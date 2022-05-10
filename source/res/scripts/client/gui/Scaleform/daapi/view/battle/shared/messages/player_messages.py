@@ -3,7 +3,7 @@
 import logging
 from typing import TYPE_CHECKING
 from constants import EQUIPMENT_STAGES
-from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
+from battle_royale.gui.constants import BR_EQUIPMENTS_WITH_MESSAGES
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
 if TYPE_CHECKING:

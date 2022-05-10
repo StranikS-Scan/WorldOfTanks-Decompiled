@@ -4,7 +4,7 @@ import BigWorld
 import ArenaType
 from adisp import process
 from frameworks.wulf import WindowLayer
-from gui import SystemMessages
+from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.settings import ICONS_SIZES
@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx, SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
-from gui.prb_control.entities.training.legacy.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
+from gui.prb_control.entities.epic_battle_training.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
@@ -329,7 +329,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         SystemMessages.pushMessage(i18n.makeString(errMsg[0], **errMsg[1]), type=SystemMessages.SM_TYPE.Error)
 
     def _isObserverModeEnabled(self):
-        return self.prbEntity.isObserverModeEnabled()
+        minCount = self.prbEntity.getSettings().getTeamLimits(1)['minCount']
+        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def _updateTrainingRoom(self, event):
         self.__changeTrainingRoomSettings(event.ctx.get('settings', None))

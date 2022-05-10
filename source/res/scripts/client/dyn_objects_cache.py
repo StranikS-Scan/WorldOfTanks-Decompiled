@@ -1,18 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/dyn_objects_cache.py
 import logging
-import typing
 from collections import namedtuple
+import typing
 import BigWorld
 import resource_helper
 from constants import ARENA_GUI_TYPE
-from gui.battle_control.controllers.commander.common import BaseHighlightType
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.component_constants import ZERO_FLOAT
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from vehicle_systems.stricted_loading import makeCallbackWeak
-if typing.TYPE_CHECKING:
-    from typing import Dict, Optional
 _CONFIG_PATH = 'scripts/dynamic_objects.xml'
 _logger = logging.getLogger(__name__)
 _ScenariosEffect = namedtuple('_ScenariosEffect', ('path', 'rate', 'offset', 'scaleRatio'))
@@ -26,7 +23,6 @@ _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
 _TerrainCircleSettings = namedtuple('_TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffYDistance'))
-_CustomHavokModelSettings = namedtuple('_CustomHavokModelSettings', ('modelPath', 'havokModule'))
 
 def _createScenarioEffect(section, path):
     return _ScenariosEffect(section.readString(path, ''), section.readFloat('rate', ZERO_FLOAT), section.readVector3('offset', (ZERO_FLOAT, ZERO_FLOAT, ZERO_FLOAT)), section.readFloat('scaleRatio', ZERO_FLOAT))
@@ -83,16 +79,6 @@ def _createTerrainCircleSettings(section):
     return result
 
 
-def _createDestroyedHavokSettings(typeSection):
-    result = {}
-    for _, supplyHavokSetting in typeSection.items():
-        if supplyHavokSetting is not None:
-            settingTypeDef = supplyHavokSetting.readString('name')
-            result[settingTypeDef] = _CustomHavokModelSettings(supplyHavokSetting.readString('modelPath'), supplyHavokSetting.readString('havokModule'))
-
-    return result
-
-
 def _parseEffectSubsection(dataSection, sectionKey):
     if dataSection is not None:
         effectSection = dataSection[sectionKey]
@@ -137,6 +123,10 @@ class _BattleRoyaleRepairPointEffect(_TeamRelatedEffect):
 
 class _BattleRoyaleBotDeliveryEffect(_TeamRelatedEffect):
     _SECTION_NAME = 'BotDeliveryEffect'
+
+
+class _BattleRoyaleBotClingDeliveryEffect(_TeamRelatedEffect):
+    _SECTION_NAME = 'BotClingDeliveryEffect'
 
 
 class _BattleRoyaleBotDeliveryMarkerArea(_TeamRelatedEffect):
@@ -191,10 +181,10 @@ class DynObjectsBase(object):
         pass
 
 
-class CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
+class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 
     def __init__(self):
-        super(CommonForBattleRoyaleAndEpicBattleDynObjects, self).__init__()
+        super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).__init__()
         self.__inspiringEffect = None
         self.__healPointEffect = None
         return
@@ -203,7 +193,7 @@ class CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
         if not self._initialized:
             self.__inspiringEffect = _createTerrainCircleSettings(dataSection['InspireAreaVisual'])
             self.__healPointEffect = _createTerrainCircleSettings(dataSection[self._healPointKey])
-            super(CommonForBattleRoyaleAndEpicBattleDynObjects, self).init(dataSection)
+            super(_CommonForBattleRoyaleAndEpicBattleDynObjects, self).init(dataSection)
 
     def getInspiringEffect(self):
         return self.__inspiringEffect
@@ -222,7 +212,23 @@ class CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
         pass
 
 
-class _EpicBattleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
+class _StrongholdDynObjects(DynObjectsBase):
+
+    def __init__(self):
+        super(_StrongholdDynObjects, self).__init__()
+        self.__inspiringEffect = None
+        return
+
+    def init(self, dataSection):
+        if not self._initialized:
+            self.__inspiringEffect = _createTerrainCircleSettings(dataSection['InspireAreaVisual'])
+            super(_StrongholdDynObjects, self).init(dataSection)
+
+    def getInspiringEffect(self):
+        return self.__inspiringEffect
+
+
+class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
         super(_EpicBattleDynObjects, self).__init__()
@@ -238,15 +244,16 @@ class _EpicBattleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
         return self.__minesEffects
 
 
-class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
+class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __init__(self):
-        super(BattleRoyaleDynObjects, self).__init__()
+        super(_BattleRoyaleDynObjects, self).__init__()
         self.__vehicleUpgradeEffect = None
         self.__kamikazeActivatedEffect = None
         self.__trapPoint = None
         self.__repairPoint = None
         self.__botDeliveryEffect = None
+        self.__botClingDeliveryEffect = None
         self.__botDeliveryMarker = None
         self.__dropPlane = None
         self.__airDrop = None
@@ -263,6 +270,7 @@ class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__trapPoint = _BattleRoyaleTrapPointEffect(dataSection)
             self.__repairPoint = _BattleRoyaleRepairPointEffect(dataSection)
             self.__botDeliveryEffect = _BattleRoyaleBotDeliveryEffect(dataSection)
+            self.__botClingDeliveryEffect = _BattleRoyaleBotClingDeliveryEffect(dataSection)
             self.__botDeliveryMarker = _BattleRoyaleBotDeliveryMarkerArea(dataSection)
             self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), blowUpEffectName='minesBlowUpEffect')
             self.__berserkerEffects = _BerserkerEffects(turretEffect=_BerserkerTurretEffect(dataSection), hullEffect=_BerserkerHullEffect(dataSection), transformPath=dataSection.readString('berserkerTransformPath'))
@@ -271,7 +279,7 @@ class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
             self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
             BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
-            super(BattleRoyaleDynObjects, self).init(dataSection)
+            super(_BattleRoyaleDynObjects, self).init(dataSection)
 
     def getVehicleUpgradeEffect(self):
         return self.__vehicleUpgradeEffect
@@ -287,6 +295,9 @@ class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def getBotDeliveryEffect(self):
         return self.__botDeliveryEffect
+
+    def getBotClingDeliveryEffect(self):
+        return self.__botClingDeliveryEffect
 
     def getBotDeliveryMarker(self):
         return self.__botDeliveryMarker
@@ -326,56 +337,12 @@ class BattleRoyaleDynObjects(CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__resourcesCache = resourceRefs
 
 
-class RTSCommander(DynObjectsBase):
-
-    def __init__(self):
-        super(RTSCommander, self).__init__()
-        self.__rtsBaseHightlight = {}
-        self.__destroyedSupplyHavokModels = {}
-
-    def init(self, dataSection):
-        section = dataSection['RTSBaseHightlight']
-        if section is None:
-            _logger.error('Failed to open base highlight config section!')
-            return {baseTypeName:'' for baseTypeName in BaseHighlightType.VARIANTS}
-        else:
-            result = {}
-            for baseTypeName in BaseHighlightType.VARIANTS:
-                ssmPath = section.readString(baseTypeName, '')
-                if not ssmPath:
-                    _logger.error('Invalid base highlight config!')
-                result[baseTypeName] = ssmPath
-
-            self.__rtsBaseHightlight = result
-            self.__destroyedSupplyHavokModels = _createDestroyedHavokSettings(dataSection['RTSDestroyedSupplyHavokModels'])
-            super(RTSCommander, self).init(dataSection)
-            return
-
-    def destroy(self):
-        self.__rtsBaseHightlight = None
-        super(RTSCommander, self).destroy()
-        return
-
-    def getBaseHighlightSsmPaths(self):
-        return self.__rtsBaseHightlight
-
-    def getDestroyedHavokModelSetting(self, supplyTypeDescr):
-        if supplyTypeDescr not in supplyTypeDescr:
-            _logger.error('Invalid supply type def %s, no valid setting found ', supplyTypeDescr)
-            return None
-        else:
-            return self.__destroyedSupplyHavokModels.get(supplyTypeDescr)
-
-
-_CONFIG_STORAGES = {ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleDynObjects,
+_CONF_STORAGES = {ARENA_GUI_TYPE.SORTIE_2: _StrongholdDynObjects,
+ ARENA_GUI_TYPE.FORT_BATTLE_2: _StrongholdDynObjects,
+ ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
  ARENA_GUI_TYPE.EPIC_BATTLE: _EpicBattleDynObjects,
  ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects,
- ARENA_GUI_TYPE.RTS: RTSCommander,
- ARENA_GUI_TYPE.RTS_BOOTCAMP: RTSCommander}
-
-def _getConfigStorage(arenaTypeID):
-    return _CONFIG_STORAGES.get(arenaTypeID)
-
+ ARENA_GUI_TYPE.EVENT_BATTLES: _EpicBattleDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
@@ -387,10 +354,10 @@ class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
         return self.__configStorage.get(arenaType)
 
     def load(self, arenaType):
+        _logger.info('Trying to load resources for arenaType = %s', arenaType)
         if arenaType not in self.__configStorage:
-            configClass = _getConfigStorage(arenaType)
-            if configClass:
-                confStorage = configClass()
+            if arenaType in _CONF_STORAGES:
+                confStorage = _CONF_STORAGES[arenaType]()
                 self.__configStorage[arenaType] = confStorage
                 _, section = resource_helper.getRoot(_CONFIG_PATH)
                 confStorage.init(section)

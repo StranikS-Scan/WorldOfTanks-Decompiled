@@ -12,7 +12,6 @@ try:
 except ImportError:
     raise NotImplementedError('Client not support Scaleform')
 
-SCALEFORM_SWF_PATH = 'gui/scaleform'
 SCALEFORM_SWF_PATH_V3 = 'gui/flash'
 SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/videos'
 SCALEFORM_STARTUP_VIDEO_MASK = 'videos/%s'

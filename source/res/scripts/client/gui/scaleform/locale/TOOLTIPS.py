@@ -617,6 +617,8 @@ class TOOLTIPS(object):
     HANGAR_STARTBTN_VEHICLETOHEAVY_BODY = '#tooltips:hangar/startBtn/vehicleToHeavy/body'
     HANGAR_STARTBTN_MAPSTRAINING_NOTREADY_HEADER = '#tooltips:hangar/startBtn/mapsTraining/notReady/header'
     HANGAR_STARTBTN_MAPSTRAINING_NOTREADY_BODY = '#tooltips:hangar/startBtn/mapsTraining/notReady/body'
+    HANGAR_STARTBTN_BATTLEROYALE_NOTRENTED_HEADER = '#tooltips:hangar/startBtn/battleRoyale/notRented/header'
+    HANGAR_STARTBTN_BATTLEROYALE_NOTRENTED_BODY = '#tooltips:hangar/startBtn/battleRoyale/notRented/body'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/header'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/body'
     HANGAR_TANKCARUSEL_WRONGSQUADSPGVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadSPGVehicle/header'
@@ -691,8 +693,6 @@ class TOOLTIPS(object):
     HEADER_PREMIUM_EXTEND_BODY = '#tooltips:header/premium_extend/body'
     HEADER_PREMSHOP_HEADER = '#tooltips:header/premShop/header'
     HEADER_PREMSHOP_BODY = '#tooltips:header/premShop/body'
-    HEADER_RTSSQUAD_HEADER = '#tooltips:header/rtsSquad/header'
-    HEADER_RTSSQUAD_BODY = '#tooltips:header/rtsSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -719,6 +719,8 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_GOLDALTERNATIVE_CLICKDESC = '#tooltips:header/buttons/goldAlternative/clickDesc'
     HEADER_BUTTONS_CREDITS_TITLE = '#tooltips:header/buttons/credits/title'
     HEADER_BUTTONS_CREDITS_FIRSTDESC = '#tooltips:header/buttons/credits/firstDesc'
+    HEADER_BUTTONS_BRCOIN_TITLE = '#tooltips:header/buttons/brcoin/title'
+    HEADER_BUTTONS_BRCOIN_FIRSTDESC = '#tooltips:header/buttons/brcoin/firstDesc'
     HEADER_BUTTONS_CREDITS_CLICKDESC = '#tooltips:header/buttons/credits/clickDesc'
     HEADER_BUTTONS_FREEXP_TITLE = '#tooltips:header/buttons/freeXP/title'
     HEADER_BUTTONS_FREEXP_FIRSTDESC = '#tooltips:header/buttons/freeXP/firstDesc'
@@ -1572,8 +1574,12 @@ class TOOLTIPS(object):
     FORTIFICATION_SORTIE_CONFIGUREBTNDISABLED = '#tooltips:fortification/sortie/configureBtnDisabled'
     FORTIFICATION_SORTIE_REMOVEBTN_HEADER = '#tooltips:fortification/sortie/removeBtn/header'
     FORTIFICATION_SORTIE_REMOVEBTN_BODY = '#tooltips:fortification/sortie/removeBtn/body'
-    FORTIFICATION_SORTIE_GUNNERICON_HEADER = '#tooltips:fortification/sortie/gunnerIcon/header'
-    FORTIFICATION_SORTIE_GUNNERICON_BODY = '#tooltips:fortification/sortie/gunnerIcon/body'
+    FORTIFICATION_SORTIE_GUNNERROLE_HEADER = '#tooltips:fortification/sortie/gunnerRole/header'
+    FORTIFICATION_SORTIE_GUNNERROLE_BODY = '#tooltips:fortification/sortie/gunnerRole/body'
+    FORTIFICATION_SORTIE_INSPIREROLE_HEADER = '#tooltips:fortification/sortie/inspireRole/header'
+    FORTIFICATION_SORTIE_INSPIREROLE_BODY = '#tooltips:fortification/sortie/inspireRole/body'
+    FORTIFICATION_SORTIE_BOTHROLE_HEADER = '#tooltips:fortification/sortie/bothRole/header'
+    FORTIFICATION_SORTIE_BOTHROLE_BODY = '#tooltips:fortification/sortie/bothRole/body'
     FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_HEADER = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/header'
     FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_BODY = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/body'
     FORTIFICATION_SORTIE_SELECTVEHICLE_HEADER = '#tooltips:fortification/sortie/selectVehicle/header'
@@ -1645,7 +1651,6 @@ class TOOLTIPS(object):
     BATTLERESULTS_PREMIUMBONUS_TANKMENSTATECHANGED_HEADER = '#tooltips:battleResults/premiumBonus/tankmenStateChanged/header'
     BATTLERESULTS_PREMIUMBONUS_TANKMENSTATECHANGED_BODY = '#tooltips:battleResults/premiumBonus/tankmenStateChanged/body'
     BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY = '#tooltips:battleResults/premiumBonus/xpToTmenChanged/body'
-    BATTLERESULTS_DEFENCE_TOTALPOINTS = '#tooltips:battleResults/defence/totalPoints'
     CONTACT_STATUS_INBATTLE_UNKNOWN = '#tooltips:Contact/status/inBattle/unknown'
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
     CONTACT_STATUS_INBATTLE_TRAINING = '#tooltips:Contact/status/inBattle/training'
@@ -1924,6 +1929,8 @@ class TOOLTIPS(object):
     AWARDITEM_RANKEDDAILYBATTLES_BODY = '#tooltips:awardItem/rankedDailyBattles/body'
     AWARDITEM_RANKEDBONUSBATTLES_HEADER = '#tooltips:awardItem/rankedBonusBattles/header'
     AWARDITEM_RANKEDBONUSBATTLES_BODY = '#tooltips:awardItem/rankedBonusBattles/body'
+    AWARDITEM_BRCOIN_HEADER = '#tooltips:awardItem/brcoin/header'
+    AWARDITEM_BRCOIN_BODY = '#tooltips:awardItem/brcoin/body'
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
@@ -2322,6 +2329,7 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
+    QUESTS_BONUSES_TOKEN_BATTLE_ROYALE_BODY = '#tooltips:quests/bonuses/token/battle_royale/body'
     QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_HEADER = '#tooltips:quests/bonuses/token/resource/clan_promoresource/header'
     QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_BODY = '#tooltips:quests/bonuses/token/resource/clan_promoresource/body'
     QUESTS_BONUSES_TOKEN_BATTLE_BONUS_X5_HEADER = '#tooltips:quests/bonuses/token/battle_bonus_x5/header'
@@ -3104,18 +3112,6 @@ class TOOLTIPS(object):
     SENIORITYAWARDS_HANGARENTRYPOINT_TOOLTIP_BODY = '#tooltips:seniorityAwards/hangarEntryPoint/tooltip/body'
     SENIORITYAWARDS_ADDITIONAL_TOOLTIP_HEADER = '#tooltips:seniorityAwards/additional/tooltip/header'
     SENIORITYAWARDS_HANGARSLOT_TOOLTIP_HEADER = '#tooltips:seniorityAwards/hangarSlot/tooltip/header'
-    COMMANDER_MANNERS_MANNER_1_HEADER = '#tooltips:commander/manners/manner_1/header'
-    COMMANDER_MANNERS_MANNER_1_BODY = '#tooltips:commander/manners/manner_1/body'
-    COMMANDER_MANNERS_MANNER_2_HEADER = '#tooltips:commander/manners/manner_2/header'
-    COMMANDER_MANNERS_MANNER_2_BODY = '#tooltips:commander/manners/manner_2/body'
-    COMMANDER_MANNERS_MANNER_3_HEADER = '#tooltips:commander/manners/manner_3/header'
-    COMMANDER_MANNERS_MANNER_3_BODY = '#tooltips:commander/manners/manner_3/body'
-    COMMANDER_MANNERS_MANNER_4_HEADER = '#tooltips:commander/manners/manner_4/header'
-    COMMANDER_MANNERS_MANNER_4_BODY = '#tooltips:commander/manners/manner_4/body'
-    COMMANDER_MANNERS_MANNER_5_HEADER = '#tooltips:commander/manners/manner_5/header'
-    COMMANDER_MANNERS_MANNER_5_BODY = '#tooltips:commander/manners/manner_5/body'
-    COMMANDER_HALT_HEADER = '#tooltips:commander/halt/header'
-    COMMANDER_STARTVEHICLECONTROL_HEADER = '#tooltips:commander/startVehicleControl/header'
     VEHICLECRYSTAL_LIMITSTATUS_COMMON_TITLE = '#tooltips:vehicleCrystal/limitStatus/common/title'
     VEHICLECRYSTAL_LIMITSTATUS_COMMON_DESCRIPTION = '#tooltips:vehicleCrystal/limitStatus/common/description'
     VEHICLECRYSTAL_LIMITSTATUS_PROGRESS_TITLE = '#tooltips:vehicleCrystal/limitStatus/progress/title'
@@ -3157,11 +3153,11 @@ class TOOLTIPS(object):
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_GERMANY = '#tooltips:battle_royale/hangar/vehicle/description/germany'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_FRANCE = '#tooltips:battle_royale/hangar/vehicle/description/france'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_UK = '#tooltips:battle_royale/hangar/vehicle/description/uk'
+    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_CHINA = '#tooltips:battle_royale/hangar/vehicle/description/china'
+    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_POLAND = '#tooltips:battle_royale/hangar/vehicle/description/poland'
+    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_SWEDEN = '#tooltips:battle_royale/hangar/vehicle/description/sweden'
     BATTLE_ROYALE_ARTEFACT_LIMIT = '#tooltips:battle_royale/artefact/limit'
     BATTLE_ROYALE_ARTEFACT_SOURCE = '#tooltips:battle_royale/artefact/source'
-    BATTLE_ROYALE_HANGAR_REPAIR_BUTTON_HEADER = '#tooltips:battle_royale/hangar/repair_button/header'
-    BATTLE_ROYALE_HANGAR_REPAIR_DISABLED_DESCRIPTION = '#tooltips:battle_royale/hangar/repair_disabled/description'
-    BATTLE_ROYALE_HANGAR_REPAIR_ENABLED_DESCRIPTION = '#tooltips:battle_royale/hangar/repair_enabled/description'
     BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/high_risk/header'
     BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_DESCRIPTION = '#tooltips:battle_royale/hangar/perf/high_risk/description'
     BATTLE_ROYALE_HANGAR_PERF_MEDIUM_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/medium_risk/header'
@@ -3398,22 +3394,6 @@ class TOOLTIPS(object):
     ADDITIONALREWARDS_PREMIUM_PLUS = '#tooltips:additionalRewards/premium_plus'
     ADDITIONALREWARDS_DOSSIER_ACHIEVEMENT = '#tooltips:additionalRewards/dossier_achievement'
     ADDITIONALREWARDS_DOSSIER_BADGE = '#tooltips:additionalRewards/dossier_badge'
-    TANK_PARAMS_DESC_SUPPLY_AVGDAMAGE = '#tooltips:tank_params/desc/supply_avgDamage'
-    TANK_PARAMS_DESC_SUPPLY_FLAMETHROWERDAMAGE = '#tooltips:tank_params/desc/supply_flamethrowerDamage'
-    TANK_PARAMS_DESC_SUPPLY_BARRICADESDAMAGE = '#tooltips:tank_params/desc/supply_barricadesDamage'
-    TANK_PARAMS_DESC_SUPPLY_AVGPIERCINGPOWER = '#tooltips:tank_params/desc/supply_avgPiercingPower'
-    TANK_PARAMS_DESC_SUPPLY_RELOADTIMESECS = '#tooltips:tank_params/desc/supply_reloadTimeSecs'
-    TANK_PARAMS_DESC_SUPPLY_PILLBOXCLIPFIRERATE = '#tooltips:tank_params/desc/supply_pillboxClipFireRate'
-    TANK_PARAMS_DESC_SUPPLY_BUNKERCLIPFIRERATE = '#tooltips:tank_params/desc/supply_bunkerClipFireRate'
-    TANK_PARAMS_DESC_SUPPLY_MORTARCLIPFIRERATE = '#tooltips:tank_params/desc/supply_mortarClipFireRate'
-    TANK_PARAMS_DESC_SUPPLY_FLAMETHROWERCLIPFIRERATE = '#tooltips:tank_params/desc/supply_flamethrowerClipFireRate'
-    TANK_PARAMS_DESC_SUPPLY_AIMINGTIME = '#tooltips:tank_params/desc/supply_aimingTime'
-    TANK_PARAMS_DESC_SUPPLY_MAXHEALTH = '#tooltips:tank_params/desc/supply_maxHealth'
-    TANK_PARAMS_DESC_SUPPLY_ARMOR = '#tooltips:tank_params/desc/supply_armor'
-    VEHICLEPARAMS_SUPPLY_TURRETARMOR = '#tooltips:vehicleParams/supply_turretArmor'
-    TANK_PARAMS_DESC_SUPPLY_CIRCULARVISIONRADIUS = '#tooltips:tank_params/desc/supply_circularVisionRadius'
-    TANK_PARAMS_DESC_SUPPLY_SHOTDISPERSIONANGLE = '#tooltips:tank_params/desc/supply_shotDispersionAngle'
-    TANK_PARAMS_DESC_SUPPLY_STUNDURATION = '#tooltips:tank_params/desc/supply_stunDuration'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3550,22 +3530,7 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_TURBOSHAFTENGINEPOWER,
      TANK_PARAMS_DESC_STUNMINDURATION,
      TANK_PARAMS_DESC_STUNMAXDURATION,
-     TANK_PARAMS_DESC_CHARGETIME,
-     TANK_PARAMS_DESC_SUPPLY_AVGDAMAGE,
-     TANK_PARAMS_DESC_SUPPLY_FLAMETHROWERDAMAGE,
-     TANK_PARAMS_DESC_SUPPLY_BARRICADESDAMAGE,
-     TANK_PARAMS_DESC_SUPPLY_AVGPIERCINGPOWER,
-     TANK_PARAMS_DESC_SUPPLY_RELOADTIMESECS,
-     TANK_PARAMS_DESC_SUPPLY_PILLBOXCLIPFIRERATE,
-     TANK_PARAMS_DESC_SUPPLY_BUNKERCLIPFIRERATE,
-     TANK_PARAMS_DESC_SUPPLY_MORTARCLIPFIRERATE,
-     TANK_PARAMS_DESC_SUPPLY_FLAMETHROWERCLIPFIRERATE,
-     TANK_PARAMS_DESC_SUPPLY_AIMINGTIME,
-     TANK_PARAMS_DESC_SUPPLY_MAXHEALTH,
-     TANK_PARAMS_DESC_SUPPLY_ARMOR,
-     TANK_PARAMS_DESC_SUPPLY_CIRCULARVISIONRADIUS,
-     TANK_PARAMS_DESC_SUPPLY_SHOTDISPERSIONANGLE,
-     TANK_PARAMS_DESC_SUPPLY_STUNDURATION)
+     TANK_PARAMS_DESC_CHARGETIME)
     BATTLERESULTS_EFFICIENCYHEADER_ENUM = (BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,
@@ -3639,7 +3604,8 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_2020_DISCOUNT_HEADER,
      AWARDITEM_RANKED_202203_ACCESS_HEADER,
      AWARDITEM_RANKEDDAILYBATTLES_HEADER,
-     AWARDITEM_RANKEDBONUSBATTLES_HEADER)
+     AWARDITEM_RANKEDBONUSBATTLES_HEADER,
+     AWARDITEM_BRCOIN_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
      AWARDITEM_CREDITS_BODY,
      AWARDITEM_CRYSTAL_BODY,
@@ -3706,7 +3672,8 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_2020_DISCOUNT_BODY,
      AWARDITEM_RANKED_202203_ACCESS_BODY,
      AWARDITEM_RANKEDDAILYBATTLES_BODY,
-     AWARDITEM_RANKEDBONUSBATTLES_BODY)
+     AWARDITEM_RANKEDBONUSBATTLES_BODY,
+     AWARDITEM_BRCOIN_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_ENUM = (VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,
@@ -3957,10 +3924,14 @@ class TOOLTIPS(object):
      HEADER_BUTTONS_GOLDALTERNATIVE_CLICKDESC,
      HEADER_BUTTONS_CREDITS_CLICKDESC,
      HEADER_BUTTONS_FREEXP_CLICKDESC)
-    HEADER_BUTTONS_ALL_FIRSTDESC_ENUM = (HEADER_BUTTONS_GOLD_FIRSTDESC, HEADER_BUTTONS_CREDITS_FIRSTDESC, HEADER_BUTTONS_FREEXP_FIRSTDESC)
+    HEADER_BUTTONS_ALL_FIRSTDESC_ENUM = (HEADER_BUTTONS_GOLD_FIRSTDESC,
+     HEADER_BUTTONS_CREDITS_FIRSTDESC,
+     HEADER_BUTTONS_BRCOIN_FIRSTDESC,
+     HEADER_BUTTONS_FREEXP_FIRSTDESC)
     HEADER_BUTTONS_ALL_TITLE_ENUM = (HEADER_BUTTONS_CRYSTAL_TITLE,
      HEADER_BUTTONS_GOLD_TITLE,
      HEADER_BUTTONS_CREDITS_TITLE,
+     HEADER_BUTTONS_BRCOIN_TITLE,
      HEADER_BUTTONS_FREEXP_TITLE)
     VEHICLEPREVIEW_BOXTOOLTIP_ALL_HEADER_ENUM = (VEHICLEPREVIEW_BOXTOOLTIP_SHELL_HEADER,
      VEHICLEPREVIEW_BOXTOOLTIP_CAMOUFLAGE_HEADER,

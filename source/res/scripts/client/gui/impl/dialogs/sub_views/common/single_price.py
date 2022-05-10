@@ -24,17 +24,18 @@ def _convertMoneyToTuple(money):
 
 
 class SinglePrice(ViewImpl):
-    __slots__ = ('__text', '__price', '__size')
+    __slots__ = ('__text', '__price', '__size', '__currencyTypeClass')
     _LAYOUT_DYN_ACCESSOR = R.views.dialogs.sub_views.common.SinglePrice
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, text, price, size=CurrencySize.SMALL, layoutID=None):
+    def __init__(self, text, price, size=CurrencySize.SMALL, layoutID=None, currencyTypeClass=CurrencyType):
         settings = ViewSettings(layoutID or self._LAYOUT_DYN_ACCESSOR())
         settings.model = SinglePriceViewModel()
         super(SinglePrice, self).__init__(settings)
         self.__text = text
         self.__price = price
         self.__size = size
+        self.__currencyTypeClass = currencyTypeClass
 
     @property
     def viewModel(self):
@@ -85,7 +86,7 @@ class SinglePrice(ViewImpl):
             vm.tooltip.setType(TooltipType.BACKPORT if isDiscount else TooltipType.ABSENT)
             cost = vm.cost
             currency = self.__price.getCurrency()
-            cost.setType(CurrencyType(currency))
+            cost.setType(self.__currencyTypeClass(currency))
             cost.setSize(self.__size)
             cost.setValue(int(self.__price.price.get(currency)))
             cost.setIsDiscount(isDiscount)

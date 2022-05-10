@@ -178,10 +178,6 @@ def getReadableKey(command):
 
 def __getVK(command):
     key = getKey(command)
-    return getKeyAsString(key)
-
-
-def getKeyAsString(key):
     if canGetVirtualKey(key):
         vk = BigWorld.mapVirtualKey(key, MappingType.MAPVK_VSC_TO_VK)
         if vk != 0:

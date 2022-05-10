@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.stat_i
 class PersonalResultsModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(PersonalResultsModel, self).__init__(properties=properties, commands=commands)
 
     def getFinishResultLabel(self):
@@ -30,8 +30,15 @@ class PersonalResultsModel(ViewModel):
     def setBattleRewardsList(self, value):
         self._setArray(2, value)
 
+    def getBattleRewardsListWithPremium(self):
+        return self._getArray(3)
+
+    def setBattleRewardsListWithPremium(self, value):
+        self._setArray(3, value)
+
     def _initialize(self):
         super(PersonalResultsModel, self)._initialize()
         self._addResourceProperty('finishResultLabel', R.invalid())
         self._addArrayProperty('statsList', Array())
         self._addArrayProperty('battleRewardsList', Array())
+        self._addArrayProperty('battleRewardsListWithPremium', Array())

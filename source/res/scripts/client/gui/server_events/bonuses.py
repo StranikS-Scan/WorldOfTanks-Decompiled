@@ -6,13 +6,12 @@ import typing
 from collections import namedtuple
 from functools import partial
 from operator import itemgetter
-from itertools import chain
 import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, RentType
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from frameworks.wulf import WindowLayer
@@ -59,7 +58,6 @@ from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
 from shared_utils import makeTupleByDict, CONST_CONTAINER, first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IRTSBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -187,10 +185,6 @@ class SimpleBonus(object):
 
     def getLightViewModelData(self):
         return (self.getName(),)
-
-    def isReceived(self):
-        LOG_CODEPOINT_WARNING('SimpleBonus::isReceived')
-        return False
 
     def _format(self, styleSubset):
         formattedValue = self.formatValue()
@@ -328,6 +322,45 @@ class BpcoinBonus(IntegralBonus):
 
     def getIconLabel(self):
         return text_styles.bpcoin(self.getValue())
+
+
+class CurrenciesBonus(IntegralBonus):
+
+    def __init__(self, *args, **kwargs):
+        super(CurrenciesBonus, self).__init__(*args, **kwargs)
+        self._code = self._value.keys()[0]
+        self._value = self._value[self._code]['count']
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': self.getIconBySize(AWARDS_SIZES.SMALL),
+          'tooltip': self.getTooltip()}]
+
+    def getCode(self):
+        return self._code
+
+    def getTooltip(self):
+        return _getItemTooltip(self._code)
+
+    def hasIconFormat(self):
+        return True
+
+    def getIconLabel(self):
+        return text_styles.hightlight(self.getValue())
+
+    def getIconBySize(self, size):
+        iconName = RES_ICONS.getBonusIcon(size, self._code)
+        return super(CurrenciesBonus, self).getIconBySize(size) if iconName is None else iconName
+
+    def getWrappedEpicBonusList(self):
+        awardItem = R.strings.tooltips.awardItem.dyn(self._code)
+        return [{'id': 0,
+          'type': 'custom/{}'.format(self._code),
+          'value': self.getValue(),
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
+          'name': backport.text(awardItem.header()) if awardItem else '',
+          'description': backport.text(awardItem.body()) if awardItem else ''}]
 
 
 class FreeXpBonus(IntegralBonus):
@@ -507,29 +540,6 @@ class BattleTokensBonus(TokensBonus):
         return []
 
 
-class RTSCurrencyToken(TokensBonus):
-    _TOKEN_TO_RES = {'rts:currency': 'rts1x7currency',
-     'rts_1x1:currency': 'rts1x1currency'}
-
-    def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(RTSCurrencyToken, self).__init__(name, value, isCompensation, ctx)
-        self._name = 'rtsCurrencyToken'
-
-    def isShowInGUI(self):
-        return True
-
-    def formatValue(self):
-        result = []
-        for tokenID, data in self._value.iteritems():
-            if tokenID not in self._TOKEN_TO_RES:
-                continue
-            name = backport.text(getattr(R.strings.rts_battles.currency, self._TOKEN_TO_RES[tokenID]).name())
-            count = data.get('count', 0)
-            result.append(i18n.makeString('#quests:bonuses/items/name', name=name, count=count))
-
-        return ', '.join(result) if result else None
-
-
 class BattlePassTokensBonus(TokensBonus):
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
@@ -600,7 +610,6 @@ class LootBoxTokensBonus(TokensBonus):
 
 
 class TmanTemplateTokensBonus(TokensBonus):
-    TANKMAN_RECEIVED_TOKEN_PREFIX = 'got_'
 
     def __init__(self, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__('tmanToken', value, isCompensation, ctx)
@@ -625,13 +634,6 @@ class TmanTemplateTokensBonus(TokensBonus):
              'description': recruitInfo.getDescription()})
 
         return result
-
-    def isReceived(self):
-        result = []
-        for tID in self.getTokens().iterkeys():
-            result.append(self.itemsCache.items.tokens.getTokenCount(self.TANKMAN_RECEIVED_TOKEN_PREFIX + tID) > 0)
-
-        return all(result)
 
 
 class X5BattleTokensBonus(TokensBonus):
@@ -754,7 +756,6 @@ def createBonusFromTokens(result, prefix, bonusId, value):
 
 def tokensFactory(name, value, isCompensation=False, ctx=None):
     result = []
-    rtsTokens = dependency.instance(IRTSBattlesController).getAvailableCurrencies()
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
             result.append(LootBoxTokensBonus({tID: tValue}, isCompensation, ctx))
@@ -774,8 +775,6 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
-        if tID in rtsTokens:
-            result.append(RTSCurrencyToken(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1299,7 +1298,7 @@ class DossierBonus(SimpleBonus):
         return ', '.join(self.formattedList())
 
     def formattedList(self):
-        return [ item.getUserName() for item in chain(self.getAchievements(), self.getBadges()) ]
+        return [ achievement.getUserName() for achievement in self.getAchievements() ]
 
     def getWrappedEpicBonusList(self):
         result = []
@@ -1577,14 +1576,6 @@ class CustomizationsBonus(SimpleBonus):
         elif itemType in _CUSTOMIZATION_BONUSES:
             typeStr = ''.join([typeStr, '/all'])
         return typeStr
-
-    def isReceived(self):
-        result = []
-        for customizationItem in self._value:
-            c11nItem = self.getC11nItem(customizationItem)
-            result.append(bool(c11nItem.fullCount()))
-
-        return all(result)
 
     def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
         c11nItem = self.getC11nItem(item)
@@ -2000,12 +1991,7 @@ class CrewBooksBonus(SimpleBonus):
     def formattedList(self):
         result = []
         for item, count in self.getItems():
-            if item.getNation():
-                result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'type': item.getBookType(),
-                 'nation': item.getNation(),
-                 'value': count,
-                 'name': item.userName}))
-            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBookText', {'type': item.getBookType(),
+            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'type': item.getBookType(),
              'nation': item.getNation(),
              'value': count,
              'name': item.userName}))
@@ -2200,7 +2186,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'battlePassPoints': BattlePassPointsBonus,
  'dogTagComponents': DogTagComponentBonus,
  'selectableCrewbook': UniversalCrewbook,
- 'randomCrewbook': UniversalCrewbook}
+ 'randomCrewbook': UniversalCrewbook,
+ 'currencies': CurrenciesBonus}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

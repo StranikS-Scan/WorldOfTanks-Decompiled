@@ -5,8 +5,11 @@ import math
 import random
 import BigWorld
 import AnimationSequence
+import CGF
+import GenericComponents
 import Math
 import CombatSelectedArea
+import math_utils
 from ProjectileMover import collideDynamicAndStatic
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MarkersManagerEvent
@@ -30,8 +33,10 @@ class AreaOfEffect(BigWorld.Entity):
         self._sequences = []
         self._callbacks = {}
         self._areas = {}
+        self.__areaGO = None
         self._equipment = vehicles.g_cache.equipments()[self.equipmentID]
         self.salvo = BigWorld.PySalvo(self.MAX_SHOTS, 0, -self.SHOT_HEIGHT)
+        return
 
     def prerequisites(self):
         prereqs = []
@@ -80,6 +85,7 @@ class AreaOfEffect(BigWorld.Entity):
             BigWorld.cancelCallback(callbackID)
 
         self._callbacks = {}
+        self.__destroyAreaGameObject()
         for area in self._areas.itervalues():
             area.destroy()
 
@@ -114,10 +120,11 @@ class AreaOfEffect(BigWorld.Entity):
             if artilleryID is not None:
                 self.salvo.addProjectile(artilleryID, self.GRAVITY, targetPosition + altitude, self.SHELL_VELOCITY)
         if effect['sequences']:
+            sequenceID, sequenceData = random.choice(effect['sequences'].items())
             matrix = Math.Matrix()
             matrix.setRotateY(self.yaw)
+            matrix.setScale(sequenceData['scale'])
             matrix.translation = targetPosition
-            sequenceID = random.choice(effect['sequences'])
             loader = AnimationSequence.Loader(sequenceID, self.spaceID)
             animator = loader.loadSync()
             animator.bindToWorld(matrix)
@@ -128,6 +135,7 @@ class AreaOfEffect(BigWorld.Entity):
         return
 
     def _areaDestroy(self, areaID):
+        self.__destroyAreaGameObject()
         self._callbacks.pop(areaID)
         area = self._areas.pop(areaID)
         area.destroy()
@@ -156,16 +164,34 @@ class AreaOfEffect(BigWorld.Entity):
         areaVisual = self._equipment.areaVisual
         if areaVisual and areaTimeout > 0:
             areaSize = Math.Vector2(self._equipment.areaWidth, self._equipment.areaLength)
-            areaColor = self._equipment.areaColor or CombatSelectedArea.COLOR_WHITE
+            areaColor = self._equipment.areaColor
             area = CombatSelectedArea.CombatSelectedArea()
             area.setup(self.position, self._direction, areaSize, areaVisual, areaColor, None)
+            area.enableAccurateCollision(self._equipment.areaAccurateCollision)
+            area.enableWaterCollision(True)
             areaID = self._idGen.next()
             self._areas[areaID] = area
             self._callbacks[areaID] = BigWorld.callback(areaTimeout, partial(self._areaDestroy, areaID))
+            if self._equipment.areaUsedPrefab:
+                CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self.entityGameObject, Math.Vector3(), self.__areaGameObjectLoaded)
         return
 
     def _showMarker(self):
-        delay = self._adjustedDelay
+        delay = self.strikeTime - BigWorld.serverTime()
         equipmentsCtrl = self.sessionProvider.shared.equipments
         if equipmentsCtrl and delay > 0:
             equipmentsCtrl.showMarker(self._equipment, self.position, self._direction, delay)
+
+    def __areaGameObjectLoaded(self, gameObject):
+        self.__areaGO = gameObject
+        t = gameObject.findComponentByType(GenericComponents.TransformComponent)
+        floatEpsilon = 0.001
+        xScale = self._equipment.areaWidth * 0.5
+        zScale = self._equipment.areaLength * 0.5
+        t.transform = math_utils.createSRTMatrix(Math.Vector3(xScale, 1.0, zScale), (0.0, 0.0, 0.0), (0.0, floatEpsilon, 0.0))
+
+    def __destroyAreaGameObject(self):
+        if self.__areaGO is not None:
+            CGF.removeGameObject(self.__areaGO)
+        self.__areaGO = None
+        return

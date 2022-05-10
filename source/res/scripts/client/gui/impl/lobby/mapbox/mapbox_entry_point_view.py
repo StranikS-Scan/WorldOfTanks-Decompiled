@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/mapbox/mapbox_entry_point_view.py
 from constants import Configs
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.impl.gen.view_models.views.lobby.mapbox.mapbox_entry_point_view_model import MapboxEntryPointViewModel, Seasons
+from gui.impl.gen.view_models.views.lobby.mapbox.mapbox_entry_point_view_model import MapboxEntryPointViewModel
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
 from helpers import dependency, time_utils, server_settings
@@ -46,9 +46,7 @@ class MapBoxEntryPointView(ViewImpl):
             return
         with self.viewModel.transaction() as model:
             currServerTime = time_utils.getCurrentLocalServerTimestamp()
-            actualSeason = self.__mapboxCtrl.getCurrentSeason() or self.__mapboxCtrl.getNextSeason()
             model.setEndDate(self.__mapboxCtrl.getEventEndTimestamp() + time_utils.getCurrentTimestamp() - currServerTime)
-            model.setSeason(Seasons(actualSeason.getNumber()))
 
     def __onClick(self):
         self.__mapboxCtrl.selectMapboxBattle()

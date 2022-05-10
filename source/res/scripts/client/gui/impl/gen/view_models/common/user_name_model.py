@@ -9,7 +9,7 @@ class UserNameModel(ViewModel):
     IGR_TYPE_BASE = 1
     IGR_TYPE_PREMIUM = 2
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(UserNameModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -62,6 +62,12 @@ class UserNameModel(ViewModel):
     def setIsKilled(self, value):
         self._setBool(8, value)
 
+    def getDatabaseID(self):
+        return self._getNumber(9)
+
+    def setDatabaseID(self, value):
+        self._setNumber(9, value)
+
     def _initialize(self):
         super(UserNameModel, self)._initialize()
         self._addViewModelProperty('badge', BadgeModel())
@@ -73,3 +79,4 @@ class UserNameModel(ViewModel):
         self._addNumberProperty('igrType', 0)
         self._addBoolProperty('isTeamKiller', False)
         self._addBoolProperty('isKilled', False)
+        self._addNumberProperty('databaseID', 0)

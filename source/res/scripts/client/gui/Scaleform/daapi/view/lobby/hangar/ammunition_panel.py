@@ -24,6 +24,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
 from gui.customization.shared import isVehicleCanBeCustomized
+from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
@@ -45,7 +46,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def showRepairDialog(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            yield VehicleRepairAction(vehicle).doAction()
+            yield VehicleRepairAction(vehicle, NeedRepairMainContent).doAction()
 
     def showCustomization(self):
         self.__service.showCustomization()

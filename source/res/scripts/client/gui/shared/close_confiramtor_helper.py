@@ -27,7 +27,6 @@ class CloseConfirmatorsHelper(object):
          events.PrbActionEvent.LEAVE,
          events.TrainingEvent.RETURN_TO_TRAINING_ROOM,
          events.TrainingEvent.SHOW_TRAINING_LIST,
-         events.TrainingEvent.SHOW_RTS_TRAINING_LIST,
          events.CustomizationEvent.SHOW]
 
     def getRestrictedSfViews(self):

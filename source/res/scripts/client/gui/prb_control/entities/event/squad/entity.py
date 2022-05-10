@@ -56,10 +56,7 @@ class EventBattleSquadEntity(SquadEntity):
 
     def __init__(self):
         super(EventBattleSquadEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, PREBATTLE_TYPE.EVENT)
-
-    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
-    def storage(self):
-        return None
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
 
     def init(self, ctx=None):
         self.storage.release()

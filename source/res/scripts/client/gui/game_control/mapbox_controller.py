@@ -12,22 +12,21 @@ from BWUtil import AsyncReturn
 from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs
 import Event
 from gui import SystemMessages
-from gui.prb_control import prb_getters
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.mapbox.mapbox_helpers import formatMapboxBonuses
+from gui.mapbox.mapbox_helpers import formatMapboxBonuses, convertTimeFromISO
+from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
+from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getClientControlledCloseCtx
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import caches
-from gui.shared.event_dispatcher import showMapboxIntro, showBrowserOverlayView
+from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
-from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx, MapboxRequestAuthorizedURLCtx
+from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
 from helpers import dependency, server_settings, time_utils
 from season_provider import SeasonProvider
 from skeletons.gui.game_control import IMapboxController
@@ -39,13 +38,15 @@ _logger = logging.getLogger(__name__)
 ProgressionData = namedtuple('ProgressionData', ('surveys',
  'rewards',
  'minRank',
- 'totalBattles'))
+ 'totalBattles',
+ 'nextSubstage'))
 MapData = namedtuple('MapData', ('progress',
  'total',
  'passed',
  'available',
  'url'))
 RewardData = namedtuple('RewardData', ('bonusList', 'status'))
+_LAST_PERIOD = 0
 
 class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -57,11 +58,17 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onUpdated = Event.Event()
         self.onMapboxSurveyShown = Event.Event()
+        self.onMapboxSurveyCompleted = Event.Event()
         self.__callbackID = None
         self.__progressionDataProvider = MapboxProgressionDataProvider()
         self.__settingsManager = MapboxSettingsManager()
+        self.__surveyManager = MapboxSurveyManager()
         self.__isSyncing = False
         return
+
+    @property
+    def surveyManager(self):
+        return self.__surveyManager
 
     def addProgressionListener(self, listener):
         self.__progressionDataProvider.onProgressionDataUpdated += listener
@@ -79,10 +86,14 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         self.__progressionDataProvider = None
         self.__settingsManager.stop()
         self.__settingsManager = None
+        if self.__surveyManager is not None:
+            self.__surveyManager.fini()
+            self.__surveyManager = None
         self.clearNotification()
         self.onPrimeTimeStatusUpdated.clear()
         self.onUpdated.clear()
         self.onMapboxSurveyShown.clear()
+        self.onMapboxSurveyCompleted.clear()
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)
@@ -103,6 +114,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             unitMgr.onUnitJoined += self.__onUnitJoined
         if self.isActive():
             self.__progressionDataProvider.start()
+        self.__updateMode()
         self.startNotification()
         self.startGlobalListening()
         return
@@ -119,6 +131,8 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             self.__progressionDataProvider.stop()
         if self.__settingsManager is not None:
             self.__settingsManager.stop()
+        if self.__surveyManager is not None:
+            self.__surveyManager.fini()
         return
 
     def isEnabled(self):
@@ -151,6 +165,9 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def getProgressionData(self):
         return self.__progressionDataProvider.getProgressionData()
 
+    def getProgressionRestartTime(self):
+        return self.__progressionDataProvider.getProgressionRestartTime()
+
     @adisp.process
     def selectCrewbookNation(self, itemID):
         if self.__webCtrl.isAvailable():
@@ -159,7 +176,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
                 SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.crewbookRequestError()), SystemMessages.SM_TYPE.ErrorSimple)
 
     @adisp.process
-    def handleSurveyCompleted(self, mapName):
+    def handleSurveyCompleted(self, surveyData):
 
         @adisp.async
         @async
@@ -168,7 +185,10 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             callback(result)
 
         if self.__webCtrl.isAvailable():
-            yield self.__webCtrl.sendRequest(MapboxCompleteSurveyCtx(mapName))
+            result = yield self.__webCtrl.sendRequest(MapboxCompleteSurveyCtx(surveyData))
+            if result.isSuccess():
+                self.onMapboxSurveyCompleted(self.surveyManager.getMapId())
+                self.surveyManager.resetSurvey()
             yield proxy()
         else:
             _logger.error('Survey completed request not sent due to WGCG unavailability')
@@ -180,22 +200,15 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         else:
             return len([ mapName for mapName, mapData in progressionData.surveys.iteritems() if not self.__settingsManager.isMapVisited(mapName) and mapData.available and mapData.progress >= mapData.total ]) + len([ rewardItem for battles, reward in progressionData.rewards.iteritems() if battles <= progressionData.totalBattles for rewardItem in reward.bonusList if rewardItem.getName() == 'selectableCrewbook' ])
 
-    @adisp.process
     def showSurvey(self, mapName):
         progressionData = self.getProgressionData()
         if progressionData is None:
             return
         else:
-            if mapName in progressionData.surveys and not self.__isSyncing:
-                self.__isSyncing = True
-                result = yield self.__webCtrl.sendRequest(MapboxRequestAuthorizedURLCtx(progressionData.surveys[mapName].url))
-                self.__isSyncing = False
-                if result.isSuccess():
-                    data = MapboxProgressionCtx.getDataObj(result.data)
-                    if data is not None:
-                        showBrowserOverlayView(data['url'], alias=VIEW_ALIAS.BROWSER_OVERLAY, **getClientControlledCloseCtx())
-                        self.onMapboxSurveyShown(mapName)
-                        self.addVisitedMap(mapName)
+            if mapName in progressionData.surveys:
+                showMapboxSurvey(mapName)
+                self.onMapboxSurveyShown(mapName)
+                self.addVisitedMap(mapName)
             return
 
     def addVisitedMap(self, mapName):
@@ -279,8 +292,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             self.__progressionDataProvider.stop()
             if self.isMapboxMode():
                 self.__selectRandomBattle()
-        if not self.isActive() and self.isMapboxMode():
-            self.__selectRandomBattle()
+        self.__updateMode()
 
     @server_settings.serverSettingsChangeListener(Configs.MAPBOX_CONFIG.value)
     def __onServerSettingsChanged(self, diff):
@@ -288,6 +300,10 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         self.onUpdated()
         self.__timerUpdate()
         self.storeCycle()
+
+    def __updateMode(self):
+        if not self.isActive() and self.isMapboxMode():
+            self.__selectRandomBattle()
 
 
 class MapboxProgressionDataProvider(Notifiable):
@@ -338,7 +354,10 @@ class MapboxProgressionDataProvider(Notifiable):
         self.__isStarted = False
 
     def getProgressionData(self):
-        return None if not self.__progressionData else ProgressionData({key:MapData(value['progress'], value['total'], value['passed'], value['available'], value['url']) for key, value in self.__progressionData.get('surveys', {}).iteritems()}, {value['battles']:RewardData(formatMapboxBonuses(value['reward']), value['status']) for value in self.__progressionData.get('rewards', [])}, self.__progressionData.get('min_rank'), self.__progressionData.get('total_battles_amount'))
+        return None if not self.__progressionData else ProgressionData({key:MapData(value['progress'], value['total'], value['passed'], value['available'], value['url']) for key, value in self.__progressionData.get('surveys', {}).iteritems()}, {value['battles']:RewardData(formatMapboxBonuses(value['reward']), value['status']) for value in self.__progressionData.get('rewards', [])}, self.__progressionData.get('min_rank'), self.__progressionData.get('total_battles_amount'), self.__convertProgressionRestartTime())
+
+    def getProgressionRestartTime(self):
+        return self.__convertProgressionRestartTime() if self.__progressionData else _LAST_PERIOD
 
     def getTimer(self):
         return self.__mapboxCtrl.getModeSettings().progressionUpdateInterval
@@ -384,6 +403,10 @@ class MapboxProgressionDataProvider(Notifiable):
         else:
             callback(False)
         return
+
+    def __convertProgressionRestartTime(self):
+        endTime = self.__progressionData.get('next_substage_at')
+        return convertTimeFromISO(endTime) if endTime else _LAST_PERIOD
 
 
 class MapboxSettingsManager(object):

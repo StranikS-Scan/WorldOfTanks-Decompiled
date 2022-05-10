@@ -30,7 +30,6 @@
       <mediumAT-SPG></mediumAT-SPG>
       <heavyAT-SPG></heavyAT-SPG>
       <premium></premium>
-      <commander></commander>
       <observer></observer>
       <improvedVentilation_class1_user></improvedVentilation_class1_user>
       <improvedVentilation_class2_user></improvedVentilation_class2_user>
@@ -59,6 +58,12 @@
       <extraHealthReserve_class1_user></extraHealthReserve_class1_user>
       <extraHealthReserve_class2_user></extraHealthReserve_class2_user>
       <extraHealthReserve_class3_user></extraHealthReserve_class3_user>
+      <fireCircle_user></fireCircle_user>
+      <corrodingShot_user></corrodingShot_user>
+      <adaptationHealthRestore_user></adaptationHealthRestore_user>
+      <shotPassion_user></shotPassion_user>
+      <selfBuff_user></selfBuff_user>
+      <berserker_user></berserker_user>
       <beast></beast>
       <sinai></sinai>
       <patton></patton>
@@ -88,23 +93,6 @@
       <premiumIGR></premiumIGR>
       <HD></HD>
       <pillbox></pillbox>
-      <stationary></stationary>
-      <supply></supply>
-      <supply_Pillbox></supply_Pillbox>
-      <supply_Bunker></supply_Bunker>
-      <supply_ATgun></supply_ATgun>
-      <supply_Barricades></supply_Barricades>
-      <supply_WatchTower></supply_WatchTower>
-      <supply_Mortar></supply_Mortar>
-      <supply_Flamer></supply_Flamer>
-      <supply_hull_bsp_model></supply_hull_bsp_model>
-      <supply_turret_bsp_model></supply_turret_bsp_model>
-      <supply_WithoutSelfRamming></supply_WithoutSelfRamming>
-      <supply_WithoutRamming></supply_WithoutRamming>
-      <supply_structure></supply_structure>
-      <noCollisionWhenDestroyed></noCollisionWhenDestroyed>
-      <isDestructibleSupply></isDestructibleSupply>
-      <visibleToWatchTower></visibleToWatchTower>
       <dog></dog>
       <excluded_from_sandbox></excluded_from_sandbox>
       <testTank></testTank>
@@ -119,11 +107,11 @@
       <turboshaftEngine></turboshaftEngine>
       <lockOutfit></lockOutfit>
       <lockExceptProgression></lockExceptProgression>
-      <lockDevices></lockDevices>
-      <lockShells></lockShells>
       <wheeledVehicle></wheeledVehicle>
       <burnout></burnout>
+      <lockDevices></lockDevices>
       <lockEquipment></lockEquipment>
+      <lockShells></lockShells>
       <fr_hidden></fr_hidden>
       <bonds></bonds>
       <builtinRepairkit_user></builtinRepairkit_user>
@@ -272,6 +260,8 @@
       <additInvisibilityDevice></additInvisibilityDevice>
       <commandersView></commandersView>
       <notBuyWhenAutoEquip></notBuyWhenAutoEquip>
+      <repairKitBattleRoyale></repairKitBattleRoyale>
+      <advancedLogging></advancedLogging>
     </tags>
   </equipment>
   <customizationItem>

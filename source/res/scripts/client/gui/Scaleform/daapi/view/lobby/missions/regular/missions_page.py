@@ -5,7 +5,6 @@ from collections import namedtuple
 import typing
 import BigWorld
 import Windowing
-from constants import ARENA_BONUS_TYPE
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
@@ -31,7 +30,7 @@ from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShow
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import getMarathons
-from gui.server_events import caches, settings, events_helpers
+from gui.server_events import caches, settings
 from gui.server_events.events_dispatcher import hideMissionDetails, showMissionDetails
 from gui.server_events.events_helpers import isLinkedSet
 from gui.shared import event_bus_handlers, events, g_eventBus
@@ -60,7 +59,7 @@ TabData = namedtuple('TabData', ('alias',
  'prefix'))
 TABS_DATA_ORDERED = [TabData(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_EVENTBOARDS, QUESTS.MISSIONS_TAB_EVENTBOARDS_DISABLED, _ms(QUESTS.MISSIONS_TAB_LABEL_EVENTBOARDS), None),
  TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHON), None),
- TabData(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, QUESTS_ALIASES.MAPBOX_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MAPBOX_HEADER, QUESTS.MISSIONS_TAB_MAPBOX_HEADER, backport.text(R.strings.mapbox.mapboxTab()), None),
+ TabData(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, QUESTS_ALIASES.MAPBOX_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MAPBOX, QUESTS.MISSIONS_TAB_MAPBOX, backport.text(R.strings.mapbox.mapboxTab()), None),
  TabData(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_BATTLE_PASS, QUESTS.MISSIONS_TAB_BATTLE_PASS, _ms(BATTLE_PASS.BATTLEPASSTAB), None),
  TabData(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CATEGORIES, QUESTS.MISSIONS_TAB_CATEGORIES, _ms(QUESTS.MISSIONS_TAB_LABEL_CATEGORIES), None),
  TabData(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_DAILY, QUESTS.MISSIONS_TAB_DAILY, _ms(QUESTS.MISSIONS_TAB_LABEL_DAILY), None)]
@@ -417,12 +416,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
-                    suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
+                    suitableEvents = self.__getSuitableEvents(self.currentTab)
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
                 else:
                     if alias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
                         from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
                         advisableQuests = self.eventsCache.getAdvisableQuests(MissionsCategoriesView.getViewQuestFilter())
+                        advisableQuests.update({q.getID():q for q in self.__getSuitableEvents(self.getComponent(alias))})
                     else:
                         advisableQuests = self.eventsCache.getAdvisableQuests()
                     advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
@@ -430,14 +430,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 tab['value'] = newEventsCount
             return (headerTab, tab)
 
-    def __elenHasEvents(self):
-        if self.lobbyContext.getServerSettings().isElenEnabled():
-            evts = self.eventsController.getEventsSettingsData().getEvents()
-            for evt in evts:
-                if evt.getBattleType() not in ARENA_BONUS_TYPE.RTS_RANGE:
-                    return True
+    @staticmethod
+    def __getSuitableEvents(tab):
+        if not tab:
+            return []
+        return [ quest for quest in tab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
 
-        return False
+    def __elenHasEvents(self):
+        return self.lobbyContext.getServerSettings().isElenEnabled() and self.eventsController.hasEvents()
 
     def __filterApplied(self):
         for attr in self.__filterData:
@@ -593,7 +593,6 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
-        self._appendBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
@@ -648,17 +647,12 @@ class MissionView(MissionViewBase):
         settings.updateCommonEventsSettings(self.__viewQuests)
 
     def __filter(self, event):
-        if events_helpers.isRts(event.getID()):
-            return False
         if self._filterData.get(HIDE_UNAVAILABLE, False) and not event.isAvailable()[0]:
             return False
         return False if self._filterData.get(HIDE_DONE, False) and event.isCompleted() else event.shouldBeShown()
 
     def _getViewQuestFilter(self):
         return None
-
-    def _appendBanner(self, _):
-        pass
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()

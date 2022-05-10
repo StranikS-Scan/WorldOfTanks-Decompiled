@@ -26,6 +26,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control import avatar_getter
+from Vehicle import StunInfo
 _logger = logging.getLogger(__name__)
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealthFromServer',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
@@ -43,7 +44,8 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealthFromServer',
  VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire',
  VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType',
  VEHICLE_VIEW_STATE.REPAIR_POINT: '_updateRepairPoint',
- VEHICLE_VIEW_STATE.GOD_MODE: '_onGodModeChanged'}
+ VEHICLE_VIEW_STATE.BERSERKER: '_updateBerserker',
+ VEHICLE_VIEW_STATE.THUNDER_STRIKE: '_updateThunderStrike'}
 
 class STATUS_ID(CONST_CONTAINER):
     STUN = 0
@@ -175,7 +177,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
         self.__initialized = False
         self.__isWheeledTech = False
         self.__isTrackWithinVehicle = False
-        self.__stunDuration = 0
+        self.__stunSourcesData = {}
         self.__debuffDuration = 0
         self.__isRepairPointActive = False
         return
@@ -219,7 +221,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
 
     def _populate(self):
         super(DamagePanel, self)._populate()
-        self.__stunDuration = 0
+        self.__stunSourcesData = {}
         self.__debuffDuration = 0
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         if self.app is not None:
@@ -283,7 +285,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
 
     def _updateDeviceState(self, value):
         controllingVehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
-        if controllingVehicle is None or avatar_getter.isCommanderCtrlMode():
+        if controllingVehicle is None:
             return
         else:
             self.as_updateDeviceStateS(*value[:2])
@@ -330,24 +332,17 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
         self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):
-        if STATUS_ID.STUN in self.__statusAnimPlayers:
-            self.__stunDuration = stunInfo.duration
-            if self.__stunDuration > 0 and not self.__isRepairPointActive:
-                self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__stunDuration, True)
-            elif self.__debuffDuration > 0:
-                self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__debuffDuration, False)
-            else:
-                self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
-        else:
-            _logger.warning('Animations times are not initialized, stun status can be lost: %r', stunInfo)
+        self.__updateStunSources(id(self), stunInfo)
+        self.__updateStunAnimations(stunInfo)
 
     def _updateDebuff(self, debuffInfo):
         self.__debuffDuration = debuffInfo.duration
         animated = debuffInfo.animated
-        if self.__debuffDuration > 0:
+        stunDuration = self.__getStunDuration()
+        if self.__debuffDuration > 0 and stunDuration == 0:
             self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__debuffDuration, animated)
-        elif self.__stunDuration > 0:
-            self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__stunDuration, False)
+        elif stunDuration > 0:
+            self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(stunDuration, False)
         else:
             self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(animated)
 
@@ -364,13 +359,41 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             _logger.warning('Animations times are not initialized, inspire status can be lost: %r', values)
         return
 
-    def _onGodModeChanged(self, _):
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            vehicle = ctrl.getControllingVehicle()
-            if vehicle is not None:
-                self._updatePlayerInfo(vehicle.id)
+    def _updateBerserker(self, values):
+        duration = max(values.endTime - BigWorld.serverTime(), 0.0)
+        data = {'isSourceVehicle': True,
+         'isInactivation': False if duration > 0.0 else None,
+         'endTime': values.endTime,
+         'duration': values.endTime - BigWorld.serverTime()}
+        self._updateInspire(data)
         return
+
+    def _updateThunderStrike(self, data):
+        stunInfo = StunInfo(startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + data.elapsedTime, duration=data.elapsedTime, totalTime=data.elapsedTime)
+        self.__updateStunSources(data.id, stunInfo)
+        self.__updateStunAnimations(stunInfo)
+
+    def __updateStunAnimations(self, stunInfo):
+        if STATUS_ID.STUN in self.__statusAnimPlayers:
+            duration = self.__getStunDuration()
+            if duration > 0 and not self.__isRepairPointActive:
+                self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(duration, True)
+            elif self.__debuffDuration > 0:
+                self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(self.__debuffDuration, False)
+            else:
+                self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
+        else:
+            _logger.warning('Animations times are not initialized, stun status can be lost: %r', stunInfo)
+
+    def __updateStunSources(self, stunID, stunInfo):
+        if stunInfo.duration > 0:
+            self.__stunSourcesData[stunID] = BigWorld.serverTime() + stunInfo.duration
+        elif stunID in self.__stunSourcesData:
+            self.__stunSourcesData.pop(stunID)
+
+    def __getStunDuration(self):
+        stunFinishTime = max(self.__stunSourcesData.itervalues()) if self.__stunSourcesData else 0
+        return max(stunFinishTime - BigWorld.serverTime(), 0)
 
     def __changeVehicleSetting(self, tag, entityName):
         ctrl = self.sessionProvider.shared.equipments

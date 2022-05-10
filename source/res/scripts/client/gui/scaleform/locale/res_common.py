@@ -19,6 +19,7 @@ class RES_COMMON(object):
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
     MAPS_ICONS_EPICBATTLES_SKILLS_INTRO_BG = '../maps/icons/epicBattles/skills/intro/bg.png'
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'
+    MAPS_ICONS_MAPBOX_SURVEY_BG = '../maps/icons/mapbox/survey/bg.png'
     MAPS_ICONS_MAPSTRAINING_BG = '../maps/icons/mapsTraining/bg.png'
     MAPS_ICONS_MAPSTRAINING_MINIMAP_BG = '../maps/icons/mapsTraining/minimap/bg.png'
     MAPS_ICONS_MARATHON_REWARDWINDOW_BG = '../maps/icons/marathon/rewardWindow/bg.png'

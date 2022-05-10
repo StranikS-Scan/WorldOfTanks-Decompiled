@@ -218,7 +218,7 @@ class ChatCommandsController(IBattleController):
         return
 
     def sendReplyChatCommand(self, targetID, action):
-        if self.__isEnabled is False or not avatar_getter.isVehicleAlive() or self.sessionProvider.getCtx().isPlayerObserver() or self.sessionProvider.getCtx().isPlayerCommander():
+        if not avatar_getter.isVehicleAlive() or self.sessionProvider.getCtx().isPlayerObserver() or self.__isEnabled is False:
             return
         player = BigWorld.player()
         command = self.proto.battleCmd.createReplyByName(targetID, action, player.id)
@@ -344,7 +344,7 @@ class ChatCommandsController(IBattleController):
             _logger.error('Can not create reloading command')
 
     def __isProhibitedToSendIfDeadOrObserver(self, name):
-        return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR or self.sessionProvider.getCtx().isPlayerCommander()
+        return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR
 
     def __isSPG(self):
         return self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()

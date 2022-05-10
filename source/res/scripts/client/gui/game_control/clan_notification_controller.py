@@ -4,7 +4,7 @@ import logging
 from constants import ClansConfig
 from Event import Event
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CLAN_NOTIFICATION_COUNTERS
+from account_helpers.AccountSettings import CLAN_NOTIFICATION_COUNTERS, CLAN_NEWS_SEEN
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
@@ -18,11 +18,14 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IClanNotificationController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_window_controller import GameWindowController
+from skeletons.gui.web import IWebController
 _logger = logging.getLogger(__name__)
 
 class ClanNotificationController(GameWindowController, IClanNotificationController, MethodsRules):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __appLoader = dependency.descriptor(IAppLoader)
+    __clansCtrl = dependency.descriptor(IWebController)
+    CLAN_NEWS_ALIAS = 'clanNews'
 
     def __init__(self):
         super(ClanNotificationController, self).__init__()
@@ -56,6 +59,7 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
     def onLobbyInited(self, event):
         self.__enabled = self.__lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.NOTIFICATION_ENABLED, False)
         self.__addListeners()
+        self.__processClanNewsNotification()
 
     def onAvatarBecomePlayer(self):
         self.__removeListeners()
@@ -105,3 +109,12 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
             self.__enabled = clansDiff[ClansConfig.NOTIFICATION_ENABLED]
             if not self.__enabled:
                 self.resetCounters()
+
+    def __processClanNewsNotification(self):
+        account = self.__clansCtrl.getAccountProfile()
+        notificationStartTime = self.__lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.NOTIFICATION_START_TIME, 0)
+        if not account.isInClan() or account.getJoinedAt() > notificationStartTime:
+            return
+        if not AccountSettings.getNotifications(CLAN_NEWS_SEEN):
+            AccountSettings.setNotifications(CLAN_NEWS_SEEN, True)
+            self.setCounters(self.CLAN_NEWS_ALIAS, 1, isIncrement=True)

@@ -24,7 +24,33 @@ class ProfileSection(ProfileSectionMeta):
         self._data = None
         self._dossier = None
         self.__needUpdate = False
+        self.__battleTypeHandlers = {}
+        self.__initHandlers()
         return
+
+    def __initHandlers(self):
+        self.__battleTypeHandlers = {PROFILE_DROPDOWN_KEYS.ALL: (True, '_getTotalStatsBlock'),
+         PROFILE_DROPDOWN_KEYS.TEAM: (False, 'getTeam7x7Stats'),
+         PROFILE_DROPDOWN_KEYS.STATICTEAM: (False, 'getRated7x7Stats'),
+         PROFILE_DROPDOWN_KEYS.HISTORICAL: (False, 'getHistoricalStats'),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: (True, 'getHistoricalStats'),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: (False, 'getFortSortiesStats'),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: (False, 'getFortBattlesStats'),
+         PROFILE_DROPDOWN_KEYS.COMPANY: (False, 'getCompanyStats'),
+         PROFILE_DROPDOWN_KEYS.CLAN: (False, 'getGlobalMapStats'),
+         PROFILE_DROPDOWN_KEYS.FALLOUT: (False, 'getFalloutStats'),
+         PROFILE_DROPDOWN_KEYS.RANKED: (False, 'getRankedStats'),
+         PROFILE_DROPDOWN_KEYS.RANKED_10X10: (False, 'getRanked10x10Stats'),
+         PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: (False, 'getEpicRandomStats'),
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: (False, 'getBattleRoyaleSoloStats'),
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: (False, 'getBattleRoyaleSquadStats')}
+
+    def __getData(self, battleType, obj):
+        data = self.__battleTypeHandlers.get(battleType)
+        if data is None:
+            raise SoftException('ProfileSection: Unknown battle type: ' + self._battlesType)
+        useSelf, funcName = data
+        return getattr(self, funcName)(obj) if useSelf else getattr(obj, funcName)()
 
     def _populate(self):
         super(ProfileSection, self)._populate()
@@ -64,34 +90,7 @@ class ProfileSection(ProfileSectionMeta):
     def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
             accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
-            data = self._getTotalStatsBlock(accountDossier)
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
-            data = accountDossier.getTeam7x7Stats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM:
-            data = accountDossier.getRated7x7Stats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.HISTORICAL:
-            data = accountDossier.getHistoricalStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS:
-            data = self._receiveFortDossier(accountDossier)
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES:
-            data = accountDossier.getFortSortiesStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
-            data = accountDossier.getFortBattlesStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.COMPANY:
-            data = accountDossier.getCompanyStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.CLAN:
-            data = accountDossier.getGlobalMapStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
-            data = accountDossier.getFalloutStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
-            data = accountDossier.getRankedStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
-            data = accountDossier.getRanked10x10Stats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
-            data = accountDossier.getEpicRandomStats()
-        else:
-            raise SoftException('ProfileSection: Unknown battle type: ' + self._battlesType)
+        data = self.__getData(self._battlesType, accountDossier)
         return data
 
     def _receiveFortDossier(self, accountDossier):

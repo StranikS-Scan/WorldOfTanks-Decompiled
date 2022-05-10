@@ -13,11 +13,10 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, GuiSettingsBehavior, ScorePanelStorageKeys, SPGAim, SOUND, AIM, CONTOUR
+from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys, ScorePanelStorageKeys, SPGAim, SOUND, AIM, CONTOUR, GuiSettingsBehavior
 from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.rts_battles.rts_constants import RTS_CAROUSEL_FILTER_KEY
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -55,11 +54,6 @@ BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
 ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
 ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
 ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
-RTS_CAROUSEL_FILTER_1 = 'RTS_CAROUSEL_FILTER_1'
-RTS_CAROUSEL_FILTER_2 = 'RTS_CAROUSEL_FILTER_2'
-RTS_CAROUSEL_FILTER_CLIENT_1 = 'RTS_CAROUSEL_FILTER_CLIENT_1'
-RTS_INTRO_PAGE_VISITED = 'RTS_INTRO_VISITED'
-RTS_ROSTER_FILTER_CLIENT = 'RTS_ROSTER_FILTER_CLIENT'
 MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
 MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
 MAPBOX_CAROUSEL_FILTER_CLIENT_1 = 'MAPBOX_CAROUSEL_FILTER_CLIENT_1'
@@ -71,7 +65,6 @@ BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
-EVENT_VEHICLE = 'event_vehicle'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -175,8 +168,6 @@ RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED = 'rankedCurrentAwardsBubbleYearReached'
 RANKED_ENTITLEMENT_EVENTS_AMOUNT = 'rankedEntitlementEventsAmount'
 RANKED_YEAR_POSITION = 'rankedYearPosition'
-BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED = 'battleRoyaleHangarBottomPanelViewed'
-IS_RTS_COMMANDER = 'isRTSCommander'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
@@ -195,13 +186,13 @@ TELECOM_RENTALS = 'telecomRentals'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
 MAPBOX_PROGRESSION = 'mapbox_progression'
-RTS_LAST_COLLECTION_SEEN = 'rtsCollectionLastProgress'
-RTS_LAST_ITEMS_SEEN = 'rtsLastItemsSeen'
 UNLOCK_VEHICLES_IN_BATTLE_HINTS = 'unlockVehiclesInBattleHints'
 BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
+MAPBOX_SURVEYS = 'mapbox_surveys'
+CLAN_NEWS_SEEN = 'clanNewsSeen'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -373,9 +364,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'sweden': False,
                                           'poland': False,
                                           'italy': False,
-                                          'lightTank': False,
-                                          'mediumTank': False,
-                                          'heavyTank': False,
+                                          'lightTank': True,
+                                          'mediumTank': True,
+                                          'heavyTank': True,
                                           'SPG': False,
                                           'AT-SPG': False,
                                           'level_1': False,
@@ -400,59 +391,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'battleRoyale': True},
                ROYALE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
                                                  'clanRented': False},
-               RTS_CAROUSEL_FILTER_1: {'ussr': False,
-                                       'germany': False,
-                                       'usa': False,
-                                       'china': False,
-                                       'france': False,
-                                       'uk': False,
-                                       'japan': False,
-                                       'czech': False,
-                                       'sweden': False,
-                                       'poland': False,
-                                       'italy': False,
-                                       'lightTank': False,
-                                       'mediumTank': False,
-                                       'heavyTank': False,
-                                       'SPG': False,
-                                       'AT-SPG': False,
-                                       'level_1': False,
-                                       'level_2': False,
-                                       'level_3': False,
-                                       'level_4': False,
-                                       'level_5': False,
-                                       'level_6': False,
-                                       'level_7': False,
-                                       'level_8': False,
-                                       'level_9': False,
-                                       'level_10': False},
-               RTS_CAROUSEL_FILTER_2: {'premium': False,
-                                       'elite': False,
-                                       'igr': False,
-                                       'rented': True,
-                                       'event': True,
-                                       'gameMode': False,
-                                       'favorite': False,
-                                       'bonus': False,
-                                       'crystals': False,
-                                       'role_HT_assault': False,
-                                       'role_HT_break': False,
-                                       'role_HT_universal': False,
-                                       'role_HT_support': False,
-                                       'role_MT_assault': False,
-                                       'role_MT_universal': False,
-                                       'role_MT_sniper': False,
-                                       'role_MT_support': False,
-                                       'role_ATSPG_assault': False,
-                                       'role_ATSPG_universal': False,
-                                       'role_ATSPG_sniper': False,
-                                       'role_ATSPG_support': False,
-                                       'role_LT_universal': False,
-                                       'role_LT_wheeled': False,
-                                       'role_SPG': False,
-                                       RTS_CAROUSEL_FILTER_KEY: True},
-               RTS_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
-                                              'clanRented': False},
                EPICBATTLE_CAROUSEL_FILTER_1: {'ussr': False,
                                               'germany': False,
                                               'usa': False,
@@ -572,15 +510,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  'location': 3,
                                  'nationID': None},
                ORDERS_FILTER: {'isSelected': False},
-               GUI_START_BEHAVIOR: {GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: False,
-                                    GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: False,
-                                    GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: False,
-                                    GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: False,
-                                    GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED: False,
-                                    GuiSettingsBehavior.TECHTREE_INTRO_SHOWED: False,
-                                    GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: False,
-                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True,
-                                    GuiSettingsBehavior.IS_HIDE_RTS_BOOTCAMP_BANNER: False},
+               GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False,
+                                    'isRankedWelcomeViewShowed': False,
+                                    'isRankedWelcomeViewStarted': False,
+                                    'isEpicRandomCheckboxClicked': False,
+                                    'isDisplayPlatoonMembersClicked': False,
+                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -631,7 +566,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 EVENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -930,7 +864,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
                 STYLE_PREVIEW_VEHICLES_POOL: [],
-                BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED: False,
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_INFO: None,
                 RANKED_WEB_INFO_UPDATE: None,
@@ -944,15 +877,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
-                IS_RTS_COMMANDER: False,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
                                      'visited_maps': [],
                                      'stored_rewards': {},
                                      'lastCycleId': None},
+                MAPBOX_SURVEYS: {},
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
-                RTS_LAST_COLLECTION_SEEN: 0,
-                RTS_LAST_ITEMS_SEEN: 0,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
                 SHOW_DEMO_ACC_REGISTRATION: False},
@@ -977,10 +908,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
                      RECRUIT_NOTIFICATIONS: set(),
                      PROGRESSIVE_REWARD_VISITED: False,
-                     RTS_INTRO_PAGE_VISITED: False,
                      VIEWED_OFFERS: set(),
                      OFFERS_DISABLED_MSG_SEEN: False,
-                     BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False},
+                     BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
+                     CLAN_NEWS_SEEN: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1070,44 +1001,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'unlock_available': False,
                                                              'can_convert': False,
                                                              'scroll_to': None},
-                        RTS_ROSTER_FILTER_CLIENT: {'ussr': False,
-                                                   'germany': False,
-                                                   'usa': False,
-                                                   'china': False,
-                                                   'france': False,
-                                                   'uk': False,
-                                                   'japan': False,
-                                                   'czech': False,
-                                                   'sweden': False,
-                                                   'poland': False,
-                                                   'italy': False,
-                                                   'lightTank': False,
-                                                   'mediumTank': False,
-                                                   'heavyTank': False,
-                                                   'SPG': False,
-                                                   'AT-SPG': False,
-                                                   'level_1': False,
-                                                   'level_2': False,
-                                                   'level_3': False,
-                                                   'level_4': False,
-                                                   'level_5': False,
-                                                   'level_6': False,
-                                                   'level_7': False,
-                                                   'level_8': False,
-                                                   'level_9': False,
-                                                   'level_10': False,
-                                                   'premium': False,
-                                                   'elite': False,
-                                                   'igr': False,
-                                                   'rented': True,
-                                                   'event': True,
-                                                   'gameMode': False,
-                                                   'favorite': False,
-                                                   'bonus': False,
-                                                   'battleRoyale': False,
-                                                   'crystals': False,
-                                                   'searchNameVehicle': '',
-                                                   'clanRented': False},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
                         SESSION_STATS_PREV_BATTLE_COUNT: 0,
                         ACTIVE_TEST_PARTICIPATION_CONFIRMED: False,
@@ -1150,7 +1043,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 53
+    version = 54
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1653,11 +1546,6 @@ class AccountSettings(object):
                             savedFilters['clanRented'] = False
                         filtersSection.write(filterSection, _pack(savedFilters))
 
-                    if GUI_START_BEHAVIOR in filtersSection.keys():
-                        guiSettings = _unpack(filtersSection[GUI_START_BEHAVIOR].asString)
-                        guiSettings[GuiSettingsBehavior.IS_HIDE_RTS_BOOTCAMP_BANNER] = False
-                        filtersSection.write(GUI_START_BEHAVIOR, _pack(guiSettings))
-
             if currVersion < 50:
                 for key, section in _filterAccountSection(ads):
                     accFilters = AccountSettings._readSection(section, KEY_FILTERS)
@@ -1686,6 +1574,13 @@ class AccountSettings(object):
                     keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if LAST_BATTLE_PASS_POINTS_SEEN in keySettings.keys():
                         keySettings.write(LAST_BATTLE_PASS_POINTS_SEEN, _pack({}))
+
+            if currVersion < 54:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    obsoleteKey = 'battleRoyaleHangarBottomPanelViewed'
+                    if obsoleteKey in keySettings.keys():
+                        keySettings.deleteSection(obsoleteKey)
 
         return
 

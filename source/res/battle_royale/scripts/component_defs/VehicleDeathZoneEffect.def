@@ -1,6 +1,17 @@
 <VehicleDeathZoneEffect.def>
-  <ofEntity>
-    <Vehicle></Vehicle>
-  </ofEntity>
-  <DefaultKeyName>	vehicleDeathZoneEffect	</DefaultKeyName>
+  <ClientMethods>
+    <onDamaged></onDamaged>
+  </ClientMethods>
+  <Properties>
+    <state>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </state>
+    <damageTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </damageTime>
+  </Properties>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <DefaultKeyName>	deathZoneEffect	</DefaultKeyName>
 </VehicleDeathZoneEffect.def>

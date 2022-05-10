@@ -20,6 +20,8 @@ if IS_EDITOR:
     from reflection_framework.helpers.editor_shared_properties import isPropertyShared
 else:
     isPropertyShared = lambda instance, path: False
+if IS_EDITOR:
+    from items.customizations import getEditorOnlySection
 
 def findOrCreate(section, subsectionName):
     if not section.has_key(subsectionName):
@@ -623,6 +625,8 @@ class ComponentXmlSerializer(object):
         defaultValue = None
         if defaultValuesDict:
             defaultValue = defaultValuesDict.get(key)
+        if IS_EDITOR and fieldType.flags & FieldFlags.SAVE_AS_EDITOR_ONLY:
+            section = getEditorOnlySection(section, True)
         if fieldType.type == FieldTypes.VARINT:
             return _xml.rewriteInt(section, key, value, defaultValue)
         elif fieldType.type == FieldTypes.FLOAT:
@@ -1006,6 +1010,7 @@ def rewritePalettes(section, item):
              str(a)])
             changed |= _xml.rewriteString(paletteSection, sectName(i), colorStr)
 
+    changed |= _xml.rewriteInt(getEditorOnlySection(section, True), 'paletteIndex', item.editorData.paletteIndex)
     return changed
 
 

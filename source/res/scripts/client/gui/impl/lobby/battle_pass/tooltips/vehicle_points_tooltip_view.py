@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/vehicle_points_tooltip_view.py
 from frameworks.wulf import ViewSettings
+from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_points_tooltip_view_model import VehiclePointsTooltipViewModel
 from gui.impl.pub import ViewImpl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
-from gui.prb_control.prb_getters import getSupportedCurrentArenaBonusType
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache

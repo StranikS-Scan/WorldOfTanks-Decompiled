@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgcg/strongholds/contexts.py
+import typing
 from account_helpers import getAccountDatabaseID
 from gui.clans import items
 from gui.clans.settings import DEFAULT_COOLDOWN
@@ -295,23 +296,28 @@ class StrongholdGiveLeadershipCtx(StrongholdRequestCtx):
 
 
 class StrongholdSetEquipmentCommanderCtx(StrongholdRequestCtx):
-    __slots__ = ('__pID',)
+    __slots__ = ('__pID', '__role')
 
-    def __init__(self, pID=None, **kwargs):
+    def __init__(self, pID=None, role=None, **kwargs):
         super(StrongholdSetEquipmentCommanderCtx, self).__init__(**kwargs)
         self.__pID = pID
+        self.__role = role
 
     @classmethod
     def fromPrbCtx(cls, prbCtx, unitMgrId):
         waitingID = prbCtx.getWaitingID()
         pID = prbCtx.getPlayerID()
-        return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
+        role = prbCtx.getRole()
+        return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID, role=role)
 
     def getRequestType(self):
         return WebRequestDataType.STRONGHOLD_SET_EQUIPMENT_COMMANDER
 
     def getPlayerID(self):
         return self.__pID
+
+    def getRole(self):
+        return self.__role
 
 
 class StrongholdUpdateCtx(StrongholdRequestCtx):

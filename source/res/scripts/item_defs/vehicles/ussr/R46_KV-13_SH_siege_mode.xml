@@ -31,7 +31,7 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	14.28571465	</repairCost>
+  <repairCost>	7.142858	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
@@ -133,7 +133,8 @@
           <armor_14>	20	</armor_14>
           <armor_15>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
           </armor_15>
-          <armor_16>	135	</armor_16>
+          <armor_16>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+          </armor_16>
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <weight>	28800	</weight>
@@ -2292,6 +2293,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2385,6 +2387,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2420,7 +2423,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	8.3	</reloadTime>
           <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
@@ -2463,6 +2466,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2479,7 +2483,7 @@
       </hitTester>
       <gunPosition>	0.003766 0.544155 0.789837	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 -0.090 0.993 -0.000 0.820 -0.118 0.953 0.626 0.141 0.500 0.255 0.500 0.135 0.692 0.000	</physicsShape>
+      <physicsShape>	1.059 -0.461 0.993 -0.000 0.797 -0.088 0.953 0.626 0.141 0.500 0.255 0.500 0.135 0.692 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
@@ -2684,6 +2688,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2730,7 +2735,7 @@
             </armor_17>
             <gun>	40	</gun>
           </armor>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	8.3	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
@@ -2774,6 +2779,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2865,6 +2871,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2970,6 +2977,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2987,7 +2995,7 @@
       <gunPosition>	-0.010396 0.384358 1.33142	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.052 -0.016 1.013 0.000 1.126 0.061 0.740 0.441 0.472 0.521 0.396 0.500 0.258 0.402 0.329	</physicsShape>
+      <physicsShape>	1.081 0.028 1.013 0.000 1.051 0.075 0.740 0.441 0.472 0.521 0.396 0.500 0.258 0.402 0.329	</physicsShape>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>
@@ -3158,6 +3166,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3184,7 +3193,7 @@
             </armor_7>
             <gun>	40	</gun>
           </armor>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	8.3	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
@@ -3228,6 +3237,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3313,6 +3323,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3388,6 +3399,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>

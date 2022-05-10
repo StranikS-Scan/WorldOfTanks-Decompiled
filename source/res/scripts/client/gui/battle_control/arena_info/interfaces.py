@@ -1,14 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/interfaces.py
 import typing
-from abc import ABCMeta
-from Event import Event
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
 if typing.TYPE_CHECKING:
-    from gui.battle_control.controllers.commander.spawn_ctrl.common import PointData
-    from gui.battle_control.controllers.commander.spawn_ctrl.interfaces import ISpawnEntity, ISupplyContainerEntity
     from items.vehicles import VehicleDescr
     from gui.shared.gui_items.Vehicle import Vehicle
 
@@ -94,12 +90,6 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
         pass
 
     def invalidateFogOfWarEnabledFlag(self, flag):
-        pass
-
-    def updateCommanderDataList(self):
-        pass
-
-    def updateCommanderDataVehicle(self, vehicleID):
         pass
 
     def updateTriggeredChatCommands(self, chatCommands, arenaDP):
@@ -314,100 +304,10 @@ class IRadarController(object):
         raise NotImplementedError
 
 
-class IBaseSpawnController(object):
-
-    def chooseSpawnKeyPoint(self, pointId):
-        raise NotImplementedError
-
-    def addRuntimeView(self, view):
-        raise NotImplementedError
-
-    def removeRuntimeView(self, view):
-        raise NotImplementedError
-
-
-class ISpawnController(IBaseSpawnController):
-    __metaclass__ = ABCMeta
+class ISpawnController(object):
 
     def showSpawnPoints(self, points):
         raise NotImplementedError
-
-    def iterSelectedPoints(self):
-        pass
-
-    def isEntityAppliedToPoint(self, entityID):
-        return False
-
-    def appliedPointsCount(self):
-        pass
-
-    def applySelection(self):
-        pass
-
-
-class IRTSSpawnController(ISpawnController):
-    __metaclass__ = ABCMeta
-
-    @property
-    def selectedEntity(self):
-        raise NotImplementedError
-
-    @property
-    def selectedEntityID(self):
-        raise NotImplementedError
-
-    @property
-    def selectedEntityType(self):
-        raise NotImplementedError
-
-    @property
-    def placedEntities(self):
-        raise NotImplementedError
-
-    def updatePoints(self, chosenPoints, unsuitablePoints):
-        raise NotImplementedError
-
-    def updateAvailablePoints(self, availablePoints):
-        raise NotImplementedError
-
-    def iterAvailablePointsByEntityID(self, entryID):
-        raise NotImplementedError
-
-    def getPointDataByID(self, pID):
-        raise NotImplementedError
-
-    def getSortedVehicleInfos(self):
-        raise NotImplementedError
-
-    def getSuppliesByClassTag(self, entityType):
-        raise NotImplementedError
-
-    def selectSupplyByClassTag(self, classTag):
-        raise NotImplementedError
-
-    def selectEntity(self, entityID):
-        raise NotImplementedError
-
-    def unselectEntity(self):
-        raise NotImplementedError
-
-    def resetSelection(self):
-        raise NotImplementedError
-
-    def autoChoosePoints(self):
-        raise NotImplementedError
-
-    def chooseSpawnKeyPoint(self, chosenPointID):
-        raise NotImplementedError
-
-
-class ITeamSixthSenseController(IBattleController):
-
-    def addRuntimeView(self, view):
-        pass
-
-    def removeRuntimeView(self, view):
-        pass
 
 
 class IVehicleCountController(IArenaVehiclesController, ViewComponentsController):
@@ -473,49 +373,4 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
         raise NotImplementedError
 
     def switchLayout(self, groupID, layoutIdx):
-        raise NotImplementedError
-
-
-class IRTSVehicleChangeController(IBattleController):
-    __metaclass__ = ABCMeta
-    onStartVehicleControl = None
-    onStopVehicleControl = None
-
-    @property
-    def isEnabled(self):
-        raise NotImplementedError
-
-    @property
-    def currentVehicleID(self):
-        raise NotImplementedError
-
-    @property
-    def isVehicleChanging(self):
-        raise NotImplementedError
-
-    def handleKeyEvent(self, isDown, key, mods):
-        raise NotImplementedError
-
-    def changeVehicle(self, vehicleID):
-        raise NotImplementedError
-
-    def changeToCandidateVehicle(self):
-        raise NotImplementedError
-
-    def resetVehicle(self):
-        raise NotImplementedError
-
-    def stopVehicleControl(self):
-        raise NotImplementedError
-
-    def onVehicleChangeFailed(self):
-        raise NotImplementedError
-
-    def onVehicleChanged(self, vehicleID):
-        raise NotImplementedError
-
-    def canChangeVehicle(self, vehicle):
-        raise NotImplementedError
-
-    def getCandidateVehicleID(self):
         raise NotImplementedError

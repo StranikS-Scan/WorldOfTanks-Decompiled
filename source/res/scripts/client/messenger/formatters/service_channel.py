@@ -19,7 +19,7 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, OFFER_TOKEN_PREFIX
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, OFFER_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from gui.dog_tag_composer import dogTagComposer
@@ -73,7 +73,7 @@ from messenger.formatters.service_channel_helpers import EOL, getCustomizationIt
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IBattleRoyaleController, IMapboxController, IRTSBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IBattleRoyaleController, IMapboxController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -287,7 +287,7 @@ def _getAchievementsFromQuestData(data):
         for (block, name), value in it:
             if block not in ACHIEVEMENT_BLOCK.ALL:
                 continue
-            achieve = getAchievementFactory((block, name)).create(value['actualValue'])
+            achieve = getAchievementFactory((block, name)).create(value.get('actualValue', 0))
             if achieve is not None:
                 achievesList.append(achieve.getUserName())
             achievesList.append(backport.text(R.strings.achievements.dyn(name)()))
@@ -456,9 +456,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __BRResultKeys = {-1: 'battleRoyaleDefeatResult',
      0: 'battleRoyaleDefeatResult',
      1: 'battleRoyaleVictoryResult'}
-    __RtsResultKeys = {-1: 'RtsBattleDefeatResult',
-     0: 'RtsBattleDrawGameResult',
-     1: 'RtsBattleVictoryResult'}
     __MTResultKeys = {SCENARIO_RESULT.LOSE: 'mapsTrainingDefeatResult',
      SCENARIO_RESULT.WIN: 'mapsTrainingVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
@@ -484,11 +481,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                  'vehicleNames': 'N/A',
                  'xp': '0',
                  Currency.CREDITS: '0'}
-                guiType = battleResults.get('guiType', 0)
-                if guiType == ARENA_GUI_TYPE.RTS and battleResults.get('isCommander', False):
-                    vehicleNames = {intCD:self._itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('rtsVehicles', [])}
-                else:
-                    vehicleNames = {intCD:self._itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
+                vehicleNames = {intCD:self._itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
                 ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), sorted(vehicleNames.values())))
                 xp = battleResults.get('xp')
                 if xp:
@@ -500,7 +493,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 if accCredits:
                     ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
                 ctx['piggyBank'] = self.__makePiggyBankString(battleResults.get('piggyBank'))
-                accCrystal = battleResults.get(Currency.CRYSTAL, 0)
+                accCrystal = battleResults.get(Currency.CRYSTAL)
                 ctx['crystalStr'] = ''
                 if accCrystal:
                     ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
@@ -522,12 +515,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                      'count': backport.getIntegralFormat(countDict.get('count', 0))}) for currency, countDict in platformCurrencies.iteritems()))
                 else:
                     ctx['platformCurrencyStr'] = ''
-                platformCurrencies = battleResults.get('currencies', {})
-                if platformCurrencies:
-                    ctx['platformCurrencyStr'] = '<br/>' + '<br/>'.join((g_settings.htmlTemplates.format('platformCurrency', {'msg': backport.text(R.strings.messenger.platformCurrencyMsg.received.dyn(currency)()),
-                     'count': backport.getIntegralFormat(countDict.get('count', 0))}) for currency, countDict in platformCurrencies.iteritems()))
-                else:
-                    ctx['platformCurrencyStr'] = ''
+                guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
@@ -541,25 +529,12 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
                 if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+                    ctx['brcoin'] = self.__makeBRCoinString(battleResults)
                     battleResultKeys = self.__BRResultKeys
                 elif guiType == ARENA_GUI_TYPE.MAPS_TRAINING:
                     ctx = self.__makeMapsTrainingMsgCtx(battleResults, ctx)
                     battleResKey = battleResults.get('mtScenarioResult')
                     battleResultKeys = self.__MTResultKeys
-                elif guiType == ARENA_GUI_TYPE.RTS:
-                    rtsCurrencyParamStr = ''
-                    for rtsParam in ('rts1x7TokensGain', 'rts1x1TokensGain', 'rtsLeaderPoints', 'rtsEventPoints'):
-                        currencyMethod = R.strings.rts_battles.notifications.battleResults.rtsCurrency
-                        rtsParamValue = battleResults.get(rtsParam, 0)
-                        if rtsParamValue:
-                            rtsCurrencyParamStr += g_settings.htmlTemplates.format('battleRTSCurrency', {'text': backport.text(currencyMethod.dyn(rtsParam)()),
-                             'value': rtsParamValue})
-
-                    if rtsCurrencyParamStr:
-                        ctx['rtsCurrencies'] = rtsCurrencyParamStr
-                        battleResultKeys = self.__RtsResultKeys
-                    else:
-                        battleResultKeys = self.__battleResultKeys
                 else:
                     battleResultKeys = self.__battleResultKeys
                 templateName = battleResultKeys[battleResKey]
@@ -760,6 +735,12 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
+
+    def __makeBRCoinString(self, battleResults):
+        value = battleResults.get('brcoin', 0)
+        if value:
+            text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
+            return g_settings.htmlTemplates.format('battleResultBrcoin', ctx={'brcoin': text})
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -1060,7 +1041,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __auxMessagesHandlers = {INVOICE_ASSET.DATA: 'getInvoiceDataAuxMessages'}
     __DESTROY_PAIR_MODIFICATIONS_MSG_TEMPLATE = 'DestroyAllPairsModifications'
     __goodiesCache = dependency.descriptor(IGoodiesCache)
-    __rtsController = dependency.descriptor(IRTSBattlesController)
     __eventsCache = dependency.descriptor(IEventsCache)
 
     @async
@@ -2521,7 +2501,6 @@ class QuestAchievesFormatter(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __rtsController = dependency.descriptor(IRTSBattlesController)
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
@@ -2615,12 +2594,6 @@ class QuestAchievesFormatter(object):
                 name = None
                 if tokenID == BATTLE_BONUS_X5_TOKEN:
                     name = backport.text(R.strings.quests.bonusName.battle_bonus_x5())
-                else:
-                    rtsTokensParams = {cls.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS): 'rts1x7TokensGain',
-                     cls.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS_1x1): 'rts1x1TokensGain'}
-                    if tokenID in rtsTokensParams:
-                        currencyMethod = R.strings.rts_battles.notifications.battleResults.rtsCurrency
-                        name = backport.text(currencyMethod.dyn(rtsTokensParams[tokenID])())
                 if name is not None:
                     itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=count))
 
@@ -4317,26 +4290,28 @@ class MapboxEndedFormatter(ServiceChannelFormatter):
 
 class MapboxSurveyAvailableFormatter(ServiceChannelFormatter):
     __TEMPLATE = 'MapboxSurveyAvailableMessage'
+    __STR_PATH = R.strings.messenger.serviceChannelMessages.mapbox
 
     def format(self, message, *args):
         if not message:
             return [MessageData(None, None)]
         else:
             mapName = message.get('map')
-            header = backport.text(R.strings.messenger.serviceChannelMessages.mapbox.surveyAvailable.header())
+            header = backport.text(self.__STR_PATH.surveyAvailable.header())
             if mapName in ArenaType.g_geometryNamesToIDs:
                 arenaType = ArenaType.g_cache[ArenaType.g_geometryNamesToIDs[mapName]]
-                text = backport.text(R.strings.messenger.serviceChannelMessages.mapbox.surveyAvailable.singleMap(), mapName=arenaType.name)
+                text = backport.text(self.__STR_PATH.surveyAvailable.singleMap(), mapName=arenaType.name)
             else:
-                text = backport.text(R.strings.messenger.serviceChannelMessages.mapbox.surveyAvailable.allMaps())
+                text = backport.text(self.__STR_PATH.surveyAvailable.allMaps())
             formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'header': header,
              'text': text}, data={'savedData': mapName})
-            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageSubtype=message.get('msgType')))]
 
 
 class MapboxRewardReceivedFormatter(ServiceChannelFormatter):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __TEMPLATE = 'MapboxRewardReceivedMessage'
+    __STR_PATH = R.strings.messenger.serviceChannelMessages.mapbox
 
     def format(self, message, *args):
         rewards = message.get('rewards')
@@ -4346,23 +4321,20 @@ class MapboxRewardReceivedFormatter(ServiceChannelFormatter):
             resultRewards = {}
             textItems = []
             battles = message.get('battles')
-            progressionData = self.__mapboxCtrl.getProgressionData()
-            totalBattles = max(progressionData.rewards.keys()) if progressionData is not None else None
             if battles is not None:
-                textItems.append(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.progressionStageCompleted(), battles=battles))
-            if battles == totalBattles and battles is not None:
-                textItems.append(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.progressionFinalRewardReceived()))
+                textItems.append(backport.text(self.__STR_PATH.progressionStageCompleted(), battles=battles))
+            isFinal = message.get('isFinal', False) and battles is not None
+            if isFinal:
+                textItems.append(backport.text(self.__STR_PATH.progressionFinalRewardReceived()))
             else:
-                textItems.append(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.rewardReceived()))
+                textItems.append(backport.text(self.__STR_PATH.rewardReceived()))
             rewards = {item['name']:item['value'] for item in formatMapboxRewards(rewards)}
             mergeRewards(resultRewards, rewards)
-            textItems.append(QuestAchievesFormatter.formatQuestAchieves(resultRewards, False))
-            if battles == totalBattles and battles is not None:
-                textItems.append(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.surveyRequest()))
-            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'header': backport.text(R.strings.messenger.serviceChannelMessages.mapbox.congrats.title()),
+            textItems.append(LootBoxAchievesFormatter.formatQuestAchieves(resultRewards, False))
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'header': backport.text(self.__STR_PATH.congrats.title()),
              'text': '<br>'.join(textItems)}, data={'savedData': {'rewards': rewards,
                            'battles': battles}})
-            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.get('msgType')))]
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageSubtype=message.get('msgType')))]
 
 
 class TelecomMergeResultsFormatter(WaitItemsSyncFormatter):
@@ -4416,31 +4388,3 @@ class TelecomMergeResultsFormatter(WaitItemsSyncFormatter):
         else:
             callback([MessageData(None, None)])
         return
-
-
-class RtsTokensFormatter(ServiceChannelFormatter):
-    __rtsController = dependency.descriptor(IRTSBattlesController)
-    _1x7currencyDebitTemplate = 'rts1x7CurrencyDebited'
-    _1x1currencyDebitTemplate = 'rts1x1CurrencyDebited'
-    _rts1x7PassDebitedTemplate = 'rts1x7PassDebited'
-
-    def format(self, message, *args):
-        result = [MessageData(None, None)]
-        if message.data:
-            data = message.data
-            if 'token' in data and 'count' in data:
-                tokenID = data['token']
-                count = data['count']
-                rts1x7CurrencyToken = self.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS)
-                rts1x1CurrencyToken = self.__rtsController.getSettings().getCurrencyTokenName(ARENA_BONUS_TYPE.RTS_1x1)
-                rts1x7PassToken = self.__rtsController.getSettings().getPassTokenName(ARENA_BONUS_TYPE.RTS)
-                if tokenID == rts1x7CurrencyToken and count < 0:
-                    formatted = g_settings.msgTemplates.format(self._1x7currencyDebitTemplate, ctx={'count': abs(count)})
-                    result = [MessageData(formatted, self._getGuiSettings(message, self._1x7currencyDebitTemplate))]
-                elif tokenID == rts1x1CurrencyToken and count < 0:
-                    formatted = g_settings.msgTemplates.format(self._1x1currencyDebitTemplate, ctx={'count': abs(count)})
-                    result = [MessageData(formatted, self._getGuiSettings(message, self._1x1currencyDebitTemplate))]
-                elif tokenID == rts1x7PassToken and count < 0:
-                    formatted = g_settings.msgTemplates.format(self._rts1x7PassDebitedTemplate)
-                    result = [MessageData(formatted, self._getGuiSettings(message, self._rts1x7PassDebitedTemplate))]
-        return result

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/visual_script/type.py
 from inspect import getmembers
 from enumerations import Enumeration
+from enum import IntEnum
 from misc import EDITOR_TYPE, ASPECT
 from typing import Any, List
 __all__ = ('VScriptType', 'VScriptEnum', 'VScriptStruct', 'VScriptStructField')
@@ -70,6 +71,11 @@ class VScriptEnum(object):
             enum = cls.vs_enum()
             for item in enum.all():
                 entriesData[item.name()] = item.index()
+
+        if isinstance(cls.vs_enum(), IntEnum):
+            enum = cls.vs_enum()
+            for item in enum:
+                entriesData[item.name] = item.value
 
         else:
             for name, member in getmembers(cls.vs_enum()):

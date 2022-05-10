@@ -3,7 +3,7 @@
 import os
 from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
-from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES, ARENA_GAMEPLAY_COMMANDER_IDS
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
@@ -63,10 +63,6 @@ def parseTypeID(typeID):
 
 def buildArenaTypeID(gameplayID, geometryID):
     return geometryID | gameplayID << 16
-
-
-def isCommanderGameplay(arenaTypeID):
-    return parseTypeID(arenaTypeID)[0] in ARENA_GAMEPLAY_COMMANDER_IDS
 
 
 _LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
@@ -279,7 +275,6 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
             cfg['waterFreqX'] = section.readFloat('water/freqX', 1.0)
             cfg['waterFreqZ'] = section.readFloat('water/freqZ', 1.0)
             cfg['defaultGroundEffect'] = __readDefaultGroundEffect(section, defaultXml)
-            cfg['deathZoneBorders'] = __readDeathZoneBordersSection(section, defaultXml)
         cfg.update(__readCommonCfg(section, defaultXml, True, {}))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -304,7 +299,7 @@ def __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
             if defaultSubsection is None:
                 raise SoftException("no defaults for '%s'" % name)
             gameplayCfg = __readGameplayCfg(name, subsection, defaultSubsection, geometryCfg)
-            if IS_CLIENT or IS_WEB:
+            if IS_CLIENT:
                 wwmusicDroneSetup = 'wwmusicDroneSetup'
                 gameplayCfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml, name)
             cfgs.append(gameplayCfg)
@@ -363,14 +358,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['artilleryPreparationChance'] = _readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
-    if raiseIfMissing or section.has_key('capturedCount'):
-        cfg['capturedCount'] = _readInt('capturedCount', section, defaultXml, 1)
     if raiseIfMissing or section.has_key('boundingBox'):
         cfg['boundingBox'] = _readBoundingBox(section)
-    if raiseIfMissing or section.has_key('boundingBoxExtension'):
-        cfg['boundingBoxExtension'] = _readInt('boundingBoxExtension', section, defaultXml, 0)
-    if raiseIfMissing or section.has_key('rtsMinMaxCameraHeightOffset'):
-        cfg['rtsMinMaxCameraHeightOffset'] = _readInt('rtsMinMaxCameraHeightOffset', section, defaultXml, 0)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
@@ -384,8 +373,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['playerGroupLimit'] = _readInt('playerGroupLimit', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('respawnType', section, defaultXml):
         cfg['respawnType'] = _readString('respawnType', section, defaultXml, '')
-    if raiseIfMissing or __hasKey('spawnRoster', section, defaultXml):
-        cfg['spawnRoster'] = _readString('spawnRoster', section, defaultXml, '')
     if raiseIfMissing or __hasKey('unlockUnusedVehiclesOnLeave', section, defaultXml):
         cfg['unlockUnusedVehiclesOnLeave'] = __readBool('unlockUnusedVehiclesOnLeave', section, defaultXml, False)
     if raiseIfMissing or __hasKey('numDestructiblesToDestroyForWin', section, defaultXml):
@@ -467,17 +454,6 @@ def __readWWmusicSection(section, defaultXml):
             wwmusic[name] = value.asString
 
     return wwmusic
-
-
-def __readDeathZoneBordersSection(section, defaultXml):
-    if __hasKey('deathZoneBorders', section, defaultXml):
-        dataSection = section['deathZoneBorders']
-        return {'maxAlpha': dataSection.readFloat('maxAlpha'),
-         'height': dataSection.readFloat('height'),
-         'activeColor': dataSection.readVector4('activeColor'),
-         'waitingColor': dataSection.readVector4('waitingColor')}
-    else:
-        return None
 
 
 def __readNotificationsRemappingSection(section, defaultXml):

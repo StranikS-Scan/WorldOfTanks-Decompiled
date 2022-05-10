@@ -180,43 +180,27 @@ def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode
 
 g_desiredShotPoint = Vector3(0)
 g_frameStamp = -1
+__disableShotPointCache = False
+
+def disableShotPointCache(f):
+
+    def wrapped(*args, **kwargs):
+        __disableShotPointCache = True
+        f(*args, **kwargs)
+        __disableShotPointCache = False
+
+    return wrapped
+
 
 def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False, shotDistance=10000.0):
     global g_desiredShotPoint
     global g_frameStamp
     currentFrameStamp = BigWorld.wg_getFrameTimestamp()
-    if g_frameStamp == currentFrameStamp:
+    if g_frameStamp == currentFrameStamp and not __disableShotPointCache:
         return g_desiredShotPoint
     g_frameStamp = currentFrameStamp
     g_desiredShotPoint = _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck, shotDistance)
     return g_desiredShotPoint
-
-
-def getShotPosition(vehicleMatrix, typeDescriptor, turretYaw, gunPitch, gunOffset=None, shotIdx=None):
-    turretOffs = typeDescriptor.hull.turretPositions[0] + typeDescriptor.chassis.hullPosition
-    if gunOffset is None:
-        gunOffset = typeDescriptor.activeGunShotPosition
-    shotSpeed = typeDescriptor.getShot(shotIdx).speed
-    turretWorldMatrix = Math.Matrix()
-    turretWorldMatrix.setRotateY(turretYaw)
-    turretWorldMatrix.translation = turretOffs
-    turretWorldMatrix.postMultiply(Math.Matrix(vehicleMatrix))
-    position = turretWorldMatrix.applyPoint(gunOffset)
-    gunWorldMatrix = Math.Matrix()
-    gunWorldMatrix.setRotateX(gunPitch)
-    gunWorldMatrix.postMultiply(turretWorldMatrix)
-    vector = gunWorldMatrix.applyVector(Math.Vector3(0, 0, shotSpeed))
-    return (position, vector)
-
-
-def getMultiGunCurrentShotPosition(vehicle):
-    typeDescriptor = vehicle.typeDescriptor
-    if not typeDescriptor.isDualgunVehicle:
-        return None
-    else:
-        gunIdx = vehicle.activeGunIndex
-        multiGun = typeDescriptor.turret.multiGun
-        return None if multiGun is None or not 0 <= gunIdx < len(multiGun) else multiGun[gunIdx].shotPosition
 
 
 def _trackcalls(func):
@@ -247,23 +231,6 @@ def getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, vehicleID, mi
      direction,
      collData,
      usedMaxDistance)
-
-
-def getVehicleGunMarkerPosition(vehicleID, shotPos, shotVec, avatar=None):
-    avatar = avatar or BigWorld.player()
-    if avatar is None:
-        _logger.error('Could not get avatar')
-        return
-    else:
-        vehicle = BigWorld.entity(vehicleID)
-        if vehicle is None:
-            _logger.error('Could not get vehicle entity with vehicleID=%r', vehicleID)
-            return
-        shotDescr = vehicle.typeDescriptor.shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        collisionStrategy = CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = avatar.arena.getSpaceBB()
-        return getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, vehicleID, minBounds, maxBounds, collisionStrategy)
 
 
 @_trackcalls

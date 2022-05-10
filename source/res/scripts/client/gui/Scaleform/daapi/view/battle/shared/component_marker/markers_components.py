@@ -104,6 +104,7 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         self.__marker2DData = data.get(self.maskType)[idx]
         self._gui = lambda : None
         self._isMarkerExists = False
+        self.__displayDistance = self.__marker2DData.get('displayDistance', True)
         self.__distance = self.__marker2DData.get('distance', 0)
 
     @property
@@ -139,6 +140,8 @@ class World2DMarkerComponent(_IMarkerComponentBase):
     def update(self, distance, *args, **kwargs):
         self.__distance = distance
         gui = self._gui()
+        if not self.__displayDistance:
+            distance = -1
         if self._isVisible and self._isMarkerExists and gui:
             gui.markerSetDistance(self._componentID, distance)
 

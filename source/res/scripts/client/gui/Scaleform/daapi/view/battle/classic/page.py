@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/page.py
 from aih_constants import CTRL_MODE_NAME
-import BigWorld
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player
@@ -10,7 +9,6 @@ from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import 
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from shared_utils import CONST_CONTAINER
-import Keys
 
 class DynamicAliases(CONST_CONTAINER):
     PREBATTLE_TIMER_SOUND_PLAYER = 'prebattleTimerSoundPlayer'
@@ -47,8 +45,6 @@ class ClassicPage(SharedPage):
 
     def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
         self._fullStatsAlias = fullStatsAlias
-        self._selectedBotIndex = -1
-        self._modifiedLine = -1
         if components is None:
             components = COMMON_CLASSIC_CONFIG if self.sessionProvider.isReplayPlaying else EXTENDED_CLASSIC_CONFIG
         super(ClassicPage, self).__init__(components=components, external=external)
@@ -73,74 +69,8 @@ class ClassicPage(SharedPage):
                 radialMenu.hide(allowAction)
             return
 
-    def _findBot(self, botId):
-        roster = BigWorld.player().getRosterData()
-        for lineInfo in roster:
-            for botInfo in roster[lineInfo]:
-                b = botInfo
-                LOG_DEBUG('Checking ' + str(b['botID']) + ', with ' + str(botId))
-                if b['botID'] == botId:
-                    LOG_DEBUG('Found the same bot')
-                    return b
-
-        return None
-
-    def _botsNumberOnTheLine(self, botId):
-        botsPerLine = 0
-        lineNumber = -1
-        roster = BigWorld.player().getRosterData()
-        for lineInfo in roster:
-            for botInfo in roster[lineInfo]:
-                b = botInfo
-                if b['botID'] == botId:
-                    lineNumber = lineInfo[1]
-
-        for lineInfo in roster:
-            for botInfo in roster[lineInfo]:
-                if lineInfo[1] == lineNumber:
-                    botsPerLine = botsPerLine + 1
-
-        LOG_DEBUG('Found ' + str(botsPerLine) + ' bots on line ' + str(lineNumber) + ' for bot ' + str(botId))
-        return botsPerLine
-
-    def _isBotSelectable(self, botId):
-        return self._botsNumberOnTheLine(botId) > 1
-
-    def _processNum(self, event):
-        key = event.ctx['key']
-        idx = key - Keys.KEY_1 + 1
-        if event.ctx['isDown']:
-            if self._selectedBotIndex == -1:
-                if self._findBot(idx) is not None and self._isBotSelectable(idx):
-                    self._selectedBotIndex = idx
-            else:
-                teamId = -1
-                sourceLine = -1
-                botsOnLine = 0
-                roster = BigWorld.player().getRosterData()
-                for lineInfo in roster:
-                    for botInfo in roster[lineInfo]:
-                        b = botInfo
-                        if lineInfo[1] == idx:
-                            botsOnLine = botsOnLine + 1
-                        if b['botID'] == self._selectedBotIndex:
-                            teamId = lineInfo[0]
-                            sourceLine = lineInfo[1]
-
-                maximumLinesNumber = 3
-                if idx > 0 and idx <= maximumLinesNumber and botsOnLine > 0:
-                    LOG_DEBUG('Move bot ' + str(self._selectedBotIndex) + ' from team ' + str(teamId) + ' and line ' + str(sourceLine) + ' to line ' + str(idx))
-                    BigWorld.player().changeSpawnGroup(self._selectedBotIndex, sourceLine, idx)
-                    self._modifiedLine = idx
-                    self._selectedBotIndex = -1
-        elif self._selectedBotIndex == -1:
-            self._modifiedLine = -1
-        return
-
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager
-        self._selectedBotIndex = -1
-        self._modifiedLine = -1
         if manager.isModalViewsIsExists():
             return
         elif not self._fullStatsAlias:

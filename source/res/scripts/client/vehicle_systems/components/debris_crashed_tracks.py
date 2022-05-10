@@ -9,7 +9,7 @@ from vehicle_systems import tankStructure
 import math_utils
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 import GenericComponents
-from constants import IS_CGF_DUMP
+from constants import IS_CGF_DUMP, IS_EDITOR
 if not IS_CGF_DUMP:
     from CustomEffectManager import CustomEffectManager
 _logger = logging.getLogger(__name__)
@@ -137,17 +137,20 @@ class DebrisCrashedTracksManager(CGF.ComponentManager):
 
     def __remapNodes(self, debris):
         go = debris.wheelsGameObject
-        debrisDesc = debris.debrisDesc
-        nodes = {}
-        existingRemap = go.findComponentByType(NodeRemapperComponent)
-        if existingRemap is not None:
-            nodes = dict(existingRemap.nodes)
-            go.removeComponentByType(NodeRemapperComponent)
-        for fromNode, toNode in debrisDesc.nodesRemap.iteritems():
-            nodes[fromNode] = toNode
+        if IS_EDITOR and not go.isValid():
+            return
+        else:
+            debrisDesc = debris.debrisDesc
+            nodes = {}
+            existingRemap = go.findComponentByType(NodeRemapperComponent)
+            if existingRemap is not None:
+                nodes = dict(existingRemap.nodes)
+                go.removeComponentByType(NodeRemapperComponent)
+            for fromNode, toNode in debrisDesc.nodesRemap.iteritems():
+                nodes[fromNode] = toNode
 
-        go.createComponent(NodeRemapperComponent, nodes)
-        return
+            go.createComponent(NodeRemapperComponent, nodes)
+            return
 
     def __unmapNodes(self, debris):
         go = debris.wheelsGameObject

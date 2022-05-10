@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Pl03_PzV_Poland>
     <id>	0	</id>
     <userString>	#poland_vehicles:Pl03_PzV_Poland	</userString>
@@ -172,6 +171,16 @@
     <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	10	</level>
   </Pl21_CS_63>
+  <Pl17_DS_PZlnz_SH>
+    <id>	22	</id>
+    <userString>	#poland_vehicles:Pl17_DS_PZlnz_SH	</userString>
+    <shortUserString>	#poland_vehicles:Pl17_DS_PZlnz_SH_short	</shortUserString>
+    <description>	#poland_vehicles:Pl17_DS_PZlnz_SH_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret private	</tags>
+    <level>	1	</level>
+  </Pl17_DS_PZlnz_SH>
   <Pl22_CS_59>
     <id>	31	</id>
     <userString>	#poland_vehicles:Pl22_CS_59	</userString>
@@ -181,39 +190,6 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	9	</level>
   </Pl22_CS_59>
-  <Pl16_T34_85_Rudy>
-    <id>	200	</id>
-    <userString>	#poland_vehicles:Pl16_T34_85_Rudy	</userString>
-    <description>	#poland_vehicles:Pl16_T34_85_Rudy_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl16_T34_85_Rudy_short	</shortUserString>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_long_special	</longDescriptionSpecial>
-    <price>	3100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
-    <level>	6	</level>
-  </Pl16_T34_85_Rudy>
-  <Pl201_Gun_D_74_RTS>
-    <id>	202	</id>
-    <userString>	#poland_vehicles:Pl201_Gun_D_74_RTS	</userString>
-    <description>	#poland_vehicles:Pl201_Gun_D_74_RTS_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl201_Gun_D_74_RTS_short	</shortUserString>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD secret supply supply_ATgun earn_crystals stationary noCollisionWhenDestroyed isDestructibleSupply	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl201_Gun_D_74_RTS>
-  <Pl203_WatchTower1_RTS>
-    <id>	233	</id>
-    <userString>	#poland_vehicles:Pl203_WatchTower1_RTS	</userString>
-    <description>	#poland_vehicles:Pl203_WatchTower1_RTS_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl203_WatchTower1_RTS_short	</shortUserString>
-    <notInShop>	true	</notInShop>
-    <tags>	SPG HD secret supply supply_WatchTower earn_crystals stationary supply_structure noCollisionWhenDestroyed supply_WithoutSelfRamming isDestructibleSupply	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl203_WatchTower1_RTS>
   <Pl19_CS_52_LIS>
     <id>	199	</id>
     <userString>	#poland_vehicles:Pl19_CS_52_LIS	</userString>
@@ -227,44 +203,17 @@
     <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user HD	</tags>
     <level>	8	</level>
   </Pl19_CS_52_LIS>
-  <Pl205_203mm50_Mle_1924_RTS>
-    <id>	234	</id>
-    <userString>	#poland_vehicles:Pl205_203mm50_Mle_1924_RTS	</userString>
-    <description>	#poland_vehicles:Pl205_203mm50_Mle_1924_RTS_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl205_203mm50_Mle_1924_RTS_short	</shortUserString>
+  <Pl16_T34_85_Rudy>
+    <id>	200	</id>
+    <userString>	#poland_vehicles:Pl16_T34_85_Rudy	</userString>
+    <description>	#poland_vehicles:Pl16_T34_85_Rudy_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl16_T34_85_Rudy_short	</shortUserString>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl16_T34_85_Rudy_long_special	</longDescriptionSpecial>
+    <price>	3100	  <gold></gold>
+    </price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG HD dualgun secret supply supply_Bunker supply_hull_bsp_model supply_turret_bsp_model earn_crystals stationary supply_structure supply_WithoutRamming	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl205_203mm50_Mle_1924_RTS>
-  <Pl207_Mortar_RTS>
-    <id>	236	</id>
-    <userString>	#poland_vehicles:Pl207_Mortar_RTS	</userString>
-    <description>	#poland_vehicles:Pl207_Mortar_RTS_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl207_Mortar_RTS_short	</shortUserString>
-    <notInShop>	true	</notInShop>
-    <tags>	SPG HD secret supply supply_Mortar earn_crystals stationary noCollisionWhenDestroyed isDestructibleSupply	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl207_Mortar_RTS>
-  <Pl206_Firedot_RTS>
-    <id>	237	</id>
-    <userString>	#poland_vehicles:Pl206_Firedot_RTS	</userString>
-    <shortUserString>	#poland_vehicles:Pl206_Firedot_RTS_short	</shortUserString>
-    <description>	#poland_vehicles:Pl206_Firedot_RTS_descr	</description>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD secret supply earn_crystals stationary supply_structure supply_Flamer supply_WithoutRamming supply_hull_bsp_model supply_turret_bsp_model	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl206_Firedot_RTS>
-  <Pl208_Pillbox_SPM_4_RTS>
-    <id>	235	</id>
-    <userString>	#poland_vehicles:Pl208_Pillbox_SPM_4_RTS	</userString>
-    <shortUserString>	#poland_vehicles:Pl208_Pillbox_SPM_4_RTS_short	</shortUserString>
-    <description>	#poland_vehicles:Pl208_Pillbox_SPM_4_RTS_descr	</description>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD secret supply supply_Pillbox earn_crystals stationary supply_WithoutRamming supply_hull_bsp_model supply_turret_bsp_model supply_structure event_battles	</tags>
-    <level>	10	</level>
-    <price>	1	</price>
-  </Pl208_Pillbox_SPM_4_RTS>
+    <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </Pl16_T34_85_Rudy>
 </list.xml>

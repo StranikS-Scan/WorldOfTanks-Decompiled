@@ -11,11 +11,9 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
-WIDE_STAT_ROW = 'wideLineUI'
-NORMAL_STAT_ROW = 'normalLineUI'
+WIDE_STAT_ROW = 'wideLine'
+NORMAL_STAT_ROW = 'normalLine'
 SMALL_STAT_LINE = 'smallLineUI'
-WIDE_SOLID_STAT_ROW = 'wideSolidLineUI'
-NORMAL_SOLID_STAT_ROW = 'normalSolidLineUI'
 _LINE_BRAKE_STR = '<br/>'
 _STATS_INFOTIP_HEADER_FORMAT = '#battle_results:team/stats/infotip_{0}/header'
 _VEHICLE_STATE_PREFIX = '{0} ('
@@ -32,10 +30,6 @@ I18nDeathReason = namedtuple('I18nDeathReason', 'i18nString prefix suffix')
 def makeI18nDeathReason(deathReason):
     i18nString = i18n.makeString(BATTLE_RESULTS.getVehicleDeadState(intType=deathReason))
     return I18nDeathReason(i18nString, _VEHICLE_STATE_PREFIX.format(i18nString), _VEHICLE_STATE_SUFFIX)
-
-
-def makeSupplyStatus(alive, total):
-    return backport.text(R.strings.battle_results.common.supplyState(), alive=alive, total=total)
 
 
 def markValueAsError(value):
@@ -203,34 +197,6 @@ def makeCrystalLabel(value):
     return makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': formatted})
 
 
-def makeToken1x7Label(value):
-    formatted = backport.getIntegralFormat(int(value))
-    if value < 0:
-        formatted = markValueAsError(formatted)
-    return makeHtmlString('html_templates:lobby/battle_results', 'rts1x7Currency_small_label', {'value': formatted})
-
-
-def makeToken1x1Label(value):
-    formatted = backport.getIntegralFormat(int(value))
-    if value < 0:
-        formatted = markValueAsError(formatted)
-    return makeHtmlString('html_templates:lobby/battle_results', 'rts1x1Currency_small_label', {'value': formatted})
-
-
-def makeRTSEventPointsLabel(value):
-    formatted = backport.getIntegralFormat(int(value))
-    if value < 0:
-        formatted = markValueAsError(formatted)
-    return makeHtmlString('html_templates:lobby/battle_results', 'rtsEventPoints_small_label', {'value': formatted})
-
-
-def makeRTSLeaderboardPointsLabel(value):
-    formatted = backport.getIntegralFormat(int(value))
-    if value < 0:
-        formatted = markValueAsError(formatted)
-    return makeHtmlString('html_templates:lobby/battle_results', 'rtsLeaderboardPoints_small_label', {'value': formatted})
-
-
 def makePercentLabel(value):
     formatted = backport.getGoldFormat(int(value))
     template = 'percent'
@@ -329,9 +295,8 @@ def makeRankedNickNameHugeValue(name):
 
 class GroupMiddleLabelBlock(base.DirectStatsItem):
 
-    def __init__(self, label, efficiencyFieldName=None):
-        super(GroupMiddleLabelBlock, self).__init__('', {'groupLabel': text_styles.main(label),
-         'efficiencyFieldName': efficiencyFieldName})
+    def __init__(self, label):
+        super(GroupMiddleLabelBlock, self).__init__('', {'groupLabel': text_styles.main(label)})
 
 
 class _SlashedValueItem(base.StatsItem):

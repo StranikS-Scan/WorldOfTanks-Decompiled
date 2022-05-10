@@ -315,12 +315,9 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     RANKED_WELCOME_VIEW_SHOWED = 'isRankedWelcomeViewShowed'
     RANKED_WELCOME_VIEW_STARTED = 'isRankedWelcomeViewStarted'
     EPIC_RANDOM_CHECKBOX_CLICKED = 'isEpicRandomCheckboxClicked'
-    TECHTREE_INTRO_BLUEPRINTS_RECEIVED = 'techTreeIntroBlueprintsReceived'
-    TECHTREE_INTRO_SHOWED = 'techTreeIntroShowed'
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
-    IS_HIDE_RTS_BOOTCAMP_BANNER = 'isHideRTSBootcampBanner'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -379,8 +376,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
-    RTS_ROSTER_SETUP_HINT = 'RTSRosterSetupHint'
-    RTS_BUILD_ROSTER_HINT = 'RTSBuildRosterHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

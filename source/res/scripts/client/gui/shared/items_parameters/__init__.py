@@ -156,6 +156,16 @@ def getEquipmentParameters(eqpDescr):
          'bombsNumberRange': eqpDescr.bombsNumber,
          'areaSquare': eqpDescr.areaLength * eqpDescr.areaWidth,
          'flyDelayRange': eqpDescr.delay})
+    elif eqDescrType is artefacts.AttackArtilleryFortEquipment:
+        params.update({'maxDamage': eqpDescr.maxDamage,
+         'commonDelay': eqpDescr.delay,
+         'areaRadius': eqpDescr.areaRadius,
+         'duration': eqpDescr.duration})
+    elif eqDescrType in (artefacts.FortConsumableInspire, artefacts.ConsumableInspire):
+        params.update({'crewRolesFactor': max(eqpDescr.increaseFactors['crewRolesFactor'] * 100 - 100, 0),
+         'inactivationDelay': eqpDescr.inactivationDelay,
+         'commonAreaRadius': eqpDescr.radius,
+         'duration': eqpDescr.duration})
     return params
 
 

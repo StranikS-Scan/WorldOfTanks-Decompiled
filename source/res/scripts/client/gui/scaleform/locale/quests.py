@@ -75,7 +75,6 @@ class QUESTS(object):
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
-    BONUSES_RTSCOLLECTION = '#quests:bonuses/rtsCollection'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
@@ -736,10 +735,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
     DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
-    DETAILS_CONDITIONS_CUMULATIVE_RTSTANKEREVENTPOINTS = '#quests:details/conditions/cumulative/rtsTankerEventPoints'
-    DETAILS_CONDITIONS_CUMULATIVE_RTSSTRATEGISTEVENTPOINTS = '#quests:details/conditions/cumulative/rtsStrategistEventPoints'
-    DETAILS_CONDITIONS_RTSSTRATEGISTWIN = '#quests:details/conditions/rtsStrategistWin'
-    DETAILS_CONDITIONS_RTSTANKERTOP5 = '#quests:details/conditions/rtsTankerTop5'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1053,8 +1048,8 @@ class QUESTS(object):
     MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
     MISSIONS_TAB_BATTLE_PASS_BODY = '#quests:missions/tab/battle_pass/body'
     MISSIONS_TAB_BATTLE_PASS_HEADER = '#quests:missions/tab/battle_pass/header'
-    MISSIONS_TAB_MAPBOX_BODY = '#quests:missions/tab/mapbox/body'
     MISSIONS_TAB_MAPBOX_HEADER = '#quests:missions/tab/mapbox/header'
+    MISSIONS_TAB_MAPBOX_BODY = '#quests:missions/tab/mapbox/body'
     MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
     MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
     MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
@@ -1187,6 +1182,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
+    TOKEN_DEFAULT_BATTLE_ROYALE = '#quests:token/default/battle_royale'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1257,6 +1253,7 @@ class QUESTS(object):
     BONUSNAME_BATTLE_BONUS_X5 = '#quests:bonusName/battle_bonus_x5'
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
+    BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1706,7 +1703,8 @@ class QUESTS(object):
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
-     TOKEN_DEFAULT_TANKREWARDS)
+     TOKEN_DEFAULT_TANKREWARDS,
+     TOKEN_DEFAULT_BATTLE_ROYALE)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
      BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_VEHICLE_ANY,
@@ -1782,7 +1780,8 @@ class QUESTS(object):
      BONUSNAME_ENTITLEMENTS_RANKED_202203_ACCESS,
      BONUSNAME_BATTLE_BONUS_X5,
      BONUSNAME_BATTLEPASSPOINTS,
-     BONUSNAME_BATTLEPASSPOINTS_PREVIEW)
+     BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
+     BONUSNAME_BRCOIN)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

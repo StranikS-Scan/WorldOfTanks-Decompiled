@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/InBattleUpgrades.py
 import BigWorld
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_NOTE
 from wotdecorators import noexcept
+
+class UpgradeInProgressComponent(object):
+    pass
+
 
 class InBattleUpgrades(BigWorld.DynamicScriptComponent):
 
@@ -18,7 +23,9 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
     def onVehicleUpgraded(self, newVehCompactDescr, newVehOutfitCompactDescr):
         vehicle = self.entity
         vehicle.isUpgrading = True
+        vehicle.entityGameObject.createComponent(UpgradeInProgressComponent)
         self.__onVehicleUpgraded(vehicle, newVehCompactDescr, newVehOutfitCompactDescr)
+        BigWorld.callback(0, lambda : vehicle.entityGameObject.removeComponentByType(UpgradeInProgressComponent))
         vehicle.isUpgrading = False
 
     @noexcept
@@ -26,7 +33,10 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         vehicleID = vehicle.id
         if vehicle.isPlayerVehicle:
             inputHandler = BigWorld.player().inputHandler
-            inputHandler.onControlModeChanged('arcade', initialVehicleMatrix=vehicle.matrix)
+            arcadeState = None
+            if inputHandler.ctrlModeName == CTRL_MODE_NAME.ARCADE:
+                arcadeState = inputHandler.ctrl.camera.cloneState()
+            inputHandler.onControlModeChanged(CTRL_MODE_NAME.ARCADE, initialVehicleMatrix=vehicle.matrix, arcadeState=arcadeState)
         progressionCtrl = vehicle.guiSessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.vehicleVisualChangingStarted(vehicleID)

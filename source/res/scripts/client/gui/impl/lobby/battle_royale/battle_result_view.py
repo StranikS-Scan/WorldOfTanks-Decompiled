@@ -3,13 +3,12 @@
 import typing
 from collections import OrderedDict
 import SoundGroups
+from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_result_view_model import BattleResultViewModel
-from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.achievement_model import AchievementModel
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.tooltip_constants_model import TooltipConstantsModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.stat_item_model import StatItemModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.leaderboard.leaderboard_constants import LeaderboardConstants
@@ -18,7 +17,6 @@ from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.place
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.row_model import RowModel
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_pass_progress import BattlePassProgress
 from gui.impl.pub import ViewImpl
-from gui.server_events.bonuses import mergeBonuses, splitBonuses
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.server_events.battle_royale_formatters import BRSections
@@ -32,10 +30,18 @@ from skeletons.gui.lobby_context import ILobbyContext
 from shared_utils import first
 from soft_exception import SoftException
 from gui.sounds.ambients import BattleResultsEnv
-from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BREvents
+from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
 from constants import ATTACK_REASON_INDICES, ATTACK_REASON, DEATH_REASON_ALIVE
 from gui.server_events import events_dispatcher
-from gui.impl.lobby.battle_royale.tooltips.battle_pass_points_sources_tooltip_view import BattlePassPointsSourcesTooltipView
+from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
+from gui.impl.backport.backport_context_menu import createContextMenuData
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from skeletons.connection_mgr import IConnectionManager
+from battle_pass_common import CurrencyBP
+from battle_pass_common import getPresentLevel
+from skeletons.gui.shared import IItemsCache
+from messenger.storage import storage_getter
+from gui.battle_pass.battle_pass_constants import ChapterState
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
@@ -57,7 +63,8 @@ _BR_POINTS_ICON = R.images.gui.maps.icons.battleRoyale.battleResult.leaderboard.
 _CURRENCIES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.CREDITS,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
- BattleRewardItemModel.CRYSTALS]
+ BattleRewardItemModel.CRYSTALS,
+ BattleRewardItemModel.BATTLE_ROYALE_COIN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
 
 class BrBattleResultsViewInLobby(ViewImpl):
@@ -66,6 +73,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battlePassController = dependency.descriptor(IBattlePassController)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
+    __itemsCache = dependency.descriptor(IItemsCache)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -100,7 +109,10 @@ class BrBattleResultsViewInLobby(ViewImpl):
         return self.__arenaUniqueID
 
     def createToolTipContent(self, event, contentID):
-        return BattlePassPointsSourcesTooltipView(self.__data) if event.contentID == R.views.lobby.battle_royale.tooltips.BattlePassPointsSourcesTooltipView() else super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
+        if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
+            currencyType = event.getArgument('currencyType')
+            return RewardCurrencyTooltipView(currencyType)
+        return super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -114,6 +126,21 @@ class BrBattleResultsViewInLobby(ViewImpl):
             return window
         else:
             return super(BrBattleResultsViewInLobby, self).createToolTip(event)
+
+    def createContextMenu(self, event):
+        if event.contentID == R.views.common.BackportContextMenu():
+            contextMenuArgs = {}
+            contextMenuArgs['databaseID'] = event.getArgument('databaseID')
+            hiddenUserName = event.getArgument('hiddenUserName')
+            contextMenuArgs['userName'] = hiddenUserName if hiddenUserName else event.getArgument('userName')
+            contextMenuData = createContextMenuData(CONTEXT_MENU_HANDLER_TYPE.BR_BATTLE_RESULT_CONTEXT_MENU, contextMenuArgs)
+            currentPlayer = self.usersStorage.getUser(self.__connectionMgr.databaseID)
+            isCurrentPlayer = currentPlayer.getName() == contextMenuArgs['userName']
+            if contextMenuData is not None and not isCurrentPlayer:
+                window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())
+                window.load()
+                return window
+        return super(BrBattleResultsViewInLobby, self).createContextMenu(event)
 
     def _initialize(self, *args, **kwargs):
         super(BrBattleResultsViewInLobby, self)._initialize(*args, **kwargs)
@@ -142,12 +169,17 @@ class BrBattleResultsViewInLobby(ViewImpl):
             self.__setPersonalResult(model.personalResults)
             self.__setLeaderboard(model.leaderboardLobbyModel)
 
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
     def __onBattlePassClick(self):
         events_dispatcher.showMissionsBattlePass()
 
     def __updateBattlePass(self):
         self.__setBattlePass(self.viewModel.personalResults.battlePassProgress)
         self.__setBattleRewards(self.viewModel.personalResults)
+        self.__setBattleRewardsWithPremium(self.viewModel.personalResults)
 
     def __setPlayerVehicleStatus(self, statusModel):
         commonInfo = self.__data.get(BRSections.COMMON)
@@ -170,21 +202,36 @@ class BrBattleResultsViewInLobby(ViewImpl):
             self.__setFinishResult(personalModel)
             self.__setStats(personalModel)
             self.__setBattleRewards(personalModel)
-            self.__setBonuses(personalModel)
-            self.__setAchievements(personalModel)
+            self.__setBattleRewardsWithPremium(personalModel)
             self.__setCompletedQuests(personalModel)
         self.__setBattlePass(personalModel.battlePassProgress)
 
     def __setBattlePass(self, battlePassModel):
         battlePassData = self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]
+        chapterID = battlePassData['chapterID']
+        currentLevelPoints = battlePassData['currentLevelPoints']
         totalPoints = self.__getBattlePassPointsTotal()
-        battlePassModel.setEarnedPoints(min(totalPoints, battlePassData['currentLevelPoints']))
-        battlePassModel.setCurrentLevel(battlePassData['currentLevel'])
+        battlePassModel.setEarnedPoints(min(totalPoints, currentLevelPoints))
+        battlePassModel.setCurrentLevel(getPresentLevel(battlePassData['currentLevel']))
         battlePassModel.setMaxPoints(battlePassData['maxPoints'])
-        battlePassModel.setCurrentLevelPoints(battlePassData['currentLevelPoints'])
-        if battlePassData['isDone']:
+        battlePassModel.setCurrentLevelPoints(currentLevelPoints)
+        battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
+        isMaxLevel = self.__battlePassController.getMaxLevelInChapter(chapterID) == battlePassData['currentLevel']
+        if isMaxLevel and battlePassData['isDone']:
+            chapterID = 0
+            currentLevelPoints = totalPoints
+            chapterState = ChapterState.COMPLETED
+        else:
+            chapterState = ChapterState.ACTIVE
+        battlePassModel.setChapterState(chapterState)
+        battlePassModel.setChapterID(chapterID)
+        if battlePassData['battlePassComplete']:
+            battlePassModel.setFreePoints(self.__freePoints)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
         else:
+            if currentLevelPoints == 0:
+                currentLevelPoints = battlePassData['pointsTotal']
+            battlePassModel.setFreePoints(currentLevelPoints)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
         state = BattlePassProgress.BP_STATE_DISABLED
         bpController = self.__battlePassController
@@ -230,7 +277,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
                 rowModel.user.setKills(rowData['kills'])
                 rowModel.user.setDamage(rowData['damage'])
                 rowModel.user.setVehicleLevel(rowData['achievedLevel'])
-                rowModel.user.setVehicleNation(rowData['nationName'])
+                rowModel.user.setVehicleType(rowData['vehicleType'])
                 rowModel.user.setVehicleName(rowData['vehicleName'])
                 rowList.addViewModel(rowModel)
 
@@ -254,11 +301,14 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __isSquadMode(self):
         return self.__data[BRSections.COMMON]['isSquadMode']
 
+    def __hasPremium(self):
+        return self.__data[BRSections.COMMON]['hasPremium']
+
     def __getStats(self):
         return self.__data[BRSections.PERSONAL][BRSections.STATS]
 
-    def __getFinancialData(self):
-        financialData = self.__data.get(BRSections.PERSONAL, {}).get(BRSections.FINANCE, {})
+    def __getFinancialData(self, section):
+        financialData = self.__data.get(BRSections.PERSONAL, {}).get(section, {})
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType):
             financialData.update({BattleRewardItemModel.BATTLE_PASS_POINTS: self.__getBattlePassPointsTotal()})
         return financialData
@@ -266,7 +316,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __getBattlePassPointsTotal(self):
         questsBonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES)
         questPoints = sum([ bonus.getCount() for bonuses in questsBonuses for bonus in bonuses if bonus.getName() == 'battlePassPoints' ]) if questsBonuses else 0
-        return self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]['earnedPoints'] + questPoints
+        return self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]['basePointsDiff'] + questPoints
 
     def __setFinishResult(self, personalResultsModel):
         finishReason = self.__getFinishReason()
@@ -292,14 +342,23 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __setBattleRewards(self, rewardsModel):
         rewardList = rewardsModel.getBattleRewardsList()
         rewardList.clear()
-        rewards = self.__getEarnedFinance()
+        rewards = self.__getEarnedFinance(BRSections.FINANCE)
         for reward in rewards:
             rewardList.addViewModel(reward)
 
         rewardList.invalidate()
 
-    def __getEarnedFinance(self):
-        earned = self.__getFinancialData()
+    def __setBattleRewardsWithPremium(self, rewardsModel):
+        rewardList = rewardsModel.getBattleRewardsListWithPremium()
+        rewardList.clear()
+        rewards = self.__getEarnedFinance(BRSections.FINANCE_PREM)
+        for reward in rewards:
+            rewardList.addViewModel(reward)
+
+        rewardList.invalidate()
+
+    def __getEarnedFinance(self, section):
+        earned = self.__getFinancialData(section)
         sortedEarned = OrderedDict(sorted(earned.iteritems(), key=lambda x: _CURRENCIES.index(x[0])))
         financialList = []
         for bonusType, value in sortedEarned.iteritems():
@@ -318,8 +377,9 @@ class BrBattleResultsViewInLobby(ViewImpl):
         model = self.viewModel.personalResults
         self.viewModel.personalResults.setPlace(commonData['playerPlace'])
         vehicleInfo = first(commonData['playerVehicles'])
-        model.setNationName(vehicleInfo['nationName'])
         model.setVehicleName(vehicleInfo['vehicleName'])
+        model.setVehicleType(vehicleInfo['vehicleType'])
+        model.setHasPremium(self.__hasPremium())
         return
 
     def __setMapName(self):
@@ -329,31 +389,6 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __setCompletedQuests(self, personalModel):
         questsCount = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get('completedQuestsCount', 0)
         personalModel.setQuestCompleted(questsCount)
-
-    def __setBonuses(self, model):
-        questsBonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES, [])
-        if not questsBonuses:
-            return
-        bonusesModel = model.getBonuses()
-        bonusesModel.clear()
-        bonuses = [ bonus for questBonuses in questsBonuses for bonus in questBonuses ]
-        bonuses = [ bonus for bonus in mergeBonuses(bonuses) if bonus.getName() not in _CURRENCIES ]
-        bonuses = splitBonuses(bonuses)
-        packBonusModelAndTooltipData(bonuses, bonusesModel, tooltipData=self.__tooltipsData)
-        bonusesModel.invalidate()
-
-    def __setAchievements(self, model):
-        achievements = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.ACHIEVEMENTS, [])
-        if not achievements:
-            return
-        achievementsList = model.getAchievements()
-        achievementsList.clear()
-        for achievementName in achievements:
-            achievementModel = AchievementModel()
-            achievementModel.setName(achievementName)
-            achievementsList.addViewModel(achievementModel)
-
-        achievementsList.invalidate()
 
     def __getTooltipParametersCreator(self):
         return {TooltipConstantsModel.ACHIEVEMENT_TOOLTIP: self.__getAchievementTooltipParameters,
@@ -387,4 +422,10 @@ class BrBattleResultsViewInLobby(ViewImpl):
     @staticmethod
     def __setUserName(model, info):
         model.setUserName(info.get('userName', ''))
+        model.setDatabaseID(info.get('databaseID', 0))
         model.setClanAbbrev(info.get('clanAbbrev', info.get('userClanAbbrev', '')))
+        model.setHiddenUserName(info.get('hiddenName', ''))
+
+    @property
+    def __freePoints(self):
+        return self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0)

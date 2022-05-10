@@ -17,7 +17,7 @@ from gui.impl.gen import R
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
-_DEFAULT_VEHICLE_PRICE = 3000
+_DEFAULT_VEHICLE_PRICE = 1500
 _DEFAULT_EQUIPMENT_PRICE = 3000
 _DEFAULT_INSTRUCTION_PRICE = 6
 _DEFAULT_LEVEL = 10

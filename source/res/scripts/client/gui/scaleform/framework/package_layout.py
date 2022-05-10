@@ -5,7 +5,8 @@ import logging
 from frameworks.wulf import WindowLayer
 from gui.shared.events import ViewEventType
 from soft_exception import SoftException
-from gui.Scaleform.framework import g_entitiesFactories
+from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
+from gui.Scaleform.framework import g_entitiesFactories, GroupedViewSettings
 from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -111,10 +112,10 @@ class PackageImporter(object):
     def getAliasesByPackage(self, path):
         return self._aliases.get(path)
 
-    def load(self, app, seq):
+    def load(self, app, seq, arenaGuiType=None, isExtention=False):
         load = self._loadPackage
         for path in seq:
-            load(path)
+            load(path, arenaGuiType, isExtention)
 
         appNS = app.appNS
         for handlers in self._handlers.itervalues():
@@ -144,13 +145,15 @@ class PackageImporter(object):
 
         return
 
-    def _loadPackage(self, path):
+    def _loadPackage(self, path, arenaGuiType, isExtention):
         if self.isPackageLoaded(path):
             return
         _logger.debug('Tries to load GUI package "%s"', path)
         imported = importlib.import_module(path)
         try:
             settings = imported.getViewSettings()
+            if not isExtention:
+                settings = self._getHandlesWithoutExtensionOverride(settings, arenaGuiType)
         except AttributeError:
             _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getViewSettings'.format(path))
@@ -159,6 +162,8 @@ class PackageImporter(object):
         self._aliases[path] = aliases
         try:
             handlers = imported.getContextMenuHandlers()
+            if not isExtention:
+                handlers = self._getHandlesWithoutExtensionOverride(handlers, arenaGuiType)
         except AttributeError:
             _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getContextMenuHandlers'.format(path))
@@ -182,3 +187,17 @@ class PackageImporter(object):
             processed.add(handler)
 
         self._handlers[path] = processed
+
+    def _getHandlesWithoutExtensionOverride(self, handlers, arenaGuiType):
+        handlersList = list(handlers)
+        for handler in handlersList[:]:
+            if isinstance(handler, GroupedViewSettings):
+                alias = handler.alias
+                activeOverrideAliases = g_overrideScaleFormViewsConfig.activeExtensionsViewAliases.get(arenaGuiType, [])
+            else:
+                alias, _ = handler[:2]
+                activeOverrideAliases = g_overrideScaleFormViewsConfig.activeExtensionsCMAliases.get(arenaGuiType, [])
+            if alias in activeOverrideAliases:
+                handlersList.remove(handler)
+
+        return tuple(handlersList)

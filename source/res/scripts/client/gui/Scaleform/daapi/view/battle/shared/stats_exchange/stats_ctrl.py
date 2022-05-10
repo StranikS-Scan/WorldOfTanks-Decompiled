@@ -108,9 +108,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         collection = vos_collections.VehiclesInfoCollection()
         for vInfoVO in collection.iterator(arenaDP):
-            if not self.__isValidVO(vInfoVO):
+            if vInfoVO.isObserver():
                 continue
-            isEnemy, overrides = self._getTeamOverrides(vInfoVO, arenaDP)
+            isEnemy, overrides = self.__getTeamOverrides(vInfoVO, arenaDP)
             with exchange.getCollectedComponent(isEnemy) as item:
                 item.addVehicleInfo(vInfoVO, overrides)
 
@@ -124,7 +124,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         collection = vos_collections.VehiclesItemsCollection()
         for vos in collection.iterator(arenaDP):
             vInfoVO, vStatsVO = vos
-            if not self.__isValidVO(vInfoVO):
+            if vInfoVO.isObserver():
                 continue
             self._statsCollector.addVehicleStatsUpdate(vInfoVO, vStatsVO)
             isEnemy = self.__isEnemyTeam(arenaDP, vInfoVO.team)
@@ -140,7 +140,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setFragsS(data)
 
     def addVehicleInfo(self, vo, arenaDP):
-        isEnemy, overrides = self._getTeamOverrides(vo, arenaDP)
+        isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         with exchange.getCollectedComponent(isEnemy) as item:
             item.addVehicleInfo(vo, overrides)
@@ -160,9 +160,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         reusable = set()
         for flags, vInfoVO in updated:
-            if not self.__isValidVO(vInfoVO):
+            if vInfoVO.isObserver():
                 continue
-            isEnemy, overrides = self._getTeamOverrides(vInfoVO, arenaDP)
+            isEnemy, overrides = self.__getTeamOverrides(vInfoVO, arenaDP)
             if flags & INVALIDATE_OP.SORTING > 0:
                 reusable.add(isEnemy)
             with exchange.getCollectedComponent(isEnemy) as item:
@@ -187,7 +187,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         exchange.addVehicleInfo(vo)
         if flags & INVALIDATE_OP.SORTING > 0:
             exchange.addSortIDs(arenaDP)
-        if self.__isValidVO(vo):
+        if not vo.isObserver():
             self._statsCollector.addVehicleStatusUpdate(vo)
         exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         data = exchange.get()
@@ -203,7 +203,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         getVehicleInfo = arenaDP.getVehicleInfo
         for flags, vStatsVO in updated:
             vInfoVO = getVehicleInfo(vStatsVO.vehicleID)
-            if not self.__isValidVO(vInfoVO):
+            if vInfoVO.isObserver():
                 continue
             self._statsCollector.addVehicleStatsUpdate(vInfoVO, vStatsVO)
             isEnemy = self.__isEnemyTeam(arenaDP, vInfoVO.team)
@@ -231,7 +231,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         self.as_updateTriggeredChatCommandsS(updateList)
 
     def invalidatePlayerStatus(self, flags, vo, arenaDP):
-        isEnemy, overrides = self._getTeamOverrides(vo, arenaDP)
+        isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
         exchange = self._exchangeBroker.getPlayerStatusExchange(isEnemy)
         exchange.setVehicleID(vo.vehicleID)
         exchange.setStatus(overrides.getPlayerStatus(vo))
@@ -268,7 +268,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def invalidateInvitationsStatuses(self, vos, arenaDP):
         exchange = self._exchangeBroker.getInvitationsExchange()
         for vo in vos:
-            isEnemy, overrides = self._getTeamOverrides(vo, arenaDP)
+            isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
             with exchange.getCollectedComponent(isEnemy) as item:
                 item.setVehicleID(vo.vehicleID)
                 item.setStatus(overrides.getInvitationDeliveryStatus(vo))
@@ -336,20 +336,6 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def _createExchangeCollector(self):
         raise NotImplementedError
 
-    def _getTeamOverrides(self, vo, arenaDP):
-        team = vo.team
-        if team in self.__reusable:
-            isEnemy, overrides = self.__reusable[team]
-        else:
-            isEnemy = self.__isEnemyTeam(arenaDP, team)
-            overrides = team_overrides.makeOverrides(isEnemy, team, self._personalInfo, self._arenaVisitor, isReplayPlaying=self.sessionProvider.isReplayPlaying)
-            self.__reusable[team] = (isEnemy, overrides)
-        return (isEnemy, overrides)
-
-    @staticmethod
-    def __isValidVO(vInfoVO):
-        return not (vInfoVO.isObserver() or vInfoVO.isSupply() or vInfoVO.isCommander())
-
     def __setPersonalStatus(self):
         self.__personalStatus = _makePersonalStatusFromSettingsStorage(self.settingsCore)
         self.__personalStatus |= PERSONAL_STATUS.SHOW_ALLY_INVITES
@@ -398,6 +384,16 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         statusLabel = text_styles.concatStylesToSingleLine(icon, text)
         return {'statusLabel': statusLabel,
          'status': status}
+
+    def __getTeamOverrides(self, vo, arenaDP):
+        team = vo.team
+        if team in self.__reusable:
+            isEnemy, overrides = self.__reusable[team]
+        else:
+            isEnemy = self.__isEnemyTeam(arenaDP, team)
+            overrides = team_overrides.makeOverrides(isEnemy, team, self._personalInfo, self._arenaVisitor, isReplayPlaying=self.sessionProvider.isReplayPlaying)
+            self.__reusable[team] = (isEnemy, overrides)
+        return (isEnemy, overrides)
 
     def __clearTeamOverrides(self):
         while self.__reusable:

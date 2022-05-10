@@ -81,11 +81,12 @@ class DependencyError(SoftException):
 
 
 class DependencyManager(object):
-    __slots__ = ('__services',)
+    __slots__ = ('__services', '__replacedServices')
 
     def __init__(self):
         super(DependencyManager, self).__init__()
         self.__services = {}
+        self.__replacedServices = set()
 
     def getService(self, class_):
         try:
@@ -100,14 +101,17 @@ class DependencyManager(object):
         self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
         _logger.debug('Instance of service is added: %r->%r', class_, obj)
 
-    def replaceInstance(self, class_, obj, finalizer=None):
+    def replaceInstance(self, class_, obj, finalizer=None, force=True):
         if class_ not in self.__services:
             _logger.warning('No implementation found for Service %r prior to replace!', class_)
+        elif class_ in self.__replacedServices and not force:
+            raise DependencyError('Service {} is already replaced'.format(class_))
         else:
             self.__services[class_].finalize()
             self.__services[class_].clear()
             self.__services.pop(class_, None)
         self.addInstance(class_, obj, finalizer)
+        self.__replacedServices.add(class_)
         return
 
     def addRuntime(self, class_, creator, finalizer=None):

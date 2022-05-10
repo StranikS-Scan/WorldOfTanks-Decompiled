@@ -445,9 +445,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='PATCH', post_data=post_data)
 
-    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, role, fields=None):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/equipment_commander/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
-        post_data = {'equipment_commander_id': target_account_id}
+        post_data = {'equipment_commander_id': target_account_id,
+         'role': role}
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='POST', post_data=post_data)
 
@@ -514,43 +515,43 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')
 
     def join_event(self, callback, event_id, fields=None):
-        url = '/wgelen/wot/v1/join_event'
+        url = '/wgelen/v1/join_event'
         post_data = {'event_id': event_id}
         return self._request_data(callback, url, method='POST', post_data=post_data)
 
     def leave_event(self, callback, event_id, fields=None):
-        url = '/wgelen/wot/v1/leave_event'
+        url = '/wgelen/v1/leave_event'
         post_data = {'event_id': event_id}
         return self._request_data(callback, url, method='POST', post_data=post_data)
 
     def get_events_data(self, callback, fields=None):
-        url = '/wgelen/wot/v1/get_events_data'
+        url = '/wgelen/v1/get_events_data'
         return self._request_data(callback, url, method='GET')
 
     def get_hangar_flag(self, callback, fields=None):
-        url = '/wgelen/wot/v1/get_hangar_flag'
+        url = '/wgelen/v1/get_hangar_flag'
         return self._request_data(callback, url, method='GET')
 
     def get_leaderboard(self, callback, event_id, page_number, leaderboard_id, fields=None):
-        url = '/wgelen/wot/v1/get_leaderboard'
+        url = '/wgelen/v1/get_leaderboard'
         get_data = {'event_id': event_id,
          'page_number': page_number,
          'leaderboard_id': leaderboard_id}
         return self._request_data(callback, url, get_data, 'GET')
 
     def get_my_event_top(self, callback, event_id, fields=None):
-        url = '/wgelen/wot/v1/get_my_event_top'
+        url = '/wgelen/v1/get_my_event_top'
         get_data = {'event_id': event_id}
         return self._request_data(callback, url, get_data, 'GET')
 
     def get_my_leaderboard_position(self, callback, event_id, leaderboard_id, fields=None):
-        url = '/wgelen/wot/v1/get_my_leaderboard_position'
+        url = '/wgelen/v1/get_my_leaderboard_position'
         get_data = {'event_id': event_id,
          'leaderboard_id': leaderboard_id}
         return self._request_data(callback, url, get_data, 'GET')
 
     def get_player_data(self, callback, fields=None):
-        url = '/wgelen/wot/v1/get_player_data'
+        url = '/wgelen/v1/get_player_data'
         return self._request_data(callback, url, method='GET')
 
     def hof_user_info(self, callback):
@@ -593,9 +594,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/mapbox'
         return self._request_data(callback, url, method='POST', post_data={'itemID': itemID})
 
-    def complete_survey(self, callback, mapName):
+    def complete_survey(self, callback, surveyData):
         url = '/mapbox/surveys/complete'
-        return self._request_data(callback, url, method='POST', post_data={'name': mapName})
+        return self._request_data(callback, url, method='POST', post_data=surveyData)
 
     def request_authorized_survey_url(self, callback, mapURL):
         return self._request_data(callback, mapURL, method='GET')

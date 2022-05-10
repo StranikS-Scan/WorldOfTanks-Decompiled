@@ -1,0 +1,19 @@
+<ThunderStrike.def>
+  <ClientMethods>
+    <hitThunderStrike></hitThunderStrike>
+  </ClientMethods>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <attackerID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </attackerID>
+    <delayEndTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </delayEndTime>
+  </Properties>
+</ThunderStrike.def>

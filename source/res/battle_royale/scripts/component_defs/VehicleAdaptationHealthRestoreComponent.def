@@ -1,0 +1,15 @@
+<VehicleAdaptationHealthRestoreComponent.def>
+  <Properties>
+    <finishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </finishTime>
+    <restoreHealth>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </restoreHealth>
+  </Properties>
+  <DefaultKeyName>	vehicleAdaptationHealthRestoreComponent	</DefaultKeyName>
+</VehicleAdaptationHealthRestoreComponent.def>

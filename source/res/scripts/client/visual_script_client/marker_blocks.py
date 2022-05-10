@@ -49,18 +49,13 @@ class HideMarker(Block, MarkerMeta):
         super(HideMarker, self).__init__(*args, **kwargs)
         self._in = self._makeEventInputSlot('in', self.__onHide)
         self._marker = self._makeDataInputSlot('marker', SLOT_TYPE.MARKER_POINT)
-        self._hideSilently = self._makeDataInputSlot('hideSilently ', SLOT_TYPE.BOOL)
-        self._hideSilently.setDefaultValue(False)
         self._out = self._makeEventOutputSlot('out')
 
     def __onHide(self):
         if not IS_VS_EDITOR:
             marker = self._marker.getValue()
             if marker:
-                hideSilently = False
-                if self._hideSilently.hasValue():
-                    hideSilently = self._hideSilently.getValue()
-                HintManager.hintManager().hideMarker(marker, hideSilently)
+                HintManager.hintManager().hideMarker(marker)
         self._out.call()
 
 

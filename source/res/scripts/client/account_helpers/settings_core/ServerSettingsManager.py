@@ -7,9 +7,8 @@ from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.battle_pass.battle_pass_helpers import updateBattlePassVersion
+from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
-from gui.rts_battles.rts_constants import RTS_CAROUSEL_FILTER_KEY
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
@@ -34,8 +33,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
     ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
     ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
-    RTS_CAROUSEL_FILTER_1 = 'RTS_CAROUSEL_FILTER_1'
-    RTS_CAROUSEL_FILTER_2 = 'RTS_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
@@ -345,8 +342,7 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
                                             GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25,
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
-                                            GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
-                                            GuiSettingsBehavior.IS_HIDE_RTS_BOOTCAMP_BANNER: 28}, offsets={}),
+                                            GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -417,9 +413,7 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_HANGAR_HINT: 20,
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
-                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
-                                           OnceOnlyHints.RTS_ROSTER_SETUP_HINT: 24,
-                                           OnceOnlyHints.RTS_BUILD_ROSTER_HINT: 25}, offsets={}),
+                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -600,58 +594,7 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)}),
-     SETTINGS_SECTIONS.RTS_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                               'germany': 1,
-                                               'usa': 2,
-                                               'china': 3,
-                                               'france': 4,
-                                               'uk': 5,
-                                               'japan': 6,
-                                               'czech': 7,
-                                               'sweden': 8,
-                                               'poland': 9,
-                                               'italy': 10,
-                                               'lightTank': 15,
-                                               'mediumTank': 16,
-                                               'heavyTank': 17,
-                                               'SPG': 18,
-                                               'AT-SPG': 19,
-                                               'level_1': 20,
-                                               'level_2': 21,
-                                               'level_3': 22,
-                                               'level_4': 23,
-                                               'level_5': 24,
-                                               'level_6': 25,
-                                               'level_7': 26,
-                                               'level_8': 27,
-                                               'level_9': 28,
-                                               'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.RTS_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                               'elite': 1,
-                                               'rented': 2,
-                                               'igr': 3,
-                                               'gameMode': 4,
-                                               'favorite': 5,
-                                               'bonus': 6,
-                                               'event': 7,
-                                               'crystals': 8,
-                                               RTS_CAROUSEL_FILTER_KEY: 9,
-                                               'role_HT_assault': 11,
-                                               'role_HT_break': 12,
-                                               'role_HT_support': 13,
-                                               'role_HT_universal': 14,
-                                               'role_MT_universal': 15,
-                                               'role_MT_sniper': 16,
-                                               'role_MT_assault': 17,
-                                               'role_MT_support': 18,
-                                               'role_ATSPG_assault': 19,
-                                               'role_ATSPG_universal': 20,
-                                               'role_ATSPG_sniper': 21,
-                                               'role_ATSPG_support': 22,
-                                               'role_LT_universal': 23,
-                                               'role_LT_wheeled': 24,
-                                               'role_SPG': 25}, offsets={})}
+     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -741,13 +684,16 @@ class ServerSettingsManager(object):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
 
     def getBPStorage(self, defaults=None):
+        if not self.settingsCache.isSynced():
+            return {}
         storageData = self.getSection(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, defaults)
-        if updateBattlePassVersion(storageData):
+        if updateBattlePassSettings(storageData):
             self.saveInBPStorage(storageData)
         return storageData
 
     def saveInBPStorage(self, settings):
-        return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
+        if self.settingsCache.isSynced():
+            self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -985,6 +931,8 @@ class ServerSettingsManager(object):
          GUI_START_BEHAVIOR: {},
          'battlePassStorage': {},
          SETTINGS_SECTIONS.CONTOUR: {},
+         SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
+         SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1099,6 +1047,14 @@ class ServerSettingsManager(object):
         clearContourData = clear.get(SETTINGS_SECTIONS.CONTOUR, 0)
         if contourData or clearContourData:
             settings[SETTINGS_SECTIONS.CONTOUR] = self._buildSectionSettings(SETTINGS_SECTIONS.CONTOUR, contourData) ^ clearContourData
+        royaleFilterCarousel1 = data.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1, {})
+        clearRoyaleFilterCarousel1 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1, 0)
+        if royaleFilterCarousel1 or clearRoyaleFilterCarousel1:
+            settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1, royaleFilterCarousel1) ^ clearRoyaleFilterCarousel1
+        royaleFilterCarousel2 = data.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, {})
+        clearRoyaleFilterCarousel2 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, 0)
+        if royaleFilterCarousel2 or clearRoyaleFilterCarousel2:
+            settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, royaleFilterCarousel2) ^ clearRoyaleFilterCarousel2
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

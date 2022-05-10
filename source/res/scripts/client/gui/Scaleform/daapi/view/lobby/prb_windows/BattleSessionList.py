@@ -89,5 +89,5 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
         peripheryName = self.lobbyContext.getPeripheryName(battleSession.peripheryID, checkAnother=False, useShortName=True)
         if peripheryName is None:
             peripheryName = ''
-        startTimeString = formatters.getShortPrebattleStartTimeString(battleSession.startTime)
+        startTimeString = formatters.getPrebattleStartTimeString(battleSession.startTime)
         return backport.text(R.strings.prebattle.title.battleSession.clanBattle.startTime(), startTime=startTimeString, peripheryName=peripheryName, arenaName=arenaName)

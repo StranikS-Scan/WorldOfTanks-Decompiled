@@ -32,10 +32,10 @@ class RankedSelectorTooltip(BlocksTooltipData):
     def _packHeaderBlock(self):
         return formatters.packTitleDescBlock(title=text_styles.highTitle(backport.text(R.strings.ranked_battles.selectorTooltip.title())), desc=text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.desc())))
 
-    def _packTimeTableBlock(self, leftPadding=0):
+    def _packTimeTableBlock(self, leftPadding=0, bottomPadding=0):
         primeTime = self._battleController.getPrimeTimes().get(self.__connectionMgr.peripheryID)
         currentCycleEnd = self._battleController.getCurrentSeason().getCycleEndDate()
-        return formatters.packBuildUpBlockData(getPrimeTableBlocks(primeTime, currentCycleEnd, R.strings.ranked_battles.selectorTooltip), 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding))
+        return formatters.packBuildUpBlockData(getPrimeTableBlocks(primeTime, currentCycleEnd, R.strings.ranked_battles.selectorTooltip), 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, bottom=bottomPadding))
 
     def _getTillEndBlock(self, timeLeft):
         return formatters.packTextBlockData(text_styles.main(backport.text(R.strings.ranked_battles.selectorTooltip.tillEnd())) + ' ' + text_styles.stats(backport.getTillTimeStringByRClass(timeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability)))

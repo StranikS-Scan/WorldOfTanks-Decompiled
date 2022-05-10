@@ -1,6 +1,10 @@
 <Loot.def>
   <AppealRadius>	3000	</AppealRadius>
   <Properties>
+    <spawnerId>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </spawnerId>
     <pickupRange>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -17,6 +21,10 @@
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </pickupOffset>
+    <pickupBlockTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </pickupBlockTime>
     <pickupTime>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

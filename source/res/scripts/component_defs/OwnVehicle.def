@@ -89,15 +89,10 @@
       <Type>	BATTLE_EVENTS_SUMMARY	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </battleEventsSummary>
-    <deathZonesStatus>
-      <Type>	DEATH_ZONES_STATUS	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </deathZonesStatus>
   </Properties>
   <CellMethods></CellMethods>
   <ClientMethods>
     <onBattleEvents>
-      <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
       </Arg>
     </onBattleEvents>

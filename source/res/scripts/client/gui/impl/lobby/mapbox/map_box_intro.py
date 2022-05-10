@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mapbox/map_box_intro.py
 from constants import Configs
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
-from frameworks.wulf.gui_constants import WindowLayer
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_intro_model import MapBoxIntroModel
 from gui.impl.lobby.mapbox.sound import getMapboxViewSoundSpace
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.server_events.events_dispatcher import showMissionsMapboxProgression
 from gui.shared.event_dispatcher import showModeSelectorWindow
@@ -22,11 +20,11 @@ class MapBoxIntro(ViewImpl):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, layoutID, closeCallback):
-        settings = ViewSettings(layoutID)
+    def __init__(self, *args, **kwargs):
+        settings = ViewSettings(R.views.lobby.mapbox.MapBoxIntro())
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = MapBoxIntroModel()
-        self.__closeCallback = closeCallback
+        self.__closeCallback = kwargs.get('closeCallback')
         super(MapBoxIntro, self).__init__(settings)
 
     @property
@@ -35,13 +33,13 @@ class MapBoxIntro(ViewImpl):
 
     def _initialize(self):
         super(MapBoxIntro, self)._initialize()
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateViewModel
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeChanged
         self.viewModel.onClose += self.__onClose
 
     def _finalize(self):
         self.viewModel.onClose -= self.__onClose
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateViewModel
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeChanged
         super(MapBoxIntro, self)._finalize()
 
@@ -52,7 +50,7 @@ class MapBoxIntro(ViewImpl):
         self.__updateViewModel()
 
     @server_settings.serverSettingsChangeListener(Configs.MAPBOX_CONFIG.value)
-    def __onServerSettingsChanged(self, diff):
+    def __onServerSettingsChanged(self, _):
         if not self.__mapboxCtrl.getModeSettings().isEnabled:
             self.destroyWindow()
             return
@@ -82,10 +80,3 @@ class MapBoxIntro(ViewImpl):
         else:
             showMissionsMapboxProgression()
         return
-
-
-class MapBoxIntroWindow(LobbyWindow):
-    __slots__ = ()
-
-    def __init__(self, closeCallback=None, parent=None):
-        super(MapBoxIntroWindow, self).__init__(WindowFlags.WINDOW, content=MapBoxIntro(R.views.lobby.mapbox.MapBoxIntro(), closeCallback), parent=parent, layer=WindowLayer.FULLSCREEN_WINDOW)

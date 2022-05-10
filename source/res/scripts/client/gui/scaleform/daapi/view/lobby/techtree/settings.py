@@ -11,6 +11,8 @@ __all__ = ('NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'DEFAU
 TREE_SHARED_REL_FILE_PATH = 'gui/flash/techtree/tree-shared.xml'
 NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/{}-tree.xml'
 NATION_TREE_REL_PREMIUM_FILE_PATH = 'gui/flash/techtree/{}-premium.xml'
+NODE_ORDER_PREFIX_COMMON = 0
+NODE_ORDER_PREFIX_PREMIUM = 1
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.VEHICLE]
 RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.TURRET,

@@ -4,7 +4,7 @@ import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT, BATTLE_ROYALE_STATISTICS_LAYOUT
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
@@ -16,6 +16,7 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getAvailableNationsNames
 
 def _packAvgDmgLditItemData(avgDmg):
     return PUtils.packLditItemData(backport.getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDAMAGE, 'avgDamage40x32.png')
@@ -94,7 +95,11 @@ def _formatChartsData(data):
 
 def _getChartsFullData(targetData, levelDisabledTooltip=None):
     stats = targetData.getBattlesStats()
-    return _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), _getVehStatsByLevel(stats, levelDisabledTooltip)))
+    return _formatChartsData((_getVehStatsByTypes(stats),
+     _getVehStatsByNation(stats),
+     _getVehStatsByLevel(stats, levelDisabledTooltip),
+     tuple(),
+     tuple()))
 
 
 def _getFortAvgLoot(targetData, totalLootValue):
@@ -324,7 +329,11 @@ class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
     def _getDetailedData(self, data):
         targetData = data[0]
         stats = targetData.getBattlesStats()
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats),
+          _getVehStatsByNation(stats),
+          tuple(),
+          tuple(),
+          tuple())))
 
 
 class ProfileRanked10x10StatisticsVO(ProfileRankedStatisticsVO):
@@ -341,12 +350,108 @@ class ProfileEpicRandomStatisticsVO(ProfileAllStatisticsVO):
     def _getDetailedData(self, data):
         targetData = data[0]
         stats = targetData.getBattlesStats()
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats),
+          _getVehStatsByNation(stats),
+          tuple(),
+          tuple(),
+          tuple())))
 
     def _getListOfUniqueVehicles(self, targetData, accountDossier):
         randomVehicles = set(accountDossier.getRandomStats().getVehicles().keys())
         epicRandomVehicles = set(targetData.getVehicles().keys())
         return len(randomVehicles.union(epicRandomVehicles))
+
+
+class ProfileStatisticsBattleRoyaleVO(BaseDictStatisticsVO):
+
+    def __init__(self, targetData, accountDossier, isCurrentUser):
+        self._isCurrentUser = isCurrentUser
+        self.__targetData = targetData
+        super(ProfileStatisticsBattleRoyaleVO, self).__init__((targetData, accountDossier))
+
+    def _getHeaderText(self, data):
+        targetData = data[0]
+        return backport.text(R.strings.profile.section.statistics.headerText.battleRoyaleSolo()) if targetData.isSolo() else backport.text(R.strings.profile.section.statistics.headerText.battleRoyaleSquad())
+
+    def _getHeaderData(self, data):
+        return (self.__packBattleCount(),
+         self.__packWins(),
+         self.__packAvgPosition(),
+         self.__packAverageDamageDealt(),
+         self.__packAverageXP())
+
+    def _getDetailedData(self, data):
+        targetData = data[0]
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser, layout=BATTLE_ROYALE_STATISTICS_LAYOUT), self._getChartsFullData(targetData))
+
+    def _getChartsFullData(self, targetData):
+        stats = targetData.getBattlesStats()
+        data = _formatChartsData((tuple(),
+         self._getVehStatsByNation(stats),
+         tuple(),
+         self._getVehStatsByType(stats),
+         self._getVehStatsByPlace(stats)))
+        return data
+
+    def _getVehStatsByPlace(self, battlesStats):
+        tDict = battlesStats[2]
+        placeRes = len(tDict) * [None]
+        index = 0
+        battleType = 'solo' if self.__targetData.isSolo() else 'squad'
+        for place, value in tDict.iteritems():
+            placeRes[index] = {'xField': place,
+             'icon': '../maps/icons/battleRoyale/charts/places/{0}/{1}.png'.format(battleType, place),
+             'yField': value,
+             'tooltip': PROFILE.SECTION_STATISTICS_CHART_PLACE_TOOLTIP}
+            index += 1
+
+        _setChartDataPercentages(placeRes)
+        return placeRes
+
+    def _getVehStatsByNation(self, battlesStats):
+        tDict = battlesStats[1]
+        nationRes = []
+        for guiNationIdx, _ in enumerate(GUI_NATIONS):
+            nationIdx = getNationIndex(guiNationIdx)
+            nationName = nations.NAMES[nationIdx]
+            value = tDict[nationIdx] if nationName in getAvailableNationsNames() else -1
+            nationRes.append({'xField': i18n.makeString(MENU.nations(nationName)),
+             'icon': '../maps/icons/filters/nations/{0}.png'.format(nationName),
+             'yField': value,
+             'tooltip': PROFILE.SECTION_STATISTICS_CHART_NATION_TOOLTIP})
+
+        _setChartDataPercentages(nationRes)
+        return nationRes
+
+    def _getVehStatsByType(self, battlesStats):
+        tDict = battlesStats[0]
+        typeRes = []
+        for vehType in tDict.keys():
+            typeRes.append({'xField': i18n.makeString(DIALOGS.vehicleselldialog_vehicletype(vehType)),
+             'icon': '../maps/icons/filters/tanks/{0}.png'.format(vehType),
+             'yField': tDict[vehType],
+             'tooltip': PROFILE.SECTION_STATISTICS_CHART_CLASS_TOOLTIP})
+
+        _setChartDataPercentages(typeRes)
+        return typeRes
+
+    def __packBattleCount(self):
+        return PUtils.getTotalBattlesHeaderParam(self.__targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BRBATTLESCOUNT)
+
+    def __packWins(self):
+        return PUtils.packLditItemData(backport.getIntegralFormat(self.__targetData.getWinsCount()), PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_BRWINS, 'wins40x32.png')
+
+    def __packAvgPosition(self):
+        res = PUtils.getValueOrUnavailable(self.__targetData.getAveragePosition())
+        return PUtils.packLditItemData(backport.getNiceNumberFormat(res), PROFILE.SECTION_SUMMARY_SCORES_AVERAGERANK, PROFILE.PROFILE_PARAMS_TOOLTIP_BRAVERAGERANK, 'avgPosition40x32.png')
+
+    def __packAverageDamageDealt(self):
+        res = PUtils.getValueOrUnavailable(self.__targetData.getAvgDamage())
+        return PUtils.packLditItemData(backport.getIntegralFormat(res), PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE, 'avgDamage40x32.png')
+
+    def __packAverageXP(self):
+        res = PUtils.getValueOrUnavailable(self.__targetData.getAvgXP())
+        return PUtils.packLditItemData(backport.getIntegralFormat(res), PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE_SHORT, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT, 'maxExp40x32.png')
 
 
 _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
@@ -359,7 +464,9 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: ProfileFortStatisticsVO,
  PROFILE_DROPDOWN_KEYS.RANKED: ProfileRankedStatisticsVO,
  PROFILE_DROPDOWN_KEYS.RANKED_10X10: ProfileRanked10x10StatisticsVO,
- PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO}
+ PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO,
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: ProfileStatisticsBattleRoyaleVO,
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: ProfileStatisticsBattleRoyaleVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):
     return _VO_MAPPING[battlesType](targetData=targetData, accountDossier=accountDossier, isCurrentUser=isCurrentUser)

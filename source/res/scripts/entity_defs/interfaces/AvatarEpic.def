@@ -39,7 +39,8 @@
     </onRankUpdate>
     <showDestructibleShotResults>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
+      <Arg>	ARRAY	  <of>	UINT32	</of>
+      </Arg>
     </showDestructibleShotResults>
     <onDestructibleDestroyed>
       <Arg>	UINT8	</Arg>

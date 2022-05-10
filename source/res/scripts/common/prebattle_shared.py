@@ -89,10 +89,6 @@ def isObserver(vehCompDescr):
     return bool(vehCompDescr) and 'observer' in vehicles.getVehicleType(vehCompDescr).tags
 
 
-def isCommander(vehCompDescr):
-    return bool(vehCompDescr) and 'commander' in vehicles.getVehicleType(vehCompDescr).tags
-
-
 def isTeamValid(accountsInfo, limits):
     minLevel, maxLevel = limits['level']
     tagsLimits = limits['tags']
@@ -122,8 +118,7 @@ def isTeamValid(accountsInfo, limits):
                     return (False, 'limits/tags')
 
         count += 1
-        if 'observer' in vehTags:
-            observerCount += 1
+        observerCount += int('observer' in vehTags)
         totalLevel += vehLevel
         vehs[vehTypeCompDescr] = vehs.get(vehTypeCompDescr, 0) + 1
 

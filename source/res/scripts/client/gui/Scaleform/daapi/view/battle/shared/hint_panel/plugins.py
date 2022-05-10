@@ -10,11 +10,10 @@ from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_G
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.battle_control.controllers.radar_ctrl import IRadarListener
+from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
@@ -719,8 +718,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
-        if avatar_getter.isCommanderCtrlMode():
-            return False
         settingsCore = dependency.instance(ISettingsCore)
         battleCommunicationIsEnabled = bool(settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__battleComHintSettings) and self.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.BOOTCAMP and battleCommunicationIsEnabled
@@ -794,7 +791,7 @@ class RoleHelpPlugin(HintPanelPlugin):
     def isAvailableToShow(cls):
         result = False
         vehicle = cls._sessionProvider.shared.vehicleState.getControllingVehicle()
-        hasRole = vehicle.typeDescriptor.role != ROLE_TYPE.NOT_DEFINED
+        hasRole = vehicle and vehicle.typeDescriptor.role != ROLE_TYPE.NOT_DEFINED
         if not cls.__getIsObserver() and hasRole and not cls._sessionProvider.isReplayPlaying:
             periodCtrl = cls._sessionProvider.shared.arenaPeriod
             if cls.isSuitable() and periodCtrl.getPeriod() in _BEFORE_START_BATTLE_PERIODS:

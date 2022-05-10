@@ -10,6 +10,7 @@ class CURRENCIES_CONSTANTS(object):
     BPCOIN = 'bpcoin'
     XP_COST = 'xp'
     FREE_XP = 'freeXP'
+    BRCOIN = 'brcoin'
     ERROR = 'error'
     SINGAPORE_ALTERNATIVE_CURRENCIES_SET = [GOLD, CREDITS]
     GOLD_COLOR = 16761699

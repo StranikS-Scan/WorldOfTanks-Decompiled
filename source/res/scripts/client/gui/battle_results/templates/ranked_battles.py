@@ -49,7 +49,7 @@ RANKED_TEAMS_STATS_BLOCK = vehicles.TwoTeamsStatsBlock(regular.TEAMS_VO_META.clo
 RANKED_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RankedBattlesTeamStatsBlock(meta=base.ListMeta(), field='team1'))
 RANKED_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RankedBattlesTeamStatsBlock(meta=base.ListMeta(), field='team2'))
 RANKED_PERSONAL_STATS_BLOCK = regular.REGULAR_PERSONAL_STATS_BLOCK.clone(8)
-RANKED_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesRankedStatsBlock(base.ListMeta(), 'statValues'))
+RANKED_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesRankedStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
 RANKED_RESULTS_BLOCK = base.DictMeta({'title': text_styles.promoTitle(backport.text(R.strings.ranked_battles.battleresult.headerText())),
  'readyBtn': backport.text(R.strings.ranked_battles.battleResult.yes()),
  'readyBtnVisible': True,

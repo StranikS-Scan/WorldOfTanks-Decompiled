@@ -24,11 +24,11 @@ from gui.shared.items_parameters import isAutoReloadGun
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import dependency, i18n
+from helpers import dependency
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.battle_royale.constants import SteelHunterEquipmentNames
+from battle_royale.gui.constants import BattleRoyaleEquipments
 _logger = logging.getLogger(__name__)
 _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.CAPTURE_BLOCK, _TIMER_STATES.WARNING_VIEW): 1,
@@ -51,6 +51,8 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.BERSERKER, _TIMER_STATES.WARNING_VIEW): 4,
  (_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.INSPIRE_CD, _TIMER_STATES.WARNING_VIEW): 3,
+ (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 3,
+ (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.HEALING, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.HEALING_CD, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.REPAIRING, _TIMER_STATES.WARNING_VIEW): 3,
@@ -59,6 +61,8 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD,
+ _TIMER_STATES.INSPIRE_SOURCE,
+ _TIMER_STATES.INSPIRE_INACTIVATION_SOURCE,
  _TIMER_STATES.HEALING,
  _TIMER_STATES.HEALING_CD,
  _TIMER_STATES.ORANGE_ZONE,
@@ -522,12 +526,12 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._showTimer(self._mapping.getTimerTypeIDByDeathZoneCode(value.zoneID), value.totalTime, value.level, value.finishTime)
 
     def _updateInspireTimer(self, isSourceVehicle, isInactivation, endTime, duration, primary=True, equipmentID=None):
-        _logger.debug('[INSPIRE] %s __updateInspireTimer: isSourceVehicle: %s, isInactivation: %s, endTime: %s, duration: %s, primary: %s', BigWorld.player().id, isSourceVehicle, isInactivation, endTime, duration, primary)
+        _logger.debug('[INSPIRE] %s _updateInspireTimer: isSourceVehicle: %s, isInactivation: %s, endTime: %s, duration: %s, primary: %s', BigWorld.player().id, isSourceVehicle, isInactivation, endTime, duration, primary)
         self._hideTimer(_TIMER_STATES.INSPIRE)
         self._hideTimer(_TIMER_STATES.INSPIRE_CD)
         if equipmentID is not None:
             itemName = self.__equipmentCtrl.getEquipmentNameByID(equipmentID)
-            isBerserk = itemName == SteelHunterEquipmentNames.BERSERKER if itemName is not None else False
+            isBerserk = itemName == BattleRoyaleEquipments.BERSERKER if itemName is not None else False
             if isBerserk:
                 return
         if isInactivation is not None and primary:
@@ -542,7 +546,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         return
 
     def _getInspireSecondaryTimerText(self, isSourceVehicle=False):
-        return i18n.makeString(EPIC_BATTLE.INSPIRE_INSPIRING) if isSourceVehicle else i18n.makeString(EPIC_BATTLE.INSPIRE_INSPIRED)
+        return backport.text(R.strings.epic_battle.inspire.inspiring()) if isSourceVehicle else backport.text(R.strings.epic_battle.inspire.inspired())
 
     def __stopSound(self):
         if self.__sound is not None:

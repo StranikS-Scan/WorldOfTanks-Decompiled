@@ -70,10 +70,8 @@ def extractSelectedSetup(setups, setupsIndexes):
         chosenIndex = setupsIndexes.get(tankSetupId, 0)
         for tankSetupLayout in tankSetupGroup:
             tankSetups = tankSetupLayout.replace('Layout', 'Setups')
-            if tankSetups in setups:
-                layout = setups[tankSetups]
-                selectedSetup[tankSetups] = layout[chosenIndex] if chosenIndex < len(layout) else []
-            selectedSetup[tankSetups] = []
+            layout = setups[tankSetups]
+            selectedSetup[tankSetups] = layout[chosenIndex] if chosenIndex < len(layout) else []
 
     return selectedSetup
 
@@ -231,14 +229,11 @@ class VehicleState(object):
         return not self.unlocks and not self.pairs and not self.features
 
     def toActionCDs(self, tree):
-        steps = tree.steps
-        pairs = self._pairs
-        notSet = PAIR_TYPES.NOT_SET
-        pairModification = ACTION_TYPES.PAIR_MODIFICATION
         result = []
         for stepID in self._unlocks:
-            actionID, itemID = steps[stepID].action
-            result.append(makeActionCompDescr(actionID, itemID, pairs.get(stepID, notSet) if actionID == pairModification else 0))
+            actionID, itemID = tree.steps[stepID].action
+            subId = self._pairs.get(stepID, PAIR_TYPES.NOT_SET) if actionID == ACTION_TYPES.PAIR_MODIFICATION else 0
+            result.append(makeActionCompDescr(actionID, itemID, subId))
 
         return result
 

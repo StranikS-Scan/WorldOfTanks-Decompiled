@@ -6,12 +6,13 @@ from gui.impl.gen import R
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.periodic_battles.models import AlertData
+from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IMapboxController
 from skeletons.connection_mgr import IConnectionManager
-from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
-from gui.shared.utils.functions import makeTooltip
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 
@@ -26,9 +27,14 @@ def getPrimeTimeStatusVO():
 
 def getMapboxFightBtnTooltipData(result):
     strPath = R.strings.mapbox.headerButtons.fightBtn.tooltip
-    if result.restriction == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
+    restriction = result.restriction
+    if restriction == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
         header = backport.text(strPath.disabled.header())
         body = backport.text(strPath.disabled.text())
+    elif restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
+        levels = backport.text(strPath.mapboxVehLevel.levelSubStr(), levels=toRomanRangeString(result.ctx['levels']))
+        header = backport.text(strPath.mapboxVehLevel.header())
+        body = backport.text(strPath.mapboxVehLevel.body(), levelSubStr=levels)
     else:
         return ''
     return makeTooltip(header, body)

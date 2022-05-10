@@ -6,7 +6,6 @@ import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
-from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
@@ -119,10 +118,7 @@ class EpicBattleTrainingEntity(LegacyEntity):
          REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM: self.swapBetweenTeam}
         super(EpicBattleTrainingEntity, self).__init__(FUNCTIONAL_FLAG.EPIC_TRAINING, settings, permClass=EpicBattleTrainingPermissions, limits=EpicBattleTrainingLimits(self), requestHandlers=requests)
         self.__settingRecords = []
-
-    @legacy_storage_getter(PREBATTLE_TYPE.EPIC_TRAINING)
-    def storage(self):
-        return None
+        self.storage = legacy_storage_getter(PREBATTLE_TYPE.EPIC_TRAINING)()
 
     def init(self, clientPrb=None, ctx=None):
         result = super(EpicBattleTrainingEntity, self).init(clientPrb=clientPrb)
@@ -188,10 +184,6 @@ class EpicBattleTrainingEntity(LegacyEntity):
 
     def getTeamLimits(self):
         return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
-
-    def isObserverModeEnabled(self):
-        minCount = self.getSettings().getTeamLimits(1)['minCount']
-        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def doAction(self, action=None):
         self.__enterTrainingRoom()

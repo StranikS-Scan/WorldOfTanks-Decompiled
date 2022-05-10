@@ -7,7 +7,6 @@ class FITTING_TYPES(object):
     EQUIPMENT = 'equipment'
     SHELL = 'shell'
     VEHICLE = 'vehicle'
-    SUPPLY = 'supply'
     MODULE = 'module'
     ORDER = 'order'
     BOOSTER = 'battleBooster'
@@ -51,6 +50,7 @@ class FITTING_TYPES(object):
      TARGET_VEHICLE]
     GUN_TURRET_FITTING_ITEM_RENDERER = 'GunTurretFittingItemRendererUI'
     RESERVE_FITTING_ITEM_RENDERER = 'ReserveFittingItemRendererUI'
+    RESERVE_PARAMS_ITEM_RENDERER = 'ReserveParamsItemRendererUI'
     ENGINE_FITTING_ITEM_RENDERER = 'EngineFittingItemRendererUI'
     ENGINE_FITTING_BIG_ITEM_RENDERER = 'EngineFittingBigItemRendererUI'
     RADIO_FITTING_ITEM_RENDERER = 'RadioFittingItemRendererUI'

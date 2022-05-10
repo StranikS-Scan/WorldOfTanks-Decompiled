@@ -40,8 +40,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 tooltip, isSpecial = self.__getEpicAvailabilityData()
             elif itemData == PREBATTLE_ACTION_NAME.RANKED:
                 tooltip, isSpecial = self.__getRankedAvailabilityData()
-            elif itemData == PREBATTLE_ACTION_NAME.RTS:
-                tooltip, isSpecial = TOOLTIPS_CONSTANTS.RTS_SELECTOR_INFO, True
             elif itemData == PREBATTLE_ACTION_NAME.E_SPORT:
                 tooltip = TOOLTIPS.BATTLETYPES_UNIT
             elif itemData == PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST:

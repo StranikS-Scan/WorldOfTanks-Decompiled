@@ -99,9 +99,6 @@ class MarkerPlugin(IPlugin):
     def getMarkerSubtype(self, targetID):
         return INVALID_MARKER_SUBTYPE
 
-    def isMarkerActive(self, targetID):
-        return False
-
     def _createMarkerWithPosition(self, symbol, position, active=True):
         matrixProvider = Matrix()
         matrixProvider.translation = position
@@ -396,7 +393,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
                 self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
                 self._setMarkerActive(marker.getMarkerID(), True)
         else:
-            if vInfo.isObserver() or vInfo.isCommander():
+            if vInfo.isObserver():
                 return
             self.__addMarkerToPool(vehicleID, vProxy)
         return
@@ -443,15 +440,12 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
     def __addAutoAimMarker(self, event):
         vehicle = event.ctx.get('vehicle')
         self._vehicleID = vehicle.id if vehicle is not None else None
-        if avatar_getter.isPlayerCommander() and avatar_getter.isCommanderCtrlMode():
-            return
-        else:
-            if self._showExtendedInfo:
-                if self.__altMarker:
-                    self._addMarker(self._vehicleID)
-            elif self.__baseMarker:
+        if self._showExtendedInfo:
+            if self.__altMarker:
                 self._addMarker(self._vehicleID)
-            return
+        elif self.__baseMarker:
+            self._addMarker(self._vehicleID)
+        return
 
     def __onVehicleStateUpdated(self, state, value):
         if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
@@ -534,7 +528,7 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
 
     def __onEquipmentMarkerShown(self, item, position, _, delay):
         markerID = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER, position + settings.MARKER_POSITION_ADJUSTMENT)
-        self._invokeMarker(markerID, 'init', item.getMarker(), _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix)
+        self._invokeMarker(markerID, 'init', item.getMarker(), _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, item.getMarkerColor())
         self.__setCallback(markerID, round(BigWorld.serverTime() + delay))
 
     def __setCallback(self, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):

@@ -94,7 +94,7 @@ def makeTooltip(header=None, body=None, note=None, attention=None):
 @future_async.async
 def checkAmmoLevel(vehicles, callback):
     showAmmoWarning = False
-    ammoWarningMessage = 'lowAmmoAutoLoad' if len(vehicles) == 1 else 'lowAmmosAutoLoad'
+    ammoWarningMessage = 'lowAmmoAutoLoad'
     alternativeAmmoWarningMessage = 'lowAlternativeAmmoAutoLoad'
     for vehicle in vehicles:
         if vehicle.isReadyToFight:

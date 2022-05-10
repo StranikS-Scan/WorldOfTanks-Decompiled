@@ -53,10 +53,11 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
     def __fillViewModel(self):
         with self.viewModel.transaction() as vm:
             vm.setTimeLeft(self.__getSeasonTimeLeft())
-            nextSeason = self.__mapboxCtrl.getNextSeason()
-            if not self.__mapboxCtrl.isActive() and nextSeason is not None:
-                vm.setStatusNotActive(backport.text(R.strings.mapbox.selector.startEvent(), day=self.__getDate(nextSeason.getStartDate())))
-        return
+            vm.setStatusNotActive(self.__getNotActiveStatus())
+
+    def __getNotActiveStatus(self):
+        nextSeason = self.__mapboxCtrl.getNextSeason()
+        return backport.text(R.strings.mapbox.selector.startEvent(), day=self.__getDate(nextSeason.getStartDate())) if not self._isDisabled() and not self.__mapboxCtrl.isActive() and nextSeason is not None else ''
 
     def __getCurrentSeasonDate(self):
         currentSeason = self.__mapboxCtrl.getCurrentSeason()

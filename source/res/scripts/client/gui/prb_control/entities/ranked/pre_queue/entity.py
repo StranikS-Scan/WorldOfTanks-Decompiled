@@ -1,20 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/pre_queue/entity.py
 import logging
-import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from gui.impl.gen import R
-from gui.prb_control import prb_getters
 from gui.prb_control.entities.ranked.pre_queue.actions_validator import RankedActionsValidator
 from gui.prb_control.entities.ranked.pre_queue.ctx import RankedQueueCtx
 from gui.prb_control.entities.ranked.pre_queue.permissions import RankedPermissions
 from gui.prb_control.entities.ranked.pre_queue.vehicles_watcher import RankedVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntity
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueSubscriber
 from gui.prb_control.entities.ranked.pre_queue.scheduler import RankedScheduler
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
@@ -25,28 +22,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from soft_exception import SoftException
-if typing.TYPE_CHECKING:
-    from gui.prb_control.storages.local_storage import LocalStorage
 _logger = logging.getLogger(__name__)
-
-class RankedSubscriber(PreQueueSubscriber):
-
-    def subscribe(self, entity):
-        g_playerEvents.onEnqueuedRanked += entity.onEnqueued
-        g_playerEvents.onDequeuedRanked += entity.onDequeued
-        g_playerEvents.onEnqueuedRankedFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromRankedQueue += entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
-
-    def unsubscribe(self, entity):
-        g_playerEvents.onEnqueuedRanked -= entity.onEnqueued
-        g_playerEvents.onDequeuedRanked -= entity.onDequeued
-        g_playerEvents.onEnqueuedRankedFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromRankedQueue -= entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
-
 
 class RankedEntryPoint(PeriodicEntryPoint):
     _RES_ROOT = R.strings.system_messages.ranked
@@ -61,13 +37,10 @@ class RankedEntity(PreQueueEntity):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
-        super(RankedEntity, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED, RankedSubscriber())
+        super(RankedEntity, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED, PreQueueSubscriber())
         self.__watcher = None
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.RANKED)()
         return
-
-    @prequeue_storage_getter(QUEUE_TYPE.RANKED)
-    def storage(self):
-        return None
 
     def init(self, ctx=None):
         self.storage.release()
@@ -94,9 +67,6 @@ class RankedEntity(PreQueueEntity):
     def leave(self, ctx, callback=None):
         self.storage.suspend()
         super(RankedEntity, self).leave(ctx, callback)
-
-    def isInQueue(self):
-        return prb_getters.isInRankedQueue()
 
     @vehicleAmmoCheck
     def queue(self, ctx, callback=None):

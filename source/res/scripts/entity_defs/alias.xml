@@ -370,39 +370,6 @@
       </queues>
     </Properties>
   </MAPS_TRAINING_QUEUE_INFO>
-  <RTS_SPAWN_POINT_DATA>	FIXED_DICT	  <Properties>
-      <guid>
-        <Type>	STRING	</Type>
-      </guid>
-      <position>
-        <Type>	VECTOR2	</Type>
-      </position>
-      <vehicleTag>
-        <Type>	STRING	</Type>
-      </vehicleTag>
-      <vehiclePreferableType>
-        <Type>	STRING	</Type>
-      </vehiclePreferableType>
-      <yaw>
-        <Type>	FLOAT32	</Type>
-      </yaw>
-    </Properties>
-  </RTS_SPAWN_POINT_DATA>
-  <RTS_CHOSEN_SPAWN_POINT_DATA>	FIXED_DICT	  <Properties>
-      <entityID>
-        <Type>	OBJECT_ID	</Type>
-      </entityID>
-      <guid>
-        <Type>	STRING	</Type>
-      </guid>
-      <position>
-        <Type>	VECTOR2	</Type>
-      </position>
-      <yaw>
-        <Type>	FLOAT32	</Type>
-      </yaw>
-    </Properties>
-  </RTS_CHOSEN_SPAWN_POINT_DATA>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
       <id>
         <Type>	OBJECT_ID	</Type>
@@ -1039,10 +1006,10 @@
         <Type>	INT8	</Type>
       </attackerSiegeState>
       <attackerMasterVehID>
-        <Type>	UINT16	</Type>
+        <Type>	OBJECT_ID	</Type>
       </attackerMasterVehID>
       <needsCount>
-        <Type>	UINT8	</Type>
+        <Type>	BOOL	</Type>
       </needsCount>
     </Properties>
   </ATTACKER_INFO>
@@ -1177,19 +1144,6 @@
       </status>
     </Properties>
   </IS_OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE>
-  <DEATH_ZONE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <deathZoneID>
-        <Type>	OBJECT_ID	</Type>
-      </deathZoneID>
-      <damageInfo>
-        <Type>	ARRAY	  <of>	FLOAT32	</of>
-        </Type>
-      </damageInfo>
-    </Properties>
-  </DEATH_ZONE_STATUS>
-  <DEATH_ZONES_STATUS>	ARRAY	  <of>	DEATH_ZONE_STATUS	</of>
-  </DEATH_ZONES_STATUS>
   <BURNOUT_UNAVAILABLE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -1208,6 +1162,27 @@
       </times>
     </Properties>
   </OVERTURN_LEVEL>
+  <IN_AOE_ZONE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <zoneID>
+        <Type>	OBJECT_ID	</Type>
+      </zoneID>
+      <equipmentID>
+        <Type>	UINT16	</Type>
+      </equipmentID>
+      <team>
+        <Type>	UINT8	</Type>
+      </team>
+      <startTime>
+        <Type>	FLOAT64	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+    </Properties>
+  </IN_AOE_ZONE_STATUS>
+  <IN_AOE_ZONE>	ARRAY	  <of>	IN_AOE_ZONE_STATUS	</of>
+  </IN_AOE_ZONE>
   <DROWN_LEVEL>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <level>
@@ -1249,9 +1224,6 @@
     <Properties>	&gt;	  <damage>
         <Type>	UINT32	</Type>
       </damage>
-      <damageSupply>
-        <Type>	UINT32	</Type>
-      </damageSupply>
       <trackAssist>
         <Type>	UINT32	</Type>
       </trackAssist>
@@ -1757,9 +1729,6 @@
       <customRoleSlotTypeId>
         <Type>	UINT8	</Type>
       </customRoleSlotTypeId>
-      <isGodModeActive>
-        <Type>	BOOL	</Type>
-      </isGodModeActive>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1813,9 +1782,6 @@
   </VEHICLE_MARKER_DATA>
   <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
-      <vehicleId>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleId>
       <nextStrikeTime>
         <Type>	FLOAT32	</Type>
       </nextStrikeTime>
@@ -1901,42 +1867,6 @@
       </isRespawnActive>
     </Properties>
   </VEHICLE_HEALTH_INFO>
-  <RTS_ORDER_UPDATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <order>
-        <Type>	INT8	</Type>
-      </order>
-      <manner>
-        <Type>	INT8	</Type>
-      </manner>
-      <position>
-        <Type>	VECTOR3	</Type>
-      </position>
-      <isPositionModified>
-        <Type>	INT8	</Type>
-      </isPositionModified>
-      <target>
-        <Type>	OBJECT_ID	</Type>
-      </target>
-      <heading>
-        <Type>	VECTOR3	</Type>
-      </heading>
-      <baseID>
-        <Type>	INT8	</Type>
-      </baseID>
-      <baseTeam>
-        <Type>	INT8	</Type>
-      </baseTeam>
-      <companions>
-        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-          <size>	7	</size>
-        </Type>
-      </companions>
-    </Properties>
-  </RTS_ORDER_UPDATE>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <gunPosition>
@@ -1978,50 +1908,6 @@
       </attackReasonID>
     </Properties>
   </VEHICLE_HIT_DIRECTION>
-  <RTS_GROUP_UPDATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <groupID>
-        <Type>	INT8	</Type>
-      </groupID>
-    </Properties>
-  </RTS_GROUP_UPDATE>
-  <RTS_QUERY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <queryID>
-        <Type>	UINT32	</Type>
-      </queryID>
-      <queryType>
-        <Type>	INT8	</Type>
-      </queryType>
-      <packedPosition>
-        <Type>	VECTOR3	</Type>
-      </packedPosition>
-      <companions>
-        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-          <size>	7	</size>
-        </Type>
-      </companions>
-    </Properties>
-  </RTS_QUERY>
-  <RTS_QUERY_RESULT>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
-    <Properties>
-      <queryID>
-        <Type>	UINT32	</Type>
-      </queryID>
-      <resultCode>
-        <Type>	UINT8	</Type>
-      </resultCode>
-      <packedPosition>
-        <Type>	VECTOR3	</Type>
-      </packedPosition>
-    </Properties>
-  </RTS_QUERY_RESULT>
   <VEHICLE_CLIP_RELOAD_TIME>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <endTime>
@@ -2285,4 +2171,16 @@
       </startTime>
     </Properties>
   </FIRE_INFO>
+  <DEBUFF_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <attackReasonID>
+        <Type>	UINT16	</Type>
+      </attackReasonID>
+      <finishTime>
+        <Type>	FLOAT32	</Type>
+      </finishTime>
+    </Properties>
+  </DEBUFF_INFO>
+  <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
+  </DEBUFF_INFO_LIST>
 </alias.xml>

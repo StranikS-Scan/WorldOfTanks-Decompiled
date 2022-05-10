@@ -28,6 +28,8 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         super(ProfileWindow, self).__init__()
         self.__userName = ctx.get('userName')
         self.__databaseID = ctx.get('databaseID')
+        self.__selectedAlias = ctx.get('selectedAlias')
+        self.__eventOwner = ctx.get('eventOwner')
 
     def onClanEnableChanged(self, enabled):
         self.__updateAddToClanBtn()
@@ -104,10 +106,11 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
 
     def registerFlashComponent(self, component, alias, *args):
         if alias == VIEW_ALIAS.PROFILE_TAB_NAVIGATOR:
-            super(ProfileWindow, self).registerFlashComponent(component, alias, self.__userName, self.__databaseID, self.__databaseID, {'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_SUMMARY_WINDOW),
+            super(ProfileWindow, self).registerFlashComponent(component, alias, self.__userName, self.__databaseID, self.__databaseID, {'selectedAlias': self.__selectedAlias,
+             'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_SUMMARY_WINDOW),
                               self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS),
                               self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS),
-                              self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW)]})
+                              self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW)]}, {'eventOwner': self.__eventOwner})
         else:
             super(ProfileWindow, self).registerFlashComponent(component, alias)
 

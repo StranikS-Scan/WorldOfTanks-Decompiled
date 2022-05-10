@@ -16,8 +16,9 @@ class DecalMap(object):
         if IS_EDITOR:
             self.__chassisEffectGroups = dict()
         self._readCfg(dataSec)
+        self.__initGroups(1.0)
 
-    def initGroups(self, scaleFactor):
+    def __initGroups(self, scaleFactor):
         if not BigWorld.isDynamicDecalEnabled():
             return
         try:

@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
-from gui.server_events import formatters, events_helpers
+from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
@@ -156,13 +156,6 @@ class BattlePassPointsFormatter(OldStyleBonusFormatter):
             self._result.append(formatters.packSimpleBonusesBlock(formattedList))
 
 
-class RTSCollectionFormatter(OldStyleBonusFormatter):
-
-    def accumulateBonuses(self, bonus):
-        bonusStr = backport.text(R.strings.quests.bonuses.rtsCollection())
-        self._result.append(formatters.packSimpleBonusesBlock([bonusStr]))
-
-
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -221,20 +214,13 @@ class NewStyleBonusFormatter(OldStyleBonusFormatter):
 
 
 def getFormattersMap(event):
-    defaultMap = {'dossier': DossierFormatter(),
+    return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
      'vehicles': VehiclesFormatter(event),
      'crewBooks': CrewBookFormatter(),
      'blueprints': BlueprintsFormatter(),
      'crewSkins': CrewSkinFormatter(),
      'battlePassPoints': BattlePassPointsFormatter()}
-    addSpecialFormatters(event, defaultMap)
-    return defaultMap
-
-
-def addSpecialFormatters(event, defaultMap):
-    if events_helpers.isRts(event.getID()):
-        defaultMap.update({'groups': RTSCollectionFormatter()})
 
 
 class OldStyleAwardsPacker(AwardsPacker):

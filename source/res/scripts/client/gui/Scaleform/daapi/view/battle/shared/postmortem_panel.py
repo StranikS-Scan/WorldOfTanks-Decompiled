@@ -35,6 +35,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
 _VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
+_BR_VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/battleRoyale/vehicles/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['fire']: 'DEATH_FROM_FIRE',
  ATTACK_REASON_INDICES['ramming']: 'DEATH_FROM_RAMMING',
@@ -48,9 +49,16 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  ATTACK_REASON_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
- ATTACK_REASON_INDICES['supply_shot']: 'DEATH_FROM_SUPPLY_SHOT',
- ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION'}
-_ALLOWED_EQUIPMENT_DEATH_CODES = ['DEATH_FROM_MINE_EXPLOSION']
+ ATTACK_REASON_INDICES[ATTACK_REASON.MINEFIELD_EQ]: 'DEATH_FROM_MINE_EXPLOSION',
+ ATTACK_REASON_INDICES[ATTACK_REASON.FIRE_CIRCLE]: 'DEATH_FROM_FIRE_CIRCLE',
+ ATTACK_REASON_INDICES[ATTACK_REASON.THUNDER_STRIKE]: 'DEATH_FROM_THUNDER_STRIKE',
+ ATTACK_REASON_INDICES[ATTACK_REASON.CORRODING_SHOT]: 'DEATH_FROM_CORRODING_SHOT',
+ ATTACK_REASON_INDICES[ATTACK_REASON.CLING_BRANDER]: 'DEATH_FROM_CLING_BRANDER'}
+_ALLOWED_EQUIPMENT_DEATH_CODES = ['DEATH_FROM_MINE_EXPLOSION',
+ 'DEATH_FROM_FIRE_CIRCLE',
+ 'DEATH_FROM_THUNDER_STRIKE',
+ 'DEATH_FROM_CORRODING_SHOT',
+ 'DEATH_FROM_CLING_BRANDER']
 
 class _ENTITIES_POSTFIX(object):
     UNKNOWN = '_UNKNOWN'
@@ -318,13 +326,13 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     showVehicle = True
                     vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
                     vTypeInfoVO = vInfoVO.vehicleType
-                    vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
+                    vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
                     if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
+                        vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = int2roman(vTypeInfoVO.level)
-                        vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
                     else:
+                        vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = None
-                        vehClass = None
                     vehName = vTypeInfoVO.shortNameWithPrefix
                     killerUserVO = self.__makeKillerVO(vInfoVO)
                 else:

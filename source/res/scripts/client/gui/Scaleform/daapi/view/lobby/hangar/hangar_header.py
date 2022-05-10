@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
 import logging
 import BigWorld
+import constants
 import nations
-from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, PremiumConfigs
 from CurrentVehicle import g_currentVehicle
 from gui import g_guiResetters
+from gui.battle_pass.battle_pass_helpers import getSupportedArenaBonusTypeFor
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.event_boards.listener import IEventBoardsListener
 from gui.impl.gen import R
@@ -20,7 +21,6 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.prb_getters import getSupportedArenaBonusTypeFor
 from gui.server_events import finders
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePass, showMissionsMapboxProgression
@@ -35,7 +35,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBattlePassController, IBootcampController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IRTSBattlesController
+from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -212,7 +212,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    __rtsController = dependency.descriptor(IRTSBattlesController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -262,9 +261,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def updateBattleRoyaleHeader(self):
         self.__updateBattleRoyaleWidget()
 
-    def updateRtsHeader(self, *_):
-        self.__updateRTSWidget()
-
     def _populate(self):
         super(HangarHeader, self)._populate()
         self._currentVehicle = g_currentVehicle
@@ -310,9 +306,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        if self.__rtsController.isPrbActive():
-            return {'isVisible': True,
-             'quests': []}
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -404,12 +397,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         else:
             self.as_removeEpicWidgetS()
 
-    def __updateRTSWidget(self):
-        if self.__rtsController.isPrbActive() and self.__rtsController.isEnabled():
-            self.as_createRTSBattlesS()
-        else:
-            self.as_removeRTSBattlesS()
-
     def __showAvailablePMOperation(self, branch):
         for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:
             operation = self._eventsCache.getPersonalMissions().getAllOperations()[operationID]
@@ -495,12 +482,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_PERSONAL, result, True)
 
     def __onServerSettingChanged(self, diff):
-        if 'elenSettings' in diff or PremiumConfigs.PREM_QUESTS in diff:
+        if 'elenSettings' in diff or constants.PremiumConfigs.PREM_QUESTS in diff:
             self.update()
 
     def __getMapboxProgressionVO(self):
         data = self.__mapboxCtrl.getProgressionData()
-        if data is not None and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
+        if data is not None and self.__mapboxCtrl.isActive():
             completed = data.totalBattles
             if completed is None:
                 _logger.error('battles played is None')
@@ -656,10 +643,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 eventQuestsTooltip = TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW
                 eventQuestsTooltipIsSpecial = True
                 battleType = currentEvent.getBattleType()
-                wrongBattleType = self.__getCurentArenaBonusType() != battleType
+                wrongBattleType = self.prbEntity.getEntityType() != battleType
                 inSquadState = False
                 if self.prbDispatcher is not None:
-                    inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.SQUAD)
+                    inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
                     if inSquadState:
                         unit = prb_getters.getUnit(safe=True)
                         if len(unit.getMembers()) == 1:
@@ -727,12 +714,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateBattlePassSmallWidget(self):
         currentArenaBonusType = self.__getCurentArenaBonusType()
-        secondaryPointCanBeAvailable = currentArenaBonusType not in (ARENA_BONUS_TYPE.REGULAR,
-         ARENA_BONUS_TYPE.UNKNOWN,
-         ARENA_BONUS_TYPE.MAPBOX,
-         ARENA_BONUS_TYPE.RTS,
-         ARENA_BONUS_TYPE.RTS_1x1,
-         ARENA_BONUS_TYPE.RTS_BOOTCAMP)
+        secondaryPointCanBeAvailable = currentArenaBonusType not in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.UNKNOWN, constants.ARENA_BONUS_TYPE.MAPBOX)
         secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled()
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:

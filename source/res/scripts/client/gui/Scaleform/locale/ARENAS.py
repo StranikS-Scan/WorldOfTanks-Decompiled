@@ -3,10 +3,6 @@
 from debug_utils import LOG_WARNING
 
 class ARENAS(object):
-    OBJECTIVES_CAPTURE = '#arenas:objectives/capture'
-    OBJECTIVES_DEFEND = '#arenas:objectives/defend'
-    OBJECTIVES_DELIMITER_AND = '#arenas:objectives/delimiter_and'
-    OBJECTIVES_DELIMITER_OR = '#arenas:objectives/delimiter_or'
     TYPE_CTF_NAME = '#arenas:type/ctf/name'
     TYPE_CTF_DESCRIPTION = '#arenas:type/ctf/description'
     TYPE_DOMINATION_NAME = '#arenas:type/domination/name'
@@ -65,54 +61,41 @@ class ARENAS(object):
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
-    C_106_ENSK_NAME = '#arenas:106_ensk/name'
-    C_106_ENSK_DESCRIPTION = '#arenas:106_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'
     C_07_LAKEVILLE_DESCRIPTION = '#arenas:07_lakeville/description'
     C_08_RUINBERG_NAME = '#arenas:08_ruinberg/name'
     C_08_RUINBERG_DESCRIPTION = '#arenas:08_ruinberg/description'
     C_10_HILLS_NAME = '#arenas:10_hills/name'
     C_10_HILLS_DESCRIPTION = '#arenas:10_hills/description'
-    C_10_HILLS_RTS_1X1_NAME = '#arenas:10_hills_rts_1x1/name'
     C_11_MUROVANKA_NAME = '#arenas:11_murovanka/name'
     C_11_MUROVANKA_DESCRIPTION = '#arenas:11_murovanka/description'
     C_13_ERLENBERG_NAME = '#arenas:13_erlenberg/name'
     C_13_ERLENBERG_DESCRIPTION = '#arenas:13_erlenberg/description'
     C_14_SIEGFRIED_LINE_NAME = '#arenas:14_siegfried_line/name'
     C_14_SIEGFRIED_LINE_DESCRIPTION = '#arenas:14_siegfried_line/description'
-    C_14_SIEGFRIED_LINE_RTS_1X1_NAME = '#arenas:14_siegfried_line_rts_1x1/name'
-    C_14_SIEGFRIED_LINE_RTS_1X7_NAME = '#arenas:14_siegfried_line_rts_1x7/name'
     C_17_MUNCHEN_NAME = '#arenas:17_munchen/name'
     C_17_MUNCHEN_DESCRIPTION = '#arenas:17_munchen/description'
     C_18_CLIFF_NAME = '#arenas:18_cliff/name'
     C_18_CLIFF_DESCRIPTION = '#arenas:18_cliff/description'
-    C_18_CLIFF_RTS_1X1_NAME = '#arenas:18_cliff_rts_1x1/name'
-    C_18_CLIFF_RTS_1X7_NAME = '#arenas:18_cliff_rts_1x7/name'
     C_29_EL_HALLOUF_DESCRIPTION = '#arenas:29_el_hallouf/description'
     C_31_AIRFIELD_NAME = '#arenas:31_airfield/name'
     C_31_AIRFIELD_DESCRIPTION = '#arenas:31_airfield/description'
-    C_31_AIRFIELD_RTS_1X1_NAME = '#arenas:31_airfield_rts_1x1/name'
-    C_31_AIRFIELD_RTS_1X7_NAME = '#arenas:31_airfield_rts_1x7/name'
     C_33_FJORD_NAME = '#arenas:33_fjord/name'
     C_33_FJORD_DESCRIPTION = '#arenas:33_fjord/description'
     C_34_REDSHIRE_NAME = '#arenas:34_redshire/name'
     C_34_REDSHIRE_DESCRIPTION = '#arenas:34_redshire/description'
     C_35_STEPPES_NAME = '#arenas:35_steppes/name'
     C_35_STEPPES_DESCRIPTION = '#arenas:35_steppes/description'
-    C_35_STEPPES_RTS_1X1_NAME = '#arenas:35_steppes_rts_1x1/name'
-    C_35_STEPPES_RTS_1X7_NAME = '#arenas:35_steppes_rts_1x7/name'
     C_36_FISHING_BAY_NAME = '#arenas:36_fishing_bay/name'
     C_36_FISHING_BAY_DESCRIPTION = '#arenas:36_fishing_bay/description'
     C_37_CAUCASUS_NAME = '#arenas:37_caucasus/name'
     C_37_CAUCASUS_DESCRIPTION = '#arenas:37_caucasus/description'
     C_38_MANNERHEIM_LINE_NAME = '#arenas:38_mannerheim_line/name'
-    C_38_MANNERHEIM_LINE_RTS_1X7_NAME = '#arenas:38_mannerheim_line_rts_1x7/name'
     C_38_MANNERHEIM_LINE_DESCRIPTION = '#arenas:38_mannerheim_line/description'
     C_44_NORTH_AMERICA_NAME = '#arenas:44_north_america/name'
     C_44_NORTH_AMERICA_DESCRIPTION = '#arenas:44_north_america/description'
     C_19_MONASTERY_NAME = '#arenas:19_monastery/name'
     C_19_MONASTERY_DESCRIPTION = '#arenas:19_monastery/description'
-    C_19_MONASTERY_RTS_1X7_NAME = '#arenas:19_monastery_rts_1x7/name'
     C_23_WESTFELD_NAME = '#arenas:23_westfeld/name'
     C_23_WESTFELD_DESCRIPTION = '#arenas:23_westfeld/description'
     C_28_DESERT_NAME = '#arenas:28_desert/name'
@@ -165,16 +148,23 @@ class ARENAS(object):
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
     C_60_ASIA_MIAO_DESCRIPTION = '#arenas:60_asia_miao/description'
     C_251_BR_BATTLE_CITY3_NAME = '#arenas:251_br_battle_city3/name'
+    C_117_CANYON_ISH_NAME = '#arenas:117_canyon_ish/name'
+    C_117_CANYON_ISH_DESCRIPTION = '#arenas:117_canyon_ish/description'
     C_127_JAPORT_NAME = '#arenas:127_japort/name'
     C_127_JAPORT_DESCRIPTION = '#arenas:127_japort/description'
-    C_95_LOST_CITY_RTS_1X1_NAME = '#arenas:95_lost_city_rts_1x1/name'
-    C_95_LOST_CITY_RTS_1X7_NAME = '#arenas:95_lost_city_rts_1x7/name'
-    C_112_EIFFEL_TOWER_RTS_1X1_NAME = '#arenas:112_eiffel_tower_rts_1x1/name'
-    ALL_ENUM = (OBJECTIVES_CAPTURE,
-     OBJECTIVES_DEFEND,
-     OBJECTIVES_DELIMITER_AND,
-     OBJECTIVES_DELIMITER_OR,
-     TYPE_CTF_NAME,
+    C_252_BR_BATTLE_CITY4_NAME = '#arenas:252_br_battle_city4/name'
+    C_252_BR_BATTLE_CITY4_DESCRIPTION = '#arenas:252_br_battle_city4/description'
+    C_132_ABRUZZO_NAME = '#arenas:132_abruzzo/name'
+    C_132_ABRUZZO_DESCRIPTION = '#arenas:132_abruzzo/description'
+    C_130_ANYKEY_IF_NAME = '#arenas:130_anykey_if/name'
+    C_130_ANYKEY_IF_DESCRIPTION = '#arenas:130_anykey_if/description'
+    C_136_KASSEL_NAME = '#arenas:136_kassel/name'
+    C_136_KASSEL_DESCRIPTION = '#arenas:136_kassel/description'
+    C_120_GRAF_ZEPPELIN_ISH_NAME = '#arenas:120_graf_zeppelin_ish/name'
+    C_120_GRAF_ZEPPELIN_ISH_DESCRIPTION = '#arenas:120_graf_zeppelin_ish/description'
+    C_123_DALNY_GG_NAME = '#arenas:123_dalny_gg/name'
+    C_123_DALNY_GG_DESCRIPTION = '#arenas:123_dalny_gg/description'
+    ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
      TYPE_DOMINATION_DESCRIPTION,
@@ -232,54 +222,41 @@ class ARENAS(object):
      C_05_PROHOROVKA_DESCRIPTION,
      C_06_ENSK_NAME,
      C_06_ENSK_DESCRIPTION,
-     C_106_ENSK_NAME,
-     C_106_ENSK_DESCRIPTION,
      C_07_LAKEVILLE_NAME,
      C_07_LAKEVILLE_DESCRIPTION,
      C_08_RUINBERG_NAME,
      C_08_RUINBERG_DESCRIPTION,
      C_10_HILLS_NAME,
      C_10_HILLS_DESCRIPTION,
-     C_10_HILLS_RTS_1X1_NAME,
      C_11_MUROVANKA_NAME,
      C_11_MUROVANKA_DESCRIPTION,
      C_13_ERLENBERG_NAME,
      C_13_ERLENBERG_DESCRIPTION,
      C_14_SIEGFRIED_LINE_NAME,
      C_14_SIEGFRIED_LINE_DESCRIPTION,
-     C_14_SIEGFRIED_LINE_RTS_1X1_NAME,
-     C_14_SIEGFRIED_LINE_RTS_1X7_NAME,
      C_17_MUNCHEN_NAME,
      C_17_MUNCHEN_DESCRIPTION,
      C_18_CLIFF_NAME,
      C_18_CLIFF_DESCRIPTION,
-     C_18_CLIFF_RTS_1X1_NAME,
-     C_18_CLIFF_RTS_1X7_NAME,
      C_29_EL_HALLOUF_DESCRIPTION,
      C_31_AIRFIELD_NAME,
      C_31_AIRFIELD_DESCRIPTION,
-     C_31_AIRFIELD_RTS_1X1_NAME,
-     C_31_AIRFIELD_RTS_1X7_NAME,
      C_33_FJORD_NAME,
      C_33_FJORD_DESCRIPTION,
      C_34_REDSHIRE_NAME,
      C_34_REDSHIRE_DESCRIPTION,
      C_35_STEPPES_NAME,
      C_35_STEPPES_DESCRIPTION,
-     C_35_STEPPES_RTS_1X1_NAME,
-     C_35_STEPPES_RTS_1X7_NAME,
      C_36_FISHING_BAY_NAME,
      C_36_FISHING_BAY_DESCRIPTION,
      C_37_CAUCASUS_NAME,
      C_37_CAUCASUS_DESCRIPTION,
      C_38_MANNERHEIM_LINE_NAME,
-     C_38_MANNERHEIM_LINE_RTS_1X7_NAME,
      C_38_MANNERHEIM_LINE_DESCRIPTION,
      C_44_NORTH_AMERICA_NAME,
      C_44_NORTH_AMERICA_DESCRIPTION,
      C_19_MONASTERY_NAME,
      C_19_MONASTERY_DESCRIPTION,
-     C_19_MONASTERY_RTS_1X7_NAME,
      C_23_WESTFELD_NAME,
      C_23_WESTFELD_DESCRIPTION,
      C_28_DESERT_NAME,
@@ -332,11 +309,22 @@ class ARENAS(object):
      C_60_ASIA_MIAO_NAME,
      C_60_ASIA_MIAO_DESCRIPTION,
      C_251_BR_BATTLE_CITY3_NAME,
+     C_117_CANYON_ISH_NAME,
+     C_117_CANYON_ISH_DESCRIPTION,
      C_127_JAPORT_NAME,
      C_127_JAPORT_DESCRIPTION,
-     C_95_LOST_CITY_RTS_1X1_NAME,
-     C_95_LOST_CITY_RTS_1X7_NAME,
-     C_112_EIFFEL_TOWER_RTS_1X1_NAME)
+     C_252_BR_BATTLE_CITY4_NAME,
+     C_252_BR_BATTLE_CITY4_DESCRIPTION,
+     C_132_ABRUZZO_NAME,
+     C_132_ABRUZZO_DESCRIPTION,
+     C_130_ANYKEY_IF_NAME,
+     C_130_ANYKEY_IF_DESCRIPTION,
+     C_136_KASSEL_NAME,
+     C_136_KASSEL_DESCRIPTION,
+     C_120_GRAF_ZEPPELIN_ISH_NAME,
+     C_120_GRAF_ZEPPELIN_ISH_DESCRIPTION,
+     C_123_DALNY_GG_NAME,
+     C_123_DALNY_GG_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

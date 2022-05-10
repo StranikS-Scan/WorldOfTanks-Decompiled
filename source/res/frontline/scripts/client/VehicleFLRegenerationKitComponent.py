@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/VehicleFLRegenerationKitComponent.py
 import BigWorld
-from debug_utils import LOG_DEBUG
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 
 class VehicleFLRegenerationKitComponent(BigWorld.DynamicScriptComponent):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/pre_queue/entity.py
+from PlayerEvents import g_playerEvents
 from soft_exception import SoftException
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -34,10 +35,20 @@ class PreQueueSubscriber(object):
     __slots__ = ()
 
     def subscribe(self, entity):
-        raise NotImplementedError
+        g_playerEvents.onEnqueued += entity.onEnqueued
+        g_playerEvents.onDequeued += entity.onDequeued
+        g_playerEvents.onEnqueueFailure += entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue += entity.onKickedFromQueue
+        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
 
     def unsubscribe(self, entity):
-        raise NotImplementedError
+        g_playerEvents.onEnqueued -= entity.onEnqueued
+        g_playerEvents.onDequeued -= entity.onDequeued
+        g_playerEvents.onEnqueueFailure -= entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue -= entity.onKickedFromQueue
+        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
 
 
 class PreQueueEntryPoint(BasePrbEntryPoint):
@@ -97,6 +108,9 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
 
     def getQueueType(self):
         return self._queueType
+
+    def isInQueue(self):
+        return prb_getters.getQueueType() == self._queueType
 
     def doAction(self, action=None):
         if not self.isInQueue():
@@ -201,26 +215,34 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         else:
             __leave()
 
-    def onEnqueued(self, *args):
+    def onEnqueued(self, queueType, *args):
+        if queueType != self._queueType:
+            return
         if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
             self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueued', self.getQueueType(), *args)
         self._goToQueueUI()
 
-    def onDequeued(self, *args):
+    def onDequeued(self, queueType, *args):
+        if queueType != self._queueType:
+            return
         if self._requestCtx.getRequestType() == REQUEST_TYPE.DEQUEUE:
             self._requestCtx.stopProcessing(True)
         self._invokeListeners('onDequeued', self.getQueueType(), *args)
         self._exitFromQueueUI()
 
-    def onEnqueueError(self, errorCode, *args):
+    def onEnqueueError(self, queueType, errorCode, *args):
+        if queueType != self._queueType:
+            return
         if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
             self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueueError', self.getQueueType(), *args)
         self._exitFromQueueUI()
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
-    def onKickedFromQueue(self, *args):
+    def onKickedFromQueue(self, queueType, *args):
+        if queueType != self._queueType:
+            return
         if self._requestCtx.getRequestType() in (REQUEST_TYPE.QUEUE, REQUEST_TYPE.DEQUEUE):
             self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self.getQueueType(), *args)

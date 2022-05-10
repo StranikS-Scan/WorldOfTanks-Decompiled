@@ -75,20 +75,21 @@ class WindowFlags(CONST_CONTAINER):
 class WindowLayer(CONST_CONTAINER):
     UNDEFINED = 0
     ROOT = 1
-    MARKER = 2
-    VIEW = 3
-    SUB_VIEW = 4
-    TOP_SUB_VIEW = 5
-    WINDOW = 6
-    FULLSCREEN_WINDOW = 7
-    SYSTEM_MESSAGE = 8
-    TOP_WINDOW = 9
-    OVERLAY = 10
-    IME = 11
-    SERVICE_LAYOUT = 12
-    TOOLTIP = 13
-    CURSOR = 14
-    WAITING = 15
+    HIDDEN_SERVICE_LAYOUT = 2
+    MARKER = 3
+    VIEW = 4
+    SUB_VIEW = 5
+    TOP_SUB_VIEW = 6
+    WINDOW = 7
+    FULLSCREEN_WINDOW = 8
+    SYSTEM_MESSAGE = 9
+    TOP_WINDOW = 10
+    OVERLAY = 11
+    IME = 12
+    SERVICE_LAYOUT = 13
+    TOOLTIP = 14
+    CURSOR = 15
+    WAITING = 16
 
 
 class PropertyType(CONST_CONTAINER):

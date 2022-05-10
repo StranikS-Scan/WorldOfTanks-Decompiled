@@ -190,9 +190,6 @@ class READABLE_KEY_NAMES(object):
     KEY_LCDKB_DOWN = '#readable_key_names:KEY_LCDKB_DOWN'
     KEY_LCDKB_MENU = '#readable_key_names:KEY_LCDKB_MENU'
     KEY_IME_CHAR = '#readable_key_names:KEY_IME_CHAR'
-    KEY_SHIFT = '#readable_key_names:KEY_SHIFT'
-    KEY_ALT = '#readable_key_names:KEY_ALT'
-    KEY_CTRL = '#readable_key_names:KEY_CTRL'
     KEY_ENUM = (KEY_NONE,
      KEY_NONE_ALT,
      KEY_ESCAPE,
@@ -379,10 +376,7 @@ class READABLE_KEY_NAMES(object):
      KEY_LCDKB_UP,
      KEY_LCDKB_DOWN,
      KEY_LCDKB_MENU,
-     KEY_IME_CHAR,
-     KEY_SHIFT,
-     KEY_ALT,
-     KEY_CTRL)
+     KEY_IME_CHAR)
 
     @classmethod
     def key(cls, bwKey):

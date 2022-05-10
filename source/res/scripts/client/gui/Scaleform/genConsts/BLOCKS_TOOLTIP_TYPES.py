@@ -57,7 +57,7 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_BUILD_BLOCK_VIOLET_BIG_LINKAGE = 'TooltipBuildUpBlockVioletBgBigUI'
     TOOLTIP_BUILD_BLOCK_GRAY_LINKAGE = 'TooltipBuildUpBlockGrayBgUI'
     TOOLTIP_EPIC_PROGRESS_BLOCK_LINKAGE = 'EpicProgressBlockUI'
-    BATTLE_ROYALE_WEAK_ZONES_UI = 'BattleRoyaleWeakZonesBlockUI'
+    TOOLTIP_QUEST_REWARD_ITEM_BLOCK_LINKAGE = 'QuestRewardItemBlockUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

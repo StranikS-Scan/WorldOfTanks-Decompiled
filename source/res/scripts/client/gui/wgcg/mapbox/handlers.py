@@ -19,7 +19,7 @@ class MapboxRequestHandlers(RequestHandlers):
         return self._requester.doRequestEx(ctx, callback, ('mapbox', 'select_mapbox_crewbook'), ctx.getItemID)
 
     def __completeSurvey(self, ctx, callback):
-        return self._requester.doRequestEx(ctx, callback, ('mapbox', 'complete_survey'), ctx.getMapName())
+        return self._requester.doRequestEx(ctx, callback, ('mapbox', 'complete_survey'), ctx.getSurveyData())
 
     def __requestAuthorizedSurveyURL(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('mapbox', 'request_authorized_survey_url'), ctx.getMapURL())

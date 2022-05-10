@@ -73,8 +73,6 @@ class PlayerFullNameFormatter(object):
                 key |= _FORMAT_MASK.VEHICLE
             else:
                 vehName = vehType.name
-        if vInfoVO.isGodModeActive():
-            vehName += ' *immortal*'
         if playerName is None:
             playerName = self._normalizePlayerName(vInfoVO.player.getPlayerLabel())
         fakePlayerName = vInfoVO.player.getPlayerFakeLabel()

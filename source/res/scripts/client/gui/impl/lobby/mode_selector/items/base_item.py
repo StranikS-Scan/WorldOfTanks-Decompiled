@@ -102,13 +102,13 @@ class ModeSelectorItem(object):
             return
 
     def handleInfoPageClick(self):
-        url = GUI_SETTINGS.lookup(getInfoPageKey(self.modeName))
+        url = self._urlProcessing(GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)))
         showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
     def _onInitializing(self):
         isInBootcamp = self._bootcamp.isInBootcamp()
         isNewbie = self._uiSpamController.shouldBeHidden('ModeSelectorWidgetsBtnHint')
-        self.viewModel.setIsDisabled(self._getIsDisabled() or isInBootcamp)
+        self.viewModel.setIsDisabled(self._isDisabled())
         self.viewModel.setIsNew(self._getIsNew() and not isInBootcamp and not isNewbie)
         self.viewModel.setIsInfoIconVisible(self._isInfoIconVisible())
         self.viewModel.setModeName(self.modeName)
@@ -132,6 +132,12 @@ class ModeSelectorItem(object):
     def _getPositionByModeName(self):
         return COLUMN_SETTINGS.get(self.modeName, (DEFAULT_COLUMN, DEFAULT_PRIORITY))
 
+    def _urlProcessing(self, url):
+        return url
+
+    def _isDisabled(self):
+        return self._getIsDisabled() or self._bootcamp.isInBootcamp()
+
 
 class ModeSelectorNormalCardItem(ModeSelectorItem):
     _VIEW_MODEL = ModeSelectorNormalCardModel
@@ -139,6 +145,13 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
     def __init__(self):
         super(ModeSelectorNormalCardItem, self).__init__()
         self.onCardChange = Event.Event()
+
+    @property
+    def hasExtendedCalendarTooltip(self):
+        return False
+
+    def getExtendedCalendarTooltip(self, parentWindow):
+        return []
 
     @property
     def modeName(self):

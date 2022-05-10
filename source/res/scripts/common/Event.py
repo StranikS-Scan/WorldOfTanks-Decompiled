@@ -138,7 +138,13 @@ class SuspendedEventManager(EventManager):
 class EventsSubscriber(object):
 
     def __init__(self):
+        super(EventsSubscriber, self).__init__()
         self.__subscribeList = []
+        self.__contextSubscribeList = []
+
+    def subscribeToContextEvent(self, event, delegate, *contextIDs):
+        event.subscribe(delegate, *contextIDs)
+        self.__contextSubscribeList.append((event, delegate))
 
     def subscribeToEvent(self, event, delegate):
         event += delegate
@@ -148,4 +154,45 @@ class EventsSubscriber(object):
         for event, delegate in self.__subscribeList:
             event -= delegate
 
+        for event, delegate in self.__contextSubscribeList:
+            event.unsubscribe(delegate)
+
         self.__subscribeList = []
+
+
+class ContextEvent(object):
+    __allContexts = object()
+
+    def __init__(self, manager=None):
+        self.__contextSubscribers = {}
+        if manager is not None:
+            manager.register(self)
+        return
+
+    def __call__(self, contextID, *args, **kwargs):
+        subscribers = self.__contextSubscribers.get(contextID)
+        if subscribers:
+            for subscriber in subscribers:
+                subscriber(contextID, *args, **kwargs)
+
+        subscribers = self.__contextSubscribers.get(self.__allContexts)
+        if subscribers:
+            for subscriber in subscribers:
+                subscriber(contextID, *args, **kwargs)
+
+    def subscribe(self, delegate, *contextIDs):
+        if contextIDs:
+            for contextID in contextIDs:
+                self.__contextSubscribers.setdefault(contextID, set())
+                self.__contextSubscribers[contextID].add(delegate)
+
+        else:
+            self.__contextSubscribers.setdefault(self.__allContexts, set())
+            self.__contextSubscribers[self.__allContexts].add(delegate)
+
+    def unsubscribe(self, delegate):
+        for contextSubscribers in self.__contextSubscribers.itervalues():
+            contextSubscribers.discard(delegate)
+
+    def clear(self):
+        self.__contextSubscribers.clear()

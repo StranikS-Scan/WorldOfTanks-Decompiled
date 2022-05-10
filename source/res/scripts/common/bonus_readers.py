@@ -458,8 +458,6 @@ def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
     if section.has_key('ammo'):
         ammo = section['ammo'].asString
         extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
-    if section.has_key('unlock'):
-        extra['unlock'] = section['unlock'].asBool
     vehicleBonuses = bonus.setdefault('vehicles', {})
     vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
     if vehKey in vehicleBonuses:

@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
@@ -30,7 +30,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IMapboxController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -325,7 +325,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
 
     def _updateButtons(self, _):
         isLocked = True
-        if not currentHangarIsSteelHunter() and self.__vehicle is not None and self.__vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and self.__vehicle is not None and self.__vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(self.__vehicle, GUI_ITEM_TYPE.STYLE)
         self._updateButtonsState(lock=isLocked)
         return
@@ -922,6 +922,45 @@ class BattlePassLockButtonDecorator(MessageDecorator):
 
     def __update(self, *_):
         self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+
+class MapboxButtonDecorator(MessageDecorator):
+    __mapboxCtrl = dependency.descriptor(IMapboxController)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(MapboxButtonDecorator, self).__init__(entityID, entity, settings, model)
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__update
+
+    def clear(self):
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__update
+        super(MapboxButtonDecorator, self).clear()
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateButtons()
+        super(MapboxButtonDecorator, self)._make(formatted, settings)
+
+    def __updateButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            buttonsStates = self._entity.get('buttonsStates')
+            if not buttonsLayout or buttonsStates is None:
+                return
+            if self.__mapboxCtrl.isActive():
+                state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
+            else:
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+                tooltip = makeTooltip(body=backport.text(R.strings.mapbox.buttonDisable.tooltip()))
+            buttonsStates['submit'] = state
+            buttonsLayout[0]['tooltip'] = tooltip
+            return
+
+    def __update(self, *_):
+        self.__updateButtons()
         if self._model is not None:
             self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
         return

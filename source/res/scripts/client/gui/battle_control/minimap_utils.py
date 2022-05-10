@@ -67,24 +67,6 @@ def makePointMatrixByLocal(localX, localY, bottomLeft, upperRight):
     return makePointInBBoxMatrix(getPositionByLocal(localX, localY, bottomLeft, upperRight), bottomLeft, upperRight)
 
 
-def getMapBoundingBox(arenaVisitor):
-    bl, tr = arenaVisitor.type.getBoundingBox()
-    if arenaVisitor.gui.isBootcampBattle() or arenaVisitor.gui.isRTSBootcamp():
-        topRightX = tr[0]
-        topRightY = tr[1]
-        bottomLeftX = bl[0]
-        bottomLeftY = bl[1]
-        vSide = topRightX - bottomLeftX
-        hSide = topRightY - bottomLeftY
-        if vSide > hSide:
-            bl = (bottomLeftX, bottomLeftX)
-            tr = (topRightX, topRightX)
-        else:
-            bl = (bottomLeftY, bottomLeftY)
-            tr = (topRightY, topRightY)
-    return (bl, tr)
-
-
 def metersToMinimapPixels(minSize, maxSize):
     mmPixelsWidth, mmPixelsHeight = MINIMAP_SIZE
     mapWidthPx = int(abs(maxSize[0] - minSize[0]) * _METERS_TO_KILOMETERS * mmPixelsWidth)

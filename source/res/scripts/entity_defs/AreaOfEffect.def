@@ -1,4 +1,5 @@
 <AreaOfEffect.def>
+  <AppealRadius>	3000	</AppealRadius>
   <Properties>
     <arenaID>
       <Type>	INT32	</Type>
@@ -13,12 +14,12 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </equipmentID>
     <launchTime>
-      <Type>	FLOAT32	</Type>
+      <Type>	FLOAT64	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Default>	0	</Default>
     </launchTime>
     <strikeTime>
-      <Type>	FLOAT32	</Type>
+      <Type>	FLOAT64	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Default>	0	</Default>
     </strikeTime>

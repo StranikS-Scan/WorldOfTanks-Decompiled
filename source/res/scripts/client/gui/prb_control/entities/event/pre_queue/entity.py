@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/pre_queue/entity.py
 import BigWorld
-from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
-from gui.prb_control.prb_getters import isInEventBattlesQueue
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.items import SelectResult
 from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
@@ -15,25 +13,6 @@ from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.event.pre_queue.scheduler import EventScheduler
 from helpers import dependency
 from skeletons.gui.game_control import IEventBattlesController
-
-class EventBattleSubscriber(PreQueueSubscriber):
-
-    def subscribe(self, entity):
-        g_playerEvents.onEnqueuedEventBattles += entity.onEnqueued
-        g_playerEvents.onDequeuedEventBattles += entity.onDequeued
-        g_playerEvents.onEnqueueEventBattlesFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromEventBattles += entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
-
-    def unsubscribe(self, entity):
-        g_playerEvents.onEnqueuedEventBattles -= entity.onEnqueued
-        g_playerEvents.onDequeuedEventBattles -= entity.onDequeued
-        g_playerEvents.onEnqueueEventBattlesFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromEventBattles -= entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
-
 
 class EventBattleEntryPoint(PreQueueEntryPoint):
 
@@ -45,11 +24,8 @@ class EventBattleEntity(PreQueueEntity):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
-        super(EventBattleEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES, EventBattleSubscriber())
-
-    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
-    def storage(self):
-        return None
+        super(EventBattleEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES, PreQueueSubscriber())
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
 
     def init(self, ctx=None):
         self.storage.release()
@@ -67,9 +43,6 @@ class EventBattleEntity(PreQueueEntity):
 
     def doSelectAction(self, action):
         return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.EVENT_BATTLE else super(EventBattleEntity, self).doSelectAction(action)
-
-    def isInQueue(self):
-        return isInEventBattlesQueue()
 
     def leave(self, ctx, callback=None):
         self.storage.suspend()

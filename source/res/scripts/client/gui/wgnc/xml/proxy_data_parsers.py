@@ -273,7 +273,8 @@ class _MapboxRewardReceivedParser(SectionParser):
 
     def parse(self, section):
         return proxy_data.ShowMapboxRewardReceivedMessage({'rewards': json.loads(section['rewards'].asString),
-         'battles': section['battles'].asInt})
+         'battles': section['battles'].asInt,
+         'isFinal': section.readBool('is_last_reward')})
 
 
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):

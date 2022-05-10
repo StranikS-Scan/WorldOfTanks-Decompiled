@@ -10,12 +10,6 @@ class MinimapMeta(BaseDAAPIComponent):
     def applyNewSize(self, sizeIndex):
         self._printOverrideError('applyNewSize')
 
-    def handleMouseOverUIMinimap(self, isMouseOver):
-        self._printOverrideError('handleMouseOverUIMinimap')
-
-    def onHoverEntry(self, entry):
-        self._printOverrideError('onHoverEntry')
-
     def as_setSizeS(self, size):
         return self.flashObject.as_setSize(size) if self._isDAAPIInited() else None
 

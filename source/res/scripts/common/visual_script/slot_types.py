@@ -20,6 +20,8 @@ class SLOT_TYPE(object):
     PATROL_NODE = 'PatrolNode'
     PVE_SPAWN_POINT = 'PVESpawnPoint'
     SPAWN_POINT = 'SpawnPoint'
+    LOOT_BASIC = 'LootBasic'
+    LOOT_ADVANCED = 'LootAdvanced'
     AI_ZONE_CENTER = 'AiZoneCenter'
     MARKER_POINT = 'MarkerPoint'
     AREA_TRIGGER = 'AreaTrigger'

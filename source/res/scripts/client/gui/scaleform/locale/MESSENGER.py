@@ -140,7 +140,6 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_SIMPLECHATNAME = '#messenger:dialogs/squadChannel/simpleChatName'
     DIALOGS_SQUADCHANNEL_SIMPLECHATALERT_ANONYMIZER = '#messenger:dialogs/squadChannel/simpleChatAlert/anonymizer'
     DIALOGS_SIMPLESQUAD_EPICBATTLE_VEHICLERESTRICTION = '#messenger:dialogs/simpleSquad/epicBattle/VehicleRestriction'
-    DIALOGS_SIMPLESQUAD_BATTLEROYALE_VEHICLERESTRICTION = '#messenger:dialogs/simpleSquad/battleRoyale/VehicleRestriction'
     DIALOGS_EVENTSQUAD_VEHICLE = '#messenger:dialogs/eventSquad/vehicle'
     DIALOGS_BSCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/bsChannel/context/kickPlayer'
     DIALOGS_TEAMCHANNEL_BUTTONS_DISMISS = '#messenger:dialogs/teamChannel/buttons/dismiss'
@@ -368,6 +367,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_TANKMAN = '#messenger:serviceChannelMessages/battleResults/tankman'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BATTLEPASS = '#messenger:serviceChannelMessages/battleResults/battlePass'
     SERVICECHANNELMESSAGES_BRBATTLERESULTS_BATTLEPASS = '#messenger:serviceChannelMessages/BRbattleResults/battlePass'
+    SERVICECHANNELMESSAGES_BRBATTLERESULTS_BATTLEROYALEBRCOIN = '#messenger:serviceChannelMessages/BRbattleResults/battleRoyaleBrCoin'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/results/finished'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/results/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/reasons/finished'
@@ -1002,7 +1002,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_MAPBOX_REWARDRECEIVED = '#messenger:serviceChannelMessages/mapbox/rewardReceived'
     SERVICECHANNELMESSAGES_MAPBOX_PROGRESSIONSTAGECOMPLETED = '#messenger:serviceChannelMessages/mapbox/progressionStageCompleted'
     SERVICECHANNELMESSAGES_MAPBOX_PROGRESSIONFINALREWARDRECEIVED = '#messenger:serviceChannelMessages/mapbox/progressionFinalRewardReceived'
-    SERVICECHANNELMESSAGES_MAPBOX_SURVEYREQUEST = '#messenger:serviceChannelMessages/mapbox/surveyRequest'
     SERVICECHANNELMESSAGES_MAPBOX_CREWBOOKREQUESTERROR = '#messenger:serviceChannelMessages/mapbox/crewbookRequestError'
     SERVICECHANNELMESSAGES_SELECTABLECREWBOOK_GUIDE = '#messenger:serviceChannelMessages/selectableCrewbook/guide'
     SERVICECHANNELMESSAGES_SELECTABLECREWBOOK_BROCHURE = '#messenger:serviceChannelMessages/selectableCrewbook/brochure'
@@ -1047,10 +1046,8 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_DEBITED_SACOIN = '#messenger:platformCurrencyMsg/debited/sacoin'
     PLATFORMCURRENCYMSG_RECEIVED_BPBIT = '#messenger:platformCurrencyMsg/received/bpbit'
     PLATFORMCURRENCYMSG_DEBITED_BPBIT = '#messenger:platformCurrencyMsg/debited/bpbit'
-    SERVICECHANNELMESSAGES_RTS_PASSACCURED = '#messenger:serviceChannelMessages/RTS/passAccured'
-    SERVICECHANNELMESSAGES_RTS_RTS1X7CURRENCYDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x7CurrencyDebited'
-    SERVICECHANNELMESSAGES_RTS_RTS1X1CURRENCYDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x1CurrencyDebited'
-    SERVICECHANNELMESSAGES_RTS_RTS1X7PASSDEBITED = '#messenger:serviceChannelMessages/RTS/rts1x7PassDebited'
+    PLATFORMCURRENCYMSG_RECEIVED_BRCOIN = '#messenger:platformCurrencyMsg/received/brcoin'
+    PLATFORMCURRENCYMSG_DEBITED_BRCOIN = '#messenger:platformCurrencyMsg/debited/brcoin'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

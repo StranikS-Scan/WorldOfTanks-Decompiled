@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/common_builders.py
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced
+from gui.shared.tooltips import advanced, stronghold
 from gui.shared.tooltips import common
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder, TooltipWindowBuilder
@@ -26,7 +26,8 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.QUESTS_VEHICLE_BONUSES, TOOLTIPS_CONSTANTS.COLUMN_FIELDS_UI, common.QuestVehiclesBonusTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.ENVIRONMENT, TOOLTIPS_CONSTANTS.ENVIRONMENT_UI, common.EnvironmentTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.MISSIONS_TOKEN, TOOLTIPS_CONSTANTS.MISSIONS_TOKEN_UI, common.MissionsToken(contexts.QuestContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.RESERVE_MODULE, TOOLTIPS_CONSTANTS.REF_SYS_RESERVES_UI, common.ReserveTooltipData(contexts.ReserveContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.OLD_RESERVE_MODULE, TOOLTIPS_CONSTANTS.REF_SYS_RESERVES_UI, common.ReserveTooltipData(contexts.ReserveContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.RESERVE_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, stronghold.ReserveTooltipData(contexts.ReserveContext())),
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.EVENT_COIN, TOOLTIPS_CONSTANTS.EVENT_COIN_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
@@ -37,6 +38,7 @@ def getTooltipBuilders():
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
      AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.FREE_XP, TOOLTIPS_CONSTANTS.FREEXP_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
+     HeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.BRCOIN, TOOLTIPS_CONSTANTS.BRCOIN_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_FILTER, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, VehicleFilterTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ELITE_BONUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleEliteBonusTooltipData(contexts.VehicleEliteBonusContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_HISTORICAL_REFERENCE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleHistoricalReferenceTooltipData(contexts.VehicleHistoricalReferenceContext())),
@@ -56,15 +58,16 @@ def getTooltipBuilders():
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):
-    __slots__ = ('__btnType',)
+    __slots__ = ('__btnType', '__hideActionBlock')
 
-    def __init__(self, btnType, tooltipType, linkage):
+    def __init__(self, btnType, tooltipType, linkage, hideActionBlock=False):
         super(HeaderMoneyAndXpBuilder, self).__init__(tooltipType, linkage, common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)))
         self.__btnType = btnType
+        self.__hideActionBlock = hideActionBlock
         return
 
     def _buildData(self, _advanced, *args, **kwargs):
-        return super(HeaderMoneyAndXpBuilder, self)._buildData(_advanced, self.__btnType)
+        return super(HeaderMoneyAndXpBuilder, self)._buildData(_advanced, self.__btnType, self.__hideActionBlock)
 
 
 class AdvancedHeaderMoneyAndXpBuilder(AdvancedDataBuilder):

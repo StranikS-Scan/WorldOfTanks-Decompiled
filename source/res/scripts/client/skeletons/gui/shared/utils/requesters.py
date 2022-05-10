@@ -6,7 +6,7 @@ if typing.TYPE_CHECKING:
     from collections import OrderedDict
     from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
     from gui.shared.gui_items.gui_item_economics import ItemPrice
-    from gui.shared.money import Money
+    from gui.shared.money import Money, DynamicMoney
     from gui.shared.utils.requesters import InventoryRequester
     from gui.veh_post_progression.models.ext_money import ExtendedMoney
     from post_progression_common import VehicleState
@@ -381,6 +381,9 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     def getMoneyExt(self, vehCD):
+        raise NotImplementedError
+
+    def getDynamicMoney(self):
         raise NotImplementedError
 
     def getWeeklyVehicleCrystals(self, vehCD):
@@ -809,6 +812,13 @@ class IBattleRoyaleRequester(IRequester):
     def topCount(self):
         raise NotImplementedError
 
+    @property
+    def testDriveExpired(self):
+        raise NotImplementedError
+
+    def getStats(self, arenaBonusType, playerDatabaseID=None):
+        raise NotImplementedError
+
 
 class IBadgesRequester(IRequester):
 
@@ -917,9 +927,6 @@ class ITokensRequester(IRequester):
         raise NotImplementedError
 
     def getToken(self, tokenID):
-        raise NotImplementedError
-
-    def getTokenInfo(self, tokenID):
         raise NotImplementedError
 
     def getTokenCount(self, tokenID):
@@ -1080,15 +1087,6 @@ class ISessionStatsRequester(IRequester):
         raise NotImplementedError
 
 
-class IAIRostersRequester(IRequester):
-
-    def getRosters(self):
-        raise NotImplementedError
-
-    def getRTSRoster(self, bonusType):
-        raise NotImplementedError
-
-
 class IOffersRequester(IRequester):
 
     def isBannerSeen(self, offerID):
@@ -1132,16 +1130,4 @@ class IGiftSystemRequester(IRequester):
 
     @property
     def isHistoryReady(self):
-        raise NotImplementedError
-
-
-class IRtsStatisticsRequester(IRequester):
-
-    def getRts1x7(self):
-        raise NotImplementedError
-
-    def getRts1x1(self):
-        raise NotImplementedError
-
-    def getTankist(self):
         raise NotImplementedError

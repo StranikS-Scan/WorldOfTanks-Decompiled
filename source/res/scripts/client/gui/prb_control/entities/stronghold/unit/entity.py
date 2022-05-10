@@ -191,6 +191,7 @@ class StrongholdEntity(UnitEntity):
         self.__strongholdUpdateEventsMapping = {}
         self.__playersMatchingStartedAt = None
         self.__slotVehicleFilters = []
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.STRONGHOLD_UNITS)()
         return
 
     def init(self, ctx=None):
@@ -239,10 +240,6 @@ class StrongholdEntity(UnitEntity):
             self._invokeListeners('onStrongholdMaintenance', True)
         if self.inPlayersMatchingMode():
             self._invokeListeners('onPlayersMatching', True)
-
-    @prequeue_storage_getter(QUEUE_TYPE.STRONGHOLD_UNITS)
-    def storage(self):
-        return None
 
     def onUnitResponseReceived(self, requestID):
         LOG_DEBUG('Unit response requestID = ' + str(requestID))
@@ -341,8 +338,11 @@ class StrongholdEntity(UnitEntity):
         diff = prevRoleFlags ^ nextRoleFlags
         if diff & UNIT_ROLE.CREATOR > 0:
             self.__onCommanderChanged(playerID)
-        userNoLongerEquipmentCommander = prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
-        userBecomesEquipmentCommander = nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
+        equipRoles = UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS | UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS
+        prevEquipRoleFlags = prevRoleFlags & equipRoles
+        nextEquipRoleFlags = nextRoleFlags & equipRoles
+        userBecomesEquipmentCommander = self.__isEquipmentRoleChanged(prevEquipRoleFlags, nextEquipRoleFlags)
+        userNoLongerEquipmentCommander = self.__isEquipmentRoleChanged(nextEquipRoleFlags, prevEquipRoleFlags)
         if not userBecomesEquipmentCommander and not userNoLongerEquipmentCommander:
             return
         pInfo = self.getPlayerInfo(dbID=playerID)
@@ -1041,4 +1041,9 @@ class StrongholdEntity(UnitEntity):
             SystemMessages.pushMessage(backport.text(messageRes), type=messageType)
 
     def __isAnyPlayerEquipmentCommander(self):
-        return any((slot.player and slot.player.role & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 for slot in self.getSlotsIterator(*self.getUnit())))
+        equipRoles = UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS | UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS
+        return any((slot.player and slot.player.role & equipRoles > 0 for slot in self.getSlotsIterator(*self.getUnit())))
+
+    @staticmethod
+    def __isEquipmentRoleChanged(left, right):
+        return (left ^ right) & right > 0

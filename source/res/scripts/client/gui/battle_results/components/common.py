@@ -35,10 +35,6 @@ def makeEpicBattleFinishResultLabel(finishReason, teamResult):
     return backport.text(R.strings.battle_results.finish.reason.dyn('c_{}{}'.format(finishReason, teamResult))()) if finishReason in {FINISH_REASON.EXTERMINATION, FINISH_REASON.TIMEOUT, FINISH_REASON.DESTROYED_OBJECTS} else backport.text(R.strings.battle_results.finish.reason.dyn('c_{}'.format(finishReason))())
 
 
-def convertStrToNumber(value):
-    return '{:,}'.format(value).replace(',', ' ')
-
-
 class ArenaShortTimeVO(base.StatsItem):
     __slots__ = ()
 
@@ -163,13 +159,9 @@ class RegularFinishResultBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        self.finishReasonLabel = self._getFinishReasonLabel(reusable, teamResult)
+        self.finishReasonLabel = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
         self.fullResultLabel = toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(teamResult)()))
-
-    @classmethod
-    def _getFinishReasonLabel(cls, reusable, teamResult):
-        return makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
 
 
 class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):

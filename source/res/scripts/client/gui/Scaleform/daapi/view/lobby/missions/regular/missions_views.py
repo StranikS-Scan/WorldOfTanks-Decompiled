@@ -26,7 +26,6 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
-from gui.impl.gen.view_models.views.lobby.rts.meta_tab_model import Tabs
 from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
@@ -35,11 +34,11 @@ from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showTankPremiumAboutPage, showRTSMetaRootWindow
+from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IRTSBattlesController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -59,9 +58,6 @@ class _GroupedMissionsView(MissionsGroupedViewMeta):
                     blockData['isCollapsed'] = settings.isGroupMinimized(gID)
 
         return
-
-    def onGotoRtsQuestsClick(self):
-        pass
 
 
 class MissionsGroupedView(_GroupedMissionsView):
@@ -346,7 +342,6 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    _rtsController = dependency.descriptor(IRTSBattlesController)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -380,9 +375,6 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def onClickButtonDetails(self):
         showTankPremiumAboutPage()
 
-    def onGotoRtsQuestsClick(self):
-        showRTSMetaRootWindow(Tabs.QUESTS.value)
-
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
         g_eventBus.addListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
@@ -412,13 +404,6 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     def _getViewQuestFilter(self):
         return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
-
-    def _shouldAppendRTSBanner(self):
-        return self._rtsController.isEnabled() and self._rtsController.getCurrentCycleInfo()[1]
-
-    def _appendBanner(self, quests):
-        if self._shouldAppendRTSBanner():
-            quests.append({'blockId': QUESTS_ALIASES.MISSIONS_RTS_BANNER_VIEW_ALIAS})
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:

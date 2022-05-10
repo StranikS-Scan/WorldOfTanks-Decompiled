@@ -18,11 +18,9 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from shared_utils import first
 if typing.TYPE_CHECKING:
     from gui.battle_results.reusable.vehicles import VehiclesInfo
     from gui.shared.utils.requesters.StatsRequester import _ControllableXPData
-    from gui.battle_results.reusable import _ReusableInfo
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 
 class _SquadBonusInfo(object):
@@ -417,7 +415,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__battleRoyale', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__replayURL')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__replayURL')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -439,7 +437,6 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__c11nProgress = {}
         self.__xpProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
-        self.__battleRoyale = {}
         self.__dogTags = {}
         self.__goldBankGain = 0
         self.__replayURL = ''
@@ -450,10 +447,6 @@ class PersonalInfo(shared.UnpackedInfo):
     @property
     def avatar(self):
         return self.__avatar
-
-    @property
-    def vehicles(self):
-        return self.__vehicles
 
     @property
     def isObserver(self):
@@ -491,12 +484,11 @@ class PersonalInfo(shared.UnpackedInfo):
     def xpProgress(self):
         return self.__xpProgress
 
-    def getVehicleCDsIterator(self, result, reusable=None):
-        personalResult = result[_RECORD.PERSONAL]
+    def getVehicleCDsIterator(self, result):
         for intCD in self.__vehicles:
-            if intCD not in personalResult:
+            if intCD not in result:
                 continue
-            yield (intCD, personalResult[intCD])
+            yield (intCD, result[intCD])
 
     def getVehicleItemsIterator(self):
         getItemByCD = self.itemsCache.items.getItemByCD
@@ -545,9 +537,6 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getRankInfo(self):
         return self.__rankInfo
-
-    def getBattleRoyaleInfo(self):
-        return self.__battleRoyale
 
     def getProgressiveReward(self):
         return self.__progressiveReward
@@ -599,8 +588,6 @@ class PersonalInfo(shared.UnpackedInfo):
         itemCDs = [ key for key in info.keys() if isinstance(key, (int, long, float)) ]
         items = sorted((getItemByCD(itemCD) for itemCD in itemCDs))
         lifeTimes = []
-        self._fillAvatarInfo(info)
-        items = self._getItems(info)
         infoAvatar = info['avatar']
         if infoAvatar:
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
@@ -616,8 +603,7 @@ class PersonalInfo(shared.UnpackedInfo):
             if data is None:
                 self._addUnpackedItemID(intCD)
                 continue
-            if not item.isSupply:
-                self.__vehicles.append(intCD)
+            self.__vehicles.append(intCD)
             self._economicsRecords.addResults(intCD, data)
             if not self.__isObserver:
                 self.__isObserver = item.isObserver
@@ -636,49 +622,3 @@ class PersonalInfo(shared.UnpackedInfo):
         if lifeTimes:
             self.__lifeTimeInfo = _LifeTimeInfo(True, min(lifeTimes))
         return
-
-    def _fillAvatarInfo(self, info):
-        infoAvatar = info['avatar']
-        if infoAvatar:
-            self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
-            self.__PM2Progress.update(infoAvatar.get('PM2Progress', {}))
-            self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
-            self.__progressiveReward = infoAvatar.get('progressiveReward')
-            self.__battleRoyale = {'brPointsChanges': infoAvatar.get('brPointsChanges', 0),
-             'accBRTitle': infoAvatar.get('accBRTitle', (1, 0)),
-             'prevBRTitle': infoAvatar.get('prevBRTitle', (1, 0)),
-             'maxAchievedBRTitle': infoAvatar.get('maxAchievedBRTitle', (1, 0))}
-            self.__dogTags.update(infoAvatar.get('dogTags', {}))
-
-    def _getItems(self, info):
-        getItemByCD = self.itemsCache.items.getItemByCD
-        itemCDs = [ key for key in info.keys() if isinstance(key, (int, long, float)) ]
-        return sorted((getItemByCD(itemCD) for itemCD in itemCDs))
-
-
-class RTSPersonalInfo(PersonalInfo):
-    __slots__ = ('__isCommander',)
-
-    def __init__(self, personal):
-        self.__isCommander = False
-        super(RTSPersonalInfo, self).__init__(personal)
-
-    @property
-    def isCommander(self):
-        return self.__isCommander
-
-    def getVehicleCDsIterator(self, result, reusable=None):
-        for intCD, vehicleInfo in super(RTSPersonalInfo, self).getVehicleCDsIterator(result, reusable):
-            yield (intCD, vehicleInfo)
-
-        if self.__isCommander and reusable is not None:
-            for supplyID, intCD in reusable.common.getTeamSupplies(self.avatar.team):
-                yield (intCD, first(result[_RECORD.VEHICLES][supplyID]))
-
-        return
-
-    def _fillAvatarInfo(self, info):
-        infoAvatar = info['avatar']
-        if infoAvatar:
-            super(RTSPersonalInfo, self)._fillAvatarInfo(info)
-            self.__isCommander = infoAvatar.get('isCommander', False)

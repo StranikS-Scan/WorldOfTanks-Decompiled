@@ -24,7 +24,6 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_CHECKBOX_RENTED = '#tank_carousel_filter:popover/checkbox/rented'
     POPOVER_CHECKBOX_EVENT = '#tank_carousel_filter:popover/checkbox/event'
     POPOVER_CHECKBOX_BATTLEROYALE = '#tank_carousel_filter:popover/checkbox/battleRoyale'
-    POPOVER_CHECKBOX_RTSBATTLES = '#tank_carousel_filter:popover/checkbox/rtsBattles'
     POPOVER_CHECKBOX_UNLOCK_AVAILABLE = '#tank_carousel_filter:popover/checkbox/unlock_available'
     POPOVER_COUNTER = '#tank_carousel_filter:popover/counter'
     TOOLTIP_TOGGLESWITCHCAROUSEL_HEADER = '#tank_carousel_filter:tooltip/toggleSwitchCarousel/header'

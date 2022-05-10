@@ -117,7 +117,6 @@ class VehiclesInfo(shared.UnpackedInfo):
         for idx, item in enumerate(items):
             if idx >= len(result):
                 continue
-            vehicle = getItemByCD(item.intCD)
-            info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, vehicle, weakref.proxy(player), getVehicleResult(item.intCD)))
+            info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, getItemByCD(item.intCD), weakref.proxy(player), getVehicleResult(item.intCD)))
 
         return info

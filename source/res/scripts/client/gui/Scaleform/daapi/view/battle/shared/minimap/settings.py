@@ -28,23 +28,19 @@ class ENTRY_SYMBOL_NAME(object):
     ALLY_TEAM_SPAWN = 'AllyTeamSpawnEntry'
     ENEMY_TEAM_SPAWN = 'EnemyTeamSpawnEntry'
     CONTROL_POINT = 'ControlPointEntry'
-    COMMANDER_ALLY_TEAM_BASE = 'CommanderAllyTeamBaseEntry'
-    COMMANDER_ENEMY_TEAM_BASE = 'CommanderEnemyTeamBaseEntry'
-    COMMANDER_CONTROL_POINT = 'CommanderControlPointEntry'
     TUTORIAL_TARGET = 'TutorialTargetEntry'
     BOOTCAMP_TARGET = 'BootcampTargetEntry'
     ARTILLERY_ENTRY = 'ArtilleryEntry'
+    ARTILLERY_YELLOW_ENTRY = 'ArtilleryYellowEntry'
     BOMBER_ENTRY = 'BomberEntry'
     RECON_ENTRY = 'ReconEntry'
     SMOKE_ENTRY = 'SmokeEntry'
     VEHICLE = 'VehicleEntry'
-    COMMANDER_VEHICLE = 'CommanderVehicleEntry'
     VIEW_POINT = 'ViewPointEntry'
     DEAD_POINT = 'DeadPointEntry'
     VIDEO_CAMERA = 'VideoCameraEntry'
     ARCADE_CAMERA = 'ArcadeCameraEntry'
     STRATEGIC_CAMERA = 'StrategicCameraEntry'
-    FRUSTUM = 'FrustumEntry'
     VIEW_RANGE_CIRCLES = 'ViewRangeCirclesEntry'
     ANIMATION = 'AnimationEntry'
     MARK_OBJECTIVE_DEF = 'PositionDefendEntry'
@@ -58,7 +54,6 @@ class ENTRY_SYMBOL_NAME(object):
     ATTENTION_MARKER = 'MarkAttentionEntryUI'
     SHOOTING_POINT_MARKER = 'ShootingPointEntryUI'
     NAVIGATION_POINT_MARKER = 'NavigationPointEntryUI'
-    COMMANDER_PING_MARKER = 'CommanderPingEntryUI'
     EPIC_SECTOR_ENEMY_BASE = 'SectorBaseEnemyEntry'
     EPIC_SECTOR_ALLY_BASE = 'SectorBaseAllyEntry'
     EPIC_HQ_ENEMY = 'HeadquarterEnemyEntry'
@@ -118,6 +113,7 @@ class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
 
 
 EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
+ 'artillery_yellow': ENTRY_SYMBOL_NAME.ARTILLERY_YELLOW_ENTRY,
  'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY,
  'recon': ENTRY_SYMBOL_NAME.RECON_ENTRY,
  'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY}

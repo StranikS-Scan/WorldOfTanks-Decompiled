@@ -334,36 +334,27 @@ class HangarVehicleAppearance(ScriptGameObject):
          TankPartNames.TURRET: vDesc.turret.hitTesterManager,
          TankPartNames.GUN: vDesc.gun.hitTesterManager}
         bspModels = ()
-        crashedBspModels = []
-        useCrashedModels = False
+        crashedBspModels = ()
         for partName, htManager in hitTesterManagers.iteritems():
             partId = TankPartNames.getIdx(partName)
             bspModel = (partId, htManager.modelHitTester.bspModelName)
             bspModels = bspModels + (bspModel,)
             if htManager.crashedModelHitTester:
-                useCrashedModels = True
-                if htManager.crashedModelHitTester.bspModelName:
-                    crashedBspModel = (partId, htManager.crashedModelHitTester.bspModelName)
-                    crashedBspModels.append(crashedBspModel)
+                crashedBspModel = (partId, htManager.crashedModelHitTester.bspModelName)
+                crashedBspModels = crashedBspModels + (crashedBspModel,)
 
         bspModels = bspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.modelHitTester.bspModelName, capsuleScale), (TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.modelHitTester.bspModelName, capsuleScale), (TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.modelHitTester.bspModelName, gunScale))
         if vDesc.hull.hitTesterManager.crashedModelHitTester:
-            useCrashedModels = True
-            if vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName is not None:
-                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale))
+            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1, vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale),)
         if vDesc.turret.hitTesterManager.crashedModelHitTester:
-            useCrashedModels = True
-            if vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName:
-                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale))
+            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 2, vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName, capsuleScale),)
         if vDesc.gun.hitTesterManager.crashedModelHitTester:
-            useCrashedModels = True
-            if vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName:
-                crashedBspModels.append((TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName, gunScale))
+            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 3, vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName, gunScale),)
         modelCA = BigWorld.CollisionAssembler(bspModels, self.__spaceId)
         modelCA.name = 'ModelCollisions'
         resources.append(modelCA)
-        if useCrashedModels:
-            crashedModelCA = BigWorld.CollisionAssembler(tuple(crashedBspModels), self.__spaceId)
+        if crashedBspModels:
+            crashedModelCA = BigWorld.CollisionAssembler(crashedBspModels, self.__spaceId)
             crashedModelCA.name = 'CrashedModelCollisions'
             resources.append(crashedModelCA)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
@@ -435,7 +426,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if not self.__isVehicleDestroyed:
             self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.__spaceId, resourceRefs, self.compoundModel))
         from vehicle_systems import model_assembler
-        model_assembler.assembleCustomLogicComponents(self, self.__attachments, self.__modelAnimators)
+        model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
 
@@ -807,7 +798,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__clearModelAnimators()
             if not self.__isVehicleDestroyed:
                 from vehicle_systems import model_assembler
-                model_assembler.assembleCustomLogicComponents(self, self.__attachments, self.__modelAnimators)
+                model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
             return
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
 

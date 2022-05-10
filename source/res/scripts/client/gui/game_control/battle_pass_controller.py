@@ -68,12 +68,8 @@ class BattlePassController(IBattlePassController, EventsHandler):
         if any((self.isExtraChapter(chapterID) for chapterID in self.getChapterIDs())):
             self.__extraChapterNotifier.startNotification()
         self.__rewardLogic.start()
-        if self.__currentMode is None:
-            self.__currentMode = self.__getConfig().mode
-        else:
-            self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
-            self.__currentMode = self.__getConfig().mode
-        return
+        self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
+        self.__currentMode = self.__getConfig().mode
 
     def onAvatarBecomePlayer(self):
         self.__stop()

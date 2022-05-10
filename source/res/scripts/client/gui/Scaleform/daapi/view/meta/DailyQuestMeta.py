@@ -6,3 +6,6 @@ class DailyQuestMeta(BaseDAAPIComponent):
 
     def updateWidgetLayout(self, value):
         self._printOverrideError('updateWidgetLayout')
+
+    def as_setEnabledS(self, isEnabled):
+        return self.flashObject.as_setEnabled(isEnabled) if self._isDAAPIInited() else None

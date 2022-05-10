@@ -8,11 +8,11 @@ from items.components import path_builder
 from items.components import shared_components
 __all__ = ('Wheel', 'WheelGroup', 'TrackPair', 'TrackNode', 'TrackBasicVisualParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
 Wheel = reflectedNamedTuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTesterManager', 'materials', 'position'))
-Wheel.getHitTester = property(lambda self: self.hitTesterManager.getHitTester)
+Wheel.hitTester = property(lambda self: self.hitTesterManager.activeHitTester)
 WheelGroup = reflectedNamedTuple('WheelGroup', ('isLeft', 'template', 'count', 'startIndex', 'radius'))
 WheelsConfig = reflectedNamedTuple('WheelsConfig', ('groups', 'wheels'))
 TrackPair = namedtuple('TrackPair', ('hitTesterManager', 'materials', 'healthParams', 'breakMode'))
-TrackPair.getHitTester = property(lambda self: self.hitTesterManager.getHitTester)
+TrackPair.hitTester = property(lambda self: self.hitTesterManager.activeHitTester)
 TrackNode = reflectedNamedTuple('TrackNode', ('name', 'isLeft', 'initialOffset', 'leftNodeName', 'rightNodeName', 'damping', 'elasticity', 'forwardElasticityCoeff', 'backwardElasticityCoeff'))
 TrackBasicVisualParams = reflectedNamedTuple('TrackBasicVisualParams', ('lodDist', 'trackPairs'))
 TrackPairParams = reflectedNamedTuple('TrackPairParams', ('leftMaterial', 'rightMaterial', 'textureScale', 'tracksDebris'))

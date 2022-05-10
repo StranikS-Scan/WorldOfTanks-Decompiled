@@ -43,7 +43,10 @@ _PREM_TYPE_TO_FACTOR100_NAMES = {PREM_BONUS_TYPES.CREDITS: {PREMIUM_TYPE.BASIC: 
                        PREMIUM_TYPE.VIP: 'premiumVipXPFactor100'},
  PREM_BONUS_TYPES.TMEN_XP: {PREMIUM_TYPE.BASIC: 'premiumTmenXPFactor100',
                             PREMIUM_TYPE.PLUS: 'premiumPlusTmenXPFactor100',
-                            PREMIUM_TYPE.VIP: 'premiumVipXPTmenFactor100'}}
+                            PREMIUM_TYPE.VIP: 'premiumVipXPTmenFactor100'},
+ PREM_BONUS_TYPES.DYN_CURRENCIES: {PREMIUM_TYPE.BASIC: 'premiumFactor100',
+                                   PREMIUM_TYPE.PLUS: 'premiumPlusFactor100',
+                                   PREMIUM_TYPE.VIP: 'premiumVipFactor100'}}
 
 class UNIT_CLAN_MEMBERSHIP:
     NONE = 0

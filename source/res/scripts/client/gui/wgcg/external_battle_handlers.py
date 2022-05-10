@@ -86,7 +86,7 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
         self._requester.doRequestEx(ctx, callback, (api, 'lock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())
 
     def __setEquipmentCommander(self, api, ctx, callback, *args, **kwargs):
-        self._requester.doRequestEx(ctx, callback, (api, 'set_equipment_commander'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID())
+        self._requester.doRequestEx(ctx, callback, (api, 'set_equipment_commander'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID(), ctx.getRole())
 
     def __unsetReserve(self, api, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, (api, 'unlock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())

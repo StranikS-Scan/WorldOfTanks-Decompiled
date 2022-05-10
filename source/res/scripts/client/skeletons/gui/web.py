@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/web.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from gui.clans.clan_account_profile import MyClanAccountProfile
 
 class IWebController(object):
 

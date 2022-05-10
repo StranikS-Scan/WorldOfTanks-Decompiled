@@ -1936,6 +1936,42 @@
         </effects>
       </variant1>
     </tree_Birch_Bold_01_touchdown>
+    <tree_birch_bold_twisted_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/broadleaves/tree_birch_bold_twisted_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_birch_bold_twisted_fall>
+    <tree_birch_bold_twisted_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/broadleaves/tree_birch_bold_twisted_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_birch_bold_twisted_touchdown>
     <tree_Birch_Bold_10m_fall>
       <variant1>
         <stages>
@@ -3556,6 +3592,42 @@
         </effects>
       </variant1>
     </tree_Spruce_8m_touchdown>
+    <tree_spruce_ragged_14m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/conifers/tree_spruce_ragged_14m_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_med	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_spruce_ragged_14m_fall>
+    <tree_spruce_ragged_14m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/conifers/tree_spruce_ragged_14m_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down_med	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_spruce_ragged_14m_touchdown>
     <tree_Spruce_24m_fall>
       <variant1>
         <stages>
@@ -4132,7 +4204,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_touch	</wwsound>
+            <wwsound>	obj_pole	</wwsound>
             <params></params>
           </destructionSound>
         </effects>
@@ -4170,7 +4242,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_crack	</wwsound>
+            <wwsound>	obj_wood_barrel	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -10156,13 +10228,8 @@
             <force>	1	</force>
           </pixie>
           <destructionSound>
+            <wwsound>	obj_fence_wood_wattle	</wwsound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	35	</debrisAmount>
-              <weight>	2500	</weight>
-              <wood_1>	24	</wood_1>
-            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -15040,8 +15107,8 @@
             <wwsound>	obj_generative	</wwsound>
             <params>
               <weight>	4500.000000	</weight>
-              <metal_1>	40.000000	</metal_1>
               <debrisAmount>	35.000000	</debrisAmount>
+              <metal_1>	40.000000	</metal_1>
             </params>
           </destructionSound>
         </effects>
@@ -15088,8 +15155,8 @@
               <weight>	4500.000000	</weight>
               <metal_1>	40.000000	</metal_1>
               <debrisAmount>	35.000000	</debrisAmount>
-              <metal_2>	10.000000	</metal_2>
               <glass>	5.000000	</glass>
+              <metal_2>	10.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -21333,6 +21400,30 @@
         </effects>
       </variant1>
     </inf_env609_StreetTrafficController>
+    <inf_gaf007_ChurchFenceEnd>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf007_ChurchFenceEnd.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	15	</debrisAmount>
+              <weight>	4900	</weight>
+              <wood_1>	24	</wood_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf007_ChurchFenceEnd>
     <inf_gaf013_FenceTile1>
       <variant1>
         <stages>
@@ -23042,6 +23133,30 @@
         </effects>
       </variant1>
     </inf_envAF_005_ClayJug_1_11>
+    <inf_envAF_005_ClayJug_1_12>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	26	</stone_1>
+              <glass>	1	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAF_005_ClayJug_1_12>
     <inf_envAF_005_ClayJug_1_15>
       <variant1>
         <stages>
@@ -24904,6 +25019,56 @@
         </effects>
       </variant1>
     </inf_envNW_002_MarketShelves_01_05_hit>
+    <inf_envNW_002_MarketShelves_01_08>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envNW_002_MarketShelves_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	4000	</weight>
+              <metal_1>	5	</metal_1>
+              <cloth>	24	</cloth>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envNW_002_MarketShelves_01_08>
+    <inf_envNW_002_MarketShelves_01_08_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envNW_002_MarketShelves_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	4000	</weight>
+              <metal_1>	5	</metal_1>
+              <cloth>	24	</cloth>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envNW_002_MarketShelves_01_08_hit>
     <inf_envNW_002_MarketShelves_03>
       <variant1>
         <stages>
@@ -28344,6 +28509,7 @@
           <destructionSound>
             <startKey>	base	</startKey>
             <wwsound>	inf_fuel_env608_Sovbus	</wwsound>
+            <params></params>
           </destructionSound>
         </effects>
       </variant1>
@@ -30929,6 +31095,100 @@
         </effects>
       </variant1>
     </hd_env_SU_032_TramPost_hit>
+    <hd_env_AM_009_Poles>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_009_Poles.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	7200	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_009_Poles>
+    <hd_env_AM_009_Poles_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_009_Poles.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	7200	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_009_Poles_hit>
+    <hd_env_AM_009_Poles_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_009_Poles.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	7200	</weight>
+              <metal_1>	1	</metal_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_009_Poles_01>
+    <hd_env_AM_009_Poles_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_009_Poles.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	7200	</weight>
+              <metal_1>	1	</metal_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_009_Poles_01_hit>
     <hd_env_SU_071_AdvertisingPillar>
       <variant1>
         <stages>
@@ -32327,9 +32587,9 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <debrisAmount>	33.58	</debrisAmount>
-              <weight>	4453.84	</weight>
-              <metal_2>	1.5	</metal_2>
+              <debrisAmount>	23.000000	</debrisAmount>
+              <weight>	1460.000000	</weight>
+              <metal_2>	33.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -32350,9 +32610,9 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <debrisAmount>	33.58	</debrisAmount>
-              <weight>	4453.84	</weight>
-              <metal_2>	1.5	</metal_2>
+              <debrisAmount>	23.000000	</debrisAmount>
+              <weight>	1460.000000	</weight>
+              <metal_2>	33.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -32708,7 +32968,7 @@
             <startKey>	base	</startKey>
             <params>
               <weight>	9908.089844	</weight>
-              <metal_1>	6.800000	</metal_1>
+              <metal_1>	22.980000	</metal_1>
               <metal_2>	25.180000	</metal_2>
               <debrisAmount>	65.629997	</debrisAmount>
             </params>
@@ -33543,8 +33803,8 @@
             <params>
               <debrisAmount>	68.000000	</debrisAmount>
               <weight>	610.000000	</weight>
-              <metal_2>	1.500000	</metal_2>
               <glass>	91.000000	</glass>
+              <metal_2>	1.500000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -36181,11 +36441,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
-              <wood_2>	49.62	</wood_2>
-              <glass>	38.07	</glass>
+              <wood_1>	60.000000	</wood_1>
+              <wood_2>	55.000000	</wood_2>
+              <glass>	39.000000	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
+              <stone_2>	20.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -36232,12 +36493,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
+              <wood_1>	63.000000	</wood_1>
               <wood_2>	49.62	</wood_2>
               <glass>	38.07	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
-              <stone_2>	39.45	</stone_2>
+              <stone_2>	37.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -36258,12 +36519,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
-              <wood_2>	49.62	</wood_2>
-              <glass>	38.07	</glass>
+              <wood_1>	57.000000	</wood_1>
+              <wood_2>	52.000000	</wood_2>
+              <glass>	33.000000	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
-              <stone_2>	39.45	</stone_2>
+              <stone_2>	34.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -36284,12 +36545,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
-              <wood_2>	49.62	</wood_2>
-              <glass>	38.07	</glass>
+              <wood_1>	65.000000	</wood_1>
+              <wood_2>	46.000000	</wood_2>
+              <glass>	35.000000	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
-              <stone_2>	39.45	</stone_2>
+              <stone_2>	34.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -36310,12 +36571,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
-              <wood_2>	49.62	</wood_2>
-              <glass>	38.07	</glass>
+              <wood_1>	56.000000	</wood_1>
+              <wood_2>	48.000000	</wood_2>
+              <glass>	39.000000	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
-              <stone_2>	39.45	</stone_2>
+              <stone_2>	40.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -36336,7 +36597,7 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
+              <wood_1>	63.000000	</wood_1>
               <wood_2>	49.62	</wood_2>
               <glass>	38.07	</glass>
               <debrisAmount>	75	</debrisAmount>
@@ -36362,12 +36623,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	62.32	</wood_1>
+              <wood_1>	57.000000	</wood_1>
               <wood_2>	49.62	</wood_2>
-              <glass>	38.07	</glass>
+              <glass>	40.000000	</glass>
               <debrisAmount>	75	</debrisAmount>
               <weight>	7703.64	</weight>
-              <stone_2>	39.45	</stone_2>
+              <stone_2>	32.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -40459,6 +40720,30 @@
         </effects>
       </variant1>
     </hd_bld_AF_001_VHouse_Ruins_02_04_ram>
+    <inf_bld_114_01_Workshop_new_04_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	77.98	</metal_1>
+              <metal_2>	7.46	</metal_2>
+              <debrisAmount>	30.44	</debrisAmount>
+              <weight>	8656.72	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_04_1>
     <inf_env_112_19_MetroEnterance_1_03_ram>
       <variant1>
         <stages>
@@ -46721,7 +47006,7 @@
               <glass>	17.17	</glass>
               <debrisAmount>	59.2	</debrisAmount>
               <weight>	7052.25	</weight>
-              <wood_2>	23.74	</wood_2>
+              <wood_2>	31.049999	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -46746,7 +47031,7 @@
               <glass>	17.17	</glass>
               <debrisAmount>	59.2	</debrisAmount>
               <weight>	7052.25	</weight>
-              <wood_2>	26.94	</wood_2>
+              <wood_2>	31.049999	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -47559,6 +47844,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	28.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47582,6 +47868,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	28.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47605,6 +47892,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47628,6 +47916,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47651,6 +47940,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47674,6 +47964,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47697,6 +47988,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47720,6 +48012,7 @@
               <wood_1>	78.73	</wood_1>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <glass>	20.360001	</glass>
             </params>
           </destructionSound>
         </effects>
@@ -47792,6 +48085,7 @@
               <glass>	28.36	</glass>
               <debrisAmount>	65.67	</debrisAmount>
               <weight>	6696.18	</weight>
+              <metal_1>	22.000000	</metal_1>
             </params>
           </destructionSound>
         </effects>
@@ -52332,6 +52626,8 @@
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
               <glass>	16.97	</glass>
+              <stone_2>	19.629999	</stone_2>
+              <stone_1>	17.350000	</stone_1>
             </params>
           </destructionSound>
         </effects>
@@ -52357,6 +52653,8 @@
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
               <glass>	16.97	</glass>
+              <stone_1>	17.350000	</stone_1>
+              <stone_2>	19.629999	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -52381,6 +52679,8 @@
               <wood_2>	80.16	</wood_2>
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
+              <stone_2>	19.629999	</stone_2>
+              <stone_1>	17.350000	</stone_1>
             </params>
           </destructionSound>
         </effects>
@@ -52405,6 +52705,8 @@
               <wood_2>	80.16	</wood_2>
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
+              <stone_1>	17.350000	</stone_1>
+              <stone_2>	19.629999	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -52429,6 +52731,8 @@
               <wood_2>	80.16	</wood_2>
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
+              <stone_2>	19.629999	</stone_2>
+              <stone_1>	17.350000	</stone_1>
             </params>
           </destructionSound>
         </effects>
@@ -52453,6 +52757,8 @@
               <wood_2>	80.16	</wood_2>
               <debrisAmount>	99.24	</debrisAmount>
               <weight>	5605.55	</weight>
+              <stone_1>	17.350000	</stone_1>
+              <stone_2>	19.629999	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -52473,11 +52779,14 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	72.15	</wood_1>
-              <wood_2>	0.68	</wood_2>
+              <wood_1>	24.000000	</wood_1>
+              <wood_2>	35.000000	</wood_2>
               <glass>	11.95	</glass>
               <debrisAmount>	83.57	</debrisAmount>
               <weight>	7508.53	</weight>
+              <stone_1>	29.000000	</stone_1>
+              <stone_2>	32.000000	</stone_2>
+              <metal_1>	35.000000	</metal_1>
             </params>
           </destructionSound>
         </effects>
@@ -52498,11 +52807,14 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	72.15	</wood_1>
-              <wood_2>	0.68	</wood_2>
+              <wood_1>	24.000000	</wood_1>
               <glass>	11.95	</glass>
               <debrisAmount>	83.57	</debrisAmount>
               <weight>	7508.53	</weight>
+              <stone_2>	32.000000	</stone_2>
+              <metal_1>	35.000000	</metal_1>
+              <stone_1>	29.000000	</stone_1>
+              <wood_2>	35.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -52528,6 +52840,7 @@
               <glass>	11.95	</glass>
               <debrisAmount>	63.42	</debrisAmount>
               <weight>	7508.53	</weight>
+              <metal_2>	21.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -52553,6 +52866,7 @@
               <glass>	11.95	</glass>
               <debrisAmount>	63.42	</debrisAmount>
               <weight>	7508.53	</weight>
+              <metal_2>	21.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -52578,6 +52892,8 @@
               <glass>	11.95	</glass>
               <debrisAmount>	63.42	</debrisAmount>
               <weight>	7508.53	</weight>
+              <metal_1>	37.000000	</metal_1>
+              <metal_2>	17.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -52603,6 +52919,8 @@
               <glass>	11.95	</glass>
               <debrisAmount>	63.42	</debrisAmount>
               <weight>	7508.53	</weight>
+              <metal_1>	37.000000	</metal_1>
+              <metal_2>	18.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>

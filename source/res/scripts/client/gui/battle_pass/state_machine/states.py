@@ -260,7 +260,8 @@ class RewardAnyState(State):
             currentLevel = self.__battlePass.getCurrentLevel()
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
-                showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+                if not self.__battlePass.isDisabled():
+                    showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             machine.clearManualFlow()
             return
 
@@ -268,6 +269,6 @@ class RewardAnyState(State):
         machine = self.getMachine()
         if machine is not None:
             machine.post(StateEvent())
-        if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+        if not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
         return

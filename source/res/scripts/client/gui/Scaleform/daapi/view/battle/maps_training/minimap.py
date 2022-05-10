@@ -154,7 +154,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
             model.setGoalForPlayer(model.getOwnVehicleID() in self.__localGoals)
             self.__updateVehInfo(targetID, True)
 
-    def __onArenaVehicleKilled(self, victimID, attackerID, equipmentID, reason):
+    def __onArenaVehicleKilled(self, victimID, attackerID, equipmentID, reason, numVehiclesAffected):
         for targetID, model in self._entries.iteritems():
             if victimID == model.getOwnVehicleID() and targetID not in self.__callbacksIDs:
                 model.setAlive(False)

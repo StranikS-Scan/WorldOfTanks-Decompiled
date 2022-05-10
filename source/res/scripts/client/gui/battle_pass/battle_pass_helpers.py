@@ -207,11 +207,12 @@ def updateBuyAnimationFlag(chapterID, settingsCore=None, battlePass=None):
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
-def updateBattlePassVersion(data, battlePass=None):
+def updateBattlePassSettings(data, battlePass=None):
     version = battlePass.getSeasonNum()
     if data[BattlePassStorageKeys.FLAGS_VERSION] != version:
         _updateClientSettings()
-        _updateServerSettings(data, version)
+        _updateServerSettings(data)
+        data[BattlePassStorageKeys.FLAGS_VERSION] = version
         return True
     return False
 
@@ -221,11 +222,11 @@ def _updateClientSettings():
     AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, False)
 
 
-def _updateServerSettings(data, version):
+def _updateServerSettings(data):
     data[BattlePassStorageKeys.INTRO_SHOWN] = False
     data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
     data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
-    data[BattlePassStorageKeys.FLAGS_VERSION] = version
+    data[BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 

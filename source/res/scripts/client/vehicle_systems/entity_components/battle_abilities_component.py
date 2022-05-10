@@ -23,12 +23,13 @@ class BattleAbilitiesComponent(VehicleComponent):
         else:
             data = self.inspiringEffect
             equipmentComp = self._getEquipmentComp()
+            equipmentID = self.inspired.equipmentID if self.inspired is not None else None
             if equipmentComp is not None:
                 if data is not None:
                     radius = data.radius if data.radius > 0 else None
-                    equipmentComp.updateInspiringSource(self.id, data.startTime, data.endTime, data.inactivationDelay, radius)
+                    equipmentComp.updateInspiringSource(self.id, data.startTime, data.endTime, data.inactivationDelay, radius, equipmentID)
                 else:
-                    equipmentComp.updateInspiringSource(self.id, None, None, None, None)
+                    equipmentComp.updateInspiringSource(self.id, None, None, None, None, None)
             return
 
     def set_inspired(self, prev=None):

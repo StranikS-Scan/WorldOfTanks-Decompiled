@@ -95,12 +95,14 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         _logger.debug('Platoon tank with slot index: %s', self.slotIndex)
         self._platoonCtrl.onPlatoonTankUpdated += self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged += self.removeModelFromScene
+        self._platoonCtrl.onPlatoonTankRemove += self.__onPlatoonTankRemove
         self._platoonCtrl.registerPlatoonTank(self)
         self.setEnable(False)
 
     def onLeaveWorld(self):
         self._platoonCtrl.onPlatoonTankUpdated -= self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged -= self.removeModelFromScene
+        self._platoonCtrl.onPlatoonTankRemove -= self.__onPlatoonTankRemove
         super(PlatoonTank, self).onLeaveWorld()
 
     def onMouseClick(self):
@@ -158,6 +160,10 @@ class PlatoonTank(ClientSelectableCameraVehicle):
     def _onVehicleDestroy(self):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeVehicle()
+
+    def __onPlatoonTankRemove(self, slotIndex):
+        if self.slotIndex == slotIndex:
+            self.removeModelFromScene(False)
 
     @staticmethod
     def __getVehicleDescriptorByIntCD(vehicleIntCD):

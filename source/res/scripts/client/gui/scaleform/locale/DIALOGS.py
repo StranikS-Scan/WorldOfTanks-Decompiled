@@ -46,10 +46,6 @@ class DIALOGS(object):
     QUITBATTLE_DESERTER_MESSAGE = '#dialogs:quitBattle/deserter/message'
     QUITBATTLE_DESERTER_SUBMIT = '#dialogs:quitBattle/deserter/submit'
     QUITBATTLE_DESERTER_CANCEL = '#dialogs:quitBattle/deserter/cancel'
-    QUITBATTLE_RTS_DESERTER_TITLE = '#dialogs:quitBattle/rts_deserter/title'
-    QUITBATTLE_RTS_DESERTER_MESSAGE = '#dialogs:quitBattle/rts_deserter/message'
-    QUITBATTLE_RTS_DESERTER_SUBMIT = '#dialogs:quitBattle/rts_deserter/submit'
-    QUITBATTLE_RTS_DESERTER_CANCEL = '#dialogs:quitBattle/rts_deserter/cancel'
     QUITBATTLEIGR_TITLE = '#dialogs:quitBattleIGR/title'
     QUITBATTLEIGR_MESSAGE = '#dialogs:quitBattleIGR/message'
     QUITBATTLEIGR_SUBMIT = '#dialogs:quitBattleIGR/submit'
@@ -172,10 +168,6 @@ class DIALOGS(object):
     LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAlternativeAmmoAutoLoad/message'
     LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
     LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
-    LOWAMMOSAUTOLOAD_TITLE = '#dialogs:lowAmmosAutoLoad/title'
-    LOWAMMOSAUTOLOAD_MESSAGE = '#dialogs:lowAmmosAutoLoad/message'
-    LOWAMMOSAUTOLOAD_SUBMIT = '#dialogs:lowAmmosAutoLoad/submit'
-    LOWAMMOSAUTOLOAD_CANCEL = '#dialogs:lowAmmosAutoLoad/cancel'
     SANDBOX_TITLE = '#dialogs:sandBox/title'
     SANDBOX_MESSAGE = '#dialogs:sandBox/message'
     SANDBOX_SUBMIT = '#dialogs:sandBox/submit'
@@ -1129,6 +1121,14 @@ class DIALOGS(object):
     DIALOGTEMPLATES_CONFIRM = '#dialogs:dialogTemplates/confirm'
     DIALOGTEMPLATES_CANCEL = '#dialogs:dialogTemplates/cancel'
     DIALOGTEMPLATES_OK = '#dialogs:dialogTemplates/ok'
+    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_BUTTON = '#dialogs:battleRoyale/confirmRent/testDrive/Button'
+    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_TITLE = '#dialogs:battleRoyale/confirmRent/testDrive/Title'
+    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_DESCRIPTION = '#dialogs:battleRoyale/confirmRent/testDrive/Description'
+    BATTLEROYALE_CONFIRMRENT_RENT_BUTTON = '#dialogs:battleRoyale/confirmRent/rent/Button'
+    BATTLEROYALE_CONFIRMRENT_RENT_TITLE = '#dialogs:battleRoyale/confirmRent/rent/Title'
+    BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION = '#dialogs:battleRoyale/confirmRent/rent/Description'
+    BATTLEROYALE_CONFIRMRENT_RENTPRICE = '#dialogs:battleRoyale/confirmRent/rentPrice'
+    BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON = '#dialogs:battleRoyale/confirmRent/eventEndsSoon'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1170,10 +1170,6 @@ class DIALOGS(object):
      QUITBATTLE_DESERTER_MESSAGE,
      QUITBATTLE_DESERTER_SUBMIT,
      QUITBATTLE_DESERTER_CANCEL,
-     QUITBATTLE_RTS_DESERTER_TITLE,
-     QUITBATTLE_RTS_DESERTER_MESSAGE,
-     QUITBATTLE_RTS_DESERTER_SUBMIT,
-     QUITBATTLE_RTS_DESERTER_CANCEL,
      QUITBATTLEIGR_TITLE,
      QUITBATTLEIGR_MESSAGE,
      QUITBATTLEIGR_SUBMIT,
@@ -1296,10 +1292,6 @@ class DIALOGS(object):
      LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE,
      LOWAMMOAUTOLOAD_SUBMIT,
      LOWAMMOAUTOLOAD_CANCEL,
-     LOWAMMOSAUTOLOAD_TITLE,
-     LOWAMMOSAUTOLOAD_MESSAGE,
-     LOWAMMOSAUTOLOAD_SUBMIT,
-     LOWAMMOSAUTOLOAD_CANCEL,
      SANDBOX_TITLE,
      SANDBOX_MESSAGE,
      SANDBOX_SUBMIT,
@@ -2252,7 +2244,15 @@ class DIALOGS(object):
      ACCOUNTCOMPLETION_RENAMINGCOMPLETEOVERLAY_SUBTITLE,
      DIALOGTEMPLATES_CONFIRM,
      DIALOGTEMPLATES_CANCEL,
-     DIALOGTEMPLATES_OK)
+     DIALOGTEMPLATES_OK,
+     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_BUTTON,
+     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_TITLE,
+     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_DESCRIPTION,
+     BATTLEROYALE_CONFIRMRENT_RENT_BUTTON,
+     BATTLEROYALE_CONFIRMRENT_RENT_TITLE,
+     BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION,
+     BATTLEROYALE_CONFIRMRENT_RENTPRICE,
+     BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

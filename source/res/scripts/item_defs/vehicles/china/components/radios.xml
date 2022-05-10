@@ -29,6 +29,10 @@
     <A-220B_1_IGR>	60002	</A-220B_1_IGR>
     <_Type94_Hei_bootcamp>	64001	</_Type94_Hei_bootcamp>
     <Development_Radio>	65000	</Development_Radio>
+    <_9R_SH>	64002	</_9R_SH>
+    <_9RM_shop_SH>	64003	</_9RM_shop_SH>
+    <A-220B_1_SH>	64004	</A-220B_1_SH>
+    <Ch00_ClingeBot_SH_Radio>	64005	</Ch00_ClingeBot_SH_Radio>
     <_9RM_shop_bootcamp>	4	</_9RM_shop_bootcamp>
   </ids>
   <shared>
@@ -370,6 +374,60 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <_9R_SH>
+      <userString>	#china_vehicles:_9R_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	430	</radarRadius>
+      <radarCooldown>	25	</radarCooldown>
+    </_9R_SH>
+    <_9RM_shop_SH>
+      <userString>	#china_vehicles:_9RM_shop_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	320	</radarRadius>
+      <radarCooldown>	15	</radarCooldown>
+    </_9RM_shop_SH>
+    <A-220B_1_SH>
+      <userString>	#china_vehicles:A-220B_1_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	530	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </A-220B_1_SH>
+    <Ch00_ClingeBot_SH_Radio>
+      <userString>	#china_vehicles:Ch00_ClingeBot_SH_Radio	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </Ch00_ClingeBot_SH_Radio>
     <_9RM_shop_bootcamp>
       <userString>	#china_vehicles:_9RM_shop	</userString>
       <tags></tags>

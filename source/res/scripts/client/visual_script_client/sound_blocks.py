@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/sound_blocks.py
 import BigWorld
-import WWISE
 from visual_script import ASPECT
 from visual_script.block import Block, Meta, EDITOR_TYPE
 from visual_script.dependency import dependencyImporter
@@ -169,20 +168,6 @@ class SetMusicSkipArenaChanges(Block, SoundMeta):
 
     def _execute(self):
         MusicControllerWWISE.g_musicController.skipArenaChanges = self._skip.getValue()
-        self._out.call()
-
-
-class SetGlobalRTPC(Block, SoundMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(SetGlobalRTPC, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._setValue)
-        self._out = self._makeEventOutputSlot('out')
-        self._rtpcName = self._makeDataInputSlot('rtpcName', SLOT_TYPE.STR)
-        self._rtpcValue = self._makeDataInputSlot('rtpcValue', SLOT_TYPE.FLOAT)
-
-    def _setValue(self):
-        WWISE.WW_setRTCPGlobal(self._rtpcName.getValue(), self._rtpcValue.getValue())
         self._out.call()
 
 

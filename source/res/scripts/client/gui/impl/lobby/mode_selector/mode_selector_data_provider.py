@@ -13,8 +13,8 @@ from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName
 from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxModeSelectorItem
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
 from gui.impl.lobby.mode_selector.items.ranked_mode_selector_item import RankedModeSelectorItem
-from gui.impl.lobby.mode_selector.items.rts_mode_selector_item import RTSModeSelectorItem
 from gui.impl.lobby.mode_selector.items.spec_mode_selector_item import SpecModeSelectorItem
+from gui.impl.lobby.mode_selector.items.battle_royale_mode_selector_item import BattleRoyaleModeSelectorItem
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
 from gui.prb_control.dispatcher import g_prbLoader
@@ -33,7 +33,7 @@ _modeSelectorLegacyItemByModeName = {PREBATTLE_ACTION_NAME.RANDOM: RandomModeSel
  PREBATTLE_ACTION_NAME.MAPBOX: MapboxModeSelectorItem,
  PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem,
  CustomModeName.BOOTCAMP: BootcampModeSelectorItem,
- PREBATTLE_ACTION_NAME.RTS: RTSModeSelectorItem}
+ PREBATTLE_ACTION_NAME.BATTLE_ROYALE: BattleRoyaleModeSelectorItem}
 _additionalItems = {CustomModeName.BOOTCAMP: None}
 
 class ModeSelectorDataProvider(IGlobalListener):

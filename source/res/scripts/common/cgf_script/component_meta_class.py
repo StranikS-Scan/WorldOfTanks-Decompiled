@@ -11,6 +11,9 @@ class CGFMetaTypes(object):
     STRING_LIST = 'CGF::ScriptList<string>'
     INT_LIST = 'CGF::ScriptList<int32>'
     FLOAT_LIST = 'CGF::ScriptList<float>'
+    VECTOR2_LIST = 'CGF::ScriptList<Vector2>'
+    VECTOR3_LIST = 'CGF::ScriptList<Vector3>'
+    VECTOR4_LIST = 'CGF::ScriptList<Vector4>'
     LINK = 'BW::CGF::PyLinkConfig'
     VECTOR2 = 'Vector2'
     VECTOR3 = 'Vector3'
@@ -118,9 +121,11 @@ class CGFMetaClass(type):
             editorTitle = getattr(cls, 'editorTitle', name)
             modulePath = getattr(cls, 'modulePath', None)
             version = getattr(cls, 'version', 1)
+            userVisible = getattr(cls, 'userVisible', True)
+            vseVisible = getattr(cls, 'vseVisible', True)
             if modulePath is None:
                 modulePath = sys.modules[cls.__module__].__file__ if cls.__module__ != '__builtin__' else '__builtin__'
-            CGF.registerComponent(cls, modulePath, name, editorTitle, category, version)
+            CGF.registerComponent(cls, modulePath, name, editorTitle, userVisible, vseVisible, category, version)
             g_propertyIndex = 0
             return cls
 
@@ -129,7 +134,12 @@ class CGFMetaClass(type):
         for key, value in kwds.items():
             component.__setattr__(key, value)
 
-        component.__init__(*args)
+        try:
+            component.__init__(*args)
+        except:
+            import traceback
+            traceback.print_stack()
+
         return component
 
 

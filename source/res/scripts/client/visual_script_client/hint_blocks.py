@@ -3,7 +3,7 @@
 import BigWorld
 import aih_constants
 from bootcamp.BootcampConstants import HINT_NAMES, HINT_TYPE
-from visual_script.block import Block, Meta, EDITOR_TYPE, InitParam
+from visual_script.block import Block, Meta, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from constants import IS_VS_EDITOR
@@ -194,62 +194,3 @@ class SetBootCampHintPenetrationString(Block, HintMeta):
             return bcPage.topHint
         else:
             return
-
-
-class ShowServerHint(Block, HintMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(ShowServerHint, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._execute)
-        self._hintId = self._makeDataInputSlot('hintId', SLOT_TYPE.STR)
-        n = self._getInitParams()
-        self._paramSlots = [ self._makeDataInputSlot(self.getParamNameByID(paramID), SLOT_TYPE.STR) for paramID in xrange(n) ]
-        self._outSlot = self._makeEventOutputSlot('out')
-
-    def _execute(self):
-        battleHints = BigWorld.player().sessionProvider.dynamic.battleHints
-        if battleHints:
-            params = {self.getParamNameByID(paramID):slot.getValue() for paramID, slot in enumerate(self._paramSlots)}
-            hintName = self._hintId.getValue()
-            battleHints.showHint(hintName, params)
-        self._outSlot.call()
-
-    @classmethod
-    def initParams(cls):
-        return [InitParam('paramCount', SLOT_TYPE.INT, 0)]
-
-    @staticmethod
-    def getParamNameByID(paramID):
-        return 'param' + str(paramID + 1)
-
-
-class HideServerHint(Block, HintMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(HideServerHint, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._execute)
-        self._hintId = self._makeDataInputSlot('hintId', SLOT_TYPE.STR)
-        self._outSlot = self._makeEventOutputSlot('out')
-
-    def _execute(self):
-        battleHints = BigWorld.player().sessionProvider.dynamic.battleHints
-        if battleHints:
-            hintName = self._hintId.getValue()
-            battleHints.hideHint(hintName)
-        self._outSlot.call()
-
-
-class GetCamera(Block, HintMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetCamera, self).__init__(*args, **kwargs)
-        self._position = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, self._getPosition)
-        self._direction = self._makeDataOutputSlot('direction', SLOT_TYPE.VECTOR3, self._getDirection)
-
-    def _getPosition(self):
-        camera = BigWorld.camera()
-        self._position.setValue(camera.position)
-
-    def _getDirection(self):
-        camera = BigWorld.camera()
-        self._direction.setValue(camera.direction)

@@ -125,6 +125,9 @@ class ArcadeAimingSystem(IAimingSystem):
             self.focusOnPos(self.__shotPointCalculator.focusAtPos(scanStart, scanDir, yawPitch))
             return
 
+    def disable(self):
+        pass
+
     def setDynamicCollisions(self, enable):
         self.__cursor.setDynamicCollisions(enable)
 
@@ -137,13 +140,16 @@ class ArcadeAimingSystem(IAimingSystem):
     def focusOnPos(self, preferredPos):
         if self.__worldSpaceAimingWithLimits.isEnabled:
             self.__worldSpaceAimingWithLimits.focusOnPos(preferredPos)
+        self.__focusCursorOnPosition(preferredPos)
+        self.__updateInternal()
+
+    def __focusCursorOnPosition(self, preferredPos):
         vehPos = Matrix(self.__vehicleMProv).translation
         posOnVehicle = vehPos + Vector3(0.0, self.__cursor.heightAboveBase, 0.0)
         self.yaw = (preferredPos - vehPos).yaw
         xzDir = Vector3(self.__cursor.focusRadius * math.sin(self.__cursor.yaw), 0.0, self.__cursor.focusRadius * math.cos(self.__cursor.yaw))
         pivotPos = posOnVehicle + xzDir
         self.pitch = self.__calcPitchAngle(self.__cursor.distanceFromFocus, preferredPos - pivotPos)
-        self.__updateInternal()
 
     def __updateInternal(self):
         self.__cursor.update(self.__cursorShouldCheckCollisions)
@@ -199,7 +205,7 @@ class ArcadeAimingSystem(IAimingSystem):
         if self.__worldSpaceAimingWithLimits.isEnabled:
             ddx, ddy = self.__calculateWorldAimMovement(dx, dy)
             self.__worldSpaceAimingWithLimits.move(ddx, ddy)
-            self.__cursor.lookAt(self.__worldSpaceAimingWithLimits.getAimPoint())
+            self.__focusCursorOnPosition(self.__worldSpaceAimingWithLimits.getAimPoint())
         else:
             self.yaw += dx
             self.pitch += dy
@@ -225,7 +231,7 @@ class ArcadeAimingSystem(IAimingSystem):
             currentLookPoint = self.getThirdPersonShotPoint()
             self.__worldSpaceAimingWithLimits.init(limits, currentLookPoint)
             self.__worldSpaceAimingWithLimits.isEnabled = True
-            self.__cursor.lookAt(currentLookPoint)
+            self.__focusCursorOnPosition(self.__worldSpaceAimingWithLimits.getAimPoint())
             return
 
     def __calculateWorldAimMovement(self, dx, dy):
@@ -426,7 +432,6 @@ class _WorldSpaceAimingWithLimits(object):
         self.__aimingLimit = (near, far)
         origin = Matrix(self.__basis).translation
         self.__aimingPoint = initialAimingPoint - origin
-        self.__aimingPoint.y = 0
         if self.__aimingPoint.lengthSquared == 0:
             self.__aimingPoint = Vector3(0, 0, near)
         self.__lastCachedFrame = None

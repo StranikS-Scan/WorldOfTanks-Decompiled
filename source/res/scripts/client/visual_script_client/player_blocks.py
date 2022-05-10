@@ -474,14 +474,3 @@ class GetPlayerGunDispersionAngles(Block, PlayerMeta):
         if avatar:
             td = avatar.getVehicleDescriptor()
             self._ideal.setValue(td.gun.shotDispersionAngle)
-
-
-class GetCommanderCtrlModeFlag(Block, PlayerMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetCommanderCtrlModeFlag, self).__init__(*args, **kwargs)
-        self._isCommanderCtrlMode = self._makeDataOutputSlot('isCommanderCtrlMode', SLOT_TYPE.BOOL, self._getResult)
-
-    def _getResult(self):
-        if self._avatar:
-            self._isCommanderCtrlMode.setValue(self._avatar.isCommanderCtrlMode())

@@ -4,7 +4,6 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.battle_control.controllers.consumables import ammo_ctrl
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.battle_control.controllers.consumables import opt_devices_ctrl
-from gui.battle_control.controllers.consumables import br_equipment_ctrl
 
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:
@@ -13,11 +12,8 @@ def createAmmoCtrl(setup):
 
 
 def createEquipmentCtrl(setup):
-    isBattleRoyale = ARENA_BONUS_TYPE_CAPS.checkAny(setup.arenaEntity.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
     if setup.isReplayPlaying:
-        clazz = br_equipment_ctrl.SteelHunterReplayEquipmentController if isBattleRoyale else equipment_ctrl.EquipmentsReplayPlayer
-    elif isBattleRoyale:
-        clazz = br_equipment_ctrl.SteelHunterEquipmentController
+        clazz = equipment_ctrl.EquipmentsReplayPlayer
     else:
         clazz = equipment_ctrl.EquipmentsController
     return clazz(setup)

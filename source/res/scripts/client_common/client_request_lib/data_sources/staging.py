@@ -972,7 +972,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'wgsh', url, method='PATCH', postData=post_data)
 
-    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, role, fields=None):
         try:
             periphery_id = int(periphery_id)
             unit_server_id = int(unit_server_id)
@@ -981,7 +981,8 @@ class StagingDataAccessor(base.BaseDataAccessor):
             return callback({'description': error.description}, error.status_code, error.response_code)
 
         url = '/unit_api/periphery/{periphery_id}/units/{unit_server_id}/members/{account_id}/equipment_commander'.format(periphery_id=periphery_id, unit_server_id=unit_server_id, account_id=self._account)
-        post_data = {'equipment_commander_id': target_account_id}
+        post_data = {'equipment_commander_id': target_account_id,
+         'role': role}
 
         @preprocess_callback(callback, 'wgsh')
         def inner_callback(data):

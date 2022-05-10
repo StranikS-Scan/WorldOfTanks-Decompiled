@@ -1,31 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/battle_royale/tech_parameters_cmp_view_model.py
-from gui.impl.gen import R
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.ui_kit.list_model import ListModel
+from gui.impl.gen.view_models.views.battle_royale.br_vehicle_specifications_model import BrVehicleSpecificationsModel
 
 class TechParametersCmpViewModel(ViewModel):
-    __slots__ = ()
+    __slots__ = ('onModulesBtnClick', 'onResized')
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=2, commands=2):
         super(TechParametersCmpViewModel, self).__init__(properties=properties, commands=commands)
 
-    @property
-    def vehicleGoodSpec(self):
-        return self._getViewModel(0)
+    def getVehicleGoodSpec(self):
+        return self._getArray(0)
 
-    @property
-    def vehicleBadSpec(self):
-        return self._getViewModel(1)
+    def setVehicleGoodSpec(self, value):
+        self._setArray(0, value)
 
-    def getVehicleDescription(self):
-        return self._getResource(2)
+    def getVehicleBadSpec(self):
+        return self._getArray(1)
 
-    def setVehicleDescription(self, value):
-        self._setResource(2, value)
+    def setVehicleBadSpec(self, value):
+        self._setArray(1, value)
 
     def _initialize(self):
         super(TechParametersCmpViewModel, self)._initialize()
-        self._addViewModelProperty('vehicleGoodSpec', ListModel())
-        self._addViewModelProperty('vehicleBadSpec', ListModel())
-        self._addResourceProperty('vehicleDescription', R.invalid())
+        self._addArrayProperty('vehicleGoodSpec', Array())
+        self._addArrayProperty('vehicleBadSpec', Array())
+        self.onModulesBtnClick = self._addCommand('onModulesBtnClick')
+        self.onResized = self._addCommand('onResized')

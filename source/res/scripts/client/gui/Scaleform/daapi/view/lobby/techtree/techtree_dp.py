@@ -10,6 +10,7 @@ from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.techtree.nodes import BaseNode
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_PREMIUM_FILE_PATH
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_ORDER_PREFIX_COMMON, NODE_ORDER_PREFIX_PREMIUM
 from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, DEFAULT_UNLOCK_PROPS
@@ -561,9 +562,9 @@ class _TechTreeDataProvider(object):
 
     def __readNation(self, shared, nation, clearCache=False):
         xmlPath = NATION_TREE_REL_FILE_PATH.format(nation)
-        displayInfo, displaySettings, gridSettings = self.__readNodeList(shared, nation, xmlPath, clearCache)
+        displayInfo, displaySettings, gridSettings = self.__readNodeList(shared, nation, xmlPath, clearCache, NODE_ORDER_PREFIX_COMMON)
         xmlPath = NATION_TREE_REL_PREMIUM_FILE_PATH.format(nation)
-        premDisplayInfo, _, gridPremiumSettings = self.__readNodeList(shared, nation, xmlPath, clearCache)
+        premDisplayInfo, _, gridPremiumSettings = self.__readNodeList(shared, nation, xmlPath, clearCache, NODE_ORDER_PREFIX_PREMIUM)
         nationID = nations.INDICES[nation]
         self.__displaySettings[nationID] = displaySettings
         self.__gridSettings[nationID] = gridSettings
@@ -571,7 +572,7 @@ class _TechTreeDataProvider(object):
         displayInfo.update(premDisplayInfo)
         return displayInfo
 
-    def __readNodeList(self, shared, nation, xmlPath, clearCache=False):
+    def __readNodeList(self, shared, nation, xmlPath, clearCache=False, orderPrefix=0):
         if clearCache:
             ResMgr.purge(xmlPath)
         section = ResMgr.openSection(xmlPath)
@@ -610,7 +611,7 @@ class _TechTreeDataProvider(object):
                 xmlCtx = (None, xPath)
                 row = _xml.readInt(xmlCtx, nodeSection, 'row')
                 column = _xml.readInt(xmlCtx, nodeSection, 'column')
-                node = self.__getNodeByName(name, nationID, order=column * 100 + row)
+                node = self.__getNodeByName(name, nationID, order=column * 1000 + orderPrefix * 100 + row)
                 if not node.isFound:
                     raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(node.nodeName))
                 if not node.isAnnouncement:

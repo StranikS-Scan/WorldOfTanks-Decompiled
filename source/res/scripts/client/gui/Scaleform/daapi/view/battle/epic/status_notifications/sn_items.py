@@ -339,9 +339,10 @@ class ResupplyTimerSN(TimerSN):
     def __onProgressUpdate(self, circleType, _, value):
         if circleType is not PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
             return
-        if 'additionalInfo' in self._vo and self._vo['additionalInfo'] == value:
+        valueStr = str(value)
+        if 'additionalInfo' in self._vo and self._vo['additionalInfo'] == valueStr:
             return
-        self._vo['additionalInfo'] = value
+        self._vo['additionalInfo'] = valueStr
         if self._isVisible:
             self._sendUpdate()
 

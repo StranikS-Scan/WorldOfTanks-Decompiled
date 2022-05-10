@@ -17,11 +17,8 @@ if not IS_EDITOR:
     import sound_blocks
     import game_settings_blocks
     import hangar_blocks
-    import camera_blocks
-    import rts_vehicle_blocks
-    import rts_player_blocks
+    import battle_hud_block
     import cgf_blocks
-    from visual_script_client import battle_hud_block
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT)
 if not IS_EDITOR:
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
@@ -36,9 +33,6 @@ if not IS_EDITOR:
     g_blockRegistrar.regBlocksFromModule(game_settings_blocks)
     g_blockRegistrar.regBlocksFromModule(battle_hud_block)
     g_blockRegistrar.regBlocksFromModule(cgf_blocks)
-    g_blockRegistrar.regBlocksFromModule(rts_vehicle_blocks)
-    g_blockRegistrar.regBlocksFromModule(rts_player_blocks)
-    g_blockRegistrar.regBlocksFromModule(camera_blocks)
 g_blockRegistrar.regContext(SoundNotificationsContext)
 g_blockRegistrar.regContext(CGFGameObjectContext)
 if not IS_VS_EDITOR:

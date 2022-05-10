@@ -72,14 +72,18 @@ class CreateUnitCtx(TimeoutCtx):
 
 @ReprInjector.withParent(('__databaseID', 'databaseID'))
 class GiveEquipmentCommanderCtx(UnitRequestCtx):
-    __slots__ = ('__databaseID',)
+    __slots__ = ('__databaseID', '__role')
 
-    def __init__(self, databaseID, waitingID=''):
+    def __init__(self, databaseID, role, waitingID=''):
         super(GiveEquipmentCommanderCtx, self).__init__(waitingID=waitingID)
         self.__databaseID = databaseID
+        self.__role = role
 
     def getRequestType(self):
         return _REQUEST_TYPE.SET_EQUIPMENT_COMMANDER
 
     def getPlayerID(self):
         return self.__databaseID
+
+    def getRole(self):
+        return self.__role

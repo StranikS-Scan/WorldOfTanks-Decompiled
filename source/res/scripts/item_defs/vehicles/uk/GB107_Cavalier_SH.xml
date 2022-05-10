@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	16.66666709	</repairCost>
+  <repairCost>	8.333334	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -142,6 +142,8 @@
           <armor_22>	55	</armor_22>
           <armor_23>	75	</armor_23>
           <armor_24>	50	</armor_24>
+          <armor_25>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+          </armor_25>
         </armor>
         <primaryArmor>	armor_23 armor_3 armor_4	</primaryArmor>
         <weight>	20800	</weight>
@@ -2583,6 +2585,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
             <density>	114.474 120.617	</density>
@@ -2605,13 +2608,13 @@
           </armor>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	30	</rate>
+            <rate>	20	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	4 4.5 5	</reloadTime>
+            <reloadTime>	5.5 5 4.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -2660,6 +2663,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -2729,6 +2733,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -2848,13 +2853,13 @@
           </armor>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	30	</rate>
+            <rate>	20	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	4 4.5 5	</reloadTime>
+            <reloadTime>	5.5 5 4.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -2902,6 +2907,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -2972,6 +2978,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -3042,6 +3049,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.475 0.355 0.000000 0.53	</tiling>
             <density>	119.182 126.547	</density>
@@ -3066,13 +3074,13 @@
           </armor>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	6.5	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	24	</rate>
+            <rate>	17.14	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	4 4.5 5	</reloadTime>
+            <reloadTime>	6.5 6 5.5 5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3113,6 +3121,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.9 0.6 0.000000 0.1	</tiling>
             <density>	108.94 108.038	</density>
@@ -3131,7 +3140,7 @@
       </hitTester>
       <gunPosition>	-0.021288 0.498486 0.915517	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.922 -0.110 0.915 0.059 1.019 0.013 0.897 0.545 0.384 0.500 0.000 0.500 0.071 0.000 0.000	</physicsShape>
+      <physicsShape>	0.922 -0.110 0.870 0.014 0.885 0.013 0.897 0.545 0.198 0.500 0.000 0.500 0.071 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
@@ -3230,13 +3239,13 @@
           </armor>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	30	</rate>
+            <rate>	20	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	4 4.5 5	</reloadTime>
+            <reloadTime>	5.5 5 4.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3284,6 +3293,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	102.288 86.6775	</density>
@@ -3346,6 +3356,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
             <density>	110.77 112.879	</density>
@@ -3362,13 +3373,13 @@
           </armor>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <reloadTime>	6.5	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	24	</rate>
+            <rate>	17.14	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	4 4.5 5	</reloadTime>
+            <reloadTime>	6.5 6 5.5 5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
@@ -3409,6 +3420,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.9 0.6 0.000000 0.1	</tiling>
             <density>	108.94 108.038	</density>
@@ -3471,6 +3483,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.6 0.3 0.4 0.42	</tiling>
             <density>	99.4311 99.162	</density>
@@ -3490,7 +3503,7 @@
       <gunPosition>	-0.000263 0.524674 0.980769	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.048 -0.024 0.918 -0.047 0.883 -0.074 0.429 0.449 0.339 0.500 0.143 0.500 0.113 0.333 0.101	</physicsShape>
+      <physicsShape>	1.048 -0.024 0.918 -0.047 0.808 -0.059 0.429 0.449 0.339 0.500 0.143 0.500 0.113 0.333 0.011	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>

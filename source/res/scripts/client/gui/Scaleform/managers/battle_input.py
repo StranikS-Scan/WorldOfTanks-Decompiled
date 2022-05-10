@@ -79,20 +79,19 @@ class BattleGameInputMgr(object):
             return True
         if isDown and CommandMapping.g_instance.isFired(CommandMapping.CMD_UPGRADE_PANEL_SHOW, key):
             event_dispatcher.hideBattleVehicleConfigurator()
-        if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL) and (not avatar_getter.isCommanderCtrlMode() or avatar_getter.isForcedGuiControlMode()):
+        if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             if not self.__consumers:
                 avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)
             return True
-        if key == Keys.KEY_TAB:
-            if mods != Keys.MODIFIER_CTRL or not isDown:
-                if isEventBattle:
-                    event_dispatcher.toggleEventStats(isDown)
-                else:
-                    event_dispatcher.hideBattleVehicleConfigurator()
+        if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
+            if isEventBattle:
+                event_dispatcher.toggleEventStats(isDown)
+            else:
+                event_dispatcher.hideBattleVehicleConfigurator()
                 event_dispatcher.toggleFullStats(isDown)
-                return True
-            if mods == Keys.MODIFIER_CTRL and isDown:
-                if not self.__consumers:
-                    event_dispatcher.setNextPlayerPanelMode()
-                return True
+            return True
+        if key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:
+            if not self.__consumers:
+                event_dispatcher.setNextPlayerPanelMode()
+            return True
         return False

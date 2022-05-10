@@ -7,9 +7,8 @@ import BigWorld
 import WWISE
 import Event
 import SoundGroups
-from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD, ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE_LABEL, ARENA_PERIOD
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.battle_control import avatar_getter
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
@@ -348,8 +347,6 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         self.__isArenaLoadingCompleted = False
         arenaType = self.sessionProvider.arenaVisitor.getArenaType()
         self.__guiTypeName = ARENA_GUI_TYPE_LABEL.LABELS[self.sessionProvider.arenaVisitor.getArenaGuiType()]
-        if self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RTS:
-            self.__guiTypeName = 'rts_commander' if avatar_getter.isPlayerCommander() else 'rts_tankman'
         self._musicSetup = self._initializeMusicData()
         self._conditions = []
         if self._musicSetup is not None:

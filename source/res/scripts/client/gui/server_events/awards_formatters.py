@@ -13,6 +13,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen_utils import INVALID_RES_ID
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -33,8 +34,6 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IRTSBattlesController
-from gui.impl.lobby.rts.model_helpers import ARENA_BONUS_TYPE_TO_CURRENCY_TYPE_ENUM
 if typing.TYPE_CHECKING:
     from typing import Callable
     from gui.goodies.goodie_items import Booster
@@ -166,7 +165,7 @@ def getDefaultFormattersMap():
      'rankedBonusBattles': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter(),
      'battlePassPoints': BattlePassBonusFormatter(),
-     'rtsCurrencyToken': tokenBonusFormatter}
+     'currencies': CurrenciesBonusFormatter()}
 
 
 def getEpicFormattersMap():
@@ -707,7 +706,6 @@ class SeniorityPremiumDaysBonusFormatter(LinkedSetPremiumDaysBonusFormatter):
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
-    _rtsController = dependency.descriptor(IRTSBattlesController)
 
     @staticmethod
     def getBattleBonusX5Tooltip(*args):
@@ -733,8 +731,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             formatted = self._formatBattleBonusToken(token, bonus)
         elif tokenID.startswith(RESOURCE_TOKEN_PREFIX):
             formatted = self._formatResource(token, bonus)
-        elif TokenBonusFormatter._isRTSToken(token):
-            formatted = self._formatRTSResource(token, bonus)
         return formatted
 
     def _formatBonusLabel(self, count):
@@ -756,7 +752,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
 
     def _formatComplexToken(self, complexToken, token, bonus):
         userName = self._getUserName(complexToken.styleID)
-        tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+        tokenBase = R.strings.tooltips.quests.bonuses.token
+        eventTokenBase = tokenBase.dyn(complexToken.styleID)
+        bodyResID = eventTokenBase.body() if eventTokenBase() != INVALID_RES_ID else tokenBase.body()
+        tooltip = makeTooltip(backport.text(tokenBase.header(), userName=userName), backport.text(bodyResID))
         return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
     def _formatResource(self, token, bonus):
@@ -770,32 +769,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             images[size] = RES_ICONS.getResource(size, bonus.resourceName)
 
         return PreformattedBonus(bonusName=bonus.resourceName, images=images, label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
-
-    @classmethod
-    def _isRTSToken(cls, token):
-        return cls._toRTSEnum(token) is not None
-
-    @classmethod
-    def _toRTSEnum(cls, token):
-        for arenaBonusType in cls._rtsController.bonusTypesWithCurrency:
-            currencyName = cls._rtsController.getSettings().getCurrencyTokenName(arenaBonusType)
-            if currencyName == token.id:
-                return ARENA_BONUS_TYPE_TO_CURRENCY_TYPE_ENUM[arenaBonusType]
-
-        return None
-
-    def _formatRTSResource(self, token, bonus):
-        images = {}
-        tooltip = ''
-        header = ''
-        bonusName = TokenBonusFormatter._toRTSEnum(token).value
-        if hasattr(R.strings.rts_battles.currency, bonusName):
-            header = backport.text(getattr(R.strings.rts_battles.currency, bonusName).name())
-            tooltip = makeTooltip(header, backport.text(R.strings.rts_battles.tooltip.strategistCurrency.dyn(bonusName).description()))
-        for size in AWARDS_SIZES.ALL():
-            images[size] = RES_ICONS.getBonusIcon(size, bonusName)
-
-        return PreformattedBonus(bonusName=bonusName, images=images, label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
     def _formatLootBoxToken(self, tokenID, token, bonus):
         lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
@@ -1732,3 +1705,15 @@ class BattlePassEpicBonusFormatter(BattlePassBonusFormatter):
         if image is not None:
             images[size] = image
         return images
+
+
+class CurrenciesBonusFormatter(SimpleBonusFormatter):
+
+    @classmethod
+    def _getUserName(cls, bonus):
+        return i18n.makeString(QUESTS.getBonusName(bonus.getCode()))
+
+    @classmethod
+    def _getImages(cls, bonus):
+        return {AWARDS_SIZES.SMALL: bonus.getIconBySize(AWARDS_SIZES.SMALL),
+         AWARDS_SIZES.BIG: bonus.getIconBySize(AWARDS_SIZES.BIG)}

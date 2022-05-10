@@ -5,7 +5,7 @@ from collections import namedtuple
 import typing
 from ResMgr import DataSection
 import resource_helper
-from gui.battle_royale.constants import ParamTypes
+from battle_royale.gui.constants import ParamTypes
 from gui.impl import backport
 from gui.impl.gen import R
 from soft_exception import SoftException

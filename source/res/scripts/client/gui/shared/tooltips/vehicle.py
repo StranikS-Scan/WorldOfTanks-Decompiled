@@ -169,7 +169,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if statsConfig.showCrystals and vehicle.isEarnCrystals:
+        if vehicle.isEarnCrystals:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
                 items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
@@ -199,7 +199,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
         if not vehicle.isRotationGroupLocked:
-            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
+            statusBlock, operationError, _ = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
             else:
@@ -706,7 +706,7 @@ class VehicleStatusTooltipData(BlocksTooltipData):
         items = super(VehicleStatusTooltipData, self)._packBlocks()
         statusConfig = self.context.getStatusConfiguration(vehicle)
         if not vehicle.isRotationGroupLocked:
-            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
+            statusBlock, operationError, _ = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not operationError:
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(bottom=-16)))
         return items
@@ -1111,8 +1111,8 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 result = self.__getTechTreeVehicleStatus(self.configuration, self.vehicle)
             elif self.configuration.isAwardWindow:
                 result = None
-            elif self.configuration.isRTS:
-                result = None
+            elif self.configuration.battleRoyale is not None:
+                result = self.__getBattleRoyaleVehicleStatus(self.configuration, self.vehicle)
             else:
                 result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle)
             if result is not None:
@@ -1125,7 +1125,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     headerFormatter = text_styles.warning
                 elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.ATTENTION:
                     headerFormatter = text_styles.statusAttention
-                elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
+                elif statusLevel in (Vehicle.VEHICLE_STATE_LEVEL.RENTED, Vehicle.VEHICLE_STATE_LEVEL.RENTABLE):
                     headerFormatter = text_styles.warning
                 else:
                     _logger.error('Unknown status type "%s"!', statusLevel)
@@ -1137,7 +1137,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(formatters.packTextBlockData(text=text_styles.standard(text)))
                 else:
                     block.append(formatters.packAlignedTextBlockData(header, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-            return (block, result and result.get('operationError') is not None)
+            return (block, result and result.get('operationError') is not None, result)
 
     def __getTechTreeVehicleStatus(self, config, vehicle):
         nodeState = int(config.node.state)
@@ -1225,6 +1225,11 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             return {'header': header,
              'text': text,
              'level': level}
+
+    def __getBattleRoyaleVehicleStatus(self, configuration, vehicle):
+        return {'header': backport.text(R.strings.battle_royale.tooltips.vehicle.status.notRented()),
+         'text': '',
+         'level': Vehicle.VEHICLE_STATE_LEVEL.CRITICAL} if vehicle.isRented and configuration.battleRoyale.isRentNotActive else self.__getVehicleStatus(configuration.showCustomStates, vehicle)
 
 
 def _getNumNotNullPenaltyTankman(penalties):

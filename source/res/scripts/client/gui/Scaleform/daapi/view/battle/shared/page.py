@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
 import logging
 import typing
-import BigWorld
 import BattleReplay
 import aih_constants
 from AvatarInputHandler import aih_global_binding
@@ -100,12 +99,6 @@ class SharedPage(BattlePageMeta):
     def isGuiVisible(self):
         return self._isVisible
 
-    def onMouseWheel(self, delta):
-        inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
-        if inputHandler is not None:
-            inputHandler.handleMouseEvent(0, 0, delta * 40)
-        return
-
     def reload(self):
         self._stopBattleSession()
         self.__onPostMortemReload()
@@ -125,7 +118,6 @@ class SharedPage(BattlePageMeta):
             component.setOwner(self.app)
 
         self.addListener(events.GameEvent.RADIAL_MENU_CMD, self._handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.addListener(events.GameEvent.NUMBER_CMD, self._processNum, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.FULL_STATS, self._handleToggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self._handleToggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.TOGGLE_GUI, self._handleGUIToggled, scope=EVENT_BUS_SCOPE.BATTLE)
@@ -149,7 +141,6 @@ class SharedPage(BattlePageMeta):
             component.close()
 
         self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.removeListener(events.GameEvent.NUMBER_CMD, self._processNum, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.RADIAL_MENU_CMD, self._handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.FULL_STATS, self._handleToggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.FULL_STATS_QUEST_PROGRESS, self._handleToggleFullStatsQuestProgress, scope=EVENT_BUS_SCOPE.BATTLE)
@@ -249,9 +240,6 @@ class SharedPage(BattlePageMeta):
 
     def _handleHelpEvent(self, event):
         raise NotImplementedError
-
-    def _processNum(self, event):
-        pass
 
     def _onBattleLoadingStart(self):
         self._isBattleLoading = True

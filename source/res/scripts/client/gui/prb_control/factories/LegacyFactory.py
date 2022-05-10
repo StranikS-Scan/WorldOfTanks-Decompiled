@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/LegacyFactory.py
 from constants import PREBATTLE_TYPE
+from gui.shared.system_factory import registerLegacyEntity, collectLegacyEntity
+from gui.shared.system_factory import registerLegacyEntryPoint, collectLegacyEntryPoint
+from gui.shared.system_factory import registerLegacyEntryPointByType, collectLegacyEntryPointByType
 from gui.prb_control import prb_getters
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.legacy.ctx import LeaveLegacyCtx
@@ -8,41 +11,34 @@ from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntryPoint, L
 from gui.prb_control.entities.epic_battle_training.entity import EpicBattleTrainingEntryPoint, EpicBattleTrainingIntroEntryPoint, EpicBattleTrainingEntity, EpicBattleTrainingIntroEntity
 from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionEntryPoint, BattleSessionListEntryPoint, BattleSessionEntity
 from gui.prb_control.entities.training.legacy.entity import TrainingEntryPoint, TrainingIntroEntryPoint, TrainingEntity, TrainingIntroEntity
-from gui.prb_control.entities.rts_battles_training.entity import RtsTrainingEntryPoint, RtsTrainingIntroEntryPoint, RtsTrainingEntity, RtsTrainingIntroEntity
-from gui.prb_control.entities.battle_royale_tournament.legacy.entity import BattleRoyaleTournamentEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 __all__ = ('LegacyFactory',)
-_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingEntryPoint,
- PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntryPoint,
- PREBATTLE_TYPE.CLAN: BattleSessionEntryPoint,
- PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingEntryPoint,
- PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT: BattleRoyaleTournamentEntryPoint,
- PREBATTLE_TYPE.RTS_TRAINING: RtsTrainingEntryPoint}
-_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingIntroEntryPoint,
- PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: BattleSessionListEntryPoint,
- PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST: EpicBattleTrainingIntroEntryPoint,
- PREBATTLE_ACTION_NAME.RTS_TRAINING_LIST: RtsTrainingIntroEntryPoint}
-_SUPPORTED_ENTITY = {PREBATTLE_TYPE.TRAINING: TrainingEntity,
- PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntity,
- PREBATTLE_TYPE.CLAN: BattleSessionEntity,
- PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingEntity,
- PREBATTLE_TYPE.RTS_TRAINING: RtsTrainingEntity}
+registerLegacyEntryPointByType(PREBATTLE_TYPE.TRAINING, TrainingEntryPoint)
+registerLegacyEntryPointByType(PREBATTLE_TYPE.TOURNAMENT, BattleSessionEntryPoint)
+registerLegacyEntryPointByType(PREBATTLE_TYPE.CLAN, BattleSessionEntryPoint)
+registerLegacyEntryPointByType(PREBATTLE_TYPE.EPIC_TRAINING, EpicBattleTrainingEntryPoint)
+registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.TRAININGS_LIST, TrainingIntroEntryPoint)
+registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, BattleSessionListEntryPoint)
+registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST, EpicBattleTrainingIntroEntryPoint)
+registerLegacyEntity(PREBATTLE_TYPE.TRAINING, TrainingEntity)
+registerLegacyEntity(PREBATTLE_TYPE.TOURNAMENT, BattleSessionEntity)
+registerLegacyEntity(PREBATTLE_TYPE.CLAN, BattleSessionEntity)
+registerLegacyEntity(PREBATTLE_TYPE.EPIC_TRAINING, EpicBattleTrainingEntity)
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity,
- PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingIntroEntity,
- PREBATTLE_TYPE.RTS_TRAINING: RtsTrainingIntroEntity}
+ PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingIntroEntity}
 
 class LegacyFactory(ControlFactory):
 
     def createEntry(self, ctx):
-        if not ctx.getRequestType():
-            return LegacyIntroEntryPoint(FUNCTIONAL_FLAG.UNDEFINED, ctx.getEntityType())
-        else:
-            prbType = ctx.getEntityType()
-            return _SUPPORTED_ENTRY_BY_TYPE[prbType]() if prbType in _SUPPORTED_ENTRY_BY_TYPE else None
+        prbType = ctx.getEntityType()
+        return LegacyIntroEntryPoint(FUNCTIONAL_FLAG.UNDEFINED, ctx.getEntityType()) if not prbType else collectLegacyEntryPointByType(prbType)
 
     def createEntryByAction(self, action):
-        return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
+        result = collectLegacyEntryPoint(action.actionName)
+        if result:
+            result.setAccountsToInvite(action.accountsToInvite)
+        return result
 
     def createEntity(self, ctx):
         if ctx.getCtrlType() == CTRL_ENTITY_TYPE.LEGACY:
@@ -68,8 +64,7 @@ class LegacyFactory(ControlFactory):
                 prbSettings = prb_getters.getPrebattleSettings(prebattle=clientPrb)
                 prbType = prb_getters.getPrebattleType(settings=prbSettings)
                 clazz = None
-                if prbType in _SUPPORTED_ENTITY:
-                    clazz = _SUPPORTED_ENTITY[prbType]
+                clazz = collectLegacyEntity(prbType)
                 if clazz:
                     return clazz(prbSettings)
             else:

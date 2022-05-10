@@ -123,11 +123,6 @@ class AvatarPositionControl(CallbackDelayer):
             self.__doUnbind(vehicleID)
         return
 
-    def initialBindToVehicle(self):
-        vehicleID = self.__avatar.playerVehicleID
-        BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
-        self.__avatar.base.initialBindToVehicle(vehicleID)
-
     def followCamera(self, bValue=True):
         self.__bFollowCamera = bValue
         if bValue:

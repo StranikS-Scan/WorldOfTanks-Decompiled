@@ -289,12 +289,3 @@ class EventCriteriesGroup(CriteriesGroup):
     @staticmethod
     def isApplicableFor(vehicle):
         return vehicle.isEvent
-
-
-class BattleRoyaleCriteriesGroup(BasicCriteriesGroup):
-
-    def update(self, filters):
-        super(BattleRoyaleCriteriesGroup, self).update(filters)
-        self._criteria ^= REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
-        if filters['battleRoyale']:
-            self._criteria |= REQ_CRITERIA.VEHICLE.BATTLE_ROYALE

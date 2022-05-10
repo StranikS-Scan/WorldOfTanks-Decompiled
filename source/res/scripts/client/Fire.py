@@ -21,7 +21,6 @@ class Fire(BigWorld.DynamicScriptComponent):
         super(Fire, self).__init__()
         self.__effectListPlayerRef = None
         vehicle = self.entity
-        self.__isPlayerVehicle = vehicle.isPlayerVehicle
         if not self.__tryShowFlameEffect():
             vehicle.onAppearanceReady += self.__tryShowFlameEffect
         return
@@ -42,28 +41,20 @@ class Fire(BigWorld.DynamicScriptComponent):
             return True
 
     def set_fireInfo(self, _=None):
-        self.triggerFireUIandSound()
-
-    def triggerFireUIandSound(self):
         fireInfo = self.fireInfo
         if fireInfo is None:
             return
         else:
             vehicle = self.entity
             avatar = BigWorld.player()
-            isCurrentOrObservedVeh = self.__isCurrentOrObservedVeh(avatar, vehicle)
-            if avatar.userSeesWorld() and isCurrentOrObservedVeh and BigWorld.serverTime() - fireInfo['startTime'] < self.__EXTENDED_NOTIFICATION_WINDOW:
+            if avatar.userSeesWorld() and BigWorld.serverTime() - fireInfo['startTime'] < self.__EXTENDED_NOTIFICATION_WINDOW:
                 soundCheck = lambda veh=vehicle, player=avatar: player.vehicle == veh and veh.isOnFire()
                 avatar.playSoundIfNotMuted(self.__FIRE_SOUNDS['fireStarted'], checkFn=soundCheck)
                 deviceExtraIndex = fireInfo['deviceExtraIndex']
                 extra = vehicle.typeDescriptor.extras[deviceExtraIndex] if deviceExtraIndex != 0 else None
                 self.__guiSessionProvider.shared.messages.showVehicleDamageInfo(avatar, FIRE_NOTIFICATION_CODES[fireInfo['notificationIndex']], vehicle.id, fireInfo['attackerID'], extra, fireInfo['equipmentID'])
                 TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
-            if isCurrentOrObservedVeh:
-                self.__guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.FIRE, True)
-            rtsCommander = self.__guiSessionProvider.dynamic.rtsCommander
-            if rtsCommander and avatar.isCommander():
-                rtsCommander.invalidateControlledVehicleState(vehicle.id, VEHICLE_VIEW_STATE.FIRE, True)
+            self.__guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.FIRE, True)
             return
 
     def onDestroy(self):
@@ -79,7 +70,7 @@ class Fire(BigWorld.DynamicScriptComponent):
             self.__stopEffects()
         avatar = BigWorld.player()
         fireInfo = self.fireInfo
-        if fireInfo is not None and self.__isCurrentOrObservedVeh(avatar, vehicle):
+        if fireInfo is not None:
             if vehicle.health > 0:
                 soundCheck = lambda veh=vehicle, player=avatar: player.vehicle == veh and not veh.isOnFire()
                 avatar.playSoundIfNotMuted(self.__FIRE_SOUNDS['fireStopped'], checkFn=soundCheck)
@@ -88,9 +79,6 @@ class Fire(BigWorld.DynamicScriptComponent):
                 self.__guiSessionProvider.shared.messages.showVehicleDamageInfo(avatar, 'FIRE_STOPPED', vehicle.id, fireInfo['attackerID'], extra, fireInfo['equipmentID'])
             TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
             self.__guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.FIRE, False)
-        rtsCommander = self.__guiSessionProvider.dynamic.rtsCommander
-        if rtsCommander and avatar.isCommander():
-            rtsCommander.invalidateControlledVehicleState(vehicle.id, VEHICLE_VIEW_STATE.FIRE, False)
         return
 
     def __getEffectsListPlayer(self):
@@ -119,23 +107,8 @@ class Fire(BigWorld.DynamicScriptComponent):
             self.__effectListPlayerRef = None
         return
 
-    def __isCurrentOrObservedVeh(self, avatar, vehicle):
-        observedVehID = self.__guiSessionProvider.shared.vehicleState.getControllingVehicleID()
-        return vehicle.id == avatar.playerVehicleID or vehicle.id == observedVehID
-
     def onUnderWaterSwitch(self, isVehicleUnderwater):
         if isVehicleUnderwater:
             self.__stopEffects()
         else:
             self.__playEffect()
-
-    def onCameraChanged(self, isPlayerVehicle):
-        if self.__isPlayerVehicle == isPlayerVehicle:
-            return
-        self.__isPlayerVehicle = isPlayerVehicle
-        vehicle = self.entity
-        appearance = vehicle.appearance
-        if appearance.isUnderwater:
-            return
-        self.__stopEffects()
-        self.__playEffect()

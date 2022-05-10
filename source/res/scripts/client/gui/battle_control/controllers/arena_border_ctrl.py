@@ -73,11 +73,10 @@ class ArenaBorderController(IArenaLoadController):
         BigWorld.ArenaBorderHelper.setArenaBorderDrawType(self.__spaceID, self.__drawType)
         g_eventBus.handleEvent(GameEvent(GameEvent.ARENA_BORDER_TYPE_CHANGED, {'drawType': drawType}), scope=EVENT_BUS_SCOPE.BATTLE)
         distanceFaderMode = 0
-        if not BigWorld.player().isCommander():
-            if self.__showMode == _SHOW_MODE.HIDE:
-                distanceFaderMode = 1
-            if self.__showMode == _SHOW_MODE.SHOW_BY_ALT_PRESS or self.__showMode == _SHOW_MODE.ALWAYS_HIDE:
-                distanceFaderMode = 2
+        if self.__showMode == _SHOW_MODE.HIDE:
+            distanceFaderMode = 1
+        if self.__showMode == _SHOW_MODE.SHOW_BY_ALT_PRESS or self.__showMode == _SHOW_MODE.ALWAYS_HIDE:
+            distanceFaderMode = 2
         BigWorld.ArenaBorderHelper.setArenaBorderDistanceFadeMode(self.__spaceID, distanceFaderMode)
         BigWorld.ArenaBorderHelper.setArenaBorderColor(self.__spaceID, color)
 

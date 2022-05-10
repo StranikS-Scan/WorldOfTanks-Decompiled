@@ -8,13 +8,16 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.entities.base.unit.ctx import KickPlayerUnitCtx, GiveLeadershipUnitCtx
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.entities.stronghold.unit.ctx import GiveEquipmentCommanderCtx
+from gui.prb_control.items.stronghold_items import BOOST_TYPE, SUPPORT_TYPE, ARTILLERY_COMMANDER, INSPIRE_COMMANDER
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 KICK_FROM_UNIT = 'kickPlayerFromUnit'
 GIVE_LEADERSHIP = 'giveLeadership'
 TAKE_LEADERSHIP = 'takeLeadership'
-TAKE_EQUIPMENT_COMMANDER = 'takeEquipmentCommander'
-GIVE_EQUIPMENT_COMMANDER = 'giveEquipmentCommander'
+TAKE_ARTILLERY_EQUIPMENT_COMMANDER = 'takeArtilleryEquipmentCommander'
+GIVE_ARTILLERY_EQUIPMENT_COMMANDER = 'giveArtilleryEquipmentCommander'
+TAKE_INSPIRE_EQUIPMENT_COMMANDER = 'takeInspireEquipmentCommander'
+GIVE_INSPIRE_EQUIPMENT_COMMANDER = 'giveInspireEquipmentCommander'
 
 class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
 
@@ -51,11 +54,18 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
     def kickPlayerFromUnit(self):
         self._kickPlayerFromUnit(self.databaseID)
 
-    def giveEquipmentCommander(self):
-        self._giveEquipmentCommander(self.databaseID)
+    def giveArtilleryEquipmentCommander(self):
+        self._giveEquipmentCommander(self.databaseID, ARTILLERY_COMMANDER)
 
-    def takeEquipmentCommander(self):
-        self._giveEquipmentCommander(None)
+    def takeArtilleryEquipmentCommander(self):
+        self._giveEquipmentCommander(None, ARTILLERY_COMMANDER)
+        return
+
+    def giveInspireEquipmentCommander(self):
+        self._giveEquipmentCommander(self.databaseID, INSPIRE_COMMANDER)
+
+    def takeInspireEquipmentCommander(self):
+        self._giveEquipmentCommander(None, INSPIRE_COMMANDER)
         return
 
     def _addMutedInfo(self, option, userCMInfo):
@@ -72,10 +82,14 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
         if self.prbEntity.getEntityType() != PREBATTLE_TYPE.STRONGHOLD:
             return []
         options = []
-        if self._canTakeEquipmentCommander():
-            options.append(self._makeItem(TAKE_EQUIPMENT_COMMANDER, MENU.contextmenu(TAKE_EQUIPMENT_COMMANDER)))
-        if self._canGiveEquipmentCommander():
-            options.append(self._makeItem(GIVE_EQUIPMENT_COMMANDER, MENU.contextmenu(GIVE_EQUIPMENT_COMMANDER)))
+        if self._canTakeEquipmentCommander(SUPPORT_TYPE):
+            options.append(self._makeItem(TAKE_ARTILLERY_EQUIPMENT_COMMANDER, MENU.contextmenu(TAKE_ARTILLERY_EQUIPMENT_COMMANDER)))
+        if self._canGiveEquipmentCommander(SUPPORT_TYPE):
+            options.append(self._makeItem(GIVE_ARTILLERY_EQUIPMENT_COMMANDER, MENU.contextmenu(GIVE_ARTILLERY_EQUIPMENT_COMMANDER)))
+        if self._canTakeEquipmentCommander(BOOST_TYPE):
+            options.append(self._makeItem(TAKE_INSPIRE_EQUIPMENT_COMMANDER, MENU.contextmenu(TAKE_INSPIRE_EQUIPMENT_COMMANDER)))
+        if self._canGiveEquipmentCommander(BOOST_TYPE):
+            options.append(self._makeItem(GIVE_INSPIRE_EQUIPMENT_COMMANDER, MENU.contextmenu(GIVE_INSPIRE_EQUIPMENT_COMMANDER)))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
@@ -92,21 +106,21 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
     def _canKick(self):
         return self.prbEntity.getPermissions().canKick()
 
-    def _canGiveEquipmentCommander(self):
+    def _canGiveEquipmentCommander(self, equipmentType):
         unitEntity = self.prbEntity
         myPermissions = unitEntity.getPermissions()
         if not myPermissions.canChangeExtraEquipmentRole():
             return False
         permissions = unitEntity.getPermissions(dbID=self.databaseID)
         pInfo = unitEntity.getPlayerInfo(dbID=self.databaseID)
-        return pInfo.isInSlot and not permissions.isEquipmentCommander()
+        return pInfo.isInSlot and not permissions.isEquipmentCommander(equipmentType)
 
-    def _canTakeEquipmentCommander(self):
+    def _canTakeEquipmentCommander(self, equipmentType):
         unitEntity = self.prbEntity
         myPermissions = unitEntity.getPermissions()
         pInfo = unitEntity.getPlayerInfo(dbID=self.databaseID)
         permissions = unitEntity.getPermissions(dbID=self.databaseID)
-        return myPermissions.canChangeExtraEquipmentRole() and pInfo.isInSlot and permissions.isEquipmentCommander()
+        return myPermissions.canChangeExtraEquipmentRole() and pInfo.isInSlot and permissions.isEquipmentCommander(equipmentType)
 
     def _canGiveLeadership(self):
         unitEntity = self.prbEntity
@@ -127,8 +141,10 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
         handlers.update({KICK_FROM_UNIT: 'kickPlayerFromUnit',
          GIVE_LEADERSHIP: 'giveLeadership',
          TAKE_LEADERSHIP: 'takeLeadership',
-         TAKE_EQUIPMENT_COMMANDER: 'takeEquipmentCommander',
-         GIVE_EQUIPMENT_COMMANDER: 'giveEquipmentCommander'})
+         TAKE_ARTILLERY_EQUIPMENT_COMMANDER: 'takeArtilleryEquipmentCommander',
+         GIVE_ARTILLERY_EQUIPMENT_COMMANDER: 'giveArtilleryEquipmentCommander',
+         TAKE_INSPIRE_EQUIPMENT_COMMANDER: 'takeInspireEquipmentCommander',
+         GIVE_INSPIRE_EQUIPMENT_COMMANDER: 'giveInspireEquipmentCommander'})
         return handlers
 
     @process
@@ -144,5 +160,5 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
         yield self.prbDispatcher.sendPrbRequest(GiveLeadershipUnitCtx(getAccountDatabaseID(), 'prebattle/takeLeadership'))
 
     @process
-    def _giveEquipmentCommander(self, databaseID):
-        yield self.prbDispatcher.sendPrbRequest(GiveEquipmentCommanderCtx(databaseID, 'prebattle/giveEquipmentCommander'))
+    def _giveEquipmentCommander(self, databaseID, role):
+        yield self.prbDispatcher.sendPrbRequest(GiveEquipmentCommanderCtx(databaseID, role, 'prebattle/giveEquipmentCommander'))

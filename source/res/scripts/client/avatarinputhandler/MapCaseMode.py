@@ -5,7 +5,8 @@ import logging
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from CombatSelectedArea import CombatSelectedArea
-from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME, MAP_CASE_MODES
+from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME
+from extension_utils import importClass
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -26,6 +27,8 @@ from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_ERROR, LOG_WARNING
 from items import vehicles as vehs_core, artefacts
 from constants import AIMING_MODE
+from items import makeIntCompactDescrByID
+from nations import NONE_INDEX
 _logger = logging.getLogger(__name__)
 
 class _DefaultStrikeSelector(CallbackDelayer):
@@ -68,9 +71,10 @@ class _DefaultStrikeSelector(CallbackDelayer):
 
 class _VehiclesSelector(object):
 
-    def __init__(self, intersectChecker):
+    def __init__(self, intersectChecker, selectPlayer=False):
         self.__edgedVehicles = []
         self.__intersectChecker = intersectChecker
+        self.__selectPlayer = selectPlayer
         BigWorld.player().onVehicleLeaveWorld += self.__onVehicleLeaveWorld
 
     def destroy(self):
@@ -78,6 +82,17 @@ class _VehiclesSelector(object):
         self.__clearEdgedVehicles()
         BigWorld.player().onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
         return
+
+    def highlightVehicles(self):
+        self.__clearEdgedVehicles()
+        vehicles = [ v for v in BigWorld.player().vehicles if self.__validateVehicle(v) ]
+        selected = self.__intersectChecker(vehicles)
+        for v in selected:
+            v.drawEdge(True)
+            self.__edgedVehicles.append(v)
+
+    def __validateVehicle(self, vehicle):
+        return vehicle.isStarted and vehicle.isAlive() and (not vehicle.isPlayerVehicle or self.__selectPlayer)
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle in self.__edgedVehicles:
@@ -91,14 +106,6 @@ class _VehiclesSelector(object):
 
         self.__edgedVehicles = []
         return
-
-    def highlightVehicles(self):
-        self.__clearEdgedVehicles()
-        vehicles = [ v for v in BigWorld.player().vehicles if v.isStarted and v.isAlive() and not v.isPlayerVehicle ]
-        selected = self.__intersectChecker(vehicles)
-        for v in selected:
-            v.drawEdge(True)
-            self.__edgedVehicles.append(v)
 
 
 class _FLMinesSensor(object):
@@ -216,7 +223,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, doYCutOff=False)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
         self.area.setOverTerrainOffset(10.0)
         self.direction = direction
         self.__sightUpdateActivity = None
@@ -509,21 +516,36 @@ class _ArcadeFLMinesSelector(_ArcadeBomberStrikeSelector, _FLMinesSensor):
             self.area.setColor(int(4278255360L))
 
 
+class _AttackArtilleryFortStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelector):
+
+    def __init__(self, position, equipment):
+        _ArenaBoundsAreaStrikeSelector.__init__(self, position, equipment)
+        _VehiclesSelector.__init__(self, self.__intersected, selectPlayer=True)
+        self.area.enableWaterCollision(True)
+
+    def destroy(self):
+        _VehiclesSelector.destroy(self)
+        _ArenaBoundsAreaStrikeSelector.destroy(self)
+
+    def tick(self):
+        self.highlightVehicles()
+
+    def __intersected(self, vehicles):
+        for v in vehicles:
+            if self.area.pointInsideCircle(v.position, self.equipment.areaRadius):
+                yield v
+
+
 _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.RageBomber: _BomberStrikeSelector,
  artefacts.EpicArtillery: _ArtilleryStrikeSelector,
  artefacts.EpicBomber: _BomberStrikeSelector,
  artefacts.EpicRecon: _ReconStrikeSelector,
  artefacts.EpicSmoke: _SmokeStrikeSelector,
- artefacts.BRBomber: _BomberStrikeSelector,
- artefacts.BRBomberArcade: _ArcadeBomberStrikeSelector,
- artefacts.BRSmoke: _SmokeStrikeSelector,
- artefacts.BRSmokeArcade: _ArcadeBomberStrikeSelector,
- artefacts.SpawnKamikaze: _ArcadeBomberStrikeSelector,
- artefacts.BattleRoyaleMinefield: _ArcadeBomberStrikeSelector,
  artefacts.FrontLineMinefield: _ArcadeFLMinesSelector,
  artefacts.AreaOfEffectEquipment: _ArcadeBomberStrikeSelector,
- artefacts.AttackBomberEquipment: _ArcadeBomberStrikeSelector}
+ artefacts.AttackBomberEquipment: _ArcadeBomberStrikeSelector,
+ artefacts.AttackArtilleryFortEquipment: _AttackArtilleryFortStrikeSelector}
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -531,6 +553,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     camera = property(lambda self: self.__cam)
     aimingMode = property(lambda self: self.__aimingMode)
     equipmentID = property(lambda self: self.__equipmentID)
+    acceptsArcadeState = property(lambda self: self._acceptsArcadeState)
     prevCtlMode = None
     deactivateCallback = None
     MODE_NAME = ''
@@ -540,7 +563,8 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def __init__(self, dataSection, avatarInputHandler):
         CallbackDelayer.__init__(self)
-        self.__cam = self._createCamera(dataSection['camera'])
+        self._acceptsArcadeState = True
+        self.__cam = self._createCamera(dataSection['camera'], dataSection.readVector2('defaultOffset'))
         self.__preferredPos = Vector3(0, 0, 0)
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__isEnabled = False
@@ -568,12 +592,16 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def enable(self, **args):
         SoundGroups.g_instance.changePlayMode(2)
+        arcadeState = args.get('arcadeState', None)
         overridePreferredPosition = self.guiSessionProvider.shared.equipments.consumePreferredPosition()
-        if any((cls == type(overridePreferredPosition) for cls in (Vector3, tuple))):
+        if arcadeState is None and any((cls == type(overridePreferredPosition) for cls in (Vector3, tuple))):
             targetPos = overridePreferredPosition
         else:
             targetPos = args.get('preferredPos', Vector3(0, 0, 0))
-        self.__cam.enable(targetPos, args.get('saveDist', True))
+        if self._acceptsArcadeState:
+            self.__cam.enable(targetPos, args.get('saveDist', arcadeState is None), arcadeState=arcadeState)
+        else:
+            self.__cam.enable(targetPos, args.get('saveDist', True))
         self.__aimingMode = args.get('aimingMode', self.__aimingMode)
         self.__aimingModeUserDisabled = self.getAimingMode(AIMING_MODE.USER_DISABLED)
         self.__aimingMode |= AIMING_MODE.USER_DISABLED
@@ -702,7 +730,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     def getDesiredShotPoint(self, ignoreAimingMode=False):
         return self.__getDesiredShotPoint() if self.__aimingMode == 0 or ignoreAimingMode else None
 
-    def _createCamera(self, data):
+    def _createCamera(self, data, offset=Math.Vector2(0, 0)):
         raise NotImplementedError
 
     def _initCamera(self):
@@ -747,7 +775,10 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         if not self.__aimingModeUserDisabled:
             self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
         pos = self._getPreferedPositionOnQuit()
-        self.__aih.onControlModeChanged(prevMode[self._MODE_NAME], preferredPos=pos, aimingMode=self.__aimingMode, saveDist=False, saveZoom=True)
+        arcadeState = None
+        if self.acceptsArcadeState:
+            arcadeState = self.__aih.ctrl.camera.cloneState()
+        self.__aih.onControlModeChanged(prevMode[self._MODE_NAME], preferredPos=pos, aimingMode=self.__aimingMode, saveDist=False, saveZoom=True, arcadeState=arcadeState)
         self.stopCallback(self.__tick)
         self.__cam.update(0.0, 0.0, 0.0, False)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -758,7 +789,18 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def activateEquipment(self, equipmentID, preferredPos=None):
         equipment = vehs_core.g_cache.equipments()[equipmentID]
-        strikeSelectorConstructor = _STRIKE_SELECTORS.get(type(equipment))
+        if equipment.clientSelector:
+            strikeSelectorConstructor = importClass(equipment.clientSelector, 'AvatarInputHandler.MapCaseMode')
+        else:
+            typeEq = type(equipment)
+            if typeEq in _STRIKE_SELECTORS:
+                strikeSelectorConstructor = _STRIKE_SELECTORS.get(type(equipment))
+            else:
+                cd = makeIntCompactDescrByID('equipment', NONE_INDEX, equipmentID)
+                eq = self.guiSessionProvider.shared.equipments.getEquipment(cd)
+                if eq is None:
+                    return
+                strikeSelectorConstructor = eq.getStrikeSelector()
         if strikeSelectorConstructor is None:
             LOG_ERROR('Cannot use equipment with id', equipmentID)
             return
@@ -782,7 +824,8 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 class MapCaseControlMode(MapCaseControlModeBase):
     MODE_NAME = CTRL_MODE_NAME.MAP_CASE
 
-    def _createCamera(self, config):
+    def _createCamera(self, config, offset=Math.Vector2(0, 0)):
+        self._acceptsArcadeState = False
         return StrategicCamera.StrategicCamera(config)
 
     def _initCamera(self):
@@ -801,8 +844,8 @@ class MapCaseControlMode(MapCaseControlModeBase):
 class ArcadeMapCaseControlMode(MapCaseControlModeBase):
     MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE
 
-    def _createCamera(self, config):
-        return ArcadeCamera.ArcadeCamera(config, Math.Vector2())
+    def _createCamera(self, config, offset=Math.Vector2(0, 0)):
+        return ArcadeCamera.ArcadeCamera(config, offset)
 
     def _initCamera(self):
         self.camera.create()
@@ -811,15 +854,14 @@ class ArcadeMapCaseControlMode(MapCaseControlModeBase):
         return self.camera.aimingSystem.getDesiredShotPoint()
 
     def _getPreferedPositionOnQuit(self):
-        inputHandler = BigWorld.player().inputHandler
-        return inputHandler.ctrl.camera.aimingSystem.getDesiredShotPoint()
+        return self.camera.aimingSystem.getThirdPersonShotPoint()
 
 
 class AracdeMinefieldControleMode(ArcadeMapCaseControlMode):
     MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD
 
-    def _createCamera(self, config):
-        return ArcadeCamera.ArcadeCameraEpic(config, Math.Vector2())
+    def _createCamera(self, config, offset=Math.Vector2(0, 0)):
+        return ArcadeCamera.ArcadeCameraEpic(config, offset)
 
 
 def activateMapCase(equipmentID, deactivateCallback, controlMode):
@@ -833,11 +875,20 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
         inputHandler.ctrl.activateEquipment(equipmentID, preferredPos)
     else:
         currentMode = inputHandler.ctrlModeName
-        if currentMode in MAP_CASE_MODES:
+        mapCaseModes = (CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
+         CTRL_MODE_NAME.MAP_CASE,
+         CTRL_MODE_NAME.MAP_CASE_ARCADE,
+         CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
+        if currentMode in mapCaseModes:
             _logger.warning('MapCaseMode is active! Attempt to switch MapCaseModes simultaneously!')
             return
         controlMode.deactivateCallback = deactivateCallback
-        pos = inputHandler.getDesiredShotPoint()
+        arcadeState = None
+        if currentMode == CTRL_MODE_NAME.ARCADE:
+            arcadeState = inputHandler.ctrl.camera.cloneState()
+            pos = inputHandler.ctrl.camera.aimingSystem.getThirdPersonShotPoint()
+        else:
+            pos = inputHandler.getDesiredShotPoint()
         if pos is None:
             camera = getattr(inputHandler.ctrl, 'camera', None)
             if camera is not None:
@@ -845,7 +896,7 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
         controlMode.prevCtlMode = [pos, currentMode, inputHandler.ctrl.aimingMode]
-        inputHandler.onControlModeChanged(controlMode.MODE_NAME, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False)
+        inputHandler.onControlModeChanged(controlMode.MODE_NAME, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False, arcadeState=arcadeState)
     return
 
 

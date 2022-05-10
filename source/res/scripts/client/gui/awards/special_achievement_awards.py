@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
 from gui.referral_program import REFERRAL_PROGRAM_SOUNDS
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
 from gui.shared import event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import sortCrew
 from gui.impl.gen import R
@@ -331,7 +332,10 @@ class TelecomAward(AwardAbstract):
         return backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.button.label)())
 
     def handleBodyButton(self):
-        shared_events.selectVehicleInHangar(self.__vehicleDesrs[0], loadHangar=True)
+        item = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
+        if hasattr(item, 'invID'):
+            g_currentVehicle.selectVehicle(item.invID)
+        shared_events.showHangar()
 
     def __addProviderToRes(self, res):
         return res.dyn(self.__provider, res.default)
@@ -355,7 +359,7 @@ class RecruiterAward(ExplosionBackAward):
         return text_styles.main(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_DESCRIPTION), _CENTER_ALIGN))
 
     def handleOkButton(self):
-        shared_events.showReferralProgramWindow()
+        showReferralProgramWindow()
 
     def getSound(self):
         return REFERRAL_PROGRAM_SOUNDS.RECRUITER_AWARD

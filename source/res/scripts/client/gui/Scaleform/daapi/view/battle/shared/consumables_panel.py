@@ -34,8 +34,8 @@ from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
-AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
-NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
+R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
+NO_AMMO_ICON = 'NO_{}'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
@@ -89,7 +89,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     _ORDERS_END_IDX = 8
     _OPT_DEVICE_START_IDX = 9
     _OPT_DEVICE_END_IDX = 11
-    _EQUIPMENT_ICON_PATH = '../maps/icons/artefact/%s.png'
+    _R_ARTEFACT_ICON = R.images.gui.maps.icons.artefact
 
     def __init__(self):
         super(ConsumablesPanel, self).__init__()
@@ -218,9 +218,26 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.__extraKeys[idx] = self.__keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
         tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
-        shellIconPath = AMMO_ICON_PATH % icon
-        noShellIconPath = NO_AMMO_ICON_PATH % icon
+        iconName = icon.split('.png')[0]
+        shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
+        noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText)
+
+    def _buildEquipmentSlotTooltipText(self, item):
+        descriptor = item.getDescriptor()
+        reloadingTime = item.getTotalTime()
+        body = descriptor.description
+        if reloadingTime > 0:
+            tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
+            if isinstance(descriptor, SharedCooldownConsumableConfigReader):
+                cdSecVal = descriptor.cooldownTime
+            else:
+                cdSecVal = descriptor.cooldownSeconds
+            cooldownSeconds = str(int(cdSecVal))
+            paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
+            body = '\n\n'.join((body, paramsString))
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
+        return toolTip
 
     def _addEquipmentSlot(self, idx, intCD, item):
         self._cds[idx] = intCD
@@ -248,28 +265,21 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             reloadingTime = item.getTotalTime()
             iconPath = self._getEquipmentIcon(idx, descriptor.icon[0])
             animationType = item.getAnimationType()
-            body = descriptor.description
-            if reloadingTime > 0:
-                tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-                if isinstance(descriptor, SharedCooldownConsumableConfigReader):
-                    cdSecVal = descriptor.cooldownTime
-                else:
-                    cdSecVal = descriptor.cooldownSeconds
-                cooldownSeconds = str(int(cdSecVal))
-                paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
-                body = '\n\n'.join((body, paramsString))
-            toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
+            toolTip = self._buildEquipmentSlotTooltipText(item)
             self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=toolTip, animation=animationType)
         return
 
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
         self._cds[idx] = optDeviceInBattle.getIntCD()
         descriptor = optDeviceInBattle.getDescriptor()
-        iconPath = descriptor.icon[0]
+        iconPath = self._getOptionalDeviceIcon(descriptor.icon[0])
         self.as_addOptionalDeviceSlotS(idx, -1 if optDeviceInBattle.getStatus() else 0, iconPath, TOOLTIPS_CONSTANTS.BATTLE_OPT_DEVICE, True, optDeviceInBattle.getIntCD(), optDeviceInBattle.isUsed())
 
+    def _getOptionalDeviceIcon(self, icon):
+        return backport.image(self._R_ARTEFACT_ICON.dyn(icon)())
+
     def _getEquipmentIcon(self, _, icon):
-        return self._getEquipmentIconPath() % icon
+        return backport.image(self._getEquipmentIconPath().dyn(icon)())
 
     def _updateShellSlot(self, idx, quantity):
         self.as_setItemQuantityInSlotS(idx, quantity)
@@ -391,7 +401,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         return item.isAvatar()
 
     def _getEquipmentIconPath(self):
-        return self._EQUIPMENT_ICON_PATH
+        return self._R_ARTEFACT_ICON
 
     def __addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
@@ -639,21 +649,18 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.delayedReload = debuffTime
 
     def __startReloadDelayed(self, shellIndex, state):
-        if self.delayedReload is None:
-            return
+        leftTimeDelayed = state.getActualValue() - self.delayedReload
+        baseTimeDelayed = state.getBaseValue() - self.delayedReload
+        if leftTimeDelayed > 0 and baseTimeDelayed > 0:
+            shellReload = shellIndex
+            if self.__delayedNextShellID is not None:
+                shellReload = self._cds.index(self.__delayedNextShellID)
+                self.__delayedNextShellID = None
+            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
         else:
-            leftTimeDelayed = state.getActualValue() - self.delayedReload
-            baseTimeDelayed = state.getBaseValue() - self.delayedReload
-            if leftTimeDelayed > 0 and baseTimeDelayed > 0:
-                shellReload = shellIndex
-                if self.__delayedNextShellID is not None:
-                    shellReload = self._cds.index(self.__delayedNextShellID)
-                    self.__delayedNextShellID = None
-                self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
-            else:
-                _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
-            self.delayedReload = None
-            return
+            _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
+        self.delayedReload = None
+        return
 
     def __startReload(self, shellIndex, state):
         if self.__reloadTicker:

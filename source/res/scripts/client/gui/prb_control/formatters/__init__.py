@@ -77,15 +77,8 @@ def getPrebattleStartTimeString(startTime):
     return startTimeString
 
 
-def getShortPrebattleStartTimeString(startTime):
-    startTimeString = backport.getShortTimeFormat(startTime)
-    if startTime - time.time() > 86400:
-        startTimeString = '{0:>s} {1:>s}'.format(backport.getLongDateFormat(startTime), startTimeString)
-    return startTimeString
-
-
 def getBattleSessionStartTimeString(startTime):
-    startTimeString = getShortPrebattleStartTimeString(startTime)
+    startTimeString = getPrebattleStartTimeString(startTime)
     return '{} {}'.format(backport.text(R.strings.prebattle.title.battleSession.startTime()), startTimeString)
 
 

@@ -189,7 +189,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
     def handleEnterPressed(self):
         if not self.__isEnabled:
             return False
-        if self.__isUserInputIgnored():
+        if self.app.isModalViewShown() or self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER):
             return False
         if not self.__isFocused:
             self.__findReceiverIndexByModifiers()
@@ -197,7 +197,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return True
 
     def handleCTRLPressed(self, _, isDown):
-        if self.__isUserInputIgnored():
+        if self.app.isModalViewShown() or self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER):
             return False
         self.as_toggleCtrlPressFlagS(isDown)
         return True
@@ -499,10 +499,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             _, _, isChatEnabled = self.__receivers[index]
             return isChatEnabled
         return False
-
-    def __isUserInputIgnored(self):
-        hasOtherConsumers = self.app.hasGuiControlModeConsumers(*_CONSUMERS_LOCK_ENTER)
-        return self.app.isModalViewShown() or hasOtherConsumers or self._battleCtx.isPlayerCommander()
 
     def __handleMessageFadingEnabled(self, event):
         self.as_setActiveS(not event.ctx['isEnabled'])

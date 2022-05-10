@@ -9,13 +9,12 @@ from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResu
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import NeedRepairBottomContent
 from gui.impl.lobby.dialogs.buy_and_exchange import BuyAndExchange
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
-from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 from gui.shared.gui_items.gui_item_economics import Money
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class NeedRepair(BuyAndExchange):
-    __slots__ = ('__vehicle', '_buyContent', '_mainContent')
+    __slots__ = ('__vehicle', '_buyContent', '_mainContent', '__repairClazz')
 
     def __init__(self, *args, **kwargs):
         self.__vehicle = kwargs.pop('vehicle', None)
@@ -25,6 +24,7 @@ class NeedRepair(BuyAndExchange):
         startState = kwargs.pop('startState', None)
         self._buyContent = None
         self._mainContent = None
+        self.__repairClazz = kwargs.pop('repairClazz')
         super(NeedRepair, self).__init__(settings, price=self.__getPrice(), startState=startState)
         return
 
@@ -36,7 +36,7 @@ class NeedRepair(BuyAndExchange):
         super(NeedRepair, self)._onLoading(*args, **kwargs)
         self._buyContent = NeedRepairBottomContent(viewModel=self.viewModel.dealPanel, vehicle=self.__vehicle)
         self._buyContent.onLoading()
-        self._mainContent = NeedRepairMainContent(viewModel=self.viewModel.needRepairContent, repairPercentage=self.__calculateRepairPercentage(), vehicle=self.__vehicle)
+        self._mainContent = self.__repairClazz(viewModel=self.viewModel.needRepairContent, repairPercentage=self.__calculateRepairPercentage(), vehicle=self.__vehicle)
         self._mainContent.onLoading()
 
     def _initialize(self, *args, **kwargs):

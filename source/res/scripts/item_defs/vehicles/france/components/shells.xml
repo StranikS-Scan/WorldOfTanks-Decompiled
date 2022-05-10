@@ -2533,8 +2533,8 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	250	</armor>
-      <devices>	25	</devices>
+      <armor>	320	</armor>
+      <devices>	32	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_75mm_OCO_mle._1926_SH>
@@ -2550,8 +2550,8 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	170	</armor>
-      <devices>	25	</devices>
+      <armor>	240	</armor>
+      <devices>	32	</devices>
     </damage>
   </_75mm_FrtPrf1946_SH>
   <_90mm_OCC_90_SH>
@@ -2632,8 +2632,8 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	350	</armor>
-      <devices>	35	</devices>
+      <armor>	490	</armor>
+      <devices>	49	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_OCC_F1_SH>
@@ -2649,60 +2649,42 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	250	</armor>
-      <devices>	35	</devices>
+      <armor>	380	</armor>
+      <devices>	49	</devices>
     </damage>
   </_90mm_OFL_90_DS2_SH>
   <_127mm_OE_127_Mle_55_SH>
     <id>	263	</id>
     <userString>	#france_vehicles:_127mm_OE_127_Mle_55_SH	</userString>
-    <icon>	he_modern	</icon>
+    <icon>	he	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	127	</caliber>
     <explosionRadius>	4	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
-      <armor>	550	</armor>
-      <devices>	55	</devices>
+      <armor>	600	</armor>
+      <devices>	60	</devices>
     </damage>
-    <armorSpalls>
-      <impactRadius>	4	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	275	</armor>
-        <devices>	30	</devices>
-      </damage>
-    </armorSpalls>
   </_127mm_OE_127_Mle_55_SH>
   <_127mm_OE_127_D_700_SH>
     <id>	264	</id>
     <userString>	#france_vehicles:_127mm_OE_127_D_700_SH	</userString>
-    <icon>	he_modern_premium	</icon>
+    <icon>	he_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	127	</caliber>
     <explosionRadius>	2.8	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
-      <armor>	450	</armor>
-      <devices>	55	</devices>
+      <armor>	400	</armor>
+      <devices>	60	</devices>
     </damage>
-    <armorSpalls>
-      <impactRadius>	2.8	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	225	</armor>
-        <devices>	30	</devices>
-      </damage>
-    </armorSpalls>
   </_127mm_OE_127_D_700_SH>
   <_155_OE_mle_1956_MapsTraining_Dummy_SPG_2>
     <id>	23	</id>

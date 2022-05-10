@@ -40,6 +40,7 @@ class BRSections(object):
     LEADERBOARD = 'leaderboard'
     IN_BATTLE = 'inBattle'
     FINANCE = 'financialBalance'
+    FINANCE_PREM = 'financialBalancePrem'
     REWARDS = 'rewards'
     ACHIEVEMENTS = 'achievements'
     BONUSES = 'bonuses'

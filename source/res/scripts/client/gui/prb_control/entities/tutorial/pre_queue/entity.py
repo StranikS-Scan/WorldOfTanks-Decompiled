@@ -3,29 +3,28 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
-from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, REQUEST_TYPE
 
 class TutorialSubscriber(PreQueueSubscriber):
 
     def subscribe(self, entity):
         g_playerEvents.onTutorialEnqueued += entity.onEnqueued
-        g_playerEvents.onTutorialDequeued += entity.onDequeued
-        g_playerEvents.onTutorialEnqueueFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromTutorialQueue += entity.onKickedFromQueue
+        g_playerEvents.onDequeued += entity.onDequeued
+        g_playerEvents.onEnqueueFailure += entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue += entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena += entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
 
     def unsubscribe(self, entity):
         g_playerEvents.onTutorialEnqueued -= entity.onEnqueued
-        g_playerEvents.onTutorialDequeued -= entity.onDequeued
-        g_playerEvents.onTutorialEnqueueFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromTutorialQueue -= entity.onKickedFromQueue
+        g_playerEvents.onDequeued -= entity.onDequeued
+        g_playerEvents.onEnqueueFailure -= entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue -= entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
 
@@ -47,11 +46,14 @@ class TutorialEntity(PreQueueEntity):
         g_eventDispatcher.startOffbattleTutorial()
         return result
 
-    def isInQueue(self):
-        return prb_getters.isInTutorialQueue()
-
     def doSelectAction(self, action):
         return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL else super(TutorialEntity, self).doSelectAction(action)
+
+    def onEnqueued(self, *args):
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+            self._requestCtx.stopProcessing(True)
+        self._invokeListeners('onEnqueued', self.getQueueType(), *args)
+        self._goToQueueUI()
 
     def onEnqueueError(self, *args):
         super(TutorialEntity, self).onEnqueueError(*args)

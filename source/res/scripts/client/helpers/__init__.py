@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
 import types
-import weakref
 import BigWorld
 import ResMgr
 import Settings
@@ -217,5 +216,15 @@ class ClanQuestButtonHandler(object):
         return
 
 
-def weakProxy(obj):
-    return weakref.proxy(obj) if type(obj).__name__ != 'weakproxy' else obj
+def unicodeToStr(data):
+    if isinstance(data, unicode):
+        return data.encode('utf-8')
+    if isinstance(data, list):
+        return [ unicodeToStr(el) for el in data ]
+    if isinstance(data, dict):
+        res = {}
+        for k, v in data.iteritems():
+            res[unicodeToStr(k)] = unicodeToStr(v)
+
+        return res
+    return data

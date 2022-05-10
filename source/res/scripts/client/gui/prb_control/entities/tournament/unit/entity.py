@@ -189,6 +189,7 @@ class TournamentEntity(UnitEntity):
         self.__playersMatchingStartedAt = None
         self.__slotVehicleFilters = []
         self.__tournamentSettings = TournamentSettings()
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.TOURNAMENT_UNITS)()
         return
 
     def init(self, ctx=None):
@@ -232,10 +233,6 @@ class TournamentEntity(UnitEntity):
             self._invokeListeners('onTournamentMaintenance', True)
         if self.inPlayersMatchingMode():
             self._invokeListeners('onPlayersMatching', True)
-
-    @prequeue_storage_getter(QUEUE_TYPE.TOURNAMENT_UNITS)
-    def storage(self):
-        return None
 
     def onUnitResponseReceived(self, requestID):
         _logger.debug('Unit response requestID = %s', str(requestID))

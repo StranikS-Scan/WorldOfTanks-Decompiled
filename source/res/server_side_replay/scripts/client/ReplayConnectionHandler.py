@@ -6,7 +6,7 @@ import BattleReplay
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
 
-class State:
+class State(object):
     PRE_START_REPLAY = 0
     STARTED_PLAYBACK = 1
     FINISHED_PLAYBACK = 2

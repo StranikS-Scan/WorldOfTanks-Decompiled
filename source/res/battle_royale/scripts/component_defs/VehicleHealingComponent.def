@@ -1,0 +1,19 @@
+<VehicleHealingComponent.def>
+  <Properties>
+    <endTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endTime>
+    <isSourceVehicle>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </isSourceVehicle>
+    <isInactivation>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </isInactivation>
+  </Properties>
+  <DefaultKeyName>	healingComponent	</DefaultKeyName>
+</VehicleHealingComponent.def>

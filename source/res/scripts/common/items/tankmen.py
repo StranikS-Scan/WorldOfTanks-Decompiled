@@ -17,7 +17,7 @@ from items.readers import tankmen_readers
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
-from vehicles import VEHICLE_CLASS_TAGS, VEHICLE_TAGS
+from vehicles import VEHICLE_CLASS_TAGS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from constants import ITEM_DEFS_PATH
 from account_shared import AmmoIterator
@@ -536,6 +536,12 @@ class TankmanDescr(object):
     def group(self):
         return int(self.isFemale) | int(self.isPremium) << 1 | int(self.gid) << 2
 
+    @property
+    def gid(self):
+        if self.__gid is None:
+            self.__gid, _ = findGroupsByIDs(getNationGroups(self.nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID)[0]
+        return self.__gid
+
     def makeCompactDescr(self):
         pack = struct.pack
         header = ITEM_TYPES.tankman + (self.nationID << 4)
@@ -593,7 +599,7 @@ class TankmanDescr(object):
             cd = cd[1:]
             nationConfig = getNationConfig(nationID)
             self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4HI', cd[:12].ljust(12, '\x00'))
-            self.gid, _ = findGroupsByIDs(getNationGroups(nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID).pop(0)
+            self.__gid = None
             if battleOnly:
                 del self.freeXP
                 return
@@ -611,6 +617,8 @@ class TankmanDescr(object):
         except Exception:
             LOG_ERROR('(compact description to XML mismatch?)', compactDescr)
             raise
+
+        return
 
     def __paramsOnVehicle(self, vehicleType):
         isPremium = 'premium' in vehicleType.tags or 'premiumIGR' in vehicleType.tags

@@ -62,18 +62,14 @@ _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTI
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,
- QUEUE_TYPE.MAPBOX: PREBATTLE_ACTION_NAME.MAPBOX_SQUAD,
- QUEUE_TYPE.RTS_BOOTCAMP: PREBATTLE_ACTION_NAME.RTS_BOOTCAMP}
+ QUEUE_TYPE.MAPBOX: PREBATTLE_ACTION_NAME.MAPBOX_SQUAD}
 _QUEUE_TYPE_TO_PREBATTLE_TYPE = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_TYPE.EVENT,
  QUEUE_TYPE.RANDOMS: PREBATTLE_TYPE.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_TYPE.EPIC,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
  QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT,
  QUEUE_TYPE.MAPBOX: PREBATTLE_TYPE.MAPBOX,
- QUEUE_TYPE.MAPS_TRAINING: PREBATTLE_TYPE.MAPS_TRAINING,
- QUEUE_TYPE.RTS: PREBATTLE_TYPE.RTS,
- QUEUE_TYPE.RTS_1x1: PREBATTLE_TYPE.RTS,
- QUEUE_TYPE.RTS_BOOTCAMP: PREBATTLE_TYPE.RTS}
+ QUEUE_TYPE.MAPS_TRAINING: PREBATTLE_TYPE.MAPS_TRAINING}
 _RANDOM_VEHICLE_CRITERIA = ~(REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.MAPS_TRAINING)
 _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: _RANDOM_VEHICLE_CRITERIA,
  PREBATTLE_TYPE.EPIC: ~(REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE),
@@ -208,6 +204,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onMembersUpdate = Event.Event()
         self.onPlatoonTankUpdated = Event.Event()
         self.onAutoSearchCooldownChanged = Event.Event()
+        self.onPlatoonTankRemove = Event.Event()
         self.__prevPrbEntityInfo = _PrbEntityInfo(QUEUE_TYPE.UNKNOWN, PREBATTLE_TYPE.NONE)
         return
 
@@ -443,7 +440,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def getPlatoonSlotsData(self):
         entity = self.prbEntity
         orderedSlots = {}
-        if isinstance(self.prbEntity, UnitEntity):
+        if isinstance(entity, UnitEntity):
             unitFullData = entity.getUnitFullData(entity.getID())
             if unitFullData.unit is None:
                 return orderedSlots
@@ -1026,6 +1023,12 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()
         if len(playerIds) > maxSlotCount:
             _logger.warning('The number of players in slot (%s) is higher then max slots to display (%s). This state should not happen for this type of unit.', len(playerIds), maxSlotCount)
+        if maxSlotCount >= 3:
+            self.__updateDisplaySlotsIndicesForPlayers(playerIds, maxSlotCount)
+        elif maxSlotCount == 2:
+            self.__updateDisplaySlotsIndicesFor2Players(players)
+
+    def __updateDisplaySlotsIndicesForPlayers(self, playerIds, maxSlotCount):
         if not self.__tankDisplayPosition:
             nextDisplayIndex = 0
             if maxSlotCount == _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING:
@@ -1049,12 +1052,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                     self.__tankDisplayPosition[playerId] = displaySlot
 
             return
-        freeDisplayIndices = []
-        for playerId, displayIndex in self.__tankDisplayPosition.items():
+        for playerId, _ in self.__tankDisplayPosition.items():
             if playerId in playerIds:
                 playerIds.remove(playerId)
                 continue
-            freeDisplayIndices.append(displayIndex)
             self.__tankDisplayPosition.pop(playerId)
 
         availableSlotIndex = 0
@@ -1063,6 +1064,27 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 availableSlotIndex += 1
 
             self.__tankDisplayPosition[newPlayerId] = availableSlotIndex
+
+    def __updateDisplaySlotsIndicesFor2Players(self, players):
+        currentPlayer = [ player for player in players.values() if player.isInSlot and player.isCurrentPlayer() ][0]
+        teamMate = [ player for player in players.values() if player.isInSlot and not player.isCurrentPlayer() ]
+        if teamMate:
+            teamMateAccID = teamMate[0].accID
+            currentPlayerIdx = 1
+            newSlotIdx, removeSlotIdx = (2, 0) if currentPlayer.isCommander() else (0, 2)
+            if self.__tankDisplayPosition.get(teamMateAccID) == removeSlotIdx:
+                self.onPlatoonTankRemove(removeSlotIdx)
+                self.__tankDisplayPosition.pop(teamMateAccID)
+            self.__tankDisplayPosition[teamMateAccID] = newSlotIdx
+        else:
+            allTeams = [ data for data in self.__tankDisplayPosition.iteritems() if data[0] != currentPlayer.accID ]
+            if allTeams:
+                teamMateAccID, teamMateIdx = allTeams[0]
+                self.onPlatoonTankRemove(teamMateIdx)
+                self.__tankDisplayPosition.pop(teamMateAccID, None)
+            currentPlayerIdx = 0
+        self.__tankDisplayPosition[currentPlayer.accID] = currentPlayerIdx
+        return
 
     def __onVehicleStateChanged(self, updateReason, _):
         if updateReason in (CACHE_SYNC_REASON.CLIENT_UPDATE, CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC):

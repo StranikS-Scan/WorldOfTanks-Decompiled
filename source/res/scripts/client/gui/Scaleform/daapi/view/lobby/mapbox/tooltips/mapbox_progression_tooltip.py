@@ -22,7 +22,7 @@ class MapboxProgressionTooltip(BlocksTooltipData):
     def _packBlocks(self, *args):
         items = []
         progressionData = self.__mapboxCtrl.getProgressionData()
-        if progressionData is not None and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
+        if progressionData is not None and self.__mapboxCtrl.isActive():
             items.append(self.__packHeaderBlock())
             items.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.mapbox.questFlag.description(), highlightedText=text_styles.stats(backport.text(R.strings.mapbox.questFlag.highlightedText())))), padding=formatters.packPadding(left=18, right=10)))
             items.append(formatters.packBuildUpBlockData(self.__packTotalProgressionBlock(progressionData), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
@@ -53,7 +53,12 @@ class MapboxProgressionTooltip(BlocksTooltipData):
             progressStyle = text_styles.bonusPreviewText
         countStr = backport.text(R.strings.mapbox.questFlag.counter(), progress=progressStyle(passedSurveys), total=text_styles.main(len(sortedProgressionData)))
         items.append(formatters.packTextBlockData(text_styles.stats(backport.text(R.strings.mapbox.questFlag.surveysTitle(), count=countStr)), padding=formatters.packPadding(left=17)))
-        items.append(formatters.packMapBoxBlockData(mapVOs, 60, 60, padding=formatters.packPadding(left=42, top=8), horizontalGap=10))
+        columnWidth = 60
+        horizontalGap = 10
+        sublists = self.__getMapsSublistsWithPaddings(mapVOs, columnWidth, horizontalGap, defaultPaddind=42)
+        for leftPadding, mapsList in sublists:
+            items.append(formatters.packMapBoxBlockData(mapsList, columnWidth, 60, padding=formatters.packPadding(left=leftPadding, top=8), horizontalGap=horizontalGap))
+
         return formatters.packBuildUpBlockData(items)
 
     def __formatMapName(self, mapName):
@@ -78,14 +83,34 @@ class MapboxProgressionTooltip(BlocksTooltipData):
         return items
 
     def __packHeaderBlock(self):
-        seasonNumber = self.__mapboxCtrl.getCurrentSeason().getNumber()
         header = backport.text(R.strings.tooltips.battleTypes.mapbox.header())
         timeLeftStr = text_styles.stats(mapbox_helpers.getTillTimeString(self.__mapboxCtrl.getEventEndTimestamp()))
         body = backport.text(R.strings.menu.headerButtons.battle.types.mapbox.extra.endsIn(), timeLeft=timeLeftStr)
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(header), desc=text_styles.main(body), img=backport.image(R.images.gui.maps.icons.mapbox.quests.dyn('tooltip_header_bg_{}'.format(seasonNumber))()), txtOffset=1, txtPadding=formatters.packPadding(top=15, left=17), padding=formatters.packPadding(bottom=-10))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(header), desc=text_styles.main(body), img=backport.image(R.images.gui.maps.icons.mapbox.quests.tooltip_header_bg()), txtOffset=1, txtPadding=formatters.packPadding(top=15, left=17), padding=formatters.packPadding(bottom=-10))
 
     def __packFrozenBlock(self):
         items = []
         items.append(formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.mapbox.questFlag.frozen.header()))))
         items.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.mapbox.questFlag.frozen.text())), blockWidth=420))
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(top=20, left=18))
+
+    def __getMapsSublistsWithPaddings(self, mapsVOs, columnWidth, horizontalGap, defaultPaddind):
+        result = []
+        mapsCount = len(mapsVOs)
+        if mapsCount % 4 == 0:
+            subListsFullCount = mapsCount / 4
+            for _ in range(subListsFullCount):
+                subList = [ mapsVOs.pop(0) for _ in range(4) ]
+                result.append((defaultPaddind, subList))
+
+        else:
+            subListsFullCount = mapsCount / 3
+            fullRowLeftPadding = defaultPaddind + columnWidth / 2 + horizontalGap / 2
+            for _ in range(subListsFullCount):
+                subList = [ mapsVOs.pop(0) for _ in range(3) ]
+                result.append((fullRowLeftPadding, subList))
+
+            if mapsVOs:
+                restLeftPadding = defaultPaddind + columnWidth + horizontalGap
+                result.append((restLeftPadding, mapsVOs))
+        return result

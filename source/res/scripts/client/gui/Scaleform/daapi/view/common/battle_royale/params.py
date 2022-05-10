@@ -5,7 +5,7 @@ from collections import namedtuple
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.battle_royale.constants import ParamTypes
+from battle_royale.gui.constants import ParamTypes
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleSettings, getTreeVehicleParams
 from gui.impl.backport.backport_system_locale import getNiceNumberFormat
 from gui.shared.formatters import text_styles
@@ -14,6 +14,7 @@ from gui.shared.items_parameters import params as base_params
 from gui.shared.items_parameters.comparator import ItemsComparator, PARAM_STATE, getParamExtendedData
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, MEASURE_UNITS
 from gui.shared.items_parameters import params_helper
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import i18n, dependency
 from items import ITEM_TYPES
 from items import getTypeOfCompactDescr
@@ -260,6 +261,7 @@ def getModuleParameters(module, vehicle, currentModule=None):
     currModule = currentModule if currentModule is not None else _getCurrentModule(moduleDescr)
     comparator = _itemsComparator(moduleDescr.typeCD, moduleDescr.moduleParams, currModule, moduleDescr.vDescr)
     params = []
+    params.extend(getExtendedParameters(currModule, module, vehicle))
     moduleData = getTreeModuleSettings(module)
     deltaParamsList = moduleData.deltaParams if moduleData is not None else tuple()
     for paramName in deltaParamsList:
@@ -317,6 +319,7 @@ def getShortListParameters(module, vehicle, currentModule=None, moduleData=None,
     if moduleDescr is None:
         moduleDescr = _getModuleDescr(module, vehicle)
     params = []
+    params.extend(getExtendedParameters(currentModule, module, vehicle))
     priorityParamsList = moduleData.priorityParams if moduleData else []
     if not priorityParamsList:
         return params
@@ -329,6 +332,29 @@ def getShortListParameters(module, vehicle, currentModule=None, moduleData=None,
                 params.append(formattedParam)
 
         return params
+
+
+def getExtendedParameters(currModule, module, vehicle):
+    params = []
+    if currModule is None:
+        moduleDescr = _getModuleDescr(module, vehicle)
+        currModule = _getCurrentModule(moduleDescr)
+    typeCDCurrentModule = getTypeOfCompactDescr(currModule.intCD)
+    typeCDNewModule = getTypeOfCompactDescr(module.intCD)
+    difference = 0
+    if typeCDCurrentModule == GUI_ITEM_TYPE.CHASSIS and typeCDNewModule == GUI_ITEM_TYPE.CHASSIS:
+        defaultHull = vehicle.typeDescr.hulls[0]
+        newNull = [ hull for hull in vehicle.typeDescr.hulls if module.innationID in hull.variantMatch ]
+        newNull = newNull[0] if newNull else None
+        if newNull:
+            difference = newNull.maxHealth - defaultHull.maxHealth
+    elif typeCDCurrentModule == GUI_ITEM_TYPE.TURRET and typeCDNewModule == GUI_ITEM_TYPE.TURRET:
+        difference = module.descriptor.maxHealth - currModule.descriptor.maxHealth
+    if difference:
+        fmtValue = params_formatters.formatParameter('maxHealth', difference, 'better', _DELTA_SCHEME, _CMP_FORMAT_SETTINGS)
+        params.append({'value': str(fmtValue),
+         'description': params_formatters.formatVehicleParamName('increaseHealth')})
+    return params
 
 
 def _formatParameters(paramType, paramName, moduleData, comparator):

@@ -105,7 +105,8 @@
     </tokenQuest>
     <battleQuest>
       <enabled>	true	</enabled>
-      <id>	linkedset_2_1	</id>
+      <serverOnly>	true	</serverOnly>
+      <id>	linkedset_2_1_helper	</id>
       <conditions>
         <preBattle>
           <account>
@@ -114,9 +115,8 @@
               <token>
                 <id>	linkedset_2_1_unlock	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
-                <consume>	10	  <force></force>
-                </consume>
               </token>
+              <accountAttributes>	DAILY_MULTIPLIED_XP	</accountAttributes>
             </and>
           </account>
           <vehicle>
@@ -139,6 +139,45 @@
         </common>
       </conditions>
       <bonus>
+        <token>
+          <id>	linkedset_2_1_helper_complete	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_1_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+              <or>
+                <token>
+                  <id>	linkedset_2_1_helper_complete	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                  <consume>	10	  <force></force>
+                  </consume>
+                </token>
+                <not>
+                  <accountAttributes>	DAILY_MULTIPLIED_XP	</accountAttributes>
+                </not>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
         <credits>	10000	</credits>
         <freeXP>	500	</freeXP>
         <token>
@@ -146,7 +185,7 @@
           <expires>	01.12.2050 05:10	</expires>
         </token>
       </bonus>
-    </battleQuest>
+    </tokenQuest>
     <hangarQuest>
       <enabled>	true	</enabled>
       <id>	linkedset_2_2	</id>

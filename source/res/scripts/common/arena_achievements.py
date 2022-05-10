@@ -123,7 +123,8 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6,
  'supremeGun': {'minDamageDealt': 10000},
  'smallArmy': {'minVehiclesDestroyed': 20},
  'steamTopLeague': {'level': 10,
-                    'minXP': 1}}
+                    'minXP': 1},
+ 'artilleryFortEquipment': {'id': range(400, 436)}}
 ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8,
              'minKills': 8},
  'heroesOfRassenay': {'minKills': 21,

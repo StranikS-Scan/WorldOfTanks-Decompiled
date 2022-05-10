@@ -4,6 +4,7 @@ import typing
 from dossiers2.custom.records import RECORDS, RECORD_INDICES
 from dossiers2.custom.cache import getCache
 from nations import ALL_NATIONS_INDEX
+from soft_exception import SoftException
 
 def getTankExpertRequirements(vehTypeFrags, nationID=ALL_NATIONS_INDEX):
     cache = getCache()

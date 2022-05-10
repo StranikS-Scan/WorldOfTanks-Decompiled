@@ -20,7 +20,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import conditions, formatters, settings as quest_settings
 from gui.server_events.bonuses import VehiclesBonus
-from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet, isRts
+from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
@@ -46,11 +46,12 @@ class BattlePassProgress(object):
     def __init__(self, arenaBonusType, *args, **kwargs):
         self.__arenaBonusType = arenaBonusType
         self.__chapterID = kwargs.get('bpChapter', 0)
-        self.__basePoints = kwargs.get('basePointsDiff', 0)
+        self.__basePointsDiff = self.__basePoints = kwargs.get('basePointsDiff', 0)
         self.__pointsAux = kwargs.get('bpNonChapterPointsDiff', 0)
         self.__pointsTotal = kwargs.get('sumPoints', 0)
         self.__hasBattlePass = kwargs.get('hasBattlePass', False)
         self.__questsProgress = kwargs.get('questsProgress', {})
+        self.__battlePassComplete = kwargs.get('battlePassComplete', False)
         self.__prevLevel = 0
         self.__currLevel = 0
         self.__pointsNew = 0
@@ -61,6 +62,10 @@ class BattlePassProgress(object):
     @property
     def chapterID(self):
         return self.__chapterID
+
+    @property
+    def basePointsDiff(self):
+        return self.__basePointsDiff
 
     @property
     def isApplied(self):
@@ -83,8 +88,20 @@ class BattlePassProgress(object):
         return self.__chapterID > 0 and self.__currLevel == self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
 
     @property
+    def hasBattlePass(self):
+        return self.__hasBattlePass
+
+    @property
+    def battlePassComplete(self):
+        return self.__battlePassComplete
+
+    @property
     def level(self):
         return self.__prevLevel + 1
+
+    @property
+    def currentLevel(self):
+        return self.__currLevel
 
     @property
     def pointsAdd(self):
@@ -105,6 +122,10 @@ class BattlePassProgress(object):
     @property
     def pointsQst(self):
         return self.__pointsQst
+
+    @property
+    def pointsTotal(self):
+        return self.__pointsTotal
 
     @property
     def awards(self):
@@ -167,12 +188,12 @@ class _EventInfo(EventInfoModel):
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
         progresses = []
-        questID = str(self.event.getID())
+        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         if not isProgressReset and not isCompleted:
             for cond in self.event.bonusCond.getConditions().items:
                 if isinstance(cond, conditions._Cumulativable):
                     for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                        if not isDailyQuest(questID) and not isRts(questID):
+                        if not isQuestDailyQuest:
                             label = cond.getUserString()
                         else:
                             label = cond.getCustomDescription()

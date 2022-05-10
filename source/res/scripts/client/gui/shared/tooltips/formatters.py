@@ -305,6 +305,18 @@ def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=
     return packBlockDataItem(linkage, data, padding)
 
 
+def packQuestRewardItemBlockData(img=None, overlayPath=None, overlayPadding=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_QUEST_REWARD_ITEM_BLOCK_LINKAGE, padding=None):
+    data = {'align': align,
+     'alpha': 1.0}
+    if img is not None:
+        data['imagePath'] = img
+    if overlayPath is not None:
+        data['overlayPath'] = overlayPath
+        if overlayPadding is not None:
+            data['overlayPadding'] = overlayPadding
+    return packBlockDataItem(linkage, data, padding)
+
+
 def packBlueprintBlockData(blueprintImg, schemeImg, numCols, numRows, layout, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BLUEPRINT_BLOCK_LINKAGE, width=-1, height=-1, padding=None, alpha=1.0):
     data = {'blueprintPath': blueprintImg,
      'blueprintLayout': layout,
@@ -527,6 +539,8 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
         decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
         decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
+    elif btnType == CURRENCIES_CONSTANTS.BRCOIN:
+        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=-8)))
     else:
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
     tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))

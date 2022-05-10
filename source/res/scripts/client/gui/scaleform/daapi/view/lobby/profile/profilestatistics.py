@@ -14,6 +14,9 @@ from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import ProfileStatisticEvent
+from gui.shared import g_eventBus
 _RankedSeasonsKeys = namedtuple('_RankedSeasonsKeys', ['all', 'current', 'previous'])
 _RANKED_SEASONS_ARCHIVE = 'archive'
 RANKED_SEASONS_ARCHIVE_10x10 = '_10x10'
@@ -27,7 +30,9 @@ _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: 'fortifications',
  PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON: 'team7x7',
  PROFILE_DROPDOWN_KEYS.RANKED: 'ranked_15x15',
- PROFILE_DROPDOWN_KEYS.RANKED_10X10: BATTLE_TYPES.RANKED_10X10}
+ PROFILE_DROPDOWN_KEYS.RANKED_10X10: BATTLE_TYPES.RANKED_10X10,
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: 'battle_royale',
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale'}
 
 def _packProviderType(mainType, addValue=None):
     return '%s/%s' % (mainType, str(addValue)) if addValue is not None else mainType
@@ -69,12 +74,25 @@ class ProfileStatistics(ProfileStatisticsMeta):
         self._setInitData()
 
     def _populate(self):
+        event = ProfileStatisticEvent(ProfileStatisticEvent.SELECT_BATTLE_TYPE)
+        if self._selectedData and isinstance(self._selectedData, dict):
+            event.ctx['eventOwner'] = self._selectedData.get('eventOwner')
+        else:
+            event.ctx['eventOwner'] = 'achievements'
+        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._battlesType = event.ctx.get('battlesType', self._battlesType)
         super(ProfileStatistics, self)._populate()
         self._setInitData()
+
+    def _dispose(self):
+        super(ProfileStatistics, self)._dispose()
+        g_eventBus.handleEvent(ProfileStatisticEvent(ProfileStatisticEvent.DISPOSE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _setInitData(self, accountDossier=None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED_10X10),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)]

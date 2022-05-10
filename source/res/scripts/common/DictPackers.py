@@ -25,7 +25,8 @@ class DeltaPacker(object):
                 s = [ p(v) for v in s ]
             ret[0] = s[0]
             for index, v in enumerate(s[1:]):
-                ret[index + 1] = v - s[index]
+                diff = v - s[index]
+                ret[index + 1] = diff
 
             return ret
 
@@ -86,12 +87,11 @@ class DictPacker(object):
         if len(dataList) == 0 or dataList[0] != self._checksum:
             return
         else:
-            getDefaultValue = self.getDefaultValue
             for index, meta in enumerate(self._metaData):
                 val = dataList[index + 1]
                 name, _, _, packer, _ = meta
                 if val is None:
-                    val = getDefaultValue(index)
+                    val = self.getDefaultValue(index)
                 elif packer is not None:
                     val = packer.unpack(val)
                 ret[name] = val
@@ -138,12 +138,45 @@ class SimpleDictPacker(object):
 
     def unpack(self, dataList):
         ret = {}
-        keys = self.__keys
         for index, value in enumerate(dataList):
             if value is not None:
-                ret[keys[index]] = value
+                ret[self.__keys[index]] = value
 
         return ret
+
+
+class MergeDictPacker(object):
+
+    def __init__(self, *metaData):
+        self._dictList = [DictPacker(*metaData)]
+
+    def pack(self, dataDict):
+        ret = []
+        for packer in self._dictList:
+            res = packer.pack(dataDict)
+            ret.append(len(res))
+            ret.extend(res)
+
+        return ret
+
+    def unpack(self, dataList):
+        ret = {}
+        offset = 0
+        for packer in self._dictList:
+            nxtOffset, offset = dataList[offset], offset + 1
+            ret.update(packer.unpack(dataList[offset:offset + nxtOffset]))
+            offset = offset + nxtOffset
+
+        return ret
+
+    def merge(self, pack):
+        checkSums = set([ v.getChecksum() for v in self._dictList ])
+        for dictPacker in pack._dictList:
+            if dictPacker.getChecksum() not in checkSums:
+                self._dictList.append(dictPacker)
+
+    def meta(self):
+        return sum([ Meta(*packer._metaData) for packer in self._dictList ], Meta())
 
 
 class Meta(DictPacker):
@@ -194,20 +227,20 @@ class Meta(DictPacker):
     def __len__(self):
         return len(self._metaData)
 
+    def meta(self, name):
+        return self.getDataByName(name)[3].meta()
+
     def __initDefaults(self):
-        self.__defaultsImmutable = defaultsImmutable = {}
-        self.__defaultsMutable = defaultsMutable = {}
+        self.__defaultsImmutable = {}
+        self.__defaultsMutable = {}
         for name, transportType, default, _, _ in self._metaData:
             mutableType = getMutability(transportType, default)
             if mutableType == 'immutable':
-                defaultsImmutable[name] = default
-            if mutableType == 'mutableList':
-                defaultsMutable[name] = partial(lambda x: x[:], default)
-            if mutableType == 'mutableDeep':
-                defaultsMutable[name] = partial(copy.deepcopy, default)
-            if mutableType == 'mutableCopy':
-                defaultsMutable[name] = partial(lambda x: x.copy(), default)
-            raise KeyError(mutableType)
+                self.__defaultsImmutable[name] = default
+            lambdas = {'mutableList': partial(lambda x: x[:], default),
+             'mutableDeep': partial(copy.deepcopy, default),
+             'mutableCopy': partial(lambda x: x.copy(), default)}
+            self.__defaultsMutable[name] = lambdas[mutableType]
 
 
 def getMutability(transportType, default):

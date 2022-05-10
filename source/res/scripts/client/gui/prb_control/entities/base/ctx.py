@@ -75,7 +75,7 @@ class PrbCtrlRequestCtx(RequestCtx):
         return ', '.join(convertFlagsToNames(self.__flags))
 
 
-@ReprInjector.simple('actionName', 'mmData', 'accountsToInvite', 'isCommander')
+@ReprInjector.simple('actionName', 'mmData', 'accountsToInvite')
 class PrbAction(object):
     __slots__ = ('actionName', 'mmData', 'accountsToInvite')
 

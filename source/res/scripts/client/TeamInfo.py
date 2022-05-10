@@ -2,11 +2,14 @@
 # Embedded file name: scripts/client/TeamInfo.py
 import BigWorld
 from debug_utils import LOG_DEBUG_DEV
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class TeamInfo(BigWorld.Entity):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self):
-        LOG_DEBUG_DEV('[TeamInfo] __init__: team = {}'.format(self.teamID))
+    def onCombatEquipmentUsed(self, vehicleID, equipmentID):
+        self.__sessionProvider.shared.equipments.onCombatEquipmentUsed(vehicleID, equipmentID)
 
     def onEnterWorld(self, prereqs):
         LOG_DEBUG_DEV('[TeamInfo] onEnterWorld: team = {}'.format(self.teamID))

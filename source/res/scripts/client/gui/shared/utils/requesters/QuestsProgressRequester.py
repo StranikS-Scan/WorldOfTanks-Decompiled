@@ -156,7 +156,7 @@ class _QuestCompletionDelta(BaseDelta):
 
     @staticmethod
     def questFilter(quest):
-        return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID()) or events_helpers.isRts(quest.getID())
+        return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID())
 
     def _getDataIterator(self, data):
         events = self.eventsCache.getEvents(self.questFilter)

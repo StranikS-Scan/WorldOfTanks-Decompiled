@@ -9,6 +9,9 @@
     <DynamicComponents>
       <ArenaLootComponent></ArenaLootComponent>
       <ArenaMinesComponent></ArenaMinesComponent>
+      <ArenaDeathZonesComponent></ArenaDeathZonesComponent>
+      <ArenaInfoDeathZonesComponent></ArenaInfoDeathZonesComponent>
+      <VehicleDeathZoneEffect></VehicleDeathZoneEffect>
       <SpawnKeyPointController></SpawnKeyPointController>
       <SpawnKeyPointAvatar></SpawnKeyPointAvatar>
       <BattleXP></BattleXP>
@@ -17,11 +20,20 @@
       <InBattleUpgradeReadiness></InBattleUpgradeReadiness>
       <InBattleUpgrades></InBattleUpgrades>
       <VehicleLoot></VehicleLoot>
-      <VehicleDeathZoneEffect></VehicleDeathZoneEffect>
       <InBattleUpgradesAvatar></InBattleUpgradesAvatar>
       <AvatarBattleRoyaleComponent></AvatarBattleRoyaleComponent>
       <BattleXPArenaInfo></BattleXPArenaInfo>
       <LootArenaInfo></LootArenaInfo>
+      <VehicleCorrodingShotComponent></VehicleCorrodingShotComponent>
+      <VehicleAdaptationHealthRestoreComponent></VehicleAdaptationHealthRestoreComponent>
+      <VehicleThunderStrikeComponent></VehicleThunderStrikeComponent>
+      <VehicleShotPassionComponent></VehicleShotPassionComponent>
+      <VehicleSelfBuffComponent></VehicleSelfBuffComponent>
+      <VehicleBerserkerComponent></VehicleBerserkerComponent>
+      <ArenaInfoAbilityNotifier></ArenaInfoAbilityNotifier>
+      <VehicleHealPointComponent></VehicleHealPointComponent>
+      <VehicleHealingComponent></VehicleHealingComponent>
+      <VehicleFireCircleEffectComponent></VehicleFireCircleEffectComponent>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>
@@ -33,10 +45,21 @@
       <Placement></Placement>
       <InfluenceZone></InfluenceZone>
       <BattleRoyaleRadio></BattleRoyaleRadio>
+      <ThunderStrike></ThunderStrike>
     </ClientServerEntities>
     <ServerOnlyEntities>
       <BattleRoyaleTournamentMgr></BattleRoyaleTournamentMgr>
     </ServerOnlyEntities>
   </Entities>
   <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.battle_royale.abilities.area_abilities	</module>
+      <module>	client.battle_royale.abilities.influence_zones	</module>
+      <module>	client.battle_royale.abilities.thunder_strike	</module>
+      <module>	client.battle_royale.mechanics.death_zones	</module>
+      <module>	client.battle_royale.abilities.shot_passion	</module>
+      <module>	client.battle_royale.abilities.adaptation_restore_health	</module>
+    </script>
+  </cgf>
 </extension.xml>

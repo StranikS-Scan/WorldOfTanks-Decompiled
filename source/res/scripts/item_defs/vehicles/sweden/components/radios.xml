@@ -15,6 +15,9 @@
     <Ra_400_P>	12	</Ra_400_P>
     <Ra_421_FL>	501	</Ra_421_FL>
     <Development_Radio>	65000	</Development_Radio>
+    <_70_W_Sv_m_43_SH>	1000	</_70_W_Sv_m_43_SH>
+    <Ra_421_1_SH>	1001	</Ra_421_1_SH>
+    <Ra_400_P_SH>	1002	</Ra_400_P_SH>
   </ids>
   <shared>
     <_1_W_Sv>
@@ -189,5 +192,47 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <_70_W_Sv_m_43_SH>
+      <userString>	#sweden_vehicles:_70_W_Sv_m_43_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	350	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </_70_W_Sv_m_43_SH>
+    <Ra_421_1_SH>
+      <userString>	#sweden_vehicles:Ra_421_1_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	300	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </Ra_421_1_SH>
+    <Ra_400_P_SH>
+      <userString>	#sweden_vehicles:Ra_400_P_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	450	</radarRadius>
+      <radarCooldown>	35	</radarCooldown>
+    </Ra_400_P_SH>
   </shared>
 </radios.xml>

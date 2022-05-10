@@ -8,6 +8,8 @@ import BigWorld
 import Keys
 import Math
 import ResMgr
+from AvatarInputHandler.AimingSystems import disableShotPointCache
+from helpers.CallbackDelayer import CallbackDelayer
 import BattleReplay
 import CommandMapping
 import DynamicCameras.ArcadeCamera
@@ -32,27 +34,24 @@ from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeContro
 from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetupsControl
 from AvatarInputHandler.commands.radar_control import RadarControl
-from AvatarInputHandler.commands.rts_battle_help_control import RtsBattleHelpControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
-from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from skeletons.helpers.statistics import IStatisticsCollector
+from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 
@@ -86,13 +85,7 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL)}
 _OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.RTS: {_CTRL_MODE.COMMANDER: (control_modes.CommanderControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL),
-                                  _CTRL_MODE.RTS_REPLAY_FREE: (control_modes.RTSReplayFreeControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.RTS_1x1: {_CTRL_MODE.COMMANDER: (control_modes.CommanderControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL),
-                                      _CTRL_MODE.RTS_REPLAY_FREE: (control_modes.RTSReplayFreeControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL)},
- constants.ARENA_BONUS_TYPE.RTS_BOOTCAMP: {_CTRL_MODE.COMMANDER: (control_modes.CommanderControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL),
-                                           _CTRL_MODE.RTS_REPLAY_FREE: (control_modes.RTSReplayFreeControlMode, 'tankCommanderMode/camera', _CTRL_TYPE.USUAL)}}
+ constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
     _OVERWRITE_CTRLS_DESC_MAP[royaleBonusCap] = {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}
 
@@ -155,7 +148,6 @@ class DynamicCameraSettings(object):
 
 class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
-    statsCollector = dependency.descriptor(IStatisticsCollector)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -284,22 +276,19 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     self.siegeModeControl.onSiegeStateChanged += notifications.onSiegeStateChanged
                 if modeChanged:
                     self.siegeModeSoundNotifications = notifications
-            if typeDescr.isDualgunVehicle:
+            if typeDescr.isDualgunVehicle and not self.dualGunControl:
                 self.dualGunControl = DualGunController(typeDescr)
-            else:
+            elif not typeDescr.isDualgunVehicle:
                 self.dualGunControl = None
             if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
                 self.__commands.append(BootcampModeControl())
-            if self.guiSessionProvider.getArenaDP().isPlayerCommander():
-                self.__commands.append(RtsBattleHelpControl())
-                self.__detachedCommands.append(RtsBattleHelpControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
                 self.__commands.append(RadarControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
                 self.__commands.append(VehicleUpdateControl())
                 self.__commands.append(VehicleUpgradePanelControl())
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS) and not BigWorld.player().isCommander():
+            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
             vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
             vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
@@ -317,64 +306,53 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         isDown, key, mods, isRepeat = game.convertKeyEvent(event)
         if isRepeat:
             return False
-        player = BigWorld.player()
-        for command in self.__persistentCommands:
-            if command.handleKeyEvent(isDown, key, mods, event):
-                return True
-
-        if self.__isStarted and self.__isDetached:
-            alwaysReceive = self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV
-            cmdLockTarget = CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
-            cmdFreeAndChat = CommandMapping.g_instance.isFiredList(_FREE_AND_CHAT_SHORTCUT_CMD, key, True)
-            if alwaysReceive or cmdLockTarget or cmdFreeAndChat:
-                self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
-            for command in self.__detachedCommands:
+        else:
+            player = BigWorld.player()
+            for command in self.__persistentCommands:
                 if command.handleKeyEvent(isDown, key, mods, event):
                     return True
 
-            return player.handleKey(isDown, key, mods)
-        if not self.__isStarted and isDown and mods == 0:
-            if CommandMapping.g_instance.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_3 + 1), key):
-                ammoCtrl = self.guiSessionProvider.shared.ammo
-                if ammoCtrl:
-                    ammoCtrl.handleAmmoChoice(key)
-                    self.statsCollector.apm.recordAction((isDown, key))
-                return True
-        if not self.__isStarted or self.__isDetached:
-            return False
-        for command in self.__commands:
-            if command.handleKeyEvent(isDown, key, mods, event):
-                self.statsCollector.apm.recordAction((isDown, key))
-                return True
+            if self.__isStarted and self.__isDetached:
+                alwaysReceive = self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV
+                cmdLockTarget = CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
+                cmdFreeAndChat = CommandMapping.g_instance.isFiredList(_FREE_AND_CHAT_SHORTCUT_CMD, key, True)
+                if alwaysReceive or cmdLockTarget or cmdFreeAndChat:
+                    self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
+                for command in self.__detachedCommands:
+                    if command.handleKeyEvent(isDown, key, mods, event):
+                        return True
 
-        if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
-            if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
-                gui_event_dispatcher.toggleCrosshairVisibility()
-                return True
-            if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
-                gui_event_dispatcher.toggleMarkers2DVisibility()
-                return True
-            if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
-                self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
-                return True
-        if key == Keys.KEY_SPACE and isDown and player.isObserver():
-            if self.isControlModeChangeAllowed():
-                player.switchObserverFPV()
-                return True
-        if not self.isObserverFPV and self.__curCtrl.isEnabled and not BigWorld.player().isControlVehicleChanging() and self.__curCtrl.handleKeyEvent(isDown, key, mods, event):
-            self.statsCollector.apm.recordAction((isDown, key))
-            return True
-        elif player.handleKey(isDown, key, mods):
-            self.statsCollector.apm.recordAction((isDown, key))
-            return True
-        else:
-            return False
+                return player.handleKey(isDown, key, mods)
+            if not self.__isStarted and isDown and mods == 0:
+                if CommandMapping.g_instance.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_3 + 1), key):
+                    ammoCtrl = self.guiSessionProvider.shared.ammo
+                    if ammoCtrl:
+                        ammoCtrl.handleAmmoChoice(key)
+                    return True
+            if not self.__isStarted or self.__isDetached:
+                return False
+            for command in self.__commands:
+                if command.handleKeyEvent(isDown, key, mods, event):
+                    return True
+
+            if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
+                if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
+                    gui_event_dispatcher.toggleCrosshairVisibility()
+                    return True
+                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
+                    gui_event_dispatcher.toggleMarkers2DVisibility()
+                    return True
+                if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
+                    self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
+                    return True
+            if key == Keys.KEY_SPACE and isDown and player.isObserver():
+                if self.isControlModeChangeAllowed():
+                    player.switchObserverFPV()
+                    return True
+            return True if not self.isObserverFPV and self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else player.handleKey(isDown, key, mods)
 
     def handleMouseEvent(self, dx, dy, dz):
         return False if not self.__isStarted or self.__isDetached else self.__curCtrl.handleMouseEvent(dx, dy, dz)
-
-    def isCommanderCtrlMode(self):
-        return self.ctrlModeName == _CTRL_MODE.COMMANDER
 
     def setForcedGuiControlMode(self, flags):
         result = False
@@ -475,11 +453,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return
 
     def deactivatePostmortem(self):
-        isCommander = BigWorld.player().isCommander()
-        if not isCommander:
-            self.onControlModeChanged('arcade')
-            arcadeMode = self.__ctrls['arcade']
-            arcadeMode.camera.setToVehicleDirection()
+        self.onControlModeChanged('arcade')
+        arcadeMode = self.__ctrls['arcade']
+        arcadeMode.camera.setToVehicleDirection()
         self.__identifyVehicleType()
         self.__constructComponents()
 
@@ -498,15 +474,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             control.create()
 
         avatar = BigWorld.player()
-        if avatar.isCommander():
-            targetControlMode = _CTRL_MODE.COMMANDER
-            BigWorld.setEdgeDrawerRenderMode(1)
-            if targetControlMode in self.__ctrls:
-                self.__ctrlModeName = targetControlMode
-                self.__curCtrl = self.__ctrls[targetControlMode]
-        LOG_DEBUG('Commander Mode ', avatar.isCommander())
         if not self.__curCtrl.isManualBind():
-            avatar.positionControl.initialBindToVehicle()
+            avatar.positionControl.bindToVehicle(True)
         self.__curCtrl.enable()
         tmp = self.__curCtrl.getPreferredAutorotationMode()
         if tmp is not None:
@@ -527,7 +496,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__onArenaStarted(arena.period)
         if not avatar.isObserver() and arena.hasObservers:
             self.__remoteCameraSender = RemoteCameraSender(self)
-        self.onCameraChanged(self.__ctrlModeName)
+        self.onCameraChanged('arcade')
         return
 
     def stop(self):
@@ -581,6 +550,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         for control in self.__ctrls.itervalues():
             control.setObservedVehicle(vehicleID)
 
+    @disableShotPointCache
     def onControlModeChanged(self, eMode, **args):
         if self.steadyVehicleMatrixCalculator is not None:
             self.steadyVehicleMatrixCalculator.relinkSources()
@@ -631,8 +601,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                         player.positionControl.followCamera(False)
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     else:
-                        vehicleID = player.commanderVehicleID() if eMode == 'commander' else None
-                        player.positionControl.bindToVehicle(True, vehicleID)
+                        player.positionControl.bindToVehicle(True)
                 elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind() and isObserverMode and not self.isObserverFPV:
                     if not (prevCtrlModeName == _CTRL_MODE.VIDEO and self.__observerIsSwitching):
                         player.positionControl.bindToVehicle(True)
@@ -663,27 +632,15 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             isReplayPlaying = replayCtrl.isPlaying
             vehicleID = None
             vehicle = player.getVehicleAttached()
-            if self.isCommanderCtrlMode():
-                vehicleID = player.commanderVehicleID()
-            elif isObserverMode:
+            if isObserverMode:
                 vehicleID = self.__observerVehicle
-            elif vehicle is not None:
+            elif vehicle is not None and isReplayPlaying:
                 vehicleID = vehicle.id
             self.onCameraChanged(eMode, vehicleID)
             if not isReplayPlaying and vehicle is not None and not vehicle.isUpgrading:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
             vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
-            if player is not None and player.isCommander():
-                distanceFaderMode = 0 if eMode == _CTRL_MODE.COMMANDER else 2
-                BigWorld.ArenaBorderHelper.setArenaBorderDistanceFadeMode(BigWorld.player().spaceID, distanceFaderMode)
-                self.refreshGunMarkers()
-                renderMode = 1 if eMode == _CTRL_MODE.COMMANDER else 0
-                BigWorld.setEdgeDrawerRenderMode(renderMode)
-            else:
-                BigWorld.setEdgeDrawerRenderMode(0)
-            if eMode in aih_constants.MAP_CASE_MODES:
-                BigWorld.setEdgeDrawerRenderMode(1)
             return
 
     def onVehicleControlModeChanged(self, eMode):
@@ -886,11 +843,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def __setupCtrls(self, section):
         bonusType = BigWorld.player().arenaBonusType
         bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
-        modes = set(_CTRLS_DESC_MAP.keys() + bonusTypeCtrlsMap.keys())
-        for name in modes:
-            desc = bonusTypeCtrlsMap.get(name)
-            if desc is None:
-                desc = _CTRLS_DESC_MAP[name]
+        for name, desc in _CTRLS_DESC_MAP.items():
+            if name in bonusTypeCtrlsMap:
+                desc = bonusTypeCtrlsMap[name]
             try:
                 classType, modeName, ctrlType = desc
                 if ctrlType != _CTRL_TYPE.DEVELOPMENT or ctrlType == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
@@ -915,12 +870,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __onArenaStarted(self, period, *args):
         self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
-        self.refreshGunMarkers()
-
-    def refreshGunMarkers(self):
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
-        isServerMarkerVisible = BigWorld.player().gunRotator.isServerMarkerVisible()
-        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker() and isServerMarkerVisible)
+        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
         self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
 
     def __onRecreateDevice(self):

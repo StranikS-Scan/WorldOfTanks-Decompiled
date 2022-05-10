@@ -66,6 +66,10 @@
     <_12150L7_IGR>	60003	</_12150L7_IGR>
     <_Type97_bootcamp>	64001	</_Type97_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
+    <Continental_AOSI_895_5_Prem_SH>	64002	</Continental_AOSI_895_5_Prem_SH>
+    <_12150L-3_V-12_SH>	64003	</_12150L-3_V-12_SH>
+    <_12150L1_SH>	64004	</_12150L1_SH>
+    <Ch00_ClingeBot_SH_Engine>	64005	</Ch00_ClingeBot_SH_Engine>
     <_12150L_bootcamp>	3	</_12150L_bootcamp>
   </ids>
   <shared>
@@ -1159,6 +1163,74 @@
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
+    <Continental_AOSI_895_5_Prem_SH>
+      <userString>	#usa_vehicles:Continental_AOSI_895_5_Prem_SH-895-5	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	630	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </Continental_AOSI_895_5_Prem_SH>
+    <_12150L-3_V-12_SH>
+      <userString>	#china_vehicles:_12150L-3_V-12_SH	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <notInShop>	true	</notInShop>
+      <price>	0	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	208	</rpm_min>
+      <rpm_max>	2283	</rpm_max>
+    </_12150L-3_V-12_SH>
+    <_12150L1_SH>
+      <userString>	#china_vehicles:_12150L1_SH	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	1260	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	244	</rpm_min>
+      <rpm_max>	2211	</rpm_max>
+    </_12150L1_SH>
+    <Ch00_ClingeBot_SH_Engine>
+      <userString>	#china_vehicles:Ch00_ClingeBot_SH_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </Ch00_ClingeBot_SH_Engine>
     <_12150L_bootcamp>
       <userString>	#china_vehicles:_12150L	</userString>
       <tags>	diesel	</tags>

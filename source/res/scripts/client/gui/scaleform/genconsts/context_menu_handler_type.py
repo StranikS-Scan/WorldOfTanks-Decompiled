@@ -9,6 +9,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     RESEARCH_ITEM = 'researchItem'
     RESEARCH_VEHICLE = 'researchVehicle'
     BLUEPRINT_VEHICLE = 'blueprintVehicle'
+    BATTLE_ROYALE_VEHICLE = 'brVehicle'
     BASE_USER = 'baseUser'
     BASE_CLAN = 'baseClan'
     BATTLE_RESULTS_USER = 'battleResultsUser'
@@ -56,3 +57,4 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     TANK_SETUP_HANGAR_BATTLE_ABILITY_SLOT = 'tankSetupHangarBattleAbilitySlot'
     TANK_SETUP_HANGAR_SHELL_SLOT = 'tankSetupHangarShellSlot'
     POST_PROGRESSION_VEHICLE = 'postProgressionVehicle'
+    BR_BATTLE_RESULT_CONTEXT_MENU = 'brBattleResultContextMenu'

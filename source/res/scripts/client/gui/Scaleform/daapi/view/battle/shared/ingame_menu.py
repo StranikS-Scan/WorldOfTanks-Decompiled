@@ -3,7 +3,6 @@
 from functools import partial
 import constants
 import BattleReplay
-from AvatarInputHandler.commands.rts_battle_help_control import showRTSBattleHelp
 from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface, GUI_SETTINGS
@@ -31,7 +30,6 @@ from skeletons.gui.game_control import IServerStatsController, IBootcampControll
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from skeletons.gui.game_control import IRTSBattlesController
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -39,7 +37,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     connectionMgr = dependency.descriptor(IConnectionManager)
     bootcampController = dependency.descriptor(IBootcampController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    rtsBattleController = dependency.descriptor(IRTSBattlesController)
 
     def onWindowClose(self):
         self.destroy()
@@ -58,10 +55,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     def helpClick(self):
         self.destroy()
-        if self.sessionProvider.getArenaDP().isPlayerCommander():
-            showRTSBattleHelp()
-        else:
-            battle_event_dispatcher.toggleHelp()
+        battle_event_dispatcher.toggleHelp()
 
     def cancelClick(self):
         self.destroy()
@@ -72,8 +66,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def bootcampClick(self):
         if self.bootcampController.isInBootcamp():
             self.__doLeaveBootcamp()
-        elif self.sessionProvider.arenaVisitor.gui.isRTSBootcamp():
-            self.__doLeaveRTSBootcamp()
         else:
             self.__doLeaveArena()
 
@@ -84,8 +76,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.__setServerSettings()
         self.__setServerStats()
         self.__setMenuButtonsLabels()
-        isInBootcamp = self.bootcampController.isInBootcamp() or self.sessionProvider.arenaVisitor.gui.isRTSBootcamp()
-        self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not isInBootcamp)
+        self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not self.bootcampController.isInBootcamp())
+        isInBootcamp = self.bootcampController.isInBootcamp()
         self.as_showBootcampButtonS(isInBootcamp)
         self.as_showHelpButtonS(not isInBootcamp)
         return
@@ -105,7 +97,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         return
 
     def __setServerSettings(self):
-        if BattleReplay.g_replayCtrl.isPlaying or self.bootcampController.isInBootcamp() or self.sessionProvider.arenaVisitor.gui.isRTSBootcamp():
+        if BattleReplay.g_replayCtrl.isPlaying or self.bootcampController.isInBootcamp():
             serverName = ''
             tooltipFullData = ''
             state = INTERFACE_STATES.HIDE_ALL_SERVER_INFO
@@ -120,7 +112,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.as_setServerSettingS(serverName, tooltipFullData, state)
 
     def __setServerStats(self):
-        if constants.IS_SHOW_SERVER_STATS and not (self.bootcampController.isInBootcamp() or self.sessionProvider.arenaVisitor.gui.isRTSBootcamp()):
+        if constants.IS_SHOW_SERVER_STATS and not self.bootcampController.isInBootcamp():
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def __setMenuButtonsLabels(self):
@@ -132,7 +124,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             quitLabel = MENU.INGAME_MENU_BUTTONS_REPLAYEXIT
         else:
             quitLabel = MENU.INGAME_MENU_BUTTONS_LOGOFF
-        if self.bootcampController.isInBootcamp() or self.sessionProvider.arenaVisitor.gui.isRTSBootcamp():
+        if self.bootcampController.isInBootcamp():
             bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_FINISH
         elif self.bootcampController.runCount() > 0:
             bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_RETURN
@@ -153,15 +145,12 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         if exitResult.isDeserter:
             quitBattleKey = self.__getQuitBattleKey(exitResult.playerInfo)
             result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(quitBattleKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
-        elif self.sessionProvider.dynamic.rtsCommander is not None and self.sessionProvider.dynamic.rtsCommander.enabled:
-            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta('quitBattle/rts_deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
         elif BattleReplay.isPlaying():
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitBattle', focusedID=DIALOG_BUTTON_ID.CLOSE))
         if result:
             self.__doExit()
-        return
 
     def __doExit(self):
         self.sessionProvider.exit()
@@ -187,16 +176,3 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         else:
             self.showBootcampExitWindow()
         self.destroy()
-
-    @process
-    def __doLeaveRTSBootcamp(self):
-        showBootcampResult = False
-        if BattleReplay.isPlaying():
-            result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
-        else:
-            result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitBattle', focusedID=DIALOG_BUTTON_ID.CLOSE))
-            showBootcampResult = True
-        if result:
-            if showBootcampResult:
-                self.rtsBattleController.setShowBootcampDeserted()
-            self.__doExit()

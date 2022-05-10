@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.windows.window_model import WindowModel
 class MembersWindowModel(WindowModel):
     __slots__ = ('onFocusChange',)
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=16, commands=3):
         super(MembersWindowModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -42,41 +42,47 @@ class MembersWindowModel(WindowModel):
     def setIsHorizontal(self, value):
         self._setBool(8, value)
 
+    def getIsShort(self):
+        return self._getBool(9)
+
+    def setIsShort(self, value):
+        self._setBool(9, value)
+
     def getWindowTooltipHeader(self):
-        return self._getString(9)
-
-    def setWindowTooltipHeader(self, value):
-        self._setString(9, value)
-
-    def getWindowTooltipBody(self):
         return self._getString(10)
 
-    def setWindowTooltipBody(self, value):
+    def setWindowTooltipHeader(self, value):
         self._setString(10, value)
 
+    def getWindowTooltipBody(self):
+        return self._getString(11)
+
+    def setWindowTooltipBody(self, value):
+        self._setString(11, value)
+
     def getIsCommander(self):
-        return self._getBool(11)
-
-    def setIsCommander(self, value):
-        self._setBool(11, value)
-
-    def getShouldShowFindPlayersButton(self):
         return self._getBool(12)
 
-    def setShouldShowFindPlayersButton(self, value):
+    def setIsCommander(self, value):
         self._setBool(12, value)
 
+    def getShouldShowFindPlayersButton(self):
+        return self._getBool(13)
+
+    def setShouldShowFindPlayersButton(self, value):
+        self._setBool(13, value)
+
     def getFooterMessage(self):
-        return self._getString(13)
+        return self._getString(14)
 
     def setFooterMessage(self, value):
-        self._setString(13, value)
+        self._setString(14, value)
 
     def getIsFooterMessageGrey(self):
-        return self._getBool(14)
+        return self._getBool(15)
 
     def setIsFooterMessageGrey(self, value):
-        self._setBool(14, value)
+        self._setBool(15, value)
 
     def _initialize(self):
         super(MembersWindowModel, self)._initialize()
@@ -86,6 +92,7 @@ class MembersWindowModel(WindowModel):
         self._addViewModelProperty('header', WindowHeaderModel())
         self._addArrayProperty('slots', Array())
         self._addBoolProperty('isHorizontal', False)
+        self._addBoolProperty('isShort', False)
         self._addStringProperty('windowTooltipHeader', '')
         self._addStringProperty('windowTooltipBody', '')
         self._addBoolProperty('isCommander', False)

@@ -17,7 +17,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController, IRTSBattlesController
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
@@ -69,7 +69,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     rankedController = dependency.descriptor(IRankedBattlesController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    rtsController = dependency.descriptor(IRTSBattlesController)
     __battleSession = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):

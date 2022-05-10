@@ -15,12 +15,14 @@ class LAYER_NAMES(object):
     SYSTEM_MESSAGES = 'systemMessages'
     DIALOGS = 'topWindow'
     SERVICE_LAYOUT = 'serviceLayout'
+    HIDDEN_SERVICE_LAYOUT = 'hiddenServiceLayout'
     OVERLAY = 'overlay'
     TOOL_TIPS = 'toolTips'
     WAITING = 'waiting'
     CURSOR = 'cursor'
     LAYER_ORDER = [UNDEFINED,
      ROOT,
+     HIDDEN_SERVICE_LAYOUT,
      MARKER,
      VIEWS,
      SUBVIEW,

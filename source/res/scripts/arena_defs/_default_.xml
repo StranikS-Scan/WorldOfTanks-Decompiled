@@ -19,592 +19,6 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
-  <extraSoundRemapping>
-    <bootcamp>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	bootcamp.pck	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_gui.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_hangar.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_hangar_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_result_screen.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_video.pck	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_video.bnk	</name>
-          </bank>
-        </loadBanks>
-      </soundRemapping>
-    </bootcamp>
-    <maps_training>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	maps_training_gameplay.bnk	</name>
-          </bank>
-          <bank>
-            <name>	maps_training_voiceover.bnk	</name>
-          </bank>
-        </loadBanks>
-      </soundRemapping>
-    </maps_training>
-    <rts_bootcamp>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	r4_commander.bnk	</name>
-          </bank>
-          <bank>
-            <name>	r4_commander.pck	</name>
-          </bank>
-          <bank>
-            <name>	r4_tutorial.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_gui.bnk	</name>
-          </bank>
-        </loadBanks>
-        <events>
-          <event>
-            <name>	music_abbey_dron_intensive	</name>
-            <mod>	music_abbey_battle	</mod>
-          </event>
-          <event>
-            <name>	music_abbey_dron_relaxed	</name>
-            <mod>	music_abbey_battle	</mod>
-          </event>
-          <event>
-            <name>	music_steppes_dron_intensive	</name>
-            <mod>	music_steppes_battle	</mod>
-          </event>
-          <event>
-            <name>	music_steppes_dron_relaxed	</name>
-            <mod>	music_steppes_battle	</mod>
-          </event>
-          <event>
-            <name>	music_siegfried_dron_intensive	</name>
-            <mod>	music_siegfried_battle	</mod>
-          </event>
-          <event>
-            <name>	music_siegfried_dron_relaxed	</name>
-            <mod>	music_siegfried_battle	</mod>
-          </event>
-          <event>
-            <name>	music_cliff_dron_intensive	</name>
-            <mod>	music_cliff_battle	</mod>
-          </event>
-          <event>
-            <name>	music_cliff_dron_relaxed	</name>
-            <mod>	music_cliff_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_intensive	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_relaxed	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_intensive_cn	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_relaxed_cn	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mines_dron_intensive	</name>
-            <mod>	music_mines_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mines_dron_relaxed	</name>
-            <mod>	music_mines_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mannerheim_dron_intensive	</name>
-            <mod>	music_mannerheim_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mannerheim_dron_relaxed	</name>
-            <mod>	music_mannerheim_battle	</mod>
-          </event>
-          <event>
-            <name>	music_airfield_dron_intensive	</name>
-            <mod>	music_airfield_battle	</mod>
-          </event>
-          <event>
-            <name>	music_airfield_dron_relaxed	</name>
-            <mod>	music_airfield_battle	</mod>
-          </event>
-          <event>
-            <name>	music_lost_city_dron_intensive	</name>
-            <mod>	music_lost_city_battle	</mod>
-          </event>
-          <event>
-            <name>	music_lost_city_dron_relaxed	</name>
-            <mod>	music_lost_city_battle	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_killed	</name>
-            <mod>	vo_r4_arcade_enemy_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_killed_by_player	</name>
-            <mod>	vo_r4_arcade_enemy_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_armor_ricochet_by_player	</name>
-            <mod>	vo_r4_arcade_ricochet	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_fire_started_by_player	</name>
-            <mod>	vo_r4_arcade_enemy_infire	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_armor_not_pierced_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_fire_started	</name>
-            <mod>	vo_r4_arcade_fire_started	</mod>
-          </event>
-          <event>
-            <name>	vo_fire_stopped	</name>
-            <mod>	vo_r4_arcade_fire_stopped	</mod>
-          </event>
-          <event>
-            <name>	vo_target_captured	</name>
-            <mod>	vo_r4_arcade_target_captured	</mod>
-          </event>
-          <event>
-            <name>	vo_target_lost	</name>
-            <mod>	vo_r4_arcade_target_lost	</mod>
-          </event>
-          <event>
-            <name>	vo_target_unlocked	</name>
-            <mod>	vo_r4_arcade_target_unlocked	</mod>
-          </event>
-          <event>
-            <name>	vo_ammo_bay_damaged	</name>
-            <mod>	vo_r4_arcade_ammo_bay_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_damaged	</name>
-            <mod>	vo_r4_arcade_engine_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_destroyed	</name>
-            <mod>	vo_r4_arcade_engine_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_functional	</name>
-            <mod>	vo_r4_arcade_engine_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_fuel_tank_damaged	</name>
-            <mod>	vo_r4_arcade_fuel_tank_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_damaged	</name>
-            <mod>	vo_r4_arcade_gun_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_destroyed	</name>
-            <mod>	vo_r4_arcade_gun_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_functional	</name>
-            <mod>	vo_r4_arcade_gun_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_radio_damaged	</name>
-            <mod>	vo_r4_arcade_radio_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_damaged	</name>
-            <mod>	vo_r4_arcade_surveying_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_destroyed	</name>
-            <mod>	vo_r4_arcade_surveying_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_functional	</name>
-            <mod>	vo_r4_arcade_surveying_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_track_destroyed	</name>
-            <mod>	vo_r4_arcade_track_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_track_functional	</name>
-            <mod>	vo_r4_arcade_track_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_track_functional_can_move	</name>
-            <mod>	vo_r4_arcade_track_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_damaged	</name>
-            <mod>	vo_r4_arcade_turret_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_destroyed	</name>
-            <mod>	vo_r4_arcade_turret_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_functional	</name>
-            <mod>	vo_r4_arcade_turret_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_commander_killed	</name>
-            <mod>	vo_r4_arcade_commander_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_driver_killed	</name>
-            <mod>	vo_r4_arcade_driver_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_gunner_killed	</name>
-            <mod>	vo_r4_arcade_gunner_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_loader_killed	</name>
-            <mod>	vo_r4_arcade_loader_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_radioman_killed	</name>
-            <mod>	vo_r4_arcade_radioman_killed	</mod>
-          </event>
-          <event>
-            <name>	wheels_suspension_pc	</name>
-            <mod>	wheels_suspension_comb	</mod>
-          </event>
-        </events>
-      </soundRemapping>
-    </rts_bootcamp>
-    <rts_commander>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	r4_commander.bnk	</name>
-          </bank>
-          <bank>
-            <name>	r4_commander.pck	</name>
-          </bank>
-        </loadBanks>
-        <events>
-          <event>
-            <name>	music_abbey_dron_intensive	</name>
-            <mod>	music_abbey_battle	</mod>
-          </event>
-          <event>
-            <name>	music_abbey_dron_relaxed	</name>
-            <mod>	music_abbey_battle	</mod>
-          </event>
-          <event>
-            <name>	music_steppes_dron_intensive	</name>
-            <mod>	music_steppes_battle	</mod>
-          </event>
-          <event>
-            <name>	music_steppes_dron_relaxed	</name>
-            <mod>	music_steppes_battle	</mod>
-          </event>
-          <event>
-            <name>	music_siegfried_dron_intensive	</name>
-            <mod>	music_siegfried_battle	</mod>
-          </event>
-          <event>
-            <name>	music_siegfried_dron_relaxed	</name>
-            <mod>	music_siegfried_battle	</mod>
-          </event>
-          <event>
-            <name>	music_cliff_dron_intensive	</name>
-            <mod>	music_cliff_battle	</mod>
-          </event>
-          <event>
-            <name>	music_cliff_dron_relaxed	</name>
-            <mod>	music_cliff_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_intensive	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_paris_dron_relaxed	</name>
-            <mod>	music_paris_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mines_dron_intensive	</name>
-            <mod>	music_mines_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mines_dron_relaxed	</name>
-            <mod>	music_mines_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mannerheim_dron_intensive	</name>
-            <mod>	music_mannerheim_battle	</mod>
-          </event>
-          <event>
-            <name>	music_mannerheim_dron_relaxed	</name>
-            <mod>	music_mannerheim_battle	</mod>
-          </event>
-          <event>
-            <name>	music_airfield_dron_intensive	</name>
-            <mod>	music_airfield_battle	</mod>
-          </event>
-          <event>
-            <name>	music_airfield_dron_relaxed	</name>
-            <mod>	music_airfield_battle	</mod>
-          </event>
-          <event>
-            <name>	music_lost_city_dron_intensive	</name>
-            <mod>	music_lost_city_battle	</mod>
-          </event>
-          <event>
-            <name>	music_lost_city_dron_relaxed	</name>
-            <mod>	music_lost_city_battle	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_killed	</name>
-            <mod>	vo_r4_arcade_enemy_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_killed_by_player	</name>
-            <mod>	vo_r4_arcade_enemy_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_armor_ricochet_by_player	</name>
-            <mod>	vo_r4_arcade_ricochet	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_fire_started_by_player	</name>
-            <mod>	vo_r4_arcade_enemy_infire	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
-            <mod>	vo_r4_arcade_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_armor_not_pierced_by_player	</name>
-            <mod>	vo_r4_arcade_not_pierced	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
-            <mod>	vo_r4_arcade_hit_modul	</mod>
-          </event>
-          <event>
-            <name>	vo_fire_started	</name>
-            <mod>	vo_r4_arcade_fire_started	</mod>
-          </event>
-          <event>
-            <name>	vo_fire_stopped	</name>
-            <mod>	vo_r4_arcade_fire_stopped	</mod>
-          </event>
-          <event>
-            <name>	vo_target_captured	</name>
-            <mod>	vo_r4_arcade_target_captured	</mod>
-          </event>
-          <event>
-            <name>	vo_target_lost	</name>
-            <mod>	vo_r4_arcade_target_lost	</mod>
-          </event>
-          <event>
-            <name>	vo_target_unlocked	</name>
-            <mod>	vo_r4_arcade_target_unlocked	</mod>
-          </event>
-          <event>
-            <name>	vo_ammo_bay_damaged	</name>
-            <mod>	vo_r4_arcade_ammo_bay_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_damaged	</name>
-            <mod>	vo_r4_arcade_engine_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_destroyed	</name>
-            <mod>	vo_r4_arcade_engine_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_engine_functional	</name>
-            <mod>	vo_r4_arcade_engine_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_fuel_tank_damaged	</name>
-            <mod>	vo_r4_arcade_fuel_tank_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_damaged	</name>
-            <mod>	vo_r4_arcade_gun_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_destroyed	</name>
-            <mod>	vo_r4_arcade_gun_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_gun_functional	</name>
-            <mod>	vo_r4_arcade_gun_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_radio_damaged	</name>
-            <mod>	vo_r4_arcade_radio_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_damaged	</name>
-            <mod>	vo_r4_arcade_surveying_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_destroyed	</name>
-            <mod>	vo_r4_arcade_surveying_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_surveying_devices_functional	</name>
-            <mod>	vo_r4_arcade_surveying_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_track_destroyed	</name>
-            <mod>	vo_r4_arcade_track_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_track_functional	</name>
-            <mod>	vo_r4_arcade_track_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_track_functional_can_move	</name>
-            <mod>	vo_r4_arcade_track_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_damaged	</name>
-            <mod>	vo_r4_arcade_turret_damaged	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_destroyed	</name>
-            <mod>	vo_r4_arcade_turret_destroyed	</mod>
-          </event>
-          <event>
-            <name>	vo_turret_rotator_functional	</name>
-            <mod>	vo_r4_arcade_turret_functional	</mod>
-          </event>
-          <event>
-            <name>	vo_commander_killed	</name>
-            <mod>	vo_r4_arcade_commander_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_driver_killed	</name>
-            <mod>	vo_r4_arcade_driver_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_gunner_killed	</name>
-            <mod>	vo_r4_arcade_gunner_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_loader_killed	</name>
-            <mod>	vo_r4_arcade_loader_killed	</mod>
-          </event>
-          <event>
-            <name>	vo_radioman_killed	</name>
-            <mod>	vo_r4_arcade_radioman_killed	</mod>
-          </event>
-          <event>
-            <name>	wheels_suspension_pc	</name>
-            <mod>	wheels_suspension_comb	</mod>
-          </event>
-        </events>
-      </soundRemapping>
-    </rts_commander>
-    <rts_tankman>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	r4_tankman.bnk	</name>
-          </bank>
-          <bank>
-            <name>	r4_tankman.pck	</name>
-          </bank>
-        </loadBanks>
-      </soundRemapping>
-    </rts_tankman>
-  </extraSoundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultReverbPreset></defaultReverbPreset>
@@ -763,20 +177,6 @@
       <roundLength>	600	</roundLength>
       <winnerIfTimeout>	1	</winnerIfTimeout>
     </assault>
-    <rts>
-      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
-      <battleEndWarningDuration>	5	</battleEndWarningDuration>
-      <battleEndingSoonTime>	60	</battleEndingSoonTime>
-      <roundLength>	900	</roundLength>
-      <winnerIfTimeout>	1	</winnerIfTimeout>
-    </rts>
-    <rts_bootcamp>
-      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
-      <battleEndWarningDuration>	5	</battleEndWarningDuration>
-      <battleEndingSoonTime>	60	</battleEndingSoonTime>
-      <roundLength>	900	</roundLength>
-      <winnerIfTimeout>	2	</winnerIfTimeout>
-    </rts_bootcamp>
     <ctf2>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
@@ -891,4 +291,57 @@
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </maps_training>
   </gameplayTypes>
+  <extraSoundRemapping>
+    <bootcamp>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	bootcamp.pck	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_gui.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_hangar.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_hangar_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_result_screen.bnk	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_video.pck	</name>
+          </bank>
+          <bank>
+            <name>	bootcamp_video.bnk	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </bootcamp>
+    <maps_training>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	maps_training_gameplay.bnk	</name>
+          </bank>
+          <bank>
+            <name>	maps_training_voiceover.bnk	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </maps_training>
+    <stronghold>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	clans_gameplay.bnk	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </stronghold>
+  </extraSoundRemapping>
 </_default_.xml>

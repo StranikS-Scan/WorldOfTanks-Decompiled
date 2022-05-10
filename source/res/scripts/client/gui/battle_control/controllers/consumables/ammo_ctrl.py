@@ -523,10 +523,12 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__shellChangeTime = baseTime
         interval = self.__gunSettings.clip.interval
         self.triggerReloadEffect(timeLeft, baseTime)
-        interval = self.__gunSettings.clip.interval
-        if self.__currShellCD in self.__ammo:
+        if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
-            baseTime = self.correctGunReloadBaseTime(interval, shellsInClip, timeLeft, baseTime, self.__gunSettings.hasAutoReload())
+            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
+                baseTime = interval
+        elif baseTime == 0.0:
+            baseTime = timeLeft
         isIgnored = False
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
             isIgnored = self.__autoShoots.process(timeLeft, self._reloadingState.getActualValue())
@@ -537,13 +539,6 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot(), skipAutoLoader)
         if self.__quickChangerActive:
             self.onQuickShellChangerUpdated(self.canQuickShellChange(), self.getQuickShellChangeTime())
-
-    @staticmethod
-    def correctGunReloadBaseTime(interval, shellsInClip, timeLeft, baseTime, isAutoReloaded):
-        if interval > 0:
-            if not (shellsInClip == 1 and timeLeft == 0 and not isAutoReloaded or shellsInClip == 0 and timeLeft != 0):
-                return interval
-        return baseTime
 
     def setGunAutoReloadTime(self, timeLeft, baseTime, firstClipBaseTime, isSlowed, isBoostApplicable):
         self._autoReloadingState.setTimes(timeLeft, baseTime)

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
-import logging
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -10,7 +9,6 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, LoadViewEvent
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-_logger = logging.getLogger(__name__)
 _SCOPE = EVENT_BUS_SCOPE.BATTLE
 
 def _makeKeyCtx(key=0, isDown=False):
@@ -59,14 +57,6 @@ def toggleHelpDetailed(ctx):
 
 def setMinimapCmd(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_CMD, _makeKeyCtx(key=key)), scope=_SCOPE)
-
-
-def setMinimapVisibilityCmd(visibilityValue):
-    g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_SET_VISIBILITY_CMD, visibilityValue), scope=_SCOPE)
-
-
-def processNum(key, isDown):
-    g_eventBus.handleEvent(GameEvent(GameEvent.NUMBER_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 
 
 def setRadialMenuCmd(key, isDown):
@@ -165,14 +155,6 @@ def sniperCameraTransition(transitionTime, currentGunIndex):
 
 def showCommanderCamHint(show):
     g_eventBus.handleEvent(GameEvent(GameEvent.COMMANDER_HINT, {'show': show}), scope=_SCOPE)
-
-
-def showCommanderHelp(show):
-    g_eventBus.handleEvent(GameEvent(GameEvent.COMMANDER_HELP, {'show': show}), scope=_SCOPE)
-
-
-def showCommanderHintTime(show):
-    g_eventBus.handleEvent(GameEvent(GameEvent.COMMANDER_HINT_TIME, {'show': show}), scope=_SCOPE)
 
 
 def togglePiercingDebugPanel():

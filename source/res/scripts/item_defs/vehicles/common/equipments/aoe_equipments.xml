@@ -3,7 +3,7 @@
     <id>	9101	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/descr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	150	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -65,7 +65,7 @@
     <id>	9201	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/descr	</description>
-    <icon>	bomber 0 0	</icon>
+    <icon>	bomber	</icon>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -102,7 +102,11 @@
       <shotEffect>	epicAirbombStrike	</shotEffect>
       <effects>
         <start>
-          <sequences>	particles/eff_sequence/aoe_airstrike_il2_01.seq	</sequences>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/aoe_airstrike_il2_01.seq	</name>
+            </sequence>
+          </sequences>
         </start>
         <action>
           <areaColor>	0x3FFFFF00	</areaColor>
@@ -123,7 +127,7 @@
     <id>	9301	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/descr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	150	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>

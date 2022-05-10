@@ -5,11 +5,13 @@ from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers.epic_game import searchRankForSlot
 from items.vehicles import getVehicleClassFromVehicleType
+from gui.impl import backport
+from gui.impl.gen import R
 
 class EpicBattleConsumablesPanel(ConsumablesPanel):
     _EMPTY_LOCKED_SLOT = -1
     _GLOW_DELAY = 0.5
-    _EPIC_EQUIPMENT_ICON_PATH = '../maps/icons/epicBattles/skills/48x48/%s.png'
+    _R_EPIC_EQUIPMENT_ICON = R.images.gui.maps.icons.epicBattles.skills.c_48x48
 
     def __init__(self):
         super(EpicBattleConsumablesPanel, self).__init__()
@@ -37,7 +39,7 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
             return
 
     def _getEquipmentIcon(self, idx, icon):
-        return self._EPIC_EQUIPMENT_ICON_PATH % icon if idx in self.__battleReserveSlots else super(EpicBattleConsumablesPanel, self)._getEquipmentIcon(idx, icon)
+        return backport.image(self._R_EPIC_EQUIPMENT_ICON.dyn(icon)()) if idx in self.__battleReserveSlots else super(EpicBattleConsumablesPanel, self)._getEquipmentIcon(idx, icon)
 
     def _resetEquipmentSlot(self, idx, intCD, item):
         super(EpicBattleConsumablesPanel, self)._resetEquipmentSlot(idx, intCD, item)

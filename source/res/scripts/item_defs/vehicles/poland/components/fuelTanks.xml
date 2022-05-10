@@ -5,6 +5,7 @@
     <Average>	203	</Average>
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
+    <Large_SH>	206	</Large_SH>
   </ids>
   <shared>
     <Small>
@@ -47,5 +48,14 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
+    <Large_SH>
+      <tags></tags>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	300	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Large_SH>
   </shared>
 </fuelTanks.xml>

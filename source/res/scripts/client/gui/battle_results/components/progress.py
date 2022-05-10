@@ -10,7 +10,7 @@ import personal_missions
 from battle_pass_common import BattlePassConsts
 from constants import EVENT_TYPE
 from dog_tags_common.components_config import componentConfigAdapter as cca
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo
@@ -482,7 +482,7 @@ class ProgressiveCustomizationVO(base.DirectStatsItem):
             _, vehicleIntCD = parseEventID(questID)
             vehicle = self._itemsCache.items.getItemByCD(vehicleIntCD)
             linkBtnEnabled, linkBtnTooltip = getC11nProgressionLinkBtnParams(vehicle)
-            if currentHangarIsSteelHunter():
+            if currentHangarIsBattleRoyale():
                 linkBtnEnabled = False
             self._value['linkBtnEnabled'] = linkBtnEnabled
             self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)

@@ -64,7 +64,6 @@ class EventDispatcher(object):
         g_eventBus.addListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.TrainingEvent.SHOW_RTS_TRAINING_LIST, self.__showRtsTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
         self.__setPrebattleDispatcher(None)
@@ -75,7 +74,6 @@ class EventDispatcher(object):
         g_eventBus.removeListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.TrainingEvent.SHOW_RTS_TRAINING_LIST, self.__showRtsTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def isTrainingLoaded(self):
@@ -94,15 +92,6 @@ class EventDispatcher(object):
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
 
-    def loadRTSBattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.RTS_BATTLE_QUEUE)
-
-    def loadRTS1x1BattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.RTS_1x1_BATTLE_QUEUE)
-
-    def loadRTSBootcampQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.RTS_BOOTCAMP_QUEUE)
-
     def loadTrainingList(self):
         self.addTrainingToCarousel()
         self.__showTrainingList()
@@ -114,14 +103,6 @@ class EventDispatcher(object):
     def loadEpicTrainingList(self):
         self.addEpicTrainingToCarousel()
         self.__showEpicTrainingList()
-
-    def loadRtsTrainingList(self):
-        self.addRtsTrainingToCarousel()
-        self.__showRtsTrainingList()
-
-    def loadRtsTrainingRoom(self):
-        self.addRtsTrainingToCarousel(False)
-        self.__showRtsTrainingRoom()
 
     def loadEpicTrainingRoom(self):
         self.addEpicTrainingToCarousel(False)
@@ -195,23 +176,6 @@ class EventDispatcher(object):
         else:
             clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
             alias = PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY
-            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.RETURN_TO_TRAINING_ROOM))
-        clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'addTrainingToCarousel')
-            return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, layer=WindowLayer.SUB_VIEW, openHandler=handler)
-        self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
-    def addRtsTrainingToCarousel(self, isList=True):
-        self.removeTrainingFromCarousel(not isList, closeWindow=False)
-        if isList:
-            clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST
-            alias = PREBATTLE_ALIASES.RTS_TRAINING_LIST_VIEW_PY
-            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.SHOW_RTS_TRAINING_LIST))
-        else:
-            clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
-            alias = PREBATTLE_ALIASES.RTS_TRAINING_ROOM_VIEW_PY
             handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.RETURN_TO_TRAINING_ROOM))
         clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
         if not clientID:
@@ -409,9 +373,6 @@ class EventDispatcher(object):
     def __showEpicTrainingRoom(self):
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY)
 
-    def __showRtsTrainingRoom(self):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.RTS_TRAINING_ROOM_VIEW_PY)
-
     def __fireEvent(self, event, scope=EVENT_BUS_SCOPE.LOBBY):
         g_eventBus.handleEvent(event, scope)
 
@@ -464,9 +425,6 @@ class EventDispatcher(object):
 
     def __showEpicTrainingList(self, event=None):
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
-
-    def __showRtsTrainingList(self, event=None):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.RTS_TRAINING_LIST_VIEW_PY)
 
     def __getReadyPrbData(self, isReady):
         return {'isReady': isReady}

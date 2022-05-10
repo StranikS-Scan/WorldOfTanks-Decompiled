@@ -223,8 +223,8 @@ class WgshAccessor(BaseAccessor):
     def give_leadership(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
         return self._data_source.give_leadership(callback, periphery_id, unit_server_id, target_account_id, fields=fields)
 
-    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
-        return self._data_source.set_equipment_commander(callback, periphery_id, unit_server_id, target_account_id, fields=fields)
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, role, fields=None):
+        return self._data_source.set_equipment_commander(callback, periphery_id, unit_server_id, target_account_id, role, fields=fields)
 
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         return self._data_source.leave_room(callback, periphery_id, unit_server_id, fields=fields)
@@ -343,8 +343,8 @@ class MapboxAccessor(BaseAccessor):
     def select_mapbox_crewbook(self, callback, itemID):
         return self._data_source.select_mapbox_crewbook(callback, itemID)
 
-    def complete_survey(self, callback, mapName):
-        return self._data_source.complete_survey(callback, mapName)
+    def complete_survey(self, callback, surveyData):
+        return self._data_source.complete_survey(callback, surveyData)
 
     def request_authorized_survey_url(self, callback, mapURL):
         return self._data_source.request_authorized_survey_url(callback, mapURL)

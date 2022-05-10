@@ -62,7 +62,7 @@ from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController, IServerStatsController
+from skeletons.gui.game_control import IIGRController, IServerStatsController, IBattleRoyaleRentVehiclesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -70,9 +70,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
-from gui.impl.lobby.rts.tooltips.rts_currency_tooltip_view import RTSCurrencyTooltipView
-from gui.impl.gen.view_models.views.lobby.rts.rts_currency_view_model import CurrencyTypeEnum
-from gui.impl.pub.tooltip_window import ToolTipWindow
 _logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _PARENTHESES_OPEN = '('
@@ -446,15 +443,15 @@ class ReserveTooltipData(StrongholdTooltipData):
         reserveId = args[0]
         reserve = reserves.getReserveById(reserveId)
         moduleLabel = getReserveNameVO(reserve.getType())
-        infoLevel = '%s %s' % (int2roman(reserve.getLevel()), i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_LEVEL))
+        infoLevel = backport.text(R.strings.fortifications.reserves.tooltip.level(), level=int2roman(reserve.getLevel()))
         selected = reserve in reserves.getSelectedReserves()
         reserveCount = reserves.getReserveCount(reserve.getType(), reserve.getLevel())
         if selected:
             reserveCount -= 1
-        infoCount = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_INSTORAGE, count=makeHtmlString('html_templates:lobby/fortifications/strongholdReserve', 'inStorage', {'text': reserveCount}))
+        infoCount = backport.text(R.strings.fortifications.reserves.tooltip.inStorage(), count=text_styles.expText(reserveCount))
         infoDescription1 = '+%s%%' % reserve.getBonusPercent()
         infoDescription2 = '%s' % reserve.getDescription()
-        infoDescription3 = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITION)
+        infoDescription3 = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequisition() else i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITION)
         selected = reserve in reserves.getSelectedReserves()
         infoStatus, infoDescription = self.__getSelectReason(reserve, selected)
         toolTipData['moduleLabel'] = moduleLabel
@@ -475,12 +472,12 @@ class ReserveTooltipData(StrongholdTooltipData):
          REQUISITION_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_REQUISITIONACTIVATION,
          HEAVYTRUCKS_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
         if selected:
-            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SELECTED)
+            status = R.strings.fortifications.reserves.tooltip.selected()
         else:
-            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_READYTOSELECT)
+            status = R.strings.fortifications.reserves.tooltip.readyToSelect()
         groupType = reserve.getGroupType()
         reason = i18n.makeString(reasonMap[groupType])
-        return (title, reason)
+        return (backport.text(status), reason)
 
 
 class MapTooltipData(ToolTipBaseData):
@@ -967,18 +964,6 @@ class SettingsShowLocationMarkers(BlocksTooltipData):
         return tooltipBlocks
 
 
-class SquadRestrictionsInfo(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(SquadRestrictionsInfo, self).__init__(context, TOOLTIP_TYPE.CONTROL)
-        self._setWidth(width=400)
-
-    def _packBlocks(self, *args, **kwargs):
-        tooltipBlocks = super(SquadRestrictionsInfo, self)._packBlocks()
-        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_HEADER), text_styles.main(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODY)), formatters.packTextBlockData(text_styles.neutral(TOOLTIPS.SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER), padding={'bottom': -15})]))
-        return tooltipBlocks
-
-
 _CurrencySetting = namedtuple('_CurrencySetting', ('text', 'icon', 'textStyle', 'frame'))
 
 class CURRENCY_SETTINGS(object):
@@ -1237,6 +1222,7 @@ class SettingsKeyShowRadialMenu(BlocksTooltipData):
 
 class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
+    __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
 
     def __init__(self, ctx):
         super(HeaderMoneyAndXpTooltipData, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
@@ -1270,6 +1256,9 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(self.itemsCache.items.stats.money.bpcoin))
         elif self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
             valueStr = text_styles.expText(backport.getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
+        elif self._btnType == CURRENCIES_CONSTANTS.BRCOIN:
+            brCoin = self.__rentVehiclesController.getBRCoinBalance(0)
+            valueStr = text_styles.bpcoin(backport.getIntegralFormat(brCoin))
         return valueStr
 
     def _getIconYOffset(self):
@@ -1417,19 +1406,6 @@ class BattleTraining(BlocksTooltipData):
         items = super(BattleTraining, self)._packBlocks(*args, **kwargs)
         items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER), desc=text_styles.main(i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))))
         return items
-
-
-class RtsCurrencyTooltipData(BlocksTooltipData):
-
-    def __init__(self, ctx):
-        super(RtsCurrencyTooltipData, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
-
-    def getDisplayableData(self, *args):
-        contentID = R.views.lobby.rts.StrategistCurrencyTooltip()
-        currencyType = CurrencyTypeEnum(args[0])
-        content = RTSCurrencyTooltipView(contentID, currencyType)
-        window = ToolTipWindow(None, content, content.getParentWindow())
-        return window
 
 
 class SquadBonusTooltipWindowData(ToolTipBaseData):

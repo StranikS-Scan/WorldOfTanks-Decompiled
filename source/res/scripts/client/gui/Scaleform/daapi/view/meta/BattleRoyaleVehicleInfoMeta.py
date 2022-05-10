@@ -7,11 +7,5 @@ class BattleRoyaleVehicleInfoMeta(View):
     def onClose(self):
         self._printOverrideError('onClose')
 
-    def onShowIntro(self):
-        self._printOverrideError('onShowIntro')
-
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
-
-    def as_setTabsDataS(self, tabsData):
-        return self.flashObject.as_setTabsData(tabsData) if self._isDAAPIInited() else None

@@ -56,16 +56,10 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def onMinimapClicked(self, x, y, buttonIdx, minimapScaleIndex):
         self.__plugins.onMinimapClicked(x, y, buttonIdx, minimapScaleIndex)
 
-    def onHoverEntry(self, entry):
-        self.__plugins.onHoverEntry(entry)
-
     def applyNewSize(self, sizeIndex):
         if self.__plugins is not None:
             self.__plugins.applyNewSize(sizeIndex)
         return
-
-    def handleMouseOverUIMinimap(self, isMouseOver):
-        pass
 
     def addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         entryID = self.__component.addEntry(symbol, container, matrix, active, transformProps)
@@ -185,7 +179,20 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         else:
             self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
             self.app.component.addChild(self.__component, self._getFlashName())
-            bl, tr = minimap_utils.getMapBoundingBox(arenaVisitor)
+            bl, tr = arenaVisitor.type.getBoundingBox()
+            if arenaVisitor.gui.isBootcampBattle():
+                topRightX = tr[0]
+                topRightY = tr[1]
+                bottomLeftX = bl[0]
+                bottomLeftY = bl[1]
+                vSide = topRightX - bottomLeftX
+                hSide = topRightY - bottomLeftY
+                if vSide > hSide:
+                    bl = (bottomLeftX, bottomLeftX)
+                    tr = (topRightX, topRightX)
+                else:
+                    bl = (bottomLeftY, bottomLeftY)
+                    tr = (topRightY, topRightY)
             self.__component.setArenaBB(bl, tr)
             self._processMinimapSize(bl, tr)
             self.__component.mapSize = Math.Vector2(self._getMinimapSize())
@@ -243,9 +250,6 @@ class MinimapPluginsCollection(PluginsCollection):
 
     def applyNewSize(self, sizeIndex):
         self._invoke('applyNewSize', sizeIndex)
-
-    def onHoverEntry(self, entry):
-        self._invoke('onHoverEntry', entry)
 
     def __onSettingsChanged(self, diff):
         self._invoke('updateSettings', diff)

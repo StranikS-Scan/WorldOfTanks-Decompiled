@@ -88,28 +88,11 @@ class BattleContext(IBattleContext):
             vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         return vID and self.__arenaDP.isTeamKiller(vID)
 
-    def isSupply(self, vID):
-        if self.__arenaDP is not None:
-            return self.__arenaDP.isSupply(vID)
-        else:
-            _logger.debug('BattleContext.isSupply: ArenaDP is None, vID = %s', vID)
-            return False
-
     def isObserver(self, vID):
         if self.__arenaDP is not None:
             return self.__arenaDP.isObserver(vID)
         else:
             _logger.debug('BattleContext.isObserver: ArenaDP is None, vID = %s', vID)
-            return
-
-    def isCommander(self, vID):
-        return self.__arenaDP.isCommander(vID) if self.__arenaDP is not None else False
-
-    def isPlayerCommander(self):
-        if self.__arenaDP is not None:
-            return self.__arenaDP.isPlayerCommander()
-        else:
-            _logger.debug('BattleContext.isPlayerCommander: ArenaDP is None')
             return
 
     def isPlayerObserver(self):

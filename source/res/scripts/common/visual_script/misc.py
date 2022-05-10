@@ -30,13 +30,6 @@ class BLOCK_MODE(object):
     DEV = 64
 
 
-class PlanNameAndParams(object):
-
-    def __init__(self):
-        self.name = ''
-        self.params = {}
-
-
 def makePlanPath(planName):
     return 'vscript/plans/{}.xml'.format(planName)
 
@@ -82,13 +75,13 @@ def readVisualScriptPlans(section, commonParams={}):
     plans = []
     for name, subsection in section.items():
         if name == 'plan':
-            planDef = PlanNameAndParams()
+            planDef = {}
             if subsection.has_key('name'):
-                planDef.name = subsection['name'].asString
-                planDef.params = readVisualScriptPlanParams(subsection, commonParams)
+                planDef['name'] = subsection['name'].asString
+                planDef['params'] = readVisualScriptPlanParams(subsection, commonParams)
             else:
-                planDef.name = subsection.asString
-                planDef.params = dict(commonParams)
+                planDef['name'] = subsection.asString
+                planDef['params'] = dict(commonParams)
             plans.append(planDef)
 
     return plans

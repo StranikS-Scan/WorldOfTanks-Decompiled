@@ -14,7 +14,7 @@ from gui.periodic_battles.models import PrimeTimeStatus, AlertData
 from helpers import time_utils
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
-BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'isSeasonActive', 'episode', 'tooltipId', 'showAlert'))
+BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'isModeAvailable', 'tooltipId', 'showAlert'))
 
 class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
@@ -28,15 +28,18 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
         event_dispatcher.showBattleRoyalePrimeTimeWindow()
 
     def update(self):
-        currentSeason = self.__battleRoyaleController.getCurrentSeason()
-        isSeasonActive = currentSeason is not None and self.__battleRoyaleController.getCurrentCycleInfo()[1]
-        cycleNumber = 1
-        if currentSeason:
-            cycleNumber = self.__battleRoyaleController.getCurrentOrNextActiveCycleNumber(currentSeason)
+        isModeAvailable = self.__battleRoyaleController.isEnabled() and self.__battleRoyaleController.isInPrimeTime()
         showAlert = not self.__battleRoyaleController.isInPrimeTime() and self.__battleRoyaleController.isEnabled()
-        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), isSeasonActive=isSeasonActive, episode=int2roman(cycleNumber), tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
+        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), isModeAvailable=isModeAvailable, tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
         self.as_setDataS(data)
-        return
+
+    def _populate(self):
+        super(BattleRoyaleHangarWidget, self)._populate()
+        self.__battleRoyaleController.onWidgetUpdate += self.update
+
+    def _dispose(self):
+        self.__battleRoyaleController.onWidgetUpdate -= self.update
+        super(BattleRoyaleHangarWidget, self)._dispose()
 
     def __getStatusBlock(self):
         status, timeLeft, _ = self.__battleRoyaleController.getPrimeTimeStatus()

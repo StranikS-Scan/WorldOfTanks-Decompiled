@@ -8,7 +8,6 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
-from gui.prb_control.prb_getters import getSupportedCurrentArenaBonusType
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -113,11 +112,11 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
         noserver = not currentEvent.isAvailableServer(self._connectionMgr.peripheryID)
         isRegistered = self._eventsController.getHangarFlagData().isRegistered(currentEvent.getEventID())
         battleType = currentEvent.getBattleType()
-        wrongBattleType = getSupportedCurrentArenaBonusType() != battleType
-        if battleType == constants.ARENA_BONUS_TYPE.REGULAR:
+        wrongBattleType = self.prbEntity.getEntityType() != battleType
+        if battleType == constants.ARENA_GUI_TYPE.RANDOM:
             battleTypeText = TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGBATTLETYPE_RANDOM
             battleTypeBodyText = TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_BODY
-        elif battleType == constants.ARENA_BONUS_TYPE.RANKED:
+        elif battleType == constants.ARENA_GUI_TYPE.RANKED:
             battleTypeText = TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGBATTLETYPE_RANKED
             battleTypeBodyText = TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_NOTRANDOM_BODY
         else:

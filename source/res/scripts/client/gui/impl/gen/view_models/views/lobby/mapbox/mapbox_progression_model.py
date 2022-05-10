@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class MapboxProgressionModel(ViewModel):
     __slots__ = ('onShowInfo', 'onSelectMapboxBattle', 'onShowSurvey', 'onTakeReward', 'onRemoveBubble', 'onClose', 'onAnimationEnded')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=13, commands=7):
         super(MapboxProgressionModel, self).__init__(properties=properties, commands=commands)
 
     def getIsOverlapped(self):
@@ -81,6 +81,12 @@ class MapboxProgressionModel(ViewModel):
     def setEndEvent(self, value):
         self._setNumber(11, value)
 
+    def getTimeTillProgressionRestart(self):
+        return self._getString(12)
+
+    def setTimeTillProgressionRestart(self, value):
+        self._setString(12, value)
+
     def _initialize(self):
         super(MapboxProgressionModel, self)._initialize()
         self._addBoolProperty('isOverlapped', False)
@@ -95,6 +101,7 @@ class MapboxProgressionModel(ViewModel):
         self._addNumberProperty('totalBattles', 0)
         self._addNumberProperty('startEvent', 0)
         self._addNumberProperty('endEvent', 0)
+        self._addStringProperty('timeTillProgressionRestart', '')
         self.onShowInfo = self._addCommand('onShowInfo')
         self.onSelectMapboxBattle = self._addCommand('onSelectMapboxBattle')
         self.onShowSurvey = self._addCommand('onShowSurvey')

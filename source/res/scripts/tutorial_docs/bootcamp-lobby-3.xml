@@ -57,10 +57,10 @@
         </gui-item>
         <gui-item>	PersonalCaseSkill	  <on-scene-effects>
             <set-action>	PersonalCaseSkillClick	</set-action>
+            <inactivate>	PersonalCaseSkillClicked	</inactivate>
           </on-scene-effects>
           <not-on-scene-effects>
             <remove-action>	PersonalCaseSkillClick	</remove-action>
-            <inactivate>	PersonalCaseSkillClicked	</inactivate>
           </not-on-scene-effects>
         </gui-item>
       </gui-items>

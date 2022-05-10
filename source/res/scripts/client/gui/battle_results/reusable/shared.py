@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/shared.py
 import functools
 import operator
-import typing
 from account_shared import getFairPlayViolationName
 from constants import DEATH_REASON_ALIVE
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -14,8 +13,6 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.dossier import getAchievementFactory
 from items import vehicles as vehicles_core
 from shared_utils import findFirst
-import ArenaType
-from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 
 def makeAchievementFromPersonal(results):
     popUps = results.get('dossierPopUps', [])
@@ -135,18 +132,7 @@ def no_key_error(func):
     return wrapper
 
 
-class _BaseInfo(object):
-
-    @property
-    def capturePoints(self):
-        raise NotImplementedError
-
-    @property
-    def droppedCapturePoints(self):
-        raise NotImplementedError
-
-
-class TeamBasesInfo(_BaseInfo):
+class TeamBasesInfo(object):
     __slots__ = ('__capturePoints', '__droppedCapturePoints')
 
     def __init__(self, capturePoints=0, droppedCapturePoints=0):
@@ -163,33 +149,11 @@ class TeamBasesInfo(_BaseInfo):
         return self.__droppedCapturePoints
 
 
-class SummarizeTeamBasesInfo(object):
-    __slots__ = ('__bases', '__arenaType')
-
-    def __init__(self, result):
-        super(SummarizeTeamBasesInfo, self).__init__()
-        self.__bases = []
-        arenaTypeID = result[_RECORD.COMMON]['arenaTypeID']
-        self.__arenaType = ArenaType.g_cache[arenaTypeID]
-
-    @property
-    def capturePoints(self):
-        sm = sum((base.capturePoints for base in self.__bases))
-        maxPoints = self.__arenaType.capturePointsLimit
-        return min(maxPoints, sm)
-
-    @property
-    def droppedCapturePoints(self):
-        return sum((base.droppedCapturePoints for base in self.__bases))
-
-    def addBasesInfo(self, info):
-        self.__bases.append(info)
-
-
 class _VehicleInfo(object):
-    __slots__ = ('_vehicleID', '_player', '_deathReason')
+    __slots__ = ('_vehicleID', '_vehicle', '_player', '_deathReason')
 
     def __init__(self, vehicleID, player, deathReason=DEATH_REASON_ALIVE):
+        super(_VehicleInfo, self).__init__()
         self._vehicleID = vehicleID
         self._player = player
         self._deathReason = deathReason
@@ -197,14 +161,6 @@ class _VehicleInfo(object):
     @property
     def vehicleID(self):
         return self._vehicleID
-
-    @property
-    def player(self):
-        return self._player
-
-    @property
-    def deathReason(self):
-        return self._deathReason
 
     @property
     def vehicle(self):
@@ -215,12 +171,12 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def isTeamKiller(self):
-        raise NotImplementedError
+    def player(self):
+        return self._player
 
     @property
-    def isKilledByTeamKiller(self):
-        raise NotImplementedError
+    def deathReason(self):
+        return self._deathReason
 
     @property
     def achievementsIDs(self):
@@ -232,10 +188,6 @@ class _VehicleInfo(object):
 
     @property
     def piercings(self):
-        raise NotImplementedError
-
-    @property
-    def piercingEnemyHits(self):
         raise NotImplementedError
 
     @property
@@ -255,31 +207,7 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def supplyDamageDealt(self):
-        raise NotImplementedError
-
-    @property
-    def supplyDamageReceived(self):
-        raise NotImplementedError
-
-    @property
-    def spottedSupplies(self):
-        raise NotImplementedError
-
-    @property
-    def damagedSupplies(self):
-        raise NotImplementedError
-
-    @property
-    def damagedTanks(self):
-        raise NotImplementedError
-
-    @property
-    def killedSupplies(self):
-        raise NotImplementedError
-
-    @property
-    def damageReceivedFromSupply(self):
+    def artilleryFortEquipDamageDealt(self):
         raise NotImplementedError
 
     @property
@@ -351,10 +279,6 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def directEnemyHits(self):
-        raise NotImplementedError
-
-    @property
     def directHitsReceived(self):
         raise NotImplementedError
 
@@ -399,6 +323,14 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
+    def isTeamKiller(self):
+        raise NotImplementedError
+
+    @property
+    def isKilledByTeamKiller(self):
+        raise NotImplementedError
+
+    @property
     def deathCount(self):
         raise NotImplementedError
 
@@ -438,16 +370,12 @@ class _VehicleInfo(object):
     def equipmentDamageAssisted(self):
         raise NotImplementedError
 
-    @property
-    def rtsEventPoints(self):
-        raise NotImplementedError
-
     def getOrderByClass(self):
         return Vehicle.getOrderByVehicleClass(Vehicle.getVehicleClassTag(self.vehicle.descriptor.type.tags))
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_supplyDamageDealt', '_damageReceivedFromSupply', '_supplyDamageReceived', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel', '_spottedSupplies', '_damagedSupplies', '_damagedTanks', '_killedSupplies', '_rtsEventPoints')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_artilleryFortEquipDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -466,9 +394,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._damageDealt = 0
         self._tdamageDealt = 0
         self._sniperDamageDealt = 0
-        self._supplyDamageDealt = 0
-        self._damageReceivedFromSupply = 0
-        self._supplyDamageReceived = 0
+        self._artilleryFortEquipDamageDealt = 0
         self._equipmentDamageDealt = 0
         self._damageAssistedTrack = 0
         self._damageAssistedRadio = 0
@@ -505,11 +431,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._destructiblesDamageDealt = 0
         self._numDefended = 0
         self._achievedLevel = 0
-        self._spottedSupplies = 0
-        self._damagedSupplies = set()
-        self._damagedTanks = set()
-        self._killedSupplies = 0
-        self._rtsEventPoints = 0
 
     @property
     def vehicle(self):
@@ -536,28 +457,12 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._piercingEnemyHits
 
     @property
-    def piercingEnemyHitsByTanks(self):
-        return self._piercingEnemyHits if not self._vehicle.isSupply else 0
-
-    @property
-    def piercingEnemyHitsBySupplies(self):
-        return self._piercingEnemyHits if self._vehicle.isSupply else 0
-
-    @property
     def piercingsReceived(self):
         return self._piercingsReceived
 
     @property
     def damageDealt(self):
         return self._damageDealt + self.destructiblesDamageDealt
-
-    @property
-    def damageDealtByTanks(self):
-        return self.damageDealt if not self._vehicle.isSupply else 0
-
-    @property
-    def damageDealtBySupplies(self):
-        return self.damageDealt if self._vehicle.isSupply else 0
 
     @property
     def tdamageDealt(self):
@@ -568,24 +473,8 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._sniperDamageDealt
 
     @property
-    def sniperDamageDealtByTanks(self):
-        return self._sniperDamageDealt if not self._vehicle.isSupply else 0
-
-    @property
-    def sniperDamageDealtBySupplies(self):
-        return self._sniperDamageDealt if self._vehicle.isSupply else 0
-
-    @property
-    def supplyDamageDealt(self):
-        return self._damageDealt if self._vehicle.isSupply else self._supplyDamageDealt
-
-    @property
-    def supplyDamageReceived(self):
-        return self._supplyDamageReceived
-
-    @property
-    def damageReceivedFromSupply(self):
-        return self._damageReceivedFromSupply
+    def artilleryFortEquipDamageDealt(self):
+        return self._artilleryFortEquipDamageDealt
 
     @property
     def equipmentDamageDealt(self):
@@ -602,14 +491,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def damageBlockedByArmor(self):
         return self._damageBlockedByArmor
-
-    @property
-    def damageBlockedByTanks(self):
-        return self._damageBlockedByArmor if not self._vehicle.isSupply else 0
-
-    @property
-    def damageBlockedBySupplies(self):
-        return self._damageBlockedByArmor if self._vehicle.isSupply else 0
 
     @property
     def rickochetsReceived(self):
@@ -656,24 +537,8 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._shots
 
     @property
-    def shotsByTanks(self):
-        return self._shots if not self._vehicle.isSupply else 0
-
-    @property
-    def shotsBySupplies(self):
-        return self._shots if self._vehicle.isSupply else 0
-
-    @property
     def explosionHits(self):
         return self._explosionHits
-
-    @property
-    def explosionHitsByTanks(self):
-        return self._explosionHits if not self._vehicle.isSupply else 0
-
-    @property
-    def explosionHitsBySupplies(self):
-        return self._explosionHits if self._vehicle.isSupply else 0
 
     @property
     def directHits(self):
@@ -682,14 +547,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def directEnemyHits(self):
         return self._directEnemyHits
-
-    @property
-    def directEnemyHitsByTanks(self):
-        return self._directEnemyHits if not self._vehicle.isSupply else 0
-
-    @property
-    def directEnemyHitsBySupplies(self):
-        return self._directEnemyHits if self._vehicle.isSupply else 0
 
     @property
     def directHitsReceived(self):
@@ -787,28 +644,8 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
-    @property
-    def spottedSupplies(self):
-        return self._spottedSupplies
-
-    @property
-    def damagedSupplies(self):
-        return self._damagedSupplies
-
-    @property
-    def damagedTanks(self):
-        return self._damagedTanks
-
-    @property
-    def killedSupplies(self):
-        return self._killedSupplies
-
-    @property
-    def rtsEventPoints(self):
-        return self._rtsEventPoints
-
     def haveInteractionDetails(self):
-        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0 or self._spottedSupplies != 0 or len(self._damagedSupplies) != 0 or len(self._damagedTanks) != 0 or self._killedSupplies != 0
+        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
     @classmethod
     @no_key_error
@@ -838,6 +675,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._piercingsReceived = vehicleRecords['piercingsReceived']
         info._tdamageDealt = vehicleRecords['tdamageDealt']
         info._sniperDamageDealt = vehicleRecords['sniperDamageDealt']
+        info._artilleryFortEquipDamageDealt = vehicleRecords['artilleryFortEquipDamageDealt']
         info._equipmentDamageDealt = vehicleRecords['equipmentDamageDealt']
         info._shots = vehicleRecords['shots']
         info._directHitsReceived = vehicleRecords['directHitsReceived']
@@ -867,15 +705,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._destructiblesDamageDealt = vehicleRecords['destructiblesDamageDealt']
         info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
-        info._supplyDamageDealt = vehicleRecords.get('supplyDamageDealt', 0)
-        info._damageReceivedFromSupply = vehicleRecords.get('damageReceivedFromSupply', 0)
-        info._supplyDamageReceived = vehicleRecords['damageReceived'] if vehicle and vehicle.isSupply else 0
         info._achievedLevel = vehicleRecords.get('achivedLevel', 0)
-        info._spottedSupplies = vehicleRecords.get('spottedSupplies', 0)
-        info._damagedSupplies = set(vehicleRecords.get('damagedSupplies', set()))
-        info._killedSupplies = vehicleRecords.get('killedSupplies', 0)
-        info._damagedTanks = set(vehicleRecords.get('damagedTanks', set()))
-        info._rtsEventPoints = vehicleRecords.get('rtsEventPoints', 0)
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -899,12 +729,12 @@ class VehicleDetailedInfo(_VehicleInfo):
 
 
 class VehicleSummarizeInfo(_VehicleInfo):
-    __slots__ = ('__avatar', '_vehicles')
+    __slots__ = ('__avatar', '__vehicles')
 
     def __init__(self, vehicleID, player):
         super(VehicleSummarizeInfo, self).__init__(vehicleID, player)
         self.__avatar = None
-        self._vehicles = []
+        self.__vehicles = []
         return
 
     @property
@@ -913,127 +743,111 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def vehicle(self):
-        return self._vehicles[0].vehicle if self._vehicles else None
-
-    @property
-    def vehicles(self):
-        return self._vehicles if self._vehicles else []
+        return self.__vehicles[0].vehicle if self.__vehicles else None
 
     @property
     def isTeamKiller(self):
-        return any(self._getAtrributeGenerator('isTeamKiller'))
+        return any(self.__getAtrributeGenerator('isTeamKiller'))
 
     @property
     def isKilledByTeamKiller(self):
-        return any(self._getAtrributeGenerator('isKilledByTeamKiller'))
+        return any(self.__getAtrributeGenerator('isKilledByTeamKiller'))
+
+    @property
+    def vehicles(self):
+        return self.__vehicles if self.__vehicles else []
 
     @property
     def killerID(self):
-        return self._findFirstNoZero('killerID')
+        return self.__findFirstNoZero('killerID')
 
     @property
     def deathReason(self):
-        return self._findMaxInt('deathReason', start=DEATH_REASON_ALIVE)
+        return self.__findMaxInt('deathReason', start=DEATH_REASON_ALIVE)
 
     @property
     def achievementsIDs(self):
-        return self._collectToSet('achievementsIDs')
+        return self.__collectToSet('achievementsIDs')
 
     @property
     def spotted(self):
-        return self._accumulate('spotted')
+        return self.__accumulate('spotted')
 
     @property
     def piercings(self):
-        return self._accumulate('piercings')
+        return self.__accumulate('piercings')
 
     @property
     def piercingEnemyHits(self):
-        return self._accumulate('piercingEnemyHits')
-
-    @property
-    def piercingEnemyHitsByTanks(self):
-        return self._accumulateTanks('piercingEnemyHits')
-
-    @property
-    def piercingEnemyHitsBySupplies(self):
-        return self._accumulateSupplies('piercingEnemyHits')
+        return self.__accumulate('piercingEnemyHits')
 
     @property
     def piercingsReceived(self):
-        return self._accumulate('piercingsReceived')
+        return self.__accumulate('piercingsReceived')
 
     @property
     def damageDealt(self):
-        value = self._accumulate('damageDealt')
+        value = self.__accumulate('damageDealt')
         if self.__avatar is not None:
             value += self.__avatar.avatarDamageDealt
         return value
 
     @property
     def tdamageDealt(self):
-        return self._accumulate('tdamageDealt')
-
-    @property
-    def supplyDamageDealt(self):
-        return self._accumulate('supplyDamageDealt')
-
-    @property
-    def supplyDamageReceived(self):
-        return self._accumulate('supplyDamageReceived')
-
-    @property
-    def damageReceivedFromSupply(self):
-        return self._accumulate('damageReceivedFromSupply')
+        return self.__accumulate('tdamageDealt')
 
     @property
     def sniperDamageDealt(self):
-        return self._accumulate('sniperDamageDealt')
+        return self.__accumulate('sniperDamageDealt')
+
+    @property
+    def artilleryFortEquipDamageDealt(self):
+        return self.__accumulate('artilleryFortEquipDamageDealt')
 
     @property
     def targetKills(self):
-        return self._accumulate('targetKills')
+        return self.__accumulate('targetKills')
 
     @property
     def noDamageDirectHitsReceived(self):
-        return self._accumulate('noDamageDirectHitsReceived')
+        return self.__accumulate('noDamageDirectHitsReceived')
 
     @property
     def damageBlockedByArmor(self):
-        return self._accumulate('damageBlockedByArmor')
+        return self.__accumulate('damageBlockedByArmor')
 
     @property
     def rickochetsReceived(self):
-        return self._accumulate('rickochetsReceived')
+        return self.__accumulate('rickochetsReceived')
 
     @property
     def damageAssistedTrack(self):
-        return self._accumulate('damageAssistedTrack')
+        return self.__accumulate('damageAssistedTrack')
 
     @property
     def damageAssistedRadio(self):
-        return self._accumulate('damageAssistedRadio')
+        return self.__accumulate('damageAssistedRadio')
 
     @property
     def damageAssisted(self):
-        return self._accumulate('damageAssisted')
+        return self.__accumulate('damageAssisted')
 
     @property
     def damageAssistedStun(self):
-        return self._accumulate('damageAssistedStun')
+        return self.__accumulate('damageAssistedStun')
 
     @property
     def stunNum(self):
-        return self._accumulate('stunNum')
+        return self.__accumulate('stunNum')
 
     @property
     def stunDuration(self):
-        return self._accumulate('stunDuration')
+        return self.__accumulate('stunDuration')
 
     @property
     def critsInfo(self):
         result = {'critsCount': 0}
-        for value in self._getAtrributeGenerator('critsInfo'):
+        for value in self.__getAtrributeGenerator('critsInfo'):
             unionCritsInfo(result, value)
 
         return result
@@ -1044,192 +858,124 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def shots(self):
-        return self._accumulate('shots')
-
-    @property
-    def shotsBySupplies(self):
-        return self._accumulateSupplies('shots')
-
-    @property
-    def shotsByTanks(self):
-        return self._accumulateTanks('shots')
-
-    @property
-    def damageDealtBySupplies(self):
-        return self._accumulateSupplies('damageDealt')
-
-    @property
-    def damageDealtByTanks(self):
-        return self._accumulateTanks('damageDealt')
-
-    @property
-    def damageBlockedBySupplies(self):
-        return self._accumulateSupplies('damageBlockedByArmor')
-
-    @property
-    def damageBlockedByTanks(self):
-        return self._accumulateTanks('damageBlockedByArmor')
-
-    @property
-    def sniperDamageDealtByTanks(self):
-        return self._accumulateTanks('sniperDamageDealt')
-
-    @property
-    def sniperDamageDealtBySupplies(self):
-        return self._accumulateSupplies('sniperDamageDealt')
+        return self.__accumulate('shots')
 
     @property
     def explosionHits(self):
-        return self._accumulate('explosionHits')
-
-    @property
-    def explosionHitsByTanks(self):
-        return self._accumulateTanks('explosionHits')
-
-    @property
-    def explosionHitsBySupplies(self):
-        return self._accumulateSupplies('explosionHits')
+        return self.__accumulate('explosionHits')
 
     @property
     def directHits(self):
-        return self._accumulate('directHits')
+        return self.__accumulate('directHits')
 
     @property
     def directEnemyHits(self):
-        return self._accumulate('directEnemyHits')
-
-    @property
-    def directEnemyHitsByTanks(self):
-        return self._accumulateTanks('directEnemyHits')
-
-    @property
-    def directEnemyHitsBySupplies(self):
-        return self._accumulateSupplies('directEnemyHits')
+        return self.__accumulate('directEnemyHits')
 
     @property
     def directHitsReceived(self):
-        return self._accumulate('directHitsReceived')
+        return self.__accumulate('directHitsReceived')
 
     @property
     def explosionHitsReceived(self):
-        return self._accumulate('explosionHitsReceived')
+        return self.__accumulate('explosionHitsReceived')
 
     @property
     def kills(self):
-        value = self._accumulate('kills')
+        value = self.__accumulate('kills')
         if self.__avatar is not None:
             value += self.__avatar.avatarKills
         return value
 
     @property
     def tkills(self):
-        return self._accumulate('tkills')
+        return self.__accumulate('tkills')
 
     @property
     def damaged(self):
-        return self._accumulate('damaged')
+        return self.__accumulate('damaged')
 
     @property
     def mileage(self):
-        return self._accumulate('mileage')
+        return self.__accumulate('mileage')
 
     @property
     def capturePoints(self):
-        return self._accumulate('capturePoints')
+        return self.__accumulate('capturePoints')
 
     @property
     def droppedCapturePoints(self):
-        return self._accumulate('droppedCapturePoints')
+        return self.__accumulate('droppedCapturePoints')
 
     @property
     def xp(self):
-        return self._accumulate('xp')
+        return self.__accumulate('xp')
 
     @property
     def xpForAttack(self):
-        return self._accumulate('xpForAttack')
+        return self.__accumulate('xpForAttack')
 
     @property
     def xpForAssist(self):
-        return self._accumulate('xpForAssist')
+        return self.__accumulate('xpForAssist')
 
     @property
     def xpOther(self):
-        return self._accumulate('xpOther')
+        return self.__accumulate('xpOther')
 
     @property
     def xpPenalty(self):
-        return self._accumulate('xpPenalty')
+        return self.__accumulate('xpPenalty')
 
     @property
     def deathCount(self):
-        return self._accumulate('deathCount')
+        return self.__accumulate('deathCount')
 
     @property
     def rollouts(self):
-        return self._accumulate('rollouts')
+        return self.__accumulate('rollouts')
 
     @property
     def respawns(self):
-        return self._accumulate('rollouts') - 1
+        return self.__accumulate('rollouts') - 1
 
     @property
     def numDefended(self):
-        return self._accumulate('numDefended')
+        return self.__accumulate('numDefended')
 
     @property
     def numRecovered(self):
-        return self._accumulate('numRecovered')
+        return self.__accumulate('numRecovered')
 
     @property
     def numCaptured(self):
-        return self._accumulate('numCaptured')
+        return self.__accumulate('numCaptured')
 
     @property
     def numDestroyed(self):
-        return self._accumulate('numDestroyed')
+        return self.__accumulate('numDestroyed')
 
     @property
     def destructiblesDamageDealt(self):
-        return self._accumulate('destructiblesDamageDealt')
+        return self.__accumulate('destructiblesDamageDealt')
 
     @property
     def equipmentDamageDealt(self):
-        return self._accumulate('equipmentDamageDealt')
+        return self.__accumulate('equipmentDamageDealt')
 
     @property
     def equipmentDamageAssisted(self):
-        return self._accumulate('equipmentDamageAssisted')
-
-    @property
-    def spottedSupplies(self):
-        return self._accumulate('spottedSupplies')
-
-    @property
-    def damagedSupplies(self):
-        return self._collectToSet('damagedSupplies')
-
-    @property
-    def damagedTanks(self):
-        return self._collectToSet('damagedTanks')
-
-    @property
-    def killedSupplies(self):
-        return self._accumulate('killedSupplies')
-
-    @property
-    def rtsEventPoints(self):
-        return self._accumulate('rtsEventPoints')
+        return self.__accumulate('equipmentDamageAssisted')
 
     def addVehicleInfo(self, info):
-        self._vehicles.append(info)
+        self.__vehicles.append(info)
 
     def addAvatarInfo(self, avatar):
         self.__avatar = avatar
 
     def getVehiclesIterator(self):
         yield self
-        for vehicle in self._vehicles:
+        for vehicle in self.__vehicles:
             yield vehicle
 
     def getAchievements(self):
@@ -1244,66 +990,37 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
         return sorted(result, key=sort_keys.AchievementSortKey)
 
-    def _getAtrributeGenerator(self, attr):
+    def __getAtrributeGenerator(self, attr):
         getter = operator.attrgetter(attr)
-        for vehicle in self._vehicles:
+        for vehicle in self.__vehicles:
             yield getter(vehicle)
 
-    def _getAtrributeGeneratorForSupplies(self, attr):
-        getter = operator.attrgetter(attr)
-        for vehicle in self._vehicles:
-            if vehicle.vehicle.isSupply:
-                yield getter(vehicle)
+    def __findFirstNoZero(self, attr):
+        return findFirst(lambda value: value > 0, self.__getAtrributeGenerator(attr), default=0)
 
-    def _getAtrributeGeneratorForTanks(self, attr):
-        getter = operator.attrgetter(attr)
-        for vehicle in self._vehicles:
-            if not vehicle.vehicle.isSupply:
-                yield getter(vehicle)
-
-    def _findFirstNoZero(self, attr):
-        return findFirst(lambda value: value > 0, self._getAtrributeGenerator(attr), default=0)
-
-    def _findMaxInt(self, attr, start=0):
+    def __findMaxInt(self, attr, start=0):
         result = start
-        for value in self._getAtrributeGenerator(attr):
+        for value in self.__getAtrributeGenerator(attr):
             result = max(result, value)
 
         return result
 
-    def _collectToSet(self, attr):
+    def __collectToSet(self, attr):
         result = set()
-        for value in self._getAtrributeGenerator(attr):
+        for value in self.__getAtrributeGenerator(attr):
             result |= value
 
         return result
 
-    def _collectToDict(self, attr):
+    def __collectToDict(self, attr):
         result = {}
-        for value in self._getAtrributeGenerator(attr):
+        for value in self.__getAtrributeGenerator(attr):
             result.update(value)
 
         return result
 
-    def _accumulate(self, attr):
-        return sum(self._getAtrributeGenerator(attr))
-
-    def _accumulateSupplies(self, attr):
-        return sum(self._getAtrributeGeneratorForSupplies(attr))
-
-    def _accumulateTanks(self, attr):
-        return sum(self._getAtrributeGeneratorForTanks(attr))
-
-
-class SupplySummarizeInfo(VehicleSummarizeInfo):
-
-    @property
-    def deathReason(self):
-        return min(self._getAtrributeGenerator('deathReason'))
-
-    @property
-    def aliveCount(self):
-        return len([ value for value in self._getAtrributeGenerator('deathReason') if value == DEATH_REASON_ALIVE ])
+    def __accumulate(self, attr):
+        return sum(self.__getAtrributeGenerator(attr))
 
 
 class FairplayViolationsInfo(object):

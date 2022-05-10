@@ -769,6 +769,46 @@ def _migrateTo89(core, data, initialized):
     data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_IMPENETRABLE_ZONE] = 0
 
 
+def _migrateTo90(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': True,
+     'mediumTank': True,
+     'heavyTank': True,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'battleRoyale': True}
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1119,6 +1159,10 @@ _versions = ((1,
   False),
  (89,
   _migrateTo89,
+  False,
+  False),
+ (90,
+  _migrateTo90,
   False,
   False))
 

@@ -31,7 +31,7 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	20	</repairCost>
+  <repairCost>	10	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
@@ -1904,7 +1904,7 @@
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	38500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	54	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.05	</vehicleMovement>
         <vehicleRotation>	0.05	</vehicleRotation>
@@ -2639,6 +2639,8 @@
             </armor_13>
             <armor_14>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
@@ -2695,6 +2697,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2730,19 +2733,21 @@
             </armor_13>
             <armor_14>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	1.6	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_main_L shot_dualgun1_main_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	1	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	5 5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadTimes>	7.5 7.5	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -2791,6 +2796,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -2827,6 +2833,8 @@
             </armor_13>
             <armor_14>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
@@ -2881,6 +2889,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3002,17 +3011,17 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	1.6	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	1	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	5 5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadTimes>	7.5 7.5	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3061,6 +3070,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3136,6 +3146,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3212,11 +3223,12 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_CN_105_57_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	6	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
           <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -3235,16 +3247,16 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	1.6	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	1	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	5 5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadTimes>	9 9	</reloadTimes>
+            <rateTime>	6	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3293,6 +3305,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3418,19 +3431,21 @@
             <armor_12>	30	</armor_12>
             <armor_13>	35	</armor_13>
             <armor_14>	80	</armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	1.6	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	1	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	5 5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadTimes>	7.5 7.5	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3479,6 +3494,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3507,6 +3523,8 @@
             <armor_12>	30	</armor_12>
             <armor_13>	35	</armor_13>
             <armor_14>	80	</armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
@@ -3561,11 +3579,12 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_F3M_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	6	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
           <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	60	</armor_1>
@@ -3585,22 +3604,24 @@
             <armor_12>	30	</armor_12>
             <armor_13>	35	</armor_13>
             <armor_14>	80	</armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	1.6	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	1	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	5 5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadTimes>	9 9	</reloadTimes>
+            <rateTime>	6	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3649,11 +3670,12 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_canon_DCA_45_AC_A_dualgun_SH>
-        <_127mm_54_Model_1948_SH>	shared	  <reloadTime>	15	</reloadTime>
+        <_127mm_54_Model_1948_SH>	shared	  <reloadTime>	13	</reloadTime>
           <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	60	</armor_1>
@@ -3673,6 +3695,8 @@
             <armor_12>	30	</armor_12>
             <armor_13>	35	</armor_13>
             <armor_14>	80	</armor_14>
+            <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
@@ -3688,7 +3712,7 @@
             <whileGunDamaged>	1.8	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	5	</count>
+            <count>	3	</count>
             <rate>	40	</rate>
           </clip>
           <models>
@@ -3731,6 +3755,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3830,16 +3855,16 @@
     <detailed>
       <engines>
         <AMX_B_271_SH>
-          <smplEnginePower>	495	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	600	</smplEnginePower>
+          <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
         </AMX_B_271_SH>
         <Detroit_Diesel_6V53T_SH>
-          <smplEnginePower>	745	</smplEnginePower>
-          <smplFwMaxSpeed>	75	</smplFwMaxSpeed>
+          <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	90	</smplFwMaxSpeed>
         </Detroit_Diesel_6V53T_SH>
         <Hispano-Suiza_HS110_SH>
-          <smplEnginePower>	1030	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplEnginePower>	1200	</smplEnginePower>
+          <smplFwMaxSpeed>	75	</smplFwMaxSpeed>
         </Hispano-Suiza_HS110_SH>
       </engines>
       <chassis>

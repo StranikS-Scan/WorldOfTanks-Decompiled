@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/pre_queue/actions_validator.py
-from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite, BaseVehicleActionsValidator, TutorialActionsValidator
+from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite, CurrentVehicleActionsValidator, TutorialActionsValidator
 from gui.prb_control.items import ValidationResult
 
 class InQueueValidator(BaseActionsValidator):
@@ -22,7 +22,7 @@ class PreQueueActionsValidator(ActionsValidatorComposite):
         return InQueueValidator(entity)
 
     def _createVehiclesValidator(self, entity):
-        return BaseVehicleActionsValidator(entity)
+        return CurrentVehicleActionsValidator(entity)
 
     def _createTutorialValidator(self, entity):
         return TutorialActionsValidator(entity)

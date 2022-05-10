@@ -66,7 +66,7 @@ class PlayerBootcampAccount(PlayerAccount):
 
     def onBootcampEnqueued(self, number, queueLen, avgWaitingTime):
         LOG_DEBUG_DEV_BOOTCAMP('onBootcampEnqueued', number, queueLen, avgWaitingTime)
-        self.isInBootcampQueue = True
+        self.battleQueueType = QUEUE_TYPE.BOOTCAMP
         events.onBootcampEnqueued(number, queueLen, avgWaitingTime)
         events.onEnqueued(QUEUE_TYPE.BOOTCAMP)
 

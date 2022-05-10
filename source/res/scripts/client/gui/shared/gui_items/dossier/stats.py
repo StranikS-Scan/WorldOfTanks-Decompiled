@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
 import itertools
 import logging
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, OrderedDict
 import typing
 import constants
 import nations
@@ -15,6 +15,10 @@ from soft_exception import SoftException
 from dossiers2.custom.account_layout import VEHICLE_STATS
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getAvailableNationsNames, getAvailableVehicleTypes
+from skeletons.gui.shared import IItemsCache
+from battle_royale_common import BattleRoyaleVehicleStats
+from arena_bonus_type_caps import ARENA_BONUS_TYPE
 _logger = logging.getLogger(__name__)
 UNAVAILABLE_MARKS_OF_MASTERY = (-1, -1, -1, -1)
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
@@ -751,6 +755,182 @@ class AccountEpicBattleStatsBlock(EpicBattleStatsBlock, _VehiclesStatsBlock, _Ma
         return self.VehiclesDossiersCut(battlesCount, wins, xp)
 
 
+class BattleRoyaleAccountStatsBase(object):
+    _RANK_RANGES = None
+    _PLACES_COUNT = None
+    _IS_SOLO = None
+
+    def __init__(self, rawData):
+        self.__vehicles = {}
+        self.__initVehicles(rawData)
+
+    def __initVehicles(self, rawData):
+        self.__vehicles = {vehCD:BattleRoyaleVehicleStats(stats) for vehCD, stats in rawData.iteritems()}
+
+    def getVehicle(self, vehicleCD):
+        if vehicleCD not in self.__vehicles:
+            self.__vehicles[vehicleCD] = BattleRoyaleVehicleStats({})
+        return self.__vehicles[vehicleCD]
+
+    def getPositionSum(self):
+        return self.__getSumByVehicles('getPositionSum')
+
+    def getAchivedLevelSum(self):
+        return self.__getSumByVehicles('getAchivedLevelSum')
+
+    def getBattlesCount(self):
+        return self.__getSumByVehicles('getBattlesCount')
+
+    def getShotsCount(self):
+        return self.__getSumByVehicles('getShotsCount')
+
+    def getHitsCount(self):
+        return self.__getSumByVehicles('getHitsCount')
+
+    def getDamageReceived(self):
+        return self.__getSumByVehicles('getDamageReceived')
+
+    def getDamageDealt(self):
+        return self.__getSumByVehicles('getDamageDealt')
+
+    def getLossesCount(self):
+        return self.__getSumByVehicles('getLossesCount')
+
+    def getXP(self):
+        return self.__getSumByVehicles('getXP')
+
+    def getSurvivedBattlesCount(self):
+        return self.__getSumByVehicles('getSurvivedBattlesCount')
+
+    def getFragsCount(self):
+        return self.__getSumByVehicles('getFragsCount')
+
+    def getWinsCount(self):
+        return self.__getSumByVehicles('getWinsCount')
+
+    def getWinsEfficiency(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getWinsCount())
+
+    def getLossesEfficiency(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getLossesCount())
+
+    def getHitsEfficiency(self):
+        return self.__getAvgValue(self.getShotsCount(), self.getHitsCount())
+
+    def getSurvivalEfficiency(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getSurvivedBattlesCount())
+
+    def getFragsEfficiency(self):
+        return self.__getAvgValue(self.getDeathsCount(), self.getFragsCount())
+
+    def getDamageEfficiency(self):
+        return self.__getAvgValue(self.getDamageReceived(), self.getDamageDealt())
+
+    def getAvgDamage(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getDamageDealt())
+
+    def getAvgFrags(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getFragsCount())
+
+    def getAvgXP(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getXP())
+
+    def getAvgDamageReceived(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getDamageReceived())
+
+    def getDeathsCount(self):
+        return self.getBattlesCount() - self.getSurvivedBattlesCount()
+
+    def getDrawsCount(self):
+        return self.getBattlesCount() - (self.getWinsCount() + self.getLossesCount())
+
+    def getMaxXp(self):
+        return max([ (key, data.getMaxXp()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+
+    def getMaxFrags(self):
+        return max([ (key, data.getMaxFrags()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+
+    def getMaxDamage(self):
+        return max([ (key, data.getMaxDamage()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
+
+    def getAveragePosition(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getPositionSum())
+
+    def getAverageLevel(self):
+        return self.__getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum())
+
+    def getMaxXpVehicle(self):
+        return max([ (key, data.getMaxXp()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+
+    def getMaxDamageVehicle(self):
+        return max([ (key, data.getMaxDamage()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+
+    def getMaxFragsVehicle(self):
+        return max([ (key, data.getMaxFrags()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]
+
+    def getPlaceData(self):
+        res = {}
+        for _, vehicleStats in self.__vehicles.iteritems():
+            places = vehicleStats.places
+            res.update({k:res.get(k, 0) + places.get(k, 0) for k in set(res) | set(places)})
+
+        return res
+
+    def getBattlesStats(self):
+        avNames = getAvailableNationsNames()
+        avTypes = getAvailableVehicleTypes()
+        vehsByType = OrderedDict(((t, 0) for t in avTypes))
+        vehsByNation = dict(((idx, 0) for idx, n in enumerate(nations.NAMES) if n in avNames))
+        for vehTypeCompDescr, vehicle in self.__vehicles.iteritems():
+            vehType = vehicles.getVehicleType(vehTypeCompDescr)
+            battlesCount = vehicle.getBattlesCount()
+            vehsByNation[vehType.id[0]] += battlesCount
+            vehsByType[set(vehType.tags & avTypes).pop()] += battlesCount
+
+        vehsByPlaces = OrderedDict([ ('-'.join((str(start), str(end))), 0) for start, end in self._RANK_RANGES ])
+        places = self.getPlaceData()
+        for i in range(0, self.placesCount + 1):
+            for start, end in self._RANK_RANGES:
+                if start <= i <= end:
+                    vehsByPlaces['-'.join((str(start), str(end)))] += places.get(i, 0)
+
+        return (vehsByType, vehsByNation, vehsByPlaces)
+
+    def getVehicles(self):
+        return self.__vehicles
+
+    def isSolo(self):
+        return self._IS_SOLO
+
+    @property
+    def placesCount(self):
+        return self._PLACES_COUNT
+
+    def __getSumByVehicles(self, vehicleDataGetter):
+        return sum([ getattr(data, vehicleDataGetter)() for data in self.__vehicles.values() ])
+
+    def __getAvgValue(self, allOccurs, effectiveOccurs):
+        return float(effectiveOccurs) / allOccurs if allOccurs else 0.0
+
+
+class BattleRoyaleSoloBlock(BattleRoyaleAccountStatsBase):
+    _RANK_RANGES = ((1, 1),
+     (2, 5),
+     (6, 10),
+     (11, 20))
+    _PLACES_COUNT = 20
+    _IS_SOLO = True
+
+
+class BattleRoyaleSquadBlock(BattleRoyaleAccountStatsBase):
+    _RANK_RANGES = ((1, 1),
+     (2, 3),
+     (4, 5),
+     (6, 10))
+    _PLACES_COUNT = 10
+    _IS_SOLO = False
+
+
 class TotalStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
 
     def __init__(self, dossier, statsBlocks=None):
@@ -1410,6 +1590,7 @@ class _DossierStats(object):
 
 
 class AccountDossierStats(_DossierStats):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def getGlobalStats(self):
         return GlobalStatsBlock(self._getDossierItem())
@@ -1492,8 +1673,19 @@ class AccountDossierStats(_DossierStats):
     def getEpicBattleStats(self):
         return AccountEpicBattleStatsBlock(self._getDossierItem())
 
+    def getBattleRoyaleSoloStats(self):
+        playerDatabaseID = self._getDossierItem().getPlayerDBID()
+        stats = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, playerDatabaseID)
+        return BattleRoyaleSoloBlock(stats)
+
+    def getBattleRoyaleSquadStats(self):
+        playerDatabaseID = self._getDossierItem().getPlayerDBID()
+        stats = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, playerDatabaseID)
+        return BattleRoyaleSquadBlock(stats)
+
 
 class VehicleDossierStats(_DossierStats):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def getGlobalStats(self):
         return GlobalStatsBlock(self._getDossierItem())
@@ -1551,6 +1743,16 @@ class VehicleDossierStats(_DossierStats):
 
     def getEpicBattleStats(self):
         return EpicBattleStatsBlock(self._getDossierItem())
+
+    def getBattleRoyaleSoloStats(self, vehicleIntCD):
+        playerDatabaseID = self._getDossierItem().getPlayerDBID()
+        vehicleData = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, playerDatabaseID, vehicleIntCD)
+        return BattleRoyaleVehicleStats(vehicleData)
+
+    def getBattleRoyaleSquadStats(self, vehicleIntCD):
+        playerDatabaseID = self._getDossierItem().getPlayerDBID()
+        vehicleData = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, playerDatabaseID, vehicleIntCD)
+        return BattleRoyaleVehicleStats(vehicleData)
 
 
 class TankmanDossierStats(_DossierStats):

@@ -136,9 +136,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'checkPromoFrequencyInBattles': 5,
  'vivoxLicense': '',
  'spgHitDirectionDelta': 10.0,
- 'vehicleDisclaimerURLs': {},
- 'rtsIntroVideoURL': '',
- 'rtsInfoPageURL': ''}
+ 'vehicleDisclaimerURLs': {}}
 
 class GuiSettings(object):
 
@@ -196,6 +194,10 @@ class GuiSettings(object):
         if name in self.__settings:
             settings = self.__applyMacros(self.__settings[name])
         return settings
+
+    def checkAndReplaceWebBridgeMacros(self, url):
+        webBridgeUrl = self.miniclient.get('webBridgeRootURL')
+        return url.replace('{webBridgeRootURL}', webBridgeUrl) if webBridgeUrl and url.find('{webBridgeRootURL}') > -1 else url
 
     def __applyMacros(self, value):
         if isinstance(value, _MacrosValue):

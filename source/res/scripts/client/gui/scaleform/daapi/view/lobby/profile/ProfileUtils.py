@@ -297,6 +297,78 @@ class _TotalVehiclesField(_OnlyAccountField):
         return backport.getIntegralFormat(targetData.getTotalVehicles())
 
 
+class _BattleRoyaleBattlesCountField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(targetData.getBattlesCount())
+
+
+class _BattleRoyaleWinsEfficiencyField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getWinsCount()))
+
+
+class _AveragePositionBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAveragePosition()))
+
+
+class _AverageVehicleLevelBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAverageLevel()))
+
+
+class _MaxBattleXPBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxXp()))
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxXpVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle)
+
+
+class _MaxBattleDamageBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxDamage()))
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxXpVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle)
+
+
+class _MaxBattleFragsBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxFrags()))
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxXpVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle)
+
+
+class _MaxBattleXPVehicleBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(targetData.getMaxXp())
+
+
+class _MaxBattleDamageVehicleBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(targetData.getMaxDamage())
+
+
+class _MaxBattleFragsVehicleBR(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return backport.getIntegralFormat(targetData.getMaxFrags())
+
+
 def _totalVehiclesField(targetData, isCurrentUser):
     formattedVehicles = backport.getIntegralFormat(targetData.getTotalVehicles())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_TOTALVEHS, formattedVehicles, PROFILE.PROFILE_PARAMS_TOOLTIP_TOTALVEHS)
@@ -362,6 +434,24 @@ RECORD_SECTION_FALLOUT_FIELDS = (_MaxXPField(PROFILE.SECTION_STATISTICS_SCORES_M
  _maxWinPointsField)
 STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, COMMON_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, AVERAGE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, RECORD_SECTION_FIELDS))
 FALLOUT_STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, COMMON_SECTION_FALLOUT_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, AVERAGE_SECTION_FALLOUT_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, RECORD_SECTION_FALLOUT_FIELDS))
+BATTLE_ROYALE_SECTION_FIELDS = (_BattleRoyaleBattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BRBATTLESCOUNT),
+ _BattleRoyaleWinsEfficiencyField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_BRWINS),
+ _AveragePositionBR(PROFILE.SECTION_SUMMARY_SCORES_AVERAGERANK, PROFILE.PROFILE_PARAMS_TOOLTIP_BRAVERAGERANK),
+ _AverageVehicleLevelBR(PROFILE.SECTION_SUMMARY_SCORES_AVERAGELEVEL, PROFILE.PROFILE_PARAMS_TOOLTIP_BRAVERAGELEVEL),
+ _HitsField(PROFILE.SECTION_STATISTICS_SCORES_HITS, PROFILE.PROFILE_PARAMS_TOOLTIP_HITS),
+ _emptyField,
+ _DamageCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF),
+ _DestructionCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DESTROYCOEFF))
+BR_AVERAGE_SECTION_FIELDS = (_avgExpField,
+ _emptyField,
+ _AvgDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDMG_SHORT),
+ _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
+ _emptyField,
+ _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES))
+BR_RECORD_SECTION_FIELDS = (_MaxBattleXPBR(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_BRMAXEXP), _MaxBattleDamageBR(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_BRMAXDAMAGE), _MaxBattleFragsBR(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BRMAXFRAGS))
+BR_VEHICLE_RECORD_SECTION_FIELDS = (_MaxBattleXPVehicleBR(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP_VEHICLE), _MaxBattleDamageVehicleBR(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDAMAGE_VEHICLE), _MaxBattleFragsVehicleBR(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED_VEHICLE))
+BATTLE_ROYALE_STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, BATTLE_ROYALE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, BR_AVERAGE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, BR_RECORD_SECTION_FIELDS))
+BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, BATTLE_ROYALE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, BR_AVERAGE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, BR_VEHICLE_RECORD_SECTION_FIELDS))
 
 class HeaderItemsTypes(object):
     VALUE_PREFIX = 'value_'

@@ -31,34 +31,22 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
         self.__highlightStatus = self.HIGHLIGHT_OFF if enabled else self.HIGHLIGHT_DISABLED
         self.__isPlayersVehicle = False
         self.__collisions = collisions
-        self.__activeArgs = None
-        self.__isCommander = True if self.sessionProvider.dynamic.rtsCommander else False
         return
-
-    @property
-    def isRTSSelected(self):
-        if self.__vehicle is not None:
-            rtsCommander = self.sessionProvider.dynamic.rtsCommander
-            if rtsCommander is not None:
-                return rtsCommander.vehicles.hasEdge(self.__vehicle.id) and not rtsCommander.vehicles.hasForceSimpleEdge(self.__vehicle.id) and rtsCommander.vehicles.get(self.__vehicle.id).isAlly
-        return False
 
     def setVehicle(self, vehicle):
         self.__vehicle = vehicle
         self.__isPlayersVehicle = vehicle.isPlayerVehicle
 
     def setVehicleOwnership(self):
-        if self.isDisabled or self.__vehicle is None:
+        if self.isDisabled:
             return
+        wasPlayerVehicle = self.__isPlayersVehicle
+        if BigWorld.player().isObserver():
+            self.__isPlayersVehicle = BigWorld.player().vehicle == self.__vehicle
         else:
-            wasPlayerVehicle = self.__isPlayersVehicle
-            if BigWorld.player().isObserver():
-                self.__isPlayersVehicle = BigWorld.player().vehicle == self.__vehicle
-            else:
-                self.__isPlayersVehicle = self.__vehicle.isPlayerVehicle
-            if wasPlayerVehicle != self.__isPlayersVehicle and not self.__isCommander:
-                self.highlight(self.__isPlayersVehicle)
-            return
+            self.__isPlayersVehicle = self.__vehicle.isPlayerVehicle
+        if wasPlayerVehicle != self.__isPlayersVehicle:
+            self.highlight(self.__isPlayersVehicle)
 
     def activate(self):
         self.__highlightStatus &= ~self.HIGHLIGHT_DISABLED
@@ -86,22 +74,21 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
         return
 
     def highlight(self, enable, forceSimpleEdge=False):
-        if self.isDisabled or self.__vehicle is None:
+        if bool(enable) == bool(self.isOn):
+            return
+        elif self.isDisabled or self.__vehicle is None:
             return
         else:
             vehicle = self.__vehicle
+            if self.isOn:
+                BigWorld.wgDelEdgeDetectEntity(vehicle)
             args = (0,
              False,
              1,
              True)
             if enable:
                 self.__highlightStatus |= self.HIGHLIGHT_ON
-                if self.isRTSSelected:
-                    args = (2,
-                     False,
-                     0,
-                     False)
-                elif self.__isPlayersVehicle:
+                if self.__isPlayersVehicle:
                     if forceSimpleEdge:
                         self.__highlightStatus |= self.HIGHLIGHT_SIMPLE
                         args = (0,
@@ -116,19 +103,13 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
                 else:
                     arenaDP = self.sessionProvider.getArenaDP()
                     isAllyTeam = arenaDP.isAllyTeam(vehicle.publicInfo['team'])
-                    if not isAllyTeam:
-                        args = (1,
-                         False,
-                         0,
-                         False)
-                    else:
-                        args = (4,
-                         False,
-                         0,
-                         False) if forceSimpleEdge else (2,
-                         False,
-                         0,
-                         False)
+                    args = (2,
+                     False,
+                     0,
+                     False) if isAllyTeam else (1,
+                     False,
+                     0,
+                     False)
             else:
                 if self.__isPlayersVehicle and forceSimpleEdge:
                     self.__highlightStatus &= ~self.HIGHLIGHT_SIMPLE
@@ -142,12 +123,6 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
 
     def __doHighlightOperation(self, status, args):
         if status & self.HIGHLIGHT_ON:
-            if self.__activeArgs is None:
-                BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2], args[3])
-            else:
-                self.__activeArgs = args
-                BigWorld.wgUpdateEdgeDetectEntityColorIndex(self.__vehicle, args[0], True)
+            BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2], args[3])
         else:
-            self.__activeArgs = None
             BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
-        return

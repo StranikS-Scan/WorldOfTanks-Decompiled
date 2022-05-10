@@ -98,6 +98,7 @@ class _InputInertia(object):
     def calcWorldPos(self, idealBasisMatrix):
         return idealBasisMatrix.translation + idealBasisMatrix.applyVector(self._InputInertia__deltaEasing.value)
 
+ArcadeCameraState = namedtuple('ArcadeCameraState', ('camDist', 'zoomSwitcherState'))
 class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
     _ArcadeCamera__settingsCache = dependency.descriptor(ISettingsCache)
     _ArcadeCamera__bootcampCtrl = dependency.descriptor(IBootcampController)
@@ -184,13 +185,22 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
     def _getConfigsKey():
         return ArcadeCamera.__name__
 
-    def create(self, onChangeControlMode = None, postmortemMode = False):
+    def cloneState(self):
+        currentState = self._ArcadeCamera__zoomStateSwitcher.getCurrentState()
+        if currentState is not None:
+            currentState = currentState.settingsKey
+        return ArcadeCameraState(self.getCameraDistance(), currentState)
+
+    def create(self, onChangeControlMode = None, postmortemMode = False, smartPointCalculator = True):
         super(ArcadeCamera, self).create()
         self._ArcadeCamera__onChangeControlMode = onChangeControlMode
         self._ArcadeCamera__postmortemMode = postmortemMode
         targetMat = self.getTargetMProv()
-        aimingSystemClass = ArcadeAimingSystemRemote if BigWorld.player().isObserver() else ArcadeAimingSystem
-        self._ArcadeCamera__aimingSystem = aimingSystemClass(self._ArcadeCamera__refineVehicleMProv(targetMat), self._cfg['heightAboveBase'], self._cfg['focusRadius'], self._ArcadeCamera__calcAimMatrix(), self._cfg['angleRange'], not postmortemMode)
+        aimingSystemClass = ArcadeAimingSystem
+        if BigWorld.player().isObserver():
+            self._ArcadeCamera__onChangeControlMode = None
+            aimingSystemClass = ArcadeAimingSystemRemote
+        self._ArcadeCamera__aimingSystem = aimingSystemClass(self._ArcadeCamera__refineVehicleMProv(targetMat), self._cfg['heightAboveBase'], self._cfg['focusRadius'], self._ArcadeCamera__calcAimMatrix(), self._cfg['angleRange'], (not postmortemMode) and smartPointCalculator)
         if self._ArcadeCamera__adCfg['enable']:
             self._ArcadeCamera__aimingSystem.initAdvancedCollider(self._ArcadeCamera__adCfg['fovRatio'], self._ArcadeCamera__adCfg['rollbackSpeed'], self._ArcadeCamera__adCfg['minimalCameraDistance'], self._ArcadeCamera__adCfg['speedThreshold'], self._ArcadeCamera__adCfg['minimalVolume'])
             for group_name in VOLUME_GROUPS_NAMES:
@@ -198,7 +208,8 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             else:
                 pass
         self.setCameraDistance(self._cfg['startDist'])
-        self.setYawPitch(Math.Matrix(targetMat).yaw, self._cfg['startAngle'])
+        self._ArcadeCamera__aimingSystem.pitch = self._cfg['startAngle']
+        self._ArcadeCamera__aimingSystem.yaw = Math.Matrix(targetMat).yaw
         self._ArcadeCamera__aimingSystem.cursorShouldCheckCollisions(True)
         self._ArcadeCamera__updateAngles(0, 0)
         cameraPosProvider = Math.Vector4Translation(self._ArcadeCamera__aimingSystem.matrix)
@@ -257,12 +268,11 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         else:
             shiftMat.setIdentity()
 
-    def enable(self, preferredPos = None, closesDist = False, postmortemParams = None, turretYaw = None, gunPitch = None, camTransitionParams = None, initialVehicleMatrix = None):
+    def enable(self, preferredPos = None, closesDist = False, postmortemParams = None, turretYaw = None, gunPitch = None, camTransitionParams = None, initialVehicleMatrix = None, arcadeState = None):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setAimClipPosition(self._ArcadeCamera__aimOffset)
         self.measureDeltaTime()
-        camDist = None
         player = BigWorld.player()
         vehicle = player.getVehicleAttached()
         if player.observerSeesAll() and player.arena.period == constants.ARENA_PERIOD.BATTLE and vehicle and vehicle.id == player.playerVehicleID:
@@ -271,15 +281,23 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         elif initialVehicleMatrix is None:
             initialVehicleMatrix = player.getOwnVehicleMatrix(self.vehicleMProv) if vehicle is None else vehicle.matrix
         vehicleMProv = initialVehicleMatrix
-        if self._ArcadeCamera__compareCurrStateSettingsKey(GAME.COMMANDER_CAM):
-            self._ArcadeCamera__updateProperties(state = None)
-            self._ArcadeCamera__updateCameraSettings(self._ArcadeCamera__distRange.max)
-            self._ArcadeCamera__inputInertia.glideFov(self._ArcadeCamera__calcRelativeDist())
+        if self._ArcadeCamera__compareCurrStateSettingsKey(GAME.COMMANDER_CAM) or arcadeState is not None:
+            state = None
+            newCameraDistance = self._ArcadeCamera__distRange.max
+            if arcadeState is not None:
+                self._ArcadeCamera__zoomStateSwitcher.switchToState(arcadeState.zoomSwitcherState)
+                state = self._ArcadeCamera__zoomStateSwitcher.getCurrentState()
+                newCameraDistance = arcadeState.camDist
+        self._ArcadeCamera__updateProperties(state = state)
+        self._ArcadeCamera__updateCameraSettings(newCameraDistance)
+        self._ArcadeCamera__inputInertia.glideFov(self._ArcadeCamera__calcRelativeDist())
+        if arcadeState is None:
             self._ArcadeCamera__aimingSystem.aimMatrix = self._ArcadeCamera__calcAimMatrix()
+        camDist = None
         if self._ArcadeCamera__postmortemMode:
             if postmortemParams is not None:
-                yawPitch = postmortemParams[0]
-                self.setYawPitch(yawPitch[0], yawPitch[1])
+                self._ArcadeCamera__aimingSystem.yaw = postmortemParams[0][0]
+                self._ArcadeCamera__aimingSystem.pitch = postmortemParams[0][1]
                 camDist = postmortemParams[1]
             else:
                 camDist = self._ArcadeCamera__distRange.max

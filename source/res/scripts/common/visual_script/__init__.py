@@ -8,11 +8,14 @@ import general
 import vehicle_blocks
 import qa_blocks
 import qa_education_blocks
+import balance
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT, ASPECT.SERVER)
 if IS_DEVELOPMENT:
     g_blockRegistrar.regBlocksFromModule(example)
     g_blockRegistrar.regTypesFromModule(example)
     g_blockRegistrar.regBlocksFromModule(qa_blocks)
     g_blockRegistrar.regBlocksFromModule(qa_education_blocks)
+    g_blockRegistrar.regBlocksFromModule(balance)
+    g_blockRegistrar.regTypesFromModule(balance)
 g_blockRegistrar.regBlocksFromModule(general)
 g_blockRegistrar.regBlocksFromModule(vehicle_blocks)

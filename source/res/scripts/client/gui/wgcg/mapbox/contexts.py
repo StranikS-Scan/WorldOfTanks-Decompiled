@@ -58,12 +58,12 @@ class MapboxRequestCrewbookCtx(CommonWebRequestCtx):
 
 class MapboxCompleteSurveyCtx(CommonWebRequestCtx):
 
-    def __init__(self, mapName, waitingID=''):
+    def __init__(self, surveyData, waitingID=''):
         super(MapboxCompleteSurveyCtx, self).__init__(waitingID=waitingID)
-        self.__mapName = mapName
+        self.__surveyData = surveyData
 
-    def getMapName(self):
-        return self.__mapName
+    def getSurveyData(self):
+        return self.__surveyData
 
     def getRequestType(self):
         return WebRequestDataType.MAPBOX_SURVEY_COMPLETE

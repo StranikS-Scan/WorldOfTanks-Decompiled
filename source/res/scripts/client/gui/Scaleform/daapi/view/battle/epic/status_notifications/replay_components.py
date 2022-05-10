@@ -3,8 +3,8 @@
 import logging
 import BattleReplay
 from ReplayEvents import g_replayEvents
-from gui.Scaleform.daapi.view.battle.battle_royale.status_notifications.components import StatusNotificationContainer
-from gui.Scaleform.daapi.view.battle.battle_royale.status_notifications.sn_items import TimerSN, TimeSnapshotHandler
+from battle_royale.gui.Scaleform.daapi.view.battle.status_notifications.components import StatusNotificationContainer
+from battle_royale.gui.Scaleform.daapi.view.battle.status_notifications.sn_items import TimerSN, TimeSnapshotHandler
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PrecisePythonTimer
 _logger = logging.getLogger(__name__)
 

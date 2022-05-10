@@ -215,7 +215,6 @@
     <_76mm_S-54_MapsTraining_Player_MT_1>	51	</_76mm_S-54_MapsTraining_Player_MT_1>
     <_85mm_D5T-85BM_MapsTraining_Player_MT_2>	60	</_85mm_D5T-85BM_MapsTraining_Player_MT_2>
     <_107mm_ZiS-6_MapsTraining_Dummy_HT_2>	63	</_107mm_ZiS-6_MapsTraining_Dummy_HT_2>
-    <Commander>	64008	</Commander>
   </ids>
   <shared>
     <_12.7mm_DSHK>
@@ -11314,63 +11313,6 @@
         </_37mm_UOT1>
       </shots>
     </Observer>
-    <Commander>
-      <userString>	#ussr_vehicles:_37mm_Gochkins	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.24	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.28	</amplitude>
-        <recoilEffect>	small	</recoilEffect>
-      </recoil>
-      <effects>	shot_Gochkins_auto	</effects>
-      <pitchLimits>
-        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	52.5	</rotationSpeed>
-      <reloadTime>	2.28571428571429	</reloadTime>
-      <maxAmmo>	92	</maxAmmo>
-      <aimingTime>	2.28571428571429	</aimingTime>
-      <weight>	104	</weight>
-      <maxHealth>	54	</maxHealth>
-      <maxRegenHealth>	27	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.537142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_37mm_UBRT1>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	442	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	34 27	</piercingPower>
-        </_37mm_UBRT1>
-        <_37mm_BPT1>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	354	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
-        </_37mm_BPT1>
-        <_37mm_UOT1>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	442	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	19 19	</piercingPower>
-        </_37mm_UOT1>
-      </shots>
-    </Commander>
     <_152mm_BL-10_IGR>
       <userString>	#igr_vehicles:_152mm_BL-10_IGR	</userString>
       <tags></tags>

@@ -524,26 +524,20 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
         unitPermissions = self.prbEntity.getPermissions()
         havePermissions = unitPermissions.canChangeConsumables()
-        notChosen = current is None
+        slotType = None
+        level = 0
+        reserveId = 0
         if current:
             slotType = current.getType()
             level = current.getLevel()
-            title = current.getTitle()
-            description = current.getDescription()
             reserveId = current.getId()
-        else:
-            slotType = None
-            level = 0
-            title = ''
-            description = ''
-            reserveId = 0
-        isRequsition = groupType == REQUISITION_TYPE
-        disabledByRequisition = isRequsition and not self.prbEntity.isFirstBattle()
+        isRequisition = groupType == REQUISITION_TYPE
+        disabledByRequisition = isRequisition and not self.prbEntity.isFirstBattle()
         empty = len(group) == 0
         isInBattle = self.prbEntity.getFlags().isInArena()
         enabled = havePermissions and not empty and not isInBattle and not disabledByRequisition
-        tooltip, tooltiptype = vo_converters.makeReserveSlotTooltipVO(groupType, title, description, empty, notChosen, havePermissions, isInBattle, disabledByRequisition)
-        vo = vo_converters.makeReserveSlotVO(slotType, groupType, reserveId, level, slotIndex, tooltip, tooltiptype)
+        tooltip, tooltipType = vo_converters.makeReserveSlotTooltipVO(current, groupType, empty, havePermissions, isInBattle, disabledByRequisition)
+        vo = vo_converters.makeReserveSlotVO(slotType, groupType, reserveId, level, slotIndex, tooltip, tooltipType)
         return (vo, enabled)
 
     def __setReadyStatus(self):

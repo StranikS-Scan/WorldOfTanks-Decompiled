@@ -42,7 +42,6 @@ class CONDITION_ICON:
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
     RANK_UP = 'rank_up'
-    RTS_POINTS = 'rts_points'
 
 
 class PROGRESS_TEMPLATE:

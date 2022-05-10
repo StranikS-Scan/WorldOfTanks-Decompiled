@@ -3,9 +3,10 @@
 from arena_bonus_type_caps import ALLOWED_ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_BONUS_TYPE_NAMES
 from soft_exception import SoftException
-import ResMgr
+from extension_utils import ResMgr
 from typing import Dict, Optional, FrozenSet
 _CONFIG_FILE = 'scripts/item_defs/bonus_caps_config.xml'
+_XML_NAMESPACE = 'xmlns:xmlref'
 
 def readConfig(verbose=False):
     section = ResMgr.openSection(_CONFIG_FILE)['']
@@ -18,6 +19,8 @@ def _readArenaTypes(section):
         return config
     else:
         for name, data in section.items():
+            if name == _XML_NAMESPACE:
+                continue
             if ARENA_BONUS_TYPE_NAMES.get(name, None) is None:
                 raise SoftException('Unknown arena type {}'.format(name))
             nameID = ARENA_BONUS_TYPE_NAMES.get(name, None)

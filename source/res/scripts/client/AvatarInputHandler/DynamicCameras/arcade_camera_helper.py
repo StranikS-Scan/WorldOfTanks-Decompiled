@@ -138,6 +138,17 @@ class ZoomStateSwitcher(object):
     def reset(self):
         self.__index = self._NONE_INDEX
 
+    def switchToState(self, stateName):
+        for index, state in enumerate(self.__zoomStates):
+            if state.settingsKey == stateName:
+                self.setCurrentState(state)
+                self.__index = index
+                return
+
+        self.reset()
+        self.setCurrentState(None)
+        return
+
     def getNextState(self):
         return self.__getState(lambda i: i + 1, self.__index)
 

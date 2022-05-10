@@ -19,7 +19,7 @@ class EpicBattleSoundController(SoundPlayersController):
         self._soundPlayers = (_MineFieldSoundPlayer(),
          _StealthSoundPlayer(),
          _EquipmentSoundPlayer(),
-         _RepairPointAndReganarationKitSoundPlayer(),
+         _RepairPointAndRegenerationKitSoundPlayer(),
          _DeathZoneSoundPlayer(),
          _UnderFireSoundPlayer())
 
@@ -130,7 +130,7 @@ class _UnderFireSoundPlayer(VehicleStateSoundPlayer):
                 EpicBattleSoundController.playSoundNotification(EPIC_SOUND.BF_EB_ENTER_PROTECTION_ZONE)
 
 
-class _RepairPointAndReganarationKitSoundPlayer(VehicleStateSoundPlayer):
+class _RepairPointAndRegenerationKitSoundPlayer(VehicleStateSoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -138,8 +138,13 @@ class _RepairPointAndReganarationKitSoundPlayer(VehicleStateSoundPlayer):
         self.__isHealing = False
         self.__curPointIdx = -1
 
-    def init(self):
-        super(_RepairPointAndReganarationKitSoundPlayer, self).init()
+    def destroy(self):
+        super(_RepairPointAndRegenerationKitSoundPlayer, self).destroy()
+        self.__playResupplyStop()
+        self.__curPointIdx = -1
+
+    def _subscribe(self):
+        super(_RepairPointAndRegenerationKitSoundPlayer, self)._subscribe()
         ctrl = self.__sessionProvider.dynamic.progressTimer
         if ctrl is not None:
             ctrl.onVehicleEntered += self.__onVehicleEntered
@@ -147,15 +152,13 @@ class _RepairPointAndReganarationKitSoundPlayer(VehicleStateSoundPlayer):
             ctrl.onVehicleLeft += self.__onVehicleLeft
         return
 
-    def destroy(self):
-        super(_RepairPointAndReganarationKitSoundPlayer, self).destroy()
+    def _unsubscribe(self):
+        super(_RepairPointAndRegenerationKitSoundPlayer, self)._unsubscribe()
         ctrl = self.__sessionProvider.dynamic.progressTimer
         if ctrl is not None:
             ctrl.onVehicleEntered -= self.__onVehicleEntered
             ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
             ctrl.onVehicleLeft -= self.__onVehicleLeft
-        self.__playResupplyStop()
-        self.__curPointIdx = -1
         return
 
     def _onVehicleStateUpdated(self, state, value):

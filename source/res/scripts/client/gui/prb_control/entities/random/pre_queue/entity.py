@@ -3,38 +3,17 @@
 import BigWorld
 import ArenaType
 from CurrentVehicle import g_currentVehicle
-from PlayerEvents import g_playerEvents
 from account_helpers import gameplay_ctx
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from soft_exception import SoftException
 from vehicles_watcher import RandomVehiclesWatcher
-
-class RandomSubscriber(PreQueueSubscriber):
-
-    def subscribe(self, entity):
-        g_playerEvents.onEnqueuedRandom += entity.onEnqueued
-        g_playerEvents.onDequeuedRandom += entity.onDequeued
-        g_playerEvents.onEnqueueRandomFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromRandomQueue += entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
-
-    def unsubscribe(self, entity):
-        g_playerEvents.onEnqueuedRandom -= entity.onEnqueued
-        g_playerEvents.onDequeuedRandom -= entity.onDequeued
-        g_playerEvents.onEnqueueRandomFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromRandomQueue -= entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
-
 
 class RandomEntryPoint(PreQueueEntryPoint):
 
@@ -45,12 +24,9 @@ class RandomEntryPoint(PreQueueEntryPoint):
 class RandomEntity(PreQueueEntity):
 
     def __init__(self):
-        super(RandomEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, QUEUE_TYPE.RANDOMS, RandomSubscriber())
+        super(RandomEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, QUEUE_TYPE.RANDOMS, PreQueueSubscriber())
         self.__watcher = None
         return
-
-    def isInQueue(self):
-        return prb_getters.isInRandomQueue()
 
     def init(self, ctx=None):
         self.__watcher = RandomVehiclesWatcher()

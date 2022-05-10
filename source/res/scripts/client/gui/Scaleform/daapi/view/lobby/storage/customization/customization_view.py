@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared import event_dispatcher, g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, customizationPreview, getAvailableForSellCustomizationCount
@@ -129,7 +129,6 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
 
     @dependency.replace_none_kwargs(c11nService=ICustomizationService)
     def navigateToCustomization(self, c11nService=None):
-        g_eventBus.handleEvent(events.CameraMoveEvent(events.CameraMoveEvent.ON_HANGAR_VEHICLE), scope=EVENT_BUS_SCOPE.LOBBY)
         if isC11nEnabled():
             c11nService.showCustomization()
         else:

@@ -3,15 +3,11 @@
 import functools
 import weakref
 import BigWorld
-import constants
-import arena_bonus_type_caps
+from constants import ARENA_GUI_TYPE as _GUI_TYPE, ARENA_GUI_TYPE_LABEL as _GUI_TYPE_LABEL, ARENA_BONUS_TYPE as _BONUS_TYPE, ARENA_PERIOD as _PERIOD, QUEUE_TYPE, TEAMS_IN_ARENA
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
+import win_points
 from gui import GUI_SETTINGS
 from skeletons.gui.battle_session import IClientArenaVisitor
-_GUI_TYPE = constants.ARENA_GUI_TYPE
-_GUI_TYPE_LABEL = constants.ARENA_GUI_TYPE_LABEL
-_BONUS_TYPE = constants.ARENA_BONUS_TYPE
-_PERIOD = constants.ARENA_PERIOD
-_CAPS = arena_bonus_type_caps.ARENA_BONUS_TYPE_CAPS
 
 def _getClientArena(avatar=None):
     if avatar is None:
@@ -77,7 +73,7 @@ class _ArenaTypeSkeleton(object):
     name = ''
     geometryName = ''
     gameplayName = ''
-    maxTeamsInArena = constants.TEAMS_IN_ARENA.MIN_TEAMS
+    maxTeamsInArena = TEAMS_IN_ARENA.MIN_TEAMS
     teamBasePositions = []
     teamLowLevelSpawnPoints = []
     teamSpawnPoints = []
@@ -146,6 +142,26 @@ class _ArenaTypeVisitor(IArenaVisitor):
             else:
                 number = 0
             yield ((point[0], 0, point[1]), number)
+
+    def getWinPointsCosts(self, isSolo=False, forVehicle=True):
+        costKill, costFlags, costDamage = 0, set(), set()
+        settings = self.getWinPointsSettings()
+        winPointsCache = win_points.g_cache
+        if settings is not None and winPointsCache is not None:
+            winPoints = win_points.g_cache[settings]
+            costKill = winPoints.pointsForKill(isSolo, forVehicle)
+            costFlags = set(winPoints.pointsForFlag(isSolo))
+            costDamage = winPoints.pointsForDamage(isSolo, forVehicle)
+        return (costKill, costFlags, costDamage)
+
+    def getWinPointsCAP(self):
+        settings = self.getWinPointsSettings()
+        winPointsCache = win_points.g_cache
+        if settings is not None and winPointsCache is not None:
+            pointsCAP = win_points.g_cache[settings].pointsCAP
+        else:
+            pointsCAP = 0
+        return pointsCAP
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.id)
     def getID(self):
@@ -242,6 +258,10 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         super(_ArenaGuiTypeVisitor, self).__init__()
         self._guiType = guiType
 
+    @property
+    def guiType(self):
+        return self._guiType
+
     def clear(self):
         self._guiType = _GUI_TYPE.UNKNOWN
 
@@ -293,17 +313,8 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isMapsTraining(self):
         return self._guiType == _GUI_TYPE.MAPS_TRAINING
 
-    def isRTSBattle(self):
-        return self._guiType == _GUI_TYPE.RTS
-
-    def isRTSBootcamp(self):
-        return self._guiType == _GUI_TYPE.RTS_BOOTCAMP
-
-    def isRTS1x1Battle(self):
-        return self._guiType == _GUI_TYPE.RTS
-
-    def isAnyRTSBattle(self):
-        return self.isRTSBattle() or self.isRTSBootcamp()
+    def isStrongholdRange(self):
+        return self._guiType in _GUI_TYPE.STRONGHOLD_RANGE
 
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
@@ -394,6 +405,10 @@ class _ArenaExtraDataVisitor(IArenaVisitor):
 
     def isLowLevelBattle(self):
         return 0 < self._extra.get('battleLevel', 0) < 4
+
+    @property
+    def queueType(self):
+        return self._extra.get('queueType', QUEUE_TYPE.UNKNOWN)
 
 
 class _ArenaVehiclesVisitor(IArenaVisitor):
@@ -549,9 +564,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         else:
             spawnPoints = self._type.getTeamSpawnPoints()
         return spawnPoints
-
-    def getTeamBasePositions(self, team):
-        return [ position for baseTeamID, position, _ in self.type.getTeamBasePositionsIterator() if baseTeamID == team ]
 
     def getTeamSpawnPointsIterator(self, team):
         for teamNum, points in enumerate(self.getTeamSpawnPoints(team), 1):

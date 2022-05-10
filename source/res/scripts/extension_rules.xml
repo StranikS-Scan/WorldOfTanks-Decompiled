@@ -1,0 +1,28 @@
+<extension_rules.xml>
+  <xml_whitelist>
+    <rule>
+      <pattern>	.*/item_defs/.*\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/vehicles/.*/.*\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/vehicles/.*/components/.*\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/vehicles/common/.*\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/bonus_caps_config\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/server_xml/example_ext_battles_config\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+  </xml_whitelist>
+</extension_rules.xml>

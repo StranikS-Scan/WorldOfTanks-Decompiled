@@ -640,9 +640,10 @@ class BuyAndInstallShells(AsyncGUIItemAction):
 
 class VehicleRepairAction(AsyncGUIItemAction):
 
-    def __init__(self, vehicle):
+    def __init__(self, vehicle, repairClazz):
         super(VehicleRepairAction, self).__init__()
         self.__vehicle = vehicle
+        self.__repairClazz = repairClazz
 
     @async
     @decorators.process('techMaintenance')
@@ -658,7 +659,7 @@ class VehicleRepairAction(AsyncGUIItemAction):
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT if _needExchangeForBuy(price) else None
         else:
             startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
-        result = yield future_async.await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState))
+        result = yield future_async.await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState, repairClazz=self.__repairClazz))
         callback(result.result if not result.busy else False)
         return
 

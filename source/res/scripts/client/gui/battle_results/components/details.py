@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
-from constants import IGR_TYPE, PREMIUM_TYPE, ARENA_BONUS_TYPE
+from constants import IGR_TYPE, PREMIUM_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
@@ -684,7 +684,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__arenaUniqueID = 0
         self.__isPersonalTeamWin = False
         self.__arenaBonusType = None
-        self.__xpFactor = 0
+        self.__xpFactor = 1
         self.__vehicleCD = None
         self.bonusIcon = ''
         self.description = ''
@@ -702,9 +702,15 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__arenaUniqueID = reusable.arenaUniqueID
         self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
         self.__arenaBonusType = reusable.common.arenaBonusType
-        self.__xpFactor = reusable.personal.getPremiumXPAddRecords().getFactor('additionalXPFactor10')
+        self.__xpFactor = self.__getAdditionalXPFactor10FromResult(result, reusable)
         _, vehicle = first(reusable.personal.getVehicleItemsIterator())
         self.__vehicleCD = vehicle.intCD
+
+    def __getAdditionalXPFactor10FromResult(self, result, reusable):
+        vehicleId = reusable.vehicles.getVehicleID(reusable.getPlayerInfo().dbID)
+        vehicleInfo = reusable.vehicles.getVehicleInfo(vehicleId)
+        additionalXPFactor10 = result.get(vehicleInfo.intCD, {}).get('additionalXPFactor10', 1)
+        return int(additionalXPFactor10 / 10) if additionalXPFactor10 else 1
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
@@ -763,7 +769,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.description = text_styles.highlightText(backport.text(R.strings.battle_results.common.premiumBonus.description()))
 
     def __setBonusLeft(self):
-        if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS) or self.__arenaBonusType in (ARENA_BONUS_TYPE.RTS, ARENA_BONUS_TYPE.RTS_1x1):
+        if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
             applyAdditionalXPCount = self.__itemsCache.items.stats.applyAdditionalXPCount
         else:
             applyAdditionalXPCount = '-'

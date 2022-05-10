@@ -19,6 +19,7 @@ from account_helpers.settings_core.settings_constants import GAME
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from aih_constants import ShakeReason
+from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON
 from debug_utils import LOG_DEBUG_DEV
@@ -32,14 +33,13 @@ from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
-from ModelHitTester import ModelHitStatus
-from RTSShared import RTSSupply
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import ISpecialSoundCtrl, IBattleRoyaleController
 from skeletons.vehicle_appearance_cache import IAppearanceCache
 from soft_exception import SoftException
+from vehicle_systems.components.shot_damage_components import ShotDamageComponent
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
 from vehicle_systems.model_assembler import collisionIdxToTrackPairIdx
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
@@ -47,6 +47,7 @@ from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from shared_utils.vehicle_utils import createWheelFilters
 import GenericComponents
 import Projectiles
+import CGF
 _logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
@@ -91,7 +92,7 @@ StunInfo = namedtuple('StunInfo', ('startTime',
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
-class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
+class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesComponent):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -104,11 +105,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
-
-    @property
-    def commanderGroup(self):
-        vehicle = self.guiSessionProvider.dynamic.rtsCommander.vehicles.get(self.id)
-        return vehicle.groupID if vehicle and vehicle.isAllyBot else 0
 
     @property
     def speedInfo(self):
@@ -147,10 +143,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     @property
     def maxHealth(self):
         return self.publicInfo.maxHealth
-
-    @property
-    def modelHitStatus(self):
-        return ModelHitStatus.NORMAL if self.health > 0 else ModelHitStatus.CRASHED
 
     def getBounds(self, partIdx):
         return self.appearance.getBounds(partIdx) if self.appearance is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
@@ -221,8 +213,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             from InBattleUpgrades import onBattleRoyalePrerequisites
             if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
                 forceReloading = True
-        if RTSSupply.isStationary(self.typeDescriptor.type) or RTSSupply.isStructure(self.typeDescriptor.type):
-            self.filter.reset()
         if forceReloading:
             oldAppearance = self.__appearanceCache.removeAppearance(self.id)
             if oldAppearance is not None:
@@ -235,18 +225,14 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:
             self.isCrewActive = True
-            typeDescr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
-            if 'battle_royale' in typeDescr.type.tags:
-                pass
-            else:
+            descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
+            if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
                 self.__prevHealth = self.publicInfo.maxHealth
                 self.__turretDetachmentConfirmed = False
-            return typeDescr
+            return descr
         else:
-            typeDescr = vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
-            self.__updateModelHitStatus(typeDescr)
-            return typeDescr
+            return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
 
     @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
@@ -310,19 +296,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if not self.isStarted or blockShooting:
             return
         else:
-            if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.RTS_BOOTCAMP:
-                isAlly = self.guiSessionProvider.getArenaDP().isAlly(self.id)
-                isSupply = RTSSupply.isSupply(self.typeDescriptor.type)
-                if isAlly and not isSupply:
-                    aimingInfo = [BigWorld.time(),
-                     1.0,
-                     1.0,
-                     0.0,
-                     0.0,
-                     0.0,
-                     1.0]
-                    TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_SHOOT, aimingInfo=aimingInfo)
-            self.guiSessionProvider.shared.feedback.onVehicleShoot(self.id)
             if not isPredictedShot and self.isPlayerVehicle and not BigWorld.player().isWaitingForShot:
                 if not BattleReplay.g_replayCtrl.isPlaying:
                     return
@@ -381,7 +354,18 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
             showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
             keyPoints, effects, _ = effectsDescr[maxPriorityHitPoint.hitEffectGroup]
-            self.appearance.boundEffects.addNewToNode(maxPriorityHitPoint.componentName, maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
+            self.appearance.boundEffects.addNewToNode(maxPriorityHitPoint.componentName, maxPriorityHitPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir, surfaceNormal=maxPriorityHitPoint.matrix.applyVector(Math.Vector3(0, 0, -1)))
+            prefabHit = effectsDescr['hitPrefabs'].get(maxPriorityHitPoint.hitEffectGroup) if 'hitPrefabs' in effectsDescr else None
+            if prefabHit:
+
+                def hitLoadCallback(go):
+                    if self.isAlive():
+                        go.createComponent(ShotDamageComponent, firstHitPoint.componentName, compoundModel)
+                    else:
+                        CGF.removeGameObject(go)
+
+                partGO = self.appearance.partsGameObjects.getPartGameObject(prefabHit, self.spaceID, self.appearance.gameObject)
+                CGF.loadGameObjectIntoHierarchy(prefabHit, partGO, firstHitPoint.matrix, hitLoadCallback)
             if not self.isAlive():
                 return
             soundNotifications = getSoundNotifications()
@@ -544,7 +528,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         return
 
     def set_health(self, _=None):
-        self.__updateModelHitStatus(self.typeDescriptor)
+        pass
 
     def set_isCrewActive(self, _=None):
         if self.isStarted:
@@ -674,15 +658,14 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.__prevHealth = newHealth
             return
         else:
-            avatar = BigWorld.player()
-            self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle and not avatar.isCommander, self.id, newHealth, attackerID, attackReasonID)
+            self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
             if not self.isStarted:
                 self.__prevHealth = newHealth
                 return
-            avatar.arena.onVehicleHealthChanged(self.id, attackerID, oldHealth - newHealth)
+            BigWorld.player().arena.onVehicleHealthChanged(self.id, attackerID, oldHealth - newHealth)
             if not self.appearance.damageState.isCurrentModelDamaged:
                 self.appearance.onVehicleHealthChanged()
-            if self.health <= 0 and self.isCrewActive or BigWorld.player().isCommanderGameplay() and newHealth <= 0:
+            if self.health <= 0 and self.isCrewActive:
                 self.__onVehicleDeath()
             if self.isPlayerVehicle:
                 TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID)
@@ -973,15 +956,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def getOptionalDevices(self):
         return vehicle_getter.getOptionalDevices() if self.isPlayerVehicle else []
 
-    def isSupply(self):
-        return self.guiSessionProvider.getCtx().isSupply(self.id)
-
-    def isObserver(self):
-        return self.guiSessionProvider.getCtx().isObserver(self.id)
-
-    def isCommander(self):
-        return self.guiSessionProvider.getCtx().isCommander(self.id)
-
     def _isDestructibleMayBeBroken(self, chunkID, itemIndex, matKind, itemFilename, itemScale, vehSpeed):
         desc = AreaDestructibles.g_cache.getDescByFilename(itemFilename)
         if desc is None:
@@ -1074,16 +1048,13 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 _logger.exception('Update modifiers')
 
     def __onVehicleDeath(self, isDeadStarted=False):
-        if not self.isPlayerVehicle or avatar_getter.isPlayerCommander():
+        if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
         self._removeInspire()
         self._removeHealing()
-        rtsCommander = self.guiSessionProvider.dynamic.rtsCommander
-        if rtsCommander is not None:
-            rtsCommander.destroyProxyVehicle(self.id)
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0
@@ -1153,14 +1124,11 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def onDynamicComponentCreated(self, component):
         LOG_DEBUG_DEV('Component created', component)
+        super(Vehicle, self).onDynamicComponentCreated(component)
 
     @property
     def label(self):
         return self.labelComponent.label if hasattr(self, 'labelComponent') else None
-
-    @property
-    def slot(self):
-        return self.labelComponent.slot if hasattr(self, 'labelComponent') else None
 
     def set_quickShellChangerFactor(self, _=None):
         ammoCtrl = self.guiSessionProvider.shared.ammo
@@ -1199,11 +1167,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.set_wheelsState()
         if hasattr(self, 'ownVehicle'):
             self.ownVehicle.initialUpdate(True)
-
-    def __updateModelHitStatus(self, typeDescr):
-        if typeDescr is not None:
-            typeDescr.modelHitStatus = ModelHitStatus.CRASHED if self.health <= 0 else ModelHitStatus.NORMAL
-        return
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

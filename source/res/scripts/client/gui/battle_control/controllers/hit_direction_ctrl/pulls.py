@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/hit_direction_ctrl/pulls.py
 import math
-import typing
 from functools import partial
-from collections import namedtuple
 import BigWorld
 import SoundGroups
 from AtGunpoint import ARTY_HIT_PREDICTION_EPSILON_YAW
@@ -11,13 +9,10 @@ from account_helpers.settings_core.settings_constants import DAMAGE_INDICATOR
 from gui import GUI_SETTINGS
 from gui.battle_control.battle_constants import HIT_FLAGS, HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
-from gui.battle_control.controllers.hit_direction_ctrl.base import HitDirection, RTSHitDirection
+from gui.battle_control.controllers.hit_direction_ctrl.base import HitDirection
 from helpers import dependency
 from math_utils import almostZero
 from skeletons.account_helpers.settings_core import ISettingsCore
-if typing.TYPE_CHECKING:
-    from gui.battle_control.controllers.hit_direction_ctrl.base import IHitIndicator
-RTSHitIndex = namedtuple('RTSHitIndex', 'idx, vID')
 _AGGREGATED_HIT_BITS = HIT_FLAGS.IS_BLOCKED | HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL
 
 class BaseHitPull(object):
@@ -42,14 +37,14 @@ class BaseHitPull(object):
             hit = self.findHit(hitData)
             if hit is None:
                 extendHitData = False
-                hit = self.getNextHit(hitData)
+                hit = self.getNextHit()
             else:
                 extendHitData = hit.isShown()
             idx = hit.getIndex()
             self.clearHideCallback(idx)
             duration = hit.show(hitData, extend=extendHitData)
             if duration:
-                self.addHideCallback(duration, idx)
+                self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self._tickToHideHit, idx))
                 self._hitShown(hit)
             return hit
 
@@ -58,7 +53,7 @@ class BaseHitPull(object):
             idx = hit.getIndex()
             duration = hit.setIndicator(indicatorProxy)
             if duration:
-                self.addHideCallback(duration, idx)
+                self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self._tickToHideHit, idx))
 
     def clear(self):
         for hit in self._pull:
@@ -73,7 +68,7 @@ class BaseHitPull(object):
 
         self.__postponedHits = []
 
-    def getNextHit(self, hitData):
+    def getNextHit(self):
         find = self._pull[0]
         for hit in self._pull:
             if not hit.isShown():
@@ -94,10 +89,6 @@ class BaseHitPull(object):
     def hideHit(self, idx):
         self.clearHideCallback(idx)
         self._tickToHideHit(idx)
-
-    def addHideCallback(self, duration, idx):
-        self.clearHideCallback(idx)
-        self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self._tickToHideHit, idx))
 
     def clearHideCallback(self, idx):
         callbackID = self.__callbackIDs.pop(idx, None)
@@ -144,7 +135,7 @@ class BaseHitPull(object):
 
     def _tickToHideHit(self, idx):
         self.__callbackIDs.pop(idx, None)
-        self.getHit(idx).hide()
+        self._pull[idx].hide()
         self.__tryShowPostponedHit()
         return
 
@@ -261,60 +252,3 @@ class ArtyHitPredictionPull(BaseHitPull):
 
     def __pollIsFull(self):
         return all((hit.isShown() for hit in self._pull))
-
-
-class RTSHitPull(HitDamagePull):
-
-    def __init__(self):
-        super(RTSHitPull, self).__init__()
-        self.__currentIndicator = None
-        self.__pullsByDamagedID = {}
-        return
-
-    def setIndicator(self, indicatorProxy):
-        self.__currentIndicator = indicatorProxy
-        super(RTSHitPull, self).setIndicator(indicatorProxy)
-
-    def getHit(self, idx):
-        for hit in self._pull:
-            if hit.getIndex() == idx:
-                return hit
-
-        return None
-
-    def findHit(self, hitData):
-        pull = self.__pullsByDamagedID.get(hitData.getDamagedID())
-        if pull is None:
-            return
-        else:
-            for hit in pull:
-                data = hit.getHitData()
-                if data is not None and self._compareHits(data, hitData):
-                    return hit
-
-            return
-
-    def getNextHit(self, hitData):
-        damagedID = hitData.getDamagedID()
-        pull = self.__pullsByDamagedID.get(damagedID)
-        if pull is None:
-            pull = [ RTSHitDirection(RTSHitIndex(idx_, hitData.getDamagedID())) for idx_ in xrange(HIT_INDICATOR_MAX_ON_SCREEN) ]
-            for hit in pull:
-                hit.setIndicator(self.__currentIndicator)
-
-            self._pull.extend(pull)
-            self.__pullsByDamagedID[damagedID] = pull
-        find = pull[0]
-        for hit in pull:
-            if not hit.isShown():
-                return hit
-            if hit.getStartTime() < find.getStartTime():
-                find = hit
-
-        return find
-
-    def _compareHits(self, hitData, newHitData):
-        return super(RTSHitPull, self)._compareHits(hitData, newHitData) if hitData.getDamagedID() == newHitData.getDamagedID() else False
-
-    def _createPull(self):
-        return []

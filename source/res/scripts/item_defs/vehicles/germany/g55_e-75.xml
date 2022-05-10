@@ -66,6 +66,13 @@
       <undamaged>	vehicles/german/G55_E-75/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G55_E-75/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G55_E-75/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G55_E75_3DSt_NEx>
+          <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Hull.model	</exploded>
+        </G55_E75_3DSt_NEx>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1247,6 +1254,19 @@
         <hiddenForUser>	true	</hiddenForUser>
         <anchorShift>	0.780778	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15092	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+        <position>	0.475511 1.67747 2.6992	</position>
+        <rotation>	0.48853 -0.00174865 3.14158	</rotation>
+        <scale>	0.69273 0.100766 0.692728	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.062324	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	97.959 98.3773	</density>
@@ -1285,6 +1305,13 @@
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G55_E-75/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G55_E-75/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G55_E75_3DSt_NEx>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</exploded>
+          </G55_E75_3DSt_NEx>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1383,6 +1410,13 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>	&gt;	  <G55_E75_3DSt_NEx>
+            <segmentModelLeft>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_R.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
+          </G55_E75_3DSt_NEx>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0121	</trackThickness>
       <groundNodes>
@@ -1596,6 +1630,12 @@
             <model>	vehicles/german/G55_E-75/track/segment2_L.model	</model>
             <length>	0.158774	</length>
           </secSegment>
+          <modelSets>
+            <G55_E75_3DSt_NEx>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
+            </G55_E75_3DSt_NEx>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1785,6 +1825,12 @@
             <model>	vehicles/german/G55_E-75/track/segment2_R.model	</model>
             <length>	0.158774	</length>
           </secSegment>
+          <modelSets>
+            <G55_E75_3DSt_NEx>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
+            </G55_E75_3DSt_NEx>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1997,6 +2043,13 @@
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G55_E-75/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G55_E-75/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G55_E75_3DSt_NEx>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</exploded>
+          </G55_E75_3DSt_NEx>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2764,6 +2817,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_01.model	</collisionModelServer>
@@ -2803,7 +2863,7 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000072 -0.0522426 4.31362	</rayStart>
+              <rayStart>	-0.000072 -0.0522426 4.13744	</rayStart>
               <rayEnd>	-0.00485282 -0.0513279 4.31223	</rayEnd>
               <rayUp>	0.075 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
@@ -2857,6 +2917,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_02.model	</collisionModelServer>
@@ -2894,7 +2961,7 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000137513 -0.0516891 3.88	</rayStart>
+              <rayStart>	0.000137513 -0.0516891 3.68456	</rayStart>
               <rayEnd>	0.0922057 -0.100146 4.08427	</rayEnd>
               <rayUp>	0.087 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
@@ -2944,6 +3011,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_03.model	</collisionModelServer>
@@ -3001,6 +3075,13 @@
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G55_E-75/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G55_E-75/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G55_E75_3DSt_NEx>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_01.model	</exploded>
+          </G55_E75_3DSt_NEx>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G55_E-75/collision/Turret_01.model	</collisionModelServer>
@@ -3528,6 +3609,71 @@
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	0.078031	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	-0.000560078 2.77843 0.654432	</position>
+          <rotation>	0.214909 -0.00174662 3.14159	</rotation>
+          <scale>	0.682328 0.0931218 0.682323	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.978598	</clipAngle>
+          <anchorShift>	0.014997	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	-1.07739 2.14944 0.252524	</position>
+          <rotation>	1.26525 -1.26985 3.02139	</rotation>
+          <scale>	0.449268 0.160044 0.449269	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06395	</clipAngle>
+          <anchorShift>	0.038035	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.910674 2.45582 -1.68229	</position>
+          <rotation>	1.92938 -1.23395 0.0233426	</rotation>
+          <scale>	0.495075 0.176362 0.495075	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06395	</clipAngle>
+          <anchorShift>	-0.011958	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.000014 2.81358 -1.48415	</position>
+          <rotation>	2.99773 -0.000002 -0.000016	</rotation>
+          <scale>	0.540135 0.0737158 0.54013	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.978598	</clipAngle>
+          <anchorShift>	0.014999	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.000001 2.38502 -2.18825	</position>
+          <rotation>	1.90446 -0.000083 -0.000006	</rotation>
+          <scale>	0.379759 0.204883 0.379759	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.07803	</anchorShift>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
@@ -3608,6 +3754,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_05.model	</collisionModelServer>
@@ -3693,6 +3846,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_06.model	</collisionModelServer>
@@ -3780,6 +3940,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_03.model	</collisionModelServer>
@@ -3865,6 +4032,13 @@
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_09.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_09.model	</exploded>
+            <sets>
+              <G55_E75_3DSt_NEx>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_09.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_09.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_09.model	</exploded>
+              </G55_E75_3DSt_NEx>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_09.model	</collisionModelServer>
@@ -3924,6 +4098,13 @@
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/german/G55_E-75/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/german/G55_E-75/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <G55_E75_3DSt_NEx>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_02.model	</exploded>
+          </G55_E75_3DSt_NEx>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G55_E-75/collision/Turret_02.model	</collisionModelServer>
@@ -4450,6 +4631,71 @@
           <clipAngle>	1.06395	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	0.018032	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	-1.18758 2.20923 -0.431954	</position>
+          <rotation>	1.30263 -1.56905 3.13825	</rotation>
+          <scale>	0.502577 0.179034 0.502577	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06395	</clipAngle>
+          <anchorShift>	0.018036	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.937776 2.48406 -1.54648	</position>
+          <rotation>	1.83579 -1.16019 0.169507	</rotation>
+          <scale>	0.563607 0.200775 0.563605	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06395	</clipAngle>
+          <anchorShift>	-0.011962	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	-0.0804711 2.77489 0.67048	</position>
+          <rotation>	0.214909 -0.00174662 3.14159	</rotation>
+          <scale>	0.662203 0.0903752 0.662198	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.978598	</clipAngle>
+          <anchorShift>	0.054997	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.000025 2.8161 -1.46276	</position>
+          <rotation>	3.03296 -0.000003 -0.000015	</rotation>
+          <scale>	0.550981 0.0751965 0.550976	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.978598	</clipAngle>
+          <anchorShift>	0.014989	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G55_E75_3DSt_NEx	</compatibleModels>
+          <position>	0.000012 2.40226 -2.12756	</position>
+          <rotation>	1.89179 -0.000059 -0.000020	</rotation>
+          <scale>	0.37803 0.20395 0.378029	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	0.098031	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

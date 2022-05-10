@@ -18,6 +18,9 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBattleRoyaleController
+from ValueReplay import ValueReplay, ValueReplayConnector
+from battle_results import g_config as battleResultsConfig
+from gui.battle_results.reusable import records
 if typing.TYPE_CHECKING:
     from typing import Dict
     from gui.battle_results.reusable import _ReusableInfo
@@ -79,18 +82,18 @@ class BattleRoyaleIsSquadModeBlock(base.StatsItem):
 
 
 class BattleRoyalePersonalVehicleBlock(base.StatsBlock):
-    __slots__ = ('nationName', 'vehicleName', 'isObserver')
+    __slots__ = ('vehicleName', 'vehicleType', 'isObserver')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePersonalVehicleBlock, self).__init__(meta, field, *path)
-        self.nationName = ''
         self.vehicleName = ''
+        self.vehicleType = ''
         self.isObserver = False
 
     def setVehicle(self, item):
         if item is not None:
-            self.nationName = item.nationName
             self.vehicleName = item.shortUserName
+            self.vehicleType = item.type
             self.isObserver = item.isObserver
         return
 
@@ -103,6 +106,13 @@ class BattleRoyaleVehiclesBlock(PersonalVehiclesBlock):
 
     def _createComponent(self):
         return BattleRoyalePersonalVehicleBlock()
+
+
+class BattleRoyaleIsPremiumBlock(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        return reusable.isPostBattlePremium or reusable.isPostBattlePremiumPlus
 
 
 class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
@@ -134,20 +144,71 @@ class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
             self.isSelfDestroyer = killerInfo.realName == playerInfo.realName
 
 
+class _BRCoinReplayRecords(records.ReplayRecords):
+    __slots__ = ()
+
+    def __init__(self, replay, results):
+        super(_BRCoinReplayRecords, self).__init__(replay, 'count')
+        self._addRecord(ValueReplay.FACTOR, 'premiumFactor100', results['premiumFactor100'], 0)
+        self._addRecord(ValueReplay.FACTOR, 'premiumVipFactor100', results['premiumVipFactor100'], 0)
+        self._addRecord(ValueReplay.FACTOR, 'premiumPlusFactor100', results['premiumPlusFactor100'], 0)
+        self._addRecord(ValueReplay.FACTOR, 'appliedPremiumFactor100', results['appliedPremiumFactor100'], 0)
+
+
 class BattleRoyaleFinancialBlock(base.StatsBlock):
-    __slots__ = ('credits', 'xp', 'crystal')
+    __slots__ = ('credits', 'xp', 'crystal', 'brcoin')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyaleFinancialBlock, self).__init__(meta, field, *path)
         self.credits = 0
         self.xp = 0
         self.crystal = 0
+        self.brcoin = 0
 
     def setRecord(self, result, reusable):
         avatarInfo = result['personal']['avatar']
-        self.credits = avatarInfo['credits'] + avatarInfo['eventCredits']
-        self.xp = avatarInfo['xp'] + avatarInfo['eventXP']
-        self.crystal = avatarInfo['crystal'] + avatarInfo['eventCrystal']
+        self.credits = avatarInfo['credits']
+        self.xp = avatarInfo['xp']
+        self.crystal = avatarInfo['crystal']
+        self.brcoin = self._getBrCoins(result, isPremium=False)
+
+    def _getBrCoins(self, result, isPremium):
+        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
+        info = result['personal'][vehicleCD]
+        for code, data in info['currencies'].iteritems():
+            if code == 'brcoin':
+                meta = battleResultsConfig['allResults'].meta('currencies').meta('brcoin')
+                replayConnector = ValueReplayConnector(data, meta)
+                replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
+                if not isPremium:
+                    return _BRCoinReplayRecords(replay, data).getRecord('count')
+                if 'appliedPremiumFactor100' in replay:
+                    replay['appliedPremiumFactor100'] = data['premiumPlusFactor100']
+                return _BRCoinReplayRecords(replay, data).getRecord('count')
+
+
+class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
+
+    def setRecord(self, result, reusable):
+        avatarInfo = result['personal']['avatar']
+        for rec in reusable.personal.getMoneyRecords():
+            _, premiumCredits = rec[:2]
+            self.credits = premiumCredits.getRecord('originalCredits', 'appliedPremiumCreditsFactor100')
+
+        for rec in reusable.personal.getCrystalRecords():
+            _, premiumCrystal = rec[:2]
+            self.crystal = premiumCrystal.getRecord('crystal')
+
+        for rec in reusable.personal.getXPRecords():
+            _, premiumXP = rec[:2]
+            self.xp = premiumXP.getRecord('xpToShow')
+
+        self.brcoin = self._getBrCoins(result, isPremium=True)
+        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
+        info = result['personal'][vehicleCD]
+        self.credits += avatarInfo.get('eventCredits', 0)
+        self.credits += info.get('boosterCredits', 0)
+        self.xp += info.get('boosterXP', 0)
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):
@@ -184,7 +245,7 @@ class SimpleEfficiencyParameter(BattleRoyaleStatsItemBlock):
     __slots__ = ()
 
     def _getValue(self, result, reusable):
-        personalInfo = reusable.getPersonalVehiclesInfo(result)
+        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
         return getattr(personalInfo, self.type)
 
     def _isTop(self, result, reusable):
@@ -202,7 +263,7 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
     __slots__ = ()
 
     def _getValue(self, result, reusable):
-        personalInfo = reusable.getPersonalVehiclesInfo(result)
+        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
         avatar = personalInfo.avatar
         return avatar.extensionInfo.get('playerRank', 0)
 
@@ -304,7 +365,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
 
 
 class BattlePassBlock(base.StatsBlock):
-    __slots__ = ('currentLevel', 'maxPoints', 'earnedPoints', 'currentLevelPoints', 'isDone')
+    __slots__ = ('currentLevel', 'maxPoints', 'earnedPoints', 'currentLevelPoints', 'isDone', 'hasBattlePass', 'battlePassComplete', 'chapterID', 'pointsTotal', 'basePointsDiff')
 
     def __init__(self, meta=None, field='', *path):
         super(BattlePassBlock, self).__init__(meta, field, *path)
@@ -313,20 +374,30 @@ class BattlePassBlock(base.StatsBlock):
         self.earnedPoints = 0
         self.currentLevelPoints = 0
         self.isDone = False
+        self.hasBattlePass = False
+        self.battlePassComplete = False
+        self.chapterID = 0
+        self.pointsTotal = 0
+        self.basePointsDiff = 0
 
     def setRecord(self, result, reusable):
         hasProgress = reusable.battlePassProgress.hasProgress
         showIfEmpty = reusable.common.arenaBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
         if hasProgress or showIfEmpty:
-            self.currentLevel = reusable.battlePassProgress.level
+            self.currentLevel = reusable.battlePassProgress.currentLevel
             self.maxPoints = reusable.battlePassProgress.pointsMax
             self.earnedPoints = reusable.battlePassProgress.pointsAdd
             self.currentLevelPoints = reusable.battlePassProgress.pointsNew
             self.isDone = reusable.battlePassProgress.isDone
+            self.hasBattlePass = reusable.battlePassProgress.hasBattlePass
+            self.battlePassComplete = reusable.battlePassProgress.battlePassComplete
+            self.chapterID = reusable.battlePassProgress.chapterID
+            self.pointsTotal = reusable.battlePassProgress.pointsTotal
+            self.basePointsDiff = reusable.battlePassProgress.basePointsDiff
 
 
 class BattleRoyalePlayerBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName', 'achievedLevel', 'kills', 'damage', 'vehicleName', 'nationName')
+    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName', 'achievedLevel', 'kills', 'damage', 'vehicleName', 'vehicleType', 'databaseID')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePlayerBlock, self).__init__(meta, field, *path)
@@ -341,7 +412,8 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.kills = 0
         self.damage = 0
         self.vehicleName = ''
-        self.nationName = ''
+        self.vehicleType = ''
+        self.databaseID = 0
 
     def setRecord(self, vehicleSummarizeInfo, reusable):
         player = vehicleSummarizeInfo.player
@@ -382,8 +454,9 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
             block.achievedLevel = item.vehicles[0].achievedLevel
             block.damage = item.damageDealt
             block.kills = item.kills
-            block.nationName = item.vehicle.nationName
             block.vehicleName = item.vehicle.shortUserName
+            block.vehicleType = item.vehicle.type
+            block.databaseID = item.player.dbID
             block.setRecord(item, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
 

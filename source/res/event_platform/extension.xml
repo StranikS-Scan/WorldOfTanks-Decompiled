@@ -1,6 +1,7 @@
 <extension.xml>
   <FeatureName>	event_platform	</FeatureName>
-  <IsEnabled>	true	</IsEnabled>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	EventPlatformPersonality	</Personality>
   <Components>
     <StaticComponents>
       <KafkaLoggingComponent></KafkaLoggingComponent>

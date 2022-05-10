@@ -130,7 +130,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                     isCapturing = True
                     viewCmp.addCapturedTeamBase(clientID, playerTeam, timeLeft, invadersCnt)
 
-            if points and (not BigWorld.player().isObserver() or BigWorld.player().isCommander()):
+            if points and not BigWorld.player().isObserver():
                 for viewCmp in self._viewComponents:
                     isCapturing = True
                     viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, stopped)
@@ -159,8 +159,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
          timeLeft,
          invadersCnt,
          capturingStopped)
-        capturingStartBlocked = points == 0 and capturingStopped and invadersCnt > 0
-        if self._teamBaseLeft(points, invadersCnt) and not capturingStartBlocked:
+        if self._teamBaseLeft(points, invadersCnt):
             if clientID in self.__clientIDs:
                 if not invadersCnt:
                     self.__clearUpdateCallback(clientID)

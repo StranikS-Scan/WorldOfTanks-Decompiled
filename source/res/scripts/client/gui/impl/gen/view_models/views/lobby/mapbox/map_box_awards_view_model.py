@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.mapbox.reward_item_model import Reward
 class MapBoxAwardsViewModel(ViewModel):
     __slots__ = ('onPick',)
 
-    def __init__(self, properties=3, commands=1):
+    def __init__(self, properties=2, commands=1):
         super(MapBoxAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -20,15 +20,8 @@ class MapBoxAwardsViewModel(ViewModel):
     def setBattlesNumber(self, value):
         self._setNumber(1, value)
 
-    def getIsFinal(self):
-        return self._getBool(2)
-
-    def setIsFinal(self, value):
-        self._setBool(2, value)
-
     def _initialize(self):
         super(MapBoxAwardsViewModel, self)._initialize()
         self._addViewModelProperty('rewards', UserListModel())
         self._addNumberProperty('battlesNumber', 0)
-        self._addBoolProperty('isFinal', False)
         self.onPick = self._addCommand('onPick')

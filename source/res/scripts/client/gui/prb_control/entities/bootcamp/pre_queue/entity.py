@@ -9,14 +9,14 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control.entities.bootcamp.pre_queue.actions_validator import BootcampActionsValidator
 from gui.shared.events import ViewEventType
-from gui.prb_control import prb_getters, prbDispatcherProperty
+from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.pre_queue.ctx import DequeueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
@@ -30,9 +30,9 @@ class BootcampSubscriber(PreQueueSubscriber):
 
     def subscribe(self, entity):
         g_playerEvents.onBootcampEnqueued += entity.onEnqueued
-        g_playerEvents.onBootcampDequeued += entity.onDequeued
-        g_playerEvents.onBootcampEnqueueFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromBootcampQueue += entity.onKickedFromQueue
+        g_playerEvents.onDequeued += entity.onDequeued
+        g_playerEvents.onEnqueueFailure += entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue += entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena += entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
         g_bootcampEvents.onBootcampBecomeNonPlayer += entity.onBootcampBecomeNonPlayer
@@ -40,9 +40,9 @@ class BootcampSubscriber(PreQueueSubscriber):
 
     def unsubscribe(self, entity):
         g_playerEvents.onBootcampEnqueued -= entity.onEnqueued
-        g_playerEvents.onBootcampDequeued -= entity.onDequeued
-        g_playerEvents.onBootcampEnqueueFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromBootcampQueue -= entity.onKickedFromQueue
+        g_playerEvents.onDequeued -= entity.onDequeued
+        g_playerEvents.onEnqueueFailure -= entity.onEnqueueError
+        g_playerEvents.onKickedFromQueue -= entity.onKickedFromQueue
         g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
         g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
         g_bootcampEvents.onBootcampBecomeNonPlayer -= entity.onBootcampBecomeNonPlayer
@@ -74,12 +74,15 @@ class BootcampEntity(PreQueueEntity):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         return super(BootcampEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
-    def isInQueue(self):
-        return prb_getters.isInBootcampQueue()
-
     def queue(self, ctx, callback=None):
         self.bootcampController.showActionWaitWindow()
         super(BootcampEntity, self).queue(ctx, callback=callback)
+
+    def onEnqueued(self, *args):
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+            self._requestCtx.stopProcessing(True)
+        self._invokeListeners('onEnqueued', self.getQueueType(), *args)
+        self._goToQueueUI()
 
     def doSelectAction(self, action):
         return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.BOOTCAMP else super(BootcampEntity, self).doSelectAction(action)

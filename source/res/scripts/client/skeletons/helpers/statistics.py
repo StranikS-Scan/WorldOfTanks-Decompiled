@@ -1,11 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/helpers/statistics.py
-import typing
-
-class IActionsPerMinute(object):
-
-    def recordAction(self, keyInfo=None):
-        raise NotImplementedError
 
 
 class IStatisticsCollector(object):
@@ -45,8 +39,4 @@ class IStatisticsCollector(object):
         raise NotImplementedError
 
     def noteLastArenaData(self, arenaTypeID, arenaUniqueID, arenaTeam):
-        raise NotImplementedError
-
-    @property
-    def apm(self):
         raise NotImplementedError

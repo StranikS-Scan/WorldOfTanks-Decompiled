@@ -29,7 +29,7 @@ from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
-from gui.battle_control.controllers.radar_ctrl import IRadarListener
+from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -1163,7 +1163,7 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
 
     def start(self):
         super(SimpleMinimapPingPlugin, self).start()
-        self._setupKeyBindingEvents(isStrategicSPG=False)
+        self._setupKeyBindingEvents(False)
 
     def stop(self):
         super(SimpleMinimapPingPlugin, self).stop()
@@ -1179,7 +1179,7 @@ class SimpleMinimapPingPlugin(common.IntervalPlugin):
     def _processCommandByPosition(self, commands, locationCommand, position, mapScaleIndex):
         raise NotImplementedError('must be implemented')
 
-    def _setupKeyBindingEvents(self, isStrategicSPG):
+    def _setupKeyBindingEvents(self, isSPGAndStrategicView):
         self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DAttentionToPing
 
     def _getTerrainHeightAt(self, spaceID, x, z):
@@ -1247,13 +1247,12 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self.__isHintPanelEnabled = False
         self.parentObj.as_disableHintPanelS()
 
-    def updateControlMode(self, ctrlMode, vehicleID):
-        super(MinimapPingPlugin, self).updateControlMode(ctrlMode, vehicleID)
-        isStrategic = ctrlMode in (_CTRL_MODE.STRATEGIC, _CTRL_MODE.ARTY, _CTRL_MODE.MAP_CASE)
-        isSPG = self.sessionProvider.getArenaDP().getVehicleInfo().isSPG()
+    def updateControlMode(self, crtlMode, vehicleID):
+        super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)
+        isSPGAndStrategicView = True if crtlMode in (aih_constants.CTRL_MODE_NAME.STRATEGIC, aih_constants.CTRL_MODE_NAME.ARTY, aih_constants.CTRL_MODE_NAME.MAP_CASE) else False
         if self.__isHintPanelEnabled:
-            self.parentObj.as_updateHintPanelDataS(isStrategic, isSPG)
-        self._setupKeyBindingEvents(isStrategic and isSPG)
+            self.parentObj.as_updateHintPanelDataS(isSPGAndStrategicView, self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
+        self._setupKeyBindingEvents(isSPGAndStrategicView and self.sessionProvider.getArenaDP().getVehicleInfo().isSPG())
 
     def onMinimapClicked(self, x, y, buttonIdx, mapScaleIndex):
         if buttonIdx in self._mouseKeyEventHandler:
@@ -1316,9 +1315,12 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
                 self._make3DGoingToPing(x, y, mapScaleIndex)
             return
 
-    def _setupKeyBindingEvents(self, isStrategicSPG):
+    def _setupKeyBindingEvents(self, isSPGAndStrategicView):
         self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBR.value] = self._specialMinimapCommand
-        self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DSPGAimArea if isStrategicSPG else self._make3DAttentionToPing
+        if isSPGAndStrategicView:
+            self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DSPGAimArea
+        else:
+            self._mouseKeyEventHandler[_EMinimapMouseKey.KEY_MBL.value] = self._make3DAttentionToPing
 
     def _make3DGoingToPing(self, x, y, mapScaleIndex):
         self._make3DPing(x, y, BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, mapScaleIndex)
@@ -1337,9 +1339,6 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
             commands.sendCommand(ONE_SHOT_COMMANDS_TO_REPLIES[commandKey])
             return
         commands.sendReplyChatCommand(uniqueId, commandKey)
-
-    def handleMouseOverUIMinimap(self, isMouseOver):
-        pass
 
 
 class _ReplayRegistrator(object):

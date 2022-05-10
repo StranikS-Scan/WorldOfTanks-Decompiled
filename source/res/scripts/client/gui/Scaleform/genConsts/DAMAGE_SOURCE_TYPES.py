@@ -10,13 +10,7 @@ class DAMAGE_SOURCE_TYPES(object):
     SPG = 'SPG'
     ARTILLERY = 'artillery'
     AIRSTRIKE = 'airstrike'
-    SUPPLY_BARRICADES = 'supply_Barricades'
-    SUPPLY_BUNKER = 'supply_Bunker'
-    SUPPLY_ATGUN = 'supply_ATgun'
-    SUPPLY_WATCHTOWER = 'supply_WatchTower'
-    SUPPLY_PILLBOX = 'supply_Pillbox'
-    SUPPLY_MORTAR = 'supply_Mortar'
-    SUPPLY_FLAMER = 'supply_Flamer'
+    FORT_ARTILLERY = 'fort_artillery'
     DAMAGE_SOURCES = [HEAVY_TANK,
      MEDIUM_TANK,
      LIGHT_TANK,
@@ -24,10 +18,4 @@ class DAMAGE_SOURCE_TYPES(object):
      SPG,
      ARTILLERY,
      AIRSTRIKE,
-     SUPPLY_BARRICADES,
-     SUPPLY_BUNKER,
-     SUPPLY_ATGUN,
-     SUPPLY_WATCHTOWER,
-     SUPPLY_PILLBOX,
-     SUPPLY_MORTAR,
-     SUPPLY_FLAMER]
+     FORT_ARTILLERY]

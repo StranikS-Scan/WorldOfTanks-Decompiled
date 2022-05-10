@@ -16,7 +16,6 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
         self._close()
         self.manualController.clear()
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
-        shared_events.showHangar()
 
     def onChapterOpenedS(self, chapterIndex):
         _logger.debug('ManualMainView. Chapter selected: %s', chapterIndex)

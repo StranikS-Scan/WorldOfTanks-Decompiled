@@ -8,7 +8,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC, timeDataToUTC
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -361,7 +361,8 @@ class Source(object):
          'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
-         'accountSecondaryTypes': self.__readListOfInts}
+         'accountSecondaryTypes': self.__readListOfInts,
+         'accountAttributes': self.__readListAccountAttributes}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
             condition_readers.update({'value': self.__readCondition_bool,
              'win': self.__readConditionComplex_true,
@@ -760,6 +761,17 @@ class Source(object):
     def __readVehicleFilter_roles(self, _, section, node):
         roles = set([ ROLE_LABEL_TO_TYPE[role] for role in section.asString.split() ])
         node.addChild(roles)
+
+    def __readListAccountAttributes(self, _, section, node):
+        attrs = 0
+        for attr in section.asString.split():
+            val = getattr(ACCOUNT_ATTR, attr, None)
+            if val is None:
+                raise SoftException('Unknown attribute name: {}'.format(attr))
+            attrs += val
+
+        node.addChild(attrs)
+        return
 
     def __readMetaSection(self, section):
         if section is None:

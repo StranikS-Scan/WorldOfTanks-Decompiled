@@ -3,16 +3,13 @@
 import BigWorld
 import BattleReplay
 from PlayerEvents import g_playerEvents
+from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.hints.HintCustom import HintCustom
 from bootcamp.hints.HintsSystem import HintSystem
 from bootcamp.BootcampMarkers import BootcampMarkersManager
 from bootcamp.BootcampContext import Chapter
-from helpers import dependency
-from bootcamp.Bootcamp import g_bootcamp
-from skeletons.gui.battle_session import IBattleSessionProvider
 
 class HintManager(object):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         self._hintSystem = HintSystem()
@@ -20,13 +17,8 @@ class HintManager(object):
         self._hints = {}
         self._markersActive = []
         chapter = Chapter('scripts/bootcamp_docs/entities.xml')
-        if self.sessionProvider.arenaVisitor.gui.isRTSBootcamp():
-            from bootcamp.BootcampGUI import RTSBootcampGUI
-            markerGUI = RTSBootcampGUI()
-        else:
-            markerGUI = g_bootcamp.getGUI()
         self._markerManager = BootcampMarkersManager()
-        self._markerManager.init(chapter, markerGUI)
+        self._markerManager.init(chapter, g_bootcamp.getGUI())
         return
 
     @property
@@ -108,10 +100,10 @@ class HintManager(object):
                 self._markersActive.append(marker.name)
                 self._markerManager.showMarker(marker.name)
 
-    def hideMarker(self, marker, hideSilently=False):
+    def hideMarker(self, marker):
         if not BattleReplay.g_replayCtrl.isPlaying:
             if marker.name in self._markersActive:
-                self._markerManager.hideMarker(marker.name, hideSilently)
+                self._markerManager.hideMarker(marker.name)
                 self._markersActive.remove(marker.name)
 
     def isMarkerVisible(self, marker):

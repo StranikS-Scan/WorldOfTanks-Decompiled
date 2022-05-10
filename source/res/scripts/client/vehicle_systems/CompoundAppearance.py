@@ -28,6 +28,8 @@ from cgf_obsolete_script.script_game_object import ComponentDescriptor
 from vehicle_systems import model_assembler
 from VehicleEffects import DamageFromShotDecoder
 from common_tank_appearance import CommonTankAppearance
+import CGF
+import GenericComponents
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
 _PERIODIC_TIME_ENGINE = 0.1
@@ -45,6 +47,31 @@ class CompoundHolder(object):
         self.compound = compound
 
 
+class PartsGameObjects(object):
+
+    def __init__(self):
+        self.__gameObjects = {}
+
+    def destroy(self):
+        self.__gameObjects = None
+        return
+
+    def getExistingGameObject(self, partName):
+        go = self.__gameObjects.get(partName)
+        return go if go is not None and go.isValid() else None
+
+    def getPartGameObject(self, partName, spaceID, parentGO):
+        go = self.__gameObjects.get(partName)
+        if go is None or not go.isValid():
+            go = CGF.GameObject(spaceID)
+            go.activate()
+            go.createComponent(GenericComponents.HierarchyComponent, parentGO)
+            go.createComponent(GenericComponents.NodeFollower, partName, parentGO)
+            go.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
+            self.__gameObjects[partName] = go
+        return go
+
+
 class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     activated = property(lambda self: self.__activated)
     wheelsState = property(lambda self: self._vehicle.wheelsState if self._vehicle is not None else 0)
@@ -55,6 +82,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     highlighter = ComponentDescriptor()
     tutorialMatKindsController = ComponentDescriptor()
     compoundHolder = ComponentDescriptor()
+    partsGameObjects = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -71,6 +99,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__tmpGameObjects = {}
         self.__engineStarted = False
         self.__turbochargerSoundPlaying = False
+        self.partsGameObjects = PartsGameObjects()
         return
 
     def setVehicle(self, vehicle):
@@ -134,8 +163,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 self.__dirtUpdateTime = BigWorld.time()
             BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
             BigWorld.player().arena.onVehicleUpdated += self.__vehicleUpdated
-            inputHandler = BigWorld.player().inputHandler
-            inputHandler.onCameraChanged += self._onCameraChanged
+            BigWorld.player().inputHandler.onCameraChanged += self._onCameraChanged
             if self.detailedEngineState is not None:
                 engine_state.checkEngineStart(self.detailedEngineState, BigWorld.player().arena.period)
             self.__activated = True
@@ -259,6 +287,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.tessellationCollisionSensor is not None and not self.tessellationCollisionSensor.activePostmortem:
             self.tessellationCollisionSensor = None
         self.siegeEffects = None
+        self.partsGameObjects = None
         self._destroySystems()
         return
 
@@ -279,8 +308,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         CallbackDelayer.destroy(self)
         return
 
-    def construct(self, isPlayer, isControllableVehicle, resourceRefs):
-        super(CompoundAppearance, self).construct(isPlayer, isControllableVehicle, resourceRefs)
+    def construct(self, isPlayer, resourceRefs):
+        super(CompoundAppearance, self).construct(isPlayer, resourceRefs)
         if self.damageState.effect is not None:
             self.playEffect(self.damageState.effect, SpecialKeyPointNames.STATIC)
         self.highlighter = Highlighter(self.isAlive, self.collisions)
@@ -508,6 +537,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 BigWorld.setSpeedTreeCollisionBody(None)
                 self.__inSpeedTreeCollision = False
             self._compoundModel = newCompoundModel
+            self.removeComponentByType(GenericComponents.DynamicModelComponent)
+            self.createComponent(GenericComponents.DynamicModelComponent, self._compoundModel)
             self.collisions = None
             self.collisions = self.createComponent(BigWorld.CollisionComponent, resourceList['collisionAssembler'])
             model_assembler.setupCollisions(self.typeDescriptor, self.collisions)
@@ -555,11 +586,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def updateTracksScroll(self, leftScroll, rightScroll):
         if self.trackScrollController is not None:
             self.trackScrollController.setExternal(leftScroll, rightScroll)
-        return
-
-    def disableExternalTracksScroll(self):
-        if self.trackScrollController is not None:
-            self.trackScrollController.disableExternal()
         return
 
     def __onPeriodicTimerEngine(self):
@@ -675,25 +701,13 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.engineAudition is not None:
             self.engineAudition.onCameraChanged(cameraName, currentVehicleId if currentVehicleId is not None else 0)
-        if self.suspensionSound is not None:
-            self.suspensionSound.onCameraChanged(cameraName, currentVehicleId if currentVehicleId is not None else 0)
         if self.tracks is not None:
             if cameraName == 'sniper':
                 self.tracks.sniperMode(True)
             else:
                 self.tracks.sniperMode(False)
-        if self._vehicle and self._vehicle.isOnFire():
-            self._vehicle.fire.onCameraChanged(self.id == currentVehicleId)
         super(CompoundAppearance, self)._onCameraChanged(cameraName, currentVehicleId=currentVehicleId)
         return
-
-    def setIsPlayerVehicle(self, isPlayerVehicle):
-        from vehicle_systems.model_assembler import _NPC_UPDATE_PERIOD, _PLAYER_UPDATE_PERIOD
-        if self.detailedEngineState:
-            self.detailedEngineState.setIsPlayerVehicle(isPlayerVehicle)
-            self.detailedEngineState.updatePeriod = _PLAYER_UPDATE_PERIOD if isPlayerVehicle else _NPC_UPDATE_PERIOD
-        if self.engineAudition:
-            self.engineAudition.setUpdatePeriod(_PLAYER_UPDATE_PERIOD if isPlayerVehicle else _NPC_UPDATE_PERIOD)
 
     def __updateTransmissionScroll(self):
         self._commonSlip = 0.0

@@ -6,11 +6,9 @@ import AnimationSequence
 import Math
 import math_utils
 import ResMgr
+from battle_royale.gui.constants import BattleRoyaleEquipments
 from helpers import dependency, newFakeModel, CallbackDelayer
-from constants import ATTACK_REASON, ATTACK_REASONS
 from vehicle_systems.tankStructure import TankPartIndexes
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE
-from gui.battle_royale.constants import SteelHunterEquipmentNames
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptorTyped
 from battleground.component_loading import loadComponentSystem, Loader
 from battleground.components import SequenceComponent, AvatarRelatedComponent
@@ -36,12 +34,9 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
 
         self.__loadingEffects.clear()
         self.__activeEffectsTime.clear()
-        ctrl = self.__sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            ctrl.onEquipmentComponentUpdated.unsubscribe(self.__onEquipmentComponentUpdated)
         progressionCtrl = self.__sessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.onVehicleUpgradeStarted -= self.__onVehicleUpgradeStarted
@@ -50,12 +45,9 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
 
     def _initialize(self):
         super(BerserkerEffectComponent, self)._initialize()
-        ctrl = self.__sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            ctrl.onEquipmentComponentUpdated.subscribe(self.__onEquipmentComponentUpdated, BattleRoyaleEquipments.BERSERKER)
         progressionCtrl = self.__sessionProvider.dynamic.progression
         if progressionCtrl is not None:
             progressionCtrl.onVehicleUpgradeStarted += self.__onVehicleUpgradeStarted
@@ -63,24 +55,10 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
         _TransformationParser().parse()
         return
 
-    def __onVehicleFeedbackReceived(self, eventID, vehicleId, value):
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_INSPIRE:
-            equipmentID = value.get('equipmentID')
-            if equipmentID is not None:
-                itemName = self.__sessionProvider.shared.equipments.getEquipmentNameByID(equipmentID)
-                if itemName == SteelHunterEquipmentNames.BERSERKER and value.get('isInactivation'):
-                    self.__addEffect(vehicleId, value.get('endTime'))
-        return
-
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.DOT_EFFECT:
-            if value is not None and value.attackReasonID == ATTACK_REASONS.index(ATTACK_REASON.BERSERKER):
-                vehicle = BigWorld.player().getVehicleAttached()
-                if vehicle and vehicle.isAlive():
-                    self.__addEffect(vehicle.id, value.endTime)
-                else:
-                    _logger.error('Can not start berserker effect, vehicle is not available.')
-        return
+    def __onEquipmentComponentUpdated(self, _, vehicleID, berserkerInfo):
+        duration = berserkerInfo.endTime - BigWorld.serverTime()
+        if duration > 0:
+            self.__addEffect(vehicleID, berserkerInfo.endTime)
 
     def __addEffect(self, vehicleId, endTime):
         self.__loadingEffects[vehicleId] = _BerserkerEffectObject(vehicleId, endTime, self.__destroyEffect)

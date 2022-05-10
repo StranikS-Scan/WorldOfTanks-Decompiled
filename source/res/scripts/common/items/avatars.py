@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/avatars.py
-import ResMgr
+from extension_utils import ResMgr
 from items import _xml, common_extras
 from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
 g_cache = None

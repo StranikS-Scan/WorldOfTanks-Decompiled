@@ -38,6 +38,7 @@ class EpicSquadEntity(SquadEntity):
         self._isUseSPGValidateRule = True
         self._maxSpgCount = False
         self.__watcher = None
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.EPIC)()
         super(EpicSquadEntity, self).__init__(FUNCTIONAL_FLAG.EPIC, PREBATTLE_TYPE.EPIC)
         return
 
@@ -95,10 +96,6 @@ class EpicSquadEntity(SquadEntity):
         else:
             enableSPGCount = sum((slot.player is not None and slot.player.isReady and slot.vehicle is not None and slot.vehicle.vehClassIdx == VEHICLE_CLASS_INDICES['SPG'] for slot in self.getSlotsIterator(unitMgrId, unit)))
             return enableSPGCount
-
-    @prequeue_storage_getter(QUEUE_TYPE.EPIC)
-    def storage(self):
-        return None
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         super(EpicSquadEntity, self).unit_onUnitVehiclesChanged(dbID, vehicles)

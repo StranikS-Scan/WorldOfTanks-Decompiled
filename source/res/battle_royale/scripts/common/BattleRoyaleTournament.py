@@ -38,6 +38,8 @@ class TYPE(object):
     ANY = 3
 
 
+MAX_PLAYERS_IN_SQUAD = 2
+
 class BattleRoyaleTourmanentToken(object):
 
     def __init__(self, token):
@@ -67,7 +69,7 @@ class BattleRoyaleTourmanentToken(object):
             self.fullTournamentID = tokenParts[1] + tp
             role = tokenParts[4]
             self.teamID = int(tokenParts[5])
-            if self.type == TYPE.SOLO and (self.teamID < 1 or self.teamID > 20) or self.type == TYPE.SQUAD and (self.teamID < 1 or self.teamID > 10):
+            if self.teamID != 0 and (self.type == TYPE.SOLO and (self.teamID < 1 or self.teamID > 20) or self.type == TYPE.SQUAD and (self.teamID < 1 or self.teamID > 10)):
                 self.whatWrong = 'Wrong teamID {} for type {}'.format(self.teamID, self.type)
                 return
             if role == 'observer':

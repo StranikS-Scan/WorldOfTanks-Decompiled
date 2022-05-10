@@ -1,13 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortReserveSelectPopover.py
+import logging
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.base.unit.listener import IUnitListener
+from gui.prb_control.items.stronghold_items import ARTILLERY_STRIKE, INSPIRATION
 from gui.shared.events import CSReserveSelectEvent
 from gui.shared.formatters import text_styles
+from gui.shared.items_parameters import params_helper, formatters
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
+RESERVE_PARAMS_LIST = {ARTILLERY_STRIKE: ('maxDamage', 'areaRadius'),
+ INSPIRATION: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay')}
 
 class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(FortReserveSelectPopover, self).__init__(ctx)
@@ -48,8 +59,8 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
                 count -= 1
                 break
 
-        bonusPersent = '+%d%%' % reserve.getBonusPercent()
-        moduleData = vo_converters.makeReserveModuleData(reserve.getId(), reserve.getType(), reserve.getLevel(), str(count), isSelected, bonusPersent, reserve.getDescription())
+        showExtendedParams = reserve.getType() in RESERVE_PARAMS_LIST
+        moduleData = vo_converters.makeReserveModuleData(reserve.getId(), reserve.getType(), reserve.getLevel(), str(count), isSelected, showExtendedParams, self.__buildReserveParams(reserve))
         return moduleData
 
     def __getReserveGroup(self):
@@ -80,3 +91,29 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
                 modulesList.append(moduleData)
 
             return modulesList
+
+    def __buildReserveParams(self, reserve):
+        if not reserve.isUsingInBattle():
+            return [{'paramValue': '+{}%'.format(reserve.getBonusPercent()),
+              'paramName': reserve.getDescription()}]
+        else:
+            paramsData = []
+            item = self.__itemsCache.items.getItemByCD(int(reserve.intCD))
+            if item is None:
+                _logger.warning('There is not a reserve with intCD=%s', reserve.intCD)
+                return paramsData
+            paramsFilter = RESERVE_PARAMS_LIST.get(reserve.getType())
+            if paramsFilter is None:
+                _logger.warning('RESERVE_PARAMS_LIST does not know a reserve with type=%s', reserve.getType())
+                return paramsData
+            params = params_helper.getParameters(item)
+            paramsResult = formatters.getFormattedParamsList(item.descriptor, params)
+            for paramName, paramValue in paramsResult:
+                if paramName in paramsFilter:
+                    paramsStrR = R.strings.menu.moduleInfo.params.short.dyn(paramName)
+                    if not paramsStrR.isValid():
+                        paramsStrR = R.strings.menu.moduleInfo.params.dyn(paramName)
+                    paramsData.append({'paramValue': paramValue,
+                     'paramName': text_styles.concatStylesWithNBSP(text_styles.main(backport.text(paramsStrR())), text_styles.standard(formatters.measureUnitsForParameter(paramName)))})
+
+            return paramsData

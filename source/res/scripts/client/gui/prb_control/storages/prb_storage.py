@@ -14,17 +14,3 @@ class TrainingStorage(LocalStorage):
 
     def suspend(self):
         self.clear()
-
-
-class RtsTrainingStorage(LocalStorage):
-    __slots__ = ('isCommander',)
-
-    def __init__(self):
-        super(RtsTrainingStorage, self).__init__()
-        self.isCommander = False
-
-    def clear(self):
-        self.isCommander = False
-
-    def suspend(self):
-        self.clear()

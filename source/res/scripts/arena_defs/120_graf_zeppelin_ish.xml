@@ -1,0 +1,46 @@
+<120_graf_zeppelin_ish.xml>
+  <name>	#arenas:120_graf_zeppelin_ish/name	</name>
+  <description>	#arenas:120_graf_zeppelin_ish/description	</description>
+  <geometry>	spaces/120_graf_zeppelin_ish	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/120_graf_zeppelin_ish/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_sweden_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_sweden_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_sweden_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_sweden_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_sweden_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_sweden_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_115_sweden_wind_winter	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-64.096863 -345.910431	</position1>
+        </team1>
+        <team2>
+          <position1>	3.057860 356.526520	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</120_graf_zeppelin_ish.xml>

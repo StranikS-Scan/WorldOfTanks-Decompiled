@@ -6,7 +6,6 @@ import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
-from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
@@ -130,11 +129,8 @@ class TrainingEntity(LegacyEntity):
         super(TrainingEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, settings, permClass=TrainingPermissions, limits=TrainingLimits(self), requestHandlers=requests)
         self.__settingRecords = []
         self.__watcher = None
+        self.storage = legacy_storage_getter(PREBATTLE_TYPE.TRAINING)()
         return
-
-    @legacy_storage_getter(PREBATTLE_TYPE.TRAINING)
-    def storage(self):
-        return None
 
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingEntity, self).init(clientPrb=clientPrb, ctx=ctx)
@@ -200,10 +196,6 @@ class TrainingEntity(LegacyEntity):
 
     def getTeamLimits(self):
         return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
-
-    def isObserverModeEnabled(self):
-        minCount = self.getSettings().getTeamLimits(1)['minCount']
-        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def doAction(self, action=None):
         self.__enterTrainingRoom()

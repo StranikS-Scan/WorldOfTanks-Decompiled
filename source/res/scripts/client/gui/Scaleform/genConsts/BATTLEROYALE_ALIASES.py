@@ -10,7 +10,7 @@ class BATTLEROYALE_ALIASES(object):
     TECH_PARAMETERS_COMPONENT = 'techParametersComponent'
     COMMANDER_COMPONENT = 'commanderComponennt'
     BOTTOM_PANEL_COMPONENT = 'bottomPanelComponent'
-    VEHICLE_WEAK_ZONES_CMP = 'weakZonesComponent'
+    PROXY_CURRENCY_PANEL_COMPONENT = 'proxyCurrencyPanelComponent'
     BATTLE_ROYALE_SUMMARY_RESULTS_CMP = 'BattleRoyaleSummaryResultsCmp'
     BATTLE_ROYALE_SCORE_RESULTS_CMP = 'BattleRoyaleScoreResultsCmp'
     BATTLE_ROYALE_PRIME_TIME = 'BattleRoyalePrimeTimeView'

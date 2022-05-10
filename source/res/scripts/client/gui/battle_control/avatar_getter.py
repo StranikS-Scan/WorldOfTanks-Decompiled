@@ -72,18 +72,6 @@ def getPlayerVehicleID(avatar=None):
     return getattr(avatar, 'playerVehicleID', 0)
 
 
-def isPlayerCommander(avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    return avatar.isCommander()
-
-
-def isCommanderCtrlMode(avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    return avatar.isCommanderCtrlMode()
-
-
 def isPlayerTeamKillSuspected():
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
@@ -428,18 +416,6 @@ def isObserver(avatar=None):
     return result
 
 
-def commanderVehicleID(avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    try:
-        result = avatar.commanderVehicleID()
-    except AttributeError:
-        _logger.exception('Attribute "isObserved" is not found')
-        result = None
-
-    return result
-
-
 def isVehiclesColorized(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
@@ -459,6 +435,18 @@ def isObserverSeesAll(avatar=None):
         result = avatar.observerSeesAll()
     except AttributeError as error:
         _logger.exception('Attribute "isObserverSeesAll" not found, exception %s', error.message)
+        result = False
+
+    return result
+
+
+def isBecomeObserverAfterDeath(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.isBecomeObserverAfterDeath()
+    except AttributeError as error:
+        _logger.exception('Attribute "isBecomeObserverAfterDeath" not found, exception %s', error.message)
         result = False
 
     return result

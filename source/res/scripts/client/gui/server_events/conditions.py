@@ -1112,8 +1112,6 @@ class _Cumulativable(_Condition):
         if curBonusCount > prevBonusCount:
             if self.__isProgressCompleted(curProg):
                 return total - min(prevProg.get(key, 0), total)
-            if curBonusCount > 0:
-                return total + curProg.get(key, 0) - prevProg.get(key, 0)
             return current
         return current - min(prevProg.get(key, 0), total)
 

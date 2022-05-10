@@ -2021,6 +2021,11 @@
       <wwsound>	ev_battle_royale_2020_amb_fueltank	</wwsound>
     </model>
     <model>
+      <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_03.srt	</modelName>
+      <offset>	0.000000 0.500000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
       <modelName>	vegetation/Broadleaves/DryTree_Autumn/DryTree_Autumn_01.srt	</modelName>
       <offset>	0.000000 5.000000 0.000000	</offset>
       <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
@@ -2151,9 +2156,19 @@
       <wwsound>	amb_map_06_ensk_flag	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/Maple/Maple_33m.srt	</modelName>
-      <offset>	0.000000 25.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
+      <modelName>	vegetation/Conifers/Spruce/Spruce_Ragged_14m.srt	</modelName>
+      <offset>	0.000000 4.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Birch_Bold/Birch_Bold_Twisted.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Misc/Hedera/Hedera_Result.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
     </model>
   </lightSounds>
   <birds>
@@ -5118,12 +5133,12 @@
         <wwsoundName>	hangar_h04_remday_cannonade	</wwsoundName>
       </channel0>
       <point>
-        <position>	-60.373898 6.347350 246.837204	</position>
+        <position>	-149.415619 6.347349 247.047638	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	50.807899 5.692504 246.127869	</position>
+        <position>	-50.688725 5.692511 247.525436	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>

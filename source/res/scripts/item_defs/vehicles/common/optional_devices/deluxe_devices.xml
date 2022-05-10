@@ -4,7 +4,7 @@
     <userString>	#artefacts:deluxImprovedConfiguration/name	</userString>
     <shortDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:deluxImprovedConfiguration/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/improvedConfiguration.png 0 0	</icon>
+    <icon>	improvedConfiguration	</icon>
     <groupName>	improvedConfiguration	</groupName>
     <price>	3000	  <crystal></crystal>
     </price>
@@ -74,7 +74,7 @@
     <id>	44	</id>
     <userString>	#artefacts:deluxImprovedVentilation/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxImprovedVentilation/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <icon>	improvedVentilation	</icon>
     <groupName>	improvedVentilation	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
@@ -110,7 +110,7 @@
     <id>	45	</id>
     <userString>	#artefacts:deluxRammer/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <icon>	rammer	</icon>
     <groupName>	tankRammer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
@@ -146,7 +146,7 @@
     <id>	46	</id>
     <userString>	#artefacts:deluxCoatedOptics/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <icon>	coatedOptics	</icon>
     <groupName>	coatedOptics	</groupName>
     <price>	4000	  <crystal></crystal>
     </price>
@@ -174,7 +174,7 @@
     <id>	47	</id>
     <userString>	#artefacts:deluxAimingStabilizer/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <icon>	aimingStabilizer.png	</icon>
     <groupName>	aimingStabilizer	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
@@ -210,7 +210,7 @@
     <id>	48	</id>
     <userString>	#artefacts:deluxEnhancedAimDrives/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <icon>	enhancedAimDrives	</icon>
     <groupName>	enhancedAimDrives	</groupName>
     <price>	5000	  <crystal></crystal>
     </price>
@@ -239,7 +239,7 @@
     <id>	111	</id>
     <userString>	#artefacts:deluxeTurbocharger/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxeTurbocharger/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/turbocharger.png 0 0	</icon>
+    <icon>	turbocharger	</icon>
     <price>	5000	  <crystal></crystal>
     </price>
     <tags>	turbocharger deluxe	</tags>
@@ -297,7 +297,7 @@
     <id>	112	</id>
     <userString>	#artefacts:deluxeExtraHealthReserve/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxeExtraHealthReserve/long_special	</longDescriptionSpecial>
-    <icon>	../maps/icons/artefact/extraHealthReserve.png 0 0	</icon>
+    <icon>	extraHealthReserve	</icon>
     <price>	5000	  <crystal></crystal>
     </price>
     <tags>	healthReserve deluxe	</tags>
@@ -359,4 +359,59 @@
       </mul>
     </kpi>
   </deluxeExtraHealthReserve>
+  <deluxeImprovedRotationMechanism>
+    <id>	117	</id>
+    <userString>	#artefacts:deluxeImprovedRotationMechanism/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeImprovedRotationMechanism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeImprovedRotationMechanism/long_special	</longDescriptionSpecial>
+    <icon>	improvedRotationMechanism	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	rotationMechanism deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	rotationMechanism	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	RotationMechanisms	  <weight>	200	</weight>
+      <trackRotateSpeedFactor>	1.175 1.175	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.175 1.175	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.175 1.175	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.175 1.175	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.175 1.175	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.175 1.175	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.825 0.825	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.175	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.175	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.825	</value>
+      </mul>
+    </kpi>
+  </deluxeImprovedRotationMechanism>
 </deluxe_devices.xml>

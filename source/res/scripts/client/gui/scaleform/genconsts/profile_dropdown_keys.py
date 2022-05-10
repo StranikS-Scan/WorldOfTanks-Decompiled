@@ -18,3 +18,5 @@ class PROFILE_DROPDOWN_KEYS(object):
     RANKED = 'ranked'
     RANKED_10X10 = 'ranked_10x10'
     EPIC_RANDOM = 'epicRandom'
+    BATTLE_ROYALE_SOLO = 'battleRoyaleSolo'
+    BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'

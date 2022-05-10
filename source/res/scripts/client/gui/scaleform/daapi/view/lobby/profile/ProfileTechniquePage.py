@@ -31,6 +31,8 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
             self._battlesType = PROFILE_DROPDOWN_KEYS.RANKED
         elif vehCD in accountDossier.getEpicRandomStats().getVehicles():
             self._battlesType = PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
+        elif vehCD in accountDossier.getBattleRoyaleSoloStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO
         self.as_setSelectedVehicleIntCDS(vehCD)
         return
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/strongholds/__init__.py
+import logging
 from functools import partial
 from adisp import process
 from constants import JOIN_FAILURE, PREBATTLE_TYPE
@@ -13,17 +14,25 @@ from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import actions
+from gui.shared.items_parameters import params_helper, formatters
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IReloginController
+from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2capi, w2c, W2CSchema, Field
+_logger = logging.getLogger(__name__)
 
 class _StrongholdsJoinBattleSchema(W2CSchema):
     unit_id = Field(required=True, type=(int, long))
     periphery_id = Field(required=True, type=(int, long))
 
 
+class _GetReserveParamsSchema(W2CSchema):
+    reserve_intCDs = Field(required=True, type=list)
+
+
 @w2capi(name='strongholds_battle', key='action')
 class StrongholdsWebApi(object):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     @w2c(W2CSchema, 'open_list')
     @process
@@ -81,3 +90,16 @@ class StrongholdsWebApi(object):
                 reloginCtrl.doRelogin(cmd.periphery_id, extraChainSteps=(actions.OnLobbyInitedAction(onInited=partial(doJoin, False)),))
         else:
             doJoin(True)
+
+    @w2c(_GetReserveParamsSchema, 'get_reserve_params')
+    def getReserveParams(self, cmd):
+        result = {}
+        for intCD in cmd.reserve_intCDs:
+            item = self.__itemsCache.items.getItemByCD(int(intCD))
+            if item is None:
+                _logger.warning('There is not a reserve with intCD=(%s)', intCD)
+                continue
+            rawParams = params_helper.getParameters(item)
+            result[intCD] = {pName:pValue for pName, pValue in formatters.getFormattedParamsList(item.descriptor, rawParams)}
+
+        return result

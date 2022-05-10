@@ -9,6 +9,7 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
@@ -114,21 +115,17 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         if recruitInfo is None:
             return
         else:
+            if recruitInfo.isFemale():
+                bonusImageName = 'tankwoman'
+            else:
+                bonusImageName = 'tankman'
             model = RewardItemModel()
             cls._packCommon(bonus, model)
-            model.setIcon(cls._getIcon(recruitInfo))
+            model.setIcon(bonusImageName)
             model.setUserName(recruitInfo.getFullUserName())
-            model.setBigIcon('_'.join([cls._getIcon(recruitInfo), recruitInfo.getGroupName()]))
+            model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
-
-    @classmethod
-    def _getIcon(cls, recruitInfo):
-        if recruitInfo.isFemale():
-            bonusImageName = 'tankwoman'
-        else:
-            bonusImageName = 'tankman'
-        return bonusImageName
 
     @classmethod
     def _getToolTip(cls, bonus):

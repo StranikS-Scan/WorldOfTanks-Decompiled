@@ -590,6 +590,7 @@ class MENU(object):
     TANK_PARAMS_VALUES_PARAM11_VALUE2 = '#menu:tank_params/values/param11/value2'
     TANK_PARAMS_VALUES_PARAM11_VALUE3 = '#menu:tank_params/values/param11/value3'
     TANK_PARAMS_EXPLOSIONRADIUS = '#menu:tank_params/explosionRadius'
+    TANK_PARAMS_INCREASEHEALTH = '#menu:tank_params/increaseHealth'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
     TANK_PARAMS_PT = '#menu:tank_params/pt'
@@ -789,19 +790,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotAvailable/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSSUBMODENOTELIGIBLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsSubmodeNotEligible/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNotAvailable/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOBATTLES_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoBattles/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rtsNotSet/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOCURRENCY1X7_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoCurrency1x7/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOCURRENCY1X1_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoCurrency1x1/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_AIROSTERNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/aiRosterNotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSVEHICLENOTREADY_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsVehicleNotReady/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSUNSUITABLEVEHICLELEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsUnsuitableVehicleLevel/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RTSNOVEHICLEWITHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/rtsNoVehicleWithLevel/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_HEADER = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/header'
@@ -1092,6 +1080,13 @@ class MENU(object):
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
     MODULEINFO_PARAMS_AREASQUARE = '#menu:moduleInfo/params/areaSquare'
     MODULEINFO_PARAMS_FLYDELAYRANGE = '#menu:moduleInfo/params/flyDelayRange'
+    MODULEINFO_PARAMS_COMMONDELAY = '#menu:moduleInfo/params/commonDelay'
+    MODULEINFO_PARAMS_DURATION = '#menu:moduleInfo/params/duration'
+    MODULEINFO_PARAMS_COMMONAREARADIUS = '#menu:moduleInfo/params/commonAreaRadius'
+    MODULEINFO_PARAMS_INACTIVATIONDELAY = '#menu:moduleInfo/params/inactivationDelay'
+    MODULEINFO_PARAMS_CREWROLESFACTOR = '#menu:moduleInfo/params/crewRolesFactor'
+    MODULEINFO_PARAMS_SHORT_CREWROLESFACTOR = '#menu:moduleInfo/params/short/crewRolesFactor'
+    MODULEINFO_PARAMS_MAXDAMAGE = '#menu:moduleInfo/params/maxDamage'
     MODULEINFO_PARAMS_BOMBDAMAGE = '#menu:moduleInfo/params/bombDamage'
     MODULEINFO_PARAMS_SHOTSNUMBERRANGE = '#menu:moduleInfo/params/shotsNumberRange'
     MODULEINFO_PARAMS_AREARADIUS = '#menu:moduleInfo/params/areaRadius'
@@ -1575,8 +1570,10 @@ class MENU(object):
     CONTEXTMENU_KICKPLAYERFROMPREBATTLE = '#menu:contextMenu/kickPlayerFromPrebattle'
     CONTEXTMENU_KICKPLAYERFROMUNIT = '#menu:contextMenu/kickPlayerFromUnit'
     CONTEXTMENU_GIVELEADERSHIP = '#menu:contextMenu/giveLeadership'
-    CONTEXTMENU_TAKEEQUIPMENTCOMMANDER = '#menu:contextMenu/takeEquipmentCommander'
-    CONTEXTMENU_GIVEEQUIPMENTCOMMANDER = '#menu:contextMenu/giveEquipmentCommander'
+    CONTEXTMENU_TAKEARTILLERYEQUIPMENTCOMMANDER = '#menu:contextMenu/takeArtilleryEquipmentCommander'
+    CONTEXTMENU_GIVEARTILLERYEQUIPMENTCOMMANDER = '#menu:contextMenu/giveArtilleryEquipmentCommander'
+    CONTEXTMENU_TAKEINSPIREEQUIPMENTCOMMANDER = '#menu:contextMenu/takeInspireEquipmentCommander'
+    CONTEXTMENU_GIVEINSPIREEQUIPMENTCOMMANDER = '#menu:contextMenu/giveInspireEquipmentCommander'
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
@@ -1604,6 +1601,8 @@ class MENU(object):
     CONTEXTMENU_MESSENGER_CLOSECURRENT = '#menu:contextMenu/messenger/closeCurrent'
     CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT = '#menu:contextMenu/messenger/closeAllExceptCurrent'
     CONTEXTMENU_CREATECONTACTNOTE = '#menu:contextMenu/createContactNote'
+    BATTLEROYALE_CONTEXTMENU_TAKETESTDRIVE = '#menu:battleRoyale/contextMenu/takeTestDrive'
+    BATTLEROYALE_CONTEXTMENU_TAKERENT = '#menu:battleRoyale/contextMenu/takeRent'
     CONTEXTMENU_EDITCONTACTNOTE = '#menu:contextMenu/editContactNote'
     CONTEXTMENU_REMOVECONTACTNOTE = '#menu:contextMenu/removeContactNote'
     CONTEXTMENU_BOTNOACTIONS = '#menu:contextMenu/botNoActions'
@@ -1710,9 +1709,6 @@ class MENU(object):
     BONUSTYPE_29 = '#menu:bonusType/29'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
-    BONUSTYPE_39 = '#menu:bonusType/39'
-    BONUSTYPE_40 = '#menu:bonusType/40'
-    BONUSTYPE_41 = '#menu:bonusType/41'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2226,22 +2222,6 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     BADGE_NEW = '#menu:badge/new'
     BADGE_CONFIRM = '#menu:badge/confirm'
-    TANK_PARAMS_SUPPLY_AVGDAMAGE = '#menu:tank_params/supply_avgDamage'
-    TANK_PARAMS_SUPPLY_BARRICADESDAMAGE = '#menu:tank_params/supply_barricadesDamage'
-    TANK_PARAMS_SUPPLY_FLAMETHROWERDAMAGE = '#menu:tank_params/supply_flamethrowerDamage'
-    TANK_PARAMS_SUPPLY_AVGPIERCINGPOWER = '#menu:tank_params/supply_avgPiercingPower'
-    TANK_PARAMS_SUPPLY_RELOADTIMESECS = '#menu:tank_params/supply_reloadTimeSecs'
-    TANK_PARAMS_SUPPLY_PILLBOXCLIPFIRERATE = '#menu:tank_params/supply_pillboxClipFireRate'
-    TANK_PARAMS_SUPPLY_BUNKERCLIPFIRERATE = '#menu:tank_params/supply_bunkerClipFireRate'
-    TANK_PARAMS_SUPPLY_MORTARCLIPFIRERATE = '#menu:tank_params/supply_mortarClipFireRate'
-    TANK_PARAMS_SUPPLY_FLAMETHROWERCLIPFIRERATE = '#menu:tank_params/supply_flamethrowerClipFireRate'
-    TANK_PARAMS_SUPPLY_MAXHEALTH = '#menu:tank_params/supply_maxHealth'
-    TANK_PARAMS_SUPPLY_ARMOR = '#menu:tank_params/supply_armor'
-    TANK_PARAMS_SUPPLY_TURRETARMOR = '#menu:tank_params/supply_turretArmor'
-    TANK_PARAMS_SUPPLY_AIMINGTIME = '#menu:tank_params/supply_aimingTime'
-    TANK_PARAMS_SUPPLY_CIRCULARVISIONRADIUS = '#menu:tank_params/supply_circularVisionRadius'
-    TANK_PARAMS_SUPPLY_SHOTDISPERSIONANGLE = '#menu:tank_params/supply_shotDispersionAngle'
-    TANK_PARAMS_SUPPLY_STUNDURATION = '#menu:tank_params/supply_stunDuration'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2291,8 +2271,10 @@ class MENU(object):
      CONTEXTMENU_KICKPLAYERFROMPREBATTLE,
      CONTEXTMENU_KICKPLAYERFROMUNIT,
      CONTEXTMENU_GIVELEADERSHIP,
-     CONTEXTMENU_TAKEEQUIPMENTCOMMANDER,
-     CONTEXTMENU_GIVEEQUIPMENTCOMMANDER,
+     CONTEXTMENU_TAKEARTILLERYEQUIPMENTCOMMANDER,
+     CONTEXTMENU_GIVEARTILLERYEQUIPMENTCOMMANDER,
+     CONTEXTMENU_TAKEINSPIREEQUIPMENTCOMMANDER,
+     CONTEXTMENU_GIVEINSPIREEQUIPMENTCOMMANDER,
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
@@ -2638,6 +2620,7 @@ class MENU(object):
      TANK_PARAMS_VALUES_PARAM11_VALUE2,
      TANK_PARAMS_VALUES_PARAM11_VALUE3,
      TANK_PARAMS_EXPLOSIONRADIUS,
+     TANK_PARAMS_INCREASEHEALTH,
      TANK_PARAMS_T,
      TANK_PARAMS_P,
      TANK_PARAMS_PT,
@@ -2664,23 +2647,7 @@ class MENU(object):
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,
-     TANK_PARAMS_NO_BRACKETS_MM,
-     TANK_PARAMS_SUPPLY_AVGDAMAGE,
-     TANK_PARAMS_SUPPLY_BARRICADESDAMAGE,
-     TANK_PARAMS_SUPPLY_FLAMETHROWERDAMAGE,
-     TANK_PARAMS_SUPPLY_AVGPIERCINGPOWER,
-     TANK_PARAMS_SUPPLY_RELOADTIMESECS,
-     TANK_PARAMS_SUPPLY_PILLBOXCLIPFIRERATE,
-     TANK_PARAMS_SUPPLY_BUNKERCLIPFIRERATE,
-     TANK_PARAMS_SUPPLY_MORTARCLIPFIRERATE,
-     TANK_PARAMS_SUPPLY_FLAMETHROWERCLIPFIRERATE,
-     TANK_PARAMS_SUPPLY_MAXHEALTH,
-     TANK_PARAMS_SUPPLY_ARMOR,
-     TANK_PARAMS_SUPPLY_TURRETARMOR,
-     TANK_PARAMS_SUPPLY_AIMINGTIME,
-     TANK_PARAMS_SUPPLY_CIRCULARVISIONRADIUS,
-     TANK_PARAMS_SUPPLY_SHOTDISPERSIONANGLE,
-     TANK_PARAMS_SUPPLY_STUNDURATION)
+     TANK_PARAMS_NO_BRACKETS_MM)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,

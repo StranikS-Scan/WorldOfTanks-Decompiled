@@ -4,7 +4,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ELEN_NOTIFICATIONS
 from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
-from constants import ARENA_BONUS_TYPE
 from gui import SystemMessages
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
@@ -12,10 +11,6 @@ from gui.SystemMessages import SM_TYPE
 from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, PLAYER_STATE_REASON as _psr
 from gui.event_boards.event_boards_items import EventSettings
 from gui.event_boards.listener import IEventBoardsListener
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.lobby.rts import LeaderboardIDSuffix
-from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg import IWebController
 from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
@@ -113,6 +108,7 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             if edResponse is not None:
                 statusCode = eventsSettings.setData(edResponse.getData(), prefetchKeyArtBig)
                 if statusCode == SET_DATA_STATUS_CODE.OK:
+                    self.__checkStartedFinishedEvents(isTabVisited)
                     if onlySettings:
                         statusCode = SET_DATA_STATUS_CODE.RETURN
                 else:
@@ -145,8 +141,6 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                     newEventsMyTop.append(myETop)
 
             myTopData.setData(newEventsMyTop)
-        if statusCode == SET_DATA_STATUS_CODE.OK or statusCode == SET_DATA_STATUS_CODE.RETURN:
-            self.__checkStartedFinishedEvents(isTabVisited)
         callback(self)
         return
 
@@ -155,8 +149,8 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
     def getMyLeaderboardInfo(self, eventID, leaderboardID, callback):
         statusCode = SET_DATA_STATUS_CODE.ERROR
         milbResponse = yield self.sendRequest(EventBoardsGetMyLeaderboardPositionCtx(eventID, leaderboardID))
-        myInfoData = MyInfoInLeaderBoard()
         if milbResponse is not None:
+            myInfoData = MyInfoInLeaderBoard()
             statusCode = myInfoData.setData(milbResponse.getData(), eventID, leaderboardID)
         if statusCode == SET_DATA_STATUS_CODE.OK:
             callback(myInfoData)
@@ -169,11 +163,11 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
     def getLeaderboard(self, eventID, leaderboardID, pageNumber, callback):
         statusCode = SET_DATA_STATUS_CODE.ERROR
         lbResponse = yield self.sendRequest(EventBoardsGetLeaderboardCtx(eventID, leaderboardID, pageNumber))
-        leaderboardData = LeaderBoard()
         if lbResponse is not None:
             eventSettings = self.__eventBoardsSettings.getEventsSettings().getEvent(eventID)
             mType = eventSettings.getMethod()
             lbType = eventSettings.getType()
+            leaderboardData = LeaderBoard()
             statusCode = leaderboardData.setData(lbResponse.getData(), leaderboardID, mType, lbType)
         if statusCode == SET_DATA_STATUS_CODE.OK:
             callback(leaderboardData)
@@ -199,22 +193,19 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             notifications[MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION] = started
             notifications[MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION] = finished
             notifications[MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED] = visited
-            finishedEvents = []
             for event in events:
                 eventID = event.getEventID()
                 if isTabVisited and event.isStarted() and not event.isFinished():
                     visited.add(eventID)
                 if event.isAtBeginning():
-                    if not self.__isRtsEvent(event):
-                        if eventID not in started:
-                            SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_BODY, eventName=event.getName()), messageData={'header': _ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_HEADER)}, type=SM_TYPE.OpenEventBoards)
-                            started.add(eventID)
+                    if eventID not in started:
+                        SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_BODY, eventName=event.getName()), messageData={'header': _ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_HEADER)}, type=SM_TYPE.OpenEventBoards)
+                        started.add(eventID)
                 if event.isAfterEnd() and eventID in visited:
                     if eventID not in finished:
-                        finishedEvents.append(event)
+                        self.__complexWarningNotification(_ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_HEADER), _ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_BODY, eventName=event.getName()))
                         finished.add(eventID)
 
-            self.__createEventFinishNotification(finishedEvents)
             AccountSettings.setNotifications(ELEN_NOTIFICATIONS, notifications)
 
     def __handleResponseNotifications(self, response, ctx):
@@ -281,32 +272,3 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                     availableVehicles.append(vehicle)
 
         return availableVehicles
-
-    def __isRtsEvent(self, event):
-        return event.getBattleType() in ARENA_BONUS_TYPE.RTS_RANGE
-
-    def __createEventFinishNotification(self, events):
-        rtsData = {}
-        for event in events:
-            eventId = event.getEventID()
-            if self.__isRtsEvent(event):
-                topItem = self.getMyEventsTopData().getMyLeaderboardEventTop(eventId=eventId, leadeboardId=0)
-                if topItem:
-                    rtsData[eventId] = topItem.getMyPosition()
-            self.__complexWarningNotification(_ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_HEADER), _ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_BODY, eventName=event.getName()))
-
-        if rtsData:
-            self.__createRtsEventFinishNotification(rtsData)
-
-    def __createRtsEventFinishNotification(self, rtsData):
-        places = ''
-        leaderboard = R.strings.rts_battles.notifications.leaderboard
-        for modeSuffix in (LeaderboardIDSuffix.TANKER.value, LeaderboardIDSuffix.STRATEGIST_1x1.value, LeaderboardIDSuffix.STRATEGIST_1x7.value):
-            for eventFullName, place in rtsData.iteritems():
-                if modeSuffix in eventFullName:
-                    places += backport.text(leaderboard.eventTopPlace.dyn(modeSuffix)(), place=place)
-                    places += '\n'
-                    break
-
-        if places:
-            SystemMessages.pushMessage(backport.text(leaderboard.eventFinished.body(), places=places), messageData={'header': backport.text(leaderboard.eventFinished.header())}, priority=NotificationPriorityLevel.MEDIUM, type=SM_TYPE.InformationHeader)

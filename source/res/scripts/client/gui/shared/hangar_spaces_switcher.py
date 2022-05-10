@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/hangar_spaces_switcher.py
 from collections import namedtuple
 import ResMgr
-from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE, event_dispatcher
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpaceReloader
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
@@ -53,8 +53,7 @@ class HangarSpacesSwitcher(IHangarSpacesSwitcher):
     @property
     def currentItem(self):
         for itemKey, itemParams in self.__hangarSpacesSwitchParams.iteritems():
-            hangarSpacePath = self._hangarSpaceReloader.hangarSpacePath
-            if hangarSpacePath and itemParams.spaceName in hangarSpacePath:
+            if itemParams.spaceName in self._hangarSpaceReloader.hangarSpacePath:
                 return itemKey
 
         return None
@@ -80,6 +79,5 @@ class HangarSpacesSwitcher(IHangarSpacesSwitcher):
     def __switchToHangarSpace(self, switchItemName):
         if switchItemName not in self.__hangarSpacesSwitchParams:
             return False
-        event_dispatcher.hideVehiclePreview(back=False, close=True)
         spaceName, waitingMessage, backgroundImage = self.__hangarSpacesSwitchParams[switchItemName]
         return self._hangarSpaceReloader.changeHangarSpace(spaceName, waitingMessage, backgroundImage)

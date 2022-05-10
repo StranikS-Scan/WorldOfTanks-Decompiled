@@ -2,11 +2,13 @@
 # Embedded file name: scripts/client/gui/prb_control/factories/UnitFactory.py
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui.shared.system_factory import registerUnitEntity, collectUnitEntity
+from gui.shared.system_factory import registerUnitEntryPoint, collectUnitEntryPoint
+from gui.shared.system_factory import registerUnitEntryPointByType, collectUnitEntryPointByType
 from gui.prb_control import prb_getters
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
 from gui.prb_control.entities.base.unit.entity import UnitIntroEntity
-from gui.prb_control.entities.battle_royale.squad.entity import BattleRoyaleSquadEntryPoint, BattleRoyaleSquadEntity
 from gui.prb_control.entities.e_sport.unit.entity import ESportIntroEntity, ESportIntroEntry
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntity, PublicEntity
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
@@ -19,38 +21,38 @@ from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 __all__ = ('UnitFactory',)
-_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint,
- PREBATTLE_ACTION_NAME.EVENT_SQUAD: EventBattleSquadEntryPoint,
- PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD: BattleRoyaleSquadEntryPoint,
- PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
- PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.MAPBOX_SQUAD: MapboxSquadEntryPoint}
-_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
- PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
- PREBATTLE_TYPE.EPIC: EpicSquadEntryPoint,
- PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntryPoint,
- PREBATTLE_TYPE.UNIT: PublicEntryPoint,
- PREBATTLE_TYPE.STRONGHOLD: StrongholdEntryPoint,
- PREBATTLE_TYPE.MAPBOX: MapboxSquadEntryPoint}
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.SQUAD, RandomSquadEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.EVENT_SQUAD, EventBattleSquadEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.E_SPORT, ESportIntroEntry)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.PUBLICS_LIST, PublicBrowserEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, StrongholdBrowserEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, MapboxSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.SQUAD, RandomSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.EVENT, EventBattleSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.EPIC, EpicSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.UNIT, PublicEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntryPoint)
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdBrowserEntity}
-_SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
- PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
- PREBATTLE_TYPE.EPIC: EpicSquadEntity,
- PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyaleSquadEntity,
- PREBATTLE_TYPE.UNIT: PublicEntity,
- PREBATTLE_TYPE.STRONGHOLD: StrongholdEntity,
- PREBATTLE_TYPE.MAPBOX: MapboxSquadEntity}
+registerUnitEntity(PREBATTLE_TYPE.SQUAD, RandomSquadEntity)
+registerUnitEntity(PREBATTLE_TYPE.EVENT, EventBattleSquadEntity)
+registerUnitEntity(PREBATTLE_TYPE.EPIC, EpicSquadEntity)
+registerUnitEntity(PREBATTLE_TYPE.UNIT, PublicEntity)
+registerUnitEntity(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntity)
+registerUnitEntity(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntity)
 
 class UnitFactory(ControlFactory):
 
     def createEntry(self, ctx):
-        return self._createEntryByType(ctx.getEntityType(), _SUPPORTED_ENTRY_BY_TYPE)
+        return collectUnitEntryPointByType(ctx.getEntityType())
 
     def createEntryByAction(self, action):
-        return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
+        result = collectUnitEntryPoint(action.actionName)
+        if result:
+            result.setAccountsToInvite(action.accountsToInvite)
+        return result
 
     def createEntity(self, ctx):
         if ctx.getCtrlType() == CTRL_ENTITY_TYPE.UNIT:
@@ -79,7 +81,7 @@ class UnitFactory(ControlFactory):
                 LOG_ERROR('Unit is not found in unit manager', unitMrg.id, unitMrg.unit)
                 unitMrg.leave()
                 return
-            return self._createEntityByType(entity.getPrebattleType(), _SUPPORTED_UNIT_BY_TYPE)
+            return collectUnitEntity(entity.getPrebattleType())
         else:
             return self.__createByPrbType(ctx)
 

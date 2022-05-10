@@ -5,8 +5,8 @@ import BigWorld
 import CGF
 import GenericComponents
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
-from gui.battle_control.controllers.sound_ctrls.br_battle_sounds import BREvents
+from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
+from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
 from helpers import dependency
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 _logger = logging.getLogger(__name__)

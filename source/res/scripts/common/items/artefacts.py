@@ -24,6 +24,9 @@ if TYPE_CHECKING:
     from ResMgr import DataSection
 if IS_CLIENT:
     from helpers import i18n
+    from gui.impl.backport import text
+    from gui.impl.backport.backport_system_locale import getNiceNumberFormat
+    from gui.impl.gen import R
 elif IS_WEB:
     from web_stubs import i18n
 else:
@@ -184,7 +187,7 @@ class Artefact(BasicItem):
             self.tags = _readTags(xmlCtx, section, 'tags', self.itemTypeName)
         if IS_CLIENT or IS_WEB:
             self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'), shortFilterAlertKey=section.readString('shortFilterAlert'), longFilterAlertKey=section.readString('longFilterAlert'))
-            self.icon = _xml.readIcon(xmlCtx, section, 'icon')
+            self.icon = _xml.readIconWithDefaultParams(xmlCtx, section, 'icon')
             self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
         if IS_CLIENT and section.has_key('kpi'):
             self.kpi = readKpi(xmlCtx, section['kpi'])
@@ -441,7 +444,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'playerMessagesKey')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -453,6 +456,7 @@ class Equipment(Artefact):
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
         self.playerMessagesKey = None
+        self.clientSelector = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -463,6 +467,9 @@ class Equipment(Artefact):
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
         self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
+        self.clientSelector = _xml.readStringOrNone(xmlCtx, scriptSection, 'clientSelector')
+        self.ownerPrefab = _xml.readStringOrNone(xmlCtx, section, 'ownerPrefab')
+        self.usagePrefab = _xml.readStringOrNone(xmlCtx, section, 'usagePrefab')
 
     def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         pass
@@ -619,8 +626,25 @@ class Repairkit(Equipment):
         self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
 
 
-class RepairkitBattleRoyale(Repairkit):
-    pass
+class CountableConsumableConfigReader(object):
+    _CONSUMABLE_SLOTS = ('consumeAmmo',)
+
+    def initCountableConsumableSlots(self):
+        self.consumeAmmo = False
+
+    def readCountableConsumableConfig(self, xmlCtx, section):
+        self.consumeAmmo = _xml.readBool(xmlCtx, section, 'consumeAmmo')
+
+
+class RepairkitBattleRoyale(Repairkit, CountableConsumableConfigReader):
+
+    def __init__(self):
+        super(RepairkitBattleRoyale, self).__init__()
+        self.initCountableConsumableSlots()
+
+    def _readConfig(self, xmlCtx, section):
+        super(RepairkitBattleRoyale, self)._readConfig(xmlCtx, section)
+        self.readCountableConsumableConfig(xmlCtx, section)
 
 
 class RemovedRpmLimiter(Equipment):
@@ -668,7 +692,7 @@ class Afterburning(Equipment):
             pass
 
 
-class AfterburningBattleRoyale(Equipment):
+class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader):
     __slots__ = ('consumeSeconds', 'enginePowerFactor', 'maxSpeedFactor', 'vehicleRotationSpeed', 'deploySeconds', 'rechargeSeconds')
 
     def __init__(self):
@@ -679,12 +703,14 @@ class AfterburningBattleRoyale(Equipment):
         self.vehicleRotationSpeed = component_constants.ZERO_FLOAT
         self.deploySeconds = component_constants.ZERO_FLOAT
         self.rechargeSeconds = component_constants.ZERO_FLOAT
+        self.initCountableConsumableSlots()
 
     def _readConfig(self, xmlCtx, section):
         self.consumeSeconds = _xml.readInt(xmlCtx, section, 'consumeSeconds', 0)
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
         self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, section, 'vehicleRotationSpeed')
+        self.readCountableConsumableConfig(xmlCtx, section)
 
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
@@ -700,7 +726,7 @@ class AfterburningBattleRoyale(Equipment):
 
 
 class InfluenceZone(object):
-    __slots__ = ('radius', 'height', 'depth', 'timer', 'terrainResistance', 'debuffFactors', 'dotParams', 'hotParams', 'influenceType')
+    __slots__ = ('radius', 'height', 'depth', 'timer', 'terrainResistance', 'debuffFactors', 'dotParams', 'hotParams', 'influenceType', 'fireEffectName', 'componentName')
 
     def __init__(self):
         self.radius = component_constants.ZERO_FLOAT
@@ -712,12 +738,20 @@ class InfluenceZone(object):
         self.dotParams = component_constants.EMPTY_DICT
         self.hotParams = component_constants.EMPTY_DICT
         self.influenceType = component_constants.INFLUENCE_ALL
+        self.fireEffectName = component_constants.EMPTY_STRING
+        self.componentName = None
+        return
 
     def _readConfig(self, xmlCtx, section):
+        self.debuffFactors = component_constants.EMPTY_DICT
+        self.dotParams = component_constants.EMPTY_DICT
+        self.hotParams = component_constants.EMPTY_DICT
         self.radius = _xml.readPositiveFloat(xmlCtx, section, 'radius')
         self.height = _xml.readPositiveFloat(xmlCtx, section, 'height')
         self.depth = _xml.readNonNegativeFloat(xmlCtx, section, 'depth', 0.0)
         self.timer = _xml.readPositiveFloat(xmlCtx, section, 'timer')
+        if section.has_key('fireEffectName'):
+            self.fireEffectName = _xml.readString(xmlCtx, section, 'fireEffectName')
         if section.has_key('terrainResistance'):
             self.terrainResistance = _xml.readPositiveFloat(xmlCtx, section, 'terrainResistance')
         if section.has_key('influenceType'):
@@ -732,16 +766,18 @@ class InfluenceZone(object):
             self.hotParams._readConfig(xmlCtx, section['hotParams'])
 
 
-class TrapPoint(Equipment):
+class TrapPoint(Equipment, CountableConsumableConfigReader):
     __slots__ = ('influenceZone',)
 
     def __init__(self):
         super(TrapPoint, self).__init__()
         self.influenceZone = InfluenceZone()
+        self.initCountableConsumableSlots()
 
     def _readConfig(self, xmlCtx, section):
         super(TrapPoint, self)._readConfig(xmlCtx, section)
         self.influenceZone._readConfig(xmlCtx, section['influenceZone'])
+        self.readCountableConsumableConfig(xmlCtx, section)
 
     def _getDescription(self, descr):
         localizeDescr = super(TrapPoint, self)._getDescription(descr)
@@ -765,7 +801,7 @@ class RageEquipmentConfigReader(object):
 
 
 class SharedCooldownConsumableConfigReader(object):
-    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('cooldownTimeRespawnFactor', 'cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage')
+    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('cooldownTimeRespawnFactor', 'cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage', 'setUnavailableAfterAmmoLeft')
 
     def initSharedCooldownConsumableSlots(self):
         self.cooldownTime = component_constants.ZERO_FLOAT
@@ -773,6 +809,7 @@ class SharedCooldownConsumableConfigReader(object):
         self.cooldownFactors = component_constants.EMPTY_DICT
         self.consumeAmmo = False
         self.disableAllyDamage = False
+        self.setUnavailableAfterAmmoLeft = False
 
     def readSharedCooldownConsumableConfig(self, xmlCtx, section):
         self.cooldownTimeRespawnFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTimeRespawnFactor', 1.0)
@@ -781,6 +818,7 @@ class SharedCooldownConsumableConfigReader(object):
         self.sharedCooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'sharedCooldownTime')
         self.consumeAmmo = _xml.readBool(xmlCtx, section, 'consumeAmmo')
         self.disableAllyDamage = _xml.readBool(xmlCtx, section, 'disableAllyDamage')
+        self.setUnavailableAfterAmmoLeft = _xml.readBool(xmlCtx, section, 'setUnavailableAfterAmmoLeft', False)
 
     def _readCooldownFactors(self, xmlCtx, section, name):
         cooldownFactors = {}
@@ -789,16 +827,6 @@ class SharedCooldownConsumableConfigReader(object):
             cooldownFactors[vehClass] = _xml.readNonNegativeFloat(subXmlCtx, subsection, vehClass)
 
         return cooldownFactors
-
-
-class CountableConsumableConfigReader(object):
-    _CONSUMABLE_SLOTS = ('consumeAmmo',)
-
-    def initCountableConsumableSlots(self):
-        self.consumeAmmo = False
-
-    def readCountableConsumableConfig(self, xmlCtx, section):
-        self.consumeAmmo = _xml.readBool(xmlCtx, section, 'consumeAmmo')
 
 
 class CooldownConsumableConfigReader(object):
@@ -1552,6 +1580,17 @@ class ConsumableInspire(Equipment, TooltipConfigReader, SharedCooldownConsumable
         self.readInspireConfig(xmlCtx, scriptSection)
 
 
+class PassiveConsumable(Equipment, TooltipConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS
+
+    def __init__(self):
+        super(PassiveConsumable, self).__init__()
+        self.initTooltipInformation()
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.readTooltipInformation(xmlCtx, scriptSection)
+
+
 class PassiveEngineering(Equipment, TooltipConfigReader):
     __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + ('captureStopping', 'captureBlockBonusTime', 'captureSpeedFactor', 'resupplyCooldownFactor', 'resupplyShellsFactor')
 
@@ -1605,8 +1644,12 @@ class EpicEngineering(PassiveEngineering):
     pass
 
 
+class FortConsumableInspire(ConsumableInspire):
+    pass
+
+
 class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader):
-    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaShow', 'noOwner', 'attackerType', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'effects', 'actionsConfig', 'explodeDestructible') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaShow', 'noOwner', 'attackerType', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'effects', 'actionsConfig', 'explodeDestructible', 'areaUsedPrefab', 'areaAccurateCollision') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
 
     def _readConfig(self, xmlCtx, section):
         super(AreaOfEffectEquipment, self)._readConfig(xmlCtx, section)
@@ -1623,6 +1666,8 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
         self.areaVisual = section.readString('areaVisual') or None
         self.areaColor = section.readInt('areaColor') or None
         self.areaShow = section.readString('areaShow').lower() or None
+        self.areaAccurateCollision = section.readBool('areaAccurateCollision', True)
+        self.areaUsedPrefab = section.readString('areaUsedPrefab') or None
         self.noOwner = section.readBool('noOwner')
         self.attackerType = section.readString('attackerType').upper()
         self.shotSoundPreDelay = section.readInt('shotSoundPreDelay')
@@ -1640,7 +1685,7 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
 
     def _readEffectConfig(self, section):
         return None if not section else {'shotEffects': section.readString('shotEffects').split(),
-         'sequences': section.readString('sequences').split(),
+         'sequences': self._readSequencesConfig(section['sequences']),
          'groundRaycast': section.readBool('groundRaycast'),
          'offsetDeviation': section.readFloat('offsetDeviation'),
          'repeatCount': section.readInt('repeatCount', 1),
@@ -1657,9 +1702,40 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
              'applyTo': section.readString('applyTo'),
              'args': actionClass.parseXML(section['args'])}
 
+    def _readSequencesConfig(self, section):
+        if not section:
+            return {}
+        sequences = {}
+        for name, subsection in section.items():
+            if name == 'sequence':
+                sequenceID = subsection.readString('name')
+                sequences[sequenceID] = {'scale': subsection.readVector3('scale', Vector3(1, 1, 1))}
+
+        return sequences
+
 
 class AttackBomberEquipment(AreaOfEffectEquipment):
     pass
+
+
+class AttackArtilleryFortEquipment(AreaOfEffectEquipment):
+    __slots__ = ('maxDamage',)
+
+    def _readConfig(self, xmlCtx, section):
+        super(AttackArtilleryFortEquipment, self)._readConfig(xmlCtx, section)
+        if IS_CLIENT:
+            damagePerShot = sum([ self._readDamageVehicleAction(action) for action in section['actions'].values() ])
+            self.maxDamage = damagePerShot * self.shotsNumber
+        else:
+            self.maxDamage = 0
+
+    def _readDamageVehicleAction(self, section):
+        if not section:
+            return 0
+        if section.readString('type') != 'DamageVehicle':
+            return 0
+        args = section['args']
+        return args.readInt('value') if args.has_key('value') else 0
 
 
 UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
@@ -1726,21 +1802,21 @@ class UpgradedLowNoiseTracks(LowNoiseTracks, UpgradedItem):
     pass
 
 
-class BRBomber(Equipment, TooltipConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader, BomberConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + BomberConfigReader._BOMBER_SLOTS + ('influenceZone',)
+class Bomber(Equipment, TooltipConfigReader, CountableConsumableConfigReader, BomberConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + BomberConfigReader._BOMBER_SLOTS + ('influenceZone', 'cooldownTime')
 
     def __init__(self):
-        super(BRBomber, self).__init__()
+        super(Bomber, self).__init__()
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
         self.initBomberSlots()
+        self.cooldownTime = component_constants.ZERO_INT
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.readTooltipInformation(xmlCtx, scriptSection)
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
         self.readBomberConfig(xmlCtx, scriptSection)
+        self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds')
         if scriptSection.has_key('influenceZone'):
             self.influenceZone = InfluenceZone()
             self.influenceZone._readConfig(xmlCtx, scriptSection['influenceZone'])
@@ -1748,78 +1824,83 @@ class BRBomber(Equipment, TooltipConfigReader, CountableConsumableConfigReader, 
             self.longDescription = i18n.makeString(self.longDescription)
 
 
-class BRBomberArcade(BRBomber, ArcadeEquipmentConfigReader):
-    __slots__ = BRBomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+class BomberArcade(Bomber, ArcadeEquipmentConfigReader):
+    __slots__ = Bomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
 
     def __init__(self):
-        super(BRBomberArcade, self).__init__()
+        super(BomberArcade, self).__init__()
         self.initArcadeInformation()
 
     def _readConfig(self, xmlCtx, scriptSection):
-        super(BRBomberArcade, self)._readConfig(xmlCtx, scriptSection)
+        super(BomberArcade, self)._readConfig(xmlCtx, scriptSection)
         self.readArcadeInformation(xmlCtx, scriptSection)
 
 
-class BRSmoke(Equipment, TooltipConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader, SmokeConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + SmokeConfigReader._SMOKE_SLOTS
+class Smoke(Equipment, TooltipConfigReader, CountableConsumableConfigReader, SmokeConfigReader):
+    __slots__ = ('cooldownTime',) + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + SmokeConfigReader._SMOKE_SLOTS
 
     def __init__(self):
-        super(BRSmoke, self).__init__()
+        super(Smoke, self).__init__()
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
         self.initSmokeSlots()
+        self.cooldownTime = component_constants.ZERO_INT
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.readTooltipInformation(xmlCtx, scriptSection)
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
         self.readSmokeConfig(xmlCtx, scriptSection)
+        self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds')
         if IS_CLIENT and self.longDescription:
             self.longDescription = i18n.makeString(self.longDescription, duration=int(self.totalDuration))
 
 
-class BRSmokeArcade(BRSmoke, ArcadeEquipmentConfigReader):
-    __slots__ = BRSmoke.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+class SmokeArcade(Smoke, ArcadeEquipmentConfigReader):
+    __slots__ = Smoke.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
 
     def __init__(self):
-        super(BRSmokeArcade, self).__init__()
+        super(SmokeArcade, self).__init__()
         self.orthogonalDir = True
         self.initArcadeInformation()
 
     def _readConfig(self, xmlCtx, scriptSection):
-        super(BRSmokeArcade, self)._readConfig(xmlCtx, scriptSection)
+        super(SmokeArcade, self)._readConfig(xmlCtx, scriptSection)
         self.readArcadeInformation(xmlCtx, scriptSection)
 
 
-class BRSelfBuff(Equipment, TooltipConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader, InspireConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + InspireConfigReader._INSPIRE_SLOTS
+class SelfBuff(Equipment, TooltipConfigReader, CountableConsumableConfigReader):
+    __slots__ = ('duration', 'increaseFactors', 'longDescription', 'cooldownTime') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS
 
     def __init__(self):
-        super(BRSelfBuff, self).__init__()
+        super(SelfBuff, self).__init__()
+        self.duration = component_constants.ZERO_INT
+        self.cooldownTime = component_constants.ZERO_FLOAT
+        self.increaseFactors = {}
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
-        self.initInspireSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
+        self.cooldownTime = _xml.readFloat(xmlCtx, scriptSection, 'cooldownTime', 0.0)
+        self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'increaseFactors')
         self.readTooltipInformation(xmlCtx, scriptSection)
-        self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
-        self.readInspireConfig(xmlCtx, scriptSection)
         if IS_CLIENT and self.longDescription:
-            self.longDescription = i18n.makeString(self.longDescription, duration=int(self.inactivationDelay))
+            self.longDescription = i18n.makeString(self.longDescription, duration=int(self.duration))
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+
+    def _getDescription(self, descr):
+        return i18n.makeString(self.longDescription, duration=int(self.duration))
 
 
-class BRBerserker(BRSelfBuff):
+class Berserker(SelfBuff):
     __slots__ = ('dotParams',)
 
     def __init__(self):
-        super(BRBerserker, self).__init__()
+        super(Berserker, self).__init__()
         self.dotParams = DOTParams(ATTACK_REASON_INDICES[ATTACK_REASON.BERSERKER])
 
     def _readConfig(self, xmlCtx, scriptSection):
-        super(BRBerserker, self)._readConfig(xmlCtx, scriptSection)
+        super(Berserker, self)._readConfig(xmlCtx, scriptSection)
         self.dotParams._readConfig(xmlCtx, scriptSection['dotParams'])
 
 
@@ -1878,26 +1959,26 @@ class _ClientSpawnBotVisuals(object):
         self.highlightDelay = _xml.readFloat(xmlCtx, scriptSection, 'highlightDelay', 0.0)
 
 
-class BRHealPoint(Equipment, TooltipConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader, HealPointConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + HealPointConfigReader._HEAL_POINT_SLOTS
+class BRHealPoint(Equipment, TooltipConfigReader, CountableConsumableConfigReader, HealPointConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + HealPointConfigReader._HEAL_POINT_SLOTS + ('cooldownTime',)
 
     def __init__(self):
         super(BRHealPoint, self).__init__()
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
+        self.cooldownTime = component_constants.ZERO_FLOAT
         self.initHealPointSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.readTooltipInformation(xmlCtx, scriptSection)
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'cooldownTime')
         self.readHealPointConfig(xmlCtx, scriptSection)
         if IS_CLIENT and self.longDescription:
             self.longDescription = i18n.makeString(self.longDescription, duration=int(self.duration), count=int(self.healPerTick * 100 / self.tickInterval))
 
 
-class RegenerationKit(Equipment):
+class RegenerationKit(Equipment, CountableConsumableConfigReader):
     __slots__ = ('healthRegenPerTick', 'initialHeal', 'healTime', 'healGroup', 'tickInterval')
 
     def __init__(self):
@@ -1907,6 +1988,7 @@ class RegenerationKit(Equipment):
         self.healTime = component_constants.ZERO_FLOAT
         self.healGroup = None
         self.tickInterval = 1.0
+        self.initCountableConsumableSlots()
         return
 
     def _readConfig(self, xmlCtx, section):
@@ -1915,6 +1997,7 @@ class RegenerationKit(Equipment):
         self.healTime = _xml.readNonNegativeFloat(xmlCtx, section, 'healTime', 0.0)
         self.healGroup = _xml.readIntOrNone(xmlCtx, section, 'healGroup')
         self.tickInterval = _xml.readPositiveFloat(xmlCtx, section, 'tickInterval', 1.0)
+        self.readCountableConsumableConfig(xmlCtx, section)
 
     def _getDescription(self, descr):
         localizeDescr = super(RegenerationKit, self)._getDescription(descr)
@@ -2029,17 +2112,18 @@ class MineParams(object):
             self.directDetectionTypes = [ mapping[t] for t in DDTypes ]
 
 
-class BattleRoyaleMinefield(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader, CountableConsumableConfigReader, CooldownConsumableConfigReader):
-    __slots__ = ('bombsPattern', 'mineParams', 'noOwner', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaMarker')
+class Minefield(Equipment, TooltipConfigReader, ArcadeEquipmentConfigReader, CountableConsumableConfigReader):
+    __slots__ = ('mineParams', 'noOwner', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'cooldownTime', 'disableAllyDamage') + CountableConsumableConfigReader._CONSUMABLE_SLOTS + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
 
     def __init__(self):
-        super(BattleRoyaleMinefield, self).__init__()
+        super(Minefield, self).__init__()
         self.initTooltipInformation()
-        self.initSharedCooldownConsumableSlots()
         self.initArcadeInformation()
         self.bombsPattern = []
         self.mineParams = MineParams()
         self.noOwner = False
+        self.disableAllyDamage = True
+        self.cooldownTime = component_constants.ZERO_INT
         self.areaLength = 0
         self.areaWidth = 0
         self.areaVisual = None
@@ -2051,14 +2135,13 @@ class BattleRoyaleMinefield(Equipment, TooltipConfigReader, SharedCooldownConsum
         bombs = _xml.readTupleOfFloats(xmlCtx, section, 'bombsPattern')
         self.bombsPattern = [ (bombs[b], bombs[b + 1]) for b in range(0, len(bombs) - 1, 2) ]
         self.mineParams._readConfig(xmlCtx, section['mineParams'])
-        self.noOwner = _xml.readBool(xmlCtx, section, 'noOwner')
+        self.cooldownTime = _xml.readInt(xmlCtx, section, 'cooldownSeconds')
+        self.disableAllyDamage = _xml.readBool(xmlCtx, section, 'disableAllyDamage')
         self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
         self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
         self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
         self.readCountableConsumableConfig(xmlCtx, section)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, section)
         self.readTooltipInformation(xmlCtx, section)
-        self.readSharedCooldownConsumableConfig(xmlCtx, section)
         self.readArcadeInformation(xmlCtx, section)
         if IS_CLIENT and self.longDescription:
             self.longDescription = i18n.makeString(self.longDescription, duration=int(self.mineParams.lifetime))
@@ -2100,14 +2183,13 @@ class FrontLineMinefield(Equipment, TooltipConfigReader, SharedCooldownConsumabl
         self.readArcadeInformation(xmlCtx, section)
 
 
-class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumableConfigReader, MarkerConfigReader, CooldownConsumableConfigReader, ArcadeEquipmentConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + CooldownConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + MarkerConfigReader._MARKER_SLOTS_ + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay')
+class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConfigReader, MarkerConfigReader, ArcadeEquipmentConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + MarkerConfigReader._MARKER_SLOTS_ + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay', 'cooldownTime', 'disableAllyDamage')
 
     def __init__(self):
-        super(ConsumableSpawnKamikaze, self).__init__()
+        super(ConsumableSpawnBot, self).__init__()
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
-        self.initConsumableWithDeployTimeSlots()
         self.initArcadeInformation()
         self.initMarkerInformation()
         self.botType = component_constants.EMPTY_STRING
@@ -2121,12 +2203,13 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
         self.damageReductionRate = component_constants.ZERO_FLOAT
         self.clientVisuals = component_constants.EMPTY_DICT
         self.delay = component_constants.ZERO_FLOAT
+        self.cooldownTime = component_constants.ZERO_INT
+        self.disableAllyDamage = True
         return
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.readTooltipInformation(xmlCtx, scriptSection)
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, scriptSection)
         self.readArcadeInformation(xmlCtx, scriptSection)
         self.readMarkerConfig(xmlCtx, scriptSection)
         self.botType = _xml.readString(xmlCtx, scriptSection, 'botType')
@@ -2141,13 +2224,13 @@ class ConsumableSpawnKamikaze(Equipment, TooltipConfigReader, CountableConsumabl
         self.damageReductionRate = _xml.readFloat(xmlCtx, scriptSection, 'damageReductionRate', 0.0)
         self.vehicleRemoveDelay = _xml.readInt(xmlCtx, scriptSection, 'vehicleRemoveDelay', 0.0)
         self.clientRemovalNotificationDelay = _xml.readInt(xmlCtx, scriptSection, 'clientRemovalNotificationDelay', 0.0)
+        self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds')
+        self.disableAllyDamage = _xml.readBool(xmlCtx, scriptSection, 'disableAllyDamage', True)
         if IS_CLIENT:
-            self.clientVisuals = _ClientSpawnBotVisuals(scriptSection, scriptSection['clientVisuals'])
+            if scriptSection['clientVisuals'] is not None:
+                self.clientVisuals = _ClientSpawnBotVisuals(scriptSection, scriptSection['clientVisuals'])
             self.longDescription = i18n.makeString(self.longDescription, duration=int(self.botLifeTime))
-
-
-class SpawnKamikaze(ConsumableSpawnKamikaze):
-    pass
+        return
 
 
 _readTags = vehicles._readTags
@@ -2183,3 +2266,188 @@ class AoeEffects(object):
 class AreaShow(object):
     BEFORE = 'before'
     ALWAYS = 'always'
+
+
+class Circle(object):
+    __slots__ = ('abilityRadius', 'safeZoneRadius')
+
+    def __init__(self):
+        self.abilityRadius = 0.0
+        self.safeZoneRadius = 0.0
+
+    def readConfig(self, xmlCtx, section):
+        self.abilityRadius = _xml.readFloat(xmlCtx, section, 'abilityRadius', 0.0)
+        self.safeZoneRadius = _xml.readFloat(xmlCtx, section, 'safeZoneRadius', 0.0)
+
+
+class ZonesCircle(Equipment):
+    __slots__ = ('influenceZone', 'radius', 'zonesCount', 'vehicleHeightMultiplier')
+
+    def __init__(self):
+        super(ZonesCircle, self).__init__()
+        self.radius = component_constants.ZERO_FLOAT
+        self.zonesCount = component_constants.ZERO_FLOAT
+        self.vehicleHeightMultiplier = 1.0
+        self.influenceZone = InfluenceZone()
+
+    def _readConfig(self, xmlCtx, section):
+        super(ZonesCircle, self)._readConfig(xmlCtx, section)
+        self.radius = _xml.readFloat(xmlCtx, section, 'radius')
+        self.zonesCount = _xml.readPositiveInt(xmlCtx, section, 'zonesCount')
+        self.vehicleHeightMultiplier = _xml.readNonNegativeFloat(xmlCtx, section, 'vehicleHeightMultiplier')
+        self.influenceZone._readConfig(xmlCtx, section['influenceZone'])
+
+    def _getDescription(self, descr):
+        localizeDescr = super(ZonesCircle, self)._getDescription(descr)
+        return i18n.makeString(localizeDescr, duration=int(self.influenceZone.timer))
+
+
+class FireCircle(ZonesCircle, CountableConsumableConfigReader):
+
+    def __init__(self):
+        super(FireCircle, self).__init__()
+        self.initCountableConsumableSlots()
+
+    def _readConfig(self, xmlCtx, section):
+        super(FireCircle, self)._readConfig(xmlCtx, section)
+        self.influenceZone.dotParams.attackReasonID = ATTACK_REASON_INDICES[ATTACK_REASON.FIRE_CIRCLE]
+        self.influenceZone.componentName = 'VehicleFireCircleEffectComponent'
+        self.readCountableConsumableConfig(xmlCtx, section)
+
+
+class CorrodingShot(Equipment, CountableConsumableConfigReader):
+    __slots__ = ('damagePercentAfterShot', 'canBeStoppedRepairKit', 'increaseFactors', 'dotEffectDuration', 'dotParams', 'tooltipMovie', 'effectsIndex')
+
+    def __init__(self):
+        super(CorrodingShot, self).__init__()
+        self.damagePercentAfterShot = component_constants.ZERO_FLOAT
+        self.canBeStoppedRepairKit = component_constants.ZERO_INT
+        self.increaseFactors = {}
+        self.dotEffectDuration = component_constants.ZERO_INT
+        self.dotParams = DOTParams(ATTACK_REASON_INDICES[ATTACK_REASON.CORRODING_SHOT])
+        self.dotEffectDuration = component_constants.ZERO_INT
+        self.tooltipMovie = component_constants.EMPTY_STRING
+        self.initCountableConsumableSlots()
+
+    def _readConfig(self, xmlCtx, section):
+        self.damagePercentAfterShot = _xml.readFloat(xmlCtx, section, 'damagePercentAfterShot', 0.0)
+        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, section, 'canBeStoppedRepairKit', False)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'increaseFactors')
+        self.dotEffectDuration = _xml.readInt(xmlCtx, section, 'dotEffectDuration', 0)
+        self.dotParams._readConfig(xmlCtx, section['dotParams'])
+        self.tooltipMovie = _xml.readStringOrEmpty(xmlCtx, section, 'tooltipMovie')
+        self.effectsIndex = vehicles.g_cache.shotEffectsIndexes[_xml.readString(xmlCtx, section, 'shotEffect')]
+        self.readCountableConsumableConfig(xmlCtx, section)
+
+    def _getDescription(self, descr):
+        localizeDescr = super(CorrodingShot, self)._getDescription(descr)
+        return i18n.makeString(localizeDescr, duration=self.dotEffectDuration)
+
+
+class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader):
+    __slots__ = ('duration', 'areaVisual', 'immediatelyRestore', 'posteffectPrefab', 'restoringCoefficient', 'restoringCoefficientTeamMates', 'teamMateRestoringRadius')
+
+    def __init__(self):
+        super(AdaptationHealthRestore, self).__init__()
+        self.duration = component_constants.ZERO_INT
+        self.restoringCoefficient = component_constants.ZERO_FLOAT
+        self.restoringCoefficientTeamMates = component_constants.ZERO_FLOAT
+        self.teamMateRestoringRadius = component_constants.ZERO_INT
+        self.areaVisual = None
+        self.posteffectPrefab = None
+        self.initCountableConsumableSlots()
+        return
+
+    def _readBasicConfig(self, xmlCtx, section):
+        super(AdaptationHealthRestore, self)._readBasicConfig(xmlCtx, section)
+        self.posteffectPrefab = _xml.readStringOrNone(xmlCtx, section, 'posteffectPrefab')
+
+    def _readConfig(self, xmlCtx, section):
+        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
+        self.immediatelyRestore = _xml.readInt(xmlCtx, section, 'immediatelyRestore', 0.0)
+        self.restoringCoefficient = _xml.readFloat(xmlCtx, section, 'restoringCoefficient', 0.0)
+        self.restoringCoefficientTeamMates = _xml.readFloat(xmlCtx, section, 'restoringCoefficientTeamMates', 0.0)
+        self.teamMateRestoringRadius = _xml.readInt(xmlCtx, section, 'teamMateRestoringRadius', 0)
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
+        self.readCountableConsumableConfig(xmlCtx, section)
+
+    def _getDescription(self, descr):
+        localizeDescr = super(AdaptationHealthRestore, self)._getDescription(descr)
+        return i18n.makeString(localizeDescr, ownPercent=int(self.restoringCoefficient * 100), teamMatesPercent=int(self.restoringCoefficientTeamMates * 100))
+
+
+class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader, CountableConsumableConfigReader):
+    __slots__ = ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + ('noOwner', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'delay', 'duration', 'damage', 'thunderCount', 'thunderPeriod', 'deployTime', 'cooldownTime', 'decreaseFactors', 'isDamageAll', 'canBeStoppedRepairKit')
+
+    def __init__(self):
+        super(ThunderStrike, self).__init__()
+        self.initArcadeInformation()
+        self.cooldownTime = component_constants.ZERO_INT
+        self.canBeStoppedRepairKit = component_constants.ZERO_INT
+        self.noOwner = False
+        self.consumeAmmo = True
+        self.duration = 0
+        self.damage = 0
+        self.thunderCount = 0
+        self.thunderPeriod = 0
+        self.areaLength = 0
+        self.areaWidth = 0
+        self.areaVisual = None
+        self.areaColor = None
+        self.damageRadius = 0
+        self.decreaseFactors = {}
+        self.isDamageAll = False
+        self.initCountableConsumableSlots()
+        return
+
+    def _readConfig(self, xmlCtx, section):
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownSeconds')
+        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, section, 'canBeStoppedRepairKit', False)
+        self.damageRadius = _xml.readInt(xmlCtx, section, 'damageRadius', 0)
+        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
+        self.delay = _xml.readPositiveFloat(xmlCtx, section, 'delay', 0)
+        self.damage = _xml.readInt(xmlCtx, section, 'damage', 0)
+        self.thunderCount = _xml.readInt(xmlCtx, section, 'thunderCount', 0)
+        self.thunderPeriod = _xml.readPositiveFloat(xmlCtx, section, 'thunderPeriod', 0)
+        self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
+        self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
+        self.isDamageAll = _xml.readBool(xmlCtx, section, 'isDamageAll', False)
+        self.decreaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'decreaseFactors')
+        self.readArcadeInformation(xmlCtx, section)
+        self.readTooltipInformation(xmlCtx, section)
+        self.readCountableConsumableConfig(xmlCtx, section)
+
+    def readTooltipInformation(self, xmlCtx, section):
+        super(ThunderStrike, self).readTooltipInformation(xmlCtx, section)
+        if IS_CLIENT:
+            self.longDescription = i18n.makeString(self.longDescription, duration=self.duration)
+
+
+class ShotPassion(Equipment, CountableConsumableConfigReader):
+    __slots__ = ('duration', 'increaseFactors', 'enableRamDamage', 'enableHEDamage', 'damageIncreasePerShot', 'maxDamageIncreasePerShot', 'affectingAbilities', 'cooldownTime', 'enableThunderStrikeDamageIncrease', 'posteffectPrefab')
+
+    def __init__(self):
+        super(ShotPassion, self).__init__()
+        self.duration = component_constants.ZERO_INT
+        self.damageIncreasePerShot = component_constants.ZERO_FLOAT
+        self.maxDamageIncreasePerShot = component_constants.ZERO_FLOAT
+        self.cooldownTime = component_constants.ZERO_INT
+        self.initCountableConsumableSlots()
+
+    def _readBasicConfig(self, xmlCtx, section):
+        super(ShotPassion, self)._readBasicConfig(xmlCtx, section)
+        self.posteffectPrefab = _xml.readStringOrNone(xmlCtx, section, 'posteffectPrefab')
+
+    def _readConfig(self, xmlCtx, section):
+        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'increaseFactors')
+        self.damageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'damageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.maxDamageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.cooldownTime = _xml.readInt(xmlCtx, section, 'cooldownSeconds', component_constants.ZERO_INT)
+        self.readCountableConsumableConfig(xmlCtx, section)
+
+    def _getDescription(self, descr):
+        localizeDescr = super(ShotPassion, self)._getDescription(descr)
+        percentSymbol = text(R.strings.common.common.percent())
+        return i18n.makeString(localizeDescr, duration=getNiceNumberFormat(self.duration), dmgPerShot=getNiceNumberFormat(self.damageIncreasePerShot * 100) + percentSymbol, maxDmgPerShot=getNiceNumberFormat(self.maxDamageIncreasePerShot * 100) + percentSymbol)

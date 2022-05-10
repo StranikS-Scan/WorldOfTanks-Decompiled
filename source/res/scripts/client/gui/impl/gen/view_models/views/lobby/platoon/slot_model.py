@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.slot_label_element_model impor
 class SlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(SlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -63,11 +63,17 @@ class SlotModel(ViewModel):
     def setEstimatedTime(self, value):
         self._setString(8, value)
 
+    def getBattleType(self):
+        return self._getString(9)
+
+    def setBattleType(self, value):
+        self._setString(9, value)
+
     def getSlotLabelElements(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setSlotLabelElements(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     def _initialize(self):
         super(SlotModel, self)._initialize()
@@ -80,4 +86,5 @@ class SlotModel(ViewModel):
         self._addBoolProperty('isInBattle', False)
         self._addStringProperty('infoText', '')
         self._addStringProperty('estimatedTime', '')
+        self._addStringProperty('battleType', '')
         self._addArrayProperty('slotLabelElements', Array())

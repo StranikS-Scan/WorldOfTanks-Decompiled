@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -391,9 +391,6 @@
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
-        <bank>
-          <name>	r4_hangar.bnk	</name>
-        </bank>
         <bank>
           <name>	fort_area.bnk	</name>
         </bank>
@@ -724,6 +721,13 @@
       <messageLength>	8192	</messageLength>
     </file>
     <file>	python.log	  <enabled>	true	</enabled>
+      <severity>	DEBUG	</severity>
+      <severity>	INFO	</severity>
+      <severity>	NOTICE	</severity>
+      <severity>	WARNING	</severity>
+      <severity>	ERROR	</severity>
+      <severity>	CRITICAL	</severity>
+      <severity>	HACK	</severity>
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
@@ -734,6 +738,12 @@
       <messageLength>	8192	</messageLength>
     </file>
     <file>	ui.log	  <enabled>	true	</enabled>
+      <severity>	TRACE	</severity>
+      <severity>	DEBUG	</severity>
+      <severity>	INFO	</severity>
+      <severity>	WARNING	</severity>
+      <severity>	ERROR	</severity>
+      <severity>	CRITICAL	</severity>
       <source>	UI	</source>
       <openMode>	a	</openMode>
       <maxSizeKB>	2048	</maxSizeKB>

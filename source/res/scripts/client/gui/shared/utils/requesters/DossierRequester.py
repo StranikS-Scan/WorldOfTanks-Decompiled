@@ -57,19 +57,21 @@ class UserDossier(object):
                 self.__cache['rated7x7Seasons'] = seasons = {}
                 self.__cache['ranked'] = value[5]
                 self.__cache['dogTag'] = value[6]
+                self.__cache['battleRoyaleStats'] = value[7]
                 for sID, d in (value[4] or {}).iteritems():
                     seasons[sID] = dossiers2.getRated7x7DossierDescr(d)
 
             callback(self.__cache['account'])
             return
 
-        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked, dogTag: self.__processValueResponse(c, code, (databaseID,
+        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked, dogTag, br: self.__processValueResponse(c, code, (databaseID,
          dossier,
          (clanID, clanInfo),
          gRating,
          eSportSeasons,
          ranked,
-         dogTag)), proxyCallback)))
+         dogTag,
+         br)), proxyCallback)))
         self.__processQueue()
 
     def __requestAccountDossier(self, callback):
@@ -184,6 +186,17 @@ class UserDossier(object):
             return
         else:
             callback(self.__cache['dogTag'])
+            return
+
+    @async
+    def getBattleRoyaleStats(self, callback):
+        if not self.isValid:
+            callback({})
+        if self.__cache.get('battleRoyaleStats') is None:
+            self.__requestPlayerInfo(lambda accDossier: callback(self.__cache['battleRoyaleStats']))
+            return
+        else:
+            callback(self.__cache['battleRoyaleStats'])
             return
 
     @property

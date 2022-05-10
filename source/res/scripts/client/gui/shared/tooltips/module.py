@@ -432,7 +432,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     needValue = None
                 block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
             isComplexDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable
-            if isComplexDevice and not (self.configuration.isAwardWindow or self.configuration.isRTS):
+            if isComplexDevice and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
                 removalPriceCurrency = removalPrice.getCurrency()
                 value = removalPrice.price.getSignValue(removalPriceCurrency)
@@ -663,7 +663,7 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
             descr = backport.text(R.strings.tank_setup.effects.template(), icon=icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.tanksetup.cards.effect()), width=10, height=16), title=text_styles.neutral(backport.text(R.strings.tank_setup.effects.name())), descr=backport.text(additionalDescr()))
             block.append(formatters.packTextBlockData(text_styles.standard(descr)))
         if categories and isPanelTooltip and slotCategories:
-            kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc(), match=self.__neutralFatTextStyle(backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.dyn(str(isSpecMatch))())))
+            kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc(), match=self.__neutralFatTextStyle(backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.num(str(isSpecMatch))())))
         else:
             kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.applied())
         block.append(formatters.packTextBlockData(text_styles.middleTitle(kpiTitle), padding=formatters.packPadding(top=8 if additionalDescr else -1, bottom=5)))
@@ -714,7 +714,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
     def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
-        if self.configuration.isAwardWindow or self.configuration.isRTS:
+        if self.configuration.isAwardWindow:
             return []
         return [] if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn else self._getStatus()
 

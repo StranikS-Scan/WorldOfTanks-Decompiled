@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/filter_contexts.py
-from gui.rts_battles.rts_constants import RTS_CAROUSEL_FILTER_KEY
+
 
 class FilterSetupContext(object):
 
@@ -16,8 +16,7 @@ def getFilterSetupContexts(xpRateMultiplier):
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_small'),
      'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}'),
-     'battleRoyale': FilterSetupContext(asset='battle_royale_toggle'),
-     RTS_CAROUSEL_FILTER_KEY: FilterSetupContext(asset=RTS_CAROUSEL_FILTER_KEY + '_toggle')}
+     'battleRoyale': FilterSetupContext(asset='battle_royale_toggle')}
 
 
 def getFilterPopoverSetupContexts(xpRateMultiplier):

@@ -831,33 +831,36 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
 
     def __init__(self, parentObj):
         super(EpicMinimapPingPlugin, self).__init__(parentObj)
-        self.__hqsList = {}
-        self.__baseList = {}
+        self.__baseInteractionList = {}
+        self.__hqInteractionActive = False
         self._hitAreaSize = minimap_utils.EPIC_MINIMAP_HIT_AREA
 
     def start(self):
         super(EpicMinimapPingPlugin, self).start()
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
-            destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
-            hqs = destructibleComponent.destructibleEntities
-            for hq in hqs.values():
-                self.__onDestructibleEntityAdded(hq)
-
         sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
         if sectorBaseComponent is not None:
             sectorBases = sectorBaseComponent.sectorBases
             for base in sectorBases:
                 self.__onSectorBaseAdded(base)
 
+        missionCtrl = self.sessionProvider.dynamic.missions
+        if missionCtrl is not None:
+            missionCtrl.onPlayerMissionUpdated += self._onPlayerMissionUpdated
         return
 
     def stop(self):
         super(EpicMinimapPingPlugin, self).stop()
-        destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
-        if destructibleComponent is not None:
-            destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
+        missionCtrl = self.sessionProvider.dynamic.missions
+        if missionCtrl is not None:
+            missionCtrl.onPlayerMissionUpdated -= self._onPlayerMissionUpdated
         return
+
+    def _onPlayerMissionUpdated(self, mission, _):
+        if mission.isBaseMission():
+            if mission.id in self.__baseInteractionList:
+                self.__baseInteractionList[mission.id] = True
+        elif mission.isObjectivesMission():
+            self.__hqInteractionActive = True
 
     def _getClickPosition(self, x, y):
         return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
@@ -898,11 +901,8 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
             self._processReplyCommand(replyState, commands, uniqueId, commandKey)
             return
 
-    def __onDestructibleEntityAdded(self, destEntity):
-        self.__hqsList[destEntity.destructibleEntityID] = destEntity.position
-
     def __onSectorBaseAdded(self, sectorBase):
-        self.__baseList[sectorBase.baseID] = sectorBase.position
+        self.__baseInteractionList[sectorBase.baseID] = False
 
     def __getNearestHQForPosition(self, clickPos, range_):
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
@@ -912,7 +912,7 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
         else:
             closestHqIdx, distance = destructibleComponent.getNearestDestructibleEntityID(clickPos)
             destEntity = destructibleComponent.getDestructibleEntity(closestHqIdx)
-            return (closestHqIdx, destEntity.team) if distance <= range_ and destEntity.isActive else (None, None)
+            return (closestHqIdx, destEntity.team) if distance <= range_ and (destEntity.isActive or self.__hqInteractionActive) else (None, None)
 
     def __getNearestBaseForPosition(self, clickPos, range_):
         sectorBaseComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
@@ -920,7 +920,7 @@ class EpicMinimapPingPlugin(plugins.MinimapPingPlugin):
             _logger.error('Expected SectorBaseComponent not present!')
             return (None, None, None)
         else:
-            openBases = [ base for base in sectorBaseComponent.sectorBases if not base.isCaptured and base.active() ]
+            openBases = [ base for base in sectorBaseComponent.sectorBases if not base.isCaptured and base.active() or self.__baseInteractionList[base.baseID] ]
             if not openBases:
                 return (None, None, None)
 

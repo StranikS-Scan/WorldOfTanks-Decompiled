@@ -7,7 +7,14 @@
   <Volatile></Volatile>
   <Properties></Properties>
   <TempProperties></TempProperties>
-  <ClientMethods></ClientMethods>
+  <ClientMethods>
+    <showCarpetBombing>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </showCarpetBombing>
+  </ClientMethods>
   <CellMethods></CellMethods>
   <BaseMethods></BaseMethods>
   <shouldBackup>	false	</shouldBackup>

@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/lobby_entry.py
 import BigWorld
 from frameworks.wulf import WindowLayer
+from gui.shared.system_factory import collectLobbyTooltipsBuilders
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.daapi.settings.config import LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS
+from gui.Scaleform.daapi.settings.config import ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
 from gui.Scaleform.framework.ui_logging_manager import UILoggerManager
@@ -42,7 +43,6 @@ LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.ROYALE_TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.RTS_TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 
 class LobbyEntry(AppEntry):
@@ -69,10 +69,11 @@ class LobbyEntry(AppEntry):
         return LoaderManager(self.proxy)
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.MARKER), DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), DefaultContainer(WindowLayer.WAITING), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), PopUpContainer(WindowLayer.TOP_WINDOW), PopUpContainer(WindowLayer.OVERLAY), DefaultContainer(WindowLayer.SERVICE_LAYOUT))
+        return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.HIDDEN_SERVICE_LAYOUT), DefaultContainer(WindowLayer.MARKER), DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), DefaultContainer(WindowLayer.WAITING), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), PopUpContainer(WindowLayer.TOP_WINDOW), PopUpContainer(WindowLayer.OVERLAY), DefaultContainer(WindowLayer.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS, GuiGlobalSpaceID.BATTLE_LOADING)
+        builders = collectLobbyTooltipsBuilders()
+        tooltip = ToolTip(builders, ADVANCED_COMPLEX_TOOLTIPS, GuiGlobalSpaceID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 

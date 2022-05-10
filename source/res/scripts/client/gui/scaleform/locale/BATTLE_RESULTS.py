@@ -35,7 +35,7 @@ class BATTLE_RESULTS(object):
     COMMON_OVERTIMEFINISHREASONTITLE = '#battle_results:common/overtimeFinishReasonTitle'
     COMMON_XPMULTIPLIERSIGN = '#battle_results:common/xpMultiplierSign'
     COMMON_BATTLEEFFICIENCY_TITLE = '#battle_results:common/battleEfficiency/title'
-    COMMON_BATTLEEFFICIENCYWITHOUTRESERVES_TITLE = '#battle_results:common/battleEfficiencyWithoutReserves/title'
+    COMMON_BATTLEEFFICIENCYWITHOUTOREDERS_TITLE = '#battle_results:common/battleEfficiencyWithoutOreders/title'
     COMMON_BATTLEEFFICIENCY_ALLIES = '#battle_results:common/battleEfficiency/allies'
     COMMON_BATTLEEFFICIENCY_NONE = '#battle_results:common/battleEfficiency/none'
     COMMON_BATTLEEFFICIENCY_TECHNIQUE = '#battle_results:common/battleEfficiency/technique'
@@ -123,9 +123,6 @@ class BATTLE_RESULTS(object):
     COMMON_VEHICLESTATE_DEAD5 = '#battle_results:common/vehicleState/dead5'
     COMMON_VEHICLESTATE_DEAD6 = '#battle_results:common/vehicleState/dead6'
     COMMON_VEHICLESTATE_DEAD7 = '#battle_results:common/vehicleState/dead7'
-    COMMON_VEHICLESTATE_DEAD21 = '#battle_results:common/vehicleState/dead21'
-    COMMON_VEHICLESTATE_DEAD22 = '#battle_results:common/vehicleState/dead22'
-    COMMON_SUPPLYSTATE = '#battle_results:common/supplyState'
     COMMON_VEHICLESTATE_PREMATURELEAVE = '#battle_results:common/vehicleState/prematureLeave'
     COMMON_DETAILS_NOPREMTITLE = '#battle_results:common/details/noPremTitle'
     COMMON_DETAILS_PREMTITLE = '#battle_results:common/details/premTitle'
@@ -217,13 +214,12 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_INFOTIP_XPOTHER_BODY = '#battle_results:team/stats/infotip_xpOther/body'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
-    TEAM_STATS_LABELS_HITSBYTANKS = '#battle_results:team/stats/labels_hitsByTanks'
-    TEAM_STATS_LABELS_HITSBYSUPPLIES = '#battle_results:team/stats/labels_hitsBySupplies'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
     TEAM_STATS_LABELS_DAMAGEDEALT = '#battle_results:team/stats/labels_damageDealt'
     TEAM_STATS_LABELS_SNIPERDAMAGEDEALT = '#battle_results:team/stats/labels_sniperDamageDealt'
     TEAM_STATS_LABELS_DESTRUCTIBLESDAMAGEDEALT = '#battle_results:team/stats/labels_destructiblesDamageDealt'
     TEAM_STATS_LABELS_EQUIPMENTDAMAGEDEALT = '#battle_results:team/stats/labels_equipmentDamageDealt'
+    TEAM_STATS_LABELS_ARTILLERYFORTEQUIPDAMAGEDEALT = '#battle_results:team/stats/labels_artilleryFortEquipDamageDealt'
     TEAM_STATS_LABELS_DAMAGEDEALTRATIO = '#battle_results:team/stats/labels_damageDealtRatio'
     TEAM_STATS_LABELS_DIRECTHITSRECEIVED = '#battle_results:team/stats/labels_directHitsReceived'
     TEAM_STATS_LABELS_PIERCINGSRECEIVED = '#battle_results:team/stats/labels_piercingsReceived'
@@ -236,28 +232,6 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_KILLED = '#battle_results:team/stats/labels_killed'
     TEAM_STATS_LABELS_DAMAGEASSISTED = '#battle_results:team/stats/labels_damageAssisted'
     TEAM_STATS_LABELS_DAMAGEASSISTEDSTUN = '#battle_results:team/stats/labels_damageAssistedStun'
-    TEAM_STATS_LABELS_TANKMANDAMAGETOSUPPLIES = '#battle_results:team/stats/labels_tankmanDamageToSupplies'
-    TEAM_STATS_LABELS_SUPPLYDAMAGETOTANKMAN = '#battle_results:team/stats/labels_supplyDamageToTankman'
-    TEAM_STATS_LABELS_COMMANDERSUPPLYDAMAGE = '#battle_results:team/stats/labels_commanderSupplyDamage'
-    TEAM_STATS_LABELS_DAMAGETOCOMMANDERSUPPLIES = '#battle_results:team/stats/labels_damageToCommanderSupplies'
-    TEAM_STATS_LABELS_SPOTTEDENEMIESBYWATCHTOWERS = '#battle_results:team/stats/labels_spottedEnemiesByWatchtowers'
-    TEAM_STATS_LABELS_DAMAGEDBYWATCHTOWERS = '#battle_results:team/stats/labels_damagedByWatchtowers'
-    TEAM_STATS_LABELS_TOTALDAMAGEDBYBARRICADES = '#battle_results:team/stats/labels_totalDamagedByBarricades'
-    TEAM_STATS_LABELS_KILLEDTANKSBYBARRICADES = '#battle_results:team/stats/labels_killedTanksByBarricades'
-    TEAM_STATS_LABELS_SHOTSBYSUPPLIES = '#battle_results:team/stats/labels_shotsBySupplies'
-    TEAM_STATS_LABELS_DAMAGEDEALTBYSUPPLIES = '#battle_results:team/stats/labels_damageDealtBySupplies'
-    TEAM_STATS_LABELS_SNIPERDAMAGEDEALTBYSUPPLIES = '#battle_results:team/stats/labels_sniperDamageDealtBySupplies'
-    TEAM_STATS_LABELS_DIRECTHITSRECEIVEDBYSUPPLIES = '#battle_results:team/stats/labels_directHitsReceivedBySupplies'
-    TEAM_STATS_LABELS_PIERCINGSRECEIVEDBYSUPPLIES = '#battle_results:team/stats/labels_piercingsReceivedBySupplies'
-    TEAM_STATS_LABELS_NODAMAGEDIRECTHITSRECEIVEDBYSUPPLIES = '#battle_results:team/stats/labels_noDamageDirectHitsReceivedBySupplies'
-    TEAM_STATS_LABELS_SPOTTEDTANKSBYSUPPLIES = '#battle_results:team/stats/labels_spottedTanksBySupplies'
-    TEAM_STATS_LABELS_DAMAGEDKILLEDTANKSBYSUPPLIES = '#battle_results:team/stats/labels_damagedKilledTanksBySupplies'
-    TEAM_STATS_LABELS_SPOTTEDSUPPLIES = '#battle_results:team/stats/labels_spottedSupplies'
-    TEAM_STATS_LABELS_DAMAGEDKILLEDSUPPLIES = '#battle_results:team/stats/labels_damagedKilledSupplies'
-    TEAM_STATS_LABELS_SHOTSBYTANKSSUPPLIES = '#battle_results:team/stats/labels_shotsByTanksSupplies'
-    TEAM_STATS_LABELS_DAMAGEDEALTBYTANKSSUPPLIES = '#battle_results:team/stats/labels_damageDealtByTanksSupplies'
-    TEAM_STATS_LABELS_DAMAGEBLOCKEDBYTANKSSUPPLIES = '#battle_results:team/stats/labels_damageBlockedByTanksSupplies'
-    TEAM_STATS_LABELS_SPOTTEDSTRATEGISTITEMS = '#battle_results:team/stats/labels_spottedStrategistItems'
     TEAM_STATS_LABELS_STUNNUM = '#battle_results:team/stats/labels_stunNum'
     TEAM_STATS_LABELS_STUNDURATION = '#battle_results:team/stats/labels_stunDuration'
     TEAM_STATS_LABELS_DAMAGEDEALTBYORDER = '#battle_results:team/stats/labels_damageDealtByOrder'
@@ -292,7 +266,6 @@ class BATTLE_RESULTS(object):
     DETAILS_XP = '#battle_results:details/xp'
     DETAILS_RESOURCE = '#battle_results:details/resource'
     DETAILS_CRYSTAL = '#battle_results:details/crystal'
-    DETAILS_SPECIALCURRENCY = '#battle_results:details/specialCurrency'
     DETAILS_TIME_LBL_ARENACREATETIMEONLYSTR = '#battle_results:details/time/lbl_arenaCreateTimeOnlyStr'
     DETAILS_TIME_LBL_DURATION = '#battle_results:details/time/lbl_duration'
     DETAILS_TIME_LBL_PLAYERKILLED = '#battle_results:details/time/lbl_playerKilled'
@@ -339,11 +312,6 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE = '#battle_results:details/calculations/squad/restrictions/title'
     DETAILS_CALCULATIONS_CRYSTAL_TOTAL = '#battle_results:details/calculations/crystal/total'
     DETAILS_CALCULATIONS_CRYSTAL_EVENTS = '#battle_results:details/calculations/crystal/events'
-    DETAILS_CALCULATIONS_CRYSTAL_RTSEVENT = '#battle_results:details/calculations/crystal/rtsEvent'
-    DETAILS_CALCULATIONS_RTSTOKEN1X7 = '#battle_results:details/calculations/rtsToken1x7'
-    DETAILS_CALCULATIONS_RTSTOKEN1X1 = '#battle_results:details/calculations/rtsToken1x1'
-    DETAILS_CALCULATIONS_RTSEVENTPOINTS = '#battle_results:details/calculations/rtsEventPoints'
-    DETAILS_CALCULATIONS_RTSLEADERBOARDPOINTS = '#battle_results:details/calculations/rtsLeaderboardPoints'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
     VICTORYSCORE = '#battle_results:victoryScore'
     EXTERMINATIONVICTORY_ALLIES = '#battle_results:exterminationVictory/allies'
@@ -426,25 +394,19 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,
      DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE,
      DETAILS_CALCULATIONS_CRYSTAL_TOTAL,
-     DETAILS_CALCULATIONS_CRYSTAL_EVENTS,
-     DETAILS_CALCULATIONS_CRYSTAL_RTSEVENT,
-     DETAILS_CALCULATIONS_RTSTOKEN1X7,
-     DETAILS_CALCULATIONS_RTSTOKEN1X1,
-     DETAILS_CALCULATIONS_RTSEVENTPOINTS,
-     DETAILS_CALCULATIONS_RTSLEADERBOARDPOINTS)
+     DETAILS_CALCULATIONS_CRYSTAL_EVENTS)
     TEAM_STATS_LABELS_ENUM = (TEAM_STATS_LABELS_XP,
      TEAM_STATS_LABELS_XPFORATTACK,
      TEAM_STATS_LABELS_XPFORASSIST,
      TEAM_STATS_LABELS_XPOTHER,
      TEAM_STATS_LABELS_SHOTS,
      TEAM_STATS_LABELS_HITS,
-     TEAM_STATS_LABELS_HITSBYTANKS,
-     TEAM_STATS_LABELS_HITSBYSUPPLIES,
      TEAM_STATS_LABELS_EXPLOSIONHITS,
      TEAM_STATS_LABELS_DAMAGEDEALT,
      TEAM_STATS_LABELS_SNIPERDAMAGEDEALT,
      TEAM_STATS_LABELS_DESTRUCTIBLESDAMAGEDEALT,
      TEAM_STATS_LABELS_EQUIPMENTDAMAGEDEALT,
+     TEAM_STATS_LABELS_ARTILLERYFORTEQUIPDAMAGEDEALT,
      TEAM_STATS_LABELS_DAMAGEDEALTRATIO,
      TEAM_STATS_LABELS_DIRECTHITSRECEIVED,
      TEAM_STATS_LABELS_PIERCINGSRECEIVED,
@@ -457,28 +419,6 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_KILLED,
      TEAM_STATS_LABELS_DAMAGEASSISTED,
      TEAM_STATS_LABELS_DAMAGEASSISTEDSTUN,
-     TEAM_STATS_LABELS_TANKMANDAMAGETOSUPPLIES,
-     TEAM_STATS_LABELS_SUPPLYDAMAGETOTANKMAN,
-     TEAM_STATS_LABELS_COMMANDERSUPPLYDAMAGE,
-     TEAM_STATS_LABELS_DAMAGETOCOMMANDERSUPPLIES,
-     TEAM_STATS_LABELS_SPOTTEDENEMIESBYWATCHTOWERS,
-     TEAM_STATS_LABELS_DAMAGEDBYWATCHTOWERS,
-     TEAM_STATS_LABELS_TOTALDAMAGEDBYBARRICADES,
-     TEAM_STATS_LABELS_KILLEDTANKSBYBARRICADES,
-     TEAM_STATS_LABELS_SHOTSBYSUPPLIES,
-     TEAM_STATS_LABELS_DAMAGEDEALTBYSUPPLIES,
-     TEAM_STATS_LABELS_SNIPERDAMAGEDEALTBYSUPPLIES,
-     TEAM_STATS_LABELS_DIRECTHITSRECEIVEDBYSUPPLIES,
-     TEAM_STATS_LABELS_PIERCINGSRECEIVEDBYSUPPLIES,
-     TEAM_STATS_LABELS_NODAMAGEDIRECTHITSRECEIVEDBYSUPPLIES,
-     TEAM_STATS_LABELS_SPOTTEDTANKSBYSUPPLIES,
-     TEAM_STATS_LABELS_DAMAGEDKILLEDTANKSBYSUPPLIES,
-     TEAM_STATS_LABELS_SPOTTEDSUPPLIES,
-     TEAM_STATS_LABELS_DAMAGEDKILLEDSUPPLIES,
-     TEAM_STATS_LABELS_SHOTSBYTANKSSUPPLIES,
-     TEAM_STATS_LABELS_DAMAGEDEALTBYTANKSSUPPLIES,
-     TEAM_STATS_LABELS_DAMAGEBLOCKEDBYTANKSSUPPLIES,
-     TEAM_STATS_LABELS_SPOTTEDSTRATEGISTITEMS,
      TEAM_STATS_LABELS_STUNNUM,
      TEAM_STATS_LABELS_STUNDURATION,
      TEAM_STATS_LABELS_DAMAGEDEALTBYORDER,
@@ -503,9 +443,7 @@ class BATTLE_RESULTS(object):
      COMMON_VEHICLESTATE_DEAD4,
      COMMON_VEHICLESTATE_DEAD5,
      COMMON_VEHICLESTATE_DEAD6,
-     COMMON_VEHICLESTATE_DEAD7,
-     COMMON_VEHICLESTATE_DEAD21,
-     COMMON_VEHICLESTATE_DEAD22)
+     COMMON_VEHICLESTATE_DEAD7)
 
     @classmethod
     def getDetailsTimeLbl(cls, statName):

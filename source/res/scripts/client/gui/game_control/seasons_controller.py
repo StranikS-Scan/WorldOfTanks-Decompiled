@@ -15,11 +15,17 @@ class SeasonsController(ISeasonsController):
 
     def __init__(self):
         super(SeasonsController, self).__init__()
-        self._seasonProvidersByType = {GameSeasonType.RANKED: self.__rankedController,
-         GameSeasonType.EPIC: self.__epicMetaController,
-         GameSeasonType.BATTLE_ROYALE: self.__battleRoyaleController,
-         GameSeasonType.MAPBOX: self.__mapboxController,
-         GameSeasonType.EVENT_BATTLES: self.__eventBattlesController}
+        self.__seasonProvidersByType = {}
+
+    @property
+    def _seasonProvidersByType(self):
+        if not self.__seasonProvidersByType:
+            self.__seasonProvidersByType = {GameSeasonType.RANKED: self.__rankedController,
+             GameSeasonType.EPIC: self.__epicMetaController,
+             GameSeasonType.BATTLE_ROYALE: self.__battleRoyaleController,
+             GameSeasonType.MAPBOX: self.__mapboxController,
+             GameSeasonType.EVENT_BATTLES: self.__eventBattlesController}
+        return self.__seasonProvidersByType
 
     def hasAnySeason(self, seasonType):
         return self.__getSeasonProviderChecked(seasonType).hasAnySeason()

@@ -3,6 +3,7 @@
 import constants
 from skeletons.festivity_factory import IFestivityFactory
 from shared_utils import CONST_CONTAINER
+from gui.shared.system_factory import collectGameControllers
 
 class CalendarInvokeOrigin(CONST_CONTAINER):
     ACTION = 'action'
@@ -41,8 +42,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
     from gui.game_control.hangar_loading_controller import HangarLoadingController as _HangarLoading
-    from gui.game_control.battle_royale_controller import BattleRoyaleController as _BattleRoyale
-    from gui.game_control.battle_royale_tournament_controller import BattleRoyaleTournamentController as _BRTournament
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
@@ -72,8 +71,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.gift_system_controller import GiftSystemController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
-    from gui.game_control.rts_progression_controller import RTSProgressionController
-    from gui.rts_battles.rts_notifications import RTSEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -114,8 +111,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
-    _config(_interface.IBattleRoyaleController, _BattleRoyale())
-    _config(_interface.IBattleRoyaleTournamentController, _BRTournament())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
@@ -145,5 +140,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
-    _config(_interface.IRTSProgressionController, RTSProgressionController())
-    _config(_interface.IRTSNotificationsController, RTSEventNotifications())
+    collectGameControllers(_config)

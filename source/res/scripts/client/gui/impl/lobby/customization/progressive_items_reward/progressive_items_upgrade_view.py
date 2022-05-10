@@ -9,7 +9,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInstalledCount
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsSteelHunter
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
@@ -145,7 +145,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateButtons(self, lock=False, model=None):
         okEnabled = True
-        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled() and not currentHangarIsSteelHunter()
+        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled() and not currentHangarIsBattleRoyale()
         if self.__itemsInNeedToUpgrade:
             okEnabled = c11nEnabled
             if okEnabled:

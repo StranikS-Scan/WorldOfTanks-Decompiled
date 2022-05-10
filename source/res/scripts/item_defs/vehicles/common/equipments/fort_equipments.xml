@@ -1,709 +1,9 @@
 <fort_equipments.xml>
-  <artillery_tier1>
-    <id>	19	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	1	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	25	</shotsNumber>
-      <areaRadius>	10	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier1>
-  <artillery_tier2>
-    <id>	20	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	75	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	2	</minLevel>
-          <maxLevel>	2	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	30	</shotsNumber>
-      <areaRadius>	11	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier2>
-  <artillery_tier3>
-    <id>	21	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	3	</minLevel>
-          <maxLevel>	3	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	35	</shotsNumber>
-      <areaRadius>	12	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier3>
-  <artillery_tier4>
-    <id>	22	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	4	</minLevel>
-          <maxLevel>	4	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	40	</shotsNumber>
-      <areaRadius>	12	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier4>
-  <artillery_tier5>
-    <id>	23	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	55	</shotsNumber>
-      <areaRadius>	14	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier5>
-  <artillery_tier6>
-    <id>	24	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	6	</minLevel>
-          <maxLevel>	6	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	75	</shotsNumber>
-      <areaRadius>	16	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	90 90	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	56.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier6>
-  <artillery_tier7>
-    <id>	25	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	400	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	90	</shotsNumber>
-      <areaRadius>	19	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	90 90	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	52.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier7>
-  <artillery_tier8>
-    <id>	26	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	115	</shotsNumber>
-      <areaRadius>	21	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	95 95	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	48.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier8>
-  <artillery_tier9>
-    <id>	27	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	650	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	9	</minLevel>
-          <maxLevel>	9	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	130	</shotsNumber>
-      <areaRadius>	23	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	95 95	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	44.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier9>
-  <artillery_tier10>
-    <id>	28	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	3.0	</delay>
-      <duration>	5.0	</duration>
-      <shotsNumber>	140	</shotsNumber>
-      <areaRadius>	24	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	100 100	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	40.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </artillery_tier10>
-  <bomber_tier1>
-    <id>	29	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	1	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	20.	</areaLength>
-      <areaWidth>	15.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	15	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier1>
-  <bomber_tier2>
-    <id>	30	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	75	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	2	</minLevel>
-          <maxLevel>	2	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	20.	</areaLength>
-      <areaWidth>	15.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	20	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier2>
-  <bomber_tier3>
-    <id>	31	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	3	</minLevel>
-          <maxLevel>	3	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	25	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier3>
-  <bomber_tier4>
-    <id>	32	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	4	</minLevel>
-          <maxLevel>	4	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	30	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier4>
-  <bomber_tier5>
-    <id>	33	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	35	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier5>
-  <bomber_tier6>
-    <id>	34	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	6	</minLevel>
-          <maxLevel>	6	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	40.	</areaLength>
-      <areaWidth>	30.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	60	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	90 90	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	56.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier6>
-  <bomber_tier7>
-    <id>	35	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	400	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	40.	</areaLength>
-      <areaWidth>	30.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	75	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	90 90	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	52.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier7>
-  <bomber_tier8>
-    <id>	36	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	200	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55.	</areaLength>
-      <areaWidth>	35.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	110	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	95 95	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	48.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier8>
-  <bomber_tier9>
-    <id>	37	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	650	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	9	</minLevel>
-          <maxLevel>	9	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55.	</areaLength>
-      <areaWidth>	35.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	120	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	95 95	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	44.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier9>
-  <bomber_tier10>
-    <id>	38	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55	</areaLength>
-      <areaWidth>	35	</areaWidth>
-      <antepositions>	0	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	130	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	100 100	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	40.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-    </script>
-  </bomber_tier10>
   <artillery_cw_tier6>
     <id>	45	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	300	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -733,7 +33,7 @@
     <id>	47	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	500	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -763,7 +63,7 @@
     <id>	49	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -793,7 +93,7 @@
     <id>	55	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
+    <icon>	bomber	</icon>
     <price>	300	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -833,7 +133,7 @@
     <id>	57	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
+    <icon>	bomber	</icon>
     <price>	500	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -873,7 +173,7 @@
     <id>	59	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
+    <icon>	bomber	</icon>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -913,7 +213,7 @@
     <id>	101	</id>
     <userString>	#artefacts:artillery/name	</userString>
     <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
+    <icon>	artillery	</icon>
     <price>	150	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -943,7 +243,7 @@
     <id>	102	</id>
     <userString>	#artefacts:bomber/name	</userString>
     <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
+    <icon>	bomber	</icon>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
@@ -979,4 +279,2536 @@
       <noOwner>	false	</noOwner>
     </script>
   </bomber_fallout>
+  <artillery_aoe_fort_6lvl_1>
+    <id>	400	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	20	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	16	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	12	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_1>
+  <artillery_aoe_fort_6lvl_2>
+    <id>	401	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	12	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_2>
+  <artillery_aoe_fort_6lvl_3>
+    <id>	402	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	14	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_3>
+  <artillery_aoe_fort_6lvl_4>
+    <id>	403	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	14	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_4>
+  <artillery_aoe_fort_6lvl_5>
+    <id>	404	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	16	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_5>
+  <artillery_aoe_fort_6lvl_6>
+    <id>	405	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	16	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_6>
+  <artillery_aoe_fort_6lvl_7>
+    <id>	406	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	18	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_7>
+  <artillery_aoe_fort_6lvl_8>
+    <id>	407	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	18	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_8>
+  <artillery_aoe_fort_6lvl_9>
+    <id>	408	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	20	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_9>
+  <artillery_aoe_fort_6lvl_10>
+    <id>	409	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	20	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_10>
+  <artillery_aoe_fort_6lvl_11>
+    <id>	410	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	22	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_11>
+  <artillery_aoe_fort_6lvl_12>
+    <id>	411	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	24	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_6lvl_12>
+  <artillery_aoe_fort_8lvl_1>
+    <id>	412	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	20	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	16	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	17	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_1>
+  <artillery_aoe_fort_8lvl_2>
+    <id>	413	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	17	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_2>
+  <artillery_aoe_fort_8lvl_3>
+    <id>	414	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	20	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_3>
+  <artillery_aoe_fort_8lvl_4>
+    <id>	415	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	20	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_4>
+  <artillery_aoe_fort_8lvl_5>
+    <id>	416	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	23	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_5>
+  <artillery_aoe_fort_8lvl_6>
+    <id>	417	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	23	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_6>
+  <artillery_aoe_fort_8lvl_7>
+    <id>	418	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	26	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_7>
+  <artillery_aoe_fort_8lvl_8>
+    <id>	419	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	26	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_8>
+  <artillery_aoe_fort_8lvl_9>
+    <id>	420	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	30	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_9>
+  <artillery_aoe_fort_8lvl_10>
+    <id>	421	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	30	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_10>
+  <artillery_aoe_fort_8lvl_11>
+    <id>	422	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	33	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_11>
+  <artillery_aoe_fort_8lvl_12>
+    <id>	423	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	36	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_8lvl_12>
+  <artillery_aoe_fort_10lvl_1>
+    <id>	424	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	20	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	16	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	30	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_1>
+  <artillery_aoe_fort_10lvl_2>
+    <id>	425	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	30	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_2>
+  <artillery_aoe_fort_10lvl_3>
+    <id>	426	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	22	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	17.6	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	35	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_3>
+  <artillery_aoe_fort_10lvl_4>
+    <id>	427	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	35	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_4>
+  <artillery_aoe_fort_10lvl_5>
+    <id>	428	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	24	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	19.2	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	40	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_5>
+  <artillery_aoe_fort_10lvl_6>
+    <id>	429	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	40	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_6>
+  <artillery_aoe_fort_10lvl_7>
+    <id>	430	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	26	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	20.8	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	45	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_7>
+  <artillery_aoe_fort_10lvl_8>
+    <id>	431	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	45	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_8>
+  <artillery_aoe_fort_10lvl_9>
+    <id>	432	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	28	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	22.4	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	50	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_9>
+  <artillery_aoe_fort_10lvl_10>
+    <id>	433	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	50	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_10>
+  <artillery_aoe_fort_10lvl_11>
+    <id>	434	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	55	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_11>
+  <artillery_aoe_fort_10lvl_12>
+    <id>	435	</id>
+    <userString>	#artefacts:fort_aoe_artillery/name	</userString>
+    <description>	#artefacts:fort_aoe_artillery/shortDescr	</description>
+    <icon>	artillery 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	AttackArtilleryFortEquipment	  <shortDescription>	#artefacts:fort_aoe_artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_aoe_artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	7	</delay>
+      <duration>	20.0	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	FORT_ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	24	</offsetDeviation>
+          <repeatCount>	2	</repeatCount>
+          <repeatDelay>	0.526316	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <value>	60	</value>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_aoe_fort_10lvl_12>
+  <inspire_fort1>
+    <id>	436	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.1	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	15	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort1>
+  <inspire_fort2>
+    <id>	437	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.1	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	20	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort2>
+  <inspire_fort3>
+    <id>	438	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	20	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort3>
+  <inspire_fort4>
+    <id>	439	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.15	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	25	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort4>
+  <inspire_fort5>
+    <id>	440	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.2	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	25	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort5>
+  <inspire_fort6>
+    <id>	441	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.2	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	30	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort6>
+  <inspire_fort7>
+    <id>	442	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.25	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	30	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort7>
+  <inspire_fort8>
+    <id>	443	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.25	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	35	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort8>
+  <inspire_fort9>
+    <id>	444	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.3	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	35	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort9>
+  <inspire_fort10>
+    <id>	445	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.3	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	0	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort10>
+  <inspire_fort11>
+    <id>	446	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.3	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	7	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort11>
+  <inspire_fort12>
+    <id>	447	</id>
+    <userString>	#artefacts:fort_inspire/name	</userString>
+    <description>	#artefacts:fort_inspire/shortDescr	</description>
+    <icon>	inspire 0 0	</icon>
+    <soundNotification>	sh_ability_ready	</soundNotification>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger advancedLogging	</tags>
+    <type>	battleAbilities	</type>
+    <script>	FortConsumableInspire	  <shortDescription>	#artefacts:fort_inspire/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:fort_inspire/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	55	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <setUnavailableAfterAmmoLeft>	true	</setUnavailableAfterAmmoLeft>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.6	</cooldownTimeRespawnFactor>
+      <increaseFactors>
+        <crewRolesFactor>	1.3	</crewRolesFactor>
+      </increaseFactors>
+      <duration>	60	</duration>
+      <inactivationDelay>	15	</inactivationDelay>
+      <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
+    </script>
+  </inspire_fort12>
 </fort_equipments.xml>

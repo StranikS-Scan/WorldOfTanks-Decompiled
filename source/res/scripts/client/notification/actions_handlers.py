@@ -38,7 +38,7 @@ from notification.tutorial_helper import TUTORIAL_GLOBAL_VAR, TutorialGlobalStor
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController, IBattlePassController, IRTSBattlesController
+from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController, IBattlePassController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -983,7 +983,11 @@ class _OpenMapboxSurvey(_NavigationDisabledActionHandler):
 
     def doAction(self, model, entityID, action):
         notification = model.getNotification(self.getNotType(), entityID)
-        self.__mapboxCtrl.showSurvey(notification.getSavedData())
+        if self.__mapboxCtrl.getProgressionData() is not None:
+            self.__mapboxCtrl.showSurvey(notification.getSavedData())
+        else:
+            showMissionsMapboxProgression()
+        return
 
 
 class _OpenPsaShop(_NavigationDisabledActionHandler):
@@ -1019,38 +1023,6 @@ class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
     @classmethod
     def getNotType(cls):
         return NOTIFICATION_TYPE.BATTLE_PASS_SWITCH_CHAPTER_REMINDER
-
-
-class _RTSEventHandler(_NavigationDisabledActionHandler):
-    _rtsCtrl = dependency.descriptor(IRTSBattlesController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    def _canNavigate(self):
-        result = super(_RTSEventHandler, self)._canNavigate()
-        return self._rtsCtrl.isEnabled() and result
-
-
-class _OpenRTSEventHandler(_RTSEventHandler):
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        self._rtsCtrl.doSelectPrb(lambda : None)
-
-
-class _OpenRTSCollectionHandler(_RTSEventHandler):
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        self._rtsCtrl.doSelectPrb(shared_events.showRTSMetaRootWindow)
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1098,9 +1070,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMapboxSurvey,
  _OpenPsaShop,
  _OpenBattlePassPointsShop,
- _OpenChapterChoiceView,
- _OpenRTSEventHandler,
- _OpenRTSCollectionHandler)
+ _OpenChapterChoiceView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

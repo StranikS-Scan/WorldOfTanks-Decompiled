@@ -6,6 +6,7 @@ import typing
 from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
+from async import async, await
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
@@ -26,7 +27,6 @@ from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.RTSBATTLES_ALIASES import RTSBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -65,7 +65,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
-from async import async, await
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union
     from gui.marathon.marathon_event import MarathonEvent
@@ -114,15 +113,6 @@ def showRankedBattleIntro():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRtsPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RTSBATTLES_ALIASES.RTS_BATTLES_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showRtsIntroPage():
-    from gui.impl.lobby.rts.intro_view import IntroView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.rts.IntroView(), IntroView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -139,7 +129,8 @@ def showBattleRoyalePrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBattleRoyaleResultsView(ctx):
+@dependency.replace_none_kwargs(notificationsMgr=INotificationWindowController)
+def showBattleRoyaleResultsView(ctx, notificationsMgr=None):
     from gui.impl.lobby.battle_royale.battle_result_view import BrBattleResultsViewInLobby
     uiLoader = dependency.instance(IGuiLoader)
     contentResId = R.views.lobby.battle_royale.BattleResultView()
@@ -148,12 +139,14 @@ def showBattleRoyaleResultsView(ctx):
         if battleResultView.arenaUniqueID == ctx.get('arenaUniqueID', -1):
             return
         battleResultView.destroyWindow()
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, BrBattleResultsViewInLobby, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    view = BrBattleResultsViewInLobby(ctx=ctx)
+    window = LobbyNotificationWindow(WindowFlags.WINDOW_FULLSCREEN, content=view, layer=view.layer)
+    notificationsMgr.append(WindowNotificationCommand(window))
     return
 
 
-def showHangarVehicleConfigurator(isFirstEnter=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW), ctx={'isFirstEnter': isFirstEnter}), scope=EVENT_BUS_SCOPE.LOBBY)
+def showHangarVehicleConfigurator():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW), ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleInfo(vehTypeCompDescr):
@@ -359,8 +352,9 @@ def showTechTree(vehTypeCompDescr=None, itemsCache=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleStats(vehTypeCompDescr):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'itemCD': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
+def showVehicleStats(vehTypeCompDescr, eventOwner=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'itemCD': vehTypeCompDescr,
+     'eventOwner': eventOwner}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showHangar():
@@ -612,10 +606,12 @@ def showPersonalMissionsQuestAwardScreen(quest, ctx, proxyEvent, notificationMgr
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showProfileWindow(databaseID, userName):
+def showProfileWindow(databaseID, userName, selectedAlias=None, eventOwner=None):
     alias = VIEW_ALIAS.PROFILE_WINDOW
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getViewName(alias, databaseID)), ctx={'userName': userName,
-     'databaseID': databaseID}), EVENT_BUS_SCOPE.LOBBY)
+     'databaseID': databaseID,
+     'selectedAlias': selectedAlias,
+     'eventOwner': eventOwner}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showClanProfileWindow(clanDbID, clanAbbrev):
@@ -870,15 +866,6 @@ def showDedicationRewardWindow(bonuses, data, closeCallback=None):
     from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
     window = DedicationRewardWindow(bonuses, data, closeCallback)
     window.load()
-
-
-def isViewLoaded(layoutID):
-    uiLoader = dependency.instance(IGuiLoader)
-    if not uiLoader or not uiLoader.windowsManager:
-        return False
-    else:
-        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
-        return view is not None
 
 
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
@@ -1221,9 +1208,9 @@ def showCompareAmmunitionSelectorView(**kwargs):
 
 
 @async
-def showNeedRepairDialog(vehicle, startState=None, parent=None):
+def showNeedRepairDialog(vehicle, repairClazz, startState=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), wrappedViewClass=NeedRepair, vehicle=vehicle, startState=startState, parent=parent))
+    result = yield await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), wrappedViewClass=NeedRepair, vehicle=vehicle, startState=startState, parent=parent, repairClazz=repairClazz))
     raise AsyncReturn(result)
 
 
@@ -1349,9 +1336,14 @@ def showMapboxPrimeTimeWindow():
 
 
 def showMapboxIntro(closeCallback=None):
-    from gui.impl.lobby.mapbox.map_box_intro import MapBoxIntroWindow
-    if not MapBoxIntroWindow.getInstances():
-        window = MapBoxIntroWindow(closeCallback)
+    from gui.impl.lobby.mapbox.map_box_intro import MapBoxIntro
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.mapbox.MapBoxIntro(), MapBoxIntro, ScopeTemplates.LOBBY_SUB_SCOPE), closeCallback=closeCallback), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showMapboxSurvey(mapName, closeCallback=None):
+    from gui.impl.lobby.mapbox.mapbox_survey_view import MapBoxSurveyWindow
+    if not MapBoxSurveyWindow.getInstances():
+        window = MapBoxSurveyWindow(mapName, closeCallback)
         window.load()
 
 
@@ -1472,22 +1464,6 @@ def showBuyModuleDialog(newModule, installedModule, currency, mountDisabledReaso
         callback((False, {}))
     else:
         callback(result.result)
-
-
-@async
-def showRTSRosterSaveDialog():
-    from gui.impl.dialogs import dialogs
-    from gui.impl.pub.dialog_window import DialogButtons
-    from gui.impl.dialogs.gf_builders import ChooseOrCancelDialogBuilder
-    stringRoot = R.strings.rts_battles.strategist.saveDialog
-    builder = ChooseOrCancelDialogBuilder()
-    builder.setTitle(stringRoot.title())
-    builder.setPrimaryButtonLabel(stringRoot.accept())
-    builder.setSecondaryButtonLabel(stringRoot.cancel())
-    result = yield await(dialogs.show(builder.build()))
-    wasCanceled = result.result == DialogButtons.CANCEL
-    shouldSave = result.result == ChooseOrCancelDialogBuilder.PRIMARY
-    raise AsyncReturn((shouldSave, wasCanceled))
 
 
 def showMapsTrainingPage(ctx):
@@ -1651,33 +1627,3 @@ def showRankedSelectableReward(rewards=None):
     from gui.impl.lobby.ranked.ranked_selectable_reward_view import RankedSelectableRewardWindow
     window = RankedSelectableRewardWindow(rewards)
     window.load()
-
-
-def showRTSMetaRootWindow(tabId=None):
-    layoutID = R.views.lobby.rts.MetaRootView()
-    if isViewLoaded(layoutID):
-        return
-    from gui.impl.lobby.rts.meta_root_view import MetaRootView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=layoutID, viewClass=MetaRootView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), tabId=tabId), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showRTSRewardsWindow():
-    from gui.impl.lobby.rts.rewards_view import RewardsViewWindow
-    guiLoader = dependency.instance(IGuiLoader)
-    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.rts.RewardsView())
-    if view is not None:
-        return
-    else:
-        window = RewardsViewWindow()
-        window.load()
-        return
-
-
-def showRTSBootcampResult(arenaUniqueID):
-    from gui.rts_battles.rts_helpers import onShowRTSBootcampResult
-    onShowRTSBootcampResult(arenaUniqueID)
-
-
-def showRTSBootcampResultDeserted():
-    from gui.impl.lobby.rts.tutorial.rts_tutorial_helpers import showDefeatDialog
-    showDefeatDialog()

@@ -193,7 +193,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, None)
             g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
-        g_eventBus.handleEvent(events.CameraMoveEvent(events.CameraMoveEvent.ON_HANGAR_VEHICLE), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged

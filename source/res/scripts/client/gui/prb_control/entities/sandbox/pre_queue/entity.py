@@ -2,13 +2,11 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/sandbox/pre_queue/entity.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import DEFAULT_QUEUE
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
-from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.sandbox.pre_queue.actions_validator import SandboxActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -24,25 +22,6 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 
-class SandboxSubscriber(PreQueueSubscriber):
-
-    def subscribe(self, entity):
-        g_playerEvents.onEnqueuedSandbox += entity.onEnqueued
-        g_playerEvents.onDequeuedSandbox += entity.onDequeued
-        g_playerEvents.onEnqueuedSandboxFailure += entity.onEnqueueError
-        g_playerEvents.onKickedFromSandboxQueue += entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena += entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure += entity.onArenaJoinFailure
-
-    def unsubscribe(self, entity):
-        g_playerEvents.onEnqueuedSandbox -= entity.onEnqueued
-        g_playerEvents.onDequeuedSandbox -= entity.onDequeued
-        g_playerEvents.onEnqueuedSandboxFailure -= entity.onEnqueueError
-        g_playerEvents.onKickedFromSandboxQueue -= entity.onKickedFromQueue
-        g_playerEvents.onKickedFromArena -= entity.onKickedFromArena
-        g_playerEvents.onArenaJoinFailure -= entity.onArenaJoinFailure
-
-
 class SandboxEntryPoint(PreQueueEntryPoint):
 
     def __init__(self):
@@ -53,13 +32,10 @@ class SandboxEntity(PreQueueEntity):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        super(SandboxEntity, self).__init__(FUNCTIONAL_FLAG.SANDBOX, QUEUE_TYPE.SANDBOX, SandboxSubscriber())
+        super(SandboxEntity, self).__init__(FUNCTIONAL_FLAG.SANDBOX, QUEUE_TYPE.SANDBOX, PreQueueSubscriber())
         self.__watcher = None
+        self.storage = prequeue_storage_getter(QUEUE_TYPE.SANDBOX)()
         return
-
-    @prequeue_storage_getter(QUEUE_TYPE.SANDBOX)
-    def storage(self):
-        return None
 
     def init(self, ctx=None):
         self.storage.release()
@@ -74,9 +50,6 @@ class SandboxEntity(PreQueueEntity):
             self.__watcher = None
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         return super(SandboxEntity, self).fini(ctx=ctx, woEvents=woEvents)
-
-    def isInQueue(self):
-        return prb_getters.isInSandboxQueue()
 
     def leave(self, ctx, callback=None):
         if not ctx.hasFlags(FUNCTIONAL_FLAG.TUTORIAL) and not ctx.hasFlags(FUNCTIONAL_FLAG.SANDBOX):

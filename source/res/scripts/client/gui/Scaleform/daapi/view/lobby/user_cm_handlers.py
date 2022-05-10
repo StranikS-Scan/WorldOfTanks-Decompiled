@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
 import math
-import logging
 from Event import Event
 from adisp import process
 from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA
@@ -38,7 +37,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-_logger = logging.getLogger(__name__)
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
@@ -99,7 +97,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return None
 
     def canInvite(self):
-        if self.prbEntity is not None and not self._isRts():
+        if self.prbEntity is not None:
             if hasattr(self.prbEntity, 'getFlags'):
                 flags = self.prbEntity.getFlags()
                 if flags.isInSearch():
@@ -187,11 +185,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             showSentInviteMessage(user)
 
     def getOptions(self, ctx=None):
-        if not self._getUseCmInfo().isCurrentPlayer:
-            return self._generateOptions(ctx)
-        else:
-            _logger.warning('Attempt to invoke context menu for self')
-            return None
+        return self._generateOptions(ctx) if not self._getUseCmInfo().isCurrentPlayer else None
 
     def _getHandlers(self):
         handlers = {USER.INFO: 'showUserInfo',
@@ -220,21 +214,16 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         self.wasInBattle = getattr(ctx, 'wasInBattle', True)
         self.showClanProfile = getattr(ctx, 'showClanProfile', True)
         self.clanAbbrev = getattr(ctx, 'clanAbbrev', None)
-        self._arenaGuiType = getattr(ctx, 'arenaType', ARENA_GUI_TYPE.UNKNOWN)
         return
 
     def _clearFlashValues(self):
         self.databaseID = None
         self.userName = None
         self.wasInBattle = None
-        self._arenaGuiType = None
         return
 
     def _getUseCmInfo(self):
         return UserContextMenuInfo(self.databaseID, self.userName, self.clanAbbrev)
-
-    def _isRts(self):
-        return self._arenaGuiType == ARENA_GUI_TYPE.RTS
 
     def _generateOptions(self, ctx=None):
         userCMInfo = self._getUseCmInfo()
@@ -350,11 +339,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _makeAIBotOptions(self):
-        if self._vehicleCD > 0:
-            vehicle = self.itemsCache.items.getItemByCD(self._vehicleCD)
-            if not vehicle.isSecret:
-                return [self._makeItem(USER.VEHICLE_INFO, MENU.contextmenu(USER.VEHICLE_INFO)), self._makeItem(USER.VEHICLE_PREVIEW, MENU.contextmenu(USER.VEHICLE_PREVIEW))]
-        return []
+        return [self._makeItem(USER.VEHICLE_INFO, MENU.contextmenu(USER.VEHICLE_INFO)), self._makeItem(USER.VEHICLE_PREVIEW, MENU.contextmenu(USER.VEHICLE_PREVIEW))]
 
     def _doSelect(self, prebattleActionName, accountsToInvite=None):
         action = PrbAction(prebattleActionName, accountsToInvite=accountsToInvite)
@@ -401,6 +386,7 @@ class AppealCMHandler(BaseUserCMHandler):
             self._vehicleCD = int(vehicleCD)
         clientArenaIdx = getattr(ctx, 'clientArenaIdx', 0)
         self._arenaUniqueID = self.lobbyContext.getArenaUniqueIDByClientID(clientArenaIdx)
+        self._arenaGuiType = getattr(ctx, 'arenaType', ARENA_GUI_TYPE.UNKNOWN)
         self._isAlly = getattr(ctx, 'isAlly', False)
         super(AppealCMHandler, self)._initFlashValues(ctx)
         return
@@ -408,6 +394,7 @@ class AppealCMHandler(BaseUserCMHandler):
     def _clearFlashValues(self):
         super(AppealCMHandler, self)._clearFlashValues()
         self._vehicleCD = None
+        self._arenaGuiType = None
         self._isAlly = None
         return
 
@@ -426,24 +413,19 @@ class AppealCMHandler(BaseUserCMHandler):
             options.append(self._createSubMenuItem())
         return options
 
-    def _shouldShowVehicleInfoOption(self, vehicle):
-        return not vehicle.isSecret or self._isRts() and not vehicle.isCommander
-
-    def _isVehicleInfoOptionEnabled(self, vehicle):
-        isEnabled = not self._isRts()
-        return not self.prbDispatcher.getFunctionalState().isNavigationDisabled() if isEnabled and vehicle.isPreviewAllowed() else isEnabled
-
     def _addVehicleInfo(self, options):
         if self._vehicleCD > 0:
             vehicle = self.itemsCache.items.getItemByCD(self._vehicleCD)
-            if self._shouldShowVehicleInfoOption(vehicle):
+            if not vehicle.isSecret:
+                isEnabled = True
                 if vehicle.isPreviewAllowed():
+                    isEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                     action = USER.VEHICLE_PREVIEW
                     label = MENU.contextmenu(USER.VEHICLE_PREVIEW)
                 else:
                     action = USER.VEHICLE_INFO
                     label = MENU.contextmenu(USER.VEHICLE_INFO)
-                options.append(self._makeItem(action, label, optInitData={'enabled': self._isVehicleInfoOptionEnabled(vehicle)}))
+                options.append(self._makeItem(action, label, optInitData={'enabled': isEnabled}))
         return options
 
     def _isAppealsForTopicEnabled(self, topic):
@@ -458,16 +440,9 @@ class AppealCMHandler(BaseUserCMHandler):
         make = self._makeItem
         return [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self._isAppealsForTopicEnabled(denunciation)}) for denunciation in order ]
 
-    def _isAppealOptionEnabled(self):
-        if self._isRts():
-            return False
-        else:
-            permissions = self.prbEntity.getPermissions() if self.prbEntity else None
-            return permissions and permissions.canAppeal() and self._denunciator.isAppealsEnabled()
-
     def _createSubMenuItem(self):
         labelStr = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self._denunciator.getDenunciationsLeft(), DENUNCIATIONS_PER_DAY)
-        return self._makeItem(DENUNCIATIONS.APPEAL, labelStr, optInitData={'enabled': self._isAppealOptionEnabled()}, optSubMenu=self._getSubmenuData())
+        return self._makeItem(DENUNCIATIONS.APPEAL, labelStr, optInitData={'enabled': self._denunciator.isAppealsEnabled()}, optSubMenu=self._getSubmenuData())
 
 
 class UserVehicleCMHandler(AppealCMHandler):
@@ -487,16 +462,9 @@ class UserVehicleCMHandler(AppealCMHandler):
         self._manageVehCompareOptions(options)
         return options
 
-    def _isVehicleCompareOptionEnabled(self, vehicle):
-        return not self._isRts() and self.comparisonBasket.isReadyToAdd(vehicle)
-
-    def _shouldShowVehicleCompareOption(self, vehicle):
-        return self.comparisonBasket.isEnabled() and not vehicle.isCommander
-
     def _manageVehCompareOptions(self, options):
-        vehicle = self.itemsCache.items.getItemByCD(self._vehicleCD)
-        if self._shouldShowVehicleCompareOption(vehicle):
-            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self._isVehicleCompareOptionEnabled(vehicle)}))
+        if self.comparisonBasket.isEnabled():
+            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(self.itemsCache.items.getItemByCD(self._vehicleCD))}))
 
 
 class CustomUserCMHandler(BaseUserCMHandler):

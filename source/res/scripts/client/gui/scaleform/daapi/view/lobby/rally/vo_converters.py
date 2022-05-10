@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
+from UnitBase import UNIT_ROLE
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui import makeHtmlString
@@ -23,7 +24,7 @@ from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle, getIconResourceName
 from gui.shared.utils.functions import makeTooltip
-from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE, AIRSTRIKE, ARTILLERY_STRIKE, REQUISITION, HIGH_CAPACITY_TRANSPORT
+from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE, BOOST_TYPE, ARTILLERY_STRIKE, REQUISITION, HIGH_CAPACITY_TRANSPORT, INSPIRATION
 from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE, USER_TAG
@@ -242,6 +243,9 @@ def makeCandidateIconPath(pInfo, user):
 _UNIT_RESTRICTION_TO_LABEL = {UNIT_RESTRICTION.MAX_TOTAL_LEVEL: 'levelError',
  UNIT_RESTRICTION.MIN_TOTAL_LEVEL: 'levelError',
  UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: 'levelWarning'}
+_ROLE_ICONS = {UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS: 'gunner',
+ UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS: 'inspire',
+ UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS | UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS: 'gunnerAndInspire'}
 
 def makeTotalLevelLabel(unitStats, restriction=''):
     templateKey = 'sumLevelLabel'
@@ -329,6 +333,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
             isLocked = False
         else:
             isLocked = True
+        equipmentCommanderRoles = UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS | UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS
         slot = {'rallyIdx': unitMgrID,
          'isCommanderState': isPlayerCreator,
          'isCurrentUserInSlot': isPlayerInSlot,
@@ -346,7 +351,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
          'rating': rating,
          'isLegionaries': isLegionaries,
          'isLocked': isLocked,
-         'role': role}
+         'role': role,
+         'roleIcon': _ROLE_ICONS.get(role & equipmentCommanderRoles, '')}
         if withPrem:
             slot['hasPremiumAccount'] = player and player.hasPremium
         if unit.isSquad():
@@ -371,8 +377,6 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
              'additionalMsg': additionMsg})
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:
             slot.update(_updateEpicBattleSlotInfo(player, vehicle))
-        elif unit.getPrebattleType() == PREBATTLE_TYPE.BATTLE_ROYALE:
-            slot.update(_updateBattleRoyaleSlotInfo(player, vehicle))
         slots.append(slot)
         playerCount += 1
 
@@ -381,10 +385,6 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
 
 def _updateEpicBattleSlotInfo(player, vehicle):
     return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction()))
-
-
-def _updateBattleRoyaleSlotInfo(player, vehicle):
-    return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.battleRoyale.VehicleRestriction()))
 
 
 def _updateSpecialBattleSlotInfo(player, vehicle, message):
@@ -595,6 +595,7 @@ def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResV
 
 
 __emptyTypeMap = {SUPPORT_TYPE: 'fireSupportPlus',
+ BOOST_TYPE: 'inspirePlus',
  REQUISITION_TYPE: 'requisitionPlus',
  HEAVYTRUCKS_TYPE: 'heavyTrucksPlus'}
 
@@ -612,6 +613,7 @@ def makeReserveSlotVO(reserveType, groupType, reserveId, level, slotIndex, toolt
 
 
 __locTypeMap = {SUPPORT_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_SUPPORT,
+ BOOST_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_BOOST,
  REQUISITION_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_REQUISITION,
  HEAVYTRUCKS_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_HEAVYTRUCKS}
 
@@ -619,44 +621,55 @@ def getReserveGroupTitle(groupType):
     return i18n.makeString(__locTypeMap[groupType])
 
 
-def makeReserveSlotTooltipVO(groupType, header, description, empty, notChosen, havePermition, isInBattle, disabledByRequisition):
-    tooltipType = TOOLTIPS_CONSTANTS.RESERVE_MODULE
-    if notChosen:
+def makeReserveSlotTooltipVO(reserve, groupType, empty, havePermissions, isInBattle, disabledByRequisition):
+    if reserve is None:
         tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
         header = getReserveGroupTitle(groupType)
-        if havePermition:
+        rShortCut = R.strings.fortifications.reserves.tooltip
+        if havePermissions:
             if disabledByRequisition:
-                description = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_DISABLEDREQUISITION)
+                description = backport.text(rShortCut.disabledRequisition())
             elif isInBattle:
-                description = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_DISABLEDINBATTLE)
+                description = backport.text(rShortCut.disabledInBattle())
             elif empty:
-                description = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_EMPTY)
+                description = backport.text(rShortCut.empty())
             else:
-                description = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_WITHPERMITION)
+                description = backport.text(rShortCut.withPermission())
         else:
-            description = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_WITHOUTPERMITION)
+            description = backport.text(rShortCut.withoutPermission())
+    else:
+        header = reserve.getTitle()
+        description = reserve.getDescription()
+        tooltipType = geReserveTooltipType(reserve.getType())
     return (makeTooltip(header, description), tooltipType)
 
 
-__typeMapVO = {AIRSTRIKE: 'airSupport',
- ARTILLERY_STRIKE: 'artillerySupport',
+__typeMapVO = {ARTILLERY_STRIKE: 'artillerySupport',
  REQUISITION: 'requisition',
- HIGH_CAPACITY_TRANSPORT: 'heavyTrucks'}
+ HIGH_CAPACITY_TRANSPORT: 'heavyTrucks',
+ INSPIRATION: 'inspire'}
+__reserveTooltipMap = {ARTILLERY_STRIKE: TOOLTIPS_CONSTANTS.RESERVE_MODULE,
+ REQUISITION: TOOLTIPS_CONSTANTS.OLD_RESERVE_MODULE,
+ HIGH_CAPACITY_TRANSPORT: TOOLTIPS_CONSTANTS.OLD_RESERVE_MODULE,
+ INSPIRATION: TOOLTIPS_CONSTANTS.RESERVE_MODULE}
 
 def getReserveNameVO(name):
     return __typeMapVO.get(name, None)
 
 
-def makeReserveModuleData(mID, moduleType, level, count, isSelected, paramValues, paramNames):
-    moduleLabel = getReserveNameVO(moduleType)
+def geReserveTooltipType(name):
+    return __reserveTooltipMap.get(name, None)
+
+
+def makeReserveModuleData(mID, moduleType, level, count, isSelected, showExtendedParams, paramsItems):
     return {'id': mID,
-     'moduleLabel': moduleLabel,
+     'moduleLabel': getReserveNameVO(moduleType),
      'level': level,
      'count': count,
      'isSelected': isSelected,
-     'paramValues': paramValues,
-     'paramNames': paramNames,
-     'tooltipType': TOOLTIPS_CONSTANTS.RESERVE_MODULE}
+     'showExtendedParams': showExtendedParams,
+     'paramsItems': paramsItems,
+     'tooltipType': geReserveTooltipType(moduleType)}
 
 
 def makeFortClanBattleRoomVO(mapId, headerDescr, mineClanName, enemyClanName, waitForBattleDescr, isMapEnabled, isBattleTimerVisible, isSortie):

@@ -9,6 +9,7 @@ from items import vehicles
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyList, getHotKeyVkList
 from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
+from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 
 def getEquipmentById(equipmentId):
@@ -83,13 +84,22 @@ def isAdditionalModule(level, unlocks, moduleGetter):
 
 @dependency.replace_none_kwargs(brCtrl=IBattleRoyaleController)
 def canVehicleSpawnBot(vehicleName, brCtrl=None):
-    equipmentIds = brCtrl.getBrVehicleEquipmentIds(vehicleName)
-    if equipmentIds:
-        spawnedBotID = vehicles.g_cache.equipmentIDs()['spawn_kamikaze']
-        return spawnedBotID in equipmentIds
-    return False
+    vehicleEquipmentIDs = brCtrl.getBrVehicleEquipmentIds(vehicleName)
+    equipments = vehicles.g_cache.equipments()
+    return any((eqID for eqID in vehicleEquipmentIDs if hasattr(equipments[eqID], 'botType')))
 
 
 @dependency.replace_none_kwargs(hangarSwitcher=IHangarSpacesSwitcher)
-def currentHangarIsSteelHunter(hangarSwitcher=None):
+def currentHangarIsBattleRoyale(hangarSwitcher=None):
     return hangarSwitcher.currentItem == hangarSwitcher.itemsToSwitch.BATTLE_ROYALE
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getAvailableNationsNames(lobbyContext=None):
+    keys = lobbyContext.getServerSettings().battleRoyale.vehiclesSlotsConfig.keys()
+    names = [ values.split(':')[0] for values in keys ]
+    return names
+
+
+def getAvailableVehicleTypes():
+    return frozenset(('lightTank', 'mediumTank', 'heavyTank'))

@@ -308,7 +308,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
-                if not vehicleItems and crewItems:
+                if crewItems and not vehicleItems:
                     groupID = crewItems[0].groupID
                     vehicleItems = (ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=groupID),)
                 viewPy.setVehicleCrews(vehicleItems, crewItems)

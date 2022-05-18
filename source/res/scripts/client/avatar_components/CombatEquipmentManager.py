@@ -269,7 +269,7 @@ class CombatEquipmentManager(object):
         return
 
     @staticmethod
-    def createEquipmentSelectedArea(pos, direction, equipment, doYCutOff=True):
+    def createEquipmentSelectedArea(pos, direction, equipment):
         area = CombatSelectedArea.CombatSelectedArea()
         size = Vector2(equipment.areaWidth, equipment.areaLength)
         visual = equipment.areaVisual
@@ -278,7 +278,7 @@ class CombatEquipmentManager(object):
             visual = CombatSelectedArea.DEFAULT_RADIUS_MODEL
         if color is None:
             pass
-        area.setup(pos, direction, size, visual, color, None, doYCutOff)
+        area.setup(pos, direction, size, visual, color, None)
         return area
 
     def onSmoke(self, smokeInfo):

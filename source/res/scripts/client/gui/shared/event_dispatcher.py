@@ -527,7 +527,8 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
      'style': kwargs.get('style'),
      'topPanelData': kwargs.get('topPanelData'),
      'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
-     'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW}), EVENT_BUS_SCOPE.LOBBY)
+     'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
+     'itemsPack': kwargs.get('itemsPack')}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, previousBackAlias=None, hangarVehicleCD=None):
@@ -887,7 +888,8 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'styleDescr': descr,
      'backCallback': backCallback,
      'backBtnDescrLabel': backBtnDescrLabel,
-     'topPanelData': kwargs.get('topPanelData')}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'topPanelData': kwargs.get('topPanelData'),
+     'itemsPack': kwargs.get('itemsPack')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):

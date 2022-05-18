@@ -83,7 +83,7 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         command = _TAB_COMMAND.get(self.__currentTabID)
         if callable(command):
             backCallback = self.__parentCtx.get('backCallback') or self.__parentCtx.get('previewBackCb')
-            command(self.__parentCtx.get('itemCD'), style=self.__parentCtx.get('style'), topPanelData=self.__makeTopPanelData(), backCallback=backCallback)
+            command(self.__parentCtx.get('itemCD'), style=self.__parentCtx.get('style'), topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback)
 
     def __makeTopPanelData(self):
         return {'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,

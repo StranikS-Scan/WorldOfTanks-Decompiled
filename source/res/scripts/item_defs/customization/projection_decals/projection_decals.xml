@@ -5115,4 +5115,23 @@
     </projection_decal>
     <name>	Lunar Marathon 2022	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	726	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_65.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_65	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Yandex June 2022	</name>
+  </itemGroup>
 </projection_decals.xml>

@@ -216,8 +216,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, doYCutOff=False)
-        self.area.setOverTerrainOffset(10.0)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
         self.direction = direction
         self.__sightUpdateActivity = None
         replayCtrl = BattleReplay.g_replayCtrl

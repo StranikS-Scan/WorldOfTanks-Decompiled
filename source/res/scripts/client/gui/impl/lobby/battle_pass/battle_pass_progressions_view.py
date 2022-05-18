@@ -42,6 +42,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from tutorial.control.game_vars import getVehicleByIntCD
+from web.web_client_api.common import ItemPackEntry, ItemPackType
 _logger = logging.getLogger(__name__)
 _bpRes = R.strings.battle_pass
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
@@ -432,9 +433,10 @@ class BattlePassProgressionsView(ViewImpl):
     def __onExtraPreviewClick(self):
         styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePassController)
         vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
+        itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
         showStylePreview(vehicleCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': (TabID.VEHICLE, TabID.STYLE),
-         'currentTabID': TabID.STYLE}, backCallback=self.__getPreviewCallback())
+         'currentTabID': TabID.STYLE}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
 
     def __getPreviewCallback(self):
         return partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)

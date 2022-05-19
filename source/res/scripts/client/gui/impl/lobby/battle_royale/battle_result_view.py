@@ -131,6 +131,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if event.contentID == R.views.common.BackportContextMenu():
             contextMenuArgs = {}
             contextMenuArgs['databaseID'] = event.getArgument('databaseID')
+            if self.__connectionMgr.databaseID == contextMenuArgs['databaseID']:
+                return super(BrBattleResultsViewInLobby, self).createContextMenu(event)
             hiddenUserName = event.getArgument('hiddenUserName')
             contextMenuArgs['userName'] = hiddenUserName if hiddenUserName else event.getArgument('userName')
             contextMenuData = createContextMenuData(CONTEXT_MENU_HANDLER_TYPE.BR_BATTLE_RESULT_CONTEXT_MENU, contextMenuArgs)
@@ -174,6 +176,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         return None
 
     def __onBattlePassClick(self):
+        self.destroyWindow()
         events_dispatcher.showMissionsBattlePass()
 
     def __updateBattlePass(self):

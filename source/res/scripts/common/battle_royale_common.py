@@ -113,10 +113,10 @@ class BattleRoyaleVehicleStats(object):
         return self._getAvgValue(self.getBattlesCount(), self.getDamageDealt())
 
     def getAveragePosition(self):
-        return self._getAvgValue(self.getBattlesCount(), self.getPositionSum())
+        return round(self._getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
 
     def getAverageLevel(self):
-        return self._getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum())
+        return round(self._getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
 
     def getPositionSum(self):
         return sum([ k * v for k, v in self.__rawData['brplaces'].iteritems() ])

@@ -191,8 +191,7 @@ class BRBattleSoundController(SoundPlayersController):
          _HealingRepairSoundPlayer(),
          _DamagingSmokeAreaSoundPlayer(),
          ClingBranderSoundPlayer(),
-         ShotPassionSoundPlayer(),
-         FireCircleSoundPlayer())
+         ShotPassionSoundPlayer())
 
 
 class RadarSoundPlayer(IRadarListener):
@@ -525,6 +524,8 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
             if self.__period == ARENA_PERIOD.AFTERBATTLE and self.__winStatus is not None and self.__isAlive:
                 eventName = BREvents.BATTLE_WIN if self.__winStatus.isWin() else BREvents.BATTLE_DEFEAT
                 BREvents.playSound(eventName)
+                self.__period = None
+                self.__winStatus = None
             return
 
 
@@ -882,36 +883,4 @@ class ShotPassionSoundPlayer(EquipmentComponentSoundPlayer):
         if self.__isActive:
             BREventParams.setEventParam(BREventParams.SHOT_PASSION_MULTIPLIER, 0)
             BREvents.playSound(BREvents.BR_SHOT_PASSION_AFFECT_OFF)
-            self.__isActive = False
-
-
-class FireCircleSoundPlayer(EquipmentComponentSoundPlayer):
-    __slots__ = ('__isActive',)
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def __init__(self):
-        super(FireCircleSoundPlayer, self).__init__()
-        self.__isActive = False
-
-    def destroy(self):
-        super(FireCircleSoundPlayer, self).destroy()
-        self._stopSounds()
-
-    def _onEquipmentComponentUpdated(self, equipmentName, vehicleID, equipmentInfo):
-        if vehicleID == self.__sessionProvider.shared.vehicleState.getControllingVehicleID():
-            if equipmentInfo.endTime - BigWorld.serverTime() > 0 and not self.__isActive:
-                BREvents.playSound(BREvents.BR_FIRE_CIRCLE_ENTERED)
-                self.__isActive = True
-            else:
-                self._stopSounds()
-
-    def _getComponentName(self):
-        return BattleRoyaleComponents.FIRE_CIRCLE
-
-    def _getEquipmentName(self):
-        return BattleRoyaleEquipments.FIRE_CIRCLE
-
-    def _stopSounds(self):
-        if self.__isActive:
-            BREvents.playSound(BREvents.BR_FIRE_CIRCLE_LEFT)
             self.__isActive = False

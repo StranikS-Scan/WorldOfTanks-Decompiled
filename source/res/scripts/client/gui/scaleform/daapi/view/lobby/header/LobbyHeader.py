@@ -1113,6 +1113,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         elif state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
             header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
             body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
+        elif state == PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER:
+            header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.notRented.header())
+            body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.notRented.body())
         else:
             return ''
         return makeTooltip(header, body)
@@ -1214,14 +1217,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 tooltipData = self.__getUnsuitableToQueueTooltipData(result)
             elif isEpic or isRoyale:
                 tooltipData = self.__getEpicFightBtnTooltipData(result)
+            elif isMapBox:
+                tooltipData = getMapboxFightBtnTooltipData(result)
             elif isInSquad:
                 tooltipData = self.__getSquadFightBtnTooltipData(canDoMsg)
             elif g_currentPreviewVehicle.isPresent():
                 tooltipData = self.__getPreviewTooltipData()
             elif isRanked:
                 tooltipData = self.__getRankedFightBtnTooltipData(result)
-            elif isMapBox:
-                tooltipData = getMapboxFightBtnTooltipData(result)
             elif isMapsTraining:
                 tooltipData = self.__getMapsTrainingTooltipData()
         elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():

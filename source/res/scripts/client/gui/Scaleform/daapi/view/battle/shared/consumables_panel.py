@@ -226,10 +226,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _buildEquipmentSlotTooltipText(self, item):
         descriptor = item.getDescriptor()
         reloadingTime = item.getTotalTime()
+        isSharedCooldownConfig = isinstance(descriptor, SharedCooldownConsumableConfigReader)
         body = descriptor.description
-        if reloadingTime > 0:
+        consumeAmmo = descriptor.consumeAmmo if isSharedCooldownConfig else False
+        if not consumeAmmo and reloadingTime > 0:
             tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-            if isinstance(descriptor, SharedCooldownConsumableConfigReader):
+            if isSharedCooldownConfig:
                 cdSecVal = descriptor.cooldownTime
             else:
                 cdSecVal = descriptor.cooldownSeconds

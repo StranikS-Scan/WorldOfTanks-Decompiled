@@ -54,9 +54,7 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
         if vehicle is None:
             return options
         else:
-            vehDossier = self.itemsCache.items.getVehicleDossier(self.vehCD)
-            battleCount = vehDossier.getBattleRoyaleSoloStats(self.vehCD).getBattlesCount() if vehDossier else 0
-            options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': battleCount > 0})])
+            options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': True})])
             rentState = self.__rentVehiclesController.getRentState(self.vehCD)
             if rentState != EquipmentPanelCmpRentStates.STATE_NORMAL:
                 testDriveStates = (EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_AVAILABLE, EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_ACTIVE)

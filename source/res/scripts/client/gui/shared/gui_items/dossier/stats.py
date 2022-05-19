@@ -854,10 +854,10 @@ class BattleRoyaleAccountStatsBase(object):
         return max([ (key, data.getMaxDamage()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[1]
 
     def getAveragePosition(self):
-        return self.__getAvgValue(self.getBattlesCount(), self.getPositionSum())
+        return round(self.__getAvgValue(self.getBattlesCount(), self.getPositionSum()), 1)
 
     def getAverageLevel(self):
-        return self.__getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum())
+        return round(self.__getAvgValue(self.getBattlesCount(), self.getAchivedLevelSum()), 1)
 
     def getMaxXpVehicle(self):
         return max([ (key, data.getMaxXp()) for key, data in self.__vehicles.iteritems() ] or [(0, 0)], key=lambda item: item[1])[0]

@@ -736,8 +736,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         for ePlatoonLayout in self.__ePlatoonLayouts:
             view = self.__getView(ePlatoonLayout)
             if view:
-                if hideOnly and not view.getParentWindow().isHidden():
-                    view.getParentWindow().hide()
+                if hideOnly:
+                    if not view.getParentWindow().isHidden():
+                        view.getParentWindow().hide()
                 else:
                     canPreloadWelcomeLayout = ePlatoonLayout != _EPlatoonLayout.WELCOME
                     if ePlatoonLayout == _EPlatoonLayout.MEMBER and self.__isPlatoonVisualizationEnabled:

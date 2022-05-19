@@ -1912,9 +1912,9 @@ def getIconResourceName(vehicleName):
 
 def getContourIconPath(vehicleName):
     unicName = getIconResourceName(vehicleName)
-    resID = R.images.gui.maps.icons.vehicle.small.dyn(unicName)()
+    resID = R.images.gui.maps.icons.vehicle.contour.dyn(unicName)()
     if resID == INVALID_RES_ID:
-        resID = R.images.gui.maps.icons.vehicle.small.noImage()
+        resID = R.images.gui.maps.icons.vehicle.contour.noImage()
     return backport.image(resID)
 
 

@@ -9,6 +9,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_result_model import DoneValueEnum, MapsTrainingResultModel
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IMapsTrainingController
@@ -56,6 +57,7 @@ class MapsTrainingResult(ViewImpl):
                 self.battleResults.onResultPosted += self.__handleBattleResultsPosted
 
         super(MapsTrainingResult, self)._onLoading(*args, **kwargs)
+        switchHangarOverlaySoundFilter(on=True)
         self.mapsTrainingController.requestInitialDataFromServer(_setResults)
 
     def _initialize(self, *args, **kwargs):
@@ -65,6 +67,7 @@ class MapsTrainingResult(ViewImpl):
 
     def _finalize(self):
         self.__removeListeners()
+        switchHangarOverlaySoundFilter(on=False)
         super(MapsTrainingResult, self)._finalize()
 
     def __handleBattleResultsPosted(self, reusableInfo, _, __):

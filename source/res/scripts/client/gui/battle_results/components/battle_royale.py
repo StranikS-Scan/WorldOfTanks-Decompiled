@@ -193,7 +193,8 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
         avatarInfo = result['personal']['avatar']
         for rec in reusable.personal.getMoneyRecords():
             _, premiumCredits = rec[:2]
-            self.credits = premiumCredits.getRecord('originalCredits', 'appliedPremiumCreditsFactor100')
+            names = ('originalCredits', 'appliedPremiumCreditsFactor100', 'boosterCreditsFactor100')
+            self.credits = premiumCredits.getRecord(*names)
 
         for rec in reusable.personal.getCrystalRecords():
             _, premiumCrystal = rec[:2]
@@ -204,11 +205,7 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
             self.xp = premiumXP.getRecord('xpToShow')
 
         self.brcoin = self._getBrCoins(result, isPremium=True)
-        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
-        info = result['personal'][vehicleCD]
         self.credits += avatarInfo.get('eventCredits', 0)
-        self.credits += info.get('boosterCredits', 0)
-        self.xp += info.get('boosterXP', 0)
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):

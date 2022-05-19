@@ -1478,6 +1478,73 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_APFSDS_T320_HLY>
+  <_94mm_AP_MkI>
+    <id>	167	</id>
+    <userString>	#usa_vehicles:_94mm_AP_MkI	</userString>
+    <icon>	ap	</icon>
+    <price>	630	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	94	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_94mm_AP_MkI>
+  <_94mm_APCR_MkII>
+    <id>	168	</id>
+    <userString>	#usa_vehicles:_94mm_APCR_MkII	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	94	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_94mm_APCR_MkII>
+  <_94mm_HE_MkI>
+    <id>	169	</id>
+    <userString>	#usa_vehicles:_94mm_HE_MkI	</userString>
+    <icon>	he_modern	</icon>
+    <price>	250	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	94	</caliber>
+    <explosionRadius>	1.58	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	1.58	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_94mm_HE_MkI>
   <_105mm_HE_M1>
     <id>	26	</id>
     <userString>	#usa_vehicles:_105mm_HE_M1	</userString>

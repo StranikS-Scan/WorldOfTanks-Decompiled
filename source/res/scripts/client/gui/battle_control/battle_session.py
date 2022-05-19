@@ -134,7 +134,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         else:
             vehicle = self.__sharedRepo.vehicleState.getControllingVehicle()
             if vehicle is not None:
-                if vehicle.debuff:
+                if vehicle.debuff > 0:
                     vehicle.onDebuffEffectApplied(True)
                 if vehicle.stunInfo > 0.0:
                     vehicle.updateStunInfo()

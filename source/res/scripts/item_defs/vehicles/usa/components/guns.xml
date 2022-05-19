@@ -123,6 +123,7 @@
     <_105mm_T140_Y_IV>	266	</_105mm_T140_Y_IV>
     <_37mm_Browning_Semi_Automatic>	267	</_37mm_Browning_Semi_Automatic>
     <_105mm_Gun_M68_2>	269	</_105mm_Gun_M68_2>
+    <_94mm_British_dualgun>	270	</_94mm_British_dualgun>
     <_105mm_Gun_T141>	272	</_105mm_Gun_T141>
     <_120mm_Gun_T124>	273	</_120mm_Gun_T124>
     <_90mm_Gun_T208_rifled>	274	</_90mm_Gun_T208_rifled>
@@ -5193,6 +5194,64 @@
         </_90mm_HE_T340>
       </shots>
     </_90mm_Gun_T208_rifled>
+    <_94mm_British_dualgun>
+      <userString>	#usa_vehicles:_94mm_British_dualgun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	105000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	dualgun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	6.85714285714286	</reloadTime>
+      <maxAmmo>	44	</maxAmmo>
+      <aimingTime>	1.71428571428571	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_94mm_AP_MkI>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	200 190	</piercingPower>
+        </_94mm_AP_MkI>
+        <_94mm_APCR_MkII>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1098	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 241	</piercingPower>
+        </_94mm_APCR_MkII>
+        <_94mm_HE_MkI>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	47 47	</piercingPower>
+        </_94mm_HE_MkI>
+      </shots>
+    </_94mm_British_dualgun>
     <_105mm_SPH_M4_L23>
       <userString>	#usa_vehicles:_105mm_SPH_M4_L23	</userString>
       <tags></tags>

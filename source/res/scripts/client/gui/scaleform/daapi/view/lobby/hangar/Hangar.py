@@ -324,7 +324,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if self.rankedController.isRankedPrbActive():
                 self.__updateAlertBlock(*self.rankedController.getAlertBlock())
                 return
-            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.MAPBOX):
+            if self.__mapboxCtrl.isMapboxPrbActive():
                 self.__updateMapboxAlertMsg()
                 return
             if self.epicController.isEpicPrbActive():

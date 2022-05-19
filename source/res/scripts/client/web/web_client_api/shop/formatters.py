@@ -250,6 +250,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     clanLockField = Field('clanLock', lambda i: i.clanLock)
     isCollectibleField = Field('isCollectible', lambda i: i.isCollectible)
     isNotComparingAvailableField = Field('isNotComparingAvailable', _formatVehicleComparingAvailability)
+    isOnlyForBattleRoyaleBattles = Field('isOnlyForBattleRoyaleBattles', lambda i: i.isOnlyForBattleRoyaleBattles)
     fields = [idField,
      nameField,
      shortName,
@@ -276,7 +277,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      nationChangeField,
      clanLockField,
      isCollectibleField,
-     isNotComparingAvailableField]
+     isNotComparingAvailableField,
+     isOnlyForBattleRoyaleBattles]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells.installed.getItems() ])

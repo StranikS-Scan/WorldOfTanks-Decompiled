@@ -180,7 +180,7 @@ class Tutorial(object):
                     self._currentState = None
                 LOG_DEBUG('Set new state', state.__name__)
                 self._currentState = state()
-                self._currentState.tick()
+                BigWorld.callback(0, self._currentState.tick)
         else:
             LOG_ERROR('Can not sets current state', stateID)
         return

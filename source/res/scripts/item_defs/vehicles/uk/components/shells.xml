@@ -2304,7 +2304,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	465	</armor>
+      <armor>	490	</armor>
       <devices>	165	</devices>
     </damage>
     <armorSpalls>
@@ -2393,6 +2393,73 @@
       </damage>
     </armorSpalls>
   </_120mm_HESH_L31>
+  <_120mm_APDS_L15P>
+    <id>	194	</id>
+    <userString>	#gb_vehicles:_120mm_APDS_L15P	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1050	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	119.38	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_APDS_L15P>
+  <_120mm_APDS_L15P1>
+    <id>	195	</id>
+    <userString>	#gb_vehicles:_120mm_APDS_L15P1	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	119.38	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_APDS_L15P1>
+  <_120mm_HESH_L311>
+    <id>	196	</id>
+    <userString>	#gb_vehicles:_120mm_HESH_L311	</userString>
+    <icon>	he_modern	</icon>
+    <price>	950	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	119.38	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <blastWave>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </blastWave>
+    <shellFragments>
+      <impactRadius>	0	</impactRadius>
+      <damage>
+        <armor>	0	</armor>
+        <devices>	0	</devices>
+      </damage>
+    </shellFragments>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HESH_L311>
   <_120mm_APDS_L15>
     <id>	138	</id>
     <userString>	#gb_vehicles:_120mm_APDS_L15	</userString>

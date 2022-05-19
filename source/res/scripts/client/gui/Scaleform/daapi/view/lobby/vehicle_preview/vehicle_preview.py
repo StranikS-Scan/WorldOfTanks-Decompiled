@@ -50,6 +50,13 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from tutorial.control.context import GLOBAL_FLAG
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup
+VEHICLE_PREVIEW_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
+ VIEW_ALIAS.HERO_VEHICLE_PREVIEW,
+ VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW,
+ VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
+ VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW,
+ VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
+ VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW)
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -192,6 +199,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             g_currentPreviewVehicle.resetAppearance()
             g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, None)
             g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
+        elif g_currentPreviewVehicle.intCD == self._vehicleCD:
+            g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged

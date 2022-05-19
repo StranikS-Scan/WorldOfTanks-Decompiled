@@ -5,7 +5,7 @@ from functools import partial
 import logging
 import typing
 from account_helpers.AccountSettings import AccountSettings, MAPBOX_PROGRESSION
-from async import async, await, await_callback
+from async import async, await, await_callback, BrokenPromiseError
 import adisp
 import BigWorld
 from BWUtil import AsyncReturn
@@ -19,7 +19,7 @@ from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUNCTIONAL_FLAG
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import caches
 from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey
@@ -115,6 +115,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         if self.isActive():
             self.__progressionDataProvider.start()
         self.__updateMode()
+        self.__updateSavedTab()
         self.startNotification()
         self.startGlobalListening()
         return
@@ -151,6 +152,9 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
             return state.isInPreQueue(queueType=QUEUE_TYPE.MAPBOX) or state.isInUnit(PREBATTLE_TYPE.MAPBOX)
         else:
             return False
+
+    def isMapboxPrbActive(self):
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.MAPBOX)
 
     @adisp.process
     def selectMapboxBattle(self):
@@ -275,14 +279,18 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
 
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()
-        isMapboxTabLast = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS
-        isMarathonsTabLast = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS
-        if not self.isActive() and isMapboxTabLast or self.isActive() and isMarathonsTabLast:
-            caches.getNavInfo().setMissionsTab(None)
+        self.__updateSavedTab()
         self.onPrimeTimeStatusUpdated(status)
         if self.getCurrentSeason() is None:
             self.__settingsManager.clearSettings()
         self.__eventAvailabilityUpdate()
+        return
+
+    def __updateSavedTab(self):
+        isMapboxTabLast = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS
+        isMarathonsTabLast = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS
+        if not self.isActive() and isMapboxTabLast or self.isActive() and isMarathonsTabLast:
+            caches.getNavInfo().setMissionsTab(None)
         return
 
     def __eventAvailabilityUpdate(self):
@@ -364,7 +372,12 @@ class MapboxProgressionDataProvider(Notifiable):
 
     @async
     def forceUpdateProgressData(self):
-        result = yield await_callback(self.__request)()
+        try:
+            result = yield await_callback(self.__request)()
+        except BrokenPromiseError:
+            _logger.debug('%s has been destroyed before got a response to remote mapbox progression request', self)
+            result = False
+
         raise AsyncReturn(result)
 
     @server_settings.serverSettingsChangeListener(Configs.MAPBOX_CONFIG.value)

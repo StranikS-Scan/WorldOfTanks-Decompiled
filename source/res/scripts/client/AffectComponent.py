@@ -12,10 +12,13 @@ from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 _logger = logging.getLogger(__name__)
 _HEAL_OVER_TIME_ZONE_ = 0
 _DAMAGE_OVER_TIME_ZONE_ = 1
+_FIRE_CIRCLE_ZONE_ = 2
 _ZONE_ACTIVATE_EVENT_ = {_HEAL_OVER_TIME_ZONE_: BREvents.REPAIR_POINT_ENTER,
- _DAMAGE_OVER_TIME_ZONE_: BREvents.TRAP_POINT_ENTER}
+ _DAMAGE_OVER_TIME_ZONE_: BREvents.TRAP_POINT_ENTER,
+ _FIRE_CIRCLE_ZONE_: BREvents.BR_FIRE_CIRCLE_ENTERED}
 _ZONE_DEACTIVATE_EVENT_ = {_HEAL_OVER_TIME_ZONE_: BREvents.REPAIR_POINT_EXIT,
- _DAMAGE_OVER_TIME_ZONE_: BREvents.TRAP_POINT_EXIT}
+ _DAMAGE_OVER_TIME_ZONE_: BREvents.TRAP_POINT_EXIT,
+ _FIRE_CIRCLE_ZONE_: BREvents.BR_FIRE_CIRCLE_LEFT}
 
 class AffectComponent(IVehicleCountListener):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -94,6 +97,12 @@ class TrapAffectComponent(AffectComponent):
 
     def __init__(self, gameObject, isPlayerVehicle, spaceID):
         super(TrapAffectComponent, self).__init__(gameObject, _DAMAGE_OVER_TIME_ZONE_, isPlayerVehicle, spaceID, True)
+
+
+class FireCircleAffectComponent(AffectComponent):
+
+    def __init__(self, gameObject, isPlayerVehicle, spaceID):
+        super(FireCircleAffectComponent, self).__init__(gameObject, _FIRE_CIRCLE_ZONE_, isPlayerVehicle, spaceID, True)
 
 
 class RepairAffectComponent(AffectComponent):

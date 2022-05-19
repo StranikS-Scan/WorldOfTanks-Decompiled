@@ -352,6 +352,7 @@ class UNIT_MGR_FLAGS:
     TOURNAMENT = 8192
     BATTLE_ROYALE = 16384
     MAPBOX = 32768
+    RTS = 65536
 
 
 class UnitAssemblerSearchFlags(object):

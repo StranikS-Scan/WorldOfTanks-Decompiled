@@ -276,6 +276,10 @@ def bpcoin(text):
     return _formatText('bpcoinText', text)
 
 
+def brcoin(text):
+    return _formatText('creditsText', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 

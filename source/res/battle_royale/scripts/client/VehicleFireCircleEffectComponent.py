@@ -61,11 +61,10 @@ class VehicleFireCircleEffectComponent(BigWorld.DynamicScriptComponent, EventsSu
             self.entity.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.FIRE_CIRCLE, self.__elapsedTime)
 
     def __updateFireCircleMarker(self):
-        if self.entity.id != BigWorld.player().getObservedVehicleID():
-            if self.__elapsedTime:
-                self.__showMarker(self.entity.id, self.__elapsedTime)
-            else:
-                self.__hideMarker()
+        if self.entity.id != BigWorld.player().getObservedVehicleID() and self.__elapsedTime:
+            self.__showMarker(self.entity.id, self.__elapsedTime)
+        else:
+            self.__hideMarker()
 
     def __showMarker(self, vehicleID, elapsedTime):
         feedback = self.entity.guiSessionProvider.shared.feedback

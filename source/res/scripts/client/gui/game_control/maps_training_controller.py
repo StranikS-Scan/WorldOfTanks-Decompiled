@@ -109,6 +109,8 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         if vehicleName:
             nationID, vehID = vehicles.g_list.getIDsByName(vehicleName)
             self.__vehCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, vehID)
+            if g_currentPreviewVehicle.isHeroTank:
+                g_currentPreviewVehicle.selectHeroTank(False)
             g_currentPreviewVehicle.selectVehicle(self.__vehCompDescr)
         else:
             self.__vehCompDescr = self._UNDEFINED_VALUE

@@ -33,7 +33,7 @@ class ProfileSection(ProfileSectionMeta):
          PROFILE_DROPDOWN_KEYS.TEAM: (False, 'getTeam7x7Stats'),
          PROFILE_DROPDOWN_KEYS.STATICTEAM: (False, 'getRated7x7Stats'),
          PROFILE_DROPDOWN_KEYS.HISTORICAL: (False, 'getHistoricalStats'),
-         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: (True, 'getHistoricalStats'),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: (True, '_receiveFortDossier'),
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: (False, 'getFortSortiesStats'),
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: (False, 'getFortBattlesStats'),
          PROFILE_DROPDOWN_KEYS.COMPANY: (False, 'getCompanyStats'),

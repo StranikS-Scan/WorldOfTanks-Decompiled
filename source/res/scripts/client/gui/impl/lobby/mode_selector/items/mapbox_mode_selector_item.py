@@ -5,6 +5,7 @@ from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
+from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.event_dispatcher import showMapboxIntro
@@ -54,6 +55,7 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
         with self.viewModel.transaction() as vm:
             vm.setTimeLeft(self.__getSeasonTimeLeft())
             vm.setStatusNotActive(self.__getNotActiveStatus())
+            setBattlePassState(self.viewModel)
 
     def __getNotActiveStatus(self):
         nextSeason = self.__mapboxCtrl.getNextSeason()

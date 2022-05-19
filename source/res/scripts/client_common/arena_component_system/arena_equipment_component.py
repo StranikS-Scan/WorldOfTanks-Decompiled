@@ -5,6 +5,7 @@ from functools import partial
 import logging
 import BigWorld
 from aih_constants import CTRL_MODE_NAME
+from battle_royale.gui.constants import BattleRoyaleEquipments
 from client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS, ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR_DEV
@@ -13,12 +14,15 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVE
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from items import vehicles
 from shared_utils import CONST_CONTAINER
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from smoke_screen import SmokeScreen
-from AffectComponent import RepairAffectComponent, TrapAffectComponent
+from AffectComponent import RepairAffectComponent, TrapAffectComponent, FireCircleAffectComponent
 _logger = logging.getLogger(__name__)
+_EQUIPMENT_AFFECT_COMPONENTS = {BattleRoyaleEquipments.FIRE_CIRCLE: FireCircleAffectComponent,
+ BattleRoyaleEquipments.TRAP_POINT: TrapAffectComponent}
 
 class EffectData(object):
 
@@ -308,8 +312,13 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         self.__updateExposedToEffect(vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, True, None, self.__repairPointEffect, isInfluenceZone, False)
         return
 
-    def updateDebuff(self, vehicleID, isInfluenceZone):
-        self.__checkAffectComponent(vehicleID, TrapAffectComponent, isInfluenceZone)
+    def updateDebuff(self, vehicleID, equipmentID):
+        if equipmentID > -1 and vehicles.g_cache.equipments()[equipmentID].name in _EQUIPMENT_AFFECT_COMPONENTS:
+            affectComponent = _EQUIPMENT_AFFECT_COMPONENTS[vehicles.g_cache.equipments()[equipmentID].name]
+            self.__checkAffectComponent(vehicleID, affectComponent, True)
+        else:
+            for affectComponent in _EQUIPMENT_AFFECT_COMPONENTS.values():
+                self.__checkAffectComponent(vehicleID, affectComponent, False)
 
     def updateInspiringSource(self, vehicleID, startTime, endTime, inactivationDelay, inspireSourceRadius, equipmentID):
         self._updateEffectSource(vehicleID, startTime, endTime, inactivationDelay, inspireSourceRadius, self.__inspiringEffect, equipmentID)

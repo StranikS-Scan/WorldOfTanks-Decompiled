@@ -279,12 +279,9 @@ class _SpecBattleItem(_SelectorItem):
         return super(_SpecBattleItem, self).getFightButtonLabel(state, playerInfo)
 
     def _update(self, state):
-        if state.isInSpecialPrebattle():
+        if state.isInSpecialPrebattle() or self.__battleRoyaleTournamentController.isSelected():
             self._isSelected = True
             self._isDisabled = state.hasLockedState
-        elif self.__battleRoyaleTournamentController.isSelected():
-            self._isDisabled = False
-            self._isSelected = True
         else:
             self._isSelected = False
             self._isDisabled = areSpecBattlesHidden()

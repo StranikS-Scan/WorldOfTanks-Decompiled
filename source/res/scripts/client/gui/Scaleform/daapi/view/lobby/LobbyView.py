@@ -3,9 +3,11 @@
 import constants
 import gui
 from PlayerEvents import g_playerEvents
+from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View, ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -23,7 +25,7 @@ from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IMapsTrainingController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -92,6 +94,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -119,6 +122,11 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
          'dz': dz}))
 
     def notifyCursorOver3dScene(self, isOver3dScene):
+        if self.mapsTrainingController.isMapsTrainingPrbActive:
+            container = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
+            view = container.getView()
+            if view.alias not in VEHICLE_PREVIEW_ALIASES:
+                return
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': isOver3dScene}))
 
     def notifyCursorDragging(self, isDragging):

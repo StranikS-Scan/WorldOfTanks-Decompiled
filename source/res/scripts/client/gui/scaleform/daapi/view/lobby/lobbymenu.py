@@ -103,7 +103,7 @@ class LobbyMenu(LobbyMenuMeta):
         self.__updateNewSettingsCount()
 
     def bootcampClick(self):
-        if not self.bootcamp.canRun():
+        if not self.bootcamp.canRun() and not self.bootcamp.isInBootcamp():
             SystemMessages.pushI18nMessage('#system_messages:prebattle/bootcamp/inOtherQueue', type=SystemMessages.SM_TYPE.Warning)
             self.destroy()
         else:
@@ -152,17 +152,16 @@ class LobbyMenu(LobbyMenuMeta):
 
     def __updateBootcampBtn(self, isDemoAccountWithOpenedCurtain):
         enabledOnServer = self.lobbyContext.getServerSettings().isBootcampEnabled()
+        isInBootcamp = self.bootcamp.isInBootcamp()
         disabledBySPAFlag = BigWorld.player().spaFlags.getFlag(constants.SPA_ATTRS.BOOTCAMP_DISABLED)
         isPlayerEntityChanging = events.isPlayerEntityChanging
-        isVisible = enabledOnServer and not disabledBySPAFlag and not isPlayerEntityChanging
-        isVisible = isVisible and not isDemoAccountWithOpenedCurtain
+        isVisible = (enabledOnServer or isInBootcamp) and not disabledBySPAFlag and not isPlayerEntityChanging and not isDemoAccountWithOpenedCurtain
         if self.__bootcampBtnIsVisible != isVisible:
             self.as_showBootcampButtonS(isVisible)
             self.__bootcampBtnIsVisible = isVisible
         if isVisible:
             self.__updateBootcampBtnContent(enabledOnServer)
             triggerIsShown = AccountSettings.getManualData(LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN)
-            isInBootcamp = self.bootcamp.isInBootcamp()
             if not triggerIsShown and not self.bootcamp.hasFinishedBootcampBefore() and not isInBootcamp:
                 getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP, True)
 

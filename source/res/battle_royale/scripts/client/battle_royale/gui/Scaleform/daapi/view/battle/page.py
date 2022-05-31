@@ -3,7 +3,7 @@
 import BigWorld
 from shared_utils import CONST_CONTAINER
 from aih_constants import CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_CAPS
 from gui.battle_control import avatar_getter
 from Event import EventsSubscriber
 from battle_royale.gui.Scaleform.daapi.view.battle.ability_indicators.panel import AbilityIndicatorsPanel
@@ -131,7 +131,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def _canShowPostmortemTips(self):
         arenaDP = self.sessionProvider.getArenaDP()
         enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
-        if enemiesTeamCount <= 1:
+        bonusType = BigWorld.player().arenaBonusType
+        isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
+        if enemiesTeamCount <= 1 or isTournament:
             postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
             if postmortemPanel is not None:
                 postmortemPanel.as_setSpectatorPanelVisibleS(False)

@@ -33,6 +33,7 @@ class HANGAR_ALIASES(object):
     VEH_PARAM_RENDERER_HIGHLIGHT_POSITIVE = 'positive'
     VEH_PARAM_RENDERER_HIGHLIGHT_NEGATIVE = 'negative'
     VEH_PARAM_RENDERER_HIGHLIGHT_MIXED = 'mixed'
+    EVENT_ENTRANCE_POINT = 'eventEntrancePoint'
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'
     DAILY_QUEST_WIDGET = 'dqWidget'
     BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'

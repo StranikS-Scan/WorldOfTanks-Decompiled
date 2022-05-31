@@ -33,6 +33,7 @@
     <_10RT_26E>	34	</_10RT_26E>
     <_10RK_W>	35	</_10RK_W>
     <_71_TK_1SH>	36	</_71_TK_1SH>
+    <_9RU_CN>	40	</_9RU_CN>
     <Radio_01_KV>	200	</Radio_01_KV>
     <Radio_T-50-2>	201	</Radio_T-50-2>
     <Observer>	202	</Observer>
@@ -42,6 +43,7 @@
     <R123_fallout>	208	</R123_fallout>
     <R113_FL>	210	</R113_FL>
     <R113M_cl>	214	</R113M_cl>
+    <_10RK-26_CN>	215	</_10RK-26_CN>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -367,6 +369,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26>
+    <_10RK-26_CN>
+      <userString>	#ussr_vehicles:_10RK-26_CN	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_CN>
     <_10RK-26_fallout>
       <userString>	#ussr_vehicles:_10RK-26_fallout	</userString>
       <tags></tags>
@@ -544,6 +558,18 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </_9RU>
+    <_9RU_CN>
+      <userString>	#ussr_vehicles:_9RU_CN	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <notInShop>	true	</notInShop>
+      <price>	25000	</price>
+      <weight>	30	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_9RU_CN>
     <N19_Marka_II>
       <userString>	#ussr_vehicles:N19_Marka_II	</userString>
       <tags></tags>
@@ -713,7 +739,7 @@
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-      <radarRadius>	300	</radarRadius>
+      <radarRadius>	250	</radarRadius>
       <radarCooldown>	20	</radarCooldown>
     </_12RT_SH>
     <R113_SH>
@@ -728,7 +754,7 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <radarRadius>	450	</radarRadius>
-      <radarCooldown>	35	</radarCooldown>
+      <radarCooldown>	30	</radarCooldown>
     </R113_SH>
     <_9RM_MapsTraining_Dummy_LT_1>
       <userString>	#ussr_vehicles:_9RM	</userString>

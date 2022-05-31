@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_vehicle_ma
 class MapsTrainingViewModel(ViewModel):
     __slots__ = ('onBack', 'onMenu', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked')
 
-    def __init__(self, properties=7, commands=8):
+    def __init__(self, properties=8, commands=8):
         super(MapsTrainingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -39,17 +39,23 @@ class MapsTrainingViewModel(ViewModel):
     def setTitleFilter(self, value):
         self._setString(4, value)
 
+    def getIsDataLoaded(self):
+        return self._getBool(5)
+
+    def setIsDataLoaded(self, value):
+        self._setBool(5, value)
+
     def getMaps(self):
-        return self._getArray(5)
-
-    def setMaps(self, value):
-        self._setArray(5, value)
-
-    def getGroups(self):
         return self._getArray(6)
 
-    def setGroups(self, value):
+    def setMaps(self, value):
         self._setArray(6, value)
+
+    def getGroups(self):
+        return self._getArray(7)
+
+    def setGroups(self, value):
+        self._setArray(7, value)
 
     def _initialize(self):
         super(MapsTrainingViewModel, self)._initialize()
@@ -58,6 +64,7 @@ class MapsTrainingViewModel(ViewModel):
         self._addBoolProperty('isMapSelected', False)
         self._addBoolProperty('incompleteFilter', False)
         self._addStringProperty('titleFilter', '')
+        self._addBoolProperty('isDataLoaded', False)
         self._addArrayProperty('maps', Array())
         self._addArrayProperty('groups', Array())
         self.onBack = self._addCommand('onBack')

@@ -3,14 +3,17 @@
 import logging
 import operator
 import weakref
-from collections import namedtuple
+from collections import namedtuple, deque
 import BigWorld
 import BattleReplay
+from WeakMethod import WeakMethodProxy
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from chat_commands_consts import INVALID_VEHICLE_POSITION
 from constants import PREBATTLE_TYPE, ARENA_BONUS_TYPE
 from gui import GUI_SETTINGS
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG, UserEntityScope
 from messenger.proto.bw_chat2 import admin_chat_cmd, entities, limits, wrappers, errors
 from messenger.proto.bw_chat2 import provider as bw2_provider
@@ -380,6 +383,8 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         self.__targetIDs = []
         self.__receivedChatCommands = {}
         self.__isEnabled = True
+        self.__antispamHandler = AntispamHandler(WeakMethodProxy(self.__processCommand))
+        self.__spamProtection = True
 
     @property
     def factory(self):
@@ -389,6 +394,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         self.__factory = None
         self.__targetIDs = []
         self.__receivedChatCommands = None
+        self.__antispamHandler.stopAndClear()
         super(BattleChatCommandHandler, self).clear()
         return
 
@@ -396,13 +402,18 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def switch(self, scope):
         self.__targetIDs = []
         if scope != MESSENGER_SCOPE.BATTLE:
+            self.__antispamHandler.stopAndClear()
             return
         else:
             arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+            self.__startAntispamHandler()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
                 self.__isEnabled = self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
             return
+
+    def goToReplay(self):
+        self.__startAntispamHandler()
 
     @simpleLog(argsIndex=0, preProcessAction=lambda x: x.getCommand().name, resetTime=False)
     def send(self, decorator):
@@ -548,23 +559,33 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             return
         self.__isEnabled = bool(battleCommunicationEnabled)
 
+    def __startAntispamHandler(self):
+        self.__spamProtection = ARENA_BONUS_TYPE_CAPS.checkAny(self.__sessionProvider.arenaVisitor.getArenaBonusType(), ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION)
+        if not self.__spamProtection:
+            self.__antispamHandler.start()
+
     def __onCommandReceived(self, ids, args):
         actionID, _ = ids
         cmd = self.__factory.createByAction(actionID, args)
         if self.__isEnabled is False:
             return
+        if not self.__spamProtection and not self.__antispamHandler.validate(cmd):
+            return
+        self.__processCommand(cmd)
+
+    def __processCommand(self, cmd):
+        silentMode = self.__isSilentMode(cmd)
+        if not silentMode and self.__sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.EPIC_BATTLE:
+            silentMode = self.__isSilentModeForEpicBattleMode(cmd)
+        if silentMode:
+            cmd.setSilentMode(silentMode)
+        if cmd.isIgnored():
+            g_mutedMessages[cmd.getFirstTargetID()] = cmd
+            _logger.debug("Chat command '%s' is ignored", cmd.getCommandText())
+            return
+        elif cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
+            return
         else:
-            silentMode = self.__isSilentMode(cmd)
-            if not silentMode and self.__sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.EPIC_BATTLE:
-                silentMode = self.__isSilentModeForEpicBattleMode(cmd)
-            if silentMode:
-                cmd.setSilentMode(silentMode)
-            if cmd.isIgnored():
-                g_mutedMessages[cmd.getFirstTargetID()] = cmd
-                _logger.debug("Chat command '%s' is ignored", cmd.getCommandText())
-                return
-            if cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
-                return
             arenaDP = self.__sessionProvider.getArenaDP()
             if arenaDP is not None:
                 if arenaDP.isObserver(arenaDP.getPlayerVehicleID()) and (cmd.isReply() or cmd.isCancelReply() or cmd.isAutoCommit()):
@@ -617,6 +638,53 @@ class AdminChatCommandHandler(bw2_provider.ResponseDictHandler):
         cmd = super(AdminChatCommandHandler, self)._onResponseSuccess(ids, args)
         if cmd:
             g_messengerEvents.channels.onCommandReceived(cmd)
+
+
+class AntispamHandler(CallbackDelayer):
+    __TICK_DELAY = 0.1
+    __SEND_COMMAND_TICK_DELAY = 0.05
+    __COMMAND_PER_TICK = 5
+
+    def __init__(self, sendMethodRef):
+        super(AntispamHandler, self).__init__()
+        self.__receivedCommandsQueue = deque()
+        self.__spamProtection = True
+        self.__sendMethod = sendMethodRef
+        self.__cmdsPerTickCounter = 0
+
+    def start(self):
+        self.delayCallback(self.__TICK_DELAY, self.__counterTick)
+
+    def stopAndClear(self):
+        self.clearCallbacks()
+        self.__receivedCommandsQueue.clear()
+        self.__cmdsPerTickCounter = 0
+
+    def validate(self, cmd):
+        if not self.__receivedCommandsQueue:
+            self.__cmdsPerTickCounter += 1
+            if self.__cmdsPerTickCounter > self.__COMMAND_PER_TICK:
+                self.__receivedCommandsQueue.append(cmd)
+                result = False
+            else:
+                result = True
+        else:
+            self.__receivedCommandsQueue.append(cmd)
+            result = False
+        if not result and not self.hasDelayedCallback(self.__antispamTick):
+            self.delayCallback(self.__SEND_COMMAND_TICK_DELAY, self.__antispamTick)
+        return result
+
+    def __counterTick(self):
+        self.__cmdsPerTickCounter = 0
+        return self.__TICK_DELAY
+
+    def __antispamTick(self):
+        if self.__receivedCommandsQueue:
+            self.__sendMethod(self.__receivedCommandsQueue.popleft())
+        else:
+            return 0
+        return self.__SEND_COMMAND_TICK_DELAY
 
 
 g_mutedMessages = {}

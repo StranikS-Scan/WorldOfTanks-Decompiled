@@ -11,6 +11,7 @@ from gui.server_events.cond_formatters import CONDITION_SIZE, FORMATTER_IDS, For
 from gui.server_events.cond_formatters.bonus import BattlesCountFormatter, MissionsBonusConditionsFormatter
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter
 from gui.server_events.cond_formatters.tokens import TokensConditionFormatter
+from gui.server_events.events_helpers import isDragonBoatQuest
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import icons, text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -98,7 +99,7 @@ class MissionBonusAndPostBattleCondFormatter(ConditionsFormatter):
         battleCountCondition = event.bonusCond.getConditions().find('battles')
         for pCondGroup in postBattleConditions:
             for bCondGroup in bonusConditions:
-                if battleCountCondition is not None:
+                if battleCountCondition is not None and not isDragonBoatQuest(event.getID()):
                     conditions = []
                     conditions.extend(pCondGroup)
                     conditions.extend(bCondGroup)

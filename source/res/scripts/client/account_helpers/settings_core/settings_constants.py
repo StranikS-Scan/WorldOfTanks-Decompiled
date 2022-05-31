@@ -486,3 +486,12 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
+
+
+class DragonBoatStorageKeys(CONST_CONTAINER):
+    TEAM_1 = 'team1'
+    TEAM_2 = 'team2'
+    TEAM_3 = 'team3'
+    TEAM_4 = 'team4'
+    TEAM_5 = 'team5'
+    DBOAT_FINAL_REWARD_OBTAINED = 'dboatFinalRewardObtained'

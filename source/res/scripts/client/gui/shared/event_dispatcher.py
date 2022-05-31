@@ -469,15 +469,16 @@ def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marat
     return
 
 
-def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
+def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack, style=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewBackCb': previewBackCb,
      'hiddenBlocks': hiddenBlocks,
-     'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'itemsPack': itemPack,
+     'style': style}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, **kwargs):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, style=None, **kwargs):
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
@@ -509,7 +510,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'description': description,
          'endTime': endTime,
          'buyParams': buyParams,
-         'vehParams': vehParams})
+         'vehParams': vehParams,
+         'style': style})
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx=kwargs), EVENT_BUS_SCOPE.LOBBY)
     return
 
@@ -521,7 +523,18 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
      'style': kwargs.get('style'),
      'topPanelData': kwargs.get('topPanelData'),
      'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
-     'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW}), EVENT_BUS_SCOPE.LOBBY)
+     'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
+     'itemsPack': kwargs.get('itemsPack')}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showVehiclePreviewWithStyleWithoutBottomPanel(vehCD, **kwargs):
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW), ctx={'itemCD': vehCD,
+     'previewBackCb': kwargs.get('backCallback'),
+     'previewAlias': kwargs.get('previewAlias'),
+     'style': kwargs.get('style'),
+     'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
+     'heroInteractive': False}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, previousBackAlias=None, hangarVehicleCD=None):
@@ -646,6 +659,7 @@ def selectVehicleInHangar(itemCD, loadHangar=True):
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
+    g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
     g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
         showHangar()
@@ -874,7 +888,8 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'styleDescr': descr,
      'backCallback': backCallback,
      'backBtnDescrLabel': backBtnDescrLabel,
-     'topPanelData': kwargs.get('topPanelData')}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'topPanelData': kwargs.get('topPanelData'),
+     'itemsPack': kwargs.get('itemsPack')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
@@ -1627,3 +1642,29 @@ def showRankedSelectableReward(rewards=None):
     from gui.impl.lobby.ranked.ranked_selectable_reward_view import RankedSelectableRewardWindow
     window = RankedSelectableRewardWindow(rewards)
     window.load()
+
+
+def showDragonBoatIntroWindow(parent=None, closeCallback=None):
+    from gui.impl.lobby.dragon_boat.dragon_boat_intro_view import DragonBoatIntroWindow
+    from account_helpers.AccountSettings import AccountSettings, DBOAT_INTRO_SCREEN_SHOWN
+    AccountSettings.setSettings(DBOAT_INTRO_SCREEN_SHOWN, True)
+    if not DragonBoatIntroWindow.getInstances():
+        window = DragonBoatIntroWindow(parent=parent if parent is not None else getParentWindow(), closeCallback=closeCallback)
+        window.load()
+    return
+
+
+def showDragonBoatFinalRewardWindow(parent=None, closeCallback=None):
+    from gui.impl.lobby.dragon_boat.dragon_boat_award_view import DragonBoatFinalRewardWindow
+    if not DragonBoatFinalRewardWindow.getInstances():
+        window = DragonBoatFinalRewardWindow(parent=parent if parent is not None else getParentWindow(), closeCallback=closeCallback)
+        window.load()
+    return
+
+
+def showDragonBoatFinishTeamdWindow(team=1, parent=None, closeCallback=None):
+    from gui.impl.lobby.dragon_boat.dragon_boat_team_finish_view import DragonBoatTeamFinishWindow
+    if not DragonBoatTeamFinishWindow.getInstances():
+        window = DragonBoatTeamFinishWindow(team=team, parent=parent if parent is not None else getParentWindow(), closeCallback=closeCallback)
+        window.load()
+    return

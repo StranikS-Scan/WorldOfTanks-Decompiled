@@ -38,7 +38,7 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDragonBoatController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -193,6 +193,118 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         if browser:
             if self.__viewActive:
                 browser.skipEscape = not self._marathonEvent.isNeedHandlingEscape
+                browser.useSpecialKeys = False
+            else:
+                browser.skipEscape = False
+                browser.useSpecialKeys = True
+
+
+class MissionsDragonBoatView(MissionsMarathonViewMeta):
+    _browserCtrl = dependency.descriptor(IBrowserController)
+    _dragonBoatCtrl = dependency.descriptor(IDragonBoatController)
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self):
+        super(MissionsDragonBoatView, self).__init__()
+        self.__browserID = None
+        self._width = 0
+        self._height = 0
+        self._builder = None
+        self.__loadBrowserCallbackID = None
+        self.__browserView = None
+        self.__ctx = None
+        return
+
+    def closeView(self):
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def getSuitableEvents(self):
+        return []
+
+    @process
+    def reload(self):
+        browser = self._browserCtrl.getBrowser(self.__browserID)
+        if browser is not None and self.__browserView:
+            url = yield self._dragonBoatCtrl.getUrl()
+            if url:
+                self.__browserView.showLoading(True)
+                browser.navigate(url)
+        else:
+            yield lambda callback: callback(True)
+        return
+
+    def setActive(self, value):
+        self.reload()
+
+    def setBuilder(self, builder, filterData, eventID):
+        self._builder = builder
+        self._onEventsUpdate()
+
+    def viewSize(self, width, height):
+        self._width = width
+        self._height = height
+
+    def markVisited(self):
+        pass
+
+    def setCtx(self, ctx):
+        self.__ctx = ctx
+
+    @process
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias == VIEW_ALIAS.BROWSER:
+            if self.__browserID is None:
+                urlName = self.__ctx.get('url') if self.__ctx else None
+                url = yield self._dragonBoatCtrl.getUrl(urlName)
+                browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
+                self.__browserID = browserID
+                viewPy.init(browserID, self._dragonBoatCtrl.createWebHandlers(), alias=alias)
+                self.__browserView = viewPy
+                self.__browserView.showContentUnderLoading = False
+                self.__updateBrowserProperties()
+            else:
+                LOG_ERROR('Attampt to initialize browser 2nd time!')
+        return
+
+    @async
+    def _onEventsUpdate(self, *args):
+        yield await(self.eventsCache.prefetcher.demand())
+        if self._builder:
+            self.__updateEvents()
+
+    def _populate(self):
+        super(MissionsDragonBoatView, self)._populate()
+        Waiting.hide('loadPage')
+        self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
+        g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
+
+    def _dispose(self):
+        g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
+        self.__cancelLoadBrowserCallback()
+        self.__browserView = None
+        super(MissionsDragonBoatView, self)._dispose()
+        return
+
+    def __cancelLoadBrowserCallback(self):
+        if self.__loadBrowserCallbackID is not None:
+            BigWorld.cancelCallback(self.__loadBrowserCallbackID)
+            self.__loadBrowserCallbackID = None
+        return
+
+    def __loadBrowser(self):
+        self.__loadBrowserCallbackID = None
+        self.as_loadBrowserS()
+        return
+
+    def __updateEvents(self):
+        self._builder.invalidateBlocks()
+
+    def __updateBrowserProperties(self, *args):
+        self.__viewActive = caches.getNavInfo().getMissionsTab() == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS
+        browser = self._browserCtrl.getBrowser(self.__browserID)
+        if browser:
+            if self.__viewActive:
+                browser.skipEscape = not self._dragonBoatCtrl.isNeedHandlingEscape
                 browser.useSpecialKeys = False
             else:
                 browser.skipEscape = False

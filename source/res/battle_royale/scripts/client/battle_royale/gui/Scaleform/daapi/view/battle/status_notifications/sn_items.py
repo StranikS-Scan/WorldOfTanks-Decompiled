@@ -705,11 +705,9 @@ class ThunderStrikeSN(_SmokeBase):
 
 
 class AdaptationHealthRestoreSN(TimerSN):
-    __MSG_INFO_PREFIX = '+0'
 
     def __init__(self, updateCallback):
         super(AdaptationHealthRestoreSN, self).__init__(updateCallback)
-        self._vo['additionalInfo'] = self.__MSG_INFO_PREFIX
         self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
 
     def _update(self, value):
@@ -722,12 +720,13 @@ class AdaptationHealthRestoreSN(TimerSN):
                 self._sendUpdate()
             else:
                 self._setVisible(False)
-                self._vo['additionalInfo'] = self.__MSG_INFO_PREFIX
+                self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
                 self._sendUpdate()
         elif value['type'] == 'additionInfo':
             restoreHealth = value['value']
             self._vo['additionalInfo'] = ''.join(('+', str(restoreHealth)))
-            self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA
+            if restoreHealth > 0:
+                self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA
             self._sendUpdate()
 
     def getItemID(self):

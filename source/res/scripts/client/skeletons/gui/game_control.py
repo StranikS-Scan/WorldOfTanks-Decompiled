@@ -2138,3 +2138,60 @@ class ISeniorityAwardsController(IGameController):
 
     def getSACoin(self):
         raise NotImplementedError
+
+
+class IDragonBoatController(IGameController):
+    onSettingsChanged = None
+    onStatusUpdated = None
+    onWidgetStateChanged = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getUrl(self, urlName=None, callback=lambda *args: None):
+        raise NotImplementedError
+
+    def createWebHandlers(self):
+        raise NotImplementedError
+
+    def isNeedHandlingEscape(self):
+        raise NotImplementedError
+
+    def getDragonBoatQuests(self):
+        raise NotImplementedError
+
+    def getTeam(self):
+        raise NotImplementedError
+
+    def getState(self):
+        raise NotImplementedError
+
+    def processFinalReward(self):
+        raise NotImplementedError
+
+    def checkWidgetState(self):
+        raise NotImplementedError
+
+    def getDailyQuestName(self):
+        raise NotImplementedError
+
+    def checkFinishScreenToShow(self):
+        raise NotImplementedError
+
+    def showFinishScreen(self, team):
+        raise NotImplementedError
+
+    def isDayQuestCompleted(self):
+        raise NotImplementedError
+
+    def isFinalRewardInProcess(self):
+        raise NotImplementedError
+
+    def getLastDayOfEvent(self):
+        raise NotImplementedError

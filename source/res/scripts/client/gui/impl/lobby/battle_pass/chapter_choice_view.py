@@ -27,6 +27,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
+from web.web_client_api.common import ItemPackEntry, ItemPackType
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
     from gui.shared.gui_items.customization.c11n_items import Style
@@ -176,9 +177,10 @@ class ChapterChoiceView(ViewImpl):
             return
 
     def __showStylePreview(self, style, vehicleCD):
+        itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
         showStylePreview(vehicleCD, style=style, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': (TabID.VEHICLE, TabID.STYLE),
-         'currentTabID': TabID.STYLE}, backCallback=self.__getPreviewCallback())
+         'currentTabID': TabID.STYLE}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
 
     @staticmethod
     def __getPreviewCallback():

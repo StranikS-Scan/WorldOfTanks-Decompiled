@@ -5,13 +5,16 @@ import logging
 import sys
 import typing
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.game_control.dragon_boat_controller import DBOAT_QUEST_SELECTED
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.bonuses import HIDDEN_BONUSES
+from gui.server_events.bonuses import HIDDEN_BONUSES, VehiclesBonus
 from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import CardBattleConditionsFormatters
 from gui.server_events.cond_formatters import CONDITION_SIZE
-from helpers import dependency, i18n
-from skeletons.gui.game_control import IMarathonEventsController
+from gui.server_events.events_helpers import EventInfoModel, isDragonBoatQuest
+from helpers import dependency, i18n, time_utils
+from skeletons.gui.game_control import IMarathonEventsController, IDragonBoatController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2c, w2capi, Field, W2CSchema
 from gui.server_events.event_items import Quest
 from web.web_client_api.common import sanitizeResPath
@@ -49,6 +52,8 @@ def _formatQuestBonuses(quest):
         if any((isinstance(bonus, hb) for hb in HIDDEN_BONUSES)):
             continue
         for item in bonus.getWrappedEpicBonusList():
+            if isinstance(bonus, VehiclesBonus) and not isDragonBoatQuest(quest.getID()) and item['type'].startswith('crew/'):
+                continue
             icon = {size:sanitizeResPath(path) for size, path in item.get('icon').iteritems()}
             entries.append({'id': item.get('id', 0),
              'type': item['type'],
@@ -71,7 +76,9 @@ def _questAsDict(quest):
 @w2capi(name='user_data', key='action')
 class QuestsWebApi(W2CSchema):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
+    _dboatCtrl = dependency.descriptor(IDragonBoatController)
 
     @w2c(_QuestsSchema, 'get_tokens')
     def handleGetTokens(self, command):
@@ -140,3 +147,31 @@ class QuestsWebApi(W2CSchema):
             _logger.warning('Missing icon for quest: %s', questIdBase)
 
         return questInfo
+
+    @w2c(_QuestsSchema, 'get_dboat_quests')
+    def handleGetDBoatQuests(self, _):
+        data = {}
+        quests = self._dboatCtrl.getDragonBoatQuests()
+        config = self._dboatCtrl.getConfig()
+        tokens = self._itemsCache.items.tokens.getTokens()
+        selectedQuestId = []
+        dailyQuestName = self._dboatCtrl.getDailyQuestName()
+        if dailyQuestName is not None:
+            selectedQuestId.append(dailyQuestName)
+        if DBOAT_QUEST_SELECTED in tokens or dailyQuestName:
+            selectedQuestId.extend(config.dragonBoatQuests['weekBattleMission'])
+        selectedQuestId.extend(config.dragonBoatQuests['finalReward'])
+        for stageQuest in config.dragonBoatQuests['intermediateTeamRewards']:
+            selectedQuestId.append(stageQuest)
+
+        for qId, quest in quests.iteritems():
+            if qId in selectedQuestId:
+                data.update({qId: _questAsDict(quest)})
+
+        return data
+
+    @w2c(W2CSchema, 'get_dboat_time_data')
+    def handleGetDBoatTimeData(self, _):
+        nextGameDay = time_utils.getCurrentLocalServerTimestamp() + EventInfoModel.getDailyProgressResetTimeDelta()
+        return {'eod': nextGameDay + time_utils.ONE_MINUTE,
+         'endTime': self._dboatCtrl.getLastDayOfEvent()}

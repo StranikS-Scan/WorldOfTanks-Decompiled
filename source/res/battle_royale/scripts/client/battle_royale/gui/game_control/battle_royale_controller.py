@@ -55,6 +55,8 @@ from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTe
 from skeletons.gui.impl import IGuiLoader
 from gui.shared.event_dispatcher import getParentWindow
 from gui import GUI_SETTINGS
+from gui.prb_control.settings import FUNCTIONAL_FLAG
+from items.battle_royale import isBattleRoyale
 if typing.TYPE_CHECKING:
     from helpers.server_settings import BattleRoyaleConfig
 _logger = logging.getLogger(__name__)
@@ -108,6 +110,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__profileStatisticWasSelected = False
         self.__profStatSelectBattlesTypeInited = False
         self.__profTechSelectBattlesTypeInited = False
+        self.__switchingFromBR = False
         return
 
     def init(self):
@@ -152,6 +155,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         g_eventBus.addListener(ProfileStatisticEvent.DISPOSE, self.__onProfileStatisticDispose, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(ProfileTechniqueEvent.SELECT_BATTLE_TYPE, self.__onProfileTechniqueSelectBattlesType, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(ProfileTechniqueEvent.DISPOSE, self.__onProfileTechniqueDispose, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__updateMode()
         self.__wasInLobby = True
         if not self.__hangarsSpace.spaceInited or self.__hangarsSpace.spaceLoading():
@@ -291,7 +295,13 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             return False
 
+    def onPrbEntitySwitching(self):
+        self.__switchingFromBR = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.BATTLE_ROYALE)
+
     def onPrbEntitySwitched(self):
+        if self.__switchingFromBR and self.isBattleRoyaleMode():
+            self.__switchingFromBR = False
+            return
         self.__updateMode()
         self.__updateSpace()
 
@@ -592,6 +602,14 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __onProfileTechniqueDispose(self, event):
         self.__profTechSelectBattlesTypeInited = False
 
+    def __onSelectVehicleInHangar(self, event):
+        if not self.isBattleRoyaleMode():
+            return
+        vehicleInvID = event.ctx['vehicleInvID']
+        vehicle = self.__itemsCache.items.getVehicle(vehicleInvID)
+        if vehicle and not isBattleRoyale(vehicle.tags):
+            self.selectRandomBattle()
+
     def __clear(self):
         self.stopNotification()
         self.stopGlobalListening()
@@ -607,6 +625,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         g_eventBus.removeListener(ProfileTechniqueEvent.SELECT_BATTLE_TYPE, self.__onProfileTechniqueSelectBattlesType, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(ProfileStatisticEvent.DISPOSE, self.__onProfileStatisticDispose, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(ProfileTechniqueEvent.DISPOSE, self.__onProfileTechniqueDispose, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__defaultHangars = {}
         g_clientUpdateManager.removeObjectCallbacks(self)
 

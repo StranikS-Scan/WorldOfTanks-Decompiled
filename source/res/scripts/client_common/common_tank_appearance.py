@@ -184,6 +184,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__periodicTimerID = None
         self.undamagedStateChildren = []
         self.createComponent(VehicleAppearanceComponent, self)
+        self._loadingQueue = []
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD, renderMode=None):
@@ -314,6 +315,10 @@ class CommonTankAppearance(ScriptGameObject):
         camouflages.updateFashions(self)
         model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
         self._createStickers()
+        while self._loadingQueue:
+            prefab, go, vector, callback = self._loadingQueue.pop()
+            CGF.loadGameObjectIntoHierarchy(prefab, go, vector, callback)
+
         return
 
     def destroy(self):
@@ -336,6 +341,7 @@ class CommonTankAppearance(ScriptGameObject):
         self._chassisDecal = None
         self._compoundModel = None
         self._destroyStickers()
+        self._loadingQueue = []
         return
 
     def activate(self):
@@ -802,6 +808,12 @@ class CommonTankAppearance(ScriptGameObject):
 
     def maxTurretRotationSpeed(self):
         pass
+
+    def pushToLoadingQueue(self, prefab, go, vector, callback):
+        self._loadingQueue.append((prefab,
+         go,
+         vector,
+         callback))
 
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.id != BigWorld.player().playerVehicleID:

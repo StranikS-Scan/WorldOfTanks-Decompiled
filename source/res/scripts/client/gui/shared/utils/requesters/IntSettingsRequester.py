@@ -79,7 +79,8 @@ class IntSettingsRequester(object):
      'SPG_AIM': constants.USER_SERVER_SETTINGS.SPG_AIM,
      MAPBOX_CAROUSEL_FILTER_1: 103,
      MAPBOX_CAROUSEL_FILTER_2: 104,
-     'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR}
+     'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR,
+     'DRAGON_BOAT_STORAGE': constants.USER_SERVER_SETTINGS.DRAGON_BOAT}
 
     def __init__(self):
         self.__isSynced = False

@@ -13,6 +13,7 @@ class QUESTS(object):
     MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
     MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
+    MISSIONS_TAB_DRAGON_BOAT_MARATHON = '#quests:missions/tab/dragon_boat_marathon'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -66,6 +67,7 @@ class QUESTS(object):
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
     BONUSES_EVENTCOIN_DESCRIPTION = '#quests:bonuses/eventCoin/description'
+    BONUSES_DRAGONBOATPOINTS_DESCRIPTION = '#quests:bonuses/dragonBoatPoints/description'
     BONUSES_BPCOIN_DESCRIPTION = '#quests:bonuses/bpcoin/description'
     BONUSES_FREEXP_DESCRIPTION = '#quests:bonuses/freeXP/description'
     BONUSES_PREMIUM_PLUS_DESCRIPTION = '#quests:bonuses/premium_plus/description'
@@ -1254,6 +1256,7 @@ class QUESTS(object):
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
+    BONUSNAME_DRAGONBOATPOINTS = '#quests:bonusName/dragonBoatPoints'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1675,6 +1678,11 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DESTROYVEH_FEW_ACCUM = '#quests:dailyQuests/condition/destroyVeh_few_accum'
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
+    MISSIONS_TAB_LABEL_DRAGON_BOAT_MARATHON = '#quests:missions/tab/label/dragon_boat_marathon'
+    MISSIONS_TAB_DRAGON_BOAT_MARATHON_HEADER = '#quests:missions/tab/dragon_boat_marathon/header'
+    MISSIONS_TAB_DRAGON_BOAT_MARATHON_BODY = '#quests:missions/tab/dragon_boat_marathon/body'
+    DRAGONBOAT_POSTBATTLE_DAILY = '#quests:dragonBoat/postBattle/daily'
+    DRAGONBOAT_POSTBATTLE_WEEKLY = '#quests:dragonBoat/postBattle/weekly'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1781,7 +1789,8 @@ class QUESTS(object):
      BONUSNAME_BATTLE_BONUS_X5,
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
-     BONUSNAME_BRCOIN)
+     BONUSNAME_BRCOIN,
+     BONUSNAME_DRAGONBOATPOINTS)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

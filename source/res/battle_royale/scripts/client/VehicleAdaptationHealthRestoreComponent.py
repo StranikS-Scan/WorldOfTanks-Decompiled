@@ -27,16 +27,16 @@ class VehicleAdaptationHealthRestoreComponent(EventsSubscriber, DynamicScriptCom
         self.entity.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.ADAPTATION_HEALTH_RESTORE, data)
 
     def onDestroy(self):
+        self.__destroy()
+
+    def onLeaveWorld(self, *args):
+        self.__destroy()
+
+    def __destroy(self):
         self.unsubscribeFromAllEvents()
         self.__timeLeft = 0.0
         self.__updateTimer()
         self.__hideMarker()
-
-    def onLeaveWorld(self, *args):
-        self.unsubscribeFromAllEvents()
-        self.__calculateElapsedTime()
-        if self.__timeLeft > 0.0:
-            self.__hideMarker()
 
     def __calculateElapsedTime(self):
         self.__timeLeft = self.finishTime - BigWorld.serverTime() if self.finishTime else 0.0

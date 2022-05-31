@@ -619,6 +619,7 @@ class HangarVehicleEvent(HasCtxEvent):
     ON_PLATOON_TANK_LOADED = 'hangarVehicle/onPlatoonTankLoaded'
     ON_PLATOON_TANK_DESTROY = 'hangarVehicle/onPlatoonTankDestroy'
     PLATOON_TANK_MARKER = 'hangarVehicle/platoonTankMarker'
+    SELECT_VEHICLE_IN_HANGAR = 'hangarVehicle/selectVehicleInHangar'
 
 
 class LinkedSetEvent(HasCtxEvent):

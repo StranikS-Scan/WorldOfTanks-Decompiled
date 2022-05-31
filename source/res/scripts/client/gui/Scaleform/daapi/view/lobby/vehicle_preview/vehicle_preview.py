@@ -30,6 +30,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
+from gui.game_control.dragon_boat_controller import DBOAT_REWARDS
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
@@ -70,7 +71,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.VEH_POST_PROGRESSION: 'vehPostProgression',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
  VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW: None,
- VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None}
+ VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None,
+ DBOAT_REWARDS: 'rewards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
@@ -164,10 +166,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
         self.__topPanelData = ctx.get('topPanelData') or {}
+        self.__style = ctx.get('style')
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
         addBuiltInEquipment(self._itemsPack, self.__itemsCache, self._vehicleCD)
         notInteractive = (VIEW_ALIAS.LOBBY_STORE, VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION)
         self._heroInteractive = not (self._itemsPack or self.__offers or self.__topPanelData or self._backAlias in notInteractive)
+        self._heroInteractive = self._heroInteractive and ctx.get('heroInteractive', True)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         self.__hangarVehicleCD = ctx.get('hangarVehicleCD')
         self.__previewAppearance = ctx.get('previewAppearance')
@@ -197,11 +201,11 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__fullUpdate()
         if self.__hangarVehicleCD and self.__isHeroTank and self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
-            g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, None)
+            g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, style=self.__style)
             g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
         elif g_currentPreviewVehicle.intCD == self._vehicleCD:
             g_currentPreviewVehicle.selectNoVehicle()
-        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
+        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD, style=self.__style)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
@@ -316,7 +320,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
-                if not vehicleItems and crewItems:
+                if crewItems and not vehicleItems:
                     groupID = crewItems[0].groupID
                     vehicleItems = (ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=groupID),)
                 viewPy.setVehicleCrews(vehicleItems, crewItems)
@@ -454,7 +458,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             backBtnLabel = _BACK_BTN_LABELS[self._backAlias]
             if not backBtnLabel:
                 return None
-            return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias])
+            return VEHICLE_PREVIEW.getBackBtnLabel(backBtnLabel)
         else:
             return VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
 

@@ -315,6 +315,8 @@ class Source(object):
             info['shopButton'] = questSection.readString('shopButton', 'hide')
         if questSection.has_key('notificationText'):
             info['notificationText'] = self.__readMetaSection(questSection['notificationText'])
+        if eventType == EVENT_TYPE.TOKEN_QUEST:
+            info['delayed'] = questSection.readBool('delayed', False)
         return info
 
     def __readGroupContent(self, questSection):
@@ -362,7 +364,11 @@ class Source(object):
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts,
-         'accountAttributes': self.__readListAccountAttributes}
+         'accountAttributes': self.__readListAccountAttributes,
+         'externalData': self.__readBattleResultsConditionList,
+         'externalDataItem': self.__readBattleResultsConditionList,
+         'source': self.__readCondition_string,
+         'paramName': self.__readCondition_string}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
             condition_readers.update({'value': self.__readCondition_bool,
              'win': self.__readConditionComplex_true,

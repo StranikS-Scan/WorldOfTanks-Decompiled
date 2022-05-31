@@ -329,16 +329,16 @@
       <color>	0xffffffff	</color>
       <enableAccurateCollision>	False	</enableAccurateCollision>
       <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.5	</overTerrainHeight>
-      <cutOffYDistance>	2.	</cutOffYDistance>
+      <overTerrainHeight>	1	</overTerrainHeight>
+      <cutOffYDistance>	5.	</cutOffYDistance>
     </enemy>
     <ally>
       <visual>	content/Interface/TargetPoint/inspire.model	</visual>
       <color>	0xffffffff	</color>
       <enableAccurateCollision>	True	</enableAccurateCollision>
       <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.5	</overTerrainHeight>
-      <cutOffYDistance>	2.	</cutOffYDistance>
+      <overTerrainHeight>	1	</overTerrainHeight>
+      <cutOffYDistance>	5.	</cutOffYDistance>
     </ally>
   </battleRoyaleHealpoint>
   <lootTypes>

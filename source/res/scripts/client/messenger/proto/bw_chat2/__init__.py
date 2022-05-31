@@ -86,6 +86,7 @@ class BWProtoPlugin(IProtoPlugin):
 
     def goToReplay(self):
         self.__provider.goToReplay()
+        self.__battleCmd.goToReplay()
 
     def setFilters(self, msgFilterChain):
         self.__provider.setFilters(msgFilterChain)

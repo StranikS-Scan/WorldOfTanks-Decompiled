@@ -32,6 +32,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
 from gui.game_control.blueprints_convert_sale_controller import BCSActionState
+from gui.game_control.dragon_boat_controller import DBOAT_POINTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.mapbox.mapbox_helpers import formatMapboxRewards
@@ -522,6 +523,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(guiType, battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
                 ctx['quests'] = self.__makeQuestsAchieve(message)
+                ctx['DBPointsStr'] = self.__makeDragonBoatPointsString(battleResults)
                 team = battleResults.get('team', 0)
                 if guiType == ARENA_GUI_TYPE.FORT_BATTLE_2 or guiType == ARENA_GUI_TYPE.SORTIE_2:
                     if battleResKey == 0:
@@ -741,6 +743,10 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         if value:
             text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
             return g_settings.htmlTemplates.format('battleResultBrcoin', ctx={'brcoin': text})
+
+    def __makeDragonBoatPointsString(self, battleResults):
+        points = battleResults.get('tokens', {}).get(DBOAT_POINTS, {}).get('count', 0)
+        return '' if not points else g_settings.htmlTemplates.format('battleResultDBPoints', ctx={'DBPoints': points})
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):

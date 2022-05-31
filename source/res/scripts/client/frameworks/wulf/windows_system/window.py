@@ -200,7 +200,7 @@ class Window(PyObjectEntity):
         self.proxy.setParent(getProxy(parent))
 
     def load(self):
-        _logger.info('Loading window: %r', self)
+        _logger.debug('Loading window: %r', self)
         self.proxy.load()
 
     def reload(self):

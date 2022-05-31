@@ -27,6 +27,7 @@ class States(CONST_CONTAINER):
     HANGAR_PLACE_TASKS_MISSIONS = 'STATE_hangar_place_tasks_missions'
     HANGAR_PLACE_TASKS_BATTLE_PASS = 'STATE_hangar_place_tasks_battle_pass'
     HANGAR_PLACE_TASKS_EVENTS = 'STATE_hangar_place_tasks_events'
+    HANGAR_PLACE_TASKS_DRAGON_BOAT = 'STATE_hangar_place_tasks_dragon_boat'
 
 
 class Events(CONST_CONTAINER):
@@ -34,6 +35,8 @@ class Events(CONST_CONTAINER):
     BOB_EXIT = 'gui_bb_bloggers_progress_page_ambient_Exit'
     MARATHON_ENTER = 'ev_hangar_marathon_enter'
     MARATHON_EXIT = 'ev_hangar_marathon_exit'
+    DRAGON_BOAT_ENTER = 'ev_cn_dragonboat_enter'
+    DRAGON_BOAT_EXIT = 'ev_cn_dragonboat_exit'
 
 
 def switchHangarFilteredFilter(on=True):
@@ -183,6 +186,20 @@ class WWISEEventPageFilter(WWISEHangarTasksFilter):
         return States.HANGAR_PLACE_TASKS_EVENTS
 
 
+class WWISEDragonBoatPageFilter(WWISEHangarTasksFilter):
+
+    def start(self):
+        super(WWISEDragonBoatPageFilter, self).start()
+        WWISE.WW_eventGlobal(Events.DRAGON_BOAT_ENTER)
+
+    def stop(self):
+        super(WWISEDragonBoatPageFilter, self).stop()
+        WWISE.WW_eventGlobal(Events.DRAGON_BOAT_EXIT)
+
+    def _getStartState(self):
+        return States.HANGAR_PLACE_TASKS_DRAGON_BOAT
+
+
 def getEmptyFilter():
     return EmptySoundFilter()
 
@@ -201,7 +218,8 @@ _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilte
  SoundFilters.HANGAR_PLACE_TASKS_DAILY: _selectFilter(WWISEHangarTasksDailyFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_MISSIONS: _selectFilter(WWISEHangarTasksMissionsFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter()),
- SoundFilters.HANGAR_PLACE_TASKS_EVENTS: _selectFilter(WWISEEventPageFilter())}
+ SoundFilters.HANGAR_PLACE_TASKS_EVENTS: _selectFilter(WWISEEventPageFilter()),
+ SoundFilters.HANGAR_PLACE_TASKS_DRAGON_BOAT: _selectFilter(WWISEDragonBoatPageFilter())}
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)

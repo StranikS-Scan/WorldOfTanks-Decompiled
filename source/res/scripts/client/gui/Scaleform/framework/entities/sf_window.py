@@ -35,9 +35,6 @@ class SFWindow(Window):
         _logger.debug('Creating %r with %r', self, loadParams)
         return
 
-    def __repr__(self):
-        return '{}(uniqueID={}, layer={}, decorator={}, content={}, viewKey={})'.format(self.__class__.__name__, self.uniqueID, self.layer, self.decorator, self.content, self.__loadParams.viewKey)
-
     def getName(self):
         return 'SFWindow [{}]'.format(self.__loadParams.viewKey.name)
 

@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	45	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22470	</weight>
-    <maxHealth>	1840	</maxHealth>
+    <maxHealth>	1640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -2185,7 +2185,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
-      <maxHealth>	460	</maxHealth>
+      <maxHealth>	410	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2230,11 +2230,11 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3053,7 +3053,7 @@
       <engines>
         <GTD_700P>
           <smplEnginePower>	870	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </GTD_700P>
       </engines>
       <chassis>

@@ -105,21 +105,45 @@ class _CorrodingShot(_TriggerItem):
 
 
 class _BotSpawner(_ArtilleryItem, _BomberStrikeSelector):
+    MAX_SHIFT = 5
+    MIN_SHIFT = 0
 
     def getAimingControlMode(self):
         return MapCaseMode.ArcadeMapCaseControlMode
 
     def _getErrorMsg(self):
         return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+    def getStrikeSelector(self):
+
+        def selectorFunc(*args, **kwargs):
+            selector = MapCaseMode._ArcadeBomberStrikeSelector(*args, **kwargs)
+            selector.maxHeightShift = _BotSpawner.MAX_SHIFT
+            selector.minHeightShift = _BotSpawner.MIN_SHIFT
+            return selector
+
+        return selectorFunc
 
 
 class _ThunderStrike(_ArtilleryItem, _BomberStrikeSelector):
+    MAX_SHIFT = 5
+    MIN_SHIFT = -5
 
     def getAimingControlMode(self):
         return MapCaseMode.ArcadeMapCaseControlMode
 
     def _getErrorMsg(self):
         return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+    def getStrikeSelector(self):
+
+        def selectorFunc(*args, **kwargs):
+            selector = MapCaseMode._ArcadeBomberStrikeSelector(*args, **kwargs)
+            selector.maxHeightShift = _ThunderStrike.MAX_SHIFT
+            selector.minHeightShift = _ThunderStrike.MIN_SHIFT
+            return selector
+
+        return selectorFunc
 
 
 class _AdaptationHealthRestore(_TriggerItem):

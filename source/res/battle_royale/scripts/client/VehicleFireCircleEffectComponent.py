@@ -6,7 +6,6 @@ from battle_royale.gui.constants import BattleRoyaleEquipments
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from Event import EventsSubscriber
-from Vehicle import DebuffInfo
 FireCircleInfo = namedtuple('FireCircleInfo', ('endTime',))
 
 class VehicleFireCircleEffectComponent(BigWorld.DynamicScriptComponent, EventsSubscriber):
@@ -27,17 +26,15 @@ class VehicleFireCircleEffectComponent(BigWorld.DynamicScriptComponent, EventsSu
         self.entity.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, FireCircleInfo(self.finishTime))
 
     def onDestroy(self):
-        self.unsubscribeFromAllEvents()
-        self.__calculateDebuffTime(isIgnoreSelf=True)
-        self.__udateVisuals()
-        self.entity.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, FireCircleInfo(0))
+        self.__destroy()
 
     def onLeaveWorld(self, *args):
+        self.__destroy()
+
+    def __destroy(self):
         self.unsubscribeFromAllEvents()
-        if self.finishTime - BigWorld.serverTime() > 0.0:
-            self.__hideMarker()
-            ctrl = self.entity.guiSessionProvider.shared.feedback
-            ctrl.invalidateDebuff(self.entity.id, DebuffInfo(0, animated=True))
+        self.__hideMarker()
+        self.entity.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, FireCircleInfo(0))
 
     def __calculateDebuffTime(self, isIgnoreSelf=False):
 

@@ -69,9 +69,6 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
              'isTestDriveEnabled': isTestDriveEnabled,
              'lockBackground': isBgLocked or isRentAvailable,
              'rentLeft': rentLeft if isRentActive else ''})
-            if not isRentActive:
-                result.update({'infoHoverText': '',
-                 'smallInfoHoverText': ''})
             if vState not in (Vehicle.VEHICLE_STATE.IN_PREBATTLE,
              Vehicle.VEHICLE_STATE.DAMAGED,
              Vehicle.VEHICLE_STATE.DESTROYED,

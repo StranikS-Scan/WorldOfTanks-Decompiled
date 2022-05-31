@@ -308,6 +308,13 @@ class EditableStyleMode(CustomMode):
                 self.selectSlot(slotId)
             return False
         else:
+            if selItemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                ancors = self.getAnchorVOs()
+                if len(ancors) == 1 and ancors[0] is not None:
+                    slotId = C11nId(**ancors[0]['slotId'])
+                    self.installItem(intCD, slotId)
+                    self.selectSlot(slotId)
+                    return False
             result = super(EditableStyleMode, self)._selectItem(intCD, progressionLevel)
             return result
 

@@ -75,7 +75,7 @@ class ShotPassionManager(CGF.ComponentManager):
         def postloadSetup(go):
             go.createComponent(GenericComponents.RedirectorComponent, vehicle.appearance.gameObject)
 
-        if vehicle is not None and vehicle.isAlive():
+        if vehicle is not None and vehicle.isAlive() and vehicle.appearance:
             equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleShotPassionComponent.EQUIPMENT_NAME)
             equipment = vehicles.g_cache.equipments()[equipmentID]
             CGF.loadGameObjectIntoHierarchy(equipment.posteffectPrefab, vehicle.appearance.partsGameObjects.getPartGameObject(TankNodeNames.GUN_INCLINATION, vehicle.appearance.gameObject.spaceID, vehicle.appearance.gameObject), Math.Vector3(0, 0, 0), postloadSetup)

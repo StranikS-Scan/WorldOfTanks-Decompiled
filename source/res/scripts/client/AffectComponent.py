@@ -57,7 +57,7 @@ class AffectComponent(IVehicleCountListener):
         if self.__vehicleEffectConfig is not None:
             self.__particle = gameObject = CGF.GameObject(self.__gameObject.spaceID)
             gameObject.createComponent(GenericComponents.HierarchyComponent, self.__gameObject)
-            gameObject.createComponent(GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, self.__vehicleEffectConfig.rate, True)
+            gameObject.createComponent(GenericComponents.ParticleComponent, self.__vehicleEffectConfig.path, True, self.__vehicleEffectConfig.rate)
             gameObject.createComponent(GenericComponents.TransformComponent, self.__vehicleEffectConfig.offset)
             gameObject.activate()
         return

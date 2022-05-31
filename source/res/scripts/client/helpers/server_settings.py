@@ -850,6 +850,32 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
         data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
 
 
+class _DragonBoatConfig(namedtuple('_DragonBoatConfig', ('isEnabled',
+ 'isActive',
+ 'endTime',
+ 'dragonBoatUrl',
+ 'dragonBoatTokens',
+ 'dragonBoatQuests'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isActive=False, endTime=0, dragonBoatUrl='', dragonBoatTokens={}, dragonBoatQuests={})
+        defaults.update(kwargs)
+        return super(_DragonBoatConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -884,6 +910,7 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
+        self.__dragonBoatConfig = _DragonBoatConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -984,6 +1011,10 @@ class ServerSettings(object):
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
+        if 'dragon_boat_config' in self.__serverSettings:
+            self.__dragonBoatConfig = makeTupleByDict(_DragonBoatConfig, self.__serverSettings['dragon_boat_config'])
+        else:
+            self.__dragonBoatConfig = _DragonBoatConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1060,6 +1091,8 @@ class ServerSettings(object):
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
+        if 'dragon_boat_config' in serverSettingsDiff:
+            self.__dragonBoatConfig = makeTupleByDict(_DragonBoatConfig, serverSettingsDiff['dragon_boat_config'])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1167,6 +1200,10 @@ class ServerSettings(object):
     @property
     def eventBattlesConfig(self):
         return self.__eventBattlesConfig
+
+    @property
+    def dragonBoatConfig(self):
+        return self.__dragonBoatConfig
 
     @property
     def giftSystemConfig(self):

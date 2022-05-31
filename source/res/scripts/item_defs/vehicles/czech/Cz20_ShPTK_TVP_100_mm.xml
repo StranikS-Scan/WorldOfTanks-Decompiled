@@ -68,6 +68,13 @@
       <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+          <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Hull.model	</exploded>
+        </Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -100,9 +107,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.428756 0.482734 2.8623	</rayStart>
-        <rayEnd>	0.416417 0.306479 2.76859	</rayEnd>
-        <rayUp>	-0.0692326 0.00356728 -0.997594	</rayUp>
+        <rayStart>	1.19875 0.501878 2.72454	</rayStart>
+        <rayEnd>	1.18535 0.326256 2.6298	</rayEnd>
+        <rayUp>	-0.107975 0.00507734 -0.994141	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -861,6 +868,45 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	0.575746	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15060	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+        <position>	-1.22568 1.66155 3.24482	</position>
+        <rotation>	0.284091 -0.000004 3.12901	</rotation>
+        <scale>	0.44051 0.206352 0.44051	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.04	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+        <position>	0.0114 1.53934 -3.12766	</position>
+        <rotation>	2.33951 -0.000018 -0.000022	</rotation>
+        <scale>	0.397591 0.074333 0.397591	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.04	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+        <position>	0.592614 1.85866 -1.9216	</position>
+        <rotation>	3.13985 -0.000002 -0.000015	</rotation>
+        <scale>	0.496477 0.0928205 0.496477	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.03	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	106.439 106.33	</density>
@@ -896,6 +942,13 @@
         <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+            <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Chassis.model	</exploded>
+          </Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1652,6 +1705,13 @@
             <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+                <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Gun_01.model	</exploded>
+              </Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Gun_01.model	</collisionModelServer>
@@ -1758,6 +1818,18 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0.081438 4.37	</rayStart>
+              <rayEnd>	0 0.081438 4.86	</rayEnd>
+              <rayUp>	0.101018 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.49	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+            </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
@@ -1770,6 +1842,13 @@
         <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+            <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_3DSt_22MM/crash/lod0/Turret_01.model	</exploded>
+          </Cz20_ShPTK_TVP_100_mm_3DSt_22MM>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Turret_01.model	</collisionModelServer>
@@ -1790,13 +1869,13 @@
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
           <anchorPosition>	0.00677014 0.6684 -1.06622	</anchorPosition>
-          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
           <anchorPosition>	0.00677014 0.6684 -1.06622	</anchorPosition>
-          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>
@@ -2228,6 +2307,32 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.760402	</clipAngle>
           <anchorShift>	0.09	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+          <position>	-0.900441 2.13328 1.71561	</position>
+          <rotation>	1.07098 -0.895961 -3.08595	</rotation>
+          <scale>	0.411459 0.0769259 0.41146	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.760402	</clipAngle>
+          <anchorShift>	0.09	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz20_ShPTK_TVP_100_mm_3DSt_22MM	</compatibleModels>
+          <position>	0.625724 2.13847 2.12151	</position>
+          <rotation>	1.09128 0.649194 2.84502	</rotation>
+          <scale>	0.383723 0.0717403 0.383724	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.760402	</clipAngle>
+          <anchorShift>	0.08	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

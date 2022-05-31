@@ -334,7 +334,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def _updateInspireMarker(self, vehicleID, handle, isSourceVehicle, isInactivation, endTime, duration, primary=True, animated=True, equipmentID=None):
         vehicle = BigWorld.entities.get(vehicleID)
-        if vehicle and vehicle.isAlive() and isInactivation is not None:
+        if vehicle and vehicle.isAlive() and isInactivation is not None and duration > 0.0:
             statusID = BATTLE_MARKER_STATES.INSPIRING_STATE if isSourceVehicle else BATTLE_MARKER_STATES.INSPIRED_STATE
             if isSourceVehicle:
                 hideStatusID = BATTLE_MARKER_STATES.INSPIRED_STATE

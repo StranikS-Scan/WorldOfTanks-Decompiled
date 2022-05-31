@@ -169,7 +169,7 @@ class HangarCameraManager(object):
     def setC11nDistMode(self, enabled):
         self.__isInC11nMode = enabled
         if self.__isInPlatoon and not self.__isInC11nMode:
-            self.__updateCameraLimits()
+            self.setPlatoonStartingCameraPosition()
 
     def __onSpaceCreated(self):
         self.__cam.isMovementEnabled = True

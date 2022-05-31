@@ -24,6 +24,7 @@
     <C13_B47>	33	</C13_B47>
     <N22_LT>	34	</N22_LT>
     <N19_1>	35	</N19_1>
+    <C45A_Gonsalo>	37	</C45A_Gonsalo>
     <C42_FL>	501	</C42_FL>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
@@ -312,6 +313,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45A>
+    <C45A_Gonsalo>
+      <userString>	#gb_vehicles:C45A_Gonsalo	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45A_Gonsalo>
     <C42_IGR>
       <userString>	#igr_vehicles:C42_IGR	</userString>
       <tags></tags>
@@ -395,7 +408,7 @@
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-      <radarRadius>	370	</radarRadius>
+      <radarRadius>	390	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </N19Mk1_SH>
     <C45A_SH>
@@ -409,7 +422,7 @@
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-      <radarRadius>	320	</radarRadius>
+      <radarRadius>	300	</radarRadius>
       <radarCooldown>	20	</radarCooldown>
     </C45A_SH>
     <C42_B47_SH>
@@ -423,8 +436,8 @@
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-      <radarRadius>	480	</radarRadius>
-      <radarCooldown>	35	</radarCooldown>
+      <radarRadius>	500	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
     </C42_B47_SH>
     <N19Mk3_MapsTraining_Dummy_MT_2>
       <userString>	#gb_vehicles:N19Mk3	</userString>

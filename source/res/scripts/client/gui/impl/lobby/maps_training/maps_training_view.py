@@ -6,6 +6,7 @@ import Math
 from AvatarInputHandler.cameras import getViewProjectionMatrix
 from CurrentVehicle import g_currentPreviewVehicle
 from gui import GUI_SETTINGS
+from gui.Scaleform.Waiting import Waiting
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_group_model import MapsTrainingGroupModel
@@ -103,6 +104,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__finalizationInProgress = False
         if self.hangarSpace.spaceInited:
             self.__hangarCameraManager = self.hangarSpace.space.getCameraManager()
+        Waiting.show('loadPage')
         self.mapsTrainingController.requestInitialDataFromServer(self.__fillData)
 
     def _finalize(self):
@@ -363,7 +365,9 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
                 if g_currentPreviewVehicle.isPresent() and self.__tickCallback is None:
                     self.__onPreviewVehicleChanged()
                 self.__updateAllSelections(model)
+            model.setIsDataLoaded(True)
         self.__isDataLoaded = True
+        Waiting.hide('loadPage')
         return
 
     def __updateAllSelections(self, model):

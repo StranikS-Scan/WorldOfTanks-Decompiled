@@ -2036,4 +2036,47 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A40_T95	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	439	</id>
+      <texture>	gui/maps/vehicles/styles/A40_T95_SC_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A40_T95_SC_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A40_T95_SC_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A40_T95_SC_3DSt	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	302	</id>
+              <slotId>	15133	</slotId>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <projection_decal>
+          <id>	303 304	</id>
+        </projection_decal>
+      </alternateItems>
+    </style>
+  </itemGroup>
 </usa.xml>

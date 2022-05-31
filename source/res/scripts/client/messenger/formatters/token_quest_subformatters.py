@@ -692,3 +692,64 @@ class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
     def _isQuestOfThisGroup(cls, questID):
         tmp = cls.__RENEWABLE_SUB_TOKEN_QUEST_PATTERN in questID
         return tmp
+
+
+class DragonBoatStageQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __DBOAT_TOKEN_QUEST_PREFIX = 'dboat:'
+    __DBOAT_TOKEN_QUEST_PATTERN = ':stage:'
+    __MESSAGE_TEMPLATE = 'dragonBoatStageReward'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            rewards = getRewardsForQuests(message, completedQuestIDs)
+            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
+            if fmt is not None:
+                templateParams = {'text': fmt}
+                settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+                formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+                messageDataList.append(MessageData(formatted, settings))
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        tmp = questID.startswith(cls.__DBOAT_TOKEN_QUEST_PREFIX) and cls.__DBOAT_TOKEN_QUEST_PATTERN in questID
+        return tmp
+
+
+class DragonBoatFinalQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __DBOAT_TOKEN_QUEST_PREFIX = 'dboat:final_reward'
+    __MESSAGE_TEMPLATE = 'dragonBoatFinalReward'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            rewards = getRewardsForQuests(message, completedQuestIDs)
+            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
+            if fmt is not None:
+                templateParams = {'text': fmt}
+                settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+                formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+                messageDataList.append(MessageData(formatted, settings))
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        tmp = cls.__DBOAT_TOKEN_QUEST_PREFIX in questID
+        return tmp

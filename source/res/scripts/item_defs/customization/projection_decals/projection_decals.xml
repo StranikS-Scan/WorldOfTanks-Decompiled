@@ -5014,6 +5014,39 @@
     <name>	CIS Winter Olympics Games	</name>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	302	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_390.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_390	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	303	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_391.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_391	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	304	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_392.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_392	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	A40_T95_SC_3DSt	</name>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -5154,5 +5187,97 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	R4	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	726	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_65.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_65	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Yandex June 2022	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	717	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_381.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_381	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	718	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_382.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_382	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	719	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_383.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_383	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	720	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_384.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_384	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	721	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_385.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_385	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	CN Dragon Boat festival	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	715	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_379.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_379	</userString>
+      <tags>	styleOnly hiddenInUI formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	716	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_380.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_379	</userString>
+      <tags>	styleOnly hiddenInUI formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	CN Dragon Boat festival	</name>
   </itemGroup>
 </projection_decals.xml>

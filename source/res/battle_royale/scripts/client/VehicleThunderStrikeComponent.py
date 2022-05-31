@@ -6,7 +6,6 @@ from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from Event import EventsSubscriber
-from Vehicle import DebuffInfo
 ThunderStrikeDebuffInfo = namedtuple('ThunderStrikeDebuffInfo', 'id, elapsedTime')
 
 class VehicleThunderStrikeComponent(BigWorld.DynamicScriptComponent, EventsSubscriber):
@@ -24,17 +23,16 @@ class VehicleThunderStrikeComponent(BigWorld.DynamicScriptComponent, EventsSubsc
         self.__updateVisuals()
 
     def onDestroy(self):
+        self.__destroy()
+
+    def onLeaveWorld(self, *args):
+        self.__destroy()
+
+    def __destroy(self):
         self.unsubscribeFromAllEvents()
         self.__elapsedTime = 0.0
         self.__updateTimer()
         self.__hideMarker()
-
-    def onLeaveWorld(self, *args):
-        self.unsubscribeFromAllEvents()
-        if self.finishTime - BigWorld.serverTime() > 0.0:
-            self.__hideMarker()
-            ctrl = self.entity.guiSessionProvider.shared.feedback
-            ctrl.invalidateDebuff(self.entity.id, DebuffInfo(0, animated=True))
 
     def __onUpdateObservedVehicleData(self, *args, **kwargs):
         self.__calculateElapsedTime()

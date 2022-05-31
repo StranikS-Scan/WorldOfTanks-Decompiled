@@ -641,6 +641,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
             vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
+            if eMode in aih_constants.MAP_CASE_MODES:
+                BigWorld.setEdgeDrawerRenderMode(1)
             return
 
     def onVehicleControlModeChanged(self, eMode):

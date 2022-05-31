@@ -397,6 +397,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self._setActive(self.__animationID, True)
             getter = self.settingsCore.getSetting
             showDirectionLine = GUI_SETTINGS.showDirectionLine and getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
+            showDirectionLine = showDirectionLine and self._canShowDirectionLine()
             showYawLimit = GUI_SETTINGS.showSectorLines and getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
             showCircles = self._canShowDrawRangeCircle() or self._canShowMaxViewRangeCircle() or self._canShowViewRangeCircle()
             if showDirectionLine:
@@ -444,6 +445,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
     def _canShowDrawRangeCircle(self):
         return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_DRAW_RANGE)
+
+    def _canShowDirectionLine(self):
+        return True
 
     def _enableCameraEntryInCtrlMode(self, ctrlMode):
         return True

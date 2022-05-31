@@ -7,7 +7,7 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE
+from account_helpers.AccountSettings import MISSIONS_PAGE, DBOAT_INTRO_SCREEN_SHOWN
 from adisp import async as adispasync, process
 from async import async, await
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -35,16 +35,17 @@ from gui.server_events.events_dispatcher import hideMissionDetails, showMissionD
 from gui.server_events.events_helpers import isLinkedSet
 from gui.shared import event_bus_handlers, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showDragonBoatIntroWindow
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv
+from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv, DragonBoatSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.app_loader import GuiGlobalSpaceID, IAppLoader
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IUISpamController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IUISpamController, IDragonBoatController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -67,7 +68,8 @@ MARATHONS_START_TAB_INDEX = 1
 NON_FLASH_TABS = (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,
  QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,
  QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS,
- QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
+ QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS,
+ QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS)
 TABS_WITHOUT_COMMON_MUSIC = (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,)
 for marathonIndex, marathon in enumerate(getMarathons(), MARATHONS_START_TAB_INDEX):
     TABS_DATA_ORDERED.insert(marathonIndex, TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, marathon.tabTooltip, marathon.tabTooltip, backport.text(marathon.label), marathon.prefix))
@@ -90,6 +92,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     battlePassCtrl = dependency.descriptor(IBattlePassController)
     uiSpamController = dependency.descriptor(IUISpamController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
+    dragonboatCtrl = dependency.descriptor(IDragonBoatController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -99,7 +102,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__marathonPrefix = None
         self.__needToScroll = False
         self._showMissionDetails = True
-        self.__builders = {QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS: group_packers.MarathonsDumbBuilder(),
+        self.__builders = {QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS: group_packers.DragonBoatDumbBuilder(),
+         QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS: group_packers.MarathonsDumbBuilder(),
          QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS: group_packers.MissionsGroupsBuilder(),
          QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS: group_packers.QuestsGroupsBuilder(),
          QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS: group_packers.VehicleGroupBuilder(),
@@ -136,6 +140,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__showFilter()
         if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.currentTab.setMarathon(prefix)
+        self.__showDragonBoatIntroScreen()
+        self.__showDragonBoatFinishScreen(Windowing.isWindowAccessible())
         if self.currentTab:
             self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, ctx=self))
             self.currentTab.setActive(True)
@@ -169,7 +175,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             return MarathonPageSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             return MissionsCategoriesSoundEnv
-        return MissionsEventsSoundEnv if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS else self.__sound_env__
+        if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS:
+            return MissionsEventsSoundEnv
+        return DragonBoatSoundEnv if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS else self.__sound_env__
 
     def _populate(self):
         super(MissionsPage, self)._populate()
@@ -188,12 +196,15 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         g_currentVehicle.onChanged += self.__updateHeader
         self.battlePassCtrl.onSeasonStateChanged += self.__updateHeader
         self.marathonsCtrl.onVehicleReceived += self.__onMarathonVehicleReceived
+        self.dragonboatCtrl.onSettingsChanged += self.__updateDragonBoatHeader
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         if self.marathonsCtrl.isAnyActive():
             TABS_DATA_ORDERED.insert(MARATHONS_START_TAB_INDEX, TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHON), None))
-        self.__updateHeader()
+        self.__updateDragonBoatHeader()
         self.__tryOpenMissionDetails()
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_ACTIVATE), EVENT_BUS_SCOPE.LOBBY)
+        self.__showDragonBoatIntroScreen()
+        self.__showDragonBoatFinishScreen(Windowing.isWindowAccessible())
         return
 
     def _invalidate(self, ctx=None):
@@ -216,6 +227,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 self.soundManager.playSound(exitEvent)
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         self.marathonsCtrl.onVehicleReceived -= self.__onMarathonVehicleReceived
+        self.dragonboatCtrl.onSettingsChanged -= self.__updateDragonBoatHeader
         g_currentVehicle.onChanged -= self.__updateHeader
         self.battlePassCtrl.onSeasonStateChanged -= self.__updateHeader
         self.removeListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__onPageUpdate, EVENT_BUS_SCOPE.LOBBY)
@@ -238,6 +250,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             self.__subTab = None
         if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
             viewPy.updateState(**self.__ctx)
+        if alias == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS:
+            viewPy.setCtx(self.__ctx)
         self.__fireTabChangedEvent()
         return
 
@@ -293,6 +307,18 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):
         self.destroy()
+
+    def __showDragonBoatIntroScreen(self):
+        isDragonBoatTab = self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS
+        isIntroScreenShown = AccountSettings.getSettings(DBOAT_INTRO_SCREEN_SHOWN)
+        if isDragonBoatTab and not isIntroScreenShown:
+            showDragonBoatIntroWindow()
+
+    def __showDragonBoatFinishScreen(self, isAccessbile):
+        isDragonBoatTab = self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS
+        boatFinished = self.dragonboatCtrl.checkFinishScreenToShow()
+        if isDragonBoatTab and isAccessbile and boatFinished:
+            self.dragonboatCtrl.showFinishScreen(boatFinished)
 
     def __showMarathonReward(self, isAccessible, prefix):
         isMarathonTab = self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
@@ -351,6 +377,31 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__filterApplied():
             self.as_blinkFilterCounterS()
 
+    def __updateDragonBoatHeader(self):
+        currentTabIndx = -1
+        resetCurrentTab = False
+        tabAdded = False
+        backupCurrentTabAlias = self.__currentTabAlias
+        for i, tabData in enumerate(TABS_DATA_ORDERED):
+            if tabData.alias == QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS:
+                currentTabIndx = i
+                break
+
+        if self.dragonboatCtrl.isAvailable() and currentTabIndx == -1:
+            TABS_DATA_ORDERED.insert(MARATHONS_START_TAB_INDEX, TabData(QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_DRAGON_BOAT_MARATHON, QUESTS.MISSIONS_TAB_DRAGON_BOAT_MARATHON, _ms(QUESTS.MISSIONS_TAB_LABEL_DRAGON_BOAT_MARATHON), None))
+            resetCurrentTab = True
+            tabAdded = True
+            backupCurrentTabAlias = self.__currentTabAlias
+        if not self.dragonboatCtrl.isAvailable() and currentTabIndx != -1:
+            TABS_DATA_ORDERED.pop(currentTabIndx)
+            resetCurrentTab = True
+        if resetCurrentTab:
+            tabAlias = backupCurrentTabAlias if tabAdded else None
+            caches.getNavInfo().setMissionsTab(tabAlias)
+            self.__currentTabAlias = tabAlias
+        self._invalidate(self.__ctx)
+        return
+
     def __updateHeader(self, updateTabsDataProvider=True):
         data = []
         tabs = []
@@ -360,6 +411,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 continue
             if headerTab in tabs:
                 continue
+            if self.dragonboatCtrl.isAvailable() and not self.marathonsCtrl.isAnyActive():
+                if headerTab['alias'] == 'MissionsGroupedView':
+                    continue
             tabs.append(headerTab)
             data.append(tab)
 
@@ -457,7 +511,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
          QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,
          QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS,
          QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,
-         QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS), self.__currentTabAlias not in NON_FLASH_TABS)
+         QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS,
+         QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS), self.__currentTabAlias not in NON_FLASH_TABS)
 
 
 class MissionViewBase(MissionsListViewBaseMeta):

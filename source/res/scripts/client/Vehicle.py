@@ -180,6 +180,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.refreshNationalVoice()
         self.__prevHealth = None
         self.__quickShellChangerIsActive = False
+        self.__isInDebuff = False
         return
 
     def reload(self):
@@ -926,6 +927,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.appearance = None
         self.isStarted = False
         self.__speedInfo.reset()
+        if self.__isInDebuff:
+            self.onDebuffEffectApplied(False)
         return
 
     def show(self, show):
@@ -1111,6 +1114,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def onDebuffEffectApplied(self, applied):
+        self.__isInDebuff = applied
         attachedVehicle = BigWorld.player().getVehicleAttached()
         if attachedVehicle is not None and self.id == attachedVehicle.id:
             playerDebuffInfo = DebuffInfo(duration=0.1 if applied else 0, animated=applied)

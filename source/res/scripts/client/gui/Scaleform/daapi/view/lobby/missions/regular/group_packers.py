@@ -244,6 +244,15 @@ class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
         return {}
 
 
+class DragonBoatDumbBuilder(GroupedEventsBlocksBuilder):
+
+    def _createGroupedEventsBlock(self, group):
+        return []
+
+    def _getEventsGroups(self):
+        return {}
+
+
 class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     linkedSet = dependency.descriptor(ILinkedSetController)
     lobbyContext = dependency.descriptor(ILobbyContext)

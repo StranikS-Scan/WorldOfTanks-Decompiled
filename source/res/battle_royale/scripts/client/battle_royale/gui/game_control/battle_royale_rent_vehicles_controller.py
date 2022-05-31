@@ -345,7 +345,7 @@ class BattleRoyaleRentVehiclesController(IBattleRoyaleRentVehiclesController):
         brCoin = currencies.get(BR_COIN, 0)
         if self.getBRCoinBalance(0) != brCoin:
             self.__onBalanceUpdate()
-            self.onBalanceUpdated()
+        self.onBalanceUpdated()
 
     def __updateBattleRoyale(self, _):
         self.onRentInfoUpdated()

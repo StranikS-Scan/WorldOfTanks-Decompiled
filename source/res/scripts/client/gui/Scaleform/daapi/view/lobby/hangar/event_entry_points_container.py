@@ -6,6 +6,7 @@ from operator import attrgetter
 from itertools import chain
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
+from gui.impl.lobby.dragon_boat.dragon_boat_entry_point import isDragonBoatEntryPointAvailable
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -27,7 +28,8 @@ _ADDITIONAL_SWFS_MAP = {}
 _ENTRY_POINT_ENABLED_VALIDATOR = {HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT: getCraftMachineEntryPointIsActive,
  RANKEDBATTLES_ALIASES.ENTRY_POINT: isRankedEntryPointAvailable,
  HANGAR_ALIASES.MAPBOX_ENTRY_POINT: isMapboxEntryPointAvailable,
- HANGAR_ALIASES.MARATHON_ENTRY_POINT: isMarathonEntryPointAvailable}
+ HANGAR_ALIASES.MARATHON_ENTRY_POINT: isMarathonEntryPointAvailable,
+ HANGAR_ALIASES.EVENT_ENTRANCE_POINT: isDragonBoatEntryPointAvailable}
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):

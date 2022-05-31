@@ -17,6 +17,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.app_loader.decorators import sf_lobby
+from gui.game_control.dragon_boat_controller import DBOAT_POINTS
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
@@ -670,6 +671,36 @@ class SelectableBonus(TokensBonus):
         return (self.getType(),)
 
 
+class DragonBoatPointsBonus(TokensBonus):
+
+    def isShowInGUI(self):
+        return True
+
+    def formatValue(self):
+        if self._value:
+            for _, d in self._value.iteritems():
+                return d.get('count', 0)
+
+        return None
+
+    def getValue(self):
+        return self.formatValue()
+
+    def getIconBySize(self, size):
+        bonusImg = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('dragonBoatPoints')
+        return backport.image(bonusImg()) if bonusImg else None
+
+    def getWrappedEpicBonusList(self):
+        awardItem = R.strings.tooltips.awardItem.dyn(self._name)
+        return [{'id': 0,
+          'type': 'custom/{}'.format(self.getName()),
+          'value': self.formatValue(),
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
+          'name': backport.text(awardItem.header()) if awardItem else '',
+          'description': backport.text(awardItem.body()) if awardItem else ''}]
+
+
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
     _FORMATTED_AMOUNT = ('ranked_202203_access',)
@@ -775,6 +806,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
+        if tID.startswith(DBOAT_POINTS):
+            result.append(DragonBoatPointsBonus('dragonBoatPoints', {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1079,6 +1112,12 @@ class VehiclesBonus(SimpleBonus):
              'type': 'vehicle/{}'.format(item.type),
              'value': 1,
              'icon': icons})
+            tmanRoleLevel = self.getTmanRoleLevel(vehInfo)
+            if tmanRoleLevel is not None:
+                result.append({'id': item.intCD,
+                 'type': 'crew/{}'.format(tmanRoleLevel),
+                 'value': 1,
+                 'icon': self.__getIconsForCrew()})
 
         return result
 
@@ -1236,6 +1275,14 @@ class VehiclesBonus(SimpleBonus):
          'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
          'specialArgs': [vehicle.intCD, tmanRoleLevel, rentExpiryTime]}
+
+    @staticmethod
+    def __getIconsForCrew():
+        icon = {}
+        for size in AWARDS_SIZES.ALL():
+            icon[size] = backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(size).tankmen())
+
+        return icon
 
 
 class BadgesGroupBonus(SimpleBonus):

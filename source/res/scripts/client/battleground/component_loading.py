@@ -40,13 +40,23 @@ class CompositeLoaderMixin(object):
         pass
 
 
-def loadComponentSystem(componentSystem, callback, resourceMapping=None):
+def loadComponentSystem(componentSystem, callback, resourceMapping=None, forceForegroundLoad=False):
     componentSystem = weakref.ref(componentSystem)
     resourceLoadingList = [ loader.resourceLoader for loader in resourceMapping.itervalues() ]
-    wrappedCallback = None if callback is None else stricted_loading.makeCallbackWeak(callback)
-    loadingCallback = functools.partial(_processLoadedList, componentSystem, wrappedCallback, resourceMapping)
-    BigWorld.loadResourceListBG(resourceLoadingList, loadingCallback)
-    return
+    if forceForegroundLoad:
+        loadedRes = BigWorld.loadResourceListFG(resourceLoadingList)
+        _processLoadedList(componentSystem, callback, resourceMapping, loadedRes)
+        return
+    else:
+        wrappedCallback = None if callback is None else stricted_loading.makeCallbackWeak(callback)
+        loadingCallback = functools.partial(_processLoadedList, componentSystem, wrappedCallback, resourceMapping)
+        BigWorld.loadResourceListBG(resourceLoadingList, loadingCallback)
+        return
+
+
+def loadResourceMapping(resourceMapping, callback, *args, **kwargs):
+    resourceLoadingList = [ loader.resourceLoader for loader in resourceMapping.itervalues() ]
+    BigWorld.loadResourceListBG(resourceLoadingList, stricted_loading.makeCallbackWeak(callback, *args, **kwargs))
 
 
 def _processLoadedList(componentSystemWeak, callback, resourceMapping, resourceList):

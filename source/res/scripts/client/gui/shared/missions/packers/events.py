@@ -136,9 +136,9 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
             if not questIcon:
                 _logger.error('Failed to prefetch daily quest icon from uiDecorator %s', str(iconId))
         else:
-            conditionModel = findFirstConditionModel(model.bonusCondition)
+            conditionModel = findFirstConditionModel(model.postBattleCondition)
             if conditionModel is None:
-                conditionModel = findFirstConditionModel(model.postBattleCondition)
+                conditionModel = findFirstConditionModel(model.bonusCondition)
                 if conditionModel is None:
                     _logger.warning('No condition found. Unable to define quest icon.')
                     return

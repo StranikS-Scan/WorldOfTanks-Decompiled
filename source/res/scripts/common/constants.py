@@ -1872,6 +1872,7 @@ class USER_SERVER_SETTINGS:
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
     CONTOUR = 106
+    DRAGON_BOAT = 107
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1880,7 +1881,8 @@ class USER_SERVER_SETTINGS:
      DOG_TAGS,
      GAME_EXTENDED_2,
      BATTLE_HUD,
-     CONTOUR)
+     CONTOUR,
+     DRAGON_BOAT)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1986,7 +1988,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
- USER_SERVER_SETTINGS.CONTOUR: 'Contour settings'}
+ USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
+ USER_SERVER_SETTINGS.DRAGON_BOAT: 'dragon boat settings'}
 
 class WG_GAMES:
     TANKS = 'wot'

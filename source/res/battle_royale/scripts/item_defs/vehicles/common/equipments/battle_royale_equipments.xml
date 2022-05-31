@@ -250,7 +250,7 @@
       <consumeAmmo>	true	</consumeAmmo>
       <disableAllyDamage>	true	</disableAllyDamage>
       <delay>	3.0	</delay>
-      <areaRadius>	15	</areaRadius>
+      <areaRadius>	4	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
       <noOwner>	false	</noOwner>
       <maxApplyRadius>	300	</maxApplyRadius>
@@ -699,7 +699,7 @@
       <botXRayFactor>	2	</botXRayFactor>
       <vehicleRemoveDelay>	0	</vehicleRemoveDelay>
       <clientRemovalNotificationDelay>	0	</clientRemovalNotificationDelay>
-      <areaRadius>	15	</areaRadius>
+      <areaRadius>	4	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
       <arenaAimLimits>
         <areaColor>	0xFFFF0000	</areaColor>
@@ -817,16 +817,16 @@
     <usagePrefab>	content/CGFPrefabs/steel_hunter/shot_passion.prefab	</usagePrefab>
     <ownerPrefab></ownerPrefab>
     <script>	ShotPassion	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <duration>	20	</duration>
       <damageIncreasePerShot>	0.15	</damageIncreasePerShot>
       <maxDamageIncreasePerShot>	0.75	</maxDamageIncreasePerShot>
       <increaseFactors>
-        <chassis-shotDispersionFactors-movement>	3.0	</chassis-shotDispersionFactors-movement>
-        <chassis-shotDispersionFactors-rotation>	3.0	</chassis-shotDispersionFactors-rotation>
-        <gun-shotDispersionFactors-turretRotation>	3.0	</gun-shotDispersionFactors-turretRotation>
+        <chassis-shotDispersionFactors-movement>	2.0	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	2.0	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-turretRotation>	2.0	</gun-shotDispersionFactors-turretRotation>
         <gun-reloadTime>	1.0	</gun-reloadTime>
-        <gun-aimingTime>	3.0	</gun-aimingTime>
+        <gun-aimingTime>	1.5	</gun-aimingTime>
       </increaseFactors>
     </script>
   </shotPassion>

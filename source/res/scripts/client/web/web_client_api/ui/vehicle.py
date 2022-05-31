@@ -359,6 +359,14 @@ class _MarathonRewardScreen(W2CSchema):
     marathon_prefix = Field(required=True, type=basestring)
 
 
+class _VehicleWithStylePreviewSchema(W2CSchema):
+    vehicle_id = Field(required=True, type=int)
+    style_id = Field(required=True, type=int)
+    back_url = Field(required=False, type=basestring)
+    items = Field(required=False, type=list, validator=_validateItemsPack)
+    hidden_blocks = Field(required=False, type=list, default=None, validator=_validateBlocks)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -493,6 +501,15 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_MarathonRewardScreen, 'marathon_reward_screen')
     def openMarathonRewardScreen(self, cmd):
         showMarathonRewardScreen(cmd.marathon_prefix)
+
+    @w2c(_VehicleWithStylePreviewSchema, 'vehicle_preview_with_style')
+    def openVehicleWithStylePreview(self, cmd):
+        vehicle = self.__itemsCache.items.getItemByCD(cmd.vehicle_id)
+        styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
+        if styleInfo.mayInstall(vehicle):
+            event_dispatcher.showVehiclePreviewWithStyleWithoutBottomPanel(vehCD=cmd.vehicle_id, backCallback=self._getVehiclePreviewReturnCallback(cmd), previewAlias=self._getVehiclePreviewReturnAlias(cmd), style=styleInfo)
+        else:
+            _pushInvalidPreviewMessage()
 
     def _openVehicleStylePreview(self, cmd):
         if cmd.vehicle_cd:

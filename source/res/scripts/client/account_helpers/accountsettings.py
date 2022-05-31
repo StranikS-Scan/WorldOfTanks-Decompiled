@@ -193,6 +193,8 @@ CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
+DBOAT_INTRO_SCREEN_SHOWN = 'dboatIntroScreenShown'
+DBOAT_WIDGET_SHOW = 'dboatWidgetShow'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -886,7 +888,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
-                SHOW_DEMO_ACC_REGISTRATION: False},
+                SHOW_DEMO_ACC_REGISTRATION: False,
+                DBOAT_INTRO_SCREEN_SHOWN: False,
+                DBOAT_WIDGET_SHOW: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

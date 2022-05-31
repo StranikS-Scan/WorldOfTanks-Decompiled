@@ -134,6 +134,9 @@ class MarathonEvent(object):
     def isEnabled(self):
         return self._data.isEnabled and not self._bootcamp.isInBootcamp()
 
+    def isFlagVisible(self):
+        return self._data.isFlagVisible
+
     def isAvailable(self):
         return self._data.isAvailable
 
@@ -171,7 +174,7 @@ class MarathonEvent(object):
          'flagMain': self.getHangarFlag(),
          'tooltip': self.__getTooltip(),
          'enable': self.isAvailable(),
-         'visible': self.isEnabled()}
+         'visible': self.isFlagVisible() and self.isEnabled()}
 
     def checkForWarnings(self, vehicle):
         if self.prbEntity.getEntityType() != constants.ARENA_GUI_TYPE.RANDOM:

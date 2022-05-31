@@ -25,6 +25,12 @@ class VehicleShotPassionComponent(BigWorld.DynamicScriptComponent):
         self.__onUpdated()
 
     def onDestroy(self):
+        self.__destroy()
+
+    def onLeaveWorld(self, *args):
+        self.__destroy()
+
+    def __destroy(self):
         self.__onUpdated(ShotPassionInfo(0.0, 0))
         self.__es.unsubscribeFromAllEvents()
         self.__es = None

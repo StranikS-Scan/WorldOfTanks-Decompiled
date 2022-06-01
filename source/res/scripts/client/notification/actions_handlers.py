@@ -10,7 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl, getBattlePassCoinProductsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerSeniorityAwardsUrl, getBattlePassPointsProductsUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -1015,7 +1015,7 @@ class _OpenBattlePassPointsShop(_NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        showShop(getBattlePassCoinProductsUrl())
+        showShop(getBattlePassPointsProductsUrl())
 
 
 class _OpenChapterChoiceView(_OpenBattlePassProgressionView):

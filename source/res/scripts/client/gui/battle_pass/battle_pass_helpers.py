@@ -3,7 +3,7 @@
 import logging
 from collections import namedtuple
 import typing
-from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_EXTRA_STARTED
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassState
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
@@ -24,7 +24,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
-    from typing import Dict
+    from typing import Dict, List
     from gui.server_events.bonuses import TmanTemplateTokensBonus
 _logger = logging.getLogger(__name__)
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
@@ -74,20 +74,28 @@ def getLevelFromStats(seasonStats, seasonHistory):
     return (state, level)
 
 
+def getBattlePassUrl(urlPathName):
+    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePass.get(urlPathName)))
+
+
 def getInfoPageURL():
-    return GUI_SETTINGS.battlePass.get('infoPage')
+    return getBattlePassUrl('infoPage')
 
 
 def getExtraInfoPageURL():
-    return GUI_SETTINGS.battlePass.get('extraInfoPage')
+    return getBattlePassUrl('extraInfoPage')
 
 
 def getIntroVideoURL():
-    return GUI_SETTINGS.battlePass.get('introVideo')
+    return getBattlePassUrl('introVideo')
 
 
 def getExtraIntroVideoURL():
-    return GUI_SETTINGS.battlePass.get('extraIntroVideo')
+    return getBattlePassUrl('extraIntroVideo')
+
+
+def getIntroSlidesNames():
+    return GUI_SETTINGS.battlePass.get('introSlides')
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)

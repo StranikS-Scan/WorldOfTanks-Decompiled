@@ -78,7 +78,7 @@ class BattlePassActivateChapterProcessor(Processor):
         else:
             textRes = R.strings.system_messages.battlePass.activateChapter.success()
             messageType = SM_TYPE.BattlePassActivateChapter
-        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
+        chapterName = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(self.__chapterID).value).fullName.num(self.__chapterID)())
         SystemMessages.pushMessage(backport.text(textRes, chapter=text_styles.credits(chapterName)), type=messageType)
 
 
@@ -94,7 +94,7 @@ class BuyBattlePass(Processor):
         return makeI18nError(sysMsgKey='battlePass_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
-        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
+        chapterName = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(self.__chapterID).value).fullName.num(self.__chapterID)())
         return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
          'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName)),
          'additionalText': self.__makeGoldString(self.__battlePassController.getBattlePassCost(self.__chapterID).get(Currency.GOLD, 0))})

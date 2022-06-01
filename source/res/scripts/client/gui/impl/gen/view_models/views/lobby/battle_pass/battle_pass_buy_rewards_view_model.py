@@ -14,7 +14,7 @@ class PackageType(IntEnum):
 class BattlePassBuyRewardsViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(BattlePassBuyRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -49,6 +49,12 @@ class BattlePassBuyRewardsViewModel(ViewModel):
     def setChapterID(self, value):
         self._setNumber(5, value)
 
+    def getFinalReward(self):
+        return self._getString(6)
+
+    def setFinalReward(self, value):
+        self._setString(6, value)
+
     def _initialize(self):
         super(BattlePassBuyRewardsViewModel, self)._initialize()
         self._addViewModelProperty('nowRewards', UserListModel())
@@ -57,3 +63,4 @@ class BattlePassBuyRewardsViewModel(ViewModel):
         self._addNumberProperty('toLevel', 0)
         self._addNumberProperty('packageState')
         self._addNumberProperty('chapterID', 0)
+        self._addStringProperty('finalReward', '')

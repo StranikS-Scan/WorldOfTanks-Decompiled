@@ -8,14 +8,16 @@ import typing
 from enum import Enum, unique
 from battle_pass_integration import getBattlePassByGameMode
 from constants import ARENA_BONUS_TYPE, MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
+from debug_utils import LOG_ERROR
 from items import parseIntCompactDescr, vehicles
 if typing.TYPE_CHECKING:
-    from typing import Dict, Generator, Optional, Sequence, Tuple, Union, List
+    from typing import Dict, Generator, Sequence, Tuple, Union, List
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
 BATTLE_PASS_TOKEN_PASS = BATTLE_PASS_TOKEN_PREFIX + 'pass:'
 BATTLE_PASS_ENTITLEMENT_PASS = BATTLE_PASS_TOKEN_PASS.replace(':', '_')
 BATTLE_PASS_SHOP_ENTITLEMENT_PASS = 'battle_pass_shop_'
 BATTLE_PASS_OFFER_TOKEN_PREFIX = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX
+BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX = BATTLE_PASS_TOKEN_PREFIX + 'q_chain:'
 BATTLE_PASS_TOKEN_TROPHY_OFFER = BATTLE_PASS_OFFER_TOKEN_PREFIX + 'trophy:'
 BATTLE_PASS_TOKEN_TROPHY_GIFT_OFFER = BATTLE_PASS_OFFER_TOKEN_PREFIX + 'trophy_gift:'
 BATTLE_PASS_TOKEN_NEW_DEVICE_MI_OFFER = BATTLE_PASS_OFFER_TOKEN_PREFIX + 'new_device_mi:'
@@ -47,12 +49,19 @@ BATTLE_PASS_PDATA_KEY = 'battlePass'
 BATTLE_PASS_CONFIG_NAME = 'battlePass_config'
 BATTLE_PASS_SELECT_BONUS_NAME = 'battlePassSelectToken'
 BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME = 'styleProgressToken'
+BATTLE_PASS_Q_CHAIN_BONUS_NAME = 'battlePassQuestChainToken'
 BATTLE_PASS_BADGE_ID = 90
 USE_BATTLE_PASS_BADGE = False
 MAX_BADGE_LEVEL = 100
 DEFAULT_REWARD_LEVEL = 0
 NON_VEH_CD = 0
 MAX_NON_CHAPTER_POINTS = 1000000
+
+@unique
+class FinalReward(Enum):
+    STYLE = 'style'
+    TANKMAN = 'tankman'
+
 
 @unique
 class CurrencyBP(Enum):
@@ -247,10 +256,16 @@ class BattlePassConfig(object):
 
     def __init__(self, config):
         self._config = config
-        self._season = config.get('season', {})
-        self._rewards = config.get('rewards', {})
-        self._regularChapterIds = set((k for k, v in self.chapters.iteritems() if not v['extra']))
-        self._extraChapterIds = set((k for k, v in self.chapters.iteritems() if v['extra']))
+        self._season = config.get('season') or {}
+        self._rewards = config.get('rewards') or {}
+        self._regularChapterIds = set()
+        self._extraChapterIds = set()
+        if not self.chapters:
+            return
+        for chapterID, chapterData in self.chapters.iteritems():
+            if chapterData['extra']:
+                self._extraChapterIds.add(chapterID)
+            self._regularChapterIds.add(chapterID)
 
     @property
     def mode(self):
@@ -291,6 +306,13 @@ class BattlePassConfig(object):
     @property
     def vehCDCaps(self):
         return self._season.get('vehCDCaps', {})
+
+    def getRewardType(self, chapterID):
+        if chapterID not in self.chapters:
+            LOG_ERROR('BattlePass wrong chapter={}, exists: {}'.format(chapterID, self.chapters))
+            return None
+        else:
+            return FinalReward(self.chapters[chapterID]['finalRewardType'])
 
     def getChapterLevels(self, chapterID):
         return self.getChapter(chapterID).get('levels', (0,))

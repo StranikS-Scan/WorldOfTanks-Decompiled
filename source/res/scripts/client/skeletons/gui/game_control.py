@@ -4,6 +4,7 @@ import typing
 from constants import ARENA_BONUS_TYPE
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence
+    from battle_pass_common import FinalReward
     from Event import Event
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
@@ -1624,6 +1625,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getExtraChapterID(self):
+        raise NotImplementedError
+
+    def getRewardType(self, chapterID):
         raise NotImplementedError
 
     def isChapterExists(self, chapterID):

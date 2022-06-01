@@ -78,7 +78,7 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
 
 
 class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __itemsCache = dependency.descriptor(IItemsCache)
 
@@ -87,53 +87,57 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     @property
     def chapterID(self):
-        return self.__battlePassController.getCurrentChapterID()
+        return self.__battlePass.getCurrentChapterID()
 
     @property
     def level(self):
-        return self.__battlePassController.getCurrentLevel()
+        return self.__battlePass.getCurrentLevel()
 
     @property
     def isChapterChosen(self):
-        return self.__battlePassController.hasActiveChapter()
+        return self.__battlePass.hasActiveChapter()
 
     @property
     def isBought(self):
         chapterID = self.chapterID
-        if chapterID and self.__battlePassController.isBought(chapterID=chapterID):
+        if chapterID and self.__battlePass.isBought(chapterID=chapterID):
             return True
-        chapterIDs = self.__battlePassController.getChapterIDs()
-        return all((self.__battlePassController.isBought(chapterID=chapter) for chapter in chapterIDs))
+        chapterIDs = self.__battlePass.getChapterIDs()
+        return all((self.__battlePass.isBought(chapterID=chapter) for chapter in chapterIDs))
 
     @property
     def isCompleted(self):
-        chapterIDs = self.__battlePassController.getChapterIDs()
-        return all((self.__battlePassController.isChapterCompleted(chapter) for chapter in chapterIDs))
+        chapterIDs = self.__battlePass.getChapterIDs()
+        return all((self.__battlePass.isChapterCompleted(chapter) for chapter in chapterIDs))
 
     @property
     def isPaused(self):
-        return self.__battlePassController.isPaused() or not self.__battlePassController.isGameModeEnabled(self._getCurrentArenaBonusType())
+        return self.__battlePass.isPaused() or not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType())
 
     @property
     def hasExtra(self):
-        return self.__battlePassController.hasExtra()
+        return self.__battlePass.hasExtra()
 
     @property
     def battlePassState(self):
-        return self.__battlePassController.getState()
+        return self.__battlePass.getState()
 
     @property
     def progress(self):
-        points, limit = self.__battlePassController.getLevelProgression(self.chapterID)
+        points, limit = self.__battlePass.getLevelProgression(self.chapterID)
         return FULL_PROGRESS / (limit or FULL_PROGRESS) * points
 
     @property
     def notChosenRewardCount(self):
-        return self.__battlePassController.getNotChosenRewardCount()
+        return self.__battlePass.getNotChosenRewardCount()
 
     @property
     def freePoints(self):
         return self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0)
+
+    @property
+    def finalReward(self):
+        return self.__battlePass.getRewardType(self.chapterID)
 
     def onPrbEntitySwitched(self):
         self._updateData()
@@ -160,12 +164,12 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return ((events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),)
 
     def _getEvents(self):
-        return ((self.__battlePassController.onPointsUpdated, self._updateData),
-         (self.__battlePassController.onBattlePassIsBought, self._updateData),
-         (self.__battlePassController.onSeasonStateChanged, self._updateData),
-         (self.__battlePassController.onExtraChapterExpired, self._updateData),
-         (self.__battlePassController.onBattlePassSettingsChange, self._updateData),
-         (self.__battlePassController.onChapterChanged, self._updateData),
+        return ((self.__battlePass.onPointsUpdated, self._updateData),
+         (self.__battlePass.onBattlePassIsBought, self._updateData),
+         (self.__battlePass.onSeasonStateChanged, self._updateData),
+         (self.__battlePass.onExtraChapterExpired, self._updateData),
+         (self.__battlePass.onBattlePassSettingsChange, self._updateData),
+         (self.__battlePass.onChapterChanged, self._updateData),
          (g_playerEvents.onClientUpdated, self.__onClientUpdated))
 
     def _addListeners(self):
@@ -182,7 +186,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView() if not self.chapterID else R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
 
     def _getNotChosenRewardCount(self):
-        return self.__battlePassController.getNotChosenRewardCount()
+        return self.__battlePass.getNotChosenRewardCount()
 
     def _getCurrentArenaBonusType(self):
         return getSupportedCurrentArenaBonusType(self._getQueueType())
@@ -200,7 +204,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
 
 class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __slots__ = ('__isSmall', '__notifications', '__isAttentionTimerStarted')
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -291,7 +295,9 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setHasBattlePass(self.isBought)
             tx.setAnimState(self.__getAnimationState())
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
-            if not self.__battlePassController.isGameModeEnabled(self._getCurrentArenaBonusType()):
+            if self.chapterID:
+                tx.setFinalReward(self.finalReward.value)
+            if not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType()):
                 tx.setBattleType(getPreQueueName(self._getQueueType(), True))
         self._saveLastState()
 

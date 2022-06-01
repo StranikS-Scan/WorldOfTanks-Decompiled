@@ -3256,4 +3256,120 @@
       <tags>	hiddenInUI	</tags>
     </paint>
   </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2022 DG	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	316	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_03.png	</texture>
+      <color>	39 45 23 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp8_dg	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2022 UM	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	317	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/bp8_um	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2022 O	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	318	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
+      <color>	73 57 55 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.095	</metallic>
+      <userString>	#vehicle_customization:repaint/bp8_o	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2022 BS	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	319	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp8_bs	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
 </custom_paints.xml>

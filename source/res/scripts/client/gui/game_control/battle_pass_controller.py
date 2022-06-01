@@ -20,7 +20,7 @@ from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from helpers.events_handler import EventsHandler
 from helpers.server_settings import serverSettingsChangeListener
-from shared_utils import first, findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -150,6 +150,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getExtraChapterID(self):
         return findFirst(self.isExtraChapter, self.getChapterIDs(), 0)
+
+    def getRewardType(self, chapterID):
+        return self.__getConfig().getRewardType(chapterID)
 
     def isChapterExists(self, chapterID):
         return chapterID in self.getChapterIDs()
@@ -390,14 +393,15 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return result
 
     def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
-        winList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, gameMode=gameMode)
-        pointList = self.__getPackedBonusPointsList(vehTypeCompDescr=vehCompDesc, isWinner=False, gameMode=gameMode)
+        winList = self.__getConfig().bonusPointsList(vehCompDesc, isWinner=True, gameMode=gameMode)
+        pointsList = list(self.__getConfig().bonusPointsList(vehCompDesc, isWinner=False, gameMode=gameMode))
+        pointsList[0] = winList[0]
+        pointList = [ (key, len(list(group))) for key, group in groupby(pointsList) ]
         count = 0
         result = []
         if not winList or not pointList:
             _logger.error('Failed to get bonus points information! Check server settings are correct for Battle Royale.')
             return result
-        pointList[0] = winList[0]
         for item in pointList:
             points, pointsCount = item
             count += pointsCount

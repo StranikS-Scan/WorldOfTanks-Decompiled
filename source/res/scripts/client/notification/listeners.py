@@ -6,6 +6,7 @@ import collections
 import weakref
 from collections import defaultdict
 from PlayerEvents import g_playerEvents
+from battle_pass_common import FinalReward
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED
@@ -1015,16 +1016,14 @@ class BattlePassListener(_NotificationListener):
         text = backport.text(textRes())
         SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
 
-    @staticmethod
-    def __notifyStartExtra(chapterID):
+    def __notifyStartExtra(self, chapterID):
         header = backport.text(R.strings.system_messages.battlePass.extraStarted.header())
-        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+        chapterName = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
 
-    @staticmethod
-    def __notifyFinishExtra(chapterID):
+    def __notifyFinishExtra(self, chapterID):
         chapterID = int(chapterID)
-        textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
+        textRes = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
         if not textRes.exists():
             _logger.warning('There is no text for given chapterID: %d', chapterID)
             return
@@ -1035,7 +1034,7 @@ class BattlePassListener(_NotificationListener):
 
     def __notifyExtraWillEndSoon(self, chapterID):
         chapterID = int(chapterID)
-        textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
+        textRes = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
         if not textRes.exists() or not self.__battlePassController.isChapterExists(chapterID):
             _logger.warning('There is no text or config for given chapterID: %d', chapterID)
             return
@@ -1076,17 +1075,20 @@ class BattlePassListener(_NotificationListener):
     def __pushFinished(self):
         styles = []
         for chapterID in self.__battlePassController.getChapterIDs():
-            styleCD, styleLevel = getStyleInfoForChapter(chapterID)
-            style = self.__itemsCache.items.getItemByCD(styleCD)
-            if style.fullInventoryCount() and styleLevel != style.getMaxProgressionLevel():
-                styles.append(backport.text(R.strings.system_messages.battlePass.switch_disable.incompleteStyle(), styleName=style.userName))
+            if self.__battlePassController.getRewardType(chapterID) == FinalReward.STYLE:
+                styleCD, styleLevel = getStyleInfoForChapter(chapterID)
+                style = self.__itemsCache.items.getItemByCD(styleCD)
+                if style.fullInventoryCount() and styleLevel != style.getMaxProgressionLevel():
+                    styles.append(backport.text(R.strings.system_messages.battlePass.switch_disable.incompleteStyle(), styleName=style.userName))
 
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_disable.title(), seasonNum=self.__battlePassController.getSeasonNum()),
          'additionalText': '\n'.join(styles)})
 
     def __pushStarted(self):
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.title(), seasonNum=self.__battlePassController.getSeasonNum()),
-         'additionalText': ''})
+        rewardTypes = set((self.__battlePassController.getRewardType(chapterID) for chapterID in self.__battlePassController.getChapterIDs()))
+        for rewardType in rewardTypes:
+            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).title(), seasonNum=self.__battlePassController.getSeasonNum()),
+             'additionalText': ''})
 
     def __pushEnabled(self):
         expiryTime = self.__battlePassController.getSeasonFinishTime()

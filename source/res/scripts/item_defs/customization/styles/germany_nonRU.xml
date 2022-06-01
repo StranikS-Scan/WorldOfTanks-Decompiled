@@ -1,0 +1,139 @@
+<germany_nonRU.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G56_E-100	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	614	</id>
+      <texture>	gui/maps/vehicles/styles/G56_E-100_BP8_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G56_E-100_BP8_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G56_E-100_BP8_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G56_E-100_BP8_3DSt	</userString>
+      <tags>	styleProgression	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 tank_upgrade_03_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 tank_upgrade_04_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	38000	</slotId>
+                  <id>	24	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	18	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	631	</id>
+      <texture>	gui/maps/vehicles/styles/bp8_um.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp8_um	</userString>
+      <description>	#vehicle_customization:special_style/bp8_um_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	411	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	18	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	317	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	728	</id>
+              <tags>	formfactor_square safe left	</tags>
+            </item>
+            <item>
+              <id>	729	</id>
+              <tags>	formfactor_square safe right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</germany_nonRU.xml>

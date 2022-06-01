@@ -72,6 +72,11 @@
           <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Hull.model	</exploded>
         </R148_Object_430_U_3Dst>
+        <R148_Object_430_U_BP8_3DSt>
+          <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Hull.model	</exploded>
+        </R148_Object_430_U_BP8_3DSt>
       </sets>
     </models>
     <swinging>
@@ -96,10 +101,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.280683 0.259618 2.87936	</rayStart>
-        <rayEnd>	-0.280683 0.136832 2.80802	</rayEnd>
+        <rayStart>	-0.36447 0.200979 2.89325	</rayStart>
+        <rayEnd>	-0.36447 0.153806 2.86584	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.25	</size>
+        <size>	0.19	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -970,6 +975,11 @@
             <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Chassis.model	</exploded>
           </R148_Object_430_U_3Dst>
+          <R148_Object_430_U_BP8_3DSt>
+            <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Chassis.model	</exploded>
+          </R148_Object_430_U_BP8_3DSt>
         </sets>
       </models>
       <traces>
@@ -1084,6 +1094,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <R148_Object_430_U_BP8_3DSt>
+            <segmentModelLeft>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/track/segment.model	</segmentModelRight>
+          </R148_Object_430_U_BP8_3DSt>
+        </modelSets>
       </splineDesc>
       <trackThickness>	0.0018	</trackThickness>
       <trackNodes>
@@ -1373,6 +1389,11 @@
             <model>	vehicles/russian/R148_Object_430_U/track/segment.model	</model>
             <length>	0.130517	</length>
           </mainSegment>
+          <modelSets>
+            <R148_Object_430_U_BP8_3DSt>
+              <mainSegmentModel>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/track/segment.model	</mainSegmentModel>
+            </R148_Object_430_U_BP8_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1568,6 +1589,11 @@
             <model>	vehicles/russian/R148_Object_430_U/track/segment.model	</model>
             <length>	0.130318	</length>
           </mainSegment>
+          <modelSets>
+            <R148_Object_430_U_BP8_3DSt>
+              <mainSegmentModel>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/track/segment.model	</mainSegmentModel>
+            </R148_Object_430_U_BP8_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1856,6 +1882,11 @@
                 <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Gun_01.model	</exploded>
               </R148_Object_430_U_3Dst>
+              <R148_Object_430_U_BP8_3DSt>
+                <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </R148_Object_430_U_BP8_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1926,10 +1957,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000000 0.0343063 1.67363	</rayStart>
-              <rayEnd>	0.0257557 -0.0378744 1.67117	</rayEnd>
+              <rayStart>	0.000000 0.0343063 1.84962	</rayStart>
+              <rayEnd>	-0.0985105 0.00566126 1.84817	</rayEnd>
               <rayUp>	0.11 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.73	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1959,6 +1990,11 @@
             <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Turret_01.model	</exploded>
           </R148_Object_430_U_3Dst>
+          <R148_Object_430_U_BP8_3DSt>
+            <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_BP8_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </R148_Object_430_U_BP8_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2601,6 +2637,13 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	-0.030141	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <compatibleModels>	R148_Object_430_U_BP8_3DSt	</compatibleModels>
         </slot>
       </customizationSlots>
       <customization>

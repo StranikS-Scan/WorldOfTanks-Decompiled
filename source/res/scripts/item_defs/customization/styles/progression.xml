@@ -225,17 +225,17 @@
       <level2>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level2>
       <level3>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level3>
       <level4>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level4>
     </levels>
   </progress>
@@ -249,22 +249,58 @@
       <level2>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level2>
       <level3>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level3>
       <level4>
         <price>	750	  <gold></gold>
         </price>
-        <notInShop>	True	</notInShop>
+        <notInShop>	False	</notInShop>
       </level4>
     </levels>
   </progress>
   <progress>
     <id>	602	</id>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <levels>
+      <level1>
+        <default></default>
+      </level1>
+      <level2>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	False	</notInShop>
+      </level2>
+      <level3>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	False	</notInShop>
+      </level3>
+      <level4>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	False	</notInShop>
+      </level4>
+    </levels>
+  </progress>
+  <progress>
+    <id>	594	</id>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <levels>
+      <level1>
+        <default></default>
+      </level1>
+      <level2>
+        <notInShop>	False	</notInShop>
+      </level2>
+    </levels>
+  </progress>
+  <progress>
+    <id>	614	</id>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <levels>
       <level1>
@@ -288,15 +324,51 @@
     </levels>
   </progress>
   <progress>
-    <id>	594	</id>
-    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <id>	615	</id>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <levels>
       <level1>
         <default></default>
       </level1>
       <level2>
-        <notInShop>	False	</notInShop>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
       </level2>
+      <level3>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
+      </level3>
+      <level4>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
+      </level4>
+    </levels>
+  </progress>
+  <progress>
+    <id>	616	</id>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <levels>
+      <level1>
+        <default></default>
+      </level1>
+      <level2>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
+      </level2>
+      <level3>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
+      </level3>
+      <level4>
+        <price>	750	  <gold></gold>
+        </price>
+        <notInShop>	True	</notInShop>
+      </level4>
     </levels>
   </progress>
 </progression.xml>

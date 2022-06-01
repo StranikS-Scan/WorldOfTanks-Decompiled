@@ -1190,8 +1190,10 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
-    BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
-    BATTLEPASS_SWITCH_STARTED_BODY = '#system_messages:battlePass/switch_started/body'
+    BATTLEPASS_SWITCH_STARTED_STYLE_TITLE = '#system_messages:battlePass/switch_started/style/title'
+    BATTLEPASS_SWITCH_STARTED_STYLE_BODY = '#system_messages:battlePass/switch_started/style/body'
+    BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE = '#system_messages:battlePass/switch_started/tankman/title'
+    BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY = '#system_messages:battlePass/switch_started/tankman/body'
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
@@ -2607,8 +2609,10 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
-     BATTLEPASS_SWITCH_STARTED_TITLE,
-     BATTLEPASS_SWITCH_STARTED_BODY,
+     BATTLEPASS_SWITCH_STARTED_STYLE_TITLE,
+     BATTLEPASS_SWITCH_STARTED_STYLE_BODY,
+     BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE,
+     BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY,
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,

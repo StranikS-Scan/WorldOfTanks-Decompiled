@@ -9,7 +9,7 @@
   <postProgressionTree>	role_HT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	37	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -72,6 +72,13 @@
       <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB115_Gonsalo_OCN_3Dst>
+          <undamaged>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB115_Gonsalo_OCN_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1480,6 +1487,32 @@
         <anchorShift>	0.161105	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15099	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <compatibleModels>	GB115_Gonsalo_OCN_3Dst	</compatibleModels>
+        <position>	0.000001 1.35895 2.56245	</position>
+        <rotation>	0.475438 0.000001 3.141592	</rotation>
+        <scale>	1.1094 1.109404 1.109404	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	4368	</showOn>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	0	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15100	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <compatibleModels>	GB115_Gonsalo_OCN_3Dst	</compatibleModels>
+        <position>	-0.16232 1.009595 1.540358	</position>
+        <rotation>	1.570796 -0.633085 -2.200655	</rotation>
+        <scale>	1.124673 4 1.124673	</scale>
+        <doubleSided>	true	</doubleSided>
+        <showOn>	4368	</showOn>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	1.38	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	3 3 0.000000 0.000000	</tiling>
@@ -1516,6 +1549,13 @@
         <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB115_Gonsalo_OCN_3Dst>
+            <undamaged>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB115_Gonsalo_OCN_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2382,13 +2422,20 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.5	</aimingTime>
+          <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.150	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB115_Gonsalo/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB115_Gonsalo/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB115_Gonsalo/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB115_Gonsalo_OCN_3Dst>
+                <undamaged>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB115_Gonsalo_OCN_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB115_Gonsalo/collision/Gun_01.model	</collisionModelServer>
@@ -2771,6 +2818,19 @@
               <anchorShift>	0.271793	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45020	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	GB115_Gonsalo_OCN_3Dst	</compatibleModels>
+              <position>	-0.001519 1.914315 0.498377	</position>
+              <rotation>	0.580147 0 3.141593	</rotation>
+              <scale>	1.941908 1.941908 1.941908	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4352	</showOn>
+              <clipAngle>	0	</clipAngle>
+              <anchorShift>	0.49	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000000 0.00133 2.52504	</rayStart>
@@ -2802,6 +2862,13 @@
         <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB115_Gonsalo_OCN_3Dst>
+            <undamaged>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB115_Gonsalo/_skins/GB115_Gonsalo_OCN_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB115_Gonsalo_OCN_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB112_Caliban/collision/Turret_01.model	</collisionModelServer>
@@ -3034,7 +3101,7 @@
       <engines>
         <Meteorite_Mk_202_Gonsalo>
           <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
         </Meteorite_Mk_202_Gonsalo>
       </engines>
       <chassis>

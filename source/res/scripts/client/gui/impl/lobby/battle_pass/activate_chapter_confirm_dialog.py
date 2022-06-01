@@ -16,6 +16,7 @@ _CHAPTER_RES = R.strings.battle_pass.chapter
 
 class ChapterConfirm(ViewImpl):
     __slots__ = ('__prevChapterID', '__nextChapterID')
+    __battlePass = dependency.descriptor(IBattlePassController)
     _COMMON_SOUND_SPACE = ACTIVATE_CHAPTER_SOUND_SPACE
 
     def __init__(self, prevChapterID, nextChapterID):
@@ -34,7 +35,10 @@ class ChapterConfirm(ViewImpl):
         super(ChapterConfirm, self)._onLoading()
         with self.viewModel.transaction() as model:
             model.setPrevChapter(self.__prevChapterID)
+            if self.__prevChapterID:
+                model.setPrevFinalReward(self.__battlePass.getRewardType(self.__prevChapterID).value)
             model.setNextChapter(self.__nextChapterID)
+            model.setNextFinalReward(self.__battlePass.getRewardType(self.__nextChapterID).value)
 
 
 class ActivateChapterConfirmDialog(DialogTemplateView):

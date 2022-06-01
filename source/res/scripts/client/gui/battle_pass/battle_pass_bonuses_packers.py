@@ -1,29 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_bonuses_packers.py
 import logging
-import typing
 from contextlib import contextmanager
-from battle_pass_common import BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
-from gui.battle_pass.battle_pass_helpers import getStyleForChapter, getOfferTokenByGift
+import typing
+from battle_pass_common import BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleForChapter
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, CrewBookBonusUIPacker, SimpleBonusUIPacker, BlueprintBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, VehiclesBonusUIPacker
-from gui.server_events.recruit_helper import getRecruitInfo
+from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap
 from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus
+    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -39,9 +39,11 @@ def getBattlePassBonusPacker():
      'blueprints': BattlePassBlueprintsBonusPacker(),
      'slots': BattlePassSlotsBonusPacker(),
      'vehicles': BattlePassVehiclesBonusUIPacker(),
+     'freeXP': BattlePassFreeXPPacker(),
      Currency.CREDITS: ExtendedCreditsBonusUIPacker(),
      BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
      BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
+     BATTLE_PASS_Q_CHAIN_BONUS_NAME: QuestChainBonusPacker(),
      Currency.BPCOIN: CoinBonusPacker()})
     return BonusUIPacker(mapping)
 
@@ -71,6 +73,11 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
                         item.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
                     bonusIndexTotal += 1
 
+    return
+
+
+def packSpecialTooltipData(specialReward, specialRewardItems, *args):
+    specialRewardItems[specialReward] = TooltipData(tooltip=None, isSpecial=True, specialAlias=specialReward, specialArgs=args)
     return
 
 
@@ -405,6 +412,28 @@ class CoinBonusPacker(SimpleBonusUIPacker):
         return [R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView()]
 
 
+class QuestChainBonusPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        return [cls._packSingleBonus(bonus, None)]
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = RewardItemModel()
+        model.setName(bonus.getName())
+        model.setBigIcon(bonus.getName())
+        return model
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [R.views.lobby.battle_pass.tooltips.BattlePassQuestsChainTooltipView()]
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        return [TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[bonus.tokenID])]
+
+
 class BattlePassSlotsBonusPacker(SimpleBonusUIPacker):
 
     @classmethod
@@ -434,6 +463,19 @@ class BattlePassVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setVehicleLvl(vehicle.level)
         model.setVehicleName(vehicle.userName)
         model.setVehicleType(vehicle.type)
+
+
+class BattlePassFreeXPPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = super(BattlePassFreeXPPacker, cls)._packSingleBonus(bonus, label)
+        model.setBigIcon(bonus.getName())
+        return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
 
 
 class BattlePassBlueprintsBonusPacker(BlueprintBonusUIPacker):

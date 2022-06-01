@@ -196,7 +196,7 @@ class GuiSettings(object):
         return settings
 
     def checkAndReplaceWebBridgeMacros(self, url):
-        webBridgeUrl = self.miniclient.get('webBridgeRootURL')
+        webBridgeUrl = self.baseUrls.get('webBridgeRootURL')
         return url.replace('{webBridgeRootURL}', webBridgeUrl) if webBridgeUrl and url.find('{webBridgeRootURL}') > -1 else url
 
     def __applyMacros(self, value):

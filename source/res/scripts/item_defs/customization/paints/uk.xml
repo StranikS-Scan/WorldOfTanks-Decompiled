@@ -73,4 +73,31 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	GB115_Gonsalo_OCN_3Dst	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB115_Gonsalo	</vehicles>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	320	</id>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/repaints/custom_color_08.png	</texture>
+      <color>	168 116 11 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/GB115_Gonsalo_OCN_3Dst	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
 </uk.xml>

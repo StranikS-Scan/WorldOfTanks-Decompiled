@@ -7,25 +7,24 @@ import SoundGroups
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, CurrencyBP
-from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
+from battle_pass_common import BattlePassConsts, CurrencyBP, FinalReward
+from frameworks.wulf import Array, ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassCoinProductsUrl, getBattlePassPointsProductsUrl
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData
+from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, isSeasonEndingSoon, updateBuyAnimationFlag, getExtraInfoPageURL
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, updateBuyAnimationFlag
 from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_lock_icon_tooltip_view import BattlePassLockIconTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_points_view import BattlePassPointsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
@@ -35,12 +34,11 @@ from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattle
 from gui.shared.formatters.time_formatters import formatDate
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from helpers import dependency, int2roman, time_utils
-from shared_utils import first
+from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController, IWalletController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
-from soft_exception import SoftException
 from tutorial.control.game_vars import getVehicleByIntCD
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 _logger = logging.getLogger(__name__)
@@ -52,9 +50,9 @@ _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
 _FREE_POINTS_INDEX = 0
 
 class BattlePassProgressionsView(ViewImpl):
-    __slots__ = ('__tooltipItems', '__viewActive', '__tooltipContentCreator', '__notifier', '__chapterID', '__showReplaceRewardAnimations')
+    __slots__ = ('__tooltipItems', '__viewActive', '__notifier', '__chapterID', '__showReplaceRewardAnimations', '__specialTooltipItems')
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __gui = dependency.descriptor(IGuiLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wallet = dependency.descriptor(IWalletController)
@@ -66,8 +64,8 @@ class BattlePassProgressionsView(ViewImpl):
         settings.flags = ViewFlags.COMPONENT
         settings.model = BattlePassProgressionsViewModel()
         self.__tooltipItems = {}
+        self.__specialTooltipItems = {}
         self.__viewActive = False
-        self.__tooltipContentCreator = self.__getTooltipContentCreator()
         self.__chapterID = kwargs.get('chapterID') or self.__getDefaultChapterID()
         self.__showReplaceRewardAnimations = False
         self.__notifier = None
@@ -84,14 +82,15 @@ class BattlePassProgressionsView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        tooltipContentCreator = self.__tooltipContentCreator.get(contentID)
-        if tooltipContentCreator is None:
-            raise SoftException('Incorrect tooltip type with contentID {}'.format(contentID))
-        return tooltipContentCreator(event)
+        return super(BattlePassProgressionsView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
-        return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
+        if tooltipId is None:
+            return
+        else:
+            tooltipData = self.__tooltipItems.get(tooltipId)
+            return tooltipData if tooltipData is not None else self.__specialTooltipItems.get(tooltipId)
 
     def _getEvents(self):
         return ((self.viewModel.onActionClick, self.__onActionClick),
@@ -109,15 +108,15 @@ class BattlePassProgressionsView(ViewImpl):
          (self.viewModel.onBpcoinClick, self.__showCoinsShop),
          (self.viewModel.onBpbitClick, self.__showPointsShop),
          (self.viewModel.onTakeRewardsClick, self.__takeAllRewards),
-         (self.__battlePassController.onPointsUpdated, self.__onPointsUpdated),
-         (self.__battlePassController.onBattlePassIsBought, self.__onBattlePassBought),
-         (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
-         (self.__battlePassController.onRewardSelectChange, self.__onRewardSelectChange),
-         (self.__battlePassController.onOffersUpdated, self.__onOffersUpdated),
-         (self.__battlePassController.onSeasonStateChanged, self.__updateProgressData),
-         (self.__battlePassController.onSelectTokenUpdated, self.__onSelectTokenUpdated),
-         (self.__battlePassController.onChapterChanged, self.__onChapterChanged),
-         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePass.onPointsUpdated, self.__onPointsUpdated),
+         (self.__battlePass.onBattlePassIsBought, self.__onBattlePassBought),
+         (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
+         (self.__battlePass.onRewardSelectChange, self.__onRewardSelectChange),
+         (self.__battlePass.onOffersUpdated, self.__onOffersUpdated),
+         (self.__battlePass.onSeasonStateChanged, self.__updateProgressData),
+         (self.__battlePass.onSelectTokenUpdated, self.__onSelectTokenUpdated),
+         (self.__battlePass.onChapterChanged, self.__onChapterChanged),
+         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
          (self.__wallet.onWalletStatusChanged, self.__updateWalletAvailability),
          (g_playerEvents.onClientUpdated, self.__onBpBitUpdated))
 
@@ -133,8 +132,8 @@ class BattlePassProgressionsView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BattlePassProgressionsView, self)._onLoading()
         self.__notifier = Notifiable()
-        self.__notifier.addNotificator(PeriodicNotifier(self.__battlePassController.getSeasonTimeLeft, self.__updateTimer))
-        self.__notifier.addNotificator(SimpleNotifier(self.__battlePassController.getFinalOfferTimeLeft, self.__updateTimer))
+        self.__notifier.addNotificator(PeriodicNotifier(self.__battlePass.getSeasonTimeLeft, self.__updateTimer))
+        self.__notifier.addNotificator(SimpleNotifier(self.__battlePass.getFinalOfferTimeLeft, self.__updateTimer))
         self.__notifier.startNotification()
         self.__updateProgressData()
         self.__updateBuyButtonState()
@@ -146,6 +145,7 @@ class BattlePassProgressionsView(ViewImpl):
     def _finalize(self):
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__tooltipItems = None
+        self.__specialTooltipItems = None
         if self.__notifier is not None:
             self.__notifier.stopNotification()
             self.__notifier.clearNotification()
@@ -154,7 +154,7 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __onActionClick(self):
         self.__resetBuyAnimation()
-        ctrl = self.__battlePassController
+        ctrl = self.__battlePass
         if ctrl.isChapterActive(self.__chapterID):
             if ctrl.isBought(chapterID=self.__chapterID):
                 self.__showBuyLevelsWindow()
@@ -166,7 +166,7 @@ class BattlePassProgressionsView(ViewImpl):
             self.__showBuyWindow()
 
     def __onAboutClick(self):
-        self.__loadUrl(getExtraInfoPageURL() if self.__battlePassController.isExtraChapter(self.__chapterID) else getInfoPageURL())
+        self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isExtraChapter(self.__chapterID) else getInfoPageURL())
 
     @staticmethod
     def __onClose():
@@ -180,8 +180,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
 
     def __updateProgressData(self):
-        if not self.__battlePassController.isActive():
-            showHangar()
         with self.viewModel.transaction() as model:
             self.__setAwards(model)
             self.__updateData(model=model)
@@ -189,9 +187,13 @@ class BattlePassProgressionsView(ViewImpl):
             self.__updateWalletAvailability(model=model)
 
     def __setAwards(self, model):
-        bpController = self.__battlePassController
+        bpController = self.__battlePass
         self.__tooltipItems.clear()
-        self.__setStyleWidget(model)
+        self.__specialTooltipItems.clear()
+        if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
+            self.__setStyleWidget(model)
+        elif self.__battlePass.getRewardType(self.__chapterID) == FinalReward.TANKMAN:
+            self.__setCharacterWidget(model)
         model.levels.clearItems()
         minLevel, maxLevel = bpController.getChapterLevelInterval(self.__chapterID)
         freeBonuses = sorted(bpController.getAwardsInterval(self.__chapterID, minLevel, maxLevel, BattlePassConsts.REWARD_FREE).iteritems(), key=itemgetter(0))
@@ -207,9 +209,9 @@ class BattlePassProgressionsView(ViewImpl):
             levelModel.setLevelPoints(bpController.getLevelPoints(self.__chapterID, level - 1))
             levelModel.setNeedTakeFree(isNeedToTakeFree)
             levelModel.setNeedTakePaid(isNeedToTakePaid)
-            realFreeAwards = self.__battlePassController.replaceOfferByReward(freeBonus)
+            realFreeAwards = self.__battlePass.replaceOfferByReward(freeBonus)
             packBonusModelAndTooltipData(realFreeAwards, levelModel.freeRewardItems, self.__tooltipItems)
-            realPaidAwards = self.__battlePassController.replaceOfferByReward(paidBonus)
+            realPaidAwards = self.__battlePass.replaceOfferByReward(paidBonus)
             packBonusModelAndTooltipData(realPaidAwards, levelModel.paidRewardItems, self.__tooltipItems)
             model.levels.addViewModel(levelModel)
 
@@ -223,8 +225,38 @@ class BattlePassProgressionsView(ViewImpl):
             fillVehicleInfo(model.widget3dStyle.vehicleInfo, vehicle)
         return
 
+    def __setCharacterWidget(self, model):
+        _, maxLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
+        freeRewards = self.__battlePass.getSingleAward(chapterId=self.__chapterID, level=maxLevel)
+        characterBonus = findFirst(lambda b: b.getName() == 'tmanToken', freeRewards)
+        if characterBonus is None:
+            self.__clearChapterCharacter(model)
+            return
+        else:
+            character = getTankmanInfo(characterBonus)
+            if character is None:
+                self.__clearChapterCharacter(model)
+                return
+            iconName, characterName, skills = getDataByTankman(character)
+            skillsArray = Array()
+            for skill in skills:
+                skillsArray.addString(skill)
+
+            model.chapterCharacter.setIcon(iconName)
+            model.chapterCharacter.setTankman(characterName)
+            model.chapterCharacter.setSkills(skillsArray)
+            model.chapterCharacter.setTooltipId(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED)
+            packSpecialTooltipData(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, self.__specialTooltipItems, character.getRecruitID())
+            return
+
+    @staticmethod
+    def __clearChapterCharacter(model):
+        model.chapterCharacter.setIcon('')
+        model.chapterCharacter.setTankman('')
+        model.chapterCharacter.setSkills(Array())
+
     def __resetRewardsInterval(self, model, fromLevel, toLevel, replaceRewards=False):
-        startLevel, finalLevel = self.__battlePassController.getChapterLevelInterval(self.__chapterID)
+        startLevel, finalLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
         if fromLevel == toLevel:
             return
         fromLevel += 1
@@ -235,15 +267,15 @@ class BattlePassProgressionsView(ViewImpl):
             isNeedToTakeFree, isChooseFreeRewardEnabled = self.__getRewardLevelState(BattlePassConsts.REWARD_FREE, level)
             if replaceRewards and levelData.getNeedTakeFree() and not isNeedToTakeFree:
                 levelData.freeRewardItems.clearItems()
-                awards = self.__battlePassController.getSingleAward(self.__chapterID, level, BattlePassConsts.REWARD_FREE)
-                realAwards = self.__battlePassController.replaceOfferByReward(awards)
+                awards = self.__battlePass.getSingleAward(self.__chapterID, level, BattlePassConsts.REWARD_FREE)
+                realAwards = self.__battlePass.replaceOfferByReward(awards)
                 packBonusModelAndTooltipData(realAwards, levelData.freeRewardItems, self.__tooltipItems)
                 self.__showReplaceRewardAnimations = True
             isNeedToTakePaid, isChoosePaidRewardEnabled = self.__getRewardLevelState(BattlePassConsts.REWARD_PAID, level)
             if replaceRewards and levelData.getNeedTakePaid() and not isNeedToTakePaid:
                 levelData.paidRewardItems.clearItems()
-                awards = self.__battlePassController.getSingleAward(self.__chapterID, level, BattlePassConsts.REWARD_PAID)
-                realAwards = self.__battlePassController.replaceOfferByReward(awards)
+                awards = self.__battlePass.getSingleAward(self.__chapterID, level, BattlePassConsts.REWARD_PAID)
+                realAwards = self.__battlePass.replaceOfferByReward(awards)
                 packBonusModelAndTooltipData(realAwards, levelData.paidRewardItems, self.__tooltipItems)
                 self.__showReplaceRewardAnimations = True
             levelData.setNeedTakeFree(isNeedToTakeFree)
@@ -255,7 +287,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.levels.invalidate()
 
     def __getRewardLevelState(self, awardType, level):
-        bpController = self.__battlePassController
+        bpController = self.__battlePass
         isNeedToTake = bpController.isNeedToTakeReward(self.__chapterID, awardType, level)
         isChooseRewardEnabled = isNeedToTake and bpController.isChooseRewardEnabled(awardType, self.__chapterID, level)
         return (isNeedToTake, isChooseRewardEnabled)
@@ -263,25 +295,27 @@ class BattlePassProgressionsView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateData(self, model=None):
         self.__updateLevelState(model)
-        isBattlePassBought = self.__battlePassController.isBought(chapterID=self.__chapterID)
+        isBattlePassBought = self.__battlePass.isBought(chapterID=self.__chapterID)
         model.setIsBattlePassPurchased(isBattlePassBought)
-        model.setIsPaused(self.__battlePassController.isPaused())
-        model.setChapterState(_CHAPTER_STATES.get(self.__battlePassController.getChapterState(self.__chapterID)))
+        model.setIsPaused(self.__battlePass.isPaused())
+        model.setChapterState(_CHAPTER_STATES.get(self.__battlePass.getChapterState(self.__chapterID)))
+        model.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value)
         model.setChapterID(self.__chapterID)
         model.setBpbitCount(self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0))
-        model.setIsBattlePassCompleted(self.__battlePassController.isCompleted())
-        model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())
-        model.setIsChooseRewardsEnabled(self.__battlePassController.canChooseAnyReward())
-        model.setIsExtra(self.__battlePassController.isExtraChapter(self.__chapterID))
+        model.setIsBattlePassCompleted(self.__battlePass.isCompleted())
+        model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
+        model.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
+        model.setIsExtra(self.__battlePass.isExtraChapter(self.__chapterID))
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setSeasonText(self.__makeSeasonTimeText())
-        model.setHasExtra(self.__battlePassController.hasExtra())
+        model.setHasExtra(self.__battlePass.hasExtra())
         self.__setExpirations(model)
-        self.__setStyleTaken(model)
+        if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
+            self.__setStyleTaken(model)
         self.__updateRewardSelectButton(model=model)
 
     def __setExpirations(self, model):
-        expireTimestamp = self.__battlePassController.getChapterRemainingTime(self.__chapterID) if self.__battlePassController.isExtraChapter(self.__chapterID) else self.__battlePassController.getSeasonTimeLeft()
+        expireTimestamp = self.__battlePass.getChapterRemainingTime(self.__chapterID) if self.__battlePass.isExtraChapter(self.__chapterID) else self.__battlePass.getSeasonTimeLeft()
         model.setExpireTime(expireTimestamp)
         model.setExpireTimeStr(getFormattedTimeLeft(expireTimestamp))
 
@@ -295,23 +329,23 @@ class BattlePassProgressionsView(ViewImpl):
         previousBattlePassPointsSeen = AccountSettings.getSettings(LAST_BATTLE_PASS_POINTS_SEEN)
         previousChapterPoints = previousBattlePassPointsSeen.get(self.__chapterID, 0)
         previousFreePoints = previousBattlePassPointsSeen.get(_FREE_POINTS_INDEX, 0)
-        currentChapterPoints = self.__battlePassController.getPointsInChapter(self.__chapterID)
-        previousLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, previousChapterPoints)
-        previousPoints, _ = self.__battlePassController.getProgressionByPoints(self.__chapterID, previousChapterPoints, previousLevel)
+        currentChapterPoints = self.__battlePass.getPointsInChapter(self.__chapterID)
+        previousLevel = self.__battlePass.getLevelByPoints(self.__chapterID, previousChapterPoints)
+        previousPoints, _ = self.__battlePass.getProgressionByPoints(self.__chapterID, previousChapterPoints, previousLevel)
         previousLevel += 1
-        currentLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, currentChapterPoints)
-        currentPoints, _ = self.__battlePassController.getProgressionByPoints(self.__chapterID, currentChapterPoints, currentLevel)
+        currentLevel = self.__battlePass.getLevelByPoints(self.__chapterID, currentChapterPoints)
+        currentPoints, _ = self.__battlePass.getProgressionByPoints(self.__chapterID, currentChapterPoints, currentLevel)
         currentLevel += 1
-        finalLevel = self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
+        finalLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)
         currentLevel = currentLevel if currentLevel <= finalLevel else finalLevel
-        freePointsInChapter = self.__battlePassController.getFreePoints() + currentChapterPoints
-        potentialLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, freePointsInChapter)
-        freePointsInLevel, _ = self.__battlePassController.getProgressionByPoints(self.__chapterID, freePointsInChapter, potentialLevel)
+        freePointsInChapter = self.__battlePass.getFreePoints() + currentChapterPoints
+        potentialLevel = self.__battlePass.getLevelByPoints(self.__chapterID, freePointsInChapter)
+        freePointsInLevel, _ = self.__battlePass.getProgressionByPoints(self.__chapterID, freePointsInChapter, potentialLevel)
         potentialLevel += 1
-        previousPotentialLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, previousFreePoints)
-        previousFreePointsInLevel, _ = self.__battlePassController.getProgressionByPoints(self.__chapterID, previousFreePoints, previousPotentialLevel)
+        previousPotentialLevel = self.__battlePass.getLevelByPoints(self.__chapterID, previousFreePoints)
+        previousFreePointsInLevel, _ = self.__battlePass.getProgressionByPoints(self.__chapterID, previousFreePoints, previousPotentialLevel)
         previousPotentialLevel += 1
-        if self.__battlePassController.isExtraChapter(self.__chapterID):
+        if self.__battlePass.isExtraChapter(self.__chapterID):
             freePointsInChapter = 0
             freePointsInLevel = 0
             potentialLevel = 0
@@ -335,7 +369,7 @@ class BattlePassProgressionsView(ViewImpl):
         AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, previousBattlePassPointsSeen)
 
     def __updateBuyButtonState(self, *_):
-        bpController = self.__battlePassController
+        bpController = self.__battlePass
         isBattlePassBought = bpController.isBought(chapterID=self.__chapterID)
         isActiveChapter = bpController.isChapterActive(self.__chapterID)
         isCompleted = bpController.isChapterCompleted(self.__chapterID)
@@ -355,8 +389,8 @@ class BattlePassProgressionsView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateRewardSelectButton(self, model=None):
         model.setIsChooseDeviceEnabled(False)
-        notChosenRewardCount = self.__battlePassController.getNotChosenRewardCount()
-        model.setIsChooseDeviceEnabled(self.__battlePassController.canChooseAnyReward())
+        notChosenRewardCount = self.__battlePass.getNotChosenRewardCount()
+        model.setIsChooseDeviceEnabled(self.__battlePass.canChooseAnyReward())
         model.setNotChosenRewardCount(notChosenRewardCount)
 
     @replaceNoneKwargsModel
@@ -364,7 +398,7 @@ class BattlePassProgressionsView(ViewImpl):
         self.__resetRewardSelectButtons(model, MIN_LEVEL)
 
     def __resetRewardSelectButtons(self, model, fromLevel):
-        startLevel, finalLevel = self.__battlePassController.getChapterLevelInterval(self.__chapterID)
+        startLevel, finalLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
         if fromLevel <= startLevel:
             fromLevel = startLevel + 1
         for level in range(fromLevel, finalLevel + 1):
@@ -377,7 +411,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.levels.invalidate()
 
     def __updateTimer(self):
-        self.viewModel.setExpireTimeStr(getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft()))
+        self.viewModel.setExpireTimeStr(getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft()))
         self.__updateBuyButtonState()
 
     def __onMissionsTabChanged(self, event):
@@ -398,13 +432,13 @@ class BattlePassProgressionsView(ViewImpl):
         self.__setShowBuyAnimations()
 
     def __onBattlePassSettingsChange(self, *_):
-        if not self.__battlePassController.isChapterExists(self.__chapterID):
+        if not self.__battlePass.isChapterExists(self.__chapterID):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             return
-        if self.__battlePassController.isPaused():
+        if self.__battlePass.isPaused():
             showMissionsBattlePass()
             return
-        if not (self.__battlePassController.isEnabled() and self.__battlePassController.isActive()):
+        if not (self.__battlePass.isEnabled() and self.__battlePass.isActive()):
             showHangar()
             return
         self.__updateProgressData()
@@ -425,13 +459,13 @@ class BattlePassProgressionsView(ViewImpl):
         if level is None:
             return
         else:
-            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePassController)
+            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
             vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
             showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), self.__getPreviewCallback(), chapterId=self.__chapterID, styleLevel=int(level))
             return
 
     def __onExtraPreviewClick(self):
-        styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePassController)
+        styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
         vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
         itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
         showStylePreview(vehicleCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
@@ -443,15 +477,15 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __onPointsUpdated(self):
         with self.viewModel.transaction() as model:
-            newChapter = self.__battlePassController.getCurrentChapterID()
-            newFreePoints = self.__battlePassController.getFreePoints()
+            newChapter = self.__battlePass.getCurrentChapterID()
+            newFreePoints = self.__battlePass.getFreePoints()
             oldFreePoints = model.getFreePointsInChapter()
             if model.getChapterID() != newChapter and newFreePoints == oldFreePoints:
                 return
             oldPoints = model.getCurrentPointsInChapter()
-            oldLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, oldPoints)
-            newPoints = self.__battlePassController.getPointsInChapter(self.__chapterID)
-            newLevel = self.__battlePassController.getLevelInChapter(self.__chapterID)
+            oldLevel = self.__battlePass.getLevelByPoints(self.__chapterID, oldPoints)
+            newPoints = self.__battlePass.getPointsInChapter(self.__chapterID)
+            newLevel = self.__battlePass.getLevelInChapter(self.__chapterID)
             self.__resetRewardsInterval(model, oldLevel, newLevel)
             self.__updateData(model=model)
         isDrawPoints = newLevel < oldLevel or newPoints < oldPoints or newFreePoints > oldFreePoints
@@ -466,7 +500,7 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __onBattlePassBought(self):
         with self.viewModel.transaction() as model:
-            finalLevel = self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
+            finalLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)
             self.__resetRewardsInterval(model, MIN_LEVEL, finalLevel)
             self.__updateData(model=model)
         self.__updateBuyButtonState()
@@ -474,8 +508,11 @@ class BattlePassProgressionsView(ViewImpl):
     def __onRewardSelectChange(self):
         self.__updateRewardSelectButton()
         with self.viewModel.transaction() as model:
-            self.__setStyleWidget(model)
-            finalLevel = self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
+            if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
+                self.__setStyleWidget(model)
+            elif self.__battlePass.getRewardType(self.__chapterID) == FinalReward.TANKMAN:
+                self.__setCharacterWidget(model)
+            finalLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)
             self.__resetRewardsInterval(model, MIN_LEVEL, finalLevel, replaceRewards=True)
 
     def __onSelectTokenUpdated(self):
@@ -487,14 +524,17 @@ class BattlePassProgressionsView(ViewImpl):
             return
         self.__updateRewardSelectButton()
         with self.viewModel.transaction() as model:
-            self.__setStyleWidget(model)
-            model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())
-            model.setIsChooseRewardsEnabled(self.__battlePassController.canChooseAnyReward())
-            finalLevel = self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
+            if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
+                self.__setStyleWidget(model)
+            elif self.__battlePass.getRewardType(self.__chapterID) == FinalReward.TANKMAN:
+                self.__setCharacterWidget(model)
+            model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
+            model.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
+            finalLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)
             self.__resetRewardsInterval(model, MIN_LEVEL, finalLevel, replaceRewards=False)
 
     def __onChapterChanged(self):
-        if self.__chapterID not in self.__battlePassController.getChapterIDs():
+        if self.__chapterID not in self.__battlePass.getChapterIDs():
             return
         self.__updateBuyButtonState()
         self.__updateProgressData()
@@ -511,32 +551,19 @@ class BattlePassProgressionsView(ViewImpl):
     def __onPurchaseLevels(self, _):
         self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = True
 
-    def __getTooltipContentCreator(self):
-        _tooltipsRes = R.views.lobby.battle_pass.tooltips
-        return {_tooltipsRes.BattlePassPointsView(): self.__getPointsTooltipContent,
-         _tooltipsRes.BattlePassLockIconTooltipView(): self.__getLockIconTooltipContent}
-
     @replaceNoneKwargsModel
     def __setShowBuyAnimations(self, model=None):
         showAnimations = False
-        isBattlePassBought = self.__battlePassController.isBought(chapterID=self.__chapterID)
+        isBattlePassBought = self.__battlePass.isBought(chapterID=self.__chapterID)
         if isBattlePassBought:
-            showAnimations = updateBuyAnimationFlag(chapterID=self.__chapterID, settingsCore=self.__settingsCore, battlePass=self.__battlePassController)
+            showAnimations = updateBuyAnimationFlag(chapterID=self.__chapterID, settingsCore=self.__settingsCore, battlePass=self.__battlePass)
             model.setIsBattlePassPurchased(isBattlePassBought)
         model.setShowBuyAnimations(showAnimations)
         model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
         self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = False
 
-    @staticmethod
-    def __getPointsTooltipContent(_=None):
-        return BattlePassPointsTooltip()
-
-    @staticmethod
-    def __getLockIconTooltipContent(_=None):
-        return BattlePassLockIconTooltipView()
-
     def __getDefaultChapterID(self):
-        return self.__battlePassController.getCurrentChapterID() or first(sorted(self.__battlePassController.getChapterIDs(), cmp=chaptersIDsComparator))
+        return self.__battlePass.getCurrentChapterID() or first(sorted(self.__battlePass.getChapterIDs(), cmp=chaptersIDsComparator))
 
     def __showIntroVideo(self, onStart=False):
         settings = self.__settingsCore.serverSettings
@@ -548,17 +575,17 @@ class BattlePassProgressionsView(ViewImpl):
         return True
 
     def __makeSeasonTimeText(self):
-        if self.__battlePassController.isExtraChapter(self.__chapterID):
-            endTimestamp = self.__battlePassController.getChapterExpiration(self.__chapterID)
+        if self.__battlePass.isExtraChapter(self.__chapterID):
+            endTimestamp = self.__battlePass.getChapterExpiration(self.__chapterID)
             endStringRes = _bpRes.progression.season.end.extra
-        elif self.__battlePassController.isSeasonFinished():
+        elif self.__battlePass.isSeasonFinished():
             endTimestamp = 0
             endStringRes = _bpRes.commonProgression.body.ended
         else:
-            endTimestamp = self.__battlePassController.getSeasonFinishTime()
+            endTimestamp = self.__battlePass.getSeasonFinishTime()
             endStringRes = _bpRes.progression.season.end.normal
         endTime = time_utils.getTimeStructInLocal(endTimestamp)
-        return backport.text(endStringRes(), seasonNum=int2roman(self.__battlePassController.getSeasonNum()), endDay=endTime.tm_mday, endMonth=backport.text(R.strings.menu.dateTime.months.num(endTime.tm_mon)()), endTime=formatDate('%H:%M', endTimestamp))
+        return backport.text(endStringRes(), seasonNum=int2roman(self.__battlePass.getSeasonNum()), endDay=endTime.tm_mday, endMonth=backport.text(R.strings.menu.dateTime.months.num(endTime.tm_mon)()), endTime=formatDate('%H:%M', endTimestamp))
 
     def __showBuyWindow(self, backCallback=None):
         showBattlePassBuyWindow({'backCallback': backCallback})
@@ -571,10 +598,10 @@ class BattlePassProgressionsView(ViewImpl):
         level = args.get('level')
         if not level:
             return
-        self.__battlePassController.takeRewardForLevel(self.__chapterID, level)
+        self.__battlePass.takeRewardForLevel(self.__chapterID, level)
 
     def __onTakeAllClick(self):
-        self.__battlePassController.takeAllRewards()
+        self.__battlePass.takeAllRewards()
 
     @staticmethod
     def __onOpenShopClick():
@@ -616,7 +643,7 @@ class BattlePassProgressionsView(ViewImpl):
                 model.setBpbitCount(self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0))
 
     def __takeAllRewards(self):
-        self.__battlePassController.takeAllRewards()
+        self.__battlePass.takeAllRewards()
 
     @staticmethod
     def __showCoinsShop():

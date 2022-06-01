@@ -129,17 +129,20 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return self.__isFullStatsShown
 
     def _canShowPostmortemTips(self):
-        arenaDP = self.sessionProvider.getArenaDP()
-        enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
-        bonusType = BigWorld.player().arenaBonusType
-        isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
-        if enemiesTeamCount <= 1 or isTournament:
-            postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
-            if postmortemPanel is not None:
-                postmortemPanel.as_setSpectatorPanelVisibleS(False)
-                super(BattleRoyalePage, self).as_setPostmortemTipsVisibleS(True)
-                return False
-        return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
+        if avatar_getter.isObserverSeesAll():
+            return False
+        else:
+            arenaDP = self.sessionProvider.getArenaDP()
+            enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
+            bonusType = BigWorld.player().arenaBonusType
+            isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
+            if enemiesTeamCount <= 1 or isTournament:
+                postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+                if postmortemPanel is not None:
+                    postmortemPanel.as_setSpectatorPanelVisibleS(False)
+                    super(BattleRoyalePage, self).as_setPostmortemTipsVisibleS(True)
+                    return False
+            return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
 
     def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         manager = self.app.containerManager

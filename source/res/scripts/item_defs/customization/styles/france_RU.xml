@@ -1,0 +1,106 @@
+<france_RU.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F18_Bat_Chatillon25t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	613	</id>
+      <texture>	gui/maps/vehicles/styles/F18_Bat_Chatillon25t_BP8_3DSt.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_BP8_3DSt	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	25	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	20	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	633	</id>
+      <texture>	gui/maps/vehicles/styles/bp8_bs.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp8_bs	</userString>
+      <description>	#vehicle_customization:special_style/bp8_bs_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	413	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	20	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	319	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	732	</id>
+              <tags>	formfactor_square safe left	</tags>
+            </item>
+            <item>
+              <id>	733	</id>
+              <tags>	formfactor_rect1x2 safe right	</tags>
+            </item>
+            <item>
+              <id>	734	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</france_RU.xml>

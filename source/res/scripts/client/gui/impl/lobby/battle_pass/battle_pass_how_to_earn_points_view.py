@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_how_to_earn_points_view.py
+import itertools
 import logging
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
@@ -18,14 +19,14 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED, ARENA_BONUS_TYPE.EPIC_BATTLE]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_BATTLE, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassHowToEarnPointsView(ViewImpl):
     __slots__ = ('__chapterID',)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, layoutID, chapterID):
         settings = ViewSettings(layoutID)
@@ -52,6 +53,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
             tx.setSyncInitiator((tx.getSyncInitiator() + 1) % 1000)
             tx.setChapterID(self.__chapterID)
+            tx.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value if self.__chapterID else '')
 
     def __createGameModel(self, gameType):
         viewModel = self.__createViewHeader(gameType)
@@ -77,14 +79,20 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.__createBattleRoyalTableHeader(gameType, viewModel)
         previousLevelSolo = 1
         previousLevelSquad = 1
-        for pointsSolo, pointsSquad in zip(self.__battlePassController.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO), self.__battlePassController.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD)):
+        for pointsSolo, pointsSquad in itertools.izip_longest(self.__battlePass.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO), self.__battlePass.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD), fillvalue=0):
             tableRow = GameModeRowsModel()
-            cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo)
             cellSoloPoints = GameModeCellModel()
-            cellSoloPoints.setPoints(pointsSolo.points)
-            cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad)
+            if pointsSolo == 0:
+                cellLabelSolo, cellSoloPoints = self.__createEmptyCell()
+            else:
+                cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo)
+                cellSoloPoints.setPoints(pointsSolo.points)
             cellSquadPoints = GameModeCellModel()
-            cellSquadPoints.setPoints(pointsSquad.points)
+            if pointsSquad == 0:
+                cellLabelSquad, cellSquadPoints = self.__createEmptyCell()
+            else:
+                cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad)
+                cellSquadPoints.setPoints(pointsSquad.points)
             tableRow.cell.addViewModel(cellLabelSolo)
             tableRow.cell.addViewModel(cellSoloPoints)
             tableRow.cell.addViewModel(cellLabelSquad)
@@ -101,9 +109,17 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         previousLevel = points.label + 1
         return (cell, previousLevel)
 
+    @staticmethod
+    def __createEmptyCell():
+        cellLabel = GameModeCellModel()
+        cellPoints = GameModeCellModel()
+        cellLabel.setText('')
+        cellPoints.setPoints(0)
+        return (cellLabel, cellPoints)
+
     def __createTable(self, gameType, viewModel):
         self.__createTableHeader(gameType, viewModel)
-        for points in self.__battlePassController.getPerBattlePoints(gameMode=gameType):
+        for points in self.__battlePass.getPerBattlePoints(gameMode=gameType):
             cellLabel = GameModeCellModel()
             cellLabel.setText(backport.text(_rBattlePass.howToEarnPoints.rating.num(gameType)(), level=points.label))
             cellWinPoints = GameModeCellModel()
@@ -195,10 +211,10 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createSpecialVehCard(self, viewModel, gameType=ARENA_BONUS_TYPE.REGULAR):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.TECH)
-        specialTanksIntCDs = self.__battlePassController.getSpecialVehicles()
+        specialTanksIntCDs = self.__battlePass.getSpecialVehicles()
         for specialTanksIntCD in specialTanksIntCDs:
             vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
-            pointsDiff = self.__battlePassController.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
+            pointsDiff = self.__battlePass.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
             if vehicle is None or pointsDiff.textID == 0:
                 _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
                 continue
@@ -215,7 +231,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePassController.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))
+        return ((self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePass.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))
 
     def __onLinkClick(self, args):
         viewModel = args.get('viewId')
@@ -224,13 +240,13 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.destroyWindow()
 
     def __onBattlePassSettingsChange(self, *_):
-        if self.__battlePassController.isVisible() and not self.__battlePassController.isPaused():
+        if self.__battlePass.isVisible() and not self.__battlePass.isPaused():
             self.__createGeneralModel()
         else:
             showHangar()
 
     def __onSeasonStateChanged(self):
-        if not self.__battlePassController.isActive():
+        if not self.__battlePass.isActive():
             showHangar()
 
 

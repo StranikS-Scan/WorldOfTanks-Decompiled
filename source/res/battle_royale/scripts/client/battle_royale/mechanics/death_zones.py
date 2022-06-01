@@ -75,6 +75,7 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         BigWorld.ArenaBorderHelper.setBorderMaxAlpha(spaceID, zoneID, self._maxAlpha)
         BigWorld.ArenaBorderHelper.setBorderHeight(spaceID, zoneID, self._height)
         BigWorld.ArenaBorderHelper.setBordersDistanceFadeEnabled(spaceID, False)
+        BigWorld.ArenaBorderHelper.setOutsideShift(spaceID, zoneID, 0)
         visibilityMask = self._setBoundsVisibility(x, y, state, deathZones)
         BigWorld.ArenaBorderHelper.setBorderMask(spaceID, zoneID, visibilityMask)
         deathZones.visibilityMskZones[zoneID] = visibilityMask

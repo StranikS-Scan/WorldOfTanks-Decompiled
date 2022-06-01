@@ -38,6 +38,7 @@ from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -251,6 +252,7 @@ class VehicleProgressBlock(base.StatsBlock):
 PMComplete = namedtuple('PMComplete', ['isMainComplete', 'isAddComplete'])
 
 class BattlePassProgressBlock(base.StatsBlock):
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def setRecord(self, result, reusable):
         if reusable.battlePassProgress.hasProgress:
@@ -284,17 +286,18 @@ class BattlePassProgressBlock(base.StatsBlock):
     @classmethod
     def __makeProgressQuestInfo(cls, progress, isExtraBlock):
         isFreePoints = progress.pointsAux and not progress.isLevelMax or progress.isLevelMax and isExtraBlock
+        chapterID = progress.chapterID
         return {'status': cls.__getMissionState(progress.isDone and not isExtraBlock),
          'questID': BattlePassConsts.FAKE_QUEST_ID,
          'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
          'eventType': EVENT_TYPE.BATTLE_QUEST,
          'maxProgrVal': progress.pointsMax,
          'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL,
-         'description': backport.text(_POST_BATTLE_RES.title.free() if isFreePoints else _POST_BATTLE_RES.title(), level=progress.level if not isExtraBlock else progress.level + 1, chapter=backport.text(R.strings.battle_pass.chapter.fullName.num(progress.chapterID)())),
+         'description': backport.text(_POST_BATTLE_RES.title.free() if isFreePoints else _POST_BATTLE_RES.title(), level=progress.level if not isExtraBlock else progress.level + 1, chapter=cls.__getChapterName(chapterID)),
          'currentProgrVal': progress.pointsNew,
          'tasksCount': -1,
          'progrBarType': cls.__getProgressBarType(not progress.isDone),
-         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if progress.chapterID else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
+         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
 
     @classmethod
     def __makeProgressList(cls, progress, isExtraBlock):
@@ -304,6 +307,10 @@ class BattlePassProgressBlock(base.StatsBlock):
           'progressDiffTooltip': backport.text(_POST_BATTLE_RES.progress.tooltip(), points=progress.pointsAdd),
           'currentProgrVal': progress.pointsNew,
           'progrBarType': cls.__getProgressBarType(not progress.pointsAux)}] if not progress.isDone or progress.pointsAux and not progress.isLevelMax or isExtraBlock else []
+
+    @classmethod
+    def __getChapterName(cls, chapterID):
+        return backport.text(R.strings.battle_pass.chapter.dyn(cls.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)()) if chapterID else ''
 
     @staticmethod
     def __getMissionState(isDone):

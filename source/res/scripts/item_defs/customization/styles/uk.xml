@@ -1464,4 +1464,68 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB115_Gonsalo	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	492	</id>
+      <texture>	gui/maps/vehicles/styles/GB115_Gonsalo_OCN_3Dst.png	</texture>
+      <modelsSet>	GB115_Gonsalo_OCN_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB115_Gonsalo_OCN_3Dst	</userString>
+      <description>	#vehicle_customization:special_style/GB115_Gonsalo_OCN_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB115_Gonsalo_OCN_3Dst_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	400	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	320	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <projection_decals>
+            <item>
+              <id>	2301	</id>
+              <slotId>	45020	</slotId>
+            </item>
+            <item>
+              <id>	2321	</id>
+              <slotId>	15099	</slotId>
+            </item>
+            <item>
+              <id>	2341	</id>
+              <slotId>	15100	</slotId>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	400 414 415 416 417 418 419	</id>
+        </camouflage>
+        <projection_decal>
+          <id>	2301 2302 2303 2304 2305 2306 2307 2308 2309 2310 2311 2312 2313 2321 2322 2323 2324 2325 2326 2327 2328 2329 2330 2341 2342 2343 2344 2345 2346 2347	</id>
+        </projection_decal>
+      </alternateItems>
+    </style>
+  </itemGroup>
 </uk.xml>

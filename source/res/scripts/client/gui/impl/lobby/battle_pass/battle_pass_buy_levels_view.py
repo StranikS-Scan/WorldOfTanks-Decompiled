@@ -28,14 +28,14 @@ _logger = logging.getLogger(__name__)
 
 class BattlePassBuyLevelView(ViewImpl):
     __slots__ = ('__package', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__chapterID')
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, layoutID, ctx, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=BattlePassBuyViewModel):
-        settings = ViewSettings(layoutID)
-        settings.flags = wsFlags
-        settings.model = viewModelClazz()
+    def __init__(self, ctx):
+        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassBuyView())
+        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
+        settings.model = BattlePassBuyViewModel()
         self.__backCallback = ctx.get('backCallback')
         self.__tooltipItems = {}
         self.__tooltipWindow = None
@@ -109,15 +109,15 @@ class BattlePassBuyLevelView(ViewImpl):
          (self.viewModel.confirmAnyNumber.onChangeSelectedLevels, self.__onChangeSelectedLevels),
          (self.viewModel.confirmAnyNumber.onBuyClick, self.__onBuyBattlePassClick),
          (self.viewModel.confirmAnyNumber.onShowRewardsClick, self.__showRewards),
-         (self.__battlePassController.onLevelUp, self.__onLevelUp),
-         (self.__battlePassController.onBattlePassSettingsChange, self.__onSettingsChanged),
-         (self.__battlePassController.onSeasonStateChanged, self.__onSettingsChanged),
-         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
-         (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
+         (self.__battlePass.onLevelUp, self.__onLevelUp),
+         (self.__battlePass.onBattlePassSettingsChange, self.__onSettingsChanged),
+         (self.__battlePass.onSeasonStateChanged, self.__onSettingsChanged),
+         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
          (self.__wallet.onWalletStatusChanged, self.__onWalletChanged))
 
     def __onBuying(self, _):
-        self.__battlePassController.onLevelUp += self.__onLevelUp
+        self.__battlePass.onLevelUp += self.__onLevelUp
 
     def __onAwardViewClose(self, _):
         self.__onBackClick()
@@ -129,9 +129,9 @@ class BattlePassBuyLevelView(ViewImpl):
         self.__updateState()
 
     def __onSettingsChanged(self, *_):
-        if self.__battlePassController.isPaused():
+        if self.__battlePass.isPaused():
             showMissionsBattlePass()
-        elif self.__battlePassController.isVisible():
+        elif self.__battlePass.isVisible():
             self.__updateState()
         else:
             showHangar()
@@ -156,11 +156,12 @@ class BattlePassBuyLevelView(ViewImpl):
             self.__updateDetailRewards()
 
     def __setConfirmAnyNumberModel(self, model):
-        startLevel, endLevel = self.__battlePassController.getChapterLevelInterval(self.__chapterID)
+        startLevel, endLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
         model.setLevelsTotal(endLevel)
         model.setLevelsStart(startLevel - 1)
         model.setChapterID(self.__chapterID)
         model.setLevelsPassed(self.__package.getCurrentLevel())
+        model.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value)
         self.__updateConfirmAnyNumberModel(self.__package.getLevelsCount())
 
     def __updateConfirmAnyNumberModel(self, count):
@@ -183,32 +184,33 @@ class BattlePassBuyLevelView(ViewImpl):
             tx.setToLevel(toLevel)
             tx.setPackageState(PackageType.ANYLEVELS)
             tx.setChapterID(self.__chapterID)
+            tx.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value)
         packBonusModelAndTooltipData(self.__package.getNowAwards(), self.viewModel.rewards.nowRewards, self.__tooltipItems)
 
     def __onBuyBattlePassClick(self):
-        self.__battlePassController.onLevelUp -= self.__onLevelUp
+        self.__battlePass.onLevelUp -= self.__onLevelUp
         BattlePassBuyer.buyLevels(self.__package.getSeasonID(), self.__package.getChapterID(), self.__package.getLevelsCount(), onBuyCallback=self.__onBuyLevelsCallback)
 
     def __onBuyLevelsCallback(self, result):
         if not result:
-            self.__battlePassController.onLevelUp += self.__onLevelUp
+            self.__battlePass.onLevelUp += self.__onLevelUp
         else:
             g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_PURCHASE_LEVELS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __isFinishedProgression(self):
-        return self.__battlePassController.getState() == BattlePassState.COMPLETED
+        return self.__battlePass.getState() == BattlePassState.COMPLETED
 
     def __isChapterCompleted(self):
         return self.__package.getChapterState() == ChapterState.COMPLETED
 
     def __onExtraChapterExpired(self):
-        if self.__battlePassController.isExtraChapter(self.__chapterID):
+        if self.__battlePass.isExtraChapter(self.__chapterID):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
 
     def __onBattlePassSettingsChange(self, *_):
-        ctrl = self.__battlePassController
+        ctrl = self.__battlePass
         if not (ctrl.isEnabled() and ctrl.isVisible() and ctrl.isChapterExists(self.__chapterID)):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
@@ -218,5 +220,5 @@ class BattlePassBuyLevelWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, ctx, parent):
-        super(BattlePassBuyLevelWindow, self).__init__(content=BattlePassBuyLevelView(R.views.lobby.battle_pass.BattlePassBuyView(), wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, ctx=ctx), wndFlags=WindowFlags.WINDOW, decorator=None, parent=parent)
+        super(BattlePassBuyLevelWindow, self).__init__(content=BattlePassBuyLevelView(ctx=ctx), wndFlags=WindowFlags.WINDOW, decorator=None, parent=parent)
         return

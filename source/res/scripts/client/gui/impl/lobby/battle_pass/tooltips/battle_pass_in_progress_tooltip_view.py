@@ -18,7 +18,7 @@ from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleContr
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattlePassInProgressTooltipView(ViewImpl):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ('__battleType',)
@@ -48,36 +48,37 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 else:
                     items = model.rewardPoints.getItems()
                     arenaBonusType = getSupportedCurrentArenaBonusType(battleType)
-                    for points in self.__battlePassController.getPerBattlePoints(gameMode=arenaBonusType):
+                    for points in self.__battlePass.getPerBattlePoints(gameMode=arenaBonusType):
                         item = RewardPointsModel()
                         item.setTopCount(points.label)
                         item.setPointsWin(points.winPoint)
                         item.setPointsLose(points.losePoint)
                         items.addViewModel(item)
 
-                curLevel = self.__battlePassController.getCurrentLevel()
-                chapterID = self.__battlePassController.getCurrentChapterID()
-                curPoints, limitPoints = self.__battlePassController.getLevelProgression(chapterID)
-                isBattlePassPurchased = self.__battlePassController.isBought(chapterID=chapterID)
+                curLevel = self.__battlePass.getCurrentLevel()
+                chapterID = self.__battlePass.getCurrentChapterID()
+                curPoints, limitPoints = self.__battlePass.getLevelProgression(chapterID)
+                isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID)
                 model.setLevel(curLevel)
                 model.setChapter(chapterID)
                 model.setCurrentPoints(curPoints)
                 model.setMaxPoints(limitPoints)
                 model.setIsBattlePassPurchased(isBattlePassPurchased)
                 model.setBattleType(getPreQueueName(battleType).lower())
-                model.setNotChosenRewardCount(self.__battlePassController.getNotChosenRewardCount())
-                model.setExpireTime(self.__battlePassController.getChapterRemainingTime(chapterID))
-                model.setIsExtra(self.__battlePassController.isExtraChapter(chapterID))
+                model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
+                model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
+                model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
+                model.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
-                    timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())
+                    timeTillEnd = getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft())
                 model.setTimeTillEnd(timeTillEnd)
                 self.__getAwards(chapterID, model.rewardsCommon, curLevel, BattlePassConsts.REWARD_FREE)
                 self.__getAwards(chapterID, model.rewardsElite, curLevel, BattlePassConsts.REWARD_PAID)
             return
 
     def __getAwards(self, chapterID, rewardsList, level, bonusType):
-        bonuses = self.__battlePassController.getSingleAward(chapterID, level + 1, bonusType)
+        bonuses = self.__battlePass.getSingleAward(chapterID, level + 1, bonusType)
         packBonusModelAndTooltipData(bonuses, rewardsList)
 
     def __updateBattleRoyalePoints(self, model):

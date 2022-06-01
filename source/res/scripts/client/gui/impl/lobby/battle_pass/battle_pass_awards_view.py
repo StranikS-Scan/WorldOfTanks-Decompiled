@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
 import SoundGroups
-from battle_pass_common import BattlePassRewardReason
+from battle_pass_common import BattlePassRewardReason, FinalReward
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
@@ -32,7 +32,7 @@ REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
 
 class BattlePassAwardsView(ViewImpl):
     __slots__ = ('__tooltipItems', '__closeCallback')
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassAwardsView())
@@ -69,20 +69,25 @@ class BattlePassAwardsView(ViewImpl):
         newLevel = data.get('newLevel', 0) or 0
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
         self.__closeCallback = data.get('callback')
-        isFinalReward = self.__battlePassController.isFinalLevel(chapterID, newLevel) and reason not in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE, BattlePassRewardReason.SELECT_REWARD)
+        isFinalReward = self.__battlePass.isFinalLevel(chapterID, newLevel) and reason not in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE, BattlePassRewardReason.SELECT_REWARD)
         isPurchase = reason in BattlePassRewardReason.PURCHASE_REASONS
         rewardReason = MAP_REWARD_REASON.get(reason, RewardReason.DEFAULT)
-        isBattlePassPurchased = self.__battlePassController.isBought(chapterID=chapterID) or isPurchase
-        _, styleLevel = getStyleInfoForChapter(chapterID) if chapterID else (None, None)
+        isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID) or isPurchase
+        if chapterID and self.__battlePass.getRewardType(chapterID) == FinalReward.STYLE:
+            _, styleLevel = getStyleInfoForChapter(chapterID) if chapterID else (None, None)
+        else:
+            styleLevel = None
         with self.viewModel.transaction() as tx:
             tx.setIsFinalReward(isFinalReward)
             tx.setReason(rewardReason)
             tx.setIsBattlePassPurchased(isBattlePassPurchased)
             tx.setCurrentLevel(newLevel)
             tx.setChapterID(chapterID)
-            tx.setSeasonStopped(self.__battlePassController.isPaused())
+            tx.setSeasonStopped(self.__battlePass.isPaused())
             tx.setIsBaseStyleLevel(styleLevel == 1)
-            tx.setIsExtra(self.__battlePassController.isExtraChapter(chapterID))
+            tx.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
+            if chapterID:
+                tx.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
         self.__setAwards(bonuses, isFinalReward)
         isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength() or isRewardSelected))

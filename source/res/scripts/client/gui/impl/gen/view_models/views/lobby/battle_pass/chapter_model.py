@@ -14,7 +14,7 @@ class ChapterStates(Enum):
 class ChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(ChapterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -69,6 +69,12 @@ class ChapterModel(ViewModel):
     def setIsExtra(self, value):
         self._setBool(8, value)
 
+    def getFinalReward(self):
+        return self._getString(9)
+
+    def setFinalReward(self, value):
+        self._setString(9, value)
+
     def _initialize(self):
         super(ChapterModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -80,3 +86,4 @@ class ChapterModel(ViewModel):
         self._addBoolProperty('isBought', False)
         self._addNumberProperty('levelProgression', 0)
         self._addBoolProperty('isExtra', False)
+        self._addStringProperty('finalReward', '')

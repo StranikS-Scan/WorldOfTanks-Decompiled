@@ -2,25 +2,21 @@
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
 import logging
-import typing
 from collections import namedtuple
 from functools import partial
 from operator import itemgetter
+import typing
 import BigWorld
 from adisp import process
+from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, CURRENCY_TOKEN_PREFIX, RESOURCE_TOKEN_PREFIX, RentType
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
-from gui.app_loader.decorators import sf_lobby
-from gui.game_control.dragon_boat_controller import DBOAT_POINTS
-from gui.game_control.links import URLMacros
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -29,43 +25,42 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
+from gui.Scaleform.settings import BADGES_ICONS, ICONS_SIZES, getBadgeIconPath
+from gui.app_loader.decorators import sf_lobby
+from gui.game_control.dragon_boat_controller import DBOAT_POINTS
+from gui.game_control.links import URLMacros
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
-from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
+from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
+from gui.shared.gui_items.crew_book import orderCmp
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
-from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.money import Currency, Money
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
-from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
-from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence
-from gui.shared.utils.requesters.blueprints_requester import makeNationalCD, makeIntelligenceCD
-from helpers import dependency
-from helpers import getLocalizedData, i18n
-from helpers import time_utils
+from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
+from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
-from items import vehicles, tankmen
+from items import tankmen, vehicles
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
-from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from optional_bonuses import BONUS_MERGERS
-from shared_utils import makeTupleByDict, CONST_CONTAINER, first
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
+from shared_utils import CONST_CONTAINER, first, makeTupleByDict
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN
-from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
-from web.web_client_api.common import ItemPackEntry, ItemPackTypeGroup, getItemPackByGroupAndName, ItemPackType
+from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup, getItemPackByGroupAndName
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
@@ -568,6 +563,33 @@ class BattlePassSelectTokensBonus(TokensBonus):
         self._ctx.update(ctx)
 
 
+class BattlePassQuestChainTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(BattlePassQuestChainTokensBonus, self).__init__(BATTLE_PASS_Q_CHAIN_BONUS_NAME, value, isCompensation, ctx)
+
+    @property
+    def tokenID(self):
+        return first(self._value.keys())
+
+    @property
+    def chapterID(self):
+        return int(self.__getTokenIDPart(2))
+
+    @property
+    def level(self):
+        return int(self.__getTokenIDPart(3))
+
+    def getType(self):
+        return self.__getTokenIDPart(1)
+
+    def isShowInGUI(self):
+        return True
+
+    def __getTokenIDPart(self, index):
+        return self.tokenID.split(':')[index]
+
+
 class BattlePassStyleProgressTokenBonus(TokensBonus):
 
     def __init__(self, value, isCompensation=False, ctx=None):
@@ -800,6 +822,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(BattlePassSelectTokensBonus({tID: tValue}, isCompensation, ctx))
         if _isSelectableBonusID(tID):
             result.append(SelectableBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX):
+            result.append(BattlePassQuestChainTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_TOKEN_PREFIX):
             result.append(BattlePassTokensBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(CURRENCY_TOKEN_PREFIX):

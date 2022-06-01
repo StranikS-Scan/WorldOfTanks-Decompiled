@@ -75,4 +75,4 @@ def _show_continue_client_download_dialog():
 
 
 def _getContinueDownloadUrl():
-    return GUI_SETTINGS.miniclient['webBridgeRootURL'] + '/wot_client_url/'
+    return GUI_SETTINGS.baseUrls['webBridgeRootURL'] + '/wot_client_url/'

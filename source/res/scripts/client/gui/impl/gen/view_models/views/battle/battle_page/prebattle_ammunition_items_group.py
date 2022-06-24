@@ -13,6 +13,10 @@ class PrebattleAmmunitionItemsGroup(AmmunitionItemsGroup):
     def setupSelector(self):
         return self._getViewModel(5)
 
+    @staticmethod
+    def getSetupSelectorType():
+        return PrebattleAmmunitionSetupSelector
+
     def _initialize(self):
         super(PrebattleAmmunitionItemsGroup, self)._initialize()
         self._addViewModelProperty('setupSelector', PrebattleAmmunitionSetupSelector())

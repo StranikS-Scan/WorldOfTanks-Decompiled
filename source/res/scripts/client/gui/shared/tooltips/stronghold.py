@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/stronghold.py
+import logging
 import typing
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -12,6 +13,7 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import int2roman
 if typing.TYPE_CHECKING:
     from gui.prb_control.items.stronghold_items import StrongholdData
+_logger = logging.getLogger(__name__)
 
 class StrongholdTooltipData(BlocksTooltipData):
 
@@ -44,16 +46,20 @@ class ReserveTooltipData(StrongholdTooltipData):
         reserveCount = reserves.getReserveCount(reserve.getType(), reserve.getLevel())
         if selected:
             reserveCount -= 1
-        item = self.context.buildItem(reserve.intCD)
-        tooltipBlocks.append(self.__getHeaderBlock(item, reserveName, reserveLevel, reserveCount, isPlayerLegionary))
-        tooltipBlocks.append(formatters.packBuildUpBlockData(self.__getMainParamsBlock(reserveName, item), padding=formatters.packPadding(left=10, right=10, top=-4, bottom=-2), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=-2, blockWidth=450))
-        tooltipBlocks.append(formatters.packBuildUpBlockData(self.__getAdditionalParamsBlock(reserve), padding=formatters.packPadding(left=10, right=10, top=-4, bottom=-2), gap=-2))
-        if selected:
-            status = R.strings.fortifications.reserves.tooltip.selected()
+        if reserve.intCD is None:
+            _logger.error('%s intCD is None! Check wgsh version on staging.', reserveName)
+            return tooltipBlocks
         else:
-            status = R.strings.fortifications.reserves.tooltip.readyToSelect()
-        tooltipBlocks.append(formatters.packAlignedTextBlockData(text_styles.statInfo(backport.text(status)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, blockWidth=430, padding=formatters.packPadding(left=10, right=10, top=-7, bottom=-7)))
-        return tooltipBlocks
+            item = self.context.buildItem(reserve.intCD)
+            tooltipBlocks.append(self.__getHeaderBlock(item, reserveName, reserveLevel, reserveCount, isPlayerLegionary))
+            tooltipBlocks.append(formatters.packBuildUpBlockData(self.__getMainParamsBlock(reserveName, item), padding=formatters.packPadding(left=10, right=10, top=-4, bottom=-2), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=-2, blockWidth=450))
+            tooltipBlocks.append(formatters.packBuildUpBlockData(self.__getAdditionalParamsBlock(reserve), padding=formatters.packPadding(left=10, right=10, top=-4, bottom=-2), gap=-2))
+            if selected:
+                status = R.strings.fortifications.reserves.tooltip.selected()
+            else:
+                status = R.strings.fortifications.reserves.tooltip.readyToSelect()
+            tooltipBlocks.append(formatters.packAlignedTextBlockData(text_styles.statInfo(backport.text(status)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, blockWidth=430, padding=formatters.packPadding(left=10, right=10, top=-7, bottom=-7)))
+            return tooltipBlocks
 
     def __getHeaderBlock(self, item, name, level, count, isPlayerLegionary):
         reserveIcon = R.images.gui.maps.icons.reserveTypes.dyn(self.__getReserveIconName(name, level))()

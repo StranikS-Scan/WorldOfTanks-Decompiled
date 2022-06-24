@@ -16,6 +16,10 @@ class BonusesModel(ViewModel):
     def setItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getItemsType():
+        return BonusModel
+
     def getTitle(self):
         return self._getString(1)
 

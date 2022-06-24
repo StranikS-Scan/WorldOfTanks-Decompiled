@@ -1307,6 +1307,12 @@
       <userString>	#vehicle_customization:emblem/special/sticker_703	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	880	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_703.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_703_east	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	Global Map	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
@@ -1520,6 +1526,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
       <id>	644	</id>
@@ -3571,6 +3578,39 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	CN WCL	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It20_Carro_Combattimento_45t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	876	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_708.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_708	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran Centauro It20	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	878	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_709.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_709	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Gamescom 2022	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
 </emblems_special.xml>

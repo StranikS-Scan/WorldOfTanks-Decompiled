@@ -7,12 +7,8 @@ from helpers import dependency, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from epic_constants import EPIC_BATTLE_LEVEL_IMAGE_INDEX
 _logger = logging.getLogger(__name__)
-_BACKGROUND_LEVEL_IMAGE = ((0,),
- (1, 2, 3, 4),
- (5, 6, 7, 8, 9),
- (10, 11, 12, 13, 14),
- (15,))
 ProgressionLevelIconVO = namedtuple('MetaLevelVO', ('seasonLevel', 'playerLevel', 'bgImageId'))
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
@@ -58,7 +54,7 @@ def _getProgressionIconBackgroundId(level):
     if level is None:
         return 0
     else:
-        for index, levelRange in enumerate(_BACKGROUND_LEVEL_IMAGE):
+        for index, levelRange in enumerate(EPIC_BATTLE_LEVEL_IMAGE_INDEX):
             if level in levelRange:
                 return index
 

@@ -115,10 +115,10 @@ class DossierDescr(object):
             compDescrArray = array('c', self.__compDescr)
             sizes = self.__sizes[:]
             offset = self.__blocksOffset
+            blocks = self.__blocks
             for i, name in enumerate(self.__blocksLayout):
-                block = self.__blocks.get(name, None)
-                if block is not None:
-                    compDescrArray, sizes[i] = block.updateDossierCompDescr(compDescrArray, offset, sizes[i])
+                if name in blocks:
+                    compDescrArray, sizes[i] = blocks[name].updateDossierCompDescr(compDescrArray, offset, sizes[i])
                 offset += sizes[i]
 
             if sizes != self.__sizes or self.__blockRemoved:

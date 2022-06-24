@@ -14,13 +14,25 @@ class ExchangePanelModel(ViewModel):
     def fromItem(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getFromItemType():
+        return PriceItemModel
+
     @property
     def toItem(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getToItemType():
+        return PriceItemModel
+
     @property
     def exchangeRate(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getExchangeRateType():
+        return ExchangeRateModel
 
     def _initialize(self):
         super(ExchangePanelModel, self)._initialize()

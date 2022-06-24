@@ -126,7 +126,7 @@ class MapboxSquadEntity(SquadEntity):
         return MapboxScheduler(self)
 
     def _vehicleStateCondition(self, v):
-        return self.__restrictedSPGDataProvider.isVehcleOfClassAvailable() if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG else super(MapboxSquadEntity, self)._vehicleStateCondition(v)
+        return (self.__restrictedSPGDataProvider.isVehcleOfClassAvailable(), None) if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG else super(MapboxSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         self.invalidateVehicleStates()

@@ -88,6 +88,7 @@ class ItemPackType(CONST_CONTAINER):
     GOODIE_FREE_EXPERIENCE = 'goodie/free_experience'
     GOODIE_CREW_EXPERIENCE = 'goodie/crew_experience'
     GOODIE_FRONTLINE_EXPERIENCE = 'goodie/fl_experience'
+    GOODIE_RECERTIFICATIONFORM = 'goodie/recertificationForm'
     CREW_50 = 'crew/50'
     CREW_75 = 'crew/75'
     CREW_100 = 'crew/100'
@@ -106,8 +107,6 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
     CUSTOM_BATTLE_PASS_POINTS = 'custom/battlePassPoints'
-    CUSTOM_DRAGON_BOAT_POINTS = 'custom/dragonBoatPoints'
-    CUSTOM_SLOTS = 'custom/slots'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -142,6 +141,9 @@ class ItemPackType(CONST_CONTAINER):
     BLUEPRINT_ANY = 'blueprint/any'
     DEMOUNT_KIT = 'demountKit'
     REFERRAL_AWARDS = 'referral_awards'
+    OFFER = 'offer'
+    OFFER_BROCHURE = 'offer/crew_book/brochure'
+    OFFER_BATTLE_BOOSTER = 'offer/item/equipment'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
@@ -181,8 +183,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL,
      ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
-     ItemPackType.CUSTOM_SUPPLY_POINT,
-     ItemPackType.CUSTOM_SLOTS)
+     ItemPackType.CUSTOM_SUPPLY_POINT)
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,
@@ -198,6 +199,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CREW_BOOK_CREW_BOOK,
      ItemPackType.CREW_BOOK_PERSONAL_BOOK,
      ItemPackType.CREW_BOOK_UNIVERSAL_BOOK)
+    OFFER = (ItemPackType.OFFER_BATTLE_BOOSTER, ItemPackType.OFFER_BROCHURE)
 
 
 CompensationSpec = namedtuple('CompensationSpec', ('type', 'value', 'count'))

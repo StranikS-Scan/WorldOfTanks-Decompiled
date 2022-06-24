@@ -128,6 +128,9 @@ class EPIC_SOUND(object):
     EQUIPMENT_ACTIVATED = {'arcade_minefield_epic_battle': 'eb_ability_minefield_zone',
      'fl_regenerationKit': 'eb_ability_renovation_apply',
      'stealth_radar': 'eb_ability_stealth_apply'}
+    EB_VO_RESERVE_UPGRADED = 'vo_eb_reserve_improving'
+    EB_VO_RESERVE_UNLOCKED = 'vo_eb_reserve_unlock'
+    EB_VO_TANKS_UNLOCKED = 'vo_eb_unlock_tier_9_tanks'
     EB_TANKS_UNLOCKED = 'eb_tanks_9lvl_unlocked'
     EB_UI_ADD_TIME_EMERGENCE = 'eb_ui_add_time_emergence'
     EB_UI_CANNON_DESTRUCTION_EMERGENCE = 'eb_ui_cannon_destruction_emergence'

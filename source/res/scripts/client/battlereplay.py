@@ -39,6 +39,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+from constants import ARENA_BONUS_TYPE
 _logger = logging.getLogger(__name__)
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
@@ -416,6 +417,7 @@ class BattleReplay(object):
             if wasPlaying:
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
+                    BigWorld.player().onObserverVehicleChanged -= self.__onObserverVehicleChanged
                 if not isOffline and not isDestroyed:
                     self.connectionMgr.onDisconnected += self.__goToNextReplay
                 if wasServerReplay:
@@ -552,6 +554,8 @@ class BattleReplay(object):
                     self.onControlModeChanged(controlMode)
                     self.__showInfoMessage('replayFreeCameraActivated')
                 else:
+                    if not self.__isAllowedSavedCamera():
+                        return False
                     self.__replayCtrl.isControllingCamera = True
                     self.onControlModeChanged()
                     self.__showInfoMessage('replaySavedCameraActivated')
@@ -799,6 +803,7 @@ class BattleReplay(object):
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
+                    BigWorld.player().onObserverVehicleChanged += self.__onObserverVehicleChanged
                     if isServerSideReplay():
                         BigWorld.player().startServerSideReplay()
                 if not self.isServerSideReplay:
@@ -1230,6 +1235,10 @@ class BattleReplay(object):
             if self.__replayCtrl.isControllingCamera:
                 self.onControlModeChanged(self.getControlMode())
 
+    def __onObserverVehicleChanged(self):
+        if self.__replayCtrl.isControllingCamera and not self.__isAllowedSavedCamera():
+            self.__replayCtrl.isControllingCamera = False
+
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         if self.isRecording:
             if self.__arenaPeriod == period and period == ARENA_PERIOD.BATTLE and self.__previousPeriod != period:
@@ -1275,6 +1284,9 @@ class BattleReplay(object):
 
     def onRespawnMode(self, enabled):
         self.__replayCtrl.onRespawnMode(enabled)
+
+    def __isAllowedSavedCamera(self):
+        return BigWorld.player().arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE if BigWorld.player().isObserver() else True
 
 
 def _JSON_Encode(obj):

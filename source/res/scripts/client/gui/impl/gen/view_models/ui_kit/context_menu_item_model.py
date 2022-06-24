@@ -14,6 +14,10 @@ class ContextMenuItemModel(ViewModel):
     def subItemsList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getSubItemsListType():
+        return ListModel
+
     def getLabel(self):
         return self._getResource(1)
 

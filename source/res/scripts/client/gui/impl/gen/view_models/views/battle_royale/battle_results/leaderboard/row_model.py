@@ -13,6 +13,10 @@ class RowModel(ViewModel):
     def user(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getUserType():
+        return UserNameModel
+
     def getPlace(self):
         return self._getString(1)
 

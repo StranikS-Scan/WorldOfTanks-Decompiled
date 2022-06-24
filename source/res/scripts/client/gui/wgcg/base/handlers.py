@@ -17,7 +17,7 @@ class BaseRequestHandlers(RequestHandlers):
         return handlers
 
     def __login(self, ctx, callback=None):
-        return self._requester.doRequestEx(ctx, callback, 'login', ctx.getUserDatabaseID(), ctx.getTokenID())
+        return self._requester.doRequestEx(ctx, callback, 'login', ctx.getUserDatabaseID(), ctx.getTokenID(), ctx.isJwt())
 
     def __logout(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'logout')

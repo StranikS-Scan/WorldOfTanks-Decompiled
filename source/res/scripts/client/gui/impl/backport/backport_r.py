@@ -25,6 +25,27 @@ def text(resId, *args, **kwargs):
     return wulf.getTranslatedTextByResId(resId)
 
 
+def ntext(resId, n, *args, **kwargs):
+    if resId <= 0:
+        _logger.warning('Invalid resId')
+        return ''
+    if args:
+        try:
+            return wulf.getTranslatedPluralTextByResId(resId, n, args)
+        except (TypeError, ValueError):
+            _logger.warning("Arguments do not match string with resId '%r': %r", resId, args)
+            return ''
+
+    elif kwargs:
+        try:
+            return wulf.getTranslatedPluralTextByResId(resId, n, kwargs)
+        except (TypeError, ValueError):
+            _logger.warning("Arguments do not match string with resId '%r': %r", resId, kwargs)
+            return ''
+
+    return wulf.getTranslatedPluralTextByResId(resId, n)
+
+
 def msgid(resId):
     return wulf.getTranslatedKey(resId)
 

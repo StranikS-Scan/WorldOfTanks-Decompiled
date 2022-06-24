@@ -17,13 +17,25 @@ class WindowHeaderModel(ViewModel):
     def noBonusPlaceholder(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getNoBonusPlaceholderType():
+        return NoBonusPlaceholderModel
+
     @property
     def btnLeavePlatoon(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getBtnLeavePlatoonType():
+        return ButtonModel
+
     @property
     def btnMuteAll(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getBtnMuteAllType():
+        return MuteAllToggleModel
 
     def getBackgroundImage(self):
         return self._getString(3)
@@ -48,6 +60,10 @@ class WindowHeaderModel(ViewModel):
 
     def setBonuses(self, value):
         self._setArray(6, value)
+
+    @staticmethod
+    def getBonusesType():
+        return BonusModel
 
     def _initialize(self):
         super(WindowHeaderModel, self)._initialize()

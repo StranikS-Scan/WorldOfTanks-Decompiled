@@ -33,9 +33,17 @@ class PostProgressionBaseViewModel(ViewModel):
     def grid(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getGridType():
+        return PostProgressionGridModel
+
     @property
     def persistentBonuses(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getPersistentBonusesType():
+        return BonusesModel
 
     def getProgressionAvailability(self):
         return ProgressionAvailability(self._getString(2))

@@ -13,6 +13,10 @@ class CartPurchaseModel(ViewModel):
     def totalPrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTotalPriceType():
+        return UserCompoundPriceModel
+
     def getPurchasedCount(self):
         return self._getNumber(1)
 

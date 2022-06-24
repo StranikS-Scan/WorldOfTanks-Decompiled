@@ -14,9 +14,17 @@ class BlueprintPriceContentModel(ViewModel):
     def valueMain(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getValueMainType():
+        return BlueprintValuePrice
+
     @property
     def additionalValues(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getAdditionalValuesType():
+        return ListModel
 
     def getTooltipId(self):
         return self._getNumber(2)

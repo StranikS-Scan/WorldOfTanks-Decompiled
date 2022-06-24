@@ -28,6 +28,7 @@ class BLOCK_MODE(object):
     NONE = 0
     UNIQUE = 32
     DEV = 64
+    HIDE_FROM_LIB = 256
 
 
 def makePlanPath(planName):

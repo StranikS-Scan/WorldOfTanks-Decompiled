@@ -13,6 +13,10 @@ class PremDashboardMapsBlacklistCardModel(ViewModel):
     def disabledMaps(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getDisabledMapsType():
+        return ListModel
+
     def getIsAvailable(self):
         return self._getBool(1)
 

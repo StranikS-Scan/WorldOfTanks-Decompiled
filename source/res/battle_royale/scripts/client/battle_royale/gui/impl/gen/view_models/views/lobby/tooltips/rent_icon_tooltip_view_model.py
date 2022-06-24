@@ -13,6 +13,10 @@ class RentIconTooltipViewModel(ViewModel):
     def price(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPriceType():
+        return PriceModel
+
     def getRentDays(self):
         return self._getNumber(1)
 

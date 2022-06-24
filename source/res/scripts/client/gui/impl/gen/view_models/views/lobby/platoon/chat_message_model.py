@@ -13,13 +13,25 @@ class ChatMessageModel(ViewModel):
     def playerName(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPlayerNameType():
+        return ChatMessagePartModel
+
     @property
     def timeStamp(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getTimeStampType():
+        return ChatMessagePartModel
+
     @property
     def text(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getTextType():
+        return ChatMessagePartModel
 
     def getKey(self):
         return self._getNumber(3)

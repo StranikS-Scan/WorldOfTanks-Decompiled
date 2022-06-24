@@ -15,13 +15,25 @@ class RoleSlotTooltipViewModel(FeatureTooltipViewModel):
     def price(self):
         return self._getViewModel(3)
 
+    @staticmethod
+    def getPriceType():
+        return PriceModel
+
     @property
     def moneyShortage(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getMoneyShortageType():
+        return PriceModel
+
     @property
     def chosenRole(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getChosenRoleType():
+        return RoleModel
 
     def getAvailableRoles(self):
         return self._getArray(6)
@@ -29,11 +41,19 @@ class RoleSlotTooltipViewModel(FeatureTooltipViewModel):
     def setAvailableRoles(self, value):
         self._setArray(6, value)
 
+    @staticmethod
+    def getAvailableRolesType():
+        return RoleModel
+
     def getSlots(self):
         return self._getArray(7)
 
     def setSlots(self, value):
         self._setArray(7, value)
+
+    @staticmethod
+    def getSlotsType():
+        return RoleModel
 
     def _initialize(self):
         super(RoleSlotTooltipViewModel, self)._initialize()

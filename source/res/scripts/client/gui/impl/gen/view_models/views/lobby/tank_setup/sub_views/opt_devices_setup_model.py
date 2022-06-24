@@ -15,11 +15,19 @@ class OptDevicesSetupModel(BaseSetupModel):
     def filter(self):
         return self._getViewModel(5)
 
+    @staticmethod
+    def getFilterType():
+        return OptDeviceFilterModel
+
     def getSlots(self):
         return self._getArray(6)
 
     def setSlots(self, value):
         self._setArray(6, value)
+
+    @staticmethod
+    def getSlotsType():
+        return OptDeviceSlotModel
 
     def getWithIntroduction(self):
         return self._getBool(7)

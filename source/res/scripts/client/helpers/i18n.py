@@ -44,6 +44,26 @@ def makeString(key, *args, **kwargs):
     return wulf.getTranslatedText(key)
 
 
+def makePluralString(key, pluralKey, n, *args, **kwargs):
+    if not key:
+        return key
+    if args:
+        try:
+            return wulf.getTranslatedPluralText(key, pluralKey, n, args)
+        except (TypeError, ValueError, KeyError):
+            _logger.warning("Arguments do not match string read by key '%r': %r", key, args)
+            return key
+
+    elif kwargs:
+        try:
+            return wulf.getTranslatedPluralText(key, pluralKey, n, kwargs)
+        except (TypeError, ValueError, KeyError):
+            _logger.warning("Arguments do not match string read by key '%s': %s", key, kwargs)
+            return key
+
+    return wulf.getTranslatedPluralText(key, pluralKey, n)
+
+
 def makeStringJSON(key, argsStr):
     try:
         args = json.loads(argsStr)

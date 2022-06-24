@@ -14,6 +14,7 @@ from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, Excha
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
+from gui.impl.lobby.frontline.skill_drop_dialog import SkillDropDialog
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus
@@ -122,3 +123,13 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
     raise AsyncReturn(result)
+
+
+@async
+def showDropSkillDialog(tankman, price=None, isBlank=False, freeDropSave100=False):
+    result = yield await(showSingleDialogWithResultData(price=price, isBlank=isBlank, tankman=tankman, freeDropSave100=freeDropSave100, layoutID=SkillDropDialog.LAYOUT_ID, wrappedViewClass=SkillDropDialog))
+    if result.busy:
+        raise AsyncReturn((False, {}))
+    else:
+        isOk, _ = result.result
+        raise AsyncReturn((isOk, {}))

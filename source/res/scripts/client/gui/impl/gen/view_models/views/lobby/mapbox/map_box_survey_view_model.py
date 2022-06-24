@@ -13,6 +13,10 @@ class MapBoxSurveyViewModel(ViewModel):
     def question(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getQuestionType():
+        return MapBoxQuestionModel
+
     def getMapId(self):
         return self._getString(1)
 

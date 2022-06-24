@@ -202,12 +202,22 @@ class MultipleAwardsViewWindow(LobbyNotificationWindow):
 
     def __init__(self, rewards, tooltips, productCode):
         super(MultipleAwardsViewWindow, self).__init__(content=self._getContentView(rewards, tooltips, productCode))
-        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
+        self.__blur = None
+        return
+
+    def load(self):
+        if self.__blur is None:
+            self.__blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
+        super(MultipleAwardsViewWindow, self).load()
+        return
 
     @classmethod
     def _getContentView(cls, rewards, tooltips, productCode):
         return MultipleAwardsView(rewards=rewards, tooltips=tooltips, productCode=productCode)
 
     def _finalize(self):
-        self.__blur.fini()
+        if self.__blur is not None:
+            self.__blur.fini()
+            self.__blur = None
         super(MultipleAwardsViewWindow, self)._finalize()
+        return

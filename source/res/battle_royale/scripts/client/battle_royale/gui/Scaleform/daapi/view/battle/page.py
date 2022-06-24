@@ -6,7 +6,6 @@ from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_CAPS
 from gui.battle_control import avatar_getter
 from Event import EventsSubscriber
-from battle_royale.gui.Scaleform.daapi.view.battle.ability_indicators.panel import AbilityIndicatorsPanel
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d.manager import BattleRoyaleMarkersManager
 from battle_royale.gui.Scaleform.daapi.view.battle.player_format import BattleRoyalePlayerFullNameFormatter
 from battle_royale.gui.Scaleform.daapi.view.battle.spawned_bot_msg import SpawnedBotMsgPlayerMsgs
@@ -101,7 +100,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             components = _BATTLE_ROYALE_CFG
         self.__selectSpawnToggling = set()
         self.__brSoundControl = None
-        self.__abilityIndicatorsPanel = None
         self.__isFullStatsShown = False
         self.__panelsIsVisible = False
         self.__es = EventsSubscriber()
@@ -175,7 +173,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.__es.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
         self.__brSoundControl = BRBattleSoundController()
         self.__brSoundControl.init()
-        self.__abilityIndicatorsPanel = AbilityIndicatorsPanel()
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onShowDeathScreen += self.__onShowDeathScreen
 
     def _startBattleSession(self):
         super(BattleRoyalePage, self)._startBattleSession()
@@ -217,6 +217,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         super(BattleRoyalePage, self)._toggleGuiVisible()
 
     def _dispose(self):
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onShowDeathScreen -= self.__onShowDeathScreen
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl:
             spawnCtrl.removeRuntimeView(self)
@@ -225,8 +228,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.__brSoundControl = None
         self.__selectSpawnToggling.clear()
         self.__es.unsubscribeFromAllEvents()
-        self.__abilityIndicatorsPanel.destroy()
-        self.__abilityIndicatorsPanel = None
         super(BattleRoyalePage, self)._dispose()
         return
 
@@ -285,3 +286,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             if not isDualGunVehicle:
                 if dualGunAlias in self._fsToggling:
                     self._fsToggling.remove(dualGunAlias)
+
+    def __onShowDeathScreen(self):
+        if self.as_isComponentVisibleS(self._fullStatsAlias):
+            self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=[BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE])
+            self._fsToggling.add(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE)

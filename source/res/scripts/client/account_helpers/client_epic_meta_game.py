@@ -22,6 +22,9 @@ class ClientEpicMetaGame(object):
     def setSelectedAbilities(self, listOfAbilities, vehicleCD, callback=_skipResponse):
         self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def setSelectedAbilitiesVehsClass(self, listOfAbilities, vehicleCD, callback=_skipResponse):
+        self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY_VEHICLES, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def increaseAbility(self, abilityID, callback=_skipResponse):
         self.__account._doCmdInt(AccountCommands.CMD_INCREASE_EPIC_META_ABILITY, abilityID, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 

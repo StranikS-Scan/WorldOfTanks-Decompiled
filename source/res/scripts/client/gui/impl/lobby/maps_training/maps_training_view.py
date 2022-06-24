@@ -4,9 +4,11 @@ import ArenaType
 import BigWorld
 import Math
 from AvatarInputHandler.cameras import getViewProjectionMatrix
+from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_group_model import MapsTrainingGroupModel
@@ -23,13 +25,10 @@ from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from items import vehicles
-from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMapsTrainingController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from maps_training_common.maps_training_constants import VEHICLE_TYPE, VEHICLE_CLASSES_ORDER, SCENARIO_INDEXES
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.impl.lobby.maps_training.maps_training_base_view import MapsTrainingBaseView
@@ -50,7 +49,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    c11nService = dependency.descriptor(ICustomizationService)
 
     def __init__(self, *args, **kwargs):
         super(MapsTrainingView, self).__init__(viewResource=R.views.lobby.maps_training.MapsTrainingPage(), viewModel=MapsTrainingViewModel())
@@ -107,6 +105,10 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         Waiting.show('loadPage')
         self.mapsTrainingController.requestInitialDataFromServer(self.__fillData)
 
+    def _onLoaded(self, *args, **kwargs):
+        super(MapsTrainingView, self)._onLoaded(*args, **kwargs)
+        self.__checkCamera()
+
     def _finalize(self):
         self.__finalizationInProgress = True
         self.__blur.fini()
@@ -114,9 +116,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             BigWorld.cancelCallback(self.__tickCallback)
         if not self.__selectedMap:
             MapsTrainingSound.onSelectedMap(True)
-        if self.prbEntity is not None and not self.prbEntity.isInQueue():
-            g_currentPreviewVehicle.selectNoVehicle()
-            g_currentPreviewVehicle.resetAppearance()
         super(MapsTrainingView, self)._finalize()
         return
 
@@ -131,7 +130,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
 
     def _addListeners(self):
         super(MapsTrainingView, self)._addListeners()
-        self.viewModel.onMenu += self.__onMenu
         self.viewModel.onSelect += self.__onSelect
         self.viewModel.onScenarioSelect += self.__onScenarioSelect
         self.viewModel.onBack += self.__onBack
@@ -139,25 +137,24 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.startGlobalListening()
         self.viewModel.onFilteringChange += self.__filterChangeHandler
         self.viewModel.onInfoClicked += self.__clickInfoHandler
+        self.viewModel.onClose += self.__clickCloseHandler
         self.hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
         g_currentPreviewVehicle.onChangeStarted += self.__onPreviewVehicleChangeStarted
         g_currentPreviewVehicle.onChanged += self.__onPreviewVehicleChanged
-        self.c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
 
     def _removeListeners(self):
         super(MapsTrainingView, self)._removeListeners()
         self.stopGlobalListening()
-        self.viewModel.onMenu -= self.__onMenu
         self.viewModel.onSelect -= self.__onSelect
         self.viewModel.onScenarioSelect -= self.__onScenarioSelect
         self.viewModel.onBack -= self.__onBack
         self.viewModel.onBlurRectUpdated -= self.__onBlurRectUpdated
         self.viewModel.onFilteringChange -= self.__filterChangeHandler
         self.viewModel.onInfoClicked -= self.__clickInfoHandler
+        self.viewModel.onClose -= self.__clickCloseHandler
         self.hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreate
         g_currentPreviewVehicle.onChangeStarted -= self.__onPreviewVehicleChangeStarted
         g_currentPreviewVehicle.onChanged -= self.__onPreviewVehicleChanged
-        self.c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
 
     def __onHangarSpaceCreate(self):
         self.__hangarCameraManager = self.hangarSpace.space.getCameraManager()
@@ -173,9 +170,8 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         MapsTrainingSound.onSelectedMap(False)
         self.mapsTrainingController.reset()
 
-    @staticmethod
-    def __onMenu():
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
+    def __clickCloseHandler(self):
+        self.mapsTrainingController.selectRandomMode()
 
     def __onSelect(self, args):
         self.__selectedMap = str(args.get('id'))
@@ -250,8 +246,10 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             self.mapsTrainingController.setSelectedTeam(scenario.team)
         self.__markerPosOffset = self._MEDIUM_TANK_OFFSET if scenario.vehicleType == VEHICLE_TYPE.MEDIUM else 0.0
         vehicle, vehicleName = self.__getVehicleForScenario(scenario)
-        if vehicle != self.mapsTrainingController.getSelectedVehicle() or g_currentPreviewVehicle.intCD != vehicle:
+        if vehicle != self.mapsTrainingController.getSelectedVehicle():
             self.mapsTrainingController.setSelectedVehicle(vehicle)
+        elif g_currentPreviewVehicle.intCD != vehicle:
+            self.mapsTrainingController.updateSelectedVehicle()
         selectedMapModel = model.selectedMapModel
         selectedMapModel.setSelectedScenario(self.__selectedScenario)
         selectedMapModel.setVehicleName(vehicleName)
@@ -409,12 +407,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             self.__tickCallback = BigWorld.callback(self._UPDATE_TICK_RATE, self.__tick)
         return
 
-    def __onC11nVisibilityChanged(self, _):
-        vehCompDescr = self.mapsTrainingController.getSelectedVehicle()
-        if self.__selectedMap and vehCompDescr:
-            g_currentPreviewVehicle.selectNoVehicle()
-            g_currentPreviewVehicle.selectVehicle(vehCompDescr)
-
     def __updateMarkerPosition(self):
         if self.__selectedMap and self.viewModel.isBound() and self.hangarSpace.spaceInited:
             vehEntity = self.hangarSpace.space.getVehicleEntity()
@@ -449,3 +441,15 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     def __tick(self):
         self.__updateMarkerPosition()
         self.__tickCallback = BigWorld.callback(self._UPDATE_TICK_RATE, self.__tick)
+
+    def __checkCamera(self):
+        if self.hangarSpace.spaceInited:
+            hangarVehicleEntity = self.hangarSpace.space.getVehicleEntity()
+            if hangarVehicleEntity and hangarVehicleEntity.state == CameraMovementStates.FROM_OBJECT:
+                BigWorld.callback(0, self.__switchCamera)
+
+    def __switchCamera(self):
+        ClientSelectableCameraObject.switchCamera()
+        if self.__selectedMap:
+            g_currentPreviewVehicle.selectNoVehicle()
+            self.mapsTrainingController.updateSelectedVehicle()

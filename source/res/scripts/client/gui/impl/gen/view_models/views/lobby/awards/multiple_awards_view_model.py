@@ -14,6 +14,10 @@ class MultipleAwardsViewModel(ViewModel):
     def rewards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardsType():
+        return RewardModel
+
     def getTitle(self):
         return self._getString(1)
 

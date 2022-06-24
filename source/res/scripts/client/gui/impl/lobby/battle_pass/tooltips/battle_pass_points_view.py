@@ -55,6 +55,7 @@ class BattlePassPointsTooltip(ViewImpl):
             item.setVehicleType(vehicle.type)
             item.setVehicleLevel(vehicle.level)
             item.setVehicleName(vehicle.userName)
+            item.setIsElite(vehicle.isElite)
             item.setVehicleBonus(pointsDiff.bonus)
             item.setVehicleTop(pointsDiff.top)
             item.setTextResource(backport.text(pointsDiff.textID))

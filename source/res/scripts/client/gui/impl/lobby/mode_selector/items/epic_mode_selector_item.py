@@ -4,6 +4,7 @@ import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
+from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_epic_model import ModeSelectorEpicModel
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
@@ -17,6 +18,7 @@ if typing.TYPE_CHECKING:
 
 class EpicModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ()
+    _VIEW_MODEL = ModeSelectorEpicModel
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.EPIC_BATTLE
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
@@ -49,10 +51,13 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
             nextSeason = self.__epicController.getNextSeason()
             season = currentSeason or nextSeason
             currentTime = time_utils.getCurrentLocalServerTimestamp()
-            vm.setConditions(backport.text(R.strings.mode_selector.mode.epicBattle.condition(), levels=toRomanRangeString(self.__epicController.getValidVehicleLevels())))
+            vehicleLevels = self.__epicController.getValidVehicleLevels()
+            localeFolder = R.strings.mode_selector.mode.epicBattle
+            vm.setConditions(backport.text(localeFolder.conditionSingleLevel() if len(vehicleLevels) == 1 else localeFolder.condition(), levels=toRomanRangeString(vehicleLevels)))
             vm.setDescription(backport.text(R.strings.mode_selector.mode.epicBattle.description()))
             if season is None:
                 return
+            vm.widget.setIsEnabled(True)
             if season.hasActiveCycle(currentTime):
                 self._addReward(ModeSelectorRewardID.CREDITS)
                 self._addReward(ModeSelectorRewardID.EXPERIENCE)
@@ -61,6 +66,8 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
                 if cycleInfo is not None:
                     timeLeftStr = time_formatters.getTillTimeByResource(cycleInfo.endDate - currentTime, R.strings.menu.Time.timeLeftShort, removeLeadingZeros=True)
                 vm.setTimeLeft(timeLeftStr)
+                currentLevel, _ = self.__epicController.getPlayerLevelInfo()
+                vm.widget.setLevel(currentLevel)
             else:
                 cycleInfo = season.getNextByTimeCycle(currentTime)
                 if cycleInfo is not None:

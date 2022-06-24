@@ -13,6 +13,10 @@ class AdditionalEquipmentSlotModel(ViewModel):
     def actionPrices(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getActionPricesType():
+        return ListModel
+
     def getIsEnabled(self):
         return self._getBool(1)
 

@@ -16,6 +16,10 @@ class RankedEfficiencyTooltipModel(ViewModel):
     def setItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getItemsType():
+        return RankedSeasonEfficiencyModel
+
     def _initialize(self):
         super(RankedEfficiencyTooltipModel, self)._initialize()
         self._addArrayProperty('items', Array())

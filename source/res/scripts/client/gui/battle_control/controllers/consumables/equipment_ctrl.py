@@ -4,6 +4,7 @@ import itertools
 import logging
 from collections import namedtuple
 from functools import partial
+from typing import TYPE_CHECKING
 import BigWorld
 import Event
 import SoundGroups
@@ -24,6 +25,8 @@ from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from shared_utils import findFirst, forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from items.artefacts import Equipment
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 _logger = logging.getLogger(__name__)
 
@@ -228,8 +231,14 @@ class _EquipmentItem(object):
     def getMarker(self):
         return self._descriptor.name.split('_')[0]
 
+    def getEnemyMarker(self):
+        return self.getMarker()
+
     def getMarkerColor(self):
         return BATTLE_MARKERS_CONSTS.COLOR_GREEN
+
+    def getEnemyMarkerColor(self):
+        return self.getMarkerColor()
 
     def getEquipmentID(self):
         _, innationID = self._descriptor.id
@@ -488,6 +497,21 @@ class _ArtilleryItem(_OrderItem):
 
     def getMarkerColor(self):
         return BATTLE_MARKERS_CONSTS.COLOR_YELLOW
+
+
+class _ArtilleryAOEFort(_ArtilleryItem):
+
+    def getMarker(self):
+        pass
+
+    def getMarkerColor(self):
+        return BATTLE_MARKERS_CONSTS.COLOR_GREEN
+
+    def getEnemyMarker(self):
+        pass
+
+    def getEnemyMarkerColor(self):
+        return BATTLE_MARKERS_CONSTS.COLOR_RED
 
 
 class _EpicArtilleryItem(_OrderItem):
@@ -764,6 +788,8 @@ def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, t
         return _ArcadeMineFieldItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('artillery_epic'):
         return _EpicArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('artillery_aoe_fort'):
+        return _ArtilleryAOEFort(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('artillery'):
         return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('bomber'):
@@ -967,6 +993,9 @@ class EquipmentsController(MethodsRules, IBattleController):
         if intCD in self._equipments:
             self._equipments[intCD].setServerPrevStage(prevStage)
 
+    def getEquipments(self):
+        return self._equipments
+
     def getActivationCode(self, intCD, entityName=None, avatar=None):
         code = None
         item = self.getEquipment(intCD)
@@ -1003,11 +1032,11 @@ class EquipmentsController(MethodsRules, IBattleController):
 
             return (result, error)
 
-    def showMarker(self, eq, pos, direction, time):
+    def showMarker(self, eq, pos, direction, time, team=None):
         item = findFirst(lambda e: e.getEquipmentID() == eq.id[1], self._equipments.itervalues())
         if item is None:
             item = self.createItem(eq, 0, -1, 0, 0)
-        self.onEquipmentMarkerShown(item, pos, direction, time)
+        self.onEquipmentMarkerShown(item, pos, direction, time, team)
         return
 
     def consumePreferredPosition(self):
@@ -1116,6 +1145,21 @@ class _ReplayArtilleryItem(_ReplayOrderItem):
 
     def getMarkerColor(self):
         return BATTLE_MARKERS_CONSTS.COLOR_YELLOW
+
+
+class _ReplayArtilleryAOEFort(_ReplayArtilleryItem):
+
+    def getMarker(self):
+        pass
+
+    def getMarkerColor(self):
+        return BATTLE_MARKERS_CONSTS.COLOR_GREEN
+
+    def getEnemyMarker(self):
+        pass
+
+    def getEnemyMarkerColor(self):
+        return BATTLE_MARKERS_CONSTS.COLOR_RED
 
 
 class _ReplayArcadeArtilleryItem(_ReplayOrderItem):
@@ -1320,6 +1364,8 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
         return _ReplayArcadeArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('artillery_epic'):
         return _ReplayArcadeArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+    if descriptor.name.startswith('artillery_aoe_fort'):
+        return _ReplayArtilleryAOEFort(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('arcade_bomber'):
         return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
     if descriptor.name.startswith('arcade_minefield'):

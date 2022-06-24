@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/finish_sound_player.py
 from functools import partial
+from typing import Set
 import BigWorld
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.battle.shared.finish_sound_player import FinishSoundPlayer
@@ -26,6 +27,9 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
         self.__timeIsOver = False
         g_playerEvents.onRoundFinished += self.__onEpicRoundFinished
         return
+
+    def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
+        pass
 
     def detachedFromCtrl(self, ctrlID):
         g_playerEvents.onRoundFinished -= self.__onEpicRoundFinished

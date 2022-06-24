@@ -40,6 +40,10 @@ class AmmunitionPanelModel(ViewModel):
     def setSectionGroups(self, value):
         self._setArray(4, value)
 
+    @staticmethod
+    def getSectionGroupsType():
+        return AmmunitionItemsGroup
+
     def getSyncInitiator(self):
         return self._getNumber(5)
 

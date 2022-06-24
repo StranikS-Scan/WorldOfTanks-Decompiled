@@ -148,22 +148,10 @@ class ARENAS(object):
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
     C_60_ASIA_MIAO_DESCRIPTION = '#arenas:60_asia_miao/description'
     C_251_BR_BATTLE_CITY3_NAME = '#arenas:251_br_battle_city3/name'
-    C_117_CANYON_ISH_NAME = '#arenas:117_canyon_ish/name'
-    C_117_CANYON_ISH_DESCRIPTION = '#arenas:117_canyon_ish/description'
     C_127_JAPORT_NAME = '#arenas:127_japort/name'
     C_127_JAPORT_DESCRIPTION = '#arenas:127_japort/description'
     C_252_BR_BATTLE_CITY4_NAME = '#arenas:252_br_battle_city4/name'
     C_252_BR_BATTLE_CITY4_DESCRIPTION = '#arenas:252_br_battle_city4/description'
-    C_132_ABRUZZO_NAME = '#arenas:132_abruzzo/name'
-    C_132_ABRUZZO_DESCRIPTION = '#arenas:132_abruzzo/description'
-    C_130_ANYKEY_IF_NAME = '#arenas:130_anykey_if/name'
-    C_130_ANYKEY_IF_DESCRIPTION = '#arenas:130_anykey_if/description'
-    C_136_KASSEL_NAME = '#arenas:136_kassel/name'
-    C_136_KASSEL_DESCRIPTION = '#arenas:136_kassel/description'
-    C_120_GRAF_ZEPPELIN_ISH_NAME = '#arenas:120_graf_zeppelin_ish/name'
-    C_120_GRAF_ZEPPELIN_ISH_DESCRIPTION = '#arenas:120_graf_zeppelin_ish/description'
-    C_123_DALNY_GG_NAME = '#arenas:123_dalny_gg/name'
-    C_123_DALNY_GG_DESCRIPTION = '#arenas:123_dalny_gg/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -309,22 +297,10 @@ class ARENAS(object):
      C_60_ASIA_MIAO_NAME,
      C_60_ASIA_MIAO_DESCRIPTION,
      C_251_BR_BATTLE_CITY3_NAME,
-     C_117_CANYON_ISH_NAME,
-     C_117_CANYON_ISH_DESCRIPTION,
      C_127_JAPORT_NAME,
      C_127_JAPORT_DESCRIPTION,
      C_252_BR_BATTLE_CITY4_NAME,
-     C_252_BR_BATTLE_CITY4_DESCRIPTION,
-     C_132_ABRUZZO_NAME,
-     C_132_ABRUZZO_DESCRIPTION,
-     C_130_ANYKEY_IF_NAME,
-     C_130_ANYKEY_IF_DESCRIPTION,
-     C_136_KASSEL_NAME,
-     C_136_KASSEL_DESCRIPTION,
-     C_120_GRAF_ZEPPELIN_ISH_NAME,
-     C_120_GRAF_ZEPPELIN_ISH_DESCRIPTION,
-     C_123_DALNY_GG_NAME,
-     C_123_DALNY_GG_DESCRIPTION)
+     C_252_BR_BATTLE_CITY4_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

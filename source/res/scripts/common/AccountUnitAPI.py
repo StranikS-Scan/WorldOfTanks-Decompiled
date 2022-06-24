@@ -92,6 +92,9 @@ class UnitClientAPI(object):
     def createMapboxSquad(self):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 
+    def createFunRandomSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM)
+
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
 

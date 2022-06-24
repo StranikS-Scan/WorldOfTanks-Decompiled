@@ -90,6 +90,10 @@ class MapsTrainingResultModel(ViewModel):
     def setRewards(self, value):
         self._setArray(11, value)
 
+    @staticmethod
+    def getRewardsType():
+        return BonusModel
+
     def _initialize(self):
         super(MapsTrainingResultModel, self)._initialize()
         self._addNumberProperty('doneValue')

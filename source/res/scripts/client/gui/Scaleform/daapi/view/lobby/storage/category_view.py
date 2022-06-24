@@ -5,12 +5,12 @@ from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.meta.BaseStorageCategoryViewMeta import BaseStorageCategoryViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.demount_kit import IDemountKitNovelty
+from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
+from gui.goodies.goodies_constants import NOVELTY_OBJECTS
 
 class StorageDataProvider(DAAPIDataProvider):
 
@@ -94,10 +94,10 @@ class InventoryCategoryView(BaseCategoryView):
         return
 
     def scrolledToBottom(self):
-        if self.containItemType(GUI_ITEM_TYPE.DEMOUNT_KIT):
-            demountKitNovelty = dependency.instance(IDemountKitNovelty)
-            if demountKitNovelty.showNovelty:
-                demountKitNovelty.setAsSeen()
+        storageNovelty = dependency.instance(IStorageNovelty)
+        for key in NOVELTY_OBJECTS:
+            if self.containItemType(key):
+                storageNovelty.setAsSeen(NOVELTY_OBJECTS[key])
 
     def containItemType(self, itemType):
         return next((item for item in self._getItemList().values() if item.itemTypeID == itemType), None) is not None

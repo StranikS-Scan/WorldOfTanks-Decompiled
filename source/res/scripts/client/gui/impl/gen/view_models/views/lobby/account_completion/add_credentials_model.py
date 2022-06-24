@@ -16,9 +16,17 @@ class AddCredentialsModel(BaseWgnpOverlayViewModel):
     def email(self):
         return self._getViewModel(9)
 
+    @staticmethod
+    def getEmailType():
+        return FieldEmailModel
+
     @property
     def password(self):
         return self._getViewModel(10)
+
+    @staticmethod
+    def getPasswordType():
+        return FieldPasswordModel
 
     def getQuestID(self):
         return self._getString(11)

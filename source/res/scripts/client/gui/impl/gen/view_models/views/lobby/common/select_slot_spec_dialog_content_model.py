@@ -16,11 +16,19 @@ class SelectSlotSpecDialogContentModel(ViewModel):
     def vehicleInfo(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getVehicleInfoType():
+        return VehicleInfoModel
+
     def getSlots(self):
         return self._getArray(1)
 
     def setSlots(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSlotsType():
+        return SelectSlotSpecDialogSlotModel
 
     def getTargetSlotIdx(self):
         return self._getNumber(2)
@@ -33,6 +41,10 @@ class SelectSlotSpecDialogContentModel(ViewModel):
 
     def setAvailableSpecs(self, value):
         self._setArray(3, value)
+
+    @staticmethod
+    def getAvailableSpecsType():
+        return SelectSlotSpecDialogSpecModel
 
     def getSelectedSpecIdx(self):
         return self._getNumber(4)

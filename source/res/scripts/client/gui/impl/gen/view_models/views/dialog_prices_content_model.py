@@ -13,9 +13,17 @@ class DialogPricesContentModel(ViewModel):
     def valueMain(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getValueMainType():
+        return ValuePrice
+
     @property
     def valueAdditional(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getValueAdditionalType():
+        return ValuePrice
 
     def getTooltipId(self):
         return self._getNumber(2)

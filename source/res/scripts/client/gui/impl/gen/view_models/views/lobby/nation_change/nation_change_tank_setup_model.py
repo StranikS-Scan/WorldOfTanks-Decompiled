@@ -14,6 +14,10 @@ class NationChangeTankSetupModel(ViewModel):
     def instructionSlot(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getInstructionSlotType():
+        return NationChangeInstructionModel
+
     def getEquipmentList(self):
         return self._getArray(1)
 

@@ -295,6 +295,13 @@ class MapboxArenaDescription(ArenaWithLabelDescription):
         return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
 
 
+class FunRandomArenaDescription(ArenaWithLabelDescription):
+
+    def isInvitationEnabled(self):
+        replayCtrl = BattleReplay.g_replayCtrl
+        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+
+
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -309,6 +316,8 @@ def createDescription(arenaVisitor):
         description = BattleRoyaleDescription(arenaVisitor)
     elif guiVisitor.isMapbox():
         description = MapboxArenaDescription(arenaVisitor)
+    elif guiVisitor.isFunRandom():
+        description = FunRandomArenaDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

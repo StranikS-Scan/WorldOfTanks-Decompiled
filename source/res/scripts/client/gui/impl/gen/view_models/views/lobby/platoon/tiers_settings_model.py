@@ -16,6 +16,10 @@ class TiersSettingsModel(ViewModel):
     def setTierButtons(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getTierButtonsType():
+        return TierButtonModel
+
     def _initialize(self):
         super(TiersSettingsModel, self)._initialize()
         self._addArrayProperty('tierButtons', Array())

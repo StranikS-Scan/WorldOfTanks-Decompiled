@@ -21,6 +21,10 @@ class BattleAbilityByRankModel(ViewModel):
     def setRankValues(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getRankValuesType():
+        return str
+
     def _initialize(self):
         super(BattleAbilityByRankModel, self)._initialize()
         self._addStringProperty('name', '')

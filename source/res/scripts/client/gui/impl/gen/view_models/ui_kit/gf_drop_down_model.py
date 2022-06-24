@@ -16,11 +16,19 @@ class GfDropDownModel(ViewModel):
     def setItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getItemsType():
+        return GfDropDownItem
+
     def getSelected(self):
         return self._getArray(1)
 
     def setSelected(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSelectedType():
+        return str
 
     def getMultiple(self):
         return self._getBool(2)

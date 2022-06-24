@@ -40,6 +40,10 @@ class ModeSelectorModel(ViewModel):
     def setCardList(self, value):
         self._setArray(4, value)
 
+    @staticmethod
+    def getCardListType():
+        return ModeSelectorCardModel
+
     def _initialize(self):
         super(ModeSelectorModel, self)._initialize()
         self._addBoolProperty('isMapSelectionVisible', False)

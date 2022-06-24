@@ -24,6 +24,10 @@ class DialogTemplateButtonViewModel(ViewModel):
     def tooltip(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTooltipType():
+        return DialogTemplateGenericTooltipViewModel
+
     def getButtonID(self):
         return self._getString(1)
 

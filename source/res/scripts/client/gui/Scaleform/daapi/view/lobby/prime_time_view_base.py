@@ -56,6 +56,14 @@ class ServerListItemPresenter(object):
         self.invalidatePingData()
         return
 
+    @classmethod
+    def deltaFormatter(cls, delta):
+        return text_styles.neutral(backport.getTillTimeStringByRClass(delta, cls._RES_ROOT.timeLeft))
+
+    @classmethod
+    def statusDeltaFormatter(cls, delta):
+        return backport.getTillTimeStringByRClass(delta, cls._RES_ROOT.timeLeft)
+
     def asDict(self):
         return {'label': self.__name,
          'id': self.__peripheryID,
@@ -99,9 +107,6 @@ class ServerListItemPresenter(object):
     def invalidatePingData(self):
         pingValue, self.__pingStatus = g_preDefinedHosts.getHostPingData(self.__hostName)
         self.__pingValue = min(pingValue, _PING_MAX_VALUE)
-
-    def deltaFormatter(self, delta):
-        return text_styles.neutral(backport.getTillTimeStringByRClass(delta, self._RES_ROOT.timeLeft))
 
     def _buildTooltip(self, peripheryID):
         periodInfo = self._periodsController.getPeriodInfo(peripheryID=peripheryID)
@@ -227,8 +232,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         resSection = self._RES_ROOT.statusText
         periodInfo = self._getController().getPeriodInfo()
         timeFmt = backport.getShortTimeFormat if periodInfo.primeDelta < time_utils.ONE_DAY else None
-        dateFmt = backport.getShortDateFormat if timeFmt is None else _emptyFmt
-        params = periodInfo.getVO(withBNames=True, timeFmt=timeFmt or _emptyFmt, dateFmt=dateFmt)
+        params = periodInfo.getVO(withBNames=True, deltaFmt=self._serverPresenterClass.statusDeltaFormatter, timeFmt=timeFmt or _emptyFmt, dateFmt=backport.getShortDateFormat if timeFmt is None else _emptyFmt)
         params['serverName'] = self._connectionMgr.serverUserNameShort
         return backport.text(resSection.dyn(periodInfo.periodType.value, resSection.undefined)(), **params)
 

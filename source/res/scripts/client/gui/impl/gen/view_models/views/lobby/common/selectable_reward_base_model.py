@@ -13,6 +13,10 @@ class SelectableRewardBaseModel(ViewModel):
     def selectableRewardModel(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getSelectableRewardModelType():
+        return SelectableRewardModel
+
     def _initialize(self):
         super(SelectableRewardBaseModel, self)._initialize()
         self._addViewModelProperty('selectableRewardModel', SelectableRewardModel())

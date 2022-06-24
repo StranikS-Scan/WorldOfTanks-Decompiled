@@ -13,9 +13,17 @@ class NationChangeScreenModel(ViewModel):
     def currentNation(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCurrentNationType():
+        return NationChangeTankSlotModel
+
     @property
     def targetNation(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getTargetNationType():
+        return NationChangeTankSlotModel
 
     def getCurrentTankLvl(self):
         return self._getString(2)

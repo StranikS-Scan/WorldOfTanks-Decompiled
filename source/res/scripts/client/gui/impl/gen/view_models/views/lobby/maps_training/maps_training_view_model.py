@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_selected_m
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_vehicle_marker_model import MapsTrainingVehicleMarkerModel
 
 class MapsTrainingViewModel(ViewModel):
-    __slots__ = ('onBack', 'onMenu', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked')
+    __slots__ = ('onBack', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked', 'onClose')
 
     def __init__(self, properties=8, commands=8):
         super(MapsTrainingViewModel, self).__init__(properties=properties, commands=commands)
@@ -17,9 +17,17 @@ class MapsTrainingViewModel(ViewModel):
     def selectedMapModel(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getSelectedMapModelType():
+        return MapsTrainingSelectedMapModel
+
     @property
     def vehicleMarker(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getVehicleMarkerType():
+        return MapsTrainingVehicleMarkerModel
 
     def getIsMapSelected(self):
         return self._getBool(2)
@@ -51,11 +59,19 @@ class MapsTrainingViewModel(ViewModel):
     def setMaps(self, value):
         self._setArray(6, value)
 
+    @staticmethod
+    def getMapsType():
+        return MapsTrainingMapModel
+
     def getGroups(self):
         return self._getArray(7)
 
     def setGroups(self, value):
         self._setArray(7, value)
+
+    @staticmethod
+    def getGroupsType():
+        return MapsTrainingGroupModel
 
     def _initialize(self):
         super(MapsTrainingViewModel, self)._initialize()
@@ -68,10 +84,10 @@ class MapsTrainingViewModel(ViewModel):
         self._addArrayProperty('maps', Array())
         self._addArrayProperty('groups', Array())
         self.onBack = self._addCommand('onBack')
-        self.onMenu = self._addCommand('onMenu')
         self.onSelect = self._addCommand('onSelect')
         self.onScenarioSelect = self._addCommand('onScenarioSelect')
         self.onFilteringChange = self._addCommand('onFilteringChange')
         self.onBlurRectUpdated = self._addCommand('onBlurRectUpdated')
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onInfoClicked = self._addCommand('onInfoClicked')
+        self.onClose = self._addCommand('onClose')

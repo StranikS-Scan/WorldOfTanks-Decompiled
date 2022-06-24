@@ -553,9 +553,20 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
+    <setKickAtTime>
+      <Arg>	INT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </setKickAtTime>
     <resetClanDBID>
       <Arg>	DB_ID	</Arg>
     </resetClanDBID>
+    <updateAntiTeamingStorage>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+    </updateAntiTeamingStorage>
   </BaseMethods>
   <NetworkCompression>
     <internal>	ZIP	  <level>	1	</level>

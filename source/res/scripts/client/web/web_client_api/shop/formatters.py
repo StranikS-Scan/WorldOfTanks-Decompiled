@@ -16,13 +16,13 @@ from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
 from items.components.supply_slot_categories import SlotCategories
-from items.vehicles import VEHICLE_CLASS_TAGS, g_list
+from items import vehicles
 from nation_change.nation_change_helpers import getGroupByVehTypeCompactDescr, iterVehTypeCDsInNationGroup
 from rent_common import SeasonRentDuration
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Dict, Union
+    from typing import Dict, Union, Any, Optional
     from gui.shared.gui_items.Tankman import Tankman
     from web.web_client_api.shop.crew import _ShopTankman, _ShopRecruit
     AnyTankman = Union[Tankman, _ShopTankman, _ShopRecruit]
@@ -131,13 +131,13 @@ def _formatVehicleOwnership(item):
         return
 
 
-def _formatVehicleNationChange(item):
-    if item.hasNationGroup:
+def _formatVehicleNationChange(vehicle):
+    if vehicle.hasNationGroup:
         result = {}
-        result['isAvailable'] = item.isNationChangeAvailable
-        result['otherNationsVehCDs'] = list(iterVehTypeCDsInNationGroup(item.intCD))
-        nationGroupVehs = getGroupByVehTypeCompactDescr(item.intCD)
-        nationID, _ = g_list.getIDsByName(nationGroupVehs[0])
+        result['isAvailable'] = vehicle.isNationChangeAvailable
+        result['otherNationsVehCDs'] = list(iterVehTypeCDsInNationGroup(vehicle.intCD))
+        nationGroupVehicles = getGroupByVehTypeCompactDescr(vehicle.intCD)
+        nationID, _ = vehicles.g_list.getIDsByName(nationGroupVehicles[0])
         result['mainNation'] = nations.NAMES[nationID]
         return result
     else:
@@ -338,7 +338,7 @@ def _formatTankmanRank(crewItem):
 
 def _formatVehicleInfo(crewItem):
     return {vType:{'id': descr.type.compactDescr,
-     'type': first((t for t in VEHICLE_CLASS_TAGS if t in descr.type.tags)),
+     'type': first((t for t in vehicles.VEHICLE_CLASS_TAGS if t in descr.type.tags)),
      'name': descr.type.userString,
      'nation': nations.MAP[descr.type.id[0]]} for vType, descr in (('current', crewItem.vehicleDescr), ('native', crewItem.vehicleNativeDescr)) if descr is not None}
 

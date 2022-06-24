@@ -23,6 +23,10 @@ class DtGridSection(ViewModel):
     def setItems(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getItemsType():
+        return DtComponent
+
     def getTooltipTitle(self):
         return self._getResource(2)
 

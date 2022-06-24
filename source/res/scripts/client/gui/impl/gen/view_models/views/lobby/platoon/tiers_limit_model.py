@@ -14,9 +14,17 @@ class TiersLimitModel(ViewModel):
     def btnResetSettings(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getBtnResetSettingsType():
+        return ButtonModel
+
     @property
     def btnShowSettings(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getBtnShowSettingsType():
+        return ShowSettingsButtonModel
 
     def getTiers(self):
         return self._getString(2)

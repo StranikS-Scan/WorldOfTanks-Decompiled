@@ -16,6 +16,10 @@ class RandomBattlePopoverModel(ViewModel):
     def setSettingsList(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getSettingsListType():
+        return RandomBattlePopoverItemModel
+
     def _initialize(self):
         super(RandomBattlePopoverModel, self)._initialize()
         self._addArrayProperty('settingsList', Array())

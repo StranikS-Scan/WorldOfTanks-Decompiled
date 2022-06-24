@@ -13,6 +13,10 @@ class RenamingModel(BaseWgnpOverlayViewModel):
     def name(self):
         return self._getViewModel(9)
 
+    @staticmethod
+    def getNameType():
+        return FieldNameModel
+
     def _initialize(self):
         super(RenamingModel, self)._initialize()
         self._addViewModelProperty('name', FieldNameModel())

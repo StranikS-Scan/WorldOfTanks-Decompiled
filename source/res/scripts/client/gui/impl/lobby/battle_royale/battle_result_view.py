@@ -218,29 +218,30 @@ class BrBattleResultsViewInLobby(ViewImpl):
         battlePassModel.setCurrentLevel(getPresentLevel(battlePassData['currentLevel']))
         battlePassModel.setMaxPoints(battlePassData['maxPoints'])
         battlePassModel.setCurrentLevelPoints(currentLevelPoints)
-        battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
         isMaxLevel = self.__battlePassController.getMaxLevelInChapter(chapterID) == battlePassData['currentLevel']
         if isMaxLevel and battlePassData['isDone']:
             chapterID = 0
-            currentLevelPoints = totalPoints
+            currentLevelPoints = battlePassData['pointsAux']
             chapterState = ChapterState.COMPLETED
         else:
             chapterState = ChapterState.ACTIVE
-        battlePassModel.setChapterState(chapterState)
-        battlePassModel.setChapterID(chapterID)
-        if battlePassData['battlePassComplete']:
-            battlePassModel.setFreePoints(self.__freePoints)
-            battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
-        else:
             if currentLevelPoints == 0:
                 currentLevelPoints = battlePassData['pointsTotal']
-            battlePassModel.setFreePoints(currentLevelPoints)
-            battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
+        battlePassModel.setChapterState(chapterState)
+        battlePassModel.setChapterID(chapterID)
         state = BattlePassProgress.BP_STATE_DISABLED
         bpController = self.__battlePassController
         isBought = all((bpController.isBought(chapterID=chapter) for chapter in bpController.getChapterIDs()))
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
+        if battlePassData['battlePassComplete']:
+            battlePassModel.setFreePoints(self.__freePoints)
+            battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
+            battlePassModel.setIsBattlePassPurchased(state == BattlePassProgress.BP_STATE_BOUGHT)
+        else:
+            battlePassModel.setFreePoints(currentLevelPoints)
+            battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
+            battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
         battlePassModel.setBattlePassState(state)
         if chapterID:
             battlePassModel.setFinalReward(self.__battlePassController.getRewardType(chapterID).value)

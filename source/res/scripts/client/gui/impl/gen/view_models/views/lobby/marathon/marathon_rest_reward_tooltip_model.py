@@ -16,6 +16,10 @@ class MarathonRestRewardTooltipModel(ViewModel):
     def setRewards(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getRewardsType():
+        return BonusModel
+
     def _initialize(self):
         super(MarathonRestRewardTooltipModel, self)._initialize()
         self._addArrayProperty('rewards', Array())

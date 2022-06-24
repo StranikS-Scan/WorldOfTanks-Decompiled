@@ -179,7 +179,9 @@ class BaseMarkerController(IArenaVehiclesController):
     def _clear(self):
         g_eventBus.removeListener(events.GameEvent.GUI_VISIBILITY, self._handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeAllMarkers()
-        self._gui = None
+        if self._gui is not None:
+            self._gui.clear()
+            self._gui = None
         return
 
     def _attachGUIToMarkers(self, markerID):

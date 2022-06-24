@@ -389,8 +389,8 @@ class Requester(object):
         self.data_source = data_source
 
     @bigworld_wrapped
-    def login(self, callback, account_id, token):
-        self.data_source.login(callback, account_id, token)
+    def login(self, callback, account_id, token, jwt):
+        self.data_source.login(callback, account_id, token, jwt)
 
     @bigworld_wrapped
     def logout(self, callback):

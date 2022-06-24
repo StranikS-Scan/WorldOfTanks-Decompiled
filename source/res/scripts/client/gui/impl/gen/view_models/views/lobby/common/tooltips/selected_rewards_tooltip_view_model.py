@@ -16,6 +16,10 @@ class SelectedRewardsTooltipViewModel(ViewModel):
     def setCategories(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getCategoriesType():
+        return SelectedRewardsTooltipCategoryModel
+
     def getTotalSelected(self):
         return self._getNumber(1)
 

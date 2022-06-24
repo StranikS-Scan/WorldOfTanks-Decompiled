@@ -180,6 +180,10 @@ class _MapboxQueueProvider(_RandomQueueProvider):
     pass
 
 
+class _FunRandomQueueProvider(_RandomQueueProvider):
+    pass
+
+
 class _BattleRoyaleQueueProvider(_RandomQueueProvider):
 
     def processQueueInfo(self, qInfo):
@@ -202,7 +206,8 @@ _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
  constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider,
- constants.QUEUE_TYPE.MAPBOX: _MapboxQueueProvider}
+ constants.QUEUE_TYPE.MAPBOX: _MapboxQueueProvider,
+ constants.QUEUE_TYPE.FUN_RANDOM: _FunRandomQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)

@@ -21,6 +21,10 @@ class ChapterModel(ViewModel):
     def vehicleInfo(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getVehicleInfoType():
+        return VehicleInfoModel
+
     def getChapterID(self):
         return self._getNumber(1)
 

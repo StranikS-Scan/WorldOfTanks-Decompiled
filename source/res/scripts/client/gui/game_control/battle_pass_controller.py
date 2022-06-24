@@ -148,6 +148,14 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def hasExtra(self):
         return any((self.isExtraChapter(chID) for chID in self.getChapterIDs()))
 
+    def isRegularProgressionCompleted(self):
+        chapterIDs = []
+        for chapterID in self.__getConfig().getChapterIDs():
+            if not self.isExtraChapter(chapterID):
+                chapterIDs.append(chapterID)
+
+        return all((self.getChapterState(chID) == ChapterState.COMPLETED for chID in chapterIDs))
+
     def getExtraChapterID(self):
         return findFirst(self.isExtraChapter, self.getChapterIDs(), 0)
 
@@ -438,6 +446,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
         points = self.__itemsCache.items.battlePass.getPointsForVehicle(intCD, 0)
         cap = self.__getConfig().vehicleCapacity(intCD)
         return (points, cap)
+
+    def getSpecialVehicleCapBonus(self):
+        return self.__getConfig().vehicleCapacity(first(self.getSpecialVehicles()))
 
     def getVehicleCapBonus(self, intCD):
         vehicle = self.__itemsCache.items.getItemByCD(intCD)

@@ -3408,4 +3408,37 @@
     <name>	CN WCL	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It20_Carro_Combattimento_45t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	877	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_618.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_618	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran Centauro It20	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	879	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_619.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_619	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Gamescom 2022	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
 </inscriptions_special.xml>

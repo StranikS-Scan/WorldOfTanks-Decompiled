@@ -16,11 +16,19 @@ class BattleRoyaleRewardPoints(ViewModel):
     def setSoloMode(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getSoloModeType():
+        return RewardPointsByPlaceModel
+
     def getSquadMode(self):
         return self._getArray(1)
 
     def setSquadMode(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSquadModeType():
+        return RewardPointsByPlaceModel
 
     def _initialize(self):
         super(BattleRoyaleRewardPoints, self)._initialize()

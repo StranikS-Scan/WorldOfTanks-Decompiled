@@ -15,6 +15,10 @@ class CrewBooksViewModel(ViewModel):
     def crewBookTankmenList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCrewBookTankmenListType():
+        return ListModel
+
     def getFlagIcon(self):
         return self._getResource(1)
 

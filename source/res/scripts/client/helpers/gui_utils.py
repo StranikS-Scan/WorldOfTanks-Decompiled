@@ -26,3 +26,7 @@ def buildTexMapping(texCoords, texSize, fullTexSize):
      (texCoords[0] / fullTexSize[0], maximum[1] / fullTexSize[1]),
      (maximum[0] / fullTexSize[0], maximum[1] / fullTexSize[1]),
      (maximum[0] / fullTexSize[0], texCoords[1] / fullTexSize[1]))
+
+
+def hexARGBToRGBAFloatColor(hexColor):
+    return Math.Vector4((hexColor >> 16 & 255) * (1.0 / 255.0), (hexColor >> 8 & 255) * (1.0 / 255.0), (hexColor & 255) * (1.0 / 255.0), (hexColor >> 24 & 255) * (1.0 / 255.0))

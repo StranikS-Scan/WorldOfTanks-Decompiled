@@ -338,7 +338,7 @@ class ElementTooltip(BlocksTooltipData):
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.rentable())), padding=formatters.packPadding(top=-2), icon=self.RENTABLE_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
             modifiedStrRoot = rCharacteristics.collapsible
-            if self._item.isEditable and self.__vehicle is not None:
+            if self._item.isEditable:
                 vehicleIntCD = self.__vehicle.intCD
                 if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel <= 0:
                     modifiedStr = modifiedStrRoot.mutableWithDecal()

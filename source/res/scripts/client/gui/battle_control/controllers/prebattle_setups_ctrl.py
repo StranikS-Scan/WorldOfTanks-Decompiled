@@ -4,6 +4,7 @@ import logging
 import typing
 import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
+from battle_modifiers.battle_modifier_constants import EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE
 from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -108,6 +109,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def startControl(self, battleCtx, arenaVisitor):
         self.__hasValidCaps = arenaVisitor.bonus.hasSwitchSetups()
         self.__extData[_EXT_SIEGE_STATE_KEY] = VEHICLE_SIEGE_STATE.DISABLED
+        self.__extData[EXT_DATA_MODIFIERS_KEY] = arenaVisitor.getArenaModifiers()
 
     def stopControl(self):
         self.clear(reset=True)

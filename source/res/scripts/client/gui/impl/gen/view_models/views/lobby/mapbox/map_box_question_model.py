@@ -27,9 +27,17 @@ class MapBoxQuestionModel(ViewModel):
     def answers(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getAnswersType():
+        return MapBoxAnswersModel
+
     @property
     def options(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getOptionsType():
+        return MapBoxOptionModel
 
     def getType(self):
         return QuestionType(self._getString(2))
@@ -60,6 +68,10 @@ class MapBoxQuestionModel(ViewModel):
 
     def setTitleParams(self, value):
         self._setArray(6, value)
+
+    @staticmethod
+    def getTitleParamsType():
+        return int
 
     def _initialize(self):
         super(MapBoxQuestionModel, self)._initialize()

@@ -19,6 +19,10 @@ class PrebattleAmmunitionPanelViewModel(AmmunitionPanelViewModel):
     def ammunitionPanel(self):
         return self._getViewModel(6)
 
+    @staticmethod
+    def getAmmunitionPanelType():
+        return PrebattleAmmunitionPanelModel
+
     def getTimeTillBattleStart(self):
         return self._getNumber(7)
 

@@ -15,9 +15,17 @@ class BattlePassPointsViewModel(ViewModel):
     def rewardPoints(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardPointsType():
+        return RewardPointsModel
+
     @property
     def vehiclesList(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getVehiclesListType():
+        return VehicleItemModel
 
     def _initialize(self):
         super(BattlePassPointsViewModel, self)._initialize()

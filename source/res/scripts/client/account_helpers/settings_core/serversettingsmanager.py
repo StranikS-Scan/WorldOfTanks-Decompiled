@@ -38,6 +38,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
+    FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
+    FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -62,7 +64,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
-    DRAGON_BOAT_STORAGE = 'DRAGON_BOAT_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -101,21 +102,6 @@ class ServerSettingsManager(object):
     BATTLE_COMM = settings_constants.BattleCommStorageKeys
     BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SCORE_PANEL = settings_constants.ScorePanelStorageKeys
-    DRAGON_BOAT = settings_constants.DragonBoatStorageKeys
-    AIM_MAPPING = {'net': 1,
-     'netType': 1,
-     'centralTag': 1,
-     'centralTagType': 1,
-     'reloader': 2,
-     'condition': 2,
-     'mixing': 2,
-     'mixingType': 2,
-     'cassette': 3,
-     'gunTag': 3,
-     'gunTagType': 3,
-     'reloaderTimer': 3,
-     'zoomIndicator': 4}
-    _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -186,12 +172,6 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 48)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 6),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 24)}),
-     SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE: Section(masks={DRAGON_BOAT.TEAM_1: 0,
-                                             DRAGON_BOAT.TEAM_2: 1,
-                                             DRAGON_BOAT.TEAM_3: 2,
-                                             DRAGON_BOAT.TEAM_4: 3,
-                                             DRAGON_BOAT.TEAM_5: 4,
-                                             DRAGON_BOAT.DBOAT_FINAL_REWARD_OBTAINED: 5}, offsets={}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -390,6 +370,7 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.HOLD_SHEET_HINT: 4,
                                          OnceOnlyHints.HAVE_NEW_BADGE_HINT: 5,
                                          OnceOnlyHints.EPIC_RESERVES_SLOT_HINT: 6,
+                                         OnceOnlyHints.SHOW_ABILITIES_BUTTON_HINT: 7,
                                          OnceOnlyHints.PAUSE_HINT: 8,
                                          OnceOnlyHints.HAVE_NEW_SUFFIX_BADGE_HINT: 9,
                                          OnceOnlyHints.BADGE_PAGE_NEW_SUFFIX_BADGE_HINT: 10,
@@ -436,7 +417,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_HANGAR_HINT: 20,
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
-                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23}, offsets={}),
+                                           OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
+                                           OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -617,7 +599,72 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)})}
+     SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)}),
+     SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                      'germany': 1,
+                                                      'usa': 2,
+                                                      'china': 3,
+                                                      'france': 4,
+                                                      'uk': 5,
+                                                      'japan': 6,
+                                                      'czech': 7,
+                                                      'sweden': 8,
+                                                      'poland': 9,
+                                                      'italy': 10,
+                                                      'lightTank': 15,
+                                                      'mediumTank': 16,
+                                                      'heavyTank': 17,
+                                                      'SPG': 18,
+                                                      'AT-SPG': 19,
+                                                      'level_1': 20,
+                                                      'level_2': 21,
+                                                      'level_3': 22,
+                                                      'level_4': 23,
+                                                      'level_5': 24,
+                                                      'level_6': 25,
+                                                      'level_7': 26,
+                                                      'level_8': 27,
+                                                      'level_9': 28,
+                                                      'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                      'elite': 1,
+                                                      'rented': 2,
+                                                      'igr': 3,
+                                                      'gameMode': 4,
+                                                      'favorite': 5,
+                                                      'bonus': 6,
+                                                      'event': 7,
+                                                      'crystals': 8,
+                                                      'funRandom': 9,
+                                                      'role_HT_assault': 11,
+                                                      'role_HT_break': 12,
+                                                      'role_HT_support': 13,
+                                                      'role_HT_universal': 14,
+                                                      'role_MT_universal': 15,
+                                                      'role_MT_sniper': 16,
+                                                      'role_MT_assault': 17,
+                                                      'role_MT_support': 18,
+                                                      'role_ATSPG_assault': 19,
+                                                      'role_ATSPG_universal': 20,
+                                                      'role_ATSPG_sniper': 21,
+                                                      'role_ATSPG_support': 22,
+                                                      'role_LT_universal': 23,
+                                                      'role_LT_wheeled': 24,
+                                                      'role_SPG': 25}, offsets={})}
+    AIM_MAPPING = {'net': 1,
+     'netType': 1,
+     'centralTag': 1,
+     'centralTagType': 1,
+     'reloader': 2,
+     'condition': 2,
+     'mixing': 2,
+     'mixingType': 2,
+     'cassette': 3,
+     'gunTag': 3,
+     'gunTagType': 3,
+     'reloaderTimer': 3,
+     'zoomIndicator': 4}
+    _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
 
@@ -703,12 +750,6 @@ class ServerSettingsManager(object):
     def saveInBPStorage(self, settings):
         if self.settingsCache.isSynced():
             self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
-
-    def getDragonBoatStorage(self, defaults=None):
-        return self.getSections([SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE], defaults)
-
-    def saveInDragonBoatStorage(self, settings):
-        return self.setSections([SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE], settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -948,7 +989,6 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
-         SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -982,10 +1022,6 @@ class ServerSettingsManager(object):
         clearGraphics = clear.get(SETTINGS_SECTIONS.GRAPHICS, 0)
         if graphicsData or clearGraphics:
             settings[SETTINGS_SECTIONS.GRAPHICS] = self._buildSectionSettings(SETTINGS_SECTIONS.GRAPHICS, graphicsData) ^ clearGraphics
-        dragonBoatData = data.get(SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE, {})
-        clearDragonBoat = clear.get(SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE, 0)
-        if dragonBoatData or clearDragonBoat:
-            settings[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE, dragonBoatData) ^ clearDragonBoat
         aimData = data.get('aimData', {})
         if aimData:
             settings.update(self._buildAimSettings(aimData))

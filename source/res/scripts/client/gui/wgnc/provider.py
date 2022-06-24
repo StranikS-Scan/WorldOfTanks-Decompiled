@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.errors import ParseError, ValidationError
 from gui.wgnc.events import g_wgncEvents
-from gui.wgnc.xml import fromString
+from gui.wgnc.xml import fromString, fromSection
 
 @ReprInjector.simple('notID', 'ttl', 'actions', 'items', 'order', 'marked', 'client')
 class _NotificationVO(object):
@@ -132,17 +132,16 @@ class _WGNCProvider(object):
             LOG_ERROR('Can not parse notification', e.message, xmlString)
             return
 
-        if notID in self.__nots:
-            LOG_WARNING('Notification already is added', notID, self.__nots[notID])
-            return 0
-        vo = _NotificationVO(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
-        if not vo.isActive():
-            return 0
-        if not vo.validate():
-            return 0
-        self.__nots[notID] = vo
-        vo.showAll()
-        return notID
+        return self.__makeAndShow(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
+
+    def fromSection(self, section):
+        try:
+            notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder = fromSection(section)
+        except ParseError as e:
+            LOG_ERROR('Can not parse notification', e.message, section.asBinary)
+            return
+
+        return self.__makeAndShow(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
 
     def getNotItemByName(self, notID, name):
         if notID not in self.__nots:
@@ -195,6 +194,19 @@ class _WGNCProvider(object):
 
     def __onItemActionFired(self, notID, actionNames, actorName):
         self.doAction(notID, actionNames, actorName)
+
+    def __makeAndShow(self, notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder):
+        if notID in self.__nots:
+            LOG_WARNING('Notification already is added', notID, self.__nots[notID])
+            return 0
+        vo = _NotificationVO(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
+        if not vo.isActive():
+            return 0
+        if not vo.validate():
+            return 0
+        self.__nots[notID] = vo
+        vo.showAll()
+        return notID
 
 
 g_instance = _WGNCProvider()

@@ -15,6 +15,10 @@ class PrebattleAmmunitionSetupSelector(AmmunitionSetupSelector):
     def setHotKeys(self, value):
         self._setArray(3, value)
 
+    @staticmethod
+    def getHotKeysType():
+        return str
+
     def _initialize(self):
         super(PrebattleAmmunitionSetupSelector, self)._initialize()
         self._addArrayProperty('hotKeys', Array())

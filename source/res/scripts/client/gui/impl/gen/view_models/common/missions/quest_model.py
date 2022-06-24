@@ -13,13 +13,25 @@ class QuestModel(EventModel):
     def preBattleCondition(self):
         return self._getViewModel(7)
 
+    @staticmethod
+    def getPreBattleConditionType():
+        return ConditionGroupModel
+
     @property
     def bonusCondition(self):
         return self._getViewModel(8)
 
+    @staticmethod
+    def getBonusConditionType():
+        return ConditionGroupModel
+
     @property
     def postBattleCondition(self):
         return self._getViewModel(9)
+
+    @staticmethod
+    def getPostBattleConditionType():
+        return ConditionGroupModel
 
     def getBonuses(self):
         return self._getArray(10)

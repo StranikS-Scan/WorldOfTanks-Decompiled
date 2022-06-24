@@ -14,9 +14,17 @@ class ResearchStepsDialog(FullScreenDialogWindowModel):
     def dealPanel(self):
         return self._getViewModel(11)
 
+    @staticmethod
+    def getDealPanelType():
+        return DealPanelModel
+
     @property
     def mainContent(self):
         return self._getViewModel(12)
+
+    @staticmethod
+    def getMainContentType():
+        return ResearchStepsMainContent
 
     def _initialize(self):
         super(ResearchStepsDialog, self)._initialize()

@@ -13,9 +13,17 @@ class ModeSelectorRankedWidgetModel(ModeSelectorBaseWidgetModel):
     def rankLeft(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getRankLeftType():
+        return ModeSelectorRankModel
+
     @property
     def rankRight(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getRankRightType():
+        return ModeSelectorRankModel
 
     def getSteps(self):
         return self._getNumber(3)

@@ -871,16 +871,17 @@ class AutoFillVehicleLayoutProcessor(Processor):
 class InstallBattleAbilitiesProcessor(Processor):
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, vehicle):
+    def __init__(self, vehicle, classVehs=False):
         super(InstallBattleAbilitiesProcessor, self).__init__()
         self.__vehicle = vehicle
+        self.__classVehs = classVehs
         self._setupPlugins()
 
     def _setupPlugins(self):
         self.addPlugins((proc_plugs.VehicleValidator(self.__vehicle), proc_plugs.BattleAbilitiesValidator(self.__vehicle)))
 
     def _request(self, callback):
-        self.__epicMetaGameCtrl.changeEquippedSkills(self.__getCurrentSkills(), self.__vehicle.intCD, lambda code, _: self._response(code, callback))
+        self.__epicMetaGameCtrl.changeEquippedSkills(self.__getCurrentSkills(), self.__vehicle.intCD, lambda code, _: self._response(code, callback), self.__classVehs)
 
     def _successHandler(self, code, ctx=None):
         return makeSuccess()

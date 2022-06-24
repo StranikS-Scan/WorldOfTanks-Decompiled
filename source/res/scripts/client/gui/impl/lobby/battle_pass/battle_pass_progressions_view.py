@@ -113,7 +113,6 @@ class BattlePassProgressionsView(ViewImpl):
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
          (self.__battlePass.onRewardSelectChange, self.__onRewardSelectChange),
          (self.__battlePass.onOffersUpdated, self.__onOffersUpdated),
-         (self.__battlePass.onSeasonStateChanged, self.__updateProgressData),
          (self.__battlePass.onSelectTokenUpdated, self.__onSelectTokenUpdated),
          (self.__battlePass.onChapterChanged, self.__onChapterChanged),
          (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),

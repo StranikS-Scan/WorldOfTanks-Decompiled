@@ -22,6 +22,10 @@ class ProgressionRewardModel(ViewModel):
     def setRewards(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getRewardsType():
+        return RewardItemModel
+
     def _initialize(self):
         super(ProgressionRewardModel, self)._initialize()
         self._addNumberProperty('numBattles', 0)

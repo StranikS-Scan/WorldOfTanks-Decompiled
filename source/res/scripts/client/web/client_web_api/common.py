@@ -3,7 +3,6 @@
 import logging
 from Event import Event
 from web.client_web_api.battle_pass import BattlePassEventHandler
-from web.client_web_api.dragon_boat import DragonBoatEventHandler
 from web.client_web_api.platform import PlatformEventHandler
 from web.client_web_api.ranked import BrowsersBridgeC2W, RankedEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
@@ -44,5 +43,4 @@ class WebEventSender(object):
          RankedEventHandler(self),
          BrowsersBridgeC2W(self),
          TelecomTokenEventHandler(self),
-         BattlePassEventHandler(self),
-         DragonBoatEventHandler(self))
+         BattlePassEventHandler(self))

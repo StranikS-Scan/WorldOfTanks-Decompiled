@@ -17,7 +17,6 @@ class RES_COMMON(object):
     MAPS_ICONS_CUSTOMIZATION_PROGRESSION_STYLES_STAGE_SWITCHER_BG = '../maps/icons/customization/progression_styles/stage_switcher/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
-    MAPS_ICONS_DRAGONBOATS_REWARDS_BG = '../maps/icons/dragonBoats/rewards/bg.png'
     MAPS_ICONS_EPICBATTLES_SKILLS_INTRO_BG = '../maps/icons/epicBattles/skills/intro/bg.png'
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'
     MAPS_ICONS_MAPBOX_SURVEY_BG = '../maps/icons/mapbox/survey/bg.png'

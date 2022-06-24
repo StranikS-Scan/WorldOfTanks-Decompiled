@@ -15,13 +15,25 @@ class DailyQuestsViewModel(ViewModel):
     def dailyQuests(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getDailyQuestsType():
+        return DailyQuestsModel
+
     @property
     def premiumMissions(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getPremiumMissionsType():
+        return PremiumMissionsModel
+
     @property
     def epicQuest(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getEpicQuestType():
+        return EpicQuestModel
 
     def getCurrentTabIdx(self):
         return self._getNumber(3)

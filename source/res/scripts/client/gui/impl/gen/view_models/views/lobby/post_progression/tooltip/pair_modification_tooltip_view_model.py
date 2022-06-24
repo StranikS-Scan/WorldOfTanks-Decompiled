@@ -16,17 +16,33 @@ class PairModificationTooltipViewModel(ViewModel):
     def price(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPriceType():
+        return PriceModel
+
     @property
     def moneyShortage(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getMoneyShortageType():
+        return PriceModel
 
     @property
     def modifiers(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getModifiersType():
+        return BonusesModel
+
     @property
     def multiStep(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getMultiStepType():
+        return MultiStepModel
 
     def getNameRes(self):
         return self._getResource(4)

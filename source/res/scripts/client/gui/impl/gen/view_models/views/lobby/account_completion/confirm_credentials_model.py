@@ -14,6 +14,10 @@ class ConfirmCredentialsModel(BaseWgnpOverlayViewModel):
     def field(self):
         return self._getViewModel(9)
 
+    @staticmethod
+    def getFieldType():
+        return BaseFieldModel
+
     def getTimer(self):
         return self._getNumber(10)
 

@@ -15,6 +15,10 @@ class RolesViewModel(ViewModel):
     def roleActions(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRoleActionsType():
+        return RoleActionModel
+
     def getRoleType(self):
         return self._getString(1)
 

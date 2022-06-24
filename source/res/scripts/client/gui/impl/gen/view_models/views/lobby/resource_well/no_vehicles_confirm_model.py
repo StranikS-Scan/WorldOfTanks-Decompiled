@@ -13,6 +13,10 @@ class NoVehiclesConfirmModel(ViewModel):
     def vehicleCounter(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getVehicleCounterType():
+        return VehicleCounterModel
+
     def _initialize(self):
         super(NoVehiclesConfirmModel, self)._initialize()
         self._addViewModelProperty('vehicleCounter', VehicleCounterModel())

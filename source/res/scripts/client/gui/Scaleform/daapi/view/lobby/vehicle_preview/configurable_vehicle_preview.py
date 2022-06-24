@@ -4,8 +4,8 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import Vehic
 from shared_utils import CONST_CONTAINER
 
 class OptionalBlocks(CONST_CONTAINER):
-    BUYING_PANEL = u'buyingPanel'
-    CLOSE_BUTTON = u'closeBtn'
+    BUYING_PANEL = 'buyingPanel'
+    CLOSE_BUTTON = 'closeBtn'
     ALL = (BUYING_PANEL, CLOSE_BUTTON)
 
 

@@ -294,6 +294,10 @@ class ShopCommonStats(IShopCommonStats):
     def demountKits(self):
         return self.getGoodiesByVariety(GOODIE_VARIETY.DEMOUNT_KIT)
 
+    @property
+    def recertificationForms(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.RECERTIFICATION_FORM)
+
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
 

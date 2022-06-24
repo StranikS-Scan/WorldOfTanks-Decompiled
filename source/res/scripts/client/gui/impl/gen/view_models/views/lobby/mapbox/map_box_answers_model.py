@@ -21,11 +21,19 @@ class MapBoxAnswersModel(ViewModel):
     def setVariants(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getVariantsType():
+        return str
+
     def getSelectedVariants(self):
         return self._getArray(2)
 
     def setSelectedVariants(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getSelectedVariantsType():
+        return str
 
     def _initialize(self):
         super(MapBoxAnswersModel, self)._initialize()

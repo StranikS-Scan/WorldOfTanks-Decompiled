@@ -54,4 +54,5 @@ class Tokens(object):
             return
 
     def getToken(self, tokenID):
-        return self.__cache['tokens'].get(tokenID, None) if self.__cache and 'tokens' in self.__cache else None
+        cache = self.__cache
+        return cache['tokens'].get(tokenID) if cache and 'tokens' in cache else None

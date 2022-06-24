@@ -229,11 +229,14 @@ class VehicleState(object):
         return not self.unlocks and not self.pairs and not self.features
 
     def toActionCDs(self, tree):
+        steps = tree.steps
+        pairs = self._pairs
+        notSet = PAIR_TYPES.NOT_SET
+        pairModification = ACTION_TYPES.PAIR_MODIFICATION
         result = []
         for stepID in self._unlocks:
-            actionID, itemID = tree.steps[stepID].action
-            subId = self._pairs.get(stepID, PAIR_TYPES.NOT_SET) if actionID == ACTION_TYPES.PAIR_MODIFICATION else 0
-            result.append(makeActionCompDescr(actionID, itemID, subId))
+            actionID, itemID = steps[stepID].action
+            result.append(makeActionCompDescr(actionID, itemID, pairs.get(stepID, notSet) if actionID == pairModification else 0))
 
         return result
 

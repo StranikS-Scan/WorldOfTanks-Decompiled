@@ -3,6 +3,7 @@
 import typing
 if typing.TYPE_CHECKING:
     from Event import Event
+    from helpers.server_settings import ServerSettings
 
 class ILobbyContext(object):
     onServerSettingsChanged = None

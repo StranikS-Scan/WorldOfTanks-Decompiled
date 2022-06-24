@@ -22,6 +22,10 @@ class CommanderCmpViewModel(ViewModel):
     def setPerkList(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getPerkListType():
+        return CommanderCmpPerkModel
+
     def _initialize(self):
         super(CommanderCmpViewModel, self)._initialize()
         self._addStringProperty('nation', '')

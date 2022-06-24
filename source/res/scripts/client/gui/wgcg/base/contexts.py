@@ -35,19 +35,23 @@ class CommonWebRequestCtx(RequestCtx):
         return self.itemsCache.items.stats.clanDBID
 
 
-@ReprInjector.withParent(('getTokenID', 'token'), ('getUserDatabaseID', 'dbID'))
+@ReprInjector.withParent(('getTokenID', 'token'), ('getUserDatabaseID', 'dbID'), ('isJwt', 'jwt'))
 class LogInCtx(CommonWebRequestCtx):
 
-    def __init__(self, databaseID, tokenID):
+    def __init__(self, databaseID, tokenID, isJwt):
         super(LogInCtx, self).__init__()
         self.__tokenID = tokenID
         self.__databaseID = databaseID
+        self.__isJwt = isJwt
 
     def getTokenID(self):
         return self.__tokenID
 
     def getUserDatabaseID(self):
         return self.__databaseID
+
+    def isJwt(self):
+        return self.__isJwt
 
     def getRequestType(self):
         return WebRequestDataType.LOGIN

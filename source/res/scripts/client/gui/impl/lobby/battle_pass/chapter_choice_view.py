@@ -153,9 +153,6 @@ class ChapterChoiceView(ViewImpl):
         if self.__battlePass.isPaused():
             showMissionsBattlePass()
             return
-        if not self.__battlePass.isActive():
-            showHangar()
-            return
         if len(self.__battlePass.getChapterIDs()) != len(self.viewModel.getChapters()):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 

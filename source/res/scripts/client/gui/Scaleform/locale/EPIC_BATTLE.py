@@ -213,6 +213,7 @@ class EPIC_BATTLE(object):
     EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE = '#epic_battle:epic_battles_after_battle/Level_Up_Title'
     EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO_TITLE = '#epic_battle:epic_battles_after_battle/max_level_info/title'
     EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO_DESCRIPTION = '#epic_battle:epic_battles_after_battle/max_level_info/description'
+    EPIC_BATTLES_AFTER_BATTLE_CHOOSEREWARDS = '#epic_battle:epic_battles_after_battle/chooseRewards'
     SELECTORTOOLTIP_EPICBATTLE_HEADER = '#epic_battle:selectorTooltip/epicBattle/header'
     SELECTORTOOLTIP_EPICBATTLE_BODY = '#epic_battle:selectorTooltip/epicBattle/body'
     SELECTORTOOLTIP_EPICBATTLE_BODYVEHICLELEVEL = '#epic_battle:selectorTooltip/epicBattle/bodyVehicleLevel'
@@ -283,6 +284,8 @@ class EPIC_BATTLE(object):
     SEASON_201902_NAME = '#epic_battle:season/201902/name'
     SEASON_202002_NAME = '#epic_battle:season/202002/name'
     SEASON_202108_NAME = '#epic_battle:season/202108/name'
+    REWARDSELECTION_TITLE = '#epic_battle:rewardSelection/title'
+    REWARDSELECTION_SUBTITLE = '#epic_battle:rewardSelection/subTitle'
     EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
     EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/supplyPoints/description'
     EPICBATTLEITEM_SUPPLYPOINTS_BODY = '#epic_battle:epicBattleItem/supplyPoints/body'
@@ -294,6 +297,12 @@ class EPIC_BATTLE(object):
     INTRO_CARD_SLOTS_DESC = '#epic_battle:intro/card/slots/desc'
     INTRO_CARD_TYPES_TITLE = '#epic_battle:intro/card/types/title'
     INTRO_CARD_TYPES_DESC = '#epic_battle:intro/card/types/desc'
+    AWARDS_TITLE = '#epic_battle:awards/title'
+    AWARDS_SUBTITLE2 = '#epic_battle:awards/subTitle2'
+    AWARDS_SUBTITLE1 = '#epic_battle:awards/subTitle1'
+    AWARDS_ACCEPTBUTTON = '#epic_battle:awards/acceptButton'
+    AWARDS_ADDITIONALREWARDS_SUBTEXT = '#epic_battle:awards/additionalRewards/subText'
+    AWARDS_MULTIPLIER = '#epic_battle:awards/multiplier'
     TOOLTIPS_TIMETOSTART = '#epic_battle:tooltips/timeToStart'
     TOOLTIPS_TIMETOEND = '#epic_battle:tooltips/timeToEnd'
     TOOLTIPS_COMMON_DISABLED = '#epic_battle:tooltips/common/disabled'
@@ -313,6 +322,7 @@ class EPIC_BATTLE(object):
     TOOLTIPS_SLOTSETUPINFO_OPEN_DESC = '#epic_battle:tooltips/slotSetupInfo/open/desc'
     TOOLTIPS_SLOTSETUPINFO_UPGRADE_TITLE = '#epic_battle:tooltips/slotSetupInfo/upgrade/title'
     TOOLTIPS_SLOTSETUPINFO_UPGRADE_DESC = '#epic_battle:tooltips/slotSetupInfo/upgrade/desc'
+    TOOLTIPS_CHOOSEREWARDS_DESC = '#epic_battle:tooltips/chooseRewards/desc'
     RANK_RANK_ENUM = (RANK_RANK1,
      RANK_RANK2,
      RANK_RANK3,

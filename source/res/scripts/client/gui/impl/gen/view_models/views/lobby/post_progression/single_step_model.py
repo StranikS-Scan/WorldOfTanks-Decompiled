@@ -14,11 +14,19 @@ class SingleStepModel(StepModel):
     def modification(self):
         return self._getViewModel(6)
 
+    @staticmethod
+    def getModificationType():
+        return ModificationModel
+
     def getChildrenIds(self):
         return self._getArray(7)
 
     def setChildrenIds(self, value):
         self._setArray(7, value)
+
+    @staticmethod
+    def getChildrenIdsType():
+        return int
 
     def getIsPrebattleSwitchEnabled(self):
         return self._getBool(8)

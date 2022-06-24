@@ -9,11 +9,13 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 
 class BattlePassVehicleAwardView(ViewImpl):
     __slots__ = ()
     __itemsCache = dependency.descriptor(IItemsCache)
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, layoutID, *args, **kwargs):
         settings = ViewSettings(layoutID)
@@ -39,6 +41,10 @@ class BattlePassVehicleAwardView(ViewImpl):
         self.viewModel.setVehicleType(vehicle.type)
         techName = vehicle.name.split(':')
         self.viewModel.setTechName(techName[1])
+        chapterID = self.__battlePass.getCurrentChapterID()
+        self.viewModel.setChapterID(chapterID)
+        if chapterID:
+            self.viewModel.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
         switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.TANK_POINTS_CAP)
 

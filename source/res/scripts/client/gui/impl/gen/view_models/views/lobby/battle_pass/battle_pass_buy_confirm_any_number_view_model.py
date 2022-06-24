@@ -14,6 +14,10 @@ class BattlePassBuyConfirmAnyNumberViewModel(ViewModel):
     def rewards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardsType():
+        return RewardItemModel
+
     def getPrice(self):
         return self._getNumber(1)
 

@@ -670,7 +670,7 @@ def _matchTaggedProjectionDecalsToSlots(projectionDecalsMultiSlot, slotsByTagMap
     return False if not slots else True
 
 
-def _findAndMatchProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap):
+def _findAndMatchProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap, updateSlotId=True):
     slots = {}
     slotsByTags = deepcopy(slotsByTagMap)
     for decal in decals:
@@ -683,7 +683,8 @@ def _findAndMatchProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMa
     slotsList = slots.values()
     if _checkSlotsOrder(slots.values(), appliedDecals):
         for component, slotParams in slots.iteritems():
-            component.slotId = slotParams.slotId
+            if updateSlotId:
+                component.slotId = slotParams.slotId
             _checkAndMirrorProjectionDecal(component, slotParams)
 
         return slotsList
@@ -787,6 +788,27 @@ def __vehicleSlotsByType(vehDesc, slotType):
                 yield slot
 
     return
+
+
+if IS_EDITOR:
+
+    def createVehPartSlotMap(vehDesc):
+        slotsByIdMap = {}
+        for partName in TankPartNames.ALL:
+            partDesc = getattr(vehDesc, partName, None)
+            if partDesc is None:
+                continue
+            for slot in partDesc.slotsAnchors:
+                slotsByIdMap[slot.slotId] = (partDesc, slot)
+
+            for slot in partDesc.emblemSlots:
+                slotsByIdMap[slot.slotId] = (partDesc, slot)
+
+        return slotsByIdMap
+
+
+    def createVehSlotsMaps(vehDesc):
+        return __createVehSlotsMaps(vehDesc)
 
 
 def __createVehSlotsMaps(vehDesc):

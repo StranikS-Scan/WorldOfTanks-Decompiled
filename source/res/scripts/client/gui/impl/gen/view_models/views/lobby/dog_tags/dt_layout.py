@@ -13,25 +13,49 @@ class DtLayout(ViewModel):
     def playerName(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPlayerNameType():
+        return DtComponentLayout
+
     @property
     def clanTag(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getClanTagType():
+        return DtComponentLayout
 
     @property
     def engraving(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getEngravingType():
+        return DtComponentLayout
+
     @property
     def inscription(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getInscriptionType():
+        return DtComponentLayout
 
     @property
     def statTracker(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getStatTrackerType():
+        return DtComponentLayout
+
     @property
     def background(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getBackgroundType():
+        return DtComponentLayout
 
     def _initialize(self):
         super(DtLayout, self)._initialize()

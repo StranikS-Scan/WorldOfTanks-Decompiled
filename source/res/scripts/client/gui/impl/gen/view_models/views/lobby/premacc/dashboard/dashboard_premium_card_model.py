@@ -13,9 +13,17 @@ class DashboardPremiumCardModel(ViewModel):
     def withoutPremium(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getWithoutPremiumType():
+        return ListModel
+
     @property
     def withPremium(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getWithPremiumType():
+        return ListModel
 
     def getIsBasePremiumActive(self):
         return self._getBool(2)

@@ -28,6 +28,10 @@ class BootcampProgressModel(ViewModel):
     def setLevels(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getLevelsType():
+        return BootcampLessonModel
+
     def _initialize(self):
         super(BootcampProgressModel, self)._initialize()
         self._addNumberProperty('currentLesson', 0)

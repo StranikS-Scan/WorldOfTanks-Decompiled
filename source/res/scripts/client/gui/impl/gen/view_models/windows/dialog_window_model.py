@@ -15,6 +15,10 @@ class DialogWindowModel(ViewModel):
     def buttons(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getButtonsType():
+        return UserListModel
+
     def getIcon(self):
         return self._getResource(1)
 

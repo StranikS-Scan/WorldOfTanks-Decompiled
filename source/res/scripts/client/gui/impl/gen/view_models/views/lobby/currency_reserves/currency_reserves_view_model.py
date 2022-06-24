@@ -13,9 +13,17 @@ class CurrencyReservesViewModel(ViewModel):
     def creditReserve(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCreditReserveType():
+        return CurrencyReserveModel
+
     @property
     def goldReserve(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getGoldReserveType():
+        return CurrencyReserveModel
 
     def getTimeToOpen(self):
         return self._getNumber(2)

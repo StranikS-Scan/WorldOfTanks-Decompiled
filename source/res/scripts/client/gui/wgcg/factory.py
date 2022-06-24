@@ -32,7 +32,7 @@ class WebFactory(_WebFactory):
         return WebRequester.create_requester(_webUrlFetcher, settings, *args, **kwargs)
 
     def createTokenRequester(self):
-        return getTokenRequester(TOKEN_TYPE.WGNI)
+        return getTokenRequester(TOKEN_TYPE.WGNI_JWT)
 
     def createWgcgRequester(self, webRequester):
         return WgcgRequester(webRequester)
@@ -44,7 +44,7 @@ class WebFactory(_WebFactory):
 class FakeWebFactory(_WebFactory):
 
     def createWebRequester(self, settings, *args, **kwargs):
-        return WebRequester.create_requester(_webUrlFetcher, _Wgcg(True, None, 'fake', False), *args, **kwargs)
+        return WebRequester.create_requester(_webUrlFetcher, _Wgcg(True, None, 'fake', False, False), *args, **kwargs)
 
     def createTokenRequester(self):
         return TokenRequester(TOKEN_TYPE.WGNI, cache=False)

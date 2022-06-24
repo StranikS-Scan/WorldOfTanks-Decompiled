@@ -16,6 +16,10 @@ class MultipleItemsContentModel(ViewModel):
     def setConfirmedItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getConfirmedItemsType():
+        return ConfirmedItemModel
+
     def getItemsType(self):
         return self._getString(1)
 

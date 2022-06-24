@@ -255,6 +255,28 @@ class EpicMissionsController(IViewComponentsController):
     def getNearestObjectiveData(self):
         return (self.__nearestObjective, self.__nearestObjectiveDistance)
 
+    def getRankUpdateData(self, newRank):
+        if not self.__orderBattleAbilities:
+            return (None, None)
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        vehicle = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
+        vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
+        if arena is None:
+            return (None, None)
+        inBattleReserves = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank')
+        if not inBattleReserves:
+            return (None, None)
+        elif newRank not in range(0, len(inBattleReserves['slotActions'][vehClass])):
+            return (None, None)
+        updateData = inBattleReserves['slotActions'][vehClass]
+        updateList = inBattleReserves['slotActions'][vehClass][newRank]
+        if updateList:
+            firstSlot = updateList[0]
+            firstUnlocked = next((i for i, x in enumerate(updateData) if firstSlot in x), 0) == newRank
+            return (firstUnlocked, self.__orderBattleAbilities[firstSlot])
+        else:
+            return (None, None)
+
     def __isAttacker(self):
         return avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
 
@@ -629,7 +651,7 @@ class EpicMissionsController(IViewComponentsController):
 
     def __onPlayerRankUpdated(self, rank):
         subTitleText = ''
-        firstUnlocked, updateInfo = self.__getRankUpdateData(rank)
+        firstUnlocked, updateInfo = self.getRankUpdateData(rank)
         eqCtrl = self.__sessionProvider.shared.equipments
         if firstUnlocked is not None and eqCtrl is not None and eqCtrl.hasEquipment(updateInfo):
             equipmentName = eqCtrl.getEquipment(updateInfo).getDescriptor().userString
@@ -743,25 +765,3 @@ class EpicMissionsController(IViewComponentsController):
 
     def __onEquipmentsCleared(self):
         self.__orderBattleAbilities = []
-
-    def __getRankUpdateData(self, newRank):
-        if not self.__orderBattleAbilities:
-            return (None, None)
-        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
-        vehicle = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
-        vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
-        if arena is None:
-            return (None, None)
-        inBattleReserves = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank')
-        if not inBattleReserves:
-            return (None, None)
-        elif newRank not in range(0, len(inBattleReserves['slotActions'][vehClass])):
-            return (None, None)
-        updateData = inBattleReserves['slotActions'][vehClass]
-        updateList = inBattleReserves['slotActions'][vehClass][newRank]
-        if updateList:
-            firstSlot = updateList[0]
-            firstUnlocked = next((i for i, x in enumerate(updateData) if firstSlot in x), 0) == newRank
-            return (firstUnlocked, self.__orderBattleAbilities[firstSlot])
-        else:
-            return (None, None)

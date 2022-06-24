@@ -413,6 +413,10 @@ def getTimeToStartStr(timeStamp):
     return backport.text(R.strings.epic_battle.tooltips.timeToStart(), timeLeft=_getTimeLeftStr(timeStamp))
 
 
+def getOfferTokenByGift(tokenID):
+    return tokenID.replace('_gift', '')
+
+
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)
 def getAlertStatusVO(epicController=None):
     status, timeLeft, _ = epicController.getPrimeTimeStatus()

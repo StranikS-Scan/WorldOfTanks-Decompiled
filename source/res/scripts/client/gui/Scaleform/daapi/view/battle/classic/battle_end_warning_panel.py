@@ -21,10 +21,10 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
 
     def __init__(self):
         super(BattleEndWarningPanel, self).__init__()
-        arenaType = self.sessionProvider.arenaVisitor.type
-        self.__duration = arenaType.getBattleEndWarningDuration()
-        self.__appearTime = arenaType.getBattleEndWarningAppearTime()
-        self.__roundLength = arenaType.getRoundLength()
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        self.__duration = arenaVisitor.type.getBattleEndWarningDuration()
+        self.__appearTime = arenaVisitor.type.getBattleEndWarningAppearTime()
+        self.__roundLength = arenaVisitor.getRoundLength()
         self.__isShown = False
         self.__warningIsValid = self.__validateWarningTime()
 

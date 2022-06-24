@@ -21,6 +21,10 @@ class TriggersModel(ViewModel):
     def setTriggers(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getTriggersType():
+        return str
+
     def _initialize(self):
         super(TriggersModel, self)._initialize()
         self._addStringProperty('componentId', '')

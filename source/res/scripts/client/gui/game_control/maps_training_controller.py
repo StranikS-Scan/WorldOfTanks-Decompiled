@@ -17,6 +17,7 @@ from helpers import isPlayerAccount
 from items.vehicles import getVehicleClass
 from maps_training_common.helpers import unpackMapsTrainingScenarios, unpackMapsTrainingRewards
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from wotdecorators import condition
 from AccountCommands import isCodeValid
@@ -31,6 +32,7 @@ from skeletons.gui.game_control import IMapsTrainingController
 
 class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    c11nService = dependency.descriptor(ICustomizationService)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     ifEnabled = condition('isMapsTrainingEnabled')
     ifMapsTrainingPrbActive = condition('isMapsTrainingPrbActive')
@@ -105,16 +107,27 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     def getSelectedVehicle(self):
         return self.__vehCompDescr
 
+    def _showVehicle(self):
+        if g_currentPreviewVehicle.isHeroTank:
+            g_currentPreviewVehicle.selectHeroTank(False)
+        g_currentPreviewVehicle.selectVehicle(self.__vehCompDescr)
+
+    def _hideVehicle(self):
+        g_currentPreviewVehicle.selectNoVehicle()
+
+    def updateSelectedVehicle(self):
+        if self.__vehCompDescr != self._UNDEFINED_VALUE:
+            self._showVehicle()
+        else:
+            self._hideVehicle()
+
     def setSelectedVehicle(self, vehicleName):
         if vehicleName:
             nationID, vehID = vehicles.g_list.getIDsByName(vehicleName)
             self.__vehCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, vehID)
-            if g_currentPreviewVehicle.isHeroTank:
-                g_currentPreviewVehicle.selectHeroTank(False)
-            g_currentPreviewVehicle.selectVehicle(self.__vehCompDescr)
         else:
             self.__vehCompDescr = self._UNDEFINED_VALUE
-            g_currentPreviewVehicle.selectNoVehicle()
+        self.updateSelectedVehicle()
         self.onUpdated()
 
     def getSelectedTeam(self):
@@ -130,7 +143,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         self.__mapGeometryID = self._UNDEFINED_VALUE
         self.__vehCompDescr = self._UNDEFINED_VALUE
         self.__team = 1
-        g_currentPreviewVehicle.selectNoVehicle()
+        self.updateSelectedVehicle()
 
     def init(self):
         super(MapsTrainingController, self).init()
@@ -146,6 +159,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         g_playerEvents.onDisconnected += self.__onDisconnected
         g_eventBus.addListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
         if self.__isAfterBattle():
             battleCtx = self.sessionProvider.getCtx()
             event_dispatcher.showMapsTrainingResultsWindow(battleCtx.lastArenaUniqueID, False)
@@ -158,6 +172,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         g_currentPreviewVehicle.resetAppearance()
         g_playerEvents.onDisconnected -= self.__onDisconnected
         g_eventBus.removeListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
 
     def getConfig(self):
         return self.__config
@@ -246,3 +261,10 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     def __onDisconnected(self):
         self.__preferences.resetSessionFilters()
         self.reset()
+
+    def __onC11nVisibilityChanged(self, inCustomisation):
+        if inCustomisation and g_currentPreviewVehicle.isPresent():
+            g_currentPreviewVehicle.selectNoVehicle()
+        if self.__vehCompDescr != self._UNDEFINED_VALUE and not inCustomisation:
+            g_currentPreviewVehicle.selectNoVehicle()
+            g_currentPreviewVehicle.selectVehicle(self.__vehCompDescr)

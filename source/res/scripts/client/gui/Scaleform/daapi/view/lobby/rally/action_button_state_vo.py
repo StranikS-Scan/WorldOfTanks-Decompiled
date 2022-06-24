@@ -69,7 +69,13 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {}),
          UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
          UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {}),
-         UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {})}
+         UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {}),
+         UNIT_RESTRICTION.LIMIT_LEVEL: ('', {}),
+         UNIT_RESTRICTION.LIMIT_VEHICLE_TYPE: ('', {}),
+         UNIT_RESTRICTION.LIMIT_VEHICLE_CLASS: ('', {}),
+         UNIT_RESTRICTION.MODE_NO_BATTLES: ('', {}),
+         UNIT_RESTRICTION.MODE_NOT_SET: ('', {}),
+         UNIT_RESTRICTION.MODE_NOT_AVAILABLE: ('', {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()

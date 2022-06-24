@@ -97,13 +97,13 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
     def _addGameListeners(self):
         ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
-            ctrl.onShowVehicleMessageByCode += self.__onShowVehicleMessageByCode
+            ctrl.onShowVehicleMessageByCode += self._onShowVehicleMessageByCode
         return
 
     def _removeGameListeners(self):
         ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
-            ctrl.onShowVehicleMessageByCode -= self.__onShowVehicleMessageByCode
+            ctrl.onShowVehicleMessageByCode -= self._onShowVehicleMessageByCode
         return
 
     def _deathInfoReceived(self):
@@ -120,11 +120,8 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
          'device': device}
         self._deathInfoReceived()
 
-    def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
-        if extra is not None:
-            device = extra.deviceUserString
-        else:
-            device = None
+    def _onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
+        device = self._getDevice(extra)
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
             if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
@@ -140,6 +137,9 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         if code in self.__messages:
             self._prepareMessage(code, entityID, device)
         return
+
+    def _getDevice(self, extra):
+        return extra.deviceUserString if extra is not None else None
 
 
 class _SummaryPostmortemPanel(_BasePostmortemPanel):

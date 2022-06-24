@@ -75,12 +75,15 @@ class BaseAdvancedTooltip(BlocksTooltipData):
     def _getBlocksList(self, *args, **kwargs):
         pass
 
-    def _packAdvancedBlocks(self, movie, header, description):
-        descrTextR = R.strings.tooltips.advanced.dyn(description)
-        if descrTextR and descrTextR.isValid():
-            descrText = backport.text(descrTextR())
+    def _packAdvancedBlocks(self, movie, header, description, descReady=False):
+        if not descReady:
+            descrTextR = R.strings.tooltips.advanced.dyn(description)
+            if descrTextR and descrTextR.isValid():
+                descrText = backport.text(descrTextR())
+            else:
+                descrText = '#tooltips:advanced/' + description
         else:
-            descrText = '#tooltips:advanced/' + description
+            descrText = description
         if movie is None:
             items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         else:
@@ -298,7 +301,16 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'ration_sweden': 'consumablesCoffeeWithCinnamonBuns',
  'ration_poland': 'consumablesBreadWithSchmaltz',
  'ration_italy': 'consumablesSpaghetti',
- 'grousers': 'equipmentAdditionalGrousers'}
+ 'grousers': 'equipmentAdditionalGrousers',
+ 'artillery': 'artillery',
+ 'bomber': 'bomber',
+ 'inspire': 'inspire',
+ 'arcade_minefield': 'minefield',
+ 'stealthRadar': 'patrol',
+ 'recon': 'recon',
+ 'regenerationKit': 'resuply',
+ 'passive_engineering': 'sabotageSquad',
+ 'smoke': 'smokeCloud'}
 _TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

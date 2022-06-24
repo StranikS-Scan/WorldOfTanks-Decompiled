@@ -8,12 +8,15 @@ from constants import QUEUE_TYPE
 from async import async, await
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers import isLongDisconnectedFromCenter
+from frameworks.wulf import WindowLayer
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from gui.prb_control.prb_getters import getQueueType
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
@@ -42,6 +45,7 @@ class BootcampController(IBootcampController):
     lobbyContext = dependency.descriptor(ILobbyContext)
     demoAccController = dependency.descriptor(IDemoAccCompletionController)
     itemsCache = dependency.descriptor(IItemsCache)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(BootcampController, self).__init__()
@@ -220,7 +224,9 @@ class BootcampController(IBootcampController):
 
     @async
     def __doBootcamp(self, isSkip):
-        g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.LOBBY_MENU))
+        isFromLobbyMenu = self.__isLobbyMenuOpened()
+        if isFromLobbyMenu:
+            g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.LOBBY_MENU))
         if isSkip:
             self.__skipBootcamp()
         else:
@@ -240,6 +246,8 @@ class BootcampController(IBootcampController):
             result = yield await(showResSimpleDialog(startAcc, icon, message))
             if result:
                 self.__goBootcamp()
+            elif isFromLobbyMenu:
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __skipBootcamp(self):
         window = BootcampExitWindow(partial(self.stopBootcamp, not self.isInBootcampAccount()))
@@ -253,3 +261,8 @@ class BootcampController(IBootcampController):
     @staticmethod
     def __format(text, style, **kwargs):
         return makeHtmlString('html_templates:bootcamp/message', style, ctx={'text': backport.text(text, **kwargs)})
+
+    def __isLobbyMenuOpened(self):
+        app = self.appLoader.getApp()
+        container = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
+        return container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}) is not None

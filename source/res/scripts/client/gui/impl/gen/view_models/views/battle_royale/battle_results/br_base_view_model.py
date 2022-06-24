@@ -14,9 +14,17 @@ class BrBaseViewModel(ViewModel):
     def leaderboardModel(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getLeaderboardModelType():
+        return LeaderboardModel
+
     @property
     def playerVehicleStatus(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getPlayerVehicleStatusType():
+        return PlayerVehicleStatusModel
 
     def _initialize(self):
         super(BrBaseViewModel, self)._initialize()

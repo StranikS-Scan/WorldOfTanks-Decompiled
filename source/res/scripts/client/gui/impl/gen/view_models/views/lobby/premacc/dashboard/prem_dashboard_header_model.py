@@ -17,21 +17,41 @@ class PremDashboardHeaderModel(ViewModel):
     def userName(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getUserNameType():
+        return UserNameModel
+
     @property
     def subscriptionCard(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getSubscriptionCardType():
+        return SubscriptionCardModel
 
     @property
     def clanInfo(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getClanInfoType():
+        return PremDashboardHeaderClanInfoModel
+
     @property
     def personalReserves(self):
         return self._getViewModel(3)
 
+    @staticmethod
+    def getPersonalReservesType():
+        return UserListModel
+
     @property
     def clanReserves(self):
         return self._getViewModel(4)
+
+    @staticmethod
+    def getClanReservesType():
+        return UserListModel
 
     def getPrefixBadgeId(self):
         return self._getString(5)

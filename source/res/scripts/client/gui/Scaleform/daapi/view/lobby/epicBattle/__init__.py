@@ -17,7 +17,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_battles_after_battle_view import EpicBattlesAfterBattleView
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prime_time import EpicBattlesPrimeTimeView
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_quest_progress_view import EpicQuestProgressView
-    return (ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, EpicBattlesAfterBattleView, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_UI, WindowLayer.FULLSCREEN_WINDOW, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, EpicBattlesPrimeTimeView, HANGAR_ALIASES.EPIC_PRIME_TIME, WindowLayer.SUB_VIEW, EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True), ComponentSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PROGRESS_INFO_ALIAS, EpicQuestProgressView, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, EpicBattlesAfterBattleView, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_UI, WindowLayer.TOP_WINDOW, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, EpicBattlesPrimeTimeView, HANGAR_ALIASES.EPIC_PRIME_TIME, WindowLayer.SUB_VIEW, EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True), ComponentSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PROGRESS_INFO_ALIAS, EpicQuestProgressView, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

@@ -22,6 +22,10 @@ class SelectedRewardsTooltipCategoryModel(ViewModel):
     def setRewards(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getRewardsType():
+        return SelectedRewardsTooltipRewardModel
+
     def _initialize(self):
         super(SelectedRewardsTooltipCategoryModel, self)._initialize()
         self._addStringProperty('type', '')

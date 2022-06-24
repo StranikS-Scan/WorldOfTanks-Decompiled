@@ -8,7 +8,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
-from gui.battle_results.components.personal import fillKillerInfoBlock
+from gui.battle_results.components.personal import fillKillerInfoBlock, NO_OWNER_DEATH_REASON_IDS
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
@@ -130,14 +130,17 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.killerID = result.killerID
         self.deathReason = result.deathReason
         if self.isPersonal and reusable.personal.avatar.isPrematureLeave:
-            state = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
+            state = backport.text(R.strings.battle_results.common.vehicleState.prematureLeave())
             self.vehicleState = state
             self.vehicleStatePrefix = state
         elif self.deathReason > DEATH_REASON_ALIVE:
             if self.killerID:
                 fillKillerInfoBlock(self, self.deathReason, self.killerID, reusable)
+            elif self.deathReason in NO_OWNER_DEATH_REASON_IDS:
+                state = backport.text(R.strings.battle_results.common.vehicleState.dyn('dead{}'.format(self.deathReason), R.invalid)())
+                self.vehicleState = state
         else:
-            self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
+            self.vehicleState = backport.text(R.strings.battle_results.common.vehicleState.alive())
         self.isTeamKiller = result.isTeamKiller
 
 

@@ -7,7 +7,9 @@ from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidge
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('epicMetaLevelIconData', 'points'))
+from gui.ClientUpdateManager import g_clientUpdateManager
+from epic_constants import EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS
+EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('epicMetaLevelIconData', 'points', 'counterValue'))
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -40,9 +42,11 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             if self.__periodicNotifier is None:
                 self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.update)
             self.__periodicNotifier.startNotification()
+            g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
             return
 
     def _dispose(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
         if self.__periodicNotifier is not None:
             self.__periodicNotifier.stopNotification()
             self.__periodicNotifier.clear()
@@ -58,7 +62,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         if season is not None:
             cycleNumber = self.__epicController.getCurrentOrNextActiveCycleNumber(season)
         level = currentLevel if self.__epicController.isCurrentCycleActive() else None
-        return EpicBattlesWidgetVO(epicMetaLevelIconData=getProgressionIconVODict(cycleNumber, level), points=str(self.__getSkillPoints()))
+        return EpicBattlesWidgetVO(epicMetaLevelIconData=getProgressionIconVODict(cycleNumber, level), points=str(self.__getSkillPoints()), counterValue=self.__epicController.getNotChosenRewardCount())
 
     def __getSkillPoints(self):
         season = self.__epicController.getCurrentSeason()
@@ -77,3 +81,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                 return ''
             noNextCycle = season.getNextByTimeCycle(now) is None
             return '' if noActiveCycles and noNextCycle else str(self.__epicController.getSkillPoints())
+
+    def __onTokensUpdate(self, diff):
+        if any((key.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS) for key in diff.keys())):
+            self.update()

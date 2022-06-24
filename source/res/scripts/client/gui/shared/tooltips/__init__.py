@@ -74,12 +74,14 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_COLLECTOR = 'vehicleCollector'
     BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_POINTS = 'battlePassPoints'
+    EPIC_BATTLE_GIFT_TOKEN = 'epicBattleGiftToken'
     MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
     SELECTABLE_CREWBOOK = 'selectableCrewbook'
     RANDOM_CREWBOOK = 'randomCrewbook'
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
     RANKED_SELECTABLE_REWARD = 'rankedSelectableReward'
+    FUN_RANDOM_CALENDAR_DAY = 'funRandomCalendarDayInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -113,6 +115,8 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     MODULE_INFO = 'moduleInfo'
     BATTLE_PASS = 'battlePass'
+    EPIC_BATTLE = 'epicBattle'
+    RECERTIFICATION_FORM = 'recertificationForm'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

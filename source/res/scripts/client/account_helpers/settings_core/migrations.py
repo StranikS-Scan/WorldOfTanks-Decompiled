@@ -811,19 +811,67 @@ def _migrateTo90(core, data, initialized):
 
 
 def _migrateTo91(core, data, initialized):
+    pass
+
+
+def _migrateTo92(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN] = False
 
 
-def _migrateTo92(core, data, initialized):
+def _migrateTo93(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.settings_core.settings_constants import DragonBoatStorageKeys
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.TEAM_1] = False
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.TEAM_2] = False
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.TEAM_3] = False
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.TEAM_4] = False
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.TEAM_5] = False
-    data[SETTINGS_SECTIONS.DRAGON_BOAT_STORAGE][DragonBoatStorageKeys.DBOAT_FINAL_REWARD_OBTAINED] = False
+    data[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': False,
+     'mediumTank': False,
+     'heavyTank': False,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'funRandom': True,
+     'role_HT_assault': False,
+     'role_HT_break': False,
+     'role_HT_support': False,
+     'role_HT_universal': False,
+     'role_MT_universal': False,
+     'role_MT_sniper': False,
+     'role_MT_assault': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False}
 
 
 _versions = ((1,
@@ -1188,6 +1236,10 @@ _versions = ((1,
   False),
  (92,
   _migrateTo92,
+  False,
+  False),
+ (93,
+  _migrateTo93,
   False,
   False))
 

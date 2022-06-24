@@ -23,15 +23,27 @@ class SettingsModel(ViewModel, typing.Generic[F]):
     def tiersSettings(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTiersSettingsType():
+        return TiersSettingsModel
+
     @property
     def voiceSettings(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getVoiceSettingsType():
+        return VoiceChatSettingsModel
 
     def getSearchFilterTypes(self):
         return self._getArray(2)
 
     def setSearchFilterTypes(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getSearchFilterTypesType():
+        return F
 
     def _initialize(self):
         super(SettingsModel, self)._initialize()

@@ -18,27 +18,3 @@ def getAvatarSessionID():
     player = BigWorld.player()
     avatarSessionID = getattr(player, 'sessionID', '')
     return avatarSessionID
-
-
-def getBestShotResultSound(currBest, newSoundName, otherData):
-    newSoundPriority = _shotResultSoundPriorities[newSoundName]
-    if currBest is None:
-        return (newSoundName, otherData, newSoundPriority)
-    else:
-        return (newSoundName, otherData, newSoundPriority) if newSoundPriority > currBest[2] else currBest
-
-
-_shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
- 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player': 11,
- 'enemy_hp_damaged_by_projectile_by_player': 10,
- 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player': 9,
- 'enemy_hp_damaged_by_near_explosion_by_player': 8,
- 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player': 7,
- 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player': 6,
- 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player': 5,
- 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player': 4,
- 'enemy_no_piercing_by_player': 3,
- 'enemy_no_hp_damage_at_attempt_by_player': 3,
- 'enemy_no_hp_damage_at_no_attempt_by_player': 2,
- 'enemy_no_hp_damage_by_near_explosion_by_player': 1,
- 'enemy_ricochet_by_player': 0}

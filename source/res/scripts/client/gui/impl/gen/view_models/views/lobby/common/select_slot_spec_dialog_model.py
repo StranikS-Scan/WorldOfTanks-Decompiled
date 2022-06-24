@@ -15,9 +15,17 @@ class SelectSlotSpecDialogModel(DialogWithExchange):
     def changePrice(self):
         return self._getViewModel(15)
 
+    @staticmethod
+    def getChangePriceType():
+        return PriceModel
+
     @property
     def mainContent(self):
         return self._getViewModel(16)
+
+    @staticmethod
+    def getMainContentType():
+        return SelectSlotSpecDialogContentModel
 
     def _initialize(self):
         super(SelectSlotSpecDialogModel, self)._initialize()

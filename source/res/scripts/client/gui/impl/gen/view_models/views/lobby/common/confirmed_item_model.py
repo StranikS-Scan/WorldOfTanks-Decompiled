@@ -14,6 +14,10 @@ class ConfirmedItemModel(ViewModel):
     def demountPrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getDemountPriceType():
+        return PriceModel
+
     def getName(self):
         return self._getString(1)
 

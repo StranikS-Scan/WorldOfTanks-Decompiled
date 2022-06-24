@@ -3,7 +3,7 @@
 import logging
 from collections import namedtuple
 from math import ceil
-import typing
+from typing import TYPE_CHECKING, Callable, List
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -34,10 +34,10 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from typing import Callable
+if TYPE_CHECKING:
+    from account_helpers.offers.events_data import OfferEventData
     from gui.goodies.goodie_items import Booster
-    from gui.server_events.bonuses import SimpleBonus, CrystalBonus, GoodiesBonus, PlusPremiumDaysBonus
+    from gui.server_events.bonuses import SimpleBonus, CrystalBonus, GoodiesBonus, PlusPremiumDaysBonus, EpicSelectTokensBonus
     from gui.server_events.cond_formatters.formatters import ConditionFormatter
     from gui.shared.gui_items.crew_book import CrewBook
 _logger = logging.getLogger(__name__)
@@ -87,6 +87,12 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                     'xp': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
                     'xpFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
                     'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP}}
+
+def getRecertificationFormImages():
+    result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.recertification.common_48x48()),
+     AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.recertification.common_80x80())}
+    return result
+
 
 def _getMultiplierFormatter(formatter):
 
@@ -198,6 +204,17 @@ def getLinkedSetFormattersMap():
     return mapping
 
 
+def getEpicBattleFormattersMap():
+    mapping = getDefaultFormattersMap()
+    mapping.update({'abilityPts': EpicAbilityPtsFormatter(),
+     'items': EpicItemsBonusFormatter(),
+     'dossier': EpicDossierBonusFormatter(),
+     'vehicles': RankedVehiclesBonusFormatter(),
+     'epicSelectToken': InstructionEpicBattleBonusFormatter(),
+     'goodies': GoodiesEpicBattleBonusFormatter()})
+    return mapping
+
+
 def getEpicSetFormattersMap():
     mapping = getDefaultFormattersMap()
     mapping.update({'abilityPts': EpicAbilityPtsFormatter(),
@@ -281,6 +298,10 @@ def getDefaultAwardFormatter():
 
 def getEpicAwardFormatter():
     return AwardsPacker(getEpicFormattersMap())
+
+
+def getEpicBattleViewAwardPacker():
+    return AwardsPacker(getEpicBattleFormattersMap())
 
 
 def getEpicViewAwardPacker():
@@ -852,10 +873,10 @@ class RankedSelectableAwardFormatter(TokenBonusFormatter):
 class EpicAbilityPtsFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
-        return [PreformattedBonus(label=self._formatBonusLabel(bonus.getValue()), userName=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.header()), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=makeTooltip(header=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.header()), body=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.description())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))]
+        return [PreformattedBonus(label=self._formatBonusLabel(bonus.getValue()), userName=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.header()), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=makeTooltip(header=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.header()), body=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.description())), align=LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonus))]
 
     def _formatBonusLabel(self, count):
-        return formatCountLabel(count)
+        return count
 
     @classmethod
     def _getImages(cls, bonus):
@@ -1329,6 +1350,61 @@ class OperationCustomizationsBonusFormatter(CustomizationsBonusFormatter):
         return result
 
 
+class InstructionEpicBattleBonusFormatter(SimpleBonusFormatter):
+    _offersProvider = dependency.descriptor(IOffersDataProvider)
+
+    def _getLabel(self, bonus):
+        gifts = self._getGiftsCount(bonus)
+        return formatCountLabel(gifts) if gifts > 0 else ''
+
+    def _format(self, bonus):
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[self._getTokenName(bonus)])]
+
+    @classmethod
+    def _getImages(cls, bonus):
+        bonusType = cls._getType(bonus)
+        result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.quests.bonuses.small.dyn(bonusType)()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn(bonusType)())}
+        return result
+
+    def _getGiftsCount(self, bonus):
+        bonusOffers = []
+        for k in bonus.getValue().iterkeys():
+            tokenName = k.replace('_gift', '')
+            bonusOffers.append(self._offersProvider.getOfferByToken(tokenName))
+
+        giftsCount = 0
+        for bonusOffer in bonusOffers:
+            gift = bonusOffer.getFirstGift()
+            if gift is not None:
+                giftsCount += gift.giftCount
+
+        return giftsCount
+
+    @classmethod
+    def _getTokenName(cls, bonus):
+        return bonus.getValue().keys()[0]
+
+    @classmethod
+    def _getType(cls, bonus):
+        bonusType = cls._getTokenName(bonus).split(':')[2]
+        return bonusType
+
+
+class GoodiesEpicBattleBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        goodID = list(bonus.getValue())[0]
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[goodID])]
+
+    def _getLabel(self, bonus):
+        return formatCountLabel(list(bonus.getValue().values())[0]['count'])
+
+    @classmethod
+    def _getImages(cls, _):
+        return getRecertificationFormImages()
+
+
 class GoodiesBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
@@ -1341,7 +1417,15 @@ class GoodiesBonusFormatter(SimpleBonusFormatter):
             if demountKit is not None:
                 result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getDemountKitImages(demountKit), isSpecial=True, label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=demountKit.userName, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountKit.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
+        for form, count in bonus.getRecertificationForms().iteritems():
+            if form is not None:
+                result.append(PreformattedBonus(bonusName=bonus.getName(), label=formatCountLabel(count), userName=form.userName, labelFormatter=self._getLabelFormatter(bonus), images=self._getImagesRecertificationForm(form), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[form.goodieID]))
+
         return result
+
+    @classmethod
+    def _getImagesRecertificationForm(cls, _):
+        return getRecertificationFormImages()
 
     @classmethod
     def _getImages(cls, booster):
@@ -1717,3 +1801,12 @@ class CurrenciesBonusFormatter(SimpleBonusFormatter):
     def _getImages(cls, bonus):
         return {AWARDS_SIZES.SMALL: bonus.getIconBySize(AWARDS_SIZES.SMALL),
          AWARDS_SIZES.BIG: bonus.getIconBySize(AWARDS_SIZES.BIG)}
+
+
+class EpicSelectTokenFormatter(SimpleBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, bonus):
+        result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}
+        return result

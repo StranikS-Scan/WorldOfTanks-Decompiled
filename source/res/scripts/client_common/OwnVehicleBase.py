@@ -104,7 +104,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
                     damageIndex = DAMAGE_INFO_INDICES['DEVICE_CRITICAL']
                 if DAMAGE_INFO_CODES[damageIndex].startswith('DEVICE_DESTROYED'):
                     damageIndex = DAMAGE_INFO_INDICES['DEVICE_DESTROYED']
-            avatar.showVehicleDamageInfo(self.entity.id, damageIndex, damage.extraIndex, damage.entityID, damage.equipmentID)
+            avatar.showVehicleDamageInfo(self.entity.id, damageIndex, damage.extraIndex, damage.entityID, damage.equipmentID, self.__isAttachingToVehicle)
 
     @noexcept
     def update_vehicleOptionalDeviceStatusList(self, deviceList):
@@ -274,7 +274,10 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             return
         changedAmmo = self.vehicleAmmoList[path[0]]
         if changedAmmo.compactDescr != prev.compactDescr:
-            avatar.resetVehicleAmmo(prev.compactDescr, changedAmmo.compactDescr, changedAmmo.quantity, changedAmmo.previousStage, changedAmmo.endTime, changedAmmo.totalTime)
+            timeRemaining = changedAmmo.endTime - self._serverTime()
+            if 1 > timeRemaining > 0:
+                timeRemaining = -1
+            avatar.resetVehicleAmmo(oldCompactDescr=prev.compactDescr, newCompactDescr=changedAmmo.compactDescr, quantity=changedAmmo.quantity, stage=changedAmmo.previousStage, timeRemaining=timeRemaining, totalTime=changedAmmo.totalTime)
         else:
             self.__setNested(self.update_vehicleAmmoList, 'vehicleAmmoList', path, prev)
 

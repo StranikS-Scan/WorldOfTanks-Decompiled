@@ -663,16 +663,15 @@ class BerserkerSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
         CallbackDelayer.destroy(self)
         super(BerserkerSoundPlayer, self).destroy()
 
-    def _onVehicleStateUpdated(self, state, berserkerInfo):
+    def _onVehicleStateUpdated(self, state, berserkerData):
         if state == VEHICLE_VIEW_STATE.BERSERKER:
-            duration = berserkerInfo.endTime - BigWorld.serverTime()
-            if duration < 0:
+            if berserkerData['duration'] <= 0:
                 self.__stopEffect()
                 return
             BREvents.playSound(BREvents.BERSERKER_ACTIVATION)
             self.__stopEffect()
-            self.__period = berserkerInfo.tickInterval
-            self.delayCallback(berserkerInfo.tickInterval, self.__updateEffect)
+            self.__period = berserkerData['tickInterval']
+            self.delayCallback(self.__period, self.__updateEffect)
 
     def __updateEffect(self):
         BREvents.playSound(BREvents.BERSERKER_PULSE_RED)

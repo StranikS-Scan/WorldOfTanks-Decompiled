@@ -328,7 +328,7 @@ class BlinkingLaserSight(EntityExtra):
             gunPos = gunMatr.applyToOrigin()
             gunDir = gunMatr.applyToAxis(2)
             endPos = gunPos + gunDir * MAX_DISTANCE
-            collidePos = BigWorld.wg_collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1)
+            collidePos = BigWorld.wg_collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1, 0)
             data['isVehicleTakenAtGunPoint'] = args['isTakesAim'] or not self._shouldCollideTarget or collidePos[1]
             distanceToTarget = gunPos.distTo(collidePos[0]) if collidePos is not None else MAX_DISTANCE
             beamMode = args['beamMode']

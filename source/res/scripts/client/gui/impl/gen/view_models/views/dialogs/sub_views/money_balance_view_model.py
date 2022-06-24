@@ -13,17 +13,33 @@ class MoneyBalanceViewModel(ViewModel):
     def goldTooltip(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getGoldTooltipType():
+        return DialogTemplateGenericTooltipViewModel
+
     @property
     def creditsTooltip(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getCreditsTooltipType():
+        return DialogTemplateGenericTooltipViewModel
 
     @property
     def crystalsTooltip(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getCrystalsTooltipType():
+        return DialogTemplateGenericTooltipViewModel
+
     @property
     def freeExpTooltip(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getFreeExpTooltipType():
+        return DialogTemplateGenericTooltipViewModel
 
     def getGold(self):
         return self._getNumber(4)

@@ -7,14 +7,11 @@ from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH
 from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _C_NAME = settings.CONTAINER_NAME
 _DEPLOY_MAP_PATH = '_level0.root.{}.main.epicDeploymentMap.mapContainer.entriesContainer'.format(LAYER_NAMES.VIEWS)
 
 class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(EpicDeploymentMapComponent, self).__init__()

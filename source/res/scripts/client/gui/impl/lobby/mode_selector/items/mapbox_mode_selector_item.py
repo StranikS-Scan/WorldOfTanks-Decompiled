@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/items/mapbox_mode_selector_item.py
 import typing
-from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.lobby.mode_selector.items import setBattlePassState
-from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
+from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, formatSeasonLeftTime
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.event_dispatcher import showMapboxIntro
 from helpers import dependency, time_utils
@@ -47,13 +46,9 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
     def __onPrimeTimeStatusUpdate(self, *_):
         self.__fillViewModel()
 
-    def __getSeasonTimeLeft(self):
-        currentSeason = self.__mapboxCtrl.getCurrentSeason()
-        return getFormattedTimeLeft(max(0, currentSeason.getEndDate() - time_utils.getServerUTCTime())) if currentSeason else ''
-
     def __fillViewModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setTimeLeft(self.__getSeasonTimeLeft())
+            vm.setTimeLeft(formatSeasonLeftTime(self.__mapboxCtrl.getCurrentSeason()))
             vm.setStatusNotActive(self.__getNotActiveStatus())
             setBattlePassState(self.viewModel)
 

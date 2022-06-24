@@ -166,9 +166,15 @@
   </asset_pipeline>
   <cgf>
     <script>
-      <module>	client.cgf_components.client_selectable_components	</module>
+      <module>	client.cgf_components.attack_artillery_fort_components	</module>
       <module>	client.cgf_components.marker_component	</module>
       <module>	client.cgf_components.serial_number_component	</module>
+      <module>	client.cgf_components.collision_component	</module>
+      <module>	client.cgf_components.trigger_vse_component	</module>
+      <module>	client.cgf_components.highlight_component	</module>
+      <module>	client.cgf_components.hover_component	</module>
+      <module>	client.cgf_components.on_click_components	</module>
+      <module>	client.cgf_components.hangar_rules	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>

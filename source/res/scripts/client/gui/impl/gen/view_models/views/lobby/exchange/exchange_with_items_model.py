@@ -13,6 +13,10 @@ class ExchangeWithItemsModel(DialogWithExchange):
     def mainContent(self):
         return self._getViewModel(15)
 
+    @staticmethod
+    def getMainContentType():
+        return MultipleItemsContentModel
+
     def _initialize(self):
         super(ExchangeWithItemsModel, self)._initialize()
         self._addViewModelProperty('mainContent', MultipleItemsContentModel())

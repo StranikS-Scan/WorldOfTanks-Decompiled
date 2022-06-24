@@ -28,6 +28,10 @@ class PlaceModel(ViewModel):
     def setPlayersList(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getPlayersListType():
+        return RowModel
+
     def _initialize(self):
         super(PlaceModel, self)._initialize()
         self._addStringProperty('place', '')

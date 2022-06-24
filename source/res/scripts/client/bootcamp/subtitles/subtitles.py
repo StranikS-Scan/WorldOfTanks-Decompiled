@@ -11,7 +11,7 @@ class SubtitlesBase(View):
     __DURATION_ON_TICK = 0.5
 
     def __new__(cls, *args, **kwargs):
-        if cls._instance:
+        if cls._instance and not cls._instance.isDisposed():
             cls._instance.onWindowClose()
         cls._instance = View.__new__(cls, *args, **kwargs)
         return cls._instance

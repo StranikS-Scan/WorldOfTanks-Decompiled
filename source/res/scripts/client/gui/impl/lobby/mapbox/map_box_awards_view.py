@@ -3,7 +3,7 @@
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_awards_view_model import MapBoxAwardsViewModel
-from gui.impl.lobby.mapbox.sound import getMapboxViewSoundSpace
+from gui.impl.lobby.mapbox.sound import getMapboxViewSoundSpace, MapBoxSounds, playSound
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker
@@ -13,7 +13,7 @@ from shared_utils import first
 
 class MapBoxAwardsView(ViewImpl):
     __slots__ = ('__numBattles', '__tooltips', '__reward')
-    _COMMON_SOUND_SPACE = getMapboxViewSoundSpace(enterEvent='bp_reward_screen')
+    _COMMON_SOUND_SPACE = getMapboxViewSoundSpace()
 
     def __init__(self, numBattles, reward, *args, **kwargs):
         settings = ViewSettings(layoutID=R.views.lobby.mapbox.MapBoxAwardsView(), model=MapBoxAwardsViewModel())
@@ -48,6 +48,7 @@ class MapBoxAwardsView(ViewImpl):
             rewardsList = model.rewards
             packMapboxRewardModelAndTooltip(rewardsList, self.__reward, packer, self.__numBattles, self.__tooltips)
             rewardsList.invalidate()
+        playSound(MapBoxSounds.REWARD_SCREEN.value)
 
     def __onPick(self, args):
         rewardModel = self.viewModel.rewards.getItem(int(args['index']))

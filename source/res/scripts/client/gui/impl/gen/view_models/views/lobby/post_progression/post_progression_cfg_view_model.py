@@ -13,6 +13,10 @@ class PostProgressionCfgViewModel(PostProgressionBaseViewModel):
     def purchasePreview(self):
         return self._getViewModel(5)
 
+    @staticmethod
+    def getPurchasePreviewType():
+        return PostProgressionPurchaseModel
+
     def _initialize(self):
         super(PostProgressionCfgViewModel, self)._initialize()
         self._addViewModelProperty('purchasePreview', PostProgressionPurchaseModel())

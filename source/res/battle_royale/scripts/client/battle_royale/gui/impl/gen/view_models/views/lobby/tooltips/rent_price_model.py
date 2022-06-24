@@ -13,9 +13,17 @@ class RentPriceModel(ViewModel):
     def testDrivePrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTestDrivePriceType():
+        return PriceModel
+
     @property
     def rentPrice(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getRentPriceType():
+        return PriceModel
 
     def getTestDriveLabel(self):
         return self._getString(2)

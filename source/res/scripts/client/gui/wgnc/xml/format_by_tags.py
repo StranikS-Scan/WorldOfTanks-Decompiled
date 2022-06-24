@@ -3,6 +3,7 @@
 import re
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.impl import backport
+from helpers import i18n
 _RE_FLAGS = re.M | re.U
 
 class _TagFormatter(object):
@@ -168,6 +169,25 @@ class _LinkFormatter(_TagFormatter):
         return re.compile('(<{0} actions=(["|\\\']+?)(.+?)\\2>(.+?)</{0}>)'.format(name), _RE_FLAGS)
 
 
+class _LocalizationFormatter(_TagFormatter):
+
+    def __init__(self):
+        super(_LocalizationFormatter, self).__init__('')
+
+    def _prepare(self, results):
+        for found in results:
+            if len(found) != 2:
+                continue
+            tag, value = found
+            if not value:
+                LOG_WARNING('Value of tag is empty. It is ignored', tag)
+                continue
+            yield (tag, i18n.makeString(value))
+
+    def _makePattern(self, name):
+        return re.compile('(\\_\\(([^)]+)\\))', _RE_FLAGS)
+
+
 _formatters = (_GoldFormatter(),
  _IntegerFormatter(),
  _FloatFormatter(),
@@ -177,7 +197,8 @@ _formatters = (_GoldFormatter(),
  _ShortDateFormatter(),
  _LongDateFormatter(),
  _DateTimeFormatter(),
- _LinkFormatter())
+ _LinkFormatter(),
+ _LocalizationFormatter())
 
 def formatText(text):
     for formatter in _formatters:

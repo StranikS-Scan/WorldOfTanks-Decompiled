@@ -16,6 +16,10 @@ class BattleBoostersSetupModel(BaseSetupModel):
     def setSlots(self, value):
         self._setArray(5, value)
 
+    @staticmethod
+    def getSlotsType():
+        return BattleBoosterSlotModel
+
     def _initialize(self):
         super(BattleBoostersSetupModel, self)._initialize()
         self._addArrayProperty('slots', Array())

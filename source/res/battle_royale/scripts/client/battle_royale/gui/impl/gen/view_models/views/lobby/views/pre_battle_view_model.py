@@ -31,17 +31,29 @@ class PreBattleViewModel(ViewModel):
     def setTeams(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getTeamsType():
+        return TeamModel
+
     def getCurrentTeam(self):
         return self._getArray(3)
 
     def setCurrentTeam(self, value):
         self._setArray(3, value)
 
+    @staticmethod
+    def getCurrentTeamType():
+        return UserExtendedModel
+
     def getMaps(self):
         return self._getArray(4)
 
     def setMaps(self, value):
         self._setArray(4, value)
+
+    @staticmethod
+    def getMapsType():
+        return GfDropDownItem
 
     def _initialize(self):
         super(PreBattleViewModel, self)._initialize()

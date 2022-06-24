@@ -17,25 +17,49 @@ class EquipmentBlockModel(ViewModel):
     def totalPrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTotalPriceType():
+        return ListModel
+
     @property
     def ammo(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getAmmoType():
+        return AdditionalEquipmentSlotModel
 
     @property
     def slot(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getSlotType():
+        return AdditionalEquipmentSlotModel
+
     @property
     def vehicleBtn(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getVehicleBtnType():
+        return VehicleBtnModel
 
     @property
     def vehicleRentBtn(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getVehicleRentBtnType():
+        return ButtonIconTextModel
+
     @property
     def vehicleTradeInBtn(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getVehicleTradeInBtnType():
+        return ButtonIconTextModel
 
     def getBuyBtnIsEnabled(self):
         return self._getBool(6)

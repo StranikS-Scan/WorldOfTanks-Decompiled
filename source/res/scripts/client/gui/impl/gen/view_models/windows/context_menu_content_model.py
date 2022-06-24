@@ -13,6 +13,10 @@ class ContextMenuContentModel(ViewModel):
     def contextMenuList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getContextMenuListType():
+        return ListModel
+
     def getItemsCount(self):
         return self._getNumber(1)
 

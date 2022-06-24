@@ -424,6 +424,11 @@ class TOOLTIPS(object):
     EPICBATTLESWIDGET_FAMEPOINTS = '#tooltips:epicBattlesWidget/famePoints'
     EPICBATTLESWIDGET_FAMEPOINTSDESCRIPTION = '#tooltips:epicBattlesWidget/famePointsDescription'
     EPICBATTLESWIDGET_FAMEPOINTSTOLEVEL = '#tooltips:epicBattlesWidget/famePointsToLevel'
+    EPICBATTLESOFFER_TITLE_BATTLEBOOSTER_GIFT = '#tooltips:epicBattlesOffer/title/battleBooster_gift'
+    EPICBATTLESOFFER_TITLE_BROCHURE_GIFT = '#tooltips:epicBattlesOffer/title/brochure_gift'
+    EPICBATTLESOFFER_POINT = '#tooltips:epicBattlesOffer/point'
+    EPICBATTLESOFFER_ALLNATIONS = '#tooltips:epicBattlesOffer/allNations'
+    EPICBATTLESOFFER_CREWBOOKINFO = '#tooltips:epicBattlesOffer/crewBookInfo'
     BATTLEBORDERMAPMODEBUTTONBAR_INFO_HEADER = '#tooltips:battleBorderMapModeButtonBar/info/header'
     BATTLEBORDERMAPMODEBUTTONBAR_INFO_BODY = '#tooltips:battleBorderMapModeButtonBar/info/body'
     BATTLEBORDERMAPTYPEBUTTONBAR_INFO_HEADER = '#tooltips:battleBorderMapTypeButtonBar/info/header'
@@ -1182,7 +1187,6 @@ class TOOLTIPS(object):
     QUESTS_NEWLABEL_ACTION = '#tooltips:quests/newLabel/action'
     QUESTS_LINKBTN_TASK = '#tooltips:quests/linkBtn/task'
     QUESTS_LINKBTN_EPIC = '#tooltips:quests/linkBtn/epic'
-    QUESTS_LINKBTN_DRAGONBOAT = '#tooltips:quests/linkBtn/dragonBoat'
     QUESTS_LINKBTN_CUSTOMIZATIONPROGRESSION_ENABLED = '#tooltips:quests/linkBtn/customizationProgression/enabled'
     QUESTS_LINKBTN_CUSTOMIZATIONPROGRESSION_DISABLED = '#tooltips:quests/linkBtn/customizationProgression/disabled'
     QUESTS_DISABLELINKBTN_TASK = '#tooltips:quests/disableLinkBtn/task'
@@ -1932,8 +1936,6 @@ class TOOLTIPS(object):
     AWARDITEM_RANKEDBONUSBATTLES_BODY = '#tooltips:awardItem/rankedBonusBattles/body'
     AWARDITEM_BRCOIN_HEADER = '#tooltips:awardItem/brcoin/header'
     AWARDITEM_BRCOIN_BODY = '#tooltips:awardItem/brcoin/body'
-    AWARDITEM_DRAGONBOATPOINTS_HEADER = '#tooltips:awardItem/dragonBoatPoints/header'
-    AWARDITEM_DRAGONBOATPOINTS_BODY = '#tooltips:awardItem/dragonBoatPoints/body'
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
@@ -2273,6 +2275,9 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED_BODY = '#tooltips:hangar/header/personalMissions/mission_disabled/body'
     HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL_HEADER = '#tooltips:hangar/header/personalMissions/disabledAll/header'
     HANGAR_HEADER_PERSONALMISSIONS_DISABLEDALL_BODY = '#tooltips:hangar/header/personalMissions/disabledAll/body'
+    HANGAR_HEADER_PERSONALMISSIONS_UNAVAILABLE_HEADER = '#tooltips:hangar/header/personalMissions/unavailable/header'
+    HANGAR_HEADER_PERSONALMISSIONS_UNAVAILABLE_BODY = '#tooltips:hangar/header/personalMissions/unavailable/body'
+    HANGAR_HEADER_PERSONALMISSIONS_UNAVAILABLE_MODE_FUN_RANDOM = '#tooltips:hangar/header/personalMissions/unavailable/mode/fun_random'
     HANGAR_HEADER_PERSONALMISSIONS_COMPLETEDLOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions/completedLockedNext/header'
     HANGAR_HEADER_PERSONALMISSIONS_COMPLETEDLOCKEDNEXT_BODY = '#tooltips:hangar/header/personalMissions/completedLockedNext/body'
     HANGAR_HEADER_PERSONALMISSIONS_DONELOCKEDNEXT_HEADER = '#tooltips:hangar/header/personalMissions/doneLockedNext/header'
@@ -2440,6 +2445,7 @@ class TOOLTIPS(object):
     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING = '#tooltips:advanced/header/shellType/ARMOR_PIERCING'
     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR = '#tooltips:advanced/header/shellType/ARMOR_PIERCING_CR'
     ADVANCED_DEMOUNTKIT_COMMON = '#tooltips:advanced/demountKit/common'
+    ADVANCED_RECERTIFICATIONFORM_DESCRIPTION = '#tooltips:advanced/recertificationForm/description'
     CREW_ROLECHANGEFORBID_HEADER = '#tooltips:crew/roleChangeForbid/header'
     CREW_ROLECHANGEFORBID_TEXT = '#tooltips:crew/roleChangeForbid/text'
     CREW_ROLE_COMMANDER = '#tooltips:crew/role/commander'
@@ -3143,6 +3149,8 @@ class TOOLTIPS(object):
     BATTLEPASSOFFER_FOOTER_BROCHURE_GIFT = '#tooltips:battlePassOffer/footer/brochure_gift'
     BATTLEPASSOFFER_TITLE_GUIDE_GIFT = '#tooltips:battlePassOffer/title/guide_gift'
     BATTLEPASSOFFER_FOOTER_GUIDE_GIFT = '#tooltips:battlePassOffer/footer/guide_gift'
+    BATTLEPASSOFFER_TITLE_RECERTIFICATION_GIFT = '#tooltips:battlePassOffer/title/recertification_gift'
+    BATTLEPASSOFFER_FOOTER_RECERTIFICATION_GIFT = '#tooltips:battlePassOffer/footer/recertification_gift'
     BATTLE_ROYALE_AWARDS_NO_VEHICLE_AVAILABLE_HEADER = '#tooltips:battle_royale/awards/no_vehicle_available/header'
     BATTLE_ROYALE_AWARDS_NO_VEHICLE_AVAILABLE_DESCRIPTION = '#tooltips:battle_royale/awards/no_vehicle_available/description'
     BATTLE_ROYALE_SELECT_RESPAWN_HAVE_TO_SELECT_HEADER = '#tooltips:battle_royale/select_respawn/have_to_select/header'
@@ -3308,6 +3316,8 @@ class TOOLTIPS(object):
     ACCOUNTCOMPLETION_CREDENTIALS_SUBTITLE_BODY = '#tooltips:accountCompletion/credentials/subtitle/body'
     MODE_SELECTOR_UNAVAILABLE_TECHPROBLEMS = '#tooltips:mode_selector/unavailable/techProblems'
     MODE_SELECTOR_UNAVAILABLE_BOOTCAMP = '#tooltips:mode_selector/unavailable/bootcamp'
+    MODE_SELECTOR_UNAVAILABLE_NOTVEHICLES_TEXT = '#tooltips:mode_selector/unavailable/notVehicles/text'
+    MODE_SELECTOR_UNAVAILABLE_NOTVEHICLES_LEVEL = '#tooltips:mode_selector/unavailable/notVehicles/level'
     MODE_SELECTOR_POPOVER_BODY = '#tooltips:mode_selector/popover/body'
     MODE_SELECTOR_POPOVER_DEFAULT_HEADER = '#tooltips:mode_selector/popover/default/header'
     MODE_SELECTOR_POPOVER_DEFAULT_BODY = '#tooltips:mode_selector/popover/default/body'
@@ -3632,8 +3642,7 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_202203_ACCESS_HEADER,
      AWARDITEM_RANKEDDAILYBATTLES_HEADER,
      AWARDITEM_RANKEDBONUSBATTLES_HEADER,
-     AWARDITEM_BRCOIN_HEADER,
-     AWARDITEM_DRAGONBOATPOINTS_HEADER)
+     AWARDITEM_BRCOIN_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
      AWARDITEM_CREDITS_BODY,
      AWARDITEM_CRYSTAL_BODY,
@@ -3701,8 +3710,7 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_202203_ACCESS_BODY,
      AWARDITEM_RANKEDDAILYBATTLES_BODY,
      AWARDITEM_RANKEDBONUSBATTLES_BODY,
-     AWARDITEM_BRCOIN_BODY,
-     AWARDITEM_DRAGONBOATPOINTS_BODY)
+     AWARDITEM_BRCOIN_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_ENUM = (VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,
@@ -3937,7 +3945,8 @@ class TOOLTIPS(object):
      ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR,
-     ADVANCED_DEMOUNTKIT_COMMON)
+     ADVANCED_DEMOUNTKIT_COMMON,
+     ADVANCED_RECERTIFICATIONFORM_DESCRIPTION)
     ADVANCED_HEADER_SHELLTYPE_ENUM = (ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
      ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,

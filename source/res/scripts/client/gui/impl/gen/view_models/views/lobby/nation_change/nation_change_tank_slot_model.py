@@ -53,6 +53,10 @@ class NationChangeTankSlotModel(ViewModel):
     def setSetups(self, value):
         self._setArray(6, value)
 
+    @staticmethod
+    def getSetupsType():
+        return NationChangeTankSetupModel
+
     def _initialize(self):
         super(NationChangeTankSlotModel, self)._initialize()
         self._addResourceProperty('tankImage', R.invalid())

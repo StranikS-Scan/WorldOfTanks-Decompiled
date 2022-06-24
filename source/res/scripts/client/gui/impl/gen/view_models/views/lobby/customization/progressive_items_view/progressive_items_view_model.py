@@ -16,9 +16,17 @@ class ProgressiveItemsViewModel(ViewModel):
     def progressiveItems(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getProgressiveItemsType():
+        return ItemModel
+
     @property
     def tutorial(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getTutorialType():
+        return ProgressionCasesTutorialModel
 
     def getTankLevel(self):
         return self._getString(2)

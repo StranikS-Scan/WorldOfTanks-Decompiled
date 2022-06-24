@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/entity.py
 from adisp import process
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control.entities.base.actions_validator import IActionsValidator
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator, BaseActionsValidator
@@ -10,6 +10,8 @@ from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.items import SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import IListenersCollection
+from helpers import dependency
+from skeletons.gui.game_control import IFunRandomController
 
 class PrbFunctionalFlags(object):
     __slots__ = ('_entityFlags', '_modeFlags')
@@ -98,6 +100,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         return False
 
     def canInvite(self, prbType):
+        if prbType == PREBATTLE_TYPE.FUN_RANDOM:
+            funRandomCtrl = dependency.instance(IFunRandomController)
+            return funRandomCtrl.canGoToMode()
         return True
 
     def isInQueue(self):

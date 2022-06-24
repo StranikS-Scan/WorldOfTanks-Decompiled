@@ -70,9 +70,6 @@ class HangarMeta(View):
     def as_setNotificationEnabledS(self, value):
         return self.flashObject.as_setNotificationEnabled(value) if self._isDAAPIInited() else None
 
-    def as_setEventEntryPointVisibleS(self, value):
-        return self.flashObject.as_setEventEntryPointVisible(value) if self._isDAAPIInited() else None
-
     def as_createDQWidgetS(self):
         return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
 

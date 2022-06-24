@@ -41,6 +41,10 @@ class AdditionalRewardsTooltipModel(ViewModel):
     def setBonus(self, value):
         self._setArray(4, value)
 
+    @staticmethod
+    def getBonusType():
+        return BonusModel
+
     def _initialize(self):
         super(AdditionalRewardsTooltipModel, self)._initialize()
         self._addResourceProperty('headerText', R.invalid())

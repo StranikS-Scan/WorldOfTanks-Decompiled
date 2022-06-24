@@ -13,13 +13,25 @@ class HangarBottomPanelViewModel(ViewModel):
     def ammunition(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getAmmunitionType():
+        return ListModel
+
     @property
     def abilities(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getAbilitiesType():
+        return ListModel
+
     @property
     def rentPrice(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getRentPriceType():
+        return ListModel
 
     def getVehName(self):
         return self._getString(3)

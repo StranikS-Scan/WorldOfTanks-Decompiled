@@ -471,7 +471,8 @@ class _BaseHealingSN(_BuffSN):
 
     def _update(self, value):
         isInactivation = value.get('isInactivation')
-        if isInactivation is not None and self._getInActivationState() == isInactivation:
+        duration = value.get('duration')
+        if isInactivation is not None and self._getInActivationState() == isInactivation and duration > 0.0:
             self._isVisible = True
             self._updateTimeParams(value.get('duration'), value.get('endTime'))
             self._vo['title'] = self._constructTitle(value)
@@ -582,12 +583,11 @@ class BerserkerSN(_BuffSN):
     def getViewTypeID(self):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.BERSERKER
 
-    def _update(self, berserkerInfo):
-        totalTime = berserkerInfo.endTime - BigWorld.serverTime()
+    def _update(self, data):
         isVisible = False
-        if totalTime > 0:
+        if data['duration'] > 0:
             isVisible = True
-            self._updateTimeParams(totalTime, berserkerInfo.endTime)
+            self._updateTimeParams(data['duration'], data['endTime'])
         self._setVisible(isVisible)
 
 

@@ -14,6 +14,8 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
 from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
+from constants import EQUIPMENT_STAGES
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 _logger = logging.getLogger(__name__)
 _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STATE, BATTLE_MARKER_STATES.THUNDER_STRIKE_STATE),
  (BATTLE_MARKER_STATES.BERSERKER_STATE,),
@@ -33,19 +35,27 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(BattleRoyaleVehicleMarkerPlugin, self).__init__(parentObj, clazz)
         self.__markersStatesExtended = defaultdict(list)
+        self.__cache = {}
 
     def start(self):
         super(BattleRoyaleVehicleMarkerPlugin, self).start()
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onEquipmentComponentUpdated.subscribe(self.__onEquipmentComponentUpdated)
+        player = BigWorld.player()
+        if player is not None and player.inputHandler is not None:
+            player.inputHandler.onCameraChanged += self.__onCameraChanged
         return
 
     def stop(self):
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onEquipmentComponentUpdated.unsubscribe(self.__onEquipmentComponentUpdated)
+        player = BigWorld.player()
+        if player is not None and player.inputHandler is not None:
+            player.inputHandler.onCameraChanged -= self.__onCameraChanged
         super(BattleRoyaleVehicleMarkerPlugin, self).stop()
+        self.__cache = {}
         return
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
@@ -78,6 +88,16 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         handle = self._markers[vehicleID].getMarkerID()
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_CUSTOM_MARKER:
             self.__updateMarker(vehicleID, handle, **value)
+
+    def _onVehicleStateUpdated(self, state, value):
+        super(BattleRoyaleVehicleMarkerPlugin, self)._onVehicleStateUpdated(state, value)
+        if state == VEHICLE_VIEW_STATE.REPAIR_POINT:
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is not None:
+                vehicleID = vehicle.id
+                if vehicleID in self._markers:
+                    self.__cache[state] = (vehicleID, value)
+        return
 
     def __onEquipmentComponentUpdated(self, equipmentName, vehicleID, equipmentInfo):
         markerID = _BATTLE_ROYALE_EQUIPMENT_MARKER.get(equipmentName)
@@ -132,6 +152,19 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
                 return True
 
         return False
+
+    def __onCameraChanged(self, cameraName, currentVehicleId=None):
+        vehicleID, value = self.__cache.get(VEHICLE_VIEW_STATE.REPAIR_POINT, (None, {}))
+        if vehicleID is not None:
+            marker = self._markers[vehicleID]
+            handle = marker.getMarkerID()
+            equipments = self.__sessionProvider.shared.equipments.getEquipments()
+            equipmentName = BattleRoyaleEquipments.REPAIR_POINT
+            eq = [ eq for eq in equipments.itervalues() if eq.getDescriptor().name == equipmentName ]
+            if eq and eq[0].getStage() == EQUIPMENT_STAGES.COOLDOWN:
+                duration = value.get('duration', 0) if cameraName == 'video' else 0
+                self._updateRepairingMarker(vehicleID, handle, duration)
+        return
 
 
 class BattleRoyaleSettingsPlugin(SettingsPlugin):

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/factories/UnitFactory.py
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui.prb_control.entities.fun_random.squad.entity import FunRandomSquadEntryPoint, FunRandomSquadEntity
 from gui.shared.system_factory import registerUnitEntity, collectUnitEntity
 from gui.shared.system_factory import registerUnitEntryPoint, collectUnitEntryPoint
 from gui.shared.system_factory import registerUnitEntryPointByType, collectUnitEntryPointByType
@@ -27,12 +28,14 @@ registerUnitEntryPoint(PREBATTLE_ACTION_NAME.E_SPORT, ESportIntroEntry)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.PUBLICS_LIST, PublicBrowserEntryPoint)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, StrongholdBrowserEntryPoint)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, MapboxSquadEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD, FunRandomSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.SQUAD, RandomSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.EVENT, EventBattleSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.EPIC, EpicSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.UNIT, PublicEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.FUN_RANDOM, FunRandomSquadEntryPoint)
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdBrowserEntity}
@@ -42,6 +45,7 @@ registerUnitEntity(PREBATTLE_TYPE.EPIC, EpicSquadEntity)
 registerUnitEntity(PREBATTLE_TYPE.UNIT, PublicEntity)
 registerUnitEntity(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntity)
 registerUnitEntity(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntity)
+registerUnitEntity(PREBATTLE_TYPE.FUN_RANDOM, FunRandomSquadEntity)
 
 class UnitFactory(ControlFactory):
 

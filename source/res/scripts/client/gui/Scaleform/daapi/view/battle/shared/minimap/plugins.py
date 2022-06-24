@@ -339,7 +339,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive, transformProps=transformProps)
             width, height = self.__defaultViewRangeCircleSize, self.__defaultViewRangeCircleSize
             if self.__defaultViewRangeCircleSize is None:
-                bottomLeft, upperRight = self._arenaVisitor.type.getBoundingBox()
+                bottomLeft, upperRight = self._parentObj.getBoundingBox()
                 width = upperRight[0] - bottomLeft[0]
                 height = upperRight[1] - bottomLeft[1]
             self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_INIT_ARENA_SIZE, width, height)
@@ -477,8 +477,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 self._invoke(self.__animationID, 'setAnimation', marker)
 
     def _calcCircularVisionRadius(self):
+        visibilityMinRadius = self._arenaVisitor.getVisibilityMinRadius()
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
-        return min(vehAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS)
+        return min(vehAttrs.get('circularVisionRadius', visibilityMinRadius), VISIBILITY.MAX_RADIUS)
 
     def _getViewRangeRadius(self):
         return self._calcCircularVisionRadius()
@@ -514,7 +515,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE:
             return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MIN_RADIUS)
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, self._arenaVisitor.getVisibilityMinRadius())
 
     def __removeMinSpottingRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
@@ -1055,9 +1056,11 @@ class EquipmentsPlugin(common.IntervalPlugin):
         super(EquipmentsPlugin, self).stop()
         return
 
-    def __onEquipmentMarkerShown(self, equipment, position, _, interval):
+    def __onEquipmentMarkerShown(self, equipment, position, _, interval, team=None):
         uniqueID = self.__generator.next()
-        marker = equipment.getMarker()
+        arenaDP = self.sessionProvider.getArenaDP()
+        isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
+        marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
         if marker in settings.EQ_MARKER_TO_SYMBOL:
             symbol = settings.EQ_MARKER_TO_SYMBOL[marker]
         else:
@@ -1066,6 +1069,8 @@ class EquipmentsPlugin(common.IntervalPlugin):
         matrix = minimap_utils.makePositionMatrix(position)
         model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
         if model is not None:
+            if team is not None:
+                self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
             self._setCallback(uniqueID, int(interval))
         return
 

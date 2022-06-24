@@ -58,29 +58,32 @@ class BasePerksController(object):
     def onCollectFactors(self, factors):
         if IS_DEVELOPMENT:
             oldFactors = factors.copy()
-        factors['crewRolesFactor'] *= self._collectModifiersMulScopes(self._modifiedFactors['crewRolesFactor'])
-        factors['circularVisionRadius'] *= self._collectModifiersMulScopes(self._modifiedFactors['circularVisionRadius'])
-        factors['radio/distance'] *= self._collectModifiersMulScopes(self._modifiedFactors['radio/distance'])
-        factors['gun/reloadTime'] *= self._collectModifiersMulScopes(self._modifiedFactors['gun/reloadTime'])
-        factors['turret/rotationSpeed'] *= self._collectModifiersMulScopes(self._modifiedFactors['turret/rotationSpeed'])
-        factors['gun/rotationSpeed'] *= self._collectModifiersMulScopes(self._modifiedFactors['gun/rotationSpeed'])
-        factors['gun/aimingTime'] *= self._collectModifiersMulScopes(self._modifiedFactors['gun/aimingTime'])
-        factors['gun/shotDispersionFactors/turretRotation'] *= self._collectModifiersMulScopes(self._modifiedFactors['gun/shotDispersionFactors/turretRotation'])
-        factors['chassis/shotDispersionFactors/movement'] *= self._collectModifiersMulScopes(self._modifiedFactors['chassis/shotDispersionFactors/movement'])
-        factors['repairSpeed'] *= self._collectModifiersMulScopes(self._modifiedFactors['repairSpeed'])
-        factors['crewChanceToHitFactor'] *= self._collectModifiersMulScopes(self._modifiedFactors['crewChanceToHitFactor'])
-        factors['engine/fireStartingChance'] *= self._collectModifiersMulScopes(self._modifiedFactors['engine/fireStartingChance'])
-        factors['healthBurnPerSecLossFraction'] *= self._collectModifiersMulScopes(self._modifiedFactors['healthBurnPerSecLossFraction'])
-        factors['vehicle/rotationSpeed'] *= self._collectModifiersMulScopes(self._modifiedFactors['vehicle/rotationSpeed'])
-        factors['engine/power'] *= self._collectModifiersMulScopes(self._modifiedFactors['engine/power'])
+        collectModifiersMulScopes = self._collectModifiersMulScopes
+        collectModifiersAddScopes = self._collectModifiersAddScopes
+        modifiedFactors = self._modifiedFactors
+        factors['crewRolesFactor'] *= collectModifiersMulScopes(modifiedFactors['crewRolesFactor'])
+        factors['circularVisionRadius'] *= collectModifiersMulScopes(modifiedFactors['circularVisionRadius'])
+        factors['radio/distance'] *= collectModifiersMulScopes(modifiedFactors['radio/distance'])
+        factors['gun/reloadTime'] *= collectModifiersMulScopes(modifiedFactors['gun/reloadTime'])
+        factors['turret/rotationSpeed'] *= collectModifiersMulScopes(modifiedFactors['turret/rotationSpeed'])
+        factors['gun/rotationSpeed'] *= collectModifiersMulScopes(modifiedFactors['gun/rotationSpeed'])
+        factors['gun/aimingTime'] *= collectModifiersMulScopes(modifiedFactors['gun/aimingTime'])
+        factors['gun/shotDispersionFactors/turretRotation'] *= collectModifiersMulScopes(modifiedFactors['gun/shotDispersionFactors/turretRotation'])
+        factors['chassis/shotDispersionFactors/movement'] *= collectModifiersMulScopes(modifiedFactors['chassis/shotDispersionFactors/movement'])
+        factors['repairSpeed'] *= collectModifiersMulScopes(modifiedFactors['repairSpeed'])
+        factors['crewChanceToHitFactor'] *= collectModifiersMulScopes(modifiedFactors['crewChanceToHitFactor'])
+        factors['engine/fireStartingChance'] *= collectModifiersMulScopes(modifiedFactors['engine/fireStartingChance'])
+        factors['healthBurnPerSecLossFraction'] *= collectModifiersMulScopes(modifiedFactors['healthBurnPerSecLossFraction'])
+        factors['vehicle/rotationSpeed'] *= collectModifiersMulScopes(modifiedFactors['vehicle/rotationSpeed'])
+        factors['engine/power'] *= collectModifiersMulScopes(modifiedFactors['engine/power'])
         invisibility = factors['invisibility']
-        invisibility[0] += self._collectModifiersAddScopes(self._modifiedFactors['invisibilityAdd'])
-        invisibility[1] *= self._collectModifiersMulScopes(self._modifiedFactors['invisibilityMul'])
-        factors['stunResistanceDuration'] += self._collectModifiersAddScopes(self._modifiedFactors['stunResistanceDuration'])
-        factors['stunResistanceEffect'] += self._collectModifiersAddScopes(self._modifiedFactors['stunResistanceEffect'])
+        invisibility[0] += collectModifiersAddScopes(modifiedFactors['invisibilityAdd'])
+        invisibility[1] *= collectModifiersMulScopes(modifiedFactors['invisibilityMul'])
+        factors['stunResistanceDuration'] += collectModifiersAddScopes(modifiedFactors['stunResistanceDuration'])
+        factors['stunResistanceEffect'] += collectModifiersAddScopes(modifiedFactors['stunResistanceEffect'])
         if _DO_DEBUG_LOG:
             if IS_DEVELOPMENT:
-                LOG_DEBUG_DEV('ABILITY_SYSTEM DEBUG onCollectFactors, factors diff: {}'.format([ '{} {} -> {}'.format(k, oldFactors[k], factors[k]) for k in self._modifiedFactors if k in factors and oldFactors[k] != factors[k] ]))
+                LOG_DEBUG_DEV('ABILITY_SYSTEM DEBUG onCollectFactors, factors diff: {}'.format([ '{} {} -> {}'.format(k, oldFactors[k], factors[k]) for k in modifiedFactors if k in factors and oldFactors[k] != factors[k] ]))
 
     def _collectModifiersMulScopes(self, scopes):
         return reduce(mul, (1.0 + reduce(lambda acc, v: acc + v[1], mods, 0) for mods in scopes.itervalues()), 1)

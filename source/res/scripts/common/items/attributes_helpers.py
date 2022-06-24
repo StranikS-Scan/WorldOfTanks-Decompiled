@@ -143,13 +143,15 @@ class SingleCollectorHelper(object):
 
     @staticmethod
     def collect(total, modifiersList, attrPrefix):
+        isEmpty = SingleCollectorHelper.isEmpty
+        appliers = SingleCollectorHelper._APPLIERS
         for modifiers in modifiersList:
             for opType, attrType, attrName, value in modifiers:
                 if attrType != attrPrefix:
                     continue
-                if SingleCollectorHelper.isEmpty(opType, value):
+                if isEmpty(opType, value):
                     continue
-                total[attrName] = SingleCollectorHelper._APPLIERS[opType](total[attrName], value)
+                total[attrName] = appliers[opType](total[attrName], value)
 
 
 class AggregatedCollectorHelper(object):
@@ -167,17 +169,20 @@ class AggregatedCollectorHelper(object):
     @staticmethod
     def collect(total, modifiersList, attrPrefix):
         uniqueAttrs = dict()
+        mergers = AggregatedCollectorHelper._MERGERS
         for modifiers in modifiersList:
             for opType, attrType, attrName, value in modifiers:
                 if attrType != attrPrefix:
                     continue
                 key = (attrName, opType)
-                uniqueAttrs[key] = AggregatedCollectorHelper._MERGERS[opType](uniqueAttrs.get(key, 0.0), value)
+                uniqueAttrs[key] = mergers[opType](uniqueAttrs.get(key, 0.0), value)
 
+        isEmpty = AggregatedCollectorHelper.isEmpty
+        appliers = AggregatedCollectorHelper._APPLIERS
         for (attrName, opType), value in uniqueAttrs.iteritems():
-            if AggregatedCollectorHelper.isEmpty(opType, value):
+            if isEmpty(opType, value):
                 continue
-            total[attrName] = AggregatedCollectorHelper._APPLIERS[opType](total[attrName], value)
+            total[attrName] = appliers[opType](total[attrName], value)
 
 
 def onCollectAttributes(total, modifiersList, attrPrefix, asAggregated):

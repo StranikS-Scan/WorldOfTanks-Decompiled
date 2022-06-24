@@ -17,11 +17,19 @@ class SelectableRewardModel(ViewModel):
     def setTabs(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getTabsType():
+        return SelectableRewardTabModel
+
     def getRewards(self):
         return self._getArray(1)
 
     def setRewards(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getRewardsType():
+        return SelectableRewardItemModel
 
     def getTotalRewardCount(self):
         return self._getNumber(2)

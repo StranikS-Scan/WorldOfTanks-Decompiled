@@ -14,17 +14,29 @@ class IconSetViewModel(ViewModel):
     def icon(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getIconType():
+        return IconViewModel
+
     def getBackgrounds(self):
         return self._getArray(1)
 
     def setBackgrounds(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getBackgroundsType():
+        return IconViewModel
+
     def getOverlays(self):
         return self._getArray(2)
 
     def setOverlays(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getOverlaysType():
+        return IconViewModel
 
     def _initialize(self):
         super(IconSetViewModel, self)._initialize()

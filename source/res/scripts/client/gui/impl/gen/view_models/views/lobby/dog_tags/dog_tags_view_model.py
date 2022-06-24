@@ -15,6 +15,10 @@ class DogTagsViewModel(ViewModel):
     def equippedDogTag(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getEquippedDogTagType():
+        return DtDogTag
+
     def getNewEngravingComponentCount(self):
         return self._getNumber(1)
 
@@ -57,11 +61,19 @@ class DogTagsViewModel(ViewModel):
     def setBackgroundGrid(self, value):
         self._setArray(7, value)
 
+    @staticmethod
+    def getBackgroundGridType():
+        return DtGridSection
+
     def getEngravingGrid(self):
         return self._getArray(8)
 
     def setEngravingGrid(self, value):
         self._setArray(8, value)
+
+    @staticmethod
+    def getEngravingGridType():
+        return DtGridSection
 
     def getOnboardingEnabled(self):
         return self._getBool(9)

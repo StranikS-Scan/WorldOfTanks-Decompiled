@@ -18,23 +18,43 @@ class MembersWindowModel(WindowModel):
     def btnInviteFriends(self):
         return self._getViewModel(3)
 
+    @staticmethod
+    def getBtnInviteFriendsType():
+        return ButtonModel
+
     @property
     def btnSwitchReady(self):
         return self._getViewModel(4)
+
+    @staticmethod
+    def getBtnSwitchReadyType():
+        return ButtonSwitchReadyModel
 
     @property
     def btnFindPlayers(self):
         return self._getViewModel(5)
 
+    @staticmethod
+    def getBtnFindPlayersType():
+        return ButtonFindPlayersCancelSearchModel
+
     @property
     def header(self):
         return self._getViewModel(6)
+
+    @staticmethod
+    def getHeaderType():
+        return WindowHeaderModel
 
     def getSlots(self):
         return self._getArray(7)
 
     def setSlots(self, value):
         self._setArray(7, value)
+
+    @staticmethod
+    def getSlotsType():
+        return SlotModel
 
     def getIsHorizontal(self):
         return self._getBool(8)

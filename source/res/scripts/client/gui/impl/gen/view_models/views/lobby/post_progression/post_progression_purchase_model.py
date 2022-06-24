@@ -15,9 +15,17 @@ class PostProgressionPurchaseModel(ViewModel):
     def modificationBonuses(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getModificationBonusesType():
+        return BonusesModel
+
     @property
     def price(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getPriceType():
+        return PriceModel
 
     def getCanPurchase(self):
         return self._getBool(2)
@@ -31,17 +39,29 @@ class PostProgressionPurchaseModel(ViewModel):
     def setPurchasedSingleStepIds(self, value):
         self._setArray(3, value)
 
+    @staticmethod
+    def getPurchasedSingleStepIdsType():
+        return int
+
     def getPurchasedFeatureStepIds(self):
         return self._getArray(4)
 
     def setPurchasedFeatureStepIds(self, value):
         self._setArray(4, value)
 
+    @staticmethod
+    def getPurchasedFeatureStepIdsType():
+        return int
+
     def getUnlockedMultiStepIds(self):
         return self._getArray(5)
 
     def setUnlockedMultiStepIds(self, value):
         self._setArray(5, value)
+
+    @staticmethod
+    def getUnlockedMultiStepIdsType():
+        return int
 
     def _initialize(self):
         super(PostProgressionPurchaseModel, self)._initialize()

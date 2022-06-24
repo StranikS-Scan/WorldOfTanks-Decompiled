@@ -4,6 +4,8 @@ from collections import namedtuple
 import BigWorld
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from Event import EventsSubscriber
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 ShotPassionInfo = namedtuple('ShotPassionInfo', ('endTime', 'stage'))
 
 class VehicleShotPassionComponent(BigWorld.DynamicScriptComponent):
@@ -14,6 +16,10 @@ class VehicleShotPassionComponent(BigWorld.DynamicScriptComponent):
         self.__es = EventsSubscriber()
         self.__onUpdated()
         self.__es.subscribeToEvent(self.entity.guiSessionProvider.onUpdateObservedVehicleData, self.__onUpdateObservedVehicleData)
+        player = BigWorld.player()
+        if player is not None and player.inputHandler is not None:
+            self.__es.subscribeToEvent(player.inputHandler.onCameraChanged, self.__onCameraChanged)
+        return
 
     def getInfo(self):
         return ShotPassionInfo(self.endTime, self.stage)
@@ -41,3 +47,17 @@ class VehicleShotPassionComponent(BigWorld.DynamicScriptComponent):
 
     def __onUpdated(self, info=None):
         self.entity.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, info or self.getInfo())
+
+    def __onCameraChanged(self, cameraName, currentVehicleId=None):
+        if cameraName == 'video':
+            self.__elapsedTime = max(self.endTime - BigWorld.serverTime(), 0.0)
+            self.__updateMarker(self.__elapsedTime)
+
+    def __updateMarker(self, elapsedTime):
+        feedback = self.entity.guiSessionProvider.shared.feedback
+        data = {'isShown': bool(elapsedTime),
+         'isSourceVehicle': False,
+         'duration': elapsedTime,
+         'animated': True,
+         'markerID': BATTLE_MARKER_STATES.SHOT_PASSION_STATE}
+        feedback.onVehicleFeedbackReceived(FEEDBACK_EVENT_ID.VEHICLE_CUSTOM_MARKER, self.entity.id, data)

@@ -25,8 +25,7 @@ class DeltaPacker(object):
                 s = [ p(v) for v in s ]
             ret[0] = s[0]
             for index, v in enumerate(s[1:]):
-                diff = v - s[index]
-                ret[index + 1] = diff
+                ret[index + 1] = v - s[index]
 
             return ret
 
@@ -87,11 +86,12 @@ class DictPacker(object):
         if len(dataList) == 0 or dataList[0] != self._checksum:
             return
         else:
+            getDefaultValue = self.getDefaultValue
             for index, meta in enumerate(self._metaData):
                 val = dataList[index + 1]
                 name, _, _, packer, _ = meta
                 if val is None:
-                    val = self.getDefaultValue(index)
+                    val = getDefaultValue(index)
                 elif packer is not None:
                     val = packer.unpack(val)
                 ret[name] = val
@@ -138,9 +138,10 @@ class SimpleDictPacker(object):
 
     def unpack(self, dataList):
         ret = {}
+        keys = self.__keys
         for index, value in enumerate(dataList):
             if value is not None:
-                ret[self.__keys[index]] = value
+                ret[keys[index]] = value
 
         return ret
 
@@ -231,16 +232,19 @@ class Meta(DictPacker):
         return self.getDataByName(name)[3].meta()
 
     def __initDefaults(self):
-        self.__defaultsImmutable = {}
-        self.__defaultsMutable = {}
+        self.__defaultsImmutable = defaultsImmutable = {}
+        self.__defaultsMutable = defaultsMutable = {}
         for name, transportType, default, _, _ in self._metaData:
             mutableType = getMutability(transportType, default)
             if mutableType == 'immutable':
-                self.__defaultsImmutable[name] = default
-            lambdas = {'mutableList': partial(lambda x: x[:], default),
-             'mutableDeep': partial(copy.deepcopy, default),
-             'mutableCopy': partial(lambda x: x.copy(), default)}
-            self.__defaultsMutable[name] = lambdas[mutableType]
+                defaultsImmutable[name] = default
+            if mutableType == 'mutableList':
+                defaultsMutable[name] = partial(lambda x: x[:], default)
+            if mutableType == 'mutableDeep':
+                defaultsMutable[name] = partial(copy.deepcopy, default)
+            if mutableType == 'mutableCopy':
+                defaultsMutable[name] = partial(lambda x: x.copy(), default)
+            raise KeyError(mutableType)
 
 
 def getMutability(transportType, default):

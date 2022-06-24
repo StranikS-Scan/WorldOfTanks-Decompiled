@@ -16,6 +16,10 @@ class SpecializationsModel(ViewModel):
     def setSpecializations(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getSpecializationsType():
+        return SpecializationModel
+
     def getIsDynamic(self):
         return self._getBool(1)
 

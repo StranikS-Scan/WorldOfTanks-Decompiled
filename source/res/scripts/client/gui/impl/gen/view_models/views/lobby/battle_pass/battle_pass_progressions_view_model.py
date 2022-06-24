@@ -32,17 +32,33 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def offSeason(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getOffSeasonType():
+        return BattlePassOffSeasonViewModel
+
     @property
     def levels(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getLevelsType():
+        return RewardLevelModel
 
     @property
     def widget3dStyle(self):
         return self._getViewModel(6)
 
+    @staticmethod
+    def getWidget3dStyleType():
+        return BattlePassWidget3DStyleViewModel
+
     @property
     def chapterCharacter(self):
         return self._getViewModel(7)
+
+    @staticmethod
+    def getChapterCharacterType():
+        return CharacterWidgetViewModel
 
     def getChapterID(self):
         return self._getNumber(8)

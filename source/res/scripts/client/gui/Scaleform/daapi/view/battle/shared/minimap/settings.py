@@ -32,6 +32,7 @@ class ENTRY_SYMBOL_NAME(object):
     BOOTCAMP_TARGET = 'BootcampTargetEntry'
     ARTILLERY_ENTRY = 'ArtilleryEntry'
     ARTILLERY_YELLOW_ENTRY = 'ArtilleryYellowEntry'
+    AOE_ARTILLERY_ENTRY = 'AOEArtilleryMinimapEntry'
     BOMBER_ENTRY = 'BomberEntry'
     RECON_ENTRY = 'ReconEntry'
     SMOKE_ENTRY = 'SmokeEntry'
@@ -114,6 +115,8 @@ class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
 
 EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
  'artillery_yellow': ENTRY_SYMBOL_NAME.ARTILLERY_YELLOW_ENTRY,
+ 'artillery_fort_ally': ENTRY_SYMBOL_NAME.AOE_ARTILLERY_ENTRY,
+ 'artillery_fort_enemy': ENTRY_SYMBOL_NAME.AOE_ARTILLERY_ENTRY,
  'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY,
  'recon': ENTRY_SYMBOL_NAME.RECON_ENTRY,
  'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY}

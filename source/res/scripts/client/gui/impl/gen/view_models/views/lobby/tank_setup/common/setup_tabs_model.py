@@ -16,6 +16,10 @@ class SetupTabsModel(ViewModel):
     def setTabs(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getTabsType():
+        return SetupTabModel
+
     def getSelectedTabName(self):
         return self._getString(1)
 

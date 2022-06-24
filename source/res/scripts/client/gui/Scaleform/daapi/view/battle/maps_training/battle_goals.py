@@ -82,12 +82,16 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
     def _showHint(self, hintData):
         hintType = hintData['hintType']
         descr = hintData.get('description1')
-        if hintType is HintType.GOAL:
-            descr = descr.format(count=hintData['targetsCount'], total=hintData['targetsTotal'])
-        if hintType is HintType.TIMER_GREEN:
-            self.as_showHintS(hintType.value, hintData.get('description2'), descr)
+        if descr is None:
+            return
         else:
-            self.as_showHintS(hintType.value, descr)
+            if hintType is HintType.GOAL:
+                descr = descr.format(count=hintData['targetsCount'], total=hintData['targetsTotal'])
+            if hintType is HintType.TIMER_GREEN:
+                self.as_showHintS(hintType.value, hintData.get('description2'), descr)
+            else:
+                self.as_showHintS(hintType.value, descr)
+            return
 
     def _hideHint(self):
         self.as_hideHintS()

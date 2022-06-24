@@ -10,6 +10,7 @@ from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
 from gui.prb_control.entities.mapbox.pre_queue.vehicles_watcher import MapboxVehiclesWatcher
 from gui.prb_control.entities.mapbox.pre_queue.actions_validator import MapboxActionsValidator
+from gui.prb_control.entities.mapbox.pre_queue.permissions import MapboxPermissions
 from gui.prb_control.entities.mapbox.scheduler import MapboxScheduler
 from gui.prb_control.entities.special_mode.pre_queue.ctx import SpecialModeQueueCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -71,13 +72,16 @@ class MapboxEntity(PreQueueEntity):
     def queue(self, ctx, callback=None):
         super(MapboxEntity, self).queue(ctx, callback=callback)
 
-    def _makeQueueCtxByAction(self, action=None):
-        invID = g_currentVehicle.invID
-        return SpecialModeQueueCtx(self._queueType, invID, waitingID='prebattle/join')
-
     def doSelectAction(self, action):
         name = action.actionName
         return SelectResult(True) if name == PREBATTLE_ACTION_NAME.MAPBOX else super(MapboxEntity, self).doSelectAction(action)
+
+    def getPermissions(self, pID=None, **kwargs):
+        return MapboxPermissions(self.isInQueue())
+
+    def _makeQueueCtxByAction(self, action=None):
+        invID = g_currentVehicle.invID
+        return SpecialModeQueueCtx(self._queueType, invID, waitingID='prebattle/join')
 
     def _createActionsValidator(self):
         return MapboxActionsValidator(self)

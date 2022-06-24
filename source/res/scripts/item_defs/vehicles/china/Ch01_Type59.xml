@@ -68,6 +68,13 @@
       <undamaged>	vehicles/chinese/Ch01_Type59/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch01_Type59/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch01_Type59/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch01_Type59_DA_3DSt>
+          <undamaged>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Hull.model	</exploded>
+        </Ch01_Type59_DA_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -626,6 +633,32 @@
         <clipAngle>	1.43581	</clipAngle>
         <anchorShift>	0.547899	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15042	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+        <position>	0.314446 1.03622 2.59159	</position>
+        <rotation>	0.512954 0.00299984 3.14156	</rotation>
+        <scale>	0.352031 0.352031 0.352039	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.43581	</clipAngle>
+        <anchorShift>	0.095256	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+        <position>	-0.708197 1.54001 -2.07722	</position>
+        <rotation>	3.13864 -0.000040 -0.0010519	</rotation>
+        <scale>	0.494235 0.121791 0.494241	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.535541	</clipAngle>
+        <anchorShift>	0.042111	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -668,6 +701,13 @@
         <undamaged>	vehicles/chinese/Ch01_Type59/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch01_Type59/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch01_Type59/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch01_Type59_DA_3DSt>
+            <undamaged>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Chassis.model	</exploded>
+          </Ch01_Type59_DA_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1510,6 +1550,13 @@
             <undamaged>	vehicles/chinese/Ch01_Type59/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch01_Type59/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch01_Type59/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Ch01_Type59_DA_3DSt>
+                <undamaged>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </Ch01_Type59_DA_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Gun_01.model	</collisionModelServer>
@@ -1587,6 +1634,18 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000085 -0.00650355 3.0786	</rayStart>
+              <rayEnd>	-0.831315 0.00469704 1.44353	</rayEnd>
+              <rayUp>	0.097843 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1605,6 +1664,13 @@
         <undamaged>	vehicles/chinese/Ch01_Type59/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch01_Type59/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch01_Type59/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch01_Type59_DA_3DSt>
+            <undamaged>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch01_Type59/_skins/Ch01_Type59_DA_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </Ch01_Type59_DA_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch01_Type59/collision/Turret_01.model	</collisionModelServer>
@@ -2159,6 +2225,45 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.807986	</clipAngle>
           <anchorShift>	0.384597	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+          <position>	-0.87794 1.69703 1.01029	</position>
+          <rotation>	1.17828 -0.8465 -2.9605	</rotation>
+          <scale>	0.355187 0.292337 0.355187	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.889709	</clipAngle>
+          <anchorShift>	-0.00846	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+          <position>	0.877768 1.69701 1.01046	</position>
+          <rotation>	1.1783 0.846198 2.96041	</rotation>
+          <scale>	0.355186 0.292336 0.355187	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.889709	</clipAngle>
+          <anchorShift>	-0.00846	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch01_Type59_DA_3DSt	</compatibleModels>
+          <position>	-0.34534 2.06369 0.547708	</position>
+          <rotation>	0.097153 -0.000003 -3.10009	</rotation>
+          <scale>	0.635453 0.219094 0.635471	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	1.16265	</clipAngle>
+          <anchorShift>	0.089316	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

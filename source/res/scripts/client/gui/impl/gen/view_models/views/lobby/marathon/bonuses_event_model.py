@@ -16,6 +16,10 @@ class BonusesEventModel(BaseEventModel):
     def setBonuses(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getBonusesType():
+        return BonusModel
+
     def _initialize(self):
         super(BonusesEventModel, self)._initialize()
         self._addArrayProperty('bonuses', Array())

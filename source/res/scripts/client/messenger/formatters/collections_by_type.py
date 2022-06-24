@@ -18,9 +18,7 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
- token_quest_subformatters.WotPlusDirectivesFormatter(),
- token_quest_subformatters.DragonBoatStageQuestFormatter(),
- token_quest_subformatters.DragonBoatFinalQuestFormatter())
+ token_quest_subformatters.WotPlusDirectivesFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -100,6 +98,12 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.wotPlusNoRentSelected.index(): _wotPlusFormatters.SimpleFormatter('WotPlusRentNoRentSelectedMessage'),
  _SM_TYPE.giftSystemMessage.index(): GiftSystemMessagesProxy(),
  _SM_TYPE.telecomMergeResults.index(): _sc.TelecomMergeResultsFormatter(),
+ _SM_TYPE.epicSeasonEnd.index(): _sc.EpicSeasonEndFormatter(),
+ _SM_TYPE.epicLevelUp.index(): _sc.EpicLevelUpFormatter(),
+ _SM_TYPE.recertificationResetUsed.index(): _sc.RecertificationResetUsedFormatter(),
+ _SM_TYPE.recertificationReset.index(): _sc.RecertificationResetFormatter(),
+ _SM_TYPE.recertificationAvailability.index(): _sc.RecertificationAvailabilityFormatter(),
+ _SM_TYPE.recertificationFinancial.index(): _sc.RecertificationFinancialFormatter(),
  _SM_TYPE.resourceWellOperation.index(): _sc.ResourceWellOperationFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter()}

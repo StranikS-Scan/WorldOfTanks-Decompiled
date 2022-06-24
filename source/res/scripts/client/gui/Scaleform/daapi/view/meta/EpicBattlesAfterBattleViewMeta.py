@@ -13,6 +13,9 @@ class EpicBattlesAfterBattleViewMeta(View):
     def onCloseBtnClick(self):
         self._printOverrideError('onCloseBtnClick')
 
+    def onRewardsBtnClick(self):
+        self._printOverrideError('onRewardsBtnClick')
+
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 

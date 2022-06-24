@@ -22,6 +22,10 @@ class BonusModel(ViewModel):
     def setValues(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getValuesType():
+        return BonusValueModel
+
     def _initialize(self):
         super(BonusModel, self)._initialize()
         self._addStringProperty('localeName', '')

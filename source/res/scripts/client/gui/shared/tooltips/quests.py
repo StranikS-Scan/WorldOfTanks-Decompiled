@@ -58,10 +58,13 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         self._setMargins(afterBlock=0)
         self._setWidth(297)
 
+    def _getQuests(self, vehicle):
+        return sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+        quests = self._getQuests(vehicle)
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
@@ -70,7 +73,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     break
 
             rest = len(quests) - len(items) + 1
-            if rest > 0:
+            if rest > 0 and self._isShowBottom(vehicle):
                 items.append(self._getBottom(rest))
         elif not self.__battleRoyaleController.isBattleRoyaleMode():
 
@@ -84,7 +87,8 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
             else:
                 items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description()))
                 items.append(self._getBody(TOOLTIPS.HANGAR_HEADER_QUESTS_EMPTY))
-            items.append(self._getBottom(0))
+            if self._isShowBottom(vehicle):
+                items.append(self._getBottom(0))
         return items
 
     def __getQuestItem(self, quest):
@@ -150,6 +154,9 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
 
     def _getBody(self, text):
         return formatters.packBuildUpBlockData([formatters.packTextBlockData(text=text_styles.main(text), padding=formatters.packPadding(left=20, top=-10, bottom=10))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+    def _isShowBottom(self, vehicle=None):
+        return True
 
 
 class ScheduleQuestTooltipData(BlocksTooltipData):

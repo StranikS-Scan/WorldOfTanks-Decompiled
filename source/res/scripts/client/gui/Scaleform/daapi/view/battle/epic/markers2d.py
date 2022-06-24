@@ -27,6 +27,7 @@ from helpers import time_utils
 from messenger.proto.bw_chat2.battle_chat_cmd import BASE_CMD_NAMES, AUTOCOMMIT_COMMAND_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.daapi.view.battle.epic.plugins import EpicVehicleMarkerPlugin, EpicRespawnableVehicleMarkerPlugin
 _SECTOR_BASES_BOUNDS_MIN_SCALE = Vector2(1.0, 1.0)
 _SECTOR_BASES_BOUNDS = Vector4(30, 30, 30, 30)
 _INNER_SECTOR_BASES_BOUNDS = Vector4(17, 17, 18, 18)
@@ -1172,6 +1173,10 @@ class EpicMarkersManager(MarkersManager):
             setup['hq'] = HeadquartersPlugin
         if arenaVisitor.hasStepRepairPoints():
             setup['step_repairs'] = StepRepairPointPlugin
+        if arenaVisitor.hasRespawns():
+            setup['vehicles'] = EpicRespawnableVehicleMarkerPlugin
+        else:
+            setup['vehicles'] = EpicVehicleMarkerPlugin
         return setup
 
     def stopPlugins(self):

@@ -377,6 +377,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
+    APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT = 'ApplyAbilitiesToTypeCheckboxHint'
+    SHOW_ABILITIES_BUTTON_HINT = 'ShowAbilitiesButtonHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -487,12 +489,3 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
-
-
-class DragonBoatStorageKeys(CONST_CONTAINER):
-    TEAM_1 = 'team1'
-    TEAM_2 = 'team2'
-    TEAM_3 = 'team3'
-    TEAM_4 = 'team4'
-    TEAM_5 = 'team5'
-    DBOAT_FINAL_REWARD_OBTAINED = 'dboatFinalRewardObtained'

@@ -13,6 +13,10 @@ class CommonBalanceContentModel(ViewModel):
     def currency(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCurrencyType():
+        return UserListModel
+
     def _initialize(self):
         super(CommonBalanceContentModel, self)._initialize()
         self._addViewModelProperty('currency', UserListModel())

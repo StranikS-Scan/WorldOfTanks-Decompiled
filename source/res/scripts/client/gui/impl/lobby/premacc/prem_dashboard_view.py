@@ -8,6 +8,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_view_model import PremDashboardViewModel
 from gui.impl.lobby.premacc.dashboard.dashboard_premium_card import DashboardPremiumCard
+from gui.impl.lobby.premacc.dashboard.parent_control_info_popover import ParentControlInfoPopoverContent
 from gui.impl.lobby.premacc.dashboard.piggy_bank_card.prem_piggy_bank_card import PremPiggyBankCard
 from gui.impl.lobby.premacc.dashboard.piggy_bank_card.wot_plus_piggy_bank_card import WotPlusPiggyBankCard
 from gui.impl.lobby.premacc.dashboard.prem_dashboard_dog_tags_card import PremDashboardDogTagsCard
@@ -19,14 +20,18 @@ from gui.impl.lobby.premacc.premacc_helpers import SoundViewMixin
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
+from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class PremDashboardView(ViewImpl, SoundViewMixin):
     __slots__ = ()
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __gameSession = dependency.descriptor(IGameSessionController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -39,6 +44,9 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
     def viewModel(self):
         return super(PremDashboardView, self).getViewModel()
 
+    def createPopOverContent(self, event):
+        return ParentControlInfoPopoverContent() if event.contentID == R.views.lobby.premacc.dashboard.prem_dashboard_parent_control_info.PremDashboardParentControlInfoContent() else None
+
     def _onLoading(self, *args, **kwargs):
         super(PremDashboardView, self)._onLoading()
         self._addSoundEvent()
@@ -46,6 +54,8 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
         self.viewModel.onInitialized += self.__onInitialized
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self.__settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
+        self.__gameSession.onParentControlNotify += self.__onParentControlNotify
+        self.__onParentControlNotify()
         self.setChildView(R.dynamic_ids.prem_dashboard.premium_card(), DashboardPremiumCard())
         self.setChildView(R.dynamic_ids.prem_dashboard.double_xp_card(), PremDashboardDoubleExperienceCard())
         self.__setPiggyBankCard()
@@ -74,6 +84,7 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
     def _finalize(self):
         self.viewModel.onCloseAction -= self.__onCloseAction
         self.viewModel.onInitialized -= self.__onInitialized
+        self.__gameSession.onParentControlNotify -= self.__onParentControlNotify
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self.__settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
         self._removeSoundEvent()
@@ -86,3 +97,7 @@ class PremDashboardView(ViewImpl, SoundViewMixin):
 
     def __onInterfaceScaleChanged(self, scale):
         self.viewModel.setInterfaceScale(scale)
+
+    def __onParentControlNotify(self):
+        limitsEnabled = self.__itemsCache.items.gameRestrictions.hasSessionLimit
+        self.viewModel.setIsShowParentControl(limitsEnabled)

@@ -14,6 +14,10 @@ class TankmanTooltipViewModel(ViewModel):
     def icons(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getIconsType():
+        return TankmanTooltipViewIconModel
+
     def getTitle(self):
         return self._getString(1)
 

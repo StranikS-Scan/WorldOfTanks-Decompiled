@@ -129,6 +129,10 @@ class _Equipment(object):
             raise SoftException('The item {} is not suitable for {}!'.format(item, self))
         return
 
+    @property
+    def getStorage(self):
+        return self._storage
+
     def _createItem(self, itemData):
         raise NotImplementedError
 

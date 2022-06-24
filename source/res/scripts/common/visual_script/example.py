@@ -166,7 +166,7 @@ class TestTunableEvent(TunableEventBlock, Example):
         super(TestTunableEvent, self).__init__(*args, **kwargs)
         self._t = self._makeDataInputSlot('time', SLOT_TYPE.FLOAT)
         self._a = self._makeDataInputSlot('value', SLOT_TYPE.FLOAT)
-        self._res = self._makeDataOutputSlot('sqr value', SLOT_TYPE.FLOAT, None)
+        self._res = self._makeDataOutputSlot('sqrValue', SLOT_TYPE.FLOAT, None)
         self._cbID = None
         return
 
@@ -215,6 +215,18 @@ class ClampedBlockEx(Block, Example):
         self._float.setEditorData([0.0, 1.0])
         self._angle = self._makeDataInputSlot('angle [-45, 45]', SLOT_TYPE.ANGLE)
         self._angle.setEditorData([-45.0, 45.0])
+        self._outInt = self._makeDataOutputSlot('intClamped', SLOT_TYPE.INT, self._clampInt)
+        self._outFloat = self._makeDataOutputSlot('floatClamped', SLOT_TYPE.FLOAT, self._clampFloat)
+        self._outAngle = self._makeDataOutputSlot('angleClamped', SLOT_TYPE.ANGLE, self._clampAngle)
+
+    def _clampInt(self):
+        self._outInt.setValue(self._int.getValue())
+
+    def _clampFloat(self):
+        self._outFloat.setValue(self._float.getValue())
+
+    def _clampAngle(self):
+        self._outAngle.setValue(self._angle.getValue())
 
 
 class ClampedBlock(Block, Example):

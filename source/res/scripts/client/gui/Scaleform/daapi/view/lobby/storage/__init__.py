@@ -18,7 +18,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.rent_vehicles_tab import RentVehiclesTabView
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.restore_vehicles_tab import RestoreVehiclesTabView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.consumables_tab import ConsumablesTabView
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import ModulesShellsCMHandler, ModulesShellsNoSaleCMHandler, DemountKitsCMHandler
+from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import ModulesShellsCMHandler, ModulesShellsNoSaleCMHandler, DemountKitsCMHandler, RecertificationFormsCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import EquipmentCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import BattleBoostersCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import OptionalDeviceCMHandler
@@ -48,6 +48,7 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_OPTIONAL_DEVICE_ITEM, OptionalDeviceCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM, BattleBoostersCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_DEMOUNT_KIT_ITEM, DemountKitsCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_RECERTIFICATION_FORM_ITEM, RecertificationFormsCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM, VehiclesRegularCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM, VehiclesRestoreCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM, VehiclesRentedCMHandler),

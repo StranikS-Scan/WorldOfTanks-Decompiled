@@ -25,7 +25,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.missions.regular.missions_token_popover import MissionsTokenPopover
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularMissionVehicleSelector
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularVehicleSelectorCarousel
-    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsGroupedView, MissionsMarathonView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView, MissionsDragonBoatView
+    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsGroupedView, MissionsMarathonView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_details_container_view import EventBoardsDetailsBrowserView, EventBoardsDetailsVehiclesView, EventBoardsDetailsAwardsView, EventBoardsDetailsBattleView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_browser_overlay import EventBoardsBrowserOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vehicles_overlay import EventBoardsVehiclesOverlay
@@ -44,7 +44,6 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
-     ComponentSettings(QUESTS_ALIASES.MISSIONS_DRAGON_BOAT_VIEW_PY_ALIAS, MissionsDragonBoatView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassViewsHolderComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),

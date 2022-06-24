@@ -21,9 +21,17 @@ class BattlePassBuyRewardsViewModel(ViewModel):
     def nowRewards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getNowRewardsType():
+        return RewardItemModel
+
     @property
     def futureRewards(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getFutureRewardsType():
+        return RewardItemModel
 
     def getFromLevel(self):
         return self._getNumber(2)

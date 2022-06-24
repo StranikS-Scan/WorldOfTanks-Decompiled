@@ -168,6 +168,8 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_26 = '#menu:loading/battleTypes/desc/26'
     LOADING_BATTLETYPES_28 = '#menu:loading/battleTypes/28'
     LOADING_BATTLETYPES_DESC_28 = '#menu:loading/battleTypes/desc/28'
+    LOADING_BATTLETYPES_29 = '#menu:loading/battleTypes/29'
+    LOADING_BATTLETYPES_DESC_29 = '#menu:loading/battleTypes/desc/29'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -244,6 +246,7 @@ class MENU(object):
     TANKMANTRAININGWINDOW_ACADEMY = '#menu:tankmanTrainingWindow/academy'
     TANKMANTRAININGWINDOW_SCOOL = '#menu:tankmanTrainingWindow/scool'
     TANKMANTRAININGWINDOW_FREE = '#menu:tankmanTrainingWindow/free'
+    TANKMANTRAININGWINDOW_BLANK = '#menu:tankmanTrainingWindow/blank'
     TANKMANTRAININGWINDOW_FREE_PRICE = '#menu:tankmanTrainingWindow/free/price'
     TANKMANTRAININGWINDOW_TRAININGTO = '#menu:tankmanTrainingWindow/trainingTo'
     TANKMANTRAININGBUTTON2_TRAININGTO = '#menu:tankmanTrainingButton2/trainingTo'
@@ -733,6 +736,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/mapbox/availability/days'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/mapbox/availability/hours'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_LESSTHANHOUR = '#menu:headerButtons/battle/types/mapbox/availability/lessThanHour'
+    HEADERBUTTONS_BATTLE_TYPES_FUNRANDOM = '#menu:headerButtons/battle/types/funRandom'
+    HEADERBUTTONS_BATTLE_TYPES_FUNRANDOMSQUAD = '#menu:headerButtons/battle/types/funRandomSquad'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -794,6 +799,12 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_HEADER = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_BODY = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/body'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
@@ -1579,6 +1590,7 @@ class MENU(object):
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
+    CONTEXTMENU_CREATEFUNRANDOMSQUAD = '#menu:contextMenu/createFunRandomSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1630,6 +1642,10 @@ class MENU(object):
     SKILLDROPWINDOW_TITLE = '#menu:skillDropWindow/title'
     SKILLDROPWINDOW_BEFORE = '#menu:skillDropWindow/before'
     SKILLDROPWINDOW_MULTIPLIER = '#menu:skillDropWindow/multiplier'
+    SKILLDROPWINDOW_INSTORAGE = '#menu:skillDropWindow/inStorage'
+    SKILLDROPWINDOW_NOTAVAILABLE = '#menu:skillDropWindow/notAvailable'
+    SKILLDROPWINDOW_DIRECTION = '#menu:skillDropWindow/direction'
+    SKILLDROPWINDOW_TRAINING = '#menu:skillDropWindow/training'
     SKILLDROPWINDOW_AFTER = '#menu:skillDropWindow/after'
     SKILLDROPWINDOW_STUDY_ACADEMY = '#menu:skillDropWindow/study/academy'
     SKILLDROPWINDOW_STUDY_SCOOL = '#menu:skillDropWindow/study/scool'
@@ -1638,6 +1654,7 @@ class MENU(object):
     SKILLDROPWINDOW_CANCELBTN = '#menu:skillDropWindow/cancelBtn'
     SKILLDROPWINDOW_FREEDROPLABEL = '#menu:skillDropWindow/freeDropLabel'
     SKILLDROPWINDOW_FREEDROPPERCENT = '#menu:skillDropWindow/freeDropPercent'
+    SKILLDROPWINDOW_TOOLTIP_VISIBLEDISABLED = '#menu:skillDropWindow/tooltip/visibleDisabled'
     CENTERISAVAILABLE = '#menu:centerIsAvailable'
     CENTERISUNAVAILABLE = '#menu:centerIsUnAvailable'
     ACCOUNT_PROFILE_EMPTYBATTLELIST = '#menu:account/profile/emptyBattleList'
@@ -1709,6 +1726,7 @@ class MENU(object):
     BONUSTYPE_29 = '#menu:bonusType/29'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
+    BONUSTYPE_42 = '#menu:bonusType/42'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2280,6 +2298,7 @@ class MENU(object):
      CONTEXTMENU_CREATEEVENTSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
+     CONTEXTMENU_CREATEFUNRANDOMSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2674,7 +2693,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_DESC_25,
      LOADING_BATTLETYPES_DESC_26,
-     LOADING_BATTLETYPES_DESC_28)
+     LOADING_BATTLETYPES_DESC_28,
+     LOADING_BATTLETYPES_DESC_29)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2726,7 +2746,9 @@ class MENU(object):
      LOADING_BATTLETYPES_26,
      LOADING_BATTLETYPES_DESC_26,
      LOADING_BATTLETYPES_28,
-     LOADING_BATTLETYPES_DESC_28)
+     LOADING_BATTLETYPES_DESC_28,
+     LOADING_BATTLETYPES_29,
+     LOADING_BATTLETYPES_DESC_29)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,

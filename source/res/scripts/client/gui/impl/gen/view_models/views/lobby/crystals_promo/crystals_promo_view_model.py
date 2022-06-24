@@ -17,6 +17,10 @@ class CrystalsPromoViewModel(ViewModel):
     def battleTypes(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getBattleTypesType():
+        return BattleTypeModel
+
     def getSelectedTab(self):
         return self._getNumber(1)
 

@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_visitor.py
 import functools
 import weakref
+import math
 import BigWorld
-from constants import ARENA_GUI_TYPE as _GUI_TYPE, ARENA_GUI_TYPE_LABEL as _GUI_TYPE_LABEL, ARENA_BONUS_TYPE as _BONUS_TYPE, ARENA_PERIOD as _PERIOD, QUEUE_TYPE, TEAMS_IN_ARENA
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 import win_points
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
+from battle_modifiers.battle_modifiers import BattleModifiers
+from battle_modifiers.battle_modifier_constants import BattleParams
+from constants import ARENA_GUI_TYPE as _GUI_TYPE, ARENA_GUI_TYPE_LABEL as _GUI_TYPE_LABEL, ARENA_BONUS_TYPE as _BONUS_TYPE, ARENA_PERIOD as _PERIOD, QUEUE_TYPE, TEAMS_IN_ARENA, VISIBILITY, SHELL_TYPES
 from gui import GUI_SETTINGS
 from skeletons.gui.battle_session import IClientArenaVisitor
 
@@ -56,6 +59,7 @@ class _ClientArenaSkeleton(object):
     bonusType = _BONUS_TYPE.UNKNOWN
     arenaType = None
     componentSystem = None
+    battleModifiers = BattleModifiers()
     period = _PERIOD.IDLE
     periodEndTime = 0
     periodLength = 0
@@ -231,7 +235,7 @@ class _ArenaTypeVisitor(IArenaVisitor):
         return self._arenaType.battleCountdownTimerSound
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.roundLength)
-    def getRoundLength(self):
+    def getTypeRoundLength(self):
         return self._arenaType.roundLength
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.battleEndingSoonTime)
@@ -316,6 +320,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isStrongholdRange(self):
         return self._guiType in _GUI_TYPE.STRONGHOLD_RANGE
 
+    def isFunRandom(self):
+        return self._guiType == _GUI_TYPE.FUN_RANDOM
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
@@ -399,16 +406,16 @@ class _ArenaExtraDataVisitor(IArenaVisitor):
             self._extra = extra
         return
 
-    def clear(self):
-        self._extra = None
-        return
+    @property
+    def queueType(self):
+        return self._extra.get('queueType', QUEUE_TYPE.UNKNOWN)
 
     def isLowLevelBattle(self):
         return 0 < self._extra.get('battleLevel', 0) < 4
 
-    @property
-    def queueType(self):
-        return self._extra.get('queueType', QUEUE_TYPE.UNKNOWN)
+    def clear(self):
+        self._extra = None
+        return
 
 
 class _ArenaVehiclesVisitor(IArenaVisitor):
@@ -443,8 +450,33 @@ class _ArenaVehiclesVisitor(IArenaVisitor):
         return extras
 
 
+class _ArenaModifiersVisitor(IArenaVisitor):
+    __slots__ = ('_modifiers', '_shellData')
+
+    def __init__(self, modifiers=None):
+        super(_ArenaModifiersVisitor, self).__init__()
+        self._modifiers = modifiers = BattleModifiers() if modifiers is None else modifiers
+        self._shellData = {SHELL_TYPES.ARMOR_PIERCING: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(5.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
+         SHELL_TYPES.ARMOR_PIERCING_CR: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(2.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
+         SHELL_TYPES.ARMOR_PIERCING_HE: (modifiers(BattleParams.NORMALIZATION_ANGLE, 0.0), 0.0),
+         SHELL_TYPES.HOLLOW_CHARGE: (0.0, math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(85.0)))),
+         SHELL_TYPES.HIGH_EXPLOSIVE: (0.0, 0.0)}
+        return
+
+    def clear(self):
+        self._modifiers = None
+        self._shellData.clear()
+        return
+
+    def getShellNormalization(self, shellKind):
+        return self._shellData[shellKind][0]
+
+    def getShellRicochetCos(self, shellKind):
+        return self._shellData[shellKind][1]
+
+
 class _ClientArenaVisitor(IClientArenaVisitor):
-    __slots__ = ('__weakref__', '_arena', '_canSubscribe', '_gui', '_bonus', '_type', '_extra', '_vehicles')
+    __slots__ = ('__weakref__', '_arena', '_canSubscribe', '_gui', '_bonus', '_type', '_extra', '_vehicles', '_modifiers')
 
     def __init__(self, arena, canSubscribe):
         super(_ClientArenaVisitor, self).__init__()
@@ -455,6 +487,7 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         self._type = _ArenaTypeVisitor(arenaType=self.getArenaType())
         self._extra = _ArenaExtraDataVisitor(extra=self.getArenaExtraData())
         self._vehicles = _ArenaVehiclesVisitor(vehicles=self.getArenaVehicles())
+        self._modifiers = _ArenaModifiersVisitor(modifiers=self.getArenaModifiers())
 
     @classmethod
     def createByArena(cls, arena=None):
@@ -503,15 +536,21 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def vehicles(self):
         return self._vehicles
 
-    @catch_attribute_exception(default=_ClientArenaSkeleton.componentSystem)
-    def getComponentSystem(self):
-        return self._arena.componentSystem
+    @property
+    def modifiers(self):
+        return self._modifiers
 
     def isArenaNotStarted(self):
         return self.getArenaPeriod() in (_PERIOD.IDLE, _PERIOD.WAITING, _PERIOD.PREBATTLE)
 
     def isArenaInWaiting(self):
         return self.getArenaPeriod() == _PERIOD.WAITING
+
+    def isBattleEndWarningEnabled(self):
+        return GUI_SETTINGS.battleEndWarningEnabled and not self._gui.isTutorialBattle()
+
+    def isSoloTeam(self, team):
+        return False
 
     def hasRage(self):
         return self._bonus.hasRage()
@@ -546,14 +585,17 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def hasBattleNotifier(self):
         return self._bonus.hasBattleNotifier()
 
-    def isSoloTeam(self, team):
-        return False
-
     def getArenaIconKey(self):
         return self._type.getGeometryName()
 
     def getArenaIcon(self, iconKey):
         return iconKey % self.getArenaIconKey()
+
+    def getArenaSubscription(self):
+        return self._arena if self._canSubscribe else None
+
+    def getRoundLength(self):
+        return self.getArenaModifiers()(BattleParams.BATTLE_LENGTH, self._type.getTypeRoundLength())
 
     def getTeamSpawnPoints(self, team):
         other = team - 1
@@ -570,11 +612,12 @@ class _ClientArenaVisitor(IClientArenaVisitor):
             for number, point in enumerate(points, 1):
                 yield (teamNum, (point[0], 0, point[1]), number)
 
-    def getArenaSubscription(self):
-        return self._arena if self._canSubscribe else None
+    def getVisibilityMinRadius(self):
+        return self.getArenaModifiers()(BattleParams.VISION_MIN_RADIUS, VISIBILITY.MIN_RADIUS)
 
-    def isBattleEndWarningEnabled(self):
-        return GUI_SETTINGS.battleEndWarningEnabled and not self._gui.isTutorialBattle()
+    @catch_attribute_exception(default=_ClientArenaSkeleton.isFogOfWarEnabled)
+    def isArenaFogOfWarEnabled(self):
+        return self._arena.isFogOfWarEnabled
 
     @catch_attribute_exception(default=_ClientArenaSkeleton.arenaUniqueID)
     def getArenaUniqueID(self):
@@ -616,6 +659,10 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def getArenaExtraData(self):
         return self._arena.extraData
 
+    @catch_attribute_exception(default=_ClientArenaSkeleton.battleModifiers)
+    def getArenaModifiers(self):
+        return self._arena.battleModifiers
+
     @catch_attribute_exception(default=_ClientArenaSkeleton.vehicles)
     def getArenaVehicles(self):
         return self._arena.vehicles
@@ -628,6 +675,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def getArenaViewPoints(self):
         return self._arena.viewPoints
 
-    @catch_attribute_exception(default=_ClientArenaSkeleton.isFogOfWarEnabled)
-    def isArenaFogOfWarEnabled(self):
-        return self._arena.isFogOfWarEnabled
+    @catch_attribute_exception(default=_ClientArenaSkeleton.componentSystem)
+    def getComponentSystem(self):
+        return self._arena.componentSystem

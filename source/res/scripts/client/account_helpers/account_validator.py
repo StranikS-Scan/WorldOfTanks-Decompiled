@@ -74,7 +74,7 @@ class InventoryVehiclesValidator(AccountValidator):
         vehsInvData = inventory.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
 
         def createVehicleDescrAsync():
-            for invID, vehCompDescr in vehsInvData.get('compDescr', {}).iteritems():
+            for invID, vehCompDescr in vehsInvData.get('compDescr', {}).items():
                 try:
                     yield vehicles.VehicleDescr(vehCompDescr)
                 except Exception as e:
@@ -83,7 +83,7 @@ class InventoryVehiclesValidator(AccountValidator):
         yield async.await(async.distributeLoopOverTicks(createVehicleDescrAsync(), minPerTick=10, maxPerTick=100, logID='createVehicleDescrAsync', tickLength=0.0))
 
         def validateTankmanAsync():
-            for vehInvData in inventory.getItemsData(GUI_ITEM_TYPE.VEHICLE).itervalues():
+            for vehInvData in inventory.getItemsData(GUI_ITEM_TYPE.VEHICLE).values():
                 for idx, tankmanID in enumerate(vehInvData.crew):
                     if BigWorld.player() is None:
                         return
@@ -106,7 +106,7 @@ class InventoryOutfitValidator(AccountValidator):
         c11nData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
 
         def validateOutfitsAsync():
-            for vehIntCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).iteritems():
+            for vehIntCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).items():
                 vehicleData = self.itemsCache.items.inventory.getItemData(vehIntCD)
                 if vehicleData is not None:
                     vehicleCD = vehicleData.compDescr
@@ -114,7 +114,7 @@ class InventoryOutfitValidator(AccountValidator):
                     _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehIntCD)
                     vehicleDesc = vehicles.VehicleDescr(typeID=(nationID, vehicleTypeID))
                     vehicleCD = vehicleDesc.makeCompactDescr()
-                for outfitCD in outfitsData.itervalues():
+                for outfitCD in outfitsData.values():
                     if BigWorld.player() is None:
                         return
                     try:
@@ -137,7 +137,7 @@ class InventoryTankmenValidator(AccountValidator):
         tmenInvData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {})
 
         def validateInventoryTankmenAsync():
-            for invID, tmanCompDescr in tmenInvData.get('compDescr', {}).iteritems():
+            for invID, tmanCompDescr in tmenInvData.get('compDescr', {}).items():
                 if BigWorld.player() is None:
                     return
                 try:

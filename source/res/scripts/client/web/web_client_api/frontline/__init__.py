@@ -13,6 +13,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
 from web.web_client_api.common import ItemPackType
+from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow, showFrontlineAwards
 EpicSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'average_xp', 'lvl', 'battle_bp_points', 'season_bp_points'))
 
 class _RewardsSchema(W2CSchema):
@@ -83,8 +84,24 @@ class FrontLineWebApi(W2CSchema):
          'max_lvl': self.__epicController.getMaxPlayerLevel(),
          'exp': levelProgress,
          'exp_for_lvl': nextLevelExp,
-         'rewards_for_lvl': self.__getLevelAwards(currentLevel + 1)}
+         'rewards_for_lvl': self.__getLevelAwards(currentLevel + 1),
+         'rewards_count': self.__epicController.getNotChosenRewardCount()}
         return data
+
+    @w2c(W2CSchema, name='select_reward')
+    def handleSelectReward(self, _):
+        rewards = []
+
+        def _setRewardsAndUpdate(rs):
+            rewards.extend(rs)
+            self.__browserUpdate(rs)
+
+        def _showAwards():
+            if rewards:
+                showFrontlineAwards(rewards)
+
+        showEpicRewardsSelectionWindow(onRewardsReceivedCallback=_setRewardsAndUpdate, onCloseCallback=_showAwards)
+        return self.__getAllLevelAwards()
 
     @w2c(W2CSchema, name='get_calendar_info')
     def handleGetCalendarInfo(self, _):
@@ -106,14 +123,10 @@ class FrontLineWebApi(W2CSchema):
     def __getAllLevelAwards(self):
         awardsData = dict()
         abilityPts = self.__epicController.getAbilityPointsForLevel()
-        allQuests = self.__eventsCache.getAllQuests()
-        for questKey, questData in allQuests.iteritems():
-            if self.__epicController.TOKEN_QUEST_ID in questKey:
-                _, _, questNum = questKey.partition(self.__epicController.TOKEN_QUEST_ID)
-                if questNum:
-                    questLvl = int(questNum)
-                    questBonuses = questData.getBonuses()
-                    awardsData[questLvl] = self.__packBonuses(questBonuses, questLvl, abilityPts)
+        allLevelData = self.__epicController.getAllLevelRewards()
+        for questLvl, rewardData in allLevelData.iteritems():
+            bonuses = self.__epicController.replaceOfferByReward(rewardData.getBonuses())
+            awardsData[questLvl] = self.__packBonuses(bonuses, questLvl, abilityPts)
 
         return awardsData
 
@@ -123,11 +136,13 @@ class FrontLineWebApi(W2CSchema):
 
     @classmethod
     def __packBonuses(cls, bonuses, level, abilityPts):
-        result = [{'id': 0,
-          'type': ItemPackType.CUSTOM_SUPPLY_POINT,
-          'value': abilityPts[level - 1],
-          'icon': {AWARDS_SIZES.SMALL: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
-                   AWARDS_SIZES.BIG: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}}] if abilityPts else []
+        result = []
+        if abilityPts and abilityPts[level - 1]:
+            result.append({'id': 0,
+             'type': ItemPackType.CUSTOM_SUPPLY_POINT,
+             'value': abilityPts[level - 1],
+             'icon': {AWARDS_SIZES.SMALL: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
+                      AWARDS_SIZES.BIG: getRelativeUrl(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}})
         for bonus in bonuses:
             if bonus.getName() in cls._NOT_SUPPORTED_BONUSES:
                 continue
@@ -138,3 +153,6 @@ class FrontLineWebApi(W2CSchema):
             result.extend(bonusList)
 
         return result
+
+    def __browserUpdate(self, _):
+        self.__epicController.openURL()

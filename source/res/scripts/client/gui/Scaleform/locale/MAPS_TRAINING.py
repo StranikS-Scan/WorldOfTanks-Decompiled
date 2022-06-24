@@ -5,6 +5,7 @@
 class MAPS_TRAINING(object):
     MAPSELECTION_TITLE = '#maps_training:mapSelection/title'
     MAPSELECTION_SUBTITLE = '#maps_training:mapSelection/subtitle'
+    MAPSELECTION_CLOSEBTN = '#maps_training:mapSelection/closeBtn'
     MAPSELECTION_FILTERS_TIP1 = '#maps_training:mapSelection/filters/tip1'
     MAPSELECTION_FILTERS_TIP2 = '#maps_training:mapSelection/filters/tip2'
     MAPSELECTION_OPTIONS_BACKGOTO = '#maps_training:mapSelection/options/backGoto'

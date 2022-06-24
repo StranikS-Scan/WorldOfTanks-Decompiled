@@ -45,6 +45,7 @@ class IMinimapComponent(object):
 
 
 class MinimapComponent(MinimapMeta, IMinimapComponent):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(MinimapComponent, self).__init__()
@@ -117,12 +118,27 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def getComponent(self, *_):
         return self.__component
 
+    def getBoundingBox(self):
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        bl, tr = arenaVisitor.type.getBoundingBox()
+        if arenaVisitor.gui.isBootcampBattle():
+            topRightX, topRightY = tr
+            bottomLeftX, bottomLeftY = bl
+            vSide = topRightX - bottomLeftX
+            hSide = topRightY - bottomLeftY
+            if vSide > hSide:
+                bl = (bottomLeftX, bottomLeftX)
+                tr = (topRightX, topRightX)
+            else:
+                bl = (bottomLeftY, bottomLeftY)
+                tr = (topRightY, topRightY)
+        return (bl, tr)
+
     def _populate(self):
         super(MinimapComponent, self)._populate()
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        arenaVisitor = sessionProvider.arenaVisitor
-        arenaDP = sessionProvider.getArenaDP()
-        if sessionProvider is not None and arenaVisitor is not None and arenaDP is not None:
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        arenaDP = self.sessionProvider.getArenaDP()
+        if self.sessionProvider is not None and arenaVisitor is not None and arenaDP is not None:
             if self.__createComponent(arenaVisitor):
                 setup = self._setupPlugins(arenaVisitor)
                 self.__plugins = MinimapPluginsCollection(self)
@@ -130,7 +146,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
                 self.__plugins.init(weakref.proxy(arenaVisitor), weakref.proxy(arenaDP))
                 self.__plugins.start()
         else:
-            _logger.error('Could not create component due to data missing: %r, %r, %r', sessionProvider, arenaVisitor, arenaDP)
+            _logger.error('Could not create component due to data missing: %r, %r, %r', self.sessionProvider, arenaVisitor, arenaDP)
         return
 
     def _dispose(self):
@@ -179,20 +195,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         else:
             self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
             self.app.component.addChild(self.__component, self._getFlashName())
-            bl, tr = arenaVisitor.type.getBoundingBox()
-            if arenaVisitor.gui.isBootcampBattle():
-                topRightX = tr[0]
-                topRightY = tr[1]
-                bottomLeftX = bl[0]
-                bottomLeftY = bl[1]
-                vSide = topRightX - bottomLeftX
-                hSide = topRightY - bottomLeftY
-                if vSide > hSide:
-                    bl = (bottomLeftX, bottomLeftX)
-                    tr = (topRightX, topRightX)
-                else:
-                    bl = (bottomLeftY, bottomLeftY)
-                    tr = (topRightY, topRightY)
+            bl, tr = self.getBoundingBox()
             self.__component.setArenaBB(bl, tr)
             self._processMinimapSize(bl, tr)
             self.__component.mapSize = Math.Vector2(self._getMinimapSize())

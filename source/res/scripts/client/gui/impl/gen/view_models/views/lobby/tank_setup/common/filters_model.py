@@ -34,6 +34,10 @@ class FiltersModel(ViewModel):
     def setFilters(self, value):
         self._setArray(3, value)
 
+    @staticmethod
+    def getFiltersType():
+        return SubFilterModel
+
     def _initialize(self):
         super(FiltersModel, self)._initialize()
         self._addNumberProperty('selectedFilterCount', 0)

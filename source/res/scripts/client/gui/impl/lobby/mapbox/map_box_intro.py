@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_intro_model import MapBoxIntroModel
 from gui.impl.lobby.mapbox.sound import getMapboxViewSoundSpace
 from gui.impl.pub import ViewImpl
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.server_events.events_dispatcher import showMissionsMapboxProgression
 from gui.shared.event_dispatcher import showModeSelectorWindow
@@ -14,7 +15,7 @@ from helpers import dependency, server_settings, time_utils
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
 
-class MapBoxIntro(ViewImpl):
+class MapBoxIntro(ViewImpl, IGlobalListener):
     __slots__ = ('__closeCallback',)
     _COMMON_SOUND_SPACE = getMapboxViewSoundSpace()
     __mapboxCtrl = dependency.descriptor(IMapboxController)
@@ -31,13 +32,18 @@ class MapBoxIntro(ViewImpl):
     def viewModel(self):
         return super(MapBoxIntro, self).getViewModel()
 
+    def onPrbEntitySwitched(self):
+        self.destroyWindow()
+
     def _initialize(self):
         super(MapBoxIntro, self)._initialize()
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeChanged
         self.viewModel.onClose += self.__onClose
+        self.startGlobalListening()
 
     def _finalize(self):
+        self.stopGlobalListening()
         self.viewModel.onClose -= self.__onClose
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeChanged

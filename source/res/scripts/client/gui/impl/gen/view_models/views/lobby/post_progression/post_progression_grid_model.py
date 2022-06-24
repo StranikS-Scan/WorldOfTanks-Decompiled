@@ -23,11 +23,19 @@ class PostProgressionGridModel(ViewModel):
     def setMainSteps(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getMainStepsType():
+        return SingleStepModel
+
     def getMultiSteps(self):
         return self._getArray(2)
 
     def setMultiSteps(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getMultiStepsType():
+        return MultiStepModel
 
     def _initialize(self):
         super(PostProgressionGridModel, self)._initialize()

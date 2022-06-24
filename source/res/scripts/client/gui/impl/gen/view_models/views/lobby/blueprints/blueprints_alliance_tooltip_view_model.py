@@ -16,6 +16,10 @@ class BlueprintsAllianceTooltipViewModel(ViewModel):
     def setPriceOptions(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getPriceOptionsType():
+        return BlueprintPrice
+
     def getVehicleNationName(self):
         return self._getString(1)
 

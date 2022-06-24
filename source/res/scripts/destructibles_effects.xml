@@ -445,7 +445,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
+            <wwsound>	obj_treefall_creak_big	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -463,7 +463,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
+            <wwsound>	obj_treefall_down_big	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -625,7 +625,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
+            <wwsound>	obj_treefall_creak_med	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -643,7 +643,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
+            <wwsound>	obj_treefall_down_med	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -1057,7 +1057,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
+            <wwsound>	obj_treefall_creak_big	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -1075,7 +1075,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
+            <wwsound>	obj_treefall_down_big	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -1841,7 +1841,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -1859,7 +1859,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
+            <wwsound>	obj_treefall_down_small	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -2332,6 +2332,42 @@
         </effects>
       </variant1>
     </dryTree_01_touchdown>
+    <dryTree_02_small_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/dryTree_02_small_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_med	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </dryTree_02_small_fall>
+    <dryTree_02_small_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/dryTree_02_small_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down_med	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </dryTree_02_small_touchdown>
     <tree_Linden_Town_Dry_Snow_16m_fall>
       <variant1>
         <stages>
@@ -14004,29 +14040,6 @@
             <params>
               <wood_1>	30	</wood_1>
               <debrisAmount>	100	</debrisAmount>
-              <weight>	2800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf001_WoodFence_01>
-    <inf_gaf001_WoodFence_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf001_WoodFence.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
               <weight>	3000	</weight>
             </params>
           </destructionSound>
@@ -23133,30 +23146,6 @@
         </effects>
       </variant1>
     </inf_envAF_005_ClayJug_1_11>
-    <inf_envAF_005_ClayJug_1_12>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	26	</stone_1>
-              <glass>	1	</glass>
-              <debrisAmount>	30	</debrisAmount>
-              <weight>	1000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envAF_005_ClayJug_1_12>
     <inf_envAF_005_ClayJug_1_15>
       <variant1>
         <stages>

@@ -13,6 +13,10 @@ class MapBoxOptionModel(ViewModel):
     def answers(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getAnswersType():
+        return MapBoxAnswersModel
+
     def getOptionId(self):
         return self._getString(1)
 

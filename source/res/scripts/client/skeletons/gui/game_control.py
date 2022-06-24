@@ -8,6 +8,7 @@ if typing.TYPE_CHECKING:
     from Event import Event
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
+    from gui.battle_modifiers.modifiers_data_provider import ModifiersDataProvider
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
@@ -89,34 +90,34 @@ class ISeasonProvider(object):
     def isAvailable(self):
         raise NotImplementedError
 
+    def isBattlesPossible(self):
+        raise NotImplementedError
+
+    def isInPrimeTime(self):
+        raise NotImplementedError
+
     def isFrozen(self):
         raise NotImplementedError
 
-    def getModeSettings(self):
-        raise NotImplementedError
-
-    def getCurrentCycleID(self):
+    def isWithinSeasonTime(self, seasonID):
         raise NotImplementedError
 
     def hasAnySeason(self):
         raise NotImplementedError
 
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
     def hasConfiguredPrimeTimeServers(self, now=None):
+        raise NotImplementedError
+
+    def hasPrimeTimesLeftForCurrentCycle(self):
         raise NotImplementedError
 
     def getClosestStateChangeTime(self, now=None):
         raise NotImplementedError
 
-    def getPrimeTimes(self):
-        raise NotImplementedError
-
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def getCurrentOrNextActiveCycleNumber(self, season):
-        raise NotImplementedError
-
-    def getEventEndTimestamp(self):
+    def getCurrentCycleID(self):
         raise NotImplementedError
 
     def getCurrentCycleInfo(self):
@@ -125,34 +126,43 @@ class ISeasonProvider(object):
     def getCurrentSeason(self, now=None):
         raise NotImplementedError
 
+    def getCurrentOrNextActiveCycleNumber(self, season):
+        raise NotImplementedError
+
+    def getEventEndTimestamp(self):
+        raise NotImplementedError
+
+    def getModeSettings(self):
+        raise NotImplementedError
+
     def getNextSeason(self, now=None):
         raise NotImplementedError
 
     def getPeriodInfo(self, now=None, peripheryID=None):
         raise NotImplementedError
 
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
     def getPrimeTimeStatus(self, now=None, peripheryID=None):
-        raise NotImplementedError
-
-    def getSeason(self, seasonID):
-        raise NotImplementedError
-
-    def isWithinSeasonTime(self, seasonID):
-        raise NotImplementedError
-
-    def hasPrimeTimesLeftForCurrentCycle(self):
         raise NotImplementedError
 
     def getPreviousSeason(self, now=None):
         raise NotImplementedError
 
-    def isInPrimeTime(self):
+    def getSeason(self, seasonID):
         raise NotImplementedError
 
     def getSeasonPassed(self, now=None):
         raise NotImplementedError
 
-    def hasAvailablePrimeTimeServers(self):
+    def getTimer(self, now=None, peripheryID=None):
+        raise NotImplementedError
+
+    def getLeftTimeToPrimeTimesEnd(self):
         raise NotImplementedError
 
 
@@ -181,6 +191,7 @@ class IGameSessionController(IGameController):
     onNewDayNotify = None
     onPremiumNotify = None
     onPremiumTypeChanged = None
+    onParentControlNotify = None
 
     def isSessionStartedThisDay(self):
         raise NotImplementedError
@@ -1248,6 +1259,24 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getAbilitySlotsUnlockOrder(self, vehicleType):
         raise NotImplementedError
 
+    def getAllLevelRewards(self):
+        raise NotImplementedError
+
+    def isNeedToTakeReward(self):
+        raise NotImplementedError
+
+    def getNotChosenRewardCount(self):
+        raise NotImplementedError
+
+    def hasAnyOfferGiftToken(self):
+        raise NotImplementedError
+
+    def replaceOfferByReward(self, bonuses):
+        raise NotImplementedError
+
+    def replaceOfferByGift(self, bonuses):
+        raise NotImplementedError
+
     def getCurrentCycleInfo(self):
         raise NotImplementedError
 
@@ -1624,6 +1653,9 @@ class IBattlePassController(IGameController):
     def hasExtra(self):
         raise NotImplementedError
 
+    def isRegularProgressionCompleted(self):
+        raise NotImplementedError
+
     def getExtraChapterID(self):
         raise NotImplementedError
 
@@ -1757,6 +1789,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getVehicleProgression(self, intCD):
+        raise NotImplementedError
+
+    def getSpecialVehicleCapBonus(self):
         raise NotImplementedError
 
     def getVehicleCapBonus(self, intCD):
@@ -2024,6 +2059,9 @@ class IMapsTrainingController(IGameController):
     def getSelectedVehicle(self):
         raise NotImplementedError
 
+    def updateSelectedVehicle(self):
+        raise NotImplementedError
+
     def setSelectedVehicle(self, vehicleName):
         raise NotImplementedError
 
@@ -2219,58 +2257,34 @@ class IResourceWellController(IGameController):
         raise NotImplementedError
 
 
-class IDragonBoatController(IGameController):
-    onSettingsChanged = None
-    onStatusUpdated = None
-    onWidgetStateChanged = None
+class IFunRandomController(IGameController, ISeasonProvider):
+    onUpdated = None
+    onGameModeStatusTick = None
+    onGameModeStatusUpdated = None
 
     def isEnabled(self):
         raise NotImplementedError
 
-    def isAvailable(self):
+    def isFunRandomPrbActive(self):
         raise NotImplementedError
 
-    def getConfig(self):
+    def isSuitableVehicle(self, vehicle, isSquad=False):
         raise NotImplementedError
 
-    def getUrl(self, urlName=None, callback=lambda *args: None):
+    def isSuitableVehicleAvailable(self):
         raise NotImplementedError
 
-    def createWebHandlers(self):
+    def canGoToMode(self):
         raise NotImplementedError
 
-    def isNeedHandlingEscape(self):
+    def hasSuitableVehicles(self):
         raise NotImplementedError
 
-    def getDragonBoatQuests(self):
+    def getAlertBlock(self):
         raise NotImplementedError
 
-    def getTeam(self):
+    def getModifiersDataProvider(self):
         raise NotImplementedError
 
-    def getState(self):
-        raise NotImplementedError
-
-    def processFinalReward(self):
-        raise NotImplementedError
-
-    def checkWidgetState(self):
-        raise NotImplementedError
-
-    def getDailyQuestName(self):
-        raise NotImplementedError
-
-    def checkFinishScreenToShow(self):
-        raise NotImplementedError
-
-    def showFinishScreen(self, team):
-        raise NotImplementedError
-
-    def isDayQuestCompleted(self):
-        raise NotImplementedError
-
-    def isFinalRewardInProcess(self):
-        raise NotImplementedError
-
-    def getLastDayOfEvent(self):
+    def selectFunRandomBattle(self):
         raise NotImplementedError

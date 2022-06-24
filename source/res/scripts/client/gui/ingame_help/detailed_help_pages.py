@@ -16,6 +16,8 @@ _logger = logging.getLogger(__name__)
 def buildPagesData(ctx):
     datailedList = []
     defaultHeaderTitle = buildTitle(ctx)
+    if ctx.get('isFunRandom'):
+        datailedList.extend(buildFunRandomPages(backport.text(R.strings.ingame_help.detailsHelp.funRandom.title())))
     if ctx.get('roleType'):
         datailedList.extend(buildRoleTypePages(backport.text(R.strings.ingame_help.detailsHelp.role.title()), ctx.get('roleType')))
     if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
@@ -123,6 +125,16 @@ def buildRoleTypePages(headerTitle, roleType):
     roleTypeLabel = ROLE_TYPE_TO_LABEL[roleType]
     pages = []
     _addPage(pages, headerTitle, text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions)
+    return pages
+
+
+def buildFunRandomPages(headerTitle):
+    pages = []
+    numPages = R.images.gui.maps.icons.battleHelp.funRandom.length()
+    for i in xrange(numPages):
+        dynKey = 'mode%s' % (i + 1)
+        _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.funRandom.dyn(dynKey)()))
+
     return pages
 
 

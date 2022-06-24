@@ -13,6 +13,10 @@ class RewardWindowContentModel(ViewModel):
     def rewardsList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardsListType():
+        return ListModel
+
     def getEventName(self):
         return self._getString(1)
 

@@ -15,13 +15,25 @@ class PlayerModel(ViewModel):
     def commonData(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCommonDataType():
+        return CommonPlayerDataModel
+
     @property
     def vehicle(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getVehicleType():
+        return VehicleModel
+
     @property
     def voice(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getVoiceType():
+        return SoundModel
 
     def getIsCurrentUser(self):
         return self._getBool(3)

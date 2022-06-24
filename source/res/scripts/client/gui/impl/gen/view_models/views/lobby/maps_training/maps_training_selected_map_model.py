@@ -63,17 +63,29 @@ class MapsTrainingSelectedMapModel(ViewModel):
     def setPoints(self, value):
         self._setArray(7, value)
 
+    @staticmethod
+    def getPointsType():
+        return MapsTrainingMinimapPoint
+
     def getScenarios(self):
         return self._getArray(8)
 
     def setScenarios(self, value):
         self._setArray(8, value)
 
+    @staticmethod
+    def getScenariosType():
+        return MapsTrainingScenarioModel
+
     def getRewards(self):
         return self._getArray(9)
 
     def setRewards(self, value):
         self._setArray(9, value)
+
+    @staticmethod
+    def getRewardsType():
+        return BonusModel
 
     def _initialize(self):
         super(MapsTrainingSelectedMapModel, self)._initialize()

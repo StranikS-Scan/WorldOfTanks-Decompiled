@@ -14,9 +14,17 @@ class AmmunitionPanelViewModel(ViewModel):
     def ammunitionPanel(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getAmmunitionPanelType():
+        return AmmunitionPanelModel
+
     @property
     def lastSlotAction(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getLastSlotActionType():
+        return TankSetupActionModel
 
     def getIsMaintenanceEnabled(self):
         return self._getBool(2)

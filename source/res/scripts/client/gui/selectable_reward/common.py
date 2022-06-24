@@ -148,6 +148,15 @@ class RankedSelectableRewardManager(SelectableRewardManager):
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANKED_BATTLES_SELECTABLE_REWARD, specialArgs=[]) if cls.isFeatureReward(tokenID) else None
 
 
+class EpicSelectableRewardManager(SelectableRewardManager):
+    _FEATURE = Features.EPIC
+
+    @classmethod
+    def getTabTooltipData(cls, selectableBonus):
+        tokenID = selectableBonus.getValue().keys()[0]
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[_getGiftTokenFromOffer(tokenID)]) if cls.isFeatureReward(tokenID) else None
+
+
 def _getGiftTokenFromOffer(offerToken):
     splitToken = offerToken.split(':')
     splitToken[2] += '_gift'

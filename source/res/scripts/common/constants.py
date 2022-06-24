@@ -16,9 +16,10 @@ except ImportError:
         component = 'unknown'
 
 
-IS_CLIENT = BigWorld.component == 'client'
-IS_EDITOR = BigWorld.component == 'editor'
 IS_VS_EDITOR = BigWorld.component == 'vs_editor'
+IS_UE_EDITOR = BigWorld.component == 'editor'
+IS_CLIENT = BigWorld.component == 'client'
+IS_EDITOR = IS_VS_EDITOR or IS_UE_EDITOR
 IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
@@ -201,6 +202,7 @@ class ARENA_GUI_TYPE:
     RTS = 26
     RTS_TRAINING = 27
     RTS_BOOTCAMP = 28
+    FUN_RANDOM = 29
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -225,7 +227,8 @@ class ARENA_GUI_TYPE:
      MAPS_TRAINING,
      RTS,
      RTS_TRAINING,
-     RTS_BOOTCAMP)
+     RTS_BOOTCAMP,
+     FUN_RANDOM)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -254,7 +257,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
      ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale',
      ARENA_GUI_TYPE.MAPBOX: 'mapbox',
-     ARENA_GUI_TYPE.MAPS_TRAINING: 'maps_training'}
+     ARENA_GUI_TYPE.MAPS_TRAINING: 'maps_training',
+     ARENA_GUI_TYPE.FUN_RANDOM: 'fun_random'}
 
 
 class ARENA_BONUS_TYPE:
@@ -295,6 +299,7 @@ class ARENA_BONUS_TYPE:
     RTS = 39
     RTS_1x1 = 40
     RTS_BOOTCAMP = 41
+    FUN_RANDOM = 42
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -331,7 +336,8 @@ class ARENA_BONUS_TYPE:
      MAPS_TRAINING,
      RTS,
      RTS_1x1,
-     RTS_BOOTCAMP)
+     RTS_BOOTCAMP,
+     FUN_RANDOM)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -513,6 +519,7 @@ class PREBATTLE_TYPE:
     MAPS_TRAINING = 20
     RTS = 21
     RTS_TRAINING = 22
+    FUN_RANDOM = 23
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -531,7 +538,8 @@ class PREBATTLE_TYPE:
      MAPBOX,
      MAPS_TRAINING,
      RTS,
-     RTS_TRAINING)
+     RTS_TRAINING,
+     FUN_RANDOM)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -542,7 +550,8 @@ class PREBATTLE_TYPE:
      EVENT,
      EPIC,
      BATTLE_ROYALE,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -553,7 +562,8 @@ class PREBATTLE_TYPE:
      EPIC,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
@@ -561,7 +571,8 @@ class PREBATTLE_TYPE:
      EVENT,
      BATTLE_ROYALE,
      BATTLE_ROYALE_TOURNAMENT,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING, RTS_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -571,12 +582,14 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE,
      EVENT,
      BATTLE_ROYALE_TOURNAMENT,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
     JOIN_EX = (SQUAD,
      EPIC,
      EVENT,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     RTS_PREBATTLES = (RTS, RTS_TRAINING)
     REMOVED = (COMPANY, CLUBS)
@@ -862,6 +875,8 @@ class Configs(enum.Enum):
     MAPBOX_CONFIG = 'mapbox_config'
     GIFTS_CONFIG = 'gifts_config'
     RESOURCE_WELL = 'resource_well_config'
+    FUN_RANDOM_CONFIG = 'fun_random_config'
+    CRYSTAL_REWARDS_CONFIG = 'crystal_rewards_config'
 
 
 class RESTRICTION_TYPE:
@@ -878,6 +893,20 @@ class RESTRICTION_SOURCE:
     CLIENT = 2
     BACKYARD = 3
     MIGRATOR = 4
+    FORUM = 5
+    PAYMENT_SYSTEM = 6
+    WARGAG = 7
+    SUPPORT = 8
+    WGRS = 9
+    WGCOMMENTS = 10
+    XMPPCS = 11
+    WGPS = 12
+    WGATS = 13
+    ADIOS = 14
+    PADRE = 15
+    AUTOMAGIC_SCRIPTS = 16
+    CSA = 17
+    SPA = 18
 
 
 SPA_RESTR_NAME_TO_RESTR_TYPE = {'game': RESTRICTION_TYPE.BAN,
@@ -1395,6 +1424,7 @@ class QUEUE_TYPE:
     RTS = 25
     RTS_1x1 = 26
     RTS_BOOTCAMP = 27
+    FUN_RANDOM = 28
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1419,7 +1449,8 @@ class QUEUE_TYPE:
      MAPS_TRAINING,
      RTS,
      RTS_1x1,
-     RTS_BOOTCAMP)
+     RTS_BOOTCAMP,
+     FUN_RANDOM)
     REMOVED = (COMPANIES,)
 
 
@@ -1520,13 +1551,15 @@ class GameSeasonType(object):
     BATTLE_ROYALE = 3
     MAPBOX = 4
     EVENT_BATTLES = 5
+    FUN_RANDOM = 6
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
  'epic': GameSeasonType.EPIC,
  'battle_royale': GameSeasonType.BATTLE_ROYALE,
  'mapbox': GameSeasonType.MAPBOX,
- 'event_battles': GameSeasonType.EVENT_BATTLES}
+ 'event_battles': GameSeasonType.EVENT_BATTLES,
+ Configs.EPIC_CONFIG.value: GameSeasonType.FUN_RANDOM}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1874,7 +1907,6 @@ class USER_SERVER_SETTINGS:
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
     CONTOUR = 106
-    DRAGON_BOAT = 107
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1883,8 +1915,7 @@ class USER_SERVER_SETTINGS:
      DOG_TAGS,
      GAME_EXTENDED_2,
      BATTLE_HUD,
-     CONTOUR,
-     DRAGON_BOAT)
+     CONTOUR)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1991,7 +2022,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
- USER_SERVER_SETTINGS.DRAGON_BOAT: 'dragon boat settings'}
+ 107: 'Fun Random carousel filter 1',
+ 108: 'Fun Random carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2015,14 +2047,17 @@ class TOKEN_TYPE:
     WGNI = 2
     WOTG = 3
     WOTB = 4
+    WGNI_JWT = 5
     SERVICE_NAMES = {XMPPCS: 'xmppcs',
      WGNI: 'wgni',
      WOTG: 'wotg',
-     WOTB: 'wotb'}
+     WOTB: 'wotb',
+     WGNI_JWT: 'wgni'}
     COOLDOWNS = {XMPPCS: 'REQUEST_CHAT_TOKEN',
      WGNI: 'REQUEST_WEB_TOKEN',
      WOTG: 'REQUEST_TOKEN',
-     WOTB: 'REQUEST_TOKEN'}
+     WOTB: 'REQUEST_TOKEN',
+     WGNI_JWT: 'REQUEST_TOKEN'}
 
 
 class NC_MESSAGE_TYPE:
@@ -2077,7 +2112,7 @@ class PREBATTLE_INVITE_STATUS:
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
 FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk', 'epic_deserter')
-FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
+FAIRPLAY_VIOLATIONS_MASKS = {name:1 << index for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES)}
 
 class INVALID_CLIENT_STATS:
     OK = 0
@@ -2196,11 +2231,13 @@ class INVITATION_TYPE:
     EVENT = PREBATTLE_TYPE.EVENT
     BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
     MAPBOX = PREBATTLE_TYPE.MAPBOX
+    FUN_RANDOM = PREBATTLE_TYPE.FUN_RANDOM
     RANGE = (SQUAD,
      EVENT,
      EPIC,
      BATTLE_ROYALE,
-     MAPBOX)
+     MAPBOX,
+     FUN_RANDOM)
 
 
 class REPAIR_FLAGS:
@@ -2890,6 +2927,13 @@ class EPlatoonButtonState(enum.Enum):
     CREATE_STATE = 'CREATE'
 
 
+class HighExplosiveImpact(object):
+    BLAST_WAVE = 'blastWave'
+    SHELL_FRAGMENTS = 'shellFragments'
+    ARMOR_SPALLS = 'armorSpalls'
+    ALL = (BLAST_WAVE, SHELL_FRAGMENTS, ARMOR_SPALLS)
+
+
 class DamageAbsorptionTypes(object):
     FRAGMENTS = 0
     BLAST = 1
@@ -2941,6 +2985,12 @@ class VehicleSide(enum.IntEnum):
     RIGHT = 3
 
 
+class SwitchState(enum.Enum):
+    ENABLED = 'enabled'
+    DISABLED = 'disabled'
+    INACTIVE = 'inactive'
+
+
 class DeviceRepairMode(enum.IntEnum):
     NORMAL = 0
     SLOWED = 1
@@ -2952,7 +3002,9 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'epic_battles',
  'bob',
  'battle_royale',
- 'clanWarsBattles'}
+ 'clanWarsBattles',
+ 'fun_random'}
+BATTLE_MODE_VEH_TAGS_EXCEPT_FUN = BATTLE_MODE_VEHICLE_TAGS - {'fun_random'}
 
 @enum.unique
 class EventPhase(enum.Enum):
@@ -3007,3 +3059,6 @@ class BATTLE_MODE_LOCK_MASKS(object):
 
 
 RESOURCE_WELL_FORBIDDEN_TOKEN = 'rws{}_forbidden'
+VEHICLE_HEALTH_DECIMALS = 1
+GUARANTEED_RANDOMIZED_DAMAGE = 1.0
+GUARANTEED_RANDOMIZED_PIERCING_POWER = 1.0

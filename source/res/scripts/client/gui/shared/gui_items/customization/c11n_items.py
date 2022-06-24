@@ -916,7 +916,7 @@ class Style(Customization):
         self.__outfits = {}
         self.__dependenciesByIntCD = None
         self.__serialNumber = None
-        if proxy is not None and proxy.isSynced() and self.isWithSerialNumber:
+        if proxy is not None and proxy.isSynced():
             self.__serialNumber = proxy.inventory.getC11nSerialNumber(intCompactDescr)
         return
 

@@ -359,12 +359,11 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             _logger.warning('Animations times are not initialized, inspire status can be lost: %r', values)
         return
 
-    def _updateBerserker(self, values):
-        duration = max(values.endTime - BigWorld.serverTime(), 0.0)
+    def _updateBerserker(self, berserkerData):
         data = {'isSourceVehicle': True,
-         'isInactivation': False if duration > 0.0 else None,
-         'endTime': values.endTime,
-         'duration': values.endTime - BigWorld.serverTime()}
+         'isInactivation': False if berserkerData['duration'] > 0.0 else None,
+         'endTime': berserkerData['endTime'],
+         'duration': berserkerData['duration']}
         self._updateInspire(data)
         return
 

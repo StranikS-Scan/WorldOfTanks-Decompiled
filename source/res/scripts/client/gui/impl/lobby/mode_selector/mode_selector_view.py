@@ -108,11 +108,14 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
+             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
+             ModeSelectorTooltipsConstants.FUN_RANDOM_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(rankID,))
+            if tooltipId == ModeSelectorTooltipsConstants.EPIC_BATTLE_WIDGET_INFO:
+                return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=[])
         return super(ModeSelectorView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):

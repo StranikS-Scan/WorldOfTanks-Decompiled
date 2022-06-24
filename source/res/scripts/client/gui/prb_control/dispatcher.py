@@ -3,7 +3,7 @@
 import logging
 import time
 import types
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import IGR_TYPE
@@ -264,7 +264,7 @@ class _PreBattleDispatcher(ListenersCollection):
         return factory.createPlayerInfo(self.__entity) if factory is not None else PlayerDecorator()
 
     def doAction(self, action=None):
-        if not g_currentVehicle.isPresent():
+        if not (g_currentVehicle.isPresent() or g_currentPreviewVehicle.isPresent()):
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
         LOG_DEBUG('Do GUI action', action)

@@ -20,15 +20,15 @@ class PeriodicScheduler(BaseScheduler):
         status, _, _ = self._controller.getPrimeTimeStatus()
         self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
         self.__isConfigured = status != PrimeTimeStatus.NOT_SET
-        self._controller.onGameModeStatusUpdated += self.__update
+        self._controller.onGameModeStatusUpdated += self._update
         self.__show(isInit=True)
 
     def fini(self):
-        self._controller.onGameModeStatusUpdated -= self.__update
+        self._controller.onGameModeStatusUpdated -= self._update
 
-    def __update(self, status):
+    def _update(self, status):
         if not self._controller.isAvailable():
-            self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
+            self._doLeave()
             return
         isPrimeTime = status == PrimeTimeStatus.AVAILABLE
         isConfigured = status != PrimeTimeStatus.NOT_SET
@@ -37,6 +37,9 @@ class PeriodicScheduler(BaseScheduler):
             self.__isConfigured = isConfigured
             self.__show()
             g_eventDispatcher.updateUI()
+
+    def _doLeave(self):
+        self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
 
     def __show(self, isInit=False):
         if not self._controller.isBattlesPossible():

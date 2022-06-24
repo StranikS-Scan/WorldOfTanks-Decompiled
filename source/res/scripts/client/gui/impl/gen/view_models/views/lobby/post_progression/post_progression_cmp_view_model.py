@@ -13,6 +13,10 @@ class PostProgressionCmpViewModel(PostProgressionBaseViewModel):
     def compareControl(self):
         return self._getViewModel(5)
 
+    @staticmethod
+    def getCompareControlType():
+        return PostProgressionCompareModel
+
     def _initialize(self):
         super(PostProgressionCmpViewModel, self)._initialize()
         self._addViewModelProperty('compareControl', PostProgressionCompareModel())

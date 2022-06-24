@@ -16,5 +16,8 @@ class VoiceChatManagerMeta(BaseDAAPIComponent):
     def isVOIPEnabled(self):
         self._printOverrideError('isVOIPEnabled')
 
+    def isVOIPAvailable(self):
+        self._printOverrideError('isVOIPAvailable')
+
     def as_onPlayerSpeakS(self, accountDBID, isSpeak, isHimseljoinUnitButtonf):
         return self.flashObject.as_onPlayerSpeak(accountDBID, isSpeak, isHimseljoinUnitButtonf) if self._isDAAPIInited() else None

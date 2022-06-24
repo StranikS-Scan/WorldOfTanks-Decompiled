@@ -59,9 +59,9 @@ class ExtraIntroView(ViewImpl):
         showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 
     def __onBattlePassSettingsChanged(self, *_):
-        if not self.__battlePassController.isActive():
-            showHangar()
-        elif self.__battlePassController.isPaused():
+        if self.__battlePassController.isPaused():
             showMissionsBattlePass()
+        elif not self.__battlePassController.isActive():
+            showHangar()
         elif not self.__battlePassController.isChapterExists(self.__chapterID):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())

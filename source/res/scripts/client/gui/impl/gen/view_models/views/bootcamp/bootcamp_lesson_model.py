@@ -46,6 +46,10 @@ class BootcampLessonModel(ViewModel):
     def setRewards(self, value):
         self._setArray(5, value)
 
+    @staticmethod
+    def getRewardsType():
+        return BootcampRewardItemModel
+
     def _initialize(self):
         super(BootcampLessonModel, self)._initialize()
         self._addNumberProperty('lessonNumber', 0)

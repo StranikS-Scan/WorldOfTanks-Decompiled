@@ -13,6 +13,10 @@ class CompareStepModel(BaseStepModel):
     def modification(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getModificationType():
+        return CompareModificationModel
+
     def getIsInstalled(self):
         return self._getBool(3)
 

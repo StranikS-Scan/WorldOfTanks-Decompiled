@@ -5,7 +5,7 @@ from contextlib import contextmanager
 import typing
 from battle_pass_common import BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getSingleVehicleForCustomization, getStyleForChapter
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
@@ -191,7 +191,14 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
             if item is None:
                 continue
             itemCustomization = bonus.getC11nItem(item)
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
+            specialAlias = TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD
+            specialArgs = CustomizationTooltipContext(itemCD=itemCustomization.intCD)
+            if itemCustomization.itemTypeName in ('camouflage', 'style'):
+                vehicle = getSingleVehicleForCustomization(itemCustomization)
+                if vehicle is not None:
+                    specialAlias = TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM
+                    specialArgs = CustomizationTooltipContext(itemCD=itemCustomization.intCD, vehicleIntCD=vehicle)
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=specialAlias, specialArgs=specialArgs))
 
         return tooltipData
 

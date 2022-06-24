@@ -15,11 +15,19 @@ class ChatModel(ViewModel):
     def headerExtraInfo(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getHeaderExtraInfoType():
+        return ChatMessagePartModel
+
     def getMessages(self):
         return self._getArray(1)
 
     def setMessages(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getMessagesType():
+        return ChatMessageModel
 
     def getCanClearInput(self):
         return self._getBool(2)

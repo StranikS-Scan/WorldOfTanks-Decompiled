@@ -22,6 +22,10 @@ class SimpleTextViewModel(ViewModel):
     def setImageSubstitutions(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getImageSubstitutionsType():
+        return ImageSubstitutionViewModel
+
     def _initialize(self):
         super(SimpleTextViewModel, self)._initialize()
         self._addStringProperty('text', '')

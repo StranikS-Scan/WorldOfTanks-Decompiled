@@ -14,9 +14,17 @@ class PlayerVehicleStatusModel(ViewModel):
     def user(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getUserType():
+        return UserNameModel
+
     @property
     def killer(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getKillerType():
+        return UserNameModel
 
     def getReason(self):
         return self._getResource(2)

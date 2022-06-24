@@ -2,16 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_battles_after_battle_view.py
 import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
-from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict, getQuestBonuses, getFinishBadgeBonuses
+from epic_constants import EPIC_SELECT_BONUS_NAME
+from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
-from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.battle_reward_item_model import BattleRewardItemModel
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.awards_formatters import getEpicViewAwardPacker, AWARDS_SIZES
-from gui.server_events.bonuses import EpicAbilityPtsBonus, mergeBonuses, splitBonuses
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicBattleViewAwardPacker
+from gui.server_events.bonuses import EpicAbilityPtsBonus
+from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow, showFrontlineAwards
 from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
+from gui.server_events.bonuses import mergeBonuses
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
@@ -19,7 +22,14 @@ from skeletons.gui.server_events import IEventsCache
 
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
-    _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicViewAwardPacker())
+    _BONUS_ORDER_PRIORITY = {'battlePassPoints': 1,
+     'abilityPts': 2,
+     'crystal': 3,
+     'goodies': 4,
+     'epicSelectToken': 5,
+     'crewBooks': 6}
+    _MIDDLE_PRIORITY = 50
+    _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
     __eventsCache = dependency.descriptor(IEventsCache)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -45,6 +55,15 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     def onCloseBtnClick(self):
         self.destroy()
 
+    def onRewardsBtnClick(self):
+        rewards = []
+
+        def _showAwards():
+            if rewards:
+                showFrontlineAwards(rewards)
+
+        showEpicRewardsSelectionWindow(onRewardsReceivedCallback=rewards.extend, onCloseCallback=_showAwards, onLoadedCallback=self.destroy)
+
     def onWindowClose(self):
         self.destroy()
 
@@ -64,11 +83,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
-        epicMetaGame = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
-        pMetaLevel, pFamePts = epicMetaGame.get('metaLevel', (None, None))
-        prevPMetaLevel, prevPFamePts = epicMetaGame.get('prevMetaLevel', (None, None))
-        boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
-        originalFlXP = epicMetaGame.get('originalFlXP', 0)
+        levelUpInfo = self.__ctx['levelUpInfo']
+        pMetaLevel, pFamePts = levelUpInfo.get('metaLevel', (None, None))
+        prevPMetaLevel, prevPFamePts = levelUpInfo.get('prevMetaLevel', (None, None))
+        boosterFLXP = levelUpInfo.get('boosterFlXP', 0)
+        originalFlXP = levelUpInfo.get('originalFlXP', 0)
         maxMetaLevel = self.__epicController.getMaxPlayerLevel()
         famePtsToProgress = self.__epicController.getLevelProgress()
         season = self.__epicController.getCurrentSeason() or None
@@ -76,10 +95,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         if season is not None:
             cycleNumber = self.__epicController.getCurrentOrNextActiveCycleNumber(season)
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
-        achievedRank = max(epicMetaGame.get('playerRank', 0), 1)
+        achievedRank = max(levelUpInfo.get('playerRank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
-        awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(prevPMetaLevel, pMetaLevel), size=AWARDS_SIZES.BIG)
+        bonuses = sorted(mergeBonuses(self.__getBonuses(prevPMetaLevel, pMetaLevel)), key=lambda item: self._BONUS_ORDER_PRIORITY.get(item.getName(), self._MIDDLE_PRIORITY))
+        awardsVO = self.__markAnimationBonuses(self._awardsFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG))
         fameBarVisible = True
         dailyQuestAvailable = False
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:
@@ -102,30 +122,34 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
          'fameBarVisible': fameBarVisible,
          'maxLevel': maxMetaLevel,
          'maxLvlReached': self.__maxLvlReached,
-         'questPanelVisible': dailyQuestAvailable}
+         'questPanelVisible': dailyQuestAvailable,
+         'isRewardsButtonShown': self.__epicController.hasAnyOfferGiftToken() and self.__hasSelectBonus(bonuses)}
         self.as_setDataS(data)
         return
 
-    def __getBonuses(self, prevLevel, currentLevel):
-        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
-        if currentLevel == self.__epicController.getMaxPlayerLevel():
-            bonuses = getFinishBadgeBonuses(questsProgressData, self.__epicController.FINAL_BADGE_QUEST_ID)
-        else:
-            bonuses = []
-        bonuses.extend(getQuestBonuses(questsProgressData, (self.__epicController.TOKEN_QUEST_ID,), self.__epicController.TOKEN_QUEST_ID + str(currentLevel)))
-        if self.__battlePass.isCompleted():
-            excluded = [BattleRewardItemModel.BATTLE_PASS_POINTS]
-            bonuses = [ b for b in bonuses if b.getName() not in excluded ]
-        for level in range(prevLevel + 1, currentLevel + 1):
-            bonuses.extend(self.__getAbilityPointsRewardBonus(level))
+    def __getBonuses(self, prevLevel, level):
+        awardsData = []
+        allLevelData = self.__epicController.getAllLevelRewards()
+        for questLvl, rewardData in allLevelData.iteritems():
+            if prevLevel < questLvl <= level:
+                rewards = rewardData.getBonuses()
+                rewards.extend(self.__getAbilityPointsRewardBonus(questLvl))
+                bonuses = self.__epicController.replaceOfferByReward(rewards)
+                awardsData.extend(bonuses)
 
-        bonuses = mergeBonuses(bonuses)
-        bonuses = splitBonuses(bonuses)
+        return awardsData
+
+    @staticmethod
+    def __markAnimationBonuses(bonuses):
+        for bonus in bonuses:
+            if bonus['specialAlias'] == TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP:
+                bonus['hasAnimation'] = True
+
         return bonuses
 
     def __getAbilityPointsRewardBonus(self, level):
         abilityPts = self.__epicController.getAbilityPointsForLevel()
-        return [EpicAbilityPtsBonus(name=EPIC_ABILITY_PTS_NAME, value=abilityPts[level - 1])] if level and level <= len(abilityPts) else []
+        return [EpicAbilityPtsBonus(name=EPIC_ABILITY_PTS_NAME, value=abilityPts[level - 1])] if abilityPts and abilityPts[level - 1] and level <= len(abilityPts) else []
 
     def __getProgress(self, curLevel, curFamePoints, prevLevel, prevFamePoints, maxLevel, boostedXP):
         getPointsProgressForLevel = self.__epicController.getPointsProgressForLevel
@@ -139,3 +163,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         else:
             cBoostedLevel = cLevel
         return (pLevel, cLevel, cBoostedLevel)
+
+    @staticmethod
+    def __hasSelectBonus(bonuses):
+        return any((bonus.getName() == EPIC_SELECT_BONUS_NAME for bonus in bonuses))

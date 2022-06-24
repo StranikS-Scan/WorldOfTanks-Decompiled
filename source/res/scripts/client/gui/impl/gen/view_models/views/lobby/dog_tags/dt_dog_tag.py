@@ -13,9 +13,17 @@ class DtDogTag(ViewModel):
     def engraving(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getEngravingType():
+        return DtComponent
+
     @property
     def background(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getBackgroundType():
+        return DtComponent
 
     def getPlayerName(self):
         return self._getString(2)

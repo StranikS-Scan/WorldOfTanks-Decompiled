@@ -13,6 +13,10 @@ class BlueprintFragmentRendererModel(LootDefRendererModel):
     def congratsViewModel(self):
         return self._getViewModel(13)
 
+    @staticmethod
+    def getCongratsViewModelType():
+        return BlueprintCongratsModel
+
     def _initialize(self):
         super(BlueprintFragmentRendererModel, self)._initialize()
         self._addViewModelProperty('congratsViewModel', BlueprintCongratsModel())

@@ -27,6 +27,7 @@ from account_helpers import client_epic_meta_game, tokens
 from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
+from account_helpers.game_restrictions import GameRestrictions
 from account_helpers.renewable_subscription import RenewableSubscription
 from account_helpers.resource_well import ResourceWell
 from account_helpers.telecom_rentals import TelecomRentals
@@ -176,6 +177,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.telecomRentals = g_accountRepository.telecomRentals
         self.tradeIn = g_accountRepository.tradeIn
         self.giftSystem = g_accountRepository.giftSystem
+        self.gameRestrictions = g_accountRepository.gameRestrictions
         self.resourceWell = g_accountRepository.resourceWell
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -262,6 +264,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battlePass.onAccountBecomePlayer()
         self.offers.onAccountBecomePlayer()
         self.giftSystem.onAccountBecomePlayer()
+        self.gameRestrictions.onAccountBecomePlayer()
         self.resourceWell.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
@@ -306,6 +309,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.renewableSubscription.onAccountBecomeNonPlayer()
         self.telecomRentals.onAccountBecomeNonPlayer()
         self.giftSystem.onAccountBecomeNonPlayer()
+        self.gameRestrictions.onAccountBecomeNonPlayer()
         self.resourceWell.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -808,6 +812,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)
             self._doCmdInt3(AccountCommands.CMD_REQ_MAPS_TRAINING_INITIAL_CONFIGURATION, accountID, 0, 0, proxy)
 
+    def enqueueFunRandom(self, vehInvID):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.FUN_RANDOM, vehInvID])
+
+    def dequeueFunRandom(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.FUN_RANDOM)
+
     def createArenaFromQueue(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_QUEUE, 0, 0, 0)
@@ -1137,6 +1149,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_BLUEPRINTS_CONVERT_SALE, offerID, count, proxy)
         return
 
+    def showFrontlineSysMessage(self, msgID):
+        self._doCmdInt(AccountCommands.CMD_SHOW_FRONTLINE_SYS_MSG, msgID, None)
+        return
+
+    def unlockFrontlineReserves(self):
+        self._doCmdInt(AccountCommands.CMD_FRONTLINE_UNLOCK_RESERVES, 0, None)
+        return
+
     def _doCmdStr(self, cmd, s, callback):
         return self.__doCmd('doCmdStr', cmd, callback, s)
 
@@ -1201,6 +1221,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.renewableSubscription.synchronize(isFullSync, diff)
             self.telecomRentals.synchronize(isFullSync, diff)
             self.giftSystem.synchronize(isFullSync, diff)
+            self.gameRestrictions.synchronize(isFullSync, diff)
             self.resourceWell.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
@@ -1451,6 +1472,7 @@ class _AccountRepository(object):
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
+        self.gameRestrictions = GameRestrictions(self.syncData)
         self.platformBlueprintsConvertSaleLimits = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()

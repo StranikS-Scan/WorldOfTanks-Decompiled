@@ -23,6 +23,10 @@ class GameModeCardModel(ViewModel):
     def vehiclesList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getVehiclesListType():
+        return VehicleItemModel
+
     def getCardType(self):
         return PointsCardType(self._getNumber(1))
 

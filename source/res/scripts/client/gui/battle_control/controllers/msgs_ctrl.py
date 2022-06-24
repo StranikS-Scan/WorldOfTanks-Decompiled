@@ -43,7 +43,7 @@ _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
 _ENEMY_KILLED_SOUND = 'enemy_killed_by_ally'
 
 class BattleMessagesController(IBattleController):
-    __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__')
+    __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__', '__specEntityStringByCode')
 
     def __init__(self, setup):
         self._battleCtx = weakref.proxy(setup.battleCtx)
@@ -58,6 +58,8 @@ class BattleMessagesController(IBattleController):
         self.onShowDestructibleEntityMessageByCode = Event.Event(self._eManager)
         self._buffer = []
         self._isUIPopulated = False
+        self.__specEntityStringByCode = {}
+        self.__initSpecEntittyStringFuncsByCode()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.MESSAGES
@@ -70,6 +72,7 @@ class BattleMessagesController(IBattleController):
         self._battleCtx = None
         self._arenaDP = None
         self._arenaVisitor = None
+        self.__specEntityStringByCode = {}
         return
 
     def showDestructibleEntityDestroyedMessage(self, avatar, destructibleID, attackerID):
@@ -127,27 +130,44 @@ class BattleMessagesController(IBattleController):
     def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
-    def __getEntityString(self, avatar, entityID):
-        if entityID == avatar.playerVehicleID:
+    def __getEntityString(self, avatar, entityID, code):
+        func = self.__specEntityStringByCode.get(code)
+        res = func(avatar, entityID, code) if func is not None else None
+        if res:
+            return res
+        elif entityID == avatar.playerVehicleID:
             return _ENTITY_TYPE.SELF
-        if self._battleCtx.isAlly(entityID):
+        elif self._battleCtx.isAlly(entityID):
             return _ENTITY_TYPE.ALLY
-        return _ENTITY_TYPE.ENEMY if self._battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
+        else:
+            return _ENTITY_TYPE.ENEMY if self._battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
+
+    def __getEntityStringDeathZone(self, avatar, entityID, code):
+        observedVehicleID = BigWorld.player().getObservedVehicleID()
+        if observedVehicleID and BigWorld.player().isObserver() and observedVehicleID != avatar.playerVehicleID:
+            ownTeam = self._arenaDP.getVehicleInfo(avatar.playerVehicleID).team
+            entityTeam = self._arenaDP.getVehicleInfo(entityID).team
+            isAlly = ownTeam == entityTeam
+            if isAlly:
+                return _ENTITY_TYPE.ALLY
+            return _ENTITY_TYPE.ENEMY
+        else:
+            return None
 
     def __getDamageInfo(self, avatar, code, entityID, targetID):
-        target = self.__getEntityString(avatar, targetID)
+        target = self.__getEntityString(avatar, targetID, code)
         if not entityID or entityID == targetID:
             postfix = '%s_%s' % (target.upper(), _ENTITY_TYPE.SUICIDE.upper())
         else:
-            entity = self.__getEntityString(avatar, entityID)
+            entity = self.__getEntityString(avatar, entityID, code)
             postfix = '%s_%s' % (entity.upper(), target.upper())
         return (code, postfix)
 
     def __getKillInfo(self, avatar, targetID, attackerID, equipmentID, reason):
-        attacker = self.__getEntityString(avatar, attackerID)
+        attacker = self.__getEntityString(avatar, attackerID, reason)
         target = _ENTITY_TYPE.SUICIDE
         if targetID != attackerID:
-            target = self.__getEntityString(avatar, targetID)
+            target = self.__getEntityString(avatar, targetID, reason)
         code = _ATTACK_REASON_CODE.get(reason)
         sound = None
         soundExt = None
@@ -165,6 +185,9 @@ class BattleMessagesController(IBattleController):
          '%s_%s' % (attacker.upper(), target.upper()),
          sound,
          soundExt)
+
+    def __initSpecEntittyStringFuncsByCode(self):
+        self.__specEntityStringByCode['DEATH_FROM_DEATH_ZONE'] = self.__getEntityStringDeathZone
 
     def onUIPopulated(self):
         self._isUIPopulated = True

@@ -13,6 +13,10 @@ class SelectSlotSpecCompareDialogModel(FullScreenDialogWindowModel):
     def mainContent(self):
         return self._getViewModel(11)
 
+    @staticmethod
+    def getMainContentType():
+        return SelectSlotSpecDialogContentModel
+
     def _initialize(self):
         super(SelectSlotSpecCompareDialogModel, self)._initialize()
         self._addViewModelProperty('mainContent', SelectSlotSpecDialogContentModel())

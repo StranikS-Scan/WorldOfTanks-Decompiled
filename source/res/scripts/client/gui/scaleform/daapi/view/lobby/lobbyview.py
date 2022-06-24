@@ -125,7 +125,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         if self.mapsTrainingController.isMapsTrainingPrbActive:
             container = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
             view = container.getView()
-            if view.alias not in VEHICLE_PREVIEW_ALIASES:
+            if view and view.alias not in VEHICLE_PREVIEW_ALIASES:
                 return
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': isOver3dScene}))
 

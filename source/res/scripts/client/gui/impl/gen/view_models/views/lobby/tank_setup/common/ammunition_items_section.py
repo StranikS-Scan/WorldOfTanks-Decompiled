@@ -46,6 +46,10 @@ class AmmunitionItemsSection(ViewModel):
     def setSlots(self, value):
         self._setArray(5, value)
 
+    @staticmethod
+    def getSlotsType():
+        return BaseAmmunitionSlot
+
     def _initialize(self):
         super(AmmunitionItemsSection, self)._initialize()
         self._addStringProperty('type', '')

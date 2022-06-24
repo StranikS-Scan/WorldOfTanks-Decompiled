@@ -14,6 +14,10 @@ class GameModeRowsModel(ViewModel):
     def cell(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCellType():
+        return GameModeCellModel
+
     def _initialize(self):
         super(GameModeRowsModel, self)._initialize()
         self._addViewModelProperty('cell', UserListModel())

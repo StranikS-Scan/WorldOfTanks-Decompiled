@@ -13,6 +13,10 @@ class ComponentModel(ViewModel):
     def rect(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRectType():
+        return RectModel
+
     def getViewId(self):
         return self._getString(1)
 

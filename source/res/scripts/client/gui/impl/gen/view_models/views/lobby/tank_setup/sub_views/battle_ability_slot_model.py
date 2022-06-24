@@ -40,11 +40,19 @@ class BattleAbilitySlotModel(BaseSlotModel):
     def setRanks(self, value):
         self._setArray(22, value)
 
+    @staticmethod
+    def getRanksType():
+        return str
+
     def getAbilitiesByRank(self):
         return self._getArray(23)
 
     def setAbilitiesByRank(self, value):
         self._setArray(23, value)
+
+    @staticmethod
+    def getAbilitiesByRankType():
+        return BattleAbilityByRankModel
 
     def _initialize(self):
         super(BattleAbilitySlotModel, self)._initialize()

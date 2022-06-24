@@ -16,11 +16,19 @@ class SelectOptionViewModel(ViewModel):
     def setItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getItemsType():
+        return SelectOptionBaseItemViewModel
+
     def getSelectedIndexes(self):
         return self._getArray(1)
 
     def setSelectedIndexes(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSelectedIndexesType():
+        return int
 
     def getMessage(self):
         return self._getString(2)

@@ -19,25 +19,49 @@ class TutorialModel(ViewModel):
     def effects(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getEffectsType():
+        return EffectModel
+
     @property
     def triggers(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getTriggersType():
+        return TriggersModel
 
     @property
     def foundComponents(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getFoundComponentsType():
+        return ComponentModel
+
     @property
     def descriptions(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getDescriptionsType():
+        return DescriptionsModel
 
     @property
     def criteria(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getCriteriaType():
+        return CriterionModel
+
     @property
     def viewCriteria(self):
         return self._getViewModel(5)
+
+    @staticmethod
+    def getViewCriteriaType():
+        return ViewCriterionModel
 
     def getEnabled(self):
         return self._getBool(6)

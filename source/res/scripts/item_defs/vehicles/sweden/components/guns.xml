@@ -44,6 +44,7 @@
     <_105mm_strvkan_L_45_Alt_3>	47	</_105mm_strvkan_L_45_Alt_3>
     <_105mm_kan_strv_K_L_52>	48	</_105mm_kan_strv_K_L_52>
     <_120mm_Bofors>	55	</_120mm_Bofors>
+    <_47mm_Bohler_M35>	56	</_47mm_Bohler_M35>
     <_120mm_akan_L_40B>	300	</_120mm_akan_L_40B>
     <_105mm_kan_strv_103_L_62_FL>	501	</_105mm_kan_strv_103_L_62_FL>
     <_105mm_kan_m_41_strv_G1_SH>	1000	</_105mm_kan_m_41_strv_G1_SH>
@@ -600,6 +601,64 @@
         </_47mm_sgr_m_38>
       </shots>
     </_47mm_kan_m_38_strv>
+    <_47mm_Bohler_M35>
+      <userString>	#sweden_vehicles:_47mm_Bohler_M35	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	200	</weight>
+      <maxHealth>	76	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_47mm_slpprj_m_38>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	62 55	</piercingPower>
+        </_47mm_slpprj_m_38>
+        <_47mm_slpprj_m_39>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	782	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	78 69	</piercingPower>
+        </_47mm_slpprj_m_39>
+        <_47mm_sgr_m_38>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	660	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	24 24	</piercingPower>
+        </_47mm_sgr_m_38>
+      </shots>
+    </_47mm_Bohler_M35>
     <_57mm_pvkan_m_43>
       <userString>	#sweden_vehicles:_57mm_pvkan_m_43	</userString>
       <tags></tags>

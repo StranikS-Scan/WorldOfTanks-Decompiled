@@ -212,7 +212,7 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
             if item.boundInventoryCount() > 0:
                 inventoryVehicles = [ vehicle.intCD for vehicle in _VehiclesFilter(self._invVehicles).getVehicles(item) ]
                 vehicleDiff = item.getBoundVehicles().difference(inventoryVehicles)
-                voList = [ self._getVO(item, vehicle) for vehicle in vehicleDiff ]
+                voList = [ self._getVO(item, vehicle) for vehicle in vehicleDiff if item.boundInventoryCount(vehicle) ]
             if item.inventoryCount > 0:
                 voList.append(self._getVO(item))
         return voList

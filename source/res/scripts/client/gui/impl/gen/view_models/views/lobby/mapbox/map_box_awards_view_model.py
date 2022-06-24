@@ -14,6 +14,10 @@ class MapBoxAwardsViewModel(ViewModel):
     def rewards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardsType():
+        return RewardItemModel
+
     def getBattlesNumber(self):
         return self._getNumber(1)
 

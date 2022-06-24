@@ -14,9 +14,17 @@ class BattleResultViewModel(BrBaseViewModel):
     def personalResults(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getPersonalResultsType():
+        return BattleResultsTabModel
+
     @property
     def leaderboardLobbyModel(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getLeaderboardLobbyModelType():
+        return LeaderboardModel
 
     def getMapName(self):
         return self._getString(4)

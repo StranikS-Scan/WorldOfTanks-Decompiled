@@ -474,15 +474,20 @@ class InsigniaStickerPack(StickerPack):
         params = self._data[componentIdx]
         slotIdx = len(params)
         if componentIdx in Insignia.Indexes.ALL:
-            container = self._outfit.getContainer(TankPartIndexes.GUN)
-            slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
-            intCD = slot.getItemCD(slotIdx)
-            if intCD:
-                item = getItemByCompactDescr(intCD)
-                stickerParam = self._convertToInsignia(item)
-                self._useCustomInsignia = True
+            if IS_EDITOR:
+                defaultParams = _TextureParams('', '', False)
+                item = items.vehicles.g_cache.customization20().insignias.get(componentSlot.edResourceId)
+                stickerParam = defaultParams if item is None else self._convertToInsignia(item)
             else:
-                stickerParam = self._getDefaultParams()
+                container = self._outfit.getContainer(TankPartIndexes.GUN)
+                slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
+                intCD = slot.getItemCD(slotIdx)
+                if intCD:
+                    item = getItemByCompactDescr(intCD)
+                    stickerParam = self._convertToInsignia(item)
+                    self._useCustomInsignia = True
+                else:
+                    stickerParam = self._getDefaultParams()
         else:
             container = self._outfit.getContainer(componentIdx)
             slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)

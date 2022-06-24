@@ -1,15 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/goodies_cache.py
 from collections import defaultdict
+from typing import TYPE_CHECKING, Optional, Dict, Tuple
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
+if TYPE_CHECKING:
+    from gui.goodies.goodie_items import _Goodie, _PersonalDiscount
+    from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 
 def _createBooster(boosterID, boosterDescription, proxy):
     return Booster(boosterID, boosterDescription, proxy)
@@ -28,9 +32,14 @@ def _createDemountKit(demountKitID, demountKitDescription, proxy):
     return DemountKit(demountKitID, demountKitDescription, proxy)
 
 
+def _createRecertificationForm(recertificationFormID, recertificationFormDescription, proxy):
+    return RecertificationForm(recertificationFormID, recertificationFormDescription, proxy)
+
+
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
  GOODIE_VARIETY.DISCOUNT: _createDiscount,
- GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit}
+ GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit,
+ GOODIE_VARIETY.RECERTIFICATION_FORM: _createRecertificationForm}
 _DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
 
 class GoodiesCache(IGoodiesCache):
@@ -125,6 +134,19 @@ class GoodiesCache(IGoodiesCache):
 
     def getDemountKits(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.demountKits, criteria)
+
+    def getRecertificationForm(self, recertificationFormID=None, currency=None):
+        resourceType = CURRENCY_TO_RESOURCE_TYPE.get(currency, None)
+        if recertificationFormID is None and resourceType is not None:
+            recertificationFormID = next((id_ for id_, def_ in self._items.shop.recertificationForms.iteritems() if def_.resource.resourceType == resourceType), None)
+        description = self._items.shop.recertificationForms.get(recertificationFormID, None)
+        return self.__makeGoodie(recertificationFormID, description)
+
+    def getRecertificationForms(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.__getGoodies(self._items.shop.recertificationForms, criteria)
+
+    def getGoodie(self, goodieID=None):
+        return self.__makeGoodie(goodieID, self.getGoodieByID(goodieID))
 
     def getGoodieByID(self, goodieID):
         return self._items.shop.goodies.get(goodieID)

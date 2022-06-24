@@ -24,11 +24,19 @@ class TopPanelTabsModel(ViewModel):
     def setTabIDs(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getTabIDsType():
+        return TabID
+
     def getTabCustomNames(self):
         return self._getArray(1)
 
     def setTabCustomNames(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getTabCustomNamesType():
+        return str
 
     def getCurrentTabID(self):
         return TabID(self._getNumber(2))

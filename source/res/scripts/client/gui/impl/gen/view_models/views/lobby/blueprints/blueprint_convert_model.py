@@ -15,9 +15,17 @@ class BlueprintConvertModel(FullScreenDialogWindowModel):
     def fragmentsBalance(self):
         return self._getViewModel(11)
 
+    @staticmethod
+    def getFragmentsBalanceType():
+        return BlueprintBalanceContentModel
+
     @property
     def usedMainPrice(self):
         return self._getViewModel(12)
+
+    @staticmethod
+    def getUsedMainPriceType():
+        return BlueprintPrice
 
     def getTotalCount(self):
         return self._getNumber(13)
@@ -43,11 +51,19 @@ class BlueprintConvertModel(FullScreenDialogWindowModel):
     def setAdditionalPriceOptions(self, value):
         self._setArray(16, value)
 
+    @staticmethod
+    def getAdditionalPriceOptionsType():
+        return BlueprintPrice
+
     def getUsedAdditionalPrice(self):
         return self._getArray(17)
 
     def setUsedAdditionalPrice(self, value):
         self._setArray(17, value)
+
+    @staticmethod
+    def getUsedAdditionalPriceType():
+        return BlueprintPrice
 
     def getSyncInitiator(self):
         return self._getNumber(18)

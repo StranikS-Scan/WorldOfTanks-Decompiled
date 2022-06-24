@@ -17,7 +17,8 @@ class GetVehicleLabel(Block, VehicleMeta):
         self._label = self._makeDataOutputSlot('label', SLOT_TYPE.STR, self._getLabel)
 
     def _getLabel(self):
-        label = self._vehicle.getValue().label
+        vehicle = self._vehicle.getValue()
+        label = vehicle.label if hasattr(vehicle, 'label') else None
         if label is None:
             label = ''
         self._label.setValue(label)

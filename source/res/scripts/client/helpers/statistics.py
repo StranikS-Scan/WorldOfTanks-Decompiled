@@ -11,6 +11,7 @@ from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 STATISTICS_VERSION = '0.0.2'
@@ -99,6 +100,7 @@ class StatisticsCollector(IStatisticsCollector):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         self.__state = _STATISTICS_STATE.STOPPED
@@ -185,7 +187,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.__lastArenaTypeID = arenaTypeID
         self.__lastArenaUniqueID = arenaUniqueID
         self.__lastArenaTeam = arenaTeam
-        if not self.__hangarWasLoadedOnce:
+        if not self.__hangarWasLoadedOnce and not self.bootcampController.isInBootcamp():
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
             self.__sendFullStat = True
 

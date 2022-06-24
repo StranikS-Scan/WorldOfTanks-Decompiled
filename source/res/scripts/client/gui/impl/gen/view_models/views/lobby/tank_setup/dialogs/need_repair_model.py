@@ -14,9 +14,17 @@ class NeedRepairModel(DialogWithExchange):
     def dealPanel(self):
         return self._getViewModel(15)
 
+    @staticmethod
+    def getDealPanelType():
+        return DealPanelModel
+
     @property
     def needRepairContent(self):
         return self._getViewModel(16)
+
+    @staticmethod
+    def getNeedRepairContentType():
+        return NeedRepairContent
 
     def _initialize(self):
         super(NeedRepairModel, self)._initialize()

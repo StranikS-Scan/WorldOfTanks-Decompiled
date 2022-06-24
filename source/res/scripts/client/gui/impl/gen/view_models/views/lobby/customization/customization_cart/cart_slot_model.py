@@ -13,6 +13,10 @@ class CartSlotModel(ViewModel):
     def price(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPriceType():
+        return UserCompoundPriceModel
+
     def getId(self):
         return self._getNumber(1)
 

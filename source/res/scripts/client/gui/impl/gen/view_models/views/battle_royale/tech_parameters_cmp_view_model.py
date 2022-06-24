@@ -16,11 +16,19 @@ class TechParametersCmpViewModel(ViewModel):
     def setVehicleGoodSpec(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getVehicleGoodSpecType():
+        return BrVehicleSpecificationsModel
+
     def getVehicleBadSpec(self):
         return self._getArray(1)
 
     def setVehicleBadSpec(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getVehicleBadSpecType():
+        return BrVehicleSpecificationsModel
 
     def _initialize(self):
         super(TechParametersCmpViewModel, self)._initialize()

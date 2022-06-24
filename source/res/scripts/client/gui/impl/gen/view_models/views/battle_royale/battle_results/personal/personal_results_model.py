@@ -24,17 +24,29 @@ class PersonalResultsModel(ViewModel):
     def setStatsList(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getStatsListType():
+        return StatItemModel
+
     def getBattleRewardsList(self):
         return self._getArray(2)
 
     def setBattleRewardsList(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getBattleRewardsListType():
+        return BattleRewardItemModel
+
     def getBattleRewardsListWithPremium(self):
         return self._getArray(3)
 
     def setBattleRewardsListWithPremium(self, value):
         self._setArray(3, value)
+
+    @staticmethod
+    def getBattleRewardsListWithPremiumType():
+        return BattleRewardItemModel
 
     def _initialize(self):
         super(PersonalResultsModel, self)._initialize()

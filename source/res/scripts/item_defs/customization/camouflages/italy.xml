@@ -1329,4 +1329,42 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It20_Carro_Combattimento_45t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	431	</id>
+      <texture>	vehicles/russian/Camouflage/veteran_centauro.dds	</texture>
+      <description>	#vehicle_customization:camouflage/veteran_centauro/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/veteran_centauro/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	61 48 18 255	</c0>
+          <c1>	153 159 161 255	</c1>
+          <c2>	86 89 85 255	</c2>
+          <c3>	79 67 47 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tiling></tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1 1	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </italy.xml>

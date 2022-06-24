@@ -13,9 +13,17 @@ class BrMoneyBalanceViewModel(ViewModel):
     def creditsTooltip(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCreditsTooltipType():
+        return DialogTemplateGenericTooltipViewModel
+
     @property
     def brcoinsTooltip(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getBrcoinsTooltipType():
+        return DialogTemplateGenericTooltipViewModel
 
     def getCredits(self):
         return self._getNumber(2)

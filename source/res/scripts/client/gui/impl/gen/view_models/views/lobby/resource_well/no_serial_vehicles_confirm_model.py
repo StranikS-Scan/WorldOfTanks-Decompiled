@@ -13,6 +13,10 @@ class NoSerialVehiclesConfirmModel(ViewModel):
     def vehicleCounter(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getVehicleCounterType():
+        return VehicleCounterModel
+
     def getVehicleName(self):
         return self._getString(1)
 

@@ -16,6 +16,10 @@ class LeaderboardModel(ViewModel):
     def setPlacesList(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getPlacesListType():
+        return PlaceModel
+
     def _initialize(self):
         super(LeaderboardModel, self)._initialize()
         self._addArrayProperty('placesList', Array())

@@ -19,7 +19,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.time_utils import getCurrentTimestamp
-from skeletons.gui.demount_kit import IDemountKitNovelty
+from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -29,7 +29,7 @@ class StorageView(LobbySubView, StorageViewMeta):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
-    __demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
+    __storageNovelty = dependency.descriptor(IStorageNovelty)
     __offersNovelty = dependency.descriptor(IOffersNovelty)
     _COMMON_SOUND_SPACE = STORAGE_SOUND_SPACE
     _AUTO_TAB_SELECT_ENABLE = [STORAGE_CONSTANTS.IN_HANGAR_VIEW, STORAGE_CONSTANTS.STORAGE_VIEW]
@@ -76,7 +76,7 @@ class StorageView(LobbySubView, StorageViewMeta):
          'sections': self.__sections,
          'showDummyScreen': self.__showDummyScreen})
         self.as_selectSectionS(self.__activeSectionIdx)
-        self.__onDemountKitNoveltyUpdated()
+        self.__onStorageNoveltyUpdated()
         self.__onOffersNoveltyUpdated()
 
     def __saveLastTimestamp(self):
@@ -88,7 +88,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated,
          'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
         self.__offersProvider.onOffersUpdated += self.__onOffersChanged
-        self.__demountKitNovelty.onUpdated += self.__onDemountKitNoveltyUpdated
+        self.__storageNovelty.onUpdated += self.__onStorageNoveltyUpdated
         self.__offersNovelty.onUpdated += self.__onOffersNoveltyUpdated
 
     def __removeHandlers(self):
@@ -96,7 +96,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         serverSettings = self.__lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange -= self.__onServerSettingChanged
         self.__offersProvider.onOffersUpdated -= self.__onOffersChanged
-        self.__demountKitNovelty.onUpdated -= self.__onDemountKitNoveltyUpdated
+        self.__storageNovelty.onUpdated -= self.__onStorageNoveltyUpdated
         self.__offersNovelty.onUpdated -= self.__onOffersNoveltyUpdated
 
     def __onServerSettingChanged(self, diff):
@@ -192,8 +192,8 @@ class StorageView(LobbySubView, StorageViewMeta):
             if section['linkage'] == sectionAlias:
                 self.__activeSectionIdx = idx
 
-    def __onDemountKitNoveltyUpdated(self):
-        self.__setTabCounter(STORAGE_CONSTANTS.STORAGE, self.__demountKitNovelty.noveltyCount)
+    def __onStorageNoveltyUpdated(self):
+        self.__setTabCounter(STORAGE_CONSTANTS.STORAGE, self.__storageNovelty.noveltyCount)
 
     def __onOffersNoveltyUpdated(self):
         if self.__isSectionExist(STORAGE_CONSTANTS.OFFERS):

@@ -19,17 +19,29 @@ class DialogTemplateViewModel(ViewModel):
     def focus(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getFocusType():
+        return DialogFocusViewModel
+
     def getButtons(self):
         return self._getArray(1)
 
     def setButtons(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getButtonsType():
+        return DialogTemplateButtonViewModel
+
     def getPlaceHolders(self):
         return self._getArray(2)
 
     def setPlaceHolders(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getPlaceHoldersType():
+        return DialogTemplatePlaceHolderViewModel
 
     def getBackground(self):
         return self._getResource(3)

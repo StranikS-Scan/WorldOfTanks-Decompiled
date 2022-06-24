@@ -16,9 +16,17 @@ class UserNameModel(ViewModel):
     def badge(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getBadgeType():
+        return BadgeModel
+
     @property
     def suffixBadge(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getSuffixBadgeType():
+        return BadgeModel
 
     def getUserName(self):
         return self._getString(2)

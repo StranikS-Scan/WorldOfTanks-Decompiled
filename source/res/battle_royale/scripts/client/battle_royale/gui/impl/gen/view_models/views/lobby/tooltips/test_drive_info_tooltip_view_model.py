@@ -13,6 +13,10 @@ class TestDriveInfoTooltipViewModel(ViewModel):
     def price(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPriceType():
+        return RentPriceModel
+
     def getTestDriveDays(self):
         return self._getNumber(1)
 

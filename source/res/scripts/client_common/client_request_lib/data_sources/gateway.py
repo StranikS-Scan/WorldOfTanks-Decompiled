@@ -94,9 +94,14 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
         return wrapper
 
-    def login(self, callback, account_id, spa_token):
-        auth = b64encode(':'.join([str(account_id), str(spa_token)]))
-        extra_headers = {'AUTHORIZATION': 'Basic %s' % auth}
+    def login(self, callback, account_id, spa_token, jwt):
+        if jwt:
+            auth_type = 'JWT'
+            auth_data = spa_token
+        else:
+            auth_type = 'Basic'
+            auth_data = b64encode(':'.join([str(account_id), str(spa_token)]))
+        extra_headers = {'AUTHORIZATION': '%s %s' % (auth_type, auth_data)}
 
         def inner_callback(data, status_code, response_code, headers):
             if status_code in SUCCESS_STATUSES:

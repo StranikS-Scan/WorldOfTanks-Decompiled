@@ -15,6 +15,10 @@ class ShellSlotModel(BaseSlotModel):
     def totalPrice(self):
         return self._getViewModel(18)
 
+    @staticmethod
+    def getTotalPriceType():
+        return PriceModel
+
     def getCount(self):
         return self._getNumber(19)
 
@@ -38,6 +42,10 @@ class ShellSlotModel(BaseSlotModel):
 
     def setSpecifications(self, value):
         self._setArray(22, value)
+
+    @staticmethod
+    def getSpecificationsType():
+        return ShellSpecificationModel
 
     def _initialize(self):
         super(ShellSlotModel, self)._initialize()

@@ -16,6 +16,10 @@ class PremDashboardQuestsCardModel(ViewModel):
     def premiumQuests(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPremiumQuestsType():
+        return ListModel
+
     def getIsAvailable(self):
         return self._getBool(1)
 

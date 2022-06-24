@@ -13,6 +13,10 @@ class BattleResultsTabModel(PersonalResultsModel):
     def battlePassProgress(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getBattlePassProgressType():
+        return BattlePassProgress
+
     def getPlace(self):
         return self._getNumber(5)
 

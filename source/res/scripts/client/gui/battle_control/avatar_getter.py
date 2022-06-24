@@ -143,7 +143,7 @@ def getAvatarPlayLimits(avatar=None):
         result = avatar.playLimits
     except AttributeError:
         _logger.exception('Attribute "playLimits" not found')
-        result = {x:-1 for x in ('curfew', 'weeklyPlayLimit', 'dailyPlayLimit')}
+        result = {x:-1 for x in ('curfew', 'weeklyPlayLimit', 'dailyPlayLimit', 'sessionLimit')}
 
     return result
 

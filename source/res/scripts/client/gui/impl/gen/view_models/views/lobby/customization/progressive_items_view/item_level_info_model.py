@@ -13,6 +13,10 @@ class ItemLevelInfoModel(ViewModel):
     def progressBlock(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getProgressBlockType():
+        return ProgressBlock
+
     def getLevel(self):
         return self._getNumber(1)
 

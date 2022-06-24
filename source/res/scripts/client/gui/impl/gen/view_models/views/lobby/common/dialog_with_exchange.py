@@ -14,9 +14,17 @@ class DialogWithExchange(FullScreenDialogWindowModel):
     def exchangePanel(self):
         return self._getViewModel(11)
 
+    @staticmethod
+    def getExchangePanelType():
+        return ExchangePanelModel
+
     @property
     def lacksMoney(self):
         return self._getViewModel(12)
+
+    @staticmethod
+    def getLacksMoneyType():
+        return PriceItemModel
 
     def getBottomContentType(self):
         return self._getString(13)

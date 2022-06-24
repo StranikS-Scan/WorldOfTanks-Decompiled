@@ -15,8 +15,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.crew_book import orderCmp as crewBookCmp
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.demount_kit import IDemountKitNovelty
+from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.lobby_context import ILobbyContext
+from constants import SwitchState
 VERSION = 1
 _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
   'label': R.strings.storage.storage.tabs.all,
@@ -43,9 +44,12 @@ def _getTabDataIndexById(tabID):
             return i
 
 
-_TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_COMPONENTS + (GUI_ITEM_TYPE.CREW_BOOKS, GUI_ITEM_TYPE.DEMOUNT_KIT),
+_TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_COMPONENTS + (GUI_ITEM_TYPE.CREW_BOOKS, GUI_ITEM_TYPE.DEMOUNT_KIT, GUI_ITEM_TYPE.RECERTIFICATION_FORM),
  STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT: GUI_ITEM_TYPE.OPTIONALDEVICE,
- STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.BATTLE_BOOSTER, GUI_ITEM_TYPE.DEMOUNT_KIT),
+ STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT,
+                                              GUI_ITEM_TYPE.BATTLE_BOOSTER,
+                                              GUI_ITEM_TYPE.DEMOUNT_KIT,
+                                              GUI_ITEM_TYPE.RECERTIFICATION_FORM),
  STORAGE_CONSTANTS.INVENTORY_TAB_MODULES: GUI_ITEM_TYPE.VEHICLE_MODULES,
  STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS: GUI_ITEM_TYPE.SHELL,
  STORAGE_CONSTANTS.INVENTORY_TAB_CREW_BOOKS: GUI_ITEM_TYPE.CREW_BOOKS}
@@ -59,7 +63,8 @@ TABS_SORT_ORDER = {n:idx for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
  GUI_ITEM_TYPE.RADIO,
  GUI_ITEM_TYPE.SHELL,
  GUI_ITEM_TYPE.CREW_BOOKS,
- GUI_ITEM_TYPE.DEMOUNT_KIT))}
+ GUI_ITEM_TYPE.DEMOUNT_KIT,
+ GUI_ITEM_TYPE.RECERTIFICATION_FORM))}
 
 def _defaultInGroupComparator(a, b):
     return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
@@ -114,10 +119,11 @@ IN_GROUP_COMPARATOR = {GUI_ITEM_TYPE.OPTIONALDEVICE: _optionalDevicesComparator,
  GUI_ITEM_TYPE.CHASSIS: _defaultInGroupComparator,
  GUI_ITEM_TYPE.SHELL: _shellsComparator,
  GUI_ITEM_TYPE.CREW_BOOKS: _crewBookComparator,
- GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupComparator}
+ GUI_ITEM_TYPE.DEMOUNT_KIT: _defaultInGroupComparator,
+ GUI_ITEM_TYPE.RECERTIFICATION_FORM: _defaultInGroupComparator}
 
 class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
-    __demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
+    __storageNovelty = dependency.descriptor(IStorageNovelty)
 
     def __init__(self):
         super(InventoryCategoryStorageView, self).__init__()
@@ -146,12 +152,12 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
 
     def _populate(self):
         super(InventoryCategoryStorageView, self)._populate()
-        self.__demountKitNovelty.onUpdated += self._updateTabCounters
+        self.__storageNovelty.onUpdated += self._updateTabCounters
         self._updateTabCounters()
 
     def _destroy(self):
         super(InventoryCategoryStorageView, self)._destroy()
-        self.__demountKitNovelty.onUpdated -= self._updateTabCounters
+        self.__storageNovelty.onUpdated -= self._updateTabCounters
 
     def _getTabsData(self):
         lobbyContext = dependency.instance(ILobbyContext)
@@ -178,10 +184,11 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
 
     def _updateTabCounters(self):
         idx = _getTabDataIndexById(STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE)
-        self.as_setTabCounterS(idx, self.__demountKitNovelty.noveltyCount)
+        self.as_setTabCounterS(idx, self.__storageNovelty.noveltyCount)
 
 
 class RegularInventoryCategoryTabView(InventoryCategoryView):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(RegularInventoryCategoryTabView, self).__init__()
@@ -210,14 +217,16 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         for itemType in self._getItemTypeIDs():
             if itemType == GUI_ITEM_TYPE.DEMOUNT_KIT:
                 items.update(self._goodiesCache.getDemountKits(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
+            if itemType == GUI_ITEM_TYPE.RECERTIFICATION_FORM:
+                if self.__lobbyContext.getServerSettings().recertificationFormState() != SwitchState.DISABLED.value:
+                    items.update(self._goodiesCache.getRecertificationForms(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
             items.update(self._itemsCache.items.getItems(itemType, criteria, nationID=None))
 
         return items
 
     def _getItemTypeID(self):
-        lobbyContext = dependency.instance(ILobbyContext)
         if self._currentTabId == STORAGE_CONSTANTS.INVENTORY_TAB_ALL:
-            if not lobbyContext.getServerSettings().isCrewBooksEnabled():
+            if not self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
                 allItemTypes = set(_TABS_ITEM_TYPES[self._currentTabId]).difference({GUI_ITEM_TYPE.CREW_BOOKS})
                 return tuple(allItemTypes)
         return _TABS_ITEM_TYPES[self._currentTabId]

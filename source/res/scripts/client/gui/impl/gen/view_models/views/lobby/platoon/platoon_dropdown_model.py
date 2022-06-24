@@ -13,9 +13,17 @@ class PlatoonDropdownModel(ViewModel):
     def btnFind(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getBtnFindType():
+        return ButtonModel
+
     @property
     def btnCreate(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getBtnCreateType():
+        return ButtonModel
 
     def getBattleType(self):
         return self._getString(2)

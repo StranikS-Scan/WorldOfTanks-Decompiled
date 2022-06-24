@@ -18,9 +18,17 @@ class RewardLevelModel(ViewModel):
     def freeRewardItems(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getFreeRewardItemsType():
+        return RewardItemModel
+
     @property
     def paidRewardItems(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getPaidRewardItemsType():
+        return RewardItemModel
 
     def getLevel(self):
         return self._getNumber(2)

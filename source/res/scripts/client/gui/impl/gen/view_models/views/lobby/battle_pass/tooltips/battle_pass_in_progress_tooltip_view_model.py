@@ -16,17 +16,33 @@ class BattlePassInProgressTooltipViewModel(ViewModel):
     def rewardPoints(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardPointsType():
+        return RewardPointsModel
+
     @property
     def battleRoyaleRewardPoints(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getBattleRoyaleRewardPointsType():
+        return BattleRoyaleRewardPoints
 
     @property
     def rewardsCommon(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getRewardsCommonType():
+        return BonusModel
+
     @property
     def rewardsElite(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getRewardsEliteType():
+        return BonusModel
 
     def getLevel(self):
         return self._getNumber(4)

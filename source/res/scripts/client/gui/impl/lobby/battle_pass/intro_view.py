@@ -12,7 +12,6 @@ from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
 from helpers import dependency
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from tutorial.control.game_vars import getVehicleByIntCD
@@ -79,7 +78,7 @@ class IntroView(ViewImpl):
     def __genResCommPlaceholders(self):
         commonResArgs = {}
         vehIntCDs = self.__battlePass.getSpecialVehicles()
-        commonResArgs['points'] = self.__battlePass.getVehicleCapBonus(first(vehIntCDs))
+        commonResArgs['points'] = self.__battlePass.getSpecialVehicleCapBonus()
         for idx, vehIntCD in enumerate(vehIntCDs, 1):
             vehicle = getVehicleByIntCD(vehIntCD)
             commonResArgs['tankName{}'.format(idx)] = vehicle.userName if vehicle else ''

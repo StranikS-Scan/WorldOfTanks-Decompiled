@@ -13,6 +13,10 @@ class LootVehicleVideoRendererModel(LootVideoRendererModel):
     def congratsViewModel(self):
         return self._getViewModel(14)
 
+    @staticmethod
+    def getCongratsViewModelType():
+        return CongratsViewModel
+
     def _initialize(self):
         super(LootVehicleVideoRendererModel, self)._initialize()
         self._addViewModelProperty('congratsViewModel', CongratsViewModel())

@@ -37,6 +37,9 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
                     blocks.append(seasonBlock)
                 if season.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp()) is not None:
                     blocks.append(self.__packPerformanceWarningBlock())
+            numRewards = self.__epicController.getNotChosenRewardCount()
+            if numRewards:
+                blocks.append(self.__packRewardsToChooseBlock(numRewards, text_styles.counter))
             return blocks
 
     def __getCycleStatusTooltipPack(self, season):
@@ -100,3 +103,11 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
             titleStyle = text_styles.stats
             attention = attention.informativeLowPerformance
         return formatters.packTitleDescBlock(title=text_styles.concatStylesWithSpace(icon, titleStyle(backport.text(attention.title()))), desc=text_styles.main(backport.text(attention.description())), padding=formatters.packPadding(left=20, right=20))
+
+    def __packRewardsToChooseBlock(self, numRewards, style):
+        iconSrc = backport.image(R.images.gui.maps.icons.epicBattles.rewards_to_choose())
+        icon = icons.makeImageTag(source=iconSrc, width=24, height=24, vSpace=-10)
+        items = []
+        numRewardsText = text_styles.concatStylesWithSpace(icon, style(backport.text(R.strings.epic_battle.tooltips.chooseRewards.desc(), number=numRewards)))
+        items.append(formatters.packTextBlockData(text=numRewardsText, padding=formatters.packPadding(left=20, right=20)))
+        return formatters.packBuildUpBlockData(items)

@@ -28,6 +28,10 @@ class RankedQualificationRewardsViewModel(ViewModel):
     def setBattleBonuses(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getBattleBonusesType():
+        return RankedQualificationRewardsBattleBonusModel
+
     def _initialize(self):
         super(RankedQualificationRewardsViewModel, self)._initialize()
         self._addNumberProperty('currentProgress', 0)

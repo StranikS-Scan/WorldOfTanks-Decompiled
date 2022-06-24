@@ -64,6 +64,7 @@
     <_100mm_D54_TA>	257	</_100mm_D54_TA>
     <_122mm_vz_60>	259	</_122mm_vz_60>
     <_130mm_59_130M>	260	</_130mm_59_130M>
+    <_45mm_20K_a>	262	</_45mm_20K_a>
     <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_FL>	502	</_100mm_60-100TA_FL>
     <_100mm_60-100TA_IGR>	60001	</_100mm_60-100TA_IGR>
@@ -466,6 +467,64 @@
         </_45mm_UOF-240A>
       </shots>
     </_45mm_20K>
+    <_45mm_20K_a>
+      <userString>	#china_vehicles:_45mm_20K	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	2530	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.28571428571429	</reloadTime>
+      <maxAmmo>	84	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	313	</weight>
+      <maxHealth>	68	</maxHealth>
+      <maxRegenHealth>	34	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_45mm_UBR-240A>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	757	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	51 38	</piercingPower>
+        </_45mm_UBR-240A>
+        <_45mm_UBR-240PA>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	946	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	88 66	</piercingPower>
+        </_45mm_UBR-240PA>
+        <_45mm_UOF-240A>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	757	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	23 23	</piercingPower>
+        </_45mm_UOF-240A>
+      </shots>
+    </_45mm_20K_a>
     <_47mm_QFSA>
       <userString>	#china_vehicles:_47mm_QFSA	</userString>
       <tags></tags>

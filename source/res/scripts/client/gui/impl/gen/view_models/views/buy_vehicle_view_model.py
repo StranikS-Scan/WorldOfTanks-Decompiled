@@ -16,13 +16,25 @@ class BuyVehicleViewModel(ViewModel):
     def commanderLvlCards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCommanderLvlCardsType():
+        return ListModel
+
     @property
     def equipmentBlock(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getEquipmentBlockType():
+        return EquipmentBlockModel
+
     @property
     def congratulationAnim(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getCongratulationAnimType():
+        return VehicleCongratulationModel
 
     def getNation(self):
         return self._getString(3)

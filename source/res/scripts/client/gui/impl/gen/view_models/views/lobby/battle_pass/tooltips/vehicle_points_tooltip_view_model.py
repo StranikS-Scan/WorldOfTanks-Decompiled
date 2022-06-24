@@ -14,6 +14,10 @@ class VehiclePointsTooltipViewModel(ViewModel):
     def rewardPoints(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardPointsType():
+        return RewardPointsModel
+
     def getVehicleLevel(self):
         return self._getNumber(1)
 

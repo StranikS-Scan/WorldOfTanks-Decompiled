@@ -15,6 +15,7 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
+from gui.shared.tooltips.advanced import BaseAdvancedTooltip, MODULE_MOVIES
 _TOOLTIP_MIN_WIDTH = 460
 _SETUP_INFO_TOOLTIP_MIN_WIDTH = 440
 
@@ -33,8 +34,8 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
         if skillInfo is None or skillLevel is None:
             return items
         else:
-            items.append(formatters.packBuildUpBlockData(self._constructHeader(skillLevel), padding=formatters.packPadding(top=4, bottom=-1)))
-            items.append(formatters.packBuildUpBlockData(self.__constructDescr(skillLevel), padding=formatters.packPadding(top=-5, bottom=-8), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+            items.append(formatters.packBuildUpBlockData(self._constructHeader(skillLevel), padding=formatters.packPadding(left=2)))
+            items.append(formatters.packBuildUpBlockData(self.__constructDescr(skillLevel), padding=formatters.packPadding(top=-6, bottom=-20), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
             statBlocks = self.__constructStatsBlock(skillInfo)
             for i, _ in enumerate(statBlocks):
                 linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if i == 1 else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
@@ -46,7 +47,7 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
             return items
 
     def _constructHeader(self, skillLevel):
-        block = [formatters.packTitleDescBlock(title=text_styles.highTitle(skillLevel.name), gap=-5), formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.epicBattles.skills.c_176x176.dyn(skillLevel.icon)()), width=128, height=128, padding=formatters.packPadding(left=123, top=-10))]
+        block = [formatters.packImageTextBlockData(title=text_styles.highTitle(skillLevel.name), txtPadding=formatters.packPadding(left=19), img=backport.image(R.images.gui.maps.icons.epicBattles.skills.c_80x80.dyn(skillLevel.icon)()), titleAtMiddle=True)]
         return block
 
     def __constructDescr(self, skillLevel):
@@ -88,6 +89,27 @@ def _equipmentToEpicSkillConverter(epicMetaGameCtrl, eqCompDescr):
     if skillID == 0:
         LOG_ERROR('Could not find the epic skill corresponding to the given eqCompDescr: ' + str(eqCompDescr))
     return skillID
+
+
+class EpicSkillSlotTooltipAdvanced(BaseAdvancedTooltip):
+    _epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def _getBlocksList(self, *args, **kwargs):
+        if not args:
+            return
+        else:
+            skillID = _equipmentToEpicSkillConverter(self._epicMetaGameCtrl, int(args[0]))
+            skillInfo = self._epicMetaGameCtrl.getAllSkillsInformation().get(skillID)
+            skillLevel = skillInfo.levels.get(1) if skillInfo else None
+            itemEm = self._item
+            movieKey = itemEm.getGUIEmblemID()
+            movieName = None
+            if movieKey in MODULE_MOVIES:
+                movieName = MODULE_MOVIES[movieKey]
+            if skillLevel:
+                header = skillLevel.name
+                descr = skillLevel.longDescr
+            return self._packAdvancedBlocks(movieName, header, descr, True)
 
 
 class EpicSkillSlotTooltip(EpicSkillBaseTooltipData):

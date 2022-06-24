@@ -16,17 +16,33 @@ class AmmunitionSetupViewModel(ViewModel):
     def tankSetup(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTankSetupType():
+        return MainTankSetupModel
+
     @property
     def ammunitionPanel(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getAmmunitionPanelType():
+        return AmmunitionPanelModel
 
     @property
     def lastSlotAction(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getLastSlotActionType():
+        return TankSetupActionModel
+
     @property
     def vehicleInfo(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getVehicleInfoType():
+        return VehicleInfoModel
 
     def getShow(self):
         return self._getBool(4)

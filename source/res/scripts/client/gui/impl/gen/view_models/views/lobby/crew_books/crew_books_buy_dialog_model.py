@@ -15,6 +15,10 @@ class CrewBooksBuyDialogModel(ViewModel):
     def bookPrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getBookPriceType():
+        return ListModel
+
     def getDialogTitle(self):
         return self._getString(1)
 

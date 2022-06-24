@@ -15,9 +15,17 @@ class OptDeviceSlotModel(BaseSlotModel):
     def bonuses(self):
         return self._getViewModel(18)
 
+    @staticmethod
+    def getBonusesType():
+        return BonusesModel
+
     @property
     def specializations(self):
         return self._getViewModel(19)
+
+    @staticmethod
+    def getSpecializationsType():
+        return SpecializationsModel
 
     def getWithDescription(self):
         return self._getBool(20)

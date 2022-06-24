@@ -11,12 +11,14 @@ import Math
 import CombatSelectedArea
 import math_utils
 from ProjectileMover import collideDynamicAndStatic
+from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MarkersManagerEvent
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from items import vehicles
 from items.artefacts import AoeEffects, AreaShow
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class AreaOfEffect(BigWorld.Entity):
@@ -26,6 +28,7 @@ class AreaOfEffect(BigWorld.Entity):
     SHELL_VELOCITY = (0, -500, 0)
     MAX_LAG = 0.5
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     _idGen = SequenceIDGenerator()
 
     def __init__(self):
@@ -34,9 +37,14 @@ class AreaOfEffect(BigWorld.Entity):
         self._callbacks = {}
         self._areas = {}
         self.__areaGO = None
+        self.__mainAreaID = None
         self._equipment = vehicles.g_cache.equipments()[self.equipmentID]
         self.salvo = BigWorld.PySalvo(self.MAX_SHOTS, 0, -self.SHOT_HEIGHT)
         return
+
+    @property
+    def areaColor(self):
+        return self._equipment.areaColorBlind if self.__settingsCore.getSetting(GRAPHICS.COLOR_BLIND) and self._equipment.areaColorBlind is not None else self._equipment.areaColor
 
     def prerequisites(self):
         prereqs = []
@@ -78,8 +86,10 @@ class AreaOfEffect(BigWorld.Entity):
             self._showMarker()
         else:
             g_eventBus.addListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def onLeaveWorld(self):
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_eventBus.removeListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
         for callbackID in self._callbacks.itervalues():
             BigWorld.cancelCallback(callbackID)
@@ -90,6 +100,7 @@ class AreaOfEffect(BigWorld.Entity):
             area.destroy()
 
         self._areas = {}
+        self.__mainAreaID = None
         for animator in self._sequences:
             if animator:
                 animator.stop()
@@ -139,6 +150,9 @@ class AreaOfEffect(BigWorld.Entity):
         self._callbacks.pop(areaID)
         area = self._areas.pop(areaID)
         area.destroy()
+        if areaID == self.__mainAreaID:
+            self.__mainAreaID = None
+        return
 
     @property
     def _isMarkersManagerReady(self):
@@ -164,14 +178,14 @@ class AreaOfEffect(BigWorld.Entity):
         areaVisual = self._equipment.areaVisual
         if areaVisual and areaTimeout > 0:
             areaSize = Math.Vector2(self._equipment.areaWidth, self._equipment.areaLength)
-            areaColor = self._equipment.areaColor
             area = CombatSelectedArea.CombatSelectedArea()
-            area.setup(self.position, self._direction, areaSize, areaVisual, areaColor, None)
+            area.setup(self.position, self._direction, areaSize, areaVisual, self.areaColor, None)
             area.enableAccurateCollision(self._equipment.areaAccurateCollision)
             area.enableWaterCollision(True)
             areaID = self._idGen.next()
             self._areas[areaID] = area
             self._callbacks[areaID] = BigWorld.callback(areaTimeout, partial(self._areaDestroy, areaID))
+            self.__mainAreaID = areaID
             if self._equipment.areaUsedPrefab:
                 CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self.entityGameObject, Math.Vector3(), self.__areaGameObjectLoaded)
         return
@@ -183,6 +197,8 @@ class AreaOfEffect(BigWorld.Entity):
             equipmentsCtrl.showMarker(self._equipment, self.position, self._direction, delay)
 
     def __areaGameObjectLoaded(self, gameObject):
+        if self.isDestroyed:
+            return
         self.__areaGO = gameObject
         t = gameObject.findComponentByType(GenericComponents.TransformComponent)
         floatEpsilon = 0.001
@@ -194,4 +210,11 @@ class AreaOfEffect(BigWorld.Entity):
         if self.__areaGO is not None:
             CGF.removeGameObject(self.__areaGO)
         self.__areaGO = None
+        return
+
+    def __onSettingsChanged(self, diff):
+        if GRAPHICS.COLOR_BLIND in diff:
+            area = self._areas.get(self.__mainAreaID, None)
+            if area is not None:
+                area.setColor(self.areaColor)
         return

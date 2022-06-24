@@ -31,6 +31,10 @@ class FieldNameModel(BaseFieldModel):
     def setSuggestions(self, value):
         self._setArray(5, value)
 
+    @staticmethod
+    def getSuggestionsType():
+        return str
+
     def _initialize(self):
         super(FieldNameModel, self)._initialize()
         self._addNumberProperty('state')

@@ -14,6 +14,10 @@ class DeviceRewardOptionModel(RewardOptionModel):
     def kpiDescriptions(self):
         return self._getViewModel(6)
 
+    @staticmethod
+    def getKpiDescriptionsType():
+        return KpiDescriptionModel
+
     def getEffect(self):
         return self._getString(7)
 

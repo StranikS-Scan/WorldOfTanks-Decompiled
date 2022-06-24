@@ -319,6 +319,10 @@ class REQ_CRITERIA(object):
         IS_ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
         IN_ACCOUNT = RequestCriteria(InventoryPredicateCondition(lambda item: item.count > 0))
 
+    class RECERTIFICATION_FORM(object):
+        IS_ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
+        IN_ACCOUNT = RequestCriteria(InventoryPredicateCondition(lambda item: item.count > 0))
+
     class EQUIPMENT(object):
         BUILTIN = staticmethod(RequestCriteria(PredicateCondition(lambda item: item.isBuiltIn)))
 
@@ -381,7 +385,7 @@ class ItemsRequester(IItemsRequester):
      'dogTag',
      'battleRoyaleStats'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, resourceWellRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -400,6 +404,7 @@ class ItemsRequester(IItemsRequester):
         self.__anonymizer = anonymizerRequester
         self.__battlePass = battlePassRequester
         self.__giftSystem = giftSystemRequester
+        self.__gameRestrictions = gameRestrictionsRequester
         self.__resourceWell = resourceWellRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
@@ -483,6 +488,10 @@ class ItemsRequester(IItemsRequester):
         return self.__giftSystem
 
     @property
+    def gameRestrictions(self):
+        return self.__gameRestrictions
+
+    @property
     def resourceWell(self):
         return self.__resourceWell
 
@@ -538,6 +547,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
+        Waiting.show('download/gameRestrictions')
+        yield self.__gameRestrictions.request()
+        Waiting.hide('download/gameRestrictions')
         Waiting.show('download/resourceWell')
         yield self.__resourceWell.request()
         Waiting.hide('download/resourceWell')
@@ -545,7 +557,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__gameRestrictions.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -602,6 +614,7 @@ class ItemsRequester(IItemsRequester):
         self.__festivity.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
+        self.__gameRestrictions.clear()
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -1115,4 +1128,4 @@ class ItemsRequester(IItemsRequester):
          self.ranked,
          self.__battleRoyale)
         unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
-        LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)
+        LOG_WARNING('Trying to create fitting item type {} when requesters are not fully synced: {}'.format(itemTypeID, unsyncedList), stack=True)

@@ -15,11 +15,19 @@ class AmmunitionItemsGroup(ViewModel):
     def setupSelector(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getSetupSelectorType():
+        return AmmunitionSetupSelector
+
     def getSections(self):
         return self._getArray(1)
 
     def setSections(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSectionsType():
+        return AmmunitionItemsSection
 
     def getCurrentIndex(self):
         return self._getNumber(2)

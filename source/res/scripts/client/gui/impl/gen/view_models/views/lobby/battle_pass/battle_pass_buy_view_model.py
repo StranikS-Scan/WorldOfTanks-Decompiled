@@ -21,17 +21,33 @@ class BattlePassBuyViewModel(ViewModel):
     def packages(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getPackagesType():
+        return PackageItem
+
     @property
     def confirm(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getConfirmType():
+        return BattlePassBuyConfirmViewModel
 
     @property
     def confirmAnyNumber(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getConfirmAnyNumberType():
+        return BattlePassBuyConfirmAnyNumberViewModel
+
     @property
     def rewards(self):
         return self._getViewModel(3)
+
+    @staticmethod
+    def getRewardsType():
+        return BattlePassBuyRewardsViewModel
 
     def getState(self):
         return self._getString(4)

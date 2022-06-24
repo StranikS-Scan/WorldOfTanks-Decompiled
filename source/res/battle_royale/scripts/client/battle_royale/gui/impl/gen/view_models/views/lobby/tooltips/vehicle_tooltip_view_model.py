@@ -13,6 +13,10 @@ class VehicleTooltipViewModel(ViewModel):
     def rentPrice(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRentPriceType():
+        return RentPriceModel
+
     def getVehicleName(self):
         return self._getString(1)
 

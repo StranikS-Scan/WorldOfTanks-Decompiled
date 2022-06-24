@@ -25,7 +25,7 @@ from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showBlueprintsSalePage, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, hideWebBrowserOverlay, showResourceWellProgressionWindow
+from gui.shared.event_dispatcher import showBlueprintsSalePage, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, hideWebBrowserOverlay, showEpicBattlesAfterBattleWindow, showResourceWellProgressionWindow
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
@@ -38,8 +38,9 @@ from notification.tutorial_helper import TUTORIAL_GLOBAL_VAR, TutorialGlobalStor
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController, IBattlePassController
+from skeletons.gui.game_control import IBattleRoyaleController, IBrowserController, IMapboxController, IRankedBattlesController, IBattlePassController, IFunRandomController
 from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
@@ -1026,6 +1027,22 @@ class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
         return NOTIFICATION_TYPE.BATTLE_PASS_SWITCH_CHAPTER_REMINDER
 
 
+class _OpenEpicBattlesAfterBattleWindow(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        levelUpInfo = notification.getSavedData()
+        showEpicBattlesAfterBattleWindow(levelUpInfo)
+
+
 class _OpenResourceWellProgressionStartWindow(_NavigationDisabledActionHandler):
 
     @classmethod
@@ -1054,6 +1071,25 @@ class _OpenResourceWellProgressionNoVehiclesWindow(_NavigationDisabledActionHand
     def doAction(self, model, entityID, action):
         ResourceWellEntryPointLogger().logNoVehiclesNotificationButtonClick()
         showResourceWellProgressionWindow()
+
+
+class _SelectFunRandomMode(_NavigationDisabledActionHandler):
+    __funRandomCtrl = dependency.descriptor(IFunRandomController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    @process
+    def doAction(self, model, entityID, action):
+        navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+        if navigationPossible:
+            self.__funRandomCtrl.selectFunRandomBattle()
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1102,8 +1138,11 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenPsaShop,
  _OpenBattlePassPointsShop,
  _OpenChapterChoiceView,
+ _OpenEpicBattlesAfterBattleWindow,
  _OpenResourceWellProgressionStartWindow,
- _OpenResourceWellProgressionNoVehiclesWindow)
+ _OpenResourceWellProgressionNoVehiclesWindow,
+ _OpenEpicBattlesAfterBattleWindow,
+ _SelectFunRandomMode)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

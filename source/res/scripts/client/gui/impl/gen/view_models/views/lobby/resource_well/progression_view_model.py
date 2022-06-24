@@ -54,6 +54,10 @@ class ProgressionViewModel(ViewModel):
     def setRewards(self, value):
         self._setArray(5, value)
 
+    @staticmethod
+    def getRewardsType():
+        return RewardModel
+
     def getProgressionState(self):
         return ProgressionState(self._getString(6))
 

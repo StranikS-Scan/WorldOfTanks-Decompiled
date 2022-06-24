@@ -40,6 +40,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_CREW_BOOKS_NO_SALE_ITEM = 'storageCrewBooksNoSaleItem'
     STORAGE_DEMOUNT_KIT_ITEM = 'storageDemountKitItem'
     STORAGE_OPTIONAL_DEVICE_ITEM = 'storageOptionalDeviceItem'
+    STORAGE_RECERTIFICATION_FORM_ITEM = 'storageRecertificationFormItem'
     TANK_SETUP_OPTIONAL_DEVICE_ITEM = 'tankSetupOptionalDeviceItem'
     TANK_SETUP_MODULE_ITEM = 'tankSetupModuleItem'
     TANK_SETUP_CONSUMABLE_ITEM = 'tankSetupConsumableItem'

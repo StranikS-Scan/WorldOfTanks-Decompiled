@@ -16,6 +16,10 @@ class DescriptionsModel(ViewModel):
     def setViews(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getViewsType():
+        return ViewDescriptionModel
+
     def _initialize(self):
         super(DescriptionsModel, self)._initialize()
         self._addArrayProperty('views', Array())

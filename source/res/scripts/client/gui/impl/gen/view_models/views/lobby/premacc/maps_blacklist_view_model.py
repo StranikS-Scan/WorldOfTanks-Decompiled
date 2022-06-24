@@ -13,13 +13,25 @@ class MapsBlacklistViewModel(ViewModel):
     def disabledMaps(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getDisabledMapsType():
+        return ListModel
+
     @property
     def mapsFilters(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getMapsFiltersType():
+        return ListModel
+
     @property
     def maps(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getMapsType():
+        return ListModel
 
     def getCooldownTime(self):
         return self._getNumber(3)

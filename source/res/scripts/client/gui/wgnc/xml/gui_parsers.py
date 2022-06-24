@@ -63,7 +63,7 @@ class _PopUpParser(SectionParser):
         if priority not in WGNC_POP_UP_PRIORITIES:
             LOG_WARNING('Priority of pop up is not valid, uses default priority', priority)
             priority = 'medium'
-        topic = section.readString('topic', '')
+        topic = formatText(section.readString('topic', ''))
         icon = section.readString('icon', '')
         bg = section.readString('bg', '')
         group = section.readString('group', 'info')

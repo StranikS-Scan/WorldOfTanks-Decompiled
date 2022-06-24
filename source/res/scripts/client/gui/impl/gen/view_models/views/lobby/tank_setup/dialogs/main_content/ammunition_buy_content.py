@@ -15,6 +15,10 @@ class AmmunitionBuyContent(MultipleItemsContentModel):
     def setLacksItem(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getLacksItemType():
+        return str
+
     def getDemountPairModification(self):
         return self._getBool(3)
 

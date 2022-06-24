@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
+import copy
 import cPickle
 import math
 import collections
+from typing import List
+from constants import SwitchState
 from gui.shared.money import Money, Currency
 from helpers import dependency, i18n
 from items.components import skills_constants
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from gui.goodies import IGoodiesCache
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle
@@ -161,8 +165,8 @@ def packVehicle(vehicle):
     return result
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def packDropSkill(tankman, itemsCache=None):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, goodiesCache=IGoodiesCache, lobbyContext=ILobbyContext)
+def packDropSkill(tankman, itemsCache=None, goodiesCache=None, lobbyContext=None):
     items = itemsCache.items
     vehicle = items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
     currentMoney = items.stats.money
@@ -179,6 +183,11 @@ def packDropSkill(tankman, itemsCache=None):
      'isNativeVehicle': True,
      'nation': vehicle.nationName,
      'showAction': cost != defCost} for lvl, state, cost, defCost in zip(tankmanLevels, states, trainingCosts, defaultCosts) ]
+    rfo = copy.deepcopy(result[0])
+    rfo['level'] = '100%'
+    recertificationFormGoodie = goodiesCache.getRecertificationForm(currency='gold')
+    rfo['enabled'] = SwitchState.ENABLED.value == lobbyContext.getServerSettings().recertificationFormState() and recertificationFormGoodie.enabled and recertificationFormGoodie.count > 0
+    result.append(rfo)
     return result
 
 

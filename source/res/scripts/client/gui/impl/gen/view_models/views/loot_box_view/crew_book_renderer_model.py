@@ -13,6 +13,10 @@ class CrewBookRendererModel(LootAnimatedRendererModel):
     def congratsViewModel(self):
         return self._getViewModel(16)
 
+    @staticmethod
+    def getCongratsViewModelType():
+        return CongratsViewModel
+
     def _initialize(self):
         super(CrewBookRendererModel, self)._initialize()
         self._addViewModelProperty('congratsViewModel', CongratsViewModel())

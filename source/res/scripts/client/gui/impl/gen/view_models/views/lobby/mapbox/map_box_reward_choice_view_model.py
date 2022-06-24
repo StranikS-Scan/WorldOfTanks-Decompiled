@@ -14,6 +14,10 @@ class MapBoxRewardChoiceViewModel(ViewModel):
     def rewards(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getRewardsType():
+        return CrewBookRewardOptionModel
+
     def getRewardType(self):
         return self._getString(1)
 

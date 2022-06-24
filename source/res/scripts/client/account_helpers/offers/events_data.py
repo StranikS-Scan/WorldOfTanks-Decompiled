@@ -125,6 +125,12 @@ class OfferEventData(object):
     def getAllGifts(self):
         return [ OfferGift(giftID, settings) for giftID, settings in self._data.get('gift', {}).iteritems() ]
 
+    def getFirstGift(self):
+        for giftID, settings in self._data.get('gift', {}).iteritems():
+            return OfferGift(giftID, settings)
+
+        return None
+
     @property
     def clicksCount(self):
         return min(self.availableTokens, self.availableGiftsCount)

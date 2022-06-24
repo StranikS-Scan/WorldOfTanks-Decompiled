@@ -35,7 +35,6 @@ class MarathonEventContainer(object):
         self.doesShowRewardVideo = False
         self.doesShowInPostBattle = True
         self.questsPerStep = 2
-        self.isFlagVisible = True
         self.isEnabled = False
         self.isAvailable = False
         self.rewardObtained = False

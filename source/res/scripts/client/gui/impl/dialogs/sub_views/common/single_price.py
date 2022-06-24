@@ -65,6 +65,10 @@ class SinglePrice(ViewImpl):
                  None,
                  True)
                 return createBackportTooltipContent(specialAlias=TOOLTIPS_CONSTANTS.ACTION_PRICE, specialArgs=specialAlias)
+            shortage = self._itemsCache.items.stats.money.getShortage(self.__price.price)
+            if bool(shortage):
+                currency = shortage.getCurrency()
+                return createBackportTooltipContent(TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY, (shortage.get(currency), currency))
         return super(SinglePrice, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
@@ -83,7 +87,8 @@ class SinglePrice(ViewImpl):
         with self.viewModel.transaction() as vm:
             vm.setText(toString(self.__text))
             isDiscount = self.__price.isActionPrice()
-            vm.tooltip.setType(TooltipType.BACKPORT if isDiscount else TooltipType.ABSENT)
+            isEnough = bool(self._itemsCache.items.stats.money.getShortage(self.__price.price))
+            vm.tooltip.setType(TooltipType.BACKPORT if isDiscount or isEnough else TooltipType.ABSENT)
             cost = vm.cost
             currency = self.__price.getCurrency()
             cost.setType(self.__currencyTypeClass(currency))
@@ -91,4 +96,4 @@ class SinglePrice(ViewImpl):
             cost.setValue(int(self.__price.price.get(currency)))
             cost.setIsDiscount(isDiscount)
             cost.setDiscountValue(self.__price.getActionPrc())
-            cost.setIsEnough(not bool(self._itemsCache.items.stats.money.getShortage(self.__price.price)))
+            cost.setIsEnough(not isEnough)

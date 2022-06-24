@@ -17,10 +17,12 @@ from .gui_constants import CaseType
 from .py_object_wrappers import isTranslatedKeyValid
 from .py_object_wrappers import isTranslatedTextExisted
 from .py_object_wrappers import getTranslatedText
+from .py_object_wrappers import getTranslatedPluralText
 from .py_object_wrappers import getImagePath
 from .py_object_wrappers import getSoundEffectId
 from .py_object_wrappers import getLayoutPath
 from .py_object_wrappers import getTranslatedTextByResId
+from .py_object_wrappers import getTranslatedPluralTextByResId
 from .py_object_wrappers import getTranslatedKey
 from .py_object_wrappers import getNumberFormat
 from .py_object_wrappers import getRealFormat
@@ -36,4 +38,4 @@ from .windows_system.windows_area import WindowsArea
 from .windows_system.window import WindowSettings
 from .windows_system.window import Window
 from .view.view_model import ViewModel
-__all__ = ('GuiApplication', 'PropertyType', 'PositionAnchor', 'ViewFlags', 'ViewStatus', 'ViewEventType', 'WindowFlags', 'WindowLayer', 'WindowStatus', 'NumberFormatType', 'RealFormatType', 'TimeFormatType', 'DateFormatType', 'CaseType', 'Array', 'Command', 'ViewSettings', 'View', 'ViewEvent', 'WindowsArea', 'WindowSettings', 'Window', 'ViewModel', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')
+__all__ = ('GuiApplication', 'PropertyType', 'PositionAnchor', 'ViewFlags', 'ViewStatus', 'ViewEventType', 'WindowFlags', 'WindowLayer', 'WindowStatus', 'NumberFormatType', 'RealFormatType', 'TimeFormatType', 'DateFormatType', 'CaseType', 'Array', 'Command', 'ViewSettings', 'View', 'ViewEvent', 'WindowsArea', 'WindowSettings', 'Window', 'ViewModel', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')

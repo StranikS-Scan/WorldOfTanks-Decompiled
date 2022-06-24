@@ -17,21 +17,41 @@ class MainTankSetupModel(ViewModel):
     def consumablesSetup(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getConsumablesSetupType():
+        return ConsumablesSetupModel
+
     @property
     def shellsSetup(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getShellsSetupType():
+        return ShellsSetupModel
 
     @property
     def battleBoostersSetup(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getBattleBoostersSetupType():
+        return BattleBoostersSetupModel
+
     @property
     def optDevicesSetup(self):
         return self._getViewModel(3)
 
+    @staticmethod
+    def getOptDevicesSetupType():
+        return OptDevicesSetupModel
+
     @property
     def frontlineSetup(self):
         return self._getViewModel(4)
+
+    @staticmethod
+    def getFrontlineSetupType():
+        return FrontlineSetupModel
 
     def getSelectedSetup(self):
         return self._getString(5)

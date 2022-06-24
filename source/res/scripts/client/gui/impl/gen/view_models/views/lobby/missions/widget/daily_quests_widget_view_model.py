@@ -16,6 +16,10 @@ class DailyQuestsWidgetViewModel(ViewModel):
     def setQuests(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getQuestsType():
+        return WidgetQuestModel
+
     def getCountdown(self):
         return self._getNumber(1)
 
@@ -33,6 +37,10 @@ class DailyQuestsWidgetViewModel(ViewModel):
 
     def setIndicateCompleteQuests(self, value):
         self._setArray(3, value)
+
+    @staticmethod
+    def getIndicateCompleteQuestsType():
+        return bool
 
     def _initialize(self):
         super(DailyQuestsWidgetViewModel, self)._initialize()

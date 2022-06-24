@@ -216,6 +216,10 @@ class IClientArenaVisitor(object):
     def vehicles(self):
         raise NotImplementedError
 
+    @property
+    def modifiers(self):
+        raise NotImplementedError
+
     def getComponentSystem(self):
         raise NotImplementedError
 
@@ -252,7 +256,13 @@ class IClientArenaVisitor(object):
     def getTeamSpawnPointsIterator(self, team):
         raise NotImplementedError
 
+    def getVisibilityMinRadius(self):
+        raise NotImplementedError
+
     def getArenaSubscription(self):
+        raise NotImplementedError
+
+    def getRoundLength(self):
         raise NotImplementedError
 
     def isBattleEndWarningEnabled(self):
@@ -286,6 +296,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def getArenaExtraData(self):
+        raise NotImplementedError
+
+    def getArenaModifiers(self):
         raise NotImplementedError
 
     def getArenaVehicles(self):

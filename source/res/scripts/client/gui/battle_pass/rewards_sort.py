@@ -5,6 +5,8 @@ import re
 from functools import partial
 from enum import Enum, unique
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
+from gui.impl.gen import R
+from gui.impl import backport
 from nations import NONE_INDEX
 from shared_utils import safeIndexOf
 _logger = logging.getLogger(__name__)
@@ -28,6 +30,7 @@ class _RewardType(_Enum):
     DEVICE_MI = 'new_device_mi'
     GUIDE = 'guide'
     TROPHY = 'trophy'
+    BATTLE_BOOSTER = 'battleBooster'
 
 
 @unique
@@ -87,7 +90,16 @@ _REWARDS_ORDER = {_RewardType.TROPHY: (_Reward.AIM_DRIVES,
                          _Reward.INVIS_DEVICE,
                          _Reward.OPTICS,
                          _Reward.RADIO,
-                         _Reward.COMM_VIEW)}
+                         _Reward.COMM_VIEW),
+ _RewardType.BATTLE_BOOSTER: (_Reward.VENTILATION,
+                              _Reward.TANK_RAMMER,
+                              _Reward.AIM_DRIVES,
+                              _Reward.AIM_STABILIZER,
+                              _Reward.SIGHTS,
+                              _Reward.ROT_MECHANISM,
+                              _Reward.ANTI_FRAGMENTATION,
+                              _Reward.HEALTH_RESERVE,
+                              _Reward.CONFIGURATION)}
 _REWARD_NAME_EXTRACTOR = re.compile('(basic|enhanced|improved|trophy)*([a-z]+)(_(\\w+\\d*))*', re.I)
 _REWARD_NATION_EXTRACTOR = re.compile('.*({})'.format('|'.join(GUI_NATIONS)), re.I)
 
@@ -113,6 +125,16 @@ def _compareRewardsByType(rewardType, first, second):
     return cmp(safeIndexOf(_Reward.makeValue(_extractRewardName(first[0])), order), safeIndexOf(_Reward.makeValue(_extractRewardName(second[0])), order))
 
 
+def _compareRewardsByArtifactName(first, second):
+    artefacts = R.strings.artefacts
+
+    def _safeExtract(path):
+        folder = artefacts.dyn(path)
+        return backport.text(folder.name()) if folder else ''
+
+    return cmp(_safeExtract(first[0]), _safeExtract(second[0]))
+
+
 def _defaultComparator(first, second):
     return cmp(first[0], second[0])
 
@@ -122,7 +144,8 @@ _REWARDS_COMPARATORS = {_RewardType.TROPHY: partial(_compareRewardsByType, _Rewa
  _RewardType.DEVICE_MI: partial(_compareRewardsByType, _RewardType.DEVICE_MI),
  _RewardType.GUIDE: _compareRewardsByNation,
  _RewardType.BROCHURE: _compareRewardsByNation,
- _RewardType.BLUEPRINT: _compareRewardsByNation}
+ _RewardType.BLUEPRINT: _compareRewardsByNation,
+ _RewardType.BATTLE_BOOSTER: _compareRewardsByArtifactName}
 
 def getRewardTypesComparator():
     return _rewardTypeComparator

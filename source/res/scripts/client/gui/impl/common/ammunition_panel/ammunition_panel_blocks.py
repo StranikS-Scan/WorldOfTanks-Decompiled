@@ -18,6 +18,7 @@ from helpers import dependency
 from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 EMPTY_NAME = 'empty'
@@ -302,6 +303,7 @@ class BattleBoostersBlock(BaseBlock):
 class BattleAbilitiesBlock(BaseBlock):
     _RANK = 'list_rank_{}'
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def createBlock(self, viewModel):
         super(BattleAbilitiesBlock, self).createBlock(viewModel)
@@ -338,11 +340,17 @@ class BattleAbilitiesBlock(BaseBlock):
         self._setRankIcon(model, idx)
 
     def _setRankIcon(self, model, idx):
+        model.setRank(R.invalid())
+        componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
+        playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
+        currentRank = None
+        if playerDataComp is not None:
+            currentRank = playerDataComp.playerRank - 1 if playerDataComp.playerRank is not None else 0
         unlockSlotOrder = self.__epicMetaGameCtrl.getAbilitySlotsUnlockOrder(self._vehicle.descriptor.type)
-        rank = searchRankForSlot(idx, unlockSlotOrder)
-        if rank is not None and rank > 0:
-            rank += 1
-            resource = R.images.gui.maps.icons.library.epicRank.dyn(self._RANK.format(PLAYER_RANK.NAMES[rank]))()
+        slotRank = searchRankForSlot(idx, unlockSlotOrder)
+        if slotRank and (currentRank is None or currentRank < slotRank):
+            slotRank += 1
+            resource = R.images.gui.maps.icons.library.epicRank.dyn(self._RANK.format(PLAYER_RANK.NAMES[slotRank]))()
             model.setRank(resource)
         return
 

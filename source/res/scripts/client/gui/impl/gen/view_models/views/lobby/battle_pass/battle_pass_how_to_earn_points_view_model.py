@@ -14,6 +14,10 @@ class BattlePassHowToEarnPointsViewModel(ViewModel):
     def gameModes(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getGameModesType():
+        return GameModeModel
+
     def getSyncInitiator(self):
         return self._getNumber(1)
 

@@ -17,11 +17,19 @@ class ListModel(ViewModel, typing.Generic[T]):
     def setItems(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getItemsType():
+        return T
+
     def getSelectedIndices(self):
         return self._getArray(1)
 
     def setSelectedIndices(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getSelectedIndicesType():
+        return int
 
     def _initialize(self):
         super(ListModel, self)._initialize()

@@ -13,6 +13,10 @@ class SelectMoneyViewModel(SelectOptionBaseItemViewModel):
     def cost(self):
         return self._getViewModel(4)
 
+    @staticmethod
+    def getCostType():
+        return CurrencyViewModel
+
     def _initialize(self):
         super(SelectMoneyViewModel, self)._initialize()
         self._addViewModelProperty('cost', CurrencyViewModel())

@@ -22,6 +22,10 @@ class CompareModificationsPanelViewModel(ViewModel):
     def setSteps(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getStepsType():
+        return CompareStepModel
+
     def _initialize(self):
         super(CompareModificationsPanelViewModel, self)._initialize()
         self._addBoolProperty('isEmpty', True)

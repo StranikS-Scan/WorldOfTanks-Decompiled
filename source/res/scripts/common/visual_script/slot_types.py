@@ -29,6 +29,7 @@ class SLOT_TYPE(object):
     CONTROL_POINT = 'ControlPoint'
     SOUND = 'Sound'
     GAME_OBJECT = 'GameObject'
+    UDO = 'UDO'
     E_MODULE_STATE = 'EModuleState'
     E_VEHICLE_DEVICE = 'EVehicleDevice'
     E_VEHICLE_TANKMAN = 'EVehicleTankman'

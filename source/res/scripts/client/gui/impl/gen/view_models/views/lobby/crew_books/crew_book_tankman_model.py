@@ -14,6 +14,10 @@ class CrewBookTankmanModel(ViewModel):
     def tankmanSkillList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getTankmanSkillListType():
+        return ListModel
+
     def getIdx(self):
         return self._getNumber(1)
 

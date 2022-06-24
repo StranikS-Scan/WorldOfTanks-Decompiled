@@ -762,16 +762,17 @@ class UpgradeOptDeviceAction(AsyncGUIItemAction):
 
 
 class InstallBattleAbilities(AsyncGUIItemAction):
-    __slots__ = ('__vehicle',)
+    __slots__ = ('__vehicle', '__classVehs')
 
-    def __init__(self, vehicle):
+    def __init__(self, vehicle, classVehs=False):
         super(InstallBattleAbilities, self).__init__()
         self.__vehicle = vehicle
+        self.__classVehs = classVehs
 
     @async
     @decorators.process('techMaintenance')
     def _action(self, callback):
-        result = yield InstallBattleAbilitiesProcessor(self.__vehicle).request()
+        result = yield InstallBattleAbilitiesProcessor(self.__vehicle, self.__classVehs).request()
         callback(result)
 
 

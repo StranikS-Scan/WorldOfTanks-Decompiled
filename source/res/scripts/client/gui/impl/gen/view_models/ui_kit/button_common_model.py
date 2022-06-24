@@ -14,6 +14,10 @@ class ButtonCommonModel(ViewModel):
     def Counter(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCounterType():
+        return CounterModel
+
     def getLabel(self):
         return self._getResource(1)
 

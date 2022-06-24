@@ -22,6 +22,10 @@ class LeaderboardModel(ViewModel):
     def setGroupList(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getGroupListType():
+        return GroupModel
+
     def _initialize(self):
         super(LeaderboardModel, self)._initialize()
         self._addStringProperty('type', 'solo')

@@ -26,6 +26,7 @@ from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
     from typing import Dict, List
     from gui.server_events.bonuses import TmanTemplateTokensBonus
+    from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
 _TANKMAN_BONUS_NAME = 'tmanToken'
@@ -156,6 +157,21 @@ def getStyleForChapter(chapter, battlePass=None, c11nService=None):
 def getStyleInfoForChapter(chapter, battlePass=None):
     style = getStyleForChapter(chapter, battlePass=battlePass)
     return (style.intCD, style.getProgressionLevel()) if style is not None else (None, None)
+
+
+def getSingleVehicleForCustomization(customization):
+    itemFilter = customization.descriptor.filter
+    if itemFilter is not None and itemFilter.include:
+        vehicles = []
+        for node in itemFilter.include:
+            if node.nations or node.levels:
+                return
+            if node.vehicles:
+                vehicles.extend(node.vehicles)
+
+        if len(vehicles) == 1:
+            return vehicles[0]
+    return
 
 
 @replace_none_kwargs(settingsCore=ISettingsCore)

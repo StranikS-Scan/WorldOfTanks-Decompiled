@@ -41,6 +41,10 @@ class GroupModel(ViewModel):
     def setPlayersList(self, value):
         self._setArray(4, value)
 
+    @staticmethod
+    def getPlayersListType():
+        return RowModel
+
     def _initialize(self):
         super(GroupModel, self)._initialize()
         self._addStringProperty('place', '')

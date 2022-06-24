@@ -22,6 +22,10 @@ class TeamModel(ViewModel):
     def setUsers(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getUsersType():
+        return UserModel
+
     def _initialize(self):
         super(TeamModel, self)._initialize()
         self._addNumberProperty('id', 0)

@@ -389,7 +389,8 @@ class AvailableState(_WebState):
             if response.getDatabaseID() == pDbID:
                 LOG_DEBUG('Trying to login to the wgcg lib...')
                 responseTime = time_utils.getServerUTCTime()
-                result = yield self.sendRequest(LogInCtx(pDbID, response.getToken()))
+                isJwt = self._webCtrl.getRequesterConfig().isJwtEnabled()
+                result = yield self.sendRequest(LogInCtx(pDbID, response.getToken(), isJwt))
                 nextLoginState = LOGIN_STATE.LOGGED_OFF
                 if result.isSuccess():
                     data = result.getData()

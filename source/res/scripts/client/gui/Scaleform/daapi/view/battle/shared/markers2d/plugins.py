@@ -526,10 +526,18 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         super(EquipmentsMarkerPlugin, self).stop()
         return
 
-    def __onEquipmentMarkerShown(self, item, position, _, delay):
+    def __onEquipmentMarkerShown(self, item, position, _, delay, team=None):
         markerID = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER, position + settings.MARKER_POSITION_ADJUSTMENT)
-        self._invokeMarker(markerID, 'init', item.getMarker(), _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, item.getMarkerColor())
+        arenaDP = self.sessionProvider.getArenaDP()
+        if team is None or arenaDP is None or arenaDP.isAllyTeam(team):
+            marker = item.getMarker()
+            markerColor = item.getMarkerColor()
+        else:
+            marker = item.getEnemyMarker()
+            markerColor = item.getEnemyMarkerColor()
+        self._invokeMarker(markerID, 'init', marker, _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, markerColor)
         self.__setCallback(markerID, round(BigWorld.serverTime() + delay))
+        return
 
     def __setCallback(self, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):
         self.__callbackIDs[markerID] = BigWorld.callback(interval, partial(self.__handleCallback, markerID, finishTime))

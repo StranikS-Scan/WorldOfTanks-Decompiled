@@ -21,6 +21,10 @@ class PostProgressionLevelTooltipViewModel(ViewModel):
     def modifier(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getModifierType():
+        return BonusesModel
+
     def getLevel(self):
         return self._getNumber(1)
 

@@ -34,6 +34,10 @@ class MultiStepModel(StepModel):
     def setModifications(self, value):
         self._setArray(9, value)
 
+    @staticmethod
+    def getModificationsType():
+        return ModificationModel
+
     def _initialize(self):
         super(MultiStepModel, self)._initialize()
         self._addNumberProperty('parentId', 0)

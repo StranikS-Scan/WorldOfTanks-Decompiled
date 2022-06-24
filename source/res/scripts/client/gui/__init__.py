@@ -146,7 +146,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(wgcg.getWebServicesConfig)
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
-    manager.addConfig(goodies.getDemountKitNoveltyConfig)
+    manager.addConfig(goodies.getStorageNoveltyConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
     manager.addConfig(customization.getCustomizationServiceConfig)
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)

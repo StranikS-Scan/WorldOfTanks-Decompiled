@@ -40,6 +40,10 @@ class ShellsSetupModel(BaseSetupModel):
     def setSlots(self, value):
         self._setArray(9, value)
 
+    @staticmethod
+    def getSlotsType():
+        return ShellSlotModel
+
     def _initialize(self):
         super(ShellsSetupModel, self)._initialize()
         self._addStringProperty('shellsTempString', '')

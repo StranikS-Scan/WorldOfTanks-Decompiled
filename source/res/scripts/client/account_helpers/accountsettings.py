@@ -57,6 +57,9 @@ ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
 MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
 MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
 MAPBOX_CAROUSEL_FILTER_CLIENT_1 = 'MAPBOX_CAROUSEL_FILTER_CLIENT_1'
+FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
+FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
+FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1 = 'FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -95,6 +98,7 @@ BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 SENIORITY_AWARDS_COUNTER = 'seniorityAwardsCounter'
 SENIORITY_AWARDS_WINDOW_SHOWN = 'seniorityAwardsWindowShown'
 DEMOUNT_KIT_SEEN = 'demountKitSeen'
+RECERTIFICATION_FORM_SEEN = 'recertificationFormSeen'
 VIEWED_OFFERS = 'viewedOffers'
 OFFERS_DISABLED_MSG_SEEN = 'offersDisabledMsgSeen'
 PROFILE_TECHNIQUE = 'profileTechnique'
@@ -144,6 +148,7 @@ DYN_SQUAD_HINT_SECTION = 'dynSquadHint'
 RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 PRE_BATTLE_ROLE_HINT_SECTION = 'preBattleRoleHintSection'
+FUN_RANDOM_HINT_SECTION = 'funRandomHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 IBC_HINT_SECTION = 'battleCommunicationHint'
@@ -195,11 +200,10 @@ RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
 RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
-DBOAT_INTRO_SCREEN_SHOWN = 'dboatIntroScreenShown'
-DBOAT_WIDGET_SHOW = 'dboatWidgetShow'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
+FUN_RANDOM_LAST_CYCLE_ID = 'funRandomLastCycleID'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
                'scroll_to_item': None,
@@ -506,6 +510,59 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'role_SPG': False},
                MAPBOX_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
                                                  'clanRented': False},
+               FUN_RANDOM_CAROUSEL_FILTER_1: {'ussr': False,
+                                              'germany': False,
+                                              'usa': False,
+                                              'china': False,
+                                              'france': False,
+                                              'uk': False,
+                                              'japan': False,
+                                              'czech': False,
+                                              'sweden': False,
+                                              'poland': False,
+                                              'italy': False,
+                                              'lightTank': False,
+                                              'mediumTank': False,
+                                              'heavyTank': False,
+                                              'SPG': False,
+                                              'AT-SPG': False,
+                                              'level_1': False,
+                                              'level_2': False,
+                                              'level_3': False,
+                                              'level_4': False,
+                                              'level_5': False,
+                                              'level_6': False,
+                                              'level_7': False,
+                                              'level_8': False,
+                                              'level_9': False,
+                                              'level_10': False},
+               FUN_RANDOM_CAROUSEL_FILTER_2: {'premium': False,
+                                              'elite': False,
+                                              'igr': False,
+                                              'rented': True,
+                                              'event': True,
+                                              'gameMode': False,
+                                              'favorite': False,
+                                              'bonus': False,
+                                              'crystals': False,
+                                              'funRandom': True,
+                                              'role_HT_assault': False,
+                                              'role_HT_break': False,
+                                              'role_HT_support': False,
+                                              'role_HT_universal': False,
+                                              'role_MT_universal': False,
+                                              'role_MT_sniper': False,
+                                              'role_MT_assault': False,
+                                              'role_MT_support': False,
+                                              'role_ATSPG_assault': False,
+                                              'role_ATSPG_universal': False,
+                                              'role_ATSPG_sniper': False,
+                                              'role_ATSPG_support': False,
+                                              'role_LT_universal': False,
+                                              'role_LT_wheeled': False,
+                                              'role_SPG': False},
+               FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
+                                                     'clanRented': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -844,6 +901,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           HELP_SCREEN_HINT_SECTION: {},
                                           IBC_HINT_SECTION: {HINTS_LEFT: 10}},
                 PRE_BATTLE_ROLE_HINT_SECTION: {},
+                FUN_RANDOM_HINT_SECTION: {HINTS_LEFT: 3},
                 COMMANDER_CAM_HINT_SECTION: {HINTS_LEFT: 5},
                 MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
@@ -891,9 +949,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
-                SHOW_DEMO_ACC_REGISTRATION: False,
-                DBOAT_INTRO_SCREEN_SHOWN: False,
-                DBOAT_WIDGET_SHOW: True},
+                FUN_RANDOM_LAST_CYCLE_ID: None,
+                SHOW_DEMO_ACC_REGISTRATION: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -908,6 +965,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
+                RECERTIFICATION_FORM_SEEN: False,
                 NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
                 VPP_ENTRY_POINT_LAST_SEEN_STEP: {}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),

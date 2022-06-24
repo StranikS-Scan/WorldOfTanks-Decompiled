@@ -56,7 +56,8 @@ from avatar_components.team_healthbar_mechanic import TeamHealthbarMechanic
 from avatar_components.triggers_controller import TriggersController
 from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
 from avatar_components.vehicle_removal_controller import VehicleRemovalController
-from avatar_helpers import AvatarSyncData, getBestShotResultSound
+from avatar_components.visual_script_controller import VisualScriptController
+from avatar_helpers import AvatarSyncData
 from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
 from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
@@ -94,6 +95,7 @@ from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
+from battle_modifiers import vehicle_modifications
 import VOIP
 if TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -156,7 +158,8 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  VehicleRemovalController,
  VehicleHealthBroadcastListenerComponent,
  AvatarChatKeyHandling,
- TriggersController}
+ TriggersController,
+ VisualScriptController}
 
 class VehicleDeinitFailureException(SoftException):
 
@@ -164,7 +167,7 @@ class VehicleDeinitFailureException(SoftException):
         super(VehicleDeinitFailureException, self).__init__('Exception during vehicle deinit has been detected, thus leading to unstable state of it. Please, check the first exception happened in this function call instead of analyzing c++ crash.')
 
 
-class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -475,6 +478,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
         try:
             vehicles.g_cache.clearPrereqs()
+            vehicle_modifications.g_cache.clear()
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -865,8 +869,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         vTypeDesc = vehicle.typeDescriptor
                         vehicleWithCustomMechanics = vTypeDesc.isWheeledVehicle or vTypeDesc.isTrackWithinTrack or vTypeDesc.isDualgunVehicle or vTypeDesc.hasTurboshaftEngine
                         isRanked = self.arenaBonusType == constants.ARENA_BONUS_TYPE.RANKED
-                        if isRanked or vehicleWithCustomMechanics:
-                            ctx = {'vehName': vehicle.typeDescriptor.type.userString,
+                        isFunRandom = self.arenaBonusType == constants.ARENA_BONUS_TYPE.FUN_RANDOM
+                        if isRanked or isFunRandom or vehicleWithCustomMechanics:
+                            ctx = {'isFunRandom': isFunRandom,
+                             'vehName': vehicle.typeDescriptor.type.userString,
                              'roleType': vTypeDesc.role if isRanked else ROLE_TYPE.NOT_DEFINED,
                              'isWheeled': vTypeDesc.isWheeledVehicle,
                              'isTrackWithinTrack': vTypeDesc.isTrackWithinTrack,
@@ -1498,7 +1504,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG_DEV('showOwnVehicleHitDirection: hitDirYaw={}, attackerID={}, damage={}, crits={}isBlocked={}, isHighExplosive={}, damagedID={}, attackReasonID={}'.format(hitDirYaw, attackerID, damage, crits, isBlocked, isShellHE, damagedID, attackReasonID))
         self.guiSessionProvider.addHitDirection(hitDirYaw, attackerID, damage, isBlocked, crits, isShellHE, damagedID, attackReasonID)
 
-    def showVehicleDamageInfo(self, vehicleID, damageIndex, extraIndex, entityID, equipmentID):
+    def showVehicleDamageInfo(self, vehicleID, damageIndex, extraIndex, entityID, equipmentID, isAttachingToVehicle=False):
         if not self.userSeesWorld():
             return
         else:
@@ -1515,8 +1521,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     return
             extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
             if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
-                self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
-            if damageCode not in self.__damageInfoNoNotification:
+                self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID, isAttachingToVehicle)
+            if damageCode not in self.__damageInfoNoNotification and not isAttachingToVehicle:
                 self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=entityID)
             return
@@ -1596,7 +1602,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if len(enemies) == 1:
                         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
                 if sound is not None:
-                    bestSound = getBestShotResultSound(bestSound, sound, enemyVehID)
+                    bestSound = _getBestShotResultSound(bestSound, sound, enemyVehID)
 
             if bestSound is not None:
 
@@ -2556,7 +2562,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def showVehicleError(self, msgName, args=None):
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
 
-    def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID):
+    def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, isAttachingToVehicle=False):
         deviceName = None
         deviceState = None
         soundType = None
@@ -2590,7 +2596,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 deviceState = 'destroyed'
                 soundType = 'destroyed'
                 self.__deviceStates[deviceName] = 'destroyed'
-                if damageCode.find('TANKMAN_HIT') != -1:
+                if damageCode.find('TANKMAN_HIT') != -1 and not isAttachingToVehicle:
                     self.playSoundIfNotMuted('crew_member_contusion')
                 vehicle = BigWorld.entity(vehicleID)
                 if damageCode.find('TANKMAN_HIT') != -1:
@@ -2627,7 +2633,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             soundNotificationCheckFn = lambda : self.__deviceStates.get(deviceName, 'normal') == deviceState
         if soundType is not None and damageCode not in self.__damageInfoNoNotification:
             sound = extra.sounds.get(soundType)
-            if sound is not None:
+            if sound is not None and not isAttachingToVehicle:
                 self.playSoundIfNotMuted(sound, soundNotificationCheckFn)
         return
 
@@ -2975,6 +2981,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def killEngine(self):
         self.base.setDevelopmentFeature(0, 'kill_engine', 0, '')
 
+    def change_rank_xp(self, value):
+        self.base.setDevelopmentFeature(0, 'change_rank_xp', value, '')
+
     def receivePhysicsDebugInfo(self, info):
         modifD = dict()
         self.telemetry.receivePhysicsDebugInfo(info, modifD)
@@ -3060,6 +3069,29 @@ def preload(alist):
 def _boundingBoxAsVector4(bb):
     return Math.Vector4(bb[0][0], bb[0][1], bb[1][0], bb[1][1])
 
+
+def _getBestShotResultSound(currBest, newSoundName, otherData):
+    newSoundPriority = _shotResultSoundPriorities[newSoundName]
+    if currBest is None:
+        return (newSoundName, otherData, newSoundPriority)
+    else:
+        return (newSoundName, otherData, newSoundPriority) if newSoundPriority > currBest[2] else currBest
+
+
+_shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
+ 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player': 11,
+ 'enemy_hp_damaged_by_projectile_by_player': 10,
+ 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player': 9,
+ 'enemy_hp_damaged_by_near_explosion_by_player': 8,
+ 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player': 7,
+ 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player': 6,
+ 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player': 5,
+ 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player': 4,
+ 'enemy_no_piercing_by_player': 3,
+ 'enemy_no_hp_damage_at_attempt_by_player': 3,
+ 'enemy_no_hp_damage_at_no_attempt_by_player': 2,
+ 'enemy_no_hp_damage_by_near_explosion_by_player': 1,
+ 'enemy_ricochet_by_player': 0}
 
 class FilterLagEmulator(object):
 

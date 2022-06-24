@@ -19,9 +19,17 @@ class RankedEntryPointModel(ViewModel):
     def currentSeason(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCurrentSeasonType():
+        return RankedSeasonModel
+
     @property
     def nextSeason(self):
         return self._getViewModel(1)
+
+    @staticmethod
+    def getNextSeasonType():
+        return RankedSeasonModel
 
     def getState(self):
         return self._getNumber(2)

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BattlePassVehicleAwardViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(BattlePassVehicleAwardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleLevelPoints(self):
@@ -68,6 +68,18 @@ class BattlePassVehicleAwardViewModel(ViewModel):
     def setIsPostProgression(self, value):
         self._setBool(9, value)
 
+    def getChapterID(self):
+        return self._getNumber(10)
+
+    def setChapterID(self, value):
+        self._setNumber(10, value)
+
+    def getFinalReward(self):
+        return self._getString(11)
+
+    def setFinalReward(self, value):
+        self._setString(11, value)
+
     def _initialize(self):
         super(BattlePassVehicleAwardViewModel, self)._initialize()
         self._addNumberProperty('vehicleLevelPoints', 0)
@@ -80,3 +92,5 @@ class BattlePassVehicleAwardViewModel(ViewModel):
         self._addBoolProperty('isPremiumVehicle', False)
         self._addBoolProperty('isEliteVehicle', False)
         self._addBoolProperty('isPostProgression', False)
+        self._addNumberProperty('chapterID', 0)
+        self._addStringProperty('finalReward', '')

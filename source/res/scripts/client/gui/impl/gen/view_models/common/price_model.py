@@ -16,17 +16,29 @@ class PriceModel(ViewModel):
     def setPrice(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getPriceType():
+        return PriceItemModel
+
     def getDefPrice(self):
         return self._getArray(1)
 
     def setDefPrice(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getDefPriceType():
+        return PriceItemModel
+
     def getDiscount(self):
         return self._getArray(2)
 
     def setDiscount(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getDiscountType():
+        return PriceItemModel
 
     def _initialize(self):
         super(PriceModel, self)._initialize()

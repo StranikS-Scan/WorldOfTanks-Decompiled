@@ -19,13 +19,25 @@ class MarathonEntryPointModel(ViewModel):
     def progressGrind(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getProgressGrindType():
+        return BaseEventModel
+
     @property
     def progressPro(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getProgressProType():
+        return BaseEventModel
+
     @property
     def progressPost(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getProgressPostType():
+        return BaseEventModel
 
     def getState(self):
         return self._getNumber(3)
@@ -122,6 +134,10 @@ class MarathonEntryPointModel(ViewModel):
 
     def setUserTokens(self, value):
         self._setArray(18, value)
+
+    @staticmethod
+    def getUserTokensType():
+        return str
 
     def _initialize(self):
         super(MarathonEntryPointModel, self)._initialize()

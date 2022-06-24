@@ -6,7 +6,6 @@ import Event
 import constants
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME, _MISSION_SECTOR_ID_MAPPING
-from avatar_helpers import getBestShotResultSound
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS
 from debug_utils import LOG_DEBUG_DEV
@@ -54,9 +53,10 @@ class AvatarEpicData(object):
         if constants.IS_DEVELOPMENT:
             self.__devEvtManager.clear()
 
-    def showDestructibleShotResults(self, destructibleEntityID, hitFlagsList):
-        LOG_DEBUG_DEV('showDestructibleShotResults', destructibleEntityID, hitFlagsList)
-        destructibleComp = self.arena.componentSystem.destructibleEntityComponent
+    def showDestructibleShotResults(self, destructibleEntityID, hitFlags):
+        LOG_DEBUG_DEV('showDestructibleShotResults', destructibleEntityID, hitFlags)
+        if self.arena.componentSystem and hasattr(self.arena.componentSystem, 'destructibleEntityComponent'):
+            destructibleComp = self.arena.componentSystem.destructibleEntityComponent
         if not destructibleComp:
             return
         else:
@@ -64,15 +64,14 @@ class AvatarEpicData(object):
             if destructibleObj is None:
                 return
             VHF = VEHICLE_HIT_FLAGS
+            if hitFlags & VHF.VEHICLE_KILLED:
+                return
+            if hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
+                return
             if self.team == destructibleObj.team:
                 return
-            bestSound = None
-            for hitFlags in hitFlagsList:
-                if hitFlags & VHF.VEHICLE_KILLED:
-                    return
-                if hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
-                    return
-                sound = None
+            sound = None
+            if hitFlags is not None:
                 if hitFlags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
                     if hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
                         sound = 'enemy_hp_damaged_by_near_explosion_by_player'
@@ -95,11 +94,8 @@ class AvatarEpicData(object):
                     sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
                 else:
                     sound = 'enemy_no_piercing_by_player'
-                if sound is not None:
-                    bestSound = getBestShotResultSound(bestSound, sound, None)
-
-            if bestSound is not None:
-                self.soundNotifications.play(bestSound[0])
+            if sound is not None:
+                self.soundNotifications.play(sound)
             return
 
     def onDestructibleDestroyed(self, destructibleEntityID, shooterID):

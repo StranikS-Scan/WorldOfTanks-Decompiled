@@ -15,6 +15,10 @@ class SoldModuleInfoTooltipModel(ViewModel):
     def setCompatibleTanks(self, value):
         self._setArray(0, value)
 
+    @staticmethod
+    def getCompatibleTanksType():
+        return str
+
     def _initialize(self):
         super(SoldModuleInfoTooltipModel, self)._initialize()
         self._addArrayProperty('compatibleTanks', Array())

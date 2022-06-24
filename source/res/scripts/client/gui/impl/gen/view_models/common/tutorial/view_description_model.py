@@ -22,6 +22,10 @@ class ViewDescriptionModel(ViewModel):
     def setComponents(self, value):
         self._setArray(1, value)
 
+    @staticmethod
+    def getComponentsType():
+        return ComponentDescriptionModel
+
     def _initialize(self):
         super(ViewDescriptionModel, self)._initialize()
         self._addStringProperty('viewId', '')

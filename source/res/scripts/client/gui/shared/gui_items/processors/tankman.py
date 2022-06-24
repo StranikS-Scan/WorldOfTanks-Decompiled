@@ -470,9 +470,10 @@ class TankmanChangeRole(ItemProcessor):
 
 class TankmanDropSkills(ItemProcessor):
 
-    def __init__(self, tankman, dropSkillCostIdx):
-        super(TankmanDropSkills, self).__init__(tankman, (plugins.MessageConfirmator('dropSkill'), plugins.TankmanDropSkillValidator(tankman, True)))
+    def __init__(self, tankman, dropSkillCostIdx, useRecertificationForm):
+        super(TankmanDropSkills, self).__init__(tankman, (plugins.TankmanDropSkillValidator(tankman, True),))
         self.dropSkillCostIdx = dropSkillCostIdx
+        self.useRecertificationForm = useRecertificationForm
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='drop_tankman_skill/{}'.format(errStr), defaultSysMsgKey='drop_tankman_skill/server_error')
@@ -484,7 +485,7 @@ class TankmanDropSkills(ItemProcessor):
 
     def _request(self, callback):
         _logger.debug('Make server request to drop tankman skills: %s, %s', self.item, self.dropSkillCostIdx)
-        BigWorld.player().inventory.dropTankmanSkills(self.item.invID, self.dropSkillCostIdx, lambda code: self._response(code, callback))
+        BigWorld.player().inventory.dropTankmanSkills(self.item.invID, self.dropSkillCostIdx, self.useRecertificationForm, lambda code: self._response(code, callback))
 
     def __getTankmanSysMsgType(self, dropSkillCostIdx):
         if dropSkillCostIdx == 1:

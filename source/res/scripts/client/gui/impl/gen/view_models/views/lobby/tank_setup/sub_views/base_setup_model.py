@@ -29,19 +29,35 @@ class BaseSetupModel(ViewModel):
     def filter(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getFilterType():
+        return FiltersModel
+
     @property
     def dealPanel(self):
         return self._getViewModel(1)
 
+    @staticmethod
+    def getDealPanelType():
+        return DealPanelModel
+
     @property
     def tabs(self):
         return self._getViewModel(2)
+
+    @staticmethod
+    def getTabsType():
+        return SetupTabsModel
 
     def getSlots(self):
         return self._getArray(3)
 
     def setSlots(self, value):
         self._setArray(3, value)
+
+    @staticmethod
+    def getSlotsType():
+        return BaseSlotModel
 
     def getSyncInitiator(self):
         return self._getNumber(4)

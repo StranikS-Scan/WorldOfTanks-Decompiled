@@ -15,6 +15,10 @@ class CrewBooksDialogContentModel(ViewModel):
     def crewBookTankmenList(self):
         return self._getViewModel(0)
 
+    @staticmethod
+    def getCrewBookTankmenListType():
+        return ListModel
+
     def getIsUseStarted(self):
         return self._getBool(1)
 

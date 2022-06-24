@@ -81,13 +81,15 @@ class AdaptationHealthRestoreEffectManager(CGF.ComponentManager):
         self.showHealthGlowEffect(bwComponent, gameObject)
 
     @onRemovedQuery(VehicleAdaptationHealthRestoreComponent, CGF.GameObject)
-    def hideHealthGlowEffect(self, _, entityGameObject):
+    def hideHealthGlowEffect(self, bwComponent, entityGameObject):
         effectRoots = findEffectRoots(entityGameObject)
+        vehicle = bwComponent.entity
         for effectRoot, effectComponent in effectRoots:
             for partComponent, partGO in self.iterParts(effectRoot):
                 self.spawnEndAnimation(partComponent, partGO, effectRoot)
 
-            self.loadPostEffect(effectComponent.getPostEffectTarget())
+            if vehicle and not vehicle.isDestroyed and vehicle.health > 0:
+                self.loadPostEffect(effectComponent.getPostEffectTarget())
 
     @classmethod
     def showHealthGlowEffect(cls, bwComponent, gameObject):

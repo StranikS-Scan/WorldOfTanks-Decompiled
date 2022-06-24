@@ -13,6 +13,10 @@ class BattleResultViewModel(BrBaseViewModel):
     def personalResults(self):
         return self._getViewModel(2)
 
+    @staticmethod
+    def getPersonalResultsType():
+        return PersonalResultsModel
+
     def _initialize(self):
         super(BattleResultViewModel, self)._initialize()
         self._addViewModelProperty('personalResults', PersonalResultsModel())

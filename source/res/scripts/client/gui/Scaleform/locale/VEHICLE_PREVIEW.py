@@ -21,6 +21,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
     HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/vehPostProgression'
     HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE = '#vehicle_preview:header/backBtn/descrLabel/blueprintsExchange'
+    HEADER_BACKBTN_DESCRLABEL_RESOURCEWELL = '#vehicle_preview:header/backBtn/descrLabel/resourceWell'
     HEADER_BACKBTN_DESCRLABEL_REWARDS = '#vehicle_preview:header/backBtn/descrLabel/rewards'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
@@ -114,6 +115,11 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_STYLE_CAPTION_USERMONEY = '#vehicle_preview:buyingPanel/style/caption/userMoney'
     TOPPANEL_TAB_VEHICLE = '#vehicle_preview:topPanel/tab/vehicle'
     TOPPANEL_TAB_STYLE = '#vehicle_preview:topPanel/tab/style'
+    TOPPANEL_TAB_BASEVEHICLE_VEHICLE = '#vehicle_preview:topPanel/tab/baseVehicle/vehicle'
+    TOPPANEL_TAB_PERSONALNUMBERVEHICLE_STYLE = '#vehicle_preview:topPanel/tab/personalNumberVehicle/style'
+    BUYINGPANEL_STYLE_DESCRIPTION_TITLE = '#vehicle_preview:buyingPanel/style/description/title'
+    BUYINGPANEL_STYLE_DESCRIPTION_TEXT = '#vehicle_preview:buyingPanel/style/description/text'
+    BUYINGPANEL_STYLE_DESCRIPTION_BUTTON_TEXT = '#vehicle_preview:buyingPanel/style/description/button/text'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,
@@ -130,6 +136,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_RANKED,
      HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION,
      HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE,
+     HEADER_BACKBTN_DESCRLABEL_RESOURCEWELL,
      HEADER_BACKBTN_DESCRLABEL_REWARDS)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)

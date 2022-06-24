@@ -9,7 +9,7 @@ from PlayerEvents import g_playerEvents
 from battle_pass_common import FinalReward
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN
 from adisp import process
 from async import async, await
 from chat_shared import SYS_MESSAGE_TYPE
@@ -46,16 +46,17 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.game_vars import getVehicleByIntCD
 if typing.TYPE_CHECKING:
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -214,6 +215,8 @@ class ServiceChannelListener(_NotificationListener):
                 return BattlePassLockButtonDecorator
             if messageSubtype in (SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD, SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE):
                 return MapboxButtonDecorator
+            if messageType == SYS_MESSAGE_TYPE.resourceWellNoVehicles.index():
+                return ResourceWellLockButtonDecorator
         return MessageDecorator
 
 
@@ -1389,6 +1392,74 @@ class PsaCoinReminderListener(_NotificationListener):
             model.removeNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, self.MSG_ID)
 
 
+class ResourceWellListener(_NotificationListener):
+    __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
+    __START_ENTITY_ID = 0
+    __resourceWell = dependency.descriptor(IResourceWellController)
+
+    def __init__(self):
+        super(ResourceWellListener, self).__init__()
+        self.__isActive = False
+        self.__isPaused = False
+        self.__isFinished = False
+
+    def start(self, model):
+        result = super(ResourceWellListener, self).start(model)
+        if result:
+            self.__resourceWell.onEventUpdated += self.__onEventUpdated
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        self.__resourceWell.onEventUpdated -= self.__onEventUpdated
+        super(ResourceWellListener, self).stop()
+
+    def __onEventUpdated(self):
+        self.__tryNotify()
+
+    def __tryNotify(self):
+        isActive = self.__resourceWell.isActive()
+        isPaused = self.__resourceWell.isPaused()
+        isFinished = self.__resourceWell.isFinished()
+        if isActive and not self.__isActive and not AccountSettings.getNotifications(RESOURCE_WELL_START_SHOWN):
+            self.__pushStarted()
+        elif isPaused and not self.__isPaused:
+            self.__pushPaused()
+        elif self.__isPaused and isActive:
+            self.__pushEnabled()
+        elif isFinished and not self.__isFinished and AccountSettings.getNotifications(RESOURCE_WELL_START_SHOWN) and not AccountSettings.getNotifications(RESOURCE_WELL_END_SHOWN):
+            self.__pushFinished()
+        self.__isActive = isActive
+        self.__isPaused = isPaused
+        self.__isFinished = isFinished
+
+    def __pushStarted(self):
+        model = self._model()
+        if model is not None:
+            vehicle = text_styles.crystal(getVehicleByIntCD(self.__resourceWell.getRewardVehicle()).shortUserName)
+            text = backport.text(self.__RESOURCE_WELL_MESSAGES.start.text(), vehicle=text_styles.crystal(vehicle))
+            title = backport.text(self.__RESOURCE_WELL_MESSAGES.start.title())
+            messageData = {'title': title,
+             'text': text}
+            model.addNotification(ResourceWellStartDecorator(message=messageData, entityID=self.__START_ENTITY_ID, model=model))
+            AccountSettings.setNotifications(RESOURCE_WELL_START_SHOWN, True)
+        return
+
+    def __pushFinished(self):
+        text = backport.text(self.__RESOURCE_WELL_MESSAGES.end.text())
+        title = backport.text(self.__RESOURCE_WELL_MESSAGES.end.title())
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.ResourceWellEnd, messageData={'title': title})
+        AccountSettings.setNotifications(RESOURCE_WELL_END_SHOWN, True)
+
+    def __pushPaused(self):
+        text = backport.text(self.__RESOURCE_WELL_MESSAGES.pause.text())
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
+
+    def __pushEnabled(self):
+        text = backport.text(self.__RESOURCE_WELL_MESSAGES.enabled.text())
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1408,7 +1479,8 @@ class NotificationsListeners(_NotificationListener):
          EmailConfirmationReminderListener(),
          VehiclePostProgressionUnlockListener(),
          PsaCoinReminderListener(),
-         BattlePassSwitchChapterReminder())
+         BattlePassSwitchChapterReminder(),
+         ResourceWellListener())
 
     def start(self, model):
         for listener in self.__listeners:

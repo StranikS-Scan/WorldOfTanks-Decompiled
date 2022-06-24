@@ -20,6 +20,7 @@ from gui.shared.utils.requesters.BattleRoyaleRequester import BattleRoyaleReques
 from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
 from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
 from gui.shared.utils.requesters.blueprints_requester import BlueprintsRequester
+from gui.shared.utils.requesters.resource_well_requester import ResourceWellRequester
 from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
 from gui.shared.utils.requesters.gift_system_requester import GiftSystemRequester
 from gui.shared.compat_vehicles_cache import CompatVehiclesCache
@@ -37,7 +38,7 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), ResourceWellRequester())
         self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
         self.__syncFailed = False

@@ -26,6 +26,7 @@ class RES_COMMON(object):
     MAPS_ICONS_MARATHON_REWARDWINDOW_BG = '../maps/icons/marathon/rewardWindow/bg.png'
     MAPS_ICONS_PREMACC_DASHBOARD_HEADER_BADGESLOT_BG = '../maps/icons/premacc/dashboard/header/badgeSlot/bg.png'
     MAPS_ICONS_RANKEDBATTLES_AWARDS_BG = '../maps/icons/rankedBattles/awards/bg.png'
+    MAPS_ICONS_RESOURCEWELL_INTRO_BG = '../maps/icons/resourceWell/intro/bg.png'
     MAPS_ICONS_SENIORITYAWARDS_NOTIFICATION_BG = '../maps/icons/seniorityAwards/notification/bg.png'
     MAPS_ICONS_SUBSCRIPTION_AWARD_VIEW_BG = '../maps/icons/subscription/award_view/bg.png'
     MAPS_ICONS_SUBSCRIPTION_DASHBOARD_CARD_PIGGY_BANK_BG = '../maps/icons/subscription/dashboard_card/piggy_bank/bg.png'

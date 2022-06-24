@@ -850,6 +850,77 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
         data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
 
 
+class _WellRewardConfig(namedtuple('_WellRewardConfig', ('bonus',
+ 'limit',
+ 'isSerial',
+ 'sequence',
+ 'rewardId'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(bonus={}, limit=0, isSerial=False, sequence='', rewardId='')
+        defaults.update(kwargs)
+        return super(_WellRewardConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _ResourceConfig(namedtuple('_ResourceConfig', ('name', 'rate', 'limit'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(name='', rate=0, limit=0)
+        defaults.update(kwargs)
+        return super(_ResourceConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class ResourceWellConfig(namedtuple('_ResourceWellConfig', ('isEnabled',
+ 'season',
+ 'finishTime',
+ 'remindTime',
+ 'rewards',
+ 'points',
+ 'resources',
+ 'startTime'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, season=0, finishTime=0, remindTime=0, rewards={}, points=0, resources={}, startTime=0)
+        defaults.update(kwargs)
+        cls.__packResourceConfigs(defaults)
+        cls.__packRewardsConfigs(defaults)
+        return super(ResourceWellConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        self.__packResourceConfigs(dataToUpdate)
+        self.__packRewardsConfigs(dataToUpdate)
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def __packResourceConfigs(cls, data):
+        resources = {}
+        for resourceType, resourceConfig in data['resources'].iteritems():
+            resources[resourceType] = {name:_ResourceConfig(name=name, rate=resourceData.get('rate'), limit=resourceData.get('limit')) for name, resourceData in resourceConfig.iteritems()}
+
+        data['resources'] = resources
+
+    @classmethod
+    def __packRewardsConfigs(cls, data):
+        data['rewards'] = {rewardId:makeTupleByDict(_WellRewardConfig, reward) for rewardId, reward in data['rewards'].iteritems()}
+
+
 class _DragonBoatConfig(namedtuple('_DragonBoatConfig', ('isEnabled',
  'isActive',
  'endTime',
@@ -910,6 +981,7 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
+        self.__resourceWellConfig = ResourceWellConfig()
         self.__dragonBoatConfig = _DragonBoatConfig()
         self.set(serverSettings)
 
@@ -1011,6 +1083,8 @@ class ServerSettings(object):
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
+        if Configs.RESOURCE_WELL.value in self.__serverSettings:
+            self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if 'dragon_boat_config' in self.__serverSettings:
             self.__dragonBoatConfig = makeTupleByDict(_DragonBoatConfig, self.__serverSettings['dragon_boat_config'])
         else:
@@ -1089,6 +1163,8 @@ class ServerSettings(object):
             self.__updateGiftSystemConfig(serverSettingsDiff)
         if TRADE_IN_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
+        if Configs.RESOURCE_WELL.value in serverSettingsDiff:
+            self.__updateResourceWellConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         if 'dragon_boat_config' in serverSettingsDiff:
@@ -1208,6 +1284,10 @@ class ServerSettings(object):
     @property
     def giftSystemConfig(self):
         return self.__giftSystemConfig
+
+    @property
+    def resourceWellConfig(self):
+        return self.__resourceWellConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1600,6 +1680,9 @@ class ServerSettings(object):
 
     def __updateGiftSystemConfig(self, serverSettingsDiff):
         self.__giftSystemConfig = self.__giftSystemConfig.replace({'events': serverSettingsDiff[Configs.GIFTS_CONFIG.value]})
+
+    def __updateResourceWellConfig(self, diff):
+        self.__resourceWellConfig = self.__resourceWellConfig.replace(diff[Configs.RESOURCE_WELL.value])
 
 
 def serverSettingsChangeListener(*configKeys):

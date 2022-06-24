@@ -861,6 +861,7 @@ class Configs(enum.Enum):
     EPIC_CONFIG = 'epic_config'
     MAPBOX_CONFIG = 'mapbox_config'
     GIFTS_CONFIG = 'gifts_config'
+    RESOURCE_WELL = 'resource_well_config'
 
 
 class RESTRICTION_TYPE:
@@ -1493,7 +1494,7 @@ class INVOICE_LIMITS:
     TMAN_FREEXP_MAX = 100000000
     TMAN_SKILLS_MAX = 5
     CREW_SKINS = 100
-    BLUEPRINTS_MAX = 100
+    BLUEPRINTS_MAX = 1000
     PREMIUM_DAYS_MAX = 1830
     BATTLE_PASS_POINTS = 100000
     ENTITLEMENTS_MAX = 10000
@@ -1652,6 +1653,7 @@ class REQUEST_COOLDOWN:
     POST_PROGRESSION_CELL = 0.5
     SYNC_GIFTS = 0.5
     WATCH_REPLAY = 5.0
+    RESOURCE_WELL_PUT = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2103,6 +2105,7 @@ class CustomizationInvData(object):
     DRESSED = 4
     PROGRESSION = 5
     OUTFITS_POOL = 6
+    SERIAL_NUMBERS = 7
 
 
 class SkinInvData(object):
@@ -3001,3 +3004,6 @@ class BATTLE_MODE_LOCK_MASKS(object):
     @staticmethod
     def getUnpackedVehLockMode(vehLockMode, vehType):
         return BATTLE_MODE_LOCK_MASKS.getClanRentedVehLockMode(vehLockMode) if 'clanWarsBattles' in vehType.tags else BATTLE_MODE_LOCK_MASKS.getCommonVehLockMode(vehLockMode)
+
+
+RESOURCE_WELL_FORBIDDEN_TOKEN = 'rws{}_forbidden'

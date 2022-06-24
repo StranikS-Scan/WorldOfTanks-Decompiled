@@ -381,7 +381,7 @@ class ItemsRequester(IItemsRequester):
      'dogTag',
      'battleRoyaleStats'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, resourceWellRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -400,6 +400,7 @@ class ItemsRequester(IItemsRequester):
         self.__anonymizer = anonymizerRequester
         self.__battlePass = battlePassRequester
         self.__giftSystem = giftSystemRequester
+        self.__resourceWell = resourceWellRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -481,6 +482,10 @@ class ItemsRequester(IItemsRequester):
     def giftSystem(self):
         return self.__giftSystem
 
+    @property
+    def resourceWell(self):
+        return self.__resourceWell
+
     @async
     @process
     def request(self, callback=None):
@@ -533,6 +538,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
+        Waiting.show('download/resourceWell')
+        yield self.__resourceWell.request()
+        Waiting.hide('download/resourceWell')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
@@ -708,7 +716,8 @@ class ItemsRequester(IItemsRequester):
                 storageKeys = (CustomizationInvData.ITEMS,
                  CustomizationInvData.NOVELTY_DATA,
                  CustomizationInvData.DRESSED,
-                 CustomizationInvData.PROGRESSION)
+                 CustomizationInvData.PROGRESSION,
+                 CustomizationInvData.SERIAL_NUMBERS)
                 for storageKey in storageKeys:
                     for cType, items in itemsDiff.get(storageKey, {}).iteritems():
                         for idx in items.iterkeys():

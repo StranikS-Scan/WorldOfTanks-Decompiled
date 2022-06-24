@@ -2144,6 +2144,81 @@ class ISeniorityAwardsController(IGameController):
         raise NotImplementedError
 
 
+class IResourceWellController(IGameController):
+    onEventUpdated = None
+    onSettingsChanged = None
+    onNumberRequesterUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isActive(self):
+        raise NotImplementedError
+
+    def isStarted(self):
+        raise NotImplementedError
+
+    def isFinished(self):
+        raise NotImplementedError
+
+    def isPaused(self):
+        raise NotImplementedError
+
+    def getSeason(self):
+        raise NotImplementedError
+
+    def getRewardLimit(self, isTop):
+        raise NotImplementedError
+
+    def getFinishTime(self):
+        raise NotImplementedError
+
+    def getCurrentPoints(self):
+        raise NotImplementedError
+
+    def getMaxPoints(self):
+        raise NotImplementedError
+
+    def getRewardVehicle(self):
+        raise NotImplementedError
+
+    def getRewardStyleID(self):
+        raise NotImplementedError
+
+    def getRewardSequence(self, isTop):
+        raise NotImplementedError
+
+    def getRewardLeftCount(self, isTop):
+        raise NotImplementedError
+
+    def isRewardEnabled(self, isTop):
+        raise NotImplementedError
+
+    def isRewardCountAvailable(self, isTop=True):
+        raise NotImplementedError
+
+    def getReminderTime(self):
+        raise NotImplementedError
+
+    def isCompleted(self):
+        raise NotImplementedError
+
+    def getResources(self):
+        raise NotImplementedError
+
+    def getRewards(self):
+        raise NotImplementedError
+
+    def getRewardID(self, isTop):
+        raise NotImplementedError
+
+    def startNumberRequesters(self):
+        raise NotImplementedError
+
+    def stopNumberRequesters(self):
+        raise NotImplementedError
+
+
 class IDragonBoatController(IGameController):
     onSettingsChanged = None
     onStatusUpdated = None

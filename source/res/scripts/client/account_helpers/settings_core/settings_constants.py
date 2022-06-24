@@ -318,6 +318,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
+    RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
 
 
 class OnceOnlyHints(CONST_CONTAINER):

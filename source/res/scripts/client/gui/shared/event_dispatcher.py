@@ -31,6 +31,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.lobby.account_completion.utils.common import AccountCompletionType
 from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
@@ -41,6 +42,8 @@ from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfir
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.resource_well.resource import Resource
+from gui.resource_well.resource_well_helpers import isIntroShown, isResourceWellRewardVehicle
 from gui.shared import events, g_eventBus
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -58,7 +61,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -66,9 +69,10 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Generator, Iterable, List, Union
+    from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple
     from gui.marathon.marathon_event import MarathonEvent
     from gui.Scaleform.framework.managers import ContainerManager
+    from uilogging.resource_well.constants import ParentScreens
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -551,6 +555,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 if activeMarathon:
                     title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                     showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                elif isResourceWellRewardVehicle(descriptor.type.compactDescr):
+                    showResourceWellHeroPreview(descriptor.type.compactDescr, previewAlias=previewAlias, previousBackAlias=previousBackAlias)
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity)
@@ -1642,6 +1648,100 @@ def showRankedSelectableReward(rewards=None):
     from gui.impl.lobby.ranked.ranked_selectable_reward_view import RankedSelectableRewardWindow
     window = RankedSelectableRewardWindow(rewards)
     window.load()
+
+
+@dependency.replace_none_kwargs(resourceWell=IResourceWellController)
+def showResourceWellProgressionWindow(resourceWell=None, backCallback=showHangar):
+    from gui.impl.lobby.resource_well.intro_view import IntroView
+    from gui.impl.lobby.resource_well.completed_progression_view import CompletedProgressionView
+    from gui.impl.lobby.resource_well.progression_view import ProgressionView
+    if not isIntroShown():
+        view = IntroView
+        viewRes = R.views.lobby.resource_well.IntroView()
+    elif resourceWell.isCompleted():
+        view = CompletedProgressionView
+        viewRes = R.views.lobby.resource_well.CompletedProgressionView()
+    else:
+        view = ProgressionView
+        viewRes = R.views.lobby.resource_well.ProgressionView()
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.getViewByLayoutID(viewRes) is None:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(viewRes, view, ScopeTemplates.DEFAULT_SCOPE), backCallback=backCallback), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showResourcesLoadingWindow(parentScreen):
+    from gui.impl.lobby.resource_well.resources_loading_view import ResourcesLoadingWindow
+    ResourcesLoadingWindow(parentScreen=parentScreen).load()
+
+
+@async
+def showResourcesLoadingConfirm(resources, isReturnOperation, callback):
+    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
+    from gui.impl.lobby.resource_well.resources_loading_confirm import ResourcesLoadingConfirm
+    result = yield await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.ResourcesLoadingConfirm(), wrappedViewClass=ResourcesLoadingConfirm, resources=resources, isReturnOperation=isReturnOperation))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, data = result.result
+        callback((isOK, data))
+
+
+@async
+def showResourceWellNoSerialVehiclesConfirm(callback):
+    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
+    from gui.impl.lobby.resource_well.no_serial_vehicles_confirm import NoSerialVehiclesConfirm
+    result = yield await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.NoSerialVehiclesConfirm(), wrappedViewClass=NoSerialVehiclesConfirm))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, data = result.result
+        callback((isOK, data))
+
+
+def showResourceWellNoVehiclesConfirm():
+    from gui.impl.lobby.resource_well.no_vehicles_confirm import NoVehiclesConfirmWindow
+    NoVehiclesConfirmWindow().load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showResourceWellAwardWindow(serialNumber='', notificationMgr=None):
+    from gui.impl.lobby.resource_well.award_view import AwardWindow
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.resource_well.AwardView()) is None:
+        window = AwardWindow(serialNumber=serialNumber)
+        _killOldView(R.views.lobby.resource_well.ProgressionView())
+        _killOldView(R.views.lobby.resource_well.ResourcesLoadingView())
+        notificationMgr.append(WindowNotificationCommand(window))
+    return
+
+
+def showResourceWellVehiclePreview(vehicleCD, style=None, backCallback=None, topPanelData=None, isHeroTank=False, previewAlias=None, previousBackAlias=None):
+    if previewAlias is None:
+        previewAlias = VIEW_ALIAS.LOBBY_HANGAR if isHeroTank else VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW
+    if topPanelData is not None and topPanelData.get('currentTabID') == TabID.PERSONAL_NUMBER_VEHICLE:
+        previewStyle = style
+    else:
+        previewStyle = None
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW), ctx={'itemCD': vehicleCD,
+     'previewBackCb': backCallback,
+     'numberStyle': style,
+     'style': previewStyle,
+     'topPanelData': topPanelData,
+     'previewAlias': previewAlias,
+     'previewAppearance': HeroTankPreviewAppearance() if isHeroTank else None,
+     'isHeroTank': isHeroTank,
+     'previousBackAlias': previousBackAlias}), EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showResourceWellHeroPreview(vehicleCD, backCallback=None, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehicleCD,
+     'previewBackCb': backCallback,
+     'previewAlias': previewAlias,
+     'previewAppearance': HeroTankPreviewAppearance(),
+     'isHeroTank': True,
+     'previousBackAlias': previousBackAlias}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showDragonBoatIntroWindow(parent=None, closeCallback=None):

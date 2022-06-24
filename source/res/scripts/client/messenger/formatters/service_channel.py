@@ -26,6 +26,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from goodies.goodie_constants import GOODIE_VARIETY
 from gui import GUI_NATIONS, GUI_SETTINGS
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
@@ -39,6 +40,7 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
+from gui.resource_well.resource_well_constants import ResourceType
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
@@ -70,7 +72,7 @@ from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel_helpers import EOL, MessageData, getCustomizationItemData, getRewardsForQuests, mergeRewards
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IMapboxController, IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IBattleRoyaleController, IMapboxController, IResourceWellController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -4397,6 +4399,163 @@ class TelecomMergeResultsFormatter(WaitItemsSyncFormatter):
             textItems.append(backport.text(R.strings.system_messages.telecomMergeResults.body.wishMsg()))
             formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'text': '<br>'.join(textItems)})
             callback([MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))])
+        else:
+            callback([MessageData(None, None)])
+        return
+
+
+class ResourceWellOperationFormatter(ServiceChannelFormatter):
+    __TEMPLATE = 'ResourceWellOperationMessage'
+    __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
+    __BULLET = u'\u2022 '
+    __NONE_NATION_NAME = 'intelligence'
+    __NO_NATION_INDEX = 0
+    __NATIONS_ORDER = {name:idx for idx, name in enumerate(GUI_NATIONS, 1)}
+    __NATIONS_ORDER[__NONE_NATION_NAME] = __NO_NATION_INDEX
+    __CURRENCY_ORDER = {name:idx for idx, name in enumerate(Currency.GUI_ALL + (CURRENCIES_CONSTANTS.FREE_XP,))}
+    __FULL_PROGRESS = 100.0
+    __resourceWell = dependency.descriptor(IResourceWellController)
+
+    def format(self, message, *args):
+        data = message.data
+        if 'type' not in data or 'data' not in data:
+            return [MessageData(None, None)]
+        else:
+            operationType = data['type']
+            title = backport.text(self.__RESOURCE_WELL_MESSAGES.dyn(operationType).title())
+            text = backport.text(self.__RESOURCE_WELL_MESSAGES.dyn(operationType).text())
+            resources = self.__formatResources(data['data'])
+            if not resources:
+                return [MessageData(None, None)]
+            additionalText = ''
+            points = data.get('points')
+            if points is not None and operationType == 'put':
+                progress = self.__FULL_PROGRESS / (self.__resourceWell.getMaxPoints() or self.__FULL_PROGRESS) * points
+                additionalText = backport.text(self.__RESOURCE_WELL_MESSAGES.progress(), progress=progress) + backport.text(R.strings.common.common.percent())
+            ctx = {'resources': self.__BULLET + resources,
+             'title': title,
+             'text': text,
+             'additionalText': additionalText}
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx=ctx)
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+
+    def __formatResources(self, resources):
+        resourceStrings = []
+        if ResourceType.CURRENCY.value in resources:
+            resourceStrings.extend(self.__formatCurrencies(resources[ResourceType.CURRENCY.value]))
+        if ResourceType.BLUEPRINTS.value in resources:
+            resourceStrings.append(self.__formatBlueprints(resources[ResourceType.BLUEPRINTS.value]))
+        return (backport.text(self.__RESOURCE_WELL_MESSAGES.breakLine()) + self.__BULLET).join(resourceStrings)
+
+    def __formatBlueprints(self, blueprintResources):
+        blueprints = []
+        for fragmentCD, count in blueprintResources.iteritems():
+            fragmentType = getFragmentType(fragmentCD)
+            if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
+                blueprints.append((self.__NONE_NATION_NAME, count))
+            if fragmentType == BlueprintTypes.NATIONAL:
+                blueprints.append((nations.MAP.get(getFragmentNationID(fragmentCD), nations.NONE_INDEX), count))
+
+        blueprints.sort(cmp=lambda a, b: cmp(self.__NATIONS_ORDER.get(a), self.__NATIONS_ORDER.get(b)), key=lambda x: x[0])
+        blueprintStrings = []
+        for nation, count in blueprints:
+            nationStr = backport.text(R.strings.blueprints.nations.dyn(nation, self.__RESOURCE_WELL_MESSAGES.intelligence)())
+            blueprintStrings.append(nationStr + self.__formatBlueprintCount(count))
+
+        return backport.text(self.__RESOURCE_WELL_MESSAGES.blueprints()) + ', '.join(blueprintStrings)
+
+    def __formatCurrencies(self, currencyResources):
+        currencies = sorted(currencyResources.items(), key=lambda x: x[0], cmp=lambda a, b: cmp(self.__CURRENCY_ORDER.get(a), self.__CURRENCY_ORDER.get(b)))
+        return [ backport.text(self.__RESOURCE_WELL_MESSAGES.dyn(name)(), count=self.__formatCurrencyCount(name, count)) for name, count in currencies ]
+
+    def __formatCurrencyCount(self, currencyName, count):
+        style = getStyle(currencyName) if currencyName in Currency.ALL else text_styles.crystal
+        return style(backport.getIntegralFormat(abs(count)))
+
+    def __formatBlueprintCount(self, count):
+        countStr = backport.getIntegralFormat(abs(count))
+        return text_styles.crystal(backport.text(self.__RESOURCE_WELL_MESSAGES.blueprintCount(), count=countStr))
+
+
+class ResourceWellRewardFormatter(WaitItemsSyncFormatter):
+    __TEMPLATE = 'ResourceWellRewardReceivedMessage'
+    __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
+    __resourceWell = dependency.descriptor(IResourceWellController)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            reward = message.data.get('reward')
+            if reward is None:
+                callback([MessageData(None, None)])
+            callback([self.__getMainMessage(message), self.__getAdditionalMessage(message)])
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    def __getMainMessage(self, message):
+        from tutorial.control.game_vars import getVehicleByIntCD
+        serialNumber = message.data.get('serialNumber')
+        vehicle = getVehicleByIntCD(self.__resourceWell.getRewardVehicle()).userName
+        additionalText = ''
+        if serialNumber:
+            title = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.title(), vehicle=vehicle)
+            text = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.text(), vehicle=text_styles.crystal(vehicle))
+            additionalText = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.additionalText(), serialNumber=serialNumber)
+        else:
+            title = backport.text(self.__RESOURCE_WELL_MESSAGES.regularReward.title(), vehicle=vehicle)
+            text = backport.text(self.__RESOURCE_WELL_MESSAGES.regularReward.text(), vehicle=text_styles.crystal(vehicle))
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'title': title,
+         'text': text,
+         'additionalText': additionalText})
+        return MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))
+
+    def __getAdditionalMessage(self, message):
+        rewards = self.__resourceWell.getRewards()
+        reward = rewards.get(message.data['reward'])
+        if reward is None:
+            return MessageData(None, None)
+        else:
+            slots = reward.bonus.get('slots')
+            if not slots:
+                return MessageData(None, None)
+            text = g_settings.htmlTemplates.format('slotsAccruedInvoiceReceived', {'amount': backport.getIntegralFormat(slots)})
+            at = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime))
+            formatted = g_settings.msgTemplates.format('resourceWellInvoiceReceived', ctx={'at': at,
+             'text': text})
+            return MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))
+
+
+class ResourceWellNoVehiclesFormatter(WaitItemsSyncFormatter):
+    __TEMPLATE = 'ResourceWellNoVehiclesMessage'
+    __RETURN_TEMPLATE = 'ResourceWellNoVehiclesWithReturnMessage'
+    __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __resourceWell = dependency.descriptor(IResourceWellController)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            from tutorial.control.game_vars import getVehicleByIntCD
+            isSerial = message.data.get('isSerial')
+            balance = self.__itemsCache.items.resourceWell.getBalance()
+            title = backport.text(self.__RESOURCE_WELL_MESSAGES.noVehicles.title())
+            template = self.__TEMPLATE
+            if isSerial:
+                template = self.__RETURN_TEMPLATE
+                vehicle = getVehicleByIntCD(self.__resourceWell.getRewardVehicle()).userName
+                text = backport.text(self.__RESOURCE_WELL_MESSAGES.noSerialVehicles.text(), vehicle=vehicle)
+            elif balance:
+                text = backport.text(self.__RESOURCE_WELL_MESSAGES.noVehiclesWithReturn.text())
+            else:
+                text = backport.text(self.__RESOURCE_WELL_MESSAGES.noVehicles.text())
+            formatted = g_settings.msgTemplates.format(template, ctx={'title': title,
+             'text': text})
+            callback([MessageData(formatted, self._getGuiSettings(message, template))])
         else:
             callback([MessageData(None, None)])
         return

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/top_panel_tabs.py
 import logging
 import typing
+from CurrentVehicle import g_currentPreviewVehicle
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.VehiclePreviewTopPanelTabsMeta import VehiclePreviewTopPanelTabsMeta
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -16,6 +17,7 @@ _logger = logging.getLogger(__name__)
 _TAB_COMMAND = {TabID.VEHICLE: showVehiclePreviewWithoutBottomPanel,
  TabID.STYLE: showStylePreview}
 _TAB_CUSTOM_NAME_GETTER = {TabID.STYLE: lambda ctx: ctx['style'].userName if ctx.get('style') else ''}
+PERSONAL_NUMBER_STYLE_TABS = (TabID.PERSONAL_NUMBER_VEHICLE, TabID.BASE_VEHICLE)
 
 class VehiclePreviewTopPanelTabs(VehiclePreviewTopPanelTabsMeta):
 
@@ -84,8 +86,16 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         if callable(command):
             backCallback = self.__parentCtx.get('backCallback') or self.__parentCtx.get('previewBackCb')
             command(self.__parentCtx.get('itemCD'), style=self.__parentCtx.get('style'), topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback)
+        elif self.__currentTabID in PERSONAL_NUMBER_STYLE_TABS:
+            self.__processPersonalNumberStyleTab()
 
     def __makeTopPanelData(self):
         return {'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': self.__tabIDs,
          'currentTabID': self.__currentTabID}
+
+    def __processPersonalNumberStyleTab(self):
+        style = self.__parentCtx.get('numberStyle') if self.__currentTabID == TabID.PERSONAL_NUMBER_VEHICLE else None
+        g_currentPreviewVehicle.selectNoVehicle()
+        g_currentPreviewVehicle.selectVehicle(self.__parentCtx.get('itemCD'), style=style)
+        return

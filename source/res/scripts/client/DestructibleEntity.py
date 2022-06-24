@@ -264,7 +264,7 @@ class DestructibleEntityState(ScriptGameObject):
             for componentIdx, component in enumerate(self.__stateProperties.components.itervalues()):
                 self.__visualModel.setPartProperties(componentIdx, int(component.destructible) << PART_PROPERTIES.HIGHLIGHTABLE | PART_PROPERTIES.HIGHLIGHTBYVISUAL)
                 link = self.__visualModel.getPartGeometryLink(componentIdx)
-                self.__damageStickers[componentIdx] = DestructibleStickers(link, self.__visualModel.node('root'))
+                self.__damageStickers[componentIdx] = DestructibleStickers(self.spaceID, link, self.__visualModel.node('root'))
 
             nodeName = next((comp.guiNode for comp in self.__stateProperties.components.itervalues() if comp.guiNode is not None), None)
             if nodeName is not None:
@@ -294,6 +294,10 @@ class DestructibleEntityState(ScriptGameObject):
     def destroy(self):
         super(DestructibleEntityState, self).destroy()
         self.__effectsPlayer = None
+        if self.__damageStickers is not None:
+            for damageSticker in self.__damageStickers.itervalues():
+                damageSticker.destroy()
+
         self.__damageStickers = None
         self.__visualModel = None
         self.__guiNode = None

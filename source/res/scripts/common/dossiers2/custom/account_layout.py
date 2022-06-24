@@ -261,7 +261,9 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'oowTankmanWins',
  'oowStrategistWins',
  'oowCompetetiveWin',
- 'mapboxUniversal']
+ 'mapboxUniversal',
+ 'wclTournamentParticipant',
+ 'wclParticipant']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -415,7 +417,9 @@ _achievements15x15PopUps = ['warrior',
  'oowTankmanWins',
  'oowStrategistWins',
  'oowCompetetiveWin',
- 'mapboxUniversal']
+ 'mapboxUniversal',
+ 'wclTournamentParticipant',
+ 'wclParticipant']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',
@@ -792,6 +796,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'december21',
  'BattlePassCommonPr_7',
  'oowCBTParticipant',
+ 'june22',
  'BattlePassCommonPr_8',
  'BattlePassCommonPr_8ru',
  'BattlePassCommonPr_8quest']
@@ -960,6 +965,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'december21',
  'BattlePassCommonPr_7',
  'oowCBTParticipant',
+ 'june22',
  'BattlePassCommonPr_8',
  'BattlePassCommonPr_8ru',
  'BattlePassCommonPr_8quest']

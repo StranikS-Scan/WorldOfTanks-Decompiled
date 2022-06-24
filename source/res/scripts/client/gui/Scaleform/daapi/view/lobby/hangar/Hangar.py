@@ -5,6 +5,7 @@ import typing
 from functools import partial
 import BigWorld
 from gui.marathon.marathon_event import MarathonEvent
+from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from shared_utils import nextTick
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
@@ -379,12 +380,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 descriptor = entity.typeDescriptor
                 if descriptor:
                     marathons = self.__marathonCtrl.getMarathons()
-                    activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
+                    vehicleCD = descriptor.type.compactDescr
+                    activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == vehicleCD), None)
                     if activeMarathon:
                         title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
-                        shared_events.showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                        shared_events.showMarathonVehiclePreview(vehicleCD, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                    elif isResourceWellRewardVehicle(vehicleCD=vehicleCD):
+                        shared_events.showResourceWellHeroPreview(vehicleCD)
                     else:
-                        shared_events.showHeroTankPreview(descriptor.type.compactDescr)
+                        shared_events.showHeroTankPreview(vehicleCD)
         self.__checkVehicleCameraState()
         self.__updateState()
         return

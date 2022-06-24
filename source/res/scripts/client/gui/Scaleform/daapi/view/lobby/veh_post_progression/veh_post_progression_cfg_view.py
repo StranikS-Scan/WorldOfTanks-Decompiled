@@ -18,10 +18,11 @@ from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 from gui.veh_post_progression.vo_builders.cfg_page_vos import getDataVO, getTitleVO
 from helpers import dependency
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IHeroTankController
 from skeletons.gui.shared import IItemsCache
 from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
 from uilogging.veh_post_progression.loggers import VehPostProgressionLogger
+_HERO_PREVIEW_ALIASES = (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
 
 def _defaultExitEvent():
     return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR), name=VIEW_ALIAS.LOBBY_HANGAR)
@@ -32,6 +33,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     _PROGRESSION_INJECT_ALIAS = HANGAR_ALIASES.POST_PROGRESSION_INJECT
     __cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __heroTanks = dependency.descriptor(IHeroTankController)
     __infoButtonLogger = VehPostProgressionLogger(LogGroups.INFO_BUTTON)
     __compareButtonLogger = VehPostProgressionLogger(LogGroups.ADD_TO_COMPARE)
 
@@ -89,7 +91,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         super(VehiclePostProgressionCfgView, self)._removeListeners()
 
     def _onExit(self):
-        if self._exitEvent.alias == VIEW_ALIAS.HERO_VEHICLE_PREVIEW:
+        if self._exitEvent.alias in _HERO_PREVIEW_ALIASES and self._exitEvent.ctx.get('itemCD') == self.__heroTanks.getCurrentTankCD():
             self.__goToHeroTank()
         else:
             g_eventBus.handleEvent(self._exitEvent, scope=EVENT_BUS_SCOPE.LOBBY)

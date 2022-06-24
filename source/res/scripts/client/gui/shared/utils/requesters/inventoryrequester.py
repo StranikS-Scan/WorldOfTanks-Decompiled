@@ -214,6 +214,15 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return self.__getCustomizationsData(dataIdx)
         return self.__getCrewSkinsData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.CREW_SKINS else self.__getItemsData(itemTypeIdx, dataIdx)
 
+    def getC11nSerialNumber(self, itemCD):
+        _, itemType, itemID = parseIntCompactDescr(itemCD)
+        path = (GUI_ITEM_TYPE.CUSTOMIZATION,
+         CustomizationInvData.SERIAL_NUMBERS,
+         itemType,
+         itemID,
+         'serial_number')
+        return self.getCacheValueByPath(path)
+
     def getFreeSlots(self, vehiclesSlots):
 
         def checker(vehData):

@@ -242,6 +242,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
         battlePassModel.setBattlePassState(state)
+        if chapterID:
+            battlePassModel.setFinalReward(self.__battlePassController.getRewardType(chapterID).value)
 
     def __setLeaderboard(self, leaderboardModel):
         leaderboard = self.__data.get(BRSections.LEADERBOARD)

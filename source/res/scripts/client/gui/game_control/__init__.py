@@ -71,6 +71,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.gift_system_controller import GiftSystemController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
+    from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.dragon_boat_controller import DragonBoatController
     tracker = GameStateTracker()
     tracker.init()
@@ -141,5 +142,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
+    _config(_interface.IResourceWellController, ResourceWellController())
     _config(_interface.IDragonBoatController, DragonBoatController())
     collectGameControllers(_config)

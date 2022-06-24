@@ -156,6 +156,7 @@ class ElementTooltip(BlocksTooltipData):
     EDITABLE_ICON = 'editable'
     NON_EDITABLE_ICON = 'non_editable'
     PROGRESSION_REWIND_ICON = 'progression_rewind'
+    SERIAL_NUMBER_ICON = 'serial_number'
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
@@ -331,6 +332,8 @@ class ElementTooltip(BlocksTooltipData):
                 if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
                     icon = 'style_progression_{}'
                 blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.level.dyn(GUI_ITEM_TYPE_NAMES[self._item.itemTypeID]).text(), value=text_styles.stats(int2roman(currentLevel)))), padding=formatters.packPadding(top=-2), icon=icon.format(currentLevel), isWideOffset=isWideOffset))
+        if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE and self._item.isWithSerialNumber and self._item.serialNumber:
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.serialNumber(), number=text_styles.stats(self._item.serialNumber))), padding=formatters.packPadding(top=-2), icon=self.SERIAL_NUMBER_ICON, isWideOffset=isWideOffset))
         if self._item.isRentable:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.characteristics.rentable())), padding=formatters.packPadding(top=-2), icon=self.RENTABLE_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:

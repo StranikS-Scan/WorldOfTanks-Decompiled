@@ -8,6 +8,8 @@ class TabID(IntEnum):
     NONE = 0
     VEHICLE = 1
     STYLE = 2
+    BASE_VEHICLE = 3
+    PERSONAL_NUMBER_VEHICLE = 4
 
 
 class TopPanelTabsModel(ViewModel):

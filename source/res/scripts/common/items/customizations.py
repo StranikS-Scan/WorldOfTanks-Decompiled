@@ -856,10 +856,11 @@ class CustomizationOutfit(SerializableComponent):
      ('personal_numbers', customArrayField(PersonalNumberComponent.customType)),
      ('sequences', customArrayField(SequenceComponent.customType)),
      ('attachments', customArrayField(AttachmentComponent.customType)),
-     ('styleProgressionLevel', intField())))
-    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers', 'sequences', 'attachments', 'styleProgressionLevel')
+     ('styleProgressionLevel', intField()),
+     ('serial_number', strField())))
+    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers', 'sequences', 'attachments', 'styleProgressionLevel', 'serial_number')
 
-    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None, sequences=None, attachments=None, styleProgressionLevel=0):
+    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None, sequences=None, attachments=None, styleProgressionLevel=0, serial_number=None):
         self.modifications = modifications or []
         self.paints = paints or []
         self.camouflages = camouflages or []
@@ -871,6 +872,7 @@ class CustomizationOutfit(SerializableComponent):
         self.sequences = sequences or []
         self.attachments = attachments or []
         self.styleProgressionLevel = styleProgressionLevel or 0
+        self.serial_number = serial_number or ''
         super(CustomizationOutfit, self).__init__()
 
     def __nonzero__(self):
@@ -944,6 +946,7 @@ class CustomizationOutfit(SerializableComponent):
     def applyDiff(self, outfit):
         resultOutfit = self.copy()
         resultOutfit.styleProgressionLevel = outfit.styleProgressionLevel
+        resultOutfit.serial_number = outfit.serial_number
         for itemType in CustomizationType.RANGE:
             typeName = lower(CustomizationTypeNames[itemType])
             componentsAttrName = '{}s'.format(typeName)
@@ -1142,6 +1145,7 @@ class CustomizationOutfit(SerializableComponent):
                 if typeId == CustomizationType.STYLE and self.styleId == componentId:
                     self.styleId = 0
                     self.styleProgressionLevel = 0
+                    self.serial_number = ''
                     count -= 1
                 elif typeId == CustomizationType.PROJECTION_DECAL:
                     projection_decals = []
@@ -1273,11 +1277,14 @@ def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True, ignoreEmpty=T
 def isEditedStyle(outfit):
     styleId = outfit.styleId
     styleProgressLvl = outfit.styleProgressionLevel
+    styleSerialNumber = outfit.serial_number
     outfit.styleId = 0
     outfit.styleProgressionLevel = 0
+    outfit.serial_number = ''
     isEmpty = not outfit
     outfit.styleId = styleId
     outfit.styleProgressionLevel = styleProgressLvl
+    outfit.serial_number = styleSerialNumber
     return not isEmpty
 
 
@@ -1361,6 +1368,7 @@ class OutfitLogEntry(object):
             setattr(self, 'projection_decal{0}'.format(number), self.__getProjectionDecalData(number))
 
         self.style_progression_level = outfit.styleProgressionLevel
+        self.serial_number = outfit.serial_number
 
     @staticmethod
     def __getItemCompDescr(storage, area, cdFormatter):

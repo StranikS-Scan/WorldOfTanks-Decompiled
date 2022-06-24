@@ -478,11 +478,15 @@ def __readBonus_vehicleCustomizations(bonus, _name, section):
      'id': section.readInt('styleId', -1)}
     if section.has_key('customCompensation'):
         __readBonus_customCompensation(custData, None, section['customCompensation'])
+    if section.has_key('serialNumberSequence'):
+        custData['serialNumberSequence'] = section.readString('serialNumberSequence')
     isValid, item = validateCustomizationItem(custData)
     if not isValid:
         raise SoftException(item)
     bonus['customization'] = {'styleId': custData['id'],
      'customCompensation': custData['customCompensation']}
+    if 'serialNumberSequence' in custData:
+        bonus['customization']['serialNumberSequence'] = custData['serialNumberSequence']
     return
 
 
@@ -600,6 +604,8 @@ def __readBonus_customizations(bonus, _name, section, eventType, checkLimit):
             custData['boundToCurrentVehicle'] = True
         if subsection.has_key('customCompensation'):
             __readBonus_customCompensation(custData, None, subsection['customCompensation'])
+        if subsection.has_key('serialNumberSequence'):
+            custData['serialNumberSequence'] = subsection.readString('serialNumberSequence', '')
         isValid, item = validateCustomizationItem(custData)
         if not isValid:
             raise SoftException(item)

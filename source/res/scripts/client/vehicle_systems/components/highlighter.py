@@ -3,6 +3,7 @@
 import BigWorld
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from EdgeDrawer import HighlightComponent
 import cgf_obsolete_script.py_component
 
 class Highlighter(cgf_obsolete_script.py_component.Component):
@@ -126,3 +127,15 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
             BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2], args[3])
         else:
             BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
+        self.__updateHighlightComponent(status, args)
+
+    def __updateHighlightComponent(self, status, args):
+        appearance = self.__vehicle.appearance
+        if appearance is not None:
+            root = appearance.gameObject
+            highlight = root.findComponentByType(HighlightComponent)
+            if highlight is not None:
+                root.removeComponent(highlight)
+            if status & self.HIGHLIGHT_ON:
+                root.createComponent(HighlightComponent, args[0], args[1], args[2], args[3], False)
+        return

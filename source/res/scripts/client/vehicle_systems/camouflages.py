@@ -159,6 +159,8 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
                     outfit = getStyleProgressionOutfit(outfit, outfitComponent.styleProgressionLevel, seasonType)
                     baseOutfitComponent = outfit.pack()
                 baseOutfitComponent.styleProgressionLevel = outfitComponent.styleProgressionLevel
+            if styleDescr.isWithSerialNumber:
+                baseOutfitComponent.serial_number = outfitComponent.serial_number
             if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
                 emblems = createNationalEmblemComponents(vehicleDescriptor)
                 baseOutfitComponent.decals.extend(emblems)

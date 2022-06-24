@@ -25,7 +25,7 @@ from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showBlueprintsSalePage, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, hideWebBrowserOverlay
+from gui.shared.event_dispatcher import showBlueprintsSalePage, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, hideWebBrowserOverlay, showResourceWellProgressionWindow
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
@@ -43,6 +43,7 @@ from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
+from uilogging.resource_well.loggers import ResourceWellEntryPointLogger
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 if typing.TYPE_CHECKING:
@@ -1025,6 +1026,36 @@ class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
         return NOTIFICATION_TYPE.BATTLE_PASS_SWITCH_CHAPTER_REMINDER
 
 
+class _OpenResourceWellProgressionStartWindow(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.RESOURCE_WELL_START
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        ResourceWellEntryPointLogger().logStartNotificationButtonClick()
+        showResourceWellProgressionWindow()
+
+
+class _OpenResourceWellProgressionNoVehiclesWindow(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        ResourceWellEntryPointLogger().logNoVehiclesNotificationButtonClick()
+        showResourceWellProgressionWindow()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1070,7 +1101,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMapboxSurvey,
  _OpenPsaShop,
  _OpenBattlePassPointsShop,
- _OpenChapterChoiceView)
+ _OpenChapterChoiceView,
+ _OpenResourceWellProgressionStartWindow,
+ _OpenResourceWellProgressionNoVehiclesWindow)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

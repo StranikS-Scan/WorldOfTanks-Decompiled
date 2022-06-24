@@ -3097,5 +3097,47 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	wcl_tournament_participant	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	121	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.001	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	25	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	wcl_participant	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	122	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.002	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	25	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

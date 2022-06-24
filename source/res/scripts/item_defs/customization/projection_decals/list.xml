@@ -5216,6 +5216,13 @@
       <tags>	formfactor_square direction_right_to_left	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
+    <projection_decal>
+      <id>	736	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_66.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_66	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
     <name>	Yandex June 2022	</name>
   </itemGroup>
   <itemGroup>
@@ -5697,6 +5704,27 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	Battle Pass 2022 RU	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <projection_decal>
+      <id>	740	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_402.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_402	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	743	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_405.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_405	</userString>
+      <tags>	styleOnly formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	CN WCL	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
@@ -6826,7 +6854,23 @@
       <tags>	formfactor_square disableVerticalMirror	</tags>
       <mirror>	false	</mirror>
     </projection_decal>
-    <name>	Twitch 2021	</name>
+    <projection_decal>
+      <id>	741	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_403.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_403	</userString>
+      <tags>	formfactor_square disableVerticalMirror direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	742	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_404.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_404	</userString>
+      <tags>	formfactor_square disableVerticalMirror direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Twitch	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>

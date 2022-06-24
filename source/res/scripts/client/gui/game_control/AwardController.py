@@ -59,7 +59,7 @@ from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, 
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -192,7 +192,8 @@ class AwardController(IAwardController, IGlobalListener):
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
-         LinkedSetQuestsHandler(self)]
+         LinkedSetQuestsHandler(self),
+         ResourceWellRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1728,3 +1729,13 @@ class LinkedSetQuestsHandler(MultiTypeServiceChannelHandler):
 
     def __getCompletedQuests(self, data):
         return [ qID for qID in data.get('completedQuestIDs', set()) if self.__linkedSetCtrl.isLinkedSetQuestWithAwards(qID) ]
+
+
+class ResourceWellRewardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(ResourceWellRewardHandler, self).__init__(SYS_MESSAGE_TYPE.resourceWellReward.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))

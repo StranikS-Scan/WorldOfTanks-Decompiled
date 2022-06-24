@@ -512,7 +512,7 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             if self.vehicleStickers is not None:
                 self._destroyStickers()
-            self._vehicleStickers = VehicleStickers(self.typeDescriptor, outfit=self.outfit)
+            self._vehicleStickers = VehicleStickers(self.spaceID, self.typeDescriptor, outfit=self.outfit)
             return
 
     def _destroyStickers(self):

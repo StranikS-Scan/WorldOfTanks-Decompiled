@@ -117,7 +117,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
             return
         if self.__vehicleStickers:
             return
-        self.__vehicleStickers = VehicleStickers(self.__vehDescr, vehicle.publicInfo['marksOnGun'])
+        self.__vehicleStickers = VehicleStickers(self.spaceID, self.__vehDescr, vehicle.publicInfo['marksOnGun'])
         self.__vehicleStickers.alpha = vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
         self.__vehicleStickers.attach(self.model, True, False, True)
 

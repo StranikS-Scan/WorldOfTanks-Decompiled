@@ -191,6 +191,8 @@ BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
+RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
+RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 DBOAT_INTRO_SCREEN_SHOWN = 'dboatIntroScreenShown'
@@ -517,7 +519,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isRankedWelcomeViewStarted': False,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isDisplayPlatoonMembersClicked': False,
-                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True},
+                                    GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True,
+                                    GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: False},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -915,7 +918,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      VIEWED_OFFERS: set(),
                      OFFERS_DISABLED_MSG_SEEN: False,
                      BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
-                     CLAN_NEWS_SEEN: False},
+                     CLAN_NEWS_SEEN: False,
+                     RESOURCE_WELL_START_SHOWN: False,
+                     RESOURCE_WELL_END_SHOWN: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,

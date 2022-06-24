@@ -90,7 +90,10 @@ class ChannelsManager(object):
                 _logger.error('Can not connect to server by url %s', self.__url)
                 raise async.AsyncReturn(False)
         else:
-            channel.subscribe(self.__client)
+            if self.__client.status == websocket.ConnectionStatus.Opened:
+                channel.subscribe(self.__client)
+            else:
+                _logger.warning('Connection is not opened, waiting for reconnect to subscribe to channel <%s>', channel.name)
             event = async.AsyncEvent()
             self.__pending.append((event, subscription))
             yield async.await(event.wait())

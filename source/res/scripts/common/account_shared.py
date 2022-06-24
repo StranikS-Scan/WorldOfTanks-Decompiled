@@ -126,6 +126,8 @@ def validateCustomizationItem(custData):
         c11nItem, errStr = getCustomizationItem(custType, custID)
         if not c11nItem:
             return (False, errStr)
+        elif custType == CustomizationType.STYLE and 'serialNumberSequence' in custData and not c11nItem.isWithSerialNumber:
+            return (False, 'Only styles with serial numbers can have serialNumberSequence')
         if vehTypeCompDescr is not None:
             itemTypeID, vehNationID, vehInnationID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
             if itemTypeID != ITEM_TYPES.vehicle:

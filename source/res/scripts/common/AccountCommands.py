@@ -234,6 +234,8 @@ CMD_RECEIVE_OFFER_GIFT_MULTIPLE = 10095
 CMD_SET_BATTLE_PASS_CHAPTER = 10096
 CMD_TRADE_IN_ADD_TOKEN = 10097
 CMD_TRADE_IN_REMOVE_TOKEN = 10098
+CMD_RESOURCE_WELL_PUT = 10099
+CMD_RESOURCE_WELL_TAKE = 10100
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

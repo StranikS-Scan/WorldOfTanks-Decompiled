@@ -33,7 +33,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBootcampController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, IResourceWellController
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -212,6 +212,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __resourceWell = dependency.descriptor(IResourceWellController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -254,6 +255,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__updateBPWidget()
         self.__updateBattleRoyaleWidget()
         self.__updateEpicWidget()
+        self.__updateResourceWellEntryPoint()
 
     def updateRankedHeader(self, *_):
         self.__updateRBWidget()
@@ -272,6 +274,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
+        self.__resourceWell.onEventUpdated += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
@@ -291,6 +294,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._festivityController.onStateChanged -= self.update
         self.__battlePassController.onSeasonStateChanged -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
+        self.__resourceWell.onEventUpdated -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
         if self._eventsController:
@@ -722,3 +726,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateVisibilityPersonalMission(self, isVisible):
         self.__isShowPersonalMission = isVisible
+
+    def __updateResourceWellEntryPoint(self):
+        isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR
+        isResourceWellVisible = not self.__bootcampController.isInBootcamp() and isRandom and (self.__resourceWell.isActive() or self.__resourceWell.isPaused())
+        self.as_setResourceWellEntryPointS(isResourceWellVisible)

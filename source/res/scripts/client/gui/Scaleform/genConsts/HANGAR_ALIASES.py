@@ -40,6 +40,7 @@ class HANGAR_ALIASES(object):
     BATTLE_ROYALE_ENTRY_POINT = 'battleRoyaleEntryPoint'
     BATTLE_ROYALE_TOURNAMENT = 'battleRoyaleTournament'
     SECONDARY_ENTRY_POINT = 'secondaryEntryPoint'
+    RESOURCE_WELL_ENTRY_POINT = 'resourceWellEntryPoint'
     AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS = 'ammunitionSetupViewVehicleParams'
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'
     AMMUNITION_SETUP_VIEW_INJECT = 'ammunitionSetupViewInject'

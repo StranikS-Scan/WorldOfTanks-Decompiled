@@ -359,6 +359,10 @@ class StyleItem(BaseCustomizationItem):
         return ItemTags.STYLE_PROGRESSION in self.tags
 
     @property
+    def isWithSerialNumber(self):
+        return ItemTags.STYLE_SERIAL_NUMBER in self.tags
+
+    @property
     def isProgressionRewindEnabled(self):
         return ItemTags.PROGRESSION_REWIND_ENABLED in self.tags
 
@@ -427,7 +431,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.DECAL: DecalItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.FONT: Font, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PAINT: PaintItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -590,7 +594,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.STYLE: self.styles, CustomizationType.INSIGNIA: self.insignias, CustomizationType.DECAL: self.decals, CustomizationType.PAINT: self.paints, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.SEQUENCE: self.sequences, CustomizationType.CAMOUFLAGE: self.camouflages}
+        self.itemTypes = {CustomizationType.MODIFICATION: self.modifications, CustomizationType.STYLE: self.styles, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints}
         super(CustomizationCache, self).__init__()
 
     def getVehiclesCanMayInclude(self, item):
@@ -635,7 +639,7 @@ class CustomizationCache(object):
                 pass
         return [s for s in self._CustomizationCache__victimStyles.get(hunting, []) if s.matchVehicleType(vehType)]
 
-    def validateOutfit(self, vehDescr, outfit, progressionStorage, tokens = None, season = SeasonType.ALL):
+    def validateOutfit(self, vehDescr, outfit, progressionStorage, serialNumbersStorage, tokens = None, season = SeasonType.ALL):
         usedStyle = None
         try:
             vehType = vehDescr.type
@@ -647,22 +651,16 @@ class CustomizationCache(object):
                 elif usedStyle.matchVehicleType(vehType):
                     if usedStyle.isProgressive() and (usedStyle.progression.defaultLvl > outfit.styleProgressionLevel) and (outfit.styleProgressionLevel > len(usedStyle.progression.levels)):
                         raise SoftException('Progression style {} level out of limits'.format(styleID))
-                    else:
-                        projectionDecalsCount = len(outfit.projection_decals)
-                        if usedStyle is not None:
-                            baseOutfit = usedStyle.outfits.get(season)
-                            if baseOutfit:
-                                matchingTaggedProjectionDecals = [pDecal for pDecal in baseOutfit.projection_decals if pDecal.matchingTag]
-                                projectionDecalsCount = projectionDecalsCount + len(matchingTaggedProjectionDecals)
+                    elif usedStyle.isWithSerialNumber:
+                        _validateSerialNumber(outfit, usedStyle, serialNumbersStorage)
                 else:
                     raise SoftException('style {} is incompatible with vehicle {}'.format(styleID, vehDescr.name))
-            else:
-                projectionDecalsCount = len(outfit.projection_decals)
-                if usedStyle is not None:
-                    baseOutfit = usedStyle.outfits.get(season)
-                    if baseOutfit:
-                        matchingTaggedProjectionDecals = [pDecal for pDecal in baseOutfit.projection_decals if pDecal.matchingTag]
-                        projectionDecalsCount = projectionDecalsCount + len(matchingTaggedProjectionDecals)
+            projectionDecalsCount = len(outfit.projection_decals)
+            if usedStyle is not None:
+                baseOutfit = usedStyle.outfits.get(season)
+                if baseOutfit:
+                    matchingTaggedProjectionDecals = [pDecal for pDecal in baseOutfit.projection_decals if pDecal.matchingTag]
+                    projectionDecalsCount = projectionDecalsCount + len(matchingTaggedProjectionDecals)
             if projectionDecalsCount > MAX_USERS_PROJECTION_DECALS:
                 raise SoftException('projection decals quantity {} greater than acceptable'.format(projectionDecalsCount))
             else:
@@ -750,6 +748,13 @@ class CustomizationCache(object):
         except SoftException:
             LOG_CURRENT_EXCEPTION()
 
+    def adjustSerialNumber(self, outfit, serialNumberStorage, style):
+        try:
+            if outfit.styleId != 0:
+                _adjustSerialNumber(outfit, style, serialNumberStorage)
+        except SoftException:
+            LOG_CURRENT_EXCEPTION()
+
 class EditingStyleReason(object):
     def __init__(self, reson):
         self.reason = reson
@@ -774,6 +779,15 @@ def _adjustProgression(component, vehTypeCD, item, progressionStorage, attr, for
                 return
         else:
             raise SoftException('Missing progression level for component: {}'.format(component))
+    else:
+        return
+
+def _adjustSerialNumber(component, style, serialNumbersStorage, force = False):
+    if style is None:
+        raise SoftException('Missing customization item for component: {}'.format(component))
+    elif style.isWithSerialNumber:
+        component.serial_number = serialNumbersStorage.get(style.itemType, {}).get(style.id, {}).get('serial_number')
+        return
     else:
         return
 
@@ -807,6 +821,14 @@ def _validateProgression(component, item, progressionStorage, vehType):
             return
         else:
             raise SoftException('wrong progression level: {}, achievedLevel: {} for component: {} at vehicle: {}, '.format(level, achievedLevel, component.id, vehTypeCD))
+
+def _validateSerialNumber(component, item, serialNumberStorage):
+    installedSerialNumber = component.serial_number
+    storedSerialNumber = serialNumberStorage.get(item.itemType, {}).get(item.id, {}).get('serial_number', '')
+    if installedSerialNumber and installedSerialNumber != storedSerialNumber:
+        raise SoftException('wrong serial number for component: {}'.format(component.id))
+    else:
+        return
 
 def _validateApplyTo(component, item):
     itemType = item.itemType
@@ -941,7 +963,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

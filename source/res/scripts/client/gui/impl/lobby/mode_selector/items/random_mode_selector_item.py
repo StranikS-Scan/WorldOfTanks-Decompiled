@@ -35,3 +35,4 @@ class RandomModeSelectorItem(ModeSelectorLegacyItem):
 
     def _onDisposing(self):
         g_eventBus.removeListener(ModeSelectorPopoverEvent.NAME, self.randomBattlePopoverStatusChangeCallback)
+        super(RandomModeSelectorItem, self)._onDisposing()

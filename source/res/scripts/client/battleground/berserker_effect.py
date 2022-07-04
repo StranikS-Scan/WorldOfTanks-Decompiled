@@ -57,7 +57,7 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
 
     def __onEquipmentComponentUpdated(self, _, vehicleID, data):
         if data['duration'] > 0:
-            self.__addEffect(vehicleID, data['endTime'])
+            self.__addEffect(vehicleID, data['duration'] + BigWorld.serverTime())
 
     def __addEffect(self, vehicleId, endTime):
         self.__loadingEffects[vehicleId] = _BerserkerEffectObject(vehicleId, endTime, self.__destroyEffect)

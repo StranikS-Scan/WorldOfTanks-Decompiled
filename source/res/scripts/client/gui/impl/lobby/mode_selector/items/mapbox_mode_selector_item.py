@@ -33,6 +33,9 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
     def _getIsDisabled(self):
         return False
 
+    def _isNeedToHideCard(self):
+        return self.__mapboxCtrl.getCurrentCycleID() is None
+
     def _onInitializing(self):
         super(MapboxModeSelectorItem, self)._onInitializing()
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdate
@@ -44,7 +47,10 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
         super(MapboxModeSelectorItem, self)._onDisposing()
 
     def __onPrimeTimeStatusUpdate(self, *_):
-        self.__fillViewModel()
+        if self._isNeedToHideCard():
+            self.onCardChange()
+        else:
+            self.__fillViewModel()
 
     def __fillViewModel(self):
         with self.viewModel.transaction() as vm:

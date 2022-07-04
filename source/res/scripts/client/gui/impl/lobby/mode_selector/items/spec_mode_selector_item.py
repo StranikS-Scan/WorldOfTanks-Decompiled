@@ -34,6 +34,7 @@ class SpecModeSelectorItem(ModeSelectorLegacyItem):
 
     def _onDisposing(self):
         self.__requester.stop()
+        super(SpecModeSelectorItem, self)._onDisposing()
 
     def __onListReceived(self, sessions):
         item = first(sorted(sessions, key=operator.attrgetter('startTime')))

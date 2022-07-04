@@ -393,11 +393,9 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
         tankmenAward = False
         camouflageGivenFor = set()
         camouflageUnlockedFor = set()
-        badges = []
         for quest in self.__eventsCache.getHiddenQuests(lambda q: q.getID() in questIDs).values():
             camouflageGivenFor.update(self.__getCamouflageGivenFor(quest))
             camouflageUnlockedFor.update(self.__getCamouflageUnlockedFor(quest))
-            badges.extend(self.__getBadges(quest))
 
         for qID in pmQuestsIDs:
             pmType = personal_missions.g_cache.questByUniqueQuestID(qID)
@@ -432,9 +430,6 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
             text = backport.text(R.strings.system_messages.personalMissions.camouflageUnlocked(), vehicleName=vehicle.userName, nation=nationName)
             result.append(text)
 
-        if badges:
-            text = backport.text(R.strings.system_messages.personalMissions.badge(), name=', '.join(badges))
-            result.append(text)
         if tankmenAward:
             result.append(backport.text(R.strings.system_messages.personalMissions.tankmenGain()))
         if result:
@@ -467,19 +462,6 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
                 operation = operations[operationID]
                 camouflageUnlockedFor.add(operation.getVehicleBonus().intCD)
         return camouflageUnlockedFor
-
-    def __getBadges(self, quest):
-        badges = []
-        regex = re.search(self.__REGEX_PATTERN_BADGE, quest.getID())
-        if regex:
-            for bonus in quest.getBonuses('dossier', []):
-                for badge in bonus.getBadges():
-                    name = badge.getShortUserName()
-                    if name is None:
-                        _logger.warning('Could not find user name for the badge %s', badge.badgeID)
-                    badges.append(name)
-
-        return badges
 
 
 class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):

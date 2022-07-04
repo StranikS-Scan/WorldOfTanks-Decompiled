@@ -435,7 +435,7 @@ class Source(object):
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
              'max': self.__readCondition_int,
-             'total': self.__readCondition_int,
+             'total': self.__readCondition_false,
              'compareWithMaxHealth': self.__readCondition_true,
              'plus': self.__readBattleResultsConditionList,
              'exceptUs': self.__readCondition_true,
@@ -674,20 +674,26 @@ class Source(object):
     def __readCondition_true(self, _, section, node):
         node.addChild(True)
 
+    def __readCondition_false(self, _, section, node):
+        node.addChild(False)
+
     def __readCondition_bool(self, _, section, node):
-        node.addChild(section.asBool)
+        node.addChild(bool(section.asString))
 
     def __readCondition_int(self, _, section, node):
-        node.addChild(section.asInt)
+        node.addChild(int(section.asString))
 
     def __readCondition_float(self, _, section, node):
-        node.addChild(section.asFloat)
+        node.addChild(float(section.asString))
 
     def __readCondition_DateTimeOrFloat(self, _, section, node):
         try:
             value = timeDataToUTC(section.asString, None)
-        except SoftException:
-            value = section.asFloat
+        except SoftException as e:
+            try:
+                value = float(section.asString)
+            except ValueError:
+                raise e
 
         node.addChild(value)
         return

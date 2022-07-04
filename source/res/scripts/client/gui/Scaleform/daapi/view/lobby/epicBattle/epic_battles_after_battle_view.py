@@ -18,6 +18,7 @@ from gui.server_events.bonuses import mergeBonuses
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
@@ -33,6 +34,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     __eventsCache = dependency.descriptor(IEventsCache)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battlePass = dependency.descriptor(IBattlePassController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(EpicBattlesAfterBattleView, self).__init__()
@@ -80,9 +82,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     def destroy(self):
         self.onProgressBarCompleteAnim()
         super(EpicBattlesAfterBattleView, self).destroy()
+        self.__removeListeners()
 
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
+        self.__addListeners()
         levelUpInfo = self.__ctx['levelUpInfo']
         pMetaLevel, pFamePts = levelUpInfo.get('metaLevel', (None, None))
         prevPMetaLevel, prevPFamePts = levelUpInfo.get('prevMetaLevel', (None, None))
@@ -167,3 +171,15 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     @staticmethod
     def __hasSelectBonus(bonuses):
         return any((bonus.getName() == EPIC_SELECT_BONUS_NAME for bonus in bonuses))
+
+    def __addListeners(self):
+        self.__eventsCache.onSyncCompleted += self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+
+    def __removeListeners(self):
+        self.__eventsCache.onSyncCompleted -= self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+
+    def __onServerSettingsChanged(self, *_):
+        if not self.__epicController.isEnabled():
+            self.destroy()

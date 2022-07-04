@@ -617,7 +617,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
         money = formatPrice(cart.totalPrice.price, useStyle=True)
         if cart.boughtCount == 1:
-            pItem = findFirst(lambda i: not i.isFromInventory, purchaseItems)
+            pItem = findFirst(lambda i: not i.isFromInventory and i.selected, purchaseItems)
             if pItem is None:
                 _logger.error('Failed to construct customization purchase system message. Missing purchase item.')
                 return

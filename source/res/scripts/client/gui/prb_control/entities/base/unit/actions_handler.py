@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/unit/actions_handler.py
 import weakref
+from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
+from gui.prb_control.entities.base import checkVehicleAmmoFull
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearchUnitCtx
 from gui.prb_control.settings import FUNCTIONAL_FLAG
@@ -79,8 +81,18 @@ class UnitActionsHandler(AbstractActionsHandler):
                     self._entity.doAutoSearch(ctx)
             else:
                 self._sendBattleQueueRequest()
+        elif not pInfo.isReady:
+            vehicles = self._entity.getVehiclesInfo(pInfo.dbID)
+            selectedVehicle = vehicles[0].getVehicle() if vehicles else None
+            checkVehicleAmmoFull(selectedVehicle or g_currentVehicle.item, self._checkVehicleAmmoCallback)
         else:
             self._entity.togglePlayerReadyAction()
+        return
 
     def _canDoAutoSearch(self, unit, stats):
         return stats.freeSlotsCount > 0
+
+    def _checkVehicleAmmoCallback(self):
+        if self._entity is not None:
+            self._entity.togglePlayerReadyAction()
+        return

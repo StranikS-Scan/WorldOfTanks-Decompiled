@@ -74,10 +74,6 @@ class _VehicleStateSN(StatusNotificationItem):
         stateValue = ctrl.getStateValue(self.getItemID())
         if stateValue:
             self._update(stateValue)
-        component = vehicle.dynamicComponents.get(self._getEquipmentComponentName())
-        if ctrl.getControllingVehicleID() and component is not None:
-            self._update(component.getInfo())
-        return
 
     def _getEquipmentName(self):
         pass
@@ -430,20 +426,23 @@ class ShotPassionSN(_BuffSN):
 
     def __init__(self, updateCallback):
         super(ShotPassionSN, self).__init__(updateCallback)
-        equipmentID = vehicles.g_cache.equipmentIDs().get(self._getEquipmentName())
-        self.__equipment = vehicles.g_cache.equipments()[equipmentID]
+        eqID = vehicles.g_cache.equipmentIDs().get(self._getEquipmentName())
+        self.__eq = vehicles.g_cache.equipments()[eqID]
+        self.__maxStage = int(round(self.__eq.maxDamageIncreasePerShot / self.__eq.damageIncreasePerShot))
         self._subscribeOnVehControlling()
 
     def _update(self, value):
-        self._vo['additionalInfo'] = self.__constructCounter(value)
-        self._vo['additionalState'] = self.__getCounterState(value)
-        super(ShotPassionSN, self)._update(value._asdict())
+        stage = value.get('stage', 0)
+        self._vo['additionalInfo'] = self.__constructCounter(stage)
+        self._vo['additionalState'] = self.__getCounterState(stage)
+        data = {'endTime': BigWorld.serverTime() + value.get('duration', 0)}
+        super(ShotPassionSN, self)._update(data)
 
     def _constructTitle(self, value):
         return backport.text(R.strings.battle_royale.timersPanel.shotPassion())
 
     def getItemID(self):
-        pass
+        return VEHICLE_VIEW_STATE.SHOT_PASSION
 
     def getViewTypeID(self):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.SHOT_PASSION
@@ -454,14 +453,13 @@ class ShotPassionSN(_BuffSN):
     def _getEquipmentComponentName(self):
         return BattleRoyaleComponents.SHOT_PASSION
 
-    def __getCounterState(self, value):
-        maxStage = int(round(self.__equipment.maxDamageIncreasePerShot / self.__equipment.damageIncreasePerShot))
-        if value.stage == 0:
+    def __getCounterState(self, stage):
+        if stage == 0:
             return BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
-        return BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA if value.stage < maxStage else BATTLE_ROYAL_CONSTS.COUNTER_STATE_MAX
+        return BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA if stage < self.__maxStage else BATTLE_ROYAL_CONSTS.COUNTER_STATE_MAX
 
-    def __constructCounter(self, value):
-        return backport.text(R.strings.common.multiplier()) + str(value.stage)
+    def __constructCounter(self, stage):
+        return backport.text(R.strings.common.multiplier()) + str(stage)
 
 
 class _BaseHealingSN(_BuffSN):
@@ -570,6 +568,10 @@ class InspireSN(_BuffSN):
     def getItemID(self):
         return VEHICLE_VIEW_STATE.INSPIRE
 
+    def _update(self, value):
+        value['endTime'] = value['duration'] + BigWorld.serverTime()
+        super(InspireSN, self)._update(value)
+
 
 class BerserkerSN(_BuffSN):
 
@@ -587,7 +589,7 @@ class BerserkerSN(_BuffSN):
         isVisible = False
         if data['duration'] > 0:
             isVisible = True
-            self._updateTimeParams(data['duration'], data['endTime'])
+            self._updateTimeParams(data['duration'], data['duration'] + BigWorld.serverTime())
         self._setVisible(isVisible)
 
 
@@ -651,11 +653,12 @@ class DamagingSmokeSN(_SmokeBase):
 
 class DamagingCorrodingShotSN(_SmokeBase):
 
-    def _update(self, value):
-        if value > 0.0:
+    def _update(self, data):
+        duration = data.get('duration', 0)
+        if duration > 0.0:
             self._vo['title'] = backport.text(R.strings.battle_royale.timersPanel.damagingCorrodingShot())
             self._setVisible(True)
-            self._updateTimeParams(value, 0.0)
+            self._updateTimeParams(duration, 0.0)
             self._sendUpdate()
         else:
             self._setVisible(False)
@@ -670,10 +673,11 @@ class DamagingCorrodingShotSN(_SmokeBase):
 class FireCircleSN(_SmokeBase):
 
     def _update(self, value):
-        if value > 0.0:
+        duration = value.get('duration', 0.0) if isinstance(value, dict) else value
+        if duration > 0.0:
             self._vo['title'] = backport.text(R.strings.battle_royale.timersPanel.fireCircle())
             self._setVisible(True)
-            self._updateTimeParams(value, 0.0)
+            self._updateTimeParams(duration, 0.0)
             self._sendUpdate()
         else:
             self._setVisible(False)
@@ -688,11 +692,11 @@ class FireCircleSN(_SmokeBase):
 class ThunderStrikeSN(_SmokeBase):
 
     def _update(self, value):
-        elapsedTime = value.elapsedTime
-        if elapsedTime > 0.0:
+        duration = value.get('duration', 0.0)
+        if duration > 0.0:
             self._vo['title'] = backport.text(R.strings.battle_royale.timersPanel.thunderStrike())
             self._setVisible(True)
-            self._updateTimeParams(elapsedTime, 0.0)
+            self._updateTimeParams(duration, 0.0)
             self._sendUpdate()
         else:
             self._setVisible(False)
@@ -711,8 +715,9 @@ class AdaptationHealthRestoreSN(TimerSN):
         self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
 
     def _update(self, value):
-        if value['type'] == 'time':
-            duration = value['value']
+        restoreHealth = value.get('restoreHealth')
+        duration = value.get('duration')
+        if duration is not None:
             if duration > 0.0:
                 self._vo['title'] = backport.text(R.strings.battle_royale.timersPanel.hpRestoreOnDamage())
                 self._setVisible(True)
@@ -722,12 +727,14 @@ class AdaptationHealthRestoreSN(TimerSN):
                 self._setVisible(False)
                 self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
                 self._sendUpdate()
-        elif value['type'] == 'additionInfo':
-            restoreHealth = value['value']
-            self._vo['additionalInfo'] = ''.join(('+', str(restoreHealth)))
-            if restoreHealth > 0:
-                self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA
-            self._sendUpdate()
+            return
+        else:
+            if restoreHealth is not None:
+                self._vo['additionalInfo'] = ''.join(('+', str(restoreHealth)))
+                if restoreHealth > 0:
+                    self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_EXTRA
+                self._sendUpdate()
+            return
 
     def getItemID(self):
         return VEHICLE_VIEW_STATE.ADAPTATION_HEALTH_RESTORE

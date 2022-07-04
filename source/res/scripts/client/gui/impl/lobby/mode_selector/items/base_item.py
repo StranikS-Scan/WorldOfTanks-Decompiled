@@ -150,18 +150,12 @@ class ModeSelectorItem(object):
 
 
 class ModeSelectorNormalCardItem(ModeSelectorItem):
+    __slots__ = ('onCardChange',)
     _VIEW_MODEL = ModeSelectorNormalCardModel
 
     def __init__(self):
         super(ModeSelectorNormalCardItem, self).__init__()
         self.onCardChange = Event.Event()
-
-    @property
-    def hasExtendedCalendarTooltip(self):
-        return False
-
-    def getExtendedCalendarTooltip(self, parentWindow):
-        return []
 
     @property
     def modeName(self):
@@ -174,6 +168,16 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
     @property
     def viewModel(self):
         return super(ModeSelectorNormalCardItem, self).viewModel
+
+    @property
+    def hasExtendedCalendarTooltip(self):
+        return False
+
+    def getExtendedCalendarTooltip(self, parentWindow):
+        return []
+
+    def _isNeedToHideCard(self):
+        return False
 
     def _onInitializing(self):
         super(ModeSelectorNormalCardItem, self)._onInitializing()
@@ -203,6 +207,12 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
             item.setVehicleLevel(params.get('level', ''))
             item.setVehicleType(params.get('type', ''))
         self.viewModel.getRewardList().addViewModel(item)
+        return
+
+    def _onDisposing(self):
+        self.onCardChange.clear()
+        self.onCardChange = None
+        super(ModeSelectorNormalCardItem, self)._onDisposing()
         return
 
 

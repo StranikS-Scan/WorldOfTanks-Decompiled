@@ -259,7 +259,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         elif eventID == _EVENT_ID.VEHICLE_HEALTH:
             self.__updateVehicleHealth(vehicleID, handle, *value)
         elif eventID == _EVENT_ID.VEHICLE_STUN:
-            self.__updateStunMarker(vehicleID, handle, value)
+            self._updateStunMarker(vehicleID, handle, value)
         elif eventID == _EVENT_ID.VEHICLE_DEBUFF:
             self.__updateDebuffMarker(vehicleID, handle, value)
         elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
@@ -663,7 +663,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             _, callbackID = self.__callbackIDs.popitem()
             BigWorld.cancelCallback(callbackID)
 
-    def __updateStunMarker(self, vehicleID, handle, value):
+    def _updateStunMarker(self, vehicleID, handle, value):
         self._updateMarkerTimer(vehicleID, handle, value.duration, BATTLE_MARKER_STATES.STUN_STATE, True)
 
     def __updateDebuffMarker(self, vehicleID, handle, value):

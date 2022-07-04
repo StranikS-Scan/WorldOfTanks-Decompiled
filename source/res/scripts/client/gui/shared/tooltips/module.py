@@ -672,7 +672,7 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
             descKpi = backport.text(kpi.getLongDescriptionR())
             kpiList = []
             if not isPanelTooltip and module.isRegular and kpi.specValue is not None:
-                kpiList.append(formatters.packAlignedTextBlockData(text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=50))
+                kpiList.append(formatters.packAlignedTextBlockData(text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=60))
             if (isSpecMatch or not isPanelTooltip) and kpi.specValue is not None:
                 specValue = kpi.specValue
             else:

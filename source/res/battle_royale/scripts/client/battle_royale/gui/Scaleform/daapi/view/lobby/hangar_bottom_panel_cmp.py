@@ -7,6 +7,8 @@ from adisp import process
 from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
 from battle_royale.gui.impl.lobby.tooltips.rent_icon_tooltip_view import RentIconTooltipView
 from battle_royale.gui.impl.lobby.tooltips.test_drive_info_tooltip_view import TestDriveInfoTooltipView
+from battle_royale.gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepairBattleRoyale
+from battle_royale.gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepairMainContentBattleRoyale
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -30,7 +32,6 @@ from helpers import dependency
 from items import vehicles
 from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleRentVehiclesController
 from skeletons.gui.shared import IItemsCache
-from battle_royale.gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepairBattleRoyale
 _DEFAULT_SLOT_VALUE = 1
 _ArtefactData = namedtuple('_ArtefactData', ('intCD', 'quantity', 'icon', 'tooltip'))
 
@@ -127,7 +128,7 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
     def __onRepairBtnClicked(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            yield VehicleRepairAction(vehicle, NeedRepairBattleRoyale).doAction()
+            yield VehicleRepairAction(vehicle, NeedRepairBattleRoyale, NeedRepairMainContentBattleRoyale).doAction()
 
     def __onCurrentVehicleChanged(self):
         self.__updateModel()
@@ -221,7 +222,8 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
     def __getAmmoData(self, shell, vehicle):
         isBasic = ShellParams(shell.descriptor, vehicle.descriptor).isBasic
         ammoType = AmmoTypes.BASIC_SHELL if isBasic else AmmoTypes.PREMIUM_SHELL
-        count = self.__getEquipmentCount(ammoType) * vehicle.gun.maxAmmo
+        configCount = self.__getEquipmentCount(ammoType)
+        count = max(configCount * vehicle.gun.maxAmmo if configCount < 1.0 else int(configCount), 0)
         return _ArtefactData(intCD=shell.intCD, quantity=count, icon=R.images.gui.maps.icons.shell.small.dyn(shell.descriptor.iconName)(), tooltip=EquipmentPanelCmpTooltips.TOOLTIP_SHELL)
 
     def __getEquipmentData(self, equipment, vehicleName):

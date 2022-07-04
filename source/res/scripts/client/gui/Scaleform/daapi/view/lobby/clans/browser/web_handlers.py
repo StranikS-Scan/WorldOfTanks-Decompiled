@@ -9,6 +9,7 @@ from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.social import SocialWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.strongholds import StrongholdsWebApi
 from web.web_client_api.ui import OpenWindowWebApi, OpenTabWebApi, UtilWebApi, ContextMenuWebApi, CloseWindowWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
@@ -24,4 +25,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createNotificationWebHandlers():
-    return webApiCollection(SoundWebApi, RequestWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi, ClansWebApi, SoundStateWebApi)
+    return webApiCollection(SoundWebApi, RequestWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi, ClansWebApi, SoundStateWebApi, StrongholdsWebApi)

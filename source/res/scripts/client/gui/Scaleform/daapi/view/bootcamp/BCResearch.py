@@ -44,7 +44,7 @@ class BCResearchItemsData(ResearchItemsData):
             item = self._items.getItemByCD(nodeCD)
             if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
-            if not NODE_STATE.isAvailable2Unlock(state) and self._isLastUnlocked(nodeCD):
+            if not NODE_STATE.isAvailable2Unlock(state) and self._isLastUnlocked(nodeCD) and not NODE_STATE.inInventory(state):
                 state |= NODE_STATE_FLAGS.LAST_2_BUY
         if NODE_STATE.hasBlueprints(state):
             state = NODE_STATE.remove(state, NODE_STATE_FLAGS.BLUEPRINT)

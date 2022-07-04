@@ -397,6 +397,10 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                 return self.__getBtnDataCollectibleVehicle(vehicle)
             return self.__getBtnDataUnlockedVehicle(vehicle) if vehicle.isUnlocked else self.__getBtnDataLockedVehicle(vehicle)
 
+    def __checkBtnEnableByPrice(self, price):
+        currency = price.getCurrency()
+        return currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price)
+
     def __getBtnDataPack(self):
         buyButtonTooltip = ''
         actionTooltip = None
@@ -410,7 +414,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         elif self._disableBuyButton:
             buyButtonTooltip = _buildBuyButtonTooltip('endTime')
         elif self.__price.isSet(currency):
-            enabled = currency == Currency.GOLD or mayObtainForMoney(price) or mayObtainWithMoneyExchange(price)
+            enabled = self.__checkBtnEnableByPrice(price)
         else:
             enabled = True
         if self.__currentOffer and self.__currentOffer.bestOffer and self.__currentOffer.eventType:
@@ -444,6 +448,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                 self.__oldPrice = Money(**{priceCode: defPrice})
                 self.__price = Money(**{priceCode: price})
                 itemPrices = ItemPrice(price=self.__price, defPrice=self.__oldPrice)
+                enabled = self.__checkBtnEnableByPrice(self.__price)
             self.__title = self.__getCurrentOfferTitle()
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())

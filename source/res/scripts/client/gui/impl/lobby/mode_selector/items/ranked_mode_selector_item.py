@@ -37,6 +37,7 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
     def _onDisposing(self):
         self.__rankedBattleController.onGameModeStatusUpdated -= self.__onGameModeUpdated
         self.__rankedBattleController.onUpdated -= self.__onGameModeUpdated
+        super(RankedModeSelectorItem, self)._onDisposing()
 
     def _getDisabledTooltipText(self):
         if self.__rankedBattleController.isUnset():

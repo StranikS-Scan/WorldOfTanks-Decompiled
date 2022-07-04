@@ -451,5 +451,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     def __switchCamera(self):
         ClientSelectableCameraObject.switchCamera()
         if self.__selectedMap:
+            g_currentPreviewVehicle.resetAppearance()
             g_currentPreviewVehicle.selectNoVehicle()
             self.mapsTrainingController.updateSelectedVehicle()

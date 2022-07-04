@@ -48,7 +48,9 @@ class ChannelsManager(object):
 
         for channel, callbackID in self.__callbackIDs.iteritems():
             BigWorld.cancelCallback(callbackID)
-            self.__channels[channel].unsubscribe(self.__client)
+            if channel in self.__channels:
+                self.__channels[channel].unsubscribe(self.__client)
+            _logger.warning('Channel %s is not in channels', channel)
 
         self.__callbackIDs.clear()
 
@@ -172,7 +174,10 @@ class ChannelsManager(object):
 
             def _invoke():
                 self.__callbackIDs.pop(channel, None)
-                self.__channels[channel].unsubscribe(self.__client)
+                if channel in self.__channels:
+                    self.__channels[channel].unsubscribe(self.__client)
+                else:
+                    _logger.warning('Channel %s is not in channels', channel)
                 return
 
             self.__callbackIDs[channel] = BigWorld.callback(constants.CHANNEL_UNSUBSCRIPTION_DELAY, _invoke)

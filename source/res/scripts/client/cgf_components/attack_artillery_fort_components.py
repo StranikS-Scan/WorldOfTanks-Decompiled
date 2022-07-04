@@ -4,14 +4,20 @@ import CGF
 import GenericComponents
 import Math
 from GenericComponents import EntityGOSync
-from account_helpers.settings_core.settings_constants import GRAPHICS
 from cache import cached_property
 from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onProcessQuery, onRemovedQuery
-from constants import IS_CGF_DUMP
+from constants import IS_CGF_DUMP, IS_CLIENT
 from helpers import dependency
 from helpers.gui_utils import hexARGBToRGBAFloatColor
-from skeletons.account_helpers.settings_core import ISettingsCore
+if IS_CLIENT:
+    from account_helpers.settings_core.settings_constants import GRAPHICS
+    from skeletons.account_helpers.settings_core import ISettingsCore
+else:
+
+    class ISettingsCore(object):
+        pass
+
 
 class ColorComponent(CGFComponent):
     category = 'UI'
@@ -79,13 +85,15 @@ class AttackArtilleryFortColorManager(CGF.ComponentManager):
         if goSyncComponent is not None:
             colorComponent.entityGO = rootGameObject
             colorComponent.changeColor()
-            self.__settingsCore.onSettingsChanged += colorComponent.colorSettingsChanged
+            if IS_CLIENT:
+                self.__settingsCore.onSettingsChanged += colorComponent.colorSettingsChanged
         return
 
     @onRemovedQuery(ArtilleryFortColorComponent)
     def handleColorComponentRemoved(self, colorComponent):
         if colorComponent.entityGO is not None:
-            self.__settingsCore.onSettingsChanged -= colorComponent.colorSettingsChanged
+            if IS_CLIENT:
+                self.__settingsCore.onSettingsChanged -= colorComponent.colorSettingsChanged
             colorComponent.entityGO = None
         return
 

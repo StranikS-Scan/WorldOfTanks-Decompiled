@@ -256,13 +256,12 @@ class _UpgradesAvailability(object):
         return self.__available and self.__cbCooldownID is None
 
     def setCooldown(self, cooldownTime, reason):
-        timeLeft = cooldownTime - BigWorld.serverTime()
-        if timeLeft > 0:
+        if cooldownTime > 0:
             self.__stopPreviousTimer()
             for listener in self.__viewComponents:
                 listener.setUpgradeDisabled(cooldownTime, reason)
 
-            self.__cbCooldownID = BigWorld.callback(timeLeft, self.__checkAvailability)
+            self.__cbCooldownID = BigWorld.callback(cooldownTime, self.__checkAvailability)
 
     def onVehicleStatusChanged(self):
         avatar = BigWorld.player()

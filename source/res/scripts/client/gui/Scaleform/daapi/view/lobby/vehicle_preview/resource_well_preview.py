@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/resource_well_preview.py
+from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.resource_well.sounds import RESOURCE_WELL_SOUND_SPACE, SOUNDS
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.game_control import IResourceWellController
+from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.resource_well.loggers import ResourceWellVehiclePreviewLogger
 
 class ResourceWellVehiclePreview(VehiclePreview):
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
+    __hangarSpace = dependency.descriptor(IHangarSpace)
     __resourceWell = dependency.descriptor(IResourceWellController)
     __uiLogger = ResourceWellVehiclePreviewLogger()
 
@@ -48,7 +51,17 @@ class ResourceWellVehiclePreview(VehiclePreview):
 
     def _getExitEvent(self):
         exitEvent = super(ResourceWellVehiclePreview, self)._getExitEvent()
-        exitEvent.ctx.update({'numberStyle': self.__numberStyle})
+        ctx = exitEvent.ctx
+        ctx.update({'numberStyle': self.__numberStyle})
+        topPanelData = ctx.get('topPanelData', {})
+        if topPanelData:
+            appearance = self.__hangarSpace.getVehicleEntityAppearance()
+            if appearance is not None and appearance.outfit.style is not None:
+                topPanelData.update({'currentTabID': TabID.PERSONAL_NUMBER_VEHICLE})
+                ctx.update({'style': self.__numberStyle})
+            else:
+                topPanelData.update({'currentTabID': TabID.BASE_VEHICLE})
+                ctx.update({'style': None})
         return exitEvent
 
     def __onViewOpened(self, *_):

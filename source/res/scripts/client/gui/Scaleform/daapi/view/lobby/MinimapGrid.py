@@ -12,6 +12,7 @@ class MinimapGrid(MinimapGridMeta):
         super(MinimapGrid, self).__init__()
         self._channel = None
         self._controller = None
+        self.__mapId = 0
         return
 
     def setController(self, controller):
@@ -22,13 +23,18 @@ class MinimapGrid(MinimapGridMeta):
         self._controller = lambda : None
 
     def setActive(self, active):
-        self.as_clickEnabled(active)
+        self.as_clickEnabledS(active)
 
     def setClick(self, x, y):
         controller = self._controller()
         if controller:
             command = controller.proto.unitChat.createByMapPos(x, y)
             controller.sendCommand(command)
+
+    def setMapId(self, mapId):
+        if mapId != self.__mapId:
+            self.as_clearPointsS()
+        self.__mapId = mapId
 
     def addCommand(self, cmd):
         if cmd.isOnMinimap():

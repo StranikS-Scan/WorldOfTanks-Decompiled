@@ -416,7 +416,7 @@ class SectorBasesPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
 
 
 class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
-    __slots__ = ('_markers', '__isHQBattle', '__visibleHQ', '_isInFreeSpectatorMode', '__hqMissionActive', '__clazz')
+    __slots__ = ('_markers', '__isHQBattle', '__visibleHQ', '_isInFreeSpectatorMode', '__hqMissionActive', '__clazz', '__entitiesDamageType')
 
     def __init__(self, parentObj, clazz=BaseMarker):
         super(HeadquartersPlugin, self).__init__(parentObj)
@@ -426,6 +426,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
         self._isInFreeSpectatorMode = False
         self.__hqMissionActive = False
         self.__clazz = clazz
+        self.__entitiesDamageType = {}
         ChatCommunicationComponent.__init__(self, parentObj)
 
     def start(self):
@@ -470,6 +471,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             self._destroyMarker(marker.getMarkerID())
 
         self._markers.clear()
+        self.__entitiesDamageType.clear()
         super(HeadquartersPlugin, self).stop()
         ChatCommunicationComponent.stop(self)
         return
@@ -666,7 +668,7 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             markerID = marker.getMarkerID()
             self._setMarkerMatrix(markerID, self.__getMarkerMatrix(hq))
             if not hq.isAlive():
-                self._invokeMarker(markerID, 'setHealth', 0)
+                self._invokeMarker(markerID, 'setHealth', 0, self.__entitiesDamageType.get(entityId))
                 self._invokeMarker(markerID, 'setDead', True)
                 self._setMarkerSticky(markerID, False)
                 self._setMarkerBoundEnabled(markerID, False)
@@ -688,8 +690,8 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             return
         else:
             aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
-            vehDmg = self.__getVehicleDamageType(aInfo)
-            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, vehDmg, hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
+            self.__entitiesDamageType[entityId] = self.__getVehicleDamageType(aInfo)
+            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
             return
 
     def __activateDestructibleMarker(self, entityId, isActive):

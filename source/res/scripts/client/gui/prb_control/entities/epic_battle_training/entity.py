@@ -40,6 +40,10 @@ class EpicBattleTrainingEntryPoint(LegacyEntryPoint):
         elif not self.canCreate():
             if callback is not None:
                 callback(False)
+        elif prb_getters.isParentControlActivated():
+            g_eventDispatcher.showParentControlNotification()
+            if callback:
+                callback(False)
         elif prb_getters.getClientPrebattle() is None or ctx.isForced():
             ctx.startProcessing(callback=callback)
             BigWorld.player().prb_createEpicTrainingBattle(ctx.getArenaTypeID(), ctx.getRoundLen(), ctx.isOpened(), ctx.getComment())

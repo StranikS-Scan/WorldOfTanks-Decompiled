@@ -7,12 +7,14 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	55	</forward>
+    <forward>	60	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.218	</moving>
+    <moving>	0.225	</moving>
     <still>	0.291	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <firePenalty>	0.437	</firePenalty>
@@ -42,16 +44,16 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	140	</armor_1>
-      <armor_2>	120	</armor_2>
-      <armor_3>	80	</armor_3>
+      <armor_1>	110	</armor_1>
+      <armor_2>	100	</armor_2>
+      <armor_3>	60	</armor_3>
       <armor_4>	45	</armor_4>
       <armor_5>	40	</armor_5>
-      <armor_7>	80	</armor_7>
+      <armor_7>	60	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	80	</armor_9>
-      <armor_10>	120	</armor_10>
-      <armor_11>	85	</armor_11>
+      <armor_9>	55	</armor_9>
+      <armor_10>	110	</armor_10>
+      <armor_11>	75	</armor_11>
       <armor_12>	40	</armor_12>
       <armor_13>	30	</armor_13>
       <armor_14>	30	</armor_14>
@@ -59,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20020	</weight>
-    <maxHealth>	1080	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1104,7 +1106,7 @@
     <Chassis_R173_K_91_2>
       <userString>	#ussr_vehicles:Chassis_R173_K_91_2	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -1118,12 +1120,12 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R173_K_91_2/normal/lod0/Chassis.model	</undamaged>
@@ -2008,97 +2010,112 @@
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	4.57142878	</repairTime>
     </Chassis_R173_K_91_2>
   </chassis>
   <turrets0>
     <Turret_1_R173_K_91_2>
       <userString>	#ussr_vehicles:Turret_1_R173_K_91_2	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	220	</armor_1>
-        <armor_2>	185	</armor_2>
-        <armor_3>	100	</armor_3>
+        <armor_2>	210	</armor_2>
+        <armor_3>	90	</armor_3>
         <armor_4>	60	</armor_4>
-        <armor_5>	40	</armor_5>
-        <armor_6>	170	</armor_6>
-        <armor_7>	160	</armor_7>
+        <armor_5>	30	</armor_5>
+        <armor_6>	175	</armor_6>
+        <armor_7>	190	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	150	</armor_9>
-        <armor_10>	140	</armor_10>
-        <armor_11>	130	</armor_11>
-        <armor_12>	120	</armor_12>
-        <armor_13>	110	</armor_13>
+        <armor_9>	200	</armor_9>
+        <armor_10>	160	</armor_10>
+        <armor_11>	180	</armor_11>
+        <armor_12>	130	</armor_12>
+        <armor_13>	120	</armor_13>
         <armor_14>	90	</armor_14>
-        <armor_15>	55	</armor_15>
-        <armor_16>	80	</armor_16>
-        <armor_17>	105	</armor_17>
-        <armor_18>	95	</armor_18>
-        <armor_19>	85	</armor_19>
+        <armor_15>	115	</armor_15>
+        <armor_16>	110	</armor_16>
+        <armor_17>	85	</armor_17>
+        <armor_18>	65	</armor_18>
+        <armor_19>	75	</armor_19>
         <armor_20>	100	</armor_20>
-        <armor_21>	80	</armor_21>
-        <armor_22>	95	</armor_22>
-        <armor_23>	80	</armor_23>
-        <armor_24>	50	</armor_24>
-        <armor_25>	60	</armor_25>
-        <armor_32>	10	</armor_32>
+        <armor_21>	150	</armor_21>
+        <armor_22>	170	</armor_22>
+        <armor_23>	140	</armor_23>
+        <armor_24>	125	</armor_24>
+        <armor_25>	105	</armor_25>
+        <armor_26>	80	</armor_26>
+        <armor_27>	95	</armor_27>
+        <armor_28>	55	</armor_28>
+        <armor_29>	165	</armor_29>
+        <armor_30>	50	</armor_30>
+        <armor_31>	40	</armor_31>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11500	</weight>
-      <maxHealth>	270	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_100mm_D_46TK>	shared	  <maxAmmo>	55	</maxAmmo>
           <armor>
-            <armor_1>	230	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	125	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_8>	95	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_10>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_10>
+            <armor_11>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	125	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	130	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.305556 5 0.419444 4 0.580556 5 0.694444 5 1 5	</maxPitch>
+            <maxPitch>	0 6 0.305556 6 0.419444 5 0.580556 5 0.694444 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	7.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R173_K_91_2/normal/lod0/Gun_01.model	</undamaged>
@@ -2196,6 +2213,7 @@
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	114.554 109.545	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -2940,8 +2958,8 @@
     <detailed>
       <engines>
         <V_64R>
-          <smplEnginePower>	930	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplEnginePower>	1000	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </V_64R>
       </engines>
       <chassis>

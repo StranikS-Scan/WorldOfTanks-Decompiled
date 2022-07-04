@@ -128,9 +128,9 @@ class EpicSquadEntity(SquadEntity):
             accountDbID = account_helpers.getAccountDatabaseID()
             spgDifferenceCount = self.getMaxSPGCount() - self.getCurrentSPGCount()
             if self.getMaxSPGCount() == 0:
-                return (False, None)
+                return False
             elif self.isCommander(accountDbID):
-                return (result, None)
+                return result
             elif spgDifferenceCount == 0:
                 _, _ = self.getUnit()
                 vInfos = self.getVehiclesInfo()
@@ -139,12 +139,12 @@ class EpicSquadEntity(SquadEntity):
                         isHaveSPG = True
 
                 if isHaveSPG:
-                    return (result, None)
-                return (False, None)
+                    return result
+                return False
             elif spgDifferenceCount > 0:
-                return (result, None)
+                return result
             else:
-                return (False, None)
+                return False
         return super(EpicSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):

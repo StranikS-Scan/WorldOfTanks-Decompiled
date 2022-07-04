@@ -299,7 +299,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if self.__changeModeBrowserId and not havePermissions:
             self.__destroyChangeModeWindow()
         if self.__minimapGrid:
-            self.__minimapGrid.as_clickEnabledS(havePermissions and not unitFreezed)
+            self.__minimapGrid.setActive(havePermissions and not unitFreezed)
         self.as_updateRallyS(data)
 
     def _makeFortClanBattleRoomVO(self, mapId, headerDescr, mineClanName, enemyClanName, waitForBattleDescr, isMapEnabled, isBattleTimerVisible, isSortie):
@@ -338,7 +338,12 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if currentBattle:
             playerTeam = 1 if clan.getId() == currentBattle.getFirstClanId() else 2
             self.__minimap.setPlayerTeam(playerTeam)
-            self.__minimap.setArena(currentBattle.getMapId())
+            mapId = currentBattle.getMapId()
+            self.__minimap.setArena(mapId)
+        else:
+            mapId = 0
+        if self.__minimapGrid:
+            self.__minimapGrid.setMapId(mapId)
 
     def _updateReserves(self, reserve, reserveOrder):
         slots = []

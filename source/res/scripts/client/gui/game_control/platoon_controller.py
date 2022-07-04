@@ -8,6 +8,7 @@ import BigWorld
 import Event
 import SoundGroups
 import VOIP
+from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
 from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from PlatoonTank import PlatoonTank, PlatoonTankInfo
@@ -34,6 +35,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters import messages
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.utils import functions
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.statistics import HARDWARE_SCORE_PARAMS
@@ -323,8 +325,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     @process
     def togglePlayerReadyAction(self, callback):
         changeStatePossible = True
-        if not self.prbEntity.getPlayerInfo().isReady:
+        notReady = not self.prbEntity.getPlayerInfo().isReady
+        if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+        if changeStatePossible and notReady:
+            changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
         callback(changeStatePossible)

@@ -16,6 +16,7 @@ class TrainingsModeSelectorItem(ModeSelectorLegacyItem):
 
     def _onDisposing(self):
         self.__requester.stop()
+        super(TrainingsModeSelectorItem, self)._onDisposing()
 
     def _onListReceived(self, prebattles):
         count = sum((1 for _ in prebattles))

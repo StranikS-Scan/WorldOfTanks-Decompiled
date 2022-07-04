@@ -6,7 +6,6 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from battle_royale.gui.prb_control.entities.regular import isNeedToLoadHangar
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
 from battle_royale.gui.prb_control.entities.regular.pre_queue.actions_validator import BattleRoyaleActionsValidator
 from battle_royale.gui.prb_control.entities.regular.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
@@ -61,8 +60,7 @@ class BattleRoyaleEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        if isNeedToLoadHangar(ctx):
-            g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
     def resetPlayerState(self):

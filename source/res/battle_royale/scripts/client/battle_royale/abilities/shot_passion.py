@@ -85,10 +85,10 @@ class ShotPassionManager(CGF.ComponentManager):
 
         def postloadSetup(go):
             shotPassionComponent = go.findComponentByType(ShotPassionComponent)
-            stage = vehicleShotPassionComponent.getInfo().stage
+            stage = vehicleShotPassionComponent.stage
             self.__setupVFX(shotPassionComponent.gunNode, stage)
             self.__setupVFX(shotPassionComponent.turretNode, stage)
-            go.createComponent(GenericComponents.RemoveGoDelayedComponent, vehicleShotPassionComponent.endTime - BigWorld.serverTime())
+            go.createComponent(GenericComponents.RemoveGoDelayedComponent, vehicleShotPassionComponent.finishTime - BigWorld.serverTime())
 
         appearance = vehicleShotPassionComponent.entity.appearance
         equipmentID = vehicles.g_cache.equipmentIDs().get(VehicleShotPassionComponent.EQUIPMENT_NAME)
@@ -103,15 +103,17 @@ class ShotPassionManager(CGF.ComponentManager):
         nodeGO.deactivate()
         nodeGO.activate()
 
-    def __onEquipmentComponentUpdated(self, _, vehicleID, equipmentInfo):
+    def __onEquipmentComponentUpdated(self, _, vehicleID, data):
         vehicle = BigWorld.entity(vehicleID)
-        if equipmentInfo.endTime - BigWorld.serverTime() > 0:
+        duration = data.get('duration', 0)
+        if duration > 0:
             effectGO = self.getEffectGO(vehicle.entityGameObject)
             if not effectGO.isValid():
                 return
+            stage = data.get('stage', 0)
             shotPassionComponent = effectGO.findComponentByType(ShotPassionComponent)
-            self.__setupVFX(shotPassionComponent.turretNode, equipmentInfo.stage)
-            self.__setupVFX(shotPassionComponent.gunNode, equipmentInfo.stage)
+            self.__setupVFX(shotPassionComponent.turretNode, stage)
+            self.__setupVFX(shotPassionComponent.gunNode, stage)
         else:
             self.endShotPassion(vehicle)
 

@@ -97,6 +97,11 @@ class _PreBattleDispatcher(ListenersCollection):
             if callback is not None:
                 callback(False)
             return
+        elif prb_getters.isParentControlActivated():
+            g_eventDispatcher.showParentControlNotification()
+            if callback is not None:
+                callback(False)
+            return
         else:
             entry = self.__factories.createEntry(ctx)
             if entry is None:
@@ -104,7 +109,7 @@ class _PreBattleDispatcher(ListenersCollection):
                 if callback is not None:
                     callback(False)
                 return
-            if not entry.canCreate():
+            elif not entry.canCreate():
                 if callback is not None:
                     callback(False)
                 return

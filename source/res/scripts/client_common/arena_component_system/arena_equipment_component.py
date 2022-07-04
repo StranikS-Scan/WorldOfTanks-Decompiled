@@ -263,7 +263,11 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
                         vehicle.onDebuffEffectApplied(False)
                 return
             if isInfluenceZone:
-                appearance.createComponent(affectComponent, appearance.gameObject, vehicle.isPlayerVehicle, BigWorld.player().spaceID)
+                isPlayerVehicle = vehicle.isPlayerVehicle
+                attachedVehicle = BigWorld.player().getVehicleAttached()
+                if not vehicle.isPlayerVehicle and attachedVehicle and BigWorld.player().isObserver():
+                    isPlayerVehicle = attachedVehicle.id == vehicle.id
+                appearance.createComponent(affectComponent, appearance.gameObject, isPlayerVehicle, BigWorld.player().spaceID, vehicleID)
                 curAffectComponent = appearance.findComponentByType(affectComponent)
                 if curAffectComponent.hasDebuff:
                     vehicle.onDebuffEffectApplied(True)

@@ -52,11 +52,15 @@ class HangarSpacesSwitcher(IHangarSpacesSwitcher):
 
     @property
     def currentItem(self):
-        for itemKey, itemParams in self.__hangarSpacesSwitchParams.iteritems():
-            if itemParams.spaceName in self._hangarSpaceReloader.hangarSpacePath:
-                return itemKey
+        currSpacePath = self._hangarSpaceReloader.hangarSpacePath
+        if not currSpacePath:
+            return None
+        else:
+            for itemKey, itemParams in self.__hangarSpacesSwitchParams.iteritems():
+                if itemParams.spaceName in currSpacePath:
+                    return itemKey
 
-        return None
+            return None
 
     def __readHangarSpacesSwitchSettings(self):
         hangarsXml = ResMgr.openSection('gui/hangars.xml')

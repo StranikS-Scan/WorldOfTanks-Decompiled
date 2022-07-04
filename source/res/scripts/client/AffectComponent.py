@@ -23,7 +23,7 @@ _ZONE_DEACTIVATE_EVENT_ = {_HEAL_OVER_TIME_ZONE_: BREvents.REPAIR_POINT_EXIT,
 class AffectComponent(IVehicleCountListener):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, gameObject, zoneType, isPlayerVehicle, spaceID, hasDebuff):
+    def __init__(self, gameObject, zoneType, isPlayerVehicle, spaceID, hasDebuff, vehicleID=None):
         self.hasDebuff = hasDebuff
         self.__gameObject = gameObject
         self.__spaceID = spaceID
@@ -32,6 +32,7 @@ class AffectComponent(IVehicleCountListener):
         self.__isPlayerVehicle = isPlayerVehicle
         self.__soundPlaying = False
         self.__vehicleEffectConfig = self.getVehicleConfig()
+        self.__ownVehicleID = vehicleID
         return
 
     def activate(self):
@@ -41,15 +42,22 @@ class AffectComponent(IVehicleCountListener):
         ctrl = self.__guiSessionProvider.dynamic.vehicleCount
         if ctrl:
             ctrl.addRuntimeView(self)
+        self.__guiSessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
 
     def deactivate(self):
         self._deactivateSoundEvent()
         self._removeParticles()
+        self.__ownVehicleID = None
         ctrl = self.__guiSessionProvider.dynamic.vehicleCount
         if ctrl:
             ctrl.removeRuntimeView(self)
+        self.__guiSessionProvider.onUpdateObservedVehicleData -= self._onUpdateObservedVehicleData
+        return
 
     def setPlayerVehicleAlive(self, isAlive):
+        if not isAlive and BigWorld.player().isObserver():
+            attachedVehicle = BigWorld.player().getVehicleAttached()
+            isAlive = attachedVehicle.isAlive() if attachedVehicle else isAlive
         if not isAlive and self.__soundPlaying:
             self._deactivateSoundEvent()
 
@@ -91,25 +99,31 @@ class AffectComponent(IVehicleCountListener):
             vehicleEffect = pointEffect.vehicleEffect
         return vehicleEffect
 
+    def _onUpdateObservedVehicleData(self, vehicleID, *args):
+        if vehicleID == self.__ownVehicleID:
+            self._activateSoundEvent()
+        else:
+            self._deactivateSoundEvent()
+
 
 class TrapAffectComponent(AffectComponent):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, gameObject, isPlayerVehicle, spaceID):
-        super(TrapAffectComponent, self).__init__(gameObject, _DAMAGE_OVER_TIME_ZONE_, isPlayerVehicle, spaceID, True)
+    def __init__(self, gameObject, isPlayerVehicle, spaceID, vehicleID):
+        super(TrapAffectComponent, self).__init__(gameObject, _DAMAGE_OVER_TIME_ZONE_, isPlayerVehicle, spaceID, True, vehicleID)
 
 
 class FireCircleAffectComponent(AffectComponent):
 
-    def __init__(self, gameObject, isPlayerVehicle, spaceID):
-        super(FireCircleAffectComponent, self).__init__(gameObject, _FIRE_CIRCLE_ZONE_, isPlayerVehicle, spaceID, True)
+    def __init__(self, gameObject, isPlayerVehicle, spaceID, vehicleID):
+        super(FireCircleAffectComponent, self).__init__(gameObject, _FIRE_CIRCLE_ZONE_, isPlayerVehicle, spaceID, True, vehicleID)
 
 
 class RepairAffectComponent(AffectComponent):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, gameObject, isPlayerVehicle, spaceID):
-        super(RepairAffectComponent, self).__init__(gameObject, _HEAL_OVER_TIME_ZONE_, isPlayerVehicle, spaceID, False)
+    def __init__(self, gameObject, isPlayerVehicle, spaceID, vehicleID):
+        super(RepairAffectComponent, self).__init__(gameObject, _HEAL_OVER_TIME_ZONE_, isPlayerVehicle, spaceID, False, vehicleID)
 
 
 def getInfluenceZoneType(pointDescr):

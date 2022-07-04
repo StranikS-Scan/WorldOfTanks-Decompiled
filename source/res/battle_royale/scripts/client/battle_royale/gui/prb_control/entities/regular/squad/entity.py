@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/squad/entity.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from battle_royale.gui.prb_control.entities.regular import isNeedToLoadHangar
 from battle_royale.gui.prb_control.entities.regular.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
 from battle_royale.gui.prb_control.entities.regular.scheduler import RoyaleScheduler
 from battle_royale.gui.prb_control.entities.regular.squad.actions_validator import BattleRoyaleSquadActionsValidator
@@ -48,8 +47,7 @@ class BattleRoyaleSquadEntity(SquadEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if isNeedToLoadHangar(ctx):
-            g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadHangar()
         return super(BattleRoyaleSquadEntity, self).fini(ctx, woEvents)
 
     def leave(self, ctx, callback=None):

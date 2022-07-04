@@ -186,15 +186,15 @@ class RandomSquadEntity(SquadEntity):
         if self._isBalancedSquad:
             result = v.level in self._rosterSettings.getLevelsRange()
             if not result:
-                return (False, None)
+                return False
         if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG:
             isHaveSPG = False
             accountDbID = account_helpers.getAccountDatabaseID()
             spgDifferenceCount = self.getMaxSPGCount() - self.getCurrentSPGCount()
             if self.getMaxSPGCount() == 0:
-                return (False, None)
+                return False
             elif self.isCommander(accountDbID):
-                return (result, None)
+                return result
             elif spgDifferenceCount == 0:
                 _, _ = self.getUnit()
                 vInfos = self.getVehiclesInfo()
@@ -203,12 +203,12 @@ class RandomSquadEntity(SquadEntity):
                         isHaveSPG = True
 
                 if isHaveSPG:
-                    return (result, None)
-                return (False, None)
+                    return result
+                return False
             elif spgDifferenceCount > 0:
-                return (result, None)
+                return result
             else:
-                return (False, None)
+                return False
         return super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):

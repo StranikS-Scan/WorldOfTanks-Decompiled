@@ -328,6 +328,7 @@ class _WgcModeManager(object):
         return
 
     def __onRejected(self, status, _):
+        Waiting.hide('login')
         if self.checkWgcCouldRetry(status):
             WGC.onToken2Expired()
             self.login(self.__selectedServer)

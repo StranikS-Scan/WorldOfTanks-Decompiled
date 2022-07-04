@@ -61,7 +61,7 @@ class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
          'statusLabel': text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.standard(backport.text(R.strings.quests.missionDetails.missionsComplete(), count=text_styles.stats(self._MISSIONS_DONE), total=text_styles.standard(self._MISSIONS_COUNT)))),
          'awards': [{'label': text_styles.gold(backport.text(R.strings.menu.premium.packet.days3())),
                      'padding': self._AWARD_LABEL_PADDING,
-                     'imgSource': backport.image(R.images.gui.maps.icons.quests.bonuses.big.premium_3()),
+                     'imgSource': backport.image(R.images.gui.maps.icons.quests.bonuses.big.premium_plus_3()),
                      'align': LABEL_ALIGN.RIGHT,
                      'tooltip': TOOLTIPS.AWARDITEM_PREMIUM,
                      'obtainedImage': backport.image(R.images.gui.maps.icons.library.awardObtained()),

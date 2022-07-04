@@ -298,7 +298,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 options.append(self._makeItem(USER.CREATE_MAPBOX_SQUAD, backport.text(R.strings.menu.contextMenu.createMapboxSquad()), optInitData={'enabled': isOptionEnabled,
                  'textColor': 13347959}))
             funRandomCtrl = self.__funRandomController
-            if funRandomCtrl.isEnabled():
+            if funRandomCtrl.isEnabled() and not self._isSquadAlreadyCreated(PREBATTLE_TYPE.FUN_RANDOM):
                 isOptionEnabled = canCreate and funRandomCtrl.canGoToMode() and funRandomCtrl.isInPrimeTime()
                 options.append(self._makeItem(USER.CREATE_FUN_RANDOM_SQUAD, backport.text(R.strings.menu.contextMenu.createFunRandomSquad()), optInitData={'enabled': isOptionEnabled,
                  'textColor': 13347959}))

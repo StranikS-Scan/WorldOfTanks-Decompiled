@@ -51,7 +51,7 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         vehicle = self.entity
         ctrl = vehicle.guiSessionProvider.dynamic.progression
         if ctrl is not None and vehicle.id == BigWorld.player().playerVehicleID:
-            ctrl.updateVehicleReadinessTime(self.upgradeReadinessTime.time, self.upgradeReadinessTime.reason)
+            ctrl.updateVehicleReadinessTime(self.upgradeReadinessTime.totalTime, self.upgradeReadinessTime.reason)
         return
 
 

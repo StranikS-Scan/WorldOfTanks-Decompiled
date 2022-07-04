@@ -362,14 +362,16 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
     def _updateBerserker(self, berserkerData):
         data = {'isSourceVehicle': True,
          'isInactivation': False if berserkerData['duration'] > 0.0 else None,
-         'endTime': berserkerData['endTime'],
+         'endTime': berserkerData['duration'] + BigWorld.serverTime(),
          'duration': berserkerData['duration']}
         self._updateInspire(data)
         return
 
     def _updateThunderStrike(self, data):
-        stunInfo = StunInfo(startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + data.elapsedTime, duration=data.elapsedTime, totalTime=data.elapsedTime)
-        self.__updateStunSources(data.id, stunInfo)
+        duration = data.get('duration', 0)
+        objID = data.get('id', 0)
+        stunInfo = StunInfo(startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + duration, duration=duration, totalTime=duration)
+        self.__updateStunSources(objID, stunInfo)
         self.__updateStunAnimations(stunInfo)
 
     def __updateStunAnimations(self, stunInfo):

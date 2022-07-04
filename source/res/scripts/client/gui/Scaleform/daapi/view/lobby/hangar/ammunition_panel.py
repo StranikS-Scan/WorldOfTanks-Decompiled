@@ -10,6 +10,7 @@ from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
+from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters.icons import getRoleIcon
@@ -46,7 +47,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def showRepairDialog(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            yield VehicleRepairAction(vehicle, NeedRepairMainContent).doAction()
+            yield VehicleRepairAction(vehicle, NeedRepair, NeedRepairMainContent).doAction()
 
     def showCustomization(self):
         self.__service.showCustomization()

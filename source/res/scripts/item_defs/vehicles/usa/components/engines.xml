@@ -100,6 +100,7 @@
     <Continental_AOI_628_2A>	122	</Continental_AOI_628_2A>
     <Continental_AOSI_1195_5_Y_IV>	123	</Continental_AOSI_1195_5_Y_IV>
     <Liberty_L_12>	124	</Liberty_L_12>
+    <AOI_695>	125	</AOI_695>
     <MTU_MB_838_CaM_500>	126	</MTU_MB_838_CaM_500>
     <AOI-1490_cl>	127	</AOI-1490_cl>
     <GM_12V71T>	128	</GM_12V71T>
@@ -782,6 +783,23 @@
       <rpm_min>	406	</rpm_min>
       <rpm_max>	2500	</rpm_max>
     </Continental_R-975-C1>
+    <AOI_695>
+      <userString>	#usa_vehicles:AOI_695	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	480	</power>
+      <weight>	500	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
+    </AOI_695>
     <Continental_AV-1790-1>
       <userString>	#usa_vehicles:Continental_AV-1790-1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV-1790-1_short	</shortUserString>

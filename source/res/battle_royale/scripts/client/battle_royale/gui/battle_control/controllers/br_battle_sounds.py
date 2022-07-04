@@ -783,7 +783,7 @@ class _HealingRepairSoundPlayer(VehicleStateSoundPlayer):
 
     def __updateHealingEffect(self, value):
         if not value['isSourceVehicle']:
-            senderKey = value['senderKey']
+            senderKey = value.get('senderKey')
             if senderKey is not None:
                 self.__onHealingActivate(senderKey)
             else:
@@ -861,14 +861,16 @@ class ShotPassionSoundPlayer(EquipmentComponentSoundPlayer):
         super(ShotPassionSoundPlayer, self).destroy()
         self._stopSounds()
 
-    def _onEquipmentComponentUpdated(self, equipmentName, vehicleID, equipmentInfo):
+    def _onEquipmentComponentUpdated(self, _, vehicleID, equipmentInfo):
         if vehicleID == self.__sessionProvider.shared.vehicleState.getControllingVehicleID():
-            if equipmentInfo.endTime - BigWorld.serverTime() > 0:
+            duration = equipmentInfo.get('duration', 0)
+            if duration > 0:
                 if not self.__isActive:
                     BREvents.playSound(BREvents.BR_SHOT_PASSION_AFFECT)
                     self.__isActive = True
                 else:
-                    BREventParams.setEventParam(BREventParams.SHOT_PASSION_MULTIPLIER, equipmentInfo.stage)
+                    stage = equipmentInfo.get('stage', 0)
+                    BREventParams.setEventParam(BREventParams.SHOT_PASSION_MULTIPLIER, stage)
             else:
                 self._stopSounds()
 

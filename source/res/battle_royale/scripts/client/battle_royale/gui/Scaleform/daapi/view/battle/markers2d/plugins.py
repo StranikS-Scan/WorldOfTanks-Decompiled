@@ -4,7 +4,6 @@ from collections import defaultdict
 import logging
 import BigWorld
 from account_helpers.settings_core.settings_constants import MARKERS
-from battle_royale.gui.constants import BattleRoyaleEquipments
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import SettingsPlugin
@@ -14,7 +13,6 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
 from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
-from constants import EQUIPMENT_STAGES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 _logger = logging.getLogger(__name__)
 _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STATE, BATTLE_MARKER_STATES.THUNDER_STRIKE_STATE),
@@ -27,7 +25,7 @@ _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STAT
  (BATTLE_MARKER_STATES.INSPIRING_STATE,),
  (BATTLE_MARKER_STATES.INSPIRED_STATE,),
  (BATTLE_MARKER_STATES.REPAIRING_STATE,))
-_BATTLE_ROYALE_EQUIPMENT_MARKER = {BattleRoyaleEquipments.SHOT_PASSION: BATTLE_MARKER_STATES.SHOT_PASSION_STATE}
+_MARKERS_WITH_TIMER = (BATTLE_MARKER_STATES.INSPIRING_STATE, BATTLE_MARKER_STATES.HEALING_STATE)
 
 class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -39,21 +37,17 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
 
     def start(self):
         super(BattleRoyaleVehicleMarkerPlugin, self).start()
-        ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onEquipmentComponentUpdated.subscribe(self.__onEquipmentComponentUpdated)
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
+        self.__sessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
         return
 
     def stop(self):
-        ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onEquipmentComponentUpdated.unsubscribe(self.__onEquipmentComponentUpdated)
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
+        self.__sessionProvider.onUpdateObservedVehicleData -= self._onUpdateObservedVehicleData
         super(BattleRoyaleVehicleMarkerPlugin, self).stop()
         self.__cache = {}
         return
@@ -85,31 +79,49 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         super(BattleRoyaleVehicleMarkerPlugin, self)._onVehicleFeedbackReceived(eventID, vehicleID, value)
         if vehicleID not in self._markers:
             return
-        handle = self._markers[vehicleID].getMarkerID()
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_CUSTOM_MARKER:
-            self.__updateMarker(vehicleID, handle, **value)
+        else:
+            if eventID == FEEDBACK_EVENT_ID.VEHICLE_REPAIR_POINT:
+                if value.get('duration') is None:
+                    state = self.__getStateByFeedbackID(eventID)
+                    if state:
+                        self.__updateCache(vehicleID, state, value, 0, isRemove=True)
+            handle = self._markers[vehicleID].getMarkerID()
+            if eventID == FEEDBACK_EVENT_ID.VEHICLE_CUSTOM_MARKER:
+                self.__updateMarker(vehicleID, handle, **value)
+            return
 
     def _onVehicleStateUpdated(self, state, value):
         super(BattleRoyaleVehicleMarkerPlugin, self)._onVehicleStateUpdated(state, value)
-        if state == VEHICLE_VIEW_STATE.REPAIR_POINT:
-            vehicle = BigWorld.player().getVehicleAttached()
-            if vehicle is not None:
-                vehicleID = vehicle.id
-                if vehicleID in self._markers:
-                    self.__cache[state] = (vehicleID, value)
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is None:
+            return
+        else:
+            if state == VEHICLE_VIEW_STATE.REPAIR_POINT:
+                if vehicle.id in self._markers:
+                    markerID = self._markers[vehicle.id].getMarkerID()
+                    self.__updateCache(vehicle.id, state, value, markerID)
+            return
+
+    def __updateCache(self, vehicleID, state, value, markerID, isRemove=False):
+        if isRemove:
+            self.__cache.pop(vehicleID, {}).pop(state, None)
+        else:
+            self.__cache.setdefault(vehicleID, {})[state] = (value, markerID)
         return
 
-    def __onEquipmentComponentUpdated(self, equipmentName, vehicleID, equipmentInfo):
-        markerID = _BATTLE_ROYALE_EQUIPMENT_MARKER.get(equipmentName)
-        if markerID is not None and vehicleID in self._markers:
-            handle = self._markers[vehicleID].getMarkerID()
-            duration = equipmentInfo.endTime - BigWorld.serverTime()
-            isShown = duration > 0 and BigWorld.player().getObservedVehicleID() != vehicleID
-            self.__updateMarker(vehicleID, handle, isShown, False, duration, True, markerID)
-        return
+    def __getStateByFeedbackID(self, eventID):
+        data = {FEEDBACK_EVENT_ID.VEHICLE_REPAIR_POINT: VEHICLE_VIEW_STATE.REPAIR_POINT}
+        return data.get(eventID)
 
     def __updateMarker(self, vehicleID, handle, isShown, isSourceVehicle, duration, animated, markerID):
         self._updateStatusMarkerState(vehicleID, isShown, handle, markerID, duration, animated, isSourceVehicle)
+        if markerID in _MARKERS_WITH_TIMER:
+            self._updateMarkerTimer(vehicleID, handle, duration, markerID)
+
+    def _updateStunMarker(self, vehicleID, handle, value):
+        super(BattleRoyaleVehicleMarkerPlugin, self)._updateStunMarker(vehicleID, handle, value)
+        if vehicleID == BigWorld.player().getObservedVehicleID() and vehicleID in self._markers:
+            self.__hideStunMarker(vehicleID, self._markers[vehicleID].getMarkerID())
 
     def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
         extendedStatuses = self.__markersStatesExtended[vehicleID]
@@ -154,17 +166,54 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         return False
 
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
-        vehicleID, value = self.__cache.get(VEHICLE_VIEW_STATE.REPAIR_POINT, (None, {}))
-        if vehicleID is not None:
+        if currentVehicleId is None:
+            return
+        else:
+            vehicle = BigWorld.entities.get(currentVehicleId)
+            if vehicle is None:
+                return
+            if cameraName == 'video':
+                if self.__hasRepairingMarker(currentVehicleId):
+                    self.__updateRepairingMarker(currentVehicleId)
+                if vehicle.stunInfo:
+                    marker = self._markers.get(currentVehicleId)
+                    if marker and BATTLE_MARKER_STATES.STUN_STATE in self._markerTimers.get(marker.getMarkerID(), {}):
+                        self.__showStunMarker(currentVehicleId, marker.getMarkerID(), vehicle.getStunInfo())
+            else:
+                if self.__hasRepairingMarker(currentVehicleId):
+                    self.__updateRepairingMarker(currentVehicleId, isShow=False)
+                vehicle.updateStunInfo()
+            return
+
+    def _onUpdateObservedVehicleData(self, vehicleID, _):
+        for keyVehID, marker in self._markers.iteritems():
+            if keyVehID != vehicleID:
+                if self.__hasRepairingMarker(keyVehID):
+                    self.__updateRepairingMarker(keyVehID)
+                if BATTLE_MARKER_STATES.STUN_STATE in self._markerTimers.get(marker.getMarkerID(), {}):
+                    vehicle = BigWorld.entities.get(keyVehID)
+                    if vehicle:
+                        vehicle.updateStunInfo()
+            self.__hideStunMarker(keyVehID, marker.getMarkerID())
+
+    def __updateRepairingMarker(self, vehicleID, isShow=True):
+        repairData = self.__cache.get(vehicleID, {}).get(VEHICLE_VIEW_STATE.REPAIR_POINT)
+        if repairData is not None:
+            value, markerID = repairData
             marker = self._markers[vehicleID]
-            handle = marker.getMarkerID()
-            equipments = self.__sessionProvider.shared.equipments.getEquipments()
-            equipmentName = BattleRoyaleEquipments.REPAIR_POINT
-            eq = [ eq for eq in equipments.itervalues() if eq.getDescriptor().name == equipmentName ]
-            if eq and eq[0].getStage() == EQUIPMENT_STAGES.COOLDOWN:
-                duration = value.get('duration', 0) if cameraName == 'video' else 0
-                self._updateRepairingMarker(vehicleID, handle, duration)
+            if markerID == marker.getMarkerID():
+                duration = value.get('duration', 0) if isShow else 0.0
+                self._updateRepairingMarker(vehicleID, markerID, duration)
         return
+
+    def __hasRepairingMarker(self, vehicleID):
+        return VEHICLE_VIEW_STATE.REPAIR_POINT in self.__cache.get(vehicleID, {})
+
+    def __hideStunMarker(self, vehicleID, handle):
+        self._updateStatusMarkerState(vehicleID, False, handle, BATTLE_MARKER_STATES.STUN_STATE, 0, False, False)
+
+    def __showStunMarker(self, vehicleID, handle, stunInfo):
+        self._updateStatusMarkerState(vehicleID, True, handle, BATTLE_MARKER_STATES.STUN_STATE, stunInfo.duration, False, False)
 
 
 class BattleRoyaleSettingsPlugin(SettingsPlugin):

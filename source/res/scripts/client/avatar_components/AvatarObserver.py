@@ -94,6 +94,7 @@ class AvatarObserver(CallbackDelayer):
                     self.gunRotator.start()
                 self.updateObservedVehicleData()
                 self.vehicle.set_dotEffect()
+                self.vehicle.refreshBuffEffects()
                 if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
                     self.vehicle.filter.enableStabilisedMatrix(True)
                 if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:

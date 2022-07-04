@@ -16,7 +16,7 @@ from gui.prb_control import prb_getters, settings
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base import vehicleAmmoCheck, lobbyHeaderNavigationPossibleCheck
+from gui.prb_control.entities.base import lobbyHeaderNavigationPossibleCheck
 from gui.prb_control.entities.base.entity import BasePrbEntity, BasePrbEntryPoint
 from gui.prb_control.entities.base.unit.actions_handler import UnitActionsHandler
 from gui.prb_control.entities.base.unit.actions_validator import UnitActionsValidator
@@ -1049,7 +1049,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'changeSortieDivision', division=ctx.getDivisionID(), callback=callback)
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown())
 
-    @vehicleAmmoCheck
     @lobbyHeaderNavigationPossibleCheck
     def togglePlayerReadyAction(self, launchChain=False):
         notReady = not self.getPlayerInfo().isReady

@@ -122,6 +122,7 @@
     <_105mm_T254A>	265	</_105mm_T254A>
     <_105mm_T140_Y_IV>	266	</_105mm_T140_Y_IV>
     <_37mm_Browning_Semi_Automatic>	267	</_37mm_Browning_Semi_Automatic>
+    <_120mm_2B_British_gun>	268	</_120mm_2B_British_gun>
     <_105mm_Gun_M68_2>	269	</_105mm_Gun_M68_2>
     <_94mm_British_dualgun>	270	</_94mm_British_dualgun>
     <_105mm_Gun_T141>	272	</_105mm_Gun_T141>
@@ -7429,6 +7430,64 @@
         </_120mm_HE_T_M356E1>
       </shots>
     </_120mm_Gun_T124>
+    <_120mm_2B_British_gun>
+      <userString>	#usa_vehicles:_120mm_2B_British_gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	18	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	22	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1800	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_XM152>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1060	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 227	</piercingPower>
+        </_120mm_XM152>
+        <_120mm_XM252>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1492	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	315 285	</piercingPower>
+        </_120mm_XM252>
+        <_120mm_XM31>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_120mm_XM31>
+      </shots>
+    </_120mm_2B_British_gun>
     <_120mm_Gun_T123E6>
       <userString>	#usa_vehicles:_120mm_Gun_T123E6	</userString>
       <tags></tags>

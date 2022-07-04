@@ -5,6 +5,7 @@ from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.impl.gen import R
+from gui.prb_control.entities.base import checkVehicleAmmoFull
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
 from gui.shared.event_dispatcher import showPlatoonResourceDialog
 
@@ -15,9 +16,9 @@ class RandomSquadActionsHandler(SquadActionsHandler):
 class BalancedSquadActionsHandler(RandomSquadActionsHandler):
 
     def execute(self):
+        func = self._entity
+        fullData = func.getUnitFullData(unitMgrID=func.getID())
         if self._entity.isCommander():
-            func = self._entity
-            fullData = func.getUnitFullData(unitMgrID=func.getID())
             notReadyCount = 0
             for slot in fullData.slotsIterator:
                 slotPlayer = slot.player
@@ -52,5 +53,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
                                 return
 
             self._setCreatorReady()
+        elif not fullData.playerInfo.isReady:
+            checkVehicleAmmoFull(g_currentVehicle.item, self._checkVehicleAmmoCallback)
         else:
             self._entity.togglePlayerReadyAction(True)

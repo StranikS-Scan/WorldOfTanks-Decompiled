@@ -13,7 +13,7 @@ from account_shared import LayoutIterator
 from adisp import async, process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
-from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY

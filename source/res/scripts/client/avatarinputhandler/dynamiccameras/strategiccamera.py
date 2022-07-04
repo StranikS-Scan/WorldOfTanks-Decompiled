@@ -177,7 +177,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def getCamTransitionDist(self):
         return self._cfg['transitionDist']
 
-    def update(self, dx, dy, dz, updatedByKeyboard=False):
+    def update(self, dx, dy, dz, rotateMode=True, zoomMode=True, updatedByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
         standardMaxDist = self._cfg['distRange'][1]
         if self.__camDist > standardMaxDist:

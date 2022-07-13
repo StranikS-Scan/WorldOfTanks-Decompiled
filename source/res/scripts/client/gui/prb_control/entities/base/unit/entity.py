@@ -768,6 +768,8 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'kick', ctx.getPlayerID(), callback=callback)
 
     def setVehicle(self, ctx, callback=None):
+        if self.isParentControlActivated(callback=callback):
+            return
         pPermissions = self.getPermissions()
         if not pPermissions.canSetVehicle():
             LOG_ERROR('Player can not set vehicle', pPermissions)

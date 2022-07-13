@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/periodic_battles/prb_control/scheduler.py
+import BigWorld
 from gui.impl import backport
 from gui import SystemMessages
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
@@ -28,7 +29,7 @@ class PeriodicScheduler(BaseScheduler):
 
     def _update(self, status):
         if not self._controller.isAvailable():
-            self._doLeave()
+            BigWorld.callback(0.0, self._doLeave)
             return
         isPrimeTime = status == PrimeTimeStatus.AVAILABLE
         isConfigured = status != PrimeTimeStatus.NOT_SET
@@ -39,7 +40,11 @@ class PeriodicScheduler(BaseScheduler):
             g_eventDispatcher.updateUI()
 
     def _doLeave(self):
-        self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
+        if self._entity is None:
+            return
+        else:
+            self._entity.leave(LeavePreQueueCtx(waitingID='prebattle/leave'))
+            return
 
     def __show(self, isInit=False):
         if not self._controller.isBattlesPossible():

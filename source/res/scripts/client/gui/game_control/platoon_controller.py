@@ -935,7 +935,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
         else:
             self.__isPlatoonVisualizationEnabled = displayPlatoonMembers
-            isInPlatoon = self.prbDispatcher.getFunctionalState().isInUnit()
+            isInPlatoon = self.isInPlatoon()
             self.onPlatoonTankVisualizationChanged(self.__isPlatoonVisualizationEnabled and isInPlatoon)
             self.__updatePlatoonTankInfo()
             return

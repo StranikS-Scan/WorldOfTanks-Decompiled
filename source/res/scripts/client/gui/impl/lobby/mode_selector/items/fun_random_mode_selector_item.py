@@ -25,6 +25,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem):
     def _onInitializing(self):
         super(FunRandomSelectorItem, self)._onInitializing()
         self.__addListeners()
+        self._addReward(ModeSelectorRewardID.CREDITS)
         self._addReward(ModeSelectorRewardID.EXPERIENCE)
         self.__fillModel()
 

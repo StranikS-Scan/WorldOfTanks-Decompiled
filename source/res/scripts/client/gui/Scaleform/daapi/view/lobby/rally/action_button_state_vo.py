@@ -70,9 +70,9 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
          UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {}),
          UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {}),
-         UNIT_RESTRICTION.LIMIT_LEVEL: ('', {}),
-         UNIT_RESTRICTION.LIMIT_VEHICLE_TYPE: ('', {}),
-         UNIT_RESTRICTION.LIMIT_VEHICLE_CLASS: ('', {}),
+         UNIT_RESTRICTION.LIMIT_LEVEL: (self.__getNotAvailableIcon() + backport.text(R.strings.platoon.members.footer.invalidVehicleLevel()), {}),
+         UNIT_RESTRICTION.LIMIT_VEHICLE_TYPE: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.wrongMode()), {}),
+         UNIT_RESTRICTION.LIMIT_VEHICLE_CLASS: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.wrongMode()), {}),
          UNIT_RESTRICTION.MODE_NO_BATTLES: ('', {}),
          UNIT_RESTRICTION.MODE_NOT_SET: ('', {}),
          UNIT_RESTRICTION.MODE_NOT_AVAILABLE: ('', {})}

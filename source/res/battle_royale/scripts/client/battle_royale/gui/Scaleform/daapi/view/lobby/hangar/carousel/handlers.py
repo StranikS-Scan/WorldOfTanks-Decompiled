@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar/carousel/handlers.py
 from logging import getLogger
+from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from gui.shared import event_dispatcher as shared_events
 from gui.impl import backport
 from gui.impl.gen import R
@@ -54,7 +55,8 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
         if vehicle is None:
             return options
         else:
-            options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': True})])
+            if BATTLE_ROYALE_STATS_ENABLED:
+                options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': True})])
             rentState = self.__rentVehiclesController.getRentState(self.vehCD)
             if rentState != EquipmentPanelCmpRentStates.STATE_NORMAL:
                 testDriveStates = (EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_AVAILABLE, EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_ACTIVE)

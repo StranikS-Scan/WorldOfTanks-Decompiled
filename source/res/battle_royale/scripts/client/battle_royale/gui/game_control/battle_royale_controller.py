@@ -8,6 +8,7 @@ import BigWorld
 import Event
 from shared_utils import nextTick
 import season_common
+from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
@@ -584,10 +585,12 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             return
 
     def __onChangeProfileAlias(self, event):
-        if self.isBattleRoyaleMode():
+        if self.isBattleRoyaleMode() and BATTLE_ROYALE_STATS_ENABLED:
             event.ctx = {'selectedAlias': VIEW_ALIAS.PROFILE_STATISTICS}
 
     def __onProfileStatisticSelectBattlesType(self, event):
+        if not BATTLE_ROYALE_STATS_ENABLED:
+            return
         eventOwner = event.ctx.get('eventOwner')
         if eventOwner == 'battleRoyale':
             event.ctx['battlesType'] = PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO
@@ -596,9 +599,13 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__profStatSelectBattlesTypeInited = True
 
     def __onProfileStatisticDispose(self, event):
+        if not BATTLE_ROYALE_STATS_ENABLED:
+            return
         self.__profStatSelectBattlesTypeInited = False
 
     def __onProfileTechniqueSelectBattlesType(self, event):
+        if not BATTLE_ROYALE_STATS_ENABLED:
+            return
         eventOwner = event.ctx.get('eventOwner')
         if event.ctx.get('eventOwner') == 'battleRoyale':
             event.ctx['battlesType'] = PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO
@@ -607,6 +614,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__profTechSelectBattlesTypeInited = True
 
     def __onProfileTechniqueDispose(self, event):
+        if not BATTLE_ROYALE_STATS_ENABLED:
+            return
         self.__profTechSelectBattlesTypeInited = False
 
     def __onSelectVehicleInHangar(self, event):

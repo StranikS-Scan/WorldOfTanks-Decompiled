@@ -2992,7 +2992,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__physicsMode = newMode
 
     def __isPlayerInSquad(self):
-        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.EPIC_RANDOM, constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=self.playerVehicleID)
+        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM,
+         constants.ARENA_GUI_TYPE.EPIC_RANDOM,
+         constants.ARENA_GUI_TYPE.EPIC_BATTLE,
+         constants.ARENA_GUI_TYPE.FUN_RANDOM) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=self.playerVehicleID)
 
     def __getAdditiveShotDispersionFactor(self, descriptor):
         if self.__aimingBooster is not None:

@@ -46,7 +46,7 @@
   <hull>
     <armor>
       <armor_1>	150	</armor_1>
-      <armor_2>	150	</armor_2>
+      <armor_2>	110	</armor_2>
       <armor_3>	100	</armor_3>
       <armor_4>	90	</armor_4>
       <armor_5>	30	</armor_5>
@@ -1888,13 +1888,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14800	</weight>
       <maxHealth>	320	</maxHealth>
-      <rotationSpeed>	27	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1921,14 +1921,14 @@
             </armor_8>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.8	</aimingTime>
+          <aimingTime>	3.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 6 0.452778 6 0.463889 4 0.480556 4 0.491667 6 1 6	</maxPitch>

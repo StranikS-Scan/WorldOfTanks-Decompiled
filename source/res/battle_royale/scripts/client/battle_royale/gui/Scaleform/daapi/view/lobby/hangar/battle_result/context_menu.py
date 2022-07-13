@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar/battle_result/context_menu.py
+from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from helpers import dependency
 from gui.shared import utils, events, g_eventBus
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
@@ -63,7 +64,9 @@ class BRBattleResultContextMenu(AbstractContextMenuHandler):
     def showUserInfo(self):
 
         def onDossierReceived(databaseID, userName):
-            shared_events.showProfileWindow(databaseID, userName, selectedAlias=VIEW_ALIAS.PROFILE_STATISTICS, eventOwner='battleRoyale')
+            eventOwner = 'battleRoyale' if BATTLE_ROYALE_STATS_ENABLED else None
+            shared_events.showProfileWindow(databaseID, userName, selectedAlias=VIEW_ALIAS.PROFILE_STATISTICS, eventOwner=eventOwner)
+            return
 
         shared_events.requestProfile(self.__playerDBId, self.__playerName, successCallback=onDossierReceived)
 

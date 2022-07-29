@@ -3,6 +3,7 @@
 import logging
 from functools import wraps
 import typing
+import BigWorld
 import adisp
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
@@ -221,7 +222,7 @@ class OffersDataProvider(IOffersDataProvider):
                 self._cdnCache.restart()
                 self._pendingNotify = False
                 _logger.debug('[Offers provider] send notification')
-                self.onOffersUpdated()
+                BigWorld.callback(0.0, self.onOffersUpdated)
                 return
         _logger.debug('[Offers provider] can not send notification')
 

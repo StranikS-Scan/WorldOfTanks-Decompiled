@@ -5223,7 +5223,14 @@
       <tags>	formfactor_square direction_right_to_left	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
-    <name>	Yandex June 2022	</name>
+    <projection_decal>
+      <id>	773	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_68.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_68	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Yandex 2022	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
@@ -5725,6 +5732,66 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	CN WCL	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	766	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_437.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_437/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_437	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	767	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_438.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_438/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_438	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	768	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_439.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_439/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_439	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	769	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_440.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_440/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_440	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	770	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_441.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_441/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_441	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	771	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_442.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_442/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_442	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Iron age	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
@@ -7013,5 +7080,36 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	Yandex: 2022	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 175g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	755	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_426.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_426	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	756	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_427.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_427	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Twitch July 2022	</name>
   </itemGroup>
 </list.xml>

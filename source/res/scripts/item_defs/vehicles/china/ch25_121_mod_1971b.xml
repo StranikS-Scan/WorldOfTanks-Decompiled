@@ -68,6 +68,13 @@
       <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch25_121_mod_1971B_SE_3DSt>
+          <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Hull.model	</exploded>
+        </Ch25_121_mod_1971B_SE_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -91,9 +98,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.428658 0.503819 2.3004	</rayStart>
-        <rayEnd>	-0.428667 0.417213 2.2504	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.243312 0.503817 2.3004	</rayStart>
+        <rayEnd>	-0.243321 0.417211 2.250401	</rayEnd>
+        <rayUp>	0.000052 0.499983 -0.866035	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -675,6 +682,45 @@
         <clipAngle>	0.393651	</clipAngle>
         <anchorShift>	0.179451	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15046	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+        <position>	0.55501 1.39454 2.20112	</position>
+        <rotation>	0.480164 -0.0144711 3.13751	</rotation>
+        <scale>	0.537909 0.152936 0.516639	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.611401	</clipAngle>
+        <anchorShift>	0.103477	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15047	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+        <position>	-1.6375 1.06704 2.27527	</position>
+        <rotation>	1.56894 -0.00623489 -1.57538	</rotation>
+        <scale>	0.448734 0.127581 0.430985	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.460929	</clipAngle>
+        <anchorShift>	0.087543	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15048	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+        <position>	1.63751 1.06701 2.27527	</position>
+        <rotation>	1.56887 -0.00511592 1.56348	</rotation>
+        <scale>	0.448733 0.127581 0.430984	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.460929	</clipAngle>
+        <anchorShift>	0.077543	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -717,6 +763,13 @@
         <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch25_121_mod_1971B_SE_3DSt>
+            <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Chassis.model	</exploded>
+          </Ch25_121_mod_1971B_SE_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1071,24 +1124,24 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L1	</name>
-              <radius>	0.299284	</radius>
+              <radius>	0.298023	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.266331	</radius>
+              <radius>	0.280000	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	-1.32916	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-658.792	</startAngle>
+              <startAngle>	-3.400000	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-661.945	</startAngle>
+              <startAngle>	-0.391464	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1265,24 +1318,24 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R1	</name>
-              <radius>	0.298937	</radius>
+              <radius>	0.298003	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.266054	</radius>
+              <radius>	0.280000	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	1.32916	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-658.807	</startAngle>
+              <startAngle>	-3.400000	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-661.942	</startAngle>
+              <startAngle>	0.118717	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1483,6 +1536,13 @@
             <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Ch25_121_mod_1971B_SE_3DSt>
+                <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </Ch25_121_mod_1971B_SE_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch25_121_mod_1971B/collision/Gun_01.model	</collisionModelServer>
@@ -1548,7 +1608,19 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.042764 -0.073117 0.96	</rayStart>
+              <rayEnd>	0.042764 -0.073117 1.501	</rayEnd>
+              <rayUp>	0.107 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.541	</size>
+              <isUVProportional>	false	</isUVProportional>
+              <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+            </slot>
           </customizationSlots>
+          <shotOffset>	0.0397425 -0.075 -0.127504	</shotOffset>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -1567,6 +1639,13 @@
         <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch25_121_mod_1971B/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch25_121_mod_1971B_SE_3DSt>
+            <undamaged>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch25_121_mod_1971B/_skins/Ch25_121_mod_1971B_SE_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </Ch25_121_mod_1971B_SE_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch25_121_mod_1971B/collision/Turret_01.model	</collisionModelServer>
@@ -2180,6 +2259,45 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.611402	</clipAngle>
           <anchorShift>	0.149924	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+          <position>	-0.606413 1.72906 1.16564	</position>
+          <rotation>	1.18648 -0.458545 3.13132	</rotation>
+          <scale>	0.415949 0.2 0.415945	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.611402	</clipAngle>
+          <anchorShift>	0.135311	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+          <position>	0.613997 1.72242 1.19514	</position>
+          <rotation>	1.18649 0.458475 3.13132	</rotation>
+          <scale>	0.391143 0.188073 0.391139	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.611402	</clipAngle>
+          <anchorShift>	0.135311	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch25_121_mod_1971B_SE_3DSt	</compatibleModels>
+          <position>	-0.273579 2.21501 0.118327	</position>
+          <rotation>	-0.000000 -0.000062 -2.93482	</rotation>
+          <scale>	0.383987 0.148982 0.405256	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.882569	</clipAngle>
+          <anchorShift>	0.062541	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

@@ -920,7 +920,7 @@ class TmanTemplateBonusFormatter(SimpleBonusFormatter):
             for size in AWARDS_SIZES.ALL():
                 images[size] = RES_ICONS.getBonusIcon(size, bonusImageName)
 
-            nameStr = recruitInfo.getFullUserNameByNation(0)
+            nameStr = recruitInfo.getFullUserNameByNation(nationID=None)
             return PreformattedBonus(bonusName=bonus.getName(), userName=nameStr, label='', images=images, labelFormatter=self._getLabelFormatter(bonus), align=self._getLabelAlign(bonus), specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID], isSpecial=True)
 
 

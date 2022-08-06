@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_view.py
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+from frameworks.wulf import ViewStatus
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
@@ -76,10 +77,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         super(BattlePassViewsHolderComponent, self)._dispose()
 
     def _addInjectContentListeners(self):
-        self._injectView.viewModel.onViewLoaded += self.__onViewLoaded
+        self._injectView.onStatusChanged += self.__onViewLoaded
 
     def _removeInjectContentListeners(self):
-        self._injectView.viewModel.onViewLoaded -= self.__onViewLoaded
+        self._injectView.onStatusChanged -= self.__onViewLoaded
 
     def _makeInjectView(self, layoutID=None, chapterID=0):
         self.as_setWaitingVisibleS(True)
@@ -91,9 +92,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
     def __needReload(self, layoutID):
         return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID in (_R_VIEWS.BattlePassProgressionsView(), _R_VIEWS.ChapterChoiceView())
 
-    def __onViewLoaded(self):
-        self.as_showViewS()
-        self.as_setWaitingVisibleS(False)
+    def __onViewLoaded(self, state):
+        if state == ViewStatus.LOADED:
+            self.as_showViewS()
+            self.as_setWaitingVisibleS(False)
 
     def __onSettingsChanged(self, *_):
         if self.__isDummyVisible:

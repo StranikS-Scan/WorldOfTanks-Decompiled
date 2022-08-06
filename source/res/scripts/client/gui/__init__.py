@@ -89,6 +89,8 @@ class HtmlTemplatesCache(defaultdict):
         ns = path[1] if len(path) > 1 else ''
         value = XMLCollection(domain, ns)
         value.load()
+        if isinstance(value, str):
+            value = unicode(value)
         self[key] = value
         return value
 

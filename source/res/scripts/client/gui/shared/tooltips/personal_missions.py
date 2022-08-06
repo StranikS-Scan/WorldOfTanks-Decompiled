@@ -125,15 +125,21 @@ class BadgeTooltipData(BlocksTooltipData):
         self._setWidth(364)
 
     def _packBlocks(self, badgeID):
-        blocks = super(BadgeTooltipData, self)._packBlocks()
         badge = self.__itemsCache.items.getBadges()[badgeID]
-        tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X220), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
+        blocks = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName()), padding=formatters.packPadding(bottom=10))]
+        imgBlock = self.__getImageBlock(badge)
+        if imgBlock is not None:
+            blocks.append(imgBlock)
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            tooltipData.append(formatters.packBadgeInfoBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X24), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
-        blocks.append(formatters.packBuildUpBlockData(tooltipData))
+            blocks.append(formatters.packBadgeInfoBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X24), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName), padding=formatters.packPadding(bottom=25, top=0 if imgBlock is not None else 15)))
         blocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.badge.dyn('badge_{}_descr'.format(badgeID))()))))
-        return blocks
+        return [formatters.packBuildUpBlockData(blocks)]
+
+    @staticmethod
+    def __getImageBlock(badge):
+        badgeIcon = badge.getAwardBadgeIcon(ICONS_SIZES.X220)
+        return formatters.packImageBlockData(badgeIcon, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11)) if badgeIcon is not None else None
 
 
 class LoyalServiceTooltipData(BadgeTooltipData):

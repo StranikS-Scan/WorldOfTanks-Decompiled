@@ -1051,7 +1051,7 @@ def getFormattedNeededValue(settings, neededValue):
     return neededText
 
 
-def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', iconRightOffset=-1):
+def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', iconRightOffset=-1, gap=0):
     _int = backport.getIntegralFormat
     oldPriceText = ''
     hasAction = percent != 0
@@ -1078,7 +1078,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
          'oldPrice': oldPrice.toMoneyTuple(),
          'valuePadding': -2}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
     else:
-        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=0)
+        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5), nameOffset=iconRightOffset, gap=gap)
 
 
 def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText='', isDeluxe=False, gap=15):

@@ -178,7 +178,7 @@ class VideoSettingsStorage(ISettingsStorage):
                 g_monitorSettings.changeBorderlessSize(borderlessSizeWidth, borderlessSizeHeight)
             elif (not monitorChanged or restartApproved) and (videModeChanged or windowModeChanged):
                 deviseRecreated = True
-                BigWorld.changeVideoMode(videoMode.index, windowMode)
+                BigWorld.changeVideoMode(videoMode.index, int(windowMode))
             BigWorld.changeFullScreenAspectRatio(aspectRatio)
             self.clear()
             self._core.isDeviseRecreated = deviseRecreated

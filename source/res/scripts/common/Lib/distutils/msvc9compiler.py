@@ -350,8 +350,7 @@ class MSVCCompiler(CCompiler):
             self.ldflags_shared_debug = ['/DLL',
              '/nologo',
              '/INCREMENTAL:no',
-             '/DEBUG',
-             '/pdb:None']
+             '/DEBUG']
         self.ldflags_static = ['/nologo']
         self.initialized = True
         return

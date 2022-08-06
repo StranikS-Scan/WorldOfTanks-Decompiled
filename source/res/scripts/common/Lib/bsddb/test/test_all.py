@@ -415,8 +415,6 @@ if sys.version_info[0] >= 3:
             return self._db
 
 
-    import string
-    string.letters = [ chr(i) for i in xrange(65, 91) ]
     bsddb._db.DBEnv_orig = bsddb._db.DBEnv
     bsddb._db.DB_orig = bsddb._db.DB
     if bsddb.db.version() <= (4, 3):

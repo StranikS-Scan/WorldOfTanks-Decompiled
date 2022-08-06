@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/unit/actions_validator.py
+from CurrentVehicle import g_currentPreviewVehicle
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
@@ -30,10 +31,12 @@ class UnitPlayerValidator(BaseActionsValidator):
 class UnitVehiclesValidator(BaseActionsValidator):
 
     def _validate(self):
-        vInfos = self._getVehiclesInfo()
-        if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
-            return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
+        if g_currentPreviewVehicle.isPresent():
+            return ValidationResult(False, UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
         else:
+            vInfos = self._getVehiclesInfo()
+            if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
+                return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
             for vInfo in vInfos:
                 vehicle = vInfo.getVehicle()
                 if vehicle is not None:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/service.py
 import logging
+import typing
 import BigWorld
 import Event
 import personal_missions
@@ -20,6 +21,7 @@ from gui.shared.utils import decorators
 from helpers import dependency
 from shared_utils import first
 from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
@@ -29,10 +31,11 @@ from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
 class BattleResultsService(IBattleResultsService):
-    itemsCache = dependency.descriptor(IItemsCache)
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    battleMatters = dependency.descriptor(IBattleMattersController)
     eventsCache = dependency.descriptor(IEventsCache)
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
@@ -202,7 +205,7 @@ class BattleResultsService(IBattleResultsService):
             personalMissions = {}
             questsProgress = reusableInfo.personal.getQuestsProgress()
             if questsProgress:
-                linkedsetQuests = self.eventsCache.getLinkedSetQuests()
+                linkedsetQuests = self.battleMatters.getRegularBattleMattersQuests()
                 premiumQuests = self.eventsCache.getPremiumQuests()
                 allCommonQuests = self.eventsCache.getQuests()
                 allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))

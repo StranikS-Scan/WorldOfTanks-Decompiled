@@ -296,7 +296,9 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
                 text = i18n.makeString(i18nKey, **i18nArguments)
             else:
                 text = command.msgText
-            return unicode(text, 'utf-8', errors='ignore')
+                if isinstance(text, str):
+                    text = unicode(text, 'utf-8', errors='ignore')
+            return text
 
     def getSenderID(self):
         return self.sessionProvider.getArenaDP().getSessionIDByVehID(self._protoData['int64Arg1'])

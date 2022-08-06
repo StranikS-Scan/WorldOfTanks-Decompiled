@@ -53,13 +53,17 @@ def _mergeSelectableCrewbook(resultRewards, bonusName, bonusValue):
         selectablesTotal[item['itemName']] = item['count']
 
 
-def getCustomizationItemData(itemId, customizationName):
+def getCustomizationItem(itemId, customizationName):
     itemsCache = dependency.instance(IItemsCache)
     customizationType = CustomizationNamesToTypes.get(customizationName.upper())
     if customizationType is None:
         _logger.warning('Wrong customization name: %s', customizationName)
     compactDescr = makeIntCompactDescrByID('customizationItem', customizationType, itemId)
-    item = itemsCache.items.getItemByCD(compactDescr)
+    return itemsCache.items.getItemByCD(compactDescr)
+
+
+def getCustomizationItemData(itemId, customizationName):
+    item = getCustomizationItem(itemId, customizationName)
     itemName = item.userName
     itemTypeName = item.itemFullTypeName
     return _CustomizationItemData(itemTypeName, itemName)

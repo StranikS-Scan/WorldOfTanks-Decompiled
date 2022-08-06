@@ -25,7 +25,7 @@ from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
-from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID
 from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
@@ -422,7 +422,7 @@ class _MissionInfo(QuestInfoModel):
         bonuses = self.event.getBonuses()
         substitutes = []
         for bonus in bonuses:
-            if bonus.getName() == 'customizations':
+            if bonus.getName() == 'customizations' and bonus.hasAnyCustomCompensations():
                 bonuses.remove(bonus)
                 substitutes.extend(bonus.compensation())
 
@@ -797,10 +797,6 @@ class _EpicBattleDetailedMissionInfo(_EventDailyDetailedMissionInfo, _EpicBattle
 
 
 class _BattleRoyaleDetailedMissionInfo(_EventDailyDetailedMissionInfo, _BattleRoyaleDailyMissionInfo):
-    pass
-
-
-class _FunRandomDetailedMissionInfo(_DetailedMissionInfo):
     pass
 
 
@@ -1314,8 +1310,6 @@ def getDetailedMissionData(event):
         return _BattleRoyaleDetailedMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedDetailedMissionInfo(event)
-    elif event.getGroupID() == FUN_RANDOM_GROUP_ID:
-        return _FunRandomDetailedMissionInfo(event)
     else:
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 

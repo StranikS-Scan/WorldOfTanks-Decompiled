@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_functions.py
 from ctypes import *
+from ctypes.test import need_symbol
 import sys, unittest
 try:
     WINFUNCTYPE
@@ -61,12 +62,8 @@ class FunctionTestCase(unittest.TestCase):
         except TypeError:
             pass
 
+    @need_symbol('c_wchar')
     def test_wchar_parm(self):
-        try:
-            c_wchar
-        except NameError:
-            return
-
         f = dll._testfunc_i_bhilfd
         f.argtypes = [c_byte,
          c_wchar,
@@ -78,12 +75,8 @@ class FunctionTestCase(unittest.TestCase):
         self.assertEqual(result, 139)
         self.assertEqual(type(result), int)
 
+    @need_symbol('c_wchar')
     def test_wchar_result(self):
-        try:
-            c_wchar
-        except NameError:
-            return
-
         f = dll._testfunc_i_bhilfd
         f.argtypes = [c_byte,
          c_short,
@@ -176,12 +169,8 @@ class FunctionTestCase(unittest.TestCase):
         self.assertEqual(result, -21)
         self.assertEqual(type(result), float)
 
+    @need_symbol('c_longlong')
     def test_longlongresult(self):
-        try:
-            c_longlong
-        except NameError:
-            return
-
         f = dll._testfunc_q_bhilfd
         f.restype = c_longlong
         f.argtypes = [c_byte,
@@ -311,6 +300,7 @@ class FunctionTestCase(unittest.TestCase):
         result = f(-10, cb)
         self.assertEqual(result, -18)
 
+    @need_symbol('c_longlong')
     def test_longlong_callbacks(self):
         f = dll._testfunc_callback_q_qf
         f.restype = c_longlong
@@ -355,17 +345,16 @@ class FunctionTestCase(unittest.TestCase):
         s2h = dll.ret_2h_func(inp)
         self.assertEqual((s2h.x, s2h.y), (198, 264))
 
-    if sys.platform == 'win32':
+    @unittest.skipUnless(sys.platform == 'win32', 'Windows-specific test')
+    def test_struct_return_2H_stdcall(self):
 
-        def test_struct_return_2H_stdcall(self):
+        class S2H(Structure):
+            _fields_ = [('x', c_short), ('y', c_short)]
 
-            class S2H(Structure):
-                _fields_ = [('x', c_short), ('y', c_short)]
-
-            windll.s_ret_2h_func.restype = S2H
-            windll.s_ret_2h_func.argtypes = [S2H]
-            s2h = windll.s_ret_2h_func(S2H(99, 88))
-            self.assertEqual((s2h.x, s2h.y), (198, 264))
+        windll.s_ret_2h_func.restype = S2H
+        windll.s_ret_2h_func.argtypes = [S2H]
+        s2h = windll.s_ret_2h_func(S2H(99, 88))
+        self.assertEqual((s2h.x, s2h.y), (198, 264))
 
     def test_struct_return_8H(self):
 
@@ -399,39 +388,38 @@ class FunctionTestCase(unittest.TestCase):
          24,
          18))
 
-    if sys.platform == 'win32':
+    @unittest.skipUnless(sys.platform == 'win32', 'Windows-specific test')
+    def test_struct_return_8H_stdcall(self):
 
-        def test_struct_return_8H_stdcall(self):
+        class S8I(Structure):
+            _fields_ = [('a', c_int),
+             ('b', c_int),
+             ('c', c_int),
+             ('d', c_int),
+             ('e', c_int),
+             ('f', c_int),
+             ('g', c_int),
+             ('h', c_int)]
 
-            class S8I(Structure):
-                _fields_ = [('a', c_int),
-                 ('b', c_int),
-                 ('c', c_int),
-                 ('d', c_int),
-                 ('e', c_int),
-                 ('f', c_int),
-                 ('g', c_int),
-                 ('h', c_int)]
-
-            windll.s_ret_8i_func.restype = S8I
-            windll.s_ret_8i_func.argtypes = [S8I]
-            inp = S8I(9, 8, 7, 6, 5, 4, 3, 2)
-            s8i = windll.s_ret_8i_func(inp)
-            self.assertEqual((s8i.a,
-             s8i.b,
-             s8i.c,
-             s8i.d,
-             s8i.e,
-             s8i.f,
-             s8i.g,
-             s8i.h), (18,
-             24,
-             28,
-             30,
-             30,
-             28,
-             24,
-             18))
+        windll.s_ret_8i_func.restype = S8I
+        windll.s_ret_8i_func.argtypes = [S8I]
+        inp = S8I(9, 8, 7, 6, 5, 4, 3, 2)
+        s8i = windll.s_ret_8i_func(inp)
+        self.assertEqual((s8i.a,
+         s8i.b,
+         s8i.c,
+         s8i.d,
+         s8i.e,
+         s8i.f,
+         s8i.g,
+         s8i.h), (18,
+         24,
+         28,
+         30,
+         30,
+         28,
+         24,
+         18))
 
     def test_sf1651235(self):
         proto = CFUNCTYPE(c_int, RECT, POINT)

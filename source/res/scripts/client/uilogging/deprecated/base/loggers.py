@@ -3,13 +3,14 @@
 import BigWorld
 from helpers import dependency
 from skeletons.ui_logging import IUILoggingCore
+from uilogging.base.logger import _BaseLogger
+from uilogging.constants import LogLevels
 from wotdecorators import noexcept
-__all__ = ('BaseLogger', 'isUILoggingEnabled')
+__all__ = ('BaseLogger', 'isUILoggingEnabled', 'CommonLogger')
 
-def isUILoggingEnabled(feature, group='deprecated'):
+def isUILoggingEnabled(feature):
     uiLoggingCore = dependency.instance(IUILoggingCore)
-    settings = uiLoggingCore.getSettings(feature=feature, group=group)
-    return not settings.disabled
+    return uiLoggingCore.isFeatureEnabled(feature)
 
 
 class BaseLogger(object):
@@ -86,3 +87,16 @@ class BaseLogger(object):
     def sendLogData(self, action, **params):
         uiLoggingCore = dependency.instance(IUILoggingCore)
         return uiLoggingCore.log(self._feature, self._logKey, action, **params)
+
+
+class CommonLogger(_BaseLogger):
+    __slots__ = ()
+
+    def log(self, action, loglevel=LogLevels.INFO, **params):
+        self._log(action, loglevel, **params)
+
+    def logOnce(self, action, loglevel=LogLevels.INFO, **params):
+        self._logOnce(action, loglevel, **params)
+
+    def stopAction(self, action, loglevel=LogLevels.INFO, timeLimit=0, **params):
+        self._stopAction(action, loglevel, timeLimit, **params)

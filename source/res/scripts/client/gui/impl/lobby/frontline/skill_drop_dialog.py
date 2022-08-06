@@ -26,9 +26,8 @@ BLANK_COST_COUNT = 1
 FULL_REUSE = 100
 
 class SkillDropDialog(DialogTemplateView):
-    __uiEpicBattleLogger = EpicBattleTooltipLogger()
     __appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ('__tankman', '__isBlank', '__price', '__freeDropSave100')
+    __slots__ = ('__tankman', '__isBlank', '__price', '__freeDropSave100', '__uiEpicBattleLogger')
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tankman, price=None, isBlank=False, freeDropSave100=False, layoutID=None, uniqueID=None):
@@ -37,6 +36,7 @@ class SkillDropDialog(DialogTemplateView):
         self.__price = price
         self.__tankman = tankman
         self.__freeDropSave100 = freeDropSave100
+        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
 
     @property
     def itemPrice(self):

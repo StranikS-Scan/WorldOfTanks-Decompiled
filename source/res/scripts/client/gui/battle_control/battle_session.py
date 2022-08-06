@@ -124,25 +124,20 @@ class BattleSessionProvider(IBattleSessionProvider):
         if ctrl is not None:
             ctrl.clear(False)
         vehicle.ownVehicle.initialUpdate(force=True)
-        self.updateVehicleEffects()
+        self.updateVehicleEffects(vehicle)
         self.onUpdateObservedVehicleData(vehicle.id, None)
         return
 
-    def updateVehicleEffects(self):
-        if not self.__sharedRepo.vehicleState:
-            return
-        else:
-            vehicle = self.__sharedRepo.vehicleState.getControllingVehicle()
-            if vehicle is not None:
-                if vehicle.debuff > 0:
-                    vehicle.onDebuffEffectApplied(True)
-                if vehicle.stunInfo > 0.0:
-                    vehicle.updateStunInfo()
-                if vehicle.inspired:
-                    vehicle.set_inspired()
-                if vehicle.healing:
-                    vehicle.set_healing()
-            return
+    def updateVehicleEffects(self, vehicle):
+        if vehicle is not None:
+            vehicle.onDebuffEffectApplied(vehicle.debuff > 0)
+            if vehicle.stunInfo > 0.0:
+                vehicle.updateStunInfo()
+            if vehicle.inspired:
+                vehicle.set_inspired()
+            if vehicle.healing:
+                vehicle.set_healing()
+        return
 
     def getArenaDP(self):
         return self.__arenaDP

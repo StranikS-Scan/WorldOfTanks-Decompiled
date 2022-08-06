@@ -120,7 +120,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         self.assertEqual(self.cc.linker_so[0], 'my_cc')
 
     @unittest.skipUnless(sys.platform == 'darwin', 'test only relevant for OS X')
-    def test_osx_explict_ldshared(self):
+    def test_osx_explicit_ldshared(self):
 
         def gcv(v):
             return 'gcc-4.2 -bundle -undefined dynamic_lookup ' if v == 'LDSHARED' else 'gcc-4.2'

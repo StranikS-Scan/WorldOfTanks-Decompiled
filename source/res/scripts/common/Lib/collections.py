@@ -1,5 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/collections.py
+# Compiled at: 2014-07-14 21:39:08
+"""This module implements specialized container datatypes providing
+alternatives to Python's general purpose built-in containers, dict,
+list, set, and tuple.
+
+* namedtuple   factory function for creating tuple subclasses with named fields
+* deque        list-like container with fast appends and pops on either end
+* Counter      dict subclass for counting hashable objects
+* OrderedDict  dict subclass that remembers the order entries were added
+* defaultdict  dict subclass that calls a factory function to supply missing values
+
+"""
 __all__ = ['Counter',
  'deque',
  'defaultdict',
@@ -21,8 +33,18 @@ except ImportError:
     from dummy_thread import get_ident as _get_ident
 
 class OrderedDict(dict):
+    """Dictionary that remembers insertion order"""
 
-    def __init__(self, *args, **kwds):
+    def __init__(*args, **kwds):
+        """Initialize an ordered dictionary.  The signature is the same as
+        regular dictionaries, but keyword arguments are not recommended because
+        their insertion order is arbitrary.
+        
+        """
+        if not args:
+            raise TypeError("descriptor '__init__' of 'OrderedDict' object needs an argument")
+        self = args[0]
+        args = args[1:]
         if len(args) > 1:
             raise TypeError('expected at most 1 arguments, got %d' % len(args))
         try:
@@ -36,6 +58,7 @@ class OrderedDict(dict):
         return
 
     def __setitem__(self, key, value, dict_setitem=dict.__setitem__):
+        """od.__setitem__(i, y) <==> od[i]=y"""
         if key not in self:
             root = self.__root
             last = root[0]
@@ -43,12 +66,14 @@ class OrderedDict(dict):
         return dict_setitem(self, key, value)
 
     def __delitem__(self, key, dict_delitem=dict.__delitem__):
+        """od.__delitem__(y) <==> del od[y]"""
         dict_delitem(self, key)
         link_prev, link_next, _ = self.__map.pop(key)
         link_prev[1] = link_next
         link_next[0] = link_prev
 
     def __iter__(self):
+        """od.__iter__() <==> iter(od)"""
         root = self.__root
         curr = root[1]
         while curr is not root:
@@ -56,6 +81,7 @@ class OrderedDict(dict):
             curr = curr[1]
 
     def __reversed__(self):
+        """od.__reversed__() <==> reversed(od)"""
         root = self.__root
         curr = root[0]
         while curr is not root:
@@ -63,6 +89,7 @@ class OrderedDict(dict):
             curr = curr[0]
 
     def clear(self):
+        """od.clear() -> None.  Remove all items from od."""
         root = self.__root
         root[:] = [root, root, None]
         self.__map.clear()
@@ -70,22 +97,28 @@ class OrderedDict(dict):
         return
 
     def keys(self):
+        """od.keys() -> list of keys in od"""
         return list(self)
 
     def values(self):
+        """od.values() -> list of values in od"""
         return [ self[key] for key in self ]
 
     def items(self):
+        """od.items() -> list of (key, value) pairs in od"""
         return [ (key, self[key]) for key in self ]
 
     def iterkeys(self):
+        """od.iterkeys() -> an iterator over the keys in od"""
         return iter(self)
 
     def itervalues(self):
+        """od.itervalues -> an iterator over the values in od"""
         for k in self:
             yield self[k]
 
     def iteritems(self):
+        """od.iteritems -> an iterator over the (key, value) pairs in od"""
         for k in self:
             yield (k, self[k])
 
@@ -94,6 +127,11 @@ class OrderedDict(dict):
     __marker = object()
 
     def pop(self, key, default=__marker):
+        """od.pop(k[,d]) -> v, remove specified key and return the corresponding
+        value.  If key is not found, d is returned if given, otherwise KeyError
+        is raised.
+        
+        """
         if key in self:
             result = self[key]
             del self[key]
@@ -103,12 +141,17 @@ class OrderedDict(dict):
         return default
 
     def setdefault(self, key, default=None):
+        """od.setdefault(k[,d]) -> od.get(k,d), also set od[k]=d if k not in od"""
         if key in self:
             return self[key]
         self[key] = default
         return default
 
     def popitem(self, last=True):
+        """od.popitem() -> (k, v), return and remove a (key, value) pair.
+        Pairs are returned in LIFO order if last is true or FIFO order if false.
+        
+        """
         if not self:
             raise KeyError('dictionary is empty')
         key = next(reversed(self) if last else iter(self))
@@ -116,6 +159,7 @@ class OrderedDict(dict):
         return (key, value)
 
     def __repr__(self, _repr_running={}):
+        """od.__repr__() <==> repr(od)"""
         call_key = (id(self), _get_ident())
         if call_key in _repr_running:
             return '...'
@@ -128,6 +172,7 @@ class OrderedDict(dict):
             del _repr_running[call_key]
 
     def __reduce__(self):
+        """Return state information for pickling"""
         items = [ [k, self[k]] for k in self ]
         inst_dict = vars(self).copy()
         for k in vars(OrderedDict()):
@@ -136,10 +181,15 @@ class OrderedDict(dict):
         return (self.__class__, (items,), inst_dict) if inst_dict else (self.__class__, (items,))
 
     def copy(self):
+        """od.copy() -> a shallow copy of od"""
         return self.__class__(self)
 
     @classmethod
     def fromkeys(cls, iterable, value=None):
+        """OD.fromkeys(S[, v]) -> New ordered dictionary with keys from S.
+        If not specified, the value defaults to None.
+        
+        """
         self = cls()
         for key in iterable:
             self[key] = value
@@ -147,18 +197,26 @@ class OrderedDict(dict):
         return self
 
     def __eq__(self, other):
+        """od.__eq__(y) <==> od==y.  Comparison to another OD is order-sensitive
+        while comparison to a regular mapping is order-insensitive.
+        
+        """
         return dict.__eq__(self, other) and all(_imap(_eq, self, other)) if isinstance(other, OrderedDict) else dict.__eq__(self, other)
 
     def __ne__(self, other):
+        """od.__ne__(y) <==> od!=y"""
         return not self == other
 
     def viewkeys(self):
+        """od.viewkeys() -> a set-like object providing a view on od's keys"""
         return KeysView(self)
 
     def viewvalues(self):
+        """od.viewvalues() -> an object providing a view on od's values"""
         return ValuesView(self)
 
     def viewitems(self):
+        """od.viewitems() -> a set-like object providing a view on od's items"""
         return ItemsView(self)
 
 
@@ -167,9 +225,32 @@ _repr_template = '{name}=%r'
 _field_template = "    {name} = _property(_itemgetter({index:d}), doc='Alias for field number {index:d}')\n"
 
 def namedtuple(typename, field_names, verbose=False, rename=False):
+    """Returns a new subclass of tuple with named fields.
+    
+    >>> Point = namedtuple('Point', ['x', 'y'])
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessible by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
+    
+    """
     if isinstance(field_names, basestring):
         field_names = field_names.replace(',', ' ').split()
     field_names = map(str, field_names)
+    typename = str(typename)
     if rename:
         seen = set()
         for index, name in enumerate(field_names):
@@ -178,6 +259,8 @@ def namedtuple(typename, field_names, verbose=False, rename=False):
             seen.add(name)
 
     for name in [typename] + field_names:
+        if type(name) != str:
+            raise TypeError('Type names and field names must be strings')
         if not all((c.isalnum() or c == '_' for c in name)):
             raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
         if _iskeyword(name):
@@ -212,25 +295,129 @@ def namedtuple(typename, field_names, verbose=False, rename=False):
 
 
 class Counter(dict):
+    """Dict subclass for counting hashable items.  Sometimes called a bag
+    or multiset.  Elements are stored as dictionary keys and their counts
+    are stored as dictionary values.
+    
+    >>> c = Counter('abcdeabcdabcaba')  # count elements from a string
+    
+    >>> c.most_common(3)                # three most common elements
+    [('a', 5), ('b', 4), ('c', 3)]
+    >>> sorted(c)                       # list all unique elements
+    ['a', 'b', 'c', 'd', 'e']
+    >>> ''.join(sorted(c.elements()))   # list elements with repetitions
+    'aaaaabbbbcccdde'
+    >>> sum(c.values())                 # total of all counts
+    15
+    
+    >>> c['a']                          # count of letter 'a'
+    5
+    >>> for elem in 'shazam':           # update counts from an iterable
+    ...     c[elem] += 1                # by adding 1 to each element's count
+    >>> c['a']                          # now there are seven 'a'
+    7
+    >>> del c['b']                      # remove all 'b'
+    >>> c['b']                          # now there are zero 'b'
+    0
+    
+    >>> d = Counter('simsalabim')       # make another counter
+    >>> c.update(d)                     # add in the second counter
+    >>> c['a']                          # now there are nine 'a'
+    9
+    
+    >>> c.clear()                       # empty the counter
+    >>> c
+    Counter()
+    
+    Note:  If a count is set to zero or reduced to zero, it will remain
+    in the counter until the entry is deleted or the counter is cleared:
+    
+    >>> c = Counter('aaabbc')
+    >>> c['b'] -= 2                     # reduce the count of 'b' by two
+    >>> c.most_common()                 # 'b' is still in, but its count is zero
+    [('a', 3), ('c', 1), ('b', 0)]
+    
+    """
 
-    def __init__(self, iterable=None, **kwds):
+    def __init__(*args, **kwds):
+        """Create a new, empty Counter object.  And if given, count elements
+        from an input iterable.  Or, initialize the count from another mapping
+        of elements to their counts.
+        
+        >>> c = Counter()                           # a new, empty counter
+        >>> c = Counter('gallahad')                 # a new counter from an iterable
+        >>> c = Counter({'a': 4, 'b': 2})           # a new counter from a mapping
+        >>> c = Counter(a=4, b=2)                   # a new counter from keyword args
+        
+        """
+        if not args:
+            raise TypeError("descriptor '__init__' of 'Counter' object needs an argument")
+        self = args[0]
+        args = args[1:]
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
         super(Counter, self).__init__()
-        self.update(iterable, **kwds)
+        self.update(*args, **kwds)
 
     def __missing__(self, key):
+        """The count of elements not in the Counter is zero."""
         pass
 
     def most_common(self, n=None):
+        """List the n most common elements and their counts from the most
+        common to the least.  If n is None, then list all element counts.
+        
+        >>> Counter('abcdeabcdabcaba').most_common(3)
+        [('a', 5), ('b', 4), ('c', 3)]
+        
+        """
         return sorted(self.iteritems(), key=_itemgetter(1), reverse=True) if n is None else _heapq.nlargest(n, self.iteritems(), key=_itemgetter(1))
 
     def elements(self):
+        """Iterator over elements repeating each as many times as its count.
+        
+        >>> c = Counter('ABCABC')
+        >>> sorted(c.elements())
+        ['A', 'A', 'B', 'B', 'C', 'C']
+        
+        # Knuth's example for prime factors of 1836:  2**2 * 3**3 * 17**1
+        >>> prime_factors = Counter({2: 2, 3: 3, 17: 1})
+        >>> product = 1
+        >>> for factor in prime_factors.elements():     # loop over factors
+        ...     product *= factor                       # and multiply them
+        >>> product
+        1836
+        
+        Note, if an element's count has been set to zero or is a negative
+        number, elements() will ignore it.
+        
+        """
         return _chain.from_iterable(_starmap(_repeat, self.iteritems()))
 
     @classmethod
     def fromkeys(cls, iterable, v=None):
         raise NotImplementedError('Counter.fromkeys() is undefined.  Use Counter(iterable) instead.')
 
-    def update(self, iterable=None, **kwds):
+    def update(*args, **kwds):
+        """Like dict.update() but add counts instead of replacing them.
+        
+        Source can be an iterable, a dictionary, or another Counter instance.
+        
+        >>> c = Counter('which')
+        >>> c.update('witch')           # add elements from another iterable
+        >>> d = Counter('watch')
+        >>> c.update(d)                 # add elements from another counter
+        >>> c['h']                      # four 'h' in which, witch, and watch
+        4
+        
+        """
+        if not args:
+            raise TypeError("descriptor 'update' of 'Counter' object needs an argument")
+        self = args[0]
+        args = args[1:]
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+        iterable = args[0] if args else None
         if iterable is not None:
             if isinstance(iterable, Mapping):
                 if self:
@@ -249,7 +436,29 @@ class Counter(dict):
             self.update(kwds)
         return
 
-    def subtract(self, iterable=None, **kwds):
+    def subtract(*args, **kwds):
+        """Like dict.update() but subtracts counts instead of replacing them.
+        Counts can be reduced below zero.  Both the inputs and outputs are
+        allowed to contain zero and negative counts.
+        
+        Source can be an iterable, a dictionary, or another Counter instance.
+        
+        >>> c = Counter('which')
+        >>> c.subtract('witch')             # subtract elements from another iterable
+        >>> c.subtract(Counter('watch'))    # subtract elements from another counter
+        >>> c['h']                          # 2 in which, minus 1 in witch, minus 1 in watch
+        0
+        >>> c['w']                          # 1 in which, minus 1 in witch, minus 1 in watch
+        -1
+        
+        """
+        if not args:
+            raise TypeError("descriptor 'subtract' of 'Counter' object needs an argument")
+        self = args[0]
+        args = args[1:]
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+        iterable = args[0] if args else None
         if iterable is not None:
             self_get = self.get
             if isinstance(iterable, Mapping):
@@ -265,12 +474,14 @@ class Counter(dict):
         return
 
     def copy(self):
+        """Return a shallow copy."""
         return self.__class__(self)
 
     def __reduce__(self):
         return (self.__class__, (dict(self),))
 
     def __delitem__(self, elem):
+        """Like dict.__delitem__() but does not raise KeyError for missing values."""
         if elem in self:
             super(Counter, self).__delitem__(elem)
 
@@ -281,6 +492,12 @@ class Counter(dict):
         return '%s({%s})' % (self.__class__.__name__, items)
 
     def __add__(self, other):
+        """Add counts from two counters.
+        
+        >>> Counter('abbb') + Counter('bcc')
+        Counter({'b': 4, 'c': 2, 'a': 1})
+        
+        """
         if not isinstance(other, Counter):
             return NotImplemented
         result = Counter()
@@ -296,6 +513,12 @@ class Counter(dict):
         return result
 
     def __sub__(self, other):
+        """ Subtract count, but keep only results with positive counts.
+        
+        >>> Counter('abbbc') - Counter('bccd')
+        Counter({'b': 2, 'a': 1})
+        
+        """
         if not isinstance(other, Counter):
             return NotImplemented
         result = Counter()
@@ -311,6 +534,12 @@ class Counter(dict):
         return result
 
     def __or__(self, other):
+        """Union is the maximum of value in either of the input counters.
+        
+        >>> Counter('abbb') | Counter('bcc')
+        Counter({'b': 3, 'c': 2, 'a': 1})
+        
+        """
         if not isinstance(other, Counter):
             return NotImplemented
         result = Counter()
@@ -327,6 +556,12 @@ class Counter(dict):
         return result
 
     def __and__(self, other):
+        """ Intersection is the minimum of corresponding counts.
+        
+        >>> Counter('abbb') & Counter('bcc')
+        Counter({'b': 1})
+        
+        """
         if not isinstance(other, Counter):
             return NotImplemented
         result = Counter()
@@ -343,6 +578,7 @@ if __name__ == '__main__':
     from cPickle import loads, dumps
     Point = namedtuple('Point', 'x, y', True)
     p = Point(x=10, y=20)
+    assert p == loads(dumps(p))
 
     class Point(namedtuple('Point', 'x y')):
         __slots__ = ()
@@ -359,6 +595,7 @@ if __name__ == '__main__':
         print p
 
     class Point(namedtuple('Point', 'x y')):
+        """Point class with optimized _make() and _replace() without error-checking"""
         __slots__ = ()
         _make = classmethod(tuple.__new__)
 

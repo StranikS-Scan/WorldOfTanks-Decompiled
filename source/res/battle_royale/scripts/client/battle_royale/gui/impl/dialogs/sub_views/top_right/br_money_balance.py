@@ -13,7 +13,7 @@ class BRMoneyBalance(MoneyBalance):
     __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
 
     def __init__(self):
-        super(BRMoneyBalance, self).__init__(R.views.lobby.battle_royale.dialogs.sub_views.topRight.BRMoneyBalance(), BrMoneyBalanceViewModel())
+        super(BRMoneyBalance, self).__init__(R.views.dialogs.sub_views.topRight.BRMoneyBalance(), BrMoneyBalanceViewModel())
 
     @property
     def viewModel(self):

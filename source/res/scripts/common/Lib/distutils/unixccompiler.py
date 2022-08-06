@@ -33,7 +33,9 @@ class UnixCCompiler(CCompiler):
     static_lib_extension = '.a'
     shared_lib_extension = '.so'
     dylib_lib_extension = '.dylib'
+    xcode_stub_lib_extension = '.tbd'
     static_lib_format = shared_lib_format = dylib_lib_format = 'lib%s%s'
+    xcode_stub_lib_format = dylib_lib_format
     if sys.platform == 'cygwin':
         exe_extension = '.exe'
 
@@ -132,6 +134,8 @@ class UnixCCompiler(CCompiler):
         compiler = os.path.basename(sysconfig.get_config_var('CC'))
         if sys.platform[:6] == 'darwin':
             return '-L' + dir
+        elif sys.platform[:7] == 'freebsd':
+            return '-Wl,-rpath=' + dir
         elif sys.platform[:5] == 'hp-ux':
             if self._is_gcc(compiler):
                 return ['-Wl,+s', '-L' + dir]
@@ -149,6 +153,7 @@ class UnixCCompiler(CCompiler):
     def find_library_file(self, dirs, lib, debug=0):
         shared_f = self.library_filename(lib, lib_type='shared')
         dylib_f = self.library_filename(lib, lib_type='dylib')
+        xcode_stub_f = self.library_filename(lib, lib_type='xcode_stub')
         static_f = self.library_filename(lib, lib_type='static')
         if sys.platform == 'darwin':
             cflags = sysconfig.get_config_var('CFLAGS')
@@ -161,12 +166,16 @@ class UnixCCompiler(CCompiler):
             shared = os.path.join(dir, shared_f)
             dylib = os.path.join(dir, dylib_f)
             static = os.path.join(dir, static_f)
+            xcode_stub = os.path.join(dir, xcode_stub_f)
             if sys.platform == 'darwin' and (dir.startswith('/System/') or dir.startswith('/usr/') and not dir.startswith('/usr/local/')):
                 shared = os.path.join(sysroot, dir[1:], shared_f)
                 dylib = os.path.join(sysroot, dir[1:], dylib_f)
                 static = os.path.join(sysroot, dir[1:], static_f)
+                xcode_stub = os.path.join(sysroot, dir[1:], xcode_stub_f)
             if os.path.exists(dylib):
                 return dylib
+            if os.path.exists(xcode_stub):
+                return xcode_stub
             if os.path.exists(shared):
                 return shared
             if os.path.exists(static):

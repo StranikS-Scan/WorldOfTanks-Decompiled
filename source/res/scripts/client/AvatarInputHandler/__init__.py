@@ -28,7 +28,7 @@ import epic_battle_death_mode
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler import steel_hunter_control_modes
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from BigWorld import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
@@ -172,7 +172,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         for dynamicCameraClass in _DYNAMIC_CAMERAS:
             dynamicCameraClass.enableDynamicCamera(enable)
 
-        SniperAimingSystem.setStabilizerSettings(useHorizontalStabilizer, True)
+        if isinstance(useHorizontalStabilizer, tuple):
+            SniperAimingSystem.setStabilizerSettings(*useHorizontalStabilizer)
+        else:
+            SniperAimingSystem.setStabilizerSettings(useHorizontalStabilizer, True)
 
     @staticmethod
     def enableHullLock(enable):

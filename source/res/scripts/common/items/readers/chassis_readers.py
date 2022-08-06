@@ -9,7 +9,9 @@ from items.components.chassis_components import SplineTrackPairDesc
 from items.components.shared_components import LodSettings
 from items.readers import shared_readers
 from debug_utils import LOG_ERROR
-from constants import IS_EDITOR
+from constants import IS_EDITOR, IS_CLIENT, IS_UE_EDITOR
+if IS_UE_EDITOR or IS_CLIENT:
+    import Vehicular
 
 def readWheelsAndGroups(xmlCtx, section):
     wheelGroups = []
@@ -156,8 +158,7 @@ def __readDebrisParams(xmlCtx, section, cache):
         destructionEffect = _xml.readStringOrEmpty(ctx, subSection, 'destructionEffect')
         physicalParams = None
         if subSection['physicalParams'] is not None:
-            hingeJointStiffness = _xml.readFloat(ctx, subSection, 'physicalParams/hingeJointStiffness')
-            physicalParams = chassis_components.PhysicalTrackDebrisParams(hingeJointStiffness)
+            physicalParams = Vehicular.PhysicalDestroyedTrackConfig(subSection['physicalParams'])
         nodesRemap = {}
         for key, value in subSection.items():
             if key == 'remapNode':

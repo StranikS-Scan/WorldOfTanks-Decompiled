@@ -80,8 +80,8 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
             settings.content = view
             self.__injected = InjectWindow(settings)
             self.__injected.onStatusChanged += self.__onStatusChanged
-            self.__injected.load()
             self._addInjectContentListeners()
+            self.__injected.load()
             return
 
     def _destroyInjected(self, wasAdded=True):

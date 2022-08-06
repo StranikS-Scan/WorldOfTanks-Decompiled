@@ -64,7 +64,7 @@ class DBTxn_distributed(unittest.TestCase):
         recovered_txns = self.dbenv.txn_recover()
         self.assertEqual(self.num_txns, len(recovered_txns))
         for gid, txn in recovered_txns:
-            self.assertTrue(gid in txns)
+            self.assertIn(gid, txns)
 
         del txn
         del recovered_txns
@@ -98,7 +98,7 @@ class DBTxn_distributed(unittest.TestCase):
         del recovered_txns
         self._recreate_env(must_open_db=True)
         recovered_txns = self.dbenv.txn_recover()
-        self.assertTrue(len(recovered_txns) == 0)
+        self.assertEqual(len(recovered_txns), 0)
         self.assertEqual(len(committed_txns), self.db.stat()['nkeys'])
 
 

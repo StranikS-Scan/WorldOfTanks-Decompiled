@@ -35,6 +35,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         super(VehicleStylePreview, self).__init__(ctx)
         self.__ctx = ctx
         self._style = ctx['style']
+        self.__outfit = ctx.get('outfit')
         self.__vehicleCD = ctx['itemCD']
         self.__styleDescr = (ctx.get('styleDescr') or self._style.getDescription()) % {'insertion_open': '',
          'insertion_close': ''}
@@ -57,7 +58,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     def _populate(self):
         self.setTopPanel()
         super(VehicleStylePreview, self)._populate()
-        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, style=self._style)
+        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, style=self._style, outfit=self.__outfit)
         self.__selectedVehicleEntityId = g_currentPreviewVehicle.vehicleEntityID
         if not g_currentPreviewVehicle.isPresent() or self._style is None:
             event_dispatcher.showHangar()

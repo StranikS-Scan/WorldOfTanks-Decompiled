@@ -16,7 +16,7 @@ NeedMoreData = object()
 class BufferedSubFile(object):
 
     def __init__(self):
-        self._partial = ''
+        self._partial = []
         self._lines = []
         self._eofstack = []
         self._closed = False
@@ -28,8 +28,8 @@ class BufferedSubFile(object):
         return self._eofstack.pop()
 
     def close(self):
-        self._lines.append(self._partial)
-        self._partial = ''
+        self.pushlines(''.join(self._partial).splitlines(True))
+        self._partial = []
         self._closed = True
 
     def readline(self):
@@ -49,16 +49,17 @@ class BufferedSubFile(object):
         self._lines.append(line)
 
     def push(self, data):
-        data, self._partial = self._partial + data, ''
-        parts = NLCRE_crack.split(data)
-        self._partial = parts.pop()
-        if not self._partial and parts and parts[-1].endswith('\r'):
-            self._partial = parts.pop(-2) + parts.pop()
-        lines = []
-        for i in range(len(parts) // 2):
-            lines.append(parts[i * 2] + parts[i * 2 + 1])
-
-        self.pushlines(lines)
+        parts = data.splitlines(True)
+        if not parts or not parts[0].endswith(('\n', '\r')):
+            self._partial += parts
+            return
+        if self._partial:
+            self._partial.append(parts[0])
+            parts[0:1] = ''.join(self._partial).splitlines(True)
+            del self._partial[:]
+        if not parts[-1].endswith('\n'):
+            self._partial = [parts.pop()]
+        self.pushlines(parts)
 
     def pushlines(self, lines):
         self._lines[:0] = lines[::-1]

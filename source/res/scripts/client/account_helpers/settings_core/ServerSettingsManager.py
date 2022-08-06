@@ -55,7 +55,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_BORDER_MAP = 'FEEDBACK_BORDER_MAP'
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     UI_STORAGE = 'UI_STORAGE'
-    LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
+    BATTLE_MATTERS_QUESTS = 'BATTLE_MATTERS_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
@@ -418,7 +418,9 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
-                                           OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24}, offsets={}),
+                                           OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
+                                           OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
+                                           OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -473,7 +475,7 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
-     SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 255)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
                                          QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
      SETTINGS_SECTIONS.SESSION_STATS: Section(masks={SESSION_STATS.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY: 0,
@@ -771,20 +773,14 @@ class ServerSettingsManager(object):
     def getDisableAnimTooltipFlag(self):
         return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
 
-    def isLinkedSetQuestWasShowed(self, questID, missionID):
-        section = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown')
-        return bool(section & self._getMaskForLinkedSetQuest(questID, missionID)) if section else False
+    def getBattleMattersQuestWasShowed(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 'shown', 0)
 
-    def setLinkedSetQuestWasShowed(self, questID, missionID):
-        mask = self._getMaskForLinkedSetQuest(questID, missionID)
-        newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
-        return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
+    def setBattleMattersQuestWasShowed(self, count):
+        return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {'shown': count})
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
-
-    def _getMaskForLinkedSetQuest(self, questID, missionID):
-        return 1 << questID - 1 + (missionID - 1) * 10
 
     def _buildAimSettings(self, settings):
         settingToServer = {}

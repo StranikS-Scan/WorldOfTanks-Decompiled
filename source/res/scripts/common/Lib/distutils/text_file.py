@@ -38,10 +38,11 @@ class TextFile:
         self.current_line = 0
 
     def close(self):
-        self.file.close()
+        file = self.file
         self.file = None
         self.filename = None
         self.current_line = None
+        file.close()
         return
 
     def gen_error(self, msg, line=None):

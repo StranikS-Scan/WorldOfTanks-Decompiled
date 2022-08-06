@@ -633,9 +633,14 @@ def iterparse(source, events=None, parser=None):
     if not hasattr(source, 'read'):
         source = open(source, 'rb')
         close_source = True
-    if not parser:
-        parser = XMLParser(target=TreeBuilder())
-    return _IterParseIterator(source, events, parser, close_source)
+    try:
+        if not parser:
+            parser = XMLParser(target=TreeBuilder())
+        return _IterParseIterator(source, events, parser, close_source)
+    except:
+        if close_source:
+            source.close()
+        raise
 
 
 class _IterParseIterator(object):
@@ -698,35 +703,42 @@ class _IterParseIterator(object):
         return
 
     def next(self):
-        while 1:
-            try:
-                item = self._events[self._index]
-                self._index += 1
-                return item
-            except IndexError:
-                pass
-
-            if self._error:
-                e = self._error
-                self._error = None
-                raise e
-            if self._parser is None:
-                self.root = self._root
-                if self._close_file:
-                    self._file.close()
-                raise StopIteration
-            del self._events[:]
-            self._index = 0
-            data = self._file.read(16384)
-            if data:
+        try:
+            while 1:
                 try:
-                    self._parser.feed(data)
-                except SyntaxError as exc:
-                    self._error = exc
+                    item = self._events[self._index]
+                    self._index += 1
+                    return item
+                except IndexError:
+                    pass
 
-            self._root = self._parser.close()
-            self._parser = None
+                if self._error:
+                    e = self._error
+                    self._error = None
+                    raise e
+                if self._parser is None:
+                    self.root = self._root
+                    break
+                del self._events[:]
+                self._index = 0
+                data = self._file.read(16384)
+                if data:
+                    try:
+                        self._parser.feed(data)
+                    except SyntaxError as exc:
+                        self._error = exc
 
+                self._root = self._parser.close()
+                self._parser = None
+
+        except:
+            if self._close_file:
+                self._file.close()
+            raise
+
+        if self._close_file:
+            self._file.close()
+        raise StopIteration
         return
 
     def __iter__(self):
@@ -810,9 +822,13 @@ class TreeBuilder(object):
         return self._last
 
 
+_sentinel = ['sentinel']
+
 class XMLParser(object):
 
-    def __init__(self, html=0, target=None, encoding=None):
+    def __init__(self, html=_sentinel, target=None, encoding=None):
+        if html is not _sentinel:
+            warnings.warnpy3k('The html argument of XMLParser() is deprecated', DeprecationWarning, stacklevel=2)
         try:
             from xml.parsers import expat
         except ImportError:
@@ -958,7 +974,7 @@ class XMLParser(object):
                     pubid = pubid[1:-1]
                 if hasattr(self.target, 'doctype'):
                     self.target.doctype(name, pubid, system[1:-1])
-                elif self.doctype is not self.__doctype:
+                elif self.doctype != self.__doctype:
                     self.__doctype(name, pubid, system[1:-1])
                     self.doctype(name, pubid, system[1:-1])
                 self._doctype = None

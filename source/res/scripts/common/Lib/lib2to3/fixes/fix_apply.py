@@ -14,18 +14,26 @@ class FixApply(fixer_base.BaseFix):
         func = results['func']
         args = results['args']
         kwds = results.get('kwds')
-        prefix = node.prefix
-        func = func.clone()
-        if func.type not in (token.NAME, syms.atom) and (func.type != syms.power or func.children[-2].type == token.DOUBLESTAR):
-            func = parenthesize(func)
-        func.prefix = ''
-        args = args.clone()
-        args.prefix = ''
-        if kwds is not None:
-            kwds = kwds.clone()
-            kwds.prefix = ''
-        l_newargs = [pytree.Leaf(token.STAR, u'*'), args]
-        if kwds is not None:
-            l_newargs.extend([Comma(), pytree.Leaf(token.DOUBLESTAR, u'**'), kwds])
-            l_newargs[-2].prefix = u' '
-        return Call(func, l_newargs, prefix=prefix)
+        if args:
+            if args.type == self.syms.star_expr:
+                return
+            if args.type == self.syms.argument and args.children[0].value == '**':
+                return
+        if kwds and kwds.type == self.syms.argument and kwds.children[0].value == '**':
+            return
+        else:
+            prefix = node.prefix
+            func = func.clone()
+            if func.type not in (token.NAME, syms.atom) and (func.type != syms.power or func.children[-2].type == token.DOUBLESTAR):
+                func = parenthesize(func)
+            func.prefix = ''
+            args = args.clone()
+            args.prefix = ''
+            if kwds is not None:
+                kwds = kwds.clone()
+                kwds.prefix = ''
+            l_newargs = [pytree.Leaf(token.STAR, u'*'), args]
+            if kwds is not None:
+                l_newargs.extend([Comma(), pytree.Leaf(token.DOUBLESTAR, u'**'), kwds])
+                l_newargs[-2].prefix = u' '
+            return Call(func, l_newargs, prefix=prefix)

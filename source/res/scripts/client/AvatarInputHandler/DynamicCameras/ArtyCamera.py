@@ -7,8 +7,7 @@ import BattleReplay
 import Settings
 import math_utils
 from AvatarInputHandler import aih_global_binding, cameras
-from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
-from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
+from BigWorld import ArtyAimingSystem, ArtyAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason

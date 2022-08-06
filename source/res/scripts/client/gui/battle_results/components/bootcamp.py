@@ -2,20 +2,20 @@
 # Embedded file name: scripts/client/gui/battle_results/components/bootcamp.py
 from __future__ import absolute_import
 import logging
-from shared_utils import first
+from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
+from helpers.i18n import makeString
 import BigWorld
 from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
 from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS
 from gui import makeHtmlString
-from gui.impl import backport
-from gui.impl.gen import R
+from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.battle_results.components import base
 from gui.battle_results.components.common import makeRegularFinishResultLabel
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
-from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from helpers.i18n import makeString
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IBootcampController
 _logger = logging.getLogger(__name__)
 _BG_FOLDER_PATH = '../maps/icons/bootcamp/battle_result/background/'
@@ -33,11 +33,17 @@ _PREMIUM_RESOURCES = {PREMIUM_ENTITLEMENTS.BASIC: {'icon': backport.image(R.imag
                              'label': backport.text(R.strings.bootcamp.result.award.premiumPlus.label()),
                              'description': backport.text(R.strings.bootcamp.result.award.premiumPlus.text())}}
 
+def isTechnicalWin(record, reusable):
+    teamResult = reusable.getPersonalTeamResult()
+    isBattleGoalCompleted = record['personal']['avatar']['vseBattleResults'].get('battleGoalCompleted', False)
+    return teamResult != PLAYER_TEAM_RESULT.WIN and isBattleGoalCompleted
+
+
 class BackgroundItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        teamResult = reusable.getPersonalTeamResult()
+        teamResult = PLAYER_TEAM_RESULT.DRAW if isTechnicalWin(record, reusable) else reusable.getPersonalTeamResult()
         lessonNum = g_bootcamp.getLessonNum() - 1
         value = _BG_FOLDER_PATH + _BG_IMAGE_FORMATS[teamResult].format(lessonNum)
         return value
@@ -48,7 +54,7 @@ class RewardsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        if teamResult != PLAYER_TEAM_RESULT.WIN:
+        if not isTechnicalWin(result, reusable) and teamResult != PLAYER_TEAM_RESULT.WIN:
             return
         bootcampController = dependency.instance(IBootcampController)
         lessonNum = g_bootcamp.getLessonNum()
@@ -98,7 +104,7 @@ class StatsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result['personal'])
         teamResult = reusable.getPersonalTeamResult()
-        if teamResult == PLAYER_TEAM_RESULT.WIN:
+        if teamResult == PLAYER_TEAM_RESULT.WIN or isTechnicalWin(result, reusable):
             battleStats = g_bootcamp.getBattleStatsLessonWin()
         else:
             battleStats = g_bootcamp.getBattleStatsLessonDefeat()
@@ -116,9 +122,10 @@ class StatsBlock(base.StatsBlock):
 
 class ResultTypeStrItem(base.StatsItem):
     __slots__ = ()
+    COMPLETE = 'complete'
 
     def _convert(self, record, reusable):
-        teamResult = reusable.getPersonalTeamResult()
+        teamResult = self.COMPLETE if isTechnicalWin(record, reusable) else reusable.getPersonalTeamResult()
         return backport.text(R.strings.bootcamp.resultlabel.dyn(teamResult)())
 
 
@@ -126,6 +133,9 @@ class FinishReasonStrItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
+        if isTechnicalWin(record, reusable):
+            lessonNum = g_bootcamp.getLessonNum()
+            return backport.text(R.strings.bootcamp.completionWithoutVictory.num(lessonNum)())
         teamResult = reusable.getPersonalTeamResult()
         val = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         return val
@@ -135,7 +145,7 @@ class FinishReasonItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return reusable.getPersonalTeamResult()
+        return PLAYER_TEAM_RESULT.WIN if isTechnicalWin(record, reusable) else reusable.getPersonalTeamResult()
 
 
 class ShowRewardsFlag(base.StatsItem):
@@ -173,7 +183,7 @@ class VideoButtonsItem(base.StatsItem):
         player = BigWorld.player()
         teamResult = reusable.getPersonalTeamResult()
         buttons = g_bootcamp.getInterludeVideoButtons()
-        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN or not buttons else buttons
+        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN and not isTechnicalWin(record, reusable) or not buttons else buttons
 
 
 class CreditsBlock(base.StatsBlock):
@@ -194,3 +204,10 @@ class XPBlock(base.StatsBlock):
         strVal = backport.getIntegralFormat(intVal)
         self.addNextComponent(base.DirectStatsItem('value', intVal))
         self.addNextComponent(base.DirectStatsItem('str', strVal))
+
+
+class AlternativeLayoutFlag(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        return isTechnicalWin(record, reusable)

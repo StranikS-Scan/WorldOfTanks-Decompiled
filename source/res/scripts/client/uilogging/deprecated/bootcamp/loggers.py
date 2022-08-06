@@ -3,11 +3,17 @@
 from collections import defaultdict
 import BigWorld
 from bootcamp.Bootcamp import g_bootcamp
+from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
+from uilogging.base.logger import ifUILoggingEnabled
+from uilogging.constants import LogLevels
+from uilogging.deprecated.base.loggers import CommonLogger
 from uilogging.deprecated.bootcamp.validators import TimeValidator
 from uilogging.deprecated.logging_constants import FEATURES
 from uilogging.deprecated.base.loggers import BaseLogger
 from uilogging.deprecated.bootcamp.constants import ACTIONS_HINTS_TO_LOG_ONCE, ACTION_SEQUENCES
-__all__ = ('BootcampUILogger',)
+from wotdecorators import noexcept
+__all__ = ('BootcampUILogger', 'BootcampLogger')
 
 class LoggingCacheMeta(type):
     _instance = None
@@ -95,3 +101,25 @@ class BootcampUILogger(BaseLogger):
             self._loggingCache.add(action)
             self._resetTime(resetTime)
             return
+
+
+class BootcampLogger(CommonLogger):
+    __slots__ = ()
+    __bootcamp = dependency.descriptor(IBootcampController)
+
+    def __init__(self, group):
+        super(BootcampLogger, self).__init__(FEATURES.BOOTCAMP, group)
+
+    @noexcept
+    @ifUILoggingEnabled()
+    def log(self, action, loglevel=LogLevels.INFO, **params):
+        if 'timeSpent' in params:
+            params['timeSpent'] = int(params['timeSpent'])
+        params['lesson_id'] = g_bootcamp.getLessonNum()
+        params['is_newbie'] = g_bootcamp.isNewbie()
+        return super(BootcampLogger, self).log(action=action, loglevel=loglevel, **params)
+
+    def logOnlyFromBootcamp(self, action, loglevel=LogLevels.INFO, **params):
+        if not self.__bootcamp.isInBootcamp():
+            return
+        self.log(action=action, loglevel=loglevel, **params)

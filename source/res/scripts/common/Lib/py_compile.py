@@ -90,7 +90,7 @@ def main(args=None):
                 compile(filename, doraise=True)
             except PyCompileError as error:
                 rv = 1
-                sys.stderr.write(error.msg)
+                sys.stderr.write('%s\n' % error.msg)
 
     return rv
 

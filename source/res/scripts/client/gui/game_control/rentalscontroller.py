@@ -126,6 +126,8 @@ class RentalsController(IRentalsController):
 
     @staticmethod
     def getDeltaPeriod(delta):
+        if delta == float('inf'):
+            return time_utils.ONE_DAY
         if delta > time_utils.ONE_DAY:
             period = time_utils.ONE_DAY
         elif delta > time_utils.ONE_HOUR:

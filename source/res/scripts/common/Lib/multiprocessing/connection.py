@@ -178,9 +178,14 @@ class SocketListener(object):
         return conn
 
     def close(self):
-        self._socket.close()
-        if self._unlink is not None:
-            self._unlink()
+        try:
+            self._socket.close()
+        finally:
+            unlink = self._unlink
+            if unlink is not None:
+                self._unlink = None
+                unlink()
+
         return
 
 
@@ -310,11 +315,11 @@ class ConnectionWrapper(object):
 
 
 def _xml_dumps(obj):
-    return xmlrpclib.dumps((obj,), None, None, None, 1).encode('utf8')
+    return xmlrpclib.dumps((obj,), None, None, None, 1)
 
 
 def _xml_loads(s):
-    (obj), method = xmlrpclib.loads(s.decode('utf8'))
+    (obj), method = xmlrpclib.loads(s)
     return obj
 
 

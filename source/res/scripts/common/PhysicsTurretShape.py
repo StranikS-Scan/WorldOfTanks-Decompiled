@@ -27,7 +27,9 @@ class PhysicsTurretShape:
     def __init__(self, bbMin=None, bbMax=None):
         self.__polys = None
         self.__params = dict(zip(PhysicsTurretShape.PARAMS_DESC.iterkeys(), (d[2] for d in PhysicsTurretShape.PARAMS_DESC.itervalues())))
-        self.setTurretBox(bbMin, bbMax)
+        self.__box = None
+        if bbMin is not None and bbMax is not None:
+            self.__box = (Math.Vector3(bbMin), Math.Vector3(bbMax))
         self.__isDirty = True
         self.__isSetParams = False
         return
@@ -42,9 +44,10 @@ class PhysicsTurretShape:
         if bbMin is None or bbMax is None:
             return
         else:
-            self.__box = (Math.Vector3(bbMin), Math.Vector3(bbMax))
-            if (bbMin, bbMax != self.__box):
+            newBox = (Math.Vector3(bbMin), Math.Vector3(bbMax))
+            if self.__box != newBox:
                 self.__isDirty = True
+                self.__box = newBox
             return
 
     def setParam(self, name, value):

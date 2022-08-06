@@ -6,6 +6,15 @@ import re
 import sys
 from SimpleXMLRPCServer import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler, CGIXMLRPCRequestHandler, resolve_dotted_attribute
 
+def _html_escape_quote(s):
+    s = s.replace('&', '&amp;')
+    s = s.replace('<', '&lt;')
+    s = s.replace('>', '&gt;')
+    s = s.replace('"', '&quot;')
+    s = s.replace("'", '&#x27;')
+    return s
+
+
 class ServerHTMLDoc(pydoc.HTMLDoc):
 
     def markup(self, text, escape=None, funcs={}, classes={}, methods={}):
@@ -125,7 +134,8 @@ class XMLRPCDocGenerator:
 
         documenter = ServerHTMLDoc()
         documentation = documenter.docserver(self.server_name, self.server_documentation, methods)
-        return documenter.page(self.server_title, documentation)
+        title = _html_escape_quote(self.server_title)
+        return documenter.page(title, documentation)
 
 
 class DocXMLRPCRequestHandler(SimpleXMLRPCRequestHandler):

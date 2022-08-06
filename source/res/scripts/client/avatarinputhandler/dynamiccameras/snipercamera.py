@@ -11,8 +11,7 @@ import constants
 import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import cameras, aih_global_binding
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from AvatarInputHandler.AimingSystems.SniperAimingSystemRemote import SniperAimingSystemRemote
+from BigWorld import SniperAimingSystem, SniperAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig, CameraWithSettings, calcYawPitchDelta
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
 from AvatarInputHandler.cameras import readFloat, readVec3, ImpulseReason, FovExtended
@@ -295,8 +294,8 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
-        if not self.__autoUpdateDxDyDz.x == self.__autoUpdateDxDyDz.y == self.__autoUpdateDxDyDz.z == 0.0:
-            self.__rotateAndZoom(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
+        if not self.__autoUpdateDxDyDz.isZero():
+            self.__rotateAndZoom(*self.__autoUpdateDxDyDz.tuple())
         self.__aimingSystem.update(deltaTime)
         localTransform, impulseTransform = self.__updateOscillators(deltaTime)
         zoom = self.__aimingSystem.overrideZoom(self.__zoom)
@@ -307,7 +306,7 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         camMat.postMultiply(rodMat)
         camMat.postMultiply(localTransform)
         camMat.postMultiply(antiRodMat)
-        camMat.postMultiply(self.__aimingSystem.matrix)
+        camMat.postMultiply(self.__aimingSystem.matrixProvider)
         camMat.invert()
         self.__cam.set(camMat)
         if zoom != self.__zoom:
@@ -327,7 +326,7 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
         self.__aimOffset = aimOffset
         self.__binoculars.setMaskCenter(binocularsOffset.x, binocularsOffset.y)
         player = BigWorld.player()
-        if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked and not player.isObserverFPV):
+        if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrixProvider.translation) or player.isGunLocked and not player.isObserverFPV):
             self.__onChangeControlMode(False)
             return -1
 
@@ -366,7 +365,7 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
             self.__impulseOscillator.reset()
             self.__movementOscillator.reset()
             self.__noiseOscillator.reset()
-            return (math_utils.createRotationMatrix(Vector3(0, 0, 0)), math_utils.createRotationMatrix(Vector3(0, 0, 0)))
+            return (math_utils.createRotationMatrix(math_utils.VectorConstant.Vector3Zero), math_utils.createRotationMatrix(math_utils.VectorConstant.Vector3Zero))
         oscillatorAcceleration = self.__calcCurOscillatorAcceleration(deltaTime)
         self.__movementOscillator.externalForce += oscillatorAcceleration
         self.__impulseOscillator.update(deltaTime)

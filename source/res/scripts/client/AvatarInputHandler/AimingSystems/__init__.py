@@ -5,6 +5,7 @@ from functools import wraps
 import logging.handlers
 import BigWorld
 import Math
+import ShadowEffect
 from Math import Vector3
 import math_utils
 from math_utils import MatrixProviders
@@ -13,6 +14,7 @@ from vehicle_systems.tankStructure import TankPartNames
 _logger = logging.getLogger(__name__)
 SPG_MINIMAL_AIMING_RADIUS = 15.0
 SPG_MINIMAL_AIMING_RADIUS_SQ = SPG_MINIMAL_AIMING_RADIUS * SPG_MINIMAL_AIMING_RADIUS
+SHOT_POINT_PLANAR_DEFAULT_MIN_DISTANCE = 50.0
 
 class CollisionStrategy(object):
     COLLIDE_DYNAMIC_AND_STATIC = 0
@@ -178,7 +180,7 @@ def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode
         return shootInSkyPoint(start, direction) if not onlyOnGround else None
 
 
-g_desiredShotPoint = Vector3(0)
+g_desiredShotPoint = math_utils.VectorConstant.Vector3Zero
 g_frameStamp = -1
 __disableShotPointCache = False
 
@@ -223,14 +225,27 @@ def getShotTargetInfo(vehicle, preferredTargetPoint, gunRotator):
 
 def getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, vehicleID, minBounds, maxBounds, collisionStrategy):
     endPos, direction, collData, usedMaxDistance = BigWorld.wg_getCappedShotTargetInfos(BigWorld.player().spaceID, shotPos, shotVec, gravity, shotDescr.maxDistance, vehicleID, minBounds, maxBounds, collisionStrategy)
-    if collData != 0:
+    if collData is not None:
         collData = EntityCollisionData(*collData)
-    else:
-        collData = None
     return (endPos,
      direction,
      collData,
      usedMaxDistance)
+
+
+@_trackcalls
+def shootInSkyPointHelper():
+    vehicle = BigWorld.player().vehicle
+    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.isTurretDetached:
+        compoundModel = vehicle.appearance.compoundModel
+        shotPos = Math.Vector3(compoundModel.node(TankPartNames.GUN).position)
+        shotDesc = vehicle.typeDescriptor.shot
+    else:
+        vType = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
+        shotPos = BigWorld.player().getOwnVehiclePosition()
+        shotPos += vType.hull.turretPositions[0] + vType.activeGunShotPosition
+        shotDesc = vType.shot
+    return (shotPos, shotDesc.maxDistance)
 
 
 @_trackcalls
@@ -290,3 +305,15 @@ def __collideStaticOnly(startPoint, endPoint):
     if testRes is not None:
         res = (testRes.closestPoint, None)
     return res
+
+
+def getVehicleAngles(vehicleDescriptor):
+    gunLimits = vehicleDescriptor.gun.pitchLimits
+    gunAngleMin = gunLimits['minPitch'][0][1]
+    gunAngleMax = gunLimits['maxPitch'][0][1]
+    hullAngleMin = vehicleDescriptor.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
+    hullAngleMax = vehicleDescriptor.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMax']
+    return (gunAngleMin,
+     gunAngleMax,
+     hullAngleMin,
+     hullAngleMax)

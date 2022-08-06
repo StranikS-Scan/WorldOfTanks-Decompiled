@@ -45,9 +45,6 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(hint_blocks)
 
 
-g_blockRegistrar.regContext(SoundNotificationsContext)
-g_blockRegistrar.regContext(CGFGameObjectContext)
-
 def registerForUEEditor():
     registerContext()
 

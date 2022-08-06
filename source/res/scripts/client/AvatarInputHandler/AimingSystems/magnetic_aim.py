@@ -42,7 +42,7 @@ def magneticAimProcessor(previousSimpleTarget=None, previousMagneticTarget=None)
 def magneticAimFindTarget():
     vehicleAttached = BigWorld.player().getVehicleAttached()
     aimCamera = BigWorld.player().inputHandler.ctrl.camera
-    aimCameraDirection = aimCamera.aimingSystem.matrix.applyToAxis(2)
+    aimCameraDirection = aimCamera.aimingSystem.matrixProvider.applyToAxis(2)
     if vehicleAttached is None or not vehicleAttached.isAlive():
         return
     else:
@@ -66,7 +66,7 @@ def magneticAimFindTarget():
             if minAngleVehicle is None or dotResult >= minAngleVehicle.dotResult:
                 minAngleVehicle = veh
             if minAngleVehicle is not None and math_utils.almostZero(dotResult - minAngleVehicle.dotResult):
-                if targetDistance < minAngleVehicle.distance:
+                if targetDistance.length < minAngleVehicle.distance:
                     minAngleVehicle = veh
 
         pickedVehicle = None

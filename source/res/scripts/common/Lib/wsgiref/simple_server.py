@@ -85,7 +85,13 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):
         return sys.stderr
 
     def handle(self):
-        self.raw_requestline = self.rfile.readline()
+        self.raw_requestline = self.rfile.readline(65537)
+        if len(self.raw_requestline) > 65536:
+            self.requestline = ''
+            self.request_version = ''
+            self.command = ''
+            self.send_error(414)
+            return
         if not self.parse_request():
             return
         handler = ServerHandler(self.rfile, self.wfile, self.get_stderr(), self.get_environ())

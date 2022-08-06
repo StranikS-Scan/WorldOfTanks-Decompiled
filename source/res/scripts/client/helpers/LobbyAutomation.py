@@ -12,7 +12,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 
 def _getLobby():
-    appLoader = dependency.descriptor(IAppLoader)
+    appLoader = dependency.instance(IAppLoader)
     return appLoader.getApp(app_settings.APP_NAME_SPACE.SF_LOBBY)
 
 

@@ -50,6 +50,7 @@ class PlayerBootcampAccount(PlayerAccount):
         g_bootcamp.setAccount(self)
         g_bootcamp.setContext(bootcampCtx)
         events.isPlayerEntityChanging = False
+        g_bootcampEvents.onAccountShowGUI(ctx)
         if g_bootcamp.isRunning():
             g_bootcamp.onBattleLessonFinished(currentLesson, bootcampCtx['lessonResults'])
         elif not g_bootcamp.isManualStart():

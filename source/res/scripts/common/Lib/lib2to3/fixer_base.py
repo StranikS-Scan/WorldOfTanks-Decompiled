@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixer_base.py
-import logging
 import itertools
 from .patcomp import PatternCompiler
 from . import pygram
@@ -36,7 +35,6 @@ class BaseFix(object):
 
     def set_filename(self, filename):
         self.filename = filename
-        self.logger = logging.getLogger(filename)
 
     def match(self, node):
         results = {'node': node}

@@ -343,6 +343,10 @@
     <gameObject></gameObject>
   </TempProperties>
   <ClientMethods>
+    <onExtraHitted>
+      <Arg>	INT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </onExtraHitted>
     <onHealthChanged>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>

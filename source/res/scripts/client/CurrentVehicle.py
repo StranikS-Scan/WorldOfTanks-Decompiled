@@ -535,8 +535,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def updateVehicleDescriptorInModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None):
-        self._selectVehicle(vehicleCD, vehicleStrCD, style)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit)
         self.onSelected()
 
     def selectNoVehicle(self):
@@ -647,7 +647,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
         else:
@@ -658,8 +658,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleCD, vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
-            outfit = None
-            if style is not None:
+            if style is not None and outfit is None:
                 outfit = self.__getPreviewOutfitByStyle(style)
             if self.__vehAppearance is not None:
                 self.__vehAppearance.refreshVehicle(self.__item, outfit)

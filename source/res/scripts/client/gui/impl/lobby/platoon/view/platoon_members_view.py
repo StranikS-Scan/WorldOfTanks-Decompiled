@@ -713,24 +713,6 @@ class MapboxMembersView(SquadMembersView):
             model.setShouldShowFindPlayersButton(value=False)
 
 
-class FunRandomMembersView(SquadMembersView):
-    _battleType = SELECTOR_BATTLE_TYPES.FUN_RANDOM
-
-    def _addSubviews(self):
-        self._addSubviewToLayout(ChatSubview())
-
-    def _onFindPlayers(self):
-        pass
-
-    def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.funRandom()))))
-        return title
-
-    def _updateFindPlayersButton(self, *args):
-        with self.viewModel.transaction() as model:
-            model.setShouldShowFindPlayersButton(value=False)
-
-
 class MembersWindow(PreloadableWindow):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
 
@@ -747,8 +729,6 @@ class MembersWindow(PreloadableWindow):
             content = BattleRoyalMembersView()
         elif prbType == PREBATTLE_TYPE.MAPBOX:
             content = MapboxMembersView()
-        elif prbType == PREBATTLE_TYPE.FUN_RANDOM:
-            content = FunRandomMembersView()
         if content is None:
             _logger.debug('PrbType is unknown %d', prbType)
         super(MembersWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=content)

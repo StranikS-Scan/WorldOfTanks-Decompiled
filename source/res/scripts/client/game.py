@@ -5,6 +5,7 @@ import functools
 import locale
 import sys
 import zlib
+import Account
 import AreaDestructibles
 import BigWorld
 import CommandMapping
@@ -80,8 +81,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         g_bootcamp.replayCallbackSubscribe()
         import nation_change
         nation_change.init()
-        import battle_modifiers
-        battle_modifiers.init()
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
         import battle_results
@@ -98,6 +97,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         personal_missions.init()
         import motivation_quests
         motivation_quests.init()
+        import customization_quests
+        customization_quests.init()
         BigWorld.worldDrawEnabled(False)
         manager = dependency.configure(services_config.getClientServicesConfig)
         g_systemEvents.onDependencyConfigReady(manager)
@@ -315,6 +316,10 @@ def onDisconnected():
     VOIP.getVOIPManager().onDisconnected()
 
 
+def onFini():
+    Account.delAccountRepository()
+
+
 def onCameraChange(oldCamera):
     pass
 
@@ -329,6 +334,9 @@ def handleAxisEvent(event):
 
 
 def handleKeyEvent(event):
+    if constants.HAS_DEV_RESOURCES:
+        from development.dev_input_handler import g_devInputHandlerInstance
+        g_devInputHandlerInstance.handleKeyEvent(event)
     if OfflineMode.handleKeyEvent(event):
         return True
     elif LightingGenerationMode.handleKeyEvent(event):
@@ -520,5 +528,5 @@ def checkBotNet():
     from path_manager import g_pathManager
     g_pathManager.setPathes()
     from scenario_player import g_scenarioPlayer
-    rpycPort = sys.argv[sys.argv.index(botArg) + 1]
-    g_scenarioPlayer.initScenarioPlayer(rpycPort)
+    rpycPort = int(sys.argv[sys.argv.index(botArg) + 1])
+    g_scenarioPlayer.delayedInitScenarioPlayer(rpycPort)

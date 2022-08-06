@@ -48,21 +48,18 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def run_cgi(self):
         dir, rest = self.cgi_info
-        i = rest.find('/')
+        path = dir + '/' + rest
+        i = path.find('/', len(dir) + 1)
         while i >= 0:
-            nextdir = rest[:i]
-            nextrest = rest[i + 1:]
+            nextdir = path[:i]
+            nextrest = path[i + 1:]
             scriptdir = self.translate_path(nextdir)
             if os.path.isdir(scriptdir):
                 dir, rest = nextdir, nextrest
-                i = rest.find('/')
+                i = path.find('/', len(dir) + 1)
             break
 
-        i = rest.rfind('?')
-        if i >= 0:
-            rest, query = rest[:i], rest[i + 1:]
-        else:
-            query = ''
+        rest, _, query = rest.partition('?')
         i = rest.find('/')
         if i >= 0:
             script, rest = rest[:i], rest[i:]
@@ -214,6 +211,8 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
 def _url_collapse_path(path):
+    path, _, query = path.partition('?')
+    path = urllib.unquote(path)
     path_parts = path.split('/')
     head_parts = []
     for part in path_parts[:-1]:
@@ -232,6 +231,8 @@ def _url_collapse_path(path):
                 tail_part = ''
     else:
         tail_part = ''
+    if query:
+        tail_part = '?'.join((tail_part, query))
     splitpath = ('/' + '/'.join(head_parts), tail_part)
     collapsed_path = '/'.join(splitpath)
     return collapsed_path

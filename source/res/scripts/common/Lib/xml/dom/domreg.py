@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/domreg.py
 from xml.dom.minicompat import *
+import sys
 well_known_implementations = {'minidom': 'xml.dom.minidom',
  '4DOM': 'xml.dom.DOMImplementation'}
 registered = {}
@@ -24,7 +25,7 @@ def getDOMImplementation(name=None, features=()):
         return mod.getDOMImplementation()
     elif name:
         return registered[name]()
-    elif 'PYTHON_DOM' in os.environ:
+    elif not sys.flags.ignore_environment and 'PYTHON_DOM' in os.environ:
         return getDOMImplementation(name=os.environ['PYTHON_DOM'])
     else:
         if isinstance(features, StringTypes):

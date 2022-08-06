@@ -16,7 +16,11 @@ class VehicleLoot(BigWorld.DynamicScriptComponent):
 
     def __init__(self):
         super(VehicleLoot, self).__init__()
-        self.__invalidateState(LootAction.PICKUP_STARTED, max(self.pickupEndTime - BigWorld.serverTime(), 0))
+        if self.pickupTotalTime:
+            totalTime = self.pickupTotalTime
+        else:
+            totalTime = max(self.pickupEndTime - BigWorld.serverTime(), 0)
+        self.__invalidateState(LootAction.PICKUP_STARTED, totalTime)
 
     def onDestroy(self):
         if self.pickupEndTime > 0:

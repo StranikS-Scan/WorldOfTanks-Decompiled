@@ -3,27 +3,19 @@
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from uilogging.base.logger import BaseLogger
-from uilogging.base.mixins import TimedActionMixin
-from uilogging.core.core_constants import LogLevels
-from uilogging.epic_battle.constants import FEATURE, METRICS, EpicBattleLogActions
+from uilogging.base.logger import MetricsLogger
+from uilogging.epic_battle.constants import FEATURE, EpicBattleLogActions
 from wotdecorators import noexcept
 
-class EpicBattleLogger(TimedActionMixin, BaseLogger):
+class EpicBattleLogger(MetricsLogger):
+    __slots__ = ()
 
     def __init__(self):
-        super(EpicBattleLogger, self).__init__(FEATURE, METRICS)
-
-    @noexcept
-    def log(self, action, item, parentScreen, additionalInfo=None, timeSpent=0, loglevel=LogLevels.INFO):
-        params = {'parent_screen': parentScreen,
-         'additional_info': additionalInfo,
-         'partner_id': None,
-         'item_state': None}
-        return super(EpicBattleLogger, self).log(action=action, item=item, timeSpent=timeSpent, loglevel=loglevel, **params)
+        super(EpicBattleLogger, self).__init__(FEATURE)
 
 
 class EpicBattleTooltipLogger(EpicBattleLogger):
+    __slots__ = ('_openedTooltip', '_parentScreen', '_additionalInfo')
     _appLoader = dependency.descriptor(IAppLoader)
     TIME_LIMIT = 2.0
 
@@ -61,7 +53,7 @@ class EpicBattleTooltipLogger(EpicBattleLogger):
     def __onHideTooltip(self, tooltip, *_):
         if self._openedTooltip and self._openedTooltip == tooltip:
             self._openedTooltip = None
-            self.stopAction(EpicBattleLogActions.TOOLTIP_WATCHED.value, timeLimit=self.TIME_LIMIT, item=tooltip, parentScreen=self._parentScreen, additionalInfo=self._additionalInfo)
+            self.stopAction(EpicBattleLogActions.TOOLTIP_WATCHED.value, tooltip, self._parentScreen, info=self._additionalInfo, timeLimit=self.TIME_LIMIT)
         return
 
     @noexcept

@@ -6,7 +6,6 @@ import constants
 import gui
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
@@ -34,7 +33,6 @@ from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -52,7 +50,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly')
 
     def __init__(self):
         self.vehicle = None
@@ -75,7 +73,6 @@ class StatsConfiguration(object):
         self.showCompatibles = False
         self.withSlots = False
         self.isStaticInfoOnly = False
-        self.showEarnCrystals = True
         return
 
 
@@ -427,17 +424,6 @@ class CarouselContext(InventoryContext):
 
     def buildItem(self, intCD):
         return self.itemsCache.items.getItemByCD(int(intCD))
-
-
-class FunRandomCarouselContext(CarouselContext):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def getStatsConfiguration(self, item):
-        value = super(FunRandomCarouselContext, self).getStatsConfiguration(item)
-        config = self.__lobbyContext.getServerSettings().getCrystalRewardConfig()
-        value.showEarnCrystals = config.isCrystalEarnPossible(ARENA_BONUS_TYPE.FUN_RANDOM)
-        value.dailyXP = ARENA_BONUS_TYPE_CAPS.checkAny(ARENA_BONUS_TYPE.FUN_RANDOM, ARENA_BONUS_TYPE_CAPS.DAILY_MULTIPLIED_XP)
-        return value
 
 
 class PotapovQuestsChainContext(ToolTipContext):

@@ -232,7 +232,7 @@ class CoverageResults:
         try:
             outfile = open(path, 'w')
         except IOError as err:
-            print >> sys.stderr, 'trace: Could not open %r for writing: %s- skipping' % (path, err)
+            print >> sys.stderr, 'trace: Could not open %r for writing: %s - skipping' % (path, err)
             return (0, 0)
 
         n_lines = 0

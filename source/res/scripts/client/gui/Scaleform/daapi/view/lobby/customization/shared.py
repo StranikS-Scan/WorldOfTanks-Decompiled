@@ -115,6 +115,13 @@ TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
 SEASON_TYPE_TO_INFOTYPE_MAP = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER}
+
+class BillPopoverButtons(object):
+    CUSTOMIZATION_CLEAR = 'customizationClear'
+    CUSTOMIZATION_CLEAR_LOCKED = 'customizationClearLocked'
+    ALL = (CUSTOMIZATION_CLEAR, CUSTOMIZATION_CLEAR_LOCKED)
+
+
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 CustomizationSlotUpdateVO = namedtuple('CustomizationSlotUpdateVO', ('slotId', 'itemIntCD', 'uid'))
 

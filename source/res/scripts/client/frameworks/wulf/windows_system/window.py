@@ -263,8 +263,6 @@ class Window(PyObjectEntity):
 
     def _cFini(self):
         self._finalize()
-        self._cWindowStatusChanged(self.windowStatus, WindowStatus.DESTROYED)
-        self.unbind()
 
     def _cWindowStatusChanged(self, _, newStatus):
         self.__windowStatus = newStatus

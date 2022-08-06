@@ -439,10 +439,10 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return
         super(CompoundAppearance, self).receiveShotImpulse(direction, impulse)
 
-    def addCrashedTrack(self, isLeft, pairIndex=0):
+    def addCrashedTrack(self, isLeft, pairIndex=0, index=None):
         if not self._vehicle.isAlive():
             return
-        self._addCrashedTrack(isLeft, pairIndex, self.isLeftSideFlying if isLeft else self.isRightSideFlying)
+        self._addCrashedTrack(isLeft, pairIndex, self.isLeftSideFlying if isLeft else self.isRightSideFlying, self._vehicle.getExtraHitPoint(index))
         self.onChassisDestroySound(isLeft, True, trackPairIdx=pairIndex)
 
     def delCrashedTrack(self, isLeft, pairIndex=0):

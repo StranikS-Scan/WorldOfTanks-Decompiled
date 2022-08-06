@@ -49,7 +49,7 @@ class PyPIRCCommandTestCase(support.TempdirManager, support.LoggingSilencer, sup
         config.sort()
         waited = [('password', 'secret'),
          ('realm', 'pypi'),
-         ('repository', 'https://pypi.python.org/pypi'),
+         ('repository', 'https://upload.pypi.org/legacy/'),
          ('server', 'server1'),
          ('username', 'me')]
         self.assertEqual(config, waited)
@@ -59,7 +59,7 @@ class PyPIRCCommandTestCase(support.TempdirManager, support.LoggingSilencer, sup
         config.sort()
         waited = [('password', 'secret'),
          ('realm', 'pypi'),
-         ('repository', 'https://pypi.python.org/pypi'),
+         ('repository', 'https://upload.pypi.org/legacy/'),
          ('server', 'server-login'),
          ('username', 'tarek')]
         self.assertEqual(config, waited)

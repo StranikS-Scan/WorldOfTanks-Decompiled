@@ -117,7 +117,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     def __setMenuButtonsLabels(self):
         bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON
-        bootcampIconSource = icons.makeImageTag(bootcampIcon, 33, 27, -8, 0)
+        bootcampIconSource = icons.makeImageTag(bootcampIcon, 24, 24, -6, 0)
         if self.app.varsManager.isTutorialRunning(GLOBAL_VARS_MGR_CONSTS.BATTLE):
             quitLabel = MENU.LOBBY_MENU_BUTTONS_REFUSE_TRAINING
         elif BattleReplay.isPlaying():

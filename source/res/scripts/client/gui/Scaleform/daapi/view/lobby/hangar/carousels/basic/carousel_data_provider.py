@@ -277,8 +277,9 @@ class BCCarouselDataProvider(CarouselDataProvider):
         pass
 
     def selectVehicle(self, idx):
+        realIdx = self._filteredIndices[idx]
         self._selectedIdx = idx
-        self._currentVehicle.selectVehicle(self._vehicles[idx].invID)
+        self._currentVehicle.selectVehicle(self._vehicles[realIdx].invID)
 
     def _buildVehicle(self, vehicle):
         vehicle.dailyXPFactor = 1

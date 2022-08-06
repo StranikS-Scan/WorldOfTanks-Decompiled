@@ -8,7 +8,7 @@ import sys
 from copy import deepcopy
 from test import test_support
 import unittest
-from .support import TestEquality, TestHashing, LoggingResult, ResultWithNoStartTestRunStopTestRun
+from unittest.test.support import TestEquality, TestHashing, LoggingResult, ResultWithNoStartTestRunStopTestRun
 
 class Test(object):
 
@@ -866,6 +866,44 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
     def testAssertRegexpMatches(self):
         self.assertRegexpMatches('asdfabasdf', 'ab+')
         self.assertRaises(self.failureException, self.assertRegexpMatches, 'saaas', 'aaaa')
+
+    def testAssertRaisesCallable(self):
+
+        class ExceptionMock(Exception):
+            pass
+
+        def Stub():
+            raise ExceptionMock('We expect')
+
+        self.assertRaises(ExceptionMock, Stub)
+        self.assertRaises((ValueError, ExceptionMock), Stub)
+        self.assertRaises(ValueError, int, '19', base=8)
+        with self.assertRaises(self.failureException):
+            self.assertRaises(ExceptionMock, lambda : 0)
+        with self.assertRaises(ExceptionMock):
+            self.assertRaises(ValueError, Stub)
+
+    def testAssertRaisesContext(self):
+
+        class ExceptionMock(Exception):
+            pass
+
+        def Stub():
+            raise ExceptionMock('We expect')
+
+        with self.assertRaises(ExceptionMock):
+            Stub()
+        with self.assertRaises((ValueError, ExceptionMock)) as cm:
+            Stub()
+        self.assertIsInstance(cm.exception, ExceptionMock)
+        self.assertEqual(cm.exception.args[0], 'We expect')
+        with self.assertRaises(ValueError):
+            int('19', base=8)
+        with self.assertRaises(self.failureException):
+            with self.assertRaises(ExceptionMock):
+                pass
+        with self.assertRaises(ExceptionMock):
+            self.assertRaises(ValueError, Stub)
 
     def testAssertRaisesRegexp(self):
 

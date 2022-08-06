@@ -69,6 +69,7 @@ class FetchTest(unittest.TestCase):
     def setUpClass(cls):
         requires('gui')
         cls.root = tk.Tk()
+        cls.root.withdraw()
 
     def setUp(self):
         self.text = text = TextWrapper(self.root)

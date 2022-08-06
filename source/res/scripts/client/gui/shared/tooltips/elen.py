@@ -72,7 +72,7 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
                 text = '{} {} {} {}'.format(flagIcon, text_styles.tutorial(_ms(msgText)), text_styles.tutorial(time), text_styles.tutorial(timeName))
             else:
                 flagIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_FLAG_ICON)
-                text = '{} {} {} {}'.format(flagIcon, text_styles.main(_ms(msgText)), text_styles.stats(time), text_styles.stats(timeName))
+                text = u'{} {} {} {}'.format(flagIcon, text_styles.main(_ms(msgText)), text_styles.stats(time), text_styles.stats(timeName))
         return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_ELEN_HEADER_NAME, name=currentEvent.getName())), img=currentEvent.getKeyArtSmall(), txtPadding=formatters.packPadding(top=22), txtOffset=20, txtGap=-8, desc=text)
 
     def _getPrimeTimes(self, primeTimes):

@@ -280,12 +280,12 @@ else:
         if _logger is not None:
             d['log_level'] = _logger.getEffectiveLevel()
         if not WINEXE and not WINSERVICE:
-            main_path = getattr(sys.modules['__main__'], '__file__', None)
-            if not main_path and sys.argv[0] not in ('', '-c'):
-                main_path = sys.argv[0]
-            if main_path is not None:
-                if not os.path.isabs(main_path) and process.ORIGINAL_DIR is not None:
-                    main_path = os.path.join(process.ORIGINAL_DIR, main_path)
+            if not d['sys_argv'][0].lower().endswith('pythonservice.exe'):
+                main_path = getattr(sys.modules['__main__'], '__file__', None)
+                if not main_path and sys.argv[0] not in ('', '-c'):
+                    main_path = sys.argv[0]
+                if main_path is not None:
+                    main_path = not os.path.isabs(main_path) and process.ORIGINAL_DIR is not None and os.path.join(process.ORIGINAL_DIR, main_path)
                 d['main_path'] = os.path.normpath(main_path)
         return d
 
@@ -323,7 +323,10 @@ def prepare(data):
         main_name = os.path.splitext(os.path.basename(main_path))[0]
         if main_name == '__init__':
             main_name = os.path.basename(os.path.dirname(main_path))
-        if main_name != 'ipython':
+        if main_name == '__main__':
+            main_module = sys.modules['__main__']
+            main_module.__file__ = main_path
+        elif main_name != 'ipython':
             import imp
             if main_path is None:
                 dirs = None

@@ -94,6 +94,8 @@ class FTP():
         return repr(s)
 
     def putline(self, line):
+        if '\r' in line or '\n' in line:
+            raise ValueError('an illegal newline character should not be contained')
         line = line + CRLF
         if self.debugging > 1:
             print '*put*', self.sanitize(line)
@@ -290,13 +292,16 @@ class FTP():
     def retrbinary(self, cmd, callback, blocksize=8192, rest=None):
         self.voidcmd('TYPE I')
         conn = self.transfercmd(cmd, rest)
-        while 1:
-            data = conn.recv(blocksize)
-            if not data:
-                break
-            callback(data)
+        try:
+            while 1:
+                data = conn.recv(blocksize)
+                if not data:
+                    break
+                callback(data)
 
-        conn.close()
+        finally:
+            conn.close()
+
         return self.voidresp()
 
     def retrlines(self, cmd, callback=None):
@@ -304,57 +309,68 @@ class FTP():
             callback = print_line
         resp = self.sendcmd('TYPE A')
         conn = self.transfercmd(cmd)
-        fp = conn.makefile('rb')
-        while 1:
-            line = fp.readline(self.maxline + 1)
-            if len(line) > self.maxline:
-                raise Error('got more than %d bytes' % self.maxline)
-            if self.debugging > 2:
-                print '*retr*', repr(line)
-            if not line:
-                break
-            if line[-2:] == CRLF:
-                line = line[:-2]
-            elif line[-1:] == '\n':
-                line = line[:-1]
-            callback(line)
+        fp = None
+        try:
+            fp = conn.makefile('rb')
+            while 1:
+                line = fp.readline(self.maxline + 1)
+                if len(line) > self.maxline:
+                    raise Error('got more than %d bytes' % self.maxline)
+                if self.debugging > 2:
+                    print '*retr*', repr(line)
+                if not line:
+                    break
+                if line[-2:] == CRLF:
+                    line = line[:-2]
+                elif line[-1:] == '\n':
+                    line = line[:-1]
+                callback(line)
 
-        fp.close()
-        conn.close()
+        finally:
+            if fp:
+                fp.close()
+            conn.close()
+
         return self.voidresp()
 
     def storbinary(self, cmd, fp, blocksize=8192, callback=None, rest=None):
         self.voidcmd('TYPE I')
         conn = self.transfercmd(cmd, rest)
-        while 1:
-            buf = fp.read(blocksize)
-            if not buf:
-                break
-            conn.sendall(buf)
-            if callback:
-                callback(buf)
+        try:
+            while 1:
+                buf = fp.read(blocksize)
+                if not buf:
+                    break
+                conn.sendall(buf)
+                if callback:
+                    callback(buf)
 
-        conn.close()
+        finally:
+            conn.close()
+
         return self.voidresp()
 
     def storlines(self, cmd, fp, callback=None):
         self.voidcmd('TYPE A')
         conn = self.transfercmd(cmd)
-        while 1:
-            buf = fp.readline(self.maxline + 1)
-            if len(buf) > self.maxline:
-                raise Error('got more than %d bytes' % self.maxline)
-            if not buf:
-                break
-            if buf[-2:] != CRLF:
-                if buf[-1] in CRLF:
-                    buf = buf[:-1]
-                buf = buf + CRLF
-            conn.sendall(buf)
-            if callback:
-                callback(buf)
+        try:
+            while 1:
+                buf = fp.readline(self.maxline + 1)
+                if len(buf) > self.maxline:
+                    raise Error('got more than %d bytes' % self.maxline)
+                if not buf:
+                    break
+                if buf[-2:] != CRLF:
+                    if buf[-1] in CRLF:
+                        buf = buf[:-1]
+                    buf = buf + CRLF
+                conn.sendall(buf)
+                if callback:
+                    callback(buf)
 
-        conn.close()
+        finally:
+            conn.close()
+
         return self.voidresp()
 
     def acct(self, password):
@@ -433,11 +449,17 @@ class FTP():
         return resp
 
     def close(self):
-        if self.file is not None:
-            self.file.close()
-        if self.sock is not None:
-            self.sock.close()
-        self.file = self.sock = None
+        try:
+            file = self.file
+            self.file = None
+            if file is not None:
+                file.close()
+        finally:
+            sock = self.sock
+            self.sock = None
+            if sock is not None:
+                sock.close()
+
         return
 
 
@@ -448,13 +470,21 @@ except ImportError:
 else:
 
     class FTP_TLS(FTP):
-        ssl_version = ssl.PROTOCOL_TLSv1
+        ssl_version = ssl.PROTOCOL_SSLv23
 
-        def __init__(self, host='', user='', passwd='', acct='', keyfile=None, certfile=None, timeout=_GLOBAL_DEFAULT_TIMEOUT):
+        def __init__(self, host='', user='', passwd='', acct='', keyfile=None, certfile=None, context=None, timeout=_GLOBAL_DEFAULT_TIMEOUT, source_address=None):
+            if context is not None and keyfile is not None:
+                raise ValueError('context and keyfile arguments are mutually exclusive')
+            if context is not None and certfile is not None:
+                raise ValueError('context and certfile arguments are mutually exclusive')
             self.keyfile = keyfile
             self.certfile = certfile
+            if context is None:
+                context = ssl._create_stdlib_context(self.ssl_version, certfile=certfile, keyfile=keyfile)
+            self.context = context
             self._prot_p = False
             FTP.__init__(self, host, user, passwd, acct, timeout)
+            return
 
         def login(self, user='', passwd='', acct='', secure=True):
             if secure and not isinstance(self.sock, ssl.SSLSocket):
@@ -464,11 +494,11 @@ else:
         def auth(self):
             if isinstance(self.sock, ssl.SSLSocket):
                 raise ValueError('Already using TLS')
-            if self.ssl_version == ssl.PROTOCOL_TLSv1:
+            if self.ssl_version >= ssl.PROTOCOL_SSLv23:
                 resp = self.voidcmd('AUTH TLS')
             else:
                 resp = self.voidcmd('AUTH SSL')
-            self.sock = ssl.wrap_socket(self.sock, self.keyfile, self.certfile, ssl_version=self.ssl_version)
+            self.sock = self.context.wrap_socket(self.sock, server_hostname=self.host)
             self.file = self.sock.makefile(mode='rb')
             return resp
 
@@ -486,7 +516,7 @@ else:
         def ntransfercmd(self, cmd, rest=None):
             conn, size = FTP.ntransfercmd(self, cmd, rest)
             if self._prot_p:
-                conn = ssl.wrap_socket(conn, self.keyfile, self.certfile, ssl_version=self.ssl_version)
+                conn = self.context.wrap_socket(conn, server_hostname=self.host)
             return (conn, size)
 
         def retrbinary(self, cmd, callback, blocksize=8192, rest=None):

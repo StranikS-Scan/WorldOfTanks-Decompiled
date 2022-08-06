@@ -73,7 +73,7 @@ class ScrollingList(PyGUIBase):
 
         self.component.items.height = totalHeight
         heightMode = self.component.items.heightMode
-        self.component.items.heightMode = 'LEGACY'
+        self.component.items.heightMode = GUI.Simple.eSizeMode.LEGACY
         self.totalHeightScreenClip = float(self.component.items.height)
         self.component.items.heightMode = heightMode
         self.items.script.maxScroll[1] = max(0, self.totalHeightScreenClip - self.component.height)

@@ -4,7 +4,7 @@ import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.Scaleform.daapi.view.meta.VehicleSelectPopoverMeta import VehicleSelectPopoverMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
-from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.utils import sortByFields
 
 class VehicleSelectPopoverBase(VehicleSelectPopoverMeta):
@@ -53,8 +53,8 @@ class VehiclesDataProvider(SortableDAAPIDataProvider):
         self._sort = (('level', False),)
         self.__sortMapping = {'check': lambda v: v['selected'],
          'nations': lambda v: GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]],
-         'type': lambda v: VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
-         'level': lambda v: v['level'] << 16 | GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]] << 8 | VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
+         'type': lambda v: VEHICLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
+         'level': lambda v: v['level'] << 16 | GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]] << 8 | VEHICLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
          'name': lambda v: v['shortUserName'],
          'hangar': lambda v: v['inHangar']}
         return

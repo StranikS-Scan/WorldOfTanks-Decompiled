@@ -1,7 +1,76 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/httplib.py
+# Compiled at: 2016-03-02 22:32:58
+r"""HTTP/1.1 client library
+
+<intro stuff goes here>
+<other stuff, too>
+
+HTTPConnection goes through a number of "states", which define when a client
+may legally make another request or fetch the response for a particular
+request. This diagram details these state transitions:
+
+    (null)
+      |
+      | HTTPConnection()
+      v
+    Idle
+      |
+      | putrequest()
+      v
+    Request-started
+      |
+      | ( putheader() )*  endheaders()
+      v
+    Request-sent
+      |
+      | response = getresponse()
+      v
+    Unread-response   [Response-headers-read]
+      |\____________________
+      |                     |
+      | response.read()     | putrequest()
+      v                     v
+    Idle                  Req-started-unread-response
+                     ______/|
+                   /        |
+   response.read() |        | ( putheader() )*  endheaders()
+                   v        v
+       Request-started    Req-sent-unread-response
+                            |
+                            | response.read()
+                            v
+                          Request-sent
+
+This diagram presents the following rules:
+  -- a second request may not be started until {response-headers-read}
+  -- a response [object] cannot be retrieved until {request-sent}
+  -- there is no differentiation between an unread response body and a
+     partially read response body
+
+Note: this enforcement is applied by the HTTPConnection class. The
+      HTTPResponse class does not enforce this state machine, which
+      implies sophisticated clients may accelerate the request/response
+      pipeline. Caution should be taken, though: accelerating the states
+      beyond the above pattern may imply knowledge of the server's
+      connection-close behavior for certain requests. For example, it
+      is impossible to tell whether the server will close the connection
+      UNTIL the response headers have been read; this means that further
+      requests cannot be placed into the pipeline until it is known that
+      the server will NOT be closing the connection.
+
+Logical State                  __state            __response
+-------------                  -------            ----------
+Idle                           _CS_IDLE           None
+Request-started                _CS_REQ_STARTED    None
+Request-sent                   _CS_REQ_SENT       None
+Unread-response                _CS_IDLE           <response_class>
+Req-started-unread-response    _CS_REQ_STARTED    <response_class>
+Req-sent-unread-response       _CS_REQ_SENT       <response_class>
+"""
 from array import array
 import os
+import re
 import socket
 from sys import py3kwarning
 from urlparse import urlsplit
@@ -130,10 +199,16 @@ responses = {100: 'Continue',
  505: 'HTTP Version Not Supported'}
 MAXAMOUNT = 1048576
 _MAXLINE = 65536
+_MAXHEADERS = 100
+_is_legal_header_name = re.compile('\\A[^:\\s][^:\\r\\n]*\\Z').match
+_is_illegal_header_value = re.compile('\\n(?![ \\t])|\\r(?![ \\t\\n])').search
+_contains_disallowed_url_pchar_re = re.compile('[\x00- \x7f-\xff]')
+_METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
 
 class HTTPMessage(mimetools.Message):
 
     def addheader(self, key, value):
+        """Add header for field key handling repeats."""
         prev = self.dict.get(key)
         if prev is None:
             self.dict[key] = value
@@ -143,27 +218,49 @@ class HTTPMessage(mimetools.Message):
         return
 
     def addcontinue(self, key, more):
+        """Add more field data from a continuation line."""
         prev = self.dict[key]
         self.dict[key] = prev + '\n ' + more
 
     def readheaders(self):
+        """Read header lines.
+        
+        Read header lines up to the entirely blank line that terminates them.
+        The (normally blank) line that ends the headers is skipped, but not
+        included in the returned list.  If an invalid line is found in the
+        header section, it is skipped, and further lines are processed.
+        
+        The variable self.status is set to the empty string if all went well,
+        otherwise it is an error message.  The variable self.headers is a
+        completely uninterpreted list of lines contained in the header (so
+        printing them will reproduce the header exactly as it appears in the
+        file).
+        
+        If multiple header fields with the same name occur, they are combined
+        according to the rules in RFC 2616 sec 4.2:
+        
+        Appending each subsequent field-value to the first, each separated
+        by a comma. The order in which header fields with the same field-name
+        are received is significant to the interpretation of the combined
+        field value.
+        """
         self.dict = {}
         self.unixfrom = ''
         self.headers = hlist = []
         self.status = ''
         headerseen = ''
         firstline = 1
-        startofline = unread = tell = None
-        if hasattr(self.fp, 'unread'):
-            unread = self.fp.unread
-        elif self.seekable:
+        tell = None
+        if not hasattr(self.fp, 'unread') and self.seekable:
             tell = self.fp.tell
         while True:
+            if len(hlist) > _MAXHEADERS:
+                raise HTTPException('got more than %d headers' % _MAXHEADERS)
             if tell:
                 try:
-                    startofline = tell()
+                    tell()
                 except IOError:
-                    startofline = tell = None
+                    tell = None
                     self.seekable = 0
 
             line = self.fp.readline(_MAXLINE + 1)
@@ -188,18 +285,9 @@ class HTTPMessage(mimetools.Message):
             if headerseen:
                 hlist.append(line)
                 self.addheader(headerseen, line[len(headerseen) + 1:].strip())
-                continue
-            if not self.dict:
-                self.status = 'No headers'
-            else:
-                self.status = 'Non-header line where header expected'
-            if unread:
-                unread(line)
-            elif tell:
-                self.fp.seek(startofline)
-            else:
-                self.status = self.status + '; bad seek'
-            break
+            if headerseen is not None:
+                pass
+            self.status = 'Non-header line where header expected'
 
         return
 
@@ -231,7 +319,7 @@ class HTTPResponse():
         if self.debuglevel > 0:
             print 'reply:', repr(line)
         if not line:
-            raise BadStatusLine(line)
+            raise BadStatusLine('No status line received - the server has closed the connection')
         try:
             version, status, reason = line.split(None, 2)
         except ValueError:
@@ -336,9 +424,10 @@ class HTTPResponse():
         return False if pconn and 'keep-alive' in pconn.lower() else True
 
     def close(self):
-        if self.fp:
-            self.fp.close()
+        fp = self.fp
+        if fp:
             self.fp = None
+            fp.close()
         return
 
     def isclosed(self):
@@ -379,6 +468,7 @@ class HTTPResponse():
             return s
 
     def _read_chunked(self, amt):
+        assert self.chunked != _UNKNOWN
         chunk_left = self.chunk_left
         value = []
         while True:
@@ -427,6 +517,19 @@ class HTTPResponse():
         return ''.join(value)
 
     def _safe_read(self, amt):
+        """Read the number of bytes requested, compensating for partial reads.
+        
+        Normally, we have a blocking socket, but a read() can be interrupted
+        by a signal (resulting in a partial read).
+        
+        Note that we cannot distinguish between EOF and an interrupt when zero
+        bytes have been read. IncompleteRead() will be raised in this
+        situation.
+        
+        This function should be used when <amt> bytes "should" be present for
+        reading. If the bytes are truly not available (due to EOF), then the
+        IncompleteRead exception can be used to detect the problem.
+        """
         s = []
         while amt > 0:
             chunk = self.fp.read(min(amt, MAXAMOUNT))
@@ -446,6 +549,7 @@ class HTTPResponse():
         return self.msg.getheader(name, default)
 
     def getheaders(self):
+        """Return list of (header, value) tuples."""
         if self.msg is None:
             raise ResponseNotReady()
         return self.msg.items()
@@ -474,14 +578,27 @@ class HTTPConnection():
         if strict is not None:
             self.strict = strict
         self.host, self.port = self._get_hostport(host, port)
+        self._validate_host(self.host)
         self._create_connection = socket.create_connection
         return
 
     def set_tunnel(self, host, port=None, headers=None):
+        """ Set up host and port for HTTP CONNECT tunnelling.
+        
+        In a connection that uses HTTP Connect tunneling, the host passed to the
+        constructor is used as proxy server that relays all communication to the
+        endpoint passed to set_tunnel. This is done by sending a HTTP CONNECT
+        request to the proxy server when the connection is established.
+        
+        This method must be called before the HTTP connection has been
+        established.
+        
+        The headers argument should be a mapping of extra HTTP headers
+        to send with the CONNECT request.
+        """
         if self.sock:
             raise RuntimeError("Can't setup tunnel for established connection.")
-        self._tunnel_host = host
-        self._tunnel_port = port
+        self._tunnel_host, self._tunnel_port = self._get_hostport(host, port)
         if headers:
             self._tunnel_headers = headers
         else:
@@ -511,14 +628,16 @@ class HTTPConnection():
         self.debuglevel = level
 
     def _tunnel(self):
-        host, port = self._get_hostport(self._tunnel_host, self._tunnel_port)
-        self.send('CONNECT %s:%d HTTP/1.0\r\n' % (host, port))
+        self.send('CONNECT %s:%d HTTP/1.0\r\n' % (self._tunnel_host, self._tunnel_port))
         for header, value in self._tunnel_headers.iteritems():
             self.send('%s: %s\r\n' % (header, value))
 
         self.send('\r\n')
         response = self.response_class(self.sock, strict=self.strict, method=self._method)
         version, code, message = response._read_status()
+        if version == 'HTTP/0.9':
+            self.close()
+            raise socket.error('Invalid response from tunnel request')
         if code != 200:
             self.close()
             raise socket.error('Tunnel connection failed: %d %s' % (code, message.strip()))
@@ -532,21 +651,29 @@ class HTTPConnection():
                 break
 
     def connect(self):
+        """Connect to the host and port specified in __init__."""
         self.sock = self._create_connection((self.host, self.port), self.timeout, self.source_address)
         if self._tunnel_host:
             self._tunnel()
 
     def close(self):
-        if self.sock:
-            self.sock.close()
-            self.sock = None
-        if self.__response:
-            self.__response.close()
-            self.__response = None
+        """Close the connection to the HTTP server."""
         self.__state = _CS_IDLE
+        try:
+            sock = self.sock
+            if sock:
+                self.sock = None
+                sock.close()
+        finally:
+            response = self.__response
+            if response:
+                self.__response = None
+                response.close()
+
         return
 
     def send(self, data):
+        """Send `data' to the server."""
         if self.sock is None:
             if self.auto_open:
                 self.connect()
@@ -568,9 +695,18 @@ class HTTPConnection():
         return
 
     def _output(self, s):
+        r"""Add a line of output to the current request buffer.
+        
+        Assumes that the line does *not* end with \r\n.
+        """
         self._buffer.append(s)
 
     def _send_output(self, message_body=None):
+        r"""Send the currently buffered request and clear the buffer.
+        
+        Appends an extra \r\n to the buffer.
+        A message_body may be specified, to be appended to the request.
+        """
         self._buffer.extend(('', ''))
         msg = '\r\n'.join(self._buffer)
         del self._buffer[:]
@@ -583,6 +719,14 @@ class HTTPConnection():
         return
 
     def putrequest(self, method, url, skip_host=0, skip_accept_encoding=0):
+        """Send a request to the server.
+        
+        `method' specifies an HTTP request method, e.g. 'GET'.
+        `url' specifies the object being requested, e.g. '/index.html'.
+        `skip_host' if True does not add automatically a 'Host:' header
+        `skip_accept_encoding' if True does not add automatically an
+           'Accept-Encoding:' header
+        """
         if self.__response and self.__response.isclosed():
             self.__response = None
         if self.__state == _CS_IDLE:
@@ -590,10 +734,10 @@ class HTTPConnection():
         else:
             raise CannotSendRequest()
         self._method = method
-        if not url:
-            url = '/'
-        hdr = '%s %s %s' % (method, url, self._http_vsn_str)
-        self._output(hdr)
+        url = url or '/'
+        self._validate_path(url)
+        request = '%s %s %s' % (method, url, self._http_vsn_str)
+        self._output(self._encode_request(request))
         if self._http_vsn == 11:
             if not skip_host:
                 netloc = ''
@@ -628,13 +772,50 @@ class HTTPConnection():
                 self.putheader('Accept-Encoding', 'identity')
         return
 
+    def _encode_request(self, request):
+        return request
+
+    def _validate_path(self, url):
+        """Validate a url for putrequest."""
+        match = _contains_disallowed_url_pchar_re.search(url)
+        if match:
+            msg = "URL can't contain control characters. {url!r} (found at least {matched!r})".format(matched=match.group(), url=url)
+            raise InvalidURL(msg)
+
+    def _validate_host(self, host):
+        """Validate a host so it doesn't contain control characters."""
+        match = _contains_disallowed_url_pchar_re.search(host)
+        if match:
+            msg = "URL can't contain control characters. {host!r} (found at least {matched!r})".format(matched=match.group(), host=host)
+            raise InvalidURL(msg)
+
     def putheader(self, header, *values):
+        """Send a request header line to the server.
+        
+        For example: h.putheader('Accept', 'text/html')
+        """
         if self.__state != _CS_REQ_STARTED:
             raise CannotSendHeader()
-        hdr = '%s: %s' % (header, '\r\n\t'.join([ str(v) for v in values ]))
+        header = '%s' % header
+        if not _is_legal_header_name(header):
+            raise ValueError('Invalid header name %r' % (header,))
+        values = [ str(v) for v in values ]
+        for one_value in values:
+            if _is_illegal_header_value(one_value):
+                raise ValueError('Invalid header value %r' % (one_value,))
+
+        hdr = '%s: %s' % (header, '\r\n\t'.join(values))
         self._output(hdr)
 
     def endheaders(self, message_body=None):
+        """Indicate that the last header line has been sent to the server.
+        
+        This method sends the request to the server.  The optional
+        message_body argument can be used to pass a message body
+        associated with the request.  The message body will be sent in
+        the same packet as the message headers if it is string, otherwise it is
+        sent as a separate packet.
+        """
         if self.__state == _CS_REQ_STARTED:
             self.__state = _CS_REQ_SENT
         else:
@@ -642,18 +823,22 @@ class HTTPConnection():
         self._send_output(message_body)
 
     def request(self, method, url, body=None, headers={}):
+        """Send a complete request to the server."""
         self._send_request(method, url, body, headers)
 
-    def _set_content_length(self, body):
+    def _set_content_length(self, body, method):
         thelen = None
-        try:
-            thelen = str(len(body))
-        except TypeError as te:
+        if body is None and method.upper() in _METHODS_EXPECTING_BODY:
+            thelen = '0'
+        elif body is not None:
             try:
-                thelen = str(os.fstat(body.fileno()).st_size)
-            except (AttributeError, OSError):
-                if self.debuglevel > 0:
-                    print 'Cannot stat!!'
+                thelen = str(len(body))
+            except (TypeError, AttributeError):
+                try:
+                    thelen = str(os.fstat(body.fileno()).st_size)
+                except (AttributeError, OSError):
+                    if self.debuglevel > 0:
+                        print 'Cannot stat!!'
 
         if thelen is not None:
             self.putheader('Content-Length', thelen)
@@ -667,15 +852,15 @@ class HTTPConnection():
         if 'accept-encoding' in header_names:
             skips['skip_accept_encoding'] = 1
         self.putrequest(method, url, **skips)
-        if body is not None and 'content-length' not in header_names:
-            self._set_content_length(body)
+        if 'content-length' not in header_names:
+            self._set_content_length(body, method)
         for hdr, value in headers.iteritems():
             self.putheader(hdr, value)
 
         self.endheaders(body)
-        return
 
     def getresponse(self, buffering=False):
+        """Get the response from the server."""
         if self.__response and self.__response.isclosed():
             self.__response = None
         if self.__state != _CS_REQ_SENT or self.__response:
@@ -688,22 +873,31 @@ class HTTPConnection():
         if buffering:
             kwds['buffering'] = True
         response = self.response_class(*args, **kwds)
-        response.begin()
-        self.__state = _CS_IDLE
-        if response.will_close:
-            self.close()
-        else:
-            self.__response = response
-        return response
+        try:
+            response.begin()
+            assert response.will_close != _UNKNOWN
+            self.__state = _CS_IDLE
+            if response.will_close:
+                self.close()
+            else:
+                self.__response = response
+            return response
+        except:
+            response.close()
+            raise
+
+        return
 
 
 class HTTP():
+    """Compatibility class with httplib.py from 1.5."""
     _http_vsn = 10
     _http_vsn_str = 'HTTP/1.0'
     debuglevel = 0
     _connection_class = HTTPConnection
 
     def __init__(self, host='', port=None, strict=None):
+        """Provide a default host, since the superclass requires one."""
         if port == 0:
             port = None
         self._setup(self._connection_class(host, port, strict))
@@ -722,15 +916,24 @@ class HTTP():
         return
 
     def connect(self, host=None, port=None):
+        """Accept arguments to set the host/port, since the superclass doesn't."""
         if host is not None:
-            self._conn._set_hostport(host, port)
+            self._conn.host, self._conn.port = self._conn._get_hostport(host, port)
         self._conn.connect()
         return
 
     def getfile(self):
+        """Provide a getfile, since the superclass' does not use this concept."""
         return self.file
 
     def getreply(self, buffering=False):
+        """Compat definition since superclass does not define it.
+        
+        Returns a tuple consisting of:
+        - server status code (e.g. '200' if all goes well)
+        - server "reason" corresponding to status code
+        - any RFC822 headers in the response from the server
+        """
         try:
             if not buffering:
                 response = self._conn.getresponse()
@@ -759,30 +962,45 @@ except ImportError:
 else:
 
     class HTTPSConnection(HTTPConnection):
+        """This class allows communication via SSL."""
         default_port = HTTPS_PORT
 
-        def __init__(self, host, port=None, key_file=None, cert_file=None, strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
+        def __init__(self, host, port=None, key_file=None, cert_file=None, strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None, context=None):
             HTTPConnection.__init__(self, host, port, strict, timeout, source_address)
             self.key_file = key_file
             self.cert_file = cert_file
+            if context is None:
+                context = ssl._create_default_https_context()
+            if key_file or cert_file:
+                context.load_cert_chain(cert_file, key_file)
+            self._context = context
+            return
 
         def connect(self):
-            sock = self._create_connection((self.host, self.port), self.timeout, self.source_address)
+            """Connect to a host on a given (SSL) port."""
+            HTTPConnection.connect(self)
             if self._tunnel_host:
-                self.sock = sock
-                self._tunnel()
-            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file)
+                server_hostname = self._tunnel_host
+            else:
+                server_hostname = self.host
+            self.sock = self._context.wrap_socket(self.sock, server_hostname=server_hostname)
 
 
     __all__.append('HTTPSConnection')
 
     class HTTPS(HTTP):
+        """Compatibility with 1.5 httplib interface
+        
+        Python 1.5.2 did not have an HTTPS class, but it defined an
+        interface for sending http requests that is also useful for
+        https.
+        """
         _connection_class = HTTPSConnection
 
-        def __init__(self, host='', port=None, key_file=None, cert_file=None, strict=None):
+        def __init__(self, host='', port=None, key_file=None, cert_file=None, strict=None, context=None):
             if port == 0:
                 port = None
-            self._setup(self._connection_class(host, port, key_file, cert_file, strict))
+            self._setup(self._connection_class(host, port, key_file, cert_file, strict, context=context))
             self.key_file = key_file
             self.cert_file = cert_file
             return
@@ -872,6 +1090,7 @@ class LineTooLong(HTTPException):
 error = HTTPException
 
 class LineAndFileWrapper():
+    """A limited file-like object for HTTP/0.9 responses."""
 
     def __init__(self, line, file):
         self._line = line
@@ -893,6 +1112,7 @@ class LineAndFileWrapper():
         if self._line_consumed:
             return self._file.read(amt)
         else:
+            assert self._line_left
             if amt is None or amt > self._line_left:
                 s = self._line[self._line_offset:]
                 self._done()
@@ -901,6 +1121,7 @@ class LineAndFileWrapper():
                 else:
                     return s + self._file.read(amt - len(s))
             else:
+                assert amt <= self._line_left
                 i = self._line_offset
                 j = i + amt
                 s = self._line[i:j]
@@ -914,6 +1135,7 @@ class LineAndFileWrapper():
     def readline(self):
         if self._line_consumed:
             return self._file.readline()
+        assert self._line_left
         s = self._line[self._line_offset:]
         self._done()
         return s
@@ -922,6 +1144,7 @@ class LineAndFileWrapper():
         if self._line_consumed:
             return self._file.readlines(size)
         else:
+            assert self._line_left
             L = [self._line[self._line_offset:]]
             self._done()
             if size is None:

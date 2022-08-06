@@ -4577,6 +4577,7 @@
       <tags></tags>
       <level>	10	</level>
       <price>	339000	</price>
+      <notInShop>	true	</notInShop>
       <impulse>	0.64	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
@@ -4837,21 +4838,21 @@
       <shots>
         <_120mm_Prf1951>
           <defaultPortion>	0.95	</defaultPortion>
-          <speed>	1067	</speed>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	264 246	</piercingPower>
+          <piercingPower>	270 252	</piercingPower>
         </_120mm_Prf1951>
         <_120mm_FrtPrf1951>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1334	</speed>
+          <speed>	1240	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	315 285	</piercingPower>
         </_120mm_FrtPrf1951>
         <_120mm_OE_mle_1951>
           <defaultPortion>	0.05	</defaultPortion>
-          <speed>	1067	</speed>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	65 65	</piercingPower>
@@ -5009,17 +5010,17 @@
       <shots>
         <_130mm_Capped_Common_Semi_AP>
           <defaultPortion>	0.85	</defaultPortion>
-          <speed>	840	</speed>
+          <speed>	960	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	250 240	</piercingPower>
         </_130mm_Capped_Common_Semi_AP>
         <_130mm_Capped_Common>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	840	</speed>
+          <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	280 263	</piercingPower>
+          <piercingPower>	296 283	</piercingPower>
         </_130mm_Capped_Common>
         <_130mm_Common_HE>
           <defaultPortion>	0.15	</defaultPortion>

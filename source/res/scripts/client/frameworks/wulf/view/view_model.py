@@ -17,6 +17,9 @@ class ViewModel(PyObjectEntity):
     def __init__(self, properties=0, commands=0):
         super(ViewModel, self).__init__(PyObjectViewModel(properties, commands))
 
+    def __str__(self):
+        return self.proxy.toString()
+
     def hold(self):
         self.proxy.hold()
 

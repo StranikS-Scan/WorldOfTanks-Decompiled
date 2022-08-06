@@ -2354,6 +2354,59 @@
       </damage>
     </armorSpalls>
   </_107mm_UOF-420M>
+  <_107mm_UBR-420M1>
+    <id>	308	</id>
+    <userString>	#ussr_vehicles:_107mm_UBR-420M1	</userString>
+    <icon>	ap	</icon>
+    <price>	1010	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_UBR-420M1>
+  <_107mm_UBR-420PM1>
+    <id>	309	</id>
+    <userString>	#ussr_vehicles:_107mm_UBR-420PM1	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_UBR-420PM1>
+  <_107mm_UOF-420M1>
+    <id>	310	</id>
+    <userString>	#ussr_vehicles:_107mm_UOF-420M1	</userString>
+    <icon>	he_modern	</icon>
+    <price>	650	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	107	</caliber>
+    <explosionRadius>	1.98	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.98	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_107mm_UOF-420M1>
   <_122mm_BP450S>
     <id>	49	</id>
     <userString>	#ussr_vehicles:_122mm_BP450S	</userString>

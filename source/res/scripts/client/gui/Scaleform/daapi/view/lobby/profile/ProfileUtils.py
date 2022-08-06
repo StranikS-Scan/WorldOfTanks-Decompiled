@@ -188,11 +188,35 @@ class _AvgStunNumberField(_StunFieldMixin, _AbstractField):
 
 class _AssistedStunDmgField(_StunFieldMixin, _OnlyTechniqueField):
 
+    def __init__(self):
+        super(_AssistedStunDmgField, self).__init__(label='', tooltip='')
+
+    def __call__(self, targetData, isCurrentUser):
+        if isCurrentUser:
+            label = PROFILE.SECTION_TECHNIQUE_STATISTICS_ASSISTEDSTUNDAMAGE_SHORTSELF
+            tooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE_SHORTSELF
+        else:
+            label = PROFILE.SECTION_TECHNIQUE_STATISTICS_ASSISTEDSTUNDAMAGE_SHORTOTHER
+            tooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE_SHORTOTHER
+        return DetailedStatisticsUtils.getDetailedDataObject(label, self._buildData(targetData, isCurrentUser), tooltip, self._buildTooltipData(targetData, isCurrentUser))
+
     def _buildData(self, targetData, isCurrentUser):
         return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageAssistedStun()))
 
 
 class _AvgAssistedStunDmgField(_StunFieldMixin, _AbstractField):
+
+    def __init__(self):
+        super(_AvgAssistedStunDmgField, self).__init__(label='', tooltip='')
+
+    def __call__(self, targetData, isCurrentUser):
+        if isCurrentUser:
+            label = PROFILE.SECTION_STATISTICS_DETAILED_AVGASSISTEDSTUNDAMAGE_SHORTSELF
+            tooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE_SHORTSELF
+        else:
+            label = PROFILE.SECTION_STATISTICS_DETAILED_AVGASSISTEDSTUNDAMAGE_SHORTOTHER
+            tooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE_SHORTOTHER
+        return DetailedStatisticsUtils.getDetailedDataObject(label, self._buildData(targetData, isCurrentUser), tooltip, self._buildTooltipData(targetData, isCurrentUser))
 
     def _buildData(self, targetData, isCurrentUser):
         return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageAssistedStun()))
@@ -400,7 +424,7 @@ COMMON_SECTION_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TO
  _CapturePointsField(PROFILE.SECTION_STATISTICS_SCORES_CAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS),
  _DroppedPointsField(PROFILE.SECTION_STATISTICS_SCORES_DROPPEDCAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS),
  _StunNumberField(PROFILE.SECTION_TECHNIQUE_STATISTICS_STUNNUMBER, PROFILE.PROFILE_PARAMS_TOOLTIP_STUNNUMBER),
- _AssistedStunDmgField(PROFILE.SECTION_TECHNIQUE_STATISTICS_ASSISTEDSTUNDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE))
+ _AssistedStunDmgField())
 COMMON_SECTION_FALLOUT_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_BATTLESCOUNT),
  _WinsField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_WINS),
  _HitsField(PROFILE.SECTION_STATISTICS_SCORES_HITS, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_HITS),
@@ -417,7 +441,7 @@ AVERAGE_SECTION_FIELDS = (_avgExpField,
  _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
  _AvgStunNumberField(PROFILE.SECTION_TECHNIQUE_STATISTICS_AVGSTUNNUMBER, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGSTUNNUMBER),
  _avgAssignedDmgField,
- _AvgAssistedStunDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGASSISTEDSTUNDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE),
+ _AvgAssistedStunDmgField(),
  _emptyField,
  _avgDetectedField,
  _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES))

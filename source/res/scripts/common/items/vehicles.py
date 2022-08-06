@@ -17,9 +17,10 @@ from math_common import ceilTo
 from soft_exception import SoftException
 from Math import Vector2, Vector3
 from collections import namedtuple
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
+from constants import SHELL_MECHANICS_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from functools import partial
 from items import ItemsPrices
@@ -52,21 +53,20 @@ from soft_exception import SoftException
 from string import upper
 from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING, Union, Generator
 from wrapped_reflection_framework import ReflectionMetaclass
-from constants import SHELL_MECHANICS_TYPE, TrackBreakMode, HighExplosiveImpact
+from constants import SHELL_MECHANICS_TYPE, TrackBreakMode
 from wrapped_reflection_framework import ReflectionMetaclass
 from collector_vehicle import CollectorVehicleConsts
 from material_kinds import IDS_BY_NAMES
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from extension_utils import ResMgr, importClass
-from battle_modifiers.battle_modifiers import BattleModifiers
-from battle_modifiers.battle_modifier_constants import BattleParams, ModifierDomain
-from battle_modifiers import vehicle_modifications
 if IS_UE_EDITOR:
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
     from combined_data_section import CombinedDataSection
     from reflection import ReflectedObject
     from wrapped_reflection_framework import reflectedNamedTuple
     import Math
+    import tankArmor
+    from material_kinds import isArmorMaterial
 if IS_CELLAPP or IS_CLIENT or IS_BOT or IS_UE_EDITOR:
     from ModelHitTester import HitTesterManager, BoundingBoxManager, createBBoxManagerForModels
 if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB:
@@ -317,12 +317,9 @@ def reload(full=True):
 
 class VehicleDescriptor(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('enhancements', 'turret', 'gun', 'hull', 'engine', 'fuelTank', 'radio', 'chassis', 'turrets', 'optionalDevices', 'shot', 'supplySlots', 'camouflages', 'playerEmblems', 'playerInscriptions', 'type', 'name', 'level', 'extras', 'extrasDict', 'miscAttrs', 'physics', 'visibilityCheckPoints', 'observerPosOnChassis', 'observerPosOnTurret', 'battleModifiers', '_customRoleSlotTypeId', '_modifications', '_optDevSlotsMap', '_maxHealth', '__activeTurretPos', '__activeGunShotIdx', '__activeGunShotPosition', '__boundingRadius')
+    __slots__ = ('enhancements', 'turret', 'gun', 'hull', 'engine', 'fuelTank', 'radio', 'chassis', 'turrets', 'optionalDevices', 'shot', 'supplySlots', 'camouflages', 'playerEmblems', 'playerInscriptions', 'type', 'name', 'level', 'extras', 'extrasDict', 'miscAttrs', 'physics', 'visibilityCheckPoints', 'observerPosOnChassis', 'observerPosOnTurret', '_customRoleSlotTypeId', '_modifications', '_optDevSlotsMap', '_maxHealth', '__activeTurretPos', '__activeGunShotIdx', '__activeGunShotPosition', '__boundingRadius')
 
     def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None, extData=None):
-        extData = extData if extData is not None else {}
-        battleModifiers = self.__getExtDataValue(extData, 'battleModifiers')
-        self.battleModifiers = battleModifiers if battleModifiers is not None else BattleModifiers()
         self.enhancements = []
         vehType = None
         if compactDescr is None:
@@ -357,7 +354,7 @@ class VehicleDescriptor(object):
             header = items.ITEM_TYPES.vehicle + (nationID << 4)
             compactDescr = struct.pack('<2B6HB', header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode, vehType)
-        self.__applyExternalData(extData)
+        self.__applyExternalData(extData or {})
         self.__updateAttributes()
         return
 
@@ -435,11 +432,19 @@ class VehicleDescriptor(object):
     boundingRadius = property(__get_boundingRadius)
 
     def __applyExternalData(self, extData):
+
+        def getValue(key):
+            if isinstance(extData, dict):
+                return extData.get(key, None)
+            else:
+                return getattr(extData, key, None)
+                return None
+
         self._customRoleSlotTypeId = 0
         self._modifications = []
-        value = self.__getExtDataValue(extData, 'customRoleSlotTypeId') or 0
+        value = getValue('customRoleSlotTypeId') or 0
         self.installCustomRoleSlot(value, False)
-        value = self.__getExtDataValue(extData, 'vehPostProgression') or []
+        value = getValue('vehPostProgression') or []
         modificationIDs = getActiveModifications(value, g_cache.postProgression())
         self.installModifications(modificationIDs, False)
 
@@ -1241,8 +1246,6 @@ class VehicleDescriptor(object):
         unpack = struct.unpack
         try:
             type, components, optionalDeviceSlots, optionalDevices, enhancements, emblemPositions, emblems, inscriptions, camouflages = _splitVehicleCompactDescr(compactDescr, vehMode, vehType)
-            if self.battleModifiers.haveDomain(ModifierDomain.VEH_TYPE_COMPONENTS):
-                type = vehicle_modifications.g_cache.get(type, self.battleModifiers)
             custNationID = type.customizationNationID
             customization = g_cache.customization(custNationID)
             self.type = type
@@ -1400,7 +1403,7 @@ class VehicleDescriptor(object):
         for turretDescr, gunDescr in self.turrets:
             maxHealth += turretDescr.maxHealth
 
-        self._maxHealth = self.battleModifiers(BattleParams.VEHICLE_HEALTH, maxHealth)
+        self._maxHealth = maxHealth
         weight, maxWeight = self.__computeWeight()
         self.miscAttrs = miscAttrs = {'maxWeight': maxWeight,
          'repairSpeedFactor': 1.0,
@@ -1524,15 +1527,6 @@ class VehicleDescriptor(object):
         if miscAttrs['healthFactor'] != 1.0:
             self._maxHealth = int(ceilTo(self._maxHealth * miscAttrs['healthFactor'], VEHICLE_HEALTH_DECIMALS))
         return
-
-    def __getExtDataValue(self, extData, key):
-        if isinstance(extData, dict):
-            return extData.get(key)
-        elif hasattr(extData, key):
-            return getattr(extData, key)
-        else:
-            return None
-            return None
 
 
 class CompositeVehicleDescriptor(object):
@@ -2008,11 +2002,12 @@ class VehicleType(object):
                         _xml.raiseWrongXml(None, compsXmlPath, "Can't open shared section")
                     sharedSections[componentId] = section
 
-        _writeHulls(self.hulls, mainSection)
-        _writeInstallableComponents(self.chassis, mainSection, 'chassis', _writeChassis, g_cache.chassisIDs(nationID), sharedSections)
+        materialData = tankArmor.TankArmorHelper().collectData()
+        _writeHulls(self.hulls, mainSection, materialData['hull'])
+        _writeInstallableComponents(self.chassis, mainSection, 'chassis', _writeChassis, g_cache.chassisIDs(nationID), sharedSections, materialData=materialData['chassis'])
         defHull = self.hulls[0]
         for n in xrange(len(defHull.turretPositions)):
-            _writeInstallableComponents(self.turrets[n], mainSection, 'turrets' + repr(n), _writeTurret, g_cache.turretIDs(nationID), sharedSections)
+            _writeInstallableComponents(self.turrets[n], mainSection, 'turrets' + repr(n), _writeTurret, g_cache.turretIDs(nationID), sharedSections, materialData=materialData)
 
         for id, section in sharedSections.items():
             section.save()
@@ -3097,7 +3092,7 @@ def _writeInstallableComponents(components, section, subsectionName, writer, cac
         if sharedComponentSection:
             sectionsToWrite.append(sharedComponentSection)
         combinedSection = CombinedDataSection(sectionsToWrite)
-        writer(component, combinedSection, sharedSections)
+        writer(component, combinedSection, sharedSections, kwargs['materialData'])
 
     return
 
@@ -3236,11 +3231,11 @@ def _readHull(xmlCtx, section):
     return item
 
 
-def _writeHulls(hulls, section):
+def _writeHulls(hulls, section, materialData):
     section = _xml.getSubsection(None, section, 'hull')
     item = hulls[0]
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
-    _writeArmor(item.materials, None, section, 'armor')
+    _writeArmor(item.materials, None, section, 'armor', materialData=materialData.get('hull', None))
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteInt(section, 'maxHealth', item.maxHealth)
     __writeTurretPitches(section, item.turretPitches)
@@ -3600,11 +3595,11 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVeh
     return
 
 
-def _writeChassis(item, section, *args):
+def _writeChassis(item, section, sharedSections, materialData, *args):
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
-    _writeArmor(item.materials, None, section, 'armor', optional=True)
+    _writeArmor(item.materials, None, section, 'armor', optional=True, materialData=materialData.get(item.name, None))
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     _writeCustomizableAreas(item.customizableVehicleAreas, section)
@@ -4086,14 +4081,14 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
 
 
-def _writeTurret(item, section, sharedSections):
+def _writeTurret(item, section, sharedSections, materialData):
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'gunJointPitch', degrees(item.gunJointPitch), 0.0)
     _xml.rewriteBool(section, 'showEmblemsOnGun', item.showEmblemsOnGun, defaultValue=False)
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteString(section, 'wwturretRotatorSoundManual', item.turretRotatorSoundManual)
     _writeCamouflageSettings(section, 'camouflage', item.camouflage)
-    _writeArmor(item.materials, None, section, 'armor')
+    _writeArmor(item.materials, None, section, 'armor', materialData=materialData['turret'].get(item.name, None), precedingSectionName='guns')
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     _writeCustomizableAreas(item.customizableVehicleAreas, section)
@@ -4101,7 +4096,7 @@ def _writeTurret(item, section, sharedSections):
     arrayStr = ' '.join([ '{:.3f}'.format(value) for value in item.physicsShape ])
     _xml.rewriteString(section, 'physicsShape', arrayStr)
     nationID = parseIntCompactDescr(item.compactDescr)[1]
-    _writeInstallableComponents(item.guns, section, 'guns', _writeGun, g_cache.gunIDs(nationID), sharedSections)
+    _writeInstallableComponents(item.guns, section, 'guns', _writeGun, g_cache.gunIDs(nationID), sharedSections, materialData=materialData['gun'])
     _writeMultiGun(item, section)
     return
 
@@ -4401,7 +4396,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         __markEditorPropertyAsOverride(sharedItem, 'shotDispersionRadius')
-        shotDispAngle = atan(_xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0)
+        shotDispAngle = _xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0
     if not section.has_key('shotDispersionFactors'):
         shotDispFactors = sharedItem.shotDispersionFactors
     else:
@@ -4595,7 +4590,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         return item
 
 
-def _writeGun(item, section, *args):
+def _writeGun(item, section, sharedSections, materialData, *args):
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'reloadTime', item.reloadTime)
@@ -4610,7 +4605,7 @@ def _writeGun(item, section, *args):
     _xml.rewriteVector2(section, 'turretYawLimits', item.editorTurretYawLimits)
     _writeGunEffectName(item, section)
     _writeCamouflageSettings(section, 'camouflage', item.camouflage)
-    _writeArmor(item.materials, None, section, 'armor', optional=True)
+    _writeArmor(item.materials, None, section, 'armor', optional=True, materialData=materialData.get(item.name, None))
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     _writeCustomizableAreas(item.customizableVehicleAreas, section)
@@ -4813,7 +4808,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.type = shellType
     mechanics = intern(_xml.readStringWithDefaultValue(xmlCtx, section, 'mechanics', SHELL_MECHANICS_TYPE.LEGACY))
     isModernHighExplosive = mechanics == SHELL_MECHANICS_TYPE.MODERN
-    shell.damage = (_xml.readPositiveFloat(xmlCtx, section, 'damage/armor'), _xml.readPositiveFloat(xmlCtx, section, 'damage/devices'))
+    shell.damage = (_readDamageValue(xmlCtx, section, 'armor', isModernHighExplosive), _readDamageValue(xmlCtx, section, 'devices', isModernHighExplosive))
     if section.has_key('deviceDamagePossibility/protectFromDirectHits'):
         shellType.protectFromDirectHits = readProtectedModules(xmlCtx, section, 'deviceDamagePossibility/protectFromDirectHits')
     if kind == 'HIGH_EXPLOSIVE' and section.has_key('deviceDamagePossibility/protectFromIndirectHits'):
@@ -4830,9 +4825,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         if isModernHighExplosive:
             shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
             shellType.shieldPenetration = _xml.readBool(xmlCtx, section, 'shieldPenetration', component_constants.DEFAULT_MODERN_HE_SHIELD_PENETRATION)
-            blastWave = _readImpactParams(xmlCtx, section, HighExplosiveImpact.BLAST_WAVE)
-            shellFragments = _readImpactParams(xmlCtx, section, HighExplosiveImpact.SHELL_FRAGMENTS)
-            armorSpalls = _readImpactParams(xmlCtx, section, HighExplosiveImpact.ARMOR_SPALLS)
+            blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
+            shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
+            armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
             if not (blastWave.isActive or shellFragments.isActive or armorSpalls.isActive):
                 _xml.raiseWrongXml(xmlCtx, '', 'Modern high explosive shell must contain at least one damage mechanics: blastWave, shellFragments, armorSpalls')
             shellType.blastWave = blastWave
@@ -4917,6 +4912,11 @@ def _defaultLocalReader(xmlCtx, section, sharedItem, unlocksDescrs, parentItem=N
     return descr
 
 
+def _readDamageValue(xmlCtx, section, damageTypeName, isModernHighExplosive):
+    subsectionName = 'damage/{}'.format(damageTypeName)
+    return _xml.readNonNegativeFloat(xmlCtx, section, subsectionName) if isModernHighExplosive else _xml.readPositiveFloat(xmlCtx, section, subsectionName)
+
+
 def _readGunShotDispersionFactors(xmlCtx, section, subsectionName):
     res = {'turretRotation': _xml.readNonNegativeFloat(xmlCtx, section, subsectionName + '/turretRotation') / radians(1.0),
      'afterShot': _xml.readNonNegativeFloat(xmlCtx, section, subsectionName + '/afterShot'),
@@ -4995,22 +4995,34 @@ def _readArmor(xmlCtx, section, subsectionName, optional=False, index=0):
         return res
 
 
-def _writeArmor(armor, xmlCtx, section, subsectionName, optional=False, index=0):
+def _writeArmor(armor, xmlCtx, section, subsectionName, optional=False, index=0, materialData=None, precedingSectionName=None):
     if not armor and optional:
         return
-    section.deleteSection(subsectionName)
-    section.createSection(subsectionName)
-    armorSection = _xml.getSubsection(xmlCtx, section, subsectionName)
-    materials = g_cache.commonConfig['materials']
-    for matKind, matInfo in armor.items():
-        defMatInfo = materials.get(matKind)._asdict()
-        matKindName = material_kinds.NAMES_BY_IDS.get(matKind)
-        hasChanges = matInfo.armor != 0 or matInfo.vehicleDamageFactor != defMatInfo['vehicleDamageFactor'] or matInfo.chanceToHitByProjectile != defMatInfo['chanceToHitByProjectile'] or matInfo.chanceToHitByExplosion != defMatInfo['chanceToHitByExplosion']
-        if hasChanges:
-            _xml.rewriteFloat(armorSection, matKindName, matInfo.armor)
-        _xml.rewriteFloat(armorSection, matKindName + '/vehicleDamageFactor', matInfo.vehicleDamageFactor, defMatInfo['vehicleDamageFactor'])
-        _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByProjectile', matInfo.chanceToHitByProjectile, defMatInfo['chanceToHitByProjectile'])
-        _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByExplosion', matInfo.chanceToHitByExplosion, defMatInfo['chanceToHitByExplosion'])
+    else:
+        section.deleteSection(subsectionName)
+        armorSection = None
+        if precedingSectionName is not None:
+            sectionItems = section.items()
+            sectionIndex = shared_writers.getPrecedingSectionIndex(sectionItems, precedingSectionName)
+            if sectionIndex is not None:
+                section.insertSection(subsectionName, sectionIndex)
+            else:
+                section.createSection(subsectionName)
+        else:
+            section.createSection(subsectionName)
+        armorSection = _xml.getSubsection(xmlCtx, section, subsectionName)
+        materials = g_cache.commonConfig['materials']
+        for matKind, matInfo in armor.items():
+            defMatInfo = materials.get(matKind)._asdict()
+            matKindName = material_kinds.NAMES_BY_IDS.get(matKind)
+            hasChanges = matInfo.armor != 0 or matInfo.vehicleDamageFactor != defMatInfo['vehicleDamageFactor'] or matInfo.chanceToHitByProjectile != defMatInfo['chanceToHitByProjectile'] or matInfo.chanceToHitByExplosion != defMatInfo['chanceToHitByExplosion'] or materialData is not None and matKind in materialData and material_kinds.isArmorMaterial(matKind)
+            if hasChanges:
+                _xml.rewriteFloat(armorSection, matKindName, matInfo.armor)
+            _xml.rewriteFloat(armorSection, matKindName + '/vehicleDamageFactor', matInfo.vehicleDamageFactor, defMatInfo['vehicleDamageFactor'])
+            _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByProjectile', matInfo.chanceToHitByProjectile, defMatInfo['chanceToHitByProjectile'])
+            _xml.rewriteFloat(armorSection, matKindName + '/chanceToHitByExplosion', matInfo.chanceToHitByExplosion, defMatInfo['chanceToHitByExplosion'])
+
+        return
 
 
 _g_boolMatInfoParams = ('useArmorHomogenization',
@@ -5083,9 +5095,6 @@ def _readCustomizableAreas(xmlCtx, section, subsectionName):
 
 def _writeCustomizableAreas(items, section):
     subsectionName = 'customization'
-    if len(items['paintString']) == 0 and len(items['camouflageString']) == 0:
-        section.deleteSection(subsectionName)
-        return
     _xml.rewriteString(section, subsectionName + '/customizableVehicleAreas/paint', items['paintString'])
     _xml.rewriteString(section, subsectionName + '/customizableVehicleAreas/camouflage', items['camouflageString'])
 
@@ -5984,7 +5993,7 @@ def _writeCamouflageSettings(section, sectionName, camouflage):
     densityKey = sectionName + '/density'
     if camouflage.density is not None and len(camouflage.density) == 2:
         densityValue = Math.Vector2(camouflage.density[0], camouflage.density[1])
-        _xml.rewriteVector2(section, densityKey, densityValue, [1.0, 1.0])
+        _xml.rewriteVector2(section, densityKey, densityValue)
     aoTextureSizeKey = sectionName + '/aoTextureSize'
     if camouflage.aoTextureSize is not None and len(camouflage.aoTextureSize) == 2:
         aoTextureValue = Math.Vector2(camouflage.aoTextureSize[0], camouflage.aoTextureSize[1])
@@ -6467,7 +6476,7 @@ def _readImpactParams(xmlCtx, section, paramName):
     else:
         params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
         params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
-        if paramName == HighExplosiveImpact.ARMOR_SPALLS:
+        if paramName == 'armorSpalls':
             params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
             params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
         if subsection.has_key('damageAbsorption'):
@@ -6740,6 +6749,7 @@ def reinstallOptionalDevices(vehDescr, newDevices):
     return vehDescr
 
 
+VEHICLE_HEALTH_DECIMALS = 1
 _EMPTY_EMBLEM = (None, _CUSTOMIZATION_EPOCH, 0)
 _EMPTY_EMBLEMS = (_EMPTY_EMBLEM,
  _EMPTY_EMBLEM,

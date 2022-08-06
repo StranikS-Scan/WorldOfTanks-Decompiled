@@ -1,10 +1,11 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.17.1.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.17.1.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.18.0.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.18.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part1.pkg</Package>
@@ -44,6 +45,8 @@
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/127_japort.pkg</Package>
       <Package type="hd">./res/packages/127_japort_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
+      <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
@@ -149,10 +152,12 @@
       <Package type="sd,hd">./res/packages/vehicles_level_07-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_07_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_07_hd-part2.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_08-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_08-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_08-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_08-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_08_hd-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_09-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_09-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part1.pkg</Package>

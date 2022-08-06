@@ -28,6 +28,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getCurrentLocalServerTimestamp, getDateTimeInLocal, getDateTimeInUTC, getTimeStructInLocal, getTimestampFromISO, utcToLocalDatetime
 from items import ITEM_TYPES, vehicles
+from items.components.c11n_constants import CustomizationNamesToTypes
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IVehicleComparisonBasket
@@ -330,6 +331,7 @@ class _VehicleStylePreviewSchema(W2CSchema):
     level = Field(required=False, type=int)
     price = Field(required=False, type=dict)
     buy_params = Field(required=False, type=dict)
+    alternate_item = Field(required=False, type=list)
 
 
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
@@ -540,10 +542,14 @@ class VehiclePreviewWebApiMixin(object):
     def __showStylePreview(self, vehicleCD, cmd):
         styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
+        outfit = None
+        if cmd.alternate_item:
+            alternateItemTypeName, alternateItemID = cmd.alternate_item
+            outfit = styleInfo.getAlteredOutfit(CustomizationNamesToTypes[alternateItemTypeName.upper()], alternateItemID, vehicle.descriptor.makeCompactDescr())
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
             showStyle = _getStylePreviewShowFunc(styleInfo, cmd.price)
             descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
-            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params)
+            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit)
             return True
         else:
             return False

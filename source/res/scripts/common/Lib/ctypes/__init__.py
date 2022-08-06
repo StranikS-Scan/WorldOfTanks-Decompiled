@@ -310,6 +310,9 @@ def ARRAY(typ, len):
 class CDLL(object):
     _func_flags_ = _FUNCFLAG_CDECL
     _func_restype_ = c_int
+    _name = '<uninitialized>'
+    _handle = 0
+    _FuncPtr = None
 
     def __init__(self, name, mode=DEFAULT_MODE, handle=None, use_errno=False, use_last_error=False):
         self._name = name

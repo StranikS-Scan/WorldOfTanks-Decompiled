@@ -138,6 +138,7 @@ class ConnectionManager(IConnectionManager):
     def __serverResponseHandler(self, stage, status, responseDataJSON):
         if constants.IS_DEVELOPMENT:
             LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
+        status = str(status)
         self.__connectionInProgress = False
         self.__connectionStatus = status
         try:

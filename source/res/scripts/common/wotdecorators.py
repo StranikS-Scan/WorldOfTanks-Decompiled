@@ -2,11 +2,13 @@
 # Embedded file name: scripts/common/wotdecorators.py
 import inspect
 from functools import update_wrapper
+from typing import TypeVar, Type, Generic
 from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
+CLASS = TypeVar('CLASS')
 if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP:
     from insights.common import incrTickOverspends
 

@@ -221,8 +221,8 @@ class AutoInviteTextFormatter(InviteFormatter):
         return note
 
     def getText(self, invite):
-        startTimeStr = '{} {}'.format(backport.text(R.strings.prebattle.title.battleSession.startTime()), getPrebattleStartTimeString(invite.startTime))
-        return u'{}, {}'.format(unicode(getPrebattleFullDescription(invite.description), 'utf-8'), unicode(startTimeStr, 'utf-8'))
+        startTimeStr = u'{} {}'.format(backport.text(R.strings.prebattle.title.battleSession.startTime()), getPrebattleStartTimeString(invite.startTime))
+        return u'{}, {}'.format(getPrebattleFullDescription(invite.description), startTimeStr)
 
 
 class _PrbInviteInfo(object):

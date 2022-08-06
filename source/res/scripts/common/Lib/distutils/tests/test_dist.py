@@ -9,8 +9,9 @@ import textwrap
 from distutils.dist import Distribution, fix_help_options
 from distutils.cmd import Command
 import distutils.dist
-from test.test_support import TESTFN, captured_stdout, run_unittest
+from test.test_support import TESTFN, captured_stdout, run_unittest, unlink
 from distutils.tests import support
+from distutils import log
 
 class test_dist(Command):
     user_options = [('sample-option=', 'S', 'help text')]
@@ -49,6 +50,7 @@ class DistributionTestCase(support.TempdirManager, support.LoggingSilencer, supp
         with open(TESTFN, 'w') as f:
             f.write('[global]\n')
             f.write('command_packages = foo.bar, splat')
+        self.addCleanup(unlink, TESTFN)
         files = [TESTFN]
         sys.argv.append('build')
         with captured_stdout() as stdout:
@@ -324,6 +326,7 @@ class MetadataTestCase(support.TempdirManager, support.EnvironGuard, unittest.Te
         self.assertEqual(fancy_options[1], (1, 2, 3))
 
     def test_show_help(self):
+        self.addCleanup(log.set_threshold, log._global_log.threshold)
         dist = Distribution()
         sys.argv = []
         dist.help = 1

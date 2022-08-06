@@ -251,6 +251,7 @@ class WatchedFileHandler(logging.FileHandler):
             if self.stream is not None:
                 self.stream.flush()
                 self.stream.close()
+                self.stream = None
                 self.stream = self._open()
                 self._statstream()
         logging.FileHandler.emit(self, record)
@@ -354,9 +355,10 @@ class SocketHandler(logging.Handler):
     def close(self):
         self.acquire()
         try:
-            if self.sock:
-                self.sock.close()
+            sock = self.sock
+            if sock:
                 self.sock = None
+                sock.close()
         finally:
             self.release()
 
@@ -458,14 +460,30 @@ class SysLogHandler(logging.Handler):
             self.unixsocket = 1
             self._connect_unixsocket(address)
         else:
-            self.unixsocket = 0
+            self.unixsocket = False
             if socktype is None:
                 socktype = socket.SOCK_DGRAM
-            self.socket = socket.socket(socket.AF_INET, socktype)
-            if socktype == socket.SOCK_STREAM:
-                self.socket.connect(address)
+            host, port = address
+            ress = socket.getaddrinfo(host, port, 0, socktype)
+            if not ress:
+                raise socket.error('getaddrinfo returns an empty list')
+            for res in ress:
+                af, socktype, proto, _, sa = res
+                err = sock = None
+                try:
+                    sock = socket.socket(af, socktype, proto)
+                    if socktype == socket.SOCK_STREAM:
+                        sock.connect(sa)
+                    break
+                except socket.error as exc:
+                    err = exc
+                    if sock is not None:
+                        sock.close()
+
+            if err is not None:
+                raise err
+            self.socket = sock
             self.socktype = socktype
-        self.formatter = None
         return
 
     def _connect_unixsocket(self, address):
@@ -514,12 +532,12 @@ class SysLogHandler(logging.Handler):
         return self.priority_map.get(levelName, 'warning')
 
     def emit(self, record):
-        msg = self.format(record) + '\x00'
-        prio = '<%d>' % self.encodePriority(self.facility, self.mapPriority(record.levelname))
-        if type(msg) is unicode:
-            msg = msg.encode('utf-8')
-        msg = prio + msg
         try:
+            msg = self.format(record) + '\x00'
+            prio = '<%d>' % self.encodePriority(self.facility, self.mapPriority(record.levelname))
+            if type(msg) is unicode:
+                msg = msg.encode('utf-8')
+            msg = prio + msg
             if self.unixsocket:
                 try:
                     self.socket.send(msg)
@@ -542,11 +560,11 @@ class SMTPHandler(logging.Handler):
 
     def __init__(self, mailhost, fromaddr, toaddrs, subject, credentials=None, secure=None):
         logging.Handler.__init__(self)
-        if isinstance(mailhost, tuple):
+        if isinstance(mailhost, (list, tuple)):
             self.mailhost, self.mailport = mailhost
         else:
             self.mailhost, self.mailport = mailhost, None
-        if isinstance(credentials, tuple):
+        if isinstance(credentials, (list, tuple)):
             self.username, self.password = credentials
         else:
             self.username = None
@@ -713,8 +731,10 @@ class BufferingHandler(logging.Handler):
             self.release()
 
     def close(self):
-        self.flush()
-        logging.Handler.close(self)
+        try:
+            self.flush()
+        finally:
+            logging.Handler.close(self)
 
 
 class MemoryHandler(BufferingHandler):
@@ -742,12 +762,14 @@ class MemoryHandler(BufferingHandler):
             self.release()
 
     def close(self):
-        self.flush()
-        self.acquire()
         try:
-            self.target = None
-            BufferingHandler.close(self)
+            self.flush()
         finally:
-            self.release()
+            self.acquire()
+            try:
+                self.target = None
+                BufferingHandler.close(self)
+            finally:
+                self.release()
 
         return

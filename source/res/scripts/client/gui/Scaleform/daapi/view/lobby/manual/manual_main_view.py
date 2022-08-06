@@ -12,16 +12,12 @@ _logger = logging.getLogger(__name__)
 
 class ManualMainView(ManualViewBase, ManualMainViewMeta):
 
-    def closeView(self):
-        self._close()
-        self.manualController.clear()
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+    def __init__(self, ctx=None):
+        super(ManualMainView, self).__init__(ctx)
+        self.__backCallback = self._ctx.get('backCallback')
 
-    def onChapterOpenedS(self, chapterIndex):
-        _logger.debug('ManualMainView. Chapter selected: %s', chapterIndex)
-        shared_events.openManualPage(chapterIndex)
-
-    def addConter(self, param):
+    @staticmethod
+    def addCounter(param):
         chapters = AccountSettings.getManualUnreadPages()
         index = 0
         for chapter in chapters:
@@ -31,26 +27,50 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
 
         return param
 
+    def closeView(self):
+        self._close()
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def onChapterOpenedS(self, chapterIndex):
+        _logger.debug('ManualMainView. Chapter selected: %s', chapterIndex)
+        shared_events.openManualPage(chapterIndex)
+
+    def onBackButton(self):
+        if self.__backCallback is None:
+            _logger.warning('ManualMainView. Trying to go back with None backCallback')
+            return
+        else:
+            self.__backCallback()
+            return
+
     def _populate(self):
         super(ManualMainView, self)._populate()
-        chapters = self.addConter(self.chaptersUIData)
+        chapters = self.addCounter(self.chaptersUIData)
         self.as_setChaptersS(chapters)
         self.as_setPageBackgroundS(RES_ICONS.MAPS_ICONS_MANUAL_MAINPAGE_BACKGROUND)
+        self.__updateButtons()
         self.addListener(events.ManualEvent.CHAPTER_OPENED, self.__onChapterOpened, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.ManualEvent.CHAPTER_CLOSED, self.__onChapterClosed, EVENT_BUS_SCOPE.LOBBY)
         ctx = self._ctx
-        if ctx:
+        if ctx and 'chapterIndex' in ctx:
             self.manualController.showChapterView(ctx['chapterIndex'], ctx['pageIndex'])
 
     def _dispose(self):
         super(ManualMainView, self)._dispose()
         self.removeListener(events.ManualEvent.CHAPTER_OPENED, self.__onChapterOpened, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ManualEvent.CHAPTER_CLOSED, self.__onChapterClosed, EVENT_BUS_SCOPE.LOBBY)
+        self.manualController.clear()
 
     def __onChapterClosed(self, _):
-        chapters = self.addConter(self.chaptersUIData)
+        chapters = self.addCounter(self.chaptersUIData)
         self.as_setChaptersS(chapters)
-        self.as_showCloseBtnS(True)
+        self.__updateButtons()
 
     def __onChapterOpened(self, _):
         self.as_showCloseBtnS(False)
+        self.as_showBackBtnS(False)
+
+    def __updateButtons(self):
+        self.as_showCloseBtnS(self.__backCallback is None)
+        self.as_showBackBtnS(self.__backCallback is not None)
+        return

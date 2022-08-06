@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/test_tkinter/test_variables.py
 import unittest
-from Tkinter import Variable, StringVar, IntVar, DoubleVar, BooleanVar, Tk, TclError
+import gc
+from Tkinter import Variable, StringVar, IntVar, DoubleVar, BooleanVar, Tcl, TclError
 
 class TestBase(unittest.TestCase):
 
     def setUp(self):
-        self.root = Tk()
+        self.root = Tcl()
 
     def tearDown(self):
-        self.root.destroy()
+        del self.root
 
 
 class TestVariable(TestBase):
@@ -62,6 +63,60 @@ class TestVariable(TestBase):
             self.root.globalsetvar('var\x00name', 'value')
         with self.assertRaises(ValueError):
             self.root.setvar('var\x00name', 'value')
+
+    def test_trace(self):
+        v = Variable(self.root)
+        vname = str(v)
+        trace = []
+
+        def read_tracer(*args):
+            trace.append(('read',) + args)
+
+        def write_tracer(*args):
+            trace.append(('write',) + args)
+
+        cb1 = v.trace_variable('r', read_tracer)
+        cb2 = v.trace_variable('wu', write_tracer)
+        self.assertEqual(sorted(v.trace_vinfo()), [('r', cb1), ('wu', cb2)])
+        self.assertEqual(trace, [])
+        v.set('spam')
+        self.assertEqual(trace, [('write',
+          vname,
+          '',
+          'w')])
+        trace = []
+        v.get()
+        self.assertEqual(trace, [('read',
+          vname,
+          '',
+          'r')])
+        trace = []
+        info = sorted(v.trace_vinfo())
+        v.trace_vdelete('w', cb1)
+        self.assertEqual(sorted(v.trace_vinfo()), info)
+        with self.assertRaises(TclError):
+            v.trace_vdelete('r', 'spam')
+        self.assertEqual(sorted(v.trace_vinfo()), info)
+        v.trace_vdelete('r', (cb1, 43))
+        self.assertEqual(sorted(v.trace_vinfo()), info)
+        v.get()
+        self.assertEqual(trace, [('read',
+          vname,
+          '',
+          'r')])
+        trace = []
+        v.trace_vdelete('r', cb1)
+        self.assertEqual(v.trace_vinfo(), [('wu', cb2)])
+        v.get()
+        self.assertEqual(trace, [])
+        trace = []
+        del write_tracer
+        gc.collect()
+        v.set('eggs')
+        self.assertEqual(trace, [('write',
+          vname,
+          '',
+          'w')])
 
 
 class TestStringVar(TestBase):
@@ -136,16 +191,57 @@ class TestBooleanVar(TestBase):
 
     def test_default(self):
         v = BooleanVar(self.root)
-        self.assertEqual(False, v.get())
+        self.assertIs(v.get(), False)
 
     def test_get(self):
         v = BooleanVar(self.root, True, 'name')
-        self.assertAlmostEqual(True, v.get())
+        self.assertIs(v.get(), True)
         self.root.globalsetvar('name', '0')
-        self.assertAlmostEqual(False, v.get())
+        self.assertIs(v.get(), False)
+        self.root.globalsetvar('name', 42 if self.root.wantobjects() else 1)
+        self.assertIs(v.get(), True)
+        self.root.globalsetvar('name', 0)
+        self.assertIs(v.get(), False)
+        self.root.globalsetvar('name', 42L if self.root.wantobjects() else 1L)
+        self.assertIs(v.get(), True)
+        self.root.globalsetvar('name', 0L)
+        self.assertIs(v.get(), False)
+        self.root.globalsetvar('name', 'on')
+        self.assertIs(v.get(), True)
+        self.root.globalsetvar('name', u'0')
+        self.assertIs(v.get(), False)
+        self.root.globalsetvar('name', u'on')
+        self.assertIs(v.get(), True)
+
+    def test_set(self):
+        true = 1 if self.root.wantobjects() else '1'
+        false = 0 if self.root.wantobjects() else '0'
+        v = BooleanVar(self.root, name='name')
+        v.set(True)
+        self.assertEqual(self.root.globalgetvar('name'), true)
+        v.set('0')
+        self.assertEqual(self.root.globalgetvar('name'), false)
+        v.set(42)
+        self.assertEqual(self.root.globalgetvar('name'), true)
+        v.set(0)
+        self.assertEqual(self.root.globalgetvar('name'), false)
+        v.set(42L)
+        self.assertEqual(self.root.globalgetvar('name'), true)
+        v.set(0L)
+        self.assertEqual(self.root.globalgetvar('name'), false)
+        v.set('on')
+        self.assertEqual(self.root.globalgetvar('name'), true)
+        v.set(u'0')
+        self.assertEqual(self.root.globalgetvar('name'), false)
+        v.set(u'on')
+        self.assertEqual(self.root.globalgetvar('name'), true)
 
     def test_invalid_value_domain(self):
+        false = 0 if self.root.wantobjects() else '0'
         v = BooleanVar(self.root, name='name')
+        with self.assertRaises(TclError):
+            v.set('value')
+        self.assertEqual(self.root.globalgetvar('name'), false)
         self.root.globalsetvar('name', 'value')
         with self.assertRaises(TclError):
             v.get()

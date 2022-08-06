@@ -61,11 +61,12 @@ class BuildDumbTestCase(support.TempdirManager, support.LoggingSilencer, support
         finally:
             fp.close()
 
-        contents = sorted((os.path.basename(fn) for fn in contents))
+        contents = sorted(filter(None, map(os.path.basename, contents)))
         wanted = ['foo-0.1-py%s.%s.egg-info' % sys.version_info[:2], 'foo.py']
         if not sys.dont_write_bytecode:
             wanted.append('foo.pyc')
         self.assertEqual(contents, sorted(wanted))
+        return
 
     def test_finalize_options(self):
         pkg_dir, dist = self.create_dist()

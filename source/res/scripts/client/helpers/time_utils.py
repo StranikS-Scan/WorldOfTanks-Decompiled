@@ -134,6 +134,10 @@ def getTimestampFromNow(t):
     return t - getCurrentTimestamp() if t > 0 and t > getCurrentTimestamp() else 0
 
 
+def getServerTimeDiffInLocal(t):
+    return t - getCurrentLocalServerTimestamp() if t > 0 and t > getCurrentLocalServerTimestamp() else 0
+
+
 def getTimeDeltaTillNow(t):
     if t and datetime.datetime.utcnow() > datetime.datetime.utcfromtimestamp(t):
         delta = datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(t)

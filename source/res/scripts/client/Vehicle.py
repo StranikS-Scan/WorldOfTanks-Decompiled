@@ -112,7 +112,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
     @property
     def isWheeledTech(self):
-        return 'wheeledVehicle' in self.typeDescriptor.type.tags
+        return self.typeDescriptor.type.isWheeledVehicle
+
+    @property
+    def isScout(self):
+        return 'scout' in self.typeDescriptor.type.tags
 
     @property
     def isTrackWithinTrack(self):
@@ -144,10 +148,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def maxHealth(self):
         return self.publicInfo.maxHealth
 
-    @property
-    def battleModifiers(self):
-        return self.guiSessionProvider.arenaVisitor.getArenaModifiers()
-
     def getBounds(self, partIdx):
         return self.appearance.getBounds(partIdx) if self.appearance is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
@@ -163,6 +163,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
         self.proxy = weakref.proxy(self)
         self.extras = {}
+        self.extrasHitPoint = dict()
         self.typeDescriptor = None
         self.appearance = None
         self.onAppearanceReady = Event()
@@ -657,6 +658,12 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             ctrl.setDisabledSwitches(self.id, self.disabledSwitches)
         return
 
+    def onExtraHitted(self, extraIndex, hitPoint):
+        self.extrasHitPoint[extraIndex] = hitPoint
+
+    def getExtraHitPoint(self, extraIndex):
+        return Math.Vector3(0.0, 10.0, 0.0) if extraIndex is None or extraIndex not in self.extrasHitPoint else self.extrasHitPoint[extraIndex]
+
     def onHealthChanged(self, newHealth, oldHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
@@ -946,8 +953,11 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             drawFlags = BigWorld.ShadowPassBit
         if self.isStarted:
             va = self.appearance
+            if va.tracks is not None:
+                va.tracks.setPhysicalDestroyedTracksVisible(show)
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
+        return
 
     def addCameraCollider(self):
         if self.appearance is not None:

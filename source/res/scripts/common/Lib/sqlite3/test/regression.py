@@ -3,6 +3,8 @@
 import datetime
 import unittest
 import sqlite3 as sqlite
+import weakref
+from test import support
 
 class RegressionTests(unittest.TestCase):
 
@@ -119,6 +121,9 @@ class RegressionTests(unittest.TestCase):
         except:
             self.fail('should have raised ProgrammingError')
 
+        with self.assertRaisesRegexp(sqlite.ProgrammingError, '^Base Cursor\\.__init__ not called\\.$'):
+            cur.close()
+
     def CheckConnectionConstructorCallCheck(self):
 
         class Connection(sqlite.Connection):
@@ -172,22 +177,6 @@ class RegressionTests(unittest.TestCase):
         cur.execute('pragma page_size')
         row = cur.fetchone()
 
-    def CheckSetDict(self):
-
-        class NotHashable:
-
-            def __call__(self, *args, **kw):
-                pass
-
-            def __hash__(self):
-                raise TypeError()
-
-        var = NotHashable()
-        self.assertRaises(TypeError, self.con.create_function, var)
-        self.assertRaises(TypeError, self.con.create_aggregate, var)
-        self.assertRaises(TypeError, self.con.set_authorizer, var)
-        self.assertRaises(TypeError, self.con.set_progress_handler, var)
-
     def CheckConnectionCall(self):
         self.assertRaises(sqlite.Warning, self.con, 1)
 
@@ -217,10 +206,112 @@ class RegressionTests(unittest.TestCase):
     def CheckInvalidIsolationLevelType(self):
         self.assertRaises(TypeError, sqlite.connect, ':memory:', isolation_level=123)
 
+    def CheckNullCharacter(self):
+        con = sqlite.connect(':memory:')
+        self.assertRaises(ValueError, con, '\x00select 1')
+        self.assertRaises(ValueError, con, 'select 1\x00')
+        cur = con.cursor()
+        self.assertRaises(ValueError, cur.execute, ' \x00select 2')
+        self.assertRaises(ValueError, cur.execute, 'select 2\x00')
+
+    def CheckCommitCursorReset(self):
+        con = sqlite.connect(':memory:')
+        con.executescript('\n        create table t(c);\n        create table t2(c);\n        insert into t values(0);\n        insert into t values(1);\n        insert into t values(2);\n        ')
+        self.assertEqual(con.isolation_level, '')
+        counter = 0
+        for i, row in enumerate(con.execute('select c from t')):
+            con.execute('insert into t2(c) values (?)', (i,))
+            con.commit()
+            if counter == 0:
+                self.assertEqual(row[0], 0)
+            elif counter == 1:
+                self.assertEqual(row[0], 1)
+            elif counter == 2:
+                self.assertEqual(row[0], 2)
+            counter += 1
+
+        self.assertEqual(counter, 3, 'should have returned exactly three rows')
+
+    def CheckBpo31770(self):
+
+        def callback(*args):
+            pass
+
+        con = sqlite.connect(':memory:')
+        cur = sqlite.Cursor(con)
+        ref = weakref.ref(cur, callback)
+        cur.__init__(con)
+        del cur
+        del ref
+        support.gc_collect()
+
+    def CheckDelIsolation_levelSegfault(self):
+        with self.assertRaises(AttributeError):
+            del self.con.isolation_level
+
+
+class UnhashableFunc():
+
+    def __hash__(self):
+        raise TypeError('unhashable type')
+
+    def __init__(self, return_value=None):
+        self.calls = 0
+        self.return_value = return_value
+
+    def __call__(self, *args, **kwargs):
+        self.calls += 1
+        return self.return_value
+
+
+class UnhashableCallbacksTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.con = sqlite.connect(':memory:')
+
+    def tearDown(self):
+        self.con.close()
+
+    def test_progress_handler(self):
+        f = UnhashableFunc(return_value=0)
+        with self.assertRaisesRegexp(TypeError, 'unhashable type'):
+            self.con.set_progress_handler(f, 1)
+        self.con.execute('SELECT 1')
+        self.assertFalse(f.calls)
+
+    def test_func(self):
+        func_name = 'func_name'
+        f = UnhashableFunc()
+        with self.assertRaisesRegexp(TypeError, 'unhashable type'):
+            self.con.create_function(func_name, 0, f)
+        msg = 'no such function: %s' % func_name
+        with self.assertRaisesRegexp(sqlite.OperationalError, msg):
+            self.con.execute('SELECT %s()' % func_name)
+        self.assertFalse(f.calls)
+
+    def test_authorizer(self):
+        f = UnhashableFunc(return_value=sqlite.SQLITE_DENY)
+        with self.assertRaisesRegexp(TypeError, 'unhashable type'):
+            self.con.set_authorizer(f)
+        self.con.execute('SELECT 1')
+        self.assertFalse(f.calls)
+
+    def test_aggr(self):
+
+        class UnhashableType(type):
+            __hash__ = None
+
+        aggr_name = 'aggr_name'
+        with self.assertRaisesRegexp(TypeError, 'unhashable type'):
+            self.con.create_aggregate(aggr_name, 0, UnhashableType('Aggr', (), {}))
+        msg = 'no such function: %s' % aggr_name
+        with self.assertRaisesRegexp(sqlite.OperationalError, msg):
+            self.con.execute('SELECT %s()' % aggr_name)
+
 
 def suite():
     regression_suite = unittest.makeSuite(RegressionTests, 'Check')
-    return unittest.TestSuite((regression_suite,))
+    return unittest.TestSuite((regression_suite, unittest.makeSuite(UnhashableCallbacksTestCase)))
 
 
 def test():

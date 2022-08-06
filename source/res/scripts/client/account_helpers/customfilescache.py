@@ -16,6 +16,7 @@ from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import getFullClientVersion
 from soft_exception import SoftException
 from helpers import isPlayerAccount
+from external_strings_utils import unicode_from_utf8
 INFINITE_QUEUE_SIZE = 0
 _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
@@ -236,7 +237,7 @@ class ThreadPool(object):
 class CustomFilesCache(object):
 
     def __init__(self, cacheFolder):
-        prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
+        prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
         self.__cacheDir = os.path.join(os.path.dirname(prefsFilePath), cacheFolder)
         self.__cacheDir = os.path.normpath(self.__cacheDir)
         self.__mutex = threading.RLock()
@@ -442,7 +443,7 @@ class CustomFilesCache(object):
             except urllib2.HTTPError as e:
                 LOG_WARNING('Http error. Code: %d, url: %s' % (e.code, url))
             except urllib2.URLError as e:
-                LOG_WARNING('Url error. Reason: %s, url: %s' % (str(e.reason) if isinstance(e.reason, basestring) else 'unknown', url))
+                LOG_WARNING('Url error. Reason: %r, url: %s' % (e.reason, url))
             except ValueError as e:
                 LOG_WARNING('Value error. Reason: %s, url: %s' % (e, url))
             except Exception as e:

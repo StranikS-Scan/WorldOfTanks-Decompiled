@@ -54,6 +54,7 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYE
         vehiclesInSlot = vehiclesInSlotFilters.get(idx, ())
         slot['isMatchingEnabled'] = canSetupPlayersMatching
         slot['isFiltersEnabled'] = maxLegionariesNotReached
+        slot['isRemoveAvailable'] = unitEntity.getPermissions().canReassignToSlot() or slot['isCurrentUserInSlot']
         if slot['player'] is not None:
             slot['filterState'] = 0
             slot['vehicles'] = ()

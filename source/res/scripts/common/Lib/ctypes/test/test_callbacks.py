@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_callbacks.py
+import functools
 import unittest
 from ctypes import *
+from ctypes.test import need_symbol
 import _ctypes_test
 
 class Callbacks(unittest.TestCase):
@@ -83,6 +85,11 @@ class Callbacks(unittest.TestCase):
         self.check_type(c_char, 'x')
         self.check_type(c_char, 'a')
 
+    @unittest.skip('test disabled')
+    def test_char_p(self):
+        self.check_type(c_char_p, 'abc')
+        self.check_type(c_char_p, 'def')
+
     def test_pyobject(self):
         o = ()
         from sys import getrefcount as grc
@@ -134,14 +141,12 @@ class Callbacks(unittest.TestCase):
         return
 
 
-try:
-    WINFUNCTYPE
-except NameError:
-    pass
-else:
-
-    class StdcallCallbacks(Callbacks):
+@need_symbol('WINFUNCTYPE')
+class StdcallCallbacks(Callbacks):
+    try:
         functype = WINFUNCTYPE
+    except NameError:
+        pass
 
 
 class SampleCallbacksTestCase(unittest.TestCase):
@@ -167,7 +172,7 @@ class SampleCallbacksTestCase(unittest.TestCase):
         from ctypes.util import find_library
         libc_path = find_library('c')
         if not libc_path:
-            return
+            self.skipTest('could not find libc')
         libc = CDLL(libc_path)
 
         @CFUNCTYPE(c_int, POINTER(c_int), POINTER(c_int))
@@ -182,24 +187,19 @@ class SampleCallbacksTestCase(unittest.TestCase):
          33,
          99])
 
-    try:
-        WINFUNCTYPE
-    except NameError:
-        pass
-    else:
+    @need_symbol('WINFUNCTYPE')
+    def test_issue_8959_b(self):
+        global windowCount
+        from ctypes.wintypes import BOOL, HWND, LPARAM
+        windowCount = 0
 
-        def test_issue_8959_b(self):
+        @WINFUNCTYPE(BOOL, HWND, LPARAM)
+        def EnumWindowsCallbackFunc(hwnd, lParam):
             global windowCount
-            from ctypes.wintypes import BOOL, HWND, LPARAM
-            windowCount = 0
+            windowCount += 1
+            return True
 
-            @WINFUNCTYPE(BOOL, HWND, LPARAM)
-            def EnumWindowsCallbackFunc(hwnd, lParam):
-                global windowCount
-                windowCount += 1
-                return True
-
-            windll.user32.EnumWindows(EnumWindowsCallbackFunc, 0)
+        windll.user32.EnumWindows(EnumWindowsCallbackFunc, 0)
 
     def test_callback_register_int(self):
         dll = CDLL(_ctypes_test.__file__)
@@ -236,6 +236,42 @@ class SampleCallbacksTestCase(unittest.TestCase):
 
         result = func(1.1, 2.2, 3.3, 4.4, 5.5, CALLBACK(callback))
         self.assertEqual(result, callback(1.2100000000000002, 4.840000000000001, 10.889999999999999, 19.360000000000003, 30.25))
+
+    def test_callback_large_struct(self):
+
+        class Check:
+            pass
+
+        class X(Structure):
+            _fields_ = [('first', c_ulong), ('second', c_ulong), ('third', c_ulong)]
+
+        def callback(check, s):
+            check.first = s.first
+            check.second = s.second
+            check.third = s.third
+            s.first = s.second = s.third = 195948557
+
+        check = Check()
+        s = X()
+        s.first = 3735928559L
+        s.second = 3405691582L
+        s.third = 195894762
+        CALLBACK = CFUNCTYPE(None, X)
+        dll = CDLL(_ctypes_test.__file__)
+        func = dll._testfunc_cbk_large_struct
+        func.argtypes = (X, CALLBACK)
+        func.restype = None
+        func(s, CALLBACK(functools.partial(callback, check)))
+        self.assertEqual(check.first, s.first)
+        self.assertEqual(check.second, s.second)
+        self.assertEqual(check.third, s.third)
+        self.assertEqual(check.first, 3735928559L)
+        self.assertEqual(check.second, 3405691582L)
+        self.assertEqual(check.third, 195894762)
+        self.assertEqual(s.first, check.first)
+        self.assertEqual(s.second, check.second)
+        self.assertEqual(s.third, check.third)
+        return
 
 
 if __name__ == '__main__':

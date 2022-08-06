@@ -31,7 +31,7 @@ def relate(relation, value, label):
         value = value
     relation = backport.text(R.strings.quests.details.requirementsRelation.dyn(relation)())
     rlabel = backport.text(R.strings.quests.details.requirements.relation(), relation=relation, value=value)
-    return '{}{}'.format(label, rlabel)
+    return u'{}{}'.format(label, rlabel)
 
 
 def prepareAccountConditionsGroup(conditions, event):

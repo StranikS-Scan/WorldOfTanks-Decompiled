@@ -27,7 +27,7 @@ class EpicMessagePanel(GameMessagesPanelMeta):
     def hideHint(self, hint):
         pass
 
-    def sendEndGameMessage(self, winningTeam, reason):
+    def sendEndGameMessage(self, winningTeam, reason, extraData):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
         if winningTeam == 0:
             messageType = GAME_MESSAGES_CONSTS.DRAW

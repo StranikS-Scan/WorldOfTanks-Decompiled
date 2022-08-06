@@ -5,7 +5,7 @@ from Tkconstants import TOP, LEFT, X, W, SUNKEN
 import re
 from sys import maxint as INFINITY
 from idlelib.configHandler import idleConf
-BLOCKOPENERS = set(['class',
+BLOCKOPENERS = {'class',
  'def',
  'elif',
  'else',
@@ -15,7 +15,7 @@ BLOCKOPENERS = set(['class',
  'if',
  'try',
  'while',
- 'with'])
+ 'with'}
 UPDATEINTERVAL = 100
 FONTUPDATEINTERVAL = 1000
 getspacesfirstword = lambda s, c=re.compile('^(\\s*)(\\w*)'): c.match(s).groups()

@@ -210,7 +210,7 @@ class Server(object):
                 try:
                     send(msg)
                 except Exception as e:
-                    send(('#UNSERIALIZABLE', repr(msg)))
+                    send(('#UNSERIALIZABLE', format_exc()))
 
             except Exception as e:
                 util.info('exception in thread serving %r', threading.current_thread().name)
@@ -883,6 +883,7 @@ class ListProxy(BaseListProxy):
 DictProxy = MakeProxyType('DictProxy', ('__contains__',
  '__delitem__',
  '__getitem__',
+ '__iter__',
  '__len__',
  '__setitem__',
  'clear',
@@ -896,6 +897,7 @@ DictProxy = MakeProxyType('DictProxy', ('__contains__',
  'setdefault',
  'update',
  'values'))
+DictProxy._method_to_typeid_ = {'__iter__': 'Iterator'}
 ArrayProxy = MakeProxyType('ArrayProxy', ('__len__',
  '__getitem__',
  '__setitem__',

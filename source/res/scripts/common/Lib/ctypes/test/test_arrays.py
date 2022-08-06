@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_arrays.py
 import unittest
+from test.support import precisionbigmemtest, _2G
+import sys
 from ctypes import *
+from ctypes.test import need_symbol
 formats = 'bBhHiIlLqQfd'
 formats = (c_byte,
  c_ubyte,
@@ -24,16 +27,20 @@ class ArrayTestCase(unittest.TestCase):
             int_array = ARRAY(fmt, alen)
             ia = int_array(*init)
             self.assertEqual(len(ia), alen)
-            values = [ ia[i] for i in range(len(init)) ]
+            values = [ ia[i] for i in range(alen) ]
             self.assertEqual(values, init)
+            with self.assertRaises(IndexError):
+                ia[alen]
+            with self.assertRaises(IndexError):
+                ia[-alen - 1]
             from operator import setitem
             new_values = range(42, 42 + alen)
             [ setitem(ia, n, new_values[n]) for n in range(alen) ]
-            values = [ ia[i] for i in range(len(init)) ]
+            values = [ ia[i] for i in range(alen) ]
             self.assertEqual(values, new_values)
             ia = int_array()
-            values = [ ia[i] for i in range(len(init)) ]
-            self.assertEqual(values, [0] * len(init))
+            values = [ ia[i] for i in range(alen) ]
+            self.assertEqual(values, [0] * alen)
             self.assertRaises(IndexError, int_array, *range(alen * 2))
 
         CharArray = ARRAY(c_char, 3)
@@ -89,22 +96,17 @@ class ArrayTestCase(unittest.TestCase):
         self.assertEqual(sz.value, 'foo')
         return
 
-    try:
-        create_unicode_buffer
-    except NameError:
-        pass
-    else:
-
-        def test_from_addressW(self):
-            p = create_unicode_buffer('foo')
-            sz = (c_wchar * 3).from_address(addressof(p))
-            self.assertEqual(sz[:], 'foo')
-            self.assertEqual(sz[::], 'foo')
-            self.assertEqual(sz[::-1], 'oof')
-            self.assertEqual(sz[::3], 'f')
-            self.assertEqual(sz[1:4:2], 'o')
-            self.assertEqual(sz.value, 'foo')
-            return
+    @need_symbol('create_unicode_buffer')
+    def test_from_addressW(self):
+        p = create_unicode_buffer('foo')
+        sz = (c_wchar * 3).from_address(addressof(p))
+        self.assertEqual(sz[:], 'foo')
+        self.assertEqual(sz[::], 'foo')
+        self.assertEqual(sz[::-1], 'oof')
+        self.assertEqual(sz[::3], 'f')
+        self.assertEqual(sz[1:4:2], 'o')
+        self.assertEqual(sz.value, 'foo')
+        return
 
     def test_cache(self):
 
@@ -114,6 +116,32 @@ class ArrayTestCase(unittest.TestCase):
         t1 = my_int * 1
         t2 = my_int * 1
         self.assertIs(t1, t2)
+
+    def test_empty_element_struct(self):
+
+        class EmptyStruct(Structure):
+            _fields_ = []
+
+        obj = (EmptyStruct * 2)()
+        self.assertEqual(sizeof(obj), 0)
+
+    def test_empty_element_array(self):
+
+        class EmptyArray(Array):
+            _type_ = c_int
+            _length_ = 0
+
+        obj = (EmptyArray * 2)()
+        self.assertEqual(sizeof(obj), 0)
+
+    def test_bpo36504_signed_int_overflow(self):
+        with self.assertRaises(OverflowError):
+            c_char * sys.maxsize * 2
+
+    @unittest.skipUnless(sys.maxsize > 4294967296L, 'requires 64bit platform')
+    @precisionbigmemtest(size=_2G, memuse=1, dry_run=False)
+    def test_large_array(self, size):
+        a = c_char * size
 
 
 if __name__ == '__main__':

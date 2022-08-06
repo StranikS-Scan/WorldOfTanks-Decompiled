@@ -149,7 +149,7 @@ _math_functions = ['acos',
  'sqrt',
  'tan',
  'tanh']
-__all__ = _tg_classes + _tg_screen_functions + _tg_turtle_functions + _tg_utilities + _math_functions
+__all__ = _tg_classes + _tg_screen_functions + _tg_turtle_functions + _tg_utilities + ['Terminator'] + _math_functions
 _alias_list = ['addshape',
  'backward',
  'bk',
@@ -199,7 +199,7 @@ def config_dict(filename):
             continue
         try:
             key, value = line.split('=')
-        except:
+        except ValueError:
             print 'Bad line in config-file %s:\n%s' % (filename, line)
             continue
 
@@ -213,7 +213,7 @@ def config_dict(filename):
                     value = float(value)
                 else:
                     value = int(value)
-            except:
+            except ValueError:
                 pass
 
         cfgdict[key] = value
@@ -232,7 +232,7 @@ def readconfig(cfgdict):
     try:
         head, tail = split(__file__)
         cfg_file2 = join(head, default_cfg)
-    except:
+    except BaseException:
         cfg_file2 = ''
 
     if isfile(cfg_file2):
@@ -243,7 +243,7 @@ def readconfig(cfgdict):
 
 try:
     readconfig(_CFG)
-except:
+except BaseException:
     print 'No configfile read, reason unknown'
 
 class Vec2D(tuple):
@@ -258,7 +258,7 @@ class Vec2D(tuple):
         return self[0] * other[0] + self[1] * other[1] if isinstance(other, Vec2D) else Vec2D(self[0] * other, self[1] * other)
 
     def __rmul__(self, other):
-        return Vec2D(self[0] * other, self[1] * other) if isinstance(other, int) or isinstance(other, float) else None
+        return Vec2D(self[0] * other, self[1] * other) if isinstance(other, (int, long, float)) else None
 
     def __sub__(self, other):
         return Vec2D(self[0] - other[0], self[1] - other[1])
@@ -565,7 +565,7 @@ class TurtleScreenBase(object):
                 try:
                     x, y = self.cv.canvasx(event.x) / self.xscale, -self.cv.canvasy(event.y) / self.yscale
                     fun(x, y)
-                except:
+                except BaseException:
                     pass
 
             self.cv.tag_bind(item, '<Button%s-Motion>' % num, eventfun, add)
@@ -606,7 +606,8 @@ class TurtleScreenBase(object):
     def _createimage(self, image):
         return self.cv.create_image(0, 0, image=image)
 
-    def _drawimage(self, item, (x, y), image):
+    def _drawimage(self, item, pos, image):
+        x, y = pos
         self.cv.coords(item, (x * self.xscale, -y * self.yscale))
         self.cv.itemconfig(item, image=image)
 
@@ -882,7 +883,7 @@ class TurtleScreen(TurtleScreenBase):
             raise TurtleGraphicsError('bad color string: %s' % str(color))
         try:
             r, g, b = color
-        except:
+        except (TypeError, ValueError):
             raise TurtleGraphicsError('bad color arguments: %s' % str(color))
 
         if self._colormode == 1.0:
@@ -951,7 +952,7 @@ class TurtleScreen(TurtleScreenBase):
 
     def _incrementudc(self):
         if not TurtleScreen._RUNNING:
-            TurtleScreen._RUNNNING = True
+            TurtleScreen._RUNNING = True
             raise Terminator
         if self._tracing > 0:
             self._updatecounter += 1
@@ -1372,7 +1373,7 @@ class TPen(object):
             self._resizemode = p['resizemode']
         if 'stretchfactor' in p:
             sf = p['stretchfactor']
-            if isinstance(sf, (int, float)):
+            if isinstance(sf, (int, long, float)):
                 sf = (sf, sf)
             self._stretchfactor = sf
         if 'outline' in p:
@@ -1483,7 +1484,7 @@ class RawTurtle(TPen, TNavigator):
         self._update()
 
     def setundobuffer(self, size):
-        if size is None:
+        if size is None or size <= 0:
             self.undobuffer = None
         else:
             self.undobuffer = Tbuffer(size)
@@ -1548,7 +1549,7 @@ class RawTurtle(TPen, TNavigator):
             return args
         try:
             r, g, b = args
-        except:
+        except (TypeError, ValueError):
             raise TurtleGraphicsError('bad color arguments: %s' % str(args))
 
         if self.screen._colormode == 1.0:
@@ -2129,7 +2130,7 @@ class _Screen(TurtleScreen):
             Turtle._screen = None
             _Screen._root = None
             _Screen._canvas = None
-        TurtleScreen._RUNNING = True
+        TurtleScreen._RUNNING = False
         root.destroy()
         return
 
@@ -2163,18 +2164,6 @@ class Turtle(RawTurtle):
 
 Pen = Turtle
 
-def _getpen():
-    if Turtle._pen is None:
-        Turtle._pen = Turtle()
-    return Turtle._pen
-
-
-def _getscreen():
-    if Turtle._screen is None:
-        Turtle._screen = Screen()
-    return Turtle._screen
-
-
 def write_docstringdict(filename='turtle_docstringdict'):
     docsdict = {}
     for methodname in _tg_screen_functions:
@@ -2206,7 +2195,7 @@ def read_docstrings(lang):
     for key in docsdict:
         try:
             eval(key).im_func.__doc__ = docsdict[key]
-        except:
+        except BaseException:
             print 'Bad docstring-entry: %s' % key
 
 
@@ -2216,7 +2205,7 @@ try:
         read_docstrings(_LANGUAGE)
 except ImportError:
     print 'Cannot find docsdict for', _LANGUAGE
-except:
+except BaseException:
     print 'Unknown Error when trying to import %s-docstring-dictionary' % _LANGUAGE
 
 def getmethparlist(ob):
@@ -2277,32 +2266,23 @@ def _screen_docrevise(docstr):
         return newdocstr
 
 
-for methodname in _tg_screen_functions:
-    pl1, pl2 = getmethparlist(eval('_Screen.' + methodname))
-    if pl1 == '':
-        print '>>>>>>', pl1, pl2
-        continue
-    defstr = 'def %(key)s%(pl1)s: return _getscreen().%(key)s%(pl2)s' % {'key': methodname,
-     'pl1': pl1,
-     'pl2': pl2}
-    exec defstr
-    eval(methodname).__doc__ = _screen_docrevise(eval('_Screen.' + methodname).__doc__)
+__func_body = 'def {name}{paramslist}:\n    if {obj} is None:\n        if not TurtleScreen._RUNNING:\n            TurtleScreen._RUNNING = True\n            raise Terminator\n        {obj} = {init}\n    try:\n        return {obj}.{name}{argslist}\n    except TK.TclError:\n        if not TurtleScreen._RUNNING:\n            TurtleScreen._RUNNING = True\n            raise Terminator\n        raise\n'
 
-for methodname in _tg_turtle_functions:
-    pl1, pl2 = getmethparlist(eval('Turtle.' + methodname))
-    if pl1 == '':
-        print '>>>>>>', pl1, pl2
-        continue
-    defstr = 'def %(key)s%(pl1)s: return _getpen().%(key)s%(pl2)s' % {'key': methodname,
-     'pl1': pl1,
-     'pl2': pl2}
-    exec defstr
-    eval(methodname).__doc__ = _turtle_docrevise(eval('Turtle.' + methodname).__doc__)
+def _make_global_funcs(functions, cls, obj, init, docrevise):
+    for methodname in functions:
+        method = getattr(cls, methodname)
+        pl1, pl2 = getmethparlist(method)
+        if pl1 == '':
+            print '>>>>>>', pl1, pl2
+            continue
+        defstr = __func_body.format(obj=obj, init=init, name=methodname, paramslist=pl1, argslist=pl2)
+        exec defstr in globals()
+        globals()[methodname].__doc__ = docrevise(method.__doc__)
 
+
+_make_global_funcs(_tg_screen_functions, _Screen, 'Turtle._screen', 'Screen()', _screen_docrevise)
+_make_global_funcs(_tg_turtle_functions, Turtle, 'Turtle._pen', 'Turtle()', _turtle_docrevise)
 done = mainloop = TK.mainloop
-del pl1
-del pl2
-del defstr
 if __name__ == '__main__':
 
     def switchpen():

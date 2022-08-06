@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
+import typing
 import logging
 import time
 import types
@@ -776,6 +777,7 @@ class _PrbControlLoader(IPrbControlLoader):
     def createBattleDispatcher(self):
         if self.__prbDispatcher is None:
             self.__prbDispatcher = _PreBattleDispatcher()
+            g_playerEvents.onPrbDispatcherCreated()
         if self.__isEnabled:
             self.__doStart()
         return

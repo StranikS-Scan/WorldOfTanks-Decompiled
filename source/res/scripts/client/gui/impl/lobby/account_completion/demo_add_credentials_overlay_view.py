@@ -15,8 +15,6 @@ from gui.shared.event_dispatcher import showDemoConfirmCredentialsOverlay, showD
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.platform.wgnp_controllers import IWGNPDemoAccRequestController
-from uilogging.account_completion.constants import LogGroup, ViewClosingResult
-from uilogging.account_completion.loggers import AccountCompletionViewLogger
 rAccCompletion = R.strings.dialogs.accountCompletion
 if typing.TYPE_CHECKING:
     from async import _Future
@@ -29,7 +27,6 @@ class DemoAddCredentialsOverlayView(BaseCredentialsOverlayView):
     _IS_CLOSE_BUTTON_VISIBLE = False
     _wgnpDemoAccCtrl = dependency.descriptor(IWGNPDemoAccRequestController)
     _bootcampController = dependency.descriptor(IBootcampController)
-    _uiLogger = AccountCompletionViewLogger(LogGroup.CREDENTIALS)
 
     def createToolTipContent(self, event, contentID):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -41,12 +38,9 @@ class DemoAddCredentialsOverlayView(BaseCredentialsOverlayView):
     def activate(self, *args, **kwargs):
         super(DemoAddCredentialsOverlayView, self).activate(*args, **kwargs)
         self._wgnpDemoAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__confirmedHandler)
-        self._uiLogger.viewOpened(self.getParentWindow(), type=AccountCompletionType.UNDEFINED)
 
     def deactivate(self):
         self._wgnpDemoAccCtrl.statusEvents.unsubscribe(StatusTypes.CONFIRMED, self.__confirmedHandler)
-        pwd = self._password
-        self._uiLogger.viewClosed(was_eye_clicked=pwd.wasPasswordVisibilityChanged, is_eye_on=pwd.isPasswordVisible)
         super(DemoAddCredentialsOverlayView, self).deactivate()
 
     def _validateInput(self):
@@ -60,12 +54,10 @@ class DemoAddCredentialsOverlayView(BaseCredentialsOverlayView):
         return self._wgnpDemoAccCtrl.addCredentials(email, password)
 
     def _handleSuccess(self, response):
-        self._uiLogger.setParams(result=ViewClosingResult.SUCCESS)
         self._handleTokenWaiting(response)
 
     def _handleTokenWaiting(self, response):
         completionType = AccountCompletionType.SOI if response.isCreated else AccountCompletionType.DOI
-        self._uiLogger.setParams(type=completionType)
         status = self._wgnpDemoAccCtrl.getCurrentStatus()
         if status == StatusTypes.CONFIRMATION_SENT:
             showDemoWaitingForTokenOverlayViewOverlay(completionType=completionType)

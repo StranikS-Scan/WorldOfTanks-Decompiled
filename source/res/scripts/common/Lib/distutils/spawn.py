@@ -145,7 +145,7 @@ def _spawn_posix(cmd, search_path=1, verbose=0, dry_run=0):
 
 def find_executable(executable, path=None):
     if path is None:
-        path = os.environ['PATH']
+        path = os.environ.get('PATH', os.defpath)
     paths = path.split(os.pathsep)
     base, ext = os.path.splitext(executable)
     if (sys.platform == 'win32' or os.name == 'os2') and ext != '.exe':

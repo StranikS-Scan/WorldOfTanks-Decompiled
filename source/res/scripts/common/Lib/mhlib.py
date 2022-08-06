@@ -79,7 +79,7 @@ class MH():
     def listsubfolders(self, name):
         fullname = os.path.join(self.path, name)
         nlinks = os.stat(fullname).st_nlink
-        if nlinks <= 2:
+        if nlinks == 2:
             return []
         subfolders = []
         subnames = os.listdir(fullname)
@@ -89,7 +89,7 @@ class MH():
                 name_subname = os.path.join(name, subname)
                 subfolders.append(name_subname)
                 nlinks = nlinks - 1
-                if nlinks <= 2:
+                if nlinks == 2:
                     break
 
         subfolders.sort()
@@ -101,7 +101,7 @@ class MH():
     def listallsubfolders(self, name):
         fullname = os.path.join(self.path, name)
         nlinks = os.stat(fullname).st_nlink
-        if nlinks <= 2:
+        if nlinks == 2:
             return []
         subfolders = []
         subnames = os.listdir(fullname)
@@ -116,7 +116,7 @@ class MH():
                     subsubfolders = self.listallsubfolders(name_subname)
                     subfolders = subfolders + subsubfolders
                 nlinks = nlinks - 1
-                if nlinks <= 2:
+                if nlinks == 2:
                     break
 
         subfolders.sort()

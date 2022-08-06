@@ -8,7 +8,7 @@ from base64 import standard_b64encode
 import urlparse
 import cStringIO as StringIO
 from hashlib import md5
-from distutils.errors import DistutilsOptionError
+from distutils.errors import DistutilsError, DistutilsOptionError
 from distutils.core import PyPIRCCommand
 from distutils.spawn import spawn
 from distutils import log
@@ -42,7 +42,8 @@ class upload(PyPIRCCommand):
 
     def run(self):
         if not self.distribution.dist_files:
-            raise DistutilsOptionError('No dist file created in earlier command')
+            msg = 'Must create and upload files in one command (e.g. setup.py sdist upload)'
+            raise DistutilsOptionError(msg)
         for command, pyversion, filename in self.distribution.dist_files:
             self.upload_file(command, pyversion, filename)
 
@@ -101,8 +102,8 @@ class upload(PyPIRCCommand):
             data['gpg_signature'] = (os.path.basename(filename) + '.asc', open(filename + '.asc').read())
         auth = 'Basic ' + standard_b64encode(self.username + ':' + self.password)
         boundary = '--------------GHSKFJDLGDS7543FJKLFHRE75642756743254'
-        sep_boundary = '\n--' + boundary
-        end_boundary = sep_boundary + '--'
+        sep_boundary = '\r\n--' + boundary
+        end_boundary = sep_boundary + '--\r\n'
         body = StringIO.StringIO()
         for key, value in data.items():
             if not isinstance(value, list):
@@ -114,15 +115,12 @@ class upload(PyPIRCCommand):
                 else:
                     fn = ''
                 body.write(sep_boundary)
-                body.write('\nContent-Disposition: form-data; name="%s"' % key)
+                body.write('\r\nContent-Disposition: form-data; name="%s"' % key)
                 body.write(fn)
-                body.write('\n\n')
+                body.write('\r\n\r\n')
                 body.write(value)
-                if value and value[-1] == '\r':
-                    body.write('\n')
 
         body.write(end_boundary)
-        body.write('\n')
         body = body.getvalue()
         self.announce('Submitting %s to %s' % (filename, self.repository), log.INFO)
         headers = {'Content-type': 'multipart/form-data; boundary=%s' % boundary,
@@ -138,7 +136,7 @@ class upload(PyPIRCCommand):
                 self.announce(msg, log.INFO)
         except socket.error as e:
             self.announce(str(e), log.ERROR)
-            return
+            raise
         except HTTPError as e:
             status = e.code
             reason = e.msg
@@ -146,4 +144,6 @@ class upload(PyPIRCCommand):
         if status == 200:
             self.announce('Server response (%s): %s' % (status, reason), log.INFO)
         else:
-            self.announce('Upload failed (%s): %s' % (status, reason), log.ERROR)
+            msg = 'Upload failed (%s): %s' % (status, reason)
+            self.announce(msg, log.ERROR)
+            raise DistutilsError(msg)

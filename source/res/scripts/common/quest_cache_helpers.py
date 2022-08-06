@@ -41,7 +41,7 @@ def readQuestsFromFile(filePath, eventType):
                 continue
             questName = questData.get('name', None)
             if questName:
-                questName = makeI18nString(questName['key'])
+                questName = makeI18nString(questName.get('key', ''))
             questDescr = questData.get('description', None)
             if questDescr:
                 questDescr = makeI18nString(questDescr['key'])

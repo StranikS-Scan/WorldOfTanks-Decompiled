@@ -99,9 +99,9 @@ def readStringItem(xmlCtx, section, settings=None):
 
 
 def readUnicodeItem(xmlCtx, section, settings=None):
-    return readItem(xmlCtx, section, 'readString', converter=lambda value: unicode(value, 'utf-8', 'ignore'), settings=settings)
+    return readItem(xmlCtx, section, 'readWideString', settings=settings)
 
 
 def readI18nStringItem(xmlCtx, section, settings=None):
-    name, value = readItem(xmlCtx, section, 'readString', converter=html_translation, settings=settings)
+    name, value = readItem(xmlCtx, section, 'readWideString', converter=html_translation, settings=settings)
     return (name, value)

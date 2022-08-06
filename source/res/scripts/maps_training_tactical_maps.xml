@@ -13,27 +13,24 @@
               <points>
                 <point>
                   <id>	a_ht_gorge	</id>
-                  <textKeys>	a_ht_gorgePhrase1 a_ht_gorgePhrase2 a_ht_gorgePhrase3	</textKeys>
                   <position>	63 67	</position>
                   <tooltipImage>	karelia_a_ht_gorge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_plain	</id>
-                  <textKeys>	a_ht_plainPhrase	</textKeys>
-                  <position>	114 123	</position>
-                  <tooltipImage>	karelia_a_ht_plain	</tooltipImage>
+                  <id>	a_ht_plateau	</id>
+                  <position>	154 118	</position>
+                  <tooltipImage>	karelia_a_ht_plateau	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_ht_boulders	</id>
-                  <textKeys>	a_ht_bouldersPhrase	</textKeys>
-                  <position>	16 246	</position>
+                  <position>	31 248	</position>
                   <tooltipImage>	karelia_a_ht_boulders	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_plateau	</id>
-                  <textKeys>	a_ht_plateauPhrase1 a_ht_plateauPhrase2	</textKeys>
-                  <position>	73 432	</position>
-                  <tooltipImage>	karelia_a_ht_plateau	</tooltipImage>
+                  <id>	a_ht_southernPlateau	</id>
+                  <position>	113 450	</position>
+                  <tooltipImage>	karelia_a_ht_southernPlateau	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -42,29 +39,35 @@
               <points>
                 <point>
                   <id>	a_mt_bottomArrival	</id>
-                  <textKeys>	a_mt_bottomArrivalPhrase	</textKeys>
-                  <position>	421 383	</position>
+                  <position>	364 444	</position>
                   <tooltipImage>	karelia_a_mt_bottomArrival	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_mountain	</id>
-                  <textKeys>	a_mt_mountainPhrase1 a_mt_mountainPhrase2	</textKeys>
-                  <position>	366 354	</position>
+                  <position>	449 307	</position>
                   <tooltipImage>	karelia_a_mt_mountain	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_swamp	</id>
-                  <textKeys>	a_mt_swampPhrase	</textKeys>
-                  <position>	309 302	</position>
+                  <position>	257 238	</position>
                   <tooltipImage>	karelia_a_mt_swamp	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_plateau	</id>
-                  <textKeys>	a_mt_plateauPhrase	</textKeys>
-                  <position>	142 484	</position>
-                  <tooltipImage>	karelia_a_mt_plateau	</tooltipImage>
+                  <id>	a_mt_balcony	</id>
+                  <position>	329 365	</position>
+                  <tooltipImage>	karelia_a_mt_balcony	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_southernPlateau	</id>
+                  <position>	83 432	</position>
+                  <tooltipImage>	karelia_a_mt_southernPlateau	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_creek	</id>
+                  <position>	241 461	</position>
+                  <tooltipImage>	karelia_a_mt_creek	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -79,29 +82,31 @@
               <points>
                 <point>
                   <id>	b_ht_ledge	</id>
-                  <textKeys>	b_ht_ledgePhrase	</textKeys>
-                  <position>	355 486	</position>
+                  <position>	337 491	</position>
                   <tooltipImage>	karelia_b_ht_ledge	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_bigStones	</id>
-                  <textKeys>	b_ht_bigStonesPhrase	</textKeys>
-                  <position>	408 467	</position>
+                  <position>	456 448	</position>
                   <tooltipImage>	karelia_b_ht_bigStones	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_mountain	</id>
-                  <textKeys>	b_ht_mountainPhrase1 b_ht_mountainPhrase2 b_ht_mountainPhrase3	</textKeys>
-                  <position>	380 394	</position>
+                  <position>	433 320	</position>
                   <tooltipImage>	karelia_b_ht_mountain	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
+                  <id>	b_ht_upperEntrance	</id>
+                  <position>	401 384	</position>
+                  <tooltipImage>	karelia_b_ht_upperEntrance	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
                   <id>	b_ht_northernPlateau	</id>
-                  <textKeys>	b_ht_northernPlateauPhrase	</textKeys>
-                  <position>	432 102	</position>
+                  <position>	443 135	</position>
                   <tooltipImage>	karelia_b_ht_northernPlateau	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
@@ -111,27 +116,24 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_plain	</id>
-                  <textKeys>	b_mt_plainPhrase	</textKeys>
-                  <position>	122 122	</position>
-                  <tooltipImage>	karelia_b_mt_plain	</tooltipImage>
+                  <id>	b_mt_plateau	</id>
+                  <position>	137 111	</position>
+                  <tooltipImage>	karelia_b_mt_plateau	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_gorge	</id>
-                  <textKeys>	b_mt_gorgePhrase1 b_mt_gorgePhrase2 b_mt_gorgePhrase3	</textKeys>
-                  <position>	60 65	</position>
+                  <position>	31 28	</position>
                   <tooltipImage>	karelia_b_mt_gorge	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_boulders	</id>
-                  <textKeys>	b_mt_bouldersPhrase	</textKeys>
-                  <position>	242 23	</position>
+                  <position>	237 19	</position>
                   <tooltipImage>	karelia_b_mt_boulders	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_northernPlateau	</id>
-                  <textKeys>	b_mt_northernPlateauPhrase	</textKeys>
-                  <position>	431 100	</position>
+                  <position>	445 113	</position>
                   <tooltipImage>	karelia_b_mt_northernPlateau	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
@@ -307,29 +309,43 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_courtyardFountain	</id>
-                  <textKeys>	a_ht_courtyardFountainPhrase1 a_ht_courtyardFountainPhrase2 a_ht_courtyardFountainPhrase3	</textKeys>
-                  <position>	111 243	</position>
-                  <tooltipImage>	campania_big_a_ht_courtyardFountain	</tooltipImage>
+                  <id>	a_ht_unfinishedBridge	</id>
+                  <position>	271 426	</position>
+                  <tooltipImage>	campania_big_a_ht_unfinishedBridge	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_ht_westernLowerPassage	</id>
-                  <textKeys>	a_ht_westernLowerPassagePhrase	</textKeys>
-                  <position>	162 216	</position>
-                  <tooltipImage>	campania_big_a_ht_westernLowerPassage	</tooltipImage>
+                  <id>	a_ht_lowerHairpinTurn	</id>
+                  <position>	361 403	</position>
+                  <tooltipImage>	campania_big_a_ht_lowerHairpinTurn	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_ht_shelf	</id>
+                  <position>	449 465	</position>
+                  <tooltipImage>	campania_big_a_ht_shelf	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_easternVillage	</id>
+                  <position>	432 319	</position>
+                  <tooltipImage>	campania_big_a_ht_easternVillage	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_ht_monastery	</id>
-                  <textKeys>	a_ht_monasteryPhrase	</textKeys>
-                  <position>	413 179	</position>
+                  <position>	408 193	</position>
                   <tooltipImage>	campania_big_a_ht_monastery	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_ht_easternLowerPassage	</id>
-                  <textKeys>	a_ht_easternLowerPassagePhrase	</textKeys>
-                  <position>	364 390	</position>
-                  <tooltipImage>	campania_big_a_ht_easternLowerPassage	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_ht_garden	</id>
+                  <position>	466 60	</position>
+                  <tooltipImage>	campania_big_a_ht_garden	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_valley	</id>
+                  <position>	279 133	</position>
+                  <tooltipImage>	campania_big_a_ht_valley	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -337,38 +353,31 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	a_mt_unfinishedBridge	</id>
-                  <textKeys>	a_mt_unfinishedBridgePhrase1 a_mt_unfinishedBridgePhrase2	</textKeys>
-                  <position>	223 409	</position>
-                  <tooltipImage>	campania_big_a_mt_unfinishedBridge	</tooltipImage>
+                  <id>	a_mt_courtyardFountain	</id>
+                  <position>	104 257	</position>
+                  <tooltipImage>	campania_big_a_mt_courtyardFountain	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_easternLowerPassage	</id>
-                  <textKeys>	a_mt_easternLowerPassagePhrase	</textKeys>
-                  <position>	370 376	</position>
-                  <tooltipImage>	campania_big_a_mt_easternLowerPassage	</tooltipImage>
+                  <id>	a_mt_upperHairpinTurn	</id>
+                  <position>	153 220	</position>
+                  <tooltipImage>	campania_big_a_mt_upperHairpinTurn	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_lowerHairpinTurn	</id>
+                  <position>	359 414	</position>
+                  <tooltipImage>	campania_big_a_mt_lowerHairpinTurn	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_houseCliff	</id>
-                  <textKeys>	a_mt_houseCliffPhrase	</textKeys>
-                  <position>	467 450	</position>
-                  <tooltipImage>	campania_big_a_mt_houseCliff	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	a_mt_easternUpperPassage	</id>
-                  <textKeys>	a_mt_easternUpperPassagePhrase	</textKeys>
-                  <position>	449 347	</position>
-                  <tooltipImage>	campania_big_a_mt_easternUpperPassage	</tooltipImage>
+                  <id>	a_mt_valley	</id>
+                  <position>	204 92	</position>
+                  <tooltipImage>	campania_big_a_mt_valley	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_monastery	</id>
-                  <textKeys>	a_mt_monasteryPhrase	</textKeys>
-                  <position>	398 222	</position>
+                  <position>	407 174	</position>
                   <tooltipImage>	campania_big_a_mt_monastery	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -377,37 +386,32 @@
         <team>
           <id>	2	</id>
           <position>	231 84	</position>
-          <isLeft>	true	</isLeft>
           <configs>
             <config>
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_easternUpperPassage	</id>
-                  <textKeys>	b_ht_easternUpperPassagePhrase1 b_ht_easternUpperPassagePhrase2	</textKeys>
-                  <position>	435 355	</position>
-                  <tooltipImage>	campania_big_b_ht_easternUpperPassage	</tooltipImage>
+                  <id>	b_ht_easternVillage	</id>
+                  <position>	442 293	</position>
+                  <tooltipImage>	campania_big_b_ht_easternVillage	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_unfinishedBridge	</id>
-                  <textKeys>	b_ht_unfinishedBridgePhrase	</textKeys>
                   <position>	298 421	</position>
                   <tooltipImage>	campania_big_b_ht_unfinishedBridge	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_ht_riseSouth	</id>
-                  <textKeys>	b_ht_riseSouthPhrase	</textKeys>
-                  <position>	197 459	</position>
-                  <tooltipImage>	campania_big_b_ht_riseSouth	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_ht_shelf	</id>
+                  <position>	457 459	</position>
+                  <tooltipImage>	campania_big_b_ht_shelf	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_courtyardFountain	</id>
-                  <textKeys>	b_ht_courtyardFountainPhrase	</textKeys>
-                  <position>	99 249	</position>
-                  <tooltipImage>	campania_big_b_ht_courtyardFountain	</tooltipImage>
+                  <id>	b_ht_southernAscent	</id>
+                  <position>	192 460	</position>
+                  <tooltipImage>	campania_big_b_ht_southernAscent	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -415,29 +419,29 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_lake	</id>
-                  <textKeys>	b_mt_lakePhrase	</textKeys>
-                  <position>	53 208	</position>
-                  <tooltipImage>	campania_big_b_mt_lake	</tooltipImage>
-                </point>
-                <point>
                   <id>	b_mt_courtyardFountain	</id>
-                  <textKeys>	b_mt_courtyardFountainPhrase1 b_mt_courtyardFountainPhrase2	</textKeys>
                   <position>	106 246	</position>
                   <tooltipImage>	campania_big_b_mt_courtyardFountain	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_easternLowerPassage	</id>
-                  <textKeys>	b_mt_easternLowerPassagePhrase	</textKeys>
-                  <position>	395 296	</position>
-                  <tooltipImage>	campania_big_b_mt_easternLowerPassage	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_mt_valley	</id>
+                  <position>	257 169	</position>
+                  <tooltipImage>	campania_big_b_mt_valley	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_monastery	</id>
-                  <textKeys>	b_mt_monasteryPhrase	</textKeys>
-                  <position>	413 180	</position>
-                  <tooltipImage>	campania_big_b_mt_monastery	</tooltipImage>
+                  <id>	b_mt_lakeShelf	</id>
+                  <position>	75 173	</position>
+                  <tooltipImage>	campania_big_b_mt_lakeShelf	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_lake	</id>
+                  <position>	49 210	</position>
+                  <tooltipImage>	campania_big_b_mt_lake	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_lowerHairpinTurn	</id>
+                  <position>	362 411	</position>
+                  <tooltipImage>	campania_big_b_mt_easternLowerPassage	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -617,34 +621,40 @@
         <team>
           <id>	1	</id>
           <position>	278 23	</position>
-          <isLeft>	true	</isLeft>
           <configs>
             <config>
               <type>	heavyTank	</type>
               <points>
                 <point>
                   <id>	a_ht_smallYard	</id>
-                  <textKeys>	a_ht_smallYardPhrase	</textKeys>
-                  <position>	89 250	</position>
+                  <position>	114 252	</position>
                   <tooltipImage>	ensk_a_ht_smallYard	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_square	</id>
-                  <textKeys>	a_ht_squarePhrase	</textKeys>
-                  <position>	200 278	</position>
-                  <tooltipImage>	ensk_a_ht_square	</tooltipImage>
-                </point>
-                <point>
                   <id>	a_ht_centralStreet	</id>
-                  <textKeys>	a_ht_centralStreetPhrase1 a_ht_centralStreetPhrase2	</textKeys>
-                  <position>	125 311	</position>
+                  <position>	125 317	</position>
                   <tooltipImage>	ensk_a_ht_centralStreet	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_largeCourtyard	</id>
-                  <textKeys>	a_ht_largeCourtyardPhrase	</textKeys>
+                  <id>	a_ht_largeYard	</id>
                   <position>	89 387	</position>
-                  <tooltipImage>	ensk_a_ht_largeCourtyard	</tooltipImage>
+                  <tooltipImage>	ensk_a_ht_largeYard	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_square	</id>
+                  <position>	201 280	</position>
+                  <tooltipImage>	ensk_a_ht_square	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_stadium	</id>
+                  <position>	141 536	</position>
+                  <tooltipImage>	ensk_a_ht_stadium	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_southernVillage	</id>
+                  <position>	528 543	</position>
+                  <tooltipImage>	ensk_a_ht_southernVillage	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -652,31 +662,38 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	a_mt_city	</id>
-                  <textKeys>	a_mt_cityPhrase	</textKeys>
-                  <position>	230 403	</position>
-                  <tooltipImage>	ensk_a_mt_city	</tooltipImage>
+                  <id>	a_mt_industrialArea	</id>
+                  <position>	416 263	</position>
+                  <tooltipImage>	ensk_a_mt_industrialArea	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_forest	</id>
+                  <position>	546 318	</position>
+                  <tooltipImage>	ensk_a_mt_forest	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_mt_storages	</id>
+                  <position>	403 403	</position>
+                  <tooltipImage>	ensk_a_mt_storages	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_southernVillage	</id>
-                  <textKeys>	a_mt_southernVillagePhrase1 a_mt_southernVillagePhrase2	</textKeys>
-                  <position>	539 529	</position>
+                  <position>	538 528	</position>
                   <tooltipImage>	ensk_a_mt_southernVillage	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_warehouses	</id>
-                  <textKeys>	a_mt_warehousesPhrase	</textKeys>
-                  <position>	403 403	</position>
-                  <tooltipImage>	ensk_a_mt_warehouses	</tooltipImage>
+                  <id>	a_mt_platform	</id>
+                  <position>	295 440	</position>
+                  <tooltipImage>	ensk_a_mt_platform	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_industrialZone	</id>
-                  <textKeys>	a_mt_industrialZonePhrase1 a_mt_industrialZonePhrase2	</textKeys>
-                  <position>	418 265	</position>
-                  <tooltipImage>	ensk_a_mt_industrialZone	</tooltipImage>
+                  <id>	a_mt_stadium	</id>
+                  <position>	147 526	</position>
+                  <tooltipImage>	ensk_a_mt_stadium	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -691,28 +708,30 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
+                  <id>	b_ht_largeYard	</id>
+                  <position>	99 385	</position>
+                  <tooltipImage>	ensk_b_ht_largeYard	</tooltipImage>
+                </point>
+                <point>
                   <id>	b_ht_centralStreet	</id>
-                  <textKeys>	b_ht_centralStreetPhrase	</textKeys>
                   <position>	126 313	</position>
                   <tooltipImage>	ensk_b_ht_centralStreet	</tooltipImage>
                 </point>
                 <point>
+                  <id>	b_ht_square	</id>
+                  <position>	200 280	</position>
+                  <tooltipImage>	ensk_b_ht_square	</tooltipImage>
+                </point>
+                <point>
                   <id>	b_ht_smallYard	</id>
-                  <textKeys>	b_ht_smallYardPhrase	</textKeys>
-                  <position>	88 273	</position>
+                  <position>	108 238	</position>
                   <tooltipImage>	ensk_b_ht_smallYard	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_boulevard	</id>
-                  <textKeys>	b_ht_boulevardPhrase1 b_ht_boulevardPhrase2 b_ht_boulevardPhrase3	</textKeys>
-                  <position>	15 210	</position>
-                  <tooltipImage>	ensk_b_ht_boulevard	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_ht_lane	</id>
-                  <textKeys>	b_ht_lanePhrase	</textKeys>
-                  <position>	152 173	</position>
-                  <tooltipImage>	ensk_b_ht_lane	</tooltipImage>
+                  <id>	b_ht_northernVillage	</id>
+                  <position>	496 71	</position>
+                  <tooltipImage>	ensk_b_ht_northernVillage	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -720,29 +739,31 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_warehouses	</id>
-                  <textKeys>	b_mt_warehousesPhrase	</textKeys>
-                  <position>	404 395	</position>
-                  <tooltipImage>	ensk_b_mt_warehouses	</tooltipImage>
+                  <id>	b_mt_storages	</id>
+                  <position>	404 404	</position>
+                  <tooltipImage>	ensk_b_mt_storages	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_industrialZone	</id>
-                  <textKeys>	b_mt_industrialZonePhrase1 b_mt_industrialZonePhrase2	</textKeys>
-                  <position>	417 265	</position>
-                  <tooltipImage>	ensk_b_mt_industrialZone	</tooltipImage>
+                  <id>	b_mt_forest	</id>
+                  <position>	538 299	</position>
+                  <tooltipImage>	ensk_b_mt_forest	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_square	</id>
-                  <textKeys>	b_mt_squarePhrase	</textKeys>
-                  <position>	200 279	</position>
-                  <tooltipImage>	ensk_b_mt_square	</tooltipImage>
+                  <id>	b_mt_industrialArea	</id>
+                  <position>	417 265	</position>
+                  <tooltipImage>	ensk_b_mt_industrialArea	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_northVillage	</id>
-                  <textKeys>	b_mt_northVillagePhrase	</textKeys>
-                  <position>	497 39	</position>
-                  <tooltipImage>	ensk_b_mt_northVillage	</tooltipImage>
+                  <id>	b_mt_northernVillage	</id>
+                  <position>	509 67	</position>
+                  <tooltipImage>	ensk_b_mt_northernVillage	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_northernSuburb	</id>
+                  <position>	206 53	</position>
+                  <tooltipImage>	ensk_b_mt_northernSuburb	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -756,36 +777,31 @@
       <teams>
         <team>
           <id>	1	</id>
-          <position>	138 28	</position>
+          <position>	139 23	</position>
           <isLeft>	true	</isLeft>
           <configs>
             <config>
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_pass	</id>
-                  <textKeys>	a_ht_passPhrase1 a_ht_passPhrase2	</textKeys>
-                  <position>	77 303	</position>
-                  <tooltipImage>	lakeville_a_ht_pass	</tooltipImage>
+                  <id>	a_ht_mountainPass	</id>
+                  <position>	77 298	</position>
+                  <tooltipImage>	lakeville_a_ht_mountainPass	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_southEntrance	</id>
-                  <textKeys>	a_ht_southEntrancePhrase	</textKeys>
-                  <position>	59 468	</position>
-                  <tooltipImage>	lakeville_a_ht_southEntrance	</tooltipImage>
+                  <id>	a_ht_southernEntrance	</id>
+                  <position>	63 446	</position>
+                  <tooltipImage>	lakeville_a_ht_southernEntrance	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_yuzhnyKhutor	</id>
-                  <textKeys>	a_ht_yuzhnyKhutorPhrase	</textKeys>
-                  <position>	462 495	</position>
-                  <tooltipImage>	lakeville_a_ht_yuzhnyKhutor	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_ht_path	</id>
+                  <position>	219 291	</position>
+                  <tooltipImage>	lakeville_a_ht_path	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_city	</id>
-                  <textKeys>	a_ht_cityPhrase1 a_ht_cityPhrase2	</textKeys>
-                  <position>	467 273	</position>
-                  <tooltipImage>	lakeville_a_ht_city	</tooltipImage>
+                  <id>	a_ht_town	</id>
+                  <position>	466 276	</position>
+                  <tooltipImage>	lakeville_a_ht_town	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -794,38 +810,33 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
+                  <id>	a_mt_path	</id>
+                  <position>	208 262	</position>
+                  <tooltipImage>	lakeville_a_mt_path	</tooltipImage>
+                </point>
+                <point>
                   <id>	a_mt_mill	</id>
-                  <textKeys>	a_mt_millPhrase	</textKeys>
                   <position>	388 68	</position>
                   <tooltipImage>	lakeville_a_mt_mill	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_city	</id>
-                  <textKeys>	a_mt_cityPhrase1 a_mt_cityPhrase2	</textKeys>
+                  <id>	a_mt_town	</id>
                   <position>	470 214	</position>
-                  <tooltipImage>	lakeville_a_mt_city	</tooltipImage>
+                  <tooltipImage>	lakeville_a_mt_town	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_church	</id>
-                  <textKeys>	a_mt_churchPhrase	</textKeys>
                   <position>	512 272	</position>
                   <tooltipImage>	lakeville_a_mt_church	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_yuzhnyKhutor	</id>
-                  <textKeys>	a_mt_yuzhnyKhutorPhrase	</textKeys>
-                  <position>	511 431	</position>
-                  <tooltipImage>	lakeville_a_mt_yuzhnyKhutor	</tooltipImage>
+                  <id>	a_mt_southernSuburb	</id>
+                  <position>	494 416	</position>
+                  <tooltipImage>	lakeville_a_mt_southernSuburb	</tooltipImage>
                   <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	a_mt_gorge	</id>
-                  <textKeys>	a_mt_gorgePhrase	</textKeys>
-                  <position>	71 335	</position>
-                  <tooltipImage>	lakeville_a_mt_gorge	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -839,36 +850,24 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_pass	</id>
-                  <textKeys>	b_ht_passPhrase1 b_ht_passPhrase2	</textKeys>
+                  <id>	b_ht_mountainPass	</id>
                   <position>	72 305	</position>
-                  <tooltipImage>	lakeville_b_ht_pass	</tooltipImage>
+                  <tooltipImage>	lakeville_b_ht_mountainPass	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_entranceNorth	</id>
-                  <textKeys>	b_ht_entranceNorthPhrase	</textKeys>
-                  <position>	119 81	</position>
-                  <tooltipImage>	lakeville_b_ht_entranceNorth	</tooltipImage>
+                  <id>	b_ht_northernEntrance	</id>
+                  <position>	61 112	</position>
+                  <tooltipImage>	lakeville_b_ht_northernEntrance	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_mill	</id>
-                  <textKeys>	b_ht_millPhrase	</textKeys>
-                  <position>	388 68	</position>
-                  <tooltipImage>	lakeville_b_ht_mill	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_ht_path	</id>
+                  <position>	205 259	</position>
+                  <tooltipImage>	lakeville_b_ht_path	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_church	</id>
-                  <textKeys>	b_ht_churchPhrase	</textKeys>
-                  <position>	511 273	</position>
-                  <tooltipImage>	lakeville_b_ht_church	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	b_ht_city	</id>
-                  <textKeys>	b_ht_cityPhrase1 b_ht_cityPhrase2	</textKeys>
-                  <position>	429 300	</position>
-                  <tooltipImage>	lakeville_b_ht_city	</tooltipImage>
+                  <id>	b_ht_town	</id>
+                  <position>	458 289	</position>
+                  <tooltipImage>	lakeville_b_ht_town	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -877,43 +876,32 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_yuzhnyKhutor	</id>
-                  <textKeys>	b_mt_yuzhnyKhutorPhrase	</textKeys>
-                  <position>	466 524	</position>
-                  <tooltipImage>	lakeville_b_mt_yuzhnyKhutor	</tooltipImage>
+                  <id>	b_mt_southernSuburb	</id>
+                  <position>	471 508	</position>
+                  <tooltipImage>	lakeville_b_mt_southernSuburb	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_path	</id>
+                  <position>	208 224	</position>
+                  <tooltipImage>	lakeville_b_mt_path	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_town	</id>
+                  <position>	489 330	</position>
+                  <tooltipImage>	lakeville_b_mt_town	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_church	</id>
-                  <textKeys>	b_mt_churchPhrase	</textKeys>
                   <position>	497 274	</position>
                   <tooltipImage>	lakeville_b_mt_church	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_mill	</id>
-                  <textKeys>	b_mt_millPhrase	</textKeys>
-                  <position>	384 69	</position>
-                  <tooltipImage>	lakeville_b_mt_mill	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	b_mt_severnyKhutor	</id>
-                  <textKeys>	b_mt_severnyKhutorPhrase	</textKeys>
-                  <position>	240 15	</position>
-                  <tooltipImage>	lakeville_b_mt_severnyKhutor	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_mt_trail	</id>
-                  <textKeys>	b_mt_trailPhrase	</textKeys>
-                  <position>	208 224	</position>
-                  <tooltipImage>	lakeville_b_mt_trail	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_mt_city	</id>
-                  <textKeys>	b_mt_cityPhrase1 b_mt_cityPhrase2	</textKeys>
-                  <position>	429 300	</position>
-                  <tooltipImage>	lakeville_b_mt_city	</tooltipImage>
+                  <id>	b_mt_northernSuburb	</id>
+                  <position>	453 140	</position>
+                  <tooltipImage>	lakeville_b_mt_northernSuburb	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -934,34 +922,39 @@
               <points>
                 <point>
                   <id>	a_ht_centralSquare	</id>
-                  <textKeys>	a_ht_centralSquarePhrase1 a_ht_centralSquarePhrase2	</textKeys>
-                  <position>	30 344	</position>
+                  <position>	22 340	</position>
                   <tooltipImage>	ruinberg_a_ht_centralSquare	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_church	</id>
-                  <textKeys>	a_ht_churchPhrase	</textKeys>
-                  <position>	87 382	</position>
+                  <position>	91 386	</position>
                   <tooltipImage>	ruinberg_a_ht_church	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_ht_southernYard	</id>
+                  <position>	36 540	</position>
+                  <tooltipImage>	ruinberg_a_ht_southernYard	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_centralStreet	</id>
-                  <textKeys>	a_ht_centralStreetPhrase	</textKeys>
                   <position>	277 283	</position>
                   <tooltipImage>	ruinberg_a_ht_centralStreet	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_outerArc	</id>
-                  <textKeys>	a_ht_outerArcPhrase	</textKeys>
-                  <position>	297 439	</position>
-                  <tooltipImage>	ruinberg_a_ht_outerArc	</tooltipImage>
+                  <id>	a_ht_suburb	</id>
+                  <position>	340 457	</position>
+                  <tooltipImage>	ruinberg_a_ht_suburb	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_southField	</id>
-                  <textKeys>	a_ht_southFieldPhrase	</textKeys>
-                  <position>	448 392	</position>
-                  <tooltipImage>	ruinberg_a_ht_southField	</tooltipImage>
+                  <id>	a_ht_village	</id>
+                  <position>	522 242	</position>
+                  <tooltipImage>	ruinberg_a_ht_village	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_ht_alley	</id>
+                  <position>	516 439	</position>
+                  <tooltipImage>	ruinberg_a_ht_alley	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -970,38 +963,32 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	a_mt_northField	</id>
-                  <textKeys>	a_mt_northFieldPhrase	</textKeys>
-                  <position>	429 127	</position>
-                  <tooltipImage>	ruinberg_a_mt_northField	</tooltipImage>
+                  <id>	a_mt_northernPark	</id>
+                  <position>	402 166	</position>
+                  <tooltipImage>	ruinberg_a_mt_northernPark	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_crossroads	</id>
-                  <textKeys>	a_mt_crossroadsPhrase1 a_mt_crossroadsPhrase2	</textKeys>
-                  <position>	522 270	</position>
-                  <tooltipImage>	ruinberg_a_mt_crossroads	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	a_mt_southField	</id>
-                  <textKeys>	a_mt_southFieldPhrase	</textKeys>
-                  <position>	407 365	</position>
-                  <tooltipImage>	ruinberg_a_mt_southField	</tooltipImage>
+                  <id>	a_mt_village	</id>
+                  <position>	521 267	</position>
+                  <tooltipImage>	ruinberg_a_mt_village	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_alley	</id>
-                  <textKeys>	a_mt_alleyPhrase	</textKeys>
-                  <position>	518 459	</position>
-                  <tooltipImage>	ruinberg_a_mt_alley	</tooltipImage>
+                  <position>	517 451	</position>
+                  <tooltipImage>	ruinberg_a_mt_alleye	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_church	</id>
-                  <textKeys>	a_mt_churchPhrase	</textKeys>
-                  <position>	87 382	</position>
-                  <tooltipImage>	ruinberg_a_mt_church	</tooltipImage>
+                  <id>	a_mt_suburb	</id>
+                  <position>	343 470	</position>
+                  <tooltipImage>	ruinberg_a_mt_suburb	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_centralStreet	</id>
+                  <position>	243 288	</position>
+                  <tooltipImage>	ruinberg_a_mt_centralStreet	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1016,34 +1003,39 @@
               <points>
                 <point>
                   <id>	b_ht_church	</id>
-                  <textKeys>	b_ht_churchPhrase	</textKeys>
-                  <position>	87 382	</position>
+                  <position>	91 390	</position>
                   <tooltipImage>	ruinberg_b_ht_church	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_centralSquare	</id>
-                  <textKeys>	b_ht_centralSquarePhrase1 b_ht_centralSquarePhrase2	</textKeys>
                   <position>	12 330	</position>
                   <tooltipImage>	ruinberg_b_ht_centralSquare	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_innerArc	</id>
-                  <textKeys>	b_ht_innerArcPhrase	</textKeys>
+                  <id>	b_ht_northernYard	</id>
+                  <position>	157 21	</position>
+                  <tooltipImage>	ruinberg_b_ht_northernYard	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_internalArc	</id>
                   <position>	168 308	</position>
-                  <tooltipImage>	ruinberg_b_ht_innerArc	</tooltipImage>
+                  <tooltipImage>	ruinberg_b_ht_internalArc	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_ht_centralStreet	</id>
-                  <textKeys>	b_ht_centralStreetPhrase	</textKeys>
-                  <position>	255 287	</position>
+                  <position>	250 288	</position>
                   <tooltipImage>	ruinberg_b_ht_centralStreet	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_northField	</id>
-                  <textKeys>	b_ht_northFieldPhrase	</textKeys>
-                  <position>	412 165	</position>
-                  <tooltipImage>	ruinberg_b_ht_northField	</tooltipImage>
+                  <id>	b_ht_village	</id>
+                  <position>	535 272	</position>
+                  <tooltipImage>	ruinberg_b_ht_village	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_ht_alley	</id>
+                  <position>	520 112	</position>
+                  <tooltipImage>	ruinberg_b_ht_alley	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -1052,38 +1044,33 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_southField	</id>
-                  <textKeys>	b_mt_southFieldPhrase	</textKeys>
-                  <position>	448 392	</position>
-                  <tooltipImage>	ruinberg_b_mt_southField	</tooltipImage>
+                  <id>	b_mt_centralStreet	</id>
+                  <position>	246 288	</position>
+                  <tooltipImage>	ruinberg_b_mt_centralStreet	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_crossroads	</id>
-                  <textKeys>	b_mt_crossroadsPhrase1 b_mt_crossroadsPhrase2	</textKeys>
+                  <id>	b_mt_southernPark	</id>
+                  <position>	450 397	</position>
+                  <tooltipImage>	ruinberg_b_mt_southernPark	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_village	</id>
                   <position>	521 274	</position>
-                  <tooltipImage>	ruinberg_b_mt_crossroads	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	b_mt_northField	</id>
-                  <textKeys>	b_mt_northFieldPhrase	</textKeys>
-                  <position>	420 140	</position>
-                  <tooltipImage>	ruinberg_b_mt_northField	</tooltipImage>
+                  <tooltipImage>	ruinberg_b_mt_village	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_alley	</id>
-                  <textKeys>	b_mt_alleyPhrase	</textKeys>
                   <position>	535 111	</position>
                   <tooltipImage>	ruinberg_b_mt_alley	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_courtyards	</id>
-                  <textKeys>	b_mt_courtyardsPhrase	</textKeys>
-                  <position>	347 12	</position>
-                  <tooltipImage>	ruinberg_b_mt_courtyards	</tooltipImage>
+                  <id>	b_mt_yards	</id>
+                  <position>	428 17	</position>
+                  <tooltipImage>	ruinberg_b_mt_yards	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -1104,35 +1091,34 @@
               <points>
                 <point>
                   <id>	a_ht_mountain	</id>
-                  <textKeys>	a_ht_mountainPhrase1 a_ht_mountainPhrase2	</textKeys>
                   <position>	309 263	</position>
                   <tooltipImage>	hills_a_ht_mountain	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_ruinedTower	</id>
-                  <textKeys>	a_ht_ruinedTowerPhrase	</textKeys>
-                  <position>	388 229	</position>
+                  <position>	400 235	</position>
                   <tooltipImage>	hills_a_ht_ruinedTower	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_ht_village	</id>
-                  <textKeys>	a_ht_villagePhrase1 a_ht_villagePhrase2	</textKeys>
-                  <position>	461 178	</position>
+                  <position>	430 188	</position>
                   <tooltipImage>	hills_a_ht_village	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_ht_upperEntrance	</id>
-                  <textKeys>	a_ht_upperEntrancePhrase	</textKeys>
                   <position>	216 203	</position>
                   <tooltipImage>	hills_a_ht_upperEntrance	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_shore	</id>
-                  <textKeys>	a_ht_shorePhrase	</textKeys>
-                  <position>	46 202	</position>
+                  <position>	47 224	</position>
                   <tooltipImage>	hills_a_ht_shore	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_balcony	</id>
+                  <position>	204 10	</position>
+                  <tooltipImage>	hills_a_ht_balcony	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1140,30 +1126,34 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
+                  <id>	a_mt_balcony	</id>
+                  <position>	204 10	</position>
+                  <tooltipImage>	hills_a_mt_balcony	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_mountain	</id>
+                  <position>	313 260	</position>
+                  <tooltipImage>	hills_a_mt_mountain	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_shore	</id>
+                  <position>	52 290	</position>
+                  <tooltipImage>	hills_a_mt_shore	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_upperEntrance	</id>
+                  <position>	228 178	</position>
+                  <tooltipImage>	hills_a_mt_upperEntrance	</tooltipImage>
+                </point>
+                <point>
                   <id>	a_mt_shelf	</id>
-                  <textKeys>	a_mt_shelfPhrase	</textKeys>
                   <position>	60 420	</position>
                   <tooltipImage>	hills_a_mt_shelf	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_mountain	</id>
-                  <textKeys>	a_mt_mountainPhrase1 a_mt_mountainPhrase2 a_mt_mountainPhrase3	</textKeys>
-                  <position>	313 260	</position>
-                  <tooltipImage>	hills_a_mt_mountain	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	a_mt_village	</id>
-                  <textKeys>	a_mt_villagePhrase	</textKeys>
-                  <position>	430 182	</position>
-                  <tooltipImage>	hills_a_mt_village	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	a_mt_shore	</id>
-                  <textKeys>	a_mt_shorePhrase	</textKeys>
-                  <position>	41 241	</position>
-                  <tooltipImage>	hills_a_mt_shore	</tooltipImage>
+                  <id>	a_mt_rock	</id>
+                  <position>	99 95	</position>
+                  <tooltipImage>	hills_a_mt_rock	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1172,41 +1162,38 @@
         <team>
           <id>	2	</id>
           <position>	93 29	</position>
+          <isLeft>	true	</isLeft>
           <configs>
             <config>
               <type>	heavyTank	</type>
               <points>
                 <point>
                   <id>	b_ht_mountain	</id>
-                  <textKeys>	b_ht_mountainPhrase1 b_ht_mountainPhrase2	</textKeys>
                   <position>	309 263	</position>
                   <tooltipImage>	hills_b_ht_mountain	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_ruinedTower	</id>
-                  <textKeys>	b_ht_ruinedTowerPhrase	</textKeys>
-                  <position>	388 229	</position>
-                  <tooltipImage>	hills_b_ht_ruinedTower	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	b_ht_village	</id>
-                  <textKeys>	b_ht_villagePhrase1 b_ht_villagePhrase2	</textKeys>
-                  <position>	461 178	</position>
-                  <tooltipImage>	hills_b_ht_village	</tooltipImage>
-                  <isLeft>	true	</isLeft>
-                </point>
-                <point>
                   <id>	b_ht_lowerEntrance	</id>
-                  <textKeys>	b_ht_lowerEntrancePhrase	</textKeys>
                   <position>	230 332	</position>
                   <tooltipImage>	hills_b_ht_lowerEntrance	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_ht_shore	</id>
-                  <textKeys>	b_ht_shorePhrase	</textKeys>
-                  <position>	46 202	</position>
-                  <tooltipImage>	hills_b_ht_shore	</tooltipImage>
+                  <id>	b_ht_stone	</id>
+                  <position>	199 223	</position>
+                  <tooltipImage>	hills_b_ht_stone	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_ht_southbalcony	</id>
+                  <position>	374 457	</position>
+                  <tooltipImage>	hills_b_ht_southbalcony	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_boulders	</id>
+                  <position>	222 271	</position>
+                  <tooltipImage>	hills_b_ht_boulders	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -1215,27 +1202,40 @@
               <points>
                 <point>
                   <id>	b_mt_shore	</id>
-                  <textKeys>	b_mt_shorePhrase1 b_mt_shorePhrase2	</textKeys>
-                  <position>	50 205	</position>
+                  <position>	75 242	</position>
                   <tooltipImage>	hills_b_mt_shore	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_shelf	</id>
-                  <textKeys>	b_mt_shelfPhrase	</textKeys>
                   <position>	54 420	</position>
                   <tooltipImage>	hills_b_mt_shelf	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_creek	</id>
-                  <textKeys>	b_mt_creekPhrase	</textKeys>
-                  <position>	194 545	</position>
+                  <position>	175 508	</position>
                   <tooltipImage>	hills_b_mt_creek	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_village	</id>
-                  <textKeys>	b_mt_villagePhrase	</textKeys>
-                  <position>	431 182	</position>
-                  <tooltipImage>	hills_b_mt_village	</tooltipImage>
+                  <id>	b_mt_spit	</id>
+                  <position>	38 484	</position>
+                  <tooltipImage>	hills_b_mt_spit	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_mountain	</id>
+                  <position>	220 282	</position>
+                  <tooltipImage>	hills_b_mt_mountain	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_southvillage	</id>
+                  <position>	438 545	</position>
+                  <tooltipImage>	hills_b_mt_southvillage	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_southbalcony	</id>
+                  <position>	344 484	</position>
+                  <tooltipImage>	hills_b_mt_southbalcony	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -1255,29 +1255,24 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_southernLoopholes	</id>
-                  <textKeys>	a_ht_southernLoopholesPhrase	</textKeys>
+                  <id>	a_ht_southernEmbrasure	</id>
                   <position>	113 312	</position>
-                  <tooltipImage>	munchen_a_ht_southernLoopholes	</tooltipImage>
+                  <tooltipImage>	munchen_a_ht_southernEmbrasure	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_bridge	</id>
-                  <textKeys>	a_ht_bridgePhrase1 a_ht_bridgePhrase2	</textKeys>
                   <position>	100 200	</position>
                   <tooltipImage>	munchen_a_ht_bridge	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_monument	</id>
-                  <textKeys>	a_ht_monumentPhrase	</textKeys>
-                  <position>	63 59	</position>
+                  <position>	34 63	</position>
                   <tooltipImage>	munchen_a_ht_monument	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_lake	</id>
-                  <textKeys>	a_ht_lakePhrase	</textKeys>
-                  <position>	419 171	</position>
+                  <position>	419 180	</position>
                   <tooltipImage>	munchen_a_ht_lake	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -1285,31 +1280,32 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	a_mt_depot	</id>
-                  <textKeys>	a_mt_depotPhrase	</textKeys>
-                  <position>	313 407	</position>
-                  <tooltipImage>	munchen_a_mt_depot	</tooltipImage>
-                </point>
-                <point>
                   <id>	a_mt_crossing	</id>
-                  <textKeys>	a_mt_crossingPhrase1 a_mt_crossingPhrase2	</textKeys>
                   <position>	473 376	</position>
                   <tooltipImage>	munchen_a_mt_crossing	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_lake	</id>
-                  <textKeys>	a_mt_lakePhrase	</textKeys>
-                  <position>	424 172	</position>
-                  <tooltipImage>	munchen_a_mt_lake	</tooltipImage>
+                  <id>	a_mt_depot	</id>
+                  <position>	547 238	</position>
+                  <tooltipImage>	munchen_a_mt_depot	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
+                  <id>	a_mt_lake	</id>
+                  <position>	419 180	</position>
+                  <tooltipImage>	munchen_a_mt_lake	</tooltipImage>
+                </point>
+                <point>
                   <id>	a_mt_ruinedStreet	</id>
-                  <textKeys>	a_mt_ruinedStreetPhrase	</textKeys>
-                  <position>	547 48	</position>
+                  <position>	546 47	</position>
                   <tooltipImage>	munchen_a_mt_ruinedStreet	</tooltipImage>
                   <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_mt_bridge	</id>
+                  <position>	98 199	</position>
+                  <tooltipImage>	munchen_a_mt_bridge	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1324,28 +1320,29 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_whiteBuilding	</id>
-                  <textKeys>	b_ht_whiteBuildingPhrase	</textKeys>
-                  <position>	172 124	</position>
-                  <tooltipImage>	munchen_b_ht_whiteBuilding	</tooltipImage>
-                </point>
-                <point>
                   <id>	b_ht_bridge	</id>
-                  <textKeys>	b_ht_bridgePhrase1 b_ht_bridgePhrase2	</textKeys>
-                  <position>	96 200	</position>
+                  <position>	99 201	</position>
                   <tooltipImage>	munchen_b_ht_bridge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_church	</id>
-                  <textKeys>	b_ht_churchPhrase	</textKeys>
-                  <position>	17 485	</position>
-                  <tooltipImage>	munchen_b_ht_church	</tooltipImage>
+                  <id>	b_ht_streetWithTrums	</id>
+                  <position>	77 288	</position>
+                  <tooltipImage>	munchen_b_ht_streetWithTrums	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_depot	</id>
-                  <textKeys>	b_ht_depotPhrase	</textKeys>
-                  <position>	307 409	</position>
-                  <tooltipImage>	munchen_b_ht_depot	</tooltipImage>
+                  <id>	b_ht_church	</id>
+                  <position>	5 487	</position>
+                  <tooltipImage>	munchen_b_ht_church	</tooltipImage>
+                </point>
+                <point>	as	  <id>	b_ht_ruinedStreet	</id>
+                  <position>	273 545	</position>
+                  <tooltipImage>	munchen_b_ht_ruinedStreet	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_ht_crashedTrain	</id>
+                  <position>	356 284	</position>
+                  <tooltipImage>	munchen_b_ht_crashedTrain	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1354,30 +1351,32 @@
               <points>
                 <point>
                   <id>	b_mt_lake	</id>
-                  <textKeys>	b_mt_lakePhrase	</textKeys>
-                  <position>	411 155	</position>
+                  <position>	419 180	</position>
                   <tooltipImage>	munchen_b_mt_lake	</tooltipImage>
-                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_destroyedTrain	</id>
-                  <textKeys>	b_mt_destroyedTrainPhrase	</textKeys>
+                  <id>	b_mt_crashedTrain	</id>
                   <position>	385 320	</position>
-                  <tooltipImage>	munchen_b_mt_destroyedTrain	</tooltipImage>
+                  <tooltipImage>	munchen_b_mt_crashedTrain	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_crossing	</id>
-                  <textKeys>	b_mt_crossingPhrase1 b_mt_crossingPhrase2	</textKeys>
                   <position>	466 375	</position>
                   <tooltipImage>	munchen_b_mt_crossing	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_depot	</id>
-                  <textKeys>	b_mt_depotPhrase	</textKeys>
-                  <position>	306 414	</position>
-                  <tooltipImage>	munchen_b_mt_depot	</tooltipImage>
+                  <id>	b_mt_hill	</id>
+                  <position>	534 537	</position>
+                  <tooltipImage>	munchen_b_mt_hill	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_ruinedStreet	</id>
+                  <position>	247 545	</position>
+                  <tooltipImage>	munchen_b_mt_ruinedStreet	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -1397,35 +1396,41 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_villageEast	</id>
-                  <textKeys>	a_ht_villageEastPhrase	</textKeys>
+                  <id>	a_ht_easternVillage	</id>
                   <position>	446 251	</position>
-                  <tooltipImage>	desert_a_ht_villageEast	</tooltipImage>
+                  <tooltipImage>	desert_a_ht_easternVillage	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_ht_rocks	</id>
-                  <textKeys>	a_ht_rocksPhrase	</textKeys>
-                  <position>	398 120	</position>
-                  <tooltipImage>	desert_a_ht_rocks	</tooltipImage>
+                  <id>	a_ht_mountains	</id>
+                  <position>	459 85	</position>
+                  <tooltipImage>	desert_a_ht_mountains	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_gorge	</id>
-                  <textKeys>	a_ht_gorgePhrase1 a_ht_gorgePhrase2	</textKeys>
-                  <position>	398 63	</position>
+                  <position>	419 50	</position>
                   <tooltipImage>	desert_a_ht_gorge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_villageWest	</id>
-                  <textKeys>	a_ht_villageWestPhrase	</textKeys>
-                  <position>	158 149	</position>
-                  <tooltipImage>	desert_a_ht_villageWest	</tooltipImage>
+                  <id>	a_ht_thoroughfare	</id>
+                  <position>	384 6	</position>
+                  <tooltipImage>	desert_a_ht_thoroughfare	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_ht_river	</id>
-                  <textKeys>	a_ht_riverPhrase	</textKeys>
-                  <position>	174 299	</position>
-                  <tooltipImage>	desert_a_ht_river	</tooltipImage>
+                  <id>	a_ht_dunes	</id>
+                  <position>	190 69	</position>
+                  <tooltipImage>	desert_a_ht_dunes	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_ravine	</id>
+                  <position>	65 112	</position>
+                  <tooltipImage>	desert_a_ht_ravine	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_balcony	</id>
+                  <position>	82 174	</position>
+                  <tooltipImage>	desert_a_ht_balcony	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1434,33 +1439,28 @@
               <points>
                 <point>
                   <id>	a_mt_temple	</id>
-                  <textKeys>	a_mt_templePhrase	</textKeys>
                   <position>	248 405	</position>
                   <tooltipImage>	desert_a_mt_temple	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_desert	</id>
-                  <textKeys>	a_mt_desertPhrase1 a_mt_desertPhrase2	</textKeys>
-                  <position>	101 465	</position>
-                  <tooltipImage>	desert_a_mt_desert	</tooltipImage>
+                  <id>	a_mt_hills	</id>
+                  <position>	99 484	</position>
+                  <tooltipImage>	desert_a_mt_hills	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_ledge	</id>
-                  <textKeys>	a_mt_ledgePhrase	</textKeys>
-                  <position>	7 289	</position>
-                  <tooltipImage>	desert_a_mt_ledge	</tooltipImage>
+                  <id>	a_mt_shelf	</id>
+                  <position>	18 292	</position>
+                  <tooltipImage>	desert_a_mt_shelf	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_villageWest	</id>
-                  <textKeys>	a_mt_villageWestPhrase	</textKeys>
+                  <id>	a_mt_westernVillage	</id>
                   <position>	152 132	</position>
-                  <tooltipImage>	desert_a_mt_villageWest	</tooltipImage>
+                  <tooltipImage>	desert_a_mt_westernVillage	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_cliff	</id>
-                  <textKeys>	a_mt_cliffPhrase	</textKeys>
-                  <position>	234 327	</position>
-                  <tooltipImage>	desert_a_mt_cliff	</tooltipImage>
+                  <id>	a_mt_longDune	</id>
+                  <position>	334 506	</position>
+                  <tooltipImage>	desert_a_mt_longDune	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1468,42 +1468,37 @@
         </team>
         <team>
           <id>	2	</id>
-          <position>	30 178	</position>
+          <position>	30 176	</position>
           <configs>
             <config>
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_temple	</id>
-                  <textKeys>	b_ht_templePhrase	</textKeys>
-                  <position>	245 406	</position>
-                  <tooltipImage>	desert_b_ht_temple	</tooltipImage>
+                  <id>	b_ht_shelf	</id>
+                  <position>	10 303	</position>
+                  <tooltipImage>	desert_b_ht_shelf	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_bigDune	</id>
+                  <position>	52 477	</position>
+                  <tooltipImage>	desert_b_ht_bigDune	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_hills	</id>
+                  <position>	138 529	</position>
+                  <tooltipImage>	desert_b_ht_hills	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_longDune	</id>
+                  <position>	374 508	</position>
+                  <tooltipImage>	desert_b_ht_longDune	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_ht_river	</id>
-                  <textKeys>	b_ht_riverPhrase1 b_ht_riverPhrase2	</textKeys>
-                  <position>	312 401	</position>
-                  <tooltipImage>	desert_b_ht_river	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_ht_villageEast	</id>
-                  <textKeys>	b_ht_villageEastPhrase	</textKeys>
-                  <position>	446 252	</position>
-                  <tooltipImage>	desert_b_ht_villageEast	</tooltipImage>
+                  <id>	b_ht_detour	</id>
+                  <position>	499 517	</position>
+                  <tooltipImage>	desert_b_ht_detour	</tooltipImage>
                   <isLeft>	true	</isLeft>
-                </point>
-                <point>
-                  <id>	b_ht_rocks	</id>
-                  <textKeys>	b_ht_rocksPhrase	</textKeys>
-                  <position>	398 121	</position>
-                  <tooltipImage>	desert_b_ht_rocks	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_ht_gorge	</id>
-                  <textKeys>	b_ht_gorgePhrase	</textKeys>
-                  <position>	403 54	</position>
-                  <tooltipImage>	desert_b_ht_gorge	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1511,35 +1506,37 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_villageWest	</id>
-                  <textKeys>	b_mt_villageWestPhrase	</textKeys>
+                  <id>	b_mt_westernVillage	</id>
                   <position>	157 145	</position>
-                  <tooltipImage>	desert_b_mt_villageWest	</tooltipImage>
+                  <tooltipImage>	desert_b_mt_westernVillage	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_rocks	</id>
-                  <textKeys>	b_mt_rocksPhrase1 b_mt_rocksPhrase2	</textKeys>
-                  <position>	342 40	</position>
+                  <position>	342 44	</position>
                   <tooltipImage>	desert_b_mt_rocks	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_gorge	</id>
-                  <textKeys>	b_mt_gorgePhrase	</textKeys>
-                  <position>	402 60	</position>
+                  <position>	400 57	</position>
                   <tooltipImage>	desert_b_mt_gorge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_villageEast	</id>
-                  <textKeys>	b_mt_villageEastPhrase	</textKeys>
+                  <id>	b_mt_easternVillage	</id>
                   <position>	445 247	</position>
-                  <tooltipImage>	desert_b_mt_villageEast	</tooltipImage>
+                  <tooltipImage>	desert_b_mt_easternVillage	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_river	</id>
-                  <textKeys>	b_mt_riverPhrase	</textKeys>
                   <position>	299 396	</position>
                   <tooltipImage>	desert_b_mt_river	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_mountain	</id>
+                  <position>	523 80	</position>
+                  <tooltipImage>	desert_b_mt_mountain	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -1558,60 +1555,69 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_fortress	</id>
-                  <textKeys>	a_ht_fortressPhrase1 a_ht_fortressPhrase2 a_ht_fortressPhrase3	</textKeys>
-                  <position>	94 156	</position>
-                  <tooltipImage>	el_hallouf_a_ht_fortress	</tooltipImage>
+                  <id>	a_ht_ludge	</id>
+                  <position>	96 47	</position>
+                  <tooltipImage>	el_hallouf_a_ht_ludge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_entranceFortress	</id>
-                  <textKeys>	a_ht_entranceFortressPhrase	</textKeys>
-                  <position>	87 199	</position>
-                  <tooltipImage>	el_hallouf_a_ht_entranceFortress	</tooltipImage>
+                  <id>	a_ht_ruin	</id>
+                  <position>	105 109	</position>
+                  <tooltipImage>	el_hallouf_a_ht_ruin	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_stoneRidge	</id>
-                  <textKeys>	a_ht_stoneRidgePhrase	</textKeys>
-                  <position>	117 353	</position>
-                  <tooltipImage>	el_hallouf_a_ht_stoneRidge	</tooltipImage>
+                  <id>	a_ht_westernRidge	</id>
+                  <position>	31 152	</position>
+                  <tooltipImage>	el_hallouf_a_ht_westernRidge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_shelf	</id>
-                  <textKeys>	a_ht_shelfPhrase	</textKeys>
-                  <position>	199 428	</position>
-                  <tooltipImage>	el_hallouf_a_ht_shelf	</tooltipImage>
+                  <id>	a_ht_southernTown	</id>
+                  <position>	44 426	</position>
+                  <tooltipImage>	el_hallouf_a_ht_southernTown	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_southernPlateau	</id>
+                  <position>	221 534	</position>
+                  <tooltipImage>	el_hallouf_a_ht_southernPlateau	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_hairpinTurn	</id>
+                  <position>	283 489	</position>
+                  <tooltipImage>	el_hallouf_a_ht_hairpinTurn	</tooltipImage>
                 </point>
               </points>
             </config>
             <config>
               <type>	mediumTank	</type>
               <points>
-                <point>
-                  <id>	a_mt_riverPlateau	</id>
-                  <textKeys>	a_mt_riverPlateauPhrase	</textKeys>
-                  <position>	476 410	</position>
-                  <tooltipImage>	el_hallouf_a_mt_riverPlateau	</tooltipImage>
+                <point>	]	  <id>	a_mt_easternPlateau	</id>
+                  <position>	429 363	</position>
+                  <tooltipImage>	el_hallouf_a_mt_easternPlateau	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_riverValley	</id>
-                  <textKeys>	a_mt_riverValleyPhrase1 a_mt_riverValleyPhrase2	</textKeys>
-                  <position>	420 454	</position>
-                  <tooltipImage>	el_hallouf_a_mt_riverValley	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_mt_valley	</id>
+                  <position>	372 395	</position>
+                  <tooltipImage>	el_hallouf_a_mt_valley	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_sandyRoad	</id>
-                  <textKeys>	a_mt_sandyRoadPhrase	</textKeys>
-                  <position>	355 510	</position>
-                  <tooltipImage>	el_hallouf_a_mt_sandyRoad	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_mt_hairpinTurn	</id>
+                  <position>	373 493	</position>
+                  <tooltipImage>	el_hallouf_a_mt_hairpinTurn	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_village	</id>
-                  <textKeys>	a_mt_villagePhrase	</textKeys>
-                  <position>	58 432	</position>
-                  <tooltipImage>	el_hallouf_a_mt_village	</tooltipImage>
+                  <id>	a_mt_southernPlateau	</id>
+                  <position>	248 539	</position>
+                  <tooltipImage>	el_hallouf_a_mt_southernPlateau	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_westernRidge	</id>
+                  <position>	130 335	</position>
+                  <tooltipImage>	el_hallouf_a_mt_westernRidge	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_mt_southernTown	</id>
+                  <position>	38 424	</position>
+                  <tooltipImage>	el_hallouf_a_mt_southernTown	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1625,35 +1631,29 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_fortress	</id>
-                  <textKeys>	b_ht_fortressPhrase1 b_ht_fortressPhrase2	</textKeys>
-                  <position>	96 154	</position>
-                  <tooltipImage>	el_hallouf_b_ht_fortress	</tooltipImage>
+                  <id>	b_ht_westernRidge	</id>
+                  <position>	37 159	</position>
+                  <tooltipImage>	el_hallouf_b_ht_westernRidge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_ledge	</id>
-                  <textKeys>	b_ht_ledgePhrase1 b_ht_ledgePhrase2	</textKeys>
-                  <position>	92 48	</position>
-                  <tooltipImage>	el_hallouf_b_ht_ledge	</tooltipImage>
+                  <id>	b_ht_ruin	</id>
+                  <position>	91 133	</position>
+                  <tooltipImage>	el_hallouf_b_ht_ruin	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_boulder	</id>
-                  <textKeys>	b_ht_boulderPhrase	</textKeys>
-                  <position>	201 64	</position>
-                  <tooltipImage>	el_hallouf_b_ht_boulder	</tooltipImage>
+                  <id>	b_ht_hill	</id>
+                  <position>	188 187	</position>
+                  <tooltipImage>	el_hallouf_b_ht_hill	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_entrance	</id>
-                  <textKeys>	b_ht_entrancePhrase	</textKeys>
-                  <position>	273 54	</position>
-                  <tooltipImage>	el_hallouf_b_ht_entrance	</tooltipImage>
+                  <id>	b_ht_ludge	</id>
+                  <position>	101 59	</position>
+                  <tooltipImage>	el_hallouf_b_ht_ludge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_stoneRidge	</id>
-                  <textKeys>	b_ht_stoneRidgePhrase	</textKeys>
-                  <position>	395 142	</position>
-                  <tooltipImage>	el_hallouf_b_ht_stoneRidge	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_ht_northernRidge	</id>
+                  <position>	257 48	</position>
+                  <tooltipImage>	el_hallouf_b_ht_northernRidge	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1661,30 +1661,37 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_riverValley	</id>
-                  <textKeys>	b_mt_riverValleyPhrase1 b_mt_riverValleyPhrase2	</textKeys>
-                  <position>	419 457	</position>
-                  <tooltipImage>	el_hallouf_b_mt_riverValley	</tooltipImage>
+                  <id>	b_mt_hairpinTurn	</id>
+                  <position>	373 499	</position>
+                  <tooltipImage>	el_hallouf_b_mt_hairpinTurn	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_mt_easternPlateau	</id>
+                  <position>	478 418	</position>
+                  <tooltipImage>	el_hallouf_b_mt_easternPlateau	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_mountainRoad	</id>
-                  <textKeys>	b_mt_mountainRoadPhrase	</textKeys>
-                  <position>	419 315	</position>
+                  <id>	b_mt_valley	</id>
+                  <position>	361 389	</position>
+                  <tooltipImage>	el_hallouf_b_mt_valley	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_mountainRoade	</id>
+                  <position>	419 303	</position>
                   <tooltipImage>	el_hallouf_b_mt_mountainRoad	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_shelf	</id>
-                  <textKeys>	b_mt_shelfPhrase	</textKeys>
-                  <position>	430 197	</position>
+                  <position>	379 197	</position>
                   <tooltipImage>	el_hallouf_b_mt_shelf	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_stoneRidge	</id>
-                  <textKeys>	b_mt_stoneRidgePhrase	</textKeys>
-                  <position>	257 52	</position>
-                  <tooltipImage>	el_hallouf_b_mt_stoneRidge	</tooltipImage>
+                  <id>	b_mt_northernTown	</id>
+                  <position>	424 36	</position>
+                  <tooltipImage>	el_hallouf_b_mt_northernTown	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -1704,34 +1711,29 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	a_ht_northRidge	</id>
-                  <textKeys>	a_ht_northRidgePhrase	</textKeys>
-                  <position>	223 425	</position>
-                  <tooltipImage>	steppes_a_ht_northRidge	</tooltipImage>
+                  <id>	a_ht_balcony	</id>
+                  <position>	137 485	</position>
+                  <tooltipImage>	steppes_a_ht_balcony	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_ht_rocks	</id>
-                  <textKeys>	a_ht_rocksPhrase1 a_ht_rocksPhrase2	</textKeys>
                   <position>	43 394	</position>
                   <tooltipImage>	steppes_a_ht_rocks	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_road	</id>
-                  <textKeys>	a_ht_roadPhrase	</textKeys>
-                  <position>	221 279	</position>
-                  <tooltipImage>	steppes_a_ht_road	</tooltipImage>
+                  <id>	a_ht_northernRidge	</id>
+                  <position>	64 226	</position>
+                  <tooltipImage>	steppes_a_ht_northernRidge	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_railroadStation	</id>
-                  <textKeys>	a_ht_railroadStationPhrase	</textKeys>
-                  <position>	141 30	</position>
-                  <tooltipImage>	steppes_a_ht_railroadStation	</tooltipImage>
+                  <id>	a_ht_rw	</id>
+                  <position>	85 97	</position>
+                  <tooltipImage>	steppes_a_ht_RW	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_northLedge	</id>
-                  <textKeys>	a_ht_northLedgePhrase	</textKeys>
-                  <position>	327 40	</position>
-                  <tooltipImage>	steppes_a_ht_northLedge	</tooltipImage>
+                  <id>	a_ht_shelf	</id>
+                  <position>	163 5	</position>
+                  <tooltipImage>	steppes_a_ht_shelf	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1740,36 +1742,38 @@
               <points>
                 <point>
                   <id>	a_mt_hill	</id>
-                  <textKeys>	a_mt_hillPhrase	</textKeys>
-                  <position>	549 298	</position>
+                  <position>	549 305	</position>
                   <tooltipImage>	steppes_a_mt_hill	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_boulder	</id>
-                  <textKeys>	a_mt_boulderPhrase	</textKeys>
-                  <position>	365 226	</position>
-                  <tooltipImage>	steppes_a_mt_boulder	</tooltipImage>
-                </point>
-                <point>
-                  <id>	a_mt_valley	</id>
-                  <textKeys>	a_mt_valleyPhrase1 a_mt_valleyPhrase2	</textKeys>
-                  <position>	512 138	</position>
-                  <tooltipImage>	steppes_a_mt_valley	</tooltipImage>
+                  <id>	a_mt_lowGround	</id>
+                  <position>	534 217	</position>
+                  <tooltipImage>	steppes_a_mt_lowGround	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_waterfall	</id>
-                  <textKeys>	a_mt_waterfallPhrase	</textKeys>
-                  <position>	444 17	</position>
-                  <tooltipImage>	steppes_a_mt_waterfall	</tooltipImage>
+                  <id>	a_mt_pocket	</id>
+                  <position>	466 161	</position>
+                  <tooltipImage>	steppes_a_mt_pocket	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_mt_railroadStation	</id>
-                  <textKeys>	a_mt_railroadStationPhrase	</textKeys>
-                  <position>	178 45	</position>
-                  <tooltipImage>	steppes_a_mt_railroadStation	</tooltipImage>
+                  <id>	a_mt_northernBalcony	</id>
+                  <position>	337 41	</position>
+                  <tooltipImage>	steppes_a_mt_northernBalcony	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_mt_rw	</id>
+                  <position>	141 66	</position>
+                  <tooltipImage>	steppes_a_mt_RW	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	a_mt_shelf	</id>
+                  <position>	153 10	</position>
+                  <tooltipImage>	steppes_a_mt_shelf	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>
@@ -1784,34 +1788,24 @@
               <type>	heavyTank	</type>
               <points>
                 <point>
-                  <id>	b_ht_southRidge	</id>
-                  <textKeys>	b_ht_southRidgePhrase	</textKeys>
-                  <position>	184 189	</position>
-                  <tooltipImage>	steppes_b_ht_southRidge	</tooltipImage>
+                  <id>	b_ht_northernRidge	</id>
+                  <position>	62 259	</position>
+                  <tooltipImage>	steppes_b_ht_northernRidge	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_ht_rocks	</id>
-                  <textKeys>	b_ht_rocksPhrase1 b_ht_rocksPhrase2	</textKeys>
-                  <position>	12 416	</position>
+                  <position>	54 410	</position>
                   <tooltipImage>	steppes_b_ht_rocks	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_southLedge	</id>
-                  <textKeys>	b_ht_southLedgePhrase	</textKeys>
-                  <position>	145 483	</position>
-                  <tooltipImage>	steppes_b_ht_southLedge	</tooltipImage>
+                  <id>	b_ht_balcony	</id>
+                  <position>	137 484	</position>
+                  <tooltipImage>	steppes_b_ht_balcony	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_ht_road	</id>
-                  <textKeys>	b_ht_roadPhrase	</textKeys>
-                  <position>	267 310	</position>
-                  <tooltipImage>	steppes_b_ht_road	</tooltipImage>
-                </point>
-                <point>
-                  <id>	b_ht_slide	</id>
-                  <textKeys>	b_ht_slidePhrase	</textKeys>
-                  <position>	410 544	</position>
-                  <tooltipImage>	steppes_b_ht_slide	</tooltipImage>
+                  <id>	b_ht_mountain	</id>
+                  <position>	413 544	</position>
+                  <tooltipImage>	steppes_b_ht_mountain	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -1819,38 +1813,37 @@
               <type>	mediumTank	</type>
               <points>
                 <point>
-                  <id>	b_mt_northLedge	</id>
-                  <textKeys>	b_mt_northLedgePhrase	</textKeys>
-                  <position>	340 36	</position>
-                  <tooltipImage>	steppes_b_mt_northLedge	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_mt_northernBalcony	</id>
+                  <position>	351 33	</position>
+                  <tooltipImage>	steppes_b_mt_northernBalcony	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_waterfall	</id>
-                  <textKeys>	b_mt_waterfallPhrase	</textKeys>
-                  <position>	480 52	</position>
-                  <tooltipImage>	steppes_b_mt_waterfall	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	b_mt_lowGround	</id>
+                  <position>	445 75	</position>
+                  <tooltipImage>	steppes_b_mt_lowGround	</tooltipImage>
                 </point>
                 <point>
-                  <id>	b_mt_valley	</id>
-                  <textKeys>	b_mt_valleyPhrase1 b_mt_valleyPhrase2	</textKeys>
-                  <position>	503 108	</position>
-                  <tooltipImage>	steppes_b_mt_valley	</tooltipImage>
+                  <id>	b_mt_pocket	</id>
+                  <position>	480 174	</position>
+                  <tooltipImage>	steppes_b_mt_pocket	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_hill	</id>
-                  <textKeys>	b_mt_hillPhrase	</textKeys>
-                  <position>	543 275	</position>
+                  <position>	543 274	</position>
                   <tooltipImage>	steppes_b_mt_hill	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_mt_ridgesSouth	</id>
-                  <textKeys>	b_mt_ridgesSouthPhrase	</textKeys>
-                  <position>	274 439	</position>
-                  <tooltipImage>	steppes_b_mt_ridgesSouth	</tooltipImage>
+                  <id>	b_mt_mountain	</id>
+                  <position>	443 544	</position>
+                  <tooltipImage>	steppes_b_mt_mountain	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_southernShelf	</id>
+                  <position>	267 500	</position>
+                  <tooltipImage>	steppes_b_mt_southernShelf	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -2049,30 +2042,35 @@
               <points>
                 <point>
                   <id>	a_ht_shore	</id>
-                  <textKeys>	a_ht_shorePhrase1 a_ht_shorePhrase2	</textKeys>
-                  <position>	497 429	</position>
+                  <position>	502 433	</position>
                   <tooltipImage>	mannerheim_line_a_ht_shore	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_ht_southernBunker	</id>
-                  <textKeys>	a_ht_southernBunkerPhrase	</textKeys>
-                  <position>	374 375	</position>
+                  <position>	374 381	</position>
                   <tooltipImage>	mannerheim_line_a_ht_southernBunker	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_climb	</id>
+                  <position>	506 305	</position>
+                  <tooltipImage>	mannerheim_line_a_ht_climb	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	a_ht_eastRoad	</id>
-                  <textKeys>	a_ht_eastRoadPhrase	</textKeys>
-                  <position>	95 284	</position>
-                  <tooltipImage>	mannerheim_line_a_ht_eastRoad	</tooltipImage>
+                  <id>	a_ht_westernshelf	</id>
+                  <position>	199 321	</position>
+                  <tooltipImage>	mannerheim_line_a_ht_westernshelf	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_ht_rock	</id>
-                  <textKeys>	a_ht_rockPhrase	</textKeys>
-                  <position>	469 399	</position>
-                  <tooltipImage>	mannerheim_line_a_ht_rock	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_ht_forest	</id>
+                  <position>	43 532	</position>
+                  <tooltipImage>	mannerheim_line_a_ht_forest	</tooltipImage>
+                </point>
+                <point>
+                  <id>	a_ht_southmountain	</id>
+                  <position>	246 532	</position>
+                  <tooltipImage>	mannerheim_line_a_ht_southmountain	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -2081,35 +2079,29 @@
               <points>
                 <point>
                   <id>	a_mt_northernBunker	</id>
-                  <textKeys>	a_mt_northernBunkerPhrase	</textKeys>
                   <position>	209 32	</position>
                   <tooltipImage>	mannerheim_line_a_mt_northernBunker	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	a_mt_rock	</id>
-                  <textKeys>	a_mt_rockPhrase1 a_mt_rockPhrase2 a_mt_rockPhrase3	</textKeys>
                   <position>	111 138	</position>
                   <tooltipImage>	mannerheim_line_a_mt_rock	</tooltipImage>
                 </point>
                 <point>
                   <id>	a_mt_eastRoad	</id>
-                  <textKeys>	a_mt_eastRoadPhrase	</textKeys>
-                  <position>	106 325	</position>
+                  <position>	87 268	</position>
                   <tooltipImage>	mannerheim_line_a_mt_eastRoad	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_hollow	</id>
-                  <textKeys>	a_mt_hollowPhrase	</textKeys>
-                  <position>	238 298	</position>
-                  <tooltipImage>	mannerheim_line_a_mt_hollow	</tooltipImage>
+                  <id>	a_mt_ravine	</id>
+                  <position>	49 305	</position>
+                  <tooltipImage>	mannerheim_line_a_mt_ravine	</tooltipImage>
                 </point>
                 <point>
-                  <id>	a_mt_southernBunker	</id>
-                  <textKeys>	a_mt_southernBunkerPhrase	</textKeys>
-                  <position>	374 391	</position>
-                  <tooltipImage>	mannerheim_line_a_mt_southernBunker	</tooltipImage>
-                  <isLeft>	true	</isLeft>
+                  <id>	a_mt_westernshelf	</id>
+                  <position>	203 321	</position>
+                  <tooltipImage>	mannerheim_line_a_mt_westernshelf	</tooltipImage>
                 </point>
               </points>
             </config>
@@ -2125,37 +2117,44 @@
               <points>
                 <point>
                   <id>	b_ht_southernBunker	</id>
-                  <textKeys>	b_ht_southernBunkerPhrase	</textKeys>
                   <position>	365 384	</position>
                   <tooltipImage>	mannerheim_line_b_ht_southernBunker	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_shore	</id>
-                  <textKeys>	b_ht_shorePhrase1 b_ht_shorePhrase2	</textKeys>
-                  <position>	488 437	</position>
+                  <position>	501 430	</position>
                   <tooltipImage>	mannerheim_line_b_ht_shore	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_ht_climb	</id>
-                  <textKeys>	b_ht_climbPhrase	</textKeys>
-                  <position>	491 297	</position>
+                  <position>	487 297	</position>
                   <tooltipImage>	mannerheim_line_b_ht_climb	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_ht_northernForest	</id>
-                  <textKeys>	b_ht_northernForestPhrase	</textKeys>
-                  <position>	528 219	</position>
-                  <tooltipImage>	mannerheim_line_b_ht_northernForest	</tooltipImage>
+                  <id>	b_ht_road	</id>
+                  <position>	494 347	</position>
+                  <tooltipImage>	mannerheim_line_b_ht_road	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
-                  <id>	b_ht_mountain	</id>
-                  <textKeys>	b_ht_mountainPhrase	</textKeys>
-                  <position>	422 408	</position>
-                  <tooltipImage>	mannerheim_line_b_ht_mountain	</tooltipImage>
+                  <id>	b_ht_easternshelf	</id>
+                  <position>	408 158	</position>
+                  <tooltipImage>	mannerheim_line_b_ht_easternshelf	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_ht_lowland	</id>
+                  <position>	461 215	</position>
+                  <tooltipImage>	mannerheim_line_b_ht_lowland	</tooltipImage>
+                </point>
+                <point>
+                  <id>	b_ht_easternbunker	</id>
+                  <position>	548 8	</position>
+                  <tooltipImage>	mannerheim_line_b_ht_easternbunker	</tooltipImage>
+                  <isLeft>	true	</isLeft>
                 </point>
               </points>
             </config>
@@ -2164,28 +2163,30 @@
               <points>
                 <point>
                   <id>	b_mt_eastRoad	</id>
-                  <textKeys>	b_mt_eastRoadPhrase	</textKeys>
-                  <position>	113 301	</position>
+                  <position>	86 265	</position>
                   <tooltipImage>	mannerheim_line_b_mt_eastRoad	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_rock	</id>
-                  <textKeys>	b_mt_rockPhrase1 b_mt_rockPhrase2	</textKeys>
                   <position>	140 142	</position>
                   <tooltipImage>	mannerheim_line_b_mt_rock	</tooltipImage>
                 </point>
                 <point>
                   <id>	b_mt_northernBunker	</id>
-                  <textKeys>	b_mt_northernBunkerPhrase1 b_mt_northernBunkerPhrase2	</textKeys>
                   <position>	207 18	</position>
                   <tooltipImage>	mannerheim_line_b_mt_northernBunker	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
                 <point>
                   <id>	b_mt_fortificationLine	</id>
-                  <textKeys>	b_mt_fortificationLinePhrase	</textKeys>
-                  <position>	417 30	</position>
+                  <position>	415 56	</position>
                   <tooltipImage>	mannerheim_line_b_mt_fortificationLine	</tooltipImage>
+                  <isLeft>	true	</isLeft>
+                </point>
+                <point>
+                  <id>	b_mt_easternbunker	</id>
+                  <position>	548 8	</position>
+                  <tooltipImage>	mannerheim_line_b_mt_easternbunker	</tooltipImage>
                   <isLeft>	true	</isLeft>
                 </point>
               </points>

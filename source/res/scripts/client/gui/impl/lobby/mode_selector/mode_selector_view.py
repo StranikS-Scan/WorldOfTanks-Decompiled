@@ -36,9 +36,8 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from uilogging.bootcamp.loggers import BootcampLogger
-from uilogging.mode_selector.constants import LOG_KEYS, LOG_ACTIONS, LOG_CLOSE_DETAILS
-from uilogging.mode_selector.loggers import BaseModeSelectorLogger
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
     from gui.Scaleform.framework.application import AppEntry
@@ -51,8 +50,7 @@ _CLOSE_LAYERS = (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW)
 
 class ModeSelectorView(ViewImpl):
     __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored')
-    uiLogger = BaseModeSelectorLogger(LOG_KEYS.MS_WINDOW)
-    uiBootcampLogger = BootcampLogger(LOG_KEYS.MS_WINDOW)
+    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcamp = dependency.descriptor(IBootcampController)
@@ -108,8 +106,7 @@ class ModeSelectorView(ViewImpl):
              ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
              ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
              ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.FUN_RANDOM_CALENDAR_TOOLTIP]:
+             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
@@ -136,10 +133,6 @@ class ModeSelectorView(ViewImpl):
         else:
             tooltipClass = self.__tooltipByContentID.get(contentID)
             return tooltipClass() if tooltipClass else None
-
-    def destroyWindow(self):
-        self.uiLogger.log(LOG_ACTIONS.CLOSED, details=LOG_CLOSE_DETAILS.OTHER)
-        super(ModeSelectorView, self).destroyWindow()
 
     def createPopOverContent(self, event):
         return RandomBattlePopover() if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover() else super(ModeSelectorView, self).createPopOverContent(event)
@@ -170,12 +163,11 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': True}))
 
     def _onLoaded(self):
-        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.OPENED)
+        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
-        self.uiLogger.log(LOG_ACTIONS.OPENED, isNew=self.__dataProvider.hasNewIndicator, isWidget=self._areWidgetsVisible, isFeatured=self.__isEventEnabled)
 
     def _finalize(self):
-        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.CLOSED)
+        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
@@ -241,14 +233,12 @@ class ModeSelectorView(ViewImpl):
             if modeSelectorItem is None:
                 self.__isClickProcessing = False
                 return
-            self.uiLogger.log(LOG_ACTIONS.CARD_CLICKED, size=event.get('size'), details=event.get('cardMediaSize'), isNew=modeSelectorItem.viewModel.getIsNew(), mode=modeSelectorItem.modeName, isSelected=modeSelectorItem.viewModel.getIsSelected())
             modeSelectorItem.handleClick()
             if modeSelectorItem.isSelectable:
                 specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
                 if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
                     specView.destroyWindow()
                 self.__dataProvider.select(modeSelectorItem.modeName)
-            self.uiLogger.log(LOG_ACTIONS.CLOSED, details=LOG_CLOSE_DETAILS.CARD_CLICKED)
             self.close()
             return
 
@@ -265,13 +255,12 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.setAreWidgetsVisible(ModeSelectorView._areWidgetsVisible)
 
     def __infoClickHandler(self, event):
-        self.uiBootcampLogger.logOnlyFromBootcamp(LOG_ACTIONS.INFO_PAGE_ICON_CLICKED)
+        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.INFO_PAGE_ICON_CLICKED)
         index = int(event.get('index'))
         modeSelectorItem = self.__dataProvider.getItemByIndex(index)
         if modeSelectorItem is None:
             return
         else:
-            self.uiLogger.log(LOG_ACTIONS.INFO_PAGE_ICON_CLICKED, isNew=modeSelectorItem.viewModel.getIsNew(), mode=modeSelectorItem.modeName)
             modeSelectorItem.handleInfoPageClick()
             return
 
@@ -286,7 +275,6 @@ class ModeSelectorView(ViewImpl):
             if window.layer in _CLOSE_LAYERS:
                 self.__restoreGraphics()
                 if not self.__isClickProcessing:
-                    self.uiLogger.log(LOG_ACTIONS.CLOSED, details=LOG_CLOSE_DETAILS.OTHER)
                     self.close()
         return
 

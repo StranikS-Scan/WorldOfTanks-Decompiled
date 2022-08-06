@@ -7,9 +7,12 @@ import BigWorld
 from AccountCommands import RES_SUCCESS, RES_FAILURE
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.gui_items.processors import Processor, makeI18nError
+from gui.shared.gui_items.processors import Processor, makeI18nError, makeSuccess
 from gui.shared.gui_items.processors.plugins import MessageConfirmator
+from helpers import dependency
 from messenger.formatters.service_channel import QuestAchievesFormatter
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+from skeletons.gui.system_messages import ISystemMessages
 _logger = logging.getLogger(__name__)
 
 class ReceiveOfferGiftProcessor(Processor):
@@ -83,3 +86,12 @@ class ReceiveMultipleOfferGiftsProcessor(Processor):
         choices = cPickle.dumps(self.__chosenGifts)
         BigWorld.player().receiveMultipleOfferGifts(choices, lambda requestID, resultID, errStr, ext=None: self._response(resultID, callback, ctx=ext, errStr=errStr))
         return
+
+
+class BattleMattersOfferProcessor(ReceiveOfferGiftProcessor):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def _successHandler(self, code, ctx=None):
+        Waiting.hide('loadContent')
+        self.__systemMessages.proto.serviceChannel.pushClientMessage(ctx, SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD)
+        return makeSuccess(auxData=ctx)

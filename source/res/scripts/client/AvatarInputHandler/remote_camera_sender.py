@@ -7,11 +7,7 @@ from aih_constants import CTRL_MODES
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, DualGunControlMode
 from AvatarInputHandler.control_modes import StrategicControlMode, ArtyControlMode
-from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from AvatarInputHandler.AimingSystems.DualGunAimingSystem import DualGunAimingSystem
-from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
-from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
+from BigWorld import ArcadeAimingSystem, SniperAimingSystem, DualGunAimingSystem, StrategicAimingSystem, ArtyAimingSystem
 from AvatarInputHandler.MapCaseMode import MapCaseControlModeBase
 
 class RemoteCameraSender(InputHandlerCommand):

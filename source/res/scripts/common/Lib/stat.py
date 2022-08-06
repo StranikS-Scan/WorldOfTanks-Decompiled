@@ -1,5 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/stat.py
+# Compiled at: 2023-05-27 19:35:17
+"""Constants/functions for interpreting results of os.stat() and os.lstat().
+
+Suggested usage: from stat import *
+"""
 ST_MODE = 0
 ST_INO = 1
 ST_DEV = 2

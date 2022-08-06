@@ -121,16 +121,15 @@ def formatdate(timeval=None, localtime=False, usegmt=False):
 
 
 def make_msgid(idstring=None):
-    timeval = time.time()
-    utcdate = time.strftime('%Y%m%d%H%M%S', time.gmtime(timeval))
+    timeval = int(time.time() * 100)
     pid = os.getpid()
-    randint = random.randrange(100000)
+    randint = random.getrandbits(64)
     if idstring is None:
         idstring = ''
     else:
         idstring = '.' + idstring
     idhost = socket.getfqdn()
-    msgid = '<%s.%s.%s%s@%s>' % (utcdate,
+    msgid = '<%d.%d.%d%s@%s>' % (timeval,
      pid,
      randint,
      idstring,

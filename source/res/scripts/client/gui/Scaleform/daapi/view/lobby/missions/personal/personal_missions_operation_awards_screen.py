@@ -78,7 +78,10 @@ class PersonalMissionsOperationAwardsScreen(PersonalMissionsOperationAwardsScree
             return {'vehicleSrc': vehIcon,
              'vehicleTypeIcon': vehicleTypeIcon,
              'vehicleName': vehicle.userName,
-             'vehicleLevel': vehicleLevel} if vehIcon is not None else None
+             'vehicleLevel': vehicleLevel,
+             'tooltip': {'isSpecial': True,
+                         'specialAlias': TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
+                         'specialArgs': [vehicle.intCD]}} if vehIcon is not None else None
 
     def __packBadges(self, badges):
         result = []

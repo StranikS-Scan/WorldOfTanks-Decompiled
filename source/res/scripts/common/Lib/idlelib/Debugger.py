@@ -2,7 +2,6 @@
 # Embedded file name: scripts/common/Lib/idlelib/Debugger.py
 import os
 import bdb
-import types
 from Tkinter import *
 from idlelib.WindowList import ListedToplevel
 from idlelib.ScrolledList import ScrolledList
@@ -19,7 +18,10 @@ class Idb(bdb.Bdb):
             self.set_step()
             return
         message = self.__frame2message(frame)
-        self.gui.interaction(message, frame)
+        try:
+            self.gui.interaction(message, frame)
+        except TclError:
+            pass
 
     def user_exception(self, frame, info):
         if self.in_rpc_code(frame):
@@ -59,9 +61,14 @@ class Debugger():
         self.frame = None
         self.make_gui()
         self.interacting = 0
+        self.nesting_level = 0
         return
 
     def run(self, *args):
+        if self.nesting_level > 0:
+            self.abort_loop()
+            self.root.after(100, lambda : self.run(*args))
+            return
         try:
             self.interacting = 1
             return self.idb.run(*args)
@@ -69,6 +76,11 @@ class Debugger():
             self.interacting = 0
 
     def close(self, event=None):
+        try:
+            self.quit()
+        except Exception:
+            pass
+
         if self.interacting:
             self.top.bell()
             return
@@ -177,7 +189,9 @@ class Debugger():
             b.configure(state='normal')
 
         self.top.wakeup()
-        self.root.mainloop()
+        self.nesting_level += 1
+        self.root.tk.call('vwait', '::idledebugwait')
+        self.nesting_level -= 1
         for b in self.buttons:
             b.configure(state='disabled')
 
@@ -202,23 +216,26 @@ class Debugger():
 
     def cont(self):
         self.idb.set_continue()
-        self.root.quit()
+        self.abort_loop()
 
     def step(self):
         self.idb.set_step()
-        self.root.quit()
+        self.abort_loop()
 
     def next(self):
         self.idb.set_next(self.frame)
-        self.root.quit()
+        self.abort_loop()
 
     def ret(self):
         self.idb.set_return(self.frame)
-        self.root.quit()
+        self.abort_loop()
 
     def quit(self):
         self.idb.set_quit()
-        self.root.quit()
+        self.abort_loop()
+
+    def abort_loop(self):
+        self.root.tk.call('set', '::idledebugwait', '1')
 
     stackviewer = None
 

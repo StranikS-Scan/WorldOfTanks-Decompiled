@@ -13,6 +13,17 @@ class BC_LOG_ACTIONS:
     BATTLE_BUTTON_PRESSED = 'battle_button_pressed'
     BUY_ITEM = 'buy_item'
     UNLOCK_ITEM = 'unlock_item'
+    INFO_PAGE_ICON_CLICKED = 'info_page_icon_clicked'
+    CLOSED = 'closed'
+    OPENED = 'opened'
+    CLICK = 'click'
+    CONFIRM = 'confirm'
+    SHOW = 'show'
+    SELECT = 'select'
+    LEAVE = 'leave'
+    BUTTON_BACK_TO_HANGAR = 'button_back_to_hangar'
+    BUTTON_VIEW_IN_HANGAR = 'button_view_in_hangar'
+    VIDEO_FINISHED = 'video_finished'
 
 
 class SNIPER_MODE:
@@ -94,6 +105,13 @@ class BC_LOG_KEYS:
     BC_RESEARCH_VEHICLES = 'bc_research_vehicles'
     BC_HANGAR_MENU = 'bc_hangar_menu'
     BC_PERSONAL_CASE = 'bc_personal_case'
+    BC_CURRENT_PROGRESS_WIDGET = 'bc_current_progress_widget'
+    BC_PROGRESS_WIDGET = 'bc_progress_widget'
+    BC_EXIT_VIEW = 'bc_exit_view'
+    BC_DEVICE_SETUP_SUB_VIEW = 'bc_device_setup_sub_view'
+    BC_CONSUMABLE_SETUP_SUB_VIEW = 'bc_consumable_setup_sub_view'
+    BC_QUESTS_VIEW = 'bc_quests_view'
+    MS_WINDOW = 'ms_window'
 
 
 class CHECK:

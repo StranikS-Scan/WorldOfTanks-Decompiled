@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_mode
 class BuyVehicleViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged', 'onDisclaimerClick')
 
-    def __init__(self, properties=22, commands=7):
+    def __init__(self, properties=23, commands=7):
         super(BuyVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -66,89 +66,95 @@ class BuyVehicleViewModel(ViewModel):
     def setIsWithoutCommander(self, value):
         self._setBool(7, value)
 
+    def getHasCommanderCheckbox(self):
+        return self._getBool(8)
+
+    def setHasCommanderCheckbox(self, value):
+        self._setBool(8, value)
+
     def getCountCrew(self):
-        return self._getNumber(8)
+        return self._getNumber(9)
 
     def setCountCrew(self, value):
-        self._setNumber(8, value)
+        self._setNumber(9, value)
 
     def getVehicleNameTooltip(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setVehicleNameTooltip(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def getTradeOffVehicleIntCD(self):
-        return self._getNumber(10)
-
-    def setTradeOffVehicleIntCD(self, value):
-        self._setNumber(10, value)
-
-    def getBuyVehicleIntCD(self):
         return self._getNumber(11)
 
-    def setBuyVehicleIntCD(self, value):
+    def setTradeOffVehicleIntCD(self, value):
         self._setNumber(11, value)
 
+    def getBuyVehicleIntCD(self):
+        return self._getNumber(12)
+
+    def setBuyVehicleIntCD(self, value):
+        self._setNumber(12, value)
+
     def getIsToggleBtnVisible(self):
-        return self._getBool(12)
-
-    def setIsToggleBtnVisible(self, value):
-        self._setBool(12, value)
-
-    def getIsElite(self):
         return self._getBool(13)
 
-    def setIsElite(self, value):
+    def setIsToggleBtnVisible(self, value):
         self._setBool(13, value)
 
-    def getIsRentSelected(self):
+    def getIsElite(self):
         return self._getBool(14)
 
-    def setIsRentSelected(self, value):
+    def setIsElite(self, value):
         self._setBool(14, value)
 
-    def getIsRestore(self):
+    def getIsRentSelected(self):
         return self._getBool(15)
 
-    def setIsRestore(self, value):
+    def setIsRentSelected(self, value):
         self._setBool(15, value)
 
+    def getIsRestore(self):
+        return self._getBool(16)
+
+    def setIsRestore(self, value):
+        self._setBool(16, value)
+
     def getWithoutCommanderAltText(self):
-        return self._getResource(16)
-
-    def setWithoutCommanderAltText(self, value):
-        self._setResource(16, value)
-
-    def getPriceDescription(self):
         return self._getResource(17)
 
-    def setPriceDescription(self, value):
+    def setWithoutCommanderAltText(self, value):
         self._setResource(17, value)
 
-    def getNoCrewCheckboxLabel(self):
+    def getPriceDescription(self):
         return self._getResource(18)
 
-    def setNoCrewCheckboxLabel(self, value):
+    def setPriceDescription(self, value):
         self._setResource(18, value)
 
+    def getNoCrewCheckboxLabel(self):
+        return self._getResource(19)
+
+    def setNoCrewCheckboxLabel(self, value):
+        self._setResource(19, value)
+
     def getIsContentHidden(self):
-        return self._getBool(19)
+        return self._getBool(20)
 
     def setIsContentHidden(self, value):
-        self._setBool(19, value)
+        self._setBool(20, value)
 
     def getBgSource(self):
-        return self._getResource(20)
+        return self._getResource(21)
 
     def setBgSource(self, value):
-        self._setResource(20, value)
+        self._setResource(21, value)
 
     def getNeedDisclaimer(self):
-        return self._getBool(21)
+        return self._getBool(22)
 
     def setNeedDisclaimer(self, value):
-        self._setBool(21, value)
+        self._setBool(22, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
@@ -160,6 +166,7 @@ class BuyVehicleViewModel(ViewModel):
         self._addStringProperty('tankName', '')
         self._addStringProperty('tankType', '')
         self._addBoolProperty('isWithoutCommander', False)
+        self._addBoolProperty('hasCommanderCheckbox', False)
         self._addNumberProperty('countCrew', 0)
         self._addStringProperty('vehicleNameTooltip', '')
         self._addNumberProperty('tradeOffVehicleIntCD', -1)

@@ -29,9 +29,6 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from uilogging.deprecated.decorators import loggerTarget, loggerEntry, settingsLog
-from uilogging.deprecated.ibc.constants import IBC_LOG_KEYS, IBC_SETTINGS_MAP
-from uilogging.deprecated.ibc.loggers import IBCLogger
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -63,7 +60,6 @@ def _delayCall(delay, function):
         BigWorld.callback(delay, function)
 
 
-@loggerTarget(logKey=IBC_LOG_KEYS.IBC_SETTINGS_PAGE, loggerCls=IBCLogger)
 class SettingsWindow(SettingsWindowMeta):
     anonymizerController = dependency.descriptor(IAnonymizerController)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -132,7 +128,6 @@ class SettingsWindow(SettingsWindowMeta):
         BigWorld.worldDrawEnabled(False)
         BigWorld.restartGame()
 
-    @loggerEntry
     def _populate(self):
         super(SettingsWindow, self)._populate()
         dataVO = [{'label': SETTINGS.FEEDBACK_TAB_DAMAGEINDICATOR,
@@ -191,7 +186,6 @@ class SettingsWindow(SettingsWindowMeta):
             newSettings = getNewSettings()
             self.as_setCountersDataS(newSettings)
 
-    @settingsLog(argsIndex=1, preProcessAction=lambda x: flashObject2Dict(x), argMap=IBC_SETTINGS_MAP)
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
         LOG_DEBUG('onSettingsChange', settingName, settingValue)

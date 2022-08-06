@@ -874,6 +874,12 @@ def _migrateTo93(core, data, initialized):
      'role_SPG': False}
 
 
+def _migrateTo94(core, data, initialized):
+    onceOnlyHintsData = data['onceOnlyHints2']
+    onceOnlyHintsData[OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT] = False
+    onceOnlyHintsData[OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1240,6 +1246,10 @@ _versions = ((1,
   False),
  (93,
   _migrateTo93,
+  False,
+  False),
+ (94,
+  _migrateTo94,
   False,
   False))
 

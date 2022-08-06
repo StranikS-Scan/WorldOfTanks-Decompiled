@@ -10,6 +10,7 @@ from web.web_client_api.strongholds import StrongholdsWebApi
 from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, ContextMenuWebApi, CloseWindowWebApi, UtilWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
 from web.web_client_api.arenas import ArenasWebApi
+from web.web_client_api.uilogging import UILoggingWebApi
 
 class _OpenWindowWebApi(OpenWindowWebApi):
 
@@ -56,4 +57,4 @@ def _createCloseWindowWebApi(onBrowserClose=None):
 
 
 def createStrongholdsWebHandlers(onBrowserOpen=None, onBrowserClose=None):
-    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, ReactiveCommunicationWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, VehiclesWebApi, ArenasWebApi, UtilWebApi)
+    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, ReactiveCommunicationWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, VehiclesWebApi, ArenasWebApi, UtilWebApi, UILoggingWebApi)

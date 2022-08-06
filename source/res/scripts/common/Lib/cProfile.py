@@ -136,13 +136,13 @@ def label(code):
 
 
 def main():
-    import os, sys
+    import os, sys, pstats
     from optparse import OptionParser
     usage = 'cProfile.py [-o output_file_path] [-s sort] scriptfile [arg] ...'
     parser = OptionParser(usage=usage)
     parser.allow_interspersed_args = False
     parser.add_option('-o', '--outfile', dest='outfile', help='Save stats to <outfile>', default=None)
-    parser.add_option('-s', '--sort', dest='sort', help='Sort order when printing to stdout, based on pstats.Stats class', default=-1)
+    parser.add_option('-s', '--sort', dest='sort', help='Sort order when printing to stdout, based on pstats.Stats class', default=-1, choices=sorted(pstats.Stats.sort_arg_dict_default))
     if not sys.argv[1:]:
         parser.print_usage()
         sys.exit(2)

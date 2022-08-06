@@ -57,8 +57,10 @@ class BRBattleResultContextMenu(AbstractContextMenuHandler):
         if enabledInroaming and user is not None and user.isIgnored():
             options.append(self._makeItem(VEHICLE.REMOVE_FROM_IGNORED, MENU.contextmenu(VEHICLE.REMOVE_FROM_IGNORED)))
         if enabledInroaming and isFriend:
-            options.append(self._makeItem(VEHICLE.ADD_TO_IGNORED, MENU.contextmenu(VEHICLE.ADD_TO_IGNORED)))
             options.append(self._makeItem(VEHICLE.REMOVE_FROM_FRIENDS, MENU.contextmenu(VEHICLE.REMOVE_FROM_FRIENDS)))
+        isIgnored = user is not None and user.isIgnored()
+        if not isIgnored:
+            options.append(self._makeItem(VEHICLE.ADD_TO_IGNORED, MENU.contextmenu(VEHICLE.ADD_TO_IGNORED)))
         return options
 
     def showUserInfo(self):

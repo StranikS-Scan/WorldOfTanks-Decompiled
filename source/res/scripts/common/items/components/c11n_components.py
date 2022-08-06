@@ -1,4 +1,5 @@
 import itertools
+import operator
 from backports.functools_lru_cache import lru_cache
 import Math
 import items
@@ -37,19 +38,24 @@ from typing import Optional
 from typing import TypeVar
 from typing import FrozenSet
 from typing import Set
+from typing import TYPE_CHECKING
 from string import lower
 from string import upper
 from copy import deepcopy
+from bisect import bisect
 from wrapped_reflection_framework import ReflectionMetaclass
 from constants import IS_EDITOR
 from constants import ARENA_BONUS_TYPE_NAMES
+from constants import DEFAULT_QUEST_START_TIME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 if IS_EDITOR:
     from editor_copy import edCopy
+if TYPE_CHECKING:
+    from account_helpers import Tokens
 Item = TypeVar('TypeVar')
 class BaseCustomizationItem(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'customizationDisplayType', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber', 'texture', 'progression')
+    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'customizationDisplayType', 'i18n', 'priceGroup', 'requiredToken', 'requiredTokenCount', 'priceGroupTags', 'maxNumber', 'texture', 'progression')
     allSlots = __slots__
     itemType = 0
     def __init__(self, parentGroup = None):
@@ -62,6 +68,7 @@ class BaseCustomizationItem(object):
         self.priceGroup = ''
         self.priceGroupTags = frozenset()
         self.requiredToken = ''
+        self.requiredTokenCount = 0
         self.maxNumber = 0
         self.texture = ''
         self.progression = None
@@ -98,7 +105,8 @@ class BaseCustomizationItem(object):
         return ItemTags.VEHICLE_BOUND in self.tags
 
     def isUnlocked(self, tokens):
-        return (not self.requiredToken) or (tokens and self.requiredToken in tokens)
+        requiredToken = self.requiredToken
+        return (not requiredToken) or (tokens and tokens.hasActiveToken(requiredToken) and (tokens.get(requiredToken)[1] >= self.requiredTokenCount))
 
     def isRare(self):
         return ItemTags.RARE in self.tags
@@ -120,6 +128,10 @@ class BaseCustomizationItem(object):
     @property
     def isStyleOnly(self):
         return ItemTags.STYLE_ONLY in self.tags
+
+    @property
+    def isQuestsProgression(self):
+        return ItemTags.QUESTS_PROGRESSION in self.tags
 
     @classmethod
     def makeIntDescr(cls, itemId):
@@ -307,7 +319,7 @@ class ModificationItem(BaseCustomizationItem):
 class StyleItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes', 'styleProgressions', 'dependencies', 'dependenciesAncestors')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes', 'styleProgressions', 'questsProgression', 'dependencies', 'dependenciesAncestors')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.outfits = {}
@@ -321,6 +333,7 @@ class StyleItem(BaseCustomizationItem):
         self.dependenciesAncestors = {}
         self._changeableSlotTypes = None
         self.styleProgressions = {}
+        self.questsProgression = None
         super(StyleItem, self).__init__(parentGroup)
 
     def isVictim(self, color):
@@ -431,7 +444,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PAINT: PaintItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -567,9 +580,76 @@ class ProgressForCustomization(object):
         result = {'bonusTypes': self.bonusTypes, 'priceGroup': self.priceGroup, 'levels': self.levels, 'defaultLvl': self.defaultLvl, 'autoGrantCount': self.autoGrantCount, 'autobound': self.autobound}
         return str(result)
 
+class QuestProgressForCustomization(object):
+    __slots__ = ('styleId', '_groupTokens')
+    def __init__(self, styleId, unlockChains):
+        super(QuestProgressForCustomization, self).__init__()
+        self.styleId = styleId
+        self._groupTokens = {}
+        for token, (uItems, concurrent) in unlockChains.iteritems():
+            counts = []
+            items = [({}, DEFAULT_QUEST_START_TIME)]
+            sorted_i = sorted(uItems.items(), key = operator.itemgetter(0))
+            count, item = sorted_i[0]
+            if count == 0:
+                items[0] = item
+            else:
+                counts.append(count)
+                items.append(item)
+            for count, item in sorted_i[1:]:
+                counts.append(count)
+                items.append(item)
+            self._groupTokens[token] = (counts, items, concurrent)
+
+    def getGroupTokens(self):
+        return self._groupTokens.keys()
+
+    def isGroupConcurrent(self, token):
+        return self._groupTokens[token][2]
+
+    def getFinishTimes(self, token):
+        return [items[1] for items in self._groupTokens[token][1]]
+
+    def getUnlocks(self, token, count):
+        counts, items, _ = self._groupTokens[token]
+        return [items[idx][0] for idx in xrange(bisect(counts, count) + 1)]
+
+    def getUnlockedCount(self, token, count):
+        return sum([len(ids) for ids in itertools.chain.from_iterable([item.itervalues() for item in self.getUnlocks(token, count)])])
+
+    def getTotalCount(self):
+        return sum([len(ids) for ids in itertools.chain.from_iterable([unlocksForToken[0].itervalues() for unlocksForToken in itertools.chain.from_iterable([items for _, items, _ in self._groupTokens.itervalues()])])])
+
+    def getItemsForGroup(self, token):
+        return [items[0] for items in self._groupTokens[token][1]]
+
+    def iterateItems(self, tokens = None, itemsFunc = None):
+        for token in tokens or self.getGroupTokens():
+            for items in (itemsFunc and itemsFunc(self, token)) or self.getItemsForGroup(token):
+                for itemType, ids in items.iteritems():
+                    for id in ids:
+                        yield (itemType, id)
+
+    def getLevel(self, token, count):
+        counts, _, __ = self._groupTokens[token]
+        return bisect(counts, count)
+
+    def isEverythingUnlocked(self, token, count):
+        counts, _, __ = self._groupTokens[token]
+        return count >= counts[-1]
+
+    def __deepcopy__(self, memodict = {}):
+        newItem = type(self)(self.styleId, {})
+        newItem._groupTokens = deepcopy(self._groupTokens)
+        return newItem
+
+    def __str__(self):
+        result = {'groupTokens': self._groupTokens, 'styleId': self.styleId}
+        return str(result)
+
 class CustomizationCache(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'defaultPlayerEmblems', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'itemGroupByProgressionBonusType', '__vehicleCanMayIncludeCustomization', 'topVehiclesByNation')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'defaultPlayerEmblems', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'itemToQuestProgressionStyle', '__questStyles', 'itemGroupByProgressionBonusType', '__vehicleCanMayIncludeCustomization', 'topVehiclesByNation')
     def __init__(self):
         self.priceGroupTags = {}
         self.paints = {}
@@ -591,11 +671,18 @@ class CustomizationCache(object):
         self.attachments = {}
         self._CustomizationCache__victimStyles = {}
         self.customizationWithProgression = {}
+        self.itemToQuestProgressionStyle = {}
+        self._CustomizationCache__questStyles = None
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.MODIFICATION: self.modifications, CustomizationType.STYLE: self.styles, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints}
+        self.itemTypes = {CustomizationType.DECAL: self.decals, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.STYLE: self.styles, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.ATTACHMENT: self.attachments}
         super(CustomizationCache, self).__init__()
+
+    def getQuestProgressionStyles(self):
+        if self._CustomizationCache__questStyles is None:
+            self._CustomizationCache__questStyles = {id : style for id, style in self.styles.iteritems() if style.isQuestsProgression}
+        return self._CustomizationCache__questStyles
 
     def getVehiclesCanMayInclude(self, item):
         vehsCanUseItem = self._CustomizationCache__vehicleCanMayIncludeCustomization.get(item.compactDescr)
@@ -762,6 +849,16 @@ class EditingStyleReason(object):
     def __nonzero__(self):
         return self.reason in EDITING_STYLE_REASONS.ENABLED
 
+C11N_PROGRESS_LEVEL_IDX = 0
+C11N_PROGRESS_PROGRESS_IDX = 1
+C11N_PROGRESS_VALUE_IDX = 2
+def constructProgression(level = 0, progress = None, value = None):
+    if progress is None:
+        progress = {}
+    if value is None:
+        value = {}
+    return [level, progress, value]
+
 def _adjustProgression(component, vehTypeCD, item, progressionStorage, attr, force = False):
     if item is None:
         raise SoftException('Missing customization item for component: {}'.format(component))
@@ -771,10 +868,11 @@ def _adjustProgression(component, vehTypeCD, item, progressionStorage, attr, for
                 return
             elif not item.progression.autobound:
                 vehTypeCD = 0
-            level = progressionStorage.get(item.itemType, {}).get(item.id, {}).get(vehTypeCD, {}).get('level')
-            if level is None:
+            progress = progressionStorage.get(item.itemType, {}).get(item.id, {})
+            if vehTypeCD not in progress:
                 raise SoftException('missing progression for item: {} at vehicle: {}'.format(item.id, vehTypeCD))
             else:
+                level = progress[vehTypeCD][C11N_PROGRESS_LEVEL_IDX]
                 setattr(component, attr, level)
                 return
         else:
@@ -814,19 +912,21 @@ def _validateProgression(component, item, progressionStorage, vehType):
         raise SoftException('missing progression level for component:'.format(component.id))
     else:
         vehTypeCD = vehType.compactDescr if item.progression.autobound else 0
-        achievedLevel = progressionStorage.get(item.itemType, {}).get(item.id, {}).get(vehTypeCD, {}).get('level')
-        if achievedLevel is None:
+        progression = progressionStorage.get(item.itemType, {}).get(item.id, {})
+        if vehTypeCD not in progression:
             raise SoftException('missing progression for item: {} at vehicle: {}'.format(item.id, vehTypeCD))
-        elif (0 <= level) and (level <= achievedLevel):
-            return
         else:
-            raise SoftException('wrong progression level: {}, achievedLevel: {} for component: {} at vehicle: {}, '.format(level, achievedLevel, component.id, vehTypeCD))
+            achievedLevel = progression[vehTypeCD][C11N_PROGRESS_LEVEL_IDX]
+            if (0 <= level) and (level <= achievedLevel):
+                return
+            else:
+                raise SoftException('wrong progression level: {}, achievedLevel: {} for component: {} at vehicle: {}, '.format(level, achievedLevel, component.id, vehTypeCD))
 
-def _validateSerialNumber(component, item, serialNumberStorage):
-    installedSerialNumber = component.serial_number
+def _validateSerialNumber(outfit, item, serialNumberStorage):
+    installedSerialNumber = outfit.serial_number
     storedSerialNumber = serialNumberStorage.get(item.itemType, {}).get(item.id, {}).get('serial_number', '')
     if installedSerialNumber and installedSerialNumber != storedSerialNumber:
-        raise SoftException('wrong serial number for component: {}'.format(component.id))
+        raise SoftException('wrong serial number for item: {}'.format(item.id))
     else:
         return
 
@@ -963,7 +1063,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

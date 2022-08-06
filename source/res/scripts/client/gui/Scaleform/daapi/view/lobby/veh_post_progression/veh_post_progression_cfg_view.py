@@ -20,8 +20,6 @@ from helpers import dependency
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IVehicleComparisonBasket, IHeroTankController
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
-from uilogging.veh_post_progression.loggers import VehPostProgressionLogger
 _HERO_PREVIEW_ALIASES = (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
 
 def _defaultExitEvent():
@@ -34,8 +32,6 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     __cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
     __itemsCache = dependency.descriptor(IItemsCache)
     __heroTanks = dependency.descriptor(IHeroTankController)
-    __infoButtonLogger = VehPostProgressionLogger(LogGroups.INFO_BUTTON)
-    __compareButtonLogger = VehPostProgressionLogger(LogGroups.ADD_TO_COMPARE)
 
     def __init__(self, ctx=None):
         super(VehiclePostProgressionCfgView, self).__init__(ctx)
@@ -44,14 +40,12 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
 
     def onAboutClick(self):
         getPostProgressionInfoWindowProc().show(self.getParentWindow())
-        self.__infoButtonLogger.logClick(parentScreen=ParentScreens.MODIFICATIONS_TREE)
 
     def onGoBackClick(self):
         self._onExit()
 
     def compareVehicle(self):
         self.__cmpBasket.addVehicle(self._intCD)
-        self.__compareButtonLogger.logClick(parentScreen=ParentScreens.MODIFICATIONS_TREE)
 
     @process
     def demountAllPairs(self):

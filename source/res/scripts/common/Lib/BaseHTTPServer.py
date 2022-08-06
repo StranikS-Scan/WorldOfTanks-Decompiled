@@ -123,14 +123,16 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
             message = short
         explain = long
         self.log_error('code %d, message %s', code, message)
-        content = self.error_message_format % {'code': code,
-         'message': _quote_html(message),
-         'explain': explain}
         self.send_response(code, message)
-        self.send_header('Content-Type', self.error_content_type)
         self.send_header('Connection', 'close')
+        content = None
+        if code >= 200 and code not in (204, 205, 304):
+            content = self.error_message_format % {'code': code,
+             'message': _quote_html(message),
+             'explain': explain}
+            self.send_header('Content-Type', self.error_content_type)
         self.end_headers()
-        if self.command != 'HEAD' and code >= 200 and code not in (204, 304):
+        if self.command != 'HEAD' and content:
             self.wfile.write(content)
         return
 

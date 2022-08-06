@@ -114,7 +114,10 @@ class RobotFileParser:
         return self.default_entry.allowance(url) if self.default_entry else True
 
     def __str__(self):
-        return ''.join([ str(entry) + '\n' for entry in self.entries ])
+        entries = self.entries
+        if self.default_entry is not None:
+            entries = entries + [self.default_entry]
+        return '\n'.join(map(str, entries)) + '\n'
 
 
 class RuleLine:

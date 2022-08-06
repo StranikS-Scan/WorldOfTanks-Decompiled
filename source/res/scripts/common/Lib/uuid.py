@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/uuid.py
+import os
 __author__ = 'Ka-Ping Yee <ping@zesty.ca>'
 RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = ['reserved for NCS compatibility',
  'specified in RFC 4122',
@@ -176,7 +177,7 @@ class UUID(object):
     version = property(get_version)
 
 
-def _find_mac(command, args, hw_identifiers, get_index):
+def _popen(command, args):
     import os
     path = os.environ.get('PATH', os.defpath).split(os.pathsep)
     path.extend(('/sbin', '/usr/sbin'))
@@ -187,38 +188,87 @@ def _find_mac(command, args, hw_identifiers, get_index):
     else:
         return
 
+    cmd = 'LC_ALL=C %s %s 2>/dev/null' % (executable, args)
+    return os.popen(cmd)
+
+
+def _find_mac(command, args, hw_identifiers, get_index):
     try:
-        cmd = 'LC_ALL=C %s %s 2>/dev/null' % (executable, args)
-        with os.popen(cmd) as pipe:
+        pipe = _popen(command, args)
+        if not pipe:
+            return
+        with pipe:
             for line in pipe:
-                words = line.lower().split()
+                words = line.lower().rstrip().split()
                 for i in range(len(words)):
                     if words[i] in hw_identifiers:
                         try:
-                            return int(words[get_index(i)].replace(':', ''), 16)
+                            word = words[get_index(i)]
+                            mac = int(word.replace(':', ''), 16)
+                            if mac:
+                                return mac
                         except (ValueError, IndexError):
                             pass
 
     except IOError:
         pass
 
-    return
-
 
 def _ifconfig_getnode():
+    keywords = ('hwaddr', 'ether', 'address:', 'lladdr')
     for args in ('', '-a', '-av'):
-        mac = _find_mac('ifconfig', args, ['hwaddr', 'ether'], lambda i: i + 1)
+        mac = _find_mac('ifconfig', args, keywords, lambda i: i + 1)
         if mac:
             return mac
 
-    import socket
-    ip_addr = socket.gethostbyname(socket.gethostname())
+
+def _arp_getnode():
+    import os, socket
+    try:
+        ip_addr = socket.gethostbyname(socket.gethostname())
+    except EnvironmentError:
+        return
+
     mac = _find_mac('arp', '-an', [ip_addr], lambda i: -1)
     if mac:
         return mac
     else:
-        mac = _find_mac('lanscan', '-ai', ['lan0'], lambda i: 0)
+        mac = _find_mac('arp', '-an', [ip_addr], lambda i: i + 1)
+        if mac:
+            return mac
+        mac = _find_mac('arp', '-an', ['(%s)' % ip_addr], lambda i: i + 2)
         return mac if mac else None
+
+
+def _lanscan_getnode():
+    return _find_mac('lanscan', '-ai', ['lan0'], lambda i: 0)
+
+
+def _netstat_getnode():
+    try:
+        pipe = _popen('netstat', '-ia')
+        if not pipe:
+            return
+        with pipe:
+            words = pipe.readline().rstrip().split()
+            try:
+                i = words.index('Address')
+            except ValueError:
+                return
+
+            for line in pipe:
+                try:
+                    words = line.rstrip().split()
+                    word = words[i]
+                    if len(word) == 17 and word.count(':') == 5:
+                        mac = int(word.replace(':', ''), 16)
+                        if mac:
+                            return mac
+                except (ValueError, IndexError):
+                    pass
+
+    except OSError:
+        pass
 
 
 def _ipconfig_getnode():
@@ -234,18 +284,15 @@ def _ipconfig_getnode():
 
     for dir in dirs:
         try:
-            try:
-                pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
-            except IOError:
-                continue
-            else:
-                for line in pipe:
-                    value = line.split(':')[-1].strip().lower()
-                    if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
-                        return int(value.replace('-', ''), 16)
+            pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
+        except IOError:
+            continue
 
-        finally:
-            pipe.close()
+        with pipe:
+            for line in pipe:
+                value = line.split(':')[-1].strip().lower()
+                if re.match('(?:[0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]$', value):
+                    return int(value.replace('-', ''), 16)
 
 
 def _netbios_getnode():
@@ -275,27 +322,28 @@ def _netbios_getnode():
         return (bytes[0] << 40L) + (bytes[1] << 32L) + (bytes[2] << 24L) + (bytes[3] << 16L) + (bytes[4] << 8L) + bytes[5]
 
 
-_uuid_generate_random = _uuid_generate_time = _UuidCreate = None
+_uuid_generate_time = _UuidCreate = None
 try:
     import ctypes, ctypes.util
-    for libname in ['uuid', 'c']:
+    import sys
+    _libnames = ['uuid']
+    if not sys.platform.startswith('win'):
+        _libnames.append('c')
+    for libname in _libnames:
         try:
             lib = ctypes.CDLL(ctypes.util.find_library(libname))
         except:
             continue
 
-        if hasattr(lib, 'uuid_generate_random'):
-            _uuid_generate_random = lib.uuid_generate_random
         if hasattr(lib, 'uuid_generate_time'):
             _uuid_generate_time = lib.uuid_generate_time
-            if _uuid_generate_random is not None:
-                break
+            break
 
-    import sys
+    del _libnames
     if sys.platform == 'darwin':
         import os
         if int(os.uname()[2].split('.')[0]) >= 9:
-            _uuid_generate_random = _uuid_generate_time = None
+            _uuid_generate_time = None
     try:
         lib = ctypes.windll.rpcrt4
     except:
@@ -322,6 +370,12 @@ def _random_getnode():
 
 
 _node = None
+_NODE_GETTERS_WIN32 = [_windll_getnode, _netbios_getnode, _ipconfig_getnode]
+_NODE_GETTERS_UNIX = [_unixdll_getnode,
+ _ifconfig_getnode,
+ _arp_getnode,
+ _lanscan_getnode,
+ _netstat_getnode]
 
 def getnode():
     global _node
@@ -330,9 +384,9 @@ def getnode():
     else:
         import sys
         if sys.platform == 'win32':
-            getters = [_windll_getnode, _netbios_getnode, _ipconfig_getnode]
+            getters = _NODE_GETTERS_WIN32
         else:
-            getters = [_unixdll_getnode, _ifconfig_getnode]
+            getters = _NODE_GETTERS_UNIX
         for getter in getters + [_random_getnode]:
             try:
                 _node = getter()
@@ -340,7 +394,7 @@ def getnode():
                 continue
 
             if _node is not None:
-                return _node
+                return 0 <= _node < 281474976710656L and _node
 
         return
 
@@ -385,17 +439,7 @@ def uuid3(namespace, name):
 
 
 def uuid4():
-    if _uuid_generate_random:
-        _buffer = ctypes.create_string_buffer(16)
-        _uuid_generate_random(_buffer)
-        return UUID(bytes=_buffer.raw)
-    try:
-        import os
-        return UUID(bytes=os.urandom(16), version=4)
-    except:
-        import random
-        bytes = [ chr(random.randrange(256)) for i in range(16) ]
-        return UUID(bytes=bytes, version=4)
+    return UUID(bytes=os.urandom(16), version=4)
 
 
 def uuid5(namespace, name):

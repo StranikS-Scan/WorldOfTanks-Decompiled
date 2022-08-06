@@ -177,7 +177,7 @@ class DateTime:
         elif datetime and isinstance(other, datetime.datetime):
             s = self.value
             o = other.strftime('%Y%m%dT%H:%M:%S')
-        elif isinstance(other, (str, unicode)):
+        elif isinstance(other, basestring):
             s = self.value
             o = other
         elif hasattr(other, 'timetuple'):
@@ -322,9 +322,14 @@ else:
             self._parser.Parse(data, 0)
 
         def close(self):
-            self._parser.Parse('', 1)
-            del self._target
-            del self._parser
+            try:
+                parser = self._parser
+            except AttributeError:
+                pass
+            else:
+                del self._target
+                del self._parser
+                parser.Parse('', 1)
 
 
 class SlowParser:
@@ -441,9 +446,8 @@ class Marshaller:
     if unicode:
 
         def dump_unicode(self, value, write, escape=escape):
-            value = value.encode(self.encoding)
             write('<value><string>')
-            write(escape(value))
+            write(escape(value).encode(self.encoding, 'xmlcharrefreplace'))
             write('</string></value>\n')
 
         dispatch[UnicodeType] = dump_unicode
@@ -474,12 +478,13 @@ class Marshaller:
         write('<value><struct>\n')
         for k, v in value.items():
             write('<member>\n')
-            if type(k) is not StringType:
-                if unicode and type(k) is UnicodeType:
-                    k = k.encode(self.encoding)
-                else:
-                    raise TypeError, 'dictionary key must be string'
-            write('<name>%s</name>\n' % escape(k))
+            if type(k) is StringType:
+                k = escape(k)
+            elif unicode and type(k) is UnicodeType:
+                k = escape(k).encode(self.encoding, 'xmlcharrefreplace')
+            else:
+                raise TypeError, 'dictionary key must be string'
+            write('<name>%s</name>\n' % k)
             dump(v, write)
             write('</member>\n')
 
@@ -515,6 +520,7 @@ class Unmarshaller:
         self._stack = []
         self._marks = []
         self._data = []
+        self._value = False
         self._methodname = None
         self._encoding = 'utf-8'
         self.append = self._stack.append
@@ -540,6 +546,8 @@ class Unmarshaller:
         if tag == 'array' or tag == 'struct':
             self._marks.append(len(self._stack))
         self._data = []
+        if self._value and tag not in self.dispatch:
+            raise ResponseError('unknown tag %r' % tag)
         self._value = tag == 'value'
 
     def data(self, text):
@@ -755,7 +763,7 @@ def dumps(params, methodname=None, methodresponse=None, encoding=None, allow_non
         xmlheader = "<?xml version='1.0'?>\n"
     if methodname:
         if not isinstance(methodname, StringType):
-            methodname = methodname.encode(encoding)
+            methodname = methodname.encode(encoding, 'xmlcharrefreplace')
         data = (xmlheader,
          '<methodCall>\n<methodName>',
          methodname,
@@ -791,18 +799,23 @@ def gzip_encode(data):
     return encoded
 
 
-def gzip_decode(data):
+def gzip_decode(data, max_decode=20971520):
     if not gzip:
         raise NotImplementedError
     f = StringIO.StringIO(data)
     gzf = gzip.GzipFile(mode='rb', fileobj=f)
     try:
-        decoded = gzf.read()
+        if max_decode < 0:
+            decoded = gzf.read()
+        else:
+            decoded = gzf.read(max_decode + 1)
     except IOError:
         raise ValueError('invalid data')
 
     f.close()
     gzf.close()
+    if max_decode >= 0 and len(decoded) > max_decode:
+        raise ValueError('max gzipped payload length exceeded')
     return decoded
 
 
@@ -815,8 +828,10 @@ class GzipDecodedResponse(gzip.GzipFile if gzip else object):
         gzip.GzipFile.__init__(self, mode='rb', fileobj=self.stringio)
 
     def close(self):
-        gzip.GzipFile.close(self)
-        self.stringio.close()
+        try:
+            gzip.GzipFile.close(self)
+        finally:
+            self.stringio.close()
 
 
 class _Method:
@@ -903,9 +918,10 @@ class Transport:
         return self._connection[1]
 
     def close(self):
-        if self._connection[1]:
-            self._connection[1].close()
+        host, connection = self._connection
+        if connection:
             self._connection = (None, None)
+            connection.close()
         return None
 
     def send_request(self, connection, handler, request_body):
@@ -960,6 +976,10 @@ class Transport:
 
 class SafeTransport(Transport):
 
+    def __init__(self, use_datetime=0, context=None):
+        Transport.__init__(self, use_datetime=use_datetime)
+        self.context = context
+
     def make_connection(self, host):
         if self._connection and host == self._connection[0]:
             return self._connection[1]
@@ -970,7 +990,7 @@ class SafeTransport(Transport):
                 raise NotImplementedError("your version of httplib doesn't support HTTPS")
             else:
                 chost, self._extra_headers, x509 = self.get_host_info(host)
-                self._connection = (host, HTTPS(chost, None, **(x509 or {})))
+                self._connection = (host, HTTPS(chost, None, context=self.context, **(x509 or {})))
                 return self._connection[1]
 
             return
@@ -978,8 +998,8 @@ class SafeTransport(Transport):
 
 class ServerProxy:
 
-    def __init__(self, uri, transport=None, encoding=None, verbose=0, allow_none=0, use_datetime=0):
-        if isinstance(uri, unicode):
+    def __init__(self, uri, transport=None, encoding=None, verbose=0, allow_none=0, use_datetime=0, context=None):
+        if unicode and isinstance(uri, unicode):
             uri = uri.encode('ISO-8859-1')
         import urllib
         type, uri = urllib.splittype(uri)
@@ -990,7 +1010,7 @@ class ServerProxy:
             self.__handler = '/RPC2'
         if transport is None:
             if type == 'https':
-                transport = SafeTransport(use_datetime=use_datetime)
+                transport = SafeTransport(use_datetime=use_datetime, context=context)
             else:
                 transport = Transport(use_datetime=use_datetime)
         self.__transport = transport

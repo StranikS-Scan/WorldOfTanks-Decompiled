@@ -123,7 +123,7 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
+def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, titleWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
     data = {'name': title,
      'value': value,
      'valueAtRight': valueAtRight,
@@ -133,6 +133,8 @@ def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=Non
         data['icon'] = icon
     if valueWidth != -1:
         data['valueWidth'] = valueWidth
+    if titleWidth != -1:
+        data['titleWidth'] = titleWidth
     if titlePadding is not None:
         data['titlePadding'] = titlePadding
     if valuePadding is not None:
@@ -315,6 +317,15 @@ def packQuestRewardItemBlockData(img=None, overlayPath=None, overlayPadding=None
         if overlayPadding is not None:
             data['overlayPadding'] = overlayPadding
     return packBlockDataItem(linkage, data, padding)
+
+
+def packQuestProgressBlockData(progress=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_QUEST_PROGRESS_BLOCK_LINKAGE, padding=None):
+    data = {'progress': progress}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packQuestOrConditionBlockData(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_QUEST_OR_CONDITION_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {}, padding)
 
 
 def packBlueprintBlockData(blueprintImg, schemeImg, numCols, numRows, layout, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BLUEPRINT_BLOCK_LINKAGE, width=-1, height=-1, padding=None, alpha=1.0):

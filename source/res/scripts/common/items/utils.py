@@ -8,6 +8,7 @@ from constants import VEHICLE_TTC_ASPECTS
 from debug_utils import *
 from items import tankmen
 from items import vehicles
+from items.components.c11n_constants import CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
 from items.vehicles import vehicleAttributeFactors, VehicleDescriptor
 import ResMgr
@@ -48,7 +49,7 @@ def _makeDefaultVehicleFactors(sample):
         if isinstance(value, (float,
          int,
          long,
-         str)):
+         basestring)):
             default[key] = value
         if isinstance(value, (list, tuple)):
             default[key] = value[:]
@@ -284,3 +285,25 @@ if IS_CLIENT:
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)
         factors['shotDispersion'] = shotDispersionFactors
         return
+
+
+def getEditorOnlySection(section, createNewSection=False):
+    editorOnlySection = section['editorOnly']
+    if editorOnlySection is None and createNewSection:
+        from items.writers.c11n_writers import findOrCreate
+        editorOnlySection = findOrCreate(section, 'editorOnly')
+    return editorOnlySection
+
+
+def getDifferVehiclePartNames(newVehDescr, oldVehDescr):
+    differPartNames = []
+    for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
+        if getattr(newVehDescr, partName).compactDescr != getattr(oldVehDescr, partName).compactDescr:
+            differPartNames.append(partName)
+
+    if 'turret' in differPartNames:
+        if 'gun' not in differPartNames:
+            differPartNames.append('gun')
+    elif 'gun' in differPartNames:
+        differPartNames.append('turret')
+    return differPartNames

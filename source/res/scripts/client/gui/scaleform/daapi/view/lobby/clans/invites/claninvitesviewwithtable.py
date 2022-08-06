@@ -37,6 +37,12 @@ class ClanInvitesViewWithTable(ClanInvitesViewWithTableMeta):
         self._searchDP.buildList(None)
         return
 
+    def _dispose(self):
+        self._searchDP.fini()
+        self._searchDP = None
+        super(ClanInvitesViewWithTable, self)._dispose()
+        return
+
     def _onAttachedToWindow(self):
         self.as_setDataS(self._makeData())
 

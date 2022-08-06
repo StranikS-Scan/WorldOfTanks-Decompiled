@@ -78,18 +78,23 @@ def copy_file(src, dst, preserve_mode=1, preserve_times=1, update=0, link=None, 
         return (dst, 1)
     if link == 'hard':
         if not (os.path.exists(dst) and os.path.samefile(src, dst)):
-            os.link(src, dst)
+            try:
+                os.link(src, dst)
+                return (dst, 1)
+            except OSError:
+                pass
+
     elif link == 'sym':
         if not (os.path.exists(dst) and os.path.samefile(src, dst)):
             os.symlink(src, dst)
-    else:
-        _copy_file_contents(src, dst)
-        if preserve_mode or preserve_times:
-            st = os.stat(src)
-            if preserve_times:
-                os.utime(dst, (st[ST_ATIME], st[ST_MTIME]))
-            if preserve_mode:
-                os.chmod(dst, S_IMODE(st[ST_MODE]))
+            return (dst, 1)
+    _copy_file_contents(src, dst)
+    if preserve_mode or preserve_times:
+        st = os.stat(src)
+        if preserve_times:
+            os.utime(dst, (st[ST_ATIME], st[ST_MTIME]))
+        if preserve_mode:
+            os.chmod(dst, S_IMODE(st[ST_MODE]))
     return (dst, 1)
 
 

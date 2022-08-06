@@ -32,7 +32,7 @@ class LargeZipFile(Exception):
 
 error = BadZipfile
 ZIP64_LIMIT = (1 << 31) - 1
-ZIP_FILECOUNT_LIMIT = 1 << 16
+ZIP_FILECOUNT_LIMIT = (1 << 16) - 1
 ZIP_MAX_COMMENT = (1 << 16) - 1
 ZIP_STORED = 0
 ZIP_DEFLATED = 8
@@ -102,6 +102,26 @@ _CD64_NUMBER_ENTRIES_THIS_DISK = 6
 _CD64_NUMBER_ENTRIES_TOTAL = 7
 _CD64_DIRECTORY_SIZE = 8
 _CD64_OFFSET_START_CENTDIR = 9
+_DD_SIGNATURE = 134695760
+_EXTRA_FIELD_STRUCT = struct.Struct('<HH')
+
+def _strip_extra(extra, xids):
+    unpack = _EXTRA_FIELD_STRUCT.unpack
+    modified = False
+    buffer = []
+    start = i = 0
+    while i + 4 <= len(extra):
+        xid, xlen = unpack(extra[i:i + 4])
+        j = i + 4 + xlen
+        if xid in xids:
+            if i != start:
+                buffer.append(extra[start:i])
+            start = j
+            modified = True
+        i = j
+
+    return extra if not modified else ''.join(buffer)
+
 
 def _check_zipfile(fp):
     try:
@@ -266,7 +286,7 @@ class ZipInfo(object):
     def _decodeExtra(self):
         extra = self.extra
         unpack = struct.unpack
-        while extra:
+        while len(extra) >= 4:
             tp, ln = unpack('<HH', extra[:4])
             if tp == 1:
                 if ln >= 24:
@@ -788,12 +808,17 @@ class ZipFile(object):
             raise RuntimeError, 'Compression requires the (missing) zlib module'
         if zinfo.compress_type not in (ZIP_STORED, ZIP_DEFLATED):
             raise RuntimeError, 'That compression method is not supported'
-        if zinfo.file_size > ZIP64_LIMIT:
-            if not self._allowZip64:
-                raise LargeZipFile('Filesize would require ZIP64 extensions')
-        if zinfo.header_offset > ZIP64_LIMIT:
-            if not self._allowZip64:
-                raise LargeZipFile('Zipfile size would require ZIP64 extensions')
+        if not self._allowZip64:
+            requires_zip64 = None
+            if len(self.filelist) >= ZIP_FILECOUNT_LIMIT:
+                requires_zip64 = 'Files count'
+            elif zinfo.file_size > ZIP64_LIMIT:
+                requires_zip64 = 'Filesize'
+            elif zinfo.header_offset > ZIP64_LIMIT:
+                requires_zip64 = 'Zipfile size'
+            if requires_zip64:
+                raise LargeZipFile(requires_zip64 + ' would require ZIP64 extensions')
+        return
 
     def write(self, filename, arcname=None, compress_type=None):
         if not self.fp:
@@ -812,7 +837,9 @@ class ZipFile(object):
             arcname += '/'
         zinfo = ZipInfo(arcname, date_time)
         zinfo.external_attr = (st[0] & 65535) << 16L
-        if compress_type is None:
+        if isdir:
+            zinfo.compress_type = ZIP_STORED
+        elif compress_type is None:
             zinfo.compress_type = self.compression
         else:
             zinfo.compress_type = compress_type
@@ -825,6 +852,7 @@ class ZipFile(object):
             zinfo.file_size = 0
             zinfo.compress_size = 0
             zinfo.CRC = 0
+            zinfo.external_attr |= 16
             self.filelist.append(zinfo)
             self.NameToInfo[zinfo.filename] = zinfo
             self.fp.write(zinfo.FileHeader(False))
@@ -877,7 +905,11 @@ class ZipFile(object):
         if not isinstance(zinfo_or_arcname, ZipInfo):
             zinfo = ZipInfo(filename=zinfo_or_arcname, date_time=time.localtime(time.time())[:6])
             zinfo.compress_type = self.compression
-            zinfo.external_attr = 25165824
+            if zinfo.filename[-1] == '/':
+                zinfo.external_attr = 1107099648
+                zinfo.external_attr |= 16
+            else:
+                zinfo.external_attr = 25165824
         else:
             zinfo = zinfo_or_arcname
         if not self.fp:
@@ -901,8 +933,8 @@ class ZipFile(object):
         self.fp.write(zinfo.FileHeader(zip64))
         self.fp.write(bytes)
         if zinfo.flag_bits & 8:
-            fmt = '<LQQ' if zip64 else '<LLL'
-            self.fp.write(struct.pack(fmt, zinfo.CRC, zinfo.compress_size, zinfo.file_size))
+            fmt = '<LLQQ' if zip64 else '<LLLL'
+            self.fp.write(struct.pack(fmt, _DD_SIGNATURE, zinfo.CRC, zinfo.compress_size, zinfo.file_size))
         self.fp.flush()
         self.filelist.append(zinfo)
         self.NameToInfo[zinfo.filename] = zinfo
@@ -917,10 +949,8 @@ class ZipFile(object):
         else:
             try:
                 if self.mode in ('w', 'a') and self._didModify:
-                    count = 0
                     pos1 = self.fp.tell()
                     for zinfo in self.filelist:
-                        count = count + 1
                         dt = zinfo.date_time
                         dosdate = dt[0] - 1980 << 9 | dt[1] << 5 | dt[2]
                         dostime = dt[3] << 11 | dt[4] << 5 | dt[5] // 2
@@ -940,6 +970,7 @@ class ZipFile(object):
                             header_offset = zinfo.header_offset
                         extra_data = zinfo.extra
                         if extra:
+                            extra_data = _strip_extra(extra_data, (1,))
                             extra_data = struct.pack(('<HH' + 'Q' * len(extra)), 1, (8 * len(extra)), *extra) + extra_data
                             extract_version = max(45, zinfo.extract_version)
                             create_version = max(45, zinfo.create_version)
@@ -978,10 +1009,19 @@ class ZipFile(object):
                         self.fp.write(zinfo.comment)
 
                     pos2 = self.fp.tell()
-                    centDirCount = count
+                    centDirCount = len(self.filelist)
                     centDirSize = pos2 - pos1
                     centDirOffset = pos1
-                    if centDirCount >= ZIP_FILECOUNT_LIMIT or centDirOffset > ZIP64_LIMIT or centDirSize > ZIP64_LIMIT:
+                    requires_zip64 = None
+                    if centDirCount > ZIP_FILECOUNT_LIMIT:
+                        requires_zip64 = 'Files count'
+                    elif centDirOffset > ZIP64_LIMIT:
+                        requires_zip64 = 'Central directory offset'
+                    elif centDirSize > ZIP64_LIMIT:
+                        requires_zip64 = 'Central directory size'
+                    if requires_zip64:
+                        if not self._allowZip64:
+                            raise LargeZipFile(requires_zip64 + ' would require ZIP64 extensions')
                         zip64endrec = struct.pack(structEndArchive64, stringEndArchive64, 44, 45, 45, 0, 0, centDirCount, centDirCount, centDirSize, centDirOffset)
                         self.fp.write(zip64endrec)
                         zip64locrec = struct.pack(structEndArchive64Locator, stringEndArchive64Locator, 0, pos2, 1)
@@ -1105,18 +1145,7 @@ def main(args=None):
             print USAGE
             sys.exit(1)
         with ZipFile(args[1], 'r') as zf:
-            out = args[2]
-            for path in zf.namelist():
-                if path.startswith('./'):
-                    tgt = os.path.join(out, path[2:])
-                else:
-                    tgt = os.path.join(out, path)
-                tgtdir = os.path.dirname(tgt)
-                if not os.path.exists(tgtdir):
-                    os.makedirs(tgtdir)
-                with open(tgt, 'wb') as fp:
-                    fp.write(zf.read(path))
-
+            zf.extractall(args[2])
     elif args[0] == '-c':
         if len(args) < 3:
             print USAGE
@@ -1126,12 +1155,19 @@ def main(args=None):
             if os.path.isfile(path):
                 zf.write(path, zippath, ZIP_DEFLATED)
             elif os.path.isdir(path):
+                if zippath:
+                    zf.write(path, zippath)
                 for nm in os.listdir(path):
                     addToZip(zf, os.path.join(path, nm), os.path.join(zippath, nm))
 
         with ZipFile(args[1], 'w', allowZip64=True) as zf:
-            for src in args[2:]:
-                addToZip(zf, src, os.path.basename(src))
+            for path in args[2:]:
+                zippath = os.path.basename(path)
+                if not zippath:
+                    zippath = os.path.basename(os.path.dirname(path))
+                if zippath in ('', os.curdir, os.pardir):
+                    zippath = ''
+                addToZip(zf, path, zippath)
 
     return
 

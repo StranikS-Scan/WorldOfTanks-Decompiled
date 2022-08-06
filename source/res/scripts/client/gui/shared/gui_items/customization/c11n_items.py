@@ -8,6 +8,7 @@ import typing
 import Math
 import ResMgr
 from CurrentVehicle import g_currentVehicle
+from gui.customization.shared import EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, getAvailableRegions
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.impl import backport
@@ -20,7 +21,7 @@ from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
 from helpers import dependency
-from items import makeIntCompactDescrByID
+from items import makeIntCompactDescrByID, vehicles
 from items.components import c11n_components as cc
 from items.components.c11n_components import EditingStyleReason
 from items.components.c11n_constants import CustomizationType, EDITING_STYLE_REASONS, ImageOptions, ItemTags, ProjectionDecalFormTags, SeasonType, UNBOUND_VEH_KEY
@@ -31,6 +32,8 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from vehicle_outfit.outfit import Outfit
+from vehicle_outfit.containers import emptyComponent
+from vehicle_outfit.outfit import Area
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional, Set, Tuple
     from items.components.c11n_components import ProgressForCustomization
@@ -220,7 +223,8 @@ class ConcealmentBonus(object):
 
 
 class Customization(FittingItem):
-    __slots__ = ('_boundVehicles', '_bonus', '_installedVehicles', '__noveltyData', '__progressingData', '__installedCount', '__boundInventoryCount', '__fullInventoryCount', '__fullCount')
+    __slots__ = ('_boundVehicles', '_bonus', '_installedVehicles', '__noveltyData', '__progressingData', '__installedCount', '__boundInventoryCount', '__fullInventoryCount', '__fullCount', '__questProgressInfo')
+    _service = dependency.descriptor(ICustomizationService)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, intCompactDescr, proxy=None):
@@ -235,6 +239,7 @@ class Customization(FittingItem):
         self.__boundInventoryCount = None
         self.__fullInventoryCount = None
         self.__fullCount = None
+        self.__questProgressInfo = None
         if proxy is not None and proxy.inventory.isSynced():
             installedVehicles = proxy.inventory.getC11nItemAppliedVehicles(self.intCD)
             invCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CUSTOMIZATION, self.intCD)
@@ -418,10 +423,40 @@ class Customization(FittingItem):
     def isProgressionRewindEnabled(self):
         return ItemTags.PROGRESSION_REWIND_ENABLED in self.tags
 
+    @property
+    def isQuestsProgression(self):
+        return self.descriptor.isQuestsProgression
+
+    def getQuestsProgressionInfo(self):
+        if not self.isQuestsProgression:
+            return ('', -1)
+        elif self.__questProgressInfo is not None:
+            return self.__questProgressInfo
+        else:
+            customizationCache = vehicles.g_cache.customization20()
+            if self.intCD in customizationCache.itemToQuestProgressionStyle:
+                styleDescr = customizationCache.itemToQuestProgressionStyle[self.intCD]
+                qProg = styleDescr.questsProgression
+                hasOtherItemsInChain = False
+                for token in sorted(qProg.getGroupTokens()):
+                    groupItems = qProg.getItemsForGroup(token)
+                    for level, itemsForLevel in enumerate(groupItems, 1):
+                        itemsIdsForType = itemsForLevel.get(self.descriptor.itemType, ())
+                        if self.id in itemsIdsForType:
+                            if len(groupItems) == level and not hasOtherItemsInChain:
+                                level = -1
+                            self.__questProgressInfo = (token, level)
+                            return (token, level)
+                        hasOtherItemsInChain = hasOtherItemsInChain or bool(itemsIdsForType)
+
+                _logger.error('Wrong itemToQuestProgressionStyle info for compCD "%s" ', self.intCD)
+            self.__questProgressInfo = ('', -1)
+            return ('', -1)
+
     def getIconApplied(self, component):
         return self.icon
 
-    def getInstalledVehicles(self, vehicles=None):
+    def getInstalledVehicles(self, vehicles_=None):
         return set(self._installedVehicles)
 
     def getBoundVehicles(self):
@@ -458,8 +493,41 @@ class Customization(FittingItem):
     def isWide(self):
         return False
 
-    def isUnlocked(self):
-        return bool(self.eventsCache.questsProgress.getTokenCount(self.requiredToken)) if self.requiredToken else True
+    def isUnlockedByToken(self):
+        if self.requiredToken:
+            tokenCount = self.eventsCache.questsProgress.getTokenCount(self.requiredToken)
+            return tokenCount >= self.descriptor.requiredTokenCount
+        return True
+
+    def isQuestInProgress(self):
+        if not (self.requiredToken and self.isQuestsProgression and not self.isUnlockedByToken()):
+            return False
+        else:
+            quests = self._getQuestsForToken()
+            if quests is None:
+                return False
+            quest = first(quests)
+            tokenCount = self.eventsCache.questsProgress.getTokenCount(self.requiredToken)
+            return False if not (quest and quest.isAvailable() and self.descriptor.requiredTokenCount == tokenCount + 1) else True
+
+    def getUnlockingQuests(self):
+        return self._getQuestsForToken() if self.requiredToken else None
+
+    def isUnlockingExpired(self):
+        if not self.requiredToken:
+            return False
+        quests = self.getUnlockingQuests()
+        if not quests:
+            return True
+        for quest in quests:
+            questAvailability = quest.isAvailable()
+            if not questAvailability.isValid and questAvailability.reason != 'requirements':
+                return True
+
+        return False
+
+    def _getQuestsForToken(self):
+        return self._service.getQuestsForProgressionItem(self.intCD)
 
     def isRare(self):
         return self.descriptor.isRare()
@@ -905,8 +973,7 @@ class Attachment(Customization):
 
 
 class Style(Customization):
-    __slots__ = ('_changableTypes', '_service', '_itemsCache', '__outfits', '__dependenciesByIntCD', '__serialNumber')
-    _service = dependency.descriptor(ICustomizationService)
+    __slots__ = ('_changableTypes', '_itemsCache', '__outfits', '__dependenciesByIntCD', '__serialNumber')
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, intCompactDescr, proxy=None):
@@ -989,6 +1056,23 @@ class Style(Customization):
     @property
     def serialNumber(self):
         return self.__serialNumber
+
+    def getAlteredOutfit(self, itemType, itemID, vehicleCD):
+        item = self.getAlternateItem(itemType, itemID)
+        outfit = self.getOutfit(first(self.seasons), vehicleCD=vehicleCD)
+        slotId = EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES[item.itemTypeID]
+        component = emptyComponent(item.itemTypeID)
+        for areaId in Area.TANK_PARTS:
+            regionsIndexes = getAvailableRegions(areaId, slotId.slotType)
+            for regionIdx in regionsIndexes:
+                multiSlot = outfit.getContainer(areaId).slotFor(slotId.slotType)
+                multiSlot.set(item.intCD, idx=regionIdx, component=component)
+
+        return outfit
+
+    def getAlternateItem(self, itemType, itemID):
+        itemsOfType = self.descriptor.alternateItems.get(itemType)
+        return self._service.getItemByCD(makeIntCompactDescrByID('customizationItem', itemType, itemID)) if itemsOfType is not None and itemID in itemsOfType else None
 
     def getDescription(self):
         return self.longDescriptionSpecial or self.fullDescription or self.shortDescriptionSpecial or self.shortDescription

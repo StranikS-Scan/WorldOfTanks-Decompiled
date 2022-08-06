@@ -169,9 +169,9 @@ def readFloatItem(xmlCtx, section):
 
 def readStringItem(xmlCtx, section):
     if 'value' in section.keys():
-        value = intern(section.readString('value'))
+        value = section.readWideString('value')
     else:
-        value = intern(section.asString)
+        value = section.asWideString
     return ResourceItem(RESOURCE_ITEM_TYPE.STRING, readItemName(xmlCtx, section), value)
 
 

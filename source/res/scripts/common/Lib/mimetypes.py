@@ -134,25 +134,33 @@ class MimeTypes:
             i = 0
             while True:
                 try:
-                    yield _winreg.EnumKey(mimedb, i)
+                    ctype = _winreg.EnumKey(mimedb, i)
                 except EnvironmentError:
                     break
+                else:
+                    if '\x00' not in ctype:
+                        yield ctype
 
                 i += 1
 
+        default_encoding = sys.getdefaultencoding()
         with _winreg.OpenKey(_winreg.HKEY_CLASSES_ROOT, '') as hkcr:
             for subkeyname in enum_types(hkcr):
-                if not subkeyname.startswith('.'):
-                    continue
-                with _winreg.OpenKey(hkcr, subkeyname) as subkey:
-                    try:
+                try:
+                    with _winreg.OpenKey(hkcr, subkeyname) as subkey:
+                        if not subkeyname.startswith('.'):
+                            continue
                         mimetype, datatype = _winreg.QueryValueEx(subkey, 'Content Type')
-                    except EnvironmentError:
-                        continue
+                        if datatype != _winreg.REG_SZ:
+                            continue
+                        try:
+                            mimetype = mimetype.encode(default_encoding)
+                        except UnicodeEncodeError:
+                            continue
 
-                    if datatype != _winreg.REG_SZ:
-                        continue
-                    self.add_type(mimetype, subkeyname, strict)
+                        self.add_type(mimetype, subkeyname, strict)
+                except EnvironmentError:
+                    continue
 
 
 def guess_type(url, strict=True):
@@ -223,7 +231,8 @@ def _default_mime_types():
     global types_map
     global suffix_map
     global common_types
-    suffix_map = {'.tgz': '.tar.gz',
+    suffix_map = {'.svgz': '.svg.gz',
+     '.tgz': '.tar.gz',
      '.taz': '.tar.gz',
      '.tz': '.tar.gz',
      '.tbz2': '.tar.bz2',
@@ -249,6 +258,7 @@ def _default_mime_types():
      '.cpio': 'application/x-cpio',
      '.csh': 'application/x-csh',
      '.css': 'text/css',
+     '.csv': 'text/csv',
      '.dll': 'application/octet-stream',
      '.doc': 'application/msword',
      '.dot': 'application/msword',
@@ -269,6 +279,7 @@ def _default_mime_types():
      '.jpeg': 'image/jpeg',
      '.jpg': 'image/jpeg',
      '.js': 'application/javascript',
+     '.json': 'application/json',
      '.ksh': 'text/plain',
      '.latex': 'application/x-latex',
      '.m1v': 'video/mpeg',
@@ -277,6 +288,7 @@ def _default_mime_types():
      '.mht': 'message/rfc822',
      '.mhtml': 'message/rfc822',
      '.mif': 'application/x-mif',
+     '.mjs': 'application/javascript',
      '.mov': 'video/quicktime',
      '.movie': 'video/x-sgi-movie',
      '.mp2': 'audio/mpeg',
@@ -328,6 +340,7 @@ def _default_mime_types():
      '.src': 'application/x-wais-source',
      '.sv4cpio': 'application/x-sv4cpio',
      '.sv4crc': 'application/x-sv4crc',
+     '.svg': 'image/svg+xml',
      '.swf': 'application/x-shockwave-flash',
      '.t': 'application/x-troff',
      '.tar': 'application/x-tar',
@@ -343,6 +356,7 @@ def _default_mime_types():
      '.ustar': 'application/x-ustar',
      '.vcf': 'text/x-vcard',
      '.wav': 'audio/x-wav',
+     '.webm': 'video/webm',
      '.wiz': 'application/msword',
      '.wsdl': 'application/xml',
      '.xbm': 'image/x-xbitmap',

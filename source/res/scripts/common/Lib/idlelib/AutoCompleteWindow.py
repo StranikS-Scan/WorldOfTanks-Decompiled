@@ -139,6 +139,7 @@ class AutoCompleteWindow:
         scrollbar.config(command=listbox.yview)
         scrollbar.pack(side=RIGHT, fill=Y)
         listbox.pack(side=LEFT, fill=BOTH, expand=True)
+        acw.lift()
         self.listbox.select_set(self._binary_search(self.start))
         self._selection_changed()
         self.hideid = self.widget.bind(HIDE_VIRTUAL_EVENT_NAME, self.hide_event)

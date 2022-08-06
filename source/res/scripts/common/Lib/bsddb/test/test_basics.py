@@ -484,7 +484,7 @@ class BasicTestCase(unittest.TestCase):
             print 'Running %s.test06_Truncate...' % self.__class__.__name__
         d.put('abcde', 'ABCDE')
         num = d.truncate()
-        self.assertTrue(num >= 1, 'truncate returned <= 0 on non-empty database')
+        self.assertGreaterEqual(num, 1, 'truncate returned <= 0 on non-empty database')
         num = d.truncate()
         self.assertEqual(num, 0, 'truncate on empty DB returned nonzero (%r)' % (num,))
 
@@ -497,8 +497,8 @@ class BasicTestCase(unittest.TestCase):
 
         def test08_exists(self):
             self.d.put('abcde', 'ABCDE')
-            self.assertTrue(self.d.exists('abcde') == True, 'DB->exists() returns wrong value')
-            self.assertTrue(self.d.exists('x') == False, 'DB->exists() returns wrong value')
+            self.assertEqual(self.d.exists('abcde'), True, 'DB->exists() returns wrong value')
+            self.assertEqual(self.d.exists('x'), False, 'DB->exists() returns wrong value')
 
     if db.version() >= (4, 7):
 
@@ -622,7 +622,7 @@ class BasicTransactionTestCase(BasicTestCase):
             if verbose:
                 print 'log file: ' + log
             logs = self.env.log_archive(db.DB_ARCH_REMOVE)
-            self.assertTrue(not logs)
+            self.assertFalse(logs)
 
         self.txn = self.env.txn_begin()
         return
@@ -634,8 +634,8 @@ class BasicTransactionTestCase(BasicTestCase):
             self.d.put('abcde', 'ABCDE', txn=txn)
             txn.commit()
             txn = self.env.txn_begin()
-            self.assertTrue(self.d.exists('abcde', txn=txn) == True, 'DB->exists() returns wrong value')
-            self.assertTrue(self.d.exists('x', txn=txn) == False, 'DB->exists() returns wrong value')
+            self.assertEqual(self.d.exists('abcde', txn=txn), True, 'DB->exists() returns wrong value')
+            self.assertEqual(self.d.exists('x', txn=txn), False, 'DB->exists() returns wrong value')
             txn.abort()
 
     def test09_TxnTruncate(self):
@@ -646,7 +646,7 @@ class BasicTransactionTestCase(BasicTestCase):
         d.put('abcde', 'ABCDE')
         txn = self.env.txn_begin()
         num = d.truncate(txn)
-        self.assertTrue(num >= 1, 'truncate returned <= 0 on non-empty database')
+        self.assertGreaterEqual(num, 1, 'truncate returned <= 0 on non-empty database')
         num = d.truncate(txn)
         self.assertEqual(num, 0, 'truncate on empty DB returned nonzero (%r)' % (num,))
         txn.commit()
@@ -812,7 +812,7 @@ class BasicMultiDBTestCase(BasicTestCase):
         for x in 'The quick brown fox jumped over the lazy dog'.split():
             d2.put(x, self.makeData(x))
 
-        for x in string.letters:
+        for x in string.ascii_letters:
             d3.put(x, x * 70)
 
         d1.sync()
@@ -857,7 +857,7 @@ class BasicMultiDBTestCase(BasicTestCase):
                 print rec
             rec = c3.next()
 
-        self.assertEqual(count, len(string.letters))
+        self.assertEqual(count, len(string.ascii_letters))
         c1.close()
         c2.close()
         c3.close()
@@ -893,7 +893,7 @@ class PrivateObject(unittest.TestCase):
         a = 'example of private object'
         self.obj.set_private(a)
         b = self.obj.get_private()
-        self.assertTrue(a is b)
+        self.assertIs(a, b)
 
     def test03_leak_assignment(self):
         a = 'example of private object'

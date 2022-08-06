@@ -13,9 +13,9 @@ class SectionParser(object):
         raise NotImplementedError
 
     def _readString(self, name, section):
-        value = section.readString(name, '')
+        value = section.readWideString(name, '')
         if not value:
-            raise ParseError('The {0} of section "{1}" is not defined.'.format(name, self.getTagName()))
+            raise ParseError(u'The {0} of section "{1}" is not defined.'.format(name, self.getTagName()))
         return value
 
 

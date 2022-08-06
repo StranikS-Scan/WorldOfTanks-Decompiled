@@ -91,6 +91,7 @@ class build_ext(Command):
         if plat_py_include != py_include:
             self.include_dirs.append(plat_py_include)
         self.ensure_string_list('libraries')
+        self.ensure_string_list('link_objects')
         if self.libraries is None:
             self.libraries = []
         if self.library_dirs is None:
@@ -113,10 +114,12 @@ class build_ext(Command):
                     suffix = ''
                 else:
                     suffix = self.plat_name[4:]
-                new_lib = os.path.join(sys.exec_prefix, 'PCbuild')
-                if suffix:
-                    new_lib = os.path.join(new_lib, suffix)
-                self.library_dirs.append(new_lib)
+                for d in (('PCbuild',), ('PC', 'VS9.0')):
+                    new_lib = os.path.join(sys.exec_prefix, *d)
+                    if suffix:
+                        new_lib = os.path.join(new_lib, suffix)
+                    self.library_dirs.append(new_lib)
+
             elif MSVC_VERSION == 8:
                 self.library_dirs.append(os.path.join(sys.exec_prefix, 'PC', 'VS8.0'))
             elif MSVC_VERSION == 7:
@@ -131,7 +134,7 @@ class build_ext(Command):
             else:
                 self.library_dirs.append('.')
         if sysconfig.get_config_var('Py_ENABLE_SHARED'):
-            if sys.executable.startswith(os.path.join(sys.exec_prefix, 'bin')):
+            if not sysconfig.python_build:
                 self.library_dirs.append(sysconfig.get_config_var('LIBDIR'))
             else:
                 self.library_dirs.append('.')
@@ -197,7 +200,7 @@ class build_ext(Command):
             if not isinstance(ext, tuple) or len(ext) != 2:
                 raise DistutilsSetupError, "each element of 'ext_modules' option must be an Extension instance or 2-tuple"
             ext_name, build_info = ext
-            log.warn("old-style (ext_name, build_info) tuple found in ext_modules for extension '%s'-- please convert to Extension instance" % ext_name)
+            log.warn("old-style (ext_name, build_info) tuple found in ext_modules for extension '%s' -- please convert to Extension instance" % ext_name)
             if not (isinstance(ext_name, str) and extension_name_re.match(ext_name)):
                 raise DistutilsSetupError, "first element of each tuple in 'ext_modules' must be the extension name (a string)"
             if not isinstance(build_info, dict):

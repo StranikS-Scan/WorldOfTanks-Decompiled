@@ -75,7 +75,7 @@ class MonitorSettings(object):
         BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
 
     def setGlyphCache(self, scale=1):
-        textureSize = 1024 * math.ceil(scale)
+        textureSize = int(1024 * math.ceil(scale))
         GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
 
     @property

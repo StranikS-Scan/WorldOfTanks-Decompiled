@@ -147,11 +147,11 @@ class SliderThumb(PyGUIBase, DraggableComponent):
     @staticmethod
     def create(slider, thumbTexture='', isHorizontal=True):
         c = GUI.Window(thumbTexture)
-        c.materialFX = 'BLEND'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
         c.widthMode = slider.component.widthMode
         c.heightMode = slider.component.heightMode
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         c.position = (0, 0, 1)
         slider.component.addChild(c, 'thumb')
         return SliderThumb(c, isHorizontal)
@@ -236,11 +236,11 @@ class Slider(PyGUIBase, VisualStateComponent):
     @staticmethod
     def create(texture, thumbTexture='', isHorizontal=True, **kwargs):
         c = GUI.Window(texture)
-        c.materialFX = 'BLEND'
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         s = Slider(c, **kwargs)
         s.isHorizontal = isHorizontal
         thumb = SliderThumb.create(s, thumbTexture, isHorizontal)

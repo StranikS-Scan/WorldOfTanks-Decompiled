@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/run.py
 import sys
-import io
 import linecache
 import time
 import socket
@@ -127,12 +126,13 @@ def show_socket_error(err, address):
     import Tkinter
     import tkMessageBox
     root = Tkinter.Tk()
+    fix_scaling(root)
     root.withdraw()
     if err.args[0] == 61:
         msg = "IDLE's subprocess can't connect to %s:%d.  This may be due to your personal firewall configuration.  It is safe to allow this internal connection because no data is visible on external ports." % address
         tkMessageBox.showerror('IDLE Subprocess Error', msg, parent=root)
     else:
-        tkMessageBox.showerror('IDLE Subprocess Error', 'Socket Error: %s' % err.args[1])
+        tkMessageBox.showerror('IDLE Subprocess Error', 'Socket Error: %s' % err.args[1], parent=root)
     root.destroy()
 
 
@@ -181,6 +181,8 @@ def cleanup_traceback(tb, exclude):
         fn, ln, nm, line = tb[i]
         if nm == '?':
             nm = '-toplevel-'
+        if fn.startswith('<pyshell#') and IOBinding.encoding != 'utf-8':
+            ln -= 1
         if not line and fn.startswith('<pyshell#'):
             line = rpchandler.remotecall('linecache', 'getline', (fn, ln), {})
         tb[i] = (fn,
@@ -207,6 +209,17 @@ def exit():
 
     capture_warnings(False)
     sys.exit(0)
+
+
+def fix_scaling(root):
+    import tkFont
+    scaling = float(root.tk.call('tk', 'scaling'))
+    if scaling > 1.4:
+        for name in tkFont.names(root):
+            font = tkFont.Font(root=root, name=name, exists=True)
+            size = int(font['size'])
+            if size < 0:
+                font['size'] = int(round(-0.75 * size))
 
 
 class MyRPCServer(rpc.RPCServer):

@@ -3,7 +3,7 @@
 import unittest
 from idlelib import FormatParagraph as fp
 from idlelib.EditorWindow import EditorWindow
-from Tkinter import Tk, Text, TclError
+from Tkinter import Tk, Text
 from test.test_support import requires
 
 class Is_Get_Test(unittest.TestCase):
@@ -124,7 +124,7 @@ class FindTest(unittest.TestCase):
 
 class ReformatFunctionTest(unittest.TestCase):
 
-    def test_reformat_paragrah(self):
+    def test_reformat_paragraph(self):
         Equal = self.assertEqual
         reform = fp.reformat_paragraph
         hw = 'O hello world'
@@ -205,10 +205,10 @@ class FormatEventTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.root.destroy()
-        del cls.root
         del cls.text
         del cls.formatter
+        cls.root.destroy()
+        del cls.root
 
     def test_short_line(self):
         self.text.insert('1.0', 'Short line\n')

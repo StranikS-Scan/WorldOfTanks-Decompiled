@@ -122,11 +122,47 @@
       <runtime-effects>
         <effects-group>
           <condition>
-            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+            <checkpoint-not-reached>	VehicleUnlockedCheckpoint	</checkpoint-not-reached>
+            <inactive>	SecondVehicleIsOnResearch	</inactive>
           </condition>
           <effects>
             <request-exclusive-hint>	ResearchItemNodeButton	</request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <effects-group>
+          <condition>
+            <checkpoint-not-reached>	VehicleUnlockedCheckpoint	</checkpoint-not-reached>
+            <active>	SecondVehicleIsOnResearch	</active>
+          </condition>
+          <effects>
             <request-exclusive-hint>	ResearchRootNodeButton	</request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <effects-group>
+          <condition>
+            <checkpoint-reached>	VehicleUnlockedCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+            <inactive>	SecondVehicleIsOnResearch	</inactive>
+          </condition>
+          <effects>
+            <request-exclusive-hint>	ResearchItemNodeButton	</request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <effects-group>
+          <condition>
+            <checkpoint-reached>	VehicleUnlockedCheckpoint	</checkpoint-reached>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+            <active>	SecondVehicleIsOnResearch	</active>
+          </condition>
+          <effects>
+            <request-exclusive-hint>	ResearchRootNodeButton	</request-exclusive-hint>
+          </effects>
+        </effects-group>
+        <effects-group>
+          <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+          <effects>
             <set-visible>	VehicleBuyCheckbox	  <val>	False	</val>
             </set-visible>
             <request-exclusive-hint>	VehicleBuyAcademy	</request-exclusive-hint>

@@ -5,13 +5,13 @@ import tkMessageBox
 
 class TextViewer(Toplevel):
 
-    def __init__(self, parent, title, text, modal=True):
+    def __init__(self, parent, title, text, modal=True, _htest=False):
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
-        self.geometry('=%dx%d+%d+%d' % (625,
+        self.geometry('=%dx%d+%d+%d' % (750,
          500,
          parent.winfo_rootx() + 10,
-         parent.winfo_rooty() + 10))
+         parent.winfo_rooty() + (10 if not _htest else 100)))
         self.bg = '#ffffff'
         self.fg = '#000000'
         self.CreateWidgets()
@@ -23,7 +23,8 @@ class TextViewer(Toplevel):
         self.bind('<Escape>', self.Ok)
         self.textView.insert(0.0, text)
         self.textView.config(state=DISABLED)
-        if modal:
+        self.is_modal = modal
+        if self.is_modal:
             self.transient(parent)
             self.grab_set()
             self.wait_window()
@@ -43,6 +44,8 @@ class TextViewer(Toplevel):
         frameText.pack(side=TOP, expand=TRUE, fill=BOTH)
 
     def Ok(self, event=None):
+        if self.is_modal:
+            self.grab_release()
         self.destroy()
 
 
@@ -58,23 +61,15 @@ def view_file(parent, title, filename, encoding=None, modal=True):
         else:
             textFile = open(filename, 'r')
     except IOError:
-        import tkMessageBox
         tkMessageBox.showerror(title='File Load Error', message='Unable to load file %r .' % filename, parent=parent)
+    except UnicodeDecodeError as err:
+        showerror(title='Unicode Decode Error', message=str(err), parent=parent)
     else:
         return view_text(parent, title, textFile.read(), modal)
 
 
 if __name__ == '__main__':
-    root = Tk()
-    root.title('textView test')
-    filename = './textView.py'
-    text = file(filename, 'r').read()
-    btn1 = Button(root, text='view_text', command=lambda : view_text(root, 'view_text', text))
-    btn1.pack(side=LEFT)
-    btn2 = Button(root, text='view_file', command=lambda : view_file(root, 'view_file', filename))
-    btn2.pack(side=LEFT)
-    btn3 = Button(root, text='nonmodal view_text', command=lambda : view_text(root, 'nonmodal view_text', text, modal=False))
-    btn3.pack(side=LEFT)
-    close = Button(root, text='Close', command=root.destroy)
-    close.pack(side=RIGHT)
-    root.mainloop()
+    import unittest
+    unittest.main('idlelib.idle_test.test_textview', verbosity=2, exit=False)
+    from idlelib.idle_test.htest import run
+    run(TextViewer)

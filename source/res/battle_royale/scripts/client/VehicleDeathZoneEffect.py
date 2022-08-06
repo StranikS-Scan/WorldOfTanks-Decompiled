@@ -16,12 +16,14 @@ class VehicleDeathZoneEffect(DynamicScriptComponent):
         self.set_state()
 
     def set_state(self, _=None):
-        leftTime, endTime = self.timeout()
-        value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, False, leftTime, BrTimerViewState.fromZone(self.state), endTime)
+        value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, False, self.timeLeft(), BrTimerViewState.fromZone(self.state), 0)
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE_TIMER, value)
 
-    def timeout(self):
-        return (max(self.damageTime - BigWorld.serverTime(), 0.0), self.damageTime) if self.state == ZONE_STATE.CRITICAL else (0.0, 0.0)
+    def timeLeft(self):
+        if self.state == ZONE_STATE.CRITICAL:
+            if self.timeToDamage > 0:
+                return self.timeToDamage
+            return max(self.damageTime - BigWorld.serverTime(), 0.0)
 
     def onDamaged(self):
         value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, True, -1.0, None, -1.0)

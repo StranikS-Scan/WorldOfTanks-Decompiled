@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configHandler.py
+from __future__ import print_function
 import os
 import sys
-import string
-from ConfigParser import ConfigParser, NoOptionError, NoSectionError
+from ConfigParser import ConfigParser
+from Tkinter import TkVersion
+from tkFont import Font, nametofont
 
 class InvalidConfigType(Exception):
     pass
@@ -60,26 +62,23 @@ class IdleUserConfParser(IdleConfParser):
 
     def IsEmpty(self):
         self.RemoveEmptySections()
-        if self.sections():
-            return 0
-        else:
-            return 1
+        return not self.sections()
 
     def RemoveOption(self, section, option):
-        return self.remove_option(section, option) if self.has_section(section) else None
+        return self.remove_option(section, option) if self.has_section(section) else False
 
     def SetOption(self, section, option, value):
         if self.has_option(section, option):
             if self.get(section, option) == value:
-                return 0
+                return False
             else:
                 self.set(section, option, value)
-                return 1
+                return True
         else:
             if not self.has_section(section):
                 self.add_section(section)
             self.set(section, option, value)
-            return 1
+            return True
 
     def RemoveFile(self):
         if os.path.exists(self.file):
@@ -94,7 +93,8 @@ class IdleUserConfParser(IdleConfParser):
                 os.unlink(fname)
                 cfgFile = open(fname, 'w')
 
-            self.write(cfgFile)
+            with cfgFile:
+                self.write(cfgFile)
         else:
             self.RemoveFile()
 
@@ -102,6 +102,7 @@ class IdleUserConfParser(IdleConfParser):
 class IdleConf():
 
     def __init__(self):
+        self.config_types = ('main', 'extensions', 'highlight', 'keys')
         self.defaultCfg = {}
         self.userCfg = {}
         self.cfg = {}
@@ -114,14 +115,13 @@ class IdleConf():
         else:
             idleDir = os.path.abspath(sys.path[0])
         userDir = self.GetUserCfgDir()
-        configTypes = ('main', 'extensions', 'highlight', 'keys')
         defCfgFiles = {}
         usrCfgFiles = {}
-        for cfgType in configTypes:
+        for cfgType in self.config_types:
             defCfgFiles[cfgType] = os.path.join(idleDir, 'config-' + cfgType + '.def')
             usrCfgFiles[cfgType] = os.path.join(userDir, 'config-' + cfgType + '.cfg')
 
-        for cfgType in configTypes:
+        for cfgType in self.config_types:
             self.defaultCfg[cfgType] = IdleConfParser(defCfgFiles[cfgType])
             self.userCfg[cfgType] = IdleUserConfParser(usrCfgFiles[cfgType])
 
@@ -130,9 +130,9 @@ class IdleConf():
         userDir = os.path.expanduser('~')
         if userDir != '~':
             if not os.path.exists(userDir):
-                warn = '\n Warning: os.path.expanduser("~") points to\n ' + userDir + ',\n but the path does not exist.\n'
+                warn = '\n Warning: os.path.expanduser("~") points to\n ' + userDir + ',\n but the path does not exist.'
                 try:
-                    sys.stderr.write(warn)
+                    print(warn, file=sys.stderr)
                 except IOError:
                     pass
 
@@ -144,8 +144,8 @@ class IdleConf():
             try:
                 os.mkdir(userDir)
             except (OSError, IOError):
-                warn = '\n Warning: unable to create user config directory\n' + userDir + '\n Check path and permissions.\n Exiting!\n\n'
-                sys.stderr.write(warn)
+                warn = '\n Warning: unable to create user config directory\n' + userDir + '\n Check path and permissions.\n Exiting!\n'
+                print(warn, file=sys.stderr)
                 raise SystemExit
 
         return userDir
@@ -155,12 +155,12 @@ class IdleConf():
             if self.userCfg[configType].has_option(section, option):
                 return self.userCfg[configType].Get(section, option, type=type, raw=raw)
         except ValueError:
-            warning = '\n Warning: configHandler.py - IdleConf.GetOption -\n invalid %r value for configuration option %r\n from section %r: %r\n' % (type,
+            warning = '\n Warning: configHandler.py - IdleConf.GetOption -\n invalid %r value for configuration option %r\n from section %r: %r' % (type,
              option,
              section,
              self.userCfg[configType].Get(section, option, raw=raw))
             try:
-                sys.stderr.write(warning)
+                print(warning, file=sys.stderr)
             except IOError:
                 pass
 
@@ -171,9 +171,9 @@ class IdleConf():
             pass
 
         if warn_on_default:
-            warning = '\n Warning: configHandler.py - IdleConf.GetOption -\n problem retrieving configuration option %r\n from section %r.\n returning default value: %r\n' % (option, section, default)
+            warning = '\n Warning: configHandler.py - IdleConf.GetOption -\n problem retrieving configuration option %r\n from section %r.\n returning default value: %r' % (option, section, default)
             try:
-                sys.stderr.write(warning)
+                print(warning, file=sys.stderr)
             except IOError:
                 pass
 
@@ -183,14 +183,14 @@ class IdleConf():
         self.userCfg[configType].SetOption(section, option, value)
 
     def GetSectionList(self, configSet, configType):
-        if configType not in ('main', 'extensions', 'highlight', 'keys'):
-            raise InvalidConfigType, 'Invalid configType specified'
+        if configType not in self.config_types:
+            raise InvalidConfigType('Invalid configType specified')
         if configSet == 'user':
             cfgParser = self.userCfg[configType]
         elif configSet == 'default':
             cfgParser = self.defaultCfg[configType]
         else:
-            raise InvalidConfigSet, 'Invalid configSet specified'
+            raise InvalidConfigSet('Invalid configSet specified')
         return cfgParser.sections()
 
     def GetHighlight(self, theme, element, fgBg=None):
@@ -211,7 +211,7 @@ class IdleConf():
             return highlight['foreground']
         if fgBg == 'bg':
             return highlight['background']
-        raise InvalidFgBg, 'Invalid fgBg specified'
+        raise InvalidFgBg('Invalid fgBg specified')
 
     def GetThemeDict(self, type, themeName):
         if type == 'user':
@@ -219,7 +219,7 @@ class IdleConf():
         elif type == 'default':
             cfgParser = self.defaultCfg['highlight']
         else:
-            raise InvalidTheme, 'Invalid theme type specified'
+            raise InvalidTheme('Invalid theme type specified')
         theme = {'normal-foreground': '#000000',
          'normal-background': '#ffffff',
          'keyword-foreground': '#000000',
@@ -247,21 +247,29 @@ class IdleConf():
          'stderr-background': '#ffffff',
          'console-foreground': '#000000',
          'console-background': '#ffffff'}
-        for element in theme.keys():
+        for element in theme:
             if not cfgParser.has_option(themeName, element):
-                warning = '\n Warning: configHandler.py - IdleConf.GetThemeDict -\n problem retrieving theme element %r\n from theme %r.\n returning default value: %r\n' % (element, themeName, theme[element])
+                warning = '\n Warning: configHandler.IdleConf.GetThemeDict -\n problem retrieving theme element %r\n from theme %r.\n returning default color: %r' % (element, themeName, theme[element])
                 try:
-                    sys.stderr.write(warning)
+                    print(warning, file=sys.stderr)
                 except IOError:
                     pass
 
-            colour = cfgParser.Get(themeName, element, default=theme[element])
-            theme[element] = colour
+            theme[element] = cfgParser.Get(themeName, element, default=theme[element])
 
         return theme
 
     def CurrentTheme(self):
-        return self.GetOption('main', 'Theme', 'name', default='')
+        default = self.GetOption('main', 'Theme', 'default', type='bool', default=True)
+        if default:
+            theme = self.GetOption('main', 'Theme', 'name2', default='')
+        if default and not theme or not default:
+            theme = self.GetOption('main', 'Theme', 'name', default='')
+        source = self.defaultCfg if default else self.userCfg
+        if source['highlight'].has_section(theme):
+            return theme
+        else:
+            return 'IDLE Classic'
 
     def CurrentKeys(self):
         return self.GetOption('main', 'Keys', 'name', default='')
@@ -298,8 +306,7 @@ class IdleConf():
             if name.endswith(('_bindings', '_cfgBindings')):
                 kbNameIndicies.append(names.index(name))
 
-        kbNameIndicies.sort()
-        kbNameIndicies.reverse()
+        kbNameIndicies.sort(reverse=True)
         for index in kbNameIndicies:
             del names[index]
 
@@ -309,7 +316,7 @@ class IdleConf():
         extName = None
         vEvent = '<<' + virtualEvent + '>>'
         for extn in self.GetExtensions(active_only=0):
-            for event in self.GetExtensionKeys(extn).keys():
+            for event in self.GetExtensionKeys(extn):
                 if event == vEvent:
                     extName = extn
 
@@ -373,7 +380,7 @@ class IdleConf():
         for extn in activeExtns:
             extKeys = self.__GetRawExtensionKeys(extn)
             if extKeys:
-                for event in extKeys.keys():
+                for event in extKeys:
                     if extKeys[event] in keySet.values():
                         extKeys[event] = ''
                     keySet[event] = extKeys[event]
@@ -381,7 +388,7 @@ class IdleConf():
         return keySet
 
     def IsCoreBinding(self, virtualEvent):
-        return '<<' + virtualEvent + '>>' in self.GetCoreKeys().keys()
+        return '<<' + virtualEvent + '>>' in self.GetCoreKeys()
 
     def GetCoreKeys(self, keySetName=None):
         keyBindings = {'<<copy>>': ['<Control-c>', '<Control-C>'],
@@ -434,13 +441,13 @@ class IdleConf():
          '<<del-word-left>>': ['<Control-Key-BackSpace>'],
          '<<del-word-right>>': ['<Control-Key-Delete>']}
         if keySetName:
-            for event in keyBindings.keys():
+            for event in keyBindings:
                 binding = self.GetKeyBinding(keySetName, event)
                 if binding:
                     keyBindings[event] = binding
-                warning = '\n Warning: configHandler.py - IdleConf.GetCoreKeys -\n problem retrieving key binding for event %r\n from key set %r.\n returning default value: %r\n' % (event, keySetName, keyBindings[event])
+                warning = '\n Warning: configHandler.py - IdleConf.GetCoreKeys -\n problem retrieving key binding for event %r\n from key set %r.\n returning default value: %r' % (event, keySetName, keyBindings[event])
                 try:
-                    sys.stderr.write(warning)
+                    print(warning, file=sys.stderr)
                 except IOError:
                     pass
 
@@ -453,7 +460,7 @@ class IdleConf():
         elif configSet == 'default':
             cfgParser = self.defaultCfg['main']
         else:
-            raise InvalidConfigSet, 'Invalid configSet specified'
+            raise InvalidConfigSet('Invalid configSet specified')
         options = cfgParser.GetOptionList('HelpFiles')
         for option in options:
             value = cfgParser.Get('HelpFiles', option, default=';')
@@ -461,7 +468,7 @@ class IdleConf():
                 menuItem = ''
                 helpPath = ''
             else:
-                value = string.split(value, ';')
+                value = value.split(';')
                 menuItem = value[0].strip()
                 helpPath = value[1].strip()
             if menuItem and helpPath:
@@ -474,33 +481,61 @@ class IdleConf():
         allHelpSources = self.GetExtraHelpSourceList('default') + self.GetExtraHelpSourceList('user')
         return allHelpSources
 
+    def GetFont(self, root, configType, section):
+        family = self.GetOption(configType, section, 'font', default='courier')
+        size = self.GetOption(configType, section, 'font-size', type='int', default='10')
+        bold = self.GetOption(configType, section, 'font-bold', default=0, type='bool')
+        if family == 'TkFixedFont':
+            if TkVersion < 8.5:
+                family = 'Courier'
+            else:
+                f = Font(name='TkFixedFont', exists=True, root=root)
+                actualFont = Font.actual(f)
+                family = actualFont['family']
+                size = actualFont['size']
+                if size <= 0:
+                    size = 10
+                bold = actualFont['weight'] == 'bold'
+        return (family, size, 'bold' if bold else 'normal')
+
     def LoadCfgFiles(self):
-        for key in self.defaultCfg.keys():
+        for key in self.defaultCfg:
             self.defaultCfg[key].Load()
             self.userCfg[key].Load()
 
     def SaveUserCfgFiles(self):
-        for key in self.userCfg.keys():
+        for key in self.userCfg:
             self.userCfg[key].Save()
 
 
 idleConf = IdleConf()
 if __name__ == '__main__':
+    from zlib import crc32
+    line, crc = (0, 0)
+
+    def sprint(obj):
+        global crc
+        global line
+        txt = str(obj)
+        line += 1
+        crc = crc32(txt.encode(encoding='utf-8'), crc)
+        print(txt)
+
 
     def dumpCfg(cfg):
-        print '\n', cfg, '\n'
-        for key in cfg.keys():
+        print('\n', cfg, '\n')
+        for key in sorted(cfg.keys()):
             sections = cfg[key].sections()
-            print key
-            print sections
+            sprint(key)
+            sprint(sections)
             for section in sections:
                 options = cfg[key].options(section)
-                print section
-                print options
+                sprint(section)
+                sprint(options)
                 for option in options:
-                    print option, '=', cfg[key].Get(section, option)
+                    sprint(option + ' = ' + cfg[key].Get(section, option))
 
 
     dumpCfg(idleConf.defaultCfg)
     dumpCfg(idleConf.userCfg)
-    print idleConf.userCfg['main'].Get('Theme', 'name')
+    print('\nlines = ', line, ', crc = ', crc, sep='')

@@ -379,6 +379,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
     APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT = 'ApplyAbilitiesToTypeCheckboxHint'
     SHOW_ABILITIES_BUTTON_HINT = 'ShowAbilitiesButtonHint'
+    BATTLE_MATTERS_FIGHT_BUTTON_HINT = 'BattleMattersFightButtonHint'
+    BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT = 'BattleMattersEntryPointHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

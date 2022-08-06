@@ -27,7 +27,7 @@ class bdist_rpm(Command):
      ('release=', None, 'RPM release number'),
      ('serial=', None, 'RPM serial number'),
      ('vendor=', None, 'RPM "vendor" (eg. "Joe Blow <joe@example.com>") [default: maintainer or author from setup script]'),
-     ('packager=', None, 'RPM packager (eg. "Jane Doe <jane@example.net>")[default: vendor]'),
+     ('packager=', None, 'RPM packager (eg. "Jane Doe <jane@example.net>") [default: vendor]'),
      ('doc-files=', None, 'list of documentation files (space or comma-separated)'),
      ('changelog=', None, 'RPM changelog'),
      ('icon=', None, 'name of icon file'),

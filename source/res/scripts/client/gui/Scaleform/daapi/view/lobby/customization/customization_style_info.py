@@ -153,13 +153,18 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             stylePrice = style.getBuyPrice().price
             moneyState = getPurchaseMoneyState(stylePrice)
             purchaseItem = first(self.__ctx.mode.getPurchaseItems())
+            tooltip = backport.text(R.strings.vehicle_customization.customization.buyDisabled.body())
             if purchaseItem is not None and purchaseItem.isFromInventory:
                 label = backport.text(R.strings.vehicle_customization.commit.apply())
-                enabled = True
+                if self.__ctx.mode.isOutfitsHasLockedItems():
+                    enabled = False
+                    tooltip = backport.text(R.strings.vehicle_customization.customization.lockedItemsApply())
+                else:
+                    enabled = True
             else:
                 label = backport.text(R.strings.vehicle_customization.commit.buy())
                 enabled = isTransactionValid(moneyState, stylePrice)
-            buttonVO = ButtonVO(enabled=enabled, label=label, disabledTooltip=backport.text(R.strings.vehicle_customization.customization.buyDisabled.body()), visible=True)._asdict()
+            buttonVO = ButtonVO(enabled=enabled, label=label, disabledTooltip=tooltip, visible=True)._asdict()
         return buttonVO
 
     def __makeParamsVO(self, style):

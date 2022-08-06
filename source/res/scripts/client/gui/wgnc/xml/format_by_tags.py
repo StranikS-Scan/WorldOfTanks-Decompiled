@@ -141,7 +141,7 @@ class _DateTimeFormatter(_TimeFormatter):
 
     def _getValue(self, value):
         value = self._getLocalTime(value)
-        return '{0:>s} {1:>s}'.format(backport.getShortDateFormat(value), backport.getLongTimeFormat(value))
+        return u'{0:>s} {1:>s}'.format(backport.getShortDateFormat(value), backport.getLongTimeFormat(value))
 
 
 _LINK_HTML = '<a href="event:{0}">{1}</a>'

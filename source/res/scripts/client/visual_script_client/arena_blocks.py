@@ -292,7 +292,7 @@ class OnBattleRoundFinished(Block, ArenaMeta):
     def onFinishScript(self):
         g_playerEvents.onRoundFinished -= self._onRoundFinished
 
-    def _onRoundFinished(self, winnerTeam, reason):
+    def _onRoundFinished(self, winnerTeam, reason, extraData):
         self._winner.setValue(winnerTeam)
         self._reason.setValue(reason)
         self._out.call()

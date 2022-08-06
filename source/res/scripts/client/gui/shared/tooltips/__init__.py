@@ -81,7 +81,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
     RANKED_SELECTABLE_REWARD = 'rankedSelectableReward'
-    FUN_RANDOM_CALENDAR_DAY = 'funRandomCalendarDayInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

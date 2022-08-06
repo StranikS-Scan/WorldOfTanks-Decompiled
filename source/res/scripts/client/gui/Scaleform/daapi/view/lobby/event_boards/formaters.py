@@ -16,27 +16,27 @@ from gui.event_boards.event_boards_timer import FORMAT_MINUTE_STR
 
 def formatNotAvailableTextWithIcon(text):
     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_NOTAVAILABLEICON)
-    return '{} {}'.format(icon, text_styles.main(_ms(text)))
+    return u'{} {}'.format(icon, text_styles.main(_ms(text)))
 
 
 def formatErrorTextWithIcon(text):
     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_DUPLICATED_OPTIONAL, 16, 16, -3, 0)
-    return '{} {}'.format(icon, text_styles.error(_ms(text)))
+    return u'{} {}'.format(icon, text_styles.error(_ms(text)))
 
 
 def formatAllertTextWithIcon(text):
     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ALERTICON)
-    return '{} {}'.format(icon, text_styles.error(_ms(text)))
+    return u'{} {}'.format(icon, text_styles.error(_ms(text)))
 
 
 def formatAttentionTextWithIcon(text):
     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, 16, 16, -4, 0)
-    return '{} {}'.format(icon, text_styles.error(_ms(text)))
+    return u'{} {}'.format(icon, text_styles.error(_ms(text)))
 
 
 def formatOkTextWithIcon(text):
     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK, 16, 16, -3, 0)
-    return '{} {}'.format(icon, text_styles.success(_ms(text)))
+    return u'{} {}'.format(icon, text_styles.success(_ms(text)))
 
 
 def formatVehicleNameWithTypeIcon(vehicle, path):
@@ -76,7 +76,7 @@ def getNationText(nation):
 
 def getNationTextWithIcon(nation):
     iconNation = icons.makeImageTag(RES_ICONS.getFilterNation(nation), width=26, height=16)
-    return '{}{}'.format(iconNation, getNationText(nation))
+    return u'{}{}'.format(iconNation, getNationText(nation))
 
 
 def vehicleTypeText(vType):
@@ -88,7 +88,7 @@ def formatTimeToEnd(timeValue, period):
         timeValue = 1
         period = FORMAT_MINUTE_STR
     timeName = EVENT_BOARDS.time_period(period)
-    text = '{} {}'.format(timeValue, _ms(timeName))
+    text = u'{} {}'.format(timeValue, _ms(timeName))
     return text
 
 

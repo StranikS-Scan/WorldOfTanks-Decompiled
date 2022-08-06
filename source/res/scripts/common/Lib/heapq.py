@@ -1,6 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/heapq.py
-__about__ = 'Heap queues\n\n[explanation by Fran\xe7ois Pinard]\n\nHeaps are arrays for which a[k] <= a[2*k+1] and a[k] <= a[2*k+2] for\nall k, counting elements from 0.  For the sake of comparison,\nnon-existing elements are considered to be infinite.  The interesting\nproperty of a heap is that a[0] is always its smallest element.\n\nThe strange invariant above is meant to be an efficient memory\nrepresentation for a tournament.  The numbers below are `k\', not a[k]:\n\n                                   0\n\n                  1                                 2\n\n          3               4                5               6\n\n      7       8       9       10      11      12      13      14\n\n    15 16   17 18   19 20   21 22   23 24   25 26   27 28   29 30\n\n\nIn the tree above, each cell `k\' is topping `2*k+1\' and `2*k+2\'.  In\nan usual binary tournament we see in sports, each cell is the winner\nover the two cells it tops, and we can trace the winner down the tree\nto see all opponents s/he had.  However, in many computer applications\nof such tournaments, we do not need to trace the history of a winner.\nTo be more memory efficient, when a winner is promoted, we try to\nreplace it by something else at a lower level, and the rule becomes\nthat a cell and the two cells it tops contain three different items,\nbut the top cell "wins" over the two topped cells.\n\nIf this heap invariant is protected at all time, index 0 is clearly\nthe overall winner.  The simplest algorithmic way to remove it and\nfind the "next" winner is to move some loser (let\'s say cell 30 in the\ndiagram above) into the 0 position, and then percolate this new 0 down\nthe tree, exchanging values, until the invariant is re-established.\nThis is clearly logarithmic on the total number of items in the tree.\nBy iterating over all items, you get an O(n ln n) sort.\n\nA nice feature of this sort is that you can efficiently insert new\nitems while the sort is going on, provided that the inserted items are\nnot "better" than the last 0\'th element you extracted.  This is\nespecially useful in simulation contexts, where the tree holds all\nincoming events, and the "win" condition means the smallest scheduled\ntime.  When an event schedule other events for execution, they are\nscheduled into the future, so they can easily go into the heap.  So, a\nheap is a good structure for implementing schedulers (this is what I\nused for my MIDI sequencer :-).\n\nVarious structures for implementing schedulers have been extensively\nstudied, and heaps are good for this, as they are reasonably speedy,\nthe speed is almost constant, and the worst case is not much different\nthan the average case.  However, there are other representations which\nare more efficient overall, yet the worst cases might be terrible.\n\nHeaps are also very useful in big disk sorts.  You most probably all\nknow that a big sort implies producing "runs" (which are pre-sorted\nsequences, which size is usually related to the amount of CPU memory),\nfollowed by a merging passes for these runs, which merging is often\nvery cleverly organised[1].  It is very important that the initial\nsort produces the longest runs possible.  Tournaments are a good way\nto that.  If, using all the memory available to hold a tournament, you\nreplace and percolate items that happen to fit the current run, you\'ll\nproduce runs which are twice the size of the memory for random input,\nand much better for input fuzzily ordered.\n\nMoreover, if you output the 0\'th item on disk and get an input which\nmay not fit in the current tournament (because the value "wins" over\nthe last output value), it cannot fit in the heap, so the size of the\nheap decreases.  The freed memory could be cleverly reused immediately\nfor progressively building a second heap, which grows at exactly the\nsame rate the first heap is melting.  When the first heap completely\nvanishes, you switch heaps and start a new run.  Clever and quite\neffective!\n\nIn a word, heaps are useful memory structures to know.  I use them in\na few applications, and I think it is good to keep a `heap\' module\naround. :-)\n\n--------------------\n[1] The disk balancing algorithms which are current, nowadays, are\nmore annoying than clever, and this is a consequence of the seeking\ncapabilities of the disks.  On devices which cannot seek, like big\ntape drives, the story was quite different, and one had to be very\nclever to ensure (far in advance) that each tape movement will be the\nmost effective possible (that is, will best participate at\n"progressing" the merge).  Some tapes were even able to read\nbackwards, and this was also used to avoid the rewinding time.\nBelieve me, real good tape sorts were quite spectacular to watch!\nFrom all times, sorting has always been a Great Art! :-)\n'
+# Compiled at: 2016-03-11 10:38:11
+"""Heap queue algorithm (a.k.a. priority queue).
+
+Heaps are arrays for which a[k] <= a[2*k+1] and a[k] <= a[2*k+2] for
+all k, counting elements from 0.  For the sake of comparison,
+non-existing elements are considered to be infinite.  The interesting
+property of a heap is that a[0] is always its smallest element.
+
+Usage:
+
+heap = []            # creates an empty heap
+heappush(heap, item) # pushes a new item on the heap
+item = heappop(heap) # pops the smallest item from the heap
+item = heap[0]       # smallest item on the heap without popping it
+heapify(x)           # transforms list into a heap, in-place, in linear time
+item = heapreplace(heap, item) # pops and returns smallest item, and adds
+                               # new item; the heap size is unchanged
+
+Our API differs from textbook heap algorithms as follows:
+
+- We use 0-based indexing.  This makes the relationship between the
+  index for a node and the indexes for its children slightly less
+  obvious, but is more suitable since Python uses 0-based indexing.
+
+- Our heappop() method returns the smallest item, not the largest.
+
+These two make it possible to view the heap as a regular Python list
+without surprises: heap[0] is the smallest item, and heap.sort()
+maintains the heap invariant!
+"""
+__about__ = 'Heap queues\n\n[explanation by Fran\xe7ois Pinard]\n\nHeaps are arrays for which a[k] <= a[2*k+1] and a[k] <= a[2*k+2] for\nall k, counting elements from 0.  For the sake of comparison,\nnon-existing elements are considered to be infinite.  The interesting\nproperty of a heap is that a[0] is always its smallest element.\n\nThe strange invariant above is meant to be an efficient memory\nrepresentation for a tournament.  The numbers below are `k\', not a[k]:\n\n                                   0\n\n                  1                                 2\n\n          3               4                5               6\n\n      7       8       9       10      11      12      13      14\n\n    15 16   17 18   19 20   21 22   23 24   25 26   27 28   29 30\n\n\nIn the tree above, each cell `k\' is topping `2*k+1\' and `2*k+2\'.  In\na usual binary tournament we see in sports, each cell is the winner\nover the two cells it tops, and we can trace the winner down the tree\nto see all opponents s/he had.  However, in many computer applications\nof such tournaments, we do not need to trace the history of a winner.\nTo be more memory efficient, when a winner is promoted, we try to\nreplace it by something else at a lower level, and the rule becomes\nthat a cell and the two cells it tops contain three different items,\nbut the top cell "wins" over the two topped cells.\n\nIf this heap invariant is protected at all time, index 0 is clearly\nthe overall winner.  The simplest algorithmic way to remove it and\nfind the "next" winner is to move some loser (let\'s say cell 30 in the\ndiagram above) into the 0 position, and then percolate this new 0 down\nthe tree, exchanging values, until the invariant is re-established.\nThis is clearly logarithmic on the total number of items in the tree.\nBy iterating over all items, you get an O(n ln n) sort.\n\nA nice feature of this sort is that you can efficiently insert new\nitems while the sort is going on, provided that the inserted items are\nnot "better" than the last 0\'th element you extracted.  This is\nespecially useful in simulation contexts, where the tree holds all\nincoming events, and the "win" condition means the smallest scheduled\ntime.  When an event schedule other events for execution, they are\nscheduled into the future, so they can easily go into the heap.  So, a\nheap is a good structure for implementing schedulers (this is what I\nused for my MIDI sequencer :-).\n\nVarious structures for implementing schedulers have been extensively\nstudied, and heaps are good for this, as they are reasonably speedy,\nthe speed is almost constant, and the worst case is not much different\nthan the average case.  However, there are other representations which\nare more efficient overall, yet the worst cases might be terrible.\n\nHeaps are also very useful in big disk sorts.  You most probably all\nknow that a big sort implies producing "runs" (which are pre-sorted\nsequences, which size is usually related to the amount of CPU memory),\nfollowed by a merging passes for these runs, which merging is often\nvery cleverly organised[1].  It is very important that the initial\nsort produces the longest runs possible.  Tournaments are a good way\nto that.  If, using all the memory available to hold a tournament, you\nreplace and percolate items that happen to fit the current run, you\'ll\nproduce runs which are twice the size of the memory for random input,\nand much better for input fuzzily ordered.\n\nMoreover, if you output the 0\'th item on disk and get an input which\nmay not fit in the current tournament (because the value "wins" over\nthe last output value), it cannot fit in the heap, so the size of the\nheap decreases.  The freed memory could be cleverly reused immediately\nfor progressively building a second heap, which grows at exactly the\nsame rate the first heap is melting.  When the first heap completely\nvanishes, you switch heaps and start a new run.  Clever and quite\neffective!\n\nIn a word, heaps are useful memory structures to know.  I use them in\na few applications, and I think it is good to keep a `heap\' module\naround. :-)\n\n--------------------\n[1] The disk balancing algorithms which are current, nowadays, are\nmore annoying than clever, and this is a consequence of the seeking\ncapabilities of the disks.  On devices which cannot seek, like big\ntape drives, the story was quite different, and one had to be very\nclever to ensure (far in advance) that each tape movement will be the\nmost effective possible (that is, will best participate at\n"progressing" the merge).  Some tapes were even able to read\nbackwards, and this was also used to avoid the rewinding time.\nBelieve me, real good tape sorts were quite spectacular to watch!\nFrom all times, sorting has always been a Great Art! :-)\n'
 __all__ = ['heappush',
  'heappop',
  'heapify',
@@ -17,11 +47,13 @@ def cmp_lt(x, y):
 
 
 def heappush(heap, item):
+    """Push item onto heap, maintaining the heap invariant."""
     heap.append(item)
     _siftdown(heap, 0, len(heap) - 1)
 
 
 def heappop(heap):
+    """Pop the smallest item off the heap, maintaining the heap invariant."""
     lastelt = heap.pop()
     if heap:
         returnitem = heap[0]
@@ -33,6 +65,16 @@ def heappop(heap):
 
 
 def heapreplace(heap, item):
+    """Pop and return the current smallest value, and add the new item.
+    
+    This is more efficient than heappop() followed by heappush(), and can be
+    more appropriate when using a fixed-size heap.  Note that the value
+    returned may be larger than item!  That constrains reasonable uses of
+    this routine unless written as part of a conditional replacement:
+    
+        if item > heap[0]:
+            item = heapreplace(heap, item)
+    """
     returnitem = heap[0]
     heap[0] = item
     _siftup(heap, 0)
@@ -40,6 +82,7 @@ def heapreplace(heap, item):
 
 
 def heappushpop(heap, item):
+    """Fast version of a heappush followed by a heappop."""
     if heap and cmp_lt(heap[0], item):
         item, heap[0] = heap[0], item
         _siftup(heap, 0)
@@ -47,12 +90,14 @@ def heappushpop(heap, item):
 
 
 def heapify(x):
+    """Transform list into a heap, in-place, in O(len(x)) time."""
     n = len(x)
     for i in reversed(xrange(n // 2)):
         _siftup(x, i)
 
 
 def _heappushpop_max(heap, item):
+    """Maxheap version of a heappush followed by a heappop."""
     if heap and cmp_lt(item, heap[0]):
         item, heap[0] = heap[0], item
         _siftup_max(heap, 0)
@@ -60,12 +105,17 @@ def _heappushpop_max(heap, item):
 
 
 def _heapify_max(x):
+    """Transform list into a maxheap, in-place, in O(len(x)) time."""
     n = len(x)
     for i in reversed(range(n // 2)):
         _siftup_max(x, i)
 
 
 def nlargest(n, iterable):
+    """Find the n largest elements in a dataset.
+    
+    Equivalent to:  sorted(iterable, reverse=True)[:n]
+    """
     if n < 0:
         return []
     it = iter(iterable)
@@ -82,6 +132,10 @@ def nlargest(n, iterable):
 
 
 def nsmallest(n, iterable):
+    """Find the n smallest elements in a dataset.
+    
+    Equivalent to:  sorted(iterable)[:n]
+    """
     if n < 0:
         return []
     it = iter(iterable)
@@ -129,6 +183,7 @@ def _siftup(heap, pos):
 
 
 def _siftdown_max(heap, startpos, pos):
+    """Maxheap variant of _siftdown"""
     newitem = heap[pos]
     while pos > startpos:
         parentpos = pos - 1 >> 1
@@ -143,6 +198,7 @@ def _siftdown_max(heap, startpos, pos):
 
 
 def _siftup_max(heap, pos):
+    """Maxheap variant of _siftup"""
     endpos = len(heap)
     startpos = pos
     newitem = heap[pos]
@@ -165,6 +221,16 @@ except ImportError:
     pass
 
 def merge(*iterables):
+    """Merge multiple sorted inputs into a single sorted output.
+    
+    Similar to sorted(itertools.chain(*iterables)) but returns a generator,
+    does not pull the data into memory all at once, and assumes that each of
+    the input streams is already sorted (smallest to largest).
+    
+    >>> list(merge([1,3,5,7], [0,2,4,8], [5,10,15,20], [], [25]))
+    [0, 1, 2, 3, 4, 5, 5, 7, 8, 10, 15, 20, 25]
+    
+    """
     _heappop, _heapreplace, _StopIteration = heappop, heapreplace, StopIteration
     _len = len
     h = []
@@ -198,6 +264,10 @@ def merge(*iterables):
 _nsmallest = nsmallest
 
 def nsmallest(n, iterable, key=None):
+    """Find the n smallest elements in a dataset.
+    
+    Equivalent to:  sorted(iterable, key=key)[:n]
+    """
     if n == 1:
         it = iter(iterable)
         head = list(islice(it, 1))
@@ -228,6 +298,10 @@ def nsmallest(n, iterable, key=None):
 _nlargest = nlargest
 
 def nlargest(n, iterable, key=None):
+    """Find the n largest elements in a dataset.
+    
+    Equivalent to:  sorted(iterable, key=key, reverse=True)[:n]
+    """
     if n == 1:
         it = iter(iterable)
         head = list(islice(it, 1))

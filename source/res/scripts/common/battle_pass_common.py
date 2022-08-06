@@ -419,7 +419,7 @@ class BattlePassConfig(object):
         return (fromLevel, toLevel)
 
     def getChapterIDs(self):
-        return sorted(self.chapters.iterkeys())
+        return list(self.chapters.iterkeys())
 
     def getAvailableStyles(self):
         return tuple((chapter['styleId'] for chapter in self.chapters.itervalues()))

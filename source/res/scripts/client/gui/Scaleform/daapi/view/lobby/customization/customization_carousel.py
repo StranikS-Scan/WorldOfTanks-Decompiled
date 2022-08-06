@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_carousel.py
 import logging
 from collections import defaultdict, namedtuple, OrderedDict
+from itertools import chain
 import typing
 from CurrentVehicle import g_currentVehicle
 from cache import cached_property
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isItemLimitReached, isItemUsedUp, vehicleHasSlot, ITEM_TYPE_TO_TAB
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors
+from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors, getGroupHelper
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -26,7 +27,7 @@ _logger = logging.getLogger(__name__)
 def comparisonKey(item):
     typeOrder = TYPES_ORDER.index(item.itemTypeID)
     isNationalEmblem = ItemTags.NATIONAL_EMBLEM in item.tags
-    formfactorId = 0 if not hasattr(item, 'formfactor') else ProjectionDecalFormTags.ALL.index(item.formfactor)
+    formfactorId = ProjectionDecalFormTags.ALL.index(item.formfactor) if hasattr(item, 'formfactor') and item.formfactor else 0
     return (typeOrder,
      not isNationalEmblem,
      not item.isRare(),
@@ -36,6 +37,7 @@ def comparisonKey(item):
 
 
 CustomizationBookmarkVO = namedtuple('CustomizationBookmarkVO', ('bookmarkName', 'bookmarkIndex'))
+CustomizationArrowVO = namedtuple('CustomizationArrowVO', ('index', 'enabled'))
 SelectedItem = namedtuple('SelectedItem', ('intCD', 'idx'))
 SelectedItem.__new__.__defaults__ = (-1, -1)
 
@@ -53,14 +55,20 @@ class ItemsData(object):
     def hasProgressiveItems(self):
         return any((item.isProgressive for item in self.items))
 
+    @cached_property
+    def hasQuestProgressItems(self):
+        return any((item.isQuestsProgression for item in self.items))
+
 
 class CarouselData(object):
-    __slots__ = ('items', 'sizes', 'bookmarks')
+    __slots__ = ('items', 'sizes', 'bookmarks', 'arrows', 'showSeparators')
 
     def __init__(self):
         self.items = []
         self.sizes = []
         self.bookmarks = []
+        self.arrows = []
+        self.showSeparators = False
 
 
 class CarouselCache(object):
@@ -135,11 +143,22 @@ class CarouselCache(object):
             showBookmarks = False
         carouselData = CarouselData()
         lastGroupID = None
-        for item in filteredItems:
-            if showBookmarks and item.groupID != lastGroupID:
-                lastGroupID = item.groupID
-                bookmarkVO = CustomizationBookmarkVO(item.groupUserName, len(carouselData.items))
+        carouselData.showSeparators = itemsData.hasQuestProgressItems and self.__ctx.mode.modeId == CustomizationModes.EDITABLE_STYLE
+        for idx, item in enumerate(filteredItems):
+            helper = getGroupHelper(item)
+            groupID = helper.getGroupID()
+            groupUserName = helper.getGroupName()
+            if showBookmarks and groupID != lastGroupID:
+                lastGroupID = groupID
+                bookmarkVO = CustomizationBookmarkVO(groupUserName, len(carouselData.items))
                 carouselData.bookmarks.append(bookmarkVO._asdict())
+            isLastItem = idx == len(filteredItems) - 1
+            if item.isQuestsProgression and not isLastItem:
+                nextItem = filteredItems[idx + 1]
+                nextGroupID = getGroupHelper(nextItem).getGroupID()
+                if nextItem and nextGroupID == groupID and item.descriptor.requiredTokenCount != nextItem.descriptor.requiredTokenCount:
+                    arrowVO = CustomizationArrowVO(idx, item.isUnlockedByToken())
+                    carouselData.arrows.append(arrowVO._asdict())
             carouselData.items.append(item.intCD)
             carouselData.sizes.append(item.isWide())
 
@@ -194,24 +213,41 @@ class CarouselCache(object):
             styleBaseItems = [ self.__service.getItemByCD(intCD) for intCD in styleBaseOutfit.items() ]
             for tabId, itemsData in itemsDataStorage.iteritems():
                 itemTypes = CustomizationTabs.ITEM_TYPES[tabId]
-                filteredItems = [ item for item in itemsData.items if itemsFilter(item.descriptor) ]
+                questItems = []
+                questItemsIDs = []
+                if style.isQuestsProgression:
+                    qProg = style.descriptor.questsProgression
+                    for token in sorted(qProg.getGroupTokens()):
+                        groupItems = qProg.getItemsForGroup(token)
+                        for itemsForLevel in groupItems:
+                            for itemType in itemTypes:
+                                c11nType = C11N_ITEM_TYPE_MAP[itemType]
+                                itemsIdsForType = itemsForLevel.get(c11nType, ())
+                                buf = [ self.__service.getItemByID(itemType, itemId) for itemId in itemsIdsForType ]
+                                for item in buf:
+                                    if item.itemTypeID in itemTypes and item.season & season:
+                                        questItems.append(item)
+                                        questItemsIDs.append(item.id)
+
+                filteredItems = [ item for item in itemsData.items if itemsFilter(item.descriptor) and item.id not in questItemsIDs ]
                 alternateItems = []
                 for itemType in itemTypes:
                     c11nType = C11N_ITEM_TYPE_MAP[itemType]
                     alternateItemIds = style.descriptor.alternateItems.get(c11nType, ())
-                    buf = [ self.__service.getItemByID(itemType, itemId) for itemId in alternateItemIds ]
-                    alternateItems.extend([ i for i in buf if i.itemTypeID in itemTypes ])
+                    buf = [ self.__service.getItemByID(itemType, itemId) for itemId in alternateItemIds if itemId not in questItemsIDs ]
+                    alternateItems.extend([ i for i in buf if i.itemTypeID in itemTypes and i.season & season ])
 
-                allItems = [ item for item in filteredItems + alternateItems if item.season & season ]
-                if not allItems:
+                if not any((questItems, alternateItems, filteredItems)):
                     continue
-                baseItems = [ item for item in styleBaseItems if item.itemTypeID in itemTypes and item.season & season ]
-                allItems += baseItems
-                items = sorted(set(allItems), key=comparisonKey)
+                baseItems = [ item for item in styleBaseItems if item.itemTypeID in itemTypes and item.season & season and item.id not in questItemsIDs ]
+                items = questItems + sorted(set(chain(alternateItems, filteredItems, baseItems)), key=comparisonKey)
                 groups = OrderedDict()
                 for item in items:
-                    if not groups or item.groupID != groups.keys()[-1]:
-                        groups[item.groupID] = item.groupUserName
+                    helper = getGroupHelper(item)
+                    groupID = helper.getGroupID()
+                    groupUserName = helper.getGroupName()
+                    if not groups or groupID != groups.keys()[-1]:
+                        groups[groupID] = groupUserName
 
                 self.__itemsData[CustomizationModes.EDITABLE_STYLE][season][tabId] = ItemsData(items, groups)
 
@@ -309,6 +345,12 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def getBookmarskData(self):
         return self.__carouselData.bookmarks
+
+    def getArrowsData(self):
+        return self.__carouselData.arrows
+
+    def getShowSeparatorsData(self):
+        return self.__carouselData.showSeparators
 
     def getDependentItems(self):
         return self.__dependentItems
@@ -442,7 +484,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.__carouselFilters[FilterTypes.HISTORIC] = DisjunctionCarouselFilter(criteria={FilterAliases.HISTORIC: REQ_CRITERIA.CUSTOMIZATION.HISTORICAL,
          FilterAliases.NON_HISTORIC: REQ_CRITERIA.CUSTOMIZATION.NON_HISTORICAL,
          FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL})
-        self.__carouselFilters[FilterTypes.INVENTORY] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: self.__ctx.mode.getItemInventoryCount(item) > 0))
+        self.__carouselFilters[FilterTypes.INVENTORY] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: self.__ctx.mode.getItemInventoryCount(item) > 0 and item.isUnlockedByToken()))
         self.__carouselFilters[FilterTypes.APPLIED] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.intCD in self.__ctx.mode.getAppliedItems(isOriginal=False)))
         self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not isItemUsedUp(item)), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
         self.__carouselFilters[FilterTypes.EDITABLE_STYLES] = DisjunctionCarouselFilter(criteria={FilterAliases.EDITABLE_STYLES: REQ_CRITERIA.CUSTOM(lambda item: item.canBeEditedForVehicle(g_currentVehicle.item.intCD)),
@@ -470,7 +512,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             itemsData = self.__carouselCache.getItemsData()
             groupId = itemsData.groups.keys()[groupIdx]
             groupName = itemsData.groups[groupId]
-            requirement |= REQ_CRITERIA.CUSTOMIZATION.ONLY_IN_GROUP(groupName)
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: getGroupHelper(item).getGroupName() == groupName)
         for carouselFilter in self.__carouselFilters.itervalues():
             if carouselFilter.isEnabled():
                 requirement |= carouselFilter.criteria

@@ -540,7 +540,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         BigWorld.player().stats.get('clanDBID', callback)
 
     def __onClanDBIDRetrieved(self, _, clanID):
-        self.__vehicleStickers.setClanID(clanID)
+        if self.__vehicleStickers is not None:
+            self.__vehicleStickers.setClanID(clanID)
+        return
 
     def __setupModel(self, buildIdx):
         self.__assembleModel()

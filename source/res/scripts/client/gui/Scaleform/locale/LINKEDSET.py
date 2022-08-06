@@ -3,11 +3,9 @@
 from debug_utils import LOG_WARNING
 
 class LINKEDSET(object):
-    LINKEDSET_GROUP_TITLE = '#linkedset:linkedset_group_title'
     COMPLETED = '#linkedset:completed'
     AVAILABLE = '#linkedset:available'
     NOT_AVAILABLE = '#linkedset:not_available'
-    MISSION_NOT_COMPLETE = '#linkedset:mission_not_complete'
     COMPLETE_MISSION_BEFORE = '#linkedset:complete_mission_before'
     COMPLETE_QUEST_BEFORE = '#linkedset:complete_quest_before'
     REWARD_FOR_UNCOMPLETED_MISSION = '#linkedset:reward_for_uncompleted_mission'
@@ -16,7 +14,6 @@ class LINKEDSET(object):
     QUEST_CARD_TITLE = '#linkedset:quest_card_title'
     START_QUEST_BTN = '#linkedset:start_quest_btn'
     CONTINUE_QUEST_BTN = '#linkedset:continue_quest_btn'
-    USE_THE_TOKEN = '#linkedset:use_the_token'
     MISSIONS_COMPLETED = '#linkedset:missions_completed'
     QUEST_COMPLETED = '#linkedset:quest_completed'
     CONTINUE = '#linkedset:continue'

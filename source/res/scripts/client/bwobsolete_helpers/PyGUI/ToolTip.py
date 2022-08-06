@@ -181,8 +181,8 @@ class ToolTipManager(object):
             toolTipGUI = GUI.load(guiFileName)
             toolTipGUI.horizontalAnchor = 'CENTER'
             toolTipGUI.verticalAnchor = 'CENTER'
-            toolTipGUI.horizontalPositionMode = 'CLIP'
-            toolTipGUI.verticalPositionMode = 'CLIP'
+            toolTipGUI.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+            toolTipGUI.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
             toolTipGUI.position.z = self.toolTipZOrder
             self.toolTipGUIs[templateName] = toolTipGUI
         return self.toolTipGUIs[templateName]

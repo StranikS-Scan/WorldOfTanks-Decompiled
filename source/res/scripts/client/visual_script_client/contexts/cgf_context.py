@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/contexts/cgf_context.py
 import weakref
+import BigWorld
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.context import VScriptContext, vse_get_property, vse_event_out
@@ -25,7 +26,7 @@ class CGFGameObjectContext(VScriptContext):
     def onGameObjectClick(self):
         pass
 
-    @vse_event_out((), display_name='OnHover', description='Reacts on hover over game object                      (only if go have CollisionComponent, VSEComponent)', aspects=[ASPECT.CLIENT, ASPECT.HANGAR])
+    @vse_event_out((), display_name='OnHoverIn', description='Reacts on hover over game object                      (only if go have CollisionComponent, VSEComponent)', aspects=[ASPECT.CLIENT, ASPECT.HANGAR])
     def onGameObjectHoverIn(self):
         pass
 
@@ -38,5 +39,21 @@ class CGFGameObjectContext(VScriptContext):
         pass
 
 
-def createContext(go, aspect=ASPECT.CLIENT):
+def getCurrentAspect():
+    from constants import IS_UE_EDITOR
+    if not IS_UE_EDITOR:
+        from Account import PlayerAccount
+        if isinstance(BigWorld.player(), PlayerAccount):
+            return ASPECT.HANGAR
+        return ASPECT.CLIENT
+    return ASPECT.CLIENT
+
+
+def createContext(go):
+    aspect = getCurrentAspect()
     return CGFGameObjectContext(go, aspect)
+
+
+def getPlanTags():
+    from visual_script.plan_tags import PlanTags
+    return PlanTags().tags

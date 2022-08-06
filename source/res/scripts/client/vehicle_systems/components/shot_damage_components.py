@@ -25,7 +25,8 @@ class DamageStickerComponent(CGFComponent):
 
     def __init__(self):
         super(DamageStickerComponent, self).__init__()
-        self.stickerModel = BigWorld.WGStickerModel()
+        self.stickerModel = None
+        return
 
 
 @autoregister(presentInAllWorlds=True)
@@ -33,6 +34,9 @@ class DamageStickerManager(CGF.ComponentManager):
 
     @onAddedQuery(ShotDamageComponent, DamageStickerComponent, GenericComponents.TransformComponent)
     def onAddedSticker(self, shotDamage, damageSticker, transform):
+        if shotDamage.partName == TankPartNames.CHASSIS:
+            return
+        damageSticker.stickerModel = BigWorld.WGStickerModel(self.spaceID)
         geometryLink = shotDamage.compound.getPartGeometryLink(TankPartNames.getIdx(shotDamage.partName))
         m = Math.Matrix()
         m.setIdentity()
@@ -49,5 +53,9 @@ class DamageStickerManager(CGF.ComponentManager):
 
     @onRemovedQuery(ShotDamageComponent, DamageStickerComponent)
     def onRemovedSticker(self, shotDamage, damageSticker):
-        node = shotDamage.compound.node(shotDamage.partName)
-        node.detach(damageSticker.stickerModel)
+        if damageSticker.stickerModel is None:
+            return
+        else:
+            node = shotDamage.compound.node(shotDamage.partName)
+            node.detach(damageSticker.stickerModel)
+            return

@@ -153,8 +153,8 @@ class SequenceMatcher():
             if k1:
                 non_adjacent.append((i1, j1, k1))
             non_adjacent.append((la, lb, 0))
-            self.matching_blocks = non_adjacent
-            return map(Match._make, self.matching_blocks)
+            self.matching_blocks = map(Match._make, non_adjacent)
+            return self.matching_blocks
 
     def get_opcodes(self):
         if self.opcodes is not None:
@@ -401,7 +401,7 @@ class Differ():
 
 import re
 
-def IS_LINE_JUNK(line, pat=re.compile('\\s*#?\\s*$').match):
+def IS_LINE_JUNK(line, pat=re.compile('\\s*(?:#\\s*)?$').match):
     return pat(line) is not None
 
 

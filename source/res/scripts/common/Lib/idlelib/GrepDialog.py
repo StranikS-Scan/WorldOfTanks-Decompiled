@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/GrepDialog.py
+from __future__ import print_function
 import os
 import fnmatch
+import re
 import sys
-from Tkinter import *
+from Tkinter import StringVar, BooleanVar, Checkbutton
+from Tkinter import Tk, Text, Button, SEL, END
 from idlelib import SearchEngine
 from idlelib.SearchDialogBase import SearchDialogBase
 
@@ -42,10 +45,10 @@ class GrepDialog(SearchDialogBase):
 
     def create_entries(self):
         SearchDialogBase.create_entries(self)
-        self.globent = self.make_entry('In files:', self.globvar)
+        self.globent = self.make_entry('In files:', self.globvar)[0]
 
     def create_other_buttons(self):
-        f = self.make_frame()
+        f = self.make_frame()[0]
         btn = Checkbutton(f, anchor='w', variable=self.recvar, text='Recurse down subdirectories')
         btn.pack(side='top', fill='both')
         btn.select()
@@ -76,28 +79,31 @@ class GrepDialog(SearchDialogBase):
         list.sort()
         self.close()
         pat = self.engine.getpat()
-        print 'Searching %r in %s ...' % (pat, path)
+        print('Searching %r in %s ...' % (pat, path))
         hits = 0
-        for fn in list:
-            try:
-                with open(fn) as f:
-                    for lineno, line in enumerate(f, 1):
-                        if line[-1:] == '\n':
-                            line = line[:-1]
-                        if prog.search(line):
-                            sys.stdout.write('%s: %s: %s\n' % (fn, lineno, line))
-                            hits += 1
+        try:
+            for fn in list:
+                try:
+                    with open(fn) as f:
+                        for lineno, line in enumerate(f, 1):
+                            if line[-1:] == '\n':
+                                line = line[:-1]
+                            if prog.search(line):
+                                sys.stdout.write('%s: %s: %s\n' % (fn, lineno, line))
+                                hits += 1
 
-            except IOError as msg:
-                print msg
+                except IOError as msg:
+                    print(msg)
 
-        print 'Hits found: %s\n(Hint: right-click to open locations.)' % hits if hits else 'No hits.'
+            print('Hits found: %s\n(Hint: right-click to open locations.)' % hits if hits else 'No hits.')
+        except AttributeError:
+            pass
 
     def findfiles(self, dir, base, rec):
         try:
             names = os.listdir(dir or os.curdir)
         except os.error as msg:
-            print msg
+            print(msg)
             return []
 
         list = []
@@ -121,6 +127,28 @@ class GrepDialog(SearchDialogBase):
             self.top.withdraw()
 
 
+def _grep_dialog(parent):
+    from idlelib.PyShell import PyShellFileList
+    root = Tk()
+    root.title('Test GrepDialog')
+    width, height, x, y = list(map(int, re.split('[x+]', parent.geometry())))
+    root.geometry('+%d+%d' % (x, y + 150))
+    flist = PyShellFileList(root)
+    text = Text(root, height=5)
+    text.pack()
+
+    def show_grep_dialog():
+        text.tag_add(SEL, '1.0', END)
+        grep(text, flist=flist)
+        text.tag_remove(SEL, '1.0', END)
+
+    button = Button(root, text='Show GrepDialog', command=show_grep_dialog)
+    button.pack()
+    root.mainloop()
+
+
 if __name__ == '__main__':
     import unittest
     unittest.main('idlelib.idle_test.test_grep', verbosity=2, exit=False)
+    from idlelib.idle_test.htest import run
+    run(_grep_dialog)

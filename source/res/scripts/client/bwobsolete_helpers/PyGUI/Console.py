@@ -17,24 +17,24 @@ class Console(PyGUIBase):
         if component == None:
             self.component = GUI.Window('system/maps/col_white.bmp')
             self.component.colour = (0, 0, 0, 255)
-            self.component.materialFX = 'SOLID'
+            self.component.materialFX = GUI.Simple.eMaterialFX.SOLID
             self.component.height = 0.75
             self.component.width = 1.5
             self.component.addChild(ScrollableText().component, 'buffer')
             self.component.buffer.colour = (0, 0, 0, 0)
-            self.component.buffer.widthMode = 'CLIP'
+            self.component.buffer.widthMode = GUI.Simple.eSizeMode.CLIP
             self.component.buffer.width = 2.0
             self.component.buffer.height = 1.8
-            self.component.buffer.verticalAnchor = 'TOP'
-            self.component.buffer.verticalPositionMode = 'CLIP'
+            self.component.buffer.verticalAnchor = GUI.Simple.eVAnchor.TOP
+            self.component.buffer.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
             self.component.buffer.position.y = 1.0
             self.component.addChild(EditField().component, 'editField')
             self.component.editField.colour = (64, 64, 64, 255)
-            self.component.editField.verticalPositionMode = 'CLIP'
-            self.component.editField.verticalAnchor = 'BOTTOM'
+            self.component.editField.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+            self.component.editField.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
             self.component.editField.position.y = -1.0
             self.component.editField.height = 0.2
-            self.component.editField.widthMode = 'CLIP'
+            self.component.editField.widthMode = GUI.Simple.eSizeMode.CLIP
             self.component.editField.width = 2.0
             self.component.script = self
             self.onBound()
@@ -160,8 +160,8 @@ class Console(PyGUIBase):
     def onRecreateDevice(self):
         self.component.editField.script.onRecreateDevice()
         self.component.editField.script.fitVertically()
-        self.component.editField.heightMode = 'CLIP'
-        self.component.buffer.heightMode = 'CLIP'
+        self.component.editField.heightMode = GUI.Simple.eSizeMode.CLIP
+        self.component.buffer.heightMode = GUI.Simple.eSizeMode.CLIP
         self.component.buffer.height = 2.0 - self.component.editField.height
 
     def isShowing(self):

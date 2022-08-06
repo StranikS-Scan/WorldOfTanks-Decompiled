@@ -48,7 +48,7 @@ class FadingMessages(BattleMessageListMeta):
 
     def showMessage(self, key, args=None, extra=None, postfix=''):
         if postfix:
-            extKey = '{0}_{1}'.format(key, postfix)
+            extKey = u'{0}_{1}'.format(key, postfix)
             if extKey in self.__messages:
                 self.__doShowMessage(extKey, args, extra)
                 return

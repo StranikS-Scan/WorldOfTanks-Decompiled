@@ -12,7 +12,7 @@ import math_utils
 from account_helpers.settings_core import settings_constants
 from Avatar import PlayerAvatar
 from chat_commands_consts import LocationMarkerSubType
-from constants import LOOT_TYPE, ARENA_BONUS_TYPE
+from constants import VISIBILITY, LOOT_TYPE, ARENA_BONUS_TYPE
 from battleground.location_point_manager import g_locationPointManager
 from battle_royale.gui.Scaleform.daapi.view.battle.minimap.settings import DeathZonesAs3Descr, BattleRoyaleEntries, ViewRangeSectorAs3Descr, MarkersAs3Descr
 from gui.Scaleform.daapi.view.battle.epic.minimap import CenteredPersonalEntriesPlugin, MINIMAP_SCALE_TYPES, makeMousePositionToEpicWorldPosition
@@ -118,7 +118,7 @@ class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
         return self._isAlive()
 
     def _getViewRangeRadius(self):
-        return self.__guiSessionProvider.arenaVisitor.getVisibilityMinRadius()
+        return VISIBILITY.MIN_RADIUS
 
     def _getPostmortemCenterEntry(self):
         if self._isInPostmortemMode() and self._ctrlVehicleID and self._ctrlVehicleID != self._getPlayerVehicleID():

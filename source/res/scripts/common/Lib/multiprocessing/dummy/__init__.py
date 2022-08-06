@@ -111,7 +111,7 @@ class Value(object):
     value = property(_get, _set)
 
     def __repr__(self):
-        return '<%r(%r, %r)>' % (type(self).__name__, self._typecode, self._value)
+        return '<%s(%r, %r)>' % (type(self).__name__, self._typecode, self._value)
 
 
 def Manager():

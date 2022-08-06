@@ -1,5 +1,55 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy.py
+# Compiled at: 2014-07-29 02:26:03
+"""Generic (shallow and deep) copying operations.
+
+Interface summary:
+
+        import copy
+
+        x = copy.copy(y)        # make a shallow copy of y
+        x = copy.deepcopy(y)    # make a deep copy of y
+
+For module specific errors, copy.Error is raised.
+
+The difference between shallow and deep copying is only relevant for
+compound objects (objects that contain other objects, like lists or
+class instances).
+
+- A shallow copy constructs a new compound object and then (to the
+  extent possible) inserts *the same objects* into it that the
+  original contains.
+
+- A deep copy constructs a new compound object and then, recursively,
+  inserts *copies* into it of the objects found in the original.
+
+Two problems often exist with deep copy operations that don't exist
+with shallow copy operations:
+
+ a) recursive objects (compound objects that, directly or indirectly,
+    contain a reference to themselves) may cause a recursive loop
+
+ b) because deep copy copies *everything* it may copy too much, e.g.
+    administrative data structures that should be shared even between
+    copies
+
+Python's deep copy operation avoids these problems by:
+
+ a) keeping a table of objects already copied during the current
+    copying pass
+
+ b) letting user-defined classes override the copying operation or the
+    set of components copied
+
+This version does not copy types like module, class, function, method,
+nor stack trace, stack frame, nor file, socket, window, nor array, nor
+any similar types.
+
+Classes can use the same interfaces to control copying that they use
+to control pickling: they can define methods called __getinitargs__(),
+__getstate__() and __setstate__().  See the documentation for module
+"pickle" for information on these methods.
+"""
 import types
 import weakref
 from copy_reg import dispatch_table
@@ -17,6 +67,10 @@ except ImportError:
 __all__ = ['Error', 'copy', 'deepcopy']
 
 def copy(x):
+    """Shallow copy operation on arbitrary Python objects.
+    
+    See the module's __doc__ string for more info.
+    """
     cls = type(x)
     copier = _copy_dispatch.get(cls)
     if copier:
@@ -107,6 +161,10 @@ d[types.InstanceType] = _copy_inst
 del d
 
 def deepcopy(x, memo=None, _nil=[]):
+    """Deep copy operation on arbitrary Python objects.
+    
+    See the module's __doc__ string for more info.
+    """
     if memo is None:
         memo = {}
     d = id(x)
@@ -240,6 +298,15 @@ def _deepcopy_method(x, memo):
 _deepcopy_dispatch[types.MethodType] = _deepcopy_method
 
 def _keep_alive(x, memo):
+    """Keeps a reference to the object x in the memo.
+    
+    Because we remember objects by their id, we have
+    to assure that possibly temporary objects are kept
+    alive by referencing them.
+    We store a reference at the id of the memo, which should
+    normally not be used unless someone tries to deepcopy
+    the memo itself...
+    """
     try:
         memo[id(memo)].append(x)
     except KeyError:
@@ -275,14 +342,16 @@ def _reconstruct(x, info, deep, memo=None):
     if isinstance(info, str):
         return x
     else:
+        assert isinstance(info, tuple)
         if memo is None:
             memo = {}
         n = len(info)
+        assert n in (2, 3, 4, 5)
         callable, args = info[:2]
         if n > 2:
             state = info[2]
         else:
-            state = {}
+            state = None
         if n > 3:
             listiter = info[3]
         else:
@@ -295,7 +364,7 @@ def _reconstruct(x, info, deep, memo=None):
             args = deepcopy(args, memo)
         y = callable(*args)
         memo[id(x)] = y
-        if state:
+        if state is not None:
             if deep:
                 state = deepcopy(state, memo)
             if hasattr(y, '__setstate__'):

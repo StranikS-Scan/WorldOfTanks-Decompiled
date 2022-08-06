@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_bitfields.py
 from ctypes import *
+from ctypes.test import need_symbol
 import unittest
 import os
 import ctypes
@@ -160,19 +161,17 @@ class BitFieldTest(unittest.TestCase):
             self.assertEqual(result, (TypeError, 'bit fields not allowed for type LP_c_int'))
         result = self.fail_fields(('a', c_char, 1))
         self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_char'))
-        try:
-            c_wchar
-        except NameError:
-            pass
-        else:
-            result = self.fail_fields(('a', c_wchar, 1))
-            self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_wchar'))
 
         class Dummy(Structure):
             _fields_ = []
 
         result = self.fail_fields(('a', Dummy, 1))
         self.assertEqual(result, (TypeError, 'bit fields not allowed for type Dummy'))
+
+    @need_symbol('c_wchar')
+    def test_c_wchar(self):
+        result = self.fail_fields(('a', c_wchar, 1))
+        self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_wchar'))
 
     def test_single_bitfield_size(self):
         for c_typ in int_types:
@@ -274,7 +273,7 @@ class BitFieldTest(unittest.TestCase):
             _anonymous_ = ['_']
             _fields_ = [('_', X)]
 
-    @unittest.skipUnless(hasattr(ctypes, 'c_uint32'), 'c_int32 is required')
+    @need_symbol('c_uint32')
     def test_uint32(self):
 
         class X(Structure):
@@ -286,7 +285,7 @@ class BitFieldTest(unittest.TestCase):
         x.a = 4257982855L
         self.assertEqual(x.a, 4257982855L)
 
-    @unittest.skipUnless(hasattr(ctypes, 'c_uint64'), 'c_int64 is required')
+    @need_symbol('c_uint64')
     def test_uint64(self):
 
         class X(Structure):
@@ -297,6 +296,32 @@ class BitFieldTest(unittest.TestCase):
         self.assertEqual(x.a, 10)
         x.a = 18364758544493064721L
         self.assertEqual(x.a, 18364758544493064721L)
+
+    @need_symbol('c_uint32')
+    def test_uint32_swap_little_endian(self):
+
+        class Little(LittleEndianStructure):
+            _fields_ = [('a', c_uint32, 24), ('b', c_uint32, 4), ('c', c_uint32, 4)]
+
+        b = bytearray(4)
+        x = Little.from_buffer(b)
+        x.a = 11259375
+        x.b = 1
+        x.c = 2
+        self.assertEqual(b, '\xef\xcd\xab!')
+
+    @need_symbol('c_uint32')
+    def test_uint32_swap_big_endian(self):
+
+        class Big(BigEndianStructure):
+            _fields_ = [('a', c_uint32, 24), ('b', c_uint32, 4), ('c', c_uint32, 4)]
+
+        b = bytearray(4)
+        x = Big.from_buffer(b)
+        x.a = 11259375
+        x.b = 1
+        x.c = 2
+        self.assertEqual(b, '\xab\xcd\xef\x12')
 
 
 if __name__ == '__main__':

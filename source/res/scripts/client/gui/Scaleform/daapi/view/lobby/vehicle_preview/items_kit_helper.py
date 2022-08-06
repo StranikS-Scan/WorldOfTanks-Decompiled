@@ -249,7 +249,7 @@ def getItemIcon(rawItem, item):
     icon = rawItem.iconSource
     if not icon:
         if item is not None:
-            icon = _ICONS.get(rawItem.type, item.icon)
+            icon = _ICONS.get(rawItem.type, item.getBonusIcon())
         elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
             icon = _PREM_ICONS.get(rawItem.count, '')
         elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:

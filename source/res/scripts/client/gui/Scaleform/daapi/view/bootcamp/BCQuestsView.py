@@ -17,8 +17,8 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.game_control import IBootcampController
-from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 
 class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
     __background_alpha__ = 0.8
@@ -32,10 +32,10 @@ class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
     _AWARD_LABEL_PADDING = 20
     _GOLD_LABEL = '500'
     _PAGES_LINKAGE = 'MissionDetailsPageGroup'
-    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_QUESTS_VIEW.value)
+    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_QUESTS_VIEW)
 
-    @uiBootcampLogger.dLog(BCLogActions.CLOSE.value)
     def closeView(self):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.CLOSE)
         self.app.setBackgroundAlpha(0.0)
         self.destroy()
 
@@ -81,8 +81,8 @@ class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
         self.as_setMissionDataS(missionData)
         return
 
-    @uiBootcampLogger.dLog(BCLogActions.SHOW.value)
     def _populate(self):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SHOW)
         super(BCQuestsView, self)._populate()
         self.as_setInitDataS({'pages': [{'buttonsGroup': self._PAGES_LINKAGE,
                     'pageIndex': 0,

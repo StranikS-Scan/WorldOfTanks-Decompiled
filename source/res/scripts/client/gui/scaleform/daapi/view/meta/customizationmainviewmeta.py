@@ -4,6 +4,9 @@ from gui.Scaleform.framework.entities.View import View
 
 class CustomizationMainViewMeta(View):
 
+    def showQuestProgressionInfoWindow(self):
+        self._printOverrideError('showQuestProgressionInfoWindow')
+
     def showBuyWindow(self):
         self._printOverrideError('showBuyWindow')
 
@@ -37,8 +40,8 @@ class CustomizationMainViewMeta(View):
     def propertiesSheetSet(self, sheet, width, height, crnterX, centerY):
         self._printOverrideError('propertiesSheetSet')
 
-    def onPressClearBtn(self):
-        self._printOverrideError('onPressClearBtn')
+    def onButtonPressed(self, name):
+        self._printOverrideError('onButtonPressed')
 
     def onPressEscBtn(self):
         self._printOverrideError('onPressEscBtn')

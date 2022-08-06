@@ -24,9 +24,9 @@ from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
-from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.game_control.links import URLMacros
@@ -61,18 +61,16 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IFunRandomController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple
     from gui.marathon.marathon_event import MarathonEvent
     from gui.Scaleform.framework.managers import ContainerManager
-    from uilogging.resource_well.constants import ParentScreens
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -165,11 +163,6 @@ def showVehicleRentDialog(intCD, rentType, nums, seasonType, price, buyParams):
     if price.get(priceCode) != buyParams['priceAmount']:
         price = Money(**{priceCode: buyParams['priceAmount']})
     _purchaseOffer(intCD, rentType, nums, price, seasonType, buyParams, renew=False)
-
-
-def showFunRandomPrimeTimeWindow():
-    event = events.LoadViewEvent(SFViewLoadParams(FUNRANDOM_ALIASES.FUN_RANDOM_PRIME_TIME), ctx={})
-    g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
 
 @adisp.process
@@ -529,7 +522,14 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
      'topPanelData': kwargs.get('topPanelData'),
      'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
      'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
-     'itemsPack': kwargs.get('itemsPack')}), EVENT_BUS_SCOPE.LOBBY)
+     'itemsPack': kwargs.get('itemsPack'),
+     'backBtnLabel': kwargs.get('backBtnLabel')}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showDelayedReward():
+    kwargs = {'tab': QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS,
+     'openVehicleSelection': True}
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, previousBackAlias=None, hangarVehicleCD=None):
@@ -656,7 +656,8 @@ def selectVehicleInHangar(itemCD, loadHangar=True):
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
-    g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID,
+     'prevVehicleInvID': g_currentVehicle.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
     g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
         showHangar()
@@ -886,7 +887,8 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'backCallback': backCallback,
      'backBtnDescrLabel': backBtnDescrLabel,
      'topPanelData': kwargs.get('topPanelData'),
-     'itemsPack': kwargs.get('itemsPack')}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'itemsPack': kwargs.get('itemsPack'),
+     'outfit': kwargs.get('outfit')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
@@ -1149,10 +1151,24 @@ def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
     yield showDialog(dialogBuilder.build(parent=view), callback)
 
 
-def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None):
+@async
+def showBonusDelayedConfirmationDialog(vehicle, callback=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.battle_matters.battle_matters_delayed_bonus_dialog import BattleMattersDelayedBonusDialog
+    result = yield await(dialogs.showSingleDialogWithResultData(vehicle=vehicle, layoutID=BattleMattersDelayedBonusDialog.LAYOUT_ID, wrappedViewClass=BattleMattersDelayedBonusDialog))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, data = result.result
+        callback((isOK, data))
+
+
+def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None, backBtnLabel=None, customCallbacks=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW), ctx={'offerID': offerID,
      'giftID': giftID,
-     'confirmCallback': confirmCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'confirmCallback': confirmCallback,
+     'backBtnLabel': backBtnLabel,
+     'customCallbacks': customCallbacks}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showOfferRewardWindow(offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
@@ -1340,6 +1356,16 @@ def showBattlePassBuyLevelWindow(ctx=None, parent=None, guiLoader=None):
     return
 
 
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showOnboardingView(isFirstRun=False, parent=None, guiLoader=None):
+    from gui.impl.lobby.customization.progression_styles.onboarding_view import OnboardingWindow
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progression_styles.OnboardingView())
+    if view is None:
+        window = OnboardingWindow({'isFirstRun': isFirstRun}, parent or getParentWindow())
+        window.load()
+    return
+
+
 @async
 def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None):
     from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionIntroWindowProc
@@ -1354,7 +1380,6 @@ def showVehPostProgressionCmpView(vehTypeCompDescr, exitEvent=None):
     loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEH_POST_PROGRESSION_CMP), ctx={'intCD': vehTypeCompDescr,
      'exit': exitEvent})
     g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-    VehPostProgressionEntryPointLogger().logEnter()
 
 
 def getParentWindow():
@@ -1687,9 +1712,9 @@ def showResourceWellProgressionWindow(resourceWell=None, backCallback=showHangar
     return
 
 
-def showResourcesLoadingWindow(parentScreen):
+def showResourcesLoadingWindow():
     from gui.impl.lobby.resource_well.resources_loading_view import ResourcesLoadingWindow
-    ResourcesLoadingWindow(parentScreen=parentScreen).load()
+    ResourcesLoadingWindow().load()
 
 
 @async
@@ -1761,10 +1786,12 @@ def showResourceWellHeroPreview(vehicleCD, backCallback=None, previewAlias=VIEW_
      'previousBackAlias': previousBackAlias}), EVENT_BUS_SCOPE.LOBBY)
 
 
-@dependency.replace_none_kwargs(funRandomCtrl=IFunRandomController)
-def showFunRandomInfoPage(funRandomCtrl=None):
-    url = funRandomCtrl.getModeSettings().infoPageUrl
-    if not url:
-        _logger.error('Invalid url to open infoPage about fun random mode')
-        return
-    showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showBattleMattersReward(ctx=None, notificationMgr=None):
+    from gui.impl.lobby.battle_matters.battle_matters_rewards_view import BattleMattersRewardsViewWindow
+    if ctx is not None:
+        window = BattleMattersRewardsViewWindow(ctx=ctx)
+        notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        _logger.error('No context for BattleMatters rewards View')
+    return

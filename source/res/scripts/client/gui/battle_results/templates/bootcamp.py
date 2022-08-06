@@ -16,7 +16,8 @@ _BOOTCAMP_VO_META = base.DictMeta({'background': '',
         'str': '0'},
  'finishReason': '',
  'playerResult': '',
- 'videoButtons': []})
+ 'videoButtons': [],
+ 'alternativeLayout': False})
 _BOOTCAMP_REWARDS_VO_META = base.DictMeta({'medals': [],
  'ribbons': [],
  'unlocks': []})
@@ -35,3 +36,4 @@ BOOTCAMP_RESULTS_BLOCK.addComponent(8, bootcamp.XPBlock(_BOOTCAMP_STATVALUE_VO_M
 BOOTCAMP_RESULTS_BLOCK.addComponent(9, bootcamp.FinishReasonItem('finishReason'))
 BOOTCAMP_RESULTS_BLOCK.addComponent(10, bootcamp.PlayerResultItem('playerResult'))
 BOOTCAMP_RESULTS_BLOCK.addComponent(11, bootcamp.VideoButtonsItem('videoButtons'))
+BOOTCAMP_RESULTS_BLOCK.addComponent(12, bootcamp.AlternativeLayoutFlag('alternativeLayout'))

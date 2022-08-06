@@ -8,7 +8,7 @@ import tkFileDialog
 
 class GetHelpSourceDialog(Toplevel):
 
-    def __init__(self, parent, title, menuItem='', filePath=''):
+    def __init__(self, parent, title, menuItem='', filePath='', _htest=False):
         Toplevel.__init__(self, parent)
         self.configure(borderwidth=5)
         self.resizable(height=FALSE, width=FALSE)
@@ -23,7 +23,7 @@ class GetHelpSourceDialog(Toplevel):
         self.path.set(filePath)
         self.withdraw()
         self.update_idletasks()
-        self.geometry('+%d+%d' % (parent.winfo_rootx() + (parent.winfo_width() / 2 - self.winfo_reqwidth() / 2), parent.winfo_rooty() + (parent.winfo_height() / 2 - self.winfo_reqheight() / 2)))
+        self.geometry('+%d+%d' % (parent.winfo_rootx() + (parent.winfo_width() / 2 - self.winfo_reqwidth() / 2), parent.winfo_rooty() + (parent.winfo_height() / 2 - self.winfo_reqheight() / 2 if not _htest else 150)))
         self.deiconify()
         self.bind('<Return>', self.Ok)
         self.wait_window()
@@ -120,22 +120,16 @@ class GetHelpSourceDialog(Toplevel):
                 else:
                     self.result = list(self.result)
                     self.result[1] = 'file://' + path
+            self.grab_release()
             self.destroy()
 
     def Cancel(self, event=None):
         self.result = None
+        self.grab_release()
         self.destroy()
         return
 
 
 if __name__ == '__main__':
-    root = Tk()
-
-    def run():
-        keySeq = ''
-        dlg = GetHelpSourceDialog(root, 'Get Help Source')
-        print dlg.result
-
-
-    Button(root, text='Dialog', command=run).pack()
-    root.mainloop()
+    from idlelib.idle_test.htest import run
+    run(GetHelpSourceDialog)

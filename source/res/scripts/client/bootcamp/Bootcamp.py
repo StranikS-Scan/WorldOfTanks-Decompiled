@@ -9,7 +9,7 @@ import TriggersManager
 import WWISE
 import MusicControllerWWISE as MC
 from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS
-from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
+from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core import ISettingsCore
@@ -474,7 +474,7 @@ class Bootcamp(EventSystemEntity):
     def onInterludeVideoStarted(self, index):
         messageVO = self.getInterludeVideoPageData(index)
         player = BigWorld.player()
-        if not player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) and self.__battleResults.type == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY and messageVO:
+        if not player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) and messageVO:
             showInterludeVideoWindow(messageVO=messageVO)
 
     def __onAvatarBecomeNonPlayer(self):
@@ -524,7 +524,7 @@ class Bootcamp(EventSystemEntity):
 
     def onGarageLessonFinished(self, lessonId):
         LOG_DEBUG_DEV_BOOTCAMP('onGarageLessonFinished', lessonId)
-        self.__account.base.completeBootcampLesson(0)
+        self.__account.base.completeBootcampLesson()
         lastLesson = self.getContextIntParameter('lastLessonNum')
         if self.__lessonId == lastLesson:
             LOG_DEBUG_DEV_BOOTCAMP('Finished last lesson', lessonId)
@@ -535,7 +535,7 @@ class Bootcamp(EventSystemEntity):
 
     def onRequestBootcampFinish(self):
         LOG_DEBUG_DEV_BOOTCAMP('onRequestBootcampFinish')
-        self.__account.base.requestBootcampQuit(AccountSettings.getFavorites(CURRENT_VEHICLE))
+        self.__account.base.requestBootcampQuit(AccountSettings.getFavorites(BOOTCAMP_VEHICLE))
 
     def finishBootcamp(self):
         LOG_DEBUG_DEV_BOOTCAMP('finishBootcamp', self.__currentState.id())
@@ -671,7 +671,7 @@ class Bootcamp(EventSystemEntity):
     def isResearchFreeLesson(self):
         return self.getLessonNum() >= self.getContextIntParameter('researchFreeLesson')
 
-    def isEnableDamageIcon(self):
+    def isEnableCriticalDamageIcon(self):
         return self.getLessonNum() >= self.getContextIntParameter('enableDamageIconLesson')
 
     def checkBigConsumablesIconsLesson(self):

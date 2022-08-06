@@ -595,16 +595,11 @@ class EquipmentSoundPlayer(IVehicleCountListener, IViewComponentsCtrlListener):
         self.__currentEquipment = set()
         ctrl = self.__sessionProvider.shared.equipments
         ctrl.onEquipmentUpdated += self.__onEquipmentUpdated
-        ctrl = self.__sessionProvider.shared.vehicleState
-        ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
 
     def detachedFromCtrl(self, ctrlID):
         self.__currentEquipment = None
         ctrl = self.__sessionProvider.shared.equipments
         ctrl.onEquipmentUpdated -= self.__onEquipmentUpdated
-        ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         return
 
     def __onEquipmentUpdated(self, _, item):
@@ -633,13 +628,6 @@ class EquipmentSoundPlayer(IVehicleCountListener, IViewComponentsCtrlListener):
                         BREvents.playSound(eventName)
                     self.__currentEquipment.discard(itemName)
             return
-
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.INSPIRE:
-            if 'selfBuff' in self.__currentEquipment and value.get('isInactivation') is None:
-                BREvents.playSound(BREvents.EQUIPMENT_DEACTIVATED['selfBuff'])
-                self.__currentEquipment.discard('selfBuff')
-        return
 
     def setPlayerVehicleAlive(self, isAlive):
         if not isAlive:

@@ -2,6 +2,12 @@
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/mock_tk.py
 
 
+class Event(object):
+
+    def __init__(self, **kwds):
+        self.__dict__.update(kwds)
+
+
 class Var(object):
 
     def __init__(self, master=None, value=None, name=None):
@@ -18,9 +24,8 @@ class Var(object):
 
 class Mbox_func(object):
 
-    def __init__(self):
-        self.result = None
-        return
+    def __init__(self, result=None):
+        self.result = result
 
     def __call__(self, title, message, *args, **kwds):
         self.title = title
@@ -154,7 +159,7 @@ class Text(object):
             return line1 == line2 and char1 == char2
         if op == '!=':
             return line1 != line2 or char1 != char2
-        raise TclError('bad comparison operator "%s":must be <, <=, ==, >=, >, or !=' % op)
+        raise TclError('bad comparison operator "%s": must be <, <=, ==, >=, >, or !=' % op)
 
     def mark_set(self, name, index):
         pass

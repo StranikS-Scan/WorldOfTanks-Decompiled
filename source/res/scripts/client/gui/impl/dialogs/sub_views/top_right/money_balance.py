@@ -36,6 +36,7 @@ class MoneyBalance(ViewImpl):
         settings.model = viewModel or MoneyBalanceViewModel()
         super(MoneyBalance, self).__init__(settings)
         self._stats = self._itemsCache.items.stats
+        self._tooltips = self._initTooltips()
 
     @property
     def viewModel(self):
@@ -59,7 +60,6 @@ class MoneyBalance(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(MoneyBalance, self)._onLoading(*args, **kwargs)
         g_clientUpdateManager.addMoneyCallback(self._moneyChangeHandler)
-        self._tooltips = self._initTooltips()
         self.__setStats(self.viewModel)
 
     def _finalize(self):

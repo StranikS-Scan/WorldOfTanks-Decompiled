@@ -4,7 +4,6 @@ from MemoryCriticalController import g_critMemHandler
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.shared.events import GameEvent
-from helpers import i18n
 from items import vehicles
 _VEHICLE_STYLE_FORMATTER = '<font size="%(fontSize)s" face="%(fontFace)s" color="%(fontColor)s">{0}</font>'
 
@@ -59,7 +58,7 @@ class VehicleMessages(fading_messages.FadingMessages):
     def __handleScreenShotMade(self, event):
         if 'path' not in event.ctx:
             return
-        self.showMessage('SCREENSHOT_CREATED', {'path': i18n.encodeUtf8(event.ctx['path'])})
+        self.showMessage('SCREENSHOT_CREATED', {'path': event.ctx['path']})
 
     def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
         LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra, equipmentID)

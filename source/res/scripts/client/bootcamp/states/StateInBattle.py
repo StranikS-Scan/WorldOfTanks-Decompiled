@@ -67,7 +67,7 @@ class StateInBattle(AbstractState):
         elif cameraName == 'postmortem':
             g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
 
-    def __onRoundFinished(self, winnerTeam, reason):
+    def __onRoundFinished(self, winnerTeam, reason, extraData):
         if BattleReplay.g_replayCtrl.isPlaying:
             return
         g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)

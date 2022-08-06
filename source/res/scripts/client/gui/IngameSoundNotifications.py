@@ -275,7 +275,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             index = circSec.readString('index')
             self.__circumstances[index] = {}
             for infoSec in circSec.values():
-                self.__circumstances[index][infoSec.name] = infoSec.asString
+                self.__circumstances[index][infoSec.name] = infoSec.asWideString
 
         return
 

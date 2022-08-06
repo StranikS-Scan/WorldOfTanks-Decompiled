@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/AvatarInputHandler/gun_marker_ctrl.py
 import logging
 import math
-import typing
 from collections import namedtuple
 import BattleReplay
 import BigWorld
@@ -19,7 +18,6 @@ from helpers.CallbackDelayer import CallbackDelayer
 from math_utils import almostZero
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import g_eventBus
 from gui.shared.events import GunMarkerEvent
 from gui.shared import EVENT_BUS_SCOPE
@@ -149,13 +147,12 @@ class _CrosshairShotResults(object):
     _CRIT_ONLY_SHOT_RESULT = _SHOT_RESULT.NOT_PIERCED
     _VEHICLE_TRACE_BACKWARD_LENGTH = 0.1
     _VEHICLE_TRACE_FORWARD_LENGTH = 20.0
-    shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
-    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
-     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
-     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0)}
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    shellExtraData = namedtuple('shellExtraData', ('normAngle', 'ricochetAngle', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
+    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(math.radians(5.0), math.cos(math.radians(70.0)), True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(math.radians(2.0), math.cos(math.radians(70.0)), True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(0.0, 0.0, False, False, 0.0),
+     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(0.0, math.cos(math.radians(85.0)), True, False, 0.5),
+     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(0.0, 0.0, False, False, 0.0)}
 
     @classmethod
     def _getAllCollisionDetails(cls, hitPoint, direction, entity):
@@ -174,35 +171,32 @@ class _CrosshairShotResults(object):
         return _computePiercingPowerRandomizationImpl(piercingPowerRandomization, cls._PP_RANDOM_ADJUSTMENT_MIN, cls._PP_RANDOM_ADJUSTMENT_MAX)
 
     @classmethod
-    def _shouldRicochet(cls, shell, hitAngleCos, matInfo):
+    def _shouldRicochet(cls, shellKind, hitAngleCos, matInfo, caliber):
         if not matInfo.mayRicochet:
             return False
-        shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
+        shellExtraData = cls._SHELL_EXTRA_DATA[shellKind]
         if not shellExtraData.mayRicochet:
             return False
-        if hitAngleCos <= cls.__sessionProvider.arenaVisitor.modifiers.getShellRicochetCos(shell.kind):
+        if hitAngleCos <= shellExtraData.ricochetAngle:
             if not matInfo.checkCaliberForRichet:
                 return True
             if not shellExtraData.checkCaliberForRicochet:
                 return True
             armor = matInfo.armor
-            if armor * 3 >= shell.caliber:
+            if armor * 3 >= caliber:
                 return True
         return False
 
     @classmethod
-    def _computePenetrationArmor(cls, shell, hitAngleCos, matInfo):
+    def _computePenetrationArmor(cls, shellKind, hitAngleCos, matInfo, caliber):
         armor = matInfo.armor
         if not matInfo.useHitAngle:
             return armor
-        normalizationAngle = 0.0
-        shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
-        if shellExtraData.hasNormalization:
-            normalizationAngle = cls.__sessionProvider.arenaVisitor.modifiers.getShellNormalization(shell.kind)
+        normalizationAngle = cls._SHELL_EXTRA_DATA[shellKind].normAngle
         if normalizationAngle > 0.0 and hitAngleCos < 1.0:
             if matInfo.checkCaliberForHitAngleNorm:
-                if shell.caliber > armor * 2 > 0:
-                    normalizationAngle *= 1.4 * shell.caliber / (armor * 2)
+                if caliber > armor * 2 > 0:
+                    normalizationAngle *= 1.4 * caliber / (armor * 2)
             hitAngle = math.acos(hitAngleCos) - normalizationAngle
             if hitAngle < 0.0:
                 hitAngleCos = 1.0
@@ -264,7 +258,7 @@ class _CrosshairShotResults(object):
                 piercingPercent = 1000.0
                 penetrationArmor = 0
                 if fullPiercingPower > 0.0:
-                    penetrationArmor = cls._computePenetrationArmor(shell, hitAngleCos, matInfo)
+                    penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                 if matInfo.vehicleDamageFactor:
                     piercingPower -= penetrationArmor
@@ -325,12 +319,12 @@ class _CrosshairShotResults(object):
                     continue
                 hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
                 piercingPercent = 1000.0
-                if not isJet and cls._shouldRicochet(shell, hitAngleCos, matInfo):
+                if not isJet and cls._shouldRicochet(shell.kind, hitAngleCos, matInfo, shell.caliber):
                     cls.__collectDebugPiercingData(debugPiercingsList, None, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, _SHOT_RESULT.NOT_PIERCED)
                     break
                 penetrationArmor = 0
                 if piercingPower > 0.0:
-                    penetrationArmor = cls._computePenetrationArmor(shell, hitAngleCos, matInfo)
+                    penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                     piercingPower -= penetrationArmor
                     minPiercingPower = round(minPiercingPower - penetrationArmor)
@@ -708,10 +702,10 @@ class _DefaultGunMarkerController(_GunMarkerController):
                 replayCtrl.setArcadeGunMarkerSize(size)
             elif self._gunMarkerType == _MARKER_TYPE.CLIENT:
                 replayCtrl.setArcadeGunMarkerSize(size)
-        positionMatrixForScale = self.__checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
+        positionMatrixForScale = BigWorld.checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
         worldMatrix = _makeWorldMatrix(positionMatrixForScale)
-        currentSize = _calcScale(worldMatrix, size) * self.__screenRatio
-        idealSize = _calcScale(worldMatrix, idealSize) * self.__screenRatio
+        currentSize = BigWorld.markerHelperScale(worldMatrix, size) * self.__screenRatio
+        idealSize = BigWorld.markerHelperScale(worldMatrix, idealSize) * self.__screenRatio
         self.__sizeFilter.update(currentSize, idealSize)
         self.__curSize = self.__sizeFilter.getSize()
         if self.__replSwitchTime > 0.0:
@@ -794,8 +788,7 @@ class _SPGGunMarkerController(_GunMarkerController):
 
     def update(self, markerType, position, direction, size, relaxTime, collData):
         super(_SPGGunMarkerController, self).update(markerType, position, direction, size, relaxTime, collData)
-        positionMatrix = Math.Matrix()
-        positionMatrix.setTranslate(position)
+        positionMatrix = Math.createTranslationMatrix(position)
         self._updateMatrixProvider(positionMatrix, relaxTime)
         self._size = size[0]
         self._update()
@@ -938,12 +931,7 @@ class _ArcadeArtilleryHitMarkerController(_SPGGunMarkerController):
 def _makeWorldMatrix(positionMatrix):
     sr = GUI.screenResolution()
     aspect = sr[0] / sr[1]
-    proj = BigWorld.projection()
-    worldMatrix = Math.Matrix()
-    worldMatrix.perspectiveProjection(proj.fov, aspect, proj.nearPlane, proj.farPlane)
-    worldMatrix.preMultiply(BigWorld.camera().matrix)
-    worldMatrix.preMultiply(positionMatrix)
-    return worldMatrix
+    return BigWorld.makeWorldMatrix(aspect, positionMatrix)
 
 
 def _calcScale(worldMatrix, size):

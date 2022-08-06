@@ -154,7 +154,6 @@ class PREBATTLE_ACTION_NAME(object):
     EVENT_SQUAD = 'eventSquad'
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
     MAPBOX_SQUAD = 'mapboxSquad'
-    FUN_RANDOM_SQUAD = 'funRandomSquad'
     TOURNAMENT = 'tournament'
     CLAN = 'clan'
     E_SPORT = 'eSport'
@@ -172,7 +171,6 @@ class PREBATTLE_ACTION_NAME(object):
     MAPS_TRAINING = 'mapsTraining'
     EVENT_BATTLE = 'event'
     MAPBOX = 'mapbox'
-    FUN_RANDOM = 'fun_random'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -191,7 +189,6 @@ class SELECTOR_BATTLE_TYPES(object):
     MAPBOX = 'mapbox'
     MAPS_TRAINING = 'mapsTraining'
     EVENT = 'event'
-    FUN_RANDOM = 'funRandom'
 
 
 class REQUEST_TYPE(object):
@@ -363,13 +360,9 @@ class UNIT_RESTRICTION(object):
     UNSUITABLE_VEHICLE = 44
     VEHICLE_TOO_HEAVY = 45
     UNIT_WRONG_DATA = 46
-    LIMIT_LEVEL = 47
-    LIMIT_VEHICLE_TYPE = 48
-    LIMIT_VEHICLE_CLASS = 49
-    MODE_NO_BATTLES = 50
-    MODE_NOT_SET = 51
-    MODE_NOT_AVAILABLE = 52
-    VEHICLE_LIMITS = (LIMIT_LEVEL, LIMIT_VEHICLE_TYPE, LIMIT_VEHICLE_CLASS)
+    PREVIEW_VEHICLE_IS_PRESENT = 47
+    SCOUT_IS_FULL = 48
+    SCOUT_IS_FORBIDDEN = 49
 
 
 class PRE_QUEUE_RESTRICTION(object):
@@ -380,7 +373,6 @@ class PRE_QUEUE_RESTRICTION(object):
     MODE_NOT_SET = 'mode/notSet'
     MODE_NOT_AVAILABLE = 'mode/notAvailable'
     VEHICLE_WILL_BE_UNLOCKED = 'vehicle/willBeUnlocked'
-    VEHICLE_LIMITS = (LIMIT_LEVEL, LIMIT_VEHICLE_TYPE, LIMIT_VEHICLE_CLASS)
 
 
 class PRE_QUEUE_JOIN_ERRORS(object):

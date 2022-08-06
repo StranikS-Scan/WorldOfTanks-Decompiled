@@ -8,9 +8,10 @@ from gui.impl.backport import TooltipData
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, Features
 from gui.server_events.bonuses import SelectableBonus
 from gui.shared.gui_items.processors import makeError
-from gui.shared.gui_items.processors.offers import ReceiveMultipleOfferGiftsProcessor, ReceiveOfferGiftProcessor
+from gui.shared.gui_items.processors.offers import ReceiveMultipleOfferGiftsProcessor, ReceiveOfferGiftProcessor, BattleMattersOfferProcessor
 from helpers import dependency
 from shared_utils import first
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -23,6 +24,8 @@ class SelectableRewardManager(object):
     __itemsCache = dependency.descriptor(IItemsCache)
     __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     _FEATURE = None
+    _SINGLE_GIFT_PROCESSOR = ReceiveOfferGiftProcessor
+    _MULTIPLE_GIFT_PROCESSOR = ReceiveMultipleOfferGiftsProcessor
 
     @classmethod
     def isFeatureReward(cls, tokenID):
@@ -32,7 +35,7 @@ class SelectableRewardManager(object):
     @process
     def chooseReward(cls, bonus, giftID, callback):
         offer = cls._getBonusOffer(bonus)
-        result = yield ReceiveOfferGiftProcessor(offer.id, giftID, skipConfirm=True).request()
+        result = yield cls._SINGLE_GIFT_PROCESSOR(offer.id, giftID, skipConfirm=True).request()
         callback(result)
 
     @classmethod
@@ -48,7 +51,7 @@ class SelectableRewardManager(object):
             choices.setdefault(offer.id, [])
             choices[offer.id].extend(giftIDs)
 
-        result = yield ReceiveMultipleOfferGiftsProcessor(choices).request()
+        result = yield cls._MULTIPLE_GIFT_PROCESSOR(choices).request()
         callback(result)
         return
 
@@ -155,6 +158,23 @@ class EpicSelectableRewardManager(SelectableRewardManager):
     def getTabTooltipData(cls, selectableBonus):
         tokenID = selectableBonus.getValue().keys()[0]
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[_getGiftTokenFromOffer(tokenID)]) if cls.isFeatureReward(tokenID) else None
+
+
+class BattleMattersSelectableRewardManager(SelectableRewardManager):
+    _battleMattersController = dependency.descriptor(IBattleMattersController)
+    _SINGLE_GIFT_PROCESSOR = BattleMattersOfferProcessor
+
+    @classmethod
+    def isFeatureReward(cls, tokenID):
+        return tokenID == cls._battleMattersController.getDelayedRewardToken()
+
+    @classmethod
+    def getTabTooltipData(cls, selectableBonus):
+        return None
+
+    @classmethod
+    def getBonusOffer(cls, bonus):
+        return cls._getBonusOffer(bonus)
 
 
 def _getGiftTokenFromOffer(offerToken):

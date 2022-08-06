@@ -34,6 +34,8 @@ def encode(in_file, out_file, name=None, mode=None):
             name = '-'
         if mode is None:
             mode = 438
+        name = name.replace('\n', '\\n')
+        name = name.replace('\r', '\\r')
         out_file.write('begin %o %s\n' % (mode & 511, name))
         data = in_file.read(45)
         while len(data) > 0:

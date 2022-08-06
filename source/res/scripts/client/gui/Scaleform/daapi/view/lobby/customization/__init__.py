@@ -23,6 +23,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.customization.filter_popover import FilterPopover
     from gui.Scaleform.daapi.view.lobby.customization.popovers.custom_popover import CustomPopover
     from gui.Scaleform.daapi.view.lobby.customization.popovers.style_popover import StylePopover
+    from gui.Scaleform.daapi.view.lobby.customization.popovers.progressive_style_popover import ProgressiveStylePopover
     from gui.Scaleform.daapi.view.lobby.customization.popovers.editable_style_popover import EditableStylePopover
     from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog import ConfirmCustomizationItemDialog
     from gui.Scaleform.daapi.view.lobby.customization.customization_style_info import CustomizationStyleInfo
@@ -30,6 +31,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.customization.progression_styles.stage_switcher import StageSwitcher
     return (GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, FilterPopover, 'customizationFiltersPopoverView.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, CustomPopover, 'customizationItemsPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER, ProgressiveStylePopover, 'customizationProgressiveKitPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, EditableStylePopover, 'customizationEditedKitPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, StylePopover, 'customizationKitPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, ConfirmCustomizationItemDialog, 'confirmCustomizationItemDialog.swf', WindowLayer.TOP_WINDOW, 'confirmCustomizationItemDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -60,6 +62,7 @@ class CustomizationPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PROGRESSIVE_ITEMS_BROWSER_VIEW, self.loadViewByCtxEvent))

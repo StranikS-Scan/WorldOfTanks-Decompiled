@@ -27,8 +27,6 @@ from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IResourceWellController
 from tutorial.control.game_vars import getVehicleByIntCD
-from uilogging.resource_well.constants import ParentScreens
-from uilogging.resource_well.loggers import ResourceWellMainScreenLogger
 _FULL_PROGRESS = 100
 _PROGRESSION_STATE_MAPPING = {resource_well_constants.ProgressionState.ACTIVE: ProgressionState.ACTIVE,
  resource_well_constants.ProgressionState.NO_PROGRESS: ProgressionState.NOPROGRESS,
@@ -65,7 +63,6 @@ class ProgressionView(ViewImpl):
         self.__resourceWell.startNumberRequesters()
         self.__notifier = SimpleNotifier(self.__getReminderTimeLeft, self.__updateEventTime)
         self.__updateModel()
-        ResourceWellMainScreenLogger().onViewOpened(getProgressionState())
 
     def _finalize(self):
         self.__notifier.stopNotification()
@@ -156,7 +153,7 @@ class ProgressionView(ViewImpl):
         showResourceWellProgressionWindow(backCallback=self.__backCallback)
 
     def __contributeResources(self):
-        showResourcesLoadingWindow(ParentScreens.MAIN_SCREEN)
+        showResourcesLoadingWindow()
 
     @process
     def __extractResources(self):

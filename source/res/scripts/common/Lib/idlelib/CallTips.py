@@ -121,7 +121,7 @@ def get_arg_text(ob):
             arg_offset = 1
     elif type(ob) == types.MethodType:
         fob = ob.im_func
-        if ob.im_self:
+        if ob.im_self is not None:
             arg_offset = 1
     elif type(ob_call) == types.MethodType:
         fob = ob_call.im_func
@@ -135,10 +135,18 @@ def get_arg_text(ob):
         defaults = list(map(lambda name: '=%s' % repr(name), defaults))
         defaults = [''] * (len(real_args) - len(defaults)) + defaults
         items = map(lambda arg, dflt: arg + dflt, real_args, defaults)
-        if fob.func_code.co_flags & 4:
-            items.append('*args')
-        if fob.func_code.co_flags & 8:
-            items.append('**kwds')
+        for flag, pre, name in ((4, '*', 'args'), (8, '**', 'kwargs')):
+            if fob.func_code.co_flags & flag:
+                pre_name = pre + name
+                if name not in real_args:
+                    items.append(pre_name)
+                else:
+                    i = 1
+                    while (name + '%s') % i in real_args:
+                        i += 1
+
+                    items.append((pre_name + '%s') % i)
+
         argspec = ', '.join(items)
         argspec = '(%s)' % re.sub('(?<!\\d)\\.\\d+', '<tuple>', argspec)
     lines = textwrap.wrap(argspec, _MAX_COLS, subsequent_indent=_INDENT) if len(argspec) > _MAX_COLS else ([argspec] if argspec else [])

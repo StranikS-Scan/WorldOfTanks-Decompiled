@@ -1,11 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/locale.py
+# Compiled at: 2016-07-02 05:55:19
+"""Locale support module.
+
+The module provides low-level access to the C lib's locale APIs and adds high
+level number formatting APIs as well as a locale aliasing engine to complement
+these.
+
+The aliasing engine includes support for many commonly used locale names and
+maps them to values suitable for passing to the C lib's setlocale() function. It
+also includes default encodings for all supported locale names.
+"""
 import sys
 import encodings
 import encodings.aliases
 import re
 import operator
 import functools
+_str = str
 try:
     _unicode = unicode
 except NameError:
@@ -51,6 +63,9 @@ except ImportError:
     Error = ValueError
 
     def localeconv():
+        """ localeconv() -> dict.
+            Returns numeric and monetary locale-specific parameters.
+        """
         return {'grouping': [127],
          'currency_symbol': '',
          'n_sign_posn': 127,
@@ -72,16 +87,25 @@ except ImportError:
 
 
     def setlocale(category, value=None):
+        """ setlocale(integer,string=None) -> string.
+            Activates/queries locale processing.
+        """
         if value not in (None, '', 'C'):
             raise Error, '_locale emulation only supports "C" locale'
         return 'C'
 
 
     def strcoll(a, b):
+        """ strcoll(string,string) -> int.
+            Compares two strings according to the locale.
+        """
         return cmp(a, b)
 
 
     def strxfrm(s):
+        """ strxfrm(string) -> string.
+            Returns a string that behaves for cmp locale-aware.
+        """
         return s
 
 
@@ -158,6 +182,11 @@ def _strip_padding(s, amount):
 _percent_re = re.compile('%(?:\\((?P<key>.*?)\\))?(?P<modifiers>[-#0-9 +*.hlL]*?)[eEfFgGdiouxXcrs%]')
 
 def format(percent, value, grouping=False, monetary=False, *additional):
+    """Returns the locale-aware substitution of a %? specifier
+    (percent).
+    
+    additional is for format strings which contain one or more
+    '*' modifiers."""
     match = _percent_re.match(percent)
     if not match or len(match.group()) != len(percent):
         raise ValueError('format() must be given exactly one %%char format specifier, %s not valid' % repr(percent))
@@ -188,6 +217,9 @@ def _format(percent, value, grouping=False, monetary=False, *additional):
 
 
 def format_string(f, val, grouping=False):
+    """Formats a string in the same way that the % formatting would use,
+    but takes the current locale into account.
+    Grouping is applied if the third parameter is true."""
     percents = list(_percent_re.finditer(f))
     new_f = _percent_re.sub('%s', f)
     if operator.isMappingType(val):
@@ -214,6 +246,8 @@ def format_string(f, val, grouping=False):
 
 
 def currency(val, symbol=True, grouping=False, international=False):
+    """Formats val according to the currency settings
+    in the current locale."""
     conv = localeconv()
     digits = conv[international and 'int_frac_digits' or 'frac_digits']
     if digits == 127:
@@ -246,10 +280,12 @@ def currency(val, symbol=True, grouping=False, international=False):
 
 
 def str(val):
+    """Convert float to string, taking the locale into account."""
     return format('%.12g', val)
 
 
 def atof(string, func=float):
+    """Parses a string as a float according to the locale settings."""
     ts = localeconv()['thousands_sep']
     if ts:
         string = string.replace(ts, '')
@@ -260,6 +296,7 @@ def atof(string, func=float):
 
 
 def atoi(str):
+    """Converts a string to an integer according to the locale settings."""
     return atof(str, int)
 
 
@@ -286,6 +323,20 @@ def _replace_encoding(code, encoding):
 
 
 def normalize(localename):
+    """ Returns a normalized locale code for the given locale
+        name.
+    
+        The returned locale code is formatted for use with
+        setlocale().
+    
+        If normalization fails, the original name is returned
+        unchanged.
+    
+        If the given encoding is not known, the function defaults to
+        the default encoding for the locale code just like setlocale()
+        does.
+    
+    """
     if isinstance(localename, _unicode):
         localename = localename.encode('ascii')
     code = localename.translate(_ascii_lower_map)
@@ -341,6 +392,18 @@ def normalize(localename):
 
 
 def _parse_localename(localename):
+    """ Parses the locale code for localename and returns the
+        result as tuple (language code, encoding).
+    
+        The localename is normalized and passed through the locale
+        alias engine. A ValueError is raised in case the locale name
+        cannot be parsed.
+    
+        The language code corresponds to RFC 1766.  code and encoding
+        can be None in case the values cannot be determined or are
+        unknown to this implementation.
+    
+    """
     code = normalize(localename)
     if '@' in code:
         code, modifier = code.split('@', 1)
@@ -356,6 +419,12 @@ def _parse_localename(localename):
 
 
 def _build_localename(localetuple):
+    """ Builds a locale code from the given tuple (language code,
+        encoding).
+    
+        No aliasing or normalizing takes place.
+    
+    """
     language, encoding = localetuple
     if language is None:
         language = 'C'
@@ -367,6 +436,27 @@ def _build_localename(localetuple):
 
 
 def getdefaultlocale(envvars=('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
+    """ Tries to determine the default locale settings and returns
+        them as tuple (language code, encoding).
+    
+        According to POSIX, a program which has not called
+        setlocale(LC_ALL, "") runs using the portable 'C' locale.
+        Calling setlocale(LC_ALL, "") lets it use the default locale as
+        defined by the LANG variable. Since we don't want to interfere
+        with the current locale setting we thus emulate the behavior
+        in the way described above.
+    
+        To maintain compatibility with other platforms, not only the
+        LANG variable is tested, but a list of variables given as
+        envvars parameter. The first found to be defined will be
+        used. envvars defaults to the search path used in GNU gettext;
+        it must always contain the variable name 'LANG'.
+    
+        Except for the code 'C', the language code corresponds to RFC
+        1766.  code and encoding can be None in case the values cannot
+        be determined.
+    
+    """
     try:
         import _locale
         code, encoding = _locale._getdefaultlocale()
@@ -392,6 +482,17 @@ def getdefaultlocale(envvars=('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
 
 
 def getlocale(category=LC_CTYPE):
+    """ Returns the current setting for the given locale category as
+        tuple (language code, encoding).
+    
+        category may be one of the LC_* value except LC_ALL. It
+        defaults to LC_CTYPE.
+    
+        Except for the code 'C', the language code corresponds to RFC
+        1766.  code and encoding can be None in case the values cannot
+        be determined.
+    
+    """
     localename = _setlocale(category)
     if category == LC_ALL and ';' in localename:
         raise TypeError, 'category LC_ALL is not supported'
@@ -399,18 +500,35 @@ def getlocale(category=LC_CTYPE):
 
 
 def setlocale(category, locale=None):
-    if locale and type(locale) is not type(''):
+    """ Set the locale for the given category.  The locale can be
+        a string, an iterable of two strings (language code and encoding),
+        or None.
+    
+        Iterables are converted to strings using the locale aliasing
+        engine.  Locale strings are passed directly to the C lib.
+    
+        category may be given as one of the LC_* values.
+    
+    """
+    if locale and not isinstance(locale, (_str, _unicode)):
         locale = normalize(_build_localename(locale))
     return _setlocale(category, locale)
 
 
 def resetlocale(category=LC_ALL):
+    """ Sets the locale for category to the default setting.
+    
+        The default setting is determined by calling
+        getdefaultlocale(). category defaults to LC_ALL.
+    
+    """
     _setlocale(category, _build_localename(getdefaultlocale()))
 
 
 if sys.platform.startswith('win'):
 
     def getpreferredencoding(do_setlocale=True):
+        """Return the charset that the user is likely using."""
         import _locale
         return _locale._getdefaultlocale()[1]
 
@@ -421,12 +539,16 @@ else:
     except NameError:
 
         def getpreferredencoding(do_setlocale=True):
+            """Return the charset that the user is likely using,
+            by looking at environment variables."""
             return getdefaultlocale()[1]
 
 
     else:
 
         def getpreferredencoding(do_setlocale=True):
+            """Return the charset that the user is likely using,
+            according to the system configuration."""
             if do_setlocale:
                 oldloc = setlocale(LC_CTYPE)
                 try:
@@ -436,9 +558,11 @@ else:
 
                 result = nl_langinfo(CODESET)
                 setlocale(LC_CTYPE, oldloc)
-                return result
             else:
-                return nl_langinfo(CODESET)
+                result = nl_langinfo(CODESET)
+            if not result and sys.platform == 'darwin':
+                result = 'UTF-8'
+            return result
 
 
 locale_encoding_alias = {'437': 'C',
@@ -476,13 +600,20 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'a3_az': 'az_AZ.KOI8-C',
  'a3_az.koi8c': 'az_AZ.KOI8-C',
  'a3_az.koic': 'az_AZ.KOI8-C',
+ 'aa_dj': 'aa_DJ.ISO8859-1',
+ 'aa_er': 'aa_ER.UTF-8',
+ 'aa_et': 'aa_ET.UTF-8',
  'af': 'af_ZA.ISO8859-1',
  'af_za': 'af_ZA.ISO8859-1',
  'af_za.iso88591': 'af_ZA.ISO8859-1',
+ 'agr_pe': 'agr_PE.UTF-8',
+ 'ak_gh': 'ak_GH.UTF-8',
  'am': 'am_ET.UTF-8',
  'am_et': 'am_ET.UTF-8',
  'american': 'en_US.ISO8859-1',
  'american.iso88591': 'en_US.ISO8859-1',
+ 'an_es': 'an_ES.ISO8859-15',
+ 'anp_in': 'anp_IN.UTF-8',
  'ar': 'ar_AA.ISO8859-6',
  'ar_aa': 'ar_AA.ISO8859-6',
  'ar_aa.iso88596': 'ar_AA.ISO8859-6',
@@ -515,6 +646,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ar_sa.iso88596': 'ar_SA.ISO8859-6',
  'ar_sd': 'ar_SD.ISO8859-6',
  'ar_sd.iso88596': 'ar_SD.ISO8859-6',
+ 'ar_ss': 'ar_SS.UTF-8',
  'ar_sy': 'ar_SY.ISO8859-6',
  'ar_sy.iso88596': 'ar_SY.ISO8859-6',
  'ar_tn': 'ar_TN.ISO8859-6',
@@ -525,23 +657,36 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'arabic.iso88596': 'ar_AA.ISO8859-6',
  'as': 'as_IN.UTF-8',
  'as_in': 'as_IN.UTF-8',
+ 'ast_es': 'ast_ES.ISO8859-15',
+ 'ayc_pe': 'ayc_PE.UTF-8',
  'az': 'az_AZ.ISO8859-9E',
  'az_az': 'az_AZ.ISO8859-9E',
  'az_az.iso88599e': 'az_AZ.ISO8859-9E',
+ 'az_ir': 'az_IR.UTF-8',
  'be': 'be_BY.CP1251',
  'be@latin': 'be_BY.UTF-8@latin',
+ 'be_bg.utf8': 'bg_BG.UTF-8',
  'be_by': 'be_BY.CP1251',
  'be_by.cp1251': 'be_BY.CP1251',
  'be_by.microsoftcp1251': 'be_BY.CP1251',
  'be_by.utf8@latin': 'be_BY.UTF-8@latin',
  'be_by@latin': 'be_BY.UTF-8@latin',
+ 'bem_zm': 'bem_ZM.UTF-8',
+ 'ber_dz': 'ber_DZ.UTF-8',
+ 'ber_ma': 'ber_MA.UTF-8',
  'bg': 'bg_BG.CP1251',
  'bg_bg': 'bg_BG.CP1251',
  'bg_bg.cp1251': 'bg_BG.CP1251',
  'bg_bg.iso88595': 'bg_BG.ISO8859-5',
  'bg_bg.koi8r': 'bg_BG.KOI8-R',
  'bg_bg.microsoftcp1251': 'bg_BG.CP1251',
+ 'bhb_in.utf8': 'bhb_IN.UTF-8',
+ 'bho_in': 'bho_IN.UTF-8',
+ 'bho_np': 'bho_NP.UTF-8',
+ 'bi_vu': 'bi_VU.UTF-8',
+ 'bn_bd': 'bn_BD.UTF-8',
  'bn_in': 'bn_IN.UTF-8',
+ 'bo_cn': 'bo_CN.UTF-8',
  'bo_in': 'bo_IN.UTF-8',
  'bokmal': 'nb_NO.ISO8859-1',
  'bokm\xe5l': 'nb_NO.ISO8859-1',
@@ -553,16 +698,19 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'br_fr.iso885915@euro': 'br_FR.ISO8859-15',
  'br_fr.utf8@euro': 'br_FR.UTF-8',
  'br_fr@euro': 'br_FR.ISO8859-15',
+ 'brx_in': 'brx_IN.UTF-8',
  'bs': 'bs_BA.ISO8859-2',
  'bs_ba': 'bs_BA.ISO8859-2',
  'bs_ba.iso88592': 'bs_BA.ISO8859-2',
  'bulgarian': 'bg_BG.CP1251',
+ 'byn_er': 'byn_ER.UTF-8',
  'c': 'C',
  'c-french': 'fr_CA.ISO8859-1',
  'c-french.iso88591': 'fr_CA.ISO8859-1',
  'c.ascii': 'C',
  'c.en': 'C',
  'c.iso88591': 'en_US.ISO8859-1',
+ 'c.utf8': 'en_US.UTF-8',
  'c_c': 'C',
  'c_c.c': 'C',
  'ca': 'ca_ES.ISO8859-1',
@@ -578,6 +726,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ca_es.iso885915@euro': 'ca_ES.ISO8859-15',
  'ca_es.utf8@euro': 'ca_ES.UTF-8',
  'ca_es@euro': 'ca_ES.ISO8859-15',
+ 'ca_es@valencia': 'ca_ES.UTF-8@valencia',
  'ca_fr': 'ca_FR.ISO8859-1',
  'ca_fr.iso88591': 'ca_FR.ISO8859-1',
  'ca_fr.iso885915': 'ca_FR.ISO8859-15',
@@ -591,16 +740,23 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ca_it.utf8@euro': 'ca_IT.UTF-8',
  'ca_it@euro': 'ca_IT.ISO8859-15',
  'catalan': 'ca_ES.ISO8859-1',
+ 'ce_ru': 'ce_RU.UTF-8',
  'cextend': 'en_US.ISO8859-1',
  'cextend.en': 'en_US.ISO8859-1',
  'chinese-s': 'zh_CN.eucCN',
  'chinese-t': 'zh_TW.eucTW',
+ 'chr_us': 'chr_US.UTF-8',
+ 'ckb_iq': 'ckb_IQ.UTF-8',
+ 'cmn_tw': 'cmn_TW.UTF-8',
+ 'crh_ua': 'crh_UA.UTF-8',
  'croatian': 'hr_HR.ISO8859-2',
  'cs': 'cs_CZ.ISO8859-2',
  'cs_cs': 'cs_CZ.ISO8859-2',
  'cs_cs.iso88592': 'cs_CZ.ISO8859-2',
  'cs_cz': 'cs_CZ.ISO8859-2',
  'cs_cz.iso88592': 'cs_CZ.ISO8859-2',
+ 'csb_pl': 'csb_PL.UTF-8',
+ 'cv_ru': 'cv_RU.UTF-8',
  'cy': 'cy_GB.ISO8859-1',
  'cy_gb': 'cy_GB.ISO8859-1',
  'cy_gb.iso88591': 'cy_GB.ISO8859-1',
@@ -648,6 +804,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'de_de.iso885915@euro': 'de_DE.ISO8859-15',
  'de_de.utf8@euro': 'de_DE.UTF-8',
  'de_de@euro': 'de_DE.ISO8859-15',
+ 'de_it': 'de_IT.ISO8859-1',
+ 'de_li.utf8': 'de_LI.UTF-8',
  'de_lu': 'de_LU.ISO8859-1',
  'de_lu.iso88591': 'de_LU.ISO8859-1',
  'de_lu.iso885915': 'de_LU.ISO8859-15',
@@ -655,18 +813,23 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'de_lu.utf8@euro': 'de_LU.UTF-8',
  'de_lu@euro': 'de_LU.ISO8859-15',
  'deutsch': 'de_DE.ISO8859-1',
+ 'doi_in': 'doi_IN.UTF-8',
  'dutch': 'nl_NL.ISO8859-1',
  'dutch.iso88591': 'nl_BE.ISO8859-1',
+ 'dv_mv': 'dv_MV.UTF-8',
+ 'dz_bt': 'dz_BT.UTF-8',
  'ee': 'ee_EE.ISO8859-4',
  'ee_ee': 'ee_EE.ISO8859-4',
  'ee_ee.iso88594': 'ee_EE.ISO8859-4',
  'eesti': 'et_EE.ISO8859-1',
  'el': 'el_GR.ISO8859-7',
+ 'el_cy': 'el_CY.ISO8859-7',
  'el_gr': 'el_GR.ISO8859-7',
  'el_gr.iso88597': 'el_GR.ISO8859-7',
  'el_gr@euro': 'el_GR.ISO8859-15',
  'en': 'en_US.ISO8859-1',
  'en.iso88591': 'en_US.ISO8859-1',
+ 'en_ag': 'en_AG.UTF-8',
  'en_au': 'en_AU.ISO8859-1',
  'en_au.iso88591': 'en_AU.ISO8859-1',
  'en_be': 'en_BE.ISO8859-1',
@@ -675,6 +838,10 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'en_bw.iso88591': 'en_BW.ISO8859-1',
  'en_ca': 'en_CA.ISO8859-1',
  'en_ca.iso88591': 'en_CA.ISO8859-1',
+ 'en_dk': 'en_DK.ISO8859-1',
+ 'en_dk.iso88591': 'en_DK.ISO8859-1',
+ 'en_dk.iso885915': 'en_DK.ISO8859-15',
+ 'en_dl.utf8': 'en_DL.UTF-8',
  'en_gb': 'en_GB.ISO8859-1',
  'en_gb.88591': 'en_GB.ISO8859-1',
  'en_gb.iso88591': 'en_GB.ISO8859-1',
@@ -688,11 +855,14 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'en_ie.iso885915@euro': 'en_IE.ISO8859-15',
  'en_ie.utf8@euro': 'en_IE.UTF-8',
  'en_ie@euro': 'en_IE.ISO8859-15',
+ 'en_il': 'en_IL.UTF-8',
  'en_in': 'en_IN.ISO8859-1',
+ 'en_ng': 'en_NG.UTF-8',
  'en_nz': 'en_NZ.ISO8859-1',
  'en_nz.iso88591': 'en_NZ.ISO8859-1',
  'en_ph': 'en_PH.ISO8859-1',
  'en_ph.iso88591': 'en_PH.ISO8859-1',
+ 'en_sc.utf8': 'en_SC.UTF-8',
  'en_sg': 'en_SG.ISO8859-1',
  'en_sg.iso88591': 'en_SG.ISO8859-1',
  'en_uk': 'en_GB.ISO8859-1',
@@ -709,12 +879,14 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'en_za.iso88591': 'en_ZA.ISO8859-1',
  'en_za.iso885915': 'en_ZA.ISO8859-15',
  'en_za@euro': 'en_ZA.ISO8859-15',
+ 'en_zm': 'en_ZM.UTF-8',
  'en_zw': 'en_ZW.ISO8859-1',
  'en_zw.iso88591': 'en_ZW.ISO8859-1',
+ 'en_zw.utf8': 'en_ZS.UTF-8',
  'eng_gb': 'en_GB.ISO8859-1',
  'eng_gb.8859': 'en_GB.ISO8859-1',
  'english': 'en_EN.ISO8859-1',
- 'english.iso88591': 'en_EN.ISO8859-1',
+ 'english.iso88591': 'en_US.ISO8859-1',
  'english_uk': 'en_GB.ISO8859-1',
  'english_uk.8859': 'en_GB.ISO8859-1',
  'english_united-states': 'en_US.ISO8859-1',
@@ -723,8 +895,10 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'english_us.8859': 'en_US.ISO8859-1',
  'english_us.ascii': 'en_US.ISO8859-1',
  'eo': 'eo_XX.ISO8859-3',
+ 'eo.utf8': 'eo.UTF-8',
  'eo_eo': 'eo_EO.ISO8859-3',
  'eo_eo.iso88593': 'eo_EO.ISO8859-3',
+ 'eo_us.utf8': 'eo_US.UTF-8',
  'eo_xx': 'eo_XX.ISO8859-3',
  'eo_xx.iso88593': 'eo_XX.ISO8859-3',
  'es': 'es_ES.ISO8859-1',
@@ -738,6 +912,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'es_co.iso88591': 'es_CO.ISO8859-1',
  'es_cr': 'es_CR.ISO8859-1',
  'es_cr.iso88591': 'es_CR.ISO8859-1',
+ 'es_cu': 'es_CU.UTF-8',
  'es_do': 'es_DO.ISO8859-1',
  'es_do.iso88591': 'es_DO.ISO8859-1',
  'es_ec': 'es_EC.ISO8859-1',
@@ -800,9 +975,11 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'eu_es.iso885915@euro': 'eu_ES.ISO8859-15',
  'eu_es.utf8@euro': 'eu_ES.UTF-8',
  'eu_es@euro': 'eu_ES.ISO8859-15',
+ 'eu_fr': 'eu_FR.ISO8859-1',
  'fa': 'fa_IR.UTF-8',
  'fa_ir': 'fa_IR.UTF-8',
  'fa_ir.isiri3342': 'fa_IR.ISIRI-3342',
+ 'ff_sn': 'ff_SN.UTF-8',
  'fi': 'fi_FI.ISO8859-15',
  'fi.iso885915': 'fi_FI.ISO8859-15',
  'fi_fi': 'fi_FI.ISO8859-15',
@@ -812,6 +989,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'fi_fi.iso885915@euro': 'fi_FI.ISO8859-15',
  'fi_fi.utf8@euro': 'fi_FI.UTF-8',
  'fi_fi@euro': 'fi_FI.ISO8859-15',
+ 'fil_ph': 'fil_PH.UTF-8',
  'finnish': 'fi_FI.ISO8859-1',
  'finnish.iso88591': 'fi_FI.ISO8859-1',
  'fo': 'fo_FO.ISO8859-1',
@@ -859,6 +1037,9 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'french.iso88591': 'fr_CH.ISO8859-1',
  'french_france': 'fr_FR.ISO8859-1',
  'french_france.8859': 'fr_FR.ISO8859-1',
+ 'fur_it': 'fur_IT.UTF-8',
+ 'fy_de': 'fy_DE.UTF-8',
+ 'fy_nl': 'fy_NL.UTF-8',
  'ga': 'ga_IE.ISO8859-1',
  'ga_ie': 'ga_IE.ISO8859-1',
  'ga_ie.iso88591': 'ga_IE.ISO8859-1',
@@ -881,6 +1062,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'german.iso88591': 'de_CH.ISO8859-1',
  'german_germany': 'de_DE.ISO8859-1',
  'german_germany.8859': 'de_DE.ISO8859-1',
+ 'gez_er': 'gez_ER.UTF-8',
+ 'gez_et': 'gez_ET.UTF-8',
  'gl': 'gl_ES.ISO8859-1',
  'gl_es': 'gl_ES.ISO8859-1',
  'gl_es.iso88591': 'gl_ES.ISO8859-1',
@@ -897,6 +1080,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'gv_gb.iso885914': 'gv_GB.ISO8859-14',
  'gv_gb.iso885915': 'gv_GB.ISO8859-15',
  'gv_gb@euro': 'gv_GB.ISO8859-15',
+ 'ha_ng': 'ha_NG.UTF-8',
+ 'hak_tw': 'hak_TW.UTF-8',
  'he': 'he_IL.ISO8859-8',
  'he_il': 'he_IL.ISO8859-8',
  'he_il.cp1255': 'he_IL.CP1255',
@@ -907,20 +1092,29 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'hi': 'hi_IN.ISCII-DEV',
  'hi_in': 'hi_IN.ISCII-DEV',
  'hi_in.isciidev': 'hi_IN.ISCII-DEV',
+ 'hif_fj': 'hif_FJ.UTF-8',
  'hne': 'hne_IN.UTF-8',
  'hne_in': 'hne_IN.UTF-8',
  'hr': 'hr_HR.ISO8859-2',
  'hr_hr': 'hr_HR.ISO8859-2',
  'hr_hr.iso88592': 'hr_HR.ISO8859-2',
  'hrvatski': 'hr_HR.ISO8859-2',
+ 'hsb_de': 'hsb_DE.ISO8859-2',
+ 'ht_ht': 'ht_HT.UTF-8',
  'hu': 'hu_HU.ISO8859-2',
  'hu_hu': 'hu_HU.ISO8859-2',
  'hu_hu.iso88592': 'hu_HU.ISO8859-2',
  'hungarian': 'hu_HU.ISO8859-2',
+ 'hy_am': 'hy_AM.UTF-8',
+ 'hy_am.armscii8': 'hy_AM.ARMSCII_8',
+ 'ia': 'ia.UTF-8',
+ 'ia_fr': 'ia_FR.UTF-8',
  'icelandic': 'is_IS.ISO8859-1',
  'icelandic.iso88591': 'is_IS.ISO8859-1',
  'id': 'id_ID.ISO8859-1',
  'id_id': 'id_ID.ISO8859-1',
+ 'ig_ng': 'ig_NG.UTF-8',
+ 'ik_ca': 'ik_CA.UTF-8',
  'in': 'id_ID.ISO8859-1',
  'in_id': 'id_ID.ISO8859-1',
  'is': 'is_IS.ISO8859-1',
@@ -955,6 +1149,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'iw': 'he_IL.ISO8859-8',
  'iw_il': 'he_IL.ISO8859-8',
  'iw_il.iso88598': 'he_IL.ISO8859-8',
+ 'iw_il.utf8': 'iw_IL.UTF-8',
  'ja': 'ja_JP.eucJP',
  'ja.jis': 'ja_JP.JIS7',
  'ja.sjis': 'ja_JP.SJIS',
@@ -981,6 +1176,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ka_ge.georgianacademy': 'ka_GE.GEORGIAN-ACADEMY',
  'ka_ge.georgianps': 'ka_GE.GEORGIAN-PS',
  'ka_ge.georgianrs': 'ka_GE.GEORGIAN-ACADEMY',
+ 'kab_dz': 'kab_DZ.UTF-8',
+ 'kk_kz': 'kk_KZ.ptcp154',
  'kl': 'kl_GL.ISO8859-1',
  'kl_gl': 'kl_GL.ISO8859-1',
  'kl_gl.iso88591': 'kl_GL.ISO8859-1',
@@ -993,11 +1190,15 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ko_kr': 'ko_KR.eucKR',
  'ko_kr.euc': 'ko_KR.eucKR',
  'ko_kr.euckr': 'ko_KR.eucKR',
+ 'kok_in': 'kok_IN.UTF-8',
  'korean': 'ko_KR.eucKR',
  'korean.euc': 'ko_KR.eucKR',
  'ks': 'ks_IN.UTF-8',
  'ks_in': 'ks_IN.UTF-8',
+ 'ks_in.utf8@devanagari': 'ks_IN.UTF-8@devanagari',
  'ks_in@devanagari': 'ks_IN.UTF-8@devanagari',
+ 'ks_in@devanagari.utf8': 'ks_IN.UTF-8@devanagari',
+ 'ku_tr': 'ku_TR.ISO8859-9',
  'kw': 'kw_GB.ISO8859-1',
  'kw_gb': 'kw_GB.ISO8859-1',
  'kw_gb.iso88591': 'kw_GB.ISO8859-1',
@@ -1006,7 +1207,13 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'kw_gb@euro': 'kw_GB.ISO8859-15',
  'ky': 'ky_KG.UTF-8',
  'ky_kg': 'ky_KG.UTF-8',
+ 'lb_lu': 'lb_LU.UTF-8',
+ 'lg_ug': 'lg_UG.ISO8859-10',
+ 'li_be': 'li_BE.UTF-8',
+ 'li_nl': 'li_NL.UTF-8',
+ 'lij_it': 'lij_IT.UTF-8',
  'lithuanian': 'lt_LT.ISO8859-13',
+ 'ln_cd': 'ln_CD.UTF-8',
  'lo': 'lo_LA.MULELAO-1',
  'lo_la': 'lo_LA.MULELAO-1',
  'lo_la.cp1133': 'lo_LA.IBM-CP1133',
@@ -1020,11 +1227,19 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'lv_lv': 'lv_LV.ISO8859-13',
  'lv_lv.iso885913': 'lv_LV.ISO8859-13',
  'lv_lv.iso88594': 'lv_LV.ISO8859-4',
+ 'lzh_tw': 'lzh_TW.UTF-8',
+ 'mag_in': 'mag_IN.UTF-8',
  'mai': 'mai_IN.UTF-8',
  'mai_in': 'mai_IN.UTF-8',
+ 'mai_np': 'mai_NP.UTF-8',
+ 'mfe_mu': 'mfe_MU.UTF-8',
+ 'mg_mg': 'mg_MG.ISO8859-15',
+ 'mhr_ru': 'mhr_RU.UTF-8',
  'mi': 'mi_NZ.ISO8859-1',
  'mi_nz': 'mi_NZ.ISO8859-1',
  'mi_nz.iso88591': 'mi_NZ.ISO8859-1',
+ 'miq_ni': 'miq_NI.UTF-8',
+ 'mjw_in': 'mjw_IN.UTF-8',
  'mk': 'mk_MK.ISO8859-5',
  'mk_mk': 'mk_MK.ISO8859-5',
  'mk_mk.cp1251': 'mk_MK.CP1251',
@@ -1032,6 +1247,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'mk_mk.microsoftcp1251': 'mk_MK.CP1251',
  'ml': 'ml_IN.UTF-8',
  'ml_in': 'ml_IN.UTF-8',
+ 'mn_mn': 'mn_MN.UTF-8',
+ 'mni_in': 'mni_IN.UTF-8',
  'mr': 'mr_IN.UTF-8',
  'mr_in': 'mr_IN.UTF-8',
  'ms': 'ms_MY.ISO8859-1',
@@ -1040,15 +1257,23 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'mt': 'mt_MT.ISO8859-3',
  'mt_mt': 'mt_MT.ISO8859-3',
  'mt_mt.iso88593': 'mt_MT.ISO8859-3',
+ 'my_mm': 'my_MM.UTF-8',
+ 'nan_tw': 'nan_TW.UTF-8',
  'nb': 'nb_NO.ISO8859-1',
  'nb_no': 'nb_NO.ISO8859-1',
  'nb_no.88591': 'nb_NO.ISO8859-1',
  'nb_no.iso88591': 'nb_NO.ISO8859-1',
  'nb_no.iso885915': 'nb_NO.ISO8859-15',
  'nb_no@euro': 'nb_NO.ISO8859-15',
+ 'nds_de': 'nds_DE.UTF-8',
+ 'nds_nl': 'nds_NL.UTF-8',
  'ne_np': 'ne_NP.UTF-8',
+ 'nhn_mx': 'nhn_MX.UTF-8',
+ 'niu_nu': 'niu_NU.UTF-8',
+ 'niu_nz': 'niu_NZ.UTF-8',
  'nl': 'nl_NL.ISO8859-1',
  'nl.iso885915': 'nl_NL.ISO8859-15',
+ 'nl_aw': 'nl_AW.UTF-8',
  'nl_be': 'nl_BE.ISO8859-1',
  'nl_be.88591': 'nl_BE.ISO8859-1',
  'nl_be.iso88591': 'nl_BE.ISO8859-1',
@@ -1098,10 +1323,17 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'oc_fr.iso88591': 'oc_FR.ISO8859-1',
  'oc_fr.iso885915': 'oc_FR.ISO8859-15',
  'oc_fr@euro': 'oc_FR.ISO8859-15',
+ 'om_et': 'om_ET.UTF-8',
+ 'om_ke': 'om_KE.ISO8859-1',
  'or': 'or_IN.UTF-8',
  'or_in': 'or_IN.UTF-8',
+ 'os_ru': 'os_RU.UTF-8',
  'pa': 'pa_IN.UTF-8',
  'pa_in': 'pa_IN.UTF-8',
+ 'pa_pk': 'pa_PK.UTF-8',
+ 'pap_an': 'pap_AN.UTF-8',
+ 'pap_aw': 'pap_AW.UTF-8',
+ 'pap_cw': 'pap_CW.UTF-8',
  'pd': 'pd_US.ISO8859-1',
  'pd_de': 'pd_DE.ISO8859-1',
  'pd_de.iso88591': 'pd_DE.ISO8859-1',
@@ -1127,6 +1359,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'pp': 'pp_AN.ISO8859-1',
  'pp_an': 'pp_AN.ISO8859-1',
  'pp_an.iso88591': 'pp_AN.ISO8859-1',
+ 'ps_af': 'ps_AF.UTF-8',
  'pt': 'pt_PT.ISO8859-1',
  'pt.iso885915': 'pt_PT.ISO8859-15',
  'pt_br': 'pt_BR.ISO8859-1',
@@ -1141,6 +1374,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'pt_pt.iso885915@euro': 'pt_PT.ISO8859-15',
  'pt_pt.utf8@euro': 'pt_PT.UTF-8',
  'pt_pt@euro': 'pt_PT.ISO8859-15',
+ 'quz_pe': 'quz_PE.UTF-8',
+ 'raj_in': 'raj_IN.UTF-8',
  'ro': 'ro_RO.ISO8859-2',
  'ro_ro': 'ro_RO.ISO8859-2',
  'ro_ro.iso88592': 'ro_RO.ISO8859-2',
@@ -1157,24 +1392,34 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'ru_ua.koi8u': 'ru_UA.KOI8-U',
  'ru_ua.microsoftcp1251': 'ru_UA.CP1251',
  'rumanian': 'ro_RO.ISO8859-2',
- 'russian': 'ru_RU.ISO8859-5',
+ 'russian': 'ru_RU.KOI8-R',
  'rw': 'rw_RW.ISO8859-1',
  'rw_rw': 'rw_RW.ISO8859-1',
  'rw_rw.iso88591': 'rw_RW.ISO8859-1',
+ 'sa_in': 'sa_IN.UTF-8',
+ 'sat_in': 'sat_IN.UTF-8',
+ 'sc_it': 'sc_IT.UTF-8',
  'sd': 'sd_IN.UTF-8',
  'sd@devanagari': 'sd_IN.UTF-8@devanagari',
  'sd_in': 'sd_IN.UTF-8',
+ 'sd_in.utf8@devanagari': 'sd_IN.UTF-8@devanagari',
  'sd_in@devanagari': 'sd_IN.UTF-8@devanagari',
+ 'sd_in@devanagari.utf8': 'sd_IN.UTF-8@devanagari',
+ 'sd_pk': 'sd_PK.UTF-8',
  'se_no': 'se_NO.UTF-8',
  'serbocroatian': 'sr_RS.UTF-8@latin',
+ 'sgs_lt': 'sgs_LT.UTF-8',
  'sh': 'sr_RS.UTF-8@latin',
  'sh_ba.iso88592@bosnia': 'sr_CS.ISO8859-2',
  'sh_hr': 'sh_HR.ISO8859-2',
  'sh_hr.iso88592': 'hr_HR.ISO8859-2',
  'sh_sp': 'sr_CS.ISO8859-2',
  'sh_yu': 'sr_RS.UTF-8@latin',
+ 'shn_mm': 'shn_MM.UTF-8',
+ 'shs_ca': 'shs_CA.UTF-8',
  'si': 'si_LK.UTF-8',
  'si_lk': 'si_LK.UTF-8',
+ 'sid_et': 'sid_ET.UTF-8',
  'sinhala': 'si_LK.UTF-8',
  'sk': 'sk_SK.ISO8859-2',
  'sk_sk': 'sk_SK.ISO8859-2',
@@ -1186,6 +1431,11 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'slovak': 'sk_SK.ISO8859-2',
  'slovene': 'sl_SI.ISO8859-2',
  'slovenian': 'sl_SI.ISO8859-2',
+ 'sm_ws': 'sm_WS.UTF-8',
+ 'so_dj': 'so_DJ.ISO8859-1',
+ 'so_et': 'so_ET.UTF-8',
+ 'so_ke': 'so_KE.ISO8859-1',
+ 'so_so': 'so_SO.ISO8859-1',
  'sp': 'sr_CS.ISO8859-5',
  'sp_yu': 'sr_CS.ISO8859-5',
  'spanish': 'es_ES.ISO8859-1',
@@ -1195,6 +1445,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'sq': 'sq_AL.ISO8859-2',
  'sq_al': 'sq_AL.ISO8859-2',
  'sq_al.iso88592': 'sq_AL.ISO8859-2',
+ 'sq_mk': 'sq_MK.UTF-8',
  'sr': 'sr_RS.UTF-8',
  'sr@cyrillic': 'sr_RS.UTF-8',
  'sr@latin': 'sr_RS.UTF-8@latin',
@@ -1217,6 +1468,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'sr_yu.iso88595': 'sr_CS.ISO8859-5',
  'sr_yu.iso88595@cyrillic': 'sr_CS.ISO8859-5',
  'sr_yu.microsoftcp1251@cyrillic': 'sr_CS.CP1251',
+ 'sr_yu.utf8': 'sr_RS.UTF-8',
  'sr_yu.utf8@cyrillic': 'sr_RS.UTF-8',
  'sr_yu@cyrillic': 'sr_RS.UTF-8',
  'ss': 'ss_ZA.ISO8859-1',
@@ -1238,13 +1490,19 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'sv_se.iso88591': 'sv_SE.ISO8859-1',
  'sv_se.iso885915': 'sv_SE.ISO8859-15',
  'sv_se@euro': 'sv_SE.ISO8859-15',
+ 'sw_ke': 'sw_KE.UTF-8',
+ 'sw_tz': 'sw_TZ.UTF-8',
  'swedish': 'sv_SE.ISO8859-1',
  'swedish.iso88591': 'sv_SE.ISO8859-1',
+ 'szl_pl': 'szl_PL.UTF-8',
  'ta': 'ta_IN.TSCII-0',
  'ta_in': 'ta_IN.TSCII-0',
  'ta_in.tscii': 'ta_IN.TSCII-0',
  'ta_in.tscii0': 'ta_IN.TSCII-0',
+ 'ta_lk': 'ta_LK.UTF-8',
+ 'tcy_in.utf8': 'tcy_IN.UTF-8',
  'te': 'te_IN.UTF-8',
+ 'te_in': 'te_IN.UTF-8',
  'tg': 'tg_TJ.KOI8-C',
  'tg_tj': 'tg_TJ.KOI8-C',
  'tg_tj.koi8c': 'tg_TJ.KOI8-C',
@@ -1254,13 +1512,21 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'th_th.tactis': 'th_TH.TIS620',
  'th_th.tis620': 'th_TH.TIS620',
  'thai': 'th_TH.ISO8859-11',
+ 'the_np': 'the_NP.UTF-8',
+ 'ti_er': 'ti_ER.UTF-8',
+ 'ti_et': 'ti_ET.UTF-8',
+ 'tig_er': 'tig_ER.UTF-8',
+ 'tk_tm': 'tk_TM.UTF-8',
  'tl': 'tl_PH.ISO8859-1',
  'tl_ph': 'tl_PH.ISO8859-1',
  'tl_ph.iso88591': 'tl_PH.ISO8859-1',
  'tn': 'tn_ZA.ISO8859-15',
  'tn_za': 'tn_ZA.ISO8859-15',
  'tn_za.iso885915': 'tn_ZA.ISO8859-15',
+ 'to_to': 'to_TO.UTF-8',
+ 'tpi_pg': 'tpi_PG.UTF-8',
  'tr': 'tr_TR.ISO8859-9',
+ 'tr_cy': 'tr_CY.ISO8859-9',
  'tr_tr': 'tr_TR.ISO8859-9',
  'tr_tr.iso88599': 'tr_TR.ISO8859-9',
  'ts': 'ts_ZA.ISO8859-1',
@@ -1270,8 +1536,10 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'tt_ru': 'tt_RU.TATAR-CYR',
  'tt_ru.koi8c': 'tt_RU.KOI8-C',
  'tt_ru.tatarcyr': 'tt_RU.TATAR-CYR',
+ 'tt_ru@iqtelif': 'tt_RU.UTF-8@iqtelif',
  'turkish': 'tr_TR.ISO8859-9',
  'turkish.iso88599': 'tr_TR.ISO8859-9',
+ 'ug_cn': 'ug_CN.UTF-8',
  'uk': 'uk_UA.KOI8-U',
  'uk_ua': 'uk_UA.KOI8-U',
  'uk_ua.cp1251': 'uk_UA.CP1251',
@@ -1281,6 +1549,7 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'univ': 'en_US.utf',
  'universal': 'en_US.utf',
  'universal.utf8@ucs4': 'en_US.UTF-8',
+ 'unm_us': 'unm_US.UTF-8',
  'ur': 'ur_PK.CP1256',
  'ur_in': 'ur_IN.UTF-8',
  'ur_pk': 'ur_PK.CP1256',
@@ -1305,6 +1574,9 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'wa_be.iso885915': 'wa_BE.ISO8859-15',
  'wa_be.iso885915@euro': 'wa_BE.ISO8859-15',
  'wa_be@euro': 'wa_BE.ISO8859-15',
+ 'wae_ch': 'wae_CH.UTF-8',
+ 'wal_et': 'wal_ET.UTF-8',
+ 'wo_sn': 'wo_SN.UTF-8',
  'xh': 'xh_ZA.ISO8859-1',
  'xh_za': 'xh_ZA.ISO8859-1',
  'xh_za.iso88591': 'xh_ZA.ISO8859-1',
@@ -1312,6 +1584,9 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'yi_us': 'yi_US.CP1255',
  'yi_us.cp1255': 'yi_US.CP1255',
  'yi_us.microsoftcp1255': 'yi_US.CP1255',
+ 'yo_ng': 'yo_NG.UTF-8',
+ 'yue_hk': 'yue_HK.UTF-8',
+ 'yuw_pg': 'yuw_PG.UTF-8',
  'zh': 'zh_CN.eucCN',
  'zh_cn': 'zh_CN.gb2312',
  'zh_cn.big5': 'zh_TW.big5',
@@ -1323,6 +1598,8 @@ locale_alias = {'a3': 'az_AZ.KOI8-C',
  'zh_hk.big5': 'zh_HK.big5',
  'zh_hk.big5hk': 'zh_HK.big5hkscs',
  'zh_hk.big5hkscs': 'zh_HK.big5hkscs',
+ 'zh_sg': 'zh_SG.GB2312',
+ 'zh_sg.gbk': 'zh_SG.GBK',
  'zh_tw': 'zh_TW.big5',
  'zh_tw.big5': 'zh_TW.big5',
  'zh_tw.euc': 'zh_TW.eucTW',
@@ -1540,6 +1817,8 @@ windows_locale = {1078: 'af_ZA',
  1077: 'zu_ZA'}
 
 def _print_locale():
+    """ Test function.
+    """
     categories = {}
 
     def _init_categories(categories=categories):

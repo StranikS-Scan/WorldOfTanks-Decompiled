@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
 from adisp import process
+from frameworks import wulf
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -38,6 +39,15 @@ class _OpenBuyGoldOverlaySchema(W2CSchema):
     params = Field(required=False, type=dict)
 
 
+def _tryToCloseWulfView(view):
+    window = view.getParentWindow()
+    if window is not None:
+        window.destroy()
+    else:
+        raise WebCommandException('Parent window is None. View: {}'.format(view))
+    return
+
+
 class OpenBrowserWindowWebApiMixin(object):
 
     @w2c(_OpenBrowserWindowSchema, 'browser')
@@ -66,8 +76,13 @@ class CloseBrowserWindowWebApiMixin(object):
 
     @w2c(W2CSchema, 'browser')
     def browser(self, cmd, ctx):
-        if 'browser_id' in ctx:
-            windowAlias = getViewName(ctx['browser_alias'], ctx['browser_id'])
+        browserAlias = ctx.get('browser_alias')
+        browserId = ctx.get('browser_id')
+        browserView = ctx.get('browser_view')
+        if browserView and isinstance(browserView, wulf.View):
+            _tryToCloseWulfView(browserView)
+        elif browserId:
+            windowAlias = getViewName(browserAlias, browserId)
             appLoader = dependency.instance(IAppLoader)
             app = appLoader.getApp()
             if app is not None and app.containerManager is not None:
@@ -86,6 +101,8 @@ class CloseBrowserWindowWebApiMixin(object):
                     browserWindow.destroy()
                 else:
                     raise WebCommandException('Browser window could not be found! May be alias "{}" is wrong or probably browser has unsupported layer.'.format(windowAlias))
+        else:
+            raise WebCommandException('Unable to close Browser Window! view alias: {}, id: {}, instance: {}'.format(browserAlias, browserId, browserView))
         self._onBrowserClose()
         return
 
@@ -97,13 +114,18 @@ class CloseBrowserViewWebApiMixin(object):
 
     @w2c(W2CSchema, 'browser')
     def browser(self, cmd, ctx):
-        appLoader = dependency.instance(IAppLoader)
-        app = appLoader.getApp()
-        if app is not None and app.containerManager is not None:
-            browserView = app.containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
-            if browserView is not None:
-                browserView.onCloseView()
-                return
+        browserAlias = ctx.get('browser_alias')
+        browserView = ctx.get('browser_view')
+        if browserView and isinstance(browserView, wulf.View):
+            _tryToCloseWulfView(browserView)
+        else:
+            appLoader = dependency.instance(IAppLoader)
+            app = appLoader.getApp()
+            if app is not None and app.containerManager is not None:
+                browserView = app.containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: browserAlias})
+                if browserView is not None:
+                    browserView.onCloseView()
+                    return
         raise WebCommandException('Unable to find BrowserView!')
         return
 

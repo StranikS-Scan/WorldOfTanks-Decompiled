@@ -620,10 +620,14 @@ class _singlefileMailbox(Mailbox):
         pass
 
     def close(self):
-        self.flush()
-        if self._locked:
-            self.unlock()
-        self._file.close()
+        try:
+            self.flush()
+        finally:
+            try:
+                if self._locked:
+                    self.unlock()
+            finally:
+                self._file.close()
 
     def _lookup(self, key=None):
         if self._toc is None:

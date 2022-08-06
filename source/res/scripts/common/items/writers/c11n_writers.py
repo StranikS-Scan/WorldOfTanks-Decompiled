@@ -6,13 +6,14 @@ import Math
 import ResMgr
 import typing
 import re
-from string import lower, upper
+from string import lower
 import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
+from serializable_types.types import C11nSerializationTypes as _C11nSerializationTypes
 from soft_exception import SoftException
 from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC
 from items.components.c11n_components import StyleItem, ApplyArea
-from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException, _C11nSerializationTypes
+from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
 from nations import NAMES
 from items.utils import getDefaultGlossTexture

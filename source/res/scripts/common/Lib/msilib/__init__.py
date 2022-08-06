@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/msilib/__init__.py
 from _msi import *
-import os, string, re, sys
+import glob
+import os
+import re
+import string
+import sys
 AMD64 = 'AMD64' in sys.version
 Itanium = 'Itanium' in sys.version
 Win64 = AMD64 or Itanium
@@ -267,7 +271,7 @@ class Directory:
         if Win64:
             flags |= 256
         if keyfile:
-            keyid = self.cab.gen_id(self.absolute, keyfile)
+            keyid = self.cab.gen_id(keyfile)
             self.keyfiles[keyfile] = keyid
         else:
             keyid = None

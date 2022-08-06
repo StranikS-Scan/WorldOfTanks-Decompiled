@@ -35,7 +35,7 @@ class ScriptBinding:
         try:
             tabnanny.process_tokens(tokenize.generate_tokens(f.readline))
         except tokenize.TokenError as msg:
-            msgtxt, (lineno, start) = msg
+            msgtxt, (lineno, start) = msg.args
             self.editwin.gotoline(lineno)
             self.errorbox('Tabnanny Tokenizing Error', 'Token Error: %s' % msgtxt)
             return False
@@ -105,7 +105,7 @@ class ScriptBinding:
             return 'break'
         interp = self.shell.interp
         if PyShell.use_subprocess:
-            interp.restart_subprocess(with_cwd=False)
+            interp.restart_subprocess(with_cwd=False, filename=code.co_filename)
         dirname = os.path.dirname(filename)
         interp.runcommand('if 1:\n            __file__ = {filename!r}\n            import sys as _sys\n            from os.path import basename as _basename\n            if (not _sys.argv or\n                _basename(_sys.argv[0]) != _basename(__file__)):\n                _sys.argv = [__file__]\n            import os as _os\n            _os.chdir({dirname!r})\n            del _sys, _basename, _os\n            \n'.format(filename=filename, dirname=dirname))
         interp.prepend_syspath(filename)
@@ -135,9 +135,9 @@ class ScriptBinding:
 
     def ask_save_dialog(self):
         msg = 'Source Must Be Saved\n' + '     ' + 'OK to Save?'
-        confirm = tkMessageBox.askokcancel(title='Save Before Run or Check', message=msg, default=tkMessageBox.OK, master=self.editwin.text)
+        confirm = tkMessageBox.askokcancel(title='Save Before Run or Check', message=msg, default=tkMessageBox.OK, parent=self.editwin.text)
         return confirm
 
     def errorbox(self, title, message):
-        tkMessageBox.showerror(title, message, master=self.editwin.text)
+        tkMessageBox.showerror(title, message, parent=self.editwin.text)
         self.editwin.text.focus_set()

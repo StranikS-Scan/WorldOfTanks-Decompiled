@@ -12,6 +12,7 @@ POP3_SSL_PORT = 995
 CR = '\r'
 LF = '\n'
 CRLF = CR + LF
+_MAXLINE = 2048
 
 class POP3():
 
@@ -34,7 +35,9 @@ class POP3():
         self._putline(line)
 
     def _getline(self):
-        line = self.file.readline()
+        line = self.file.readline(_MAXLINE + 1)
+        if len(line) > _MAXLINE:
+            raise error_proto('line too long')
         if self._debugging > 1:
             print '*get*', repr(line)
         if not line:
@@ -127,7 +130,7 @@ class POP3():
     def rpop(self, user):
         return self._shortcmd('RPOP %s' % user)
 
-    timestamp = re.compile('\\+OK.*(<[^>]+>)')
+    timestamp = re.compile('\\+OK.[^<]*(<.*>)')
 
     def apop(self, user, secret):
         m = self.timestamp.match(self.welcome)
@@ -194,6 +197,8 @@ else:
             match = renewline.match(self.buffer)
             while not match:
                 self._fillBuffer()
+                if len(self.buffer) > _MAXLINE:
+                    raise error_proto('line too long')
                 match = renewline.match(self.buffer)
 
             line = match.group(0)

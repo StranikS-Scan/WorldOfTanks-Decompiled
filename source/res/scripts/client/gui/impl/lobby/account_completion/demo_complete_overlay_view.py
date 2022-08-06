@@ -4,11 +4,8 @@ import BigWorld
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.account_completion.complete_model import CompleteModel
 from gui.impl.lobby.account_completion.common.base_overlay_view import BaseOverlayView
-from gui.impl.lobby.account_completion.utils.common import AccountCompletionType
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
-from uilogging.account_completion.constants import LogGroup
-from uilogging.account_completion.loggers import AccountCompletionViewLogger
 
 class DemoCompleteOverlayView(BaseOverlayView):
     __slots__ = ()
@@ -16,19 +13,10 @@ class DemoCompleteOverlayView(BaseOverlayView):
     _bootcampController = dependency.descriptor(IBootcampController)
     _LAYOUT_DYN_ACCESSOR = R.views.lobby.account_completion.CompleteView
     _VIEW_MODEL_CLASS = CompleteModel
-    _uiLogger = AccountCompletionViewLogger(LogGroup.COMPLETE)
 
     @property
     def viewModel(self):
         return super(DemoCompleteOverlayView, self).getViewModel()
-
-    def activate(self, completionType=AccountCompletionType.UNDEFINED, *args, **kwargs):
-        super(DemoCompleteOverlayView, self).activate(*args, **kwargs)
-        self._uiLogger.viewOpened(self.getParentWindow(), type=completionType)
-
-    def deactivate(self):
-        self._uiLogger.viewClosed()
-        super(DemoCompleteOverlayView, self).deactivate()
 
     def _onLoading(self, *args, **kwargs):
         super(DemoCompleteOverlayView, self)._onLoading(*args, **kwargs)

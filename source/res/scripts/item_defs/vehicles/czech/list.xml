@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Cz06_Kolohousenka>
     <id>	0	</id>
     <userString>	#czech_vehicles:Cz06_Kolohousenka	</userString>
@@ -60,7 +59,7 @@
     <shortUserString>	#czech_vehicles:Cz05_T34_100_short	</shortUserString>
     <description>	#czech_vehicles:Cz05_T34_100_descr	</description>
     <price>	1430000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </Cz05_T34_100>
   <Cz07_TVP_46>
@@ -189,4 +188,16 @@
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </Cz20_ShPTK_TVP_100_mm>
+  <Cz17_Vz_55_CN>
+    <id>	203	</id>
+    <userString>	#czech_vehicles:Cz17_Vz_55_CN	</userString>
+    <description>	#czech_vehicles:Cz17_Vz_55_CN_descr	</description>
+    <shortUserString>	#czech_vehicles:Cz17_Vz_55_CN_short	</shortUserString>
+    <shortDescriptionSpecial>	#czech_vehicles:Cz17_Vz_55_CN_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#czech_vehicles:Cz17_Vz_55_CN_long_special	</longDescriptionSpecial>
+    <price>	5	  <gold></gold>
+    </price>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret	</tags>
+    <level>	10	</level>
+  </Cz17_Vz_55_CN>
 </list.xml>

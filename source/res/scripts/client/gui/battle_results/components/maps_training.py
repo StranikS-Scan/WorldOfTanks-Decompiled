@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_results/components/maps_training.py
 import logging
 from ArenaType import parseTypeID
-from constants import VEHICLE_CLASSES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_results.components import base
@@ -36,11 +35,9 @@ class BattleResultBlock(base.StatsBlock):
 class BattleGoalsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
-        battleGoals = result['personal']['avatar']['vseBattleResults']
-        classes = ('heavyTank', 'mediumTank', 'lightTank', 'AT-SPG', 'SPG')
-        totalClasses = len(classes)
-        for vehClass, goal, res in zip(classes, battleGoals[:totalClasses], battleGoals[totalClasses:]):
-            self.addNextComponent(base.DirectStatsItem(vehClass, [goal, res]))
+        vseBattleResults = result['personal']['avatar']['vseBattleResults']
+        for vehClass, goalResult in vseBattleResults.iteritems():
+            self.addNextComponent(base.DirectStatsItem(vehClass, goalResult))
 
 
 class BattleDurationItem(base.StatsItem):
@@ -60,10 +57,9 @@ class StatsBlock(base.StatsBlock):
             self.addNextComponent(base.DirectStatsItem('', {'id': statType,
              'value': statVal}))
 
-        totalClasses = len(VEHICLE_CLASSES)
         questKills = 0
-        battleResult = result['personal']['avatar']['vseBattleResults']
-        for goal, kills in zip(battleResult[:totalClasses], battleResult[totalClasses:]):
+        vseBattleResults = result['personal']['avatar']['vseBattleResults']
+        for goal, kills in vseBattleResults.itervalues():
             if goal == 0:
                 continue
             questKills += goal if kills > goal else kills

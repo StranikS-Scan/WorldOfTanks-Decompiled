@@ -9,6 +9,8 @@ def uu_encode(input, errors='strict', filename='<data>', mode=438):
     outfile = StringIO()
     read = infile.read
     write = outfile.write
+    filename = filename.replace('\n', '\\n')
+    filename = filename.replace('\r', '\\r')
     write('begin %o %s\n' % (mode & 511, filename))
     chunk = read(45)
     while chunk:
@@ -40,7 +42,7 @@ def uu_decode(input, errors='strict'):
         try:
             data = a2b_uu(s)
         except binascii.Error as v:
-            nbytes = ((ord(s[0]) - 32 & 63) * 4 + 5) / 3
+            nbytes = ((ord(s[0]) - 32 & 63) * 4 + 5) // 3
             data = a2b_uu(s[:nbytes])
 
         write(data)
@@ -80,4 +82,4 @@ class StreamReader(Codec, codecs.StreamReader):
 
 
 def getregentry():
-    return codecs.CodecInfo(name='uu', encode=uu_encode, decode=uu_decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamreader=StreamReader, streamwriter=StreamWriter)
+    return codecs.CodecInfo(name='uu', encode=uu_encode, decode=uu_decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamreader=StreamReader, streamwriter=StreamWriter, _is_text_encoding=False)

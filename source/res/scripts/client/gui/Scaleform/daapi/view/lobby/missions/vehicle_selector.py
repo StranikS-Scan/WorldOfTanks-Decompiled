@@ -100,7 +100,6 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
         else:
             if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
                 selectedVeh = getVehicleDataVO(vehicle)
-                selectedVeh.update({'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST})
                 status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
             elif suitableVehicles:
                 label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT

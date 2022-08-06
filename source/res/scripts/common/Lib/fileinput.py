@@ -87,17 +87,14 @@ class FileInput:
         self._files = files
         self._inplace = inplace
         self._backup = backup
-        self._bufsize = bufsize or DEFAULT_BUFSIZE
         self._savestdout = None
         self._output = None
         self._filename = None
-        self._lineno = 0
+        self._startlineno = 0
         self._filelineno = 0
         self._file = None
         self._isstdin = False
         self._backupfilename = None
-        self._buffer = []
-        self._bufindex = 0
         if mode not in ('r', 'rU', 'U', 'rb'):
             raise ValueError("FileInput opening mode must be one of 'r', 'rU', 'U' and 'rb'")
         self._mode = mode
@@ -112,30 +109,26 @@ class FileInput:
         self.close()
 
     def close(self):
-        self.nextfile()
-        self._files = ()
+        try:
+            self.nextfile()
+        finally:
+            self._files = ()
 
     def __iter__(self):
         return self
 
     def next(self):
-        try:
-            line = self._buffer[self._bufindex]
-        except IndexError:
-            pass
-        else:
-            self._bufindex += 1
-            self._lineno += 1
-            self._filelineno += 1
-            return line
-
-        line = self.readline()
-        if not line:
-            raise StopIteration
-        return line
+        while 1:
+            line = self._readline()
+            if line:
+                self._filelineno += 1
+                return line
+            if not self._file:
+                raise StopIteration
+            self.nextfile()
 
     def __getitem__(self, i):
-        if i != self._lineno:
+        if i != self.lineno():
             raise RuntimeError, 'accessing lines out of order'
         try:
             return self.next()
@@ -149,40 +142,50 @@ class FileInput:
             sys.stdout = savestdout
         output = self._output
         self._output = 0
-        if output:
-            output.close()
-        file = self._file
-        self._file = 0
-        if file and not self._isstdin:
-            file.close()
-        backupfilename = self._backupfilename
-        self._backupfilename = 0
-        if backupfilename and not self._backup:
+        try:
+            if output:
+                output.close()
+        finally:
+            file = self._file
+            self._file = None
             try:
-                os.unlink(backupfilename)
-            except OSError:
+                del self._readline
+            except AttributeError:
                 pass
 
-        self._isstdin = False
-        self._buffer = []
-        self._bufindex = 0
+            try:
+                if file and not self._isstdin:
+                    file.close()
+            finally:
+                backupfilename = self._backupfilename
+                self._backupfilename = 0
+                if backupfilename and not self._backup:
+                    try:
+                        os.unlink(backupfilename)
+                    except OSError:
+                        pass
+
+                self._isstdin = False
+
+        return
 
     def readline(self):
-        try:
-            line = self._buffer[self._bufindex]
-        except IndexError:
-            pass
-        else:
-            self._bufindex += 1
-            self._lineno += 1
-            self._filelineno += 1
-            return line
+        while 1:
+            line = self._readline()
+            if line:
+                self._filelineno += 1
+                return line
+            if not self._file:
+                return line
+            self.nextfile()
 
-        if not self._file:
-            if not self._files:
-                return ''
+    def _readline(self):
+        if not self._files:
+            return ''
+        else:
             self._filename = self._files[0]
             self._files = self._files[1:]
+            self._startlineno = self.lineno()
             self._filelineno = 0
             self._file = None
             self._isstdin = False
@@ -219,17 +222,14 @@ class FileInput:
                 self._file = self._openhook(self._filename, self._mode)
             else:
                 self._file = open(self._filename, self._mode)
-        self._buffer = self._file.readlines(self._bufsize)
-        self._bufindex = 0
-        if not self._buffer:
-            self.nextfile()
-        return self.readline()
+            self._readline = self._file.readline
+            return self._readline()
 
     def filename(self):
         return self._filename
 
     def lineno(self):
-        return self._lineno
+        return self._startlineno + self._filelineno
 
     def filelineno(self):
         return self._filelineno

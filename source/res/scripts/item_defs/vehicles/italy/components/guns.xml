@@ -25,7 +25,21 @@
     <_120mm_Cannone_Da_120_62>	22	</_120mm_Cannone_Da_120_62>
     <_105mm_Cannone_Da_105_53>	23	</_105mm_Cannone_Da_105_53>
     <_120mm_Cannone_da_120_67_T53>	24	</_120mm_Cannone_da_120_67_T53>
+    <_105mm_Cannone_da_105_58>	27	</_105mm_Cannone_da_105_58>
+    <_75mm_Cannone_da_75_18>	28	</_75mm_Cannone_da_75_18>
+    <_75mm_Cannone_da_75_27>	29	</_75mm_Cannone_da_75_27>
+    <_102mm_Cannone_da_102_40>	30	</_102mm_Cannone_da_102_40>
+    <_90mm_Cannone_da_90_53_semovente>	31	</_90mm_Cannone_da_90_53_semovente>
+    <_105mm_Cannone_da_105_25>	32	</_105mm_Cannone_da_105_25>
+    <_90mm_Cannone_da_90_60>	33	</_90mm_Cannone_da_90_60>
+    <_105mm_Cannone_Da_105_56>	34	</_105mm_Cannone_Da_105_56>
+    <_105mm_Cannone_Da_105_73>	37	</_105mm_Cannone_Da_105_73>
     <_120mm_Cannone_Da_120_55>	38	</_120mm_Cannone_Da_120_55>
+    <_130mm_Cannone_da_130_45>	39	</_130mm_Cannone_da_130_45>
+    <_120mm_Cannone_Da_120_59>	40	</_120mm_Cannone_Da_120_59>
+    <_120mm_Cannone_Da_120_60>	41	</_120mm_Cannone_Da_120_60>
+    <_127mm_Cannone_Da_127_58>	42	</_127mm_Cannone_Da_127_58>
+    <Cannone_da_75_34_semovente>	44	</Cannone_da_75_34_semovente>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -314,6 +328,120 @@
         </_47mm_c_g_47_32_EP>
       </shots>
     </Cannone_da_47_40>
+    <_75mm_Cannone_da_75_18>
+      <userString>	#italy_vehicles:_75mm_Cannone_da_75_18	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	25000	</price>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	300	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	350	</weight>
+      <maxHealth>	76	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_c_p_75_32>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	610	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	92 76	</piercingPower>
+        </_75mm_c_p_75_32>
+        <_75mm_c_g_75_EPS_mod_42>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	540	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_75mm_c_g_75_EPS_mod_42>
+        <_75mm_c_g_75_27_EP_mod_32>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	540	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_75mm_c_g_75_27_EP_mod_32>
+      </shots>
+    </_75mm_Cannone_da_75_18>
+    <_75mm_Cannone_da_75_27>
+      <userString>	#italy_vehicles:_75mm_Cannone_da_75_27	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	31000	</price>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	350	</weight>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_c_p_75_32>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	610	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	112 90	</piercingPower>
+        </_75mm_c_p_75_32>
+        <_75mm_c_g_75_EPS_mod_42>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	540	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 150	</piercingPower>
+        </_75mm_c_g_75_EPS_mod_42>
+        <_75mm_c_g_75_27_EP_mod_32>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	540	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_75mm_c_g_75_27_EP_mod_32>
+      </shots>
+    </_75mm_Cannone_da_75_27>
     <Cannone_da_75_32>
       <userString>	#italy_vehicles:Cannone_da_75_32	</userString>
       <tags></tags>
@@ -428,6 +556,63 @@
         </_75mm_c_g_75_27_EP_mod_42>
       </shots>
     </Cannone_da_75_34>
+    <Cannone_da_75_34_semovente>
+      <userString>	#italy_vehicles:Cannone_da_75_34_semovente	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	35000	</price>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	400	</weight>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.37	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_c_p_75_32>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	837	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	127 115	</piercingPower>
+        </_75mm_c_p_75_32>
+        <_75mm_c_g_75_EPS_mod_42>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	757	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 175	</piercingPower>
+        </_75mm_c_g_75_EPS_mod_42>
+        <_75mm_c_g_75_27_EP_mod_42>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	557	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 70	</piercingPower>
+        </_75mm_c_g_75_27_EP_mod_42>
+      </shots>
+    </Cannone_da_75_34_semovente>
     <Cannone_da_75_46>
       <userString>	#italy_vehicles:Cannone_da_75_46	</userString>
       <tags></tags>
@@ -942,6 +1127,227 @@
         </_90mm_c_g_90_HE_Rh>
       </shots>
     </Cannone_da_90_Rh>
+    <_90mm_Cannone_da_90_53_semovente>
+      <userString>	#italy_vehicles:_90mm_Cannone_da_90_53_semovente	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	75000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	8.16	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1700	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_c_p_90_53_mod_09>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	758	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	165 147	</piercingPower>
+        </_90mm_c_p_90_53_mod_09>
+        <_90mm_c_p_90_42_mod_43>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	195 153	</piercingPower>
+        </_90mm_c_p_90_42_mod_43>
+        <_90mm_c_g_90_42_53>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	710	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_c_g_90_42_53>
+      </shots>
+    </_90mm_Cannone_da_90_53_semovente>
+    <_90mm_Cannone_da_90_60>
+      <userString>	#italy_vehicles:_90mm_Cannone_da_90_60	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	80000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	8.16	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1700	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_c_p_90_53_mod_09>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	758	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 147	</piercingPower>
+        </_90mm_c_p_90_53_mod_09>
+        <_90mm_c_p_90_42_mod_43>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	195 153	</piercingPower>
+        </_90mm_c_p_90_42_mod_43>
+        <_90mm_c_g_90_42_53>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	710	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_c_g_90_42_53>
+      </shots>
+    </_90mm_Cannone_da_90_60>
+    <_102mm_Cannone_da_102_40>
+      <userString>	#italy_vehicles:_102mm_Cannone_da_102_40	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	78000	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_mainext	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	8.57142857142857	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	1600	</weight>
+      <maxHealth>	148	</maxHealth>
+      <maxRegenHealth>	74	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_102mm_c_p_102_AP_Rh>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 155	</piercingPower>
+        </_102mm_c_p_102_AP_Rh>
+        <_102mm_c_p_102_APDS_Rh>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	711	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	215 215	</piercingPower>
+        </_102mm_c_p_102_APDS_Rh>
+        <_102mm_c_g_102_HE>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_102mm_c_g_102_HE>
+      </shots>
+    </_102mm_Cannone_da_102_40>
+    <_105mm_Cannone_da_105_25>
+      <userString>	#italy_vehicles:_105mm_Cannone_da_105_25	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	82000	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	10	</rotationSpeed>
+      <reloadTime>	8.57142857142857	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	148	</maxHealth>
+      <maxRegenHealth>	74	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.2	</turretRotation>
+        <afterShot>	7	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_c_g_105_HE_Rh>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	410	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_c_g_105_HE_Rh>
+        <_105mm_c_g_105_c_c_HEAT_Effetto_Pronto>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	330	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 230	</piercingPower>
+        </_105mm_c_g_105_c_c_HEAT_Effetto_Pronto>
+      </shots>
+    </_105mm_Cannone_da_105_25>
     <Cannone_da_105_Rh_V1>
       <userString>	#italy_vehicles:Cannone_da_105_Rh_V1	</userString>
       <tags></tags>
@@ -1113,6 +1519,177 @@
         </_105mm_HE_M113>
       </shots>
     </_105mm_Cannone_Da_105_53>
+    <_105mm_Cannone_Da_105_56>
+      <userString>	#italy_vehicles:_105mm_Cannone_Da_105_56	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	94000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1950	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_c_p_105_58_AP>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	903	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 165	</piercingPower>
+        </_105mm_c_p_105_58_AP>
+        <_105mm_c_p_105_58_APCR>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1186	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	212 183	</piercingPower>
+        </_105mm_c_p_105_58_APCR>
+        <_105mm_HE_M113>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	827	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M113>
+      </shots>
+    </_105mm_Cannone_Da_105_56>
+    <_105mm_Cannone_da_105_58>
+      <userString>	#italy_vehicles:_105mm_Cannone_da_105_58	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	98000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_c_p_105_58_AP>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	903	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	200 180	</piercingPower>
+        </_105mm_c_p_105_58_AP>
+        <_105mm_c_p_105_58_APCR>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1186	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 210	</piercingPower>
+        </_105mm_c_p_105_58_APCR>
+        <_105mm_HE_M113>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	827	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HE_M113>
+      </shots>
+    </_105mm_Cannone_da_105_58>
+    <_105mm_Cannone_Da_105_73>
+      <userString>	#italy_vehicles:_105mm_Cannone_Da_105_73	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	105000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_T_M181>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1147	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 196	</piercingPower>
+        </_105mm_AP_T_M181>
+        <_105mm_HVAPDS_T_M279>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1386	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	242 228	</piercingPower>
+        </_105mm_HVAPDS_T_M279>
+        <_105mm_HE_M393>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	827	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HE_M393>
+      </shots>
+    </_105mm_Cannone_Da_105_73>
     <_105mm_Cannone_Da_105_76>
       <userString>	#italy_vehicles:_105mm_Cannone_Da_105_76	</userString>
       <tags></tags>
@@ -1344,6 +1921,120 @@
         </_120mm_HE_M356>
       </shots>
     </_120mm_Cannone_Da_120_55>
+    <_120mm_Cannone_Da_120_59>
+      <userString>	#italy_vehicles:_120mm_Cannone_Da_120_59	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	130000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_T_M365>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1075	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	226 210	</piercingPower>
+        </_120mm_AP_T_M365>
+        <_120mm_HEAT_T_M469>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	902	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	300 300	</piercingPower>
+        </_120mm_HEAT_T_M469>
+        <_120mm_HE_M356>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	902	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_120mm_HE_M356>
+      </shots>
+    </_120mm_Cannone_Da_120_59>
+    <_120mm_Cannone_Da_120_60>
+      <userString>	#italy_vehicles:_120mm_Cannone_Da_120_60	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	185000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_T_M365>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1075	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	235 225	</piercingPower>
+        </_120mm_AP_T_M365>
+        <_120mm_HEAT_T_M469>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	902	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	303 303	</piercingPower>
+        </_120mm_HEAT_T_M469>
+        <_120mm_HE_M356>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	902	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_120mm_HE_M356>
+      </shots>
+    </_120mm_Cannone_Da_120_60>
     <_120mm_Cannone_Da_120_62>
       <userString>	#italy_vehicles:_120mm_Cannone_Da_120_62	</userString>
       <tags></tags>
@@ -1517,5 +2208,120 @@
         </_127mm_Mark_116>
       </shots>
     </_127mm_OTO_Melara>
+    <_127mm_Cannone_Da_127_58>
+      <userString>	#italy_vehicles:_127mm_Cannone_Da_127_58	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	315000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.44	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_127mm_AP_127_54>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1252	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 245	</piercingPower>
+        </_127mm_AP_127_54>
+        <_127mm_HEAT_127_54>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	756	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	325 325	</piercingPower>
+        </_127mm_HEAT_127_54>
+        <_127mm_Mark_116>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	756	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	127 127	</piercingPower>
+        </_127mm_Mark_116>
+      </shots>
+    </_127mm_Cannone_Da_127_58>
+    <_130mm_Cannone_da_130_45>
+      <userString>	#italy_vehicles:_130mm_Cannone_da_130_45	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_AP_Mark_46>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1303	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 245	</piercingPower>
+        </_130mm_AP_Mark_46>
+        <_130mm_HEAT_Mark_71>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1256	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	345 345	</piercingPower>
+        </_130mm_HEAT_Mark_71>
+        <_130mm_HE_Mark_80>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1256	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	130 130	</piercingPower>
+        </_130mm_HE_Mark_80>
+      </shots>
+    </_130mm_Cannone_da_130_45>
   </shared>
 </guns.xml>

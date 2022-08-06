@@ -243,7 +243,10 @@ class Pickler():
             save(args)
             write(REDUCE)
         if obj is not None:
-            self.memoize(obj)
+            if id(obj) in self.memo:
+                write(POP + self.get(self.memo[id(obj)][0]))
+            else:
+                self.memoize(obj)
         if listitems is not None:
             self._batch_appends(listitems)
         if dictitems is not None:

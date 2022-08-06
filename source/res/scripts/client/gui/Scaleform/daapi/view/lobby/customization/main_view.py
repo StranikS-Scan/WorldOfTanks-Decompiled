@@ -7,7 +7,7 @@ from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from Event import Event
 from Math import Matrix
-from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
+from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD, IS_CUSTOMIZATION_INTRO_VIEWED
 import adisp
 from async import async, await
 from gui import g_tankActiveCamouflage, SystemMessages
@@ -15,7 +15,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle
+from gui.Scaleform.daapi.view.lobby.customization.shared import getEmptyRegions, checkSlotsFilling, CustomizationTabs, getItemTypesAvailableForVehicle, BillPopoverButtons
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -41,16 +41,17 @@ from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import events
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showProgressiveItemsView
+from gui.shared.event_dispatcher import showProgressiveItemsView, showOnboardingView
 from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType, ApplyArea
+from items.components.c11n_constants import SeasonType, ApplyArea, ItemTags
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
@@ -206,12 +207,17 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__selectedSlot = C11nId()
         self.__locateCameraToStyleInfo = False
         self.__carouselArrowsHintShown = False
+        self.__billPopoverButtonsCallbacks = {BillPopoverButtons.CUSTOMIZATION_CLEAR: self.__onCustomizationClear,
+         BillPopoverButtons.CUSTOMIZATION_CLEAR_LOCKED: self.__onCustomizationClearLocked}
         self.__dontPlayTabChangeSound = False
         self.__itemsGrabMode = False
         self.__finishGrabModeCallback = None
         self.__closeConfirmatorHelper = _CustomizationCloseConfirmatorsHelper()
         self.__closed = False
         return
+
+    def showQuestProgressionInfoWindow(self):
+        showOnboardingView()
 
     @async
     def showBuyWindow(self, ctx=None):
@@ -310,14 +316,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.__locateCameraToCustomizationPreview()
             self.service.resumeHighlighter()
 
-    def onPressClearBtn(self):
-        if self.__propertiesSheet is not None:
-            self.__propertiesSheet.hide()
-        self.__ctx.mode.cancelChanges()
-        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
-            self.__ctx.changeMode(CustomizationModes.STYLED)
-            self.__ctx.mode.cancelChanges()
-        return
+    def onButtonPressed(self, name):
+        self.__billPopoverButtonsCallbacks[name]()
 
     def onPressEscBtn(self):
         if self.__propertiesSheet.handleEscBtn():
@@ -443,6 +443,23 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 self.soundManager.playInstantSound(SOUNDS.APPLY)
             self.__locateCameraOnAnchor(slotId)
         return
+
+    def __onCustomizationClear(self):
+        if self.__propertiesSheet is not None:
+            self.__propertiesSheet.hide()
+        self.__ctx.mode.cancelChanges()
+        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
+            self.__ctx.changeMode(CustomizationModes.STYLED)
+            self.__ctx.mode.cancelChanges()
+        return
+
+    def __onCustomizationClearLocked(self):
+        filterMethod = REQ_CRITERIA.CUSTOM(lambda item: not item.isUnlockedByToken())
+        for season in SeasonType.COMMON_SEASONS:
+            self.__ctx.mode.removeItemsFromSeason(season, filterMethod=filterMethod, refresh=False, revertToPrevious=True)
+            self.__ctx.refreshOutfit(season)
+
+        self.__ctx.events.onItemsRemoved()
 
     def __selectSlot(self, slotId):
         self.__ctx.mode.unselectItem()
@@ -751,6 +768,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.service.startHighlighter(highlightingMode)
         self.as_progressionEntryPointVisibleS(any((g_currentVehicle.item.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, areaId) for areaId in Area.ALL)))
         self.__closeConfirmatorHelper.start(self.__closeConfirmator)
+        if not AccountSettings.getSettings(IS_CUSTOMIZATION_INTRO_VIEWED):
+            if self.service.getStyles(criteria=REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT | REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.QUESTS_PROGRESSION])):
+                showOnboardingView(True)
         return
 
     def _invalidate(self, *args, **kwargs):
@@ -792,6 +812,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__propertiesSheet = None
         self.__styleInfo = None
         self.__bottomPanel = None
+        self.__billPopoverButtonsCallbacks = None
         self.__ctx.events.onPropertySheetShown -= self.__onPropertySheetShown
         self.__ctx.events.onPropertySheetHidden -= self.__onPropertySheetHidden
         self.__ctx.events.onItemSelected -= self.__onItemSelected
@@ -1068,12 +1089,14 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
         slotType = self.__ctx.mode.slotType
+        isQuestProgressionInfoBtnVisible = False
         if self.__ctx.modeId == CustomizationModes.STYLED:
             if self.__ctx.mode.modifiedStyle is not None:
                 itemsCounter = text_styles.bonusPreviewText(backport.text(R.strings.vehicle_customization.customization.header.counter.style.installed()))
             else:
                 itemsCounter = text_styles.stats(backport.text(R.strings.vehicle_customization.customization.header.counter.style.notInstalled()))
         elif self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
+            isQuestProgressionInfoBtnVisible = self.__ctx.mode.currentOutfit.style.isQuestsProgression
             itemsCounter = text_styles.bonusPreviewText(backport.text(R.strings.vehicle_customization.customization.header.counter.editablestyle.installed(), name=self.__ctx.mode.style.userName))
         elif isVehicleCanBeCustomized(g_currentVehicle.item, slotType):
             typeName = GUI_ITEM_TYPE_NAMES[slotType]
@@ -1089,7 +1112,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
          'tankInfo': itemsCounter,
          'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
          'isElite': vehicle.isElite,
-         'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN})
+         'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN,
+         'isQuestProgressionInfoBtnVisible': isQuestProgressionInfoBtnVisible})
         return
 
     def __onProlongStyleRent(self):

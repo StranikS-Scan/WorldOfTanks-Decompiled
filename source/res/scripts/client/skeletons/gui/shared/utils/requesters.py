@@ -648,8 +648,7 @@ class IShopRequester(IShopCommonStats, IRequester):
     def getTankmanCostWithDefaults(self):
         raise NotImplementedError
 
-    @property
-    def tankmanCostWithGoodyDiscount(self):
+    def getTankmanCostWithGoodyDiscount(self, vehLevel):
         raise NotImplementedError
 
     @property
@@ -703,7 +702,7 @@ class IShopRequester(IShopCommonStats, IRequester):
     def getVehicleSlotsItemPrice(self, currentSlotsCount):
         raise NotImplementedError
 
-    def getTankmanCostItemPrices(self):
+    def getTankmanCostItemPrices(self, vehLevel):
         raise NotImplementedError
 
     def getNotInShopProgressionLvlItems(self):

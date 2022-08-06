@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/chat_message.py
 from helpers import dependency
-from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters import TimeFormatter
@@ -27,10 +26,11 @@ class _BattleMessageBuilder(object):
         return self
 
     def setName(self, avatarSessionID, pName=None, suffix=''):
-        if pName is not None:
-            pName = i18n.encodeUtf8(pName)
         name = self.sessionProvider.getCtx().getPlayerFullName(avatarSessionID=avatarSessionID, pName=pName)
-        self._ctx['playerName'] = unicode(name + suffix, 'utf-8')
+        name = name + suffix
+        if isinstance(name, str):
+            name = unicode(name, 'utf-8')
+        self._ctx['playerName'] = name
         return self
 
     def setText(self, text):

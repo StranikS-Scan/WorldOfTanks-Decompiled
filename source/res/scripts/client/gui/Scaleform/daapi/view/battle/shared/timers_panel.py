@@ -664,7 +664,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             if stateValue:
                 self._onVehicleStateUpdated(stateID, stateValue)
 
-        self.sessionProvider.updateVehicleEffects()
+        self.sessionProvider.updateVehicleEffects(vehicle)
         self.__vehicleID = vehicle.id
         self.__updatePanelPosition()
 

@@ -86,35 +86,35 @@ def isalpha(c):
 
 
 def isascii(c):
-    return _ctoi(c) <= 127
+    return 0 <= _ctoi(c) <= 127
 
 
 def isblank(c):
-    return _ctoi(c) in (8, 32)
+    return _ctoi(c) in (9, 32)
 
 
 def iscntrl(c):
-    return _ctoi(c) <= 31
+    return 0 <= _ctoi(c) <= 31 or _ctoi(c) == 127
 
 
 def isdigit(c):
-    return _ctoi(c) >= 48 and _ctoi(c) <= 57
+    return 48 <= _ctoi(c) <= 57
 
 
 def isgraph(c):
-    return _ctoi(c) >= 33 and _ctoi(c) <= 126
+    return 33 <= _ctoi(c) <= 126
 
 
 def islower(c):
-    return _ctoi(c) >= 97 and _ctoi(c) <= 122
+    return 97 <= _ctoi(c) <= 122
 
 
 def isprint(c):
-    return _ctoi(c) >= 32 and _ctoi(c) <= 126
+    return 32 <= _ctoi(c) <= 126
 
 
 def ispunct(c):
-    return _ctoi(c) != 32 and not isalnum(c)
+    return isgraph(c) and not isalnum(c)
 
 
 def isspace(c):
@@ -122,15 +122,15 @@ def isspace(c):
 
 
 def isupper(c):
-    return _ctoi(c) >= 65 and _ctoi(c) <= 90
+    return 65 <= _ctoi(c) <= 90
 
 
 def isxdigit(c):
-    return isdigit(c) or _ctoi(c) >= 65 and _ctoi(c) <= 70 or _ctoi(c) >= 97 and _ctoi(c) <= 102
+    return isdigit(c) or 65 <= _ctoi(c) <= 70 or 97 <= _ctoi(c) <= 102
 
 
 def isctrl(c):
-    return _ctoi(c) < 32
+    return 0 <= _ctoi(c) < 32
 
 
 def ismeta(c):

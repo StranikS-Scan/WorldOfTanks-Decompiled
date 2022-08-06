@@ -80,6 +80,8 @@ class _ItemsSubTypeGetter(_BaseSubTypeGetter):
             subType = _HelperConsts.TROPHY_DEVICE_TYPE if item.isTrophy else _HelperConsts.OPTIONAL_DEVICE_TYPE
         elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
             subType = _HelperConsts.EQUIPMENT_TYPE
+        elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            subType = _HelperConsts.EQUIPMENT_TYPE
         return subType
 
 

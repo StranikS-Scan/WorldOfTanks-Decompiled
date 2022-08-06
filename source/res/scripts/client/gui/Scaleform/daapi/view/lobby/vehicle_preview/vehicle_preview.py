@@ -136,7 +136,7 @@ def _getModulesTabIdx():
 class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
     __metaclass__ = event_bus_handlers.EventBusListener
-    __itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
     __hangarSpace = dependency.descriptor(IHangarSpace)
@@ -159,6 +159,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
         self._previewBackCb = ctx.get('previewBackCb')
+        self._backBtnLabel = ctx.get('backBtnLabel')
         self.__isHeroTank = ctx.get('isHeroTank', False)
         self.__customizationCD = (ctx.get('vehParams') or {}).get('styleCD')
         self.__offers = ctx.get('offers')
@@ -171,13 +172,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__style = ctx.get('style')
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
-        addBuiltInEquipment(self._itemsPack, self.__itemsCache, self._vehicleCD)
+        addBuiltInEquipment(self._itemsPack, self._itemsCache, self._vehicleCD)
         notInteractive = (VIEW_ALIAS.LOBBY_STORE,
          VIEW_ALIAS.RANKED_BATTLE_PAGE,
          VIEW_ALIAS.VEH_POST_PROGRESSION,
          VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
          VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
-        self._heroInteractive = not (self._itemsPack or self.__offers or self.__topPanelData or self._backAlias in notInteractive)
+        self._heroInteractive = not (self._itemsPack or self.__offers or ctx.get('offerID', 0) or self.__topPanelData or self._backAlias in notInteractive)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         self.__hangarVehicleCD = ctx.get('hangarVehicleCD')
         self.__previewAppearance = ctx.get('previewAppearance')
@@ -407,7 +408,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
-            customizationItem = self.__itemsCache.items.getItemByCD(self.__customizationCD)
+            customizationItem = self._itemsCache.items.getItemByCD(self.__customizationCD)
             if customizationItem is None:
                 return
             if customizationItem.itemTypeID == GUI_ITEM_TYPE.STYLE:
@@ -463,7 +464,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
 
     def _getBackBtnLabel(self):
-        if self._backAlias and self._backAlias in _BACK_BTN_LABELS:
+        if self._backBtnLabel:
+            return self._backBtnLabel
+        elif self._backAlias and self._backAlias in _BACK_BTN_LABELS:
             backBtnLabel = _BACK_BTN_LABELS[self._backAlias]
             if not backBtnLabel:
                 return None
@@ -505,7 +508,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             entity = ctx.get('entity', None) if ctx else None
             if entity:
                 compactDescr = entity.typeDescriptor.type.compactDescr
-                if self.__itemsCache.items.inventory.getItemData(compactDescr) is not None:
+                if self._itemsCache.items.inventory.getItemData(compactDescr) is not None:
                     event_dispatcher.showHangar()
                 else:
                     event_dispatcher.showVehiclePreview(compactDescr, previewAlias=self._previousBackAlias)

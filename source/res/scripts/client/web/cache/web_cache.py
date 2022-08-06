@@ -160,6 +160,7 @@ class WebExternalCache(IWebExternalCache):
                 files = data['files']
                 for curfile in files:
                     url = urlparse.urljoin(host, curfile)
+                    url = url.replace(' ', '%20')
                     key = _generateKey(url)
                     if key not in self.__cache or not self.__storage.isAppFileExist(appName, key):
                         _logger.debug('Resource not found in cache. Download from web: %s', url)

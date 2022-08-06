@@ -477,9 +477,8 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 self._invoke(self.__animationID, 'setAnimation', marker)
 
     def _calcCircularVisionRadius(self):
-        visibilityMinRadius = self._arenaVisitor.getVisibilityMinRadius()
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
-        return min(vehAttrs.get('circularVisionRadius', visibilityMinRadius), VISIBILITY.MAX_RADIUS)
+        return min(vehAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS)
 
     def _getViewRangeRadius(self):
         return self._calcCircularVisionRadius()
@@ -515,7 +514,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE:
             return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, self._arenaVisitor.getVisibilityMinRadius())
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MIN_RADIUS)
 
     def __removeMinSpottingRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE

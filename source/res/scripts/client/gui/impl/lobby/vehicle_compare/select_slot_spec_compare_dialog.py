@@ -13,8 +13,6 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from helpers import dependency
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.game_control import IVehicleComparisonBasket
-from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
-from uilogging.veh_post_progression.loggers import VehPostProgressionLogger
 from gui.Scaleform.Waiting import Waiting
 _SLOT_IS_NOT_SELECTED_IDX = 0
 if typing.TYPE_CHECKING:
@@ -82,10 +80,6 @@ class SelectSlotSpecCompareDialog(FullScreenDialogView):
         self.__vehicleComparisonBasket.onSwitchChange -= self.__serverSettingsChange
         self.__vehicleComparisonBasket.onParametersChange -= self.__serverSettingsChange
         super(SelectSlotSpecCompareDialog, self)._finalize()
-
-    def _onAccept(self):
-        super(SelectSlotSpecCompareDialog, self)._onAccept()
-        VehPostProgressionLogger(LogGroups.CONFIRM_BUTTON).logClick(parentScreen=ParentScreens.ROLE_SLOT_SELECTION_DIALOG)
 
     def __serverSettingsChange(self, *_):
         if not self.__vehicleComparisonBasket.isEnabled() or not self.__vehicle.isRoleSlotExists():

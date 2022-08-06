@@ -2,9 +2,9 @@
 # Embedded file name: scripts/common/Lib/lib-tk/test/widget_tests.py
 import unittest
 import sys
-import Tkinter
-from ttk import setup_master, Scale
-from test_ttk.support import tcl_version, requires_tcl, get_tk_patchlevel, pixels_conv, tcl_obj_eq
+import Tkinter as tkinter
+from ttk import Scale
+from test_ttk.support import AbstractTkTest, tcl_version, requires_tcl, get_tk_patchlevel, pixels_conv, tcl_obj_eq
 import test.test_support
 noconv = noconv_meth = False
 if get_tk_patchlevel() < (8, 5, 11):
@@ -20,21 +20,23 @@ if get_tk_patchlevel()[:3] == (8, 5, 11):
     pixels_round = int
 _sentinel = object()
 
-class AbstractWidgetTest(object):
+class AbstractWidgetTest(AbstractTkTest):
     _conv_pixels = staticmethod(pixels_round)
     _conv_pad_pixels = None
-    wantobjects = True
+    _stringify = False
 
-    def setUp(self):
-        self.root = setup_master()
-        self.scaling = float(self.root.call('tk', 'scaling'))
-        if not self.root.wantobjects():
-            self.wantobjects = False
+    @property
+    def scaling(self):
+        try:
+            return self._scaling
+        except AttributeError:
+            self._scaling = float(self.root.call('tk', 'scaling'))
+            return self._scaling
 
-    def create(self, **kwargs):
-        widget = self._create(**kwargs)
-        self.addCleanup(widget.destroy)
-        return widget
+    def _str(self, value):
+        if not self._stringify and self.wantobjects and tcl_version >= (8, 6):
+            return value
+        return ' '.join(map(self._str, value)) if isinstance(value, tuple) else str(value)
 
     def assertEqual2(self, actual, expected, msg=None, eq=object.__eq__):
         if eq(actual, expected):
@@ -47,9 +49,9 @@ class AbstractWidgetTest(object):
             expected = value
         if conv:
             expected = conv(expected)
-        if not self.wantobjects:
+        if self._stringify or not self.wantobjects:
             if isinstance(expected, tuple):
-                expected = Tkinter._join(expected)
+                expected = tkinter._join(expected)
             else:
                 expected = str(expected)
         if eq is None:
@@ -66,7 +68,7 @@ class AbstractWidgetTest(object):
         orig = widget[name]
         if errmsg is not None:
             errmsg = errmsg.format(value)
-        with self.assertRaises(Tkinter.TclError) as cm:
+        with self.assertRaises(tkinter.TclError) as cm:
             widget[name] = value
         if errmsg is not None:
             self.assertEqual(str(cm.exception), errmsg)
@@ -74,7 +76,7 @@ class AbstractWidgetTest(object):
             self.assertEqual(widget[name], orig)
         else:
             widget[name] = orig
-        with self.assertRaises(Tkinter.TclError) as cm:
+        with self.assertRaises(tkinter.TclError) as cm:
             widget.configure({name: value})
         if errmsg is not None:
             self.assertEqual(str(cm.exception), errmsg)
@@ -191,13 +193,43 @@ class AbstractWidgetTest(object):
         return
 
     def checkImageParam(self, widget, name):
-        image = Tkinter.PhotoImage('image1')
+        image = tkinter.PhotoImage(master=self.root, name='image1')
         self.checkParam(widget, name, image, conv=str)
         self.checkInvalidParam(widget, name, 'spam', errmsg='image "spam" doesn\'t exist')
         widget[name] = ''
 
     def checkVariableParam(self, widget, name, var):
         self.checkParam(widget, name, var, conv=str)
+
+    def assertIsBoundingBox(self, bbox):
+        self.assertIsNotNone(bbox)
+        self.assertIsInstance(bbox, tuple)
+        if len(bbox) != 4:
+            self.fail('Invalid bounding box: %r' % (bbox,))
+        for item in bbox:
+            if not isinstance(item, int):
+                self.fail('Invalid bounding box: %r' % (bbox,))
+                break
+
+    def test_keys(self):
+        widget = self.create()
+        keys = widget.keys()
+        if not isinstance(widget, Scale):
+            self.assertEqual(sorted(keys), sorted(widget.configure()))
+        for k in keys:
+            widget[k]
+
+        if test.test_support.verbose:
+            aliases = {'bd': 'borderwidth',
+             'bg': 'background',
+             'fg': 'foreground',
+             'invcmd': 'invalidcommand',
+             'vcmd': 'validatecommand'}
+            keys = set(keys)
+            expected = set(self.OPTIONS)
+            for k in sorted(keys - expected):
+                if not (k in aliases and aliases[k] in keys and aliases[k] in expected):
+                    print '%s.OPTIONS doesn\'t contain "%s"' % (self.__class__.__name__, k)
 
 
 class StandardOptionsTests(object):
@@ -369,7 +401,7 @@ class StandardOptionsTests(object):
 
     def test_textvariable(self):
         widget = self.create()
-        var = Tkinter.StringVar()
+        var = tkinter.StringVar(self.root)
         self.checkVariableParam(widget, 'textvariable', var)
 
     def test_troughcolor(self):
@@ -428,7 +460,7 @@ class StandardOptionsTests(object):
 
     def test_variable(self):
         widget = self.create()
-        var = Tkinter.DoubleVar()
+        var = tkinter.DoubleVar(self.root)
         self.checkVariableParam(widget, 'variable', var)
 
 
@@ -481,5 +513,5 @@ def add_standard_options(*source_classes):
 
 def setUpModule():
     if test.test_support.verbose:
-        tcl = Tkinter.Tcl()
+        tcl = tkinter.Tcl()
         print 'patchlevel =', tcl.call('info', 'patchlevel')

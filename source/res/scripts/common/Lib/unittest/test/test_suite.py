@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/unittest/test/test_suite.py
 import unittest
 import sys
-from .support import LoggingResult, TestEquality
+from unittest.test.support import LoggingResult, TestEquality
 
 class Test(object):
 

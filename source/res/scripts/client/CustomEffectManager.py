@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffectManager.py
 import weakref
-import math
 import Math
 import material_kinds
 from helpers.PixieNode import PixieCache
 from CustomEffect import EffectSettings
 from cgf_obsolete_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
-import math_utils
 _ENABLE_VALUE_TRACKER = False
 _ENABLE_VALUE_TRACKER_ENGINE = False
 _ENABLE_PIXIE_TRACKER = False
@@ -158,17 +156,7 @@ class CustomEffectManager(Component):
         self.__variableArgs['deltaR'], self.__variableArgs['directionR'], self.__variableArgs['matkindR'] = self.__getScrollParams(appearance.trackScrollController.rightSlip(), appearance.trackScrollController.rightContact(), matKindsUnderTracks[CustomEffectManager._RIGHT_TRACK], direction)
         self.__variableArgs['deltaL'], self.__variableArgs['directionL'], self.__variableArgs['matkindL'] = self.__getScrollParams(appearance.trackScrollController.leftSlip(), appearance.trackScrollController.leftContact(), matKindsUnderTracks[CustomEffectManager._LEFT_TRACK], direction)
         self.__variableArgs['commonSlip'] = appearance.transmissionSlip
-        matInv = Math.Matrix(self.__vehicle.matrix)
-        matInv.invert()
-        velocityLocal = matInv.applyVector(self.__vehicle.filter.velocity)
-        velLen = velocityLocal.length
-        if velLen > 1.0:
-            vehicleDir = Math.Vector3(0.0, 0.0, 1.0)
-            velocityLocal = Math.Vector2(velocityLocal.z, velocityLocal.x)
-            cosA = velocityLocal.dot(Math.Vector2(vehicleDir.z, vehicleDir.x)) / velLen
-            self.__variableArgs['hullAngle'] = math.acos(math_utils.clamp(0.0, 1.0, math.fabs(cosA)))
-        else:
-            self.__variableArgs['hullAngle'] = 0.0
+        self.__variableArgs['hullAngle'] = Math.calcHullAngle(self.__vehicle.matrix, self.__vehicle.filter.velocity)
         self.__variableArgs['isUnderWater'] = 1 if appearance.isUnderwater else 0
         self.__correctWaterNodes()
         self.__variableArgs['gearUp'] = self.__gearUP

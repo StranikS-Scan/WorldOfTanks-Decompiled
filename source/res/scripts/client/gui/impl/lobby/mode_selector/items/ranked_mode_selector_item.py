@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/items/ranked_mode_selector_item.py
 import typing
+from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.lobby.mode_selector.items import setBattlePassState
-from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, formatSeasonLeftTime
+from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
-from helpers import dependency, int2roman
+from helpers import dependency, int2roman, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_ranked_model import ModeSelectorRankedModel
 if typing.TYPE_CHECKING:
@@ -76,7 +77,7 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
 
     def __getTimeLeft(self):
         currentSeason = self.__rankedBattleController.getCurrentSeason()
-        return formatSeasonLeftTime(currentSeason)
+        return getFormattedTimeLeft(max(0, currentSeason.getEndDate() - time_utils.getServerUTCTime())) if currentSeason else ''
 
     def __fillRankedWidget(self, model):
         season = self.__rankedBattleController.getCurrentSeason()

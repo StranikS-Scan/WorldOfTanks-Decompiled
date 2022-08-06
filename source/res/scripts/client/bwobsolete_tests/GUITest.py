@@ -19,14 +19,14 @@ def clear():
 
 
 def _setAllModeCombinations(c, name):
-    setattr(c, name, 'PIXEL')
-    setattr(c, name, 'LEGACY')
-    setattr(c, name, 'PIXEL')
-    setattr(c, name, 'CLIP')
-    setattr(c, name, 'PIXEL')
-    setattr(c, name, 'CLIP')
-    setattr(c, name, 'LEGACY')
-    setattr(c, name, 'CLIP')
+    setattr(c, name, GUI.Simple.eSizeMode.PIXEL)
+    setattr(c, name, GUI.Simple.eSizeMode.LEGACY)
+    setattr(c, name, GUI.Simple.eSizeMode.PIXEL)
+    setattr(c, name, GUI.Simple.eSizeMode.CLIP)
+    setattr(c, name, GUI.Simple.eSizeMode.PIXEL)
+    setattr(c, name, GUI.Simple.eSizeMode.CLIP)
+    setattr(c, name, GUI.Simple.eSizeMode.LEGACY)
+    setattr(c, name, GUI.Simple.eSizeMode.CLIP)
 
 
 def mode_conv():
@@ -36,9 +36,9 @@ def mode_conv():
         c.colour = (255, 0, 0, 255)
         c.width = 0.1
         c.height = 0.1
-        c.materialFX = 'SOLID'
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
+        c.materialFX = GUI.Simple.eMaterialFX.SOLID
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         c.position.x = pos[0]
         c.position.y = pos[1]
         c.horizontalAnchor = hAnchor
@@ -56,11 +56,11 @@ def mode_conv():
     _setAllModeCombinations(w, 'verticalPositionMode')
     _setAllModeCombinations(w, 'widthMode')
     _setAllModeCombinations(w, 'heightMode')
-    add_conv_test_child(w, 'LEFT', 'TOP', (-1, 1))
-    add_conv_test_child(w, 'RIGHT', 'TOP', (1, 1))
-    add_conv_test_child(w, 'LEFT', 'BOTTOM', (-1, -1))
-    add_conv_test_child(w, 'RIGHT', 'BOTTOM', (1, -1))
-    add_conv_test_child(w, 'CENTER', 'CENTER', (0, 0))
+    add_conv_test_child(w, GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.TOP, (-1, 1))
+    add_conv_test_child(w, GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.TOP, (1, 1))
+    add_conv_test_child(w, GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.BOTTOM, (-1, -1))
+    add_conv_test_child(w, GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.BOTTOM, (1, -1))
+    add_conv_test_child(w, GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.CENTER, (0, 0))
     GUI.addRoot(w)
 
 
@@ -82,13 +82,13 @@ class _Child(object):
     def create(hAnchor, vAnchor, pos):
         c = GUI.Simple('system/maps/col_white.bmp')
         c.colour = (0, 0, 255, 255)
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
         c.horizontalAnchor = hAnchor
         c.verticalAnchor = vAnchor
-        c.materialFX = 'SOLID'
+        c.materialFX = GUI.Simple.eMaterialFX.SOLID
         c.width = 0.5
         c.height = 0.5
         c.crossFocus = True
@@ -116,35 +116,35 @@ class _ParentAnchorWindow(object):
     @staticmethod
     def create(hAnchor, vAnchor, pos, colour):
         c = GUI.Window('system/maps/col_white.bmp')
-        c.widthMode = 'PIXEL'
-        c.heightMode = 'PIXEL'
+        c.widthMode = GUI.Simple.eSizeMode.PIXEL
+        c.heightMode = GUI.Simple.eSizeMode.PIXEL
         c.width = 200
         c.height = 200
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
         c.colour = colour
         c.horizontalAnchor = hAnchor
         c.verticalAnchor = vAnchor
         c.position.x = pos[0]
         c.position.y = pos[1]
-        c.materialFX = 'BLEND'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
         c.crossFocus = True
         c.moveFocus = True
         c.focus = True
-        c.addChild(_Child.create('LEFT', 'TOP', (-1, 1)).component)
-        c.addChild(_Child.create('CENTER', 'TOP', (0, 1)).component)
-        c.addChild(_Child.create('RIGHT', 'TOP', (1, 1)).component)
-        c.addChild(_Child.create('LEFT', 'CENTER', (-1, 0)).component)
-        c.addChild(_Child.create('CENTER', 'CENTER', (0, 0)).component)
-        c.addChild(_Child.create('RIGHT', 'CENTER', (1, 0)).component)
-        c.addChild(_Child.create('LEFT', 'BOTTOM', (-1, -1)).component)
-        c.addChild(_Child.create('CENTER', 'BOTTOM', (0, -1)).component)
-        c.addChild(_Child.create('RIGHT', 'BOTTOM', (1, -1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.TOP, (-1, 1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.TOP, (0, 1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.TOP, (1, 1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.CENTER, (-1, 0)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.CENTER, (0, 0)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.CENTER, (1, 0)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.BOTTOM, (-1, -1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.BOTTOM, (0, -1)).component)
+        c.addChild(_Child.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.BOTTOM, (1, -1)).component)
         label = GUI.Text('%s, %s' % (hAnchor, vAnchor))
         label.font = 'default_smaller.font'
-        label.verticalAnchor = 'BOTTOM'
-        label.horizontalPositionMode = 'CLIP'
-        label.verticalPositionMode = 'CLIP'
+        label.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
+        label.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        label.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         label.position.y = -0.8
         label.colour = (100, 100, 100, 255)
         c.addChild(label, 'label')
@@ -156,15 +156,15 @@ class _ParentAnchorWindow(object):
 
 def anchors():
     clear()
-    GUI.addRoot(_ParentAnchorWindow.create('LEFT', 'TOP', (-1, 1), (0, 0, 0, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('CENTER', 'TOP', (0, 1), (0, 0, 128, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('RIGHT', 'TOP', (1, 1), (0, 255, 0, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('LEFT', 'CENTER', (-1, 0), (0, 255, 255, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('CENTER', 'CENTER', (0, 0), (255, 0, 0, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('RIGHT', 'CENTER', (1, 0), (255, 0, 255, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('LEFT', 'BOTTOM', (-1, -1), (255, 255, 0, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('CENTER', 'BOTTOM', (0, -1), (255, 255, 255, 255)).component)
-    GUI.addRoot(_ParentAnchorWindow.create('RIGHT', 'BOTTOM', (1, -1), (128, 128, 128, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.TOP, (-1, 1), (0, 0, 0, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.TOP, (0, 1), (0, 0, 128, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.TOP, (1, 1), (0, 255, 0, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.CENTER, (-1, 0), (0, 255, 255, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.CENTER, (0, 0), (255, 0, 0, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.CENTER, (1, 0), (255, 0, 255, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.LEFT, GUI.Simple.eVAnchor.BOTTOM, (-1, -1), (255, 255, 0, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.CENTER, GUI.Simple.eVAnchor.BOTTOM, (0, -1), (255, 255, 255, 255)).component)
+    GUI.addRoot(_ParentAnchorWindow.create(GUI.Simple.eHAnchor.RIGHT, GUI.Simple.eVAnchor.BOTTOM, (1, -1), (128, 128, 128, 255)).component)
 
 
 class _FocusableComponent:
@@ -172,7 +172,7 @@ class _FocusableComponent:
     def __init__(self):
         self.component = GUI.Simple('system/maps/col_white.bmp')
         self.component.script = self
-        self.component.materialFX = 'BLEND'
+        self.component.materialFX = GUI.Simple.eMaterialFX.BLEND
         self.component.focus = False
         self.component.mouseButtonFocus = True
 
@@ -266,13 +266,13 @@ class _GameSquare:
     @staticmethod
     def create():
         c = GUI.Simple('system/maps/col_white.bmp')
-        c.horizontalPositionMode = 'LEGACY'
-        c.verticalPositionMode = 'LEGACY'
-        c.horizontalAnchor = 'LEFT'
-        c.verticalAnchor = 'TOP'
-        c.materialFX = 'SOLID'
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.LEGACY
+        c.verticalPositionMode = GUI.Simple.ePositionMode.LEGACY
+        c.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        c.verticalAnchor = GUI.Simple.eVAnchor.TOP
+        c.materialFX = GUI.Simple.eMaterialFX.SOLID
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
         c.width = random.random()
         c.height = random.random()
         c.focus = True
@@ -327,7 +327,7 @@ class _OrderStackingBlock:
     @staticmethod
     def create(position, colour):
         c = GUI.Simple('helpers/maps/col_%s.bmp' % colour)
-        c.materialFX = 'SOLID'
+        c.materialFX = GUI.Simple.eMaterialFX.SOLID
         c.size = (0.5, 0.5)
         c.position = position
         c.focus = True
@@ -402,16 +402,16 @@ class _MouseEventTester1:
         self.parent = parent
         self.label1 = GUI.Text('')
         self.label1.colour = (255, 0, 0, 255)
-        self.label1.verticalPositionMode = 'CLIP'
+        self.label1.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         component.addChild(self.label1)
         self.label2 = GUI.Text('')
         self.label2.colour = (0, 0, 255, 255)
-        self.label2.verticalPositionMode = 'CLIP'
+        self.label2.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         self.label2.position.y = -0.5
         component.addChild(self.label2)
         self.label3 = GUI.Text('')
         self.label3.colour = (0, 255, 0, 255)
-        self.label3.verticalPositionMode = 'CLIP'
+        self.label3.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         self.label3.position.y = 0.5
         component.addChild(self.label3)
         self.startPosition = Math.Vector3(self.component.position)
@@ -477,7 +477,7 @@ class _MouseEventTester1:
     @staticmethod
     def create(parent, pos):
         s = GUI.Window('system/maps/col_white.bmp')
-        s.materialFX = 'SOLID'
+        s.materialFX = GUI.Simple.eMaterialFX.SOLID
         s.width = 0.5
         s.height = 0.5
         s.position = pos
@@ -501,24 +501,24 @@ class _MouseEventTester2:
         self.toggleFromHierarchy = toggleFromHierarchy
         self.label1 = GUI.Text('')
         self.label1.colour = (255, 0, 0, 255)
-        self.label1.verticalPositionMode = 'CLIP'
+        self.label1.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         self.label1.position = labelPos
         self.label2 = GUI.Text('')
         self.label2.colour = (0, 0, 255, 255)
-        self.label2.verticalPositionMode = 'CLIP'
+        self.label2.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         self.label2.position = labelPos + Math.Vector3(0.5, 0, 0)
         self.label3 = GUI.Text('')
         self.label3.colour = (0, 255, 0, 255)
-        self.label3.verticalPositionMode = 'CLIP'
+        self.label3.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         self.label3.position = labelPos + Math.Vector3(-0.5, 0, 0)
         if labelPos[1] > 0:
-            self.label1.verticalAnchor = 'TOP'
-            self.label2.verticalAnchor = 'TOP'
-            self.label3.verticalAnchor = 'TOP'
+            self.label1.verticalAnchor = GUI.Simple.eVAnchor.TOP
+            self.label2.verticalAnchor = GUI.Simple.eVAnchor.TOP
+            self.label3.verticalAnchor = GUI.Simple.eVAnchor.TOP
         elif labelPos[1] < 0:
-            self.label1.verticalAnchor = 'BOTTOM'
-            self.label2.verticalAnchor = 'BOTTOM'
-            self.label3.verticalAnchor = 'BOTTOM'
+            self.label1.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
+            self.label2.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
+            self.label3.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
         if parent is None:
             GUI.addRoot(self.label1)
             GUI.addRoot(self.label2)
@@ -573,7 +573,7 @@ class _MouseEventTester2:
     @staticmethod
     def create(parent, pos, labelPos, toggleFromHierarchy):
         s = GUI.Window('system/maps/col_white.bmp')
-        s.materialFX = 'SOLID'
+        s.materialFX = GUI.Simple.eMaterialFX.SOLID
         s.width = 0.5
         s.height = 0.25
         s.position = pos

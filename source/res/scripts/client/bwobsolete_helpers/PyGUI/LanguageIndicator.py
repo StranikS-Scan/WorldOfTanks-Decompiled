@@ -59,11 +59,11 @@ class LanguageIndicator(PyGUIBase):
             w = sz
             h = sz
         oldMode = self.component.widthMode
-        self.component.widthMode = 'PIXEL'
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         self.component.width = w
         self.component.widthMode = oldMode
         oldMode = self.component.heightMode
-        self.component.heightMode = 'PIXEL'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
         self.component.height = h
         self.component.heightMode = oldMode
 
@@ -86,7 +86,7 @@ class LanguageIndicator(PyGUIBase):
     @staticmethod
     def create():
         c = GUI.Window('system/maps/col_white.bmp')
-        c.materialFX = 'BLEND'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
         c.colour = (255, 128, 64, 255)
         c.focus = True
         t = GUI.Text(_indicatorString())

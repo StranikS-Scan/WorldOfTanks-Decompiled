@@ -63,6 +63,10 @@ FEATURE_BY_GROUP_ID = {TankSetupGroupsId.EQUIPMENT_AND_SHELLS: 'shells_consumabl
 GROUP_ID_BY_FEATURE = {feature:groupID for groupID, feature in FEATURE_BY_GROUP_ID.iteritems()}
 DEFAULT_LAYOUT_CAPACITY = 1
 SWITCH_LAYOUT_CAPACITY = 2
+POST_PROGRESSION_UNLOCKS_IDX = 0
+POST_PROGRESSION_PAIRS_IDX = 1
+POST_PROGRESSION_FEATURES_IDX = 2
+POST_PROGRESSION_DISABLED_SWITCHES_IDX = 3
 
 def extractSelectedSetup(setups, setupsIndexes):
     selectedSetup = {}
@@ -133,10 +137,10 @@ class VehicleState(object):
 
     def __init__(self, data=None):
         data = data or self.getDefaultState()
-        self._unlocks = copy(data['unlocks'])
-        self._pairs = copy(data['pairs'])
-        self._features = copy(data['features'])
-        self._disabledSwitches = copy(data['disabledSwitches'])
+        self._unlocks = copy(data[POST_PROGRESSION_UNLOCKS_IDX])
+        self._pairs = copy(data[POST_PROGRESSION_PAIRS_IDX])
+        self._features = copy(data[POST_PROGRESSION_FEATURES_IDX])
+        self._disabledSwitches = copy(data[POST_PROGRESSION_DISABLED_SWITCHES_IDX])
 
     def __eq__(self, other):
         return self.unlocks == other.unlocks and self.pairs == other.pairs and self.features == other.features and self._disabledSwitches == other.disabledSwitches
@@ -241,10 +245,10 @@ class VehicleState(object):
         return result
 
     def toRawData(self):
-        return {'unlocks': self._unlocks,
-         'pairs': self._pairs,
-         'features': self._features,
-         'disabledSwitches': self._disabledSwitches}
+        return [self._unlocks,
+         self._pairs,
+         self._features,
+         self._disabledSwitches]
 
     def toggleSwitchLayout(self, groupID):
         if self.isSwitchDisabled(groupID):
@@ -254,10 +258,10 @@ class VehicleState(object):
 
     @staticmethod
     def getDefaultState():
-        return {'unlocks': VehicleState.__getDefaultUnlocksState(),
-         'pairs': VehicleState.__getDefaultPairsState(),
-         'features': VehicleState.__getDefaultFeaturesState(),
-         'disabledSwitches': VehicleState.__getDefaultDisabledSwitchesState()}
+        return [VehicleState.__getDefaultUnlocksState(),
+         VehicleState.__getDefaultPairsState(),
+         VehicleState.__getDefaultFeaturesState(),
+         VehicleState.__getDefaultDisabledSwitchesState()]
 
     @staticmethod
     def __getDefaultUnlocksState():
@@ -296,7 +300,8 @@ class VehiclesPostProgression(object):
         return VehicleState(self._storage.get(vehTypeCD))
 
     def getVehicleFeaturesList(self, vehTypeCD):
-        return tuple(self._storage.get(vehTypeCD, {}).get('features', ()))
+        postProgression = self._storage.get(vehTypeCD, {})
+        return () if not postProgression else tuple(postProgression[POST_PROGRESSION_FEATURES_IDX])
 
     def setVehicleState(self, vehTypeCD, vehicleState):
         if vehicleState.isEmpty():

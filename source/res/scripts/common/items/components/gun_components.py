@@ -22,7 +22,7 @@ class GunShot(legacy_stuff.LegacyStuff):
         self.maxHeight = maxHeight
 
     def __repr__(self):
-        return 'GunShot(shell = {}, ppower = {}, speed = {}, gravity = {}, maxDistance = {}, maxHeight = {}))'.format(self.shell, self.piercingPower, self.speed, self.gravity, self.maxDistance, self.maxHeight)
+        return 'GunShot(shell = {}, ppower = {}, speed = {}, gravity = {}, maxDistance = {}, maxHeight = {}))'.format(self.shell, self.defaultPortion, self.piercingPower, self.speed, self.gravity, self.maxDistance, self.maxHeight)
 
     def copy(self):
         raise SoftException('Operation "GunShot.copy" is not allowed')

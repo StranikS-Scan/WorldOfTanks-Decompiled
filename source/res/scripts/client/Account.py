@@ -54,6 +54,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -138,11 +139,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.name = 'offline_account'
         className = self.__class__.__name__
         if g_accountRepository is not None and g_accountRepository.className != className:
-            self.connectionMgr.onDisconnected -= _delAccountRepository
-            _delAccountRepository()
+            self.connectionMgr.onDisconnected -= delAccountRepository
+            delAccountRepository()
         if g_accountRepository is None:
             g_accountRepository = _AccountRepository(self.name, className, self.initialServerSettings)
-            self.connectionMgr.onDisconnected += _delAccountRepository
+            self.connectionMgr.onDisconnected += delAccountRepository
         self.contactInfo = g_accountRepository.contactInfo
         self.syncData = g_accountRepository.syncData
         self.serverSettings = g_accountRepository.serverSettings
@@ -223,6 +224,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.personalMissionsLock = g_accountRepository.personalMissionsLock
         self.battleQueueType = QUEUE_TYPE.UNKNOWN
         self.platformBlueprintsConvertSaleLimits = g_accountRepository.platformBlueprintsConvertSaleLimits
+        self.freePremiumCrew = g_accountRepository.freePremiumCrew
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -812,14 +814,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)
             self._doCmdInt3(AccountCommands.CMD_REQ_MAPS_TRAINING_INITIAL_CONFIGURATION, accountID, 0, 0, proxy)
 
-    def enqueueFunRandom(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.FUN_RANDOM, vehInvID])
-
-    def dequeueFunRandom(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.FUN_RANDOM)
-
     def createArenaFromQueue(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_QUEUE, 0, 0, 0)
@@ -1234,6 +1228,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self.__synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
+            synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
@@ -1474,6 +1469,7 @@ class _AccountRepository(object):
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)
         self.platformBlueprintsConvertSaleLimits = {}
+        self.freePremiumCrew = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
@@ -1483,9 +1479,9 @@ class _AccountRepository(object):
         return self.serverSettings['file_server']
 
 
-def _delAccountRepository():
+def delAccountRepository():
     global g_accountRepository
-    LOG_DEBUG('_delAccountRepository')
+    LOG_DEBUG('delAccountRepository')
     if g_accountRepository is None:
         return
     else:

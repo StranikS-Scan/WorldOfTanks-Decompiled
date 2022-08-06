@@ -162,7 +162,7 @@ class _DependencyItem(object):
         super(_DependencyItem, self).__init__()
         self._order = order
         self._service = service
-        if finalizer is not None and not callable(finalizer) and not isinstance(finalizer, str):
+        if finalizer is not None and not callable(finalizer) and not isinstance(finalizer, basestring):
             raise DependencyError('Finalizer {} is invalid'.format(finalizer))
         self._finalizer = finalizer
         return

@@ -17,15 +17,17 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.server_events.events_helpers import getIdxFromQuestID
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
 from helpers import dependency
@@ -533,6 +535,81 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
             return MessageData(formatted, settings)
         else:
             return
+
+
+class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFormatter):
+    __battleMattersController = dependency.descriptor(IBattleMattersController)
+    __MESSAGE_TEMPLATE = 'BattleMatters{}'
+    __BATTLE_MATTERS_QUEST_PATTERN = 'battle_matters'
+    __TOKEN_TYPE = 'TokenQuest'
+    __AWARD_TYPE = 'AwardsQuest'
+
+    def __init__(self):
+        super(BattleMattersAwardsFormatterBase, self).__init__()
+        self._achievesFormatter = BattleMattersQuestAchievesFormatter()
+
+    def _format(self, message, *args):
+        messageDataList = []
+        data = message.data or {}
+        completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+        for qID in completedQuestIDs:
+            messageData = self.__buildMessage(qID, message)
+            if messageData is not None:
+                messageDataList.append(messageData)
+
+        return messageDataList if messageDataList else [MessageData(None, None)]
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__BATTLE_MATTERS_QUEST_PATTERN in questID
+
+    def __buildMessage(self, questID, message):
+        data = message.data or {}
+        isWithButton = self._achievesFormatter.isWithSelectableReward(data)
+        rewards = data.get('detailedRewards', {}).get(questID, {})
+        fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False)
+        if fmt is not None:
+            questIdx = getIdxFromQuestID(questID)
+            if self.__battleMattersController.getFinalQuest().getID() == questID:
+                body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.done.body())
+            elif self.__battleMattersController.isIntermediateBattleMattersQuestID(questID):
+                body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.medium.body(), count=text_styles.stats(str(questIdx)))
+            else:
+                quest = self.__battleMattersController.getQuestByIdx(questIdx - 1)
+                body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.body(), questName=text_styles.stats(quest.getUserName() if quest else ''))
+            templateParams = {'achieves': fmt or '',
+             'body': body}
+            template = self.__MESSAGE_TEMPLATE.format(self.__TOKEN_TYPE if isWithButton else self.__AWARD_TYPE)
+            settings = self._getGuiSettings(message, template)
+            formatted = g_settings.msgTemplates.format(template, templateParams)
+            return MessageData(formatted, settings)
+        else:
+            return
+
+
+class BattleMattersAwardsFormatter(AsyncTokenQuestsSubFormatter, BattleMattersAwardsFormatterBase):
+
+    def __init__(self):
+        AsyncTokenQuestsSubFormatter.__init__(self)
+        BattleMattersAwardsFormatterBase.__init__(self)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            messageDataList = self._format(message)
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+
+class BattleMattersClientAwardsFormatter(BattleMattersAwardsFormatterBase):
+
+    def format(self, message, *args):
+        return self._format(message, *args)
 
 
 class LootBoxTokenQuestFormatter(AsyncTokenQuestsSubFormatter):

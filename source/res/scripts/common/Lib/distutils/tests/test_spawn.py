@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_spawn.py
-import unittest
 import os
+import stat
+import sys
 import time
-from test.test_support import captured_stdout, run_unittest
+import unittest
+from test.support import captured_stdout, run_unittest
+from test import support as test_support
 from distutils.spawn import _nt_quote_args
 from distutils.spawn import spawn, find_executable
 from distutils.errors import DistutilsExecError
@@ -37,6 +40,32 @@ class SpawnTestCase(support.TempdirManager, support.LoggingSilencer, unittest.Te
             self.write_file(exe, 'exit 0')
         os.chmod(exe, 511)
         spawn([exe])
+
+    def test_find_executable(self):
+        with test_support.temp_dir() as tmp_dir:
+            program_noeext = test_support.TESTFN
+            program = program_noeext + '.exe'
+            filename = os.path.join(tmp_dir, program)
+            with open(filename, 'wb'):
+                pass
+            os.chmod(filename, stat.S_IXUSR)
+            rv = find_executable(program, path=tmp_dir)
+            self.assertEqual(rv, filename)
+            if sys.platform == 'win32':
+                rv = find_executable(program_noeext, path=tmp_dir)
+                self.assertEqual(rv, filename)
+            with test_support.change_cwd(tmp_dir):
+                rv = find_executable(program)
+                self.assertEqual(rv, program)
+            dont_exist_program = 'dontexist_' + program
+            rv = find_executable(dont_exist_program, path=tmp_dir)
+            self.assertIsNone(rv)
+            with test_support.EnvironmentVarGuard() as env:
+                from distutils import spawn
+                with test_support.swap_attr(spawn.os, 'defpath', tmp_dir):
+                    env.pop('PATH')
+                    rv = find_executable(program)
+                    self.assertEqual(rv, filename)
 
 
 def test_suite():

@@ -8,7 +8,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC, timeDataToUTC
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -152,6 +152,9 @@ class Source(object):
             if conditions and conditions.has_key('common'):
                 condition = conditions['common']
                 self.__readBattleResultsConditionList(conditionReaders, condition, commonNode)
+            if conditions and conditions.has_key('description'):
+                description = conditions['description']
+                mainNode.questClientConditions.append(('description', self.__readMetaSection(description)))
             daily = commonNode.getChildNode('daily')
             info['isDaily'] = daily is not None
             weekly = commonNode.getChildNode('weekly')
@@ -339,11 +342,13 @@ class Source(object):
          'inClan': self.__readListOfInts,
          'vehiclesUnlocked': self.__readBattleResultsConditionList,
          'vehiclesOwned': self.__readBattleResultsConditionList,
+         'vehiclesUnlockedAndOwned': self.__readBattleResultsConditionList,
          'classes': self.__readVehicleFilter_classes,
          'levels': self.__readVehicleFilter_levels,
          'nations': self.__readVehicleFilter_nations,
          'types': self.__readVehicleFilter_types,
          'roles': self.__readVehicleFilter_roles,
+         'excludeTags': self.__readVehicleFilter_excludeTags,
          'dossier': self.__readBattleResultsConditionList,
          'record': self.__readCondition_dossierRecord,
          'average': self.__readCondition_int,
@@ -359,7 +364,7 @@ class Source(object):
          'weekly': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'isTutorialCompleted': self.__readCondition_bool,
-         'isLinkedSetEnabled': self.__readCondition_bool,
+         'isBattleMattersEnabled': self.__readCondition_bool,
          'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
@@ -368,7 +373,11 @@ class Source(object):
          'externalData': self.__readBattleResultsConditionList,
          'externalDataItem': self.__readBattleResultsConditionList,
          'source': self.__readCondition_string,
-         'paramName': self.__readCondition_string}
+         'paramName': self.__readCondition_string,
+         'mapsTraining': self.__readBattleResultsConditionList,
+         'mapsCompleted': self.__readBattleResultsConditionList,
+         'scenariosCompleted': self.__readBattleResultsConditionList,
+         'difficulty': self.__readCondition_int}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
             condition_readers.update({'value': self.__readCondition_bool,
              'win': self.__readConditionComplex_true,
@@ -431,6 +440,7 @@ class Source(object):
              'correspondedModification': self.__readConditionComplex_true,
              'correspondedProjectionDecal': self.__readConditionComplex_true,
              'correspondedPersonalNumber': self.__readConditionComplex_true,
+             'correspondedEquipment': self.__readCondition_correspondedEquipment,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
@@ -506,7 +516,8 @@ class Source(object):
          'rankedBonusBattles',
          'dogTagComponent',
          'battlePassPoints',
-         'currency'}
+         'currency',
+         'freePremiumCrew'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
@@ -563,6 +574,32 @@ class Source(object):
         else:
             raise SoftException('Unknown consumables(%s)' % node.name)
         node.addChild(modules)
+
+    def __readCondition_correspondedEquipment(self, _, section, node):
+        equipment = set()
+        for name, sub in section.items():
+            if name in ('title', 'description'):
+                node.questClientConditions.append((name, self.__readMetaSection(sub)))
+                continue
+            if name in ('hideInGui',):
+                node.questClientConditions.append((name, True))
+                continue
+            if name in ('tags',):
+                tags = set(sub.readString('', '').split())
+                if not tags:
+                    raise SoftException('Empty tags for corresponded equipment is not allowed')
+                equipment = {equipment.compactDescr for idx, equipment in vehicles.g_cache.equipments().iteritems() if tags == tags & equipment.tags}
+                if not equipment:
+                    raise SoftException('No corresponded equipments for tags {}'.format(tags))
+                continue
+            if name in ('ignoreBoostersCompatibility',):
+                currentNode = XMLNode(name)
+                currentNode.addChild(True)
+                node.addChild(currentNode)
+
+        equipmentNode = XMLNode('equipment')
+        equipmentNode.addChild(equipment)
+        node.addChild(equipmentNode)
 
     def __readCritName(self, _, section, node):
         critName = section.asString
@@ -678,20 +715,20 @@ class Source(object):
         node.addChild(False)
 
     def __readCondition_bool(self, _, section, node):
-        node.addChild(bool(section.asString))
+        node.addChild(section.asBool)
 
     def __readCondition_int(self, _, section, node):
-        node.addChild(int(section.asString))
+        node.addChild(section.asInt)
 
     def __readCondition_float(self, _, section, node):
-        node.addChild(float(section.asString))
+        node.addChild(section.asFloat)
 
     def __readCondition_DateTimeOrFloat(self, _, section, node):
         try:
             value = timeDataToUTC(section.asString, None)
         except SoftException as e:
             try:
-                value = float(section.asString)
+                value = section.asFloat
             except ValueError:
                 raise e
 
@@ -774,6 +811,13 @@ class Source(object):
         roles = set([ ROLE_LABEL_TO_TYPE[role] for role in section.asString.split() ])
         node.addChild(roles)
 
+    def __readVehicleFilter_excludeTags(self, _, section, node):
+        tags = set(section.asString.split())
+        diff = tags.difference(QUESTS_SUPPORTED_EXCLUDE_TAGS)
+        if diff:
+            raise SoftException('Unsupported vehicle exclude tags %s' % diff)
+        node.addChild(tags)
+
     def __readListAccountAttributes(self, _, section, node):
         attrs = 0
         for attr in section.asString.split():
@@ -794,3 +838,17 @@ class Source(object):
                 meta[local.strip()] = sub.readString('', '').strip()
 
             return meta
+
+
+def collectSections(root):
+    sections = []
+    pqSection = ResMgr.openSection(root)
+    if pqSection is not None:
+        for k, s in pqSection.items():
+            sectionPath = root + '/' + k
+            if k.endswith('.xml'):
+                sections.append(sectionPath)
+            if s is not None:
+                sections.extend(collectSections(sectionPath))
+
+    return sections

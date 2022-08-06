@@ -216,7 +216,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             slotActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, Money(gold=slotPrice), Money(gold=slotDefaultPrice))
         tankmenTotalLabel = i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TANKMENTOTALLABEL, count=str(tankMenCount))
         studyData = []
-        for index, (tCost, defTCost, typeID) in enumerate(zip(shop.tankmanCostWithGoodyDiscount, shopDefaults.tankmanCost, ('free', 'school', 'academy'))):
+        for index, (tCost, defTCost, typeID) in enumerate(zip(shop.getTankmanCostWithGoodyDiscount(vehicle.level), shopDefaults.tankmanCost, ('free', 'school', 'academy'))):
             if tCost['isPremium']:
                 currency = Currency.GOLD
             else:
@@ -283,7 +283,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def _getCrewPrice(self):
         if self.__state.crewType != -1:
             shop = self.itemsCache.items.shop
-            costs = (shop.tankmanCostWithGoodyDiscount[self.__state.crewType], shop.defaults.tankmanCost[self.__state.crewType])
+            costs = (shop.getTankmanCostWithGoodyDiscount(self.vehicle.level)[self.__state.crewType], shop.defaults.tankmanCost[self.__state.crewType])
             tankmanCount = len(self.vehicle.crew)
             return ItemPrice(*[ Money(gold=cost[Currency.GOLD], credits=cost[Currency.CREDITS]) for cost in costs ]) * tankmanCount
         return ITEM_PRICE_EMPTY

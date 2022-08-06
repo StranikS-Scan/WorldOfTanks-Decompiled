@@ -12,7 +12,7 @@ class FixExecfile(fixer_base.BaseFix):
         globals = results.get('globals')
         locals = results.get('locals')
         execfile_paren = node.children[-1].children[-1].clone()
-        open_args = ArgList([filename.clone()], rparen=execfile_paren)
+        open_args = ArgList([filename.clone(), Comma(), String('"rb"', ' ')], rparen=execfile_paren)
         open_call = Node(syms.power, [Name(u'open'), open_args])
         read = [Node(syms.trailer, [Dot(), Name(u'read')]), Node(syms.trailer, [LParen(), RParen()])]
         open_expr = [open_call] + read

@@ -10,9 +10,10 @@ from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from helpers import dependency
 from items import getTypeOfCompactDescr
-from uilogging.bootcamp.constants import BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
+from skeletons.tutorial import ITutorialLoader
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
 from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS, BC_LOG_KEYS, LIMITS
 from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
@@ -77,7 +78,9 @@ class BCResearchItemsData(ResearchItemsData):
 @loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES, loggerCls=BootcampUILogger)
 class BCResearch(Research):
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_RESEARCH_VEHICLES)
+    tutorialLoader = dependency.descriptor(ITutorialLoader)
     BC_MESSAGE_WINDOW_OPEN_SOUND_ID = 'bc_info_line_woosh'
+    SECOND_VEHICLE_FLAG = 'SecondVehicleIsOnResearch'
 
     def __init__(self, ctx=None):
         super(BCResearch, self).__init__(ctx, skipConfirm=False)
@@ -114,24 +117,31 @@ class BCResearch(Research):
     def invalidateUnlocks(self, unlocks):
         self.redraw()
 
-    @uiBootcampLogger.dLogOnce(action=BCLogActions.BUTTON_BACK_TO_HANGAR.value)
     def exitFromResearch(self):
+        self.uiBootcampLogger.logOnce(action=BC_LOG_ACTIONS.BUTTON_BACK_TO_HANGAR)
         super(BCResearch, self).exitFromResearch()
 
     def goToVehicleView(self, itemCD):
         vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
         if vehicle.isInInventory:
-            self.uiBootcampLogger.logOnce(action=BCLogActions.BUTTON_VIEW_IN_HANGAR.value)
+            self.uiBootcampLogger.logOnce(action=BC_LOG_ACTIONS.BUTTON_VIEW_IN_HANGAR)
             shared_events.selectVehicleInHangar(itemCD)
-
-    def goToNextVehicle(self, vehCD):
-        nationData = g_bootcamp.getNationData()
-        super(BCResearch, self).goToNextVehicle(vehCD)
-        if vehCD not in (nationData.get('vehicle_first'), nationData.get('vehicle_second')):
-            self.exitFromResearch()
 
     def setupContextHints(self, hintID):
         pass
+
+    def redraw(self):
+        super(BCResearch, self).redraw()
+        nationData = g_bootcamp.getNationData()
+        isSecondVehicle = self._data.getRootCD() == nationData['vehicle_second']
+        flags = self.tutorialLoader.tutorial.getFlags()
+        isFlagActive = flags.isActiveFlag(self.SECOND_VEHICLE_FLAG)
+        if isSecondVehicle and not isFlagActive:
+            flags.activateFlag(self.SECOND_VEHICLE_FLAG)
+            self.tutorialLoader.tutorial.invalidateFlags()
+        elif not isSecondVehicle and isFlagActive:
+            flags.deactivateFlag(self.SECOND_VEHICLE_FLAG)
+            self.tutorialLoader.tutorial.invalidateFlags()
 
     def _getRootData(self):
         result = super(BCResearch, self)._getRootData()

@@ -10,8 +10,8 @@ class TextField(PyGUIBase):
         PyGUIBase.__init__(self, component)
         self.lines = []
         self.lines.append(GUI.Text(''))
-        self.lines[0].horizontalAnchor = 'LEFT'
-        self.lines[0].verticalAnchor = 'TOP'
+        self.lines[0].horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.lines[0].verticalAnchor = GUI.Simple.eVAnchor.TOP
         self.transcript = ''
         self.component.addChild(self.lines[0])
 
@@ -50,8 +50,8 @@ class TextField(PyGUIBase):
     def commitLine(self, textLine, have, lineNum):
         if have <= lineNum:
             t = GUI.Text(textLine)
-            t.horizontalAnchor = 'LEFT'
-            t.verticalAnchor = 'TOP'
+            t.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+            t.verticalAnchor = GUI.Simple.eVAnchor.TOP
             t.font = self.lines[0].font
             t.colour = self.lines[0].colour
             self.component.addChild(t)

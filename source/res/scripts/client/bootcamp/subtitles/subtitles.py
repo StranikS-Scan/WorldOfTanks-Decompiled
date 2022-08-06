@@ -7,7 +7,6 @@ from gui.Scaleform.framework.entities.View import View
 class SubtitlesBase(View):
     _instance = None
     __STANDARD_DURATION_SEC = 3.0
-    __STANDARD_LENGTH_SYMBOLS = 30
     __DURATION_ON_TICK = 0.5
 
     def __new__(cls, *args, **kwargs):
@@ -42,7 +41,7 @@ class SubtitlesBase(View):
                 self.soundManager.playSound(self.__currSound['voiceover'])
                 if self.__currSound.get('subtitle', False) and AccountSettings.getSettings(SUBTITLES):
                     self._asShowSubtitle(self.__currSound['subtitle'])
-                self.__subtitlesCallback = BigWorld.callback(self.__STANDARD_DURATION_SEC, lambda : self._update(remainingTime=self.__calcMaxDuration(self.__currSound.get('subtitle', ''))))
+                self.__subtitlesCallback = BigWorld.callback(self.__STANDARD_DURATION_SEC, self._update)
                 return
         self.onWindowClose()
 
@@ -53,10 +52,11 @@ class SubtitlesBase(View):
             if self.__currSound.get('voiceover', False):
                 self.soundManager.stopSound(self.__currSound['voiceover'])
 
-    def _update(self, remainingTime):
+    def _update(self):
         self.__clearCallback()
-        if remainingTime > 0.0 and self.soundManager.isSoundPlaying(self.__currSound.get('voiceover', '')):
-            self.__subtitlesCallback = BigWorld.callback(self.__DURATION_ON_TICK, lambda : self._update(remainingTime=max(0.0, remainingTime - self.__DURATION_ON_TICK)))
+        voiceover = self.__currSound.get('voiceover', '')
+        if voiceover and self.soundManager.isSoundPlaying(voiceover):
+            self.__subtitlesCallback = BigWorld.callback(self.__DURATION_ON_TICK, self._update)
             return
         self.playSound()
 
@@ -65,9 +65,6 @@ class SubtitlesBase(View):
             BigWorld.cancelCallback(self.__subtitlesCallback)
             self.__subtitlesCallback = None
         return
-
-    def __calcMaxDuration(self, subtitle):
-        return max(self.__DURATION_ON_TICK, self.__STANDARD_DURATION_SEC * (len(subtitle) / self.__STANDARD_LENGTH_SYMBOLS - 1.0))
 
     def onWindowClose(self):
         self.stopSound()

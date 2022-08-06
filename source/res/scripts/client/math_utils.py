@@ -3,41 +3,26 @@
 import random
 import math
 import Math
-from Math import Vector2, Vector3, Matrix
+from Math import Vector2, Vector3
 
 def createIdentityMatrix():
-    result = Matrix()
-    result.setIdentity()
-    return result
+    return Math.createIdentityMatrix()
 
 
 def createRotationMatrix(rotation):
-    result = Matrix()
-    result.setRotateYPR(rotation)
-    return result
+    return Math.createRotationMatrix(rotation)
 
 
 def createTranslationMatrix(translation):
-    result = Matrix()
-    result.setTranslate(translation)
-    return result
+    return Math.createTranslationMatrix(translation)
 
 
 def createRTMatrix(rotation, translation):
-    result = Matrix()
-    result.setRotateYPR(rotation)
-    result.translation = translation
-    return result
+    return Math.createRTMatrix(rotation, translation)
 
 
 def createSRTMatrix(scale, rotation, translation):
-    scaleMatrix = Matrix()
-    scaleMatrix.setScale(scale)
-    result = Matrix()
-    result.setRotateYPR(rotation)
-    result.translation = translation
-    result.preMultiply(scaleMatrix)
-    return result
+    return Math.createSRTMatrix(scale, rotation, translation)
 
 
 def setTranslation(matrix, translation):
@@ -48,21 +33,19 @@ clamp = lambda minVal, maxVal, val: (minVal if val < minVal else maxVal if val >
 clamp01 = lambda val: clamp(0.0, 1.0, val)
 
 def clampVector3(minVal, maxVal, val):
-    return Vector3(clamp(minVal.x, maxVal.x, val.x), clamp(minVal.y, maxVal.y, val.y), clamp(minVal.z, maxVal.z, val.z))
+    return Math.clampVector3(minVal, maxVal, val)
 
 
 def clampVectorLength(minLength, maxLength, vector):
-    length = vector.length
-    if not almostZero(length):
-        if minLength > length:
-            return vector / length * minLength
-        if maxLength is not None and maxLength < length:
-            return vector / length * maxLength
-    return vector * 1.0
+    if isinstance(minLength, Math.Vector2):
+        return Math.clampVector2Length(minLength, maxLength, vector)
+    if isinstance(minLength, Math.Vector3):
+        return Math.clampVector3Length(minLength, maxLength, vector)
+    return Math.clampVector4Length(minLength, maxLength, vector) if isinstance(minLength, Math.Vector4) else vector * 1.0
 
 
 def matrixScale(vector, scaleCoeff):
-    return Vector3(vector.x * scaleCoeff.x, vector.y * scaleCoeff.y, vector.z * scaleCoeff.z)
+    return Math.matrixScale(vector, scaleCoeff)
 
 
 def almostZero(val, epsilon=0.0004):
@@ -379,3 +362,20 @@ def reduceTo2PI(inAngle):
     if outAngle < 0.0:
         outAngle += 2.0 * math.pi
     return outAngle
+
+
+class VectorConstant(object):
+    Vector2Zero = Math.Vector2(0.0, 0.0)
+    Vector2One = Math.Vector2(1.0, 1.0)
+    Vector2I = Math.Vector2(1.0, 0.0)
+    Vector2J = Math.Vector2(0.0, 1.0)
+    Vector3Zero = Math.Vector3(0.0, 0.0, 0.0)
+    Vector3One = Math.Vector3(1.0, 1.0, 1.0)
+    Vector3I = Math.Vector3(1.0, 0.0, 0.0)
+    Vector3J = Math.Vector3(0.0, 1.0, 0.0)
+    Vector3K = Math.Vector3(0.0, 0.0, 1.0)
+    Vector4Zero = Math.Vector4(0.0, 0.0, 0.0, 0.0)
+    Vector4One = Math.Vector4(1.0, 1.0, 1.0, 1.0)
+    Vector4I = Math.Vector4(1.0, 0.0, 0.0, 0.0)
+    Vector4J = Math.Vector4(0.0, 1.0, 0.0, 0.0)
+    Vector4L = Math.Vector4(0.0, 0.0, 0.0, 1.0)

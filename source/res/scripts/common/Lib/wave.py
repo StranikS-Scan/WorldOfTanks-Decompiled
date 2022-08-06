@@ -81,10 +81,11 @@ class Wave_read:
         self._soundpos = 0
 
     def close(self):
-        if self._i_opened_the_file:
-            self._i_opened_the_file.close()
-            self._i_opened_the_file = None
         self._file = None
+        file = self._i_opened_the_file
+        if file:
+            self._i_opened_the_file = None
+            file.close()
         return
 
     def tell(self):
@@ -143,7 +144,7 @@ class Wave_read:
             data = array.array(_array_fmts[self._sampwidth])
             nitems = nframes * self._nchannels
             if nitems * self._sampwidth > chunk.chunksize - chunk.size_read:
-                nitems = (chunk.chunksize - chunk.size_read) / self._sampwidth
+                nitems = (chunk.chunksize - chunk.size_read) // self._sampwidth
             data.fromfile(chunk.file.file, nitems)
             chunk.size_read = chunk.size_read + nitems * self._sampwidth
             chunk = chunk.file
@@ -319,18 +320,19 @@ class Wave_write:
             self._patchheader()
 
     def close(self):
-        if self._file:
-            try:
+        try:
+            if self._file:
                 self._ensure_header_written(0)
                 if self._datalength != self._datawritten:
                     self._patchheader()
                 self._file.flush()
-            finally:
-                self._file = None
+        finally:
+            self._file = None
+            file = self._i_opened_the_file
+            if file:
+                self._i_opened_the_file = None
+                file.close()
 
-        if self._i_opened_the_file:
-            self._i_opened_the_file.close()
-            self._i_opened_the_file = None
         return
 
     def _ensure_header_written(self, datasize):

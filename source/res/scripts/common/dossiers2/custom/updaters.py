@@ -12,6 +12,7 @@ from dossiers2.common.updater_utils import getBinarySetValue, updateStaticSizeBl
 import dossiers2.custom.tankmen_dossier1_updater
 from dossiers2.custom.config import RECORD_CONFIGS
 from VersionUpdater import VersionUpdaterBase
+from serialization import ComponentBinSerializer
 from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
 ACCOUNT_DOSSIER_VERSION = 142

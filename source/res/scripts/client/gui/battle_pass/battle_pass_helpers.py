@@ -101,7 +101,12 @@ def getIntroSlidesNames():
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def getChaptersOrder(battlePass=None):
-    return dict(zip(battlePass.getChapterIDs(), GUI_SETTINGS.battlePass.get('chaptersOrder')))
+    chapterIDs = [ chapter for chapter in battlePass.getChapterIDs() if not battlePass.isExtraChapter(chapter) ]
+    chapterIDs.sort()
+    extraChapterID = battlePass.getExtraChapterID()
+    if extraChapterID:
+        chapterIDs.append(extraChapterID)
+    return dict(zip(chapterIDs, GUI_SETTINGS.battlePass.get('chaptersOrder')))
 
 
 def getSupportedArenaBonusTypeFor(queueType, isInUnit):

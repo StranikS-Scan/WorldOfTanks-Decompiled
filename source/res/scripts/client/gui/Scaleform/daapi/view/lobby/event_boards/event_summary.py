@@ -196,7 +196,7 @@ class _SummaryMax(_Summary):
         inSquad = info.getIsInSquad()
         squadInfo = _ms(EVENT_BOARDS.SUMMARY_FIGHTINSQUAAD) if inSquad else _ms(EVENT_BOARDS.SUMMARY_FIGHTNOTINSQUAAD)
         result = _ms(EVENT_BOARDS.summary_result(info.getBattleResult()))
-        return '{}. {} {}'.format(result, squadInfo, date)
+        return u'{}. {} {}'.format(result, squadInfo, date)
 
 
 class _SummarySumAll(_Summary):

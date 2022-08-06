@@ -18,6 +18,7 @@ from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import events_dispatcher as quests_events
+from gui.server_events.events_helpers import isC11nQuest
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
@@ -63,19 +64,20 @@ class BattleResultsWindow(BattleResultsMeta):
     @process
     def showEventsWindow(self, eID, eventType):
         if self.__canNavigate():
-            if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
-                _, vehicleIntCD = parseEventID(eID)
-                vehicle = self.__itemsCache.items.getVehicleCopyByCD(vehicleIntCD)
-                if not vehicle.isCustomizationEnabled():
-                    _logger.warning('Trying to open customization from PBS for incompatible vehicle.')
-                    return
+            if eventType == constants.EVENT_TYPE.C11N_PROGRESSION or isC11nQuest(eID):
                 app = self.__appLoader.getApp()
                 view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
                 if view is None:
                     lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
                     if not lobbyHeaderNavigationPossible:
                         return
-                self.soundManager.playInstantSound(SOUNDS.SELECT)
+                if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
+                    _, vehicleIntCD = parseEventID(eID)
+                    vehicle = self.__itemsCache.items.getVehicleCopyByCD(vehicleIntCD)
+                    if not vehicle.isCustomizationEnabled():
+                        _logger.warning('Trying to open customization from PBS for incompatible vehicle.')
+                        return
+                    self.soundManager.playInstantSound(SOUNDS.SELECT)
             else:
                 lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
                 if not lobbyHeaderNavigationPossible:

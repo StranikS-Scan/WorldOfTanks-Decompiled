@@ -15,13 +15,13 @@ class _FORMAT_MASK(object):
     ALL = VEHICLE | CLAN | REGION
 
 
-_PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: '{0:>s} ({2:>s})',
- _FORMAT_MASK.CLAN: '{0:>s}[{1:>s}]',
- _FORMAT_MASK.VEH_CLAN: '{0:>s}[{1:>s}] ({2:>s})',
- _FORMAT_MASK.REGION: '{0:>s} {3:>s}',
- _FORMAT_MASK.VEH_REGION: '{0:>s} {3:>s} ({2:>s})',
- _FORMAT_MASK.REG_CLAN: '{0:>s}[{1:>s}] {3:>s}',
- _FORMAT_MASK.ALL: '{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
+_PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: u'{0:>s} ({2:>s})',
+ _FORMAT_MASK.CLAN: u'{0:>s}[{1:>s}]',
+ _FORMAT_MASK.VEH_CLAN: u'{0:>s}[{1:>s}] ({2:>s})',
+ _FORMAT_MASK.REGION: u'{0:>s} {3:>s}',
+ _FORMAT_MASK.VEH_REGION: u'{0:>s} {3:>s} ({2:>s})',
+ _FORMAT_MASK.REG_CLAN: u'{0:>s}[{1:>s}] {3:>s}',
+ _FORMAT_MASK.ALL: u'{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
 _PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'playerFakeName', 'clanAbbrev', 'regionCode', 'vehicleName'))
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -88,7 +88,7 @@ class PlayerFullNameFormatter(object):
         if key == _FORMAT_MASK.NONE:
             fullName = playerName
         else:
-            fullName = _PLAYER_FULL_NAME_FORMATS.get(key, '{0:>s}').format(playerName, clanAbbrev, vehShortName, regionCode)
+            fullName = _PLAYER_FULL_NAME_FORMATS.get(key, u'{0:>s}').format(playerName, clanAbbrev, vehShortName, regionCode)
         return _PlayerFormatResult(fullName, playerName, fakePlayerName, clanAbbrev, regionCode, vehName)
 
     @staticmethod

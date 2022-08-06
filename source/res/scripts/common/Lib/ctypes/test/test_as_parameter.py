@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/Lib/ctypes/test/test_as_parameter.py
 import unittest
 from ctypes import *
+from ctypes.test import need_symbol
 import _ctypes_test
 dll = CDLL(_ctypes_test.__file__)
 try:
@@ -18,12 +19,8 @@ class BasicWrapTestCase(unittest.TestCase):
     def wrap(self, param):
         return param
 
+    @need_symbol('c_wchar')
     def test_wchar_parm(self):
-        try:
-            c_wchar
-        except NameError:
-            return
-
         f = dll._testfunc_i_bhilfd
         f.argtypes = [c_byte,
          c_wchar,
@@ -33,7 +30,7 @@ class BasicWrapTestCase(unittest.TestCase):
          c_double]
         result = f(self.wrap(1), self.wrap(u'x'), self.wrap(3), self.wrap(4), self.wrap(5.0), self.wrap(6.0))
         self.assertEqual(result, 139)
-        self.assertTrue(type(result), int)
+        self.assertIs(type(result), int)
 
     def test_pointers(self):
         f = dll._testfunc_p_p

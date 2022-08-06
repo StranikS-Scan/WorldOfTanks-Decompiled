@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_break	</postProgressionTree>
+  <postProgressionTree>	role_HT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
@@ -70,7 +70,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24365	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1309,9 +1309,150 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.3	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-2.3	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.044316	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.116963	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.447854	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	5	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.259513	</groupRadius>
+                  <groupInnerOffset>	0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	-0.2665	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L5	</wheelName>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.4	</groupRadius>
+                  <groupInnerOffset>	0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	-0.2665	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.269557	</groupRadius>
+                  <groupInnerOffset>	0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	-0.2665	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.333992 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.197370 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.532194	</row2>
+                  <row3>	0.000000 1.047996 0.024074	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898234 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.249932	</row2>
+                  <row3>	0.000000 1.406870 0.048724	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898230 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.235632 0.185681	</row1>
+                  <row2>	0.000000 -0.185681 0.235632	</row2>
+                  <row3>	0.000000 1.287790 3.742275	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898230 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.159759 -0.253924	</row1>
+                  <row2>	0.000000 0.512555 0.322479	</row2>
+                  <row3>	0.000000 1.115122 -3.683706	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.083998 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.534274	</row2>
+                  <row3>	-1.943524 1.030267 -0.003751	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.044315	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.116957	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.447853	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	5	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.259506	</groupRadius>
+                  <groupInnerOffset>	-0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	0.2665	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R5	</wheelName>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.4	</groupRadius>
+                  <groupInnerOffset>	-0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	0.2665	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.26975	</groupRadius>
+                  <groupInnerOffset>	-0.3665	</groupInnerOffset>
+                  <groupOuterOffset>	0.2665	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.333992 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.197370 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.532194	</row2>
+                  <row3>	0.000000 1.047996 0.024074	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898234 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.249932	</row2>
+                  <row3>	0.000000 1.406870 0.048724	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898230 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.235632 0.185681	</row1>
+                  <row2>	0.000000 -0.185681 0.235632	</row2>
+                  <row3>	0.000000 1.287790 3.742275	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.898230 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.159759 -0.253924	</row1>
+                  <row2>	0.000000 0.512555 0.322479	</row2>
+                  <row3>	0.000000 1.115122 -3.683706	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.084000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.534270	</row2>
+                  <row3>	1.944000 1.030270 -0.003751	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+        </trackPair>
       </tracks>
       <AODecals>
         <decal>
@@ -2042,7 +2183,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11800	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2078,14 +2219,14 @@
             <maxPitch>	0 8 0.425 8 0.433333 6 0.486111 6 0.513889 6 0.566667 6 0.575 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.5	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
@@ -2739,7 +2880,7 @@
     <detailed>
       <engines>
         <GM_12V71T>
-          <smplEnginePower>	570	</smplEnginePower>
+          <smplEnginePower>	650	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </GM_12V71T>
       </engines>

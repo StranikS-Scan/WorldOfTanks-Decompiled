@@ -79,13 +79,14 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
-from skeletons.gui.linkedset import ILinkedSetController
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
+from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
@@ -192,7 +193,7 @@ class AwardController(IAwardController, IGlobalListener):
          MapboxProgressionRewardHandler(self),
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
-         LinkedSetQuestsHandler(self),
+         BattleMattersQuestsHandler(self),
          ResourceWellRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
@@ -1709,26 +1710,25 @@ class PurchaseHandler(ServiceChannelHandler):
                 _logger.debug('Product code is empty! Awards Window will not be shown!')
 
 
-class LinkedSetQuestsHandler(MultiTypeServiceChannelHandler):
-    __linkedSetCtrl = dependency.descriptor(ILinkedSetController)
+class BattleMattersQuestsHandler(MultiTypeServiceChannelHandler):
+    __battleMattersCtrl = dependency.descriptor(IBattleMattersController)
+    __systemMessages = dependency.descriptor(ISystemMessages)
 
     def __init__(self, awardCtrl):
-        super(LinkedSetQuestsHandler, self).__init__((SYS_MESSAGE_TYPE.hangarQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        super(BattleMattersQuestsHandler, self).__init__((SYS_MESSAGE_TYPE.hangarQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index()), awardCtrl)
 
-    def _showAward(self, ctx):
+    def _showAward(self, ctx, clientCtx=None):
         _, message = ctx
-        quests = self.__getCompletedQuests(message.data)
-        self.__linkedSetCtrl.showAwardView(quests)
+        if message.type == SYS_MESSAGE_TYPE.battleResults.index():
+            self.__systemMessages.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD)
+        self.__battleMattersCtrl.showAwardView(message.data)
 
     def _needToShowAward(self, ctx):
         _, message = ctx
-        if not super(LinkedSetQuestsHandler, self)._needToShowAward(ctx):
+        if not super(BattleMattersQuestsHandler, self)._needToShowAward(ctx):
             return False
         data = message.data
-        return self.__getCompletedQuests(data)
-
-    def __getCompletedQuests(self, data):
-        return [ qID for qID in data.get('completedQuestIDs', set()) if self.__linkedSetCtrl.isLinkedSetQuestWithAwards(qID) ]
+        return [ qID for qID in data.get('completedQuestIDs', set()) if self.__battleMattersCtrl.isRegularBattleMattersQuestID(qID) or self.__battleMattersCtrl.isIntermediateBattleMattersQuestID(qID) ]
 
 
 class ResourceWellRewardHandler(ServiceChannelHandler):

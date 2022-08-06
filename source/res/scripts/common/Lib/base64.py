@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/base64.py
+# Compiled at: 2012-10-24 08:00:13
+"""RFC 3548: Base16, Base32, Base64 Data Encodings"""
 import re
 import struct
+import string
 import binascii
 __all__ = ['encode',
  'decode',
@@ -29,15 +32,33 @@ def _translate(s, altchars):
 
 
 def b64encode(s, altchars=None):
+    """Encode a string using Base64.
+    
+    s is the string to encode.  Optional altchars must be a string of at least
+    length 2 (additional characters are ignored) which specifies an
+    alternative alphabet for the '+' and '/' characters.  This allows an
+    application to e.g. generate url or filesystem safe Base64 strings.
+    
+    The encoded string is returned.
+    """
     encoded = binascii.b2a_base64(s)[:-1]
-    return _translate(encoded, {'+': altchars[0],
-     '/': altchars[1]}) if altchars is not None else encoded
+    return encoded.translate(string.maketrans('+/', altchars[:2])) if altchars is not None else encoded
 
 
 def b64decode(s, altchars=None):
+    """Decode a Base64 encoded string.
+    
+    s is the string to decode.  Optional altchars must be a string of at least
+    length 2 (additional characters are ignored) which specifies the
+    alternative alphabet used instead of the '+' and '/' characters.
+    
+    The decoded string is returned.  A TypeError is raised if s is
+    incorrectly padded.  Characters that are neither in the normal base-64
+    alphabet nor the alternative alphabet are discarded prior to the padding
+    check.
+    """
     if altchars is not None:
-        s = _translate(s, {altchars[0]: '+',
-         altchars[1]: '/'})
+        s = s.translate(string.maketrans(altchars[:2], '+/'))
     try:
         return binascii.a2b_base64(s)
     except binascii.Error as msg:
@@ -47,19 +68,47 @@ def b64decode(s, altchars=None):
 
 
 def standard_b64encode(s):
+    """Encode a string using the standard Base64 alphabet.
+    
+    s is the string to encode.  The encoded string is returned.
+    """
     return b64encode(s)
 
 
 def standard_b64decode(s):
+    """Decode a string encoded with the standard Base64 alphabet.
+    
+    Argument s is the string to decode.  The decoded string is returned.  A
+    TypeError is raised if the string is incorrectly padded.  Characters that
+    are not in the standard alphabet are discarded prior to the padding
+    check.
+    """
     return b64decode(s)
 
 
+_urlsafe_encode_translation = string.maketrans('+/', '-_')
+_urlsafe_decode_translation = string.maketrans('-_', '+/')
+
 def urlsafe_b64encode(s):
-    return b64encode(s, '-_')
+    """Encode a string using the URL- and filesystem-safe Base64 alphabet.
+    
+    Argument s is the string to encode.  The encoded string is returned.  The
+    alphabet uses '-' instead of '+' and '_' instead of '/'.
+    """
+    return b64encode(s).translate(_urlsafe_encode_translation)
 
 
 def urlsafe_b64decode(s):
-    return b64decode(s, '-_')
+    """Decode a string using the URL- and filesystem-safe Base64 alphabet.
+    
+    Argument s is the string to decode.  The decoded string is returned.  A
+    TypeError is raised if the string is incorrectly padded.  Characters that
+    are not in the URL-safe base-64 alphabet, and are not a plus '+' or slash
+    '/', are discarded prior to the padding check.
+    
+    The alphabet uses '-' instead of '+' and '_' instead of '/'.
+    """
+    return b64decode(s.translate(_urlsafe_decode_translation))
 
 
 _b32alphabet = {0: 'A',
@@ -100,6 +149,10 @@ _b32tab = [ v for k, v in _b32tab ]
 _b32rev = dict([ (v, long(k)) for k, v in _b32alphabet.items() ])
 
 def b32encode(s):
+    """Encode a string using Base32.
+    
+    s is the string to encode.  The encoded string is returned.
+    """
     parts = []
     quanta, leftover = divmod(len(s), 5)
     if leftover:
@@ -129,12 +182,29 @@ def b32encode(s):
 
 
 def b32decode(s, casefold=False, map01=None):
+    """Decode a Base32 encoded string.
+    
+    s is the string to decode.  Optional casefold is a flag specifying whether
+    a lowercase alphabet is acceptable as input.  For security purposes, the
+    default is False.
+    
+    RFC 3548 allows for optional mapping of the digit 0 (zero) to the letter O
+    (oh), and for optional mapping of the digit 1 (one) to either the letter I
+    (eye) or letter L (el).  The optional argument map01 when not None,
+    specifies which letter the digit 1 should be mapped to (when map01 is not
+    None, the digit 0 is always mapped to the letter O).  For security
+    purposes the default is None, so that 0 and 1 are not allowed in the
+    input.
+    
+    The decoded string is returned.  A TypeError is raised if s were
+    incorrectly padded or if there are non-alphabet characters present in the
+    string.
+    """
     quanta, leftover = divmod(len(s), 8)
     if leftover:
         raise TypeError('Incorrect padding')
     if map01:
-        s = _translate(s, {'0': 'O',
-         '1': map01})
+        s = s.translate(string.maketrans('01', 'O' + map01))
     if casefold:
         s = s.upper()
     padchars = 0
@@ -175,10 +245,24 @@ def b32decode(s, casefold=False, map01=None):
 
 
 def b16encode(s):
+    """Encode a string using Base16.
+    
+    s is the string to encode.  The encoded string is returned.
+    """
     return binascii.hexlify(s).upper()
 
 
 def b16decode(s, casefold=False):
+    """Decode a Base16 encoded string.
+    
+    s is the string to decode.  Optional casefold is a flag specifying whether
+    a lowercase alphabet is acceptable as input.  For security purposes, the
+    default is False.
+    
+    The decoded string is returned.  A TypeError is raised if s is
+    incorrectly padded or if there are non-alphabet characters present in the
+    string.
+    """
     if casefold:
         s = s.upper()
     if re.search('[^0-9A-F]', s):
@@ -190,6 +274,7 @@ MAXLINESIZE = 76
 MAXBINSIZE = MAXLINESIZE // 4 * 3
 
 def encode(input, output):
+    """Encode a file."""
     while True:
         s = input.read(MAXBINSIZE)
         if not s:
@@ -205,6 +290,7 @@ def encode(input, output):
 
 
 def decode(input, output):
+    """Decode a file."""
     while True:
         line = input.readline()
         if not line:
@@ -214,6 +300,7 @@ def decode(input, output):
 
 
 def encodestring(s):
+    """Encode a string into multiple lines of base-64 data."""
     pieces = []
     for i in range(0, len(s), MAXBINSIZE):
         chunk = s[i:i + MAXBINSIZE]
@@ -223,10 +310,12 @@ def encodestring(s):
 
 
 def decodestring(s):
+    """Decode a string."""
     return binascii.a2b_base64(s)
 
 
 def test():
+    """Small test program"""
     import sys, getopt
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'deut')

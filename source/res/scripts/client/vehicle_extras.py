@@ -11,7 +11,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 from items import vehicles
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
-from common_tank_appearance import MAX_DISTANCE
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
@@ -258,7 +257,7 @@ class TrackHealth(DamageMarker):
         return backport.text(resource(), type=typeTxt)
 
     def _start(self, data, args):
-        data['entity'].appearance.addCrashedTrack(self.__isLeft, self._trackPairIndex)
+        data['entity'].appearance.addCrashedTrack(self.__isLeft, self._trackPairIndex, self.index)
 
     def _cleanup(self, data):
         data['entity'].appearance.delCrashedTrack(self.__isLeft, self._trackPairIndex)
@@ -282,6 +281,7 @@ class TankmanHealth(DamageMarker):
 class BlinkingLaserSight(EntityExtra):
     __slots__ = ('_isEnabledBlinking', '_shouldCollideTarget', '_beamLength', '_bindNode', '_beamSeqs')
     _SEQUENCE_NAMES = ('beamStaticSeq', 'beamReloadStartSeq', 'beamReloadFininshSeq')
+    _MAX_LASER_DISTANCE = 564
 
     def _readConfig(self, dataSection, containerName):
         self._isEnabledBlinking = dataSection.readBool('isEnabledBlinking')
@@ -327,10 +327,10 @@ class BlinkingLaserSight(EntityExtra):
             gunMatr = Math.Matrix(data['bindNodeRef'])
             gunPos = gunMatr.applyToOrigin()
             gunDir = gunMatr.applyToAxis(2)
-            endPos = gunPos + gunDir * MAX_DISTANCE
+            endPos = gunPos + gunDir * self._MAX_LASER_DISTANCE
             collidePos = BigWorld.wg_collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1, 0)
             data['isVehicleTakenAtGunPoint'] = args['isTakesAim'] or not self._shouldCollideTarget or collidePos[1]
-            distanceToTarget = gunPos.distTo(collidePos[0]) if collidePos is not None else MAX_DISTANCE
+            distanceToTarget = gunPos.distTo(collidePos[0]) if collidePos is not None else self._MAX_LASER_DISTANCE
             beamMode = args['beamMode']
             if beamMode not in self._beamSeqs:
                 beamMode = 'beamStaticSeq'

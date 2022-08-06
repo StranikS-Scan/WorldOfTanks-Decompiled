@@ -57,10 +57,12 @@ class GetCfgSectionNameDialog(Toplevel):
         name = self.name_ok()
         if name:
             self.result = name
+            self.grab_release()
             self.destroy()
 
     def Cancel(self, event=None):
         self.result = ''
+        self.grab_release()
         self.destroy()
 
 

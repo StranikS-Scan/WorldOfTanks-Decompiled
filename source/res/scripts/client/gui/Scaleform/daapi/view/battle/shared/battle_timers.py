@@ -103,7 +103,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         super(BattleTimer, self).__init__()
         self.__isTicking = False
         self.__state = COUNTDOWN_STATE.UNDEFINED
-        self.__roundLength = self.arenaVisitor.getRoundLength()
+        self.__roundLength = self.arenaVisitor.type.getRoundLength()
         self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
         self.__isDeathScreenShown = False
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()

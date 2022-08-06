@@ -10,14 +10,10 @@ class IUILoggingCore(object):
     def fini(self):
         raise NotImplementedError
 
-    def getSettings(self, feature, group):
+    def isFeatureEnabled(self, feature):
         raise NotImplementedError
 
     def log(self, feature, group, action, loglevel, **params):
-        raise NotImplementedError
-
-    @property
-    def ready(self):
         raise NotImplementedError
 
 

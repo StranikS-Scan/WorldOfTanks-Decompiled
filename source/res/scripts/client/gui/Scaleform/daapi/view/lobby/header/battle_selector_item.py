@@ -81,7 +81,7 @@ class SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.MAPBOX) or state.isInUnit(PREBATTLE_TYPE.FUN_RANDOM)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.MAPBOX)
 
     def setLocked(self, value):
         self._isLocked = value

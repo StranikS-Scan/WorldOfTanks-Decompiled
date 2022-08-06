@@ -16,8 +16,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers import getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.server_events import events_helpers, finders
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, BATTLE_MATTERS_INTERMEDIATE_QUEST_ID
 from gui.server_events.bonuses import compareBonuses, getBonuses
-from gui.server_events.events_helpers import isDailyQuest, isPremium
+from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import compareModifiers, getModifierObj
 from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements
@@ -34,9 +35,10 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.server_events.bonuses import SimpleBonus
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Union
-    from gui.server_events.bonuses import SimpleBonus
+    import potapov_quests
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -56,7 +58,7 @@ def getGroupTypeByID(groupID):
         return DEFAULTS_GROUPS.MARATHON_QUESTS
     if events_helpers.isPremium(groupID):
         return DEFAULTS_GROUPS.PREMIUM_QUESTS
-    return DEFAULTS_GROUPS.LINKEDSET_QUESTS if events_helpers.isLinkedSet(groupID) else DEFAULTS_GROUPS.REGULAR_GROUPED_QUESTS
+    return DEFAULTS_GROUPS.LINKEDSET_QUESTS if events_helpers.isBattleMattersQuestID(groupID) else DEFAULTS_GROUPS.REGULAR_GROUPED_QUESTS
 
 
 class CONTITIONS_SCOPE(object):
@@ -247,9 +249,6 @@ class Group(ServerEventAbstract):
     def isMarathon(self):
         return events_helpers.isMarathon(self.getID())
 
-    def isLinkedSet(self):
-        return events_helpers.isLinkedSet(self.getID())
-
     def isPremium(self):
         return events_helpers.isPremium(self.getID())
 
@@ -403,8 +402,9 @@ class Quest(ServerEventAbstract):
 
                 if name == 'vehicles':
                     stylesData = self.__getVehicleStyleBonuses(value)
-                    for bonus in getBonuses(self, 'customizations', stylesData, isCompensation, ctx=ctx):
-                        result.append(self._bonusDecorator(bonus))
+                    if stylesData:
+                        for bonus in getBonuses(self, 'customizations', stylesData, isCompensation, ctx=ctx):
+                            result.append(self._bonusDecorator(bonus))
 
         elif bonusName in bonusData:
             for bonus in getBonuses(self, bonusName, bonusData[bonusName], isCompensation, ctx=ctx):
@@ -412,7 +412,8 @@ class Quest(ServerEventAbstract):
 
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
 
-    def __getVehicleStyleBonuses(self, vehiclesData):
+    @staticmethod
+    def __getVehicleStyleBonuses(vehiclesData):
         stylesData = []
         for vehData in vehiclesData.itervalues():
             customization = vehData.get('customization', None)
@@ -443,7 +444,8 @@ class Quest(ServerEventAbstract):
     def getSuitableVehicles(self):
         return self.vehicleReqs.getSuitableVehicles()
 
-    def _bonusDecorator(self, bonus):
+    @staticmethod
+    def _bonusDecorator(bonus):
         return bonus
 
     def __checkGroupedCompletion(self, values, progress, bonusLimit=None, keyMaker=lambda v: v):
@@ -471,29 +473,42 @@ class TokenQuest(Quest):
         return self.accountReqs.isAvailable()
 
 
-class LinkedSetTokenQuest(TokenQuest):
-
-    def isCompleted(self, progress=None):
-        res = super(LinkedSetTokenQuest, self).isCompleted(progress)
-        if res:
-            eventsCache = dependency.instance(IEventsCache)
-            res = not eventsCache.hasQuestDelayedRewards(self.getID())
-        return res
+class BattleMattersTokenQuest(TokenQuest):
 
     def _checkConditions(self):
-        res = _isLinkedSetQuestAvailable(self)
+        res = _isBattleMattersQuestAvailable(self)
         if res is None:
-            res = super(LinkedSetTokenQuest, self)._checkConditions()
+            res = super(BattleMattersTokenQuest, self)._checkConditions()
         return res
 
+    def getOrder(self):
+        return getIdxFromQuestID(self.getID())
 
-class LinkedSetQuest(Quest):
+    def getConditionLbl(self):
+        return _getConditionLbl(self._data)
+
+
+class BattleMattersQuest(Quest):
 
     def _checkConditions(self):
-        res = _isLinkedSetQuestAvailable(self)
+        res = _isBattleMattersQuestAvailable(self)
         if res is None:
-            res = super(LinkedSetQuest, self)._checkConditions()
+            res = super(BattleMattersQuest, self)._checkConditions()
         return res
+
+    def getOrder(self):
+        return getIdxFromQuestID(self.getID())
+
+    def getConditionLbl(self):
+        return _getConditionLbl(self._data)
+
+
+def _getConditionLbl(data):
+    descriptionLbl = 'description'
+    conditions = data.get('conditions')
+    for itemName, itemData in conditions:
+        if itemName == descriptionLbl:
+            return i18n.makeString(getLocalizedData({descriptionLbl: itemData}, descriptionLbl))
 
 
 class PremiumQuest(Quest):
@@ -1286,16 +1301,16 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
     if questType == constants.EVENT_TYPE.RANKED_QUEST:
         return RankedQuest(qID, data, progress)
     if questType == constants.EVENT_TYPE.TOKEN_QUEST:
-        if qID.startswith('linkedset_'):
-            tokenClass = LinkedSetTokenQuest
+        if qID.startswith(BATTLE_MATTERS_QUEST_ID) or qID.startswith(BATTLE_MATTERS_INTERMEDIATE_QUEST_ID):
+            tokenClass = BattleMattersTokenQuest
         elif isDailyQuest(qID):
             tokenClass = DailyEpicTokenQuest
         else:
             tokenClass = TokenQuest
         return tokenClass(qID, data, progress)
     questClass = Quest
-    if qID.startswith('linkedset_'):
-        questClass = LinkedSetQuest
+    if qID.startswith(BATTLE_MATTERS_QUEST_ID):
+        questClass = BattleMattersQuest
     elif isPremium(qID):
         questClass = PremiumQuest
     elif isDailyQuest(qID):
@@ -1307,12 +1322,12 @@ def createAction(eventType, aID, data):
     return Group(aID, data) if eventType == constants.EVENT_TYPE.GROUP else Action(aID, data)
 
 
-def _isLinkedSetQuestAvailable(quest):
+def _isBattleMattersQuestAvailable(quest):
     if quest.isCompleted():
         return True
     else:
-        if isinstance(quest, LinkedSetTokenQuest):
-            if super(LinkedSetTokenQuest, quest).isCompleted():
+        if isinstance(quest, BattleMattersTokenQuest):
+            if super(BattleMattersTokenQuest, quest).isCompleted():
                 return True
         for item in quest.accountReqs.getConditions().items:
             if item.getName() == 'token' and item.getID() == '{}_unlock'.format(quest.getID()):

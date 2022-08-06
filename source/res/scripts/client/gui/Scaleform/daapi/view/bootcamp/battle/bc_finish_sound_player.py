@@ -22,6 +22,6 @@ class BCFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
     def _playSound(self, soundID):
         self.__soundID = _SOUND_EVENT_OVERRIDES.get(soundID, soundID)
 
-    def __onRoundFinished(self, winnerTeam, reason):
+    def __onRoundFinished(self, winnerTeam, reason, extraData):
         if self.__soundID:
             SoundGroups.g_instance.playSound2D(self.__soundID)

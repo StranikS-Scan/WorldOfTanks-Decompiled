@@ -172,9 +172,10 @@ class CustomizationMode(object):
         self._ctx.refreshOutfit(season)
         self._events.onItemsRemoved()
 
-    def removeItemsFromSeason(self, season=None, filterMethod=None, refresh=True):
+    def removeItemsFromSeason(self, season=None, filterMethod=None, refresh=True, revertToPrevious=False):
         season = season or self.season
         outfit = self._modifiedOutfits[season]
+        originalOutfit = self._originalOutfits[season]
         for intCD, _, regionIdx, container, _ in outfit.itemsFull():
             item = self._service.getItemByCD(intCD)
             if item.isHiddenInUI():
@@ -183,7 +184,15 @@ class CustomizationMode(object):
                 areaId = container.getAreaID()
                 slotType = ITEM_TYPE_TO_SLOT_TYPE[item.itemTypeID]
                 slotId = C11nId(areaId, slotType, regionIdx)
-                self.removeItem(slotId, season, refresh=False)
+                if revertToPrevious:
+                    container = originalOutfit.getContainer(areaId)
+                    slotData = container.slotFor(item.itemTypeID).getSlotData(regionIdx)
+                    if slotData.intCD:
+                        self.installItem(slotData.intCD, slotId, season, refresh=False)
+                    else:
+                        self.removeItem(slotId, season, refresh=False)
+                else:
+                    self.removeItem(slotId, season, refresh=False)
 
         if refresh:
             self._ctx.refreshOutfit(season)
@@ -242,7 +251,7 @@ class CustomizationMode(object):
             return self._originalOutfits[season]
 
     def getModifiedOutfits(self):
-        return deepcopy(self._modifiedOutfits)
+        return copy(self._modifiedOutfits)
 
     def getOriginalOutfits(self):
         return deepcopy(self._originalOutfits)
@@ -274,6 +283,27 @@ class CustomizationMode(object):
 
     def isOutfitsModified(self):
         return self._isOutfitsModified()
+
+    def isOutfitsHasLockedItems(self):
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = self._modifiedOutfits[season]
+            for itemCD in outfit.items():
+                item = self._service.getItemByCD(itemCD)
+                if not item.isUnlockedByToken():
+                    return True
+
+        return False
+
+    def getOutfitsLockedItemsCount(self):
+        count = 0
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = self._modifiedOutfits[season]
+            for itemCD in outfit.items():
+                item = self._service.getItemByCD(itemCD)
+                if not item.isUnlockedByToken():
+                    count += 1
+
+        return count
 
     def getAnchorVOs(self):
         return self._getAnchorVOs()

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_lock.py
+import sys
 import time
 import unittest
 from test_all import db, test_support, verbose, have_threads, get_new_environment_path, get_new_database_path
 if have_threads:
     from threading import Thread
-    import sys
     if sys.version_info[0] < 3:
         from threading import currentThread
     else:
@@ -31,7 +31,7 @@ class LockingTestCase(unittest.TestCase):
             print 'locker ID: %s' % anID
         lock = self.env.lock_get(anID, 'some locked thing', db.DB_LOCK_WRITE)
         if verbose:
-            print 'Aquired lock: %s' % lock
+            print 'Acquired lock: %s' % lock
         self.env.lock_put(lock)
         if verbose:
             print 'Released lock: %s' % lock
@@ -106,13 +106,17 @@ class LockingTestCase(unittest.TestCase):
         self.assertRaises(db.DBLockNotGrantedError, self.env.lock_get, anID2, 'shared lock', db.DB_LOCK_READ)
         end_time = time.time()
         deadlock_detection.end = True
-        self.assertTrue(end_time - start_time >= 0.0999)
+        if sys.platform == 'win32':
+            min_dt = 0.05
+        else:
+            min_dt = 0.0999
+        self.assertGreaterEqual(end_time - start_time, min_dt)
         self.env.lock_put(lock)
         t.join()
         self.env.lock_id_free(anID)
         self.env.lock_id_free(anID2)
         if db.version() >= (4, 6):
-            self.assertTrue(deadlock_detection.count > 0)
+            self.assertGreater(deadlock_detection.count, 0)
 
     def theThread(self, lockType):
         import sys
@@ -130,7 +134,7 @@ class LockingTestCase(unittest.TestCase):
         for i in xrange(1000):
             lock = self.env.lock_get(anID, 'some locked thing', lockType)
             if verbose:
-                print '%s: Aquired %s lock: %s' % (name, lt, lock)
+                print '%s: Acquired %s lock: %s' % (name, lt, lock)
             self.env.lock_put(lock)
             if verbose:
                 print '%s: Released %s lock: %s' % (name, lt, lock)

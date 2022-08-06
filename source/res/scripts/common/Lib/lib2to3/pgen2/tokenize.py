@@ -193,7 +193,8 @@ class Untokenizer:
             toks_append(tokval)
 
 
-cookie_re = re.compile('^[ \\t\\f]*#.*coding[:=][ \\t]*([-\\w.]+)')
+cookie_re = re.compile('^[ \\t\\f]*#.*?coding[:=][ \\t]*([-\\w.]+)')
+blank_re = re.compile('^[ \\t\\f]*(?:[#\\r\\n]|$)')
 
 def _get_normal_name(orig_enc):
     enc = orig_enc[:12].lower().replace('_', '-')
@@ -246,6 +247,8 @@ def detect_encoding(readline):
         encoding = find_cookie(first)
         if encoding:
             return (encoding, [first])
+        if not blank_re.match(first):
+            return (default, [first])
         second = read_or_stop()
         if not second:
             return (default, [first])

@@ -9,7 +9,6 @@ import BigWorld
 import Keys
 import SoundGroups
 import Settings
-from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -62,16 +61,18 @@ _LOG_SEVERITY_TO_LOG_LEVEL_MAP = {LogSeverity.disable: logging.NOTSET,
  LogSeverity.error: logging.ERROR}
 
 class WebBrowser(object):
+    id = property(lambda self: self.__browserID)
     hasBrowser = property(lambda self: self.__browser is not None)
     initializationUrl = property(lambda self: self.__baseUrl)
     baseUrl = property(lambda self: '' if self.__browser is None else self.__baseUrl)
     url = property(lambda self: '' if self.__browser is None else self.__browser.url)
     width = property(lambda self: 0 if self.__browser is None else self.__browser.width)
     height = property(lambda self: 0 if self.__browser is None else self.__browser.height)
+    cursor = property(lambda self: 0 if self.__browser is None else self.__browser.cursor)
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
     isAudioPlaying = property(lambda self: self.__isAudioPlaying)
-    textureUrl = property(lambda self: self.__textureUrl)
+    isReady = property(lambda self: self.__isReady)
     updateInterval = 0.01
     isSuccessfulLoad = property(lambda self: self.__successfulLoad)
     skipEscape = property(lambda self: self.__skipEscape)
@@ -129,16 +130,14 @@ class WebBrowser(object):
         _logger.debug('allowMouseWheel set %s (was: %s)', value, self.__allowMouseWheel)
         self.__allowMouseWheel = value
 
-    def __init__(self, browserID, uiObj, size, url='about:blank', isFocused=False, handlers=None):
+    def __init__(self, browserID, uiObj, url='about:blank', isFocused=False, handlers=None):
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
         self.__uiObj = uiObj
-        self.__browserSize = size + (1.0,)
         self.__startFocused = isFocused
         self.__browser = None
         self.__isNavigationComplete = False
-        self.__loadStartTime = None
         self.__isFocused = False
         self.__isAudioPlaying = False
         self.__navigationFilters = handlers or set()
@@ -156,7 +155,7 @@ class WebBrowser(object):
         self.__isAudioMutable = False
         self.__ctrlDown = False
         self.__shiftDown = False
-        self.__textureUrl = ''
+        self.__isReady = False
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -170,7 +169,11 @@ class WebBrowser(object):
         self.onCanCreateNewBrowser = Event(self.__eventMgr)
         self.onUserRequestToClose = Event(self.__eventMgr)
         self.onAudioStatusChanged = Event(self.__eventMgr)
-        _logger.info('INIT %s size %s, id: %s', self.__baseUrl, size, self.__browserID)
+        self.onCursorUpdated = Event(self.__eventMgr)
+        self.onChangeAddressBar = Event(self.__eventMgr)
+        self.onFocusChanged = Event(self.__eventMgr)
+        self.onResized = Event(self.__eventMgr)
+        _logger.info('INIT %s, id: %s', self.__baseUrl, self.__browserID)
         levelSetting = Settings.g_instance.engineConfig['webBrowser']['logVerbosity'].asString
         levelSettingEnum = LogSeverity[levelSetting]
         _webAppLogger.setLevel(_LOG_SEVERITY_TO_LOG_LEVEL_MAP[levelSettingEnum])
@@ -195,6 +198,8 @@ class WebBrowser(object):
             self.__browser.script.onDestroy += self.__onDestroy
             self.__browser.script.onAudioStatusChanged += self.__onAudioStatusChanged
             self.__browser.script.onConsoleMessage += self.__onConsoleMessage
+            self.__browser.script.onChangeAddressBar += self.__onChangeAddressBar
+            self.__browser.script.onResized += self.__onResized
             self.__browser.script.isBrowserPlayingAudio = False
 
             def injectBrowserKeyEvent(me, e):
@@ -282,17 +287,13 @@ class WebBrowser(object):
 
     def ready(self, success):
         _logger.info('READY success: %r %s id: %s', success, self.__baseUrl, self.__browserID)
-        self.__ui = weakref.ref(self.__uiObj)
         self.__readyToShow = False
         self.__successfulLoad = False
         self.enableUpdate = True
         self.__isMouseDown = False
-        self.__isFocused = False
         self.__isWaitingForUnfocus = False
         if success:
-            browserSize = self.__browserSize
-            self.__textureUrl = self.__browser.setScaleformRender(str(self.__browserID), browserSize[0], browserSize[1], browserSize[2])
-            _logger.info('READY scaleform texture url: %s', self.__textureUrl)
+            self.__isReady = True
             self.__browser.activate(True)
             self.__browser.focus()
             self.__browser.loadURL(self.__baseUrl)
@@ -311,7 +312,6 @@ class WebBrowser(object):
             self.__browser.invalidate()
 
     def updateSize(self, size):
-        self.__browserSize = size
         if self.hasBrowser:
             self.__browser.resize(size[0], size[1], size[2])
 
@@ -324,39 +324,34 @@ class WebBrowser(object):
             self.__onAudioStatusChanged(isPlaying=False)
             self.__browser.script.clear()
             self.__browser.script = None
-            self.__browser.resetScaleformRender()
             BigWorld.destroyWebView(self.__browserID)
             self.__browser = None
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
-        self.__ui = None
         self.__navigationFilters = None
-        self.__setUICursor(self.__uiObj, CursorManager.ARROW)
         g_mgr.delBrowser(self)
         return
 
-    def focus(self):
+    def focus(self, silent=False):
         if self.hasBrowser and not self.isFocused:
             self.__browser.focus()
             self.__isFocused = True
-            self.__setUICursor(self.__ui(), self.__browser.script.cursorType)
+            if not silent:
+                self.onFocusChanged(self, self.__isFocused)
 
-    def unfocus(self):
+    def unfocus(self, silent=False):
         if self.hasBrowser and self.isFocused:
             self.__browser.unfocus()
             self.__isFocused = False
             self.__isWaitingForUnfocus = False
+            if not silent:
+                self.onFocusChanged(self, self.__isFocused)
 
     def refresh(self, ignoreCache=True):
-        if self.__loadStartTime is None or BigWorld.time() - self.__loadStartTime < 0.5:
-            _logger.debug('refresh - called too soon')
-            return
-        else:
-            if self.hasBrowser:
-                self.__browser.reload()
-                self.onNavigate(self.__browser.url)
-            return
+        if self.hasBrowser:
+            self.__browser.reload()
+            self.onNavigate(self.__browser.url)
 
     def navigate(self, url):
         _logger.debug('navigate %s', url)
@@ -376,21 +371,16 @@ class WebBrowser(object):
 
     def navigateBack(self):
         if self.hasBrowser:
-            self.__browser.goBack(self.url)
+            self.__browser.goBack()
 
     def navigateForward(self):
         if self.hasBrowser:
-            self.__browser.goForward(self.url)
+            self.__browser.goForward()
 
     def navigateStop(self):
-        if self.__loadStartTime is None or BigWorld.time() - self.__loadStartTime < 0.5:
-            _logger.debug('navigateStop - called too soon')
-            return
-        else:
-            if self.hasBrowser:
-                self.__browser.stop()
-                self.__onLoadEnd(self.__browser.url)
-            return
+        if self.hasBrowser:
+            self.__browser.stop()
+            self.__onLoadEnd(self.__browser.url)
 
     def __getBrowserKeyHandler(self, key, isKeyDown, isAltDown, isShiftDown, isCtrlDown):
         from itertools import izip
@@ -560,7 +550,6 @@ class WebBrowser(object):
     def __onLoadStart(self, url):
         if url == self.__browser.url:
             self.__isNavigationComplete = False
-            self.__loadStartTime = BigWorld.time()
             _logger.debug('onLoadStart %s', self.__browser.url)
             self.onLoadStart(self.__browser.url)
             self.__readyToShow = False
@@ -599,18 +588,13 @@ class WebBrowser(object):
             return False
         return False if title.startswith('http://') or title.startswith('https://') else True
 
-    def __setUICursor(self, ui, cursorType):
-        if ui and cursorType:
-            ui.cursorMgr.setCursorForced(cursorType)
-
     def __onTitleChange(self, title):
         if self.__isValidTitle(title):
             _logger.debug('onTitleChange title: %s %s', title, self.__browser.url)
             self.onTitleChange(title)
 
-    def __onCursorUpdated(self):
-        if self.hasBrowser and self.isFocused:
-            self.__setUICursor(self.__ui(), self.__browser.script.cursorType)
+    def __onCursorUpdated(self, cursor):
+        self.onCursorUpdated(cursor)
 
     def __onReady(self, success):
         self.ready(success)
@@ -631,6 +615,12 @@ class WebBrowser(object):
         if levelEnum != LogSeverity.disable:
             _webAppLogger.log(_LOG_SEVERITY_TO_LOG_LEVEL_MAP[levelEnum], '%s, line %s, viewId %s: %s', source, lineNumber, viewId, message)
 
+    def __onChangeAddressBar(self, url):
+        self.onChangeAddressBar(url)
+
+    def __onResized(self, width, height):
+        self.onResized(width, height)
+
     def __onAudioStatusChanged(self, isPlaying):
         if self.__isAudioMutable:
             self.__isAudioPlaying = bool(isPlaying)
@@ -642,17 +632,9 @@ class WebBrowser(object):
 
 
 class EventListener(object):
-    cursorType = property(lambda self: self.__cursorType)
     isBrowserPlayingAudio = False
 
     def __init__(self, browser):
-        self.__cursorTypes = {CURSOR_TYPES.Hand: CursorManager.HAND,
-         CURSOR_TYPES.Pointer: CursorManager.ARROW,
-         CURSOR_TYPES.IBeam: CursorManager.IBEAM,
-         CURSOR_TYPES.Grab: CursorManager.DRAG_OPEN,
-         CURSOR_TYPES.Grabbing: CursorManager.DRAG_CLOSE,
-         CURSOR_TYPES.ColumnResize: CursorManager.MOVE}
-        self.__cursorType = None
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -665,9 +647,10 @@ class EventListener(object):
         self.onDestroy = Event(self.__eventMgr)
         self.onAudioStatusChanged = Event(self.__eventMgr)
         self.onConsoleMessage = Event(self.__eventMgr)
+        self.onChangeAddressBar = Event(self.__eventMgr)
+        self.onResized = Event(self.__eventMgr)
         self.__urlFailed = False
         self.__browserProxy = weakref.proxy(browser)
-        return
 
     def clear(self):
         self.__eventMgr.clear()
@@ -676,8 +659,7 @@ class EventListener(object):
         self.__urlFailed = False
 
     def onChangeCursor(self, cursorType):
-        self.__cursorType = self.__cursorTypes.get(cursorType) or CursorManager.ARROW
-        self.onCursorUpdated()
+        self.onCursorUpdated(cursorType)
 
     def onChangeTitle(self, title):
         _logger.debug('onChangeTitle %s', title)
@@ -750,9 +732,11 @@ class WebBrowserManager(object):
 
     def addBrowser(self, browser):
         self.__browsers.add(browser)
+        browser.onFocusChanged += self.__unFocusChanged
 
     def delBrowser(self, browser):
         self.__browsers.discard(browser)
+        browser.onFocusChanged -= self.__unFocusChanged
 
     def getBrowserPlayingAudioCount(self):
         count = 0
@@ -778,20 +762,14 @@ class WebBrowserManager(object):
             SoundGroups.g_instance.playSound2D('ue_master_mute' if isMute else 'ue_master_unmute')
             self.isBackgroundAudioMuted = isMute
 
+    def __unFocusChanged(self, browser, isFocused):
+        if isFocused:
+            for br in self.__browsers:
+                if browser != br:
+                    br.unfocus(True)
+
 
 g_mgr = WebBrowserManager()
-
-class FLASH_STRINGS(object):
-    BROWSER_DOWN = 'common.browserDown'
-    BROWSER_UP = 'common.browserUp'
-    BROWSER_MOVE = 'common.browserMove'
-    BROWSER_FOCUS_OUT = 'common.browserFocusOut'
-    BROWSER_ACTION = 'common.browserAction'
-    BROWSER_SHOW = 'common.browserShow'
-    BROWSER_HIDE = 'common.browserHide'
-    BROWSER_LOAD_START = 'common.browserLoadStart'
-    BROWSER_LOAD_END = 'common.browserLoadEnd'
-
 
 class LL_KEYS(object):
     VK_CANCEL = 3

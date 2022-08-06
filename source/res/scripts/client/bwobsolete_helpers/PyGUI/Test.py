@@ -28,7 +28,7 @@ class TestWindow(DraggableWindow):
         t = GUI.Text('Button Clicked!')
         t.colour = (255, 0, 0, 255)
         t.position.y = 0.85
-        t.verticalAnchor = 'TOP'
+        t.verticalAnchor = GUI.Simple.eVAnchor.TOP
         GUI.addRoot(t)
         BigWorld.callback(2.5, partial(_deleteComponent, t))
 

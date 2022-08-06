@@ -23,7 +23,7 @@ _ButtonData = namedtuple('_ButtonData', ['label',
 class _GUIItem(object):
     __slots__ = ('_name', '_topic', '_body', '_note', '_buttons', '_hidden')
 
-    def __init__(self, name, body, topic='', buttons=None, hidden=True):
+    def __init__(self, name, body, topic=u'', buttons=None, hidden=True):
         super(_GUIItem, self).__init__()
         self._name = name
         self._body = body
@@ -136,7 +136,7 @@ class PopUpItem(_GUIItem):
 class WindowItem(_GUIItem):
     __slots__ = ('_modal',)
 
-    def __init__(self, name, body, topic='', buttons=None, modal=False, hidden=True):
+    def __init__(self, name, body, topic=u'', buttons=None, modal=False, hidden=True):
         super(WindowItem, self).__init__(name, body, topic, buttons, hidden)
         self._modal = modal
 
@@ -179,7 +179,7 @@ class BrowserItem(_GUIItem):
     promoCtrl = dependency.descriptor(IPromoController)
     _CLOSE_CALLBACK_KEY = 'close_window'
 
-    def __init__(self, name, body, topic='', handlers=None, buttons=None, hidden=True):
+    def __init__(self, name, body, topic=u'', handlers=None, buttons=None, hidden=True):
         super(BrowserItem, self).__init__(name, body, topic, buttons, hidden)
         self._handlers = handlers
         if handlers:

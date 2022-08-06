@@ -141,7 +141,7 @@ class EpicGameNotificationsController(GameNotificationsController):
         TriggersManager.g_manager.delListener(self)
         g_playerEvents.onRoundFinished -= self.__onEpicRoundFinished
 
-    def __onEpicRoundFinished(self, winnerTeam, reason):
+    def __onEpicRoundFinished(self, winnerTeam, reason, extraData):
         EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
 
     def notify(self, messageID, data):

@@ -43,8 +43,8 @@ class ActionDisplay:
         f.transform = GUI.MatrixShader()
         f.transform.target = Math.Matrix()
         f.transform.target.setRotateX(1.57)
-        f.verticalAnchor = 'BOTTOM'
-        f.filterType = 'LINEAR'
+        f.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
+        f.filterType = GUI.Simple.eFilterType.LINEAR
         f.colour = [(92, 255, 92, 255), (255, 92, 92, 255)][red]
         f.size = (1.0, 5.0)
         tr = Math.Matrix()
@@ -155,9 +155,9 @@ class ActionDisplay:
     def addMatchedActionLabel(self):
         self.actionText.position = (-0.1, 0.0, 0.0)
         self.actionText.transform = GUI.MatrixShader()
-        self.actionText.filterType = 'LINEAR'
+        self.actionText.filterType = GUI.Simple.eFilterType.LINEAR
         self.actionText.font = 'Heading.font'
-        self.actionText.horizontalAnchor = 'RIGHT'
+        self.actionText.horizontalAnchor = GUI.Simple.eHAnchor.RIGHT
         rot = Math.Matrix()
         rot.setRotateX(1.57)
         sc = Math.Matrix()

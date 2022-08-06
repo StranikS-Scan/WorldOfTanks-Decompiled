@@ -5,8 +5,8 @@
   <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/14_siegfried_line/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
@@ -48,12 +48,12 @@
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-81 -415	</position>
-          <position>	179 -422	</position>
+          <position>	-81.000000 -415.000000	</position>
+          <position>	179.000000 -422.000000	</position>
         </team1>
         <team2>
-          <position>	-127 414	</position>
-          <position>	100 397	</position>
+          <position>	-127.000000 414.000000	</position>
+          <position>	100.000000 397.000000	</position>
         </team2>
       </teamSpawnPoints>
       <controlPoint>	334.886871 42.860889	</controlPoint>
@@ -62,17 +62,18 @@
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <teamSpawnPoints>
         <team1>
-          <position>	450.353 43.906	</position>
+          <position>	473.198914 79.617264	</position>
         </team1>
         <team2>
-          <position>	-190.664 270.832	</position>
-          <position>	-206.158 -300.038	</position>
+          <position>	-162.328323 376.266693	</position>
+          <position>	-162.891083 -354.182465	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	309.626465 53.368828	</position1>
+          <position1>	176.026001 4.788706	</position1>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault>
     <assault2>
@@ -80,17 +81,18 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	158.534 248.794	</position>
+          <position>	158.533997 248.794006	</position>
         </team1>
         <team2>
-          <position>	240.942 -397.861	</position>
+          <position>	240.942001 -397.860992	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-69.218742 4.509724	</position1>
+          <position1>	-69.218719 4.509724	</position1>
           <position2>	307.172729 43.119995	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
   </gameplayTypes>

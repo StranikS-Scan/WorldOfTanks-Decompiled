@@ -20,9 +20,6 @@ from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
-from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
-from uilogging.deprecated.ibc.constants import IBC_LOG_KEYS
-from uilogging.deprecated.ibc.loggers import IBCLogger
 _logger = logging.getLogger(__name__)
 _SHORTCUTS_IN_GROUP = 6
 Shortcut = namedtuple('Shortcut', ('title', 'action', 'icon', 'groups', 'bState', 'indexInGroup'))
@@ -139,7 +136,6 @@ def getKeyFromAction(action):
     return scaleFormKey
 
 
-@loggerTarget(logKey=IBC_LOG_KEYS.IBC_RADIAL_MENU, loggerCls=IBCLogger)
 class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
@@ -147,7 +143,6 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
 
     def __init__(self):
         super(RadialMenu, self).__init__()
-        IBCLogger.__init__(self)
         self.__crosshairData = None
         self.__stateData = None
         self.__isVisible = False
@@ -189,7 +184,6 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         if self.__isVisible:
             self.show()
 
-    @loggerEntry
     def show(self, reshowPreviousState=False):
         chatCommands = self.sessionProvider.shared.chatCommands
         if chatCommands is None:
@@ -218,7 +212,6 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
                 self.delayCallback(self._REFRESH_TIME_IN_SECONDS, self.__checkForTemporaryRespondUpdateLoop)
             return
 
-    @simpleLog(action='radial_menu_open')
     def hide(self, allowAction=True):
         if self.app is not None:
             self.app.unregisterGuiKeyHandler(self)

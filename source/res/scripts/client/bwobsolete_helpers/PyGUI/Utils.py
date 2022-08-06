@@ -28,7 +28,7 @@ def getVPixelScalar():
 
 
 def applyMapping(component, mappingType, mapping):
-    if mappingType == 'PIXEL':
+    if mappingType == GUI.Simple.eSizeMode.PIXEL:
         texture = component.texture
         if texture:
             clipMapping = [None,
@@ -85,8 +85,8 @@ def nearestRelativeParent(component, depth=0):
 def clipSize(component):
     horzMode = component.widthMode
     vertMode = component.heightMode
-    component.widthMode = 'CLIP'
-    component.heightMode = 'CLIP'
+    component.widthMode = GUI.Simple.eSizeMode.CLIP
+    component.heightMode = GUI.Simple.eSizeMode.CLIP
     width = component.width
     height = component.height
     component.widthMode = horzMode
@@ -97,8 +97,8 @@ def clipSize(component):
 def clipRegion(component):
     horzMode = component.widthMode
     vertMode = component.heightMode
-    component.widthMode = 'CLIP'
-    component.heightMode = 'CLIP'
+    component.widthMode = GUI.Simple.eSizeMode.CLIP
+    component.heightMode = GUI.Simple.eSizeMode.CLIP
     mins = component.localToScreen((-1.0, -1.0))
     maxs = component.localToScreen((+1.0, +1.0))
     component.widthMode = horzMode
@@ -109,8 +109,8 @@ def clipRegion(component):
 def pixelSize(component):
     horzMode = component.widthMode
     vertMode = component.heightMode
-    component.widthMode = 'PIXEL'
-    component.heightMode = 'PIXEL'
+    component.widthMode = GUI.Simple.eSizeMode.PIXEL
+    component.heightMode = GUI.Simple.eSizeMode.PIXEL
     width = component.width
     height = component.height
     component.widthMode = horzMode
@@ -122,8 +122,8 @@ def legacyPosition(component):
     p = Math.Vector3()
     horzMode = component.horizontalPositionMode
     vertMode = component.verticalPositionMode
-    component.horizontalPositionMode = 'LEGACY'
-    component.verticalPositionMode = 'LEGACY'
+    component.horizontalPositionMode = GUI.Simple.ePositionMode.LEGACY
+    component.verticalPositionMode = GUI.Simple.ePositionMode.LEGACY
     p = Math.Vector3(component.position)
     component.horizontalPositionMode = horzMode
     component.verticalPositionMode = vertMode
@@ -134,8 +134,8 @@ def clipPosition(component):
     p = Math.Vector3()
     horzMode = component.horizontalPositionMode
     vertMode = component.verticalPositionMode
-    component.horizontalPositionMode = 'CLIP'
-    component.verticalPositionMode = 'CLIP'
+    component.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+    component.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
     p = Math.Vector3(component.position)
     component.horizontalPositionMode = horzMode
     component.verticalPositionMode = vertMode
@@ -178,9 +178,9 @@ def containWithinRectangle(position, width, height, mins, maxs):
 def createTextWithBackground(text, font, bgcolour, fgcolour=(255, 255, 255, 255)):
     w = GUI.Window('system/maps/col_white.bmp')
     w.colour = bgcolour
-    w.materialFX = 'BLEND'
-    w.widthMode = 'PIXEL'
-    w.heightMode = 'PIXEL'
+    w.materialFX = GUI.Simple.eMaterialFX.BLEND
+    w.widthMode = GUI.Simple.eSizeMode.PIXEL
+    w.heightMode = GUI.Simple.eSizeMode.PIXEL
     t = GUI.Text(text)
     t.font = font
     t.colour = fgcolour
@@ -292,13 +292,13 @@ class BlinkingCursor(object):
 
     def __init__(self):
         self.comp = GUI.Simple('system/maps/col_white.bmp')
-        self.comp.materialFX = 'BLEND'
-        self.comp.widthMode = 'PIXEL'
-        self.comp.heightMode = 'CLIP'
+        self.comp.materialFX = GUI.Simple.eMaterialFX.BLEND
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.heightMode = GUI.Simple.eSizeMode.CLIP
         self.comp.width = CURSOR_WIDTH * getHPixelScalar()
         self.comp.height = 1.5
-        self.comp.horizontalPositionMode = 'PIXEL'
-        self.comp.horizontalAnchor = 'LEFT'
+        self.comp.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
         self.comp.position.x = 0
         self.comp.position.z = 0.25
         self.comp.blinker = GUI.ColourShader()

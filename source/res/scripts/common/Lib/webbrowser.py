@@ -285,11 +285,10 @@ class Chrome(UnixBrowser):
 Chromium = Chrome
 
 class Opera(UnixBrowser):
-    raise_opts = ['-noraise', '']
-    remote_args = ['-remote', 'openURL(%s%action)']
+    remote_args = ['%action', '%s']
     remote_action = ''
-    remote_action_newwin = ',new-window'
-    remote_action_newtab = ',new-page'
+    remote_action_newwin = '--new-window'
+    remote_action_newtab = ''
     background = True
 
 
@@ -510,6 +509,7 @@ if sys.platform == 'darwin':
 
     register('safari', None, MacOSXOSAScript('safari'), -1)
     register('firefox', None, MacOSXOSAScript('firefox'), -1)
+    register('chrome', None, MacOSXOSAScript('chrome'), -1)
     register('MacOSX', None, MacOSXOSAScript('default'), -1)
 if sys.platform[:3] == 'os2' and _iscommand('netscape'):
     _tryorder = []

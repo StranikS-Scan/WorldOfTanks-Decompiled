@@ -21,7 +21,7 @@ def _make_ext_name(modname):
     return modname + sysconfig.get_config_var('SO')
 
 
-class InstallTestCase(support.TempdirManager, support.LoggingSilencer, unittest.TestCase):
+class InstallTestCase(support.TempdirManager, support.EnvironGuard, support.LoggingSilencer, unittest.TestCase):
 
     def test_home_installation_scheme(self):
         builddir = self.mkdtemp()

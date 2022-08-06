@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/doc_loaders/surveys_loader.py
 from collections import namedtuple
 import logging
-from gui.mapbox.mapbox_survey_helper import Condition, QuantifierTypes, AlternativeQuestion, getQuestionClass
+from gui.mapbox.mapbox_survey_helper import Condition, QuantifierTypes, AlternativeOneManyQuestion, AlternativeQuestion, getQuestionClass
 import resource_helper
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -84,7 +84,9 @@ def _readQuestion(questionSection, questionTypes):
 
 def _readAlternativeQuestion(questionSection, questionTypes, qId):
     alternativeQuestions = [ _readQuestion(variant, questionTypes) for variant in questionSection['alternatives'].values() ]
-    return AlternativeQuestion(questionId=qId, alternatives=alternativeQuestions)
+    isSynchronizedAnswers = questionSection.readBool('synchronizeAnswers')
+    clz = AlternativeOneManyQuestion if isSynchronizedAnswers else AlternativeQuestion
+    return clz(questionId=qId, alternatives=alternativeQuestions, isSynchronizedAnswers=isSynchronizedAnswers)
 
 
 def _readSurveys():

@@ -99,8 +99,12 @@ def check_environ():
     if _environ_checked:
         return
     if os.name == 'posix' and 'HOME' not in os.environ:
-        import pwd
-        os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
+        try:
+            import pwd
+            os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
+        except (ImportError, KeyError):
+            pass
+
     if 'PLAT' not in os.environ:
         os.environ['PLAT'] = get_platform()
     _environ_checked = 1

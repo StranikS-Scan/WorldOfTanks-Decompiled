@@ -14,7 +14,7 @@ class TextWithWarning(ViewImpl):
     __slots__ = ()
 
     def __init__(self, mainText, warningText=None):
-        settings = ViewSettings(R.views.lobby.battle_royale.dialogs.sub_views.content.TextWithWarning())
+        settings = ViewSettings(R.views.dialogs.sub_views.content.TextWithWarning())
         settings.model = TextWithWarningViewModel()
         settings.kwargs = {'mainText': mainText,
          'warningText': warningText}

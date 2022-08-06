@@ -63,7 +63,7 @@ class _PopUpParser(SectionParser):
         if priority not in WGNC_POP_UP_PRIORITIES:
             LOG_WARNING('Priority of pop up is not valid, uses default priority', priority)
             priority = 'medium'
-        topic = formatText(section.readString('topic', ''))
+        topic = formatText(section.readWideString('topic', u''))
         icon = section.readString('icon', '')
         bg = section.readString('bg', '')
         group = section.readString('group', 'info')
@@ -120,7 +120,7 @@ class _BrowserParser(SectionParser):
             handlers = sub.parse(section[sub.getTagName()])
         else:
             handlers = None
-        return gui_items.BrowserItem(name=self._readString('name', section), body=self._readString('href', section), handlers=handlers, hidden=section.readBool('hidden', True), topic=section.readString('topic', ''))
+        return gui_items.BrowserItem(name=self._readString('name', section), body=self._readString('href', section), handlers=handlers, hidden=section.readBool('hidden', True), topic=section.readWideString('topic', u''))
 
 
 class _GUIItemsParser(ParsersCollection):

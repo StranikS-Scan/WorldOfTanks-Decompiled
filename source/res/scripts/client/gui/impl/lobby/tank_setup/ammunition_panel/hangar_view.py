@@ -12,7 +12,6 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IUISpamController
-from uilogging.veh_post_progression.loggers import VehPostProgressionSpecSlotLogger
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN,
  OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT: UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN}
@@ -20,7 +19,6 @@ _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _uiSpamController = dependency.descriptor(IUISpamController)
-    _uiLogger = VehPostProgressionSpecSlotLogger()
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -47,14 +45,6 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
             if showHint and not self._uiSpamController.shouldBeHidden(hintName):
                 serverSettings.setOnceOnlyHintsSettings({hintName: True})
                 serverSettings.saveInUIStorage({uiStorage: True})
-
-    def _initialize(self, *args, **kwargs):
-        super(HangarAmmunitionPanelView, self)._initialize(*args, **kwargs)
-        self._uiLogger.initialize()
-
-    def _finalize(self):
-        super(HangarAmmunitionPanelView, self)._finalize()
-        self._uiLogger.reset()
 
     @async
     def _onPanelSectionSelected(self, args):

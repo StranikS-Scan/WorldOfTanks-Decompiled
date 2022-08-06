@@ -952,13 +952,16 @@ _Padding = namedtuple('_Padding', ('left', 'top', 'right', 'bottom'))
 def parseHint(xmlCtx, section):
     sectionInfo = dict()
     sectionInfo['hintID'] = parseID(xmlCtx, section, 'Specify a hint ID')
-    if 'item-id' in section.keys():
+    tags = section.keys()
+    if 'item-id' in tags:
         sectionInfo['itemID'] = parseID(xmlCtx, section['item-id'], 'Specify a item ID')
     else:
         _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a item ID')
         return
-    tags = section.keys()
-    sectionInfo['text'] = translation(_xml.readString(xmlCtx, section, 'text'))
+    if 'text' in tags:
+        sectionInfo['text'] = translation(_xml.readString(xmlCtx, section, 'text'))
+    else:
+        sectionInfo['text'] = ''
     if 'arrow' in tags:
         subSec = section['arrow']
         direction = _xml.readString(xmlCtx, subSec, 'direction')

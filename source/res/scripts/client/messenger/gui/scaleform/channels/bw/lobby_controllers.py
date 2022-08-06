@@ -9,7 +9,6 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import AutoInviteTextFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent, AutoInviteEvent
-from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.gui import events_dispatcher
@@ -135,7 +134,7 @@ class LazyChannelController(_ChannelController):
     def __exitFromLazyChannel(self):
         self.__exitCallbackID = None
         if self._channel and self._channel.isJoined():
-            LOG_DEBUG('Send request to exit from lazy channel', i18n.encodeUtf8(self._channel.getName()))
+            LOG_DEBUG('Send request to exit from lazy channel', self._channel.getName())
             self.exit()
         return
 

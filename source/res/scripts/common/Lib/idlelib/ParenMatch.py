@@ -114,3 +114,8 @@ class ParenMatch:
     def set_timeout_last(self):
         self.counter += 1
         self.editwin.text_frame.after(self.FLASH_DELAY, lambda self=self, c=self.counter: self.handle_restore_timer(c))
+
+
+if __name__ == '__main__':
+    import unittest
+    unittest.main('idlelib.idle_test.test_parenmatch', verbosity=2)

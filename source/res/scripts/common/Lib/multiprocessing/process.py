@@ -56,6 +56,9 @@ class Process(object):
         else:
             from .forking import Popen
         self._popen = Popen(self)
+        del self._target
+        del self._args
+        del self._kwargs
         _current_process._children.add(self)
         return
 
@@ -74,8 +77,12 @@ class Process(object):
         elif self._popen is None:
             return False
         else:
-            self._popen.poll()
-            return self._popen.returncode is None
+            returncode = self._popen.poll()
+            if returncode is None:
+                return True
+            _current_process._children.discard(self)
+            return False
+            return
 
     @property
     def name(self):
@@ -125,7 +132,7 @@ class Process(object):
             status = self.exitcode
         else:
             status = 'started'
-        if type(status) is int:
+        if type(status) in (int, long):
             if status == 0:
                 status = 'stopped'
             else:
@@ -160,8 +167,8 @@ class Process(object):
         except SystemExit as e:
             if not e.args:
                 exitcode = 1
-            elif isinstance(e.args[0], int):
-                exitcode = e.args[0]
+            elif isinstance(e.args[0], (int, long)):
+                exitcode = int(e.args[0])
             else:
                 sys.stderr.write(str(e.args[0]) + '\n')
                 sys.stderr.flush()

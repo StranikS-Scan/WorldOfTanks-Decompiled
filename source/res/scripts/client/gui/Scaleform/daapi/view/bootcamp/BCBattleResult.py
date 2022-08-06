@@ -16,8 +16,7 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from PlayerEvents import g_playerEvents
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
-from uilogging.bootcamp.constants import BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.decorators import loggerTarget, loggerEntry, simpleLog
 from uilogging.deprecated.bootcamp.constants import BC_LOG_ACTIONS as DEPRECATED_BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
 from uilogging.deprecated.bootcamp.loggers import BootcampUILogger
@@ -132,7 +131,7 @@ class BCBattleResult(BCBattleResultMeta):
     def __setBattleResults(self):
         vo = self.battleResults.getResultsVO(self.__arenaUniqueID)
         self.as_setDataS(vo)
-        self.uiBootcampLogger.log(action=BCLogActions.SHOW.value, finishReason=vo.get('finishReason', None))
+        self.uiBootcampLogger.log(action=DEPRECATED_BC_LOG_ACTIONS.SHOW, finishReason=vo.get('finishReason', None))
         self.__hasShowRewards = vo['showRewards']
         self.__hasBonusInMedals = vo['hasUnlocks']
         self.__hasBonusInStats = vo['xp']['value'] > 0 or vo['credits']['value'] > 0

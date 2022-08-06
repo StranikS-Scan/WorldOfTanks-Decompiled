@@ -243,8 +243,6 @@ class BrBattleResultsViewInLobby(ViewImpl):
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
             battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
         battlePassModel.setBattlePassState(state)
-        if chapterID:
-            battlePassModel.setFinalReward(self.__battlePassController.getRewardType(chapterID).value)
 
     def __setLeaderboard(self, leaderboardModel):
         leaderboard = self.__data.get(BRSections.LEADERBOARD)

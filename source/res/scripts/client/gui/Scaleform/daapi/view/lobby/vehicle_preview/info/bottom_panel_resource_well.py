@@ -10,7 +10,6 @@ from gui.shared.event_dispatcher import showResourcesLoadingWindow
 from helpers import dependency
 from skeletons.gui.game_control import IResourceWellController
 from tutorial.control.game_vars import getVehicleByIntCD
-from uilogging.resource_well.constants import ParentScreens
 
 class VehiclePreviewBottomPanelResourceWell(VehiclePreviewBottomPanelWellMeta):
 
@@ -45,7 +44,7 @@ class _ResourceWellPanelView(ViewImpl):
         return ((self.viewModel.onAction, self.__showResourcesLoading), (self.__resourceWell.onNumberRequesterUpdated, self.__onNumberRequesterUpdated))
 
     def __showResourcesLoading(self):
-        showResourcesLoadingWindow(ParentScreens.VEHICLE_PREVIEW)
+        showResourcesLoadingWindow()
 
     def __updateModel(self):
         resourceWell = self.__resourceWell

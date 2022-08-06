@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/Lib/sqlite3/test/factory.py
 import unittest
 import sqlite3 as sqlite
+from collections import Sequence
 
 class MyConnection(sqlite.Connection):
 
@@ -45,8 +46,18 @@ class CursorFactoryTests(unittest.TestCase):
         self.con.close()
 
     def CheckIsInstance(self):
-        cur = self.con.cursor(factory=MyCursor)
+        cur = self.con.cursor()
+        self.assertIsInstance(cur, sqlite.Cursor)
+        cur = self.con.cursor(MyCursor)
         self.assertIsInstance(cur, MyCursor)
+        cur = self.con.cursor(factory=lambda con: MyCursor(con))
+        self.assertIsInstance(cur, MyCursor)
+
+    def CheckInvalidFactory(self):
+        self.assertRaises(TypeError, self.con.cursor, None)
+        self.assertRaises(TypeError, self.con.cursor, lambda : None)
+        self.assertRaises(TypeError, self.con.cursor, lambda con: None)
+        return
 
 
 class RowFactoryTestsBackwardsCompat(unittest.TestCase):
@@ -85,9 +96,26 @@ class RowFactoryTests(unittest.TestCase):
         col1, col2 = row['A'], row['B']
         self.assertEqual(col1, 1, "by name: wrong result for column 'A'")
         self.assertEqual(col2, 2, "by name: wrong result for column 'B'")
-        col1, col2 = row[0], row[1]
-        self.assertEqual(col1, 1, 'by index: wrong result for column 0')
-        self.assertEqual(col2, 2, 'by index: wrong result for column 1')
+        self.assertEqual(row[0], 1, 'by index: wrong result for column 0')
+        self.assertEqual(row[0L], 1, 'by index: wrong result for column 0')
+        self.assertEqual(row[1], 2, 'by index: wrong result for column 1')
+        self.assertEqual(row[1L], 2, 'by index: wrong result for column 1')
+        self.assertEqual(row[-1], 2, 'by index: wrong result for column -1')
+        self.assertEqual(row[-1L], 2, 'by index: wrong result for column -1')
+        self.assertEqual(row[-2], 1, 'by index: wrong result for column -2')
+        self.assertEqual(row[-2L], 1, 'by index: wrong result for column -2')
+        with self.assertRaises(IndexError):
+            row['c']
+        with self.assertRaises(IndexError):
+            row[2]
+        with self.assertRaises(IndexError):
+            row[2L]
+        with self.assertRaises(IndexError):
+            row[-3]
+        with self.assertRaises(IndexError):
+            row[-3L]
+        with self.assertRaises(IndexError):
+            row[10715086071862673209484250490600018105614048117055336074437503883703510511249361224931983788156958581275946729175531468251871452856923140435984577574698574803934567774824230985421074605062371141877954182153046474983581941267398767559165543946077062914571196477686542167660429831652624386837205668069376L]
 
     def CheckSqliteRowIter(self):
         self.con.row_factory = sqlite.Row
@@ -113,16 +141,37 @@ class RowFactoryTests(unittest.TestCase):
         row_1 = self.con.execute('select 1 as a, 2 as b').fetchone()
         row_2 = self.con.execute('select 1 as a, 2 as b').fetchone()
         row_3 = self.con.execute('select 1 as a, 3 as b').fetchone()
-        self.assertEqual(row_1, row_1)
-        self.assertEqual(row_1, row_2)
-        self.assertTrue(row_2 != row_3)
+        row_4 = self.con.execute('select 1 as b, 2 as a').fetchone()
+        row_5 = self.con.execute('select 2 as b, 1 as a').fetchone()
+        self.assertTrue(row_1 == row_1)
+        self.assertTrue(row_1 == row_2)
+        self.assertFalse(row_1 == row_3)
+        self.assertFalse(row_1 == row_4)
+        self.assertFalse(row_1 == row_5)
+        self.assertFalse(row_1 == object())
         self.assertFalse(row_1 != row_1)
         self.assertFalse(row_1 != row_2)
-        self.assertFalse(row_2 == row_3)
-        self.assertEqual(row_1, row_2)
+        self.assertTrue(row_1 != row_3)
+        self.assertTrue(row_1 != row_4)
+        self.assertTrue(row_1 != row_5)
+        self.assertTrue(row_1 != object())
         self.assertEqual(hash(row_1), hash(row_2))
-        self.assertNotEqual(row_1, row_3)
-        self.assertNotEqual(hash(row_1), hash(row_3))
+
+    def CheckSqliteRowAsSequence(self):
+        self.con.row_factory = sqlite.Row
+        row = self.con.execute('select 1 as a, 2 as b').fetchone()
+        as_tuple = tuple(row)
+        self.assertEqual(list(reversed(row)), list(reversed(as_tuple)))
+        self.assertIsInstance(row, Sequence)
+
+    def CheckFakeCursorClass(self):
+
+        class FakeCursor(str):
+            __class__ = sqlite.Cursor
+
+        self.con.row_factory = sqlite.Row
+        self.assertRaises(TypeError, self.con.cursor, FakeCursor)
+        self.assertRaises(TypeError, sqlite.Row, FakeCursor(), ())
 
     def tearDown(self):
         self.con.close()

@@ -92,7 +92,7 @@ def time2netscape(t=None):
     if t is None:
         t = time.time()
     year, mon, mday, hour, min, sec, wday = time.gmtime(t)[:7]
-    return '%s %02d-%s-%04d %02d:%02d:%02d GMT' % (DAYS[wday],
+    return '%s, %02d-%s-%04d %02d:%02d:%02d GMT' % (DAYS[wday],
      mday,
      MONTHS[mon - 1],
      year,
@@ -178,7 +178,7 @@ def _str2time(day, mon, yr, hr, min, sec, tz):
 
 STRICT_DATE_RE = re.compile('^[SMTWF][a-z][a-z], (\\d\\d) ([JFMASOND][a-z][a-z]) (\\d\\d\\d\\d) (\\d\\d):(\\d\\d):(\\d\\d) GMT$')
 WEEKDAY_RE = re.compile('^(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*,?\\s*', re.I)
-LOOSE_HTTP_DATE_RE = re.compile('^\n    (\\d\\d?)            # day\n       (?:\\s+|[-\\/])\n    (\\w+)              # month\n        (?:\\s+|[-\\/])\n    (\\d+)              # year\n    (?:\n          (?:\\s+|:)    # separator before clock\n       (\\d\\d?):(\\d\\d)  # hour:min\n       (?::(\\d\\d))?    # optional seconds\n    )?                 # optional clock\n       \\s*\n    ([-+]?\\d{2,4}|(?![APap][Mm]\\b)[A-Za-z]+)? # timezone\n       \\s*\n    (?:\\(\\w+\\))?       # ASCII representation of timezone in parens.\n       \\s*$', re.X)
+LOOSE_HTTP_DATE_RE = re.compile('^\n    (\\d\\d?)            # day\n       (?:\\s+|[-\\/])\n    (\\w+)              # month\n        (?:\\s+|[-\\/])\n    (\\d+)              # year\n    (?:\n          (?:\\s+|:)    # separator before clock\n       (\\d\\d?):(\\d\\d)  # hour:min\n       (?::(\\d\\d))?    # optional seconds\n    )?                 # optional clock\n       \\s*\n    (?:\n       ([-+]?\\d{2,4}|(?![APap][Mm]\\b)[A-Za-z]+) # timezone\n       \\s*\n    )?\n    (?:\n       \\(\\w+\\)         # ASCII representation of timezone in parens.\n       \\s*\n    )?$', re.X)
 
 def http2time(text):
     m = STRICT_DATE_RE.search(text)
@@ -204,7 +204,7 @@ def http2time(text):
         return _str2time(day, mon, yr, hr, min, sec, tz)
 
 
-ISO_DATE_RE = re.compile('^\n    (\\d{4})              # year\n       [-\\/]?\n    (\\d\\d?)              # numerical month\n       [-\\/]?\n    (\\d\\d?)              # day\n   (?:\n         (?:\\s+|[-:Tt])  # separator before clock\n      (\\d\\d?):?(\\d\\d)    # hour:min\n      (?::?(\\d\\d(?:\\.\\d*)?))?  # optional seconds (and fractional)\n   )?                    # optional clock\n      \\s*\n   ([-+]?\\d\\d?:?(:?\\d\\d)?\n    |Z|z)?               # timezone  (Z is "zero meridian", i.e. GMT)\n      \\s*$', re.X)
+ISO_DATE_RE = re.compile('^\n    (\\d{4})              # year\n       [-\\/]?\n    (\\d\\d?)              # numerical month\n       [-\\/]?\n    (\\d\\d?)              # day\n   (?:\n         (?:\\s+|[-:Tt])  # separator before clock\n      (\\d\\d?):?(\\d\\d)    # hour:min\n      (?::?(\\d\\d(?:\\.\\d*)?))?  # optional seconds (and fractional)\n   )?                    # optional clock\n      \\s*\n   (?:\n      ([-+]?\\d\\d?:?(:?\\d\\d)?\n       |Z|z)             # timezone  (Z is "zero meridian", i.e. GMT)\n      \\s*\n   )?$', re.X)
 
 def iso2time(text):
     text = text.lstrip()
@@ -299,25 +299,28 @@ def parse_ns_headers(ns_headers):
     for ns_header in ns_headers:
         pairs = []
         version_set = False
-        for ii, param in enumerate(re.split(';\\s*', ns_header)):
-            param = param.rstrip()
-            if param == '':
-                continue
-            if '=' not in param:
-                k, v = param, None
-            else:
-                k, v = re.split('\\s*=\\s*', param, 1)
-                k = k.lstrip()
+        for ii, param in enumerate(ns_header.split(';')):
+            param = param.strip()
+            key, sep, val = param.partition('=')
+            key = key.strip()
+            if not key:
+                if ii == 0:
+                    break
+                else:
+                    continue
+            val = val.strip() if sep else None
             if ii != 0:
-                lc = k.lower()
+                lc = key.lower()
                 if lc in known_attrs:
-                    k = lc
-                if k == 'version':
-                    v = _strip_quotes(v)
+                    key = lc
+                if key == 'version':
+                    if val is not None:
+                        val = _strip_quotes(val)
                     version_set = True
-                if k == 'expires':
-                    v = http2time(_strip_quotes(v))
-            pairs.append((k, v))
+                elif key == 'expires':
+                    if val is not None:
+                        val = http2time(_strip_quotes(val))
+            pairs.append((key, val))
 
         if pairs:
             if not version_set:
@@ -626,7 +629,7 @@ class DefaultCookiePolicy(CookiePolicy):
     def set_ok_path(self, cookie, request):
         if cookie.path_specified:
             req_path = request_path(request)
-            if (cookie.version > 0 or cookie.version == 0 and self.strict_ns_set_path) and not req_path.startswith(cookie.path):
+            if (cookie.version > 0 or cookie.version == 0 and self.strict_ns_set_path) and not self.path_return_ok(cookie.path, request):
                 _debug('   path attribute %s is not a prefix of request path %s', cookie.path, req_path)
                 return False
         return True
@@ -753,13 +756,17 @@ class DefaultCookiePolicy(CookiePolicy):
     def return_ok_domain(self, cookie, request):
         req_host, erhn = eff_request_host(request)
         domain = cookie.domain
+        if domain and not domain.startswith('.'):
+            dotdomain = '.' + domain
+        else:
+            dotdomain = domain
         if cookie.version == 0 and self.strict_ns_domain & self.DomainStrictNonDomain and not cookie.domain_specified and domain != erhn:
             _debug('   cookie with unspecified domain does not string-compare equal to request domain')
             return False
         if cookie.version > 0 and not domain_match(erhn, domain):
             _debug('   effective request-host name %s does not domain-match RFC 2965 cookie domain %s', erhn, domain)
             return False
-        if cookie.version == 0 and not ('.' + erhn).endswith(domain):
+        if cookie.version == 0 and not ('.' + erhn).endswith(dotdomain):
             _debug('   request-host %s does not match Netscape cookie domain %s', req_host, domain)
             return False
         return True
@@ -770,7 +777,11 @@ class DefaultCookiePolicy(CookiePolicy):
             req_host = '.' + req_host
         if not erhn.startswith('.'):
             erhn = '.' + erhn
-        if not (req_host.endswith(domain) or erhn.endswith(domain)):
+        if domain and not domain.startswith('.'):
+            dotdomain = '.' + domain
+        else:
+            dotdomain = domain
+        if not (req_host.endswith(dotdomain) or erhn.endswith(dotdomain)):
             return False
         if self.is_blocked(domain):
             _debug('   domain %s is in user block-list', domain)
@@ -783,10 +794,13 @@ class DefaultCookiePolicy(CookiePolicy):
     def path_return_ok(self, path, request):
         _debug('- checking cookie path=%s', path)
         req_path = request_path(request)
-        if not req_path.startswith(path):
-            _debug('  %s does not path-match %s', req_path, path)
-            return False
-        return True
+        pathlen = len(path)
+        if req_path == path:
+            return True
+        if req_path.startswith(path) and (path.endswith('/') or req_path[pathlen:pathlen + 1] == '/'):
+            return True
+        _debug('  %s does not path-match %s', req_path, path)
+        return False
 
 
 def vals_sorted_by_key(adict):
@@ -1182,14 +1196,14 @@ class CookieJar():
         for cookie in self:
             r.append(repr(cookie))
 
-        return '<%s[%s]>' % (self.__class__, ', '.join(r))
+        return '<%s[%s]>' % (self.__class__.__name__, ', '.join(r))
 
     def __str__(self):
         r = []
         for cookie in self:
             r.append(str(cookie))
 
-        return '<%s[%s]>' % (self.__class__, ', '.join(r))
+        return '<%s[%s]>' % (self.__class__.__name__, ', '.join(r))
 
 
 class LoadError(IOError):

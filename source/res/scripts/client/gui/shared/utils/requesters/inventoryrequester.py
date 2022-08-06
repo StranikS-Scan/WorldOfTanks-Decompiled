@@ -9,6 +9,7 @@ from adisp import async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from debug_utils import LOG_DEBUG
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
+from items.components.c11n_components import C11N_PROGRESS_LEVEL_IDX, C11N_PROGRESS_PROGRESS_IDX, C11N_PROGRESS_VALUE_IDX
 from items.components.c11n_constants import UNBOUND_VEH_KEY
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
@@ -429,7 +430,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         if itemData is not None:
             c11nProgressionData = {}
             for vehicleIntCD, vehData in itemData.iteritems():
-                progressionData = self.CUSTOMIZATION_PROGRESS_DATA(currentLevel=vehData['level'], currentProgressOnLevel=vehData['progress'], maxProgressOnLevel=vehData['value'])
+                progressionData = self.CUSTOMIZATION_PROGRESS_DATA(currentLevel=vehData[C11N_PROGRESS_LEVEL_IDX], currentProgressOnLevel=vehData[C11N_PROGRESS_PROGRESS_IDX], maxProgressOnLevel=vehData[C11N_PROGRESS_VALUE_IDX])
                 c11nProgressionData[vehicleIntCD] = progressionData
                 self.__c11nProgressionForVehicle.setdefault(vehicleIntCD, {})[itemIntCD] = progressionData
 

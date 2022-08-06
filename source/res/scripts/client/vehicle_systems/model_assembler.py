@@ -18,7 +18,7 @@ import math_utils
 from helpers import DecalMap
 from items.components import shared_components, component_constants
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
-from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames
+from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames, TankSoundObjectsIndexes
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
 _logger = logging.getLogger(__name__)
 DEFAULT_MAX_LOD_PRIORITY = None
@@ -449,6 +449,7 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
         if hullNode is None:
             return
         suspensionSound = appearance.createComponent(Vehicular.SuspensionSound, appearance.id)
+        suspensionSound.setSoundObject(appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.CHASSIS))
         for sound in suspensionSoundParams.sounds:
             if isPlayer:
                 suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.PC, sound.overLimitSounds.PC)

@@ -618,13 +618,18 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             return
         self.__profTechSelectBattlesTypeInited = False
 
+    @process
     def __onSelectVehicleInHangar(self, event):
         if not self.isBattleRoyaleMode():
             return
         vehicleInvID = event.ctx['vehicleInvID']
+        prevVehicleInvID = event.ctx['prevVehicleInvID']
         vehicle = self.__itemsCache.items.getVehicle(vehicleInvID)
         if vehicle and not isBattleRoyale(vehicle.tags):
-            self.selectRandomBattle()
+            dispatcher = g_prbLoader.getDispatcher()
+            result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+            if not result and self.isEnabled():
+                g_currentVehicle.selectVehicle(prevVehicleInvID)
 
     def __clear(self):
         self.stopNotification()

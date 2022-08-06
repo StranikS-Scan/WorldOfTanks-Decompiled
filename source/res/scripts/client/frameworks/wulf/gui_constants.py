@@ -135,3 +135,8 @@ class DateFormatType(CONST_CONTAINER):
 class CaseType(CONST_CONTAINER):
     UPPERCASE = 0
     LOWERCASE = 1
+
+
+class ChildFlags(CONST_CONTAINER):
+    EMPTY = 0
+    AUTO_DESTROY = 1

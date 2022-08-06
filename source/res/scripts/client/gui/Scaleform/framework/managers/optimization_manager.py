@@ -64,6 +64,7 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
         return optimizationID
 
     def unregisterOptimizationArea(self, optimizationID):
+        optimizationID = int(optimizationID)
         if optimizationID in self.__cache:
             self.__cache.pop(optimizationID)
             self.__optimizer.unregisterRect(optimizationID)
@@ -71,6 +72,7 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
             LOG_ERROR('Graphics optimization ID is not found', optimizationID)
 
     def updateOptimizationArea(self, optimizationID, x, y, width, height):
+        optimizationID = int(optimizationID)
         if optimizationID in self.__cache:
             bounds = _getRectBounds(x, y, width, height)
             oldBounds = self.__cache[optimizationID]

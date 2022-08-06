@@ -19,15 +19,19 @@ class Textbox:
     def __init__(self, win, insert_mode=False):
         self.win = win
         self.insert_mode = insert_mode
-        self.maxy, self.maxx = win.getmaxyx()
-        self.maxy = self.maxy - 1
-        self.maxx = self.maxx - 1
+        self._update_max_yx()
         self.stripspaces = 1
         self.lastcmd = None
         win.keypad(1)
         return
 
+    def _update_max_yx(self):
+        maxy, maxx = self.win.getmaxyx()
+        self.maxy = maxy - 1
+        self.maxx = maxx - 1
+
     def _end_of_line(self, y):
+        self._update_max_yx()
         last = self.maxx
         while True:
             if curses.ascii.ascii(self.win.inch(y, last)) != curses.ascii.SP:
@@ -40,8 +44,10 @@ class Textbox:
         return last
 
     def _insert_printable_char(self, ch):
+        self._update_max_yx()
         y, x = self.win.getyx()
-        if y < self.maxy or x < self.maxx:
+        backyx = None
+        while y < self.maxy or x < self.maxx:
             if self.insert_mode:
                 oldch = self.win.inch()
             try:
@@ -49,13 +55,19 @@ class Textbox:
             except curses.error:
                 pass
 
-            if self.insert_mode:
-                backy, backx = self.win.getyx()
-                if curses.ascii.isprint(oldch):
-                    self._insert_printable_char(oldch)
-                    self.win.move(backy, backx)
+            if not self.insert_mode or not curses.ascii.isprint(oldch):
+                break
+            ch = oldch
+            y, x = self.win.getyx()
+            if backyx is None:
+                backyx = (y, x)
+
+        if backyx is not None:
+            self.win.move(*backyx)
+        return
 
     def do_command(self, ch):
+        self._update_max_yx()
         y, x = self.win.getyx()
         self.lastcmd = ch
         if curses.ascii.isprint(ch):
@@ -122,6 +134,7 @@ class Textbox:
 
     def gather(self):
         result = ''
+        self._update_max_yx()
         for y in range(self.maxy + 1):
             self.win.move(y, 0)
             stop = self._end_of_line(y)

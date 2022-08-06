@@ -349,6 +349,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         self.set_burnoutUnavailable()
         self.set_isOtherVehicleDamagedDevicesVisible()
         self.set_overturnLevel()
+        self.set_drownLevel()
         self.set_smokeInfo()
         self.set_targetVehicleID()
         self.set_targetingInfo()

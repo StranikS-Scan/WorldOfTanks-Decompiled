@@ -135,3 +135,12 @@ class ICustomizationService(object):
     @staticmethod
     def removeAdditionalProgressionData(outfit, style, vehCD, season):
         raise NotImplementedError
+
+    def getQuestsForProgressionItem(self, itemCD):
+        raise NotImplementedError
+
+    def getItemCDByQuestID(self, eventID):
+        raise NotImplementedError
+
+    def isProgressionQuests(self, eventID):
+        raise NotImplementedError

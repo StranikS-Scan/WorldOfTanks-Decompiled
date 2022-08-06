@@ -256,7 +256,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
                 self.__configIsOld = False
         if not diff.get('isMapsTrainingEnabled', True):
             if self.isMapsTrainingPrbActive and not self.prbEntity.isInQueue():
-                self.selectRandomMode()
+                BigWorld.callback(0, self.selectRandomMode)
 
     def __onDisconnected(self):
         self.__preferences.resetSessionFilters()

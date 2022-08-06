@@ -35,10 +35,7 @@ class ChapterConfirm(ViewImpl):
         super(ChapterConfirm, self)._onLoading()
         with self.viewModel.transaction() as model:
             model.setPrevChapter(self.__prevChapterID)
-            if self.__prevChapterID:
-                model.setPrevFinalReward(self.__battlePass.getRewardType(self.__prevChapterID).value)
             model.setNextChapter(self.__nextChapterID)
-            model.setNextFinalReward(self.__battlePass.getRewardType(self.__nextChapterID).value)
 
 
 class ActivateChapterConfirmDialog(DialogTemplateView):

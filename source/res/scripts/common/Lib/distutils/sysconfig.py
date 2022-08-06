@@ -8,7 +8,10 @@ import sys
 from distutils.errors import DistutilsPlatformError
 PREFIX = os.path.normpath(sys.prefix)
 EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
-project_base = os.path.dirname(os.path.abspath(sys.executable))
+if sys.executable:
+    project_base = os.path.dirname(os.path.abspath(sys.executable))
+else:
+    project_base = os.getcwd()
 if os.name == 'nt' and 'pcbuild' in project_base[-8:].lower():
     project_base = os.path.abspath(os.path.join(project_base, os.path.pardir))
 if os.name == 'nt' and '\\pc\\v' in project_base[-10:].lower():
@@ -37,7 +40,10 @@ def get_python_inc(plat_specific=0, prefix=None):
         prefix = plat_specific and EXEC_PREFIX or PREFIX
     if os.name == 'posix':
         if python_build:
-            buildir = os.path.dirname(sys.executable)
+            if sys.executable:
+                buildir = os.path.dirname(sys.executable)
+            else:
+                buildir = os.getcwd()
             if plat_specific:
                 inc_dir = buildir
             else:
@@ -84,11 +90,11 @@ def customize_compiler(compiler):
     global _config_vars
     if compiler.compiler_type == 'unix':
         if sys.platform == 'darwin':
-            if not _config_vars.get('CUSTOMIZED_OSX_COMPILER', ''):
+            if not get_config_var('CUSTOMIZED_OSX_COMPILER'):
                 import _osx_support
                 _osx_support.customize_compiler(_config_vars)
                 _config_vars['CUSTOMIZED_OSX_COMPILER'] = 'True'
-        cc, cxx, opt, cflags, ccshared, ldshared, so_ext, ar, ar_flags = get_config_vars('CC', 'CXX', 'OPT', 'CFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'AR', 'ARFLAGS')
+        cc, cxx, cflags, ccshared, ldshared, so_ext, ar, ar_flags = get_config_vars('CC', 'CXX', 'CFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'AR', 'ARFLAGS')
         if 'CC' in os.environ:
             newcc = os.environ['CC']
             if sys.platform == 'darwin' and 'LDSHARED' not in os.environ and ldshared.startswith(cc):
@@ -105,7 +111,7 @@ def customize_compiler(compiler):
         if 'LDFLAGS' in os.environ:
             ldshared = ldshared + ' ' + os.environ['LDFLAGS']
         if 'CFLAGS' in os.environ:
-            cflags = opt + ' ' + os.environ['CFLAGS']
+            cflags = cflags + ' ' + os.environ['CFLAGS']
             ldshared = ldshared + ' ' + os.environ['CFLAGS']
         if 'CPPFLAGS' in os.environ:
             cpp = cpp + ' ' + os.environ['CPPFLAGS']

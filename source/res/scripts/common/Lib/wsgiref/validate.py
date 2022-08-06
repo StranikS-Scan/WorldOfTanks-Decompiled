@@ -184,7 +184,7 @@ def check_environ(environ):
     assert_(environ['wsgi.url_scheme'] in ('http', 'https'), 'wsgi.url_scheme unknown: %r' % environ['wsgi.url_scheme'])
     check_input(environ['wsgi.input'])
     check_errors(environ['wsgi.errors'])
-    if environ['REQUEST_METHOD'] not in ('GET', 'HEAD', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'TRACE'):
+    if environ['REQUEST_METHOD'] not in ('GET', 'HEAD', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE', 'TRACE'):
         warnings.warn('Unknown REQUEST_METHOD: %r' % environ['REQUEST_METHOD'], WSGIWarning)
     assert_(not environ.get('SCRIPT_NAME') or environ['SCRIPT_NAME'].startswith('/'), "SCRIPT_NAME doesn't start with /: %r" % environ['SCRIPT_NAME'])
     assert_(not environ.get('PATH_INFO') or environ['PATH_INFO'].startswith('/'), "PATH_INFO doesn't start with /: %r" % environ['PATH_INFO'])

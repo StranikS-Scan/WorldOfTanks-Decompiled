@@ -37,7 +37,7 @@ def _stringify(value):
     if isinstance(value, (list, tuple)):
         if len(value) == 1:
             value = _stringify(value[0])
-            if value[0] == '{':
+            if _magic_re.search(value):
                 value = '{%s}' % value
         else:
             value = '{%s}' % _join(value)
@@ -50,7 +50,10 @@ def _stringify(value):
             value = '{}'
         elif _magic_re.search(value):
             value = _magic_re.sub('\\\\\\1', value)
+            value = value.replace('\n', '\\n')
             value = _space_re.sub('\\\\\\1', value)
+            if value[0] == '"':
+                value = '\\' + value
         elif value[0] == '"' or _space_re.search(value):
             value = '{%s}' % value
     return value
@@ -95,6 +98,23 @@ try:
 except AttributeError:
     pass
 
+def _splitdict(tk, v, cut_minus=True, conv=None):
+    t = tk.splitlist(v)
+    if len(t) % 2:
+        raise RuntimeError('Tcl list representing a dict is expected to contain an even number of elements')
+    it = iter(t)
+    dict = {}
+    for key, value in zip(it, it):
+        key = str(key)
+        if cut_minus and key[0] == '-':
+            key = key[1:]
+        if conv:
+            value = conv(value)
+        dict[key] = value
+
+    return dict
+
+
 class Event():
     pass
 
@@ -128,12 +148,13 @@ _varnum = 0
 
 class Variable():
     _default = ''
+    _tclCommands = None
 
     def __init__(self, master=None, value=None, name=None):
         global _varnum
         if not master:
             master = _default_root
-        self._master = master
+        self._root = master._root()
         self._tk = master.tk
         if name:
             self._name = name
@@ -147,9 +168,17 @@ class Variable():
         return
 
     def __del__(self):
-        if self._tk is not None and self._tk.getboolean(self._tk.call('info', 'exists', self._name)):
-            self._tk.globalunsetvar(self._name)
-        return
+        if self._tk is None:
+            return
+        else:
+            if self._tk.getboolean(self._tk.call('info', 'exists', self._name)):
+                self._tk.globalunsetvar(self._name)
+            if self._tclCommands is not None:
+                for name in self._tclCommands:
+                    self._tk.deletecommand(name)
+
+                self._tclCommands = None
+            return
 
     def __str__(self):
         return self._name
@@ -161,7 +190,22 @@ class Variable():
         return self._tk.globalgetvar(self._name)
 
     def trace_variable(self, mode, callback):
-        cbname = self._master._register(callback)
+        f = CallWrapper(callback, None, self._root).__call__
+        cbname = repr(id(f))
+        try:
+            callback = callback.im_func
+        except AttributeError:
+            pass
+
+        try:
+            cbname = cbname + callback.__name__
+        except AttributeError:
+            pass
+
+        self._tk.createcommand(cbname, f)
+        if self._tclCommands is None:
+            self._tclCommands = []
+        self._tclCommands.append(cbname)
         self._tk.call('trace', 'variable', self._name, mode, cbname)
         return cbname
 
@@ -169,10 +213,19 @@ class Variable():
 
     def trace_vdelete(self, mode, cbname):
         self._tk.call('trace', 'vdelete', self._name, mode, cbname)
-        self._master.deletecommand(cbname)
+        cbname = self._tk.splitlist(cbname)[0]
+        for m, ca in self.trace_vinfo():
+            if self._tk.splitlist(ca)[0] == cbname:
+                break
+        else:
+            self._tk.deletecommand(cbname)
+            try:
+                self._tclCommands.remove(cbname)
+            except ValueError:
+                pass
 
     def trace_vinfo(self):
-        return map(self._tk.split, self._tk.splitlist(self._tk.call('trace', 'vinfo', self._name)))
+        return map(self._tk.splitlist, self._tk.splitlist(self._tk.call('trace', 'vinfo', self._name)))
 
     def __eq__(self, other):
         return self.__class__.__name__ == other.__class__.__name__ and self._name == other._name
@@ -220,6 +273,9 @@ class BooleanVar(Variable):
     def __init__(self, master=None, value=None, name=None):
         Variable.__init__(self, master, value, name)
 
+    def set(self, value):
+        return self._tk.globalsetvar(self._name, self._tk.getboolean(value))
+
     def get(self):
         return self._tk.getboolean(self._tk.globalgetvar(self._name))
 
@@ -263,7 +319,8 @@ class Misc():
         self.tk.call(('tk_setPalette',) + _flatten(args) + _flatten(kw.items()))
 
     def tk_menuBar(self, *args):
-        pass
+        import warnings
+        warnings.warn('tk_menuBar() does nothing and will be removed in 3.6', DeprecationWarning, stacklevel=2)
 
     def wait_variable(self, name='PY_VAR'):
         self.tk.call('tkwait', 'variable', name)
@@ -328,6 +385,7 @@ class Misc():
     def after(self, ms, func=None, *args):
         if not func:
             self.tk.call('after', ms)
+            return None
         else:
 
             def callit():
@@ -339,13 +397,17 @@ class Misc():
                     except TclError:
                         pass
 
+            callit.__name__ = func.__name__
             name = self._register(callit)
             return self.tk.call('after', ms, name)
+            return None
 
     def after_idle(self, func, *args):
         return self.after('idle', func, *args)
 
     def after_cancel(self, id):
+        if not id:
+            raise ValueError('id must be a valid identifier returned from after or after_idle')
         try:
             data = self.tk.call('after', 'info', id)
             script = self.tk.splitlist(data)[0]
@@ -501,7 +563,7 @@ class Misc():
         return getint(self.tk.call('winfo', 'height', self._w))
 
     def winfo_id(self):
-        return self.tk.getint(self.tk.call('winfo', 'id', self._w))
+        return int(self.tk.call('winfo', 'id', self._w), 0)
 
     def winfo_interps(self, displayof=0):
         args = ('winfo', 'interps') + self._displayof(displayof)
@@ -712,9 +774,9 @@ class Misc():
                 elif isinstance(v, (tuple, list)):
                     nv = []
                     for item in v:
-                        if not isinstance(item, (basestring, int)):
+                        if not isinstance(item, (basestring, int, long)):
                             break
-                        if isinstance(item, int):
+                        if isinstance(item, (int, long)):
                             nv.append('%d' % item)
                         nv.append(_stringify(item))
                     else:
@@ -870,7 +932,8 @@ class Misc():
         raise TypeError("Tkinter objects don't support 'in' tests.")
 
     def keys(self):
-        return [ x[0][1:] for x in self.tk.splitlist(self.tk.call(self._w, 'configure')) ]
+        splitlist = self.tk.splitlist
+        return [ splitlist(x)[0][1:] for x in splitlist(self.tk.call(self._w, 'configure')) ]
 
     def __str__(self):
         return self._w
@@ -926,15 +989,7 @@ class Misc():
         else:
             options = self._options(cnf, kw)
         if not options:
-            res = self.tk.call('grid', command, self._w, index)
-            words = self.tk.splitlist(res)
-            dict = {}
-            for i in range(0, len(words), 2):
-                key = words[i][1:]
-                value = words[i + 1]
-                dict[key] = self._gridconvvalue(value)
-
-            return dict
+            return _splitdict(self.tk, self.tk.call('grid', command, self._w, index), conv=self._gridconvvalue)
         res = self.tk.call(('grid',
          command,
          self._w,
@@ -1284,7 +1339,7 @@ class Tk(Misc, Wm):
 
     def report_callback_exception(self, exc, val, tb):
         import traceback, sys
-        sys.stderr.write('Exception in Tkinter callback\n')
+        print >> sys.stderr, 'Exception in Tkinter callback'
         sys.last_type = exc
         sys.last_value = val
         sys.last_traceback = tb
@@ -1311,16 +1366,10 @@ class Pack():
     forget = pack_forget
 
     def pack_info(self):
-        words = self.tk.splitlist(self.tk.call('pack', 'info', self._w))
-        dict = {}
-        for i in range(0, len(words), 2):
-            key = words[i][1:]
-            value = words[i + 1]
-            if str(value)[:1] == '.':
-                value = self._nametowidget(value)
-            dict[key] = value
-
-        return dict
+        d = _splitdict(self.tk, self.tk.call('pack', 'info', self._w))
+        if 'in' in d:
+            d['in'] = self.nametowidget(d['in'])
+        return d
 
     info = pack_info
     propagate = pack_propagate = Misc.pack_propagate
@@ -1340,16 +1389,10 @@ class Place():
     forget = place_forget
 
     def place_info(self):
-        words = self.tk.splitlist(self.tk.call('place', 'info', self._w))
-        dict = {}
-        for i in range(0, len(words), 2):
-            key = words[i][1:]
-            value = words[i + 1]
-            if str(value)[:1] == '.':
-                value = self._nametowidget(value)
-            dict[key] = value
-
-        return dict
+        d = _splitdict(self.tk, self.tk.call('place', 'info', self._w))
+        if 'in' in d:
+            d['in'] = self.nametowidget(d['in'])
+        return d
 
     info = place_info
     slaves = place_slaves = Misc.place_slaves
@@ -1373,16 +1416,10 @@ class Grid():
         self.tk.call('grid', 'remove', self._w)
 
     def grid_info(self):
-        words = self.tk.splitlist(self.tk.call('grid', 'info', self._w))
-        dict = {}
-        for i in range(0, len(words), 2):
-            key = words[i][1:]
-            value = words[i + 1]
-            if str(value)[:1] == '.':
-                value = self._nametowidget(value)
-            dict[key] = value
-
-        return dict
+        d = _splitdict(self.tk, self.tk.call('grid', 'info', self._w))
+        if 'in' in d:
+            d['in'] = self.nametowidget(d['in'])
+        return d
 
     info = grid_info
     location = grid_location = Misc.grid_location
@@ -1830,20 +1867,21 @@ class Listbox(Widget, XView, YView):
     def activate(self, index):
         self.tk.call(self._w, 'activate', index)
 
-    def bbox(self, *args):
-        return self._getints(self.tk.call((self._w, 'bbox') + args)) or None
+    def bbox(self, index):
+        return self._getints(self.tk.call(self._w, 'bbox', index)) or None
 
     def curselection(self):
-        return self.tk.splitlist(self.tk.call(self._w, 'curselection'))
+        return self._getints(self.tk.call(self._w, 'curselection')) or ()
 
     def delete(self, first, last=None):
         self.tk.call(self._w, 'delete', first, last)
 
     def get(self, first, last=None):
-        if last:
+        if last is not None:
             return self.tk.splitlist(self.tk.call(self._w, 'get', first, last))
         else:
             return self.tk.call(self._w, 'get', first)
+            return
 
     def index(self, index):
         i = self.tk.call(self._w, 'index', index)
@@ -1902,7 +1940,8 @@ class Menu(Widget):
         Widget.__init__(self, master, 'menu', cnf, kw)
 
     def tk_bindForTraversal(self):
-        pass
+        import warnings
+        warnings.warn('tk_bindForTraversal() does nothing and will be removed in 3.6', DeprecationWarning, stacklevel=2)
 
     def tk_mbPost(self):
         self.tk.call('tk_mbPost', self._w)
@@ -2400,7 +2439,7 @@ class Image():
             master = _default_root
             if not master:
                 raise RuntimeError, 'Too early to create image'
-        self.tk = master.tk
+        self.tk = getattr(master, 'tk', master)
         if not name:
             Image._last_id += 1
             name = 'pyimage%r' % (Image._last_id,)
@@ -2414,6 +2453,8 @@ class Image():
         for k, v in cnf.items():
             if hasattr(v, '__call__'):
                 v = self._register(v)
+            elif k in ('data', 'maskdata'):
+                v = self.tk._createbytearray(v)
             options = options + ('-' + k, v)
 
         self.tk.call(('image',
@@ -2447,6 +2488,8 @@ class Image():
                     k = k[:-1]
                 if hasattr(v, '__call__'):
                     v = self._register(v)
+                elif k in ('data', 'maskdata'):
+                    v = self.tk._createbytearray(v)
                 res = res + ('-' + k, v)
 
         self.tk.call((self.name, 'config') + res)
@@ -2479,19 +2522,19 @@ class PhotoImage(Image):
         return self.tk.call(self.name, 'cget', '-' + key)
 
     def copy(self):
-        destImage = PhotoImage()
+        destImage = PhotoImage(master=self.tk)
         self.tk.call(destImage, 'copy', self.name)
         return destImage
 
     def zoom(self, x, y=''):
-        destImage = PhotoImage()
+        destImage = PhotoImage(master=self.tk)
         if y == '':
             y = x
         self.tk.call(destImage, 'copy', self.name, '-zoom', x, y)
         return destImage
 
     def subsample(self, x, y=''):
-        destImage = PhotoImage()
+        destImage = PhotoImage(master=self.tk)
         if y == '':
             y = x
         self.tk.call(destImage, 'copy', self.name, '-subsample', x, y)
@@ -2579,7 +2622,7 @@ class Spinbox(Widget, XView):
         return self.selection('clear')
 
     def selection_element(self, element=None):
-        return self.selection('element', element)
+        return self.tk.call(self._w, 'selection', 'element', element)
 
 
 class LabelFrame(Widget):

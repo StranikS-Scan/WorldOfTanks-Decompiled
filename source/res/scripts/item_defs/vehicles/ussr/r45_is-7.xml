@@ -1006,9 +1006,138 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.7	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.7	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.053919	</renderModelOffset>
+              <lengthwiseSpringLength>	0.148163	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.654344	</widthwiseSpringLength>
+              <hingeJointStiffness>	1925.529663	</hingeJointStiffness>
+              <torsionStiffnessStep>	8	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.381048	</groupRadius>
+                  <groupInnerOffset>	0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	-0.351315	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L6	</wheelName>
+                  <wheelName>	W_L5	</wheelName>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.387565	</groupRadius>
+                  <groupInnerOffset>	0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	-0.351315	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.331259	</groupRadius>
+                  <groupInnerOffset>	0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	-0.351315	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.027234 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.195090 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.314490	</row2>
+                  <row3>	0.000000 1.108261 0.025925	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.867384 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.184378	</row2>
+                  <row3>	-1.307817 1.251000 0.057638	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.144503 0.000003 0.000000	</row0>
+                  <row1>	-0.000001 0.256190 -0.156097	</row1>
+                  <row2>	-0.000001 0.351767 0.577328	</row2>
+                  <row3>	-1.307820 1.171956 -3.446474	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.042890 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236950 0.183997	</row1>
+                  <row2>	0.000000 -0.414640 0.533968	</row2>
+                  <row3>	-1.307820 1.233867 3.510923	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.053919	</renderModelOffset>
+              <lengthwiseSpringLength>	0.148164	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.654344	</widthwiseSpringLength>
+              <hingeJointStiffness>	1925.512695	</hingeJointStiffness>
+              <torsionStiffnessStep>	8	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.381065	</groupRadius>
+                  <groupInnerOffset>	-0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	0.351315	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R6	</wheelName>
+                  <wheelName>	W_R5	</wheelName>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.387565	</groupRadius>
+                  <groupInnerOffset>	-0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	0.351315	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.331279	</groupRadius>
+                  <groupInnerOffset>	-0.451315	</groupInnerOffset>
+                  <groupOuterOffset>	0.351315	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.027234 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.195090 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.314490	</row2>
+                  <row3>	0.000000 1.108261 0.025925	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.867384 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.184380	</row2>
+                  <row3>	1.323000 1.260000 0.057638	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.144500 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236920 -0.184034	</row1>
+                  <row2>	0.000000 0.414724 0.533903	</row2>
+                  <row3>	1.308000 1.128076 -3.532252	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.042890 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236950 0.183998	</row1>
+                  <row2>	0.000000 -0.414640 0.533968	</row2>
+                  <row3>	1.308000 1.233870 3.510920	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+        </trackPair>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>

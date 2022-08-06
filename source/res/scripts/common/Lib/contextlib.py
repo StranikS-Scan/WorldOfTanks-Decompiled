@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/contextlib.py
+# Compiled at: 2022-10-19 12:29:34
+"""Utilities for with-statement contexts.  See PEP 343."""
 import sys
 from functools import wraps
 from warnings import warn
 __all__ = ['contextmanager', 'nested', 'closing']
 
 class GeneratorContextManager(object):
+    """Helper for @contextmanager decorator."""
 
     def __init__(self, gen):
         self.gen = gen
@@ -40,6 +43,33 @@ class GeneratorContextManager(object):
 
 
 def contextmanager(func):
+    """@contextmanager decorator.
+    
+    Typical usage:
+    
+        @contextmanager
+        def some_generator(<arguments>):
+            <setup>
+            try:
+                yield <value>
+            finally:
+                <cleanup>
+    
+    This makes this:
+    
+        with some_generator(<arguments>) as <variable>:
+            <body>
+    
+    equivalent to this:
+    
+        <setup>
+        try:
+            <variable> = <value>
+            <body>
+        finally:
+            <cleanup>
+    
+    """
 
     @wraps(func)
     def helper(*args, **kwds):
@@ -50,6 +80,19 @@ def contextmanager(func):
 
 @contextmanager
 def nested(*managers):
+    """Combine multiple context managers into a single nested context manager.
+    
+    This function has been deprecated in favour of the multiple manager form
+    of the with statement.
+    
+    The one advantage of this function over the multiple manager form of the
+    with statement is that argument unpacking allows it to be
+    used with a variable number of context managers as follows:
+    
+       with nested(*managers):
+           do_something()
+    
+     """
     warn('With-statements now directly support multiple context managers', DeprecationWarning, 3)
     exits = []
     vars = []
@@ -82,6 +125,22 @@ def nested(*managers):
 
 
 class closing(object):
+    """Context to automatically close something at the end of a block.
+    
+    Code like this:
+    
+        with closing(<module>.open(<arguments>)) as f:
+            <block>
+    
+    is equivalent to this:
+    
+        f = <module>.open(<arguments>)
+        try:
+            <block>
+        finally:
+            f.close()
+    
+    """
 
     def __init__(self, thing):
         self.thing = thing

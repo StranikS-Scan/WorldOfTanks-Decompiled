@@ -68,7 +68,6 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
                 model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
                 model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
-                model.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft())

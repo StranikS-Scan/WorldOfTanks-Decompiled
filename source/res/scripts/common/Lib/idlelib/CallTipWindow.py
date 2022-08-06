@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CallTipWindow.py
-from Tkinter import *
+from Tkinter import Toplevel, Label, LEFT, SOLID, TclError
 HIDE_VIRTUAL_EVENT_NAME = '<<calltipwindow-hide>>'
 HIDE_SEQUENCES = ('<Key-Escape>', '<FocusOut>')
 CHECKHIDE_VIRTUAL_EVENT_NAME = '<<calltipwindow-checkhide>>'
@@ -53,6 +53,8 @@ class CallTip:
 
         self.label = Label(tw, text=self.text, justify=LEFT, background='#ffffe0', relief=SOLID, borderwidth=1, font=self.widget['font'])
         self.label.pack()
+        tw.update_idletasks()
+        tw.lift()
         self.checkhideid = self.widget.bind(CHECKHIDE_VIRTUAL_EVENT_NAME, self.checkhide_event)
         for seq in CHECKHIDE_SEQUENCES:
             self.widget.event_add(CHECKHIDE_VIRTUAL_EVENT_NAME, seq)
@@ -107,32 +109,30 @@ class CallTip:
         return bool(self.tipwindow)
 
 
-class container:
+def _calltip_window(parent):
+    from Tkinter import Toplevel, Text, LEFT, BOTH
+    top = Toplevel(parent)
+    top.title('Test calltips')
+    top.geometry('200x100+%d+%d' % (parent.winfo_rootx() + 200, parent.winfo_rooty() + 150))
+    text = Text(top)
+    text.pack(side=LEFT, fill=BOTH, expand=1)
+    text.insert('insert', 'string.split')
+    top.update()
+    calltip = CallTip(text)
 
-    def __init__(self):
-        root = Tk()
-        text = self.text = Text(root)
-        text.pack(side=LEFT, fill=BOTH, expand=1)
-        text.insert('insert', 'string.split')
-        root.update()
-        self.calltip = CallTip(text)
-        text.event_add('<<calltip-show>>', '(')
-        text.event_add('<<calltip-hide>>', ')')
-        text.bind('<<calltip-show>>', self.calltip_show)
-        text.bind('<<calltip-hide>>', self.calltip_hide)
-        text.focus_set()
-        root.mainloop()
+    def calltip_show(event):
+        calltip.showtip('(s=Hello world)', 'insert', 'end')
 
-    def calltip_show(self, event):
-        self.calltip.showtip('Hello world')
+    def calltip_hide(event):
+        calltip.hidetip()
 
-    def calltip_hide(self, event):
-        self.calltip.hidetip()
-
-
-def main():
-    c = container()
+    text.event_add('<<calltip-show>>', '(')
+    text.event_add('<<calltip-hide>>', ')')
+    text.bind('<<calltip-show>>', calltip_show)
+    text.bind('<<calltip-hide>>', calltip_hide)
+    text.focus_set()
 
 
 if __name__ == '__main__':
-    main()
+    from idlelib.idle_test.htest import run
+    run(_calltip_window)

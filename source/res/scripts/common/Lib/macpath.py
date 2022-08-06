@@ -5,6 +5,7 @@ import warnings
 from stat import *
 import genericpath
 from genericpath import *
+from genericpath import _unicode
 __all__ = ['normcase',
  'isabs',
  'join',
@@ -58,7 +59,7 @@ def isabs(s):
 def join(s, *p):
     path = s
     for t in p:
-        if not s or isabs(t):
+        if not path or isabs(t):
             path = t
             continue
         if t[:1] == ':':
@@ -176,7 +177,7 @@ def walk(top, func, arg):
 
 def abspath(path):
     if not isabs(path):
-        if isinstance(path, unicode):
+        if isinstance(path, _unicode):
             cwd = os.getcwdu()
         else:
             cwd = os.getcwd()

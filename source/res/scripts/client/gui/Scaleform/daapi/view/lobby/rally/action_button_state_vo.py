@@ -59,6 +59,8 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (self.__getNotAvailableIcon() + i18n.makeString(PLATOON.MEMBERS_FOOTER_INVALIDVEHICLELEVEL), {}),
          UNIT_RESTRICTION.SPG_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(PLATOON.MEMBERS_FOOTER_SPGFORBIDDEN), {}),
          UNIT_RESTRICTION.SPG_IS_FULL: (self.__getNotAvailableIcon() + i18n.makeString(PLATOON.MEMBERS_FOOTER_SPGFULL), {}),
+         UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(PLATOON.MEMBERS_FOOTER_SCOUTFORBIDDEN), {}),
+         UNIT_RESTRICTION.SCOUT_IS_FULL: (self.__getNotAvailableIcon() + i18n.makeString(PLATOON.MEMBERS_FOOTER_SCOUTFULL), {}),
          UNIT_RESTRICTION.ROTATION_GROUP_LOCKED: BoundMethodWeakref(self._rotationGroupBlockMessage),
          UNIT_RESTRICTION.UNIT_MAINTENANCE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_MAINTENANCE, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERY, {}),
@@ -70,12 +72,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
          UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {}),
          UNIT_RESTRICTION.VEHICLE_TOO_HEAVY: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.tooHeavy()), {}),
-         UNIT_RESTRICTION.LIMIT_LEVEL: (self.__getNotAvailableIcon() + backport.text(R.strings.platoon.members.footer.invalidVehicleLevel()), {}),
-         UNIT_RESTRICTION.LIMIT_VEHICLE_TYPE: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.wrongMode()), {}),
-         UNIT_RESTRICTION.LIMIT_VEHICLE_CLASS: (backport.text(R.strings.cyberSport.window.unit.message.vehicleInNotReady.wrongMode()), {}),
-         UNIT_RESTRICTION.MODE_NO_BATTLES: ('', {}),
-         UNIT_RESTRICTION.MODE_NOT_SET: ('', {}),
-         UNIT_RESTRICTION.MODE_NOT_AVAILABLE: ('', {})}
+         UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT: (backport.text(R.strings.cyberSport.window.unit.message.previewVehicleIsPresent()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()

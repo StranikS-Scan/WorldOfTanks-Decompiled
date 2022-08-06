@@ -13,7 +13,6 @@ from gui.shared.event_dispatcher import showResourceWellProgressionWindow
 from helpers import dependency
 from shared_utils import nextTick
 from skeletons.gui.game_control import IResourceWellController
-from uilogging.resource_well.loggers import ResourceWellEntryPointLogger
 _FULL_PROGRESS = 100.0
 
 class _LastEntryPointState(object):
@@ -99,7 +98,6 @@ class EntryPoint(ViewImpl):
         _g_lastEntryPointState.update(self.__getProgress(), self.__getEventState())
 
     def __showProgressionWindow(self):
-        ResourceWellEntryPointLogger().logEntryPointClick()
         showResourceWellProgressionWindow()
 
     def __onClientUpdated(self, diff, _):

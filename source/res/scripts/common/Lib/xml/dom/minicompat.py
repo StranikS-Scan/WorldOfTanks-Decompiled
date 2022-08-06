@@ -26,11 +26,11 @@ class NodeList(list):
 
     length = property(_get_length, _set_length, doc='The number of nodes in the NodeList.')
 
-    def __getstate__(self):
-        return list(self)
-
     def __setstate__(self, state):
+        if state is None:
+            state = []
         self[:] = state
+        return
 
 
 class EmptyNodeList(tuple):

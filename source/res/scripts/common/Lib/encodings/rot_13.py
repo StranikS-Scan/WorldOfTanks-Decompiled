@@ -32,7 +32,7 @@ class StreamReader(Codec, codecs.StreamReader):
 
 
 def getregentry():
-    return codecs.CodecInfo(name='rot-13', encode=Codec().encode, decode=Codec().decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamwriter=StreamWriter, streamreader=StreamReader)
+    return codecs.CodecInfo(name='rot-13', encode=Codec().encode, decode=Codec().decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamwriter=StreamWriter, streamreader=StreamReader, _is_text_encoding=False)
 
 
 decoding_map = codecs.make_identity_dict(range(256))

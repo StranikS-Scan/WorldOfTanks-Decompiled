@@ -76,20 +76,18 @@ def hideTkConsole(root):
 
 
 def overrideRootMenu(root, flist):
-    from Tkinter import Menu, Text, Text
-    from idlelib.EditorWindow import prepstr, get_accelerator
+    from Tkinter import Menu
     from idlelib import Bindings
     from idlelib import WindowList
-    from idlelib.MultiCall import MultiCallCreator
     closeItem = Bindings.menudefs[0][1][-2]
     del Bindings.menudefs[0][1][-3:]
     Bindings.menudefs[0][1].insert(6, closeItem)
     del Bindings.menudefs[-1][1][0:2]
-    del Bindings.menudefs[-2][1][0:2]
+    del Bindings.menudefs[-2][1][0]
     menubar = Menu(root)
     root.configure(menu=menubar)
     menudict = {}
-    menudict['windows'] = menu = Menu(menubar, name='windows')
+    menudict['windows'] = menu = Menu(menubar, name='windows', tearoff=0)
     menubar.add_cascade(label='Window', menu=menu, underline=0)
 
     def postwindowsmenu(menu=menu):
@@ -113,9 +111,8 @@ def overrideRootMenu(root, flist):
         configDialog.ConfigDialog(root, 'Settings')
 
     def help_dialog(event=None):
-        from idlelib import textView
-        fn = path.join(path.abspath(path.dirname(__file__)), 'help.txt')
-        textView.view_file(root, 'Help', fn)
+        from idlelib import help
+        help.show_idlehelp(root)
 
     root.bind('<<about-idle>>', about_dialog)
     root.bind('<<open-config-dialog>>', config_dialog)
@@ -124,7 +121,7 @@ def overrideRootMenu(root, flist):
         root.bind('<<close-all-windows>>', flist.close_all_callback)
         root.createcommand('exit', flist.close_all_callback)
     if isCarbonTk():
-        menudict['application'] = menu = Menu(menubar, name='apple')
+        menudict['application'] = menu = Menu(menubar, name='apple', tearoff=0)
         menubar.add_cascade(label='IDLE', menu=menu)
         Bindings.menudefs.insert(0, ('application', [('About IDLE', '<<about-idle>>'), None]))
         tkversion = root.tk.eval('info patchlevel')

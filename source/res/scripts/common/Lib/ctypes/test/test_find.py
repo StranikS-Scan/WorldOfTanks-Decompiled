@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_find.py
 import unittest
+import os.path
 import sys
+from test import test_support
 from ctypes import *
 from ctypes.util import find_library
 from ctypes.test import is_resource_enabled
@@ -27,9 +29,17 @@ class Test_OpenGL_libs(unittest.TestCase):
     def setUp(self):
         self.gl = self.glu = self.gle = None
         if lib_gl:
-            self.gl = CDLL(lib_gl, mode=RTLD_GLOBAL)
+            try:
+                self.gl = CDLL(lib_gl, mode=RTLD_GLOBAL)
+            except OSError:
+                pass
+
         if lib_glu:
-            self.glu = CDLL(lib_glu, RTLD_GLOBAL)
+            try:
+                self.glu = CDLL(lib_glu, RTLD_GLOBAL)
+            except OSError:
+                pass
+
         if lib_gle:
             try:
                 self.gle = CDLL(lib_gle)
@@ -38,23 +48,29 @@ class Test_OpenGL_libs(unittest.TestCase):
 
         return
 
-    if lib_gl:
+    def tearDown(self):
+        self.gl = self.glu = self.gle = None
+        return
 
-        def test_gl(self):
-            if self.gl:
-                self.gl.glClearIndex
+    @unittest.skipUnless(lib_gl, 'lib_gl not available')
+    def test_gl(self):
+        if self.gl:
+            self.gl.glClearIndex
 
-    if lib_glu:
+    @unittest.skipUnless(lib_glu, 'lib_glu not available')
+    def test_glu(self):
+        if self.glu:
+            self.glu.gluBeginCurve
 
-        def test_glu(self):
-            if self.glu:
-                self.glu.gluBeginCurve
+    @unittest.skipUnless(lib_gle, 'lib_gle not available')
+    def test_gle(self):
+        if self.gle:
+            self.gle.gleGetJoinStyle
 
-    if lib_gle:
-
-        def test_gle(self):
-            if self.gle:
-                self.gle.gleGetJoinStyle
+    def test_shell_injection(self):
+        result = find_library('; echo Hello shell > ' + test_support.TESTFN)
+        self.assertFalse(os.path.lexists(test_support.TESTFN))
+        self.assertIsNone(result)
 
 
 if __name__ == '__main__':

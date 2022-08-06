@@ -1,16 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/Browser.py
+import typing
+import SCALEFORM
 from Event import Event
-from web.client_web_api.common import WebEventSender
-from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.browser import BrowserViewWebHandlers
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared.events import BrowserEvent
 from gui.shared.formatters import icons
+from WebBrowser import CURSOR_TYPES
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
-from web.web_client_api import WebCommandHandler
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from WebBrowser import WebBrowser
+_CURSOR_TYPES = {CURSOR_TYPES.Hand: CursorManager.HAND,
+ CURSOR_TYPES.Pointer: CursorManager.ARROW,
+ CURSOR_TYPES.IBeam: CursorManager.IBEAM,
+ CURSOR_TYPES.Grab: CursorManager.DRAG_OPEN,
+ CURSOR_TYPES.Grabbing: CursorManager.DRAG_CLOSE,
+ CURSOR_TYPES.ColumnResize: CursorManager.MOVE}
+
+def _getCursorType(cursorType):
+    return _CURSOR_TYPES.get(cursorType) or CursorManager.ARROW
+
 
 class Browser(BrowserMeta):
     __browserCtrl = dependency.descriptor(IBrowserController)
@@ -23,7 +37,6 @@ class Browser(BrowserMeta):
         self.__isLoaded = True
         self.__httpStatusCode = None
         self.__webCommandHandler = None
-        self.__webEventSender = None
         self.showContentUnderLoading = True
         self.onError = Event()
         return
@@ -41,13 +54,7 @@ class Browser(BrowserMeta):
             self.__browser = self.__browserCtrl.getBrowser(self.__browserID)
             if self.__browser is None:
                 raise SoftException('Cannot find browser')
-            self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
-            if webHandlersMap is not None:
-                self.__webCommandHandler.addHandlers(webHandlersMap)
-            self.__webCommandHandler.onCallback += self.__onWebCommandCallback
-            self.__webEventSender = WebEventSender()
-            self.__webEventSender.onCallback += self.__onWebEventCallback
-            self.__webEventSender.init()
+            self.__webCommandHandler = BrowserViewWebHandlers(self.__browser, self.__browserID, self, webHandlersMap, alias)
             if not self.__browser.hasBrowser:
                 self.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
             else:
@@ -83,6 +90,8 @@ class Browser(BrowserMeta):
         return
 
     def onBrowserShow(self, needRefresh=False):
+        if not self.__browser.isFocused:
+            self.__setCursor()
         self.__browser.onBrowserShow(needRefresh)
 
     def onBrowserHide(self):
@@ -119,17 +128,15 @@ class Browser(BrowserMeta):
         if self.__webCommandHandler:
             self.__webCommandHandler.fini()
             self.__webCommandHandler = None
-        if self.__webEventSender:
-            self.__webEventSender.fini()
-            self.__webEventSender = None
+        if self.__browser:
+            SCALEFORM.resetScaleformWebRender(self.__browser.id)
         self.__browserCtrl.delBrowser(self.__browserID)
         self.__browser = None
+        self.app.cursorMgr.setCursorForced(CursorManager.ARROW)
         super(Browser, self)._dispose()
         return
 
     def __clean(self):
-        if self.__webCommandHandler:
-            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
         if self.__browser:
             self.__browser.onLoadStart -= self.__onLoadStart
             self.__browser.onLoadingStateChange -= self.__onLoadingStateChange
@@ -137,8 +144,8 @@ class Browser(BrowserMeta):
             self.__browser.onNavigate -= self.__onNavigate
             self.__browser.onJsHostQuery -= self.__onJsHostQuery
             self.__browser.onTitleChange -= self.__onTitleChange
-        if self.__webEventSender:
-            self.__webEventSender.onCallback -= self.__onWebEventCallback
+            self.__browser.onCursorUpdated -= self.__onCursorUpdated
+            self.__browser.onResized -= self.__onResized
         self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
 
     def __onLoadStart(self, url):
@@ -152,7 +159,7 @@ class Browser(BrowserMeta):
 
     def __onReady(self, *args):
         self.__browser.onReady -= self.__onReady
-        self.as_loadBitmapS(self.__browser.textureUrl)
+        self.as_loadBitmapS(SCALEFORM.setScaleformWebRender(self.__browser.id))
 
     def __onLoadingStateChange(self, isLoading, manageLoadingScreen):
         if isLoading and manageLoadingScreen:
@@ -172,22 +179,16 @@ class Browser(BrowserMeta):
         self.__isLoaded = True
 
     def __onJsHostQuery(self, command):
-        try:
-            if self.__webCommandHandler is not None:
-                self.__webCommandHandler.handleCommand(command)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        return
-
-    def __onWebCommandCallback(self, callbackData):
-        self.__browser.sendMessage(callbackData)
-
-    def __onWebEventCallback(self, callbackData):
-        self.__browser.sendEvent(callbackData)
+        self.__webCommandHandler.handleCommand(command)
 
     def __onTitleChange(self, title):
         self.as_changeTitleS(title)
+
+    def __onCursorUpdated(self, _):
+        self.__setCursor()
+
+    def __onResized(self, width, height):
+        self.as_resizeS(width, height)
 
     def __handleBrowserCreated(self, event):
         if event.ctx['browserID'] == self.__browserID:
@@ -205,12 +206,19 @@ class Browser(BrowserMeta):
         self.__browser.onNavigate += self.__onNavigate
         self.__browser.onJsHostQuery += self.__onJsHostQuery
         self.__browser.onTitleChange += self.__onTitleChange
+        self.__browser.onCursorUpdated += self.__onCursorUpdated
+        self.__browser.onResized += self.__onResized
         if self.__size is not None:
             self.__browser.updateSize(self.__size)
-        if self.__browser.textureUrl:
-            self.as_loadBitmapS(self.__browser.textureUrl)
+        if SCALEFORM.hasScaleformWebRender(self.__browser.id):
+            self.as_loadBitmapS(SCALEFORM.getWebTextureUrl(self.__browser.id))
+        elif self.__browser.isReady:
+            self.as_loadBitmapS(SCALEFORM.setScaleformWebRender(self.__browser.id))
         else:
             self.__browser.onReady += self.__onReady
         if self.__browser.isNavigationComplete:
             self.as_loadingStopS()
         return
+
+    def __setCursor(self):
+        self.app.cursorMgr.setCursorForced(_getCursorType(self.__browser.cursor))

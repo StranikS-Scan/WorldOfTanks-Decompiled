@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_parameters.py
 import unittest, sys
+from ctypes.test import need_symbol
+import test.support
 
 class SimpleTypesTestCase(unittest.TestCase):
 
@@ -40,10 +42,10 @@ class SimpleTypesTestCase(unittest.TestCase):
 
         self.assertEqual(CVOIDP.from_param('abc'), 'abcabc')
         self.assertEqual(CCHARP.from_param('abc'), 'abcabcabcabc')
-        try:
-            from ctypes import c_wchar_p
-        except ImportError:
-            return
+
+    @need_symbol('c_wchar_p')
+    def test_subclasses_c_wchar_p(self):
+        from ctypes import c_wchar_p
 
         class CWCHARP(c_wchar_p):
 
@@ -64,13 +66,9 @@ class SimpleTypesTestCase(unittest.TestCase):
         a = c_char_p('123')
         self.assertIs(c_char_p.from_param(a), a)
 
+    @need_symbol('c_wchar_p')
     def test_cw_strings(self):
-        from ctypes import byref
-        try:
-            from ctypes import c_wchar_p
-        except ImportError:
-            return
-
+        from ctypes import byref, c_wchar_p
         s = u'123'
         if sys.platform == 'win32':
             self.assertTrue(c_wchar_p.from_param(s)._obj is s)
@@ -156,6 +154,37 @@ class SimpleTypesTestCase(unittest.TestCase):
         func.argtypes = (Adapter(),)
         self.assertRaises(ArgumentError, func, 99)
         return
+
+    def test_abstract(self):
+        from ctypes import Array, Structure, Union, _Pointer, _SimpleCData, _CFuncPtr
+        self.assertRaises(TypeError, Array.from_param, 42)
+        self.assertRaises(TypeError, Structure.from_param, 42)
+        self.assertRaises(TypeError, Union.from_param, 42)
+        self.assertRaises(TypeError, _CFuncPtr.from_param, 42)
+        self.assertRaises(TypeError, _Pointer.from_param, 42)
+        self.assertRaises(TypeError, _SimpleCData.from_param, 42)
+
+    @test.support.cpython_only
+    def test_issue31311(self):
+        from ctypes import Structure
+
+        class BadStruct(Structure):
+
+            @property
+            def __dict__(self):
+                pass
+
+        with self.assertRaises(TypeError):
+            BadStruct().__setstate__({}, 'foo')
+
+        class WorseStruct(Structure):
+
+            @property
+            def __dict__(self):
+                1 / 0.0
+
+        with self.assertRaises(ZeroDivisionError):
+            WorseStruct().__setstate__({}, 'foo')
 
 
 if __name__ == '__main__':

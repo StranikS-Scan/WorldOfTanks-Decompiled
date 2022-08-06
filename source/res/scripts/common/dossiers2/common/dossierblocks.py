@@ -4,7 +4,13 @@ import struct
 import weakref
 from array import array
 from itertools import izip
+from typing import Type, Dict, Tuple, TYPE_CHECKING, Callable, Any, Iterable
 from debug_utils import LOG_ERROR
+from serialization import ComponentBinSerializer, SerializableComponent, parseCompDescr
+from serialization.serializable_component import SerializableComponentChildType
+if TYPE_CHECKING:
+    from dossiers2.common.DossierDescr import DossierDescr
+    from .DossierBlockBuilders import EVENT_HANDLERS_TYPE
 
 class StaticDossierBlockDescr(object):
     eventsEnabled = True
@@ -521,6 +527,74 @@ class BinarySetDossierBlockDescr(object):
             return (dossierCompDescrArray, newSize)
         else:
             return (dossierCompDescrArray[:offset] + array('c', struct.pack(_format, *data)) + dossierCompDescrArray[offset + size:], newSize)
+
+
+class SerializableBlockDescr(object):
+
+    def __init__(self, name, dossierDescr, serializableComponentClass, parserCallback, compDescr, eventsHandlers, popUpRecords, logRecords, initialData=None):
+        self.name = name
+        self.__serializableComponentClass = serializableComponentClass
+        self.__parserCallback = parserCallback
+        self.__initialCompDescr = compDescr
+        self.__dossierDescrRef = weakref.ref(dossierDescr)
+        self.__eventsHandlers = eventsHandlers
+        self.__popUpRecords = popUpRecords
+        self.__logRecords = logRecords
+        self.__isExpanded = False
+        self.__data = {}
+        self.__changed = set()
+        if not compDescr and initialData is not None:
+            self.__isExpanded = True
+            self.__data = dict(initialData)
+        return
+
+    def __getitem__(self, key):
+        self.expand()
+        return self.__data.get(key)
+
+    def __setitem__(self, record, value):
+        self.expand()
+        if self.__data.get(record) != value:
+            self.__changed.add(record)
+        prevValue = self.__data.get(record)
+        self.__data[record] = value
+        if record in self.__popUpRecords:
+            self.__dossierDescrRef().addPopUp(self.name, record, value, addLogRecord=False)
+        if record in self.__logRecords:
+            self.__dossierDescrRef().addLogRecord(self.name, record, value)
+        _callEventHandlers(eventsEnabled=True, handlers=self.__eventsHandlers.get(record, []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=(record, value, prevValue))
+
+    def __contains__(self, record):
+        self.expand()
+        return record in self.__data
+
+    def __str__(self):
+        self.expand()
+        return str(self.__data)
+
+    def expand(self):
+        if self.__isExpanded or not self.__initialCompDescr:
+            return self
+        component = self.__parserCallback(self.__initialCompDescr)
+        data = {field:getattr(component, field) for field in component.fields}
+        data.update(self.__data)
+        self.__data = data
+        self.__isExpanded = True
+        return self
+
+    def getChanges(self):
+        return self.__changed
+
+    def get(self, key, default=None):
+        self.expand()
+        return self.__data[key] if key in self.__data else default
+
+    def updateDossierCompDescr(self, dossierCompDescrArray, offset, currentSize):
+        data = ''
+        if self.__data:
+            data = ComponentBinSerializer().serialize(self.__serializableComponentClass(**self.__data))
+        self.__changed.clear()
+        return (dossierCompDescrArray[:offset] + array('c', data) + dossierCompDescrArray[offset + currentSize:], len(data))
 
 
 def _callEventHandlers(eventsEnabled, handlers, dossierDescr, dossierBlockDescr, args):

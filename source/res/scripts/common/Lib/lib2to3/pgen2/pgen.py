@@ -40,7 +40,7 @@ class ParserGenerator(object):
             states = []
             for state in dfa:
                 arcs = []
-                for label, next in state.arcs.iteritems():
+                for label, next in sorted(state.arcs.iteritems()):
                     arcs.append((self.make_label(c, label), dfa.index(next)))
 
                 if state.isfinal:
@@ -56,7 +56,7 @@ class ParserGenerator(object):
     def make_first(self, c, name):
         rawfirst = self.first[name]
         first = {}
-        for label in rawfirst:
+        for label in sorted(rawfirst):
             ilabel = self.make_label(c, label)
             first[ilabel] = 1
 
@@ -185,7 +185,7 @@ class ParserGenerator(object):
                     if label is not None:
                         addclosure(next, arcs.setdefault(label, {}))
 
-            for label, nfaset in arcs.iteritems():
+            for label, nfaset in sorted(arcs.iteritems()):
                 for st in states:
                     if st.nfaset == nfaset:
                         break
@@ -218,7 +218,7 @@ class ParserGenerator(object):
         print 'Dump of DFA for', name
         for i, state in enumerate(dfa):
             print '  State', i, state.isfinal and '(final)' or ''
-            for label, next in state.arcs.iteritems():
+            for label, next in sorted(state.arcs.iteritems()):
                 print '    %s -> %d' % (label, dfa.index(next))
 
     def simplify_dfa(self, dfa):

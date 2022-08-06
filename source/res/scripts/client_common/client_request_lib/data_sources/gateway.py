@@ -186,8 +186,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'joined_at': from_iso})
 
     def get_clan_favorite_attributes(self, callback, clan_id, fields=None):
-        url = '/clans/%s/favorite_attributes/' % clan_id
-        return self._request_data(callback, url, converters={'favorite_primetime': lambda x: x and datetime.strptime(x, '%H:%M').time(),
+        get_params = {'clan_id': clan_id}
+        url = '/cwh/gm/clans/favorite_attributes'
+        return self._request_data(callback, url, get_data=get_params, converters={'favorite_primetime': lambda x: x and datetime.strptime(x, '%H:%M').time(),
          'favorite_arena_6': int,
          'favorite_arena_8': int,
          'favorite_arena_10': int})
@@ -617,6 +618,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'receiver_id': receiver_id}
         post_data.update(meta_info)
         return self._request_data(callback, url, method='POST', post_data=post_data)
+
+    def get_uilogging_session(self, callback):
+        return self._request_data(callback, '/uilogging/session', method='GET')
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

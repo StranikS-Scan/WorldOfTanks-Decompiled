@@ -10,7 +10,8 @@ def bin(s):
 
 class Test(unittest.TestCase):
 
-    def X_test(self):
+    @unittest.skip('test disabled')
+    def test_X(self):
         print >> sys.stderr, sys.byteorder
         for i in range(32):
             bits = BITS()

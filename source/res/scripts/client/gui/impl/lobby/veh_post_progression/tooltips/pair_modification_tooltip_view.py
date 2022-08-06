@@ -12,8 +12,6 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
-from uilogging.veh_post_progression.loggers import VehPostProgressionModificationTooltipLogger
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -84,20 +82,11 @@ class BasePairModificationTooltipView(ViewImpl):
 
 
 class CmpPairModificationTooltipView(BasePairModificationTooltipView):
-    _uiLogger = VehPostProgressionModificationTooltipLogger(LogGroups.PAIR_MODIFICATION)
     __slots__ = ()
-
-    def _onLoaded(self, *args, **kwargs):
-        super(CmpPairModificationTooltipView, self)._onLoaded(*args, **kwargs)
-        self._uiLogger.onTooltipOpened()
 
     def _onLoading(self, vehicle, stepID, modificationId, *args, **kwargs):
         super(CmpPairModificationTooltipView, self)._onLoading(vehicle, stepID, modificationId, *args, **kwargs)
         self.viewModel.setIsPriceExist(False)
-
-    def _finalize(self):
-        self._uiLogger.onTooltipClosed(parentScreen=ParentScreens.COMPARE_MODIFICATIONS_TREE)
-        super(CmpPairModificationTooltipView, self)._finalize()
 
     def _getState(self, step, modificationId):
         return StepState.AVAILABLEPURCHASE
@@ -113,7 +102,6 @@ class CmpPanelPairModificationTooltipView(CmpPairModificationTooltipView):
 
 class CfgPairModificationTooltipView(BasePairModificationTooltipView):
     _itemsCache = dependency.descriptor(IItemsCache)
-    _uiLogger = VehPostProgressionModificationTooltipLogger(LogGroups.PAIR_MODIFICATION)
     __slots__ = ()
 
     @property
@@ -129,11 +117,3 @@ class CfgPairModificationTooltipView(BasePairModificationTooltipView):
         with self.viewModel.transaction() as model:
             PriceModelBuilder.fillPriceModel(model.price, currentModification.getPrice())
             PriceModelBuilder.fillPriceModel(model.moneyShortage, moneyShortage)
-
-    def _onLoaded(self, *args, **kwargs):
-        super(CfgPairModificationTooltipView, self)._onLoaded(*args, **kwargs)
-        self._uiLogger.onTooltipOpened()
-
-    def _finalize(self):
-        self._uiLogger.onTooltipClosed(parentScreen=ParentScreens.MODIFICATIONS_TREE)
-        super(CfgPairModificationTooltipView, self)._finalize()

@@ -2,6 +2,8 @@
 # Embedded file name: scripts/common/dossiers2/common/DossierDescr.py
 import struct
 from array import array
+from typing import Dict, Iterable
+from dossiers2.common.DossierBlockBuilders import TYPE_BLOCK_BUILDER
 from dossiers2.custom.records import PLATFORM_ACHIEVEMENTS
 
 class DossierDescr(object):

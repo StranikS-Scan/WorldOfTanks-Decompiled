@@ -4,6 +4,7 @@ from cStringIO import StringIO
 import os
 import sys
 import unittest
+import unittest.test
 
 class Test_TestProgram(unittest.TestCase):
 

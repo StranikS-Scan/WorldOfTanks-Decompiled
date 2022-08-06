@@ -17,7 +17,7 @@ class bdist_dumb(Command):
      ('keep-temp', 'k', 'keep the pseudo-installation tree around after ' + 'creating the distribution archive'),
      ('dist-dir=', 'd', 'directory to put final built distributions in'),
      ('skip-build', None, 'skip rebuilding everything (for testing/debugging)'),
-     ('relative', None, 'build the archive using relative paths(default: false)'),
+     ('relative', None, 'build the archive using relative paths (default: false)'),
      ('owner=', 'u', 'Owner name used when creating a tar file [default: current user]'),
      ('group=', 'g', 'Group name used when creating a tar file [default: current group]')]
     boolean_options = ['keep-temp', 'skip-build', 'relative']

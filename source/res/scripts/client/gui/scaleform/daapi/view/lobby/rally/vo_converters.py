@@ -355,10 +355,17 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
          'roleIcon': _ROLE_ICONS.get(role & equipmentCommanderRoles, '')}
         if withPrem:
             slot['hasPremiumAccount'] = player and player.hasPremium
-        if unit.isSquad() or unit.getPrebattleType() == PREBATTLE_TYPE.FUN_RANDOM:
+        if unit.isSquad():
             eventsCache = dependency.instance(IEventsCache)
             if eventsCache.isBalancedSquadEnabled():
-                slot.update(_getBalancedSquadInfo(isPlayerCreator, levelsRange, player, unit, vehicle))
+                isVisibleAdtMsg = player and player.isCurrentPlayer() and not isPlayerCreator and not vehicle and unit and bool(unit.getVehicles())
+                if isVisibleAdtMsg:
+                    rangeString = toRomanRangeString(levelsRange, 1)
+                    additionMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
+                else:
+                    additionMsg = ''
+                slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
+                 'additionalMsg': additionMsg})
             elif eventsCache.isSquadXpFactorsEnabled():
                 slot.update(_getXPFactorSlotInfo(unit, eventsCache, slotInfo))
         if unit.isEvent():
@@ -374,17 +381,6 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
         playerCount += 1
 
     return slots
-
-
-def _getBalancedSquadInfo(isPlayerCreator, levelsRange, player, unit, vehicle):
-    isVisibleAdtMsg = player and player.isCurrentPlayer() and not isPlayerCreator and not vehicle and unit and bool(unit.getVehicles())
-    if isVisibleAdtMsg:
-        rangeString = toRomanRangeString(levelsRange, 1)
-        additionMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
-    else:
-        additionMsg = ''
-    return {'isVisibleAdtMsg': isVisibleAdtMsg,
-     'additionalMsg': additionMsg}
 
 
 def _updateEpicBattleSlotInfo(player, vehicle):

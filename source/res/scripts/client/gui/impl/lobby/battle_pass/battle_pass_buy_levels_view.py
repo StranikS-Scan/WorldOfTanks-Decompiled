@@ -161,7 +161,6 @@ class BattlePassBuyLevelView(ViewImpl):
         model.setLevelsStart(startLevel - 1)
         model.setChapterID(self.__chapterID)
         model.setLevelsPassed(self.__package.getCurrentLevel())
-        model.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value)
         self.__updateConfirmAnyNumberModel(self.__package.getLevelsCount())
 
     def __updateConfirmAnyNumberModel(self, count):
@@ -184,7 +183,6 @@ class BattlePassBuyLevelView(ViewImpl):
             tx.setToLevel(toLevel)
             tx.setPackageState(PackageType.ANYLEVELS)
             tx.setChapterID(self.__chapterID)
-            tx.setFinalReward(self.__battlePass.getRewardType(self.__chapterID).value)
         packBonusModelAndTooltipData(self.__package.getNowAwards(), self.viewModel.rewards.nowRewards, self.__tooltipItems)
 
     def __onBuyBattlePassClick(self):

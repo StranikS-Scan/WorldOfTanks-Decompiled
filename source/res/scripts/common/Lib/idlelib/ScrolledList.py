@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ScrolledList.py
 from Tkinter import *
+from idlelib import macosxSupport
 
 class ScrolledList:
     default = '(None)'
@@ -19,7 +20,11 @@ class ScrolledList:
         listbox['yscrollcommand'] = vbar.set
         listbox.bind('<ButtonRelease-1>', self.click_event)
         listbox.bind('<Double-ButtonRelease-1>', self.double_click_event)
-        listbox.bind('<ButtonPress-3>', self.popup_event)
+        if macosxSupport.isAquaTk():
+            listbox.bind('<ButtonPress-2>', self.popup_event)
+            listbox.bind('<Control-Button-1>', self.popup_event)
+        else:
+            listbox.bind('<ButtonPress-3>', self.popup_event)
         listbox.bind('<Key-Up>', self.up_event)
         listbox.bind('<Key-Down>', self.down_event)
         self.clear()
@@ -109,14 +114,16 @@ class ScrolledList:
         pass
 
 
-def test():
+def _scrolled_list(parent):
     root = Tk()
-    root.protocol('WM_DELETE_WINDOW', root.destroy)
+    root.title('Test ScrolledList')
+    width, height, x, y = list(map(int, re.split('[x+]', parent.geometry())))
+    root.geometry('+%d+%d' % (x, y + 150))
 
     class MyScrolledList(ScrolledList):
 
         def fill_menu(self):
-            self.menu.add_command(label='pass')
+            self.menu.add_command(label='right click')
 
         def on_select(self, index):
             print 'select', self.get(index)
@@ -124,17 +131,13 @@ def test():
         def on_double(self, index):
             print 'double', self.get(index)
 
-    s = MyScrolledList(root)
+    scrolled_list = MyScrolledList(root)
     for i in range(30):
-        s.append('item %02d' % i)
+        scrolled_list.append('Item %02d' % i)
 
-    return root
-
-
-def main():
-    root = test()
     root.mainloop()
 
 
 if __name__ == '__main__':
-    main()
+    from idlelib.idle_test.htest import run
+    run(_scrolled_list)

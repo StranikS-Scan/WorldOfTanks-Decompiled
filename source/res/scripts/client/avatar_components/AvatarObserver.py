@@ -35,6 +35,7 @@ class AvatarObserver(CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__observedVehicleID = None
         self.__observedVehicleData = defaultdict(ObservedVehicleData)
+        self.__previousObservedVehicleID = None
         self.__isFPVModeSwitching = False
         return
 
@@ -93,8 +94,11 @@ class AvatarObserver(CallbackDelayer):
                 if self.gunRotator is not None:
                     self.gunRotator.start()
                 self.updateObservedVehicleData()
+                if self.__previousObservedVehicleID and self.vehicle.id != self.__previousObservedVehicleID:
+                    self.guiSessionProvider.updateVehicleEffects(BigWorld.entity(self.__previousObservedVehicleID))
                 self.vehicle.set_dotEffect()
                 self.vehicle.refreshBuffEffects()
+                self.__previousObservedVehicleID = self.__observedVehicleID
                 if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
                     self.vehicle.filter.enableStabilisedMatrix(True)
                 if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:

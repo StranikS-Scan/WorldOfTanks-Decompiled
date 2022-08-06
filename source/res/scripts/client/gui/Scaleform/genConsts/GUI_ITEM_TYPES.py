@@ -3,4 +3,4 @@
 
 
 class GUI_ITEM_TYPES(object):
-    STYLE = 30
+    STYLE = 32

@@ -8,20 +8,15 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.game_control import IResourceWellController
 from skeletons.gui.shared.utils import IHangarSpace
-from uilogging.resource_well.loggers import ResourceWellVehiclePreviewLogger
 
 class ResourceWellVehiclePreview(VehiclePreview):
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __resourceWell = dependency.descriptor(IResourceWellController)
-    __uiLogger = ResourceWellVehiclePreviewLogger()
 
     def __init__(self, ctx):
-        topPanelData = ctx.get('topPanelData', {})
-        self.__firstTopTab = topPanelData.get('currentTabID', '') if topPanelData is not None else ''
         self.__numberStyle = ctx.get('numberStyle')
         super(ResourceWellVehiclePreview, self).__init__(ctx)
-        return
 
     def setBottomPanel(self):
         self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WELL)
@@ -31,8 +26,6 @@ class ResourceWellVehiclePreview(VehiclePreview):
         self.addListener(events.ResourceWellLoadingViewEvent.LOAD, self.__onViewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.ResourceWellLoadingViewEvent.DESTROY, self.__onViewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resourceWell.onEventUpdated += self.__onEventStateUpdated
-        if self.__firstTopTab:
-            self.__uiLogger.onViewOpened(tab=self.__firstTopTab)
         self.soundManager.setState(SOUNDS.STATE_PLACE, SOUNDS.STATE_PLACE_GARAGE)
         self.soundManager.playInstantSound(SOUNDS.PREVIEW_ENTER)
 
@@ -40,7 +33,6 @@ class ResourceWellVehiclePreview(VehiclePreview):
         self.removeListener(events.ResourceWellLoadingViewEvent.LOAD, self.__onViewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ResourceWellLoadingViewEvent.DESTROY, self.__onViewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resourceWell.onEventUpdated -= self.__onEventStateUpdated
-        self.__uiLogger.onViewClosed()
         super(ResourceWellVehiclePreview, self)._dispose()
 
     def _destroy(self):

@@ -9,7 +9,7 @@ except ImportError:
 def quopri_encode(input, errors='strict'):
     f = StringIO(str(input))
     g = StringIO()
-    quopri.encode(f, g, 1)
+    quopri.encode(f, g, quotetabs=True)
     output = g.getvalue()
     return (output, len(input))
 
@@ -52,4 +52,4 @@ class StreamReader(Codec, codecs.StreamReader):
 
 
 def getregentry():
-    return codecs.CodecInfo(name='quopri', encode=quopri_encode, decode=quopri_decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamwriter=StreamWriter, streamreader=StreamReader)
+    return codecs.CodecInfo(name='quopri', encode=quopri_encode, decode=quopri_decode, incrementalencoder=IncrementalEncoder, incrementaldecoder=IncrementalDecoder, streamwriter=StreamWriter, streamreader=StreamReader, _is_text_encoding=False)

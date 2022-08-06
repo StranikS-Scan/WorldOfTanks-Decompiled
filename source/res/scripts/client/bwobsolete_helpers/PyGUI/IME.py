@@ -77,20 +77,20 @@ class CompositionWindow(object):
 
     def __init__(self):
         self.comp = GUI.Window('system/maps/col_white.bmp')
-        self.comp.materialFX = 'BLEND'
+        self.comp.materialFX = GUI.Simple.eMaterialFX.BLEND
         self.comp.visible = False
         self.comp.script = self
-        self.comp.horizontalPositionMode = 'CLIP'
-        self.comp.horizontalAnchor = 'LEFT'
-        self.comp.verticalPositionMode = 'CLIP'
-        self.comp.verticalAnchor = 'CENTER'
-        self.comp.widthMode = 'PIXEL'
-        self.comp.heightMode = 'PIXEL'
+        self.comp.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.comp.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.verticalAnchor = GUI.Simple.eVAnchor.CENTER
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.heightMode = GUI.Simple.eSizeMode.PIXEL
         self.comp.position.z = ALWAYS_ON_TOP_Z
         self.comp.addChild(GUI.Text(), 'text')
         self.comp.text.font = DEFAULT_FONT_NAME
-        self.comp.text.horizontalAnchor = 'LEFT'
-        self.comp.text.horizontalPositionMode = 'PIXEL'
+        self.comp.text.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.comp.text.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
         self.comp.text.colouriser = GUI.ColourShader()
         self.comp.text.colouriser.colourProvider = self.comp.text.colour
         self.cursor = BlinkingCursor()
@@ -128,14 +128,14 @@ class CompositionWindow(object):
             if self._firstTargetConvertedBlock < 0 and attr not in [ATTR_INPUT, ATTR_CONVERTED]:
                 self._firstTargetConvertedBlock = idx
             w = _bgText(str, fontName, bgColour, fgColour)
-            w.horizontalAnchor = 'LEFT'
-            w.horizontalPositionMode = 'PIXEL'
+            w.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+            w.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
             w.position.x = fullWidth
             self.comp.addChild(w, 'compBlock%d' % idx)
             idx += 1
             fullWidth += w.width
 
-        self.comp.widthMode = 'PIXEL'
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
         self.comp.width = fullWidth
         _, self.comp.height = self.comp.compBlock0.text.stringDimensions(compString)
         self.comp.height = self.comp.height * getVPixelScalar()
@@ -176,7 +176,7 @@ class CompositionWindow(object):
             block = getattr(self.comp, 'compBlock%d' % ftcb, None)
             if block is not None:
                 widthMode = block.widthMode
-                block.widthMode = 'CLIP'
+                block.widthMode = GUI.Simple.eSizeMode.CLIP
                 blockMins = block.localToScreen((-1, -1))
                 block.widthMode = widthMode
                 clipMins[0] = blockMins[0]
@@ -192,24 +192,24 @@ class ReadingWindow(object):
 
     def __init__(self):
         self.comp = GUI.Window('system/maps/col_white.bmp')
-        self.comp.materialFX = 'BLEND'
+        self.comp.materialFX = GUI.Simple.eMaterialFX.BLEND
         self.comp.colour = BACKGROUND_COLOUR
         self.comp.visible = False
         self.comp.script = self
-        self.comp.horizontalPositionMode = 'CLIP'
-        self.comp.horizontalAnchor = 'LEFT'
-        self.comp.verticalPositionMode = 'CLIP'
-        self.comp.verticalAnchor = 'TOP'
-        self.comp.widthMode = 'PIXEL'
-        self.comp.heightMode = 'PIXEL'
+        self.comp.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.comp.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.verticalAnchor = GUI.Simple.eVAnchor.RIGHT
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.heightMode = GUI.Simple.eSizeMode.PIXEL
         self.comp.position.z = ALWAYS_ON_TOP_Z
         self.comp.addChild(GUI.Text(''), 'text')
         self.comp.text.multiline = True
         self.comp.text.font = DEFAULT_FONT_NAME
-        self.comp.text.horizontalAnchor = 'LEFT'
-        self.comp.text.horizontalPositionMode = 'PIXEL'
-        self.comp.text.verticalAnchor = 'TOP'
-        self.comp.text.verticalPositionMode = 'PIXEL'
+        self.comp.text.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.comp.text.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.text.verticalAnchor = GUI.Simple.eVAnchor.TOP
+        self.comp.text.verticalPositionMode = GUI.Simple.eSizeMode.PIXEL
 
     def populate(self, fontName):
         readingString = BigWorld.ime.reading
@@ -224,7 +224,7 @@ class ReadingWindow(object):
         self.comp.text.text = readingString
         self.comp.text.position.x = horzMargin
         self.comp.text.position.y = vertMargin
-        self.comp.widthMode = 'PIXEL'
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
         textWidth, textHeight = self.comp.text.stringDimensions(readingString)
         self.comp.width = horzMargin * 2 + textWidth * getHPixelScalar()
         self.comp.height = vertMargin * 2 + textHeight * getVPixelScalar()
@@ -248,25 +248,25 @@ class CandidateWindow(object):
     def __init__(self):
         self.comp = GUI.Window('system/maps/col_white.bmp')
         self.comp.colour = (32, 32, 32, 255)
-        self.comp.materialFX = 'BLEND'
+        self.comp.materialFX = GUI.Simple.eMaterialFX.BLEND
         self.comp.visible = False
         self.comp.script = self
-        self.comp.horizontalPositionMode = 'CLIP'
-        self.comp.horizontalAnchor = 'LEFT'
+        self.comp.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
         self.comp.position.x = 0
-        self.comp.verticalPositionMode = 'CLIP'
-        self.comp.verticalAnchor = 'TOP'
+        self.comp.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        self.comp.verticalAnchor = GUI.Simple.eVAnchor.TOP
         self.comp.position.y = 0
         self.comp.position.z = ALWAYS_ON_TOP_Z
-        self.comp.widthMode = 'PIXEL'
-        self.comp.heightMode = 'PIXEL'
+        self.comp.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.heightMode = GUI.Simple.eSizeMode.PIXEL
         self.comp.addChild(GUI.Text(''), 'candidateText')
         self.comp.candidateText.font = DEFAULT_FONT_NAME
         self.comp.candidateText.multiline = True
-        self.comp.candidateText.horizontalPositionMode = 'PIXEL'
-        self.comp.candidateText.verticalPositionMode = 'PIXEL'
-        self.comp.candidateText.horizontalAnchor = 'LEFT'
-        self.comp.candidateText.verticalAnchor = 'TOP'
+        self.comp.candidateText.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.candidateText.verticalPositionMode = GUI.Simple.eSizeMode.PIXEL
+        self.comp.candidateText.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.comp.candidateText.verticalAnchor = GUI.Simple.eVAnchor.TOP
         self.comp.candidateText.position = (0, 0, 0.5)
 
     def populate(self, fontName):
@@ -293,13 +293,13 @@ class CandidateWindow(object):
         if len(candidates) > 0:
             selStr = str(selectedIdx + 1) + candidates[selectedIdx]
             selectedComp = _bgText(selStr, fontName, SELECTED_CANDIDATE_BGCOLOUR, SELECTED_CANDIDATE_FGCOLOUR)
-            selectedComp.horizontalAnchor = 'LEFT'
-            selectedComp.horizontalPositionMode = 'PIXEL'
-            selectedComp.verticalAnchor = 'TOP'
-            selectedComp.verticalPositionMode = 'PIXEL'
+            selectedComp.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+            selectedComp.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
+            selectedComp.verticalAnchor = GUI.Simple.eVAnchor.TOP
+            selectedComp.verticalPositionMode = GUI.Simple.eSizeMode.PIXEL
             selectedComp.position.z = 0.01
-            selectedComp.text.horizontalPositionMode = 'PIXEL'
-            selectedComp.text.horizontalAnchor = 'LEFT'
+            selectedComp.text.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
+            selectedComp.text.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
             selectedComp.text.position.x = 0
             fontWidth, fontHeight = self.comp.candidateText.stringDimensions(selStr)
             if BigWorld.ime.candidatesVertical:
@@ -310,7 +310,7 @@ class CandidateWindow(object):
             else:
                 selectedComp.position.x = preSelectWidth * getHPixelScalar()
                 selectedComp.position.y = 0
-                selectedComp.widthMode = 'PIXEL'
+                selectedComp.widthMode = GUI.Simple.eSizeMode.PIXEL
                 selectedComp.width = (fontWidth + 1) * getHPixelScalar()
                 selectedComp.heightMode = self.comp.heightMode
                 selectedComp.height = self.comp.height

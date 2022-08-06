@@ -3,7 +3,7 @@
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider
+from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.mapbox.pre_queue.vehicles_watcher import MapboxVehiclesWatcher
@@ -40,14 +40,17 @@ class MapboxSquadEntity(SquadEntity):
     def __init__(self):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = True
+        self._isUseScoutValidateRule = True
         self.__watcher = None
         self.__restrictedSPGDataProvider = RestrictedSPGDataProvider()
+        self.__restrictedScoutDataProvider = RestrictedScoutDataProvider()
         self.storage = prequeue_storage_getter(QUEUE_TYPE.MAPBOX)()
         super(MapboxSquadEntity, self).__init__(FUNCTIONAL_FLAG.MAPBOX, PREBATTLE_TYPE.MAPBOX)
         return
 
     def init(self, ctx=None):
         self.__restrictedSPGDataProvider.init(self)
+        self.__restrictedScoutDataProvider.init(self)
         self.storage.release()
         mapboxSquadEntity = super(MapboxSquadEntity, self).init(ctx)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
@@ -62,11 +65,13 @@ class MapboxSquadEntity(SquadEntity):
         self.__eventsCache.onSyncCompleted -= self._onServerSettingChanged
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self._isUseSPGValidateRule = False
+        self._isUseScoutValidateRule = False
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
         self.invalidateVehicleStates()
         self.__restrictedSPGDataProvider.fini()
+        self.__restrictedScoutDataProvider.fini()
         return super(MapboxSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def leave(self, ctx, callback=None):
@@ -87,13 +92,25 @@ class MapboxSquadEntity(SquadEntity):
         return super(MapboxSquadEntity, self).doSelectAction(action)
 
     def getMaxSPGCount(self):
-        return self.__restrictedSPGDataProvider.getMaxVehiclesOfClass()
+        return self.__restrictedSPGDataProvider.getMaxPossibleVehicles()
+
+    def getMaxScoutCount(self):
+        return self.__restrictedScoutDataProvider.getMaxPossibleVehicles()
 
     def hasSlotForSPG(self):
-        return self.__restrictedSPGDataProvider.hasSlotForVehicleClass()
+        return self.__restrictedSPGDataProvider.hasSlotForVehicle()
+
+    def hasSlotForScout(self):
+        return self.__restrictedScoutDataProvider.hasSlotForVehicle()
 
     def getCurrentSPGCount(self):
-        return self.__restrictedSPGDataProvider.getCurrentVheiclesOfClassCount()
+        return self.__restrictedSPGDataProvider.getCurrentVehiclesCount()
+
+    def getCurrentScoutCount(self):
+        return self.__restrictedScoutDataProvider.getCurrentVehiclesCount()
+
+    def getMaxScoutLevels(self):
+        return self.__restrictedScoutDataProvider.getRestrictionLevels()
 
     def getConfirmDialogMeta(self, ctx):
         return None if not self.__mapboxCtrl.isActive() else super(MapboxSquadEntity, self).getConfirmDialogMeta(ctx)
@@ -126,7 +143,9 @@ class MapboxSquadEntity(SquadEntity):
         return MapboxScheduler(self)
 
     def _vehicleStateCondition(self, v):
-        return self.__restrictedSPGDataProvider.isVehcleOfClassAvailable() if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG else super(MapboxSquadEntity, self)._vehicleStateCondition(v)
+        if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG:
+            return self.__restrictedSPGDataProvider.isTagVehicleAvailable()
+        return self.__restrictedScoutDataProvider.isTagVehicleAvailable() if self._isUseScoutValidateRule and v.isScout and v.level in self.getMaxScoutLevels() else super(MapboxSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         self.invalidateVehicleStates()

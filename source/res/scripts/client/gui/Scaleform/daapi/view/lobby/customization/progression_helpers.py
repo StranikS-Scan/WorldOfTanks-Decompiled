@@ -4,6 +4,7 @@ import binascii
 import logging
 import struct
 from collections import namedtuple
+from CurrentVehicle import g_currentVehicle
 from constants import EVENT_TYPE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
@@ -61,6 +62,10 @@ def getC11nProgressionLinkBtnParams(vehicle):
     linkBtnTooltip = R.strings.tooltips.quests.linkBtn.customizationProgression
     linkBtnTooltip = linkBtnTooltip.enabled() if isLinkEnabled else linkBtnTooltip.disabled()
     return C11nProgressionLinkBtnParams(isLinkEnabled, linkBtnTooltip)
+
+
+def getC11n2dProgressionLinkBtnParams():
+    return getC11nProgressionLinkBtnParams(g_currentVehicle.item)
 
 
 def __makeAwardsVO(item, level, vehicleIntCD):

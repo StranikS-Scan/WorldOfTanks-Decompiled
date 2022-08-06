@@ -1104,6 +1104,9 @@ def main():
         except SystemExit:
             print 'The program exited via sys.exit(). Exit status: ',
             print sys.exc_info()[1]
+        except SyntaxError:
+            traceback.print_exc()
+            sys.exit(1)
         except:
             traceback.print_exc()
             print 'Uncaught exception. Entering post mortem debugging'

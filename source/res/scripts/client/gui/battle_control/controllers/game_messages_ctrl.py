@@ -43,9 +43,9 @@ class GameMessagesController(IViewComponentsController):
         self.__arenaVisitor = None
         return
 
-    def __onRoundFinished(self, winningTeam, reason):
+    def __onRoundFinished(self, winningTeam, reason, extraData):
         if self.__ui:
-            self.__ui.sendEndGameMessage(winningTeam, reason)
+            self.__ui.sendEndGameMessage(winningTeam, reason, extraData)
 
 
 def createGameMessagesController(setup):

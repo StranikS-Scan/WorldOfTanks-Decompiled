@@ -87,6 +87,8 @@ if os.name == 'nt' and 'pcbuild' in _PROJECT_BASE[-8:].lower():
     _PROJECT_BASE = _safe_realpath(os.path.join(_PROJECT_BASE, pardir))
 if os.name == 'nt' and '\\pc\\v' in _PROJECT_BASE[-10:].lower():
     _PROJECT_BASE = _safe_realpath(os.path.join(_PROJECT_BASE, pardir, pardir))
+if os.name == 'nt' and os.path.basename(os.path.dirname(os.path.dirname(_PROJECT_BASE))).lower() == 'pc' and os.path.basename(os.path.dirname(_PROJECT_BASE)).lower() == 'vs9.0':
+    _PROJECT_BASE = _safe_realpath(os.path.join(_PROJECT_BASE, pardir, pardir, pardir))
 if os.name == 'nt' and '\\pcbuild\\amd64' in _PROJECT_BASE[-14:].lower():
     _PROJECT_BASE = _safe_realpath(os.path.join(_PROJECT_BASE, pardir, pardir))
 if '_PYTHON_PROJECT_BASE' in os.environ:
@@ -230,14 +232,16 @@ def _parse_makefile(filename, vars=None):
     return vars
 
 
-def _get_makefile_filename():
+def get_makefile_filename():
     return os.path.join(_PROJECT_BASE, 'Makefile') if _PYTHON_BUILD else os.path.join(get_path('platstdlib'), 'config', 'Makefile')
 
+
+_get_makefile_filename = get_makefile_filename
 
 def _generate_posix_vars():
     import pprint
     vars = {}
-    makefile = _get_makefile_filename()
+    makefile = get_makefile_filename()
     try:
         _parse_makefile(makefile, vars)
     except IOError as e:

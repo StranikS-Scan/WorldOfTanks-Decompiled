@@ -47,19 +47,19 @@ class Grid(PyGUIBase):
     def doLayout(self):
         widthMode = self.component.widthMode
         heightMode = self.component.heightMode
-        if widthMode == 'PIXEL':
+        if widthMode == GUI.Simple.eSizeMode.PIXEL:
             horizSize = (self.component.width - self.borderLeft - self.borderRight - self.horizontalGap * (self.gridWidth - 1)) / self.gridWidth
             horizOffset = horizSize + self.horizontalGap
             horizStart = self.borderLeft
-        if widthMode == 'CLIP':
+        if widthMode == GUI.Simple.eSizeMode.CLIP:
             horizSize = (2.0 - self.borderLeft - self.borderRight - self.horizontalGap * (self.gridWidth - 1)) / self.gridWidth
             horizOffset = horizSize + self.horizontalGap
             horizStart = -1.0 + self.borderLeft
-        if heightMode == 'PIXEL':
+        if heightMode == GUI.Simple.eSizeMode.PIXEL:
             vertSize = (self.component.height - self.borderTop - self.borderBottom - self.verticalGap * (self.gridHeight - 1)) / self.gridHeight
             vertOffset = vertSize + self.verticalGap
             vertStart = self.borderTop
-        if heightMode == 'CLIP':
+        if heightMode == GUI.Simple.eSizeMode.CLIP:
             vertSize = (2.0 - self.borderTop - self.borderBottom - self.verticalGap * (self.gridHeight - 1)) / self.gridHeight
             vertOffset = -(vertSize + self.verticalGap)
             vertStart = 1.0 - self.borderTop
@@ -94,11 +94,11 @@ class Grid(PyGUIBase):
     @staticmethod
     def create(texture, gridSize=(1, 1), horizontalFirst=True, **kwargs):
         c = GUI.Window(texture)
-        c.materialFX = 'BLEND'
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         g = Grid(c, **kwargs)
         if len(gridSize) == 2:
             g.gridWidth = gridSize[0]

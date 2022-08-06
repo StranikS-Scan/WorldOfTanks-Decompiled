@@ -54,6 +54,7 @@ from nations import NAMES
 from optional_bonuses import BONUS_MERGERS
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import CONST_CONTAINER, first, makeTupleByDict
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
@@ -729,7 +730,7 @@ class X5BattleTokensBonus(TokensBonus):
         return backport.text(R.strings.quests.bonusName.battle_bonus_x5())
 
     def getIconBySize(self, size):
-        bonusBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('bonus_battle_task')
+        bonusBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('battle_bonus_x5')
         return backport.image(bonusBattleTaskRes()) if bonusBattleTaskRes else None
 
 
@@ -1126,6 +1127,7 @@ class GoodiesBonus(SimpleBonus):
 
 
 class VehiclesBonus(SimpleBonus):
+    VEHICLES_BONUS = 'vehicles'
 
     @classmethod
     def isNonZeroCompensation(cls, vehInfo):
@@ -1669,6 +1671,13 @@ class CustomizationsBonus(SimpleBonus):
             pack.append(ItemPackEntry(type=customization['type'], count=customization['value'], id=customization['id'], groupID=groupID))
 
         return pack
+
+    def hasAnyCustomCompensations(self):
+        for customizationItem in self._value:
+            if customizationItem.get('customCompensation'):
+                return True
+
+        return False
 
     def __getItemTypeStr(self, itemType):
         typeStr = itemType
@@ -2261,7 +2270,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'berths': CountableIntegralBonus,
  PREMIUM_ENTITLEMENTS.BASIC: BasicPremiumDaysBonus,
  PREMIUM_ENTITLEMENTS.PLUS: PlusPremiumDaysBonus,
- 'vehicles': VehiclesBonus,
+ VehiclesBonus.VEHICLES_BONUS: VehiclesBonus,
  'meta': MetaBonus,
  'tokens': {'default': tokensFactory,
             _ET.BATTLE_QUEST: tokensFactory,
@@ -2569,9 +2578,14 @@ def getVehicleCrewReward(vehiclesReward):
         return tmenBonus
 
 
+def getDynamicOfferTokens():
+    battleMatters = dependency.instance(IBattleMattersController)
+    return (battleMatters.getDelayedRewardToken(),)
+
+
 def _isSelectableBonusID(bonusID):
     offers = dependency.instance(IOffersDataProvider)
-    isSelectableBonus = any((bonusID.startswith(prefix) for prefix in FEATURE_TO_PREFIX.itervalues()))
+    isSelectableBonus = any((bonusID.startswith(prefix) for prefix in FEATURE_TO_PREFIX.itervalues())) or bonusID in getDynamicOfferTokens()
     if isSelectableBonus and offers.getOfferByToken(bonusID) is None:
         _logger.debug('Offer token %s has no offer', bonusID)
     return isSelectableBonus

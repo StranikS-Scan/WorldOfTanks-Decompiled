@@ -316,3 +316,7 @@ def createBBoxManagerForModels(hitTesterManagers):
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))
+if hasattr(BigWorld, 'wg_segmentMayHitVolume'):
+    segmentMayHitVolume = BigWorld.wg_segmentMayHitVolume
+if hasattr(BigWorld, 'wg_coneMayHitVolume'):
+    coneMayHitVolume = BigWorld.wg_coneMayHitVolume

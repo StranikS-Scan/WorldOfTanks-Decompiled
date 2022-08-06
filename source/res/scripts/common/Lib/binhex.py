@@ -10,7 +10,8 @@ class Error(Exception):
     pass
 
 
-_DID_HEADER, _DID_DATA, _DID_RSRC = range(3)
+_DID_HEADER = 0
+_DID_DATA = 1
 REASONABLY_LARGE = 32768
 LINELEN = 64
 RUNCHAR = chr(144)
@@ -212,17 +213,24 @@ class BinHex:
         self._write(data)
 
     def close(self):
-        if self.state < _DID_DATA:
-            self.close_data()
-        if self.state != _DID_DATA:
-            raise Error, 'Close at the wrong time'
-        if self.rlen != 0:
-            raise Error, 'Incorrect resource-datasize, diff=%r' % (self.rlen,)
-        self._writecrc()
-        self.ofp.close()
-        self.state = None
-        del self.ofp
-        return
+        if self.state is None:
+            return
+        else:
+            try:
+                if self.state < _DID_DATA:
+                    self.close_data()
+                if self.state != _DID_DATA:
+                    raise Error, 'Close at the wrong time'
+                if self.rlen != 0:
+                    raise Error, 'Incorrect resource-datasize, diff=%r' % (self.rlen,)
+                self._writecrc()
+            finally:
+                self.state = None
+                ofp = self.ofp
+                del self.ofp
+                ofp.close()
+
+            return
 
 
 def binhex(inp, out):
@@ -411,11 +419,18 @@ class HexBin:
         return self._read(n)
 
     def close(self):
-        if self.rlen:
-            dummy = self.read_rsrc(self.rlen)
-        self._checkcrc()
-        self.state = _DID_RSRC
-        self.ifp.close()
+        if self.state is None:
+            return
+        else:
+            try:
+                if self.rlen:
+                    dummy = self.read_rsrc(self.rlen)
+                self._checkcrc()
+            finally:
+                self.state = None
+                self.ifp.close()
+
+            return
 
 
 def hexbin(inp, out):

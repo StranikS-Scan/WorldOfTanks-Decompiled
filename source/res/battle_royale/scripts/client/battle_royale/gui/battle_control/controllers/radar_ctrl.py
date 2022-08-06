@@ -36,6 +36,9 @@ class IRadarListener(object):
     def radarInfoReceived(self, radarInfo):
         pass
 
+    def reset(self):
+        pass
+
 
 class IReplayRadarListener(IRadarListener):
 
@@ -97,8 +100,12 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
                 self.__notifyRadarActivated()
             self._notifyTimeOutStarted(actualTime)
             self._launchReloadCallback(actualTime)
-        elif BigWorld.player().isObserver():
-            self.__clearRadarData()
+        else:
+            for listener in self._iterAllListeners():
+                listener.reset()
+
+            if BigWorld.player().isObserver():
+                self.__clearRadarData()
 
     def updateRadarReadiness(self, isReady):
         allListeners = self._iterAllListeners()
@@ -206,8 +213,10 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
 
     def __onUpdateObservedVehicleData(self, vID, extraData):
         vehicle = BigWorld.entities.get(vID)
-        if vehicle:
+        if vehicle and vehicle.isAlive():
             vehicle.radar.refreshRadar()
+        else:
+            self.__cancelCallback()
 
 
 class RadarReplayController(RadarController):

@@ -10,57 +10,126 @@ __all__ = ['NullTranslations',
  'install',
  'textdomain',
  'bindtextdomain',
+ 'bind_textdomain_codeset',
  'dgettext',
  'dngettext',
  'gettext',
+ 'lgettext',
+ 'ldgettext',
+ 'ldngettext',
+ 'lngettext',
  'ngettext']
 _default_localedir = os.path.join(sys.prefix, 'share', 'locale')
+_token_pattern = re.compile('\n        (?P<WHITESPACES>[ \\t]+)                    | # spaces and horizontal tabs\n        (?P<NUMBER>[0-9]+\\b)                       | # decimal integer\n        (?P<NAME>n\\b)                              | # only n is allowed\n        (?P<PARENTHESIS>[()])                      |\n        (?P<OPERATOR>[-*/%+?:]|[><!]=?|==|&&|\\|\\|) | # !, *, /, %, +, -, <, >,\n                                                     # <=, >=, ==, !=, &&, ||,\n                                                     # ? :\n                                                     # unary and bitwise ops\n                                                     # not allowed\n        (?P<INVALID>\\w+|.)                           # invalid token\n    ', re.VERBOSE | re.DOTALL)
 
-def test(condition, true, false):
-    if condition:
-        return true
+def _tokenize(plural):
+    for mo in re.finditer(_token_pattern, plural):
+        kind = mo.lastgroup
+        if kind == 'WHITESPACES':
+            continue
+        value = mo.group(kind)
+        if kind == 'INVALID':
+            raise ValueError('invalid token in plural form: %s' % value)
+        yield value
+
+    yield ''
+
+
+def _error(value):
+    if value:
+        return ValueError('unexpected token in plural form: %s' % value)
     else:
-        return false
+        return ValueError('unexpected end of plural form')
+
+
+_binary_ops = (('||',),
+ ('&&',),
+ ('==', '!='),
+ ('<', '>', '<=', '>='),
+ ('+', '-'),
+ ('*', '/', '%'))
+_binary_ops = {op:i for i, ops in enumerate(_binary_ops, 1) for op in ops}
+_c2py_ops = {'||': 'or',
+ '&&': 'and',
+ '/': '//'}
+
+def _parse(tokens, priority=-1):
+    result = ''
+    nexttok = next(tokens)
+    while nexttok == '!':
+        result += 'not '
+        nexttok = next(tokens)
+
+    if nexttok == '(':
+        sub, nexttok = _parse(tokens)
+        result = '%s(%s)' % (result, sub)
+        if nexttok != ')':
+            raise ValueError('unbalanced parenthesis in plural form')
+    elif nexttok == 'n':
+        result = '%s%s' % (result, nexttok)
+    else:
+        try:
+            value = int(nexttok, 10)
+        except ValueError:
+            raise _error(nexttok)
+
+        result = '%s%d' % (result, value)
+    nexttok = next(tokens)
+    j = 100
+    while nexttok in _binary_ops:
+        i = _binary_ops[nexttok]
+        if i < priority:
+            break
+        if i in (3, 4) and j in (3, 4):
+            result = '(%s)' % result
+        op = _c2py_ops.get(nexttok, nexttok)
+        right, nexttok = _parse(tokens, i + 1)
+        result = '%s %s %s' % (result, op, right)
+        j = i
+
+    if j == priority == 4:
+        result = '(%s)' % result
+    if nexttok == '?' and priority <= 0:
+        if_true, nexttok = _parse(tokens, 0)
+        if nexttok != ':':
+            raise _error(nexttok)
+        if_false, nexttok = _parse(tokens)
+        result = '%s if %s else %s' % (if_true, result, if_false)
+        if priority == 0:
+            result = '(%s)' % result
+    return (result, nexttok)
+
+
+def _as_int(n):
+    try:
+        i = round(n)
+    except TypeError:
+        raise TypeError('Plural value must be an integer, got %s' % (n.__class__.__name__,))
+
+    return n
 
 
 def c2py(plural):
+    if len(plural) > 1000:
+        raise ValueError('plural form expression is too long')
     try:
-        from cStringIO import StringIO
-    except ImportError:
-        from StringIO import StringIO
+        result, nexttok = _parse(_tokenize(plural))
+        if nexttok:
+            raise _error(nexttok)
+        depth = 0
+        for c in result:
+            if c == '(':
+                depth += 1
+                if depth > 20:
+                    raise ValueError('plural form expression is too complex')
+            if c == ')':
+                depth -= 1
 
-    import token, tokenize
-    tokens = tokenize.generate_tokens(StringIO(plural).readline)
-    try:
-        danger = [ x for x in tokens if x[0] == token.NAME and x[1] != 'n' ]
-    except tokenize.TokenError:
-        raise ValueError, 'plural forms expression error, maybe unbalanced parenthesis'
-    else:
-        if danger:
-            raise ValueError, 'plural forms expression could be dangerous'
-
-    plural = plural.replace('&&', ' and ')
-    plural = plural.replace('||', ' or ')
-    expr = re.compile('\\!([^=])')
-    plural = expr.sub(' not \\1', plural)
-    expr = re.compile('(.*?)\\?(.*?):(.*)')
-
-    def repl(x):
-        return 'test(%s, %s, %s)' % (x.group(1), x.group(2), expr.sub(repl, x.group(3)))
-
-    stack = ['']
-    for c in plural:
-        if c == '(':
-            stack.append('')
-        if c == ')':
-            if len(stack) == 1:
-                raise ValueError, 'unbalanced parenthesis in plural form'
-            s = expr.sub(repl, stack.pop())
-            stack[-1] += '(%s)' % s
-        stack[-1] += c
-
-    plural = expr.sub(repl, stack.pop())
-    return eval('lambda n: int(%s)' % plural)
+        ns = {'_as_int': _as_int}
+        exec 'if 1:\n            def func(n):\n                if not isinstance(n, int):\n                    n = _as_int(n)\n                return int(%s)\n            ' % result in ns
+        return ns['func']
+    except RuntimeError:
+        raise ValueError('plural form expression is too complex')
 
 
 def _expand_lang(locale):
@@ -218,11 +287,12 @@ class GNUTranslations(NullTranslations):
             else:
                 raise IOError(0, 'File is corrupt', filename)
             if mlen == 0:
-                lastk = k = None
+                lastk = None
                 for item in tmsg.splitlines():
                     item = item.strip()
                     if not item:
                         continue
+                    k = v = None
                     if ':' in item:
                         k, v = item.split(':', 1)
                         k = k.strip().lower()

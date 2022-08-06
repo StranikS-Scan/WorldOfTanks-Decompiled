@@ -35,7 +35,7 @@ class ConnectToSecureChannelWindow(ConnectToSecureChannelWindowMeta):
 
     def _populate(self):
         super(ConnectToSecureChannelWindow, self)._populate()
-        self.as_infoMessageS(i18n.makeString(MESSENGER.DIALOGS_CONNECTINGTOSECURECHANNEL_LABELS_INFO, i18n.encodeUtf8(self._channel.getFullName())))
+        self.as_infoMessageS(i18n.makeString(MESSENGER.DIALOGS_CONNECTINGTOSECURECHANNEL_LABELS_INFO, self._channel.getFullName()))
 
     def _dispose(self):
         self._channel = None

@@ -26,11 +26,10 @@ class UserMenuWebApiMixin(object):
          'excludedItems': cmd.excluded_items,
          'customItemsAfterEnd': cmd.custom_items_after_end}
         callback = ctx.get('callback')
-        browserView = ctx.get('browser_view')
         appLoader = dependency.instance(IAppLoader)
         app = appLoader.getApp()
         try:
-            browserView.as_showContextMenuS(CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, context)
+            app.contextMenuManager.show(CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, context)
             cmHandler = app.contextMenuManager.getCurrentHandler()
         except AttributeError as ex:
             raise WebCommandException('Failed to show context menu: %s' % ex)

@@ -440,6 +440,8 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener):
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:
                 self.__isAutoRotationOff = flag != AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
+            else:
+                self.__isAutoRotationOff = False
         self.__isWheeledTech = vehicle.isWheeledTech
         self.__isTrackWithinVehicle = vehicle.isTrackWithinTrack
         prebattleVehicle = self.sessionProvider.shared.prebattleSetups.getPrebattleSetupsVehicle()

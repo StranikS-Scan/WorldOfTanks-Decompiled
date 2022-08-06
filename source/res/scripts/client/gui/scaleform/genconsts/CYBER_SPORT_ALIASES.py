@@ -20,7 +20,7 @@ class CYBER_SPORT_ALIASES(object):
     RANGE_ROSTER_SETTINGS_VIEW = 'RangeRosterSettingsViewUI'
     VEHICLE_SELECTOR_VIEW = 'VehicleSelectorUI'
     ROSTER_SEPARATOR = 'separatorMcUI'
-    ROSTER_FLAGS = 'SmallFlags'
+    ROSTER_FLAGS = 'NationFlags25x17_UI'
     ROSTER_LEVELS = 'TankLevels'
     ROSTER_TYPES = 'TankTypes'
     ROSTER_LEVEL_SEPARATOR = 'LevelsSeparatorUI'

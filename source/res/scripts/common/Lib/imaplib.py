@@ -13,7 +13,7 @@ Debug = 0
 IMAP4_PORT = 143
 IMAP4_SSL_PORT = 993
 AllowedVersions = ('IMAP4REV1', 'IMAP4')
-_MAXLINE = 10000
+_MAXLINE = 1000000
 Commands = {'APPEND': ('AUTH', 'SELECTED'),
  'AUTHENTICATE': ('NONAUTH',),
  'CAPABILITY': ('NONAUTH',
@@ -41,6 +41,7 @@ Commands = {'APPEND': ('AUTH', 'SELECTED'),
             'SELECTED',
             'LOGOUT'),
  'LSUB': ('AUTH', 'SELECTED'),
+ 'MOVE': ('SELECTED',),
  'NAMESPACE': ('AUTH', 'SELECTED'),
  'NOOP': ('NONAUTH',
           'AUTH',
@@ -144,7 +145,7 @@ class IMAP4():
             try:
                 self.sock.shutdown(socket.SHUT_RDWR)
             except socket.error as e:
-                if e.errno != errno.ENOTCONN:
+                if e.errno not in (errno.ENOTCONN, 10022):
                     raise
 
         finally:
@@ -587,12 +588,6 @@ else:
             self.sslobj = ssl.wrap_socket(self.sock, self.keyfile, self.certfile)
             self.file = self.sslobj.makefile('rb')
 
-        def read(self, size):
-            return self.file.read(size)
-
-        def readline(self):
-            return self.file.readline()
-
         def send(self, data):
             bytes = len(data)
             while bytes > 0:
@@ -740,7 +735,7 @@ def ParseFlags(resp):
 
 
 def Time2Internaldate(date_time):
-    if isinstance(date_time, (int, float)):
+    if isinstance(date_time, (int, long, float)):
         tt = time.localtime(date_time)
     elif isinstance(date_time, (tuple, time.struct_time)):
         tt = date_time

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/dynOptionMenuWidget.py
-from Tkinter import OptionMenu
-from Tkinter import _setit
 import copy
+from Tkinter import OptionMenu, _setit, StringVar, Button
 
 class DynOptionMenu(OptionMenu):
 
@@ -22,3 +21,29 @@ class DynOptionMenu(OptionMenu):
 
         if value:
             self.variable.set(value)
+
+
+def _dyn_option_menu(parent):
+    from Tkinter import Toplevel
+    top = Toplevel()
+    top.title('Tets dynamic option menu')
+    top.geometry('200x100+%d+%d' % (parent.winfo_rootx() + 200, parent.winfo_rooty() + 150))
+    top.focus_set()
+    var = StringVar(top)
+    var.set('Old option set')
+    dyn = DynOptionMenu(top, var, 'old1', 'old2', 'old3', 'old4')
+    dyn.pack()
+
+    def update():
+        dyn.SetMenu(['new1',
+         'new2',
+         'new3',
+         'new4'], value='new option set')
+
+    button = Button(top, text='Change option set', command=update)
+    button.pack()
+
+
+if __name__ == '__main__':
+    from idlelib.idle_test.htest import run
+    run(_dyn_option_menu)

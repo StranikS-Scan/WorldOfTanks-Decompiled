@@ -16,9 +16,6 @@ class CustomizationEditedKitPopoverMeta(SmartPopOverView):
     def as_setHeaderS(self, value):
         return self.flashObject.as_setHeader(value) if self._isDAAPIInited() else None
 
-    def as_setHelpMessageS(self, value):
-        return self.flashObject.as_setHelpMessage(value) if self._isDAAPIInited() else None
-
     def as_setDefaultButtonEnabledS(self, value):
         return self.flashObject.as_setDefaultButtonEnabled(value) if self._isDAAPIInited() else None
 

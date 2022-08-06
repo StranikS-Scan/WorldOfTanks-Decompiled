@@ -11,8 +11,9 @@ from battle_results_shared import VehicleInteractionDetails
 from battle_results import unpackClientBattleResults
 from debug_utils import LOG_CURRENT_EXCEPTION
 import constants
+from external_strings_utils import unicode_from_utf8
 BATTLE_RESULTS_VERSION = 1
-CACHE_DIR = os.path.join(os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath() if not constants.IS_BOT else '.', 'utf-8', errors='ignore')), 'battle_results')
+CACHE_DIR = os.path.join(os.path.dirname(unicode_from_utf8(BigWorld.wg_getPreferencesFilePath() if not constants.IS_BOT else '.')[1]), 'battle_results')
 
 class BattleResultsCache(object):
 

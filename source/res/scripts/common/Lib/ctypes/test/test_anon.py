@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_anon.py
 import unittest
+from test.support import cpython_only
 from ctypes import *
 
 class AnonTest(unittest.TestCase):
@@ -26,6 +27,15 @@ class AnonTest(unittest.TestCase):
     def test_anon_nonmember(self):
         self.assertRaises(AttributeError, lambda : type(Structure)('Name', (Structure,), {'_fields_': [],
          '_anonymous_': ['x']}))
+
+    @cpython_only
+    def test_issue31490(self):
+        with self.assertRaises(AttributeError):
+
+            class Name(Structure):
+                _fields_ = []
+                _anonymous_ = ['x']
+                x = 42
 
     def test_nested(self):
 

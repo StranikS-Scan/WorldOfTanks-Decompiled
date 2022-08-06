@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_functiontestcase.py
 import unittest
-from .support import LoggingResult
+from unittest.test.support import LoggingResult
 
 class Test_FunctionTestCase(unittest.TestCase):
 

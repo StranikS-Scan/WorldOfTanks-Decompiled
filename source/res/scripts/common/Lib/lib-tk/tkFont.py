@@ -16,8 +16,10 @@ class Font:
     def _set(self, kw):
         options = []
         for k, v in kw.items():
+            if not isinstance(v, basestring):
+                v = str(v)
             options.append('-' + k)
-            options.append(str(v))
+            options.append(v)
 
         return tuple(options)
 
@@ -38,8 +40,9 @@ class Font:
     def __init__(self, root=None, font=None, name=None, exists=False, **options):
         if not root:
             root = Tkinter._default_root
+        tk = getattr(root, 'tk', root)
         if font:
-            font = root.tk.splitlist(root.tk.call('font', 'actual', font))
+            font = tk.splitlist(tk.call('font', 'actual', font))
         else:
             font = self._set(options)
         if not name:
@@ -47,22 +50,22 @@ class Font:
         self.name = name
         if exists:
             self.delete_font = False
-            if self.name not in root.tk.call('font', 'names'):
+            if self.name not in tk.splitlist(tk.call('font', 'names')):
                 raise Tkinter._tkinter.TclError, 'named font %s does not already exist' % (self.name,)
             if font:
-                root.tk.call('font', 'configure', self.name, *font)
+                tk.call('font', 'configure', self.name, *font)
         else:
-            root.tk.call('font', 'create', self.name, *font)
+            tk.call('font', 'create', self.name, *font)
             self.delete_font = True
-        self._root = root
-        self._split = root.tk.splitlist
-        self._call = root.tk.call
+        self._tk = tk
+        self._split = tk.splitlist
+        self._call = tk.call
 
     def __str__(self):
         return self.name
 
     def __eq__(self, other):
-        return self.name == other.name and isinstance(other, Font)
+        return isinstance(other, Font) and self.name == other.name
 
     def __getitem__(self, key):
         return self.cget(key)
@@ -80,7 +83,7 @@ class Font:
             pass
 
     def copy(self):
-        return Font(self._root, **self.actual())
+        return Font(self._tk, **self.actual())
 
     def actual(self, option=None):
         if option:

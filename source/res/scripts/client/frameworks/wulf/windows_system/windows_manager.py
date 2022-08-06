@@ -30,7 +30,7 @@ class WindowsManager(PyObjectEntity):
         return
 
     def getView(self, uniqueID):
-        return self.proxy.getPyView(uniqueID)
+        return self.proxy.getPyView(int(uniqueID))
 
     def getViewByLayoutID(self, layoutID):
         return self.proxy.getPyViewByLayoutID(layoutID)

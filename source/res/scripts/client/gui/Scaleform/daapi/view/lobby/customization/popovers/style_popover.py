@@ -82,7 +82,7 @@ class StylePopover(CustomizationKitPopoverMeta):
     def __setClearMessage(self):
         if self.__style is None:
             isClear = True
-            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.message
+            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.message.clear
             clearMessage = backport.text(clearMessage())
         else:
             isClear = False

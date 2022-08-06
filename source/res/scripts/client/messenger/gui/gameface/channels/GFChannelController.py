@@ -92,8 +92,8 @@ class GFChannelController(IChannelController):
 
     def addMessage(self, message, doFormatting=True, isHistoryMessage=False):
         if self.__channel:
-            if isinstance(message, str):
-                message = UnitMessageVO(0, -1, message, '')
+            if isinstance(message, (str, unicode)):
+                message = UnitMessageVO(0, -1, message, u'')
             if doFormatting:
                 message.text = self.__formatText(message.text)
             self.__channel.addMessage(message)

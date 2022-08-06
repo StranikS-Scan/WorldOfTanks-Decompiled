@@ -952,7 +952,7 @@ class GraphicSetting(SettingAbstract):
         return True
 
     def getApplyMethod(self, value):
-        return BigWorld.getGraphicsSettingApplyMethod(self.name, value)
+        return BigWorld.getGraphicsSettingApplyMethod(self.name, int(value))
 
     def refresh(self):
         self._currentValue = graphics.getGraphicsSetting(self.name)

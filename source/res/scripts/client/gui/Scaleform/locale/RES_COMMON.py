@@ -8,6 +8,7 @@ class RES_COMMON(object):
     MAPS_LEGAL_BRANDS = '../maps/legal_brands.png'
     MAPS_LOADING_AWARD = '../maps/loading_award.png'
     MAPS_PROMO_BG = '../maps/promo_bg.png'
+    MAPS_ICONS_BATTLEMATTERS_ENTRYPOINT_BG = '../maps/icons/battleMatters/entryPoint/bg.png'
     MAPS_ICONS_BATTLEPASS_CHAPTER_CHOICE_BG = '../maps/icons/battlePass/chapter_choice/bg.png'
     MAPS_ICONS_BATTLEPASS_OFF_SEASON_BG = '../maps/icons/battlePass/off_season/bg.png'
     MAPS_ICONS_BATTLEPASS_PROGRESSION_BG = '../maps/icons/battlePass/progression/bg.png'

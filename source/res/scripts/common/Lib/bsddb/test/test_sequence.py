@@ -87,7 +87,7 @@ class DBSequenceTest(unittest.TestCase):
         self.assertEqual(None, self.seq.open(key='foo', txn=None, flags=db.DB_CREATE))
         stat = self.seq.stat()
         for param in ('nowait', 'min', 'max', 'value', 'current', 'flags', 'cache_size', 'last_value', 'wait'):
-            self.assertTrue(param in stat, "parameter %s isn't in stat info" % param)
+            self.assertIn(param, stat, "parameter %s isn't in stat info" % param)
 
         return
 

@@ -14,14 +14,10 @@ class VehicleHealPointComponent(BigWorld.DynamicScriptComponent):
     def __init__(self, *args):
         super(VehicleHealPointComponent, self).__init__()
         self.__onUpdated()
-        dynamicObjects = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
-        if dynamicObjects is not None:
-            if self.entity.guiSessionProvider.getArenaDP().isAllyTeam(self.entity.publicInfo['team']):
-                effectSettings = dynamicObjects.getHealPointEffect().get('ally')
-            else:
-                effectSettings = dynamicObjects.getHealPointEffect().get('enemy')
-            if effectSettings is not None:
-                self.entity.appearance.showTerrainCircle(self.radius, effectSettings)
+        effectSettings = self.__getEffectSettings()
+        if effectSettings is not None:
+            self.entity.appearance.showTerrainCircle(self.radius, effectSettings)
+        self.entity.guiSessionProvider.onUpdateObservedVehicleData += self.__onUpdateObservedVehicleData
         return
 
     def set_endTime(self, prev):
@@ -30,6 +26,22 @@ class VehicleHealPointComponent(BigWorld.DynamicScriptComponent):
     def onDestroy(self):
         self.__onUpdated(HealPointInfo(0.0))
         self.entity.appearance.hideTerrainCircle()
+        self.entity.guiSessionProvider.onUpdateObservedVehicleData -= self.__onUpdateObservedVehicleData
 
     def __onUpdated(self, info=None):
         self.entity.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.__EQUIPMENT_NAME, self.entity.id, info or HealPointInfo(self.endTime))
+
+    def __getEffectSettings(self):
+        dynamicObjects = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
+        if dynamicObjects is None:
+            return
+        else:
+            isAlly = self.entity.guiSessionProvider.getArenaDP().isAllyTeam(self.entity.publicInfo['team'])
+            return dynamicObjects.getHealPointEffect().get('ally' if isAlly else 'enemy')
+
+    def __onUpdateObservedVehicleData(self, vehicleID, *args):
+        effectSettings = self.__getEffectSettings()
+        if effectSettings is not None:
+            self.entity.appearance.hideTerrainCircle()
+            self.entity.appearance.showTerrainCircle(self.radius, effectSettings)
+        return

@@ -136,7 +136,7 @@ class _BattleTypeCondition(_Condition):
         cType = _ms(EVENT_BOARDS.CONDITION_BATTLETYPE_RANDOM)
         squadAlloweed = self._event.getIsSquadAllowed()
         squadInfo = _ms(EVENT_BOARDS.CONDITION_BATTLETYPE_SQUADALLOWED) if squadAlloweed else _ms(EVENT_BOARDS.CONDITION_BATTLETYPE_SQUADNOTALLOWED)
-        return text_styles.main('{0}. {1}'.format(cType, squadInfo))
+        return text_styles.main(u'{0}. {1}'.format(cType, squadInfo))
 
     def getTooltip(self):
         return makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_RANDOM) if self._event.getBattleType() == ARENA_GUI_TYPE.RANDOM else makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_NOTRANDOM)
@@ -155,7 +155,7 @@ class _PrimeTimeCondition(_Condition):
             pt = primeTimes[0]
             periphery = int(pt.getServer())
             name = self._lobbyContext.getPeripheryName(periphery, False)
-            result = '{0} {1}-{2}'.format(name, pt.getStartLocalTime(), pt.getEndLocalTime())
+            result = u'{0} {1}-{2}'.format(name, pt.getStartLocalTime(), pt.getEndLocalTime())
         else:
             result = _ms(EVENT_BOARDS.CONDITION_PRIMETIME_CHOSEN)
         return text_styles.main(result)
@@ -191,12 +191,12 @@ class _VehiclesCondition(_Condition):
             vehicleName = formatVehicleNameWithTypeIcon(vehicle, 'html_templates:lobby/elen/objective')
             result = _ms(EVENT_BOARDS.CONDITION_VEHICLE_SINGLE, vehicle=vehicleName)
             if vehicleMissing:
-                result = '{}. {}'.format(result, text_styles.error(_ms(EVENT_BOARDS.CONDITION_VEHICLE_MISSING)))
+                result = u'{}. {}'.format(result, text_styles.error(_ms(EVENT_BOARDS.CONDITION_VEHICLE_MISSING)))
             else:
-                result = '{}. {}'.format(result, _ms(EVENT_BOARDS.CONDITION_VEHICLE_EXIST))
+                result = u'{}. {}'.format(result, _ms(EVENT_BOARDS.CONDITION_VEHICLE_EXIST))
         else:
             myCount = text_styles.error(str(available)) if vehicleMissing else text_styles.neutral(str(available))
-            result = '{} {}/{}'.format(info, myCount, allCount)
+            result = u'{} {}/{}'.format(info, myCount, allCount)
         return text_styles.main(result)
 
     def getTooltip(self):
@@ -324,14 +324,14 @@ class _TopLeaderboard(object):
             return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTPARTICIPATED))
         if self.__notFull:
             return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTFULL))
-        return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTINTOP)) if self.__notInTop else text_styles.main('{} {}'.format(_ms(EVENT_BOARDS.TOP_POSITION), self._top.getMyPosition()))
+        return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTINTOP)) if self.__notInTop else text_styles.main(u'{} {}'.format(_ms(EVENT_BOARDS.TOP_POSITION), self._top.getMyPosition()))
 
     def __getStatusValue(self):
         event = self._event
         if self.__notFull and not event.isFinished():
             count = text_styles.stats(str(event.getCardinality() - self._top.getBattlesCount()))
             text = text_styles.standard(_ms(EVENT_BOARDS.TOP_REASON_NOTFULL))
-            return '{} {}'.format(text, count)
+            return u'{} {}'.format(text, count)
         else:
             return None
 
@@ -587,7 +587,7 @@ class EventHeader(object):
                 formatedText = timeEndStyle(text)
             else:
                 formatedText = text_styles.vehicleStatusInfoText(text)
-            return '{} {}'.format(iconPath, formatedText)
+            return u'{} {}'.format(iconPath, formatedText)
 
         event = self._event
         sday, smonth, _ = event_boards_timer.getDayMonthYear(event.getStartDate())
@@ -595,8 +595,8 @@ class EventHeader(object):
         finished = event.isFinished()
         if not finished:
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_DATE_ICON)
-            timePeriod = '{} {} {} - {} {} {}'.format(str(sday), _ms(MENU.datetime_months(str(smonth))), event_boards_timer.getShortTimeString(event.getStartDate()), str(eday), _ms(MENU.datetime_months(str(emonth))), event_boards_timer.getShortTimeString(event.getEndDate()))
-            result = '{} {}    '.format(icon, text_styles.vehicleStatusInfoText(timePeriod))
+            timePeriod = u'{} {} {} - {} {} {}'.format(unicode(sday), _ms(MENU.datetime_months(str(smonth))), event_boards_timer.getShortTimeString(event.getStartDate()), unicode(eday), _ms(MENU.datetime_months(str(emonth))), event_boards_timer.getShortTimeString(event.getEndDate()))
+            result = u'{} {}    '.format(icon, text_styles.vehicleStatusInfoText(timePeriod))
             startSoon = event.isStartSoon()
             if startSoon:
                 result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_START, EVENT_DATE_TYPE.START, startSoon)

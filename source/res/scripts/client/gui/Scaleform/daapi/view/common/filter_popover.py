@@ -6,8 +6,6 @@ import typing
 import constants
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from constants import ARENA_BONUS_TYPE
 from gui import GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, getLevelsAssetPath, getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext, getFilterPopoverSetupContexts
@@ -15,24 +13,21 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePa
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME, VEHICLE_ROLES_LABELS_BY_CLASS
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.constants import LogGroups, ParentScreens
-from uilogging.veh_post_progression.loggers import VehPostProgressionLogger
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import ICarouselEnvironment
 _logger = logging.getLogger(__name__)
@@ -45,7 +40,6 @@ _VEHICLE_LEVEL_FILTERS = [ 'level_{}'.format(level) for level in VEHICLE_LEVELS 
 
 class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     itemsCache = dependency.descriptor(IItemsCache)
-    rolesFilterLogger = VehPostProgressionLogger(LogGroups.ROLES_FILTER)
 
     def __init__(self, ctx):
         super(VehiclesFilterPopover, self).__init__()
@@ -53,12 +47,10 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         self._isFrontline = False
         self._isRanked = False
         self._withRoles = False
-        self._isFunRandom = False
         if ctx and 'data' in ctx:
             data = ctx['data']
             self._isFrontline = getattr(data, 'isFrontline', False)
             self._isRanked = getattr(data, 'isRanked', False)
-            self._isFunRandom = getattr(data, 'isFunRandom', False)
         self.__mapping = {}
         self.__usedFilters = ()
         return
@@ -66,7 +58,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     def setTankCarousel(self, carousel):
         customParams = carousel.getCustomParams()
         customParams['isRanked'] = self._isRanked
-        customParams['isFunRandom'] = self._isFunRandom
         self.__mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',))), (carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',))), carousel.hasRoles(), **customParams)
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
         self._carousel = carousel
@@ -78,7 +69,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
             if sectionId == _SECTION.ROLES or sectionId == _SECTION.ROLES_WITH_EXTRA:
                 filters = self._carousel.filter.getFilters(self.__usedFilters)
                 target = self.__mapping[_SECTION.ROLES][self.__getSelectedVehType(filters)][itemId]
-                self.rolesFilterLogger.logClick(ParentScreens.HANGAR)
             else:
                 target = self.__mapping[sectionId][itemId]
             self._carousel.filter.switch(target, save=False)
@@ -263,7 +253,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
 
 class TankCarouselFilterPopover(VehiclesFilterPopover):
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx):
         super(TankCarouselFilterPopover, self).__init__(ctx)
@@ -305,13 +294,6 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
             mapping[_SECTION.SPECIALS].append('clanRented')
         if kwargs.get('isRanked', False):
             mapping[_SECTION.SPECIALS].append('ranked')
-        if kwargs.get('isFunRandom', False):
-            mapping[_SECTION.SPECIALS].append('funRandom')
-            config = cls.__lobbyContext.getServerSettings().getCrystalRewardConfig()
-            if not config.isCrystalEarnPossible(ARENA_BONUS_TYPE.FUN_RANDOM):
-                mapping[_SECTION.SPECIALS].remove('crystals')
-            if not BONUS_CAPS.checkAny(ARENA_BONUS_TYPE.FUN_RANDOM, BONUS_CAPS.DAILY_MULTIPLIED_XP):
-                mapping[_SECTION.SPECIALS].remove('bonus')
         return mapping
 
     @classmethod

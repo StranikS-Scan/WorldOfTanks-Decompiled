@@ -2,8 +2,14 @@
 # Embedded file name: scripts/common/Lib/ctypes/test/__init__.py
 import os, sys, unittest, getopt, time
 use_resources = []
+import ctypes
+ctypes_symbols = dir(ctypes)
 
-class ResourceDenied(Exception):
+def need_symbol(name):
+    return unittest.skipUnless(name in ctypes_symbols, '{!r} is required'.format(name))
+
+
+class ResourceDenied(unittest.SkipTest):
     pass
 
 

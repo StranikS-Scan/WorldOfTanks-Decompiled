@@ -345,12 +345,13 @@ class HTMLParser(markupbase.ParserBase):
             except ValueError:
                 return '&#' + s + ';'
 
-            import htmlentitydefs
             if HTMLParser.entitydefs is None:
-                entitydefs = HTMLParser.entitydefs = {'apos': u"'"}
+                import htmlentitydefs
+                entitydefs = {'apos': u"'"}
                 for k, v in htmlentitydefs.name2codepoint.iteritems():
                     entitydefs[k] = unichr(v)
 
+                HTMLParser.entitydefs = entitydefs
             try:
                 return self.entitydefs[s]
             except KeyError:

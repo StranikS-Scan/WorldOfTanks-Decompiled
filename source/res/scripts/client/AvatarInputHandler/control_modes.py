@@ -1746,8 +1746,8 @@ class _ShellingControl(object):
             result = GUI.Simple(_ShellingControl.__TARGET_POINTER_FILE_NAME)
             result.position[2] = 0.7
             result.size = (2, 2)
-            result.materialFX = 'BLEND_INVERSE_COLOUR'
-            result.filterType = 'LINEAR'
+            result.materialFX = GUI.Simple.eMaterialFX.BLEND_INVERSE_COLOUR
+            result.filterType = GUI.Simple.eFilterType.LINEAR
             result.visible = False
             GUI.addRoot(result)
         elif self.__targetPointer is not None:

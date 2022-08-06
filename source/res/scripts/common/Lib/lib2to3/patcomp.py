@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/patcomp.py
 __author__ = 'Guido van Rossum <guido@python.org>'
-import os
 import StringIO
 from .pgen2 import driver, literals, token, tokenize, parse, grammar
 from . import pytree
 from . import pygram
-_PATTERN_GRAMMAR_FILE = os.path.join(os.path.dirname(__file__), 'PatternGrammar.txt')
 
 class PatternSyntaxError(Exception):
     pass
@@ -23,12 +21,17 @@ def tokenize_wrapper(input):
 
 class PatternCompiler(object):
 
-    def __init__(self, grammar_file=_PATTERN_GRAMMAR_FILE):
-        self.grammar = driver.load_grammar(grammar_file)
-        self.syms = pygram.Symbols(self.grammar)
+    def __init__(self, grammar_file=None):
+        if grammar_file is None:
+            self.grammar = pygram.pattern_grammar
+            self.syms = pygram.pattern_symbols
+        else:
+            self.grammar = driver.load_grammar(grammar_file)
+            self.syms = pygram.Symbols(self.grammar)
         self.pygrammar = pygram.python_grammar
         self.pysyms = pygram.python_symbols
         self.driver = driver.Driver(self.grammar, convert=pattern_convert)
+        return
 
     def compile_pattern(self, input, debug=False, with_tree=False):
         tokens = tokenize_wrapper(input)

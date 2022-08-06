@@ -175,17 +175,11 @@ def getsitepackages():
         seen.add(prefix)
         if sys.platform in ('os2emx', 'riscos'):
             sitepackages.append(os.path.join(prefix, 'Lib', 'site-packages'))
-        elif os.sep == '/':
+        if os.sep == '/':
             sitepackages.append(os.path.join(prefix, 'lib', 'python' + sys.version[:3], 'site-packages'))
             sitepackages.append(os.path.join(prefix, 'lib', 'site-python'))
-        else:
-            sitepackages.append(prefix)
-            sitepackages.append(os.path.join(prefix, 'lib', 'site-packages'))
-        if sys.platform == 'darwin':
-            from sysconfig import get_config_var
-            framework = get_config_var('PYTHONFRAMEWORK')
-            if framework:
-                sitepackages.append(os.path.join('/Library', framework, sys.version[:3], 'site-packages'))
+        sitepackages.append(prefix)
+        sitepackages.append(os.path.join(prefix, 'lib', 'site-packages'))
 
     return sitepackages
 
@@ -311,7 +305,7 @@ def setcopyright():
     else:
         __builtin__.credits = _Printer('credits', '    Thanks to CWI, CNRI, BeOpen.com, Zope Corporation and a cast of thousands\n    for supporting Python development.  See www.python.org for more information.')
     here = os.path.dirname(os.__file__)
-    __builtin__.license = _Printer('license', 'See http://www.python.org/%.3s/license.html' % sys.version, ['LICENSE.txt', 'LICENSE'], [os.path.join(here, os.pardir), here, os.curdir])
+    __builtin__.license = _Printer('license', 'See https://www.python.org/psf/license/', ['LICENSE.txt', 'LICENSE'], [os.path.join(here, os.pardir), here, os.curdir])
 
 
 class _Helper(object):

@@ -33,7 +33,7 @@ class _WOT_GAME_RESOURCE(object):
 def makeClanFullName(clanAbbrev):
     formatted = ''
     if clanAbbrev:
-        formatted = '{0} [{1}]'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLAN), clanAbbrev)
+        formatted = u'{0} [{1}]'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLAN), clanAbbrev)
     return formatted
 
 

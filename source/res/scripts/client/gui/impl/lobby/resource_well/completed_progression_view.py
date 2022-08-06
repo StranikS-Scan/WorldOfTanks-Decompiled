@@ -14,13 +14,11 @@ from gui.shared.event_dispatcher import selectVehicleInHangar, showHangar, showB
 from helpers import dependency
 from skeletons.gui.game_control import IResourceWellController
 from tutorial.control.game_vars import getVehicleByIntCD
-from uilogging.resource_well.loggers import ResourceWellCompletedScreenLogger
 
 class CompletedProgressionView(ViewImpl):
     __slots__ = ('__vehicle', '__backCallback')
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
     __resourceWell = dependency.descriptor(IResourceWellController)
-    __uiLogger = ResourceWellCompletedScreenLogger()
 
     def __init__(self, layoutID, backCallback):
         settings = ViewSettings(R.views.lobby.resource_well.CompletedProgressionView())
@@ -40,14 +38,6 @@ class CompletedProgressionView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(CompletedProgressionView, self)._onLoading(*args, **kwargs)
         self.__fillModel()
-
-    def _onLoaded(self, *args, **kwargs):
-        super(CompletedProgressionView, self)._onLoaded(*args, **kwargs)
-        self.__uiLogger.onViewOpened()
-
-    def _finalize(self):
-        self.__uiLogger.onViewClosed()
-        super(CompletedProgressionView, self)._finalize()
 
     def _getEvents(self):
         return ((self.viewModel.onAboutClick, self.__showEventInfo),

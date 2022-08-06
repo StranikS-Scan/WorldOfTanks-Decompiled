@@ -388,6 +388,7 @@
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
     </onRoundFinished>
     <onKickedFromArena>
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
@@ -531,19 +532,6 @@
       <Arg>	PYTHON	</Arg>
       <Arg>	PYTHON	</Arg>
     </receiveVisibilityLists>
-    <receivePositionsFromArena>
-      <Arg>	BOOL	</Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	FLOAT32	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	BOOL	</of>
-      </Arg>
-    </receivePositionsFromArena>
     <receiveVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	EXTRA_ID	</of>
@@ -701,12 +689,6 @@
       <Arg>	ARRAY	  <of>	DISCLOSE_EVENT	</of>
       </Arg>
     </updateArenaVehicleListAddedUpdated>
-    <updatePositions>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	FLOAT32	</of>
-      </Arg>
-    </updatePositions>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
@@ -726,6 +708,7 @@
     <onRoundFinished>
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
     </onRoundFinished>
     <leaveDisconnected></leaveDisconnected>
     <setDevelopmentFeature>

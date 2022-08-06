@@ -7,12 +7,17 @@ from idlelib import PyShell
 from idlelib.WindowList import ListedToplevel
 from idlelib.TreeWidget import TreeNode, TreeItem, ScrolledCanvas
 from idlelib.configHandler import idleConf
+file_open = None
 
 class ClassBrowser:
 
-    def __init__(self, flist, name, path):
+    def __init__(self, flist, name, path, _htest=False):
+        global file_open
+        if not _htest:
+            file_open = PyShell.flist.open
         self.name = name
         self.file = os.path.join(path[0], self.name + '.py')
+        self._htest = _htest
         self.init(flist)
 
     def close(self, event=None):
@@ -25,9 +30,11 @@ class ClassBrowser:
         self.top = top = ListedToplevel(flist.root)
         top.protocol('WM_DELETE_WINDOW', self.close)
         top.bind('<Escape>', self.close)
+        if self._htest:
+            top.geometry('+%d+%d' % (flist.root.winfo_rootx(), flist.root.winfo_rooty() + 200))
         self.settitle()
         top.focus_set()
-        theme = idleConf.GetOption('main', 'Theme', 'name')
+        theme = idleConf.CurrentTheme()
         background = idleConf.GetHighlight(theme, 'normal')['background']
         sc = ScrolledCanvas(top, bg=background, highlightthickness=0, takefocus=1)
         sc.frame.pack(expand=1, fill='both')
@@ -81,7 +88,7 @@ class ModuleBrowserTreeItem(TreeItem):
             return []
         try:
             dict = pyclbr.readmodule_ex(name, [dir] + sys.path)
-        except ImportError as msg:
+        except ImportError:
             return []
 
         items = []
@@ -158,7 +165,7 @@ class ClassBrowserTreeItem(TreeItem):
     def OnDoubleClick(self):
         if not os.path.exists(self.file):
             return
-        edit = PyShell.flist.open(self.file)
+        edit = file_open(self.file)
         if hasattr(self.cl, 'lineno'):
             lineno = self.cl.lineno
             edit.gotoline(lineno)
@@ -197,11 +204,12 @@ class MethodBrowserTreeItem(TreeItem):
     def OnDoubleClick(self):
         if not os.path.exists(self.file):
             return
-        edit = PyShell.flist.open(self.file)
+        edit = file_open(self.file)
         edit.gotoline(self.cl.methods[self.name])
 
 
-def main():
+def _class_browser(parent):
+    global file_open
     try:
         file = __file__
     except NameError:
@@ -213,10 +221,11 @@ def main():
 
     dir, file = os.path.split(file)
     name = os.path.splitext(file)[0]
-    ClassBrowser(PyShell.flist, name, [dir])
-    if sys.stdin is sys.__stdin__:
-        mainloop()
+    flist = PyShell.PyShellFileList(parent)
+    file_open = flist.open
+    ClassBrowser(flist, name, [dir], _htest=True)
 
 
 if __name__ == '__main__':
-    main()
+    from idlelib.idle_test.htest import run
+    run(_class_browser)

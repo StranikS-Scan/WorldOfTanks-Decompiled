@@ -45,8 +45,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController, IWGNPDemoAccRequestController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from uilogging.account_completion.constants import LogGroup, LogActions, ViewClosingResult
-from uilogging.account_completion.loggers import AccountCompletionViewLogger
 if typing.TYPE_CHECKING:
     from typing import Optional
     from gui.clans.clan_account_profile import ClanAccountProfile
@@ -72,7 +70,6 @@ class PremDashboardHeader(ViewImpl):
     __MAX_VIEWABLE_CLAN_RESERVES_COUNT = 2
     __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
      PremDashboardHeaderTooltips.TOOLTIP_CLAN_RESERVE: TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO}
-    _accountCompletionUILogger = AccountCompletionViewLogger(LogGroup.ACCOUNT_DASHBOARD)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.premacc.dashboard.prem_dashboard_header.PremDashboardHeader())
@@ -133,7 +130,6 @@ class PremDashboardHeader(ViewImpl):
 
     def _finalize(self):
         super(PremDashboardHeader, self)._finalize()
-        self._accountCompletionUILogger.viewClosed()
         self.viewModel.onShowBadges -= self.__onShowBadges
         self.viewModel.personalReserves.onUserItemClicked -= self.__onPersonalReserveClick
         self.viewModel.clanReserves.onUserItemClicked -= self.__onClanReserveClick
@@ -333,7 +329,6 @@ class PremDashboardHeader(ViewImpl):
 
     def __onRenamingButtonClicked(self):
         _logger.debug('Show demo account renaming overlay.')
-        self._accountCompletionUILogger.log(LogActions.RENAME_CLICKED)
         if self.platoonCtrl.isInPlatoon():
             self.__showLeaveSquadForRenamingDialog()
         else:
@@ -354,7 +349,6 @@ class PremDashboardHeader(ViewImpl):
     @replaceNoneKwargsModel
     def __showDemoAccountRenaming(self, status=None, model=None):
         model.setIsRenamingButtonVisible(True)
-        self._accountCompletionUILogger.viewOpened(self.getParentWindow())
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             queueType = dispatcher.getEntity().getQueueType()
@@ -367,7 +361,6 @@ class PremDashboardHeader(ViewImpl):
         model.setIsWarningIconVisible(True)
         model.setIsRenamingButtonVisible(False)
         model.setIsRenamingProcessVisible(True)
-        self._accountCompletionUILogger.viewClosed(result=ViewClosingResult.SUCCESS)
         _logger.debug('Demo account renaming in process.')
 
     @replaceNoneKwargsModel
@@ -375,7 +368,6 @@ class PremDashboardHeader(ViewImpl):
         model.setIsWarningIconVisible(False)
         model.setIsRenamingButtonVisible(False)
         model.setIsRenamingProcessVisible(False)
-        self._accountCompletionUILogger.viewClosed()
         _logger.debug('Hide demo account renaming.')
 
     @replaceNoneKwargsModel

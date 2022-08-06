@@ -221,7 +221,7 @@ def _makeTxt(text, key):
 
 
 def _formatModuleParamName(paramName):
-    builder = text_styles.builder()
+    builder = text_styles.builder(' ')
     resource = R.strings.menu.moduleInfo.params
     paramMsgId = backport.msgid(resource.dyn(paramName)()) if resource.dyn(paramName) else None
     builder.addStyledText(text_styles.main, paramMsgId)

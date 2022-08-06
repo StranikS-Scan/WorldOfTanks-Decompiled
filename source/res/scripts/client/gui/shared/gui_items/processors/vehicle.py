@@ -45,7 +45,7 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
         tankmenCount = len(vehicle.crew)
         itemsCache = dependency.instance(IItemsCache)
-        tankmanCost = itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
+        tankmanCost = itemsCache.items.shop.getTankmanCostWithGoodyDiscount(vehicle.level)[crewType]
         result += Money(**tankmanCost) * tankmenCount
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:

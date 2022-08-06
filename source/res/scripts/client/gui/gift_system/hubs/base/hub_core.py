@@ -17,7 +17,6 @@ if typing.TYPE_CHECKING:
     from helpers.server_settings import GiftEventConfig
 
 class IGiftEventHub(object):
-    onHubUpdated = None
 
     def destroy(self):
         pass
@@ -66,7 +65,7 @@ class IGiftEventHub(object):
 
 
 class GiftEventBaseHub(IGiftEventHub):
-    __slots__ = ('onHubUpdated', '_eventManager', '_settings', '_isHistoryReceived', '_isWebStateReceived', '_gifter', '_keeper', '_messenger', '_stamper')
+    __slots__ = ('onEventHubsCreated', '_eventManager', '_settings', '_isHistoryReceived', '_isWebStateReceived', '_gifter', '_keeper', '_messenger', '_stamper')
 
     def __init__(self, eventSettings, isMessagesAllowed):
         self._eventManager = EventManager()

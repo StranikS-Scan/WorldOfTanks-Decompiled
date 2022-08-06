@@ -82,9 +82,11 @@ class DynamicObjectsCacheLoader(object):
         else:
             _logger.debug('Trap point: Effect name is not defined')
         self.gameObject.activate()
+        self.guiSessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
         return
 
     def deactivate(self):
+        self.guiSessionProvider.onUpdateObservedVehicleData -= self._onUpdateObservedVehicleData
         if self.gameObject is not None:
             self.gameObject.destroy()
         self.gameObject = None
@@ -126,3 +128,7 @@ class DynamicObjectsCacheLoader(object):
         from AffectComponent import getEffectConfig
         pointEffect = getEffectConfig(self.__influenceZoneType, config)
         return pointEffect.ally if self.guiSessionProvider.getArenaDP().isAllyTeam(self.team) else pointEffect.enemy
+
+    def _onUpdateObservedVehicleData(self, vehicleID, *args):
+        self.deactivate()
+        self.activate()

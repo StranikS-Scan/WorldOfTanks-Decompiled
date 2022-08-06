@@ -1071,7 +1071,7 @@ class _Cumulativable(_Condition):
         pass
 
     @abstractmethod
-    def _getKey(self):
+    def getKey(self):
         pass
 
     def _parseProgress(self, curProgData, prevProgData):
@@ -1082,7 +1082,7 @@ class _Cumulativable(_Condition):
         if bonus is None:
             return result
         else:
-            key = self._getKey()
+            key = self.getKey()
             groupBy = bonus.getGroupByValue()
             total = self.getTotalValue()
             if groupBy is None:
@@ -1104,7 +1104,7 @@ class _Cumulativable(_Condition):
             return result
 
     def __getProgDiff(self, curProg, prevProg):
-        key = self._getKey()
+        key = self.getKey()
         total = self.getTotalValue()
         current = min(curProg.get(key, 0), total)
         curBonusCount = curProg.get('bonusCount', 0)
@@ -1128,17 +1128,17 @@ class BattlesCount(_Cumulativable):
         self._bonusTypes = _getArenaBonusType(preBattleCond)
 
     def __repr__(self):
-        return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
+        return 'BattlesCount<key=%s; total=%d>' % (self.getKey(), self.getTotalValue())
 
     def getUserString(self):
         result = []
         for bType in self._bonusTypes:
-            result.append(str(i18n.makeString(QUESTS.getDetailsDossier(bType, self._getKey()))))
+            result.append(unicode(i18n.makeString(QUESTS.getDetailsDossier(bType, self.getKey()))))
 
         if not result:
             _logger.warning('There are no matching condition strings for selected arenaBonusTypes')
-            return ''
-        return ', '.join(result)
+            return u''
+        return u', '.join(result)
 
     def getTotalValue(self):
         return _getNodeValue(self._data, 'count', 0)
@@ -1149,7 +1149,7 @@ class BattlesCount(_Cumulativable):
     def getBonusData(self):
         return self._bonus
 
-    def _getKey(self):
+    def getKey(self):
         pass
 
 
@@ -1357,7 +1357,7 @@ class CumulativeResult(_Cumulativable):
         return None
 
     def __repr__(self):
-        return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
+        return 'CumulativeResult<key=%s; total=%d>' % (self.getKey(), self.getTotalValue())
 
     def getUserString(self):
         return self.__getLabelString()
@@ -1372,7 +1372,7 @@ class CumulativeResult(_Cumulativable):
     def getBonusData(self):
         return self._bonus
 
-    def _getKey(self):
+    def getKey(self):
         return 'unit_%s' % self._key if self._isUnit else self._key
 
     def __getLabelString(self):
@@ -1409,7 +1409,7 @@ class VehicleKillsCumulative(VehicleKills, _Cumulativable):
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
-        return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self._getKey(),
+        return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self.getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())
@@ -1423,7 +1423,7 @@ class VehicleKillsCumulative(VehicleKills, _Cumulativable):
     def getBonusData(self):
         return self._bonus
 
-    def _getKey(self):
+    def getKey(self):
         pass
 
 
@@ -1467,7 +1467,7 @@ class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
-        return 'VehicleDamage<key=%s; %s=%d; total=%d>' % (self._getKey(),
+        return 'VehicleDamage<key=%s; %s=%d; total=%d>' % (self.getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())
@@ -1480,6 +1480,9 @@ class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
 
     def getBonusData(self):
         return self._bonus
+
+    def getKey(self):
+        return self._name
 
 
 class VehicleStun(_CountOrTotalEventsCondition):
@@ -1508,7 +1511,7 @@ class VehicleStunCumulative(VehicleStun, _Cumulativable):
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
-        return 'VehicleStun<key=%s; %s=%d; total=%d>' % (self._getKey(),
+        return 'VehicleStun<key=%s; %s=%d; total=%d>' % (self.getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())
@@ -1524,6 +1527,9 @@ class VehicleStunCumulative(VehicleStun, _Cumulativable):
 
     def getLabelKey(self):
         return super(VehicleStunCumulative, self).getLabelKey() + '/cumulative'
+
+    def getKey(self):
+        return self._name
 
 
 class MultiStunEvent(_Condition, _Negatable):

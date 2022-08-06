@@ -50,18 +50,15 @@ def writeTrackBasicParams(trackBasicParams, section, cache):
     if trackBasicParams is None:
         return
     else:
+        tracksSection = section['tracks']
+        for childSectionName, childSection in tracksSection.items():
+            tracksSection.deleteSection(childSectionName)
+
         shared_writers.writeLodDist(trackBasicParams.lodDist, section, 'tracks/lodDist', cache)
-        if len(trackBasicParams.trackPairs) == 1:
-            pair = trackBasicParams.trackPairs[component_constants.MAIN_TRACK_PAIR_IDX]
-            __writeTrackPairParams(pair, section['tracks'])
-        else:
-            for sname, subsection in _xml.getChildren(None, section, 'tracks'):
-                if sname != 'trackPair':
-                    continue
-                index = _xml.readIntOrNone(None, subsection, 'trackPairIdx')
-                if index is None:
-                    continue
-                __writeTrackPairParams(trackBasicParams.trackPairs[index], subsection)
+        for idx, trackPair in enumerate(trackBasicParams.trackPairs.values()):
+            trackPairSection = tracksSection.createSection('trackPair')
+            trackPairSection.writeInt('trackPairIdx', idx)
+            __writeTrackPairParams(trackPair, trackPairSection)
 
         return
 
@@ -78,16 +75,36 @@ def __writeDebris(tracksDebris, section):
         return
     else:
         for sname, subsection in section.items():
-            if sname != 'trackDebris':
-                continue
-            isLeft = _xml.readBool(None, subsection, 'isLeft', True)
-            tracksDebrisParams = tracksDebris.left if isLeft else tracksDebris.right
-            if tracksDebrisParams is not None:
-                _xml.rewriteString(subsection, 'destructionEffect', tracksDebrisParams.destructionEffect)
-                physicalParams = tracksDebrisParams.physicalParams
-                if physicalParams is not None and physicalParams.hingeJointStiffness is not None:
-                    _xml.rewriteFloat(subsection, 'physicalParams/hingeJointStiffness', physicalParams.hingeJointStiffness)
+            if sname == 'trackDebris':
+                section.deleteSection(sname)
 
+        leftDebrisSection = section.createSection('trackDebris')
+        leftDebrisSection.writeBool('isLeft', True)
+        leftDebris = tracksDebris.left
+        if leftDebris is not None:
+            _xml.rewriteString(leftDebrisSection, 'destructionEffect', leftDebris.destructionEffect)
+            for key, value in leftDebris.nodesRemap.items():
+                remapNodeSection = leftDebrisSection.createSection('remapNode')
+                remapNodeSection.writeString('from', key)
+                remapNodeSection.writeString('to', value)
+
+            if leftDebris.physicalParams is not None:
+                physicalParamsSection = leftDebrisSection.createSection('physicalParams')
+                leftDebris.physicalParams.save(physicalParamsSection)
+        rightDebrisSection = section.createSection('trackDebris')
+        rightDebrisSection.writeBool('isLeft', False)
+        rightDebris = tracksDebris.right
+        if rightDebris is not None:
+            _xml.rewriteString(rightDebrisSection, 'destructionEffect', rightDebris.destructionEffect)
+            if rightDebris.nodesRemap is not None:
+                for key, value in rightDebris.nodesRemap.items():
+                    remapNodeSection = rightDebrisSection.createSection('remapNode')
+                    remapNodeSection.writeString('from', key)
+                    remapNodeSection.writeString('to', value)
+
+            if rightDebris.physicalParams is not None:
+                physicalParamsSection = rightDebrisSection.createSection('physicalParams')
+                rightDebris.physicalParams.save(physicalParamsSection)
         return
 
 
@@ -217,8 +234,7 @@ def writeSplineDesc(splineDesc, section, cache):
         precedingSectionIndex = shared_writers.getPrecedingSectionIndex(sectionItems, 'physicalTracks')
         newSplineDescSection = None
         if precedingSectionIndex is not None:
-            newSection = ResMgr.DataSection().createSection('splineDesc')
-            newSplineDescSection = prioritySection.insertSection(newSection, sectionItems[precedingSectionIndex][1])
+            newSplineDescSection = prioritySection.insertSection('splineDesc', precedingSectionIndex)
         else:
             newSplineDescSection = section.createSection('splineDesc')
         newTrackPairsSection = True

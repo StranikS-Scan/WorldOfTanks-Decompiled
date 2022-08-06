@@ -15,14 +15,14 @@ from bootcamp.Bootcamp import g_bootcamp
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
-from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 
 class BootcampExitView(ViewImpl):
     __slots__ = ('__blur', '__tooltipData', '__callback', '__isInBattle')
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcampController = dependency.descriptor(IBootcampController)
-    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_EXIT_VIEW.value)
+    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_EXIT_VIEW)
 
     def __init__(self, callback, isInBattle, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.bootcamp.BootcampExitView())
@@ -61,8 +61,8 @@ class BootcampExitView(ViewImpl):
         else:
             self.__blur = CachedBlur(enabled=True, ownLayer=window.layer - 1)
 
-    @uiBootcampLogger.dLog(BCLogActions.SHOW.value)
     def _onLoading(self, *args, **kwargs):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SHOW)
         super(BootcampExitView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
             model.onLeaveBootcamp += self.__onLeave
@@ -71,19 +71,20 @@ class BootcampExitView(ViewImpl):
             model.setIsReferral(self.__bootcampController.isReferralEnabled())
             g_bootcamp.fillProgressBar(model, self.__tooltipData)
 
-    @uiBootcampLogger.dLog(BCLogActions.CLOSE.value)
     def _finalize(self):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.CLOSE)
         self.viewModel.onLeaveBootcamp -= self.__onLeave
         if self.__isInBattle:
             app = self.__appLoader.getApp()
             app.leaveGuiControlMode(self.uniqueID)
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__bootcampController.isInBootcamp():
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__blur:
             self.__blur.fini()
         super(BootcampExitView, self)._finalize()
 
-    @uiBootcampLogger.dLog(BCLogActions.LEAVE.value)
     def __onLeave(self):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.LEAVE)
         self.__callback()
         self.destroyWindow()
 

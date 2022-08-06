@@ -14,8 +14,8 @@ class FormatParagraph:
         return
 
     def format_paragraph_event(self, event, limit=None):
-        if limit == None:
-            limit = idleConf.GetOption('main', 'FormatParagraph', 'paragraph', type='int')
+        if limit is None:
+            limit = idleConf.GetOption('extensions', 'FormatParagraph', 'max-width', type='int', default=72)
         text = self.editwin.text
         first, last = self.editwin.get_selection_indices()
         if first and last:
@@ -131,7 +131,5 @@ def get_comment_header(line):
 
 
 if __name__ == '__main__':
-    from test import support
-    support.use_resources = ['gui']
     import unittest
     unittest.main('idlelib.idle_test.test_formatparagraph', verbosity=2, exit=False)

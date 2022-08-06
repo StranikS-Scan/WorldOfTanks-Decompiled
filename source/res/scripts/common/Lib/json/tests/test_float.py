@@ -40,6 +40,19 @@ class TestFloat(object):
                 self.assertNotEqual(res[0], res[0])
             self.assertRaises(ValueError, self.dumps, [val], allow_nan=False)
 
+    def test_float_subclasses_use_float_repr(self):
+
+        class PeculiarFloat(float):
+
+            def __repr__(self):
+                pass
+
+            def __str__(self):
+                pass
+
+        val = PeculiarFloat(3.2)
+        self.assertEqual(self.loads(self.dumps(val)), val)
+
 
 class TestPyFloat(TestFloat, PyTest):
     pass

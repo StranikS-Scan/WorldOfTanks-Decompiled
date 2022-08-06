@@ -3,11 +3,11 @@
 from frameworks import wulf
 
 def getIntegralFormat(value):
-    return wulf.getNumberFormat(value, wulf.NumberFormatType.INTEGRAL)
+    return wulf.getNumberFormat(int(value), wulf.NumberFormatType.INTEGRAL)
 
 
 def getGoldFormat(value):
-    return wulf.getNumberFormat(value, wulf.NumberFormatType.GOLD)
+    return wulf.getNumberFormat(int(value), wulf.NumberFormatType.GOLD)
 
 
 def getFractionalFormat(value):
@@ -39,7 +39,7 @@ def getYearMonthFormat(value):
 
 
 def getDateTimeFormat(value):
-    return '{0:>s} {1:>s}'.format(wulf.getDateFormat(value, wulf.DateFormatType.LONG_FORMAT), wulf.getTimeFormat(value, wulf.TimeFormatType.SHORT_FORMAT))
+    return u'{0:>s} {1:>s}'.format(wulf.getDateFormat(value, wulf.DateFormatType.LONG_FORMAT), wulf.getTimeFormat(value, wulf.TimeFormatType.SHORT_FORMAT))
 
 
 def upper(value):

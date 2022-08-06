@@ -58,7 +58,7 @@ def getLocalAimPoint(vehicleDescriptor):
         hullPosition = vehicleDescriptor.chassis.hullPosition
         middleX = (hullBox[0].x + hullBox[1].x) * 0.5 + hullPosition.x
         middleZ = (hullBox[0].z + hullBox[1].z) * 0.5 + hullPosition.z
-        calculatedHullPosition = (middleX, hullPosition.y, middleZ)
+        calculatedHullPosition = Math.Vector3(middleX, hullPosition.y, middleZ)
         turretPosition = vehicleDescriptor.hull.turretPositions[0] * 0.5
         maxZOffset = abs(hullBox[1].z - hullBox[0].z) * 0.2
         turretPosition.z = max(-maxZOffset, min(maxZOffset, turretPosition.z))

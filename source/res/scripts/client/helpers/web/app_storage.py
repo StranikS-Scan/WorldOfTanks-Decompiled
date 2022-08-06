@@ -9,6 +9,7 @@ from helpers import threads
 from helpers.web.storage import IStorage
 from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
+from external_strings_utils import unicode_from_utf8
 _logger = logging.getLogger(__name__)
 _CACHE_WARNING_GAP_IN_MB = 500
 
@@ -87,7 +88,7 @@ class AsynchFileStorage(IStorage):
 class ApplicationStorage(object):
 
     def __init__(self, name, workersLimit, queueLimit=threads.INFINITE_QUEUE_SIZE):
-        prefsPath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
+        prefsPath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
         self._prefsDirPath = os.path.normpath(os.path.dirname(prefsPath))
         self.__cacheDir = os.path.normpath(os.path.join(self._prefsDirPath, name))
         _expectDir(self.__cacheDir)

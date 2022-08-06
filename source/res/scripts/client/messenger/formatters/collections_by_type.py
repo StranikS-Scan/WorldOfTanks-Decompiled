@@ -18,7 +18,9 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
- token_quest_subformatters.WotPlusDirectivesFormatter())
+ token_quest_subformatters.WotPlusDirectivesFormatter(),
+ token_quest_subformatters.BattleMattersAwardsFormatter())
+_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -63,7 +65,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
  _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
- _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(),
+ _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS),
+ _SM_TYPE.prbVehicleMaxScoutKick.index(): _sc.PrbVehicleMaxScoutKickFormatter(),
  _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
  _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
  _SM_TYPE.customizationChanged.index(): _sc.CustomizationChangedFormatter(),
@@ -106,7 +109,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.recertificationFinancial.index(): _sc.RecertificationFinancialFormatter(),
  _SM_TYPE.resourceWellOperation.index(): _sc.ResourceWellOperationFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
- _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter()}
+ _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
+ _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
@@ -118,6 +122,10 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD: _sc.MapboxRewardReceivedFormatter(),
  SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED: _sc.MapboxEndedFormatter(),
  SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED: _sc.MapboxStartedFormatter(),
+ SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_PAUSED: _sc.BattleMattersPausedFormatter(),
+ SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_STARTED: _sc.BattleMattersStartedFormatter(),
+ SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD: _sc.BattleMattersTokenAward(),
+ SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD: token_quest_subformatters.BattleMattersClientAwardsFormatter(),
  SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE: _sc.MapboxSurveyAvailableFormatter(),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveEnabledMessage'),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveDisabledMessage'),

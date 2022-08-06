@@ -1,5 +1,82 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urllib2.py
+# Compiled at: 2017-02-01 04:16:58
+"""An extensible library for opening URLs using a variety of protocols
+
+The simplest way to use this module is to call the urlopen function,
+which accepts a string containing a URL or a Request object (described
+below).  It opens the URL and returns the results as file-like
+object; the returned object has some extra methods described below.
+
+The OpenerDirector manages a collection of Handler objects that do
+all the actual work.  Each Handler implements a particular protocol or
+option.  The OpenerDirector is a composite object that invokes the
+Handlers needed to open the requested URL.  For example, the
+HTTPHandler performs HTTP GET and POST requests and deals with
+non-error returns.  The HTTPRedirectHandler automatically deals with
+HTTP 301, 302, 303 and 307 redirect errors, and the HTTPDigestAuthHandler
+deals with digest authentication.
+
+urlopen(url, data=None) -- Basic usage is the same as original
+urllib.  pass the url and optionally data to post to an HTTP URL, and
+get a file-like object back.  One difference is that you can also pass
+a Request instance instead of URL.  Raises a URLError (subclass of
+IOError); for HTTP errors, raises an HTTPError, which can also be
+treated as a valid response.
+
+build_opener -- Function that creates a new OpenerDirector instance.
+Will install the default handlers.  Accepts one or more Handlers as
+arguments, either instances or Handler classes that it will
+instantiate.  If one of the argument is a subclass of the default
+handler, the argument will be installed instead of the default.
+
+install_opener -- Installs a new opener as the default opener.
+
+objects of interest:
+
+OpenerDirector -- Sets up the User Agent as the Python-urllib client and manages
+the Handler classes, while dealing with requests and responses.
+
+Request -- An object that encapsulates the state of a request.  The
+state can be as simple as the URL.  It can also include extra HTTP
+headers, e.g. a User-Agent.
+
+BaseHandler --
+
+exceptions:
+URLError -- A subclass of IOError, individual protocols have their own
+specific subclass.
+
+HTTPError -- Also a valid HTTP response, so you can treat an HTTP error
+as an exceptional event or valid response.
+
+internals:
+BaseHandler and parent
+_call_chain conventions
+
+Example usage:
+
+import urllib2
+
+# set up authentication info
+authinfo = urllib2.HTTPBasicAuthHandler()
+authinfo.add_password(realm='PDQ Application',
+                      uri='https://mahler:8092/site-updates.py',
+                      user='klem',
+                      passwd='geheim$parole')
+
+proxy_support = urllib2.ProxyHandler({"http" : "http://ahad-haam:3128"})
+
+# build a new opener that adds authentication and caching FTP handlers
+opener = urllib2.build_opener(proxy_support, authinfo, urllib2.CacheFTPHandler)
+
+# install it
+urllib2.install_opener(opener)
+
+f = urllib2.urlopen('http://www.python.org/')
+
+
+"""
 import base64
 import hashlib
 import httplib
@@ -19,16 +96,36 @@ try:
 except ImportError:
     from StringIO import StringIO
 
+try:
+    import ssl
+except ImportError:
+    _have_ssl = False
+else:
+    _have_ssl = True
+
 from urllib import unwrap, unquote, splittype, splithost, quote, addinfourl, splitport, splittag, toBytes, splitattr, ftpwrapper, splituser, splitpasswd, splitvalue
 from urllib import localhost, url2pathname, getproxies, proxy_bypass
 __version__ = sys.version[:3]
 _opener = None
 
-def urlopen(url, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+def urlopen(url, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, cafile=None, capath=None, cadefault=False, context=None):
     global _opener
-    if _opener is None:
-        _opener = build_opener()
-    return _opener.open(url, data, timeout)
+    if cafile or capath or cadefault:
+        if context is not None:
+            raise ValueError("You can't pass both context and any of cafile, capath, and cadefault")
+        if not _have_ssl:
+            raise ValueError('SSL support not available')
+        context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH, cafile=cafile, capath=capath)
+        https_handler = HTTPSHandler(context=context)
+        opener = build_opener(https_handler)
+    elif context:
+        https_handler = HTTPSHandler(context=context)
+        opener = build_opener(https_handler)
+    elif _opener is None:
+        _opener = opener = build_opener()
+    else:
+        opener = _opener
+    return opener.open(url, data, timeout)
 
 
 def install_opener(opener):
@@ -47,6 +144,7 @@ class URLError(IOError):
 
 
 class HTTPError(URLError, addinfourl):
+    """Raised when HTTP error occurs, but also acts like non-error return"""
     __super_init = addinfourl.__init__
 
     def __init__(self, url, code, msg, hdrs, fp):
@@ -73,6 +171,12 @@ class HTTPError(URLError, addinfourl):
 _cut_port_re = re.compile(':\\d+$')
 
 def request_host(request):
+    """Return request-host, as defined by RFC 2965.
+    
+    Variation from RFC: returned value is lowercased, for convenient
+    comparison.
+    
+    """
     url = request.get_full_url()
     host = urlparse.urlparse(url)[1]
     if host == '':
@@ -103,11 +207,9 @@ class Request:
         return
 
     def __getattr__(self, attr):
-        if attr[:12] == '_Request__r_':
-            name = attr[12:]
-            if hasattr(Request, 'get_' + name):
-                getattr(self, 'get_' + name)()
-                return getattr(self, attr)
+        if attr in ('_Request__r_type', '_Request__r_host'):
+            getattr(self, 'get_' + attr[12:])()
+            return self.__dict__[attr]
         raise AttributeError, attr
 
     def get_method(self):
@@ -300,6 +402,14 @@ class OpenerDirector:
 
 
 def build_opener(*handlers):
+    """Create an opener object from a list of handlers.
+    
+    The opener will use several default handlers, including support
+    for HTTP, FTP and when applicable, HTTPS.
+    
+    If any of the handlers passed as arguments are subclasses of the
+    default handlers, the default handlers will not be used.
+    """
     import types
 
     def isclass(obj):
@@ -353,6 +463,7 @@ class BaseHandler:
 
 
 class HTTPErrorProcessor(BaseHandler):
+    """Process HTTP error responses."""
     handler_order = 1000
 
     def http_response(self, request, response):
@@ -375,6 +486,15 @@ class HTTPRedirectHandler(BaseHandler):
     max_redirections = 10
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
+        """Return a Request or None in response to a redirect.
+        
+        This is called by the http_error_30x methods when a
+        redirection response is received.  If a redirection should
+        take place, return a new Request to allow http_error_30x to
+        perform the redirect.  Otherwise, raise HTTPError if no-one
+        else should try to handle this url.  Return None if you can't
+        but another Handler might.
+        """
         m = req.get_method()
         if code in (301, 302, 303, 307) and m in ('GET', 'HEAD') or code in (301, 302, 303) and m == 'POST':
             newurl = newurl.replace(' ', '%20')
@@ -390,7 +510,7 @@ class HTTPRedirectHandler(BaseHandler):
         else:
             return
         urlparts = urlparse.urlparse(newurl)
-        if not urlparts.path:
+        if not urlparts.path and urlparts.netloc:
             urlparts = list(urlparts)
             urlparts[2] = '/'
         newurl = urlparse.urlunparse(urlparts)
@@ -418,6 +538,55 @@ class HTTPRedirectHandler(BaseHandler):
 
 
 def _parse_proxy(proxy):
+    """Return (scheme, user, password, host/port) given a URL or an authority.
+    
+    If a URL is supplied, it must have an authority (host:port) component.
+    According to RFC 3986, having an authority component means the URL must
+    have two slashes after the scheme:
+    
+    >>> _parse_proxy('file:/ftp.example.com/')
+    Traceback (most recent call last):
+    ValueError: proxy URL with no authority: 'file:/ftp.example.com/'
+    
+    The first three items of the returned tuple may be None.
+    
+    Examples of authority parsing:
+    
+    >>> _parse_proxy('proxy.example.com')
+    (None, None, None, 'proxy.example.com')
+    >>> _parse_proxy('proxy.example.com:3128')
+    (None, None, None, 'proxy.example.com:3128')
+    
+    The authority component may optionally include userinfo (assumed to be
+    username:password):
+    
+    >>> _parse_proxy('joe:password@proxy.example.com')
+    (None, 'joe', 'password', 'proxy.example.com')
+    >>> _parse_proxy('joe:password@proxy.example.com:3128')
+    (None, 'joe', 'password', 'proxy.example.com:3128')
+    
+    Same examples, but with URLs instead:
+    
+    >>> _parse_proxy('http://proxy.example.com/')
+    ('http', None, None, 'proxy.example.com')
+    >>> _parse_proxy('http://proxy.example.com:3128/')
+    ('http', None, None, 'proxy.example.com:3128')
+    >>> _parse_proxy('http://joe:password@proxy.example.com/')
+    ('http', 'joe', 'password', 'proxy.example.com')
+    >>> _parse_proxy('http://joe:password@proxy.example.com:3128')
+    ('http', 'joe', 'password', 'proxy.example.com:3128')
+    
+    Everything after the authority is ignored:
+    
+    >>> _parse_proxy('ftp://joe:password@proxy.example.com/rubbish:3128')
+    ('ftp', 'joe', 'password', 'proxy.example.com')
+    
+    Test for no trailing '/' case:
+    
+    >>> _parse_proxy('http://joe:password@proxy.example.com')
+    ('http', 'joe', 'password', 'proxy.example.com')
+    
+    """
     scheme, r_scheme = splittype(proxy)
     if not r_scheme.startswith('/'):
         scheme = None
@@ -446,6 +615,7 @@ class ProxyHandler(BaseHandler):
     def __init__(self, proxies=None):
         if proxies is None:
             proxies = getproxies()
+        assert hasattr(proxies, 'has_key'), 'proxies must be a mapping'
         self.proxies = proxies
         for type, url in proxies.items():
             setattr(self, '%s_open' % type, lambda r, proxy=url, type=type, meth=self.proxy_open: meth(r, proxy, type))
@@ -498,6 +668,7 @@ class HTTPPasswordMgr:
         return (None, None)
 
     def reduce_uri(self, uri, default_port=True):
+        """Accept authority or URI and extract only the authority and path."""
         parts = urlparse.urlsplit(uri)
         if parts[1]:
             scheme = parts[0]
@@ -516,6 +687,10 @@ class HTTPPasswordMgr:
         return (authority, path)
 
     def is_suburi(self, base, test):
+        """Check if test is below base in a URI tree
+        
+        Both args must be URIs in reduced form.
+        """
         if base == test:
             return True
         if base[0] != test[0]:
@@ -539,18 +714,10 @@ class AbstractBasicAuthHandler:
             password_mgr = HTTPPasswordMgr()
         self.passwd = password_mgr
         self.add_password = self.passwd.add_password
-        self.retried = 0
         return
-
-    def reset_retry_count(self):
-        self.retried = 0
 
     def http_error_auth_reqed(self, authreq, host, req, headers):
         authreq = headers.get(authreq, None)
-        if self.retried > 5:
-            raise HTTPError(req.get_full_url(), 401, 'basic auth failed', headers, None)
-        else:
-            self.retried += 1
         if authreq:
             mo = AbstractBasicAuthHandler.rx.search(authreq)
             if mo:
@@ -558,10 +725,7 @@ class AbstractBasicAuthHandler:
                 if quote not in ('"', "'"):
                     warnings.warn('Basic Auth Realm was unquoted', UserWarning, 2)
                 if scheme.lower() == 'basic':
-                    response = self.retry_http_basic_auth(host, req, realm)
-                    if response and response.code != 401:
-                        self.retried = 0
-                    return response
+                    return self.retry_http_basic_auth(host, req, realm)
         return
 
     def retry_http_basic_auth(self, host, req, realm):
@@ -569,7 +733,7 @@ class AbstractBasicAuthHandler:
         if pw is not None:
             raw = '%s:%s' % (user, pw)
             auth = 'Basic %s' % base64.b64encode(raw).strip()
-            if req.headers.get(self.auth_header, None) == auth:
+            if req.get_header(self.auth_header, None) == auth:
                 return
             req.add_unredirected_header(self.auth_header, auth)
             return self.parent.open(req, timeout=req.timeout)
@@ -584,7 +748,6 @@ class HTTPBasicAuthHandler(AbstractBasicAuthHandler, BaseHandler):
     def http_error_401(self, req, fp, code, msg, headers):
         url = req.get_full_url()
         response = self.http_error_auth_reqed('www-authenticate', url, req, headers)
-        self.reset_retry_count()
         return response
 
 
@@ -594,11 +757,11 @@ class ProxyBasicAuthHandler(AbstractBasicAuthHandler, BaseHandler):
     def http_error_407(self, req, fp, code, msg, headers):
         authority = req.get_host()
         response = self.http_error_auth_reqed('proxy-authenticate', authority, req, headers)
-        self.reset_retry_count()
         return response
 
 
 def randombytes(n):
+    """Return n random bytes."""
     if os.path.exists('/dev/urandom'):
         f = open('/dev/urandom')
         s = f.read(n)
@@ -718,6 +881,8 @@ class AbstractDigestAuthHandler:
             H = lambda x: hashlib.md5(x).hexdigest()
         elif algorithm == 'SHA':
             H = lambda x: hashlib.sha1(x).hexdigest()
+        else:
+            raise ValueError('Unsupported digest authentication algorithm %r' % algorithm.lower())
         KD = lambda s, d: H('%s:%s' % (s, d))
         return (H, KD)
 
@@ -726,6 +891,11 @@ class AbstractDigestAuthHandler:
 
 
 class HTTPDigestAuthHandler(BaseHandler, AbstractDigestAuthHandler):
+    """An authentication protocol defined by RFC 2069
+    
+    Digest authentication improves on basic authentication because it
+    does not transmit passwords in the clear.
+    """
     auth_header = 'Authorization'
     handler_order = 490
 
@@ -778,11 +948,20 @@ class AbstractHTTPHandler(BaseHandler):
 
         return request
 
-    def do_open(self, http_class, req):
+    def do_open(self, http_class, req, **http_conn_args):
+        """Return an addinfourl object for the request, using http_class.
+        
+        http_class must implement the HTTPConnection API from httplib.
+        The addinfourl return value is a file-like object.  It also
+        has methods and attributes including:
+            - info(): return a mimetools.Message object for the headers
+            - geturl(): return the original request URL
+            - code: HTTP status code
+        """
         host = req.get_host()
         if not host:
             raise URLError('no host given')
-        h = http_class(host, timeout=req.timeout)
+        h = http_class(host, timeout=req.timeout, **http_conn_args)
         h.set_debuglevel(self._debuglevel)
         headers = dict(req.unredirected_hdrs)
         headers.update(dict(((k, v) for k, v in req.headers.items() if k not in headers)))
@@ -826,8 +1005,12 @@ if hasattr(httplib, 'HTTPS'):
 
     class HTTPSHandler(AbstractHTTPHandler):
 
+        def __init__(self, debuglevel=0, context=None):
+            AbstractHTTPHandler.__init__(self, debuglevel)
+            self._context = context
+
         def https_open(self, req):
-            return self.do_open(httplib.HTTPSConnection, req)
+            return self.do_open(httplib.HTTPSConnection, req, context=self._context)
 
         https_request = AbstractHTTPHandler.do_request_
 
@@ -861,6 +1044,7 @@ class UnknownHandler(BaseHandler):
 
 
 def parse_keqv_list(l):
+    """Parse list of key=value strings where keys are not duplicated."""
     parsed = {}
     for elt in l:
         k, v = elt.split('=', 1)
@@ -872,6 +1056,14 @@ def parse_keqv_list(l):
 
 
 def parse_http_list(s):
+    """Parse lists as described by RFC 2068 Section 2.
+    
+    In particular, parse comma-separated lists where the elements of
+    the list may include quoted-strings.  A quoted-string could
+    contain a comma.  A non-quoted string could have quotes in the
+    middle.  Neither commas nor quotes count if they are escaped.
+    Only double-quotes count, not single-quotes.
+    """
     res = []
     part = ''
     escape = quote = False

@@ -40,7 +40,7 @@ class InternalBrowser(PyGUIBase):
         self.component.moveFocus = True
         self.component.crossFocus = True
         self.component.texture = self.webPage.texture()
-        self.component.materialFX = 'SOLID'
+        self.component.materialFX = GUI.Simple.eMaterialFX.SOLID
 
     def __del__(self):
         FantasyDemo.rds.fdgui.removeResolutionOverrideHandler(self)

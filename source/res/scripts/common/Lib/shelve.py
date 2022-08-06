@@ -80,18 +80,23 @@ class Shelf(UserDict.DictMixin):
             pass
 
     def close(self):
-        self.sync()
-        try:
-            self.dict.close()
-        except AttributeError:
-            pass
+        if self.dict is None:
+            return
+        else:
+            try:
+                self.sync()
+                try:
+                    self.dict.close()
+                except AttributeError:
+                    pass
 
-        try:
-            self.dict = _ClosedDict()
-        except (NameError, TypeError):
-            self.dict = None
+            finally:
+                try:
+                    self.dict = _ClosedDict()
+                except:
+                    self.dict = None
 
-        return
+            return
 
     def __del__(self):
         if not hasattr(self, 'writeback'):

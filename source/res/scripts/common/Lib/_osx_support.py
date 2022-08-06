@@ -235,7 +235,15 @@ def get_platform_osx(_config_vars, osname, release, machine):
         release = macver
         osname = 'macosx'
         cflags = _config_vars.get(_INITPRE + 'CFLAGS', _config_vars.get('CFLAGS', ''))
-        if macrelease + '.' >= '10.4.' and '-arch' in cflags.strip():
+        if macrelease:
+            try:
+                macrelease = tuple((int(i) for i in macrelease.split('.')[0:2]))
+            except ValueError:
+                macrelease = (10, 0)
+
+        else:
+            macrelease = (10, 0)
+        if macrelease >= (10, 4) and '-arch' in cflags.strip():
             machine = 'fat'
             archs = re.findall('-arch\\s+(\\S+)', cflags)
             archs = tuple(sorted(set(archs)))

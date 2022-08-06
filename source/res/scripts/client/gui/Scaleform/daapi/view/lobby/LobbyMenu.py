@@ -29,10 +29,6 @@ from skeletons.gui.game_control import IPromoController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control.context import GLOBAL_FLAG
-from uilogging.account_completion.constants import LogActions
-from uilogging.account_completion.loggers import AccountCompletionMenuLogger
-from uilogging.manual.constants import ManualLogActions, ManualLogKeys
-from uilogging.manual.loggers import ManualLogger
 
 def _getVersionMessage():
     return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
@@ -40,7 +36,6 @@ def _getVersionMessage():
 
 class LobbyMenu(LobbyMenuMeta):
     __sound_env__ = LobbySubViewEnv
-    manualUILogger = ManualLogger(ManualLogKeys.LOBBY_MENU_BUTTON.value)
     promo = dependency.descriptor(IPromoController)
     bootcamp = dependency.descriptor(IBootcampController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -48,7 +43,6 @@ class LobbyMenu(LobbyMenuMeta):
     manualController = dependency.descriptor(IManualController)
     gui = dependency.descriptor(IGuiLoader)
     demoAccController = dependency.descriptor(IDemoAccCompletionController)
-    _accountCompletionUILogger = AccountCompletionMenuLogger()
 
     def __init__(self, *args, **kwargs):
         super(LobbyMenu, self).__init__(*args, **kwargs)
@@ -65,18 +59,15 @@ class LobbyMenu(LobbyMenuMeta):
         self.promo.showFieldPost()
 
     def settingsClick(self):
-        self._accountCompletionUILogger.log(LogActions.SETTINGS_CLICKED)
         event_dispatcher.showSettingsWindow(redefinedKeyMode=False)
 
     def onWindowClose(self):
         self.destroy()
 
     def cancelClick(self):
-        self._accountCompletionUILogger.log(LogActions.CONTINUE_CLICKED)
         self.destroy()
 
     def onEscapePress(self):
-        self._accountCompletionUILogger.log(LogActions.ESCAPE_PRESSED)
         self.destroy()
 
     @process
@@ -96,7 +87,6 @@ class LobbyMenu(LobbyMenuMeta):
     def quitClick(self):
         isOk = yield await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
-            self._accountCompletionUILogger.log(LogActions.QUIT_CLICKED)
             self.gameplay.quitFromGame()
 
     def onCounterNeedUpdate(self):
@@ -115,8 +105,6 @@ class LobbyMenu(LobbyMenuMeta):
             if view is not None:
                 self.destroy()
             else:
-                hasTrigger = getTutorialGlobalStorage().getValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL)
-                self.manualUILogger.log(ManualLogActions.CLICK.value, with_trigger=hasTrigger)
                 self.manualController.show()
         return
 
@@ -128,10 +116,10 @@ class LobbyMenu(LobbyMenuMeta):
         self.__updateBootcampBtn(isDemoAccountWithOpenedCurtain)
         if isDemoAccountWithOpenedCurtain:
             self.as_showManualButtonS(False)
-        self.as_setVersionMessageS('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())))
+        self.as_setVersionMessageS(u'{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())))
         self.__updateManualBtn()
         if self.__manualBtnIsVisible:
-            self.as_setManualButtonIconS(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -6, 0))
+            self.as_setManualButtonIconS(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MANUALICON, 24, 24, -6, 0))
         self.__updatePostButton()
         if self.__postBtnIsVisible:
             self.__setPostButtonsIcons()
@@ -176,7 +164,7 @@ class LobbyMenu(LobbyMenuMeta):
 
     def __updateBootcampBtnContent(self, enabledOnServer):
         bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON
-        bootcampIconSource = icons.makeImageTag(bootcampIcon, 33, 27, -8, 0)
+        bootcampIconSource = icons.makeImageTag(bootcampIcon, 24, 24, -6, 0)
         label = None
         if self.bootcamp.isInBootcamp():
             label = BOOTCAMP.REQUEST_BOOTCAMP_FINISH

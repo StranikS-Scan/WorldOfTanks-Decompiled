@@ -7,7 +7,6 @@ from types import NoneType
 from typing import TYPE_CHECKING
 import BigWorld
 import CommandMapping
-from battle_modifiers.battle_modifier_constants import BattleParams
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from items import vehicles
@@ -239,8 +238,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 cdSecVal = descriptor.cooldownTime
             else:
                 cdSecVal = descriptor.cooldownSeconds
-            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
-            cooldownSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, cdSecVal)))
+            cooldownSeconds = str(int(cdSecVal))
             paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
             body = '\n\n'.join((body, paramsString))
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)

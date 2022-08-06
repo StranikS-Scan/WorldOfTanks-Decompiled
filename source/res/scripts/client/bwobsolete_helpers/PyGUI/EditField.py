@@ -75,11 +75,11 @@ class EditField(PyGUIBase):
         if self.component is None:
             self.component = GUI.Window('system/maps/col_white.bmp')
             self.component.colour = (0, 0, 0, 255)
-            self.component.materialFX = 'BLEND'
+            self.component.materialFX = GUI.Simple.eMaterialFX.BLEND
             self.component.width = 0.75
             self.component.height = 0.1
-            self.component.heightMode = 'CLIP'
-            self.component.widthMode = 'CLIP'
+            self.component.heightMode = GUI.Simple.eSizeMode.CLIP
+            self.component.widthMode = GUI.Simple.eSizeMode.CLIP
             self.component.minScroll = (-100, -100)
             self.component.maxScroll = (+100, +100)
             self.component.script = self
@@ -98,8 +98,8 @@ class EditField(PyGUIBase):
         self.activeColour = DEFAULT_TEXT_COLOUR_ACTIVE
         self.inactiveColour = DEFAULT_TEXT_COLOUR_INACTIVE
         text = self.component.text
-        text.horizontalAnchor = 'LEFT'
-        text.horizontalPositionMode = 'PIXEL'
+        text.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        text.horizontalPositionMode = GUI.Simple.eSizeMode.PIXEL
         text.position.x = 0
         text.colour = self.inactiveColour
         if len(self.autoSelectionFonts) == 0:
@@ -118,7 +118,7 @@ class EditField(PyGUIBase):
 
     def fitVertically(self):
         heightMode = self.component.heightMode
-        self.component.heightMode = 'PIXEL'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
         _, self.component.height = self.component.text.stringDimensions('W')
         self.component.height *= getVPixelScalar()
         self.component.heightMode = heightMode
@@ -259,7 +259,7 @@ class EditField(PyGUIBase):
 
     def screenToCharacterIndex(self, clipPos):
         oldWidthMode = self.component.widthMode
-        self.component.widthMode = 'PIXEL'
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         locPos = self.component.screenToLocal(clipPos)
         self.component.widthMode = oldWidthMode
         clickedAtPixel = locPos.x / getHPixelScalar()
@@ -300,7 +300,7 @@ class EditField(PyGUIBase):
         hratio = getHPixelScalar()
         textArea = self.component
         widthMode = textArea.widthMode
-        textArea.widthMode = 'PIXEL'
+        textArea.widthMode = GUI.Simple.eSizeMode.PIXEL
         textAreaWidth = textArea.width / hratio
         textArea.widthMode = widthMode
         cursorPosInPixels = textArea.cursor.position.x / hratio
@@ -342,7 +342,7 @@ class EditField(PyGUIBase):
 
     def _widthInPixels(self):
         widthMode = self.component.widthMode
-        self.component.widthMode = 'PIXEL'
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         w = self.component.width
         self.component.widthMode = widthMode
         return w / getHPixelScalar()

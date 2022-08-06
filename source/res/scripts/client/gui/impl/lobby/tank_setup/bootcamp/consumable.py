@@ -3,8 +3,8 @@
 from gui.impl.lobby.tank_setup.array_providers.consumable import ConsumableDeviceProvider
 from gui.impl.lobby.tank_setup.configurations.consumable import ConsumableTabsController, ConsumableTabs
 from gui.impl.lobby.tank_setup.sub_views.consumable_setup import ConsumableSetupSubView
-from uilogging.bootcamp.constants import BCLogKeys, BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 
 class BootcampConsumableDeviceProvider(ConsumableDeviceProvider):
 
@@ -21,10 +21,10 @@ class _BootcampConsumableTabsController(ConsumableTabsController):
 
 
 class BootcampConsumableSetupSubView(ConsumableSetupSubView):
-    uiBootcampLogger = BootcampLogger(BCLogKeys.BC_CONSUMABLE_SETUP_SUB_VIEW.value)
+    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_CONSUMABLE_SETUP_SUB_VIEW)
 
-    @uiBootcampLogger.dLog(BCLogActions.SHOW.value)
     def onLoading(self, currentSlotID, *args, **kwargs):
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SHOW)
         super(BootcampConsumableSetupSubView, self).onLoading(currentSlotID, *args, **kwargs)
         if any(self._interactor.getCurrentLayout()):
             return
@@ -37,16 +37,16 @@ class BootcampConsumableSetupSubView(ConsumableSetupSubView):
 
     def finalize(self):
         if self._currentTabName:
-            self.uiBootcampLogger.log(BCLogActions.CLOSE.value)
+            self.uiBootcampLogger.log(BC_LOG_ACTIONS.CLOSE)
         super(BootcampConsumableSetupSubView, self).finalize()
 
     def _onSelectItem(self, args):
-        self.uiBootcampLogger.log(BCLogActions.SELECT.value, item_id=args.get('intCD'))
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SELECT, item_id=args.get('intCD'))
         super(BootcampConsumableSetupSubView, self)._onSelectItem(args)
 
     def _createTabsController(self):
         return _BootcampConsumableTabsController()
 
     def _onDealConfirmed(self, _=None):
-        self.uiBootcampLogger.log(BCLogActions.CONFIRM.value)
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.CONFIRM)
         super(BootcampConsumableSetupSubView, self)._onDealConfirmed(_)

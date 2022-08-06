@@ -12,8 +12,7 @@ from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActi
 from uilogging.epic_battle.loggers import EpicBattleLogger
 
 class BattleAbilitiesSetupConfirm(FullScreenDialogView):
-    __uiEpicBattleLogger = EpicBattleLogger()
-    __slots__ = ('__items', '_mainContent', '__rollBack', '__withInstall')
+    __slots__ = ('__items', '_mainContent', '__rollBack', '__withInstall', '__uiEpicBattleLogger')
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), model=AmmunitionBuyModel())
@@ -23,6 +22,7 @@ class BattleAbilitiesSetupConfirm(FullScreenDialogView):
         self._mainContent = None
         self.__rollBack = False
         self.__withInstall = kwargs.pop('withInstall', False)
+        self.__uiEpicBattleLogger = EpicBattleLogger()
         super(BattleAbilitiesSetupConfirm, self).__init__(settings)
         return
 

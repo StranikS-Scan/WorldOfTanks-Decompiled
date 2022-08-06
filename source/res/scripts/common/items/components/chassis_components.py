@@ -6,7 +6,7 @@ from wrapped_reflection_framework import reflectedNamedTuple, ReflectionMetaclas
 from items.components import component_constants
 from items.components import path_builder
 from items.components import shared_components
-__all__ = ('Wheel', 'WheelGroup', 'TrackPair', 'TrackNode', 'TrackBasicVisualParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
+__all__ = ('Wheel', 'WheelGroup', 'TrackPair', 'TrackNode', 'TrackBasicVisualParams', 'TrackPairParams', 'TrackPairDebris', 'TrackDebrisParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
 Wheel = reflectedNamedTuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTesterManager', 'materials', 'position'))
 Wheel.hitTester = property(lambda self: self.hitTesterManager.activeHitTester)
 WheelGroup = reflectedNamedTuple('WheelGroup', ('isLeft', 'template', 'count', 'startIndex', 'radius'))
@@ -18,7 +18,6 @@ TrackBasicVisualParams = reflectedNamedTuple('TrackBasicVisualParams', ('lodDist
 TrackPairParams = reflectedNamedTuple('TrackPairParams', ('leftMaterial', 'rightMaterial', 'textureScale', 'tracksDebris'))
 TrackPairDebris = reflectedNamedTuple('TrackPairDebris', ('left', 'right'))
 TrackDebrisParams = reflectedNamedTuple('TrackDebrisParams', ('destructionEffect', 'physicalParams', 'destructionEffectData', 'nodesRemap'))
-PhysicalTrackDebrisParams = reflectedNamedTuple('PhysicalTrackDebrisParams', ('hingeJointStiffness',))
 TrackSplineParams = reflectedNamedTuple('TrackSplineParams', ('thickness', 'maxAmplitude', 'maxOffset', 'gravity'))
 GroundNode = namedtuple('GroundNode', ('nodeName', 'affectedWheelName', 'isLeft', 'minOffset', 'maxOffset', 'collisionSamplesCount', 'hasLiftMode'))
 GroundNodeGroup = namedtuple('GroundNodeGroup', ('isLeft', 'minOffset', 'maxOffset', 'nodesTemplate', 'affectedWheelsTemplate', 'nodesCount', 'startIndex', 'collisionSamplesCount', 'hasLiftMode'))

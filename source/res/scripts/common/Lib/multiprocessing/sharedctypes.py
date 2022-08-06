@@ -12,7 +12,6 @@ __all__ = ['RawValue',
  'copy',
  'synchronized']
 typecode_to_type = {'c': ctypes.c_char,
- 'u': ctypes.c_wchar,
  'b': ctypes.c_byte,
  'B': ctypes.c_ubyte,
  'h': ctypes.c_short,
@@ -23,6 +22,10 @@ typecode_to_type = {'c': ctypes.c_char,
  'L': ctypes.c_ulong,
  'f': ctypes.c_float,
  'd': ctypes.c_double}
+try:
+    typecode_to_type['u'] = ctypes.c_wchar
+except AttributeError:
+    pass
 
 def _new_value(type_):
     size = ctypes.sizeof(type_)

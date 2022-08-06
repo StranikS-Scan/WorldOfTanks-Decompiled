@@ -21,13 +21,12 @@ class MiscTestCase(unittest.TestCase):
 
     def test02_db_home(self):
         env = db.DBEnv()
-        self.assertTrue(env.db_home is None)
+        self.assertIsNone(env.db_home)
         env.open(self.homeDir, db.DB_CREATE)
         if sys.version_info[0] < 3:
             self.assertEqual(self.homeDir, env.db_home)
         else:
             self.assertEqual(bytes(self.homeDir, 'ascii'), env.db_home)
-        return
 
     def test03_repr_closed_db(self):
         db = hashopen(self.filename)

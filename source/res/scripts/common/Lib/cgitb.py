@@ -101,7 +101,7 @@ def html(einfo, context=5):
         args, varargs, varkw, locals = inspect.getargvalues(frame)
         call = ''
         if func != '?':
-            call = 'in ' + strong(func) + inspect.formatargvalues(args, varargs, varkw, locals, formatvalue=lambda value: '=' + pydoc.html.repr(value))
+            call = 'in ' + strong(pydoc.html.escape(func)) + inspect.formatargvalues(args, varargs, varkw, locals, formatvalue=lambda value: '=' + pydoc.html.repr(value))
         highlight = {}
 
         def reader(lnum=[lnum]):
@@ -238,7 +238,7 @@ class Hook:
 
         if self.display:
             if plain:
-                doc = doc.replace('&', '&amp;').replace('<', '&lt;')
+                doc = pydoc.html.escape(doc)
                 self.file.write('<pre>' + doc + '</pre>\n')
             else:
                 self.file.write(doc + '\n')

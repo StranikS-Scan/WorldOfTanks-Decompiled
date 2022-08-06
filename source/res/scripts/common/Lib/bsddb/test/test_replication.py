@@ -152,16 +152,16 @@ class DBReplicationManager(DBReplication):
         d = d.values()[0]
         self.assertEqual(d[0], '127.0.0.1')
         self.assertEqual(d[1], client_port)
-        self.assertTrue(d[2] == db.DB_REPMGR_CONNECTED or d[2] == db.DB_REPMGR_DISCONNECTED)
+        self.assertIn(d[2], (db.DB_REPMGR_CONNECTED, db.DB_REPMGR_DISCONNECTED))
         d = self.dbenvClient.repmgr_site_list()
         self.assertEqual(len(d), 1)
         d = d.values()[0]
         self.assertEqual(d[0], '127.0.0.1')
         self.assertEqual(d[1], master_port)
-        self.assertTrue(d[2] == db.DB_REPMGR_CONNECTED or d[2] == db.DB_REPMGR_DISCONNECTED)
+        self.assertIn(d[2], (db.DB_REPMGR_CONNECTED, db.DB_REPMGR_DISCONNECTED))
         if db.version() >= (4, 6):
             d = self.dbenvMaster.repmgr_stat(flags=db.DB_STAT_CLEAR)
-            self.assertTrue('msgs_queued' in d)
+            self.assertIn('msgs_queued', d)
         self.dbMaster = db.DB(self.dbenvMaster)
         txn = self.dbenvMaster.txn_begin()
         self.dbMaster.open('test', db.DB_HASH, db.DB_CREATE, 438, txn=txn)
@@ -200,7 +200,7 @@ class DBReplicationManager(DBReplication):
 
         if time.time() >= timeout and startup_timeout:
             self.skipTest('replication test skipped due to random failure, see issue 3892')
-        self.assertTrue(time.time() < timeout)
+        self.assertLess(time.time(), timeout)
         self.assertEqual('123', v)
         txn = self.dbenvMaster.txn_begin()
         self.dbMaster.delete('ABC', txn=txn)
@@ -213,7 +213,7 @@ class DBReplicationManager(DBReplication):
             if v is None:
                 time.sleep(0.02)
 
-        self.assertTrue(time.time() < timeout)
+        self.assertLess(time.time(), timeout)
         self.assertEqual(None, v)
         return
 
@@ -320,7 +320,7 @@ class DBBaseReplication(DBReplication):
         while 1:
             time.time() < timeout and not (self.confirmed_master and self.client_startupdone) and time.sleep(0.02)
 
-        self.assertTrue(time.time() < timeout)
+        self.assertLess(time.time(), timeout)
         self.dbMaster = db.DB(self.dbenvMaster)
         txn = self.dbenvMaster.txn_begin()
         self.dbMaster.open('test', db.DB_HASH, db.DB_CREATE, 438, txn=txn)
@@ -345,7 +345,7 @@ class DBBaseReplication(DBReplication):
             break
 
         d = self.dbenvMaster.rep_stat(flags=db.DB_STAT_CLEAR)
-        self.assertTrue('master_changes' in d)
+        self.assertIn('master_changes', d)
         txn = self.dbenvMaster.txn_begin()
         self.dbMaster.put('ABC', '123', txn=txn)
         txn.commit()
@@ -359,7 +359,7 @@ class DBBaseReplication(DBReplication):
             if v is None:
                 time.sleep(0.02)
 
-        self.assertTrue(time.time() < timeout)
+        self.assertLess(time.time(), timeout)
         self.assertEqual('123', v)
         txn = self.dbenvMaster.txn_begin()
         self.dbMaster.delete('ABC', txn=txn)
@@ -372,7 +372,7 @@ class DBBaseReplication(DBReplication):
             if v is None:
                 time.sleep(0.02)
 
-        self.assertTrue(time.time() < timeout)
+        self.assertLess(time.time(), timeout)
         self.assertEqual(None, v)
         return
 

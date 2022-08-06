@@ -11,6 +11,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.impl.lobby.battle_pass.battle_pass_view import BattlePassViewsHolderComponent
 from gui.impl.lobby.mapbox.mapbox_progression_view import MapboxProgressionsComponent
+from gui.impl.lobby.battle_matters.battle_matters_main_view import BattleMattersMissionComponent
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -46,6 +47,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassViewsHolderComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, BattleMattersMissionComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, ScopeTemplates.VIEW_SCOPE),
@@ -82,5 +84,7 @@ class MissionsPackageBusinessHandler(PackageBusinessHandler):
             elif tabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
                 subView.currentTab.updateState(**event.ctx)
                 subView.currentTab.markVisited()
+            elif tabAlias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS:
+                subView.currentTab.updateState(**event.ctx)
         else:
             self.loadViewByCtxEvent(event)

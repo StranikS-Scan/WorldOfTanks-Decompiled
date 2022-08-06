@@ -28,7 +28,6 @@ from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
-from gui.periodic_battles.models import PeriodType
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
@@ -49,10 +48,10 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, FunRandomButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController, IFunRandomController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -258,8 +257,6 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
         if result and prbInvites:
             prbInvites.onInvitesListInited += self.__onInviteListInited
             prbInvites.onReceivedInviteListModified += self.__onInviteListModified
-            g_clientUpdateManager.addCallbacks({'inventory.1': self.__onInventoryUpdated})
-            g_clientUpdateManager.addCallbacks({'stats.unlocks': self.__onInventoryUpdated})
             if prbInvites.isInited():
                 self.__addInvites()
         return result
@@ -271,7 +268,6 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
         if prbInvites:
             prbInvites.onInvitesListInited -= self.__onInviteListInited
             prbInvites.onReceivedInviteListModified -= self.__onInviteListModified
-            g_clientUpdateManager.removeObjectCallbacks(self)
 
     def onPrbEntitySwitched(self):
         self.__updateInvites()
@@ -313,9 +309,6 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
                     model.updateNotification(NOTIFICATION_TYPE.INVITE, inviteID, invite, True)
 
             return
-
-    def __onInventoryUpdated(self, *_):
-        self.__updateInvites()
 
     def __addInvites(self):
         model = self._model()
@@ -975,7 +968,7 @@ class BattlePassListener(_NotificationListener):
 
     def start(self, model):
         super(BattlePassListener, self).start(model)
-        self.__isStarted = self.__battlePassController.isSeasonStarted()
+        self.__isStarted = self.__battlePassController.isActive()
         self.__isFinished = self.__battlePassController.isSeasonFinished()
         self.__arenaBonusTypesHandlers = {ARENA_BONUS_TYPE.RANKED: self.__pushEnableChangeRanked,
          ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange,
@@ -1031,12 +1024,12 @@ class BattlePassListener(_NotificationListener):
 
     def __notifyStartExtra(self, chapterID):
         header = backport.text(R.strings.system_messages.battlePass.extraStarted.header())
-        chapterName = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
+        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
 
     def __notifyFinishExtra(self, chapterID):
         chapterID = int(chapterID)
-        textRes = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
+        textRes = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         if not textRes.exists():
             _logger.warning('There is no text for given chapterID: %d', chapterID)
             return
@@ -1047,7 +1040,7 @@ class BattlePassListener(_NotificationListener):
 
     def __notifyExtraWillEndSoon(self, chapterID):
         chapterID = int(chapterID)
-        textRes = backport.text(R.strings.battle_pass.chapter.dyn(self.__battlePassController.getRewardType(chapterID).value).fullName.num(chapterID)())
+        textRes = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         if not textRes.exists() or not self.__battlePassController.isChapterExists(chapterID):
             _logger.warning('There is no text or config for given chapterID: %d', chapterID)
             return
@@ -1066,7 +1059,7 @@ class BattlePassListener(_NotificationListener):
                 self.__pushEnableChangedForArenaBonusType(arenaBonusType, newValue)
 
     def __checkAndNotify(self, oldMode=None, newMode=None):
-        isStarted = self.__battlePassController.isSeasonStarted()
+        isStarted = self.__battlePassController.isActive()
         isFinished = self.__battlePassController.isSeasonFinished()
         isModeChanged = oldMode is not None and newMode is not None and oldMode != newMode
         if self.__isStarted != isStarted and isStarted:
@@ -1082,7 +1075,8 @@ class BattlePassListener(_NotificationListener):
         self.__isFinished = isFinished
         return
 
-    def __pushPause(self):
+    @staticmethod
+    def __pushPause():
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __pushFinished(self):
@@ -1103,11 +1097,14 @@ class BattlePassListener(_NotificationListener):
             SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).title(), seasonNum=self.__battlePassController.getSeasonNum()),
              'additionalText': ''})
 
+        self.__initArenaBonusTypeEnabledStates()
+
     def __pushEnabled(self):
         expiryTime = self.__battlePassController.getSeasonFinishTime()
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_enabled.body(), expiryTime=text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime))), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.Warning)
 
-    def __pushBattleRoyaleEnableChange(self, isEnabled):
+    @staticmethod
+    def __pushBattleRoyaleEnableChange(isEnabled):
         if not isEnabled:
             SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.battle_royale.body()), type=SystemMessages.SM_TYPE.Warning)
 
@@ -1115,7 +1112,8 @@ class BattlePassListener(_NotificationListener):
         if arenaBonusType in self.__arenaBonusTypesHandlers:
             self.__arenaBonusTypesHandlers[arenaBonusType](newValue)
 
-    def __pushEnableChangeRanked(self, isEnabled):
+    @staticmethod
+    def __pushEnableChangeRanked(isEnabled):
         if isEnabled:
             msg = backport.text(R.strings.system_messages.battlePass.switch_enabled.ranked.body())
             msgType = SystemMessages.SM_TYPE.Warning
@@ -1510,89 +1508,6 @@ class ResourceWellListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
 
 
-class FunRandomEventsListener(_NotificationListener, IGlobalListener):
-    __funRandomCtrl = dependency.descriptor(IFunRandomController)
-    __STR_PATH = R.strings.fun_random.message
-
-    def __init__(self):
-        super(FunRandomEventsListener, self).__init__()
-        self.__periodInfo = None
-        self.__isAvailable = None
-        self.__messageIDs = []
-        return
-
-    def start(self, model):
-        super(FunRandomEventsListener, self).start(model)
-        self.__periodInfo = self.__funRandomCtrl.getPeriodInfo()
-        self.__isAvailable = self.__funRandomCtrl.isAvailable()
-        self.__funRandomCtrl.onGameModeStatusUpdated += self.__onStatusUpdated
-        g_clientUpdateManager.addCallbacks({'inventory.1': self.__onItemsUpdated})
-        g_clientUpdateManager.addCallbacks({'stats.unlocks': self.__onItemsUpdated})
-        self.startGlobalListening()
-        return True
-
-    def stop(self):
-        self.__messageIDs = []
-        self.__periodInfo = None
-        self.__funRandomCtrl.onGameModeStatusUpdated -= self.__onStatusUpdated
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        self.stopGlobalListening()
-        super(FunRandomEventsListener, self).stop()
-        return
-
-    def onPrbEntitySwitched(self):
-        self.__updateMessages()
-
-    def __onStatusUpdated(self, _):
-        isAvailable = self.__funRandomCtrl.isAvailable()
-        currentSeason = self.__funRandomCtrl.getCurrentSeason()
-        if currentSeason is not None and isAvailable != self.__isAvailable:
-            self.__pushSwitcherMessage(isAvailable)
-            self.__isAvailable = isAvailable
-        periodInfo = self.__funRandomCtrl.getPeriodInfo()
-        if self.__periodInfo.periodType != periodInfo.periodType:
-            self.__pushStatusEventMessage(currentSeason)
-            self.__periodInfo = periodInfo
-        self.__updateMessages()
-        return
-
-    def __onItemsUpdated(self, *_):
-        self.__updateMessages()
-
-    def __isEventStarted(self, currentSeason):
-        return currentSeason is not None and self.__periodInfo.periodType == PeriodType.BEFORE_SEASON
-
-    def __isEventFinished(self, currentSeason):
-        return currentSeason is None and self.__funRandomCtrl.getNextSeason() is None
-
-    def __pushStatusEventMessage(self, currentSeason):
-        if self.__isEventStarted(currentSeason):
-            model = self._model()
-            if model:
-                startTime = currentSeason.getStartDate()
-                model.addNotification(FunRandomButtonDecorator(startTime))
-                self.__messageIDs.append(startTime)
-        elif self.__isEventFinished(currentSeason):
-            SystemMessages.pushMessage(text=backport.text(self.__STR_PATH.endEvent.text()), type=SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM)
-
-    def __pushSwitcherMessage(self, isAvailable):
-        if isAvailable:
-            SystemMessages.pushMessage(text=backport.text(self.__STR_PATH.switch_on.text()), type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(self.__STR_PATH.switch.title())})
-        else:
-            SystemMessages.pushMessage(text=backport.text(self.__STR_PATH.switch_off.text()), type=SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(self.__STR_PATH.switch.title())})
-
-    def __updateMessages(self):
-        model = self._model()
-        if model is None or not self.__messageIDs:
-            return
-        else:
-            for entityID in self.__messageIDs:
-                notification = FunRandomButtonDecorator(entityID)
-                model.updateNotification(NOTIFICATION_TYPE.MESSAGE, entityID, notification.getEntity(), isStateChanged=False)
-
-            return
-
-
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1614,8 +1529,7 @@ class NotificationsListeners(_NotificationListener):
          VehiclePostProgressionUnlockListener(),
          PsaCoinReminderListener(),
          BattlePassSwitchChapterReminder(),
-         ResourceWellListener(),
-         FunRandomEventsListener())
+         ResourceWellListener())
 
     def start(self, model):
         for listener in self.__listeners:

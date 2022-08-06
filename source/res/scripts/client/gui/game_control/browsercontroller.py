@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import logging
+import typing
 import BigWorld
 import Event
 from WebBrowser import WebBrowser
@@ -72,6 +73,9 @@ class BrowserController(IBrowserController):
     def removeFilterHandler(self, handler):
         self.__filters.discard(handler)
 
+    def nextBrowserID(self):
+        return self.__browserIDGenerator.next()
+
     @async
     @process
     def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
@@ -108,7 +112,7 @@ class BrowserController(IBrowserController):
             app = appLoader.getApp()
             if app is None:
                 raise SoftException('Application can not be None')
-            browser = WebBrowser(webBrowserID, app, size, url, handlers=self.__filters)
+            browser = WebBrowser(webBrowserID, app, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
                 _logger.info('CTRL: Queueing a browser creation: %r - %s', browserID, url)

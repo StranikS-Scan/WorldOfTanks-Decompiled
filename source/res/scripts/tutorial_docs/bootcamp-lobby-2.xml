@@ -74,6 +74,7 @@
         </set-visible>
         <set-visible>	HeaderCenterMenuBg	  <val>	False	</val>
         </set-visible>
+        <activate>	DisableEscapeMenuInHangar	</activate>
         <show-dialog>	IntroDialogCredits	</show-dialog>
         <set-visible>	VehicleResearchPanel	  <val>	True	</val>
         </set-visible>
@@ -127,6 +128,7 @@
         <play-animation>	MenuHangar	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
+        <inactivate>	DisableEscapeMenuInHangar	</inactivate>
       </effects>
     </checkpoint>
     <checkpoint>	ModuleUnlockedCheckpoint	  <condition>

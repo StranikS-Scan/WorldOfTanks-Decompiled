@@ -33,7 +33,10 @@ else:
 
 prefix = os.path.join(sys.prefix, 'tcl')
 if not os.path.exists(prefix):
-    prefix = os.path.join(sys.prefix, os.path.pardir, 'tcltk', 'lib')
+    tcltk = 'tcltk'
+    if sys.maxsize > 2147483647L:
+        tcltk = 'tcltk64'
+    prefix = os.path.join(sys.prefix, 'externals', tcltk, 'lib')
     prefix = os.path.abspath(prefix)
 if os.path.exists(prefix):
     prefix = convert_path(prefix)

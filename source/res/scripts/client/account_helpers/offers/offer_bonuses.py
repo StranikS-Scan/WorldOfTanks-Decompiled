@@ -20,6 +20,8 @@ from gui.shared.utils.functions import stripHTMLTags
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from helpers import int2roman, dependency
 from skeletons.gui.customization import ICustomizationService
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 EXTRA_PARAMS_JOINER = ', '
 
 def _canCustomizationBeAdded(c11nItem, count):

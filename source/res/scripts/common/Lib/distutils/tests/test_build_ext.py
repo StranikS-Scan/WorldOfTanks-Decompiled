@@ -13,7 +13,7 @@ import unittest
 from test import test_support
 ALREADY_TESTED = False
 
-class BuildExtTestCase(support.TempdirManager, support.LoggingSilencer, unittest.TestCase):
+class BuildExtTestCase(support.TempdirManager, support.LoggingSilencer, support.EnvironGuard, unittest.TestCase):
 
     def setUp(self):
         super(BuildExtTestCase, self).setUp()
@@ -133,6 +133,10 @@ class BuildExtTestCase(support.TempdirManager, support.LoggingSilencer, unittest
         cmd.rpath = 'one%stwo' % os.pathsep
         cmd.finalize_options()
         self.assertEqual(cmd.rpath, ['one', 'two'])
+        cmd = build_ext(dist)
+        cmd.link_objects = 'one two,three'
+        cmd.finalize_options()
+        self.assertEqual(cmd.link_objects, ['one', 'two', 'three'])
         cmd = build_ext(dist)
         cmd.define = 'one,two'
         cmd.finalize_options()
@@ -371,8 +375,11 @@ class BuildExtTestCase(support.TempdirManager, support.LoggingSilencer, unittest
         with open(deptarget_c, 'w') as fp:
             fp.write(textwrap.dedent('                #include <AvailabilityMacros.h>\n\n                int dummy;\n\n                #if TARGET %s MAC_OS_X_VERSION_MIN_REQUIRED\n                #else\n                #error "Unexpected target"\n                #endif\n\n            ' % operator))
         target = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
-        target = tuple(map(int, target.split('.')))
-        target = '%02d%01d0' % target
+        target = tuple(map(int, target.split('.')[0:2]))
+        if target[1] < 10:
+            target = '%02d%01d0' % target
+        else:
+            target = '%02d%02d00' % target
         deptarget_ext = Extension('deptarget', [deptarget_c], extra_compile_args=['-DTARGET=%s' % (target,)])
         dist = Distribution({'name': 'deptarget',
          'ext_modules': [deptarget_ext]})

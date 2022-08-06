@@ -42,6 +42,9 @@ class RadarButton(RadarButtonMeta, IReplayRadarListener, IAbstractPeriodView):
         self.__radarIsReady = isReady
         self.__updateAvailability()
 
+    def reset(self):
+        self.__reset()
+
     def timeOutDone(self):
         ctrl = self.__sessionProvider.shared.messages
         if ctrl is not None:
@@ -76,9 +79,7 @@ class RadarButton(RadarButtonMeta, IReplayRadarListener, IAbstractPeriodView):
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         if BattleReplay.isPlaying():
-            self.as_updateEnableS(False)
-            self.as_setCoolDownPosAsPercentS(0)
-            self.as_setCoolDownTimeSnapshotS(0)
+            self.__reset()
         super(RadarButton, self)._dispose()
         return
 
@@ -101,3 +102,8 @@ class RadarButton(RadarButtonMeta, IReplayRadarListener, IAbstractPeriodView):
         if newAvailableVal != self.__isAvailable:
             self.__isAvailable = newAvailableVal
             self.as_updateEnableS(self.__isAvailable)
+
+    def __reset(self):
+        self.as_updateEnableS(False)
+        self.as_setCoolDownPosAsPercentS(0)
+        self.as_setCoolDownTimeSnapshotS(0)

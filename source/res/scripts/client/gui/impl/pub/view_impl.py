@@ -16,8 +16,8 @@ class ViewImpl(View, EventsHandler, typing.Generic[TViewModel]):
     __slots__ = ()
     gui = dependency.descriptor(IGuiLoader)
 
-    def _initialize(self, *args, **kwargs):
-        super(ViewImpl, self)._initialize(*args, **kwargs)
+    def _onLoading(self, *args, **kwargs):
+        super(ViewImpl, self)._onLoading(*args, **kwargs)
         self._subscribe()
 
     def _finalize(self):

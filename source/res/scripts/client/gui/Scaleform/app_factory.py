@@ -252,6 +252,7 @@ class AS3_AppFactory(IAppFactory):
         app = self.getApp(appNS=appNS)
         libs = ['guiControlsLobbyBattleDynamic.swf',
          'guiControlsLobbyDynamic.swf',
+         'guiControlsLobbyDynamic2.swf',
          'popovers.swf',
          'iconLibrary.swf']
         if self.bootcampCtrl.isInBootcamp():

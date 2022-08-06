@@ -276,35 +276,37 @@ _plusPercentFormat = {'rounder': lambda v: '+%d%%' % v}
 def _autoReloadPreprocessor(reloadTimes, rowStates):
     times = []
     states = []
-    for idx, slotTime in enumerate(reloadTimes):
-        if isinstance(slotTime, (float, int)) or slotTime is None:
-            times.append(slotTime)
-            if rowStates:
-                states.append(rowStates[idx])
-            continue
-        if isinstance(slotTime, tuple):
-            minSlotTime, maxSlotTime = slotTime
-            if minSlotTime == maxSlotTime:
-                times.append(minSlotTime)
-                if rowStates:
-                    states.append(rowStates[idx][0])
-            else:
-                LOG_ERROR('Different auto-reload times for same gun and slot')
-                return
-
-    if len(times) > _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO:
-        if states:
-            minTime, maxTime = min(times), max(times)
-            minState, maxState = (None, None)
-            for idx, time in enumerate(times):
-                if time == minTime:
-                    minState = states[idx]
-                if time == maxTime:
-                    maxState = states[idx]
-
-            return ((min(times), max(times)), _DASH, (minState, maxState))
-        return ((min(times), max(times)), _DASH, None)
+    if not hasattr(reloadTimes, '__iter__'):
+        return (times, _SLASH, states if states else None)
     else:
+        for idx, slotTime in enumerate(reloadTimes):
+            if isinstance(slotTime, (float, int)) or slotTime is None:
+                times.append(slotTime)
+                if rowStates:
+                    states.append(rowStates[idx])
+                continue
+            if isinstance(slotTime, tuple):
+                minSlotTime, maxSlotTime = slotTime
+                if minSlotTime == maxSlotTime:
+                    times.append(minSlotTime)
+                    if rowStates:
+                        states.append(rowStates[idx][0])
+                else:
+                    LOG_ERROR('Different auto-reload times for same gun and slot')
+                    return
+
+        if len(times) > _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO:
+            if states:
+                minTime, maxTime = min(times), max(times)
+                minState, maxState = (None, None)
+                for idx, time in enumerate(times):
+                    if time == minTime:
+                        minState = states[idx]
+                    if time == maxTime:
+                        maxState = states[idx]
+
+                return ((min(times), max(times)), _DASH, (minState, maxState))
+            return ((min(times), max(times)), _DASH, None)
         return (times, _SLASH, states if states else None)
 
 
@@ -475,7 +477,7 @@ def simplifiedDeltaParameter(parameter, isSituational=False, isApproximately=Fal
 def _applyFormat(value, state, settings, doSmartRound, colorScheme):
     if doSmartRound:
         value = _cutDigits(value)
-    if isinstance(value, str):
+    if isinstance(value, (str, unicode)):
         paramStr = value
     elif value is None:
         paramStr = '--'

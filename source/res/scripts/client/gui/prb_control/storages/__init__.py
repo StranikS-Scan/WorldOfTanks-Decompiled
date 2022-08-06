@@ -17,7 +17,6 @@ from gui.prb_control.storages.event_battles_storage import EventBattlesStorage
 from gui.prb_control.storages.stronghold_storage import StrongholdStorage
 from gui.prb_control.storages.tournament_storage import TournamentStorage
 from gui.prb_control.storages.mapbox_storage import MapboxStorage
-from gui.prb_control.storages.fun_random_storage import FunRandomStorage
 from soft_exception import SoftException
 __all__ = ('RECENT_ARENA_STORAGE', 'storage_getter', 'legacy_storage_getter', 'prequeue_storage_getter', 'PrbStorageDecorator', '_makeQueueName')
 
@@ -38,6 +37,7 @@ def _makeLegacyName(legacyType):
 
 
 RECENT_ARENA_STORAGE = 'recentArenaStorage'
+_PRB_STORAGE = {}
 registerPrbStorage(RECENT_ARENA_STORAGE, RecentArenaStorage())
 registerPrbStorage(_makeLegacyName(_P_TYPE.TRAINING), TrainingStorage())
 registerPrbStorage(_makeQueueName(_Q_TYPE.SANDBOX), SandboxStorage())
@@ -49,7 +49,6 @@ registerPrbStorage(_makeQueueName(_Q_TYPE.TOURNAMENT_UNITS), TournamentStorage()
 registerPrbStorage(_makeLegacyName(_P_TYPE.EPIC_TRAINING), TrainingStorage())
 registerPrbStorage(_makeQueueName(_Q_TYPE.MAPBOX), MapboxStorage())
 registerPrbStorage(_makeQueueName(_Q_TYPE.MAPS_TRAINING), MapsTrainingStorage())
-registerPrbStorage(_makeQueueName(_Q_TYPE.FUN_RANDOM), FunRandomStorage())
 
 class storage_getter(object):
 

@@ -143,7 +143,8 @@ _REPLACEMENTS = {'el': (u'\u0386\u0388\u038a\u0389\u038e\u038c\u038f', u'\u0391\
 def changeStringCasing(string, isUpper):
     langID = getLanguageCode()
     try:
-        string = string.decode('utf-8')
+        if not isinstance(string, unicode):
+            string = string.decode('utf-8')
         if langID is not None:
             langID = str(langID).lower()
             if langID in _STR_CASING_OPTIONS:
@@ -158,7 +159,7 @@ def changeStringCasing(string, isUpper):
     except Exception:
         LOG_CURRENT_EXCEPTION()
 
-    return i18n.encodeUtf8(string)
+    return string
 
 
 def toLower(string):

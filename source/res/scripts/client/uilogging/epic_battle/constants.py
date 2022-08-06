@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/uilogging/epic_battle/constants.py
 from enum import Enum
 FEATURE = 'epic_battle'
-METRICS = 'metrics'
 
 class EpicBattleLogActions(Enum):
     OPEN = 'open'

@@ -9,7 +9,7 @@ from .view_event import ViewEvent
 from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity, getProxy, getObject
 from ..py_object_wrappers import PyObjectView, PyObjectViewSettings
-from ..gui_constants import ViewFlags, ViewStatus, ViewEventType
+from ..gui_constants import ViewFlags, ViewStatus, ViewEventType, ChildFlags
 TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 _logger = logging.getLogger(__name__)
 
@@ -127,9 +127,9 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
     def getChildView(self, resourceID):
         return self.proxy.getChild(resourceID) if self.proxy is not None else None
 
-    def setChildView(self, resourceID, view=None):
+    def setChildView(self, resourceID, view=None, chFlags=ChildFlags.AUTO_DESTROY):
         if self.proxy is not None:
-            if not self.proxy.setChild(resourceID, getProxy(view)):
+            if not self.proxy.setChild(resourceID, getProxy(view), chFlags):
                 _logger.error('%r: child %r can not be added. May be child is already added to other view or window', self, view)
         else:
             _logger.error('%r: Parent view does not have proxy, child can not be added', self)
@@ -194,8 +194,6 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
 
     def _cFini(self):
         self._finalize()
-        self._cViewStatusChanged(self.viewStatus, ViewStatus.DESTROYED)
-        self.unbind()
         self.__soundExtension.destroySoundManager()
 
     def _cViewStatusChanged(self, oldStatus, newStatus):

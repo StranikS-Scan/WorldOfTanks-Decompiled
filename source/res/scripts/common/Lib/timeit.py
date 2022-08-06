@@ -16,7 +16,7 @@ if sys.platform == 'win32':
     default_timer = time.clock
 else:
     default_timer = time.time
-template = '\ndef inner(_it, _timer):\n    %(setup)s\n    _t0 = _timer()\n    for _i in _it:\n        %(stmt)s\n    _t1 = _timer()\n    return _t1 - _t0\n'
+template = '\ndef inner(_it, _timer%(init)s):\n    %(setup)s\n    _t0 = _timer()\n    for _i in _it:\n        %(stmt)s\n    _t1 = _timer()\n    return _t1 - _t0\n'
 
 def reindent(src, indent):
     return src.replace('\n', '\n' + ' ' * indent)
@@ -42,14 +42,21 @@ class Timer:
         self.timer = timer
         ns = {}
         if isinstance(stmt, basestring):
+            if isinstance(setup, basestring):
+                compile(setup, dummy_src_name, 'exec')
+                compile(setup + '\n' + stmt, dummy_src_name, 'exec')
+            else:
+                compile(stmt, dummy_src_name, 'exec')
             stmt = reindent(stmt, 8)
             if isinstance(setup, basestring):
                 setup = reindent(setup, 4)
                 src = template % {'stmt': stmt,
-                 'setup': setup}
+                 'setup': setup,
+                 'init': ''}
             elif hasattr(setup, '__call__'):
                 src = template % {'stmt': stmt,
-                 'setup': '_setup()'}
+                 'setup': '_setup()',
+                 'init': ', _setup=_setup'}
                 ns['_setup'] = setup
             else:
                 raise ValueError('setup is neither a string nor callable')
@@ -114,7 +121,7 @@ def repeat(stmt='pass', setup='pass', timer=default_timer, repeat=default_repeat
     return Timer(stmt, setup, timer).repeat(repeat, number)
 
 
-def main(args=None):
+def main(args=None, _wrap_timer=None):
     if args is None:
         args = sys.argv[1:]
     import getopt
@@ -162,6 +169,8 @@ def main(args=None):
     setup = '\n'.join(setup) or 'pass'
     import os
     sys.path.insert(0, os.curdir)
+    if _wrap_timer is not None:
+        timer = _wrap_timer(timer)
     t = Timer(stmt, setup, timer)
     if number == 0:
         for i in range(1, 10):

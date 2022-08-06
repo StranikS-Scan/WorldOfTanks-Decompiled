@@ -10,6 +10,7 @@ class _BootCampEvents(object):
         self.onBootcampBecomeNonPlayer = self._createEvent()
         self.onBootcampStarted = self._createEvent()
         self.onBootcampFinished = self._createEvent()
+        self.onAccountShowGUI = self._createEvent()
         self.onIntroVideoStop = self._createEvent()
         self.onBootcampSpaceLoaded = self._createEvent()
         self.onBootcampGoNext = self._createEvent()

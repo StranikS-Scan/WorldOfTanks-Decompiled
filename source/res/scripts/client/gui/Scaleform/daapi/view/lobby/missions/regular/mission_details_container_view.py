@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import Missio
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
-from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -79,13 +79,21 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def __setData(self, needDemand=True):
         if needDemand:
             yield await(self.eventsCache.prefetcher.demand())
+
+        def missionsFilter(q):
+            checkDaily = True if self.__showDQInMissionsTab else not isDailyQuest(q.getID()) and not isPremium(q.getID())
+            return checkDaily and q.getFinishTimeLeft()
+
         eventID = self.__ctx.get('eventID')
         groupID = self.__ctx.get('groupID')
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
         self.__groupPacker = getGroupPackerByContextID(groupID, self.eventsCache)
         self.__datailedList = []
-        self.__quests = self.__getQuests(groupID)
+        if groupID == BATTLE_ROYALE_GROUPS_ID:
+            self.__quests = self.__battleRoyaleController.getQuests()
+        else:
+            self.__quests = self.eventsCache.getQuests(missionsFilter)
         if self.__groupPacker is not None:
             for quest in self.__groupPacker.findEvents(self.__quests):
                 data = missions_helper.getDetailedMissionData(quest).getInfo()
@@ -95,7 +103,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
             quest = self.__quests.get(eventID)
             if quest is not None:
                 self.__datailedList.append(missions_helper.getDetailedMissionData(quest).getInfo())
-        if not self.__datailedList or self.__isQuestInvalid(eventID):
+        if not self.__datailedList:
             self.closeView()
         else:
             pages = [ {'buttonsGroup': 'MissionDetailsPageGroup',
@@ -110,16 +118,3 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
         self.destroy()
-
-    def __getQuests(self, groupID):
-
-        def missionsFilter(q):
-            checkDaily = True if self.__showDQInMissionsTab else not isDailyQuest(q.getID()) and not isPremium(q.getID())
-            return checkDaily and q.getFinishTimeLeft()
-
-        if groupID == BATTLE_ROYALE_GROUPS_ID:
-            return self.__battleRoyaleController.getQuests()
-        return self.eventsCache.getQuests(lambda q: q.getGroupID() == groupID) if groupID == FUN_RANDOM_GROUP_ID else self.eventsCache.getQuests(missionsFilter)
-
-    def __isQuestInvalid(self, eventID):
-        return eventID not in self.__quests

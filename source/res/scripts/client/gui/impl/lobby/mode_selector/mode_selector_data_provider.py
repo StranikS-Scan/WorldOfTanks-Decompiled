@@ -9,7 +9,6 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns im
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.bootcamp_mode_selector_item import BootcampModeSelectorItem
 from gui.impl.lobby.mode_selector.items.epic_mode_selector_item import EpicModeSelectorItem
-from gui.impl.lobby.mode_selector.items.fun_random_mode_selector_item import FunRandomSelectorItem
 from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName
 from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxModeSelectorItem
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
@@ -32,7 +31,6 @@ _modeSelectorLegacyItemByModeName = {PREBATTLE_ACTION_NAME.RANDOM: RandomModeSel
  PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: SpecModeSelectorItem,
  PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingsModeSelectorItem,
  PREBATTLE_ACTION_NAME.MAPBOX: MapboxModeSelectorItem,
- PREBATTLE_ACTION_NAME.FUN_RANDOM: FunRandomSelectorItem,
  PREBATTLE_ACTION_NAME.EPIC: EpicModeSelectorItem,
  CustomModeName.BOOTCAMP: BootcampModeSelectorItem,
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE: BattleRoyaleModeSelectorItem}
@@ -60,7 +58,7 @@ class ModeSelectorDataProvider(IGlobalListener):
 
     @property
     def hasNewIndicator(self):
-        return battle_selector_items.getItems().hasNewVisible()
+        return battle_selector_items.getItems().hasNew()
 
     @property
     def isDemoButtonEnabled(self):

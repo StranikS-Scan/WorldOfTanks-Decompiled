@@ -10,12 +10,10 @@ from Event import EventManager, Event
 from constants import EVENT_TYPE, PREMIUM_TYPE
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import EventInfo, EventHeader
-from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatErrorTextWithIcon
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MarathonAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MOTIVATION_QUESTS import MOTIVATION_QUESTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -27,16 +25,16 @@ from gui.server_events import settings, events_helpers
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup
+from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
-from skeletons.gui.linkedset import ILinkedSetController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -55,7 +53,6 @@ class GuiGroupBlockID(object):
     MOTIVE_QUESTS_BLOCK = 'motiveQuestsBlock'
     MARATHON_GROUPED_BLOCK = 'marathonGroupedBlock'
     ELEN_QUEST_BLOCK = 'elenQuest'
-    LINKEDSET_QUESTS_BLOCK = 'linkedSet'
     PREMIUM_QUESTS_BLOCK = 'premiumQuests'
     ORDER = (BASE,
      PREMIUM_QUESTS_BLOCK,
@@ -63,8 +60,7 @@ class GuiGroupBlockID(object):
      REGULAR_GROUPED_BLOCK,
      MOTIVE_QUESTS_BLOCK,
      MARATHON_GROUPED_BLOCK,
-     ELEN_QUEST_BLOCK,
-     LINKEDSET_QUESTS_BLOCK)
+     ELEN_QUEST_BLOCK)
     ORDER_INDICES = dict(((n, i) for i, n in enumerate(ORDER)))
 
     @classmethod
@@ -84,8 +80,6 @@ def getGroupPackerByContextID(contextID, proxy):
             if group:
                 if group.isMarathon():
                     return _MissionsGroupQuestsBlockInfo(group)
-                if group.isLinkedSet():
-                    return _LinkedSetQuestsBlockInfo()
                 if group.isPremium():
                     return _PremiumGroupedQuestsBlockInfo()
                 return _GroupedEventsBlockInfo(group)
@@ -245,12 +239,11 @@ class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
 
 
 class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
-    linkedSet = dependency.descriptor(ILinkedSetController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __battleMatters = dependency.descriptor(IBattleMattersController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    __funRandomController = dependency.descriptor(IFunRandomController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
         super(QuestsGroupsBuilder, self).__init__()
@@ -258,8 +251,7 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
 
     def invalidateBlocks(self):
         super(QuestsGroupsBuilder, self).invalidateBlocks()
-        if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
-            self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
+        if self.__battleMatters.isEnabled() and (self.__wasLinkedSetShowed or not self.__battleMatters.isFinished()):
             self.__wasLinkedSetShowed = True
         group = getDailyEpicGroup()
         epicBattleQuestsAvailable = self.__epicController.isEnabled() and self.__epicController.isCurrentCycleActive()
@@ -277,10 +269,6 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
             rankedPlatform = getRankedPlatformGroup()
             if rankedPlatform and RANKED_PLATFORM_GROUP_ID not in self._cache['groupedEvents']:
                 self._cache['groupedEvents'][RANKED_PLATFORM_GROUP_ID] = self._createGroupedEventsBlock(rankedPlatform)
-        if self.__funRandomController.isBattlesPossible():
-            funRandomGroup = getFunRandomDailyGroup()
-            if funRandomGroup and FUN_RANDOM_GROUP_ID not in self._cache['groupedEvents']:
-                self._cache['groupedEvents'][FUN_RANDOM_GROUP_ID] = self._createGroupedEventsBlock(funRandomGroup)
         group = getPremiumGroup()
         if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()
@@ -673,7 +661,7 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
         return {'titleBlock': self.getTitleBlock()}
 
     def __applyFilter(self, quest):
-        forbiddenQuestConditions = [lambda q: q.getType() in (EVENT_TYPE.TOKEN_QUEST,), lambda q: not q.getFinishTimeLeft(), lambda q: isLinkedSet(q.getGroupID()) or isPremium(q.getGroupID())]
+        forbiddenQuestConditions = [lambda q: q.getType() in (EVENT_TYPE.TOKEN_QUEST,), lambda q: not q.getFinishTimeLeft(), lambda q: isBattleMattersQuestID(q.getGroupID()) or isPremium(q.getGroupID())]
         if any((isForbidden(quest) for isForbidden in forbiddenQuestConditions)):
             return False
         if not g_currentVehicle.isPresent():
@@ -737,111 +725,6 @@ class _ElenBlockInfo(_EventsBlockInfo):
              'conditionBlock': event.getConditionInfo(),
              'awardBlock': event.getAwardInfo()})
         return result
-
-
-class _LinkedSetQuestsBlockInfo(_EventsBlockInfo):
-    eventsCache = dependency.descriptor(IEventsCache)
-    linkedSet = dependency.descriptor(ILinkedSetController)
-    blockType = GuiGroupBlockID.LINKEDSET_QUESTS_BLOCK
-
-    def __init__(self):
-        super(_LinkedSetQuestsBlockInfo, self).__init__(headerLinkage=QUESTS_ALIASES.MISSIONS_LINKED_SET_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSIONS_LINKED_SET_BODY_LINKAGE)
-        self._questMissions = []
-        self.mainQuest = None
-        return
-
-    @property
-    def questMissions(self):
-        return self._questMissions
-
-    def getEventsBlockID(self):
-        return DEFAULTS_GROUPS.LINKEDSET_QUESTS
-
-    def buildEventsBlockData(self, srvEvents, filterFunc):
-        self._suitableEvents = self.linkedSet.getLinkedSetQuests().values()
-        self._events = self._suitableEvents
-        self._updateLinkedSetMissions()
-        return _EventsBlockData(len(self._suitableEvents), len(self._suitableEvents), self._getVO())
-
-    def getTitleBlock(self):
-        return {'title': _ms(LINKEDSET.LINKEDSET_GROUP_TITLE)}
-
-    def isLinkedSetCompleted(self):
-        return self.getTotalMissionsCount() == self.getCompletedMissionsCount()
-
-    def getTotalMissionsCount(self):
-        return len(self._questMissions)
-
-    def getCompletedMissionsCount(self):
-        return sum((1 for quests in self._questMissions if isAllQuestsCompleted(quests)))
-
-    def getTitle(self):
-        return _ms(getLocalizedQuestNameForLinkedSetQuest(self.mainQuest))
-
-    def markVisited(self):
-        if self.mainQuest and (self.mainQuest.isAvailable().isValid or self.mainQuest.isCompleted()):
-            settings.visitEventGUI(self.mainQuest)
-
-    def _findEvents(self, srvEvents):
-        return filter(self.__applyFilter, srvEvents.itervalues())
-
-    def _getHeaderData(self):
-        info = text_styles.standard(_ms(LINKEDSET.MISSIONS_COMPLETED, cur_count=self.getCompletedMissionsCount(), total_count=self.getTotalMissionsCount()))
-        return {'titleBlock': self.getTitleBlock(),
-         'info': info}
-
-    def _getVO(self):
-        vo = super(_LinkedSetQuestsBlockInfo, self)._getVO()
-        vo['bodyDataLinkedSet'] = vo.pop('bodyData')
-        vo['isLinkedSet'] = True
-        return vo
-
-    def _getBodyData(self):
-        missions = []
-        for quests in self._questMissions:
-            status = None
-            checkStates = []
-            groupIsCompleted = isAllQuestsCompleted(quests)
-            groupIsAvailable = groupIsCompleted or hasAtLeastOneAvailableQuest(quests)
-            if not groupIsAvailable:
-                status = formatErrorTextWithIcon(_ms(LINKEDSET.NOT_AVAILABLE))
-            else:
-                isSingleQuest = len(quests) == 1
-                if not groupIsCompleted and isSingleQuest:
-                    status = _ms(LINKEDSET.MISSION_NOT_COMPLETE)
-                else:
-                    checkStates = [ quest.isCompleted() for quest in quests ]
-            missionID = getLinkedSetMissionIDFromQuest(quests[0])
-            if groupIsAvailable:
-                uiDecoration = RES_ICONS.getLinkedSetMissionItemActive(missionID)
-            else:
-                uiDecoration = RES_ICONS.getLinkedSetMissionItemDisable(missionID)
-            advisable = self.eventsCache.getAdvisableQuests()
-            advisableQuests = [ quest for quest in quests if quest.getID() in advisable ]
-            isCornerEnable = bool(len(settings.getNewCommonEvents(advisableQuests)))
-            missions.append({'eventID': str(missionID),
-             'title': _ms(LINKEDSET.getMissionName(missionID)),
-             'status': status,
-             'isAvailable': True,
-             'isCornerEnable': isCornerEnable,
-             'uiPicture': RES_ICONS.getLinkedSetMissionIconItem(missionID),
-             'uiDecoration': uiDecoration,
-             'checkStates': checkStates})
-
-        result = {'title': _ms(getLocalizedQuestNameForLinkedSetQuest(self.mainQuest)),
-         'description': _ms(getLocalizedQuestDescForLinkedSetQuest(self.mainQuest)),
-         'isButtonUseTokenEnabled': self.linkedSet.hasLinkedSetFinishToken(),
-         'buttonUseTokenLabel': _ms(LINKEDSET.USE_THE_TOKEN),
-         'uiDecoration': RES_ICONS.MAPS_ICONS_LINKEDSET_LINKEDSET_BGR_LANDING,
-         'missions': missions}
-        return result
-
-    def _updateLinkedSetMissions(self):
-        self._questMissions = self.linkedSet.getMissions()
-        self.mainQuest = self._questMissions.pop()[0]
-
-    def __applyFilter(self, quest):
-        return isLinkedSet(quest.getGroupID())
 
 
 class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):

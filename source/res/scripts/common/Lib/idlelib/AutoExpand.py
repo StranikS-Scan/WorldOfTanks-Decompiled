@@ -77,3 +77,8 @@ class AutoExpand:
             i = i - 1
 
         return line[i:]
+
+
+if __name__ == '__main__':
+    import unittest
+    unittest.main('idlelib.idle_test.test_autoexpand', verbosity=2)

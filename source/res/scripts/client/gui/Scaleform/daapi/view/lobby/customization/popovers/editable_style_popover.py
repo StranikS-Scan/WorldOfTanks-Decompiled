@@ -10,7 +10,7 @@ from gui.customization.constants import CustomizationModes
 from gui.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, C11nId, EDITABLE_STYLE_IRREMOVABLE_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import text_styles, getItemPricesVO, icons
+from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items.components.c11n_components import getItemSlotType
@@ -70,14 +70,11 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
             header = R.strings.tooltips.vehiclePreview.boxTooltip.style.header
             header = backport.text(header(), value=self.__style.userName)
         self.as_setHeaderS(text_styles.highTitle(header))
-        img = icons.makeImageTag(backport.image(R.images.gui.maps.icons.customization.edited_small()))
-        helpMessage = backport.text(R.strings.vehicle_customization.popover.editableStyle.editedItems())
-        self.as_setHelpMessageS(img + text_styles.main(helpMessage))
         return
 
     def __setClearMessage(self):
         if self.__style is None:
-            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.clear.message
+            clearMessage = R.strings.vehicle_customization.customization.itemsPopover.message.clear
             clearMessage = text_styles.main(backport.text(clearMessage()))
         else:
             clearMessage = ''
@@ -220,7 +217,6 @@ class EditableStylePopover(CustomizationEditedKitPopoverMeta):
          'isWide': item.isWide(),
          'itemsList': itemData.slotsIds,
          'isDim': item.isDim(),
-         'isEdited': not itemData.isBase,
          'isDisabled': itemData.isRemoved,
          'disabledLabel': disabledLabel,
          'isRemovable': itemData.isRemovable,

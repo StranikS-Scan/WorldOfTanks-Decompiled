@@ -144,7 +144,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
 
     @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
-        self._sessionProvider.updateVehicleEffects()
+        self._sessionProvider.updateVehicleEffects(vehicle)
         self.__vehicleID = vehicle.id
         self.__updatePanelPosition()
 

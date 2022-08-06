@@ -3,9 +3,8 @@
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from gui.Scaleform.daapi.view.bootcamp.BCVideoPage import BCVideoPage
-from uilogging.bootcamp.constants import BCLogActions
-from uilogging.bootcamp.loggers import BootcampLogger
-from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS
+from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 
 class BCInterludeVideoPage(BCVideoPage):
     appLoader = dependency.descriptor(IAppLoader)
@@ -20,7 +19,7 @@ class BCInterludeVideoPage(BCVideoPage):
         return self._content
 
     def _populate(self):
-        self.uiBootcampLogger.startAction(BCLogActions.VIDEO_FINISHED.value)
+        self.uiBootcampLogger.startAction(BC_LOG_ACTIONS.VIDEO_FINISHED)
         super(BCInterludeVideoPage, self)._populate()
         self.appLoader.onGUISpaceLeft += self._onGUISpaceLeft
 
@@ -37,5 +36,5 @@ class BCInterludeVideoPage(BCVideoPage):
         super(BCInterludeVideoPage, self)._onFinish()
 
     def videoFinished(self, skipped=False):
-        self.uiBootcampLogger.stopAction(BCLogActions.VIDEO_FINISHED.value, skipped=skipped)
+        self.uiBootcampLogger.stopAction(BC_LOG_ACTIONS.VIDEO_FINISHED, skipped=skipped)
         super(BCInterludeVideoPage, self).videoFinished()

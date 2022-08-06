@@ -34,10 +34,9 @@ from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import StrongholdConfirm
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx
-from helpers import time_utils, i18n
+from helpers import time_utils
 from UnitBase import UNIT_ERROR, UNIT_ROLE
 from gui.prb_control.entities.base import vehicleAmmoCheck
 _CREATION_TIMEOUT = 30
@@ -247,7 +246,7 @@ class StrongholdEntity(UnitEntity):
 
     def onUnitNotifyReceived(self, unitMgrID, notifyCode, notifyString, argsList):
         if notifyCode == UNIT_ERROR.NO_CLAN_MEMBERS and not self.__leaveInitiator:
-            SystemMessages.pushMessage(i18n.makeString(TOOLTIPS.STRONGHOLD_PREBATTLE_NOCLANMEMBERS), type=SM_TYPE.Warning)
+            SystemMessages.pushMessage(backport.text(R.strings.tooltips.stronghold.prebattle.noClanMembers()), type=SM_TYPE.Warning)
         elif notifyCode == UNIT_ERROR.FAIL_EXT_UNIT_QUEUE_START and not self.getFlags().isInQueue():
             self.__waitingManager.onResponseError()
 
@@ -333,6 +332,15 @@ class StrongholdEntity(UnitEntity):
         self.requestUpdateStronghold()
         self.__revisionId = revisionId
 
+    def unit_onUnitPlayerRemoved(self, playerID, playerData):
+        super(StrongholdEntity, self).unit_onUnitPlayerRemoved(playerID, playerData)
+        unitMgrID, unit = self.getUnit(safe=False)
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, -1, playerData)
+        equipRoles = UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS | UNIT_ROLE.CAN_USE_BOOST_EQUIPMENTS
+        myPInfo = self.getPlayerInfo()
+        if not pInfo.isCurrentPlayer() and pInfo.role & equipRoles and myPInfo.isCommander():
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.notification.PLAYER_BECOME_EQUIPMENT_COMMANDER()), type=SM_TYPE.Warning)
+
     def unit_onUnitPlayerRoleChanged(self, playerID, prevRoleFlags, nextRoleFlags):
         super(StrongholdEntity, self).unit_onUnitPlayerRoleChanged(playerID, prevRoleFlags, nextRoleFlags)
         diff = prevRoleFlags ^ nextRoleFlags
@@ -347,15 +355,15 @@ class StrongholdEntity(UnitEntity):
             return
         pInfo = self.getPlayerInfo(dbID=playerID)
         if userNoLongerEquipmentCommander and pInfo.isCurrentPlayer():
-            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Warning)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER()), type=SM_TYPE.Warning)
             return
         if userBecomesEquipmentCommander and pInfo.isCurrentPlayer():
-            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Information)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.notification.PLAYER_BECOME_EQUIPMENT_COMMANDER()), type=SM_TYPE.Information)
             return
         myPInfo = self.getPlayerInfo()
         userEquipmentRoleChanged = userBecomesEquipmentCommander or userNoLongerEquipmentCommander
         if userEquipmentRoleChanged and not pInfo.isCurrentPlayer() and myPInfo.isCommander():
-            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Warning)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER()), type=SM_TYPE.Warning)
             return
 
     def unit_onUnitMembersListChanged(self):

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimetools.py
+# Compiled at: 2023-02-26 07:51:25
+"""Various tools used by MIME-reading or MIME-writing programs."""
 import os
 import sys
 import tempfile
@@ -18,6 +20,8 @@ __all__ = ['Message',
  'copybinary']
 
 class Message(rfc822.Message):
+    """A derived class of rfc822.Message that knows about MIME headers and
+    contains some hooks for decoding encoded and multipart messages."""
 
     def __init__(self, fp, seekable=1):
         rfc822.Message.__init__(self, fp, seekable)
@@ -116,6 +120,14 @@ def _get_next_counter():
 _prefix = None
 
 def choose_boundary():
+    """Return a string usable as a multipart boundary.
+    
+    The string chosen is unique within a single program run, and
+    incorporates the user id (if available), process id (if available),
+    and current time.  So it's very unlikely the returned string appears
+    in message text, but there's no guarantee.
+    
+    The boundary contains dots so you have to quote it in the header."""
     global _prefix
     import time
     if _prefix is None:
@@ -140,6 +152,7 @@ def choose_boundary():
 
 
 def decode(input, output, encoding):
+    """Decode common content-transfer-encodings (base64, quopri, uuencode)."""
     if encoding == 'base64':
         import base64
         return base64.decode(input, output)
@@ -158,6 +171,7 @@ def decode(input, output, encoding):
 
 
 def encode(input, output, encoding):
+    """Encode common content-transfer-encodings (base64, quopri, uuencode)."""
     if encoding == 'base64':
         import base64
         return base64.encode(input, output)

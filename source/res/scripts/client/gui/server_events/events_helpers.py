@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
+import typing
 import operator
 import time
 import BigWorld
-from constants import EVENT_TYPE, EMAIL_CONFIRMATION_QUEST_ID
+from constants import EVENT_TYPE, EMAIL_CONFIRMATION_QUEST_ID, CUSTOMIZATION_PROGRESS_PREFIX
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.locale.MENU import MENU
@@ -14,15 +15,18 @@ from gui.impl.gen import R
 from gui.server_events import formatters
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency, isPlayerAccount
-from shared_utils import CONST_CONTAINER, findFirst
+from shared_utils import CONST_CONTAINER, findFirst, first
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, MAPS_TRAINING_QUEST_PREFIX, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, MAPS_TRAINING_QUEST_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
@@ -270,8 +274,8 @@ def isMapsTraining(groupID):
     return groupID == MAPS_TRAINING_GROUPS_ID or groupID and groupID.startswith(MAPS_TRAINING_QUEST_PREFIX)
 
 
-def isLinkedSet(eventID):
-    return eventID.startswith(LINKEDSET_GROUP_PREFIX) if eventID else False
+def isBattleMattersQuestID(questID):
+    return questID.startswith(BATTLE_MATTERS_QUEST_ID) if questID else False
 
 
 def isPremium(eventID):
@@ -284,10 +288,6 @@ def isDailyEpic(eventID):
 
 def isBattleRoyale(eventID):
     return eventID.startswith(BATTLE_ROYALE_GROUPS_ID) if eventID else False
-
-
-def isFunRandomQuest(eventID):
-    return eventID.startswith(FUN_RANDOM_GROUP_ID) if eventID else False
 
 
 def isRankedDaily(eventID):
@@ -308,7 +308,25 @@ def isACEmailConfirmationQuest(eventID):
 
 def isRegularQuest(eventID):
     idGameModeEvent = isDailyEpic(eventID) or isRankedDaily(eventID) or isRankedPlatform(eventID)
-    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID) or idGameModeEvent)
+    return not (isMarathon(eventID) or isBattleMattersQuestID(eventID) or isPremium(eventID) or idGameModeEvent)
+
+
+@dependency.replace_none_kwargs(c11nService=ICustomizationService)
+def isC11nQuest(eventID, c11nService=None):
+    return c11nService.isProgressionQuests(eventID)
+
+
+def getDataByC11nQuest(quest):
+    if not isC11nQuest(quest.getID()):
+        return (-1, -1, -1)
+    tokenBonuses = quest.getBonuses('tokens')
+    if tokenBonuses:
+        firstBonus = first(tokenBonuses)
+        token = first(firstBonus.getTokens().values())
+        tokenID = token.id
+        if tokenID.startswith(CUSTOMIZATION_PROGRESS_PREFIX):
+            ws = tokenID[len(CUSTOMIZATION_PROGRESS_PREFIX):].split('_')
+            return (int(ws[0]), int(ws[1]), token.limit)
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):
@@ -316,47 +334,59 @@ def getLocalizedMissionNameForLinkedSet(missionID):
 
 
 def getLocalizedMissionNameForLinkedSetQuest(quest):
-    return getLocalizedMissionNameForLinkedSet(getLinkedSetMissionIDFromQuest(quest))
+    return getLocalizedMissionNameForLinkedSet(getIdxFromQuest(quest))
 
 
 def getLocalizedQuestNameForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestName(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
 def getLocalizedQuestDescForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestDesc(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
 def hasLocalizedQuestHintNameForLinkedSetQuest(quest):
-    return LINKEDSET.hasQuestHintName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+    return LINKEDSET.hasQuestHintName(getIdxFromQuest(quest), getLinkedSetQuestID(quest))
 
 
 def getLocalizedQuestHintNameForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintName(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
 def getLocalizedQuestHintDescForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintDesc(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
 def hasLocalizedQuestWinNameForLinkedSetQuest(quest):
-    return LINKEDSET.hasQuestWinName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+    return LINKEDSET.hasQuestWinName(getIdxFromQuest(quest), getLinkedSetQuestID(quest))
 
 
 def getLocalizedQuestWinNameForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinName(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
 def hasLocalizedQuestWinDescForLinkedSetQuest(quest):
-    return LINKEDSET.hasQuestWinDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+    return LINKEDSET.hasQuestWinDesc(getIdxFromQuest(quest), getLinkedSetQuestID(quest))
 
 
 def getLocalizedQuestWinDescForLinkedSetQuest(quest):
-    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinDesc(getIdxFromQuest(quest), getLinkedSetQuestID(quest)), quest)
 
 
-def getLinkedSetMissionIDFromQuest(quest):
-    return int(quest.getID().split('_')[1])
+def getIdxFromQuest(quest):
+    return getIdxFromQuestID(quest.getID())
+
+
+def getIdxFromQuestID(questID):
+    parts = questID.split('_')
+    result = -1
+    if parts:
+        try:
+            result = int(parts[-1])
+        except ValueError:
+            result = -1
+
+    return result
 
 
 def getLinkedSetQuestID(quest):
@@ -461,12 +491,6 @@ def getRankedPlatformGroup(eventsCache=None):
     return findFirst(lambda g: isRankedPlatform(g.getID()), groups.values())
 
 
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getFunRandomDailyGroup(eventsCache=None):
-    groups = eventsCache.getGroups()
-    return findFirst(lambda g: isFunRandomQuest(g.getID()), groups.values())
-
-
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
 def isPremiumQuestsEnable(lobbyContext=None, eventsCache=None):
     return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getPremiumQuests()) > 0
@@ -494,3 +518,8 @@ def isEpicQuestEnabled(lobbyContext=None):
 
 def getEventsData(eventsTypeName):
     return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getC11nQuestsConfig(lobbyContext=None):
+    return lobbyContext.getServerSettings().getCustomizationQuestsConfig()

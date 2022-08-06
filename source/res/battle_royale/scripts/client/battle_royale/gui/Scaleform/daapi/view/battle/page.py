@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/page.py
 import BigWorld
 from shared_utils import CONST_CONTAINER
+from constants import ARENA_PERIOD
 from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_CAPS
 from gui.battle_control import avatar_getter
@@ -104,6 +105,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         self.__panelsIsVisible = False
         self.__es = EventsSubscriber()
         self.__isAllowToogleGuiVisible = False
+        self.__canShowHUD = True
+        self.__hudComponents = set()
         super(BattleRoyalePage, self).__init__(components, external=(crosshair.CrosshairPanelContainer, BattleRoyaleMarkersManager))
         return
 
@@ -113,12 +116,16 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             visibleComponents.extend([BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, BATTLE_VIEW_ALIASES.BATTLE_MESSENGER])
         if not self.__selectSpawnToggling:
             self.__selectSpawnToggling.update(set(self.as_getComponentsVisibilityS()) - set(visibleComponents))
+        self.__canShowHUD = False
         self._setComponentsVisibility(visible=visibleComponents, hidden=self.__selectSpawnToggling)
         self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN)
 
     def closeSpawnPoints(self):
         self.__isAllowToogleGuiVisible = True
-        if self.__selectSpawnToggling:
+        if self.__selectSpawnToggling or self.__hudComponents:
+            self.__canShowHUD = True
+            self.__selectSpawnToggling.update(self.__hudComponents)
+            self.__hudComponents.clear()
             self._setComponentsVisibility(visible=self.__selectSpawnToggling, hidden=[BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN])
             self.__selectSpawnToggling.clear()
             self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN)
@@ -177,6 +184,12 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         if deathScreenCtrl:
             deathScreenCtrl.onShowDeathScreen += self.__onShowDeathScreen
 
+    def reload(self):
+        super(BattleRoyalePage, self).reload()
+        spawnCtrl = self.sessionProvider.dynamic.spawn
+        if spawnCtrl and self not in spawnCtrl.viewComponents:
+            spawnCtrl.addRuntimeView(self)
+
     def _startBattleSession(self):
         super(BattleRoyalePage, self)._startBattleSession()
         vehStateCtrl = self.sessionProvider.shared.vehicleState
@@ -207,6 +220,22 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                 self._setComponentsVisibility(hidden=[alias])
         elif alias == BATTLE_VIEW_ALIASES.PLAYERS_PANEL:
             self._setComponentsVisibility(hidden=[alias])
+
+    def _onBattleLoadingFinish(self):
+        arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
+        self.__canShowHUD = arenaPeriod not in (ARENA_PERIOD.IDLE, ARENA_PERIOD.WAITING)
+        super(BattleRoyalePage, self)._onBattleLoadingFinish()
+        if not self.__canShowHUD and not BigWorld.player().observerSeesAll():
+            self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN})
+
+    def _setComponentsVisibility(self, visible=None, hidden=None):
+        if not self.__canShowHUD and visible:
+            hasNoHUD = {BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, BATTLE_VIEW_ALIASES.BATTLE_LOADING} & set(visible)
+            if not hasNoHUD:
+                self.__hudComponents.update(visible)
+                super(BattleRoyalePage, self)._setComponentsVisibility(hidden=hidden)
+                return
+        super(BattleRoyalePage, self)._setComponentsVisibility(visible=visible, hidden=hidden)
 
     def _toggleGuiVisible(self):
         componentsVisibility = self.as_getComponentsVisibilityS()

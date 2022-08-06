@@ -1,21 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_compile.py
+# Compiled at: 2017-04-20 07:50:11
+"""Internal support module for sre"""
 import _sre, sys
 import sre_parse
 from sre_constants import *
+assert _sre.MAGIC == MAGIC, 'SRE module mismatch'
 if _sre.CODESIZE == 2:
     MAXCODE = 65535
 else:
     MAXCODE = 4294967295L
-
-def _identityfunction(x):
-    return x
-
-
 _LITERAL_CODES = set([LITERAL, NOT_LITERAL])
 _REPEATING_CODES = set([REPEAT, MIN_REPEAT, MAX_REPEAT])
 _SUCCESS_CODES = set([SUCCESS, FAILURE])
 _ASSERT_CODES = set([ASSERT, ASSERT_NOT])
+_equivalences = ((105, 305),
+ (115, 383),
+ (181, 956),
+ (837, 953, 8126),
+ (946, 976),
+ (949, 1013),
+ (952, 977),
+ (954, 1008),
+ (960, 982),
+ (961, 1009),
+ (962, 963),
+ (966, 981),
+ (7777, 7835))
+_ignorecase_fixes = {i:tuple((j for j in t if i != j)) for t in _equivalences for i in t}
 
 def _compile(code, pattern, flags):
     emit = code.append
@@ -24,11 +36,29 @@ def _compile(code, pattern, flags):
     REPEATING_CODES = _REPEATING_CODES
     SUCCESS_CODES = _SUCCESS_CODES
     ASSERT_CODES = _ASSERT_CODES
+    if flags & SRE_FLAG_IGNORECASE and not flags & SRE_FLAG_LOCALE and flags & SRE_FLAG_UNICODE:
+        fixes = _ignorecase_fixes
+    else:
+        fixes = None
     for op, av in pattern:
         if op in LITERAL_CODES:
             if flags & SRE_FLAG_IGNORECASE:
-                emit(OPCODES[OP_IGNORE[op]])
-                emit(_sre.getlower(av, flags))
+                lo = _sre.getlower(av, flags)
+                if fixes and lo in fixes:
+                    emit(OPCODES[IN_IGNORE])
+                    skip = _len(code)
+                    emit(0)
+                    if op is NOT_LITERAL:
+                        emit(OPCODES[NEGATE])
+                    for k in (lo,) + fixes[lo]:
+                        emit(OPCODES[LITERAL])
+                        emit(k)
+
+                    emit(OPCODES[FAILURE])
+                    code[skip] = _len(code) - skip
+                else:
+                    emit(OPCODES[OP_IGNORE[op]])
+                    emit(lo)
             else:
                 emit(OPCODES[op])
                 emit(av)
@@ -41,10 +71,10 @@ def _compile(code, pattern, flags):
 
             else:
                 emit(OPCODES[op])
-                fixup = _identityfunction
+                fixup = None
             skip = _len(code)
             emit(0)
-            _compile_charset(av, flags, code, fixup)
+            _compile_charset(av, flags, code, fixup, fixes)
             code[skip] = _len(code) - skip
         if op is ANY:
             if flags & SRE_FLAG_DOTALL:
@@ -173,20 +203,20 @@ def _compile(code, pattern, flags):
                 code[skipyes] = _len(code) - skipyes + 1
         raise ValueError, ('unsupported operand type', op)
 
+    return
 
-def _compile_charset(charset, flags, code, fixup=None):
+
+def _compile_charset(charset, flags, code, fixup=None, fixes=None):
     emit = code.append
-    if fixup is None:
-        fixup = _identityfunction
-    for op, av in _optimize_charset(charset, fixup):
+    for op, av in _optimize_charset(charset, fixup, fixes, flags & SRE_FLAG_UNICODE):
         emit(OPCODES[op])
         if op is NEGATE:
             pass
         if op is LITERAL:
-            emit(fixup(av))
+            emit(av)
         if op is RANGE:
-            emit(fixup(av[0]))
-            emit(fixup(av[1]))
+            emit(av[0])
+            emit(av[1])
         if op is CHARSET:
             code.extend(av)
         if op is BIGCHARSET:
@@ -201,130 +231,149 @@ def _compile_charset(charset, flags, code, fixup=None):
         raise error, 'internal: unsupported set operator'
 
     emit(OPCODES[FAILURE])
-    return
 
 
-def _optimize_charset(charset, fixup):
+def _optimize_charset(charset, fixup, fixes, isunicode):
     out = []
-    outappend = out.append
-    charmap = [0] * 256
-    try:
-        for op, av in charset:
-            if op is NEGATE:
-                outappend((op, av))
-            if op is LITERAL:
-                charmap[fixup(av)] = 1
-            if op is RANGE:
-                for i in range(fixup(av[0]), fixup(av[1]) + 1):
-                    charmap[i] = 1
+    tail = []
+    charmap = bytearray(256)
+    for op, av in charset:
+        while True:
+            try:
+                if op is LITERAL:
+                    if fixup:
+                        i = fixup(av)
+                        charmap[i] = 1
+                        if fixes and i in fixes:
+                            for k in fixes[i]:
+                                charmap[k] = 1
 
-            if op is CATEGORY:
-                return charset
+                    else:
+                        charmap[av] = 1
+                elif op is RANGE:
+                    r = range(av[0], av[1] + 1)
+                    if fixup:
+                        r = map(fixup, r)
+                    if fixup and fixes:
+                        for i in r:
+                            charmap[i] = 1
+                            if i in fixes:
+                                for k in fixes[i]:
+                                    charmap[k] = 1
 
-    except IndexError:
-        return _optimize_unicode(charset, fixup)
+                    else:
+                        for i in r:
+                            charmap[i] = 1
 
-    i = p = n = 0
+                elif op is NEGATE:
+                    out.append((op, av))
+                else:
+                    tail.append((op, av))
+            except IndexError:
+                if len(charmap) == 256:
+                    charmap += '\x00' * 65280
+                    continue
+                if fixup and isunicode and op is RANGE:
+                    lo, hi = av
+                    ranges = [av]
+                    _fixup_range(max(65536, lo), min(73727, hi), ranges, fixup)
+                    for lo, hi in ranges:
+                        if lo == hi:
+                            tail.append((LITERAL, hi))
+                        tail.append((RANGE, (lo, hi)))
+
+                else:
+                    tail.append((op, av))
+
+            break
+
     runs = []
-    runsappend = runs.append
-    for c in charmap:
-        if c:
-            if n == 0:
-                p = i
-            n = n + 1
-        elif n:
-            runsappend((p, n))
-            n = 0
-        i = i + 1
+    q = 0
+    while True:
+        p = charmap.find('\x01', q)
+        if p < 0:
+            break
+        if len(runs) >= 2:
+            runs = None
+            break
+        q = charmap.find('\x00', p)
+        if q < 0:
+            runs.append((p, len(charmap)))
+            break
+        runs.append((p, q))
 
-    if n:
-        runsappend((p, n))
-    if len(runs) <= 2:
-        for p, n in runs:
-            if n == 1:
-                outappend((LITERAL, p))
-            outappend((RANGE, (p, p + n - 1)))
+    if runs is not None:
+        for p, q in runs:
+            if q - p == 1:
+                out.append((LITERAL, p))
+            out.append((RANGE, (p, q - 1)))
 
-        if len(out) < len(charset):
+        out += tail
+        if fixup or len(out) < len(charset):
             return out
-    else:
+        return charset
+    elif len(charmap) == 256:
         data = _mk_bitmap(charmap)
-        outappend((CHARSET, data))
+        out.append((CHARSET, data))
+        out += tail
         return out
-    return charset
-
-
-def _mk_bitmap(bits):
-    data = []
-    dataappend = data.append
-    if _sre.CODESIZE == 2:
-        start = (1, 0)
     else:
-        start = (1L, 0L)
-    m, v = start
-    for c in bits:
-        if c:
-            v = v + m
-        m = m + m
-        if m > MAXCODE:
-            dataappend(v)
-            m, v = start
+        charmap = bytes(charmap)
+        comps = {}
+        mapping = bytearray(256)
+        block = 0
+        data = bytearray()
+        for i in range(0, 65536, 256):
+            chunk = charmap[i:i + 256]
+            if chunk in comps:
+                mapping[i // 256] = comps[chunk]
+            mapping[i // 256] = comps[chunk] = block
+            block += 1
+            data += chunk
 
-    return data
+        data = _mk_bitmap(data)
+        data[0:0] = [block] + _bytes_to_codes(mapping)
+        out.append((BIGCHARSET, data))
+        out += tail
+        return out
 
 
-def _optimize_unicode(charset, fixup):
-    try:
-        import array
-    except ImportError:
-        return charset
+def _fixup_range(lo, hi, ranges, fixup):
+    for i in map(fixup, range(lo, hi + 1)):
+        for k, (lo, hi) in enumerate(ranges):
+            if i < lo:
+                if l == lo - 1:
+                    ranges[k] = (i, hi)
+                else:
+                    ranges.insert(k, (i, i))
+                break
+            if i > hi:
+                if i == hi + 1:
+                    ranges[k] = (lo, i)
+                    break
+            break
+        else:
+            ranges.append((i, i))
 
-    charmap = [0] * 65536
-    negate = 0
-    try:
-        for op, av in charset:
-            if op is NEGATE:
-                negate = 1
-            if op is LITERAL:
-                charmap[fixup(av)] = 1
-            if op is RANGE:
-                for i in xrange(fixup(av[0]), fixup(av[1]) + 1):
-                    charmap[i] = 1
 
-            if op is CATEGORY:
-                return charset
+_CODEBITS = _sre.CODESIZE * 8
+_BITS_TRANS = '0' + '1' * 255
 
-    except IndexError:
-        return charset
+def _mk_bitmap(bits, _CODEBITS=_CODEBITS, _int=int):
+    s = bytes(bits).translate(_BITS_TRANS)[::-1]
+    return [ _int(s[i - _CODEBITS:i], 2) for i in range(len(s), 0, -_CODEBITS) ]
 
-    if negate:
-        if sys.maxunicode != 65535:
-            return charset
-        for i in xrange(65536):
-            charmap[i] = not charmap[i]
 
-    comps = {}
-    mapping = [0] * 256
-    block = 0
-    data = []
-    for i in xrange(256):
-        chunk = tuple(charmap[i * 256:(i + 1) * 256])
-        new = comps.setdefault(chunk, block)
-        mapping[i] = new
-        if new == block:
-            block = block + 1
-            data = data + _mk_bitmap(chunk)
-
-    header = [block]
+def _bytes_to_codes(b):
+    import array
     if _sre.CODESIZE == 2:
         code = 'H'
     else:
         code = 'I'
-    mapping = array.array('B', mapping).tostring()
-    mapping = array.array(code, mapping)
-    header = header + mapping.tolist()
-    data[0:0] = header
-    return [(BIGCHARSET, data)]
+    a = array.array(code, bytes(b))
+    assert a.itemsize == _sre.CODESIZE
+    assert len(a) * a.itemsize == len(b)
+    return a.tolist()
 
 
 def _simple(av):
@@ -334,7 +383,7 @@ def _simple(av):
 
 def _compile_info(code, pattern, flags):
     lo, hi = pattern.getwidth()
-    if lo == 0:
+    if not lo and hi:
         return
     prefix = []
     prefixappend = prefix.append

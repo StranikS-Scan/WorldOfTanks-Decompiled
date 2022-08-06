@@ -240,9 +240,9 @@ def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
     if not logFunc:
         logFunc = BigWorld.logDebug
     if args:
-        output = ' '.join(map(str, [header, msg, args]))
+        output = u' '.join(map(unicode, [header, msg, args]))
     else:
-        output = ' '.join(map(str, [header, msg]))
+        output = u' '.join(map(unicode, [header, msg]))
     tags = kwargs.pop('tags', None)
     logFunc(category, _addTagsToMsg(tags, output), None)
     if kwargs.get('stack', False):
@@ -267,7 +267,7 @@ def _doLogFmt(prefix, fmt, *args):
 
 
 def _addTagsToMsg(tags, msg):
-    return '{0} {1}'.format(' '.join(tags), msg) if tags else msg
+    return u'{0} {1}'.format(u' '.join(tags), msg) if tags else msg
 
 
 def makeFuncLocationString(func):

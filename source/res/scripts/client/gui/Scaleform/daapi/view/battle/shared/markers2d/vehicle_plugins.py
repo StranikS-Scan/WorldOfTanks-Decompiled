@@ -48,7 +48,7 @@ _HELP_ME_STATE = 'help_me'
 
 class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_markerTimers', '__callbackIDs', '__targetedTankMarkerID', '__targetedMarkerFromCppID')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '_isSquadIndicatorEnabled', '_markerTimers', '__callbackIDs', '__playerVehicleID', '__showDamageIcon', '__hiddenEvents', '__targetedTankMarkerID', '__targetedMarkerFromCppID')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
@@ -59,6 +59,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self._isSquadIndicatorEnabled = False
         self._playerVehicleID = 0
         self.__showDamageIcon = False
+        self.__hiddenEvents = set()
         self.__callbackIDs = {}
         self.__targetedTankMarkerID = -1
         self.__targetedMarkerFromCppID = -1
@@ -72,10 +73,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         super(VehicleMarkerPlugin, self).start()
         self._playerVehicleID = self.sessionProvider.getArenaDP().getPlayerVehicleID()
         self.sessionProvider.addArenaCtrl(self)
-        settingsDamageIcon = self.settingsCore.getSetting(GAME.SHOW_DAMAGE_ICON)
-        isInBootcamp = self.bootcamp.isInBootcamp()
-        enableInBootcamp = isInBootcamp and self.bootcamp.isEnableDamageIcon()
-        self.__showDamageIcon = settingsDamageIcon and (not isInBootcamp or enableInBootcamp)
+        self.__showDamageIcon = self.settingsCore.getSetting(GAME.SHOW_DAMAGE_ICON)
+        if self.bootcamp.isInBootcamp() and not self.bootcamp.isEnableCriticalDamageIcon():
+            self.__hiddenEvents = MARKER_CRITICAL_HIT_STATES
         handler = avatar_getter.getInputHandler()
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
@@ -243,7 +243,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
         marker = self._markers[vehicleID]
         handle = marker.getMarkerID()
-        if eventID in MARKER_HIT_STATE and (eventID not in MARKER_CRITICAL_HIT_STATES or self.__showDamageIcon):
+        if eventID in MARKER_HIT_STATE and self.__showDamageIcon and eventID not in self.__hiddenEvents:
             newState, stateText, iconAnimation = self.__getHitStateVO(eventID, MARKER_HIT_STATE)
             self.__updateMarkerState(handle, newState, value, stateText, iconAnimation)
         elif eventID == _EVENT_ID.VEHICLE_DEAD:
@@ -501,6 +501,8 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             vehicleID = vInfo.vehicleID
             accountDBID = vInfo.player.accountDBID
+            if BigWorld.player().observedVehicleID == vehicleID and BigWorld.player().isObserverFPV:
+                return
             if vehicleID in self._markers:
                 marker = self._markers[vInfo.vehicleID]
                 if marker.setActive(True):

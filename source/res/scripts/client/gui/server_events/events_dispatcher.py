@@ -13,7 +13,7 @@ from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWi
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
-from gui.server_events.events_helpers import getLootboxesFromBonuses
+from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay
 from gui.shared.events import PersonalMissionsEvent
@@ -153,6 +153,18 @@ def showMissionsMapboxProgression():
     showMissions(tab=QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
 
 
+def showBattleMatters():
+    _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainRewardView=False)
+
+
+def showBattleMattersMainView():
+    _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainView=True)
+
+
+def showBattleMattersMainReward():
+    _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainRewardView=True)
+
+
 def showMissionsBattlePass(layoutID=None, chapterID=0):
 
     def __battleQueueViewPredicate(window):
@@ -215,6 +227,11 @@ def showMission(eventID, eventType=None):
         vehicle = service.getItemByCD(vehicleIntCD)
         service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
         return
+    elif isC11nQuest(eventID):
+        service = dependency.instance(ICustomizationService)
+        from gui.customization.constants import CustomizationModes
+        service.showCustomization(modeId=CustomizationModes.STYLED)
+        return
     else:
         eventsCache = dependency.instance(IEventsCache)
         quests = eventsCache.getQuests()
@@ -239,7 +256,7 @@ def showMission(eventID, eventType=None):
                     showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
                 else:
                     showMissionsGrouped(anchor=group.getID())
-            elif events_helpers.isLinkedSet(quest.getGroupID()):
+            elif events_helpers.isBattleMattersQuestID(quest.getID()):
                 showMissionsLinkedSet()
             elif events_helpers.isDailyQuest(quest.getID()):
                 showDailyQuests(subTab=DailyTabs.QUESTS)

@@ -13,6 +13,7 @@ class QUESTS(object):
     MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
     MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
+    MISSIONS_TAB_BATTLEMATTERS = '#quests:missions/tab/battleMatters'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -947,8 +948,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
     DETAILS_DOSSIER_37_BATTLESCOUNT = '#quests:details/dossier/37/battlesCount'
-    DETAILS_DOSSIER_39_BATTLESCOUNT = '#quests:details/dossier/39/battlesCount'
-    DETAILS_DOSSIER_42_BATTLESCOUNT = '#quests:details/dossier/42/battlesCount'
+    DETAILS_DOSSIER_38_BATTLESCOUNT = '#quests:details/dossier/38/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1051,6 +1051,8 @@ class QUESTS(object):
     MISSIONS_TAB_BATTLE_PASS_HEADER = '#quests:missions/tab/battle_pass/header'
     MISSIONS_TAB_MAPBOX_HEADER = '#quests:missions/tab/mapbox/header'
     MISSIONS_TAB_MAPBOX_BODY = '#quests:missions/tab/mapbox/body'
+    MISSIONS_TAB_BATTLEMATTERS_HEADER = '#quests:missions/tab/battleMatters/header'
+    MISSIONS_TAB_BATTLEMATTERS_BODY = '#quests:missions/tab/battleMatters/body'
     MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
     MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
     MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
@@ -2171,8 +2173,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_24_BATTLESCOUNT,
      DETAILS_DOSSIER_27_BATTLESCOUNT,
      DETAILS_DOSSIER_37_BATTLESCOUNT,
-     DETAILS_DOSSIER_39_BATTLESCOUNT,
-     DETAILS_DOSSIER_42_BATTLESCOUNT)
+     DETAILS_DOSSIER_38_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

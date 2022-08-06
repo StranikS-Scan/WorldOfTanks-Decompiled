@@ -43,8 +43,6 @@ class BattlePassVehicleAwardView(ViewImpl):
         self.viewModel.setTechName(techName[1])
         chapterID = self.__battlePass.getCurrentChapterID()
         self.viewModel.setChapterID(chapterID)
-        if chapterID:
-            self.viewModel.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
         switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.TANK_POINTS_CAP)
 

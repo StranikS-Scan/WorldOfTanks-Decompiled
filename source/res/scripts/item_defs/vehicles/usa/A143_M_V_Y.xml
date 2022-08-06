@@ -79,6 +79,13 @@
       <undamaged>	vehicles/american/A143_M_V_Y/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A143_M_V_Y_NL_3DSt>
+          <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Hull.model	</exploded>
+        </A143_M_V_Y_NL_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -108,13 +115,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <anchorPosition>	0.000000 0.424419 -2.18274	</anchorPosition>
-        <anchorDirection>	0.000000 0.190868 -0.981616	</anchorDirection>
-        <rayStart>	0.0160931 0.532677 2.62629	</rayStart>
-        <rayEnd>	0.00545473 0.192843 2.41557	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.003429 0.648646 2.432201	</rayStart>
+        <rayEnd>	0.003429 0.288508 2.258257	</rayEnd>
+        <rayUp>	0.015428 0.435106 -0.900247	</rayUp>
         <size>	0.345113	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -928,6 +932,32 @@
         <anchorShift>	-0.04199	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+        <position>	1.05128 1.08468 2.95299	</position>
+        <rotation>	0.400823 -0.00174982 3.14159	</rotation>
+        <scale>	0.448402 0.133281 0.448401	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.297819	</clipAngle>
+        <anchorShift>	0.093772	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15066	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+        <position>	-0.000002 1.38881 -1.85471	</position>
+        <rotation>	3.13985 -0.000001 -0.000005	</rotation>
+        <scale>	0.547609 0.275924 0.547614	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.137389	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	100.768 100.49	</density>
@@ -984,6 +1014,13 @@
         <undamaged>	vehicles/american/A143_M_V_Y/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A143_M_V_Y_NL_3DSt>
+            <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A143_M_V_Y_NL_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1005,6 +1042,7 @@
           <rightMaterial>	track_mat_R1_skinned	</rightMaterial>
           <textureScale>	-3.3	</textureScale>
           <trackDebris>
+            <isLeft>	true	</isLeft>
             <destructionEffect>	trackDestructionL	</destructionEffect>
             <remapNode>
               <from>	HP_Track_LFront	</from>
@@ -1015,11 +1053,73 @@
               <to>	HP_TrackUp_LFront_0	</to>
             </remapNode>
             <physicalParams>
-              <hingeJointStiffness>	100000	</hingeJointStiffness>
+              <renderModelOffset>	-0.048621	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.085564	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.628576	</widthwiseSpringLength>
+              <hingeJointStiffness>	33063.4375	</hingeJointStiffness>
+              <torsionStiffnessStep>	7	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.243284	</groupRadius>
+                  <groupInnerOffset>	0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	-0.367563	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <groupRadius>	0.33	</groupRadius>
+                  <groupInnerOffset>	0.4	</groupInnerOffset>
+                  <groupOuterOffset>	-0.367563	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.38	</groupRadius>
+                  <groupInnerOffset>	0.46	</groupInnerOffset>
+                  <groupOuterOffset>	-0.367563	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.231175	</groupRadius>
+                  <groupInnerOffset>	0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	-0.367563	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.777758 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.406505 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.535700	</row2>
+                  <row3>	0.000000 1.149845 0.197380	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.764960	</row2>
+                  <row3>	0.000000 1.250387 0.160750	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.253290 0.160761	</row1>
+                  <row2>	0.000000 -0.219801 0.346313	</row2>
+                  <row3>	0.000000 1.189901 3.063299	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236355 -0.184759	</row1>
+                  <row2>	0.000000 0.252614 0.323159	</row2>
+                  <row3>	0.000000 1.195648 -2.767166	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
-            <isLeft>	True	</isLeft>
           </trackDebris>
           <trackDebris>
+            <isLeft>	false	</isLeft>
             <destructionEffect>	trackDestructionR	</destructionEffect>
             <remapNode>
               <from>	HP_Track_RFront	</from>
@@ -1030,9 +1130,70 @@
               <to>	HP_TrackUp_RFront_0	</to>
             </remapNode>
             <physicalParams>
-              <hingeJointStiffness>	100000	</hingeJointStiffness>
+              <renderModelOffset>	-0.048613	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.08557	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.628576	</widthwiseSpringLength>
+              <hingeJointStiffness>	33055.183590	</hingeJointStiffness>
+              <torsionStiffnessStep>	7	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.243242	</groupRadius>
+                  <groupInnerOffset>	-0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	0.367563	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <groupRadius>	0.33	</groupRadius>
+                  <groupInnerOffset>	-0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	0.367563	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.385223	</groupRadius>
+                  <groupInnerOffset>	-0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	0.367563	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.231173	</groupRadius>
+                  <groupInnerOffset>	-0.467563	</groupInnerOffset>
+                  <groupOuterOffset>	0.367563	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.777758 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.406505 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.535700	</row2>
+                  <row3>	0.000000 1.149845 0.197380	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.764960	</row2>
+                  <row3>	0.000000 1.250387 0.160750	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 -0.000003	</row0>
+                  <row1>	0.000000 0.253290 0.160761	</row1>
+                  <row2>	0.000000 -0.219801 0.346313	</row2>
+                  <row3>	0.000000 1.189901 3.063299	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.236355 -0.184759	</row1>
+                  <row2>	0.000000 0.252614 0.323159	</row2>
+                  <row3>	0.000000 1.195648 -2.767166	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
-            <isLeft>	False	</isLeft>
           </trackDebris>
         </trackPair>
       </tracks>
@@ -2392,6 +2553,13 @@
             <undamaged>	vehicles/american/A143_M_V_Y/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A143_M_V_Y_NL_3DSt>
+                <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A143_M_V_Y_NL_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A143_M_V_Y/collision/Gun_01.model	</collisionModelServer>
@@ -3044,6 +3212,44 @@
               <verticalMirror>	true	</verticalMirror>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45046	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	-0.408278 2.47235 0.819036	</position>
+              <rotation>	2.09634 1.54033 -0.050941	</rotation>
+              <scale>	0.405007 0.380214 0.405007	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.03497	</clipAngle>
+              <anchorShift>	0.074334	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45047	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	0.408283 2.47234 0.819035	</position>
+              <rotation>	2.09633 -1.54025 0.0509639	</rotation>
+              <scale>	0.405007 0.380213 0.405007	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.03497	</clipAngle>
+              <anchorShift>	0.064334	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45048	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	0.000004 2.88651 0.241926	</position>
+              <rotation>	0.291559 -0.00174965 3.14159	</rotation>
+              <scale>	0.428985 0.345187 0.428984	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.000000	</clipAngle>
+              <anchorShift>	0.010109	</anchorShift>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000000 0.000000 4.19147	</rayStart>
@@ -3053,14 +3259,17 @@
               <size>	0.75	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
-              <position>	0.00349408 2.73277 0.754193	</position>
-              <rotation>	0.165786 -0.00174934 3.14159	</rotation>
-              <scale>	0.772234 0.621385 0.772232	</scale>
-              <doubleSided>	false	</doubleSided>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.003473 0.631975 0.226204	</anchorPosition>
-              <anchorDirection>	-0.000286392 0.986289 0.165027	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000000 0.000000 6.13	</rayStart>
+              <rayEnd>	0.000000 0.000000 6.83	</rayEnd>
+              <rayUp>	0.13 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <size>	0.7	</size>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <effects>	shot_large	</effects>
@@ -3123,6 +3332,13 @@
             <undamaged>	vehicles/american/A143_M_V_Y/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A143_M_V_Y_NL_3DSt>
+                <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </A143_M_V_Y_NL_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A143_M_V_Y/collision/Gun_02.model	</collisionModelServer>
@@ -3767,23 +3983,63 @@
               <hiddenForUser>	true	</hiddenForUser>
             </slot>
             <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000000 0.000000 4.19147	</rayStart>
-              <rayEnd>	-0.886267 0.134879 -1.2423	</rayEnd>
-              <rayUp>	0.1108 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.75	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-              <position>	0.00349408 2.73277 0.754193	</position>
-              <rotation>	0.165786 -0.00174934 3.14159	</rotation>
-              <scale>	0.772234 0.621385 0.772232	</scale>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45046	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	-0.408278 2.47235 0.819036	</position>
+              <rotation>	2.09634 1.54033 -0.050941	</rotation>
+              <scale>	0.405007 0.380214 0.405007	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.03497	</clipAngle>
+              <anchorShift>	0.074334	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45047	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	0.408283 2.47234 0.819035	</position>
+              <rotation>	2.09633 -1.54025 0.0509639	</rotation>
+              <scale>	0.405007 0.380213 0.405007	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.03497	</clipAngle>
+              <anchorShift>	0.064334	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45048	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <position>	0.000004 2.88651 0.241926	</position>
+              <rotation>	0.291559 -0.00174965 3.14159	</rotation>
+              <scale>	0.428985 0.345187 0.428984	</scale>
               <doubleSided>	false	</doubleSided>
               <showOn>	4096	</showOn>
               <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.003473 0.631975 0.226204	</anchorPosition>
-              <anchorDirection>	-0.000286392 0.986289 0.165027	</anchorDirection>
+              <anchorShift>	0.010109	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0 0 4.19147	</rayStart>
+              <rayEnd>	0 0 4.94147	</rayEnd>
+              <rayUp>	0.1108 0 0	</rayUp>
+              <size>	0.75	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 6.63	</rayStart>
+              <rayEnd>	0 0 7.33	</rayEnd>
+              <rayUp>	0.16 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	A143_M_V_Y_NL_3DSt	</compatibleModels>
+              <size>	0.55	</size>
+              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
           <effects>	shot_large_mb	</effects>
@@ -3799,6 +4055,13 @@
         <undamaged>	vehicles/american/A143_M_V_Y/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A143_M_V_Y_NL_3DSt>
+            <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A143_M_V_Y_NL_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A143_M_V_Y/collision/Turret_01.model	</collisionModelServer>

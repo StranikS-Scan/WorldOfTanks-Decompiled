@@ -22,3 +22,22 @@ class LoggerAdapter(logging.LoggerAdapter):
     def log(self, level, msg, *args, **kwargs):
         if self.isEnabledFor(level):
             super(LoggerAdapter, self).log(level, msg, *args, **kwargs)
+
+
+class InstanceContextLoggerAdapter(LoggerAdapter):
+
+    def __init__(self, logger, instance=None, **context):
+        if instance is not None:
+            context['cls'] = instance.__class__.__name__
+            context['iid'] = id(instance)
+        super(InstanceContextLoggerAdapter, self).__init__(logger, context)
+        return
+
+    def process(self, msg, kwargs):
+        if self.extra:
+            msg = '{} {}'.format(self.extra, msg)
+        return (msg, kwargs)
+
+
+def getWithContext(loggerName, instance=None, **context):
+    return InstanceContextLoggerAdapter(logging.getLogger(loggerName), instance=instance, **context)

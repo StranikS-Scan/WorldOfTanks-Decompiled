@@ -1,10 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserDict.py
-
+# Compiled at: 2015-09-28 16:31:22
+"""A more or less complete user-defined wrapper around dictionary objects."""
 
 class UserDict:
 
-    def __init__(self, dict=None, **kwargs):
+    def __init__(*args, **kwargs):
+        if not args:
+            raise TypeError("descriptor '__init__' of 'UserDict' object needs an argument")
+        self = args[0]
+        args = args[1:]
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+        if args:
+            dict = args[0]
+        elif 'dict' in kwargs:
+            dict = kwargs.pop('dict')
+            import warnings
+            warnings.warn("Passing 'dict' as keyword argument is deprecated", PendingDeprecationWarning, stacklevel=2)
+        else:
+            dict = None
         self.data = {}
         if dict is not None:
             self.update(dict)
@@ -77,7 +92,21 @@ class UserDict:
     def has_key(self, key):
         return key in self.data
 
-    def update(self, dict=None, **kwargs):
+    def update(*args, **kwargs):
+        if not args:
+            raise TypeError("descriptor 'update' of 'UserDict' object needs an argument")
+        self = args[0]
+        args = args[1:]
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+        if args:
+            dict = args[0]
+        elif 'dict' in kwargs:
+            dict = kwargs.pop('dict')
+            import warnings
+            warnings.warn("Passing 'dict' as keyword argument is deprecated", PendingDeprecationWarning, stacklevel=2)
+        else:
+            dict = None
         if dict is None:
             pass
         elif isinstance(dict, UserDict):

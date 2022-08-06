@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/Lib/ctypes/test/test_cfuncs.py
 import unittest
 from ctypes import *
+from ctypes.test import need_symbol
 import _ctypes_test
 
 class CFunctions(unittest.TestCase):
@@ -194,7 +195,11 @@ class CFunctions(unittest.TestCase):
 try:
     WinDLL
 except NameError:
-    pass
+
+    def stdcall_dll(*_):
+        pass
+
+
 else:
 
     class stdcall_dll(WinDLL):
@@ -207,8 +212,9 @@ else:
             return func
 
 
-    class stdcallCFunctions(CFunctions):
-        _dll = stdcall_dll(_ctypes_test.__file__)
+@need_symbol('WinDLL')
+class stdcallCFunctions(CFunctions):
+    _dll = stdcall_dll(_ctypes_test.__file__)
 
 
 if __name__ == '__main__':

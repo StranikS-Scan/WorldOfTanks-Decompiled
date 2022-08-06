@@ -13,6 +13,7 @@ import BigWorld
 import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
 from soft_exception import SoftException
+from external_strings_utils import unicode_from_utf8
 
 class CacheIO(object):
 
@@ -245,7 +246,7 @@ class CryptIO(RedirectIO):
 
 def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
     p = os.path
-    prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
+    prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
     dirPath = p.join(p.dirname(prefsFilePath), space)
     try:
         if not os.path.isdir(dirPath):

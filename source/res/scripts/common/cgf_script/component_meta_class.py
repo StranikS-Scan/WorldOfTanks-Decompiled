@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/cgf_script/component_meta_class.py
 import sys
 import CGF
+from debug_utils import LOG_CURRENT_EXCEPTION
 
 class CGFMetaTypes(object):
     BOOL = 'bool'
@@ -137,8 +138,7 @@ class CGFMetaClass(type):
         try:
             component.__init__(*args)
         except:
-            import traceback
-            traceback.print_stack()
+            LOG_CURRENT_EXCEPTION()
 
         return component
 

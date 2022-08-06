@@ -123,7 +123,9 @@ CLAN_DESCR_MAX_BYTES = CLAN_DESCR_MAX_LENGTH * 4
 CLAN_MOTTO_MAX_BYTES = CLAN_MOTTO_MAX_LENGTH * 4
 
 def unicode_from_utf8(utf8str, unicodeNormalForm='NFKC'):
-    unicodeStr = unicode(utf8str, 'utf8')
+    unicodeStr = utf8str
+    if isinstance(unicodeStr, str):
+        unicodeStr = unicode(unicodeStr, 'utf8')
     return (unicodedata.normalize(unicodeNormalForm, unicodeStr), unicodeStr)
 
 
@@ -142,6 +144,19 @@ def normalized_unicode_trim(utf8str, length, unicodeNormalForm='NFKC'):
         if len(unicodeStr) > max(0, length):
             unicodeStr = unicodeStr[:length]
         return unicodeStr.encode('utf8')
+    except:
+        LOG_CURRENT_EXCEPTION()
+        return None
+
+    return None
+
+
+def normalized_unicode_trim_u(unicodeStr, length, unicodeNormalForm='NFKC'):
+    try:
+        unicodeStr = unicodedata.normalize(unicodeNormalForm, unicodeStr)
+        if len(unicodeStr) > max(0, length):
+            unicodeStr = unicodeStr[:length]
+        return unicodeStr
     except:
         LOG_CURRENT_EXCEPTION()
         return None

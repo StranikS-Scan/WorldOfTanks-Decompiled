@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/ctypes/test/test_python_api.py
 from ctypes import *
 import unittest, sys
-from ctypes.test import is_resource_enabled
+from ctypes.test import requires
 from _ctypes import PyObj_FromPtr
 from sys import getrefcount as grc
 if sys.version_info > (2, 4):
@@ -29,19 +29,18 @@ class PythonAPITestCase(unittest.TestCase):
         del pyob
         self.assertEqual(grc(s), refcnt)
 
-    if is_resource_enabled('refcount'):
-
-        def test_PyInt_Long(self):
-            ref42 = grc(42)
-            pythonapi.PyInt_FromLong.restype = py_object
-            self.assertEqual(pythonapi.PyInt_FromLong(42), 42)
-            self.assertEqual(grc(42), ref42)
-            pythonapi.PyInt_AsLong.argtypes = (py_object,)
-            pythonapi.PyInt_AsLong.restype = c_long
-            res = pythonapi.PyInt_AsLong(42)
-            self.assertEqual(grc(res), ref42 + 1)
-            del res
-            self.assertEqual(grc(42), ref42)
+    def test_PyInt_Long(self):
+        requires('refcount')
+        ref42 = grc(42)
+        pythonapi.PyInt_FromLong.restype = py_object
+        self.assertEqual(pythonapi.PyInt_FromLong(42), 42)
+        self.assertEqual(grc(42), ref42)
+        pythonapi.PyInt_AsLong.argtypes = (py_object,)
+        pythonapi.PyInt_AsLong.restype = c_long
+        res = pythonapi.PyInt_AsLong(42)
+        self.assertEqual(grc(res), ref42 + 1)
+        del res
+        self.assertEqual(grc(42), ref42)
 
     def test_PyObj_FromPtr(self):
         s = 'abc def ghi jkl'

@@ -356,8 +356,11 @@ def MultiCallCreator(widget):
     return MultiCall
 
 
-if __name__ == '__main__':
+def _multi_call(parent):
     root = Tkinter.Tk()
+    root.title('Test MultiCall')
+    width, height, x, y = list(map(int, re.split('[x+]', parent.geometry())))
+    root.geometry('+%d+%d' % (x, y + 150))
     text = MultiCallCreator(Tkinter.Text)(root)
     text.pack()
 
@@ -370,7 +373,6 @@ if __name__ == '__main__':
         text.event_add('<<handler%d>>' % n[0], seq)
         n[0] += 1
 
-
     bindseq('<Key>')
     bindseq('<Control-Key>')
     bindseq('<Alt-Key-a>')
@@ -378,8 +380,14 @@ if __name__ == '__main__':
     bindseq('<Alt-Control-Key-a>')
     bindseq('<Key-b>')
     bindseq('<Control-Button-1>')
+    bindseq('<Button-2>')
     bindseq('<Alt-Button-1>')
     bindseq('<FocusOut>')
     bindseq('<Enter>')
     bindseq('<Leave>')
     root.mainloop()
+
+
+if __name__ == '__main__':
+    from idlelib.idle_test.htest import run
+    run(_multi_call)

@@ -19,11 +19,14 @@ def glob(pathname):
 
 
 def iglob(pathname):
+    dirname, basename = os.path.split(pathname)
     if not has_magic(pathname):
-        if os.path.lexists(pathname):
+        if basename:
+            if os.path.lexists(pathname):
+                yield pathname
+        elif os.path.isdir(dirname):
             yield pathname
         return
-    dirname, basename = os.path.split(pathname)
     if not dirname:
         for name in glob1(os.curdir, basename):
             yield name

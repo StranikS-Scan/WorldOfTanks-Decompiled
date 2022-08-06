@@ -6,7 +6,7 @@ from distutils.cmd import Command
 DEFAULT_PYPIRC = '[distutils]\nindex-servers =\n    pypi\n\n[pypi]\nusername:%s\npassword:%s\n'
 
 class PyPIRCCommand(Command):
-    DEFAULT_REPOSITORY = 'https://pypi.python.org/pypi'
+    DEFAULT_REPOSITORY = 'https://upload.pypi.org/legacy/'
     DEFAULT_REALM = 'pypi'
     repository = None
     realm = None

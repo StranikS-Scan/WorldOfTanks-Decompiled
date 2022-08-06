@@ -356,22 +356,9 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'favorite_primetime': 'favorite_primetime'})
     def get_clan_favorite_attributes(self, callback, clan_id, fields=None):
-        url = '/gm/clans/%s/favorite_attributes' % clan_id
-
-        @preprocess_callback(callback, 'clans')
-        def inner_callback(backend_data):
-            result = {}
-            for field in ['clan_id', 'favorite_primetime']:
-                if field in backend_data:
-                    result[field] = backend_data[field]
-
-            for data in backend_data.get('favorite_arenas', []):
-                if data.get('frontlevel') in (6, 8, 10) and 'arena' in data:
-                    result['favorite_arena_{}'.format(data['frontlevel'])] = data['arena']
-
-            return result
-
-        return self._request_data(inner_callback, 'clans', url)
+        get_params = {'clan_id': clan_id}
+        url = '/gm/clans/favorite_attributes/?%s' % urlencode(get_params)
+        return self._request_data(preprocess_callback(callback, 'clans'), 'clans', url)
 
     @convert_data({'joined_at': from_iso,
      'in_clan_cooldown_till': from_iso})

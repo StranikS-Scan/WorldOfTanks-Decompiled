@@ -115,7 +115,16 @@ def make_zipfile(base_name, base_dir, verbose=0, dry_run=0):
         log.info("creating '%s' and adding '%s' to it", zip_filename, base_dir)
         if not dry_run:
             zip = zipfile.ZipFile(zip_filename, 'w', compression=zipfile.ZIP_DEFLATED)
+            if base_dir != os.curdir:
+                path = os.path.normpath(os.path.join(base_dir, ''))
+                zip.write(path, path)
+                log.info("adding '%s'", path)
             for dirpath, dirnames, filenames in os.walk(base_dir):
+                for name in dirnames:
+                    path = os.path.normpath(os.path.join(dirpath, name, ''))
+                    zip.write(path, path)
+                    log.info("adding '%s'", path)
+
                 for name in filenames:
                     path = os.path.normpath(os.path.join(dirpath, name))
                     if os.path.isfile(path):

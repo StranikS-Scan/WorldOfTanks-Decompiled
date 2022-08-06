@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/WidgetRedirector.py
-from Tkinter import *
+from __future__ import print_function
+from Tkinter import TclError
 
 class WidgetRedirector:
 
@@ -21,13 +22,12 @@ class WidgetRedirector:
             self.unregister(operation)
 
         widget = self.widget
-        del self.widget
-        orig = self.orig
-        del self.orig
         tk = widget.tk
         w = widget._w
         tk.deletecommand(w)
-        tk.call('rename', orig, w)
+        tk.call('rename', self.orig, w)
+        del self.widget
+        del self.tk
 
     def register(self, operation, function):
         self._operations[operation] = function
@@ -38,8 +38,11 @@ class WidgetRedirector:
         if operation in self._operations:
             function = self._operations[operation]
             del self._operations[operation]
-            if hasattr(self.widget, operation):
+            try:
                 delattr(self.widget, operation)
+            except AttributeError:
+                pass
+
             return function
         else:
             return None
@@ -62,8 +65,8 @@ class OriginalCommand:
         self.operation = operation
         self.tk = redir.tk
         self.orig = redir.orig
-        self.tk_call = self.tk.call
-        self.orig_and_operation = (self.orig, self.operation)
+        self.tk_call = redir.tk.call
+        self.orig_and_operation = (redir.orig, operation)
 
     def __repr__(self):
         return 'OriginalCommand(%r, %r)' % (self.redir, self.operation)
@@ -72,26 +75,28 @@ class OriginalCommand:
         return self.tk_call(self.orig_and_operation + args)
 
 
-def main():
-    global previous_tcl_fcn
+def _widget_redirector(parent):
+    from Tkinter import Tk, Text
+    import re
     root = Tk()
-    root.wm_protocol('WM_DELETE_WINDOW', root.quit)
-    text = Text()
+    root.title('Test WidgetRedirector')
+    width, height, x, y = list(map(int, re.split('[x+]', parent.geometry())))
+    root.geometry('+%d+%d' % (x, y + 150))
+    text = Text(root)
     text.pack()
     text.focus_set()
     redir = WidgetRedirector(text)
 
     def my_insert(*args):
-        print 'insert', args
-        previous_tcl_fcn(*args)
+        print('insert', args)
+        original_insert(*args)
 
-    previous_tcl_fcn = redir.register('insert', my_insert)
+    original_insert = redir.register('insert', my_insert)
     root.mainloop()
-    redir.unregister('insert')
-    redir.close()
-    root.mainloop()
-    root.destroy()
 
 
 if __name__ == '__main__':
-    main()
+    import unittest
+    unittest.main('idlelib.idle_test.test_widgetredir', verbosity=2, exit=False)
+    from idlelib.idle_test.htest import run
+    run(_widget_redirector)

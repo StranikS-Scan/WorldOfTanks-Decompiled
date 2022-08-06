@@ -17,13 +17,13 @@ def find_lib(name):
 
 
 class MachOTest(unittest.TestCase):
-    if sys.platform == 'darwin':
 
-        def test_find(self):
-            self.assertEqual(find_lib('pthread'), '/usr/lib/libSystem.B.dylib')
-            result = find_lib('z')
-            self.assertRegexpMatches(result, '.*/lib/libz\\..*.*\\.dylib')
-            self.assertEqual(find_lib('IOKit'), '/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit')
+    @unittest.skipUnless(sys.platform == 'darwin', 'OSX-specific test')
+    def test_find(self):
+        self.assertEqual(find_lib('pthread'), '/usr/lib/libSystem.B.dylib')
+        result = find_lib('z')
+        self.assertRegexpMatches(result, '.*/lib/libz\\..*.*\\.dylib')
+        self.assertEqual(find_lib('IOKit'), '/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit')
 
 
 if __name__ == '__main__':

@@ -58,6 +58,7 @@ class MessageTemplates(templates.XMLCollection):
     def _make(self, source):
         sourceID = source.name
         data = {'type': source.readString('type'),
+         'linkage': source.readString('linkage'),
          'timestamp': -1,
          'savedData': None,
          'bgIcon': self._makeBgIconsData(source['bgIcon']),

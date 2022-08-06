@@ -8,7 +8,6 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency
 from items import filterIntCDsByItemType, ITEM_TYPES
 from skeletons.gui.shared import IItemsCache
-from uilogging.veh_post_progression.loggers import VehPostProgressionEntryPointLogger
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle, EliteStatusProgress
     from gui.impl.gen_utils import DynAccessor
@@ -16,7 +15,6 @@ if typing.TYPE_CHECKING:
 class VehPostProgressionEntryPointTooltip(ViewImpl):
     __slots__ = ('__parentScreen', '__vehicle')
     __itemsCache = dependency.descriptor(IItemsCache)
-    __uiLogger = VehPostProgressionEntryPointLogger()
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.tooltips.VehPostProgressionEntryPointTooltip())
@@ -45,14 +43,6 @@ class VehPostProgressionEntryPointTooltip(ViewImpl):
             model.setModulesExplored(len(eliteProgress.unlocked))
             model.setModulesTotal(len(eliteProgress.total))
             model.setHasVehiclesToUnlock(hasVehiclesToUnlock)
-
-    def _onLoaded(self, *args, **kwargs):
-        super(VehPostProgressionEntryPointTooltip, self)._onLoaded(*args, **kwargs)
-        self.__uiLogger.onTooltipOpened(self.__parentScreen, self.__vehicle.postProgressionAvailability(unlockOnly=True).result)
-
-    def _finalize(self):
-        self.__uiLogger.onTooltipClosed()
-        super(VehPostProgressionEntryPointTooltip, self)._finalize()
 
     def __getStatus(self, eliteProgress):
         status = R.strings.veh_post_progression.tooltips.entry_point.status

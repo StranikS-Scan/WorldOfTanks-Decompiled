@@ -25,6 +25,21 @@ class FakeCompiler(object):
 
 class CCompilerTestCase(support.EnvironGuard, unittest.TestCase):
 
+    def test_set_executables(self):
+
+        class MyCCompiler(CCompiler):
+            executables = {'compiler': '',
+             'compiler_cxx': '',
+             'linker': ''}
+
+        compiler = MyCCompiler()
+        compiler.set_executables(compiler=['env', 'OMPI_MPICC=clang', 'mpicc'])
+        self.assertEqual(compiler.compiler, ['env', 'OMPI_MPICC=clang', 'mpicc'])
+        compiler.set_executables(compiler_cxx='env OMPI_MPICXX=clang++ mpicxx')
+        self.assertEqual(compiler.compiler_cxx, ['env', 'OMPI_MPICXX=clang++', 'mpicxx'])
+        compiler.set_executables(linker=u'env OMPI_MPICXX=clang++ mpiCC')
+        self.assertEqual(compiler.linker, [u'env', u'OMPI_MPICXX=clang++', u'mpiCC'])
+
     def test_gen_lib_options(self):
         compiler = FakeCompiler()
         libdirs = ['lib1', 'lib2']

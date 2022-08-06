@@ -3,6 +3,7 @@
 import os
 import stat
 from genericpath import *
+from genericpath import _unicode
 from ntpath import expanduser, expandvars, isabs, islink, splitdrive, splitext, split, walk
 __all__ = ['normcase',
  'isabs',
@@ -124,7 +125,7 @@ def normpath(path):
 
 def abspath(path):
     if not isabs(path):
-        if isinstance(path, unicode):
+        if isinstance(path, _unicode):
             cwd = os.getcwdu()
         else:
             cwd = os.getcwd()

@@ -39,7 +39,7 @@ class TC(object):
     def t5(self, ai, b=None, *args, **kw):
         pass
 
-    t5.tip = '(self, ai, b=None, *args, **kwds)'
+    t5.tip = '(self, ai, b=None, *args, **kwargs)'
 
     def t6(no, self):
         pass
@@ -76,7 +76,8 @@ class Get_signatureTest(unittest.TestCase):
         def gtest(obj, out):
             self.assertEqual(signature(obj), out)
 
-        gtest(List, '()\n' + List.__doc__)
+        if List.__doc__ is not None:
+            gtest(List, '()\n' + List.__doc__)
         gtest(list.__new__, 'T.__new__(S, ...) -> a new object with type S, a subtype of T')
         gtest(list.__init__, 'x.__init__(...) initializes x; see help(type(x)) for signature')
         append_doc = 'L.append(object) -- append object to end'
@@ -85,9 +86,12 @@ class Get_signatureTest(unittest.TestCase):
         gtest(List.append, append_doc)
         gtest(types.MethodType, '()\ninstancemethod(function, instance, class)')
         gtest(SB(), default_tip)
+        return
 
     def test_signature_wrap(self):
-        self.assertEqual(signature(textwrap.TextWrapper), "(width=70, initial_indent='', subsequent_indent='', expand_tabs=True,\n    replace_whitespace=True, fix_sentence_endings=False, break_long_words=True,\n    drop_whitespace=True, break_on_hyphens=True)")
+        if textwrap.TextWrapper.__doc__ is not None:
+            self.assertEqual(signature(textwrap.TextWrapper), "(width=70, initial_indent='', subsequent_indent='', expand_tabs=True,\n    replace_whitespace=True, fix_sentence_endings=False, break_long_words=True,\n    drop_whitespace=True, break_on_hyphens=True)")
+        return
 
     def test_docline_truncation(self):
 
@@ -132,18 +136,20 @@ class Get_signatureTest(unittest.TestCase):
         def t5(a, b=None, *args, **kwds):
             pass
 
-        t5.tip = '(a, b=None, *args, **kwds)'
+        t5.tip = '(a, b=None, *args, **kwargs)'
+        doc = '\ndoc' if t1.__doc__ is not None else ''
         for func in (t1,
          t2,
          t3,
          t4,
          t5,
          TC):
-            self.assertEqual(signature(func), func.tip + '\ndoc')
+            self.assertEqual(signature(func), func.tip + doc)
 
         return
 
     def test_methods(self):
+        doc = '\ndoc' if TC.__doc__ is not None else ''
         for meth in (TC.t1,
          TC.t2,
          TC.t3,
@@ -151,19 +157,23 @@ class Get_signatureTest(unittest.TestCase):
          TC.t5,
          TC.t6,
          TC.__call__):
-            self.assertEqual(signature(meth), meth.tip + '\ndoc')
+            self.assertEqual(signature(meth), meth.tip + doc)
 
-        self.assertEqual(signature(TC.cm), '(a)\ndoc')
-        self.assertEqual(signature(TC.sm), '(b)\ndoc')
+        self.assertEqual(signature(TC.cm), '(a)' + doc)
+        self.assertEqual(signature(TC.sm), '(b)' + doc)
+        return
 
     def test_bound_methods(self):
+        doc = '\ndoc' if TC.__doc__ is not None else ''
         for meth, mtip in ((tc.t1, '()'),
          (tc.t4, '(*args)'),
          (tc.t6, '(self)'),
          (tc.__call__, '(ci)'),
          (tc, '(ci)'),
          (TC.cm, '(a)')):
-            self.assertEqual(signature(meth), mtip + '\ndoc')
+            self.assertEqual(signature(meth), mtip + doc)
+
+        return
 
     def test_starred_parameter(self):
 
@@ -175,12 +185,19 @@ class Get_signatureTest(unittest.TestCase):
             def m2(**kwds):
                 pass
 
+        def f1(args, kwargs, *a, **k):
+            pass
+
+        def f2(args, kwargs, args1, kwargs1, *a, **k):
+            pass
+
         c = C()
-        for meth, mtip in ((C.m1, '(*args)'),
-         (c.m1, '(*args)'),
-         (C.m2, '(**kwds)'),
-         (c.m2, '(**kwds)')):
-            self.assertEqual(signature(meth), mtip)
+        self.assertEqual(signature(C.m1), '(*args)')
+        self.assertEqual(signature(c.m1), '(*args)')
+        self.assertEqual(signature(C.m2), '(**kwargs)')
+        self.assertEqual(signature(c.m2), '(**kwargs)')
+        self.assertEqual(signature(f1), '(args, kwargs, *args1, **kwargs1)')
+        self.assertEqual(signature(f2), '(args, kwargs, args1, kwargs1, *args2, **kwargs2)')
 
     def test_no_docstring(self):
 
@@ -223,7 +240,7 @@ class Get_signatureTest(unittest.TestCase):
 class Get_entityTest(unittest.TestCase):
 
     def test_bad_entity(self):
-        self.assertIsNone(CTi.get_entity('1/0'))
+        self.assertIsNone(CTi.get_entity('1//0'))
 
     def test_good_entity(self):
         self.assertIs(CTi.get_entity('int'), int)

@@ -41,4 +41,4 @@ def notifyEngineOnArenaPeriodChange(detailedEngineState, period):
         maxTime = periodEndTime - serverTime
         maxTime = maxTime * 0.7 if maxTime > 0.0 else 1.0
         time = uniform(0.0, maxTime)
-        detailedEngineState.startEngineWithDelay(time, True)
+        detailedEngineState.startEngineWithDelay(time)

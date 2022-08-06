@@ -9,8 +9,8 @@ from helpers import i18n
 from items.tankmen import getSkillsConfig
 from prebattle_shared import LIMIT_DEFAULTS
 
-def getCrewNotFullTooltip():
-    crew_list = ''
+def getAbsenceCrewList():
+    crewList = ''
     vehicle = g_currentVehicle.item
     crewRoles = vehicle.descriptor.type.crewRoles
     skillsConfig = getSkillsConfig()
@@ -18,9 +18,14 @@ def getCrewNotFullTooltip():
         if tman is None:
             skill = skillsConfig.getSkill(crewRoles[slotIdx][0])
             userString = i18n.makeString(skill.userString).lower()
-            crew_list += (', ' if crew_list else '') + userString
+            crewList += (', ' if crewList else '') + userString
 
-    return makeTooltip('#tooltips:redButton/disabled/crew/notFull/header', i18n.makeString('#tooltips:redButton/disabled/crew/notFull/body') % crew_list)
+    return crewList
+
+
+def getCrewNotFullTooltip():
+    crewList = getAbsenceCrewList()
+    return makeTooltip('#tooltips:redButton/disabled/crew/notFull/header', i18n.makeString('#tooltips:redButton/disabled/crew/notFull/body') % crewList)
 
 
 def getVehicleStateInvalidTooltip(restriction):

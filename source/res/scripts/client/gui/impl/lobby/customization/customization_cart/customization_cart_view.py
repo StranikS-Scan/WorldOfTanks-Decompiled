@@ -19,12 +19,12 @@ from gui.impl.pub import ViewImpl
 from gui.impl.gen.view_models.views.lobby.customization.customization_cart.cart_model import CartModel
 from gui.impl.gen.view_models.views.lobby.customization.customization_cart.cart_slot_model import CartSlotModel
 from gui.impl.gen.view_models.views.lobby.customization.customization_cart.cart_season_model import CartSeasonModel
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import InfoItemBase
 from gui.shop import showBuyGoldForCustomization
 from gui.customization.processors.cart import SeparateItemsProcessor, StyleItemsProcessor, EditableStyleItemsProcessor
 from gui.customization.processors.cart import ProcessorSelector, ItemsType
 from gui.customization.shared import SEASON_TYPE_TO_NAME, SEASONS_ORDER, MoneyForPurchase, getTotalPurchaseInfo
 from gui.customization.shared import containsVehicleBound, getPurchaseMoneyState, isTransactionValid
-from gui.customization.shared import CartExchangeCreditsInfoItem
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsMultiItemsMeta
@@ -67,6 +67,27 @@ def _getSeasonModel(seasonType, seasons):
         if season is None:
             _logger.error('CartSeasonsModel does not have field %s', name)
         return season
+
+
+class CartExchangeCreditsInfoItem(InfoItemBase):
+
+    @property
+    def itemTypeName(self):
+        pass
+
+    @property
+    def userName(self):
+        pass
+
+    @property
+    def itemTypeID(self):
+        return GUI_ITEM_TYPE.CUSTOMIZATION
+
+    def getExtraIconInfo(self):
+        return None
+
+    def getGUIEmblemID(self):
+        pass
 
 
 class CustomizationCartView(ViewImpl):
@@ -225,7 +246,7 @@ class CustomizationCartView(ViewImpl):
 
     def __removeListeners(self):
         model = self.viewModel
-        model.onCloseAction += self.__onWindowClose
+        model.onCloseAction -= self.__onWindowClose
         model.seasons.onSelectItem -= self.__onSelectItem
         model.rent.onSelectAutoRent -= self.__onSelectAutoRent
         model.purchase.onBuyAction -= self.__onBuy

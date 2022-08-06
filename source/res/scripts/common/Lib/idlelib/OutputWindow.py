@@ -67,7 +67,7 @@ class OutputWindow(EditorWindow):
             line = self.text.get('insert -1line linestart', 'insert -1line lineend')
             result = self._file_line_helper(line)
             if not result:
-                tkMessageBox.showerror('No special line', "The line you point at doesn't look like a valid file name followed by a line number.", master=self.text)
+                tkMessageBox.showerror('No special line', "The line you point at doesn't look like a valid file name followed by a line number.", parent=self.text)
                 return
         filename, lineno = result
         edit = self.flist.open(filename)

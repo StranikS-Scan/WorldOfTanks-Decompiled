@@ -11,17 +11,14 @@ class Radar(BigWorld.DynamicScriptComponent):
         pass
 
     def set_radarReadinessTime(self, _=None):
-        radarCtrl = self.__getRadarCtrl()
+        radarCtrl = self.entity.guiSessionProvider.dynamic.radar
         if radarCtrl:
             radarCtrl.updateRadarReadinessTime(self.radarReadinessTime)
 
     def set_radarReady(self, prev=None):
-        radarCtrl = self.__getRadarCtrl()
+        radarCtrl = self.entity.guiSessionProvider.dynamic.radar
         if radarCtrl:
             radarCtrl.updateRadarReadiness(self.radarReady)
-
-    def __getRadarCtrl(self):
-        return self.entity.guiSessionProvider.dynamic.radar if self.entity.id == BigWorld.player().getObservedVehicleID() else None
 
     def refreshRadar(self):
         self.set_radarReadinessTime()

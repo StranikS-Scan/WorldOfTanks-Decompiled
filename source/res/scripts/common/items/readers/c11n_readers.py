@@ -10,12 +10,14 @@ import items.customizations as c11n
 import items.vehicles as iv
 import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
-from constants import IS_CLIENT, IS_EDITOR, IS_WEB
+from constants import IS_CLIENT, IS_EDITOR, IS_WEB, DEFAULT_QUEST_FINISH_TIME
 from items.components import shared_components
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
+from customization_quests_common import serelizeToken, PREFIX
+from bonus_readers import readUTC
 from soft_exception import SoftException
 if IS_EDITOR:
     from reflection_framework.unintrusive_weakref import ref as UnintrusiveWeakRef
@@ -67,6 +69,7 @@ class BaseCustomizationItemXmlReader(object):
             target.priceGroup = section.readString('priceGroup')
         if section.has_key('requiredToken'):
             target.requiredToken = section.readString('requiredToken')
+            target.requiredTokenCount = 1
         if section.has_key('maxNumber'):
             target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
             if target.maxNumber <= 0:
@@ -504,6 +507,11 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.PersonalNumberItem, folder, 'personal_number', cache.personal_numbers)
     __readItemFolder(cc.SequenceItem, folder, 'sequence', cache.sequences)
     __readItemFolder(cc.AttachmentItem, folder, 'attachment', cache.attachments)
+    pgFile = os.path.join(folder, 'progression', 'list.xml')
+    for style, questProgression in readQuestProgression(cache, (None, 'progression/list.xml'), ResMgr.openSection(pgFile), 'styleProgress'):
+        style.questsProgression = questProgression
+
+    ResMgr.purge(pgFile)
     _validateStyles(cache)
     return None
 
@@ -809,6 +817,59 @@ def _readDefault(cache, xmlCtx, section, sectionName):
         if iSection.has_key('top_vehicle'):
             topVehicle = ix.readString(xmlCtx, iSection, 'top_vehicle')
             cache.topVehiclesByNation[nation] = topVehicle
+
+
+def readQuestProgression(cache, xmlCtx, section, sectionName):
+    cls = cc.QuestProgressForCustomization
+    for gname, gsection in section.items():
+        if gname != sectionName:
+            continue
+        styleId = ix.readInt(xmlCtx, gsection, 'id')
+        if styleId not in cache.styles:
+            ix.raiseWrongXml(xmlCtx, 'id', 'Style id {} not found '.format(styleId))
+        style = cache.styles[styleId]
+        finishTime = readUTC(gsection, 'finishTime', DEFAULT_QUEST_FINISH_TIME)
+        unlockChains = {}
+        for tname, psection in gsection['unlockChains'].items():
+            groupId = 0
+            try:
+                groupId = int(tname[len(PREFIX):])
+            except:
+                ix.raiseWrongXml(xmlCtx, tname, 'Wrong section format use: {}'.format('cust_progress_{groupID}'))
+
+            token = serelizeToken(styleId, groupId)
+            if token in unlockChains:
+                ix.raiseWrongXml(xmlCtx, tname, 'GroupId dublicate id {}'.format(groupId))
+            concurrent = ix.readBool(xmlCtx, psection, 'concurrent', False)
+            items = {}
+            unlockChains[token] = (items, concurrent)
+            for lname, lsection in psection.items():
+                if lname != 'item':
+                    continue
+                count = ix.readInt(xmlCtx, lsection, 'level')
+                levelFinishTime = readUTC(lsection, 'finishTime', finishTime)
+                unlockItems = {}
+                for subSectionName, oSection in lsection.items():
+                    if oSection.has_key('id'):
+                        c11nType = CustomizationNamesToTypes[upper(subSectionName)]
+                        unlockItems[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, oSection, 'id')
+                        if not all([ False for id in unlockItems[c11nType] if id not in cache.itemTypes[c11nType] ]):
+                            ix.raiseWrongXml(xmlCtx, tname, 'id for {} not in cache'.format(subSectionName))
+
+                if count < 0:
+                    ix.raiseWrongXml(xmlCtx, tname, 'level < 0')
+                for c11nType, ids in unlockItems.iteritems():
+                    for id in ids:
+                        item = cache.itemTypes[c11nType][id]
+                        if count > 0:
+                            item.requiredToken = token
+                            item.requiredTokenCount = count
+                        item.tags = item.tags.union(frozenset((ItemTags.QUESTS_PROGRESSION,)))
+                        cache.itemToQuestProgressionStyle[item.compactDescr] = style
+
+                items.update({count: (unlockItems, levelFinishTime)})
+
+        yield (style, cls(styleId, unlockChains))
 
 
 def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):

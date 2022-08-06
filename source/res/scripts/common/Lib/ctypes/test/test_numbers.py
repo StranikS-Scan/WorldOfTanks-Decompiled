@@ -86,6 +86,12 @@ class NumberTestCase(unittest.TestCase):
 
         return
 
+    @unittest.skip('test disabled')
+    def test_valid_ranges(self):
+        for t, (l, h) in zip(unsigned_types, unsigned_ranges):
+            self.assertRaises(ValueError, t, l - 1)
+            self.assertRaises(ValueError, t, h + 1)
+
     def test_from_param(self):
         for t in signed_types + unsigned_types + float_types:
             self.assertEqual(ArgType, type(t.from_param(0)))
@@ -182,6 +188,18 @@ class NumberTestCase(unittest.TestCase):
         a[0] = '?'
         self.assertEqual(v.value, a[0])
 
+    @unittest.skip('test disabled')
+    def test_bool_from_address(self):
+        from ctypes import c_bool
+        from array import array
+        a = array(c_bool._type_, [True])
+        v = t.from_address(a.buffer_info()[0])
+        self.assertEqual(v.value, a[0])
+        self.assertEqual(type(v) is t)
+        a[0] = False
+        self.assertEqual(v.value, a[0])
+        self.assertEqual(type(v) is t)
+
     def test_init(self):
         self.assertRaises(TypeError, c_int, c_long(42))
 
@@ -194,6 +212,10 @@ class NumberTestCase(unittest.TestCase):
                 self.assertRaises(OverflowError, t.__ctype_be__, big_int)
             if hasattr(t, '__ctype_le__'):
                 self.assertRaises(OverflowError, t.__ctype_le__, big_int)
+
+    @unittest.skip('test disabled')
+    def test_perf(self):
+        check_perf()
 
 
 from ctypes import _SimpleCData

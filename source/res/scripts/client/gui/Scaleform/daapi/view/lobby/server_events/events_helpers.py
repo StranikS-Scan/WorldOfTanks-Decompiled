@@ -3,6 +3,8 @@
 import operator
 from collections import defaultdict
 import typing
+from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
+from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
 from battle_pass_common import BattlePassConsts
 from constants import EVENT_TYPE
@@ -12,15 +14,13 @@ from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getNationText
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import OldStyleBonusesFormatter
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import conditions, formatters, settings as quest_settings
-from gui.server_events.bonuses import VehiclesBonus
-from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet
+from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isDailyQuest, getDataByC11nQuest
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
@@ -28,6 +28,8 @@ from helpers.i18n import makeString as _ms
 from nations import ALLIANCE_TO_NATIONS
 from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
+from shared_utils import first
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -425,55 +427,132 @@ class _MotiveQuestInfo(_QuestInfo):
         return info
 
 
-class _LinkedSetQuestInfo(_QuestInfo):
-
-    def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
-        res = super(_LinkedSetQuestInfo, self).getInfo(svrEvents, pCur, pPrev, noProgressInfo)
-        missionName = getLocalizedMissionNameForLinkedSetQuest(self.event)
-        questName = getLocalizedQuestNameForLinkedSetQuest(self.event)
-        res['description'] = _ms(LINKEDSET.QUEST_CARD_TITLE, mission_name=missionName, quest_name=questName)
-        return res
-
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
-        bonuses = self.event.getBonuses()
-        if not bonuses:
-            return None
-        else:
-            res = super(_LinkedSetQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
-            res['title'] = getLocalizedQuestNameForLinkedSetQuest(self.event)
-            progresses = res.get('progressList', [])
-            if progresses and len(progresses) == 1:
-                curProgress = progresses[0]
-                curProgress['description'] = getLocalizedQuestDescForLinkedSetQuest(self.event)
-            return res
-
-    @staticmethod
-    def _filterBonus(bonus):
-        if isinstance(bonus, VehiclesBonus):
-            for item, vehInfo in bonus.getVehicles():
-                if not bonus.isRentVehicle(vehInfo) or item.isRented:
-                    return True
-
-            return False
-        return True
-
-    def _getBonuses(self, svrEvents, bonuses=None):
-        bonuses = filter(self._filterBonus, bonuses or self.event.getBonuses())
-        return super(_LinkedSetQuestInfo, self)._getBonuses(svrEvents, bonuses)
-
-
 def _getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return _PersonalMissionInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
         return _MotiveQuestInfo(event)
-    if isLinkedSet(event.getGroupID()):
-        return _LinkedSetQuestInfo(event)
     return _QuestInfo(event) if event.getType() in constants.EVENT_TYPE.QUEST_RANGE else _EventInfo(event)
 
 
 def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False, progressData=None):
     return _getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted, progressData)
+
+
+class Progression2dStyleFormater(object):
+    c11nService = dependency.descriptor(ICustomizationService)
+
+    @classmethod
+    def getProgress(cls, event, pCur, pPrev, isCompleted):
+        progresses = []
+        for cond in event.bonusCond.getConditions().items:
+            if isinstance(cond, conditions._Cumulativable):
+                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    label = cond.getUserString()
+                    if not diff and not label:
+                        continue
+                    state = cls.getStatus(isCompleted) if isCompleted else None
+                    progresses.append({'progrTooltip': None,
+                     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                     'maxProgrVal': totalProg,
+                     'currentProgrVal': curProg,
+                     'description': label,
+                     'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
+                     'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
+                     'questState': state})
+
+        if event.accountReqs.getTokens():
+            state = cls.getStatus(isCompleted)
+            progresses.append({'progrTooltip': None,
+             'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+             'maxProgrVal': 1,
+             'currentProgrVal': 1,
+             'description': event.getDescription(),
+             'progressDiff': '+ %s' % backport.getIntegralFormat(0),
+             'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
+             'questState': state})
+        title = ''
+        itemCD = cls.c11nService.getItemCDByQuestID(event.getID())
+        if itemCD:
+            item = cls.c11nService.getItemByCD(itemCD)
+            groupID, level = item.getQuestsProgressionInfo()
+            if groupID:
+                title = backport.text(R.strings.vehicle_customization.customization.quests.pbsItem(), itemType=item.userType, itemName=item.userName, level=int2roman(level))
+        if progresses:
+            progresses[0]['title'] = title
+        return progresses
+
+    @classmethod
+    def getProgressRate(cls, event, pCur, pPrev, isCompleted):
+        if isCompleted:
+            return 1
+        progress = 0
+        count = 0
+        for cond in event.bonusCond.getConditions().items:
+            if isinstance(cond, conditions._Cumulativable):
+                for _, (curProg, totalProg, __, ___) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    progress += curProg / float(totalProg)
+                    count += 1
+
+        return progress / float(count) if count else progress
+
+    @classmethod
+    def getTitle(cls, style):
+        return backport.text(R.strings.vehicle_customization.customization.postBattle.title(), value=style.userName)
+
+    @classmethod
+    def getStatus(cls, isComplete=None):
+        if isComplete:
+            msg = text_styles.bonusAppliedText(QUESTS.QUESTS_STATUS_DONE)
+            return {'statusState': PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_DONE,
+             'statusText': msg}
+        msg = text_styles.neutral(QUESTS.PERSONALMISSION_STATUS_INPROGRESS)
+        return {'statusState': PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
+         'statusText': msg}
+
+
+@dependency.replace_none_kwargs(c11nService=ICustomizationService)
+def get2dProgressionStylePostBattleInfo(styleID, quests, c11nService=None):
+    style = c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
+    eventData = first(quests)
+    if not eventData:
+        return None
+    else:
+        event = eventData[0]
+        fromatter = Progression2dStyleFormater
+        info = {'awards': [],
+         'alertMsg': '',
+         'questInfo': _getEventInfoData(event).getInfo([]),
+         'questState': fromatter.getStatus(isComplete=False),
+         'questType': event.getType()}
+        filteredQuests = {}
+        for eventData in quests:
+            questRate = fromatter.getProgressRate(*eventData)
+            event = eventData[0]
+            _, branch, level = getDataByC11nQuest(event)
+            if branch <= 0 or level <= 0:
+                continue
+            if (branch, level) not in filteredQuests:
+                filteredQuests[branch, level] = (questRate, eventData)
+                continue
+            rate, __ = filteredQuests[branch, level]
+            if questRate > rate:
+                filteredQuests[branch, level] = (questRate, eventData)
+
+        sortedQuests = [ eventData for _, (rate, eventData) in sorted(filteredQuests.items(), key=lambda t: t[0]) ]
+        progressList = []
+        for eventData in sortedQuests:
+            progressInfo = fromatter.getProgress(*eventData)
+            if progressInfo:
+                progressList.extend(progressInfo)
+
+        info['questInfo'].update({'description': fromatter.getTitle(style),
+         'tasksCount': -1})
+        linkBtnEnabled, linkBtnTooltip = getC11n2dProgressionLinkBtnParams()
+        info.update({'linkBtnVisible': linkBtnEnabled,
+         'linkBtnTooltip': backport.text(linkBtnTooltip),
+         'progressList': progressList})
+        return info
 
 
 def getNationsForChain(operation, chainID):

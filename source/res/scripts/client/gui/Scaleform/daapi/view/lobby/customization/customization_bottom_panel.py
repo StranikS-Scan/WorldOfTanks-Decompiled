@@ -4,13 +4,13 @@ from collections import namedtuple
 import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, PROJECTION_DECAL_HINT_SHOWN_FIELD
+from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, PROJECTION_DECAL_HINT_SHOWN_FIELD, CUSTOMIZATION_STYLE_ITEMS_VISITED
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey, FilterTypes, FilterAliases
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot
+from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot, BillPopoverButtons
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -31,13 +31,15 @@ from items.components.c11n_constants import SeasonType, EDITABLE_STYLE_STORAGE_D
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from tutorial.hints_manager import HINT_SHOWN_STATUS
 from vehicle_outfit.outfit import Area
-CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks'))
+CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks', 'arrows', 'showSeparators'))
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
     service = dependency.descriptor(ICustomizationService)
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -139,6 +141,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def onEditItem(self, intCD):
         self.__ctx.editStyle(intCD, source=CustomizationModeSource.CAROUSEL)
 
+    def onItemIsNewAnimationShown(self, intCD):
+        visitedSet = AccountSettings.getSettings(CUSTOMIZATION_STYLE_ITEMS_VISITED)
+        visitedSet.add(intCD)
+        AccountSettings.setSettings(CUSTOMIZATION_STYLE_ITEMS_VISITED, visitedSet)
+
     def blinkCounter(self):
         self.as_playFilterBlinkS()
 
@@ -229,16 +236,20 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         tabsCounters = []
         visibleTabs = self.getVisibleTabs()
         season = self.__ctx.season
-        itemFilter = self.__ctx.mode.style.isItemInstallable if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE else None
+        itemFilter = None
+        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
+            itemFilter = self.__ctx.mode.style.isItemInstallable
+        else:
+            itemFilter = lambda item: not item.isStyleOnly
         for tabId in visibleTabs:
             tabItemTypes = CustomizationTabs.ITEM_TYPES[tabId]
             tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=tabItemTypes, season=season, itemFilter=itemFilter))
 
         if self.__ctx.modeId == CustomizationModes.STYLED:
             availableItemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
-            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=availableItemTypes)
+            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=availableItemTypes, itemFilter=itemFilter)
         else:
-            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=(GUI_ITEM_TYPE.STYLE,))
+            switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=(GUI_ITEM_TYPE.STYLE,), itemFilter=itemFilter)
             styles = self._carouselDP.getItemsData(season, CustomizationModes.STYLED, CustomizationTabs.STYLES)
             switchersCounter += getEditableStylesExtraNotificationCounter(styles)
         self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
@@ -297,7 +308,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             style = self.__ctx.mode.currentOutfit.style
             if style is not None and style.isEditable:
-                popoverAlias = VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER
+                if style.isQuestsProgression:
+                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_PROGRESSIVE_KIT_POPOVER
+                else:
+                    popoverAlias = VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER
             else:
                 popoverAlias = VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER
         styles = self._carouselDP.getItemsData(self.__ctx.season, CustomizationModes.STYLED, CustomizationTabs.STYLES)
@@ -316,7 +330,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         countStyle = text_styles.error if isZeroCount else text_styles.main
         displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
         shouldShow = self._carouselDP.hasAppliedFilter()
-        return CustomizationCarouselDataVO(displayString, isZeroCount, shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=self._carouselDP.getBookmarskData())._asdict()
+        return CustomizationCarouselDataVO(displayString, isZeroCount, shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=self._carouselDP.getBookmarskData(), arrows=self._carouselDP.getArrowsData(), showSeparators=self._carouselDP.getShowSeparatorsData())._asdict()
 
     def __setBottomPanelBillData(self, *_):
         purchaseItems = self.__ctx.mode.getPurchaseItems()
@@ -325,6 +339,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         totalPriceVO = getItemPricesVO(cartInfo.totalPrice)
         label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
         fromStorageCount = 0
+        hasLockedItems = False
         toBuyCount = 0
         for pItem in purchaseItems:
             if not pItem.item.isHiddenInUI():
@@ -332,6 +347,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                     fromStorageCount += 1
                 else:
                     toBuyCount += 1
+                curItem = pItem.item
+                if curItem.isQuestsProgression and curItem.itemTypeID == GUI_ITEM_TYPE.STYLE:
+                    totalItems = curItem.descriptor.questsProgression.getTotalCount()
+                    itemsOpened = sum([ curItem.descriptor.questsProgression.getUnlockedCount(token, self.eventsCache.questsProgress.getTokenCount(token)) for token in curItem.descriptor.questsProgression.getGroupTokens() ])
+                    hasLockedItems = totalItems != itemsOpened
 
         for pItem in purchaseItems:
             if pItem.item.itemTypeID != GUI_ITEM_TYPE.PERSONAL_NUMBER:
@@ -342,15 +362,18 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             hasEmptyNumber = False
 
+        hasLockedItems = self.__ctx.mode.isOutfitsHasLockedItems() or hasLockedItems
+        buyBtnEnabled = self.__ctx.isOutfitsModified()
+        if buyBtnEnabled and cartInfo.totalPrice != ITEM_PRICE_EMPTY:
+            label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
         if hasEmptyNumber:
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_EMPTYPERSONALNUMBER
+        elif hasLockedItems:
+            tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LOCKEDITEMSAPPLY
         elif self.__ctx.mode.isOutfitsEmpty():
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
         else:
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ALREADYAPPLIED
-        buyBtnEnabled = self.__ctx.isOutfitsModified()
-        if buyBtnEnabled and cartInfo.totalPrice != ITEM_PRICE_EMPTY:
-            label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
         outfitsModified = self.__ctx.mode.isOutfitsModified()
         if outfitsModified:
             if fromStorageCount > 0 or toBuyCount > 0:
@@ -359,17 +382,25 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 self.__hideBill()
         else:
             self.__hideBill()
+        compoundPrice = totalPriceVO[0]
+        if not compoundPrice['price']:
+            compoundPrice['price'] = getMoneyVO(Money(gold=0))
         fromStorageCount = text_styles.stats('({})'.format(fromStorageCount))
         toBuyCount = text_styles.stats('({})'.format(toBuyCount))
-        self.as_setBottomPanelPriceStateS({'buyBtnEnabled': buyBtnEnabled,
+        billLines = [self.__makeBillLine(text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toBuyCount)), compoundPrice=compoundPrice, isEnoughStatuses=getMoneyVO(Money(True, True, True))), self.__makeBillLine(text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON)]
+        buttons = [self.__makeButton(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_BTNCLEARALL), BillPopoverButtons.CUSTOMIZATION_CLEAR, RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ICON_CROSS)]
+        if hasLockedItems:
+            count = self.__ctx.mode.getOutfitsLockedItemsCount()
+            lockedCount = text_styles.stats('({})'.format(count))
+            billLines.append(self.__makeBillLine(text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_LOCKED), lockedCount)), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_LOCK_ICON))
+            buttons.append(self.__makeButton(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_BTNCLEARLOCKED), BillPopoverButtons.CUSTOMIZATION_CLEAR_LOCKED, enabled=count > 0))
+        self.as_setBottomPanelPriceStateS({'buyBtnEnabled': buyBtnEnabled and not hasLockedItems,
          'buyBtnLabel': label,
          'buyBtnTooltip': tooltip,
          'customizationDisplayType': self.__ctx.mode.currentOutfit.customizationDisplayType(),
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
-                    'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toBuyCount)),
-                    'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
-                    'isEnoughStatuses': getMoneyVO(Money(True, True, True)),
-                    'pricePanel': totalPriceVO[0]}})
+                    'lines': billLines,
+                    'buttons': buttons}})
         itemsPopoverBtnEnabled = False
         for intCD, component, _, _, _ in self.__ctx.mode.currentOutfit.itemsFull():
             if component.isFilled():
@@ -380,6 +411,18 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 break
 
         self.as_setItemsPopoverBtnEnabledS(itemsPopoverBtnEnabled)
+
+    def __makeBillLine(self, label, icon=None, compoundPrice=None, isEnoughStatuses=None):
+        return {'label': label,
+         'icon': icon,
+         'compoundPrice': compoundPrice,
+         'isEnoughStatuses': isEnoughStatuses}
+
+    def __makeButton(self, label, event, icon=None, enabled=True):
+        return {'label': label,
+         'icon': icon,
+         'event': event,
+         'enabled': enabled}
 
     def __showBill(self):
         self.as_showBillS()
@@ -425,7 +468,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             autoRentEnabled = False
         isChained, isUnsuitable = self._carouselDP.processDependentParams(item)
-        return buildCustomizationItemDataVO(item=item, count=inventoryCount, isApplied=isApplied, isDarked=isDarked, isUsedUp=isUsedUp, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, isChained=isChained, isUnsuitable=isUnsuitable)
+        return buildCustomizationItemDataVO(item=item, count=inventoryCount, isApplied=isApplied, isDarked=isDarked, isUsedUp=isUsedUp, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, isChained=isChained, isUnsuitable=isUnsuitable, isInProgress=item.isQuestInProgress())
 
     def __getItemTabsData(self):
         tabsData = []
@@ -474,8 +517,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__rebuildCarousel()
         self.__updateHints()
 
-    def __onCacheResync(self, *_):
+    def __onCacheResync(self, reason, items):
         if not g_currentVehicle.isPresent():
+            return
+        typesForUpdate = {GUI_ITEM_TYPE.CUSTOMIZATION, GUI_ITEM_TYPE.CUSTOMIZATIONS}
+        if not typesForUpdate & set(items):
             return
         self._carouselDP.invalidateItems()
         self.__updateTabs()
@@ -524,7 +570,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setBottomPanelBillData()
         self.__rebuildCarousel()
         if slotId == self.__ctx.mode.selectedSlot and (season is None or season == self.__ctx.season):
-            self.__scrollToItem(item.intCD)
+            self.__scrollToItem(item.intCD, self._selectedItem.id == item.id)
         self.__updateSetSwitcherData()
         return
 
@@ -537,7 +583,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         itemCD = itemCD or self.__updateHints()
         if itemCD is not None:
             self.__scrollToItem(itemCD)
-        else:
+        elif self._selectedItem is None:
             self.__scrollToNewItem()
         return
 

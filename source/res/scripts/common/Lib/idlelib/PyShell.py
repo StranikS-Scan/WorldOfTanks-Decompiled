@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/PyShell.py
+from __future__ import print_function
 import os
 import os.path
 import sys
@@ -9,8 +10,6 @@ import re
 import socket
 import time
 import threading
-import traceback
-import types
 import io
 import linecache
 from code import InteractiveInterpreter
@@ -18,7 +17,7 @@ from platform import python_version, system
 try:
     from Tkinter import *
 except ImportError:
-    print >> sys.__stderr__, "** IDLE can't import Tkinter.  Your Python may not be configured for Tk. **"
+    print("** IDLE can't import Tkinter.\nYour Python may not be configured for Tk. **", file=sys.__stderr__)
     sys.exit(1)
 
 import tkMessageBox
@@ -28,11 +27,11 @@ from idlelib.ColorDelegator import ColorDelegator
 from idlelib.UndoDelegator import UndoDelegator
 from idlelib.OutputWindow import OutputWindow
 from idlelib.configHandler import idleConf
-from idlelib import idlever
 from idlelib import rpc
 from idlelib import Debugger
 from idlelib import RemoteDebugger
 from idlelib import macosxSupport
+from idlelib import IOBinding
 IDENTCHARS = string.ascii_letters + string.digits + '_'
 HOST = '127.0.0.1'
 PORT = 0
@@ -115,6 +114,7 @@ class PyShellEditorWindow(EditorWindow):
         self.io.set_filename_change_hook(filename_changed_hook)
         if self.io.filename:
             self.restore_file_breaks()
+        self.color_breakpoint_text()
 
     rmenu_specs = [('Cut', '<<cut>>', 'rmenu_check_cut'),
      ('Copy', '<<copy>>', 'rmenu_check_copy'),
@@ -122,12 +122,25 @@ class PyShellEditorWindow(EditorWindow):
      ('Set Breakpoint', '<<set-breakpoint-here>>', None),
      ('Clear Breakpoint', '<<clear-breakpoint-here>>', None)]
 
+    def color_breakpoint_text(self, color=True):
+        if self.io is None:
+            return
+        else:
+            if color:
+                theme = idleConf.CurrentTheme()
+                cfg = idleConf.GetHighlight(theme, 'break')
+            else:
+                cfg = {'foreground': '',
+                 'background': ''}
+            self.text.tag_config('BREAK', cfg)
+            return
+
     def set_breakpoint(self, lineno):
         text = self.text
         filename = self.io.filename
         text.tag_add('BREAK', '%d.0' % lineno, '%d.0' % (lineno + 1))
         try:
-            i = self.breakpoints.index(lineno)
+            self.breakpoints.index(lineno)
         except ValueError:
             self.breakpoints.append(lineno)
 
@@ -272,7 +285,7 @@ class ModifiedColorDelegator(ColorDelegator):
 
     def LoadTagDefs(self):
         ColorDelegator.LoadTagDefs(self)
-        theme = idleConf.GetOption('main', 'Theme', 'name')
+        theme = idleConf.CurrentTheme()
         self.tagdefs.update({'stdin': {'background': None,
                    'foreground': None},
          'stdout': idleConf.GetHighlight(theme, 'stdout'),
@@ -360,7 +373,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
             try:
                 self.rpcclt = MyRPCClient(addr)
                 break
-            except socket.error as err:
+            except socket.error:
                 pass
 
         else:
@@ -374,7 +387,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.rpcclt.listening_sock.settimeout(10)
         try:
             self.rpcclt.accept()
-        except socket.timeout as err:
+        except socket.timeout:
             self.display_no_subprocess_error()
             return None
 
@@ -389,7 +402,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.poll_subprocess()
         return self.rpcclt
 
-    def restart_subprocess(self, with_cwd=False):
+    def restart_subprocess(self, with_cwd=False, filename=''):
         if self.restarting:
             return self.rpcclt
         else:
@@ -409,23 +422,22 @@ class ModifiedInterpreter(InteractiveInterpreter):
             self.spawn_subprocess()
             try:
                 self.rpcclt.accept()
-            except socket.timeout as err:
+            except socket.timeout:
                 self.display_no_subprocess_error()
                 return None
 
             self.transfer_path(with_cwd=with_cwd)
             console.stop_readline()
             console.text.delete('iomark', 'end-1c')
-            if was_executing:
-                console.write('\n')
-                console.showprompt()
-            halfbar = (int(console.width) - 16) // 2 * '='
-            console.write(halfbar + ' RESTART ' + halfbar)
+            tag = 'RESTART: ' + (filename if filename else 'Shell')
+            halfbar = (int(console.width) - len(tag) - 4) // 2 * '='
+            console.write('\n{0} {1} {0}'.format(halfbar, tag))
             console.text.mark_set('restart', 'end-1c')
             console.text.mark_gravity('restart', 'left')
-            console.showprompt()
+            if not filename:
+                console.showprompt()
             if debug:
-                gui = RemoteDebugger.restart_subprocess_debugger(self.rpcclt)
+                RemoteDebugger.restart_subprocess_debugger(self.rpcclt)
                 debug.load_breakpoints()
             self.compile.compiler.flags = self.original_compiler_flags
             self.restarting = False
@@ -492,14 +504,14 @@ class ModifiedInterpreter(InteractiveInterpreter):
                 console = self.tkconsole.console
                 if how == 'OK':
                     if what is not None:
-                        print >> console, repr(what)
+                        print(repr(what), file=console)
                 elif how == 'EXCEPTION':
                     if self.tkconsole.getvar('<<toggle-jit-stack-viewer>>'):
                         self.remote_stack_viewer()
                 elif how == 'ERROR':
                     errmsg = 'PyShell.ModifiedInterpreter: Subprocess ERROR:\n'
-                    print >> sys.__stderr__, errmsg, what
-                    print >> console, errmsg, what
+                    print(errmsg, what, file=sys.__stderr__)
+                    print(errmsg, what, file=console)
                 try:
                     self.tkconsole.endexecuting()
                 except AttributeError:
@@ -530,7 +542,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
             item = RemoteObjectBrowser.StubObjectTreeItem(self.rpcclt, oid)
             from idlelib.TreeWidget import ScrolledCanvas, TreeNode
             top = Toplevel(self.tkconsole.root)
-            theme = idleConf.GetOption('main', 'Theme', 'name')
+            theme = idleConf.CurrentTheme()
             background = idleConf.GetHighlight(theme, 'normal')['background']
             sc = ScrolledCanvas(top, bg=background, highlightthickness=0)
             sc.frame.pack(expand=1, fill='both')
@@ -548,12 +560,10 @@ class ModifiedInterpreter(InteractiveInterpreter):
         if source is None:
             source = open(filename, 'r').read()
         try:
-            code = compile(source, filename, 'exec')
+            code = compile(source, filename, 'exec', dont_inherit=True)
         except (OverflowError, SyntaxError):
             self.tkconsole.resetoutput()
-            tkerr = self.tkconsole.stderr
-            print >> tkerr, '*** Error in script or command!\n'
-            print >> tkerr, 'Traceback (most recent call last):'
+            print('*** Error in script or command!\nTraceback (most recent call last):', file=self.tkconsole.stderr)
             InteractiveInterpreter.showsyntaxerror(self, filename)
             self.tkconsole.showprompt()
         else:
@@ -566,10 +576,9 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.more = 0
         self.save_warnings_filters = warnings.filters[:]
         warnings.filterwarnings(action='error', category=SyntaxWarning)
-        if isinstance(source, types.UnicodeType):
-            from idlelib import IOBinding
+        if isinstance(source, unicode) and IOBinding.encoding != 'utf-8':
             try:
-                source = source.encode(IOBinding.encoding)
+                source = '# -*- coding: %s -*-\n%s' % (IOBinding.encoding, source.encode(IOBinding.encoding))
             except UnicodeError:
                 self.tkconsole.resetoutput()
                 self.write('Unsupported characters in input\n')
@@ -679,7 +688,7 @@ class ModifiedInterpreter(InteractiveInterpreter):
                     exec code in self.locals
             except SystemExit:
                 if not self.tkconsole.closing:
-                    if tkMessageBox.askyesno('Exit?', 'Do you want to exit altogether?', default='yes', master=self.tkconsole.text):
+                    if tkMessageBox.askyesno('Exit?', 'Do you want to exit altogether?', default='yes', parent=self.tkconsole.text):
                         raise
                     else:
                         self.showtraceback()
@@ -687,12 +696,12 @@ class ModifiedInterpreter(InteractiveInterpreter):
                     raise
             except:
                 if use_subprocess:
-                    print >> self.tkconsole.stderr, 'IDLE internal error in runcode()'
+                    print('IDLE internal error in runcode()', file=self.tkconsole.stderr)
                     self.showtraceback()
                     self.tkconsole.endexecuting()
                 elif self.tkconsole.canceled:
                     self.tkconsole.canceled = False
-                    print >> self.tkconsole.stderr, 'KeyboardInterrupt'
+                    print('KeyboardInterrupt', file=self.tkconsole.stderr)
                 else:
                     self.showtraceback()
 
@@ -709,13 +718,13 @@ class ModifiedInterpreter(InteractiveInterpreter):
         self.tkconsole.stderr.write(s)
 
     def display_port_binding_error(self):
-        tkMessageBox.showerror('Port Binding Error', "IDLE can't bind to a TCP/IP port, which is necessary to communicate with its Python execution server.  This might be because no networking is installed on this computer.  Run IDLE with the -n command line switch to start without a subprocess and refer to Help/IDLE Help 'Running without a subprocess' for further details.", master=self.tkconsole.text)
+        tkMessageBox.showerror('Port Binding Error', "IDLE can't bind to a TCP/IP port, which is necessary to communicate with its Python execution server.  This might be because no networking is installed on this computer.  Run IDLE with the -n command line switch to start without a subprocess and refer to Help/IDLE Help 'Running without a subprocess' for further details.", parent=self.tkconsole.text)
 
     def display_no_subprocess_error(self):
-        tkMessageBox.showerror('Subprocess Startup Error', "IDLE's subprocess didn't make connection.  Either IDLE can't start a subprocess or personal firewall software is blocking the connection.", master=self.tkconsole.text)
+        tkMessageBox.showerror('Subprocess Startup Error', "IDLE's subprocess didn't make connection.  Either IDLE can't start a subprocess or personal firewall software is blocking the connection.", parent=self.tkconsole.text)
 
     def display_executing_dialog(self):
-        tkMessageBox.showerror('Already executing', 'The Python Shell window is already executing a command; please wait until it is finished.', master=self.tkconsole.text)
+        tkMessageBox.showerror('Already executing', 'The Python Shell window is already executing a command; please wait until it is finished.', parent=self.tkconsole.text)
 
 
 class PyShell(OutputWindow):
@@ -726,10 +735,8 @@ class PyShell(OutputWindow):
      ('edit', '_Edit'),
      ('debug', '_Debug'),
      ('options', '_Options'),
-     ('windows', '_Windows'),
+     ('windows', '_Window'),
      ('help', '_Help')]
-    if sys.platform == 'darwin':
-        menu_specs[-2] = ('windows', '_Window')
     from idlelib.IdleHistory import History
 
     def __init__(self, flist=None):
@@ -794,7 +801,7 @@ class PyShell(OutputWindow):
 
     def toggle_debugger(self, event=None):
         if self.executing:
-            tkMessageBox.showerror("Don't debug now", 'You can only toggle the debugger when idle', master=self.text)
+            tkMessageBox.showerror("Don't debug now", 'You can only toggle the debugger when idle', parent=self.text)
             self.set_debugger_indicator()
             return 'break'
         db = self.interp.getdebugger()
@@ -846,7 +853,7 @@ class PyShell(OutputWindow):
 
     def close(self):
         if self.executing:
-            response = tkMessageBox.askokcancel('Kill?', 'The program is still running!\n Do you want to kill it?', default='ok', parent=self.text)
+            response = tkMessageBox.askokcancel('Kill?', 'Your program is still running!\n Do you want to kill it?', default='ok', parent=self.text)
             if response is False:
                 return 'cancel'
         self.stop_readline()
@@ -874,7 +881,7 @@ class PyShell(OutputWindow):
     def short_title(self):
         return self.shell_title
 
-    COPYRIGHT = 'Type "copyright", "credits" or "license()" for more information.'
+    COPYRIGHT = 'Type "help", "copyright", "credits" or "license()" for more information.'
 
     def begin(self):
         self.resetoutput()
@@ -890,6 +897,7 @@ class PyShell(OutputWindow):
          sys.platform,
          self.COPYRIGHT,
          nosub))
+        self.text.focus_force()
         self.showprompt()
         import Tkinter
         Tkinter._default_root = None
@@ -1062,7 +1070,7 @@ class PyShell(OutputWindow):
             i = i - 1
 
         line = line[:i]
-        more = self.interp.runsource(line)
+        self.interp.runsource(line)
 
     def open_stack_viewer(self, event=None):
         if self.interp.rpcclt:
@@ -1070,11 +1078,11 @@ class PyShell(OutputWindow):
         try:
             sys.last_traceback
         except:
-            tkMessageBox.showerror('No stack trace', 'There is no stack trace yet.\n(sys.last_traceback is not defined)', master=self.text)
+            tkMessageBox.showerror('No stack trace', 'There is no stack trace yet.\n(sys.last_traceback is not defined)', parent=self.text)
             return
 
         from idlelib.StackViewer import StackBrowser
-        sv = StackBrowser(self.root, self.flist)
+        StackBrowser(self.root, self.flist)
 
     def view_restart_mark(self, event=None):
         self.text.see('iomark')
@@ -1161,7 +1169,7 @@ class PseudoOutputFile(PseudoFile):
             raise ValueError('write to closed file')
         if type(s) not in (unicode, str, bytearray):
             if isinstance(s, unicode):
-                s = unicode.__getslice__(s, None, None)
+                s = unicode.__getitem__(s, slice(None))
             elif isinstance(s, str):
                 s = str.__str__(s)
             elif isinstance(s, bytearray):
@@ -1185,7 +1193,7 @@ class PseudoInputFile(PseudoFile):
             raise ValueError('read from closed file')
         if size is None:
             size = -1
-        elif not isinstance(size, int):
+        elif not isinstance(size, (int, long)):
             raise TypeError('must be int, not ' + type(size).__name__)
         result = self._line_buffer
         self._line_buffer = ''
@@ -1212,7 +1220,7 @@ class PseudoInputFile(PseudoFile):
             raise ValueError('read from closed file')
         if size is None:
             size = -1
-        elif not isinstance(size, int):
+        elif not isinstance(size, (int, long)):
             raise TypeError('must be int, not ' + type(size).__name__)
         line = self._line_buffer or self.shell.readline()
         if size < 0:
@@ -1225,6 +1233,12 @@ class PseudoInputFile(PseudoFile):
 
     def close(self):
         self.shell.close()
+
+
+def fix_x11_paste(root):
+    if root._windowingsystem == 'x11':
+        for cls in ('Text', 'Entry', 'Spinbox'):
+            root.bind_class(cls, '<<Paste>>', 'catch {%W delete sel.first sel.last}\n' + root.bind_class(cls, '<<Paste>>'))
 
 
 usage_msg = '\nUSAGE: idle  [-deins] [-t title] [file]*\n       idle  [-dns] [-t title] (-c cmd | -r file) [arg]*\n       idle  [-dns] [-t title] - [arg]*\n\n  -h         print this help message and exit\n  -n         run IDLE without a subprocess (see Help/IDLE Help for details)\n\nThe following options will override the IDLE \'settings\' configuration:\n\n  -e         open an edit window\n  -i         open a shell window\n\nThe following options imply -i and will open a shell:\n\n  -c cmd     run the command in a shell, or\n  -r file    run script from file\n\n  -d         enable the debugger\n  -s         run $IDLESTARTUP or $PYTHONSTARTUP before anything else\n  -t title   set title of shell window\n\nA default edit window will be bypassed when -c, -r, or - are used.\n\n[arg]* are passed to the command (-c) or script (-r) in sys.argv[1:].\n\nExamples:\n\nidle\n        Open an edit window or shell depending on IDLE\'s configuration.\n\nidle foo.py foobar.py\n        Edit the files, also open a shell if configured to start with shell.\n\nidle -est "Baz" foo.py\n        Run $IDLESTARTUP or $PYTHONSTARTUP, edit foo.py, and open a shell\n        window with the title "Baz".\n\nidle -c "import sys; print sys.argv" "foo"\n        Open a shell window and run the command, passing "-c" in sys.argv[0]\n        and "foo" in sys.argv[1].\n\nidle -d -s -r foo.py "Hello World"\n        Open a shell window, run a startup script, enable the debugger, and\n        run foo.py, passing "foo.py" in sys.argv[0] and "Hello World" in\n        sys.argv[1].\n\necho "import sys; print sys.argv" | idle - "foobar"\n        Open a shell window, run the script piped in, passing \'\' in sys.argv[0]\n        and "foobar" in sys.argv[1].\n'
@@ -1244,8 +1258,7 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'c:deihnr:st:')
     except getopt.error as msg:
-        sys.stderr.write('Error: %s\n' % str(msg))
-        sys.stderr.write(usage_msg)
+        print('Error: %s\n%s' % (msg, usage_msg), file=sys.stderr)
         sys.exit(2)
 
     for o, a in opts:
@@ -1269,7 +1282,7 @@ def main():
             if os.path.isfile(script):
                 pass
             else:
-                print 'No script file: ', script
+                print('No script file: ', script, file=sys.stderr)
                 sys.exit()
             enable_shell = True
         if o == '-s':
@@ -1310,19 +1323,26 @@ def main():
     enable_edit = enable_edit or edit_start
     enable_shell = enable_shell or not enable_edit
     root = Tk(className='Idle')
+    root.withdraw()
+    from idlelib.run import fix_scaling
+    fix_scaling(root)
     icondir = os.path.join(os.path.dirname(__file__), 'Icons')
     if system() == 'Windows':
         iconfile = os.path.join(icondir, 'idle.ico')
         root.wm_iconbitmap(default=iconfile)
-    elif TkVersion >= 8.5:
+    elif TkVersion >= 8.5 and sys.platform != 'darwin':
         ext = '.png' if TkVersion >= 8.6 else '.gif'
         iconfiles = [ os.path.join(icondir, 'idle_%d%s' % (size, ext)) for size in (16, 32, 48) ]
         icons = [ PhotoImage(file=iconfile) for iconfile in iconfiles ]
         root.tk.call('wm', 'iconphoto', str(root), '-default', *icons)
     fixwordbreaks(root)
-    root.withdraw()
+    fix_x11_paste(root)
     flist = PyShellFileList(root)
     macosxSupport.setupApp(root, flist)
+    if macosxSupport.isAquaTk():
+        root.unbind_class('Text', '<B2>')
+        root.unbind_class('Text', '<B2-Motion>')
+        root.unbind_class('Text', '<<PasteSelection>>')
     if enable_edit:
         if not (cmd or script):
             for filename in args[:]:

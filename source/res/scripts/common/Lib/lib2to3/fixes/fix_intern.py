@@ -10,6 +10,13 @@ class FixIntern(fixer_base.BaseFix):
     PATTERN = "\n    power< 'intern'\n           trailer< lpar='('\n                    ( not(arglist | argument<any '=' any>) obj=any\n                      | obj=arglist<(not argument<any '=' any>) any ','> )\n                    rpar=')' >\n           after=any*\n    >\n    "
 
     def transform(self, node, results):
+        if results:
+            obj = results['obj']
+            if obj:
+                if obj.type == self.syms.star_expr:
+                    return
+                if obj.type == self.syms.argument and obj.children[0].value == '**':
+                    return
         syms = self.syms
         obj = results['obj'].clone()
         if obj.type == syms.arglist:

@@ -6,6 +6,7 @@ try:
 except ImportError:
     from StringIO import StringIO as _StringIO
 
+from functools import wraps
 __all__ = ['Error',
  'Packer',
  'Unpacker',
@@ -27,6 +28,18 @@ class ConversionError(Error):
     pass
 
 
+def raise_conversion_error(function):
+
+    @wraps(function)
+    def result(self, value):
+        try:
+            return function(self, value)
+        except struct.error as e:
+            raise ConversionError(e.args[0])
+
+    return result
+
+
 class Packer:
 
     def __init__(self):
@@ -40,9 +53,11 @@ class Packer:
 
     get_buf = get_buffer
 
+    @raise_conversion_error
     def pack_uint(self, x):
         self.__buf.write(struct.pack('>L', x))
 
+    @raise_conversion_error
     def pack_int(self, x):
         self.__buf.write(struct.pack('>l', x))
 
@@ -55,22 +70,25 @@ class Packer:
             self.__buf.write('\x00\x00\x00\x00')
 
     def pack_uhyper(self, x):
-        self.pack_uint(x >> 32 & 4294967295L)
-        self.pack_uint(x & 4294967295L)
+        try:
+            self.pack_uint(x >> 32 & 4294967295L)
+        except (TypeError, struct.error) as e:
+            raise ConversionError(e.args[0])
+
+        try:
+            self.pack_uint(x & 4294967295L)
+        except (TypeError, struct.error) as e:
+            raise ConversionError(e.args[0])
 
     pack_hyper = pack_uhyper
 
+    @raise_conversion_error
     def pack_float(self, x):
-        try:
-            self.__buf.write(struct.pack('>f', x))
-        except struct.error as msg:
-            raise ConversionError, msg
+        self.__buf.write(struct.pack('>f', x))
 
+    @raise_conversion_error
     def pack_double(self, x):
-        try:
-            self.__buf.write(struct.pack('>d', x))
-        except struct.error as msg:
-            raise ConversionError, msg
+        self.__buf.write(struct.pack('>d', x))
 
     def pack_fstring(self, n, s):
         if n < 0:

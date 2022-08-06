@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Tix.py
+import os
+import Tkinter
 from Tkinter import *
-from Tkinter import _flatten, _cnfmerge, _default_root
+from Tkinter import _flatten, _cnfmerge
 if TkVersion < 3.999:
     raise ImportError, 'This version of Tix.py requires Tk 4.0 or higher'
 import _tkinter
@@ -33,7 +35,6 @@ TCL_FILE_EVENTS = 8
 TCL_TIMER_EVENTS = 16
 TCL_IDLE_EVENTS = 32
 TCL_ALL_EVENTS = 0
-import Tkinter, os
 
 class tixCommand:
 
@@ -284,13 +285,14 @@ class TixSubWidget(TixWidget):
 class DisplayStyle:
 
     def __init__(self, itemtype, cnf={}, **kw):
-        master = _default_root
-        if not master and 'refwindow' in cnf:
-            master = cnf['refwindow']
-        elif not master and 'refwindow' in kw:
+        if 'refwindow' in kw:
             master = kw['refwindow']
-        elif not master:
-            raise RuntimeError, 'Too early to create display style: no root window'
+        elif 'refwindow' in cnf:
+            master = cnf['refwindow']
+        else:
+            master = Tkinter._default_root
+            if not master:
+                raise RuntimeError('Too early to create display style: no root window')
         self.tk = master.tk
         self.stylename = self.tk.call('tixDisplayStyle', itemtype, *self._options(cnf, kw))
 
@@ -592,7 +594,9 @@ class HList(TixWidget, XView, YView):
         return self.tk.call(self._w, 'header', 'cget', col, opt)
 
     def header_exists(self, col):
-        return self.tk.call(self._w, 'header', 'exists', col)
+        return self.tk.getboolean(self.tk.call(self._w, 'header', 'exist', col))
+
+    header_exist = header_exists
 
     def header_delete(self, col):
         self.tk.call(self._w, 'header', 'delete', col)

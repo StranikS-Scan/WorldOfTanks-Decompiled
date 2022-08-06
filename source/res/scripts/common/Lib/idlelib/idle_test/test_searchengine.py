@@ -2,7 +2,6 @@
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_searchengine.py
 import re
 import unittest
-from test.test_support import requires
 from Tkinter import BooleanVar, StringVar, TclError
 import tkMessageBox
 from idlelib import SearchEngine as se

@@ -2248,6 +2248,14 @@
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/eastern_warriors	</userString>
     </paint>
+    <paint>
+      <id>	223	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
+      <color>	50 48 28 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/southern_warriors	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -2256,7 +2264,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	BP2021	</name>
+    <name>	Battle Pass	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -2353,6 +2361,30 @@
       <gloss>	0.600000	</gloss>
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/bp2022_3	</userString>
+    </paint>
+    <paint>
+      <id>	337	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	80 48 48 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp9_1	</userString>
+    </paint>
+    <paint>
+      <id>	338	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_04.png	</texture>
+      <color>	110 86 63 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp9_2	</userString>
+    </paint>
+    <paint>
+      <id>	339	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_06.png	</texture>
+      <color>	45 53 45 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/bp9_3	</userString>
     </paint>
     <usages>
       <item>
@@ -3462,6 +3494,33 @@
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/oakwood	</userString>
       <tags>	hiddenInUI styleOnly	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	CN Mid-Autumn Festival	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	118	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	17 3 46 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/cn_mid_autumn_festival_2022	</userString>
+      <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
       <item>

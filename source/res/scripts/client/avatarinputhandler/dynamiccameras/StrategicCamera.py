@@ -10,8 +10,7 @@ import Settings
 import constants
 import math_utils
 from AvatarInputHandler import cameras, aih_global_binding
-from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
-from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
+from BigWorld import StrategicAimingSystem, StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
@@ -128,11 +127,11 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__scrollSmoother.start(self.__camDist)
         self.__enableSwitchers()
         camTarget = Math.MatrixProduct()
-        camTarget.b = self.__aimingSystem.matrix
+        camTarget.b = self.__aimingSystem.matrixProvider
         self.__cam.target = camTarget
         self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
-        BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrix.translation)
+        BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrixProvider.translation)
         BigWorld.player().positionControl.followCamera(True)
         FovExtended.instance().enabled = False
         BigWorld.projection().fov = StrategicCamera.ABSOLUTE_VERTICAL_FOV
@@ -345,7 +344,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def __calcAimOffset(self):
         if not self.isAimOffsetEnabled:
             return Vector2(0.0, 0.0)
-        aimWorldPos = self.__aimingSystem.matrix.applyPoint(Vector3(0, -self.__aimingSystem.height, 0))
+        aimWorldPos = self.__aimingSystem.matrixProvider.applyPoint(Vector3(0, -self.__aimingSystem.height, 0))
         aimOffset = cameras.projectPoint(aimWorldPos)
         return Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))
 

@@ -26,9 +26,9 @@ def writeProjectionSlots(slotDS, slot):
         slotDS.deleteSection('compatibleModels')
     else:
         slotDS.write('compatibleModels', ' '.join(slot.compatibleModels))
-    slotDS.write('position', slot.position)
-    slotDS.write('rotation', slot.rotation)
-    slotDS.write('scale', slot.scale)
+    slotDS.writeVector3('position', slot.position)
+    slotDS.writeVector3('rotation', slot.rotation)
+    slotDS.writeVector3('scale', slot.scale)
     _xml.rewriteBool(slotDS, 'doubleSided', slot.doubleSided, False)
     _xml.rewriteBool(slotDS, 'hiddenForUser', slot.hiddenForUser, False)
     slotDS.write('showOn', slot.showOn)
@@ -56,9 +56,9 @@ def writeAnchorSlots(slotDS, slot):
 def writeEmblemSlots(slotDS, slot):
     if slot.type not in ('attachment', 'sequence', 'paint', 'camouflage', 'style', 'effect', 'projectionDecal', 'fixedProjectionDecal'):
         _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, False)
-        slotDS.write('rayStart', slot.rayStart)
-        slotDS.write('rayEnd', slot.rayEnd)
-        slotDS.write('rayUp', slot.rayUp)
+        slotDS.writeVector3('rayStart', slot.rayStart)
+        slotDS.writeVector3('rayEnd', slot.rayEnd)
+        slotDS.writeVector3('rayUp', slot.rayUp)
     if slot.type in ('fixedEmblem', 'fixedInscription'):
         slotDS.write('emblemId', slot.emblemId)
     if slot.type == 'insigniaOnGun':
@@ -87,11 +87,8 @@ def writeCustomizationSlots(slots, section, subsectionName):
         sectionItems = section.items()
         precedingSectionIndex = getPrecedingSectionIndex(sectionItems, 'customization')
         if precedingSectionIndex is not None:
-            newSection = ResMgr.DataSection().createSection(subsectionName)
-            baseSection = section
-            if isinstance(section, CombinedDataSection):
-                baseSection = section.getPrioritySection()
-            subsection = baseSection.insertSection(newSection, sectionItems[precedingSectionIndex][1])
+            baseSection = section.getPrioritySection() if isinstance(section, CombinedDataSection) else section
+            subsection = baseSection.insertSection(subsectionName, precedingSectionIndex)
         else:
             subsection = section.createSection(subsectionName)
         slots.sort(key=lambda x: x.slotId)

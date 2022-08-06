@@ -126,6 +126,10 @@ class SpawnController(ViewComponentsController, ISpawnController):
         else:
             LOG_WARNING('View has not been found! {}'.format(view))
 
+    @property
+    def viewComponents(self):
+        return self._viewComponents
+
     @sf_battle
     def _app(self):
         return None

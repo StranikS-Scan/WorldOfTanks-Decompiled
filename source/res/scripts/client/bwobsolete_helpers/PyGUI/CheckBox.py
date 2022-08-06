@@ -18,27 +18,27 @@ class CheckBox(Button):
     @staticmethod
     def createInternal(texture, text='', **kwargs):
         c = GUI.Window('')
-        c.materialFX = 'BLEND'
-        c.widthMode = 'CLIP'
-        c.heightMode = 'CLIP'
-        c.horizontalPositionMode = 'CLIP'
-        c.verticalPositionMode = 'CLIP'
+        c.materialFX = GUI.Simple.eMaterialFX.BLEND
+        c.widthMode = GUI.Simple.eSizeMode.CLIP
+        c.heightMode = GUI.Simple.eSizeMode.CLIP
+        c.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        c.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
         box = GUI.Simple(texture)
         box.size = (0, 0)
-        box.horizontalPositionMode = 'CLIP'
-        box.verticalPositionMode = 'CLIP'
-        box.horizontalAnchor = 'LEFT'
+        box.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        box.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        box.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
         box.position.x = -1
-        box.materialFX = 'BLEND'
-        box.widthMode = 'PIXEL'
-        box.heightMode = 'PIXEL'
+        box.materialFX = GUI.Simple.eMaterialFX.BLEND
+        box.widthMode = GUI.Simple.eSizeMode.PIXEL
+        box.heightMode = GUI.Simple.eSizeMode.PIXEL
         box.width = 20
         box.height = 20
         c.addChild(box, 'box')
         label = GUI.Text(text)
-        label.horizontalPositionMode = 'CLIP'
-        label.verticalPositionMode = 'CLIP'
-        label.horizontalAnchor = 'RIGHT'
+        label.horizontalPositionMode = GUI.Simple.ePositionMode.CLIP
+        label.verticalPositionMode = GUI.Simple.ePositionMode.CLIP
+        label.horizontalAnchor = GUI.Simple.eHAnchor.RIGHT
         label.position.x = 1
         label.colour = (128, 128, 128, 255)
         c.addChild(label, 'label')

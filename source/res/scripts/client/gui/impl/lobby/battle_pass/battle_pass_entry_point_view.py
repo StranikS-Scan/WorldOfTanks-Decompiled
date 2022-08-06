@@ -135,10 +135,6 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def freePoints(self):
         return self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0)
 
-    @property
-    def finalReward(self):
-        return self.__battlePass.getRewardType(self.chapterID)
-
     def onPrbEntitySwitched(self):
         self._updateData()
 
@@ -295,8 +291,6 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setHasBattlePass(self.isBought)
             tx.setAnimState(self.__getAnimationState())
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
-            if self.chapterID:
-                tx.setFinalReward(self.finalReward.value)
             if not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType()):
                 tx.setBattleType(getPreQueueName(self._getQueueType(), True))
         self._saveLastState()

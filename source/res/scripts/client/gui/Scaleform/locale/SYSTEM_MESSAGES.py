@@ -179,6 +179,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     SQUAD_NOTVALIDDELETEDFILTER = '#system_messages:squad/notValidDeletedFilter'
     SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
+    SQUAD_NOTVALIDMAXSCOUTDELETED = '#system_messages:squad/notValidMaxScoutDeleted'
     SQUAD_NOTVALIDENQUEUEDATA = '#system_messages:squad/notValidEnqueueData'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
@@ -1253,6 +1254,7 @@ class SYSTEM_MESSAGES(object):
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
     OFFERS_SERVER_ERROR_COOLDOWN = '#system_messages:offers/server_error/COOLDOWN'
     OFFERS_SERVER_ERROR_DISABLED = '#system_messages:offers/server_error/DISABLED'
+    OFFERS_SERVER_ERROR_EXCEPTION = '#system_messages:offers/server_error/EXCEPTION'
     OFFERS_SERVER_ERROR_MULTI_ERROR = '#system_messages:offers/server_error/MULTI_ERROR'
     MISSINGEVENTS_BUTTON = '#system_messages:missingEvents/button'
     MISSINGEVENTS_HEADER = '#system_messages:missingEvents/header'
@@ -1315,12 +1317,6 @@ class SYSTEM_MESSAGES(object):
     PARENTCONTROL_LINKTEXT = '#system_messages:parentControl/linkText'
     RESOURCEWELL_RESOURCESLOADINGERROR = '#system_messages:resourceWell/resourcesLoadingError'
     RESOURCEWELL_RESOURCESRETURNERROR = '#system_messages:resourceWell/resourcesReturnError'
-    FUNRANDOM_NOTIFICATION_PRIMETIME_TITLE = '#system_messages:funRandom/notification/primeTime/title'
-    FUNRANDOM_NOTIFICATION_PRIMETIME = '#system_messages:funRandom/notification/primeTime'
-    FUNRANDOM_NOTIFICATION_AVAILABLE_TITLE = '#system_messages:funRandom/notification/available/title'
-    FUNRANDOM_NOTIFICATION_AVAILABLE = '#system_messages:funRandom/notification/available'
-    FUNRANDOM_NOTIFICATION_NOTSET_TITLE = '#system_messages:funRandom/notification/notSet/title'
-    FUNRANDOM_NOTIFICATION_NOTSET = '#system_messages:funRandom/notification/notSet'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1617,6 +1613,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_NOTVALIDDELETED,
      SQUAD_NOTVALIDDELETEDFILTER,
      SQUAD_NOTVALIDMAXSPGDELETED,
+     SQUAD_NOTVALIDMAXSCOUTDELETED,
      SQUAD_NOTVALIDENQUEUEDATA,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,
@@ -2691,6 +2688,7 @@ class SYSTEM_MESSAGES(object):
      OFFERS_UNAVAILABLE_MANY,
      OFFERS_SERVER_ERROR_COOLDOWN,
      OFFERS_SERVER_ERROR_DISABLED,
+     OFFERS_SERVER_ERROR_EXCEPTION,
      OFFERS_SERVER_ERROR_MULTI_ERROR,
      MISSINGEVENTS_BUTTON,
      MISSINGEVENTS_HEADER,
@@ -2752,13 +2750,7 @@ class SYSTEM_MESSAGES(object):
      PARENTCONTROL_MAINTEXT,
      PARENTCONTROL_LINKTEXT,
      RESOURCEWELL_RESOURCESLOADINGERROR,
-     RESOURCEWELL_RESOURCESRETURNERROR,
-     FUNRANDOM_NOTIFICATION_PRIMETIME_TITLE,
-     FUNRANDOM_NOTIFICATION_PRIMETIME,
-     FUNRANDOM_NOTIFICATION_AVAILABLE_TITLE,
-     FUNRANDOM_NOTIFICATION_AVAILABLE,
-     FUNRANDOM_NOTIFICATION_NOTSET_TITLE,
-     FUNRANDOM_NOTIFICATION_NOTSET)
+     RESOURCEWELL_RESOURCESRETURNERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

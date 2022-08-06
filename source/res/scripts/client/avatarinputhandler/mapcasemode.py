@@ -567,6 +567,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     _PREFERED_POSITION = 0
     _MODE_NAME = 1
     _AIM_MODE = 2
+    _DISTANCE = 3
 
     def __init__(self, dataSection, avatarInputHandler):
         CallbackDelayer.__init__(self)
@@ -580,7 +581,10 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         self.__equipmentID = None
         self.__aimingMode = 0
         self.__aimingModeUserDisabled = False
-        self.__class__.prevCtlMode = [Vector3(0, 0, 0), '', 0]
+        self.__class__.prevCtlMode = [Vector3(0, 0, 0),
+         '',
+         0,
+         None]
         return
 
     def create(self):
@@ -781,9 +785,14 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             return
         if not self.__aimingModeUserDisabled:
             self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
-        pos = self._getPreferedPositionOnQuit()
         arcadeState = None
-        if self.acceptsArcadeState:
+        if self.__aih.ctrlModeName == CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD:
+            pos = prevMode[self._PREFERED_POSITION]
+            if prevMode[self._DISTANCE] is not None:
+                arcadeState = self.__aih.ctrl.camera.cloneState(prevMode[self._DISTANCE])
+        else:
+            pos = self._getPreferedPositionOnQuit()
+        if self.acceptsArcadeState and arcadeState is None:
             arcadeState = self.__aih.ctrl.camera.cloneState()
         self.__aih.onControlModeChanged(prevMode[self._MODE_NAME], preferredPos=pos, aimingMode=self.__aimingMode, saveDist=False, saveZoom=True, arcadeState=arcadeState)
         self.stopCallback(self.__tick)
@@ -820,8 +829,8 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setEquipmentID(equipmentID)
-            isVisible = isinstance(BigWorld.player().inputHandler.ctrl, MapCaseControlModeBase)
-            self.setGUIVisible(isVisible)
+            if not isinstance(BigWorld.player().inputHandler.ctrl, MapCaseControlModeBase):
+                self.setGUIVisible(False)
             return
 
     def __tick(self):
@@ -898,7 +907,11 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
                 pos = camera.aimingSystem.getDesiredShotPoint()
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
-        controlMode.prevCtlMode = [pos, currentMode, inputHandler.ctrl.aimingMode]
+        camDist = arcadeState.camDist if arcadeState else None
+        controlMode.prevCtlMode = [pos,
+         currentMode,
+         inputHandler.ctrl.aimingMode,
+         camDist]
         inputHandler.onControlModeChanged(controlMode.MODE_NAME, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False, arcadeState=arcadeState)
     return
 

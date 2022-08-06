@@ -26,7 +26,7 @@ from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
-from shared_utils import makeTupleByDict, updateDict, first, findFirst
+from shared_utils import makeTupleByDict, updateDict
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 if typing.TYPE_CHECKING:
@@ -117,6 +117,8 @@ class _FileServerSettings(object):
         return self.__getUrl('missions_token_image', size, tokenID)
 
     def getMissionsTokenDescrsUrl(self, langID):
+        if isinstance(langID, unicode):
+            langID = str(langID)
         return self.__getUrl('missions_token_descrs', langID)
 
     def getMissionsDecorationUrl(self, decorationID, size):
@@ -214,6 +216,17 @@ class _Wgnp(namedtuple('_Wgnp', ('enabled', 'url', 'renameApiEnabled'))):
     @classmethod
     def defaults(cls):
         return cls(False, '', False)
+
+
+class _UILogging(namedtuple('_UILogging', ('enabled',))):
+    __slots__ = ()
+
+    def isEnabled(self):
+        return self.enabled
+
+    @classmethod
+    def defaults(cls):
+        return cls(False)
 
 
 class _EULA(namedtuple('_EULA', ('enabled', 'demoAccEnabled', 'steamAccEnabled'))):
@@ -673,9 +686,6 @@ class _crystalRewardsConfig(namedtuple('_crystalRewardsConfig', ('limits', 'rewa
 
         return results
 
-    def isCrystalEarnPossible(self, arenaType):
-        return findFirst(lambda item: item.arenaType == arenaType, self.getRewardInfoData(), None) is not None
-
 
 class _ReactiveCommunicationConfig(object):
     __slots__ = ('__isEnabled', '__url')
@@ -763,7 +773,7 @@ class VehiclePostProgressionConfig(namedtuple('_VehiclePostProgression', ('isPos
 
     @classmethod
     def defaults(cls):
-        return cls(False, frozenset(), frozenset(), frozenset())
+        return cls(False, frozenset(), frozenset(), frozenset)
 
     @property
     def isEnabled(self):
@@ -930,44 +940,28 @@ class ResourceWellConfig(namedtuple('_ResourceWellConfig', ('isEnabled',
         data['rewards'] = {rewardId:makeTupleByDict(_WellRewardConfig, reward) for rewardId, reward in data['rewards'].iteritems()}
 
 
-class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled',
- 'events',
- 'eventID',
- 'peripheryIDs',
- 'seasons',
- 'primeTimes',
- 'cycleTimes',
- 'levels',
- 'forbiddenClassTags',
- 'forbiddenVehTypes',
- 'battleModifiersDescr',
- 'infoPageUrl'))):
+class _BattleMattersConfig(namedtuple('_BattleMattersConfig', ('isEnabled',
+ 'isPaused',
+ 'delayedRewardOfferVisibilityToken',
+ 'delayedRewardOfferCurrencyToken'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, events={}, eventID='', peripheryIDs={}, seasons={}, primeTimes={}, cycleTimes=(), levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set(), battleModifiersDescr=(), infoPageUrl='')
+        defaults = dict(isEnabled=False, isPaused=False, delayedRewardOfferVisibilityToken='BattleMattersEmptyToken', delayedRewardOfferCurrencyToken='BattleMattersEmptyCurrencyToken')
         defaults.update(kwargs)
-        cls.__repackEventConfigs(defaults, defaults.viewkeys())
-        return super(FunRandomConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls(False, {}, '', set(), {}, {}, (), (), set(), set(), (), '')
+        return super(_BattleMattersConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
 
     def replace(self, data):
-        allowedFields = set(self._fields)
+        allowedFields = self._fields
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        self.__repackEventConfigs(dataToUpdate, allowedFields)
         return self._replace(**dataToUpdate)
 
     @classmethod
-    def __repackEventConfigs(cls, data, allowedFields):
-        events = data.get('events', {}).itervalues()
-        eventData = first(sorted(events, key=lambda event: not event.get('isEnabled', False)), {})
-        data.update(((k, eventData[k]) for k in allowedFields & eventData.viewkeys()))
+    def defaults(cls):
+        return cls()
 
 
 class ServerSettings(object):
@@ -981,6 +975,7 @@ class ServerSettings(object):
         self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
         self.__wgcg = _Wgcg.defaults()
         self.__wgnp = _Wgnp.defaults()
+        self.__uiLogging = _UILogging.defaults()
         self.__eula = _EULA.defaults()
         self.__clanProfile = _ClanProfile.defaults()
         self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
@@ -1005,7 +1000,7 @@ class ServerSettings(object):
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
-        self.__funRandomConfig = FunRandomConfig()
+        self.__battleMattersConfig = _BattleMattersConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1026,6 +1021,8 @@ class ServerSettings(object):
             self.__updateWgcg(self.__serverSettings)
         if 'wgnp' in self.__serverSettings:
             self.__updateWgnp(self.__serverSettings)
+        if Configs.UI_LOGGING.value in self.__serverSettings:
+            self.__updateUILogging(self.__serverSettings)
         if 'eula_config' in self.__serverSettings:
             self.__updateEULA(self.__serverSettings)
         if 'clanProfile' in self.__serverSettings:
@@ -1108,8 +1105,8 @@ class ServerSettings(object):
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
         if Configs.RESOURCE_WELL.value in self.__serverSettings:
             self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
-        if Configs.FUN_RANDOM_CONFIG.value in self.__serverSettings:
-            self.__funRandomConfig = makeTupleByDict(FunRandomConfig, self.__serverSettings[Configs.FUN_RANDOM_CONFIG.value])
+        if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
+            self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1126,6 +1123,8 @@ class ServerSettings(object):
             self.__updateWgcg(serverSettingsDiff)
         if 'wgnp' in serverSettingsDiff:
             self.__updateWgnp(serverSettingsDiff)
+        if Configs.UI_LOGGING.value in serverSettingsDiff:
+            self.__updateUILogging(serverSettingsDiff)
         if 'eula_config' in serverSettingsDiff:
             self.__updateEULA(serverSettingsDiff)
         if 'advent_calendar_config' in serverSettingsDiff:
@@ -1182,14 +1181,17 @@ class ServerSettings(object):
             self.__updateVehiclePostProgressionConfig(serverSettingsDiff)
         if Configs.GIFTS_CONFIG.value in serverSettingsDiff:
             self.__updateGiftSystemConfig(serverSettingsDiff)
+        if Configs.BATTLE_MATTERS_CONFIG.value in serverSettingsDiff:
+            self.__updateBattleMatters(serverSettingsDiff)
         if TRADE_IN_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         if Configs.RESOURCE_WELL.value in serverSettingsDiff:
             self.__updateResourceWellConfig(serverSettingsDiff)
-        if Configs.FUN_RANDOM_CONFIG.value in serverSettingsDiff:
-            self.__updateFunRandomConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
+        if Configs.CUSTOMIZATION_QUESTS.value in serverSettingsDiff:
+            key = Configs.CUSTOMIZATION_QUESTS.value
+            self.__serverSettings[key] = serverSettingsDiff[key]
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1225,6 +1227,10 @@ class ServerSettings(object):
     @property
     def wgnp(self):
         return self.__wgnp
+
+    @property
+    def uiLogging(self):
+        return self.__uiLogging
 
     @property
     def eula(self):
@@ -1307,8 +1313,8 @@ class ServerSettings(object):
         return self.__resourceWellConfig
 
     @property
-    def funRandomConfig(self):
-        return self.__funRandomConfig
+    def battleMattersConfig(self):
+        return self.__battleMattersConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1399,9 +1405,6 @@ class ServerSettings(object):
     def isBootcampEnabled(self):
         return self.__getGlobalSetting('isBootcampEnabled', False)
 
-    def isLinkedSetEnabled(self):
-        return self.__getGlobalSetting('isLinkedSetEnabled', False)
-
     def getBootcampBonuses(self):
         return self.__getGlobalSetting('bootcampBonuses', {})
 
@@ -1428,6 +1431,9 @@ class ServerSettings(object):
 
     def getDogTagsConfig(self):
         return self.__getGlobalSetting(DOG_TAGS_CONFIG, {})
+
+    def getCustomizationQuestsConfig(self):
+        return self.__getGlobalSetting(Configs.CUSTOMIZATION_QUESTS.value, {})
 
     def isDogTagEnabled(self):
         return self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enabled', True)
@@ -1515,6 +1521,12 @@ class ServerSettings(object):
 
     def getMaxSPGinSquads(self):
         return self.__getGlobalSetting('maxSPGinSquads', 0)
+
+    def getMaxScoutInSquads(self):
+        return self.__getGlobalSetting('maxScoutInSquads', 0)
+
+    def getMaxScoutInSquadsLevels(self):
+        return self.__getGlobalSetting('maxScoutInSquadsLevels', [])
 
     def getRandomMapsForDemonstrator(self):
         return self.__getGlobalSetting('randomMapsForDemonstrator', {})
@@ -1636,6 +1648,10 @@ class ServerSettings(object):
         cProfile = targetSettings['wgnp']
         self.__wgnp = _Wgnp(cProfile.get('enabled', False), cProfile.get('url', ''), cProfile.get('renameApiEnabled', False))
 
+    def __updateUILogging(self, targetSettings):
+        settings = targetSettings[Configs.UI_LOGGING.value]
+        self.__uiLogging = _UILogging(settings.get('enabled', False))
+
     def __updateEULA(self, targetSettings):
         cProfile = targetSettings['eula_config']
         self.__eula = _EULA(cProfile.get('enabled', False), cProfile.get('demoAccEnabled', False), cProfile.get('steamAccEnabled', False))
@@ -1708,8 +1724,8 @@ class ServerSettings(object):
     def __updateResourceWellConfig(self, diff):
         self.__resourceWellConfig = self.__resourceWellConfig.replace(diff[Configs.RESOURCE_WELL.value])
 
-    def __updateFunRandomConfig(self, serverSettingsDiff):
-        self.__funRandomConfig = self.__funRandomConfig.replace(serverSettingsDiff[Configs.FUN_RANDOM_CONFIG.value])
+    def __updateBattleMatters(self, targetSettings):
+        self.__battleMattersConfig = self.__battleMattersConfig.replace(targetSettings[Configs.BATTLE_MATTERS_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

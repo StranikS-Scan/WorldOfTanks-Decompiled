@@ -17,7 +17,7 @@ class SystemLocale(PyObjectEntity):
         self.unbind()
 
     def getNumberFormat(self, value, formatType=NumberFormatType.INTEGRAL):
-        return self.proxy.getNumberFormat(value, formatType)
+        return self.proxy.getNumberFormat(int(value), formatType)
 
     def getRealFormat(self, value, formatType=RealFormatType.FRACTIONAL):
         return self.proxy.getRealFormat(value, formatType)

@@ -12,7 +12,6 @@ from gui.impl.lobby.veh_post_progression.tooltips.level_tooltip_view import CmpP
 from gui.veh_post_progression.models.progression import PostProgressionAvailability, PostProgressionCompletion
 from gui.veh_post_progression.models.progression_step import PostProgressionStepState
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from uilogging.veh_post_progression.loggers import VehPostProgressionCmpViewLogger
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.bonuses_model import BonusesModel
     from gui.impl.gen.view_models.views.lobby.post_progression.multi_step_model import MultiStepModel
@@ -29,7 +28,6 @@ _MULTI_STEP_STATE_MAP = {PostProgressionStepState.RESTRICTED: StepState.RESTRICT
  PostProgressionStepState.UNLOCKED: StepState.RECEIVED}
 
 class PostProgressionCmpComponentView(PostProgressionBaseComponentView):
-    __viewLogger = VehPostProgressionCmpViewLogger()
     __slots__ = ('onExitAction',)
 
     def __init__(self, layoutID=R.views.lobby.veh_post_progression.VehiclePostProgressionCmpView(), **kwargs):
@@ -49,14 +47,6 @@ class PostProgressionCmpComponentView(PostProgressionBaseComponentView):
             return CmpPairModificationTooltipView(self._vehicle, stepId, modId)
         else:
             return CmpProgressionLevelTooltipView(self._vehicle, stepId) if contentID == R.views.lobby.veh_post_progression.tooltip.PostProgressionLevelTooltipView() and stepId is not None else super(PostProgressionCmpComponentView, self).createToolTipContent(event, contentID)
-
-    def _onLoaded(self, *args, **kwargs):
-        super(PostProgressionCmpComponentView, self)._onLoaded(*args, **kwargs)
-        self.__viewLogger.onViewOpened()
-
-    def _finalize(self):
-        self.__viewLogger.onViewClosed()
-        super(PostProgressionCmpComponentView, self)._finalize()
 
     def _addListeners(self):
         super(PostProgressionCmpComponentView, self)._addListeners()

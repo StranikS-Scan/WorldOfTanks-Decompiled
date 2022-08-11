@@ -17,6 +17,7 @@ from gui.server_events.events_helpers import getLootboxesFromBonuses
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay
 from gui.shared.events import PersonalMissionsEvent
+from gui.wot_anniversary.wot_anniversary_helpers import showMainView, isWotAnniversaryQuest
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -227,6 +228,8 @@ def showMission(eventID, eventType=None):
             prefix = events_helpers.getMarathonPrefix(eventID)
             if prefix is not None:
                 return showMissionsMarathon(marathonPrefix=prefix)
+            if isWotAnniversaryQuest(eventID):
+                return showMainView()
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
         elif quest is not None:

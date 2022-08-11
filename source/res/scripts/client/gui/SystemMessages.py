@@ -72,7 +72,11 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'BattlePassExtraFinish',
  'BattlePassExtraWillEndSoon',
  'ResourceWellStart',
- 'ResourceWellEnd'])
+ 'ResourceWellEnd',
+ 'ChinaLootBoxStart',
+ 'ChinaLootBoxFinish',
+ 'ChinaLootBoxEnabled',
+ 'ChinaLootBoxDisabled'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,

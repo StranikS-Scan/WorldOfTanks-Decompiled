@@ -64,6 +64,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
+    WOT_ANNIVERSARY_STORAGE = 'WOT_ANNIVERSARY_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -102,6 +103,7 @@ class ServerSettingsManager(object):
     BATTLE_COMM = settings_constants.BattleCommStorageKeys
     BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SCORE_PANEL = settings_constants.ScorePanelStorageKeys
+    WOT_ANNIVERSARY = settings_constants.WotAnniversaryStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -172,6 +174,8 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 48)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 6),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 24)}),
+     SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: Section(masks={WOT_ANNIVERSARY.WOT_ANNIVERSARY_INTRO_SHOWED: 0,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_WELCOME_SHOWED: 1}, offsets={}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -989,6 +993,7 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
+         SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1022,6 +1027,10 @@ class ServerSettingsManager(object):
         clearGraphics = clear.get(SETTINGS_SECTIONS.GRAPHICS, 0)
         if graphicsData or clearGraphics:
             settings[SETTINGS_SECTIONS.GRAPHICS] = self._buildSectionSettings(SETTINGS_SECTIONS.GRAPHICS, graphicsData) ^ clearGraphics
+        wotAnniversaryData = data.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, {})
+        clearWotAnniversary = clear.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, 0)
+        if wotAnniversaryData or clearWotAnniversary:
+            settings[SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, wotAnniversaryData) ^ clearWotAnniversary
         aimData = data.get('aimData', {})
         if aimData:
             settings.update(self._buildAimSettings(aimData))

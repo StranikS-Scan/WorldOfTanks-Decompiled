@@ -27,6 +27,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BLUEPRINTS_EXCHANGE_VIEW = 'blueprintsExchangeView'
     RESOURCE_WELL_BROWSER_VIEW = 'resourceWellBrowserView'
     RESOURCE_WELL_VIDEO_VIEW = 'resourceWellVideoView'
+    WOT_ANNIVERSARY_BROWSER_VIEW = 'wotAnniversaryBrowserView'
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'
     LOBBY_MISSION_DETAILS = 'missionDetails'

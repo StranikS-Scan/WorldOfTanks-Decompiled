@@ -179,6 +179,8 @@ SUBTITLES = 'subtitles'
 MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
 NEW_SHOP_TABS = 'newShopTabs'
 IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
+LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
+IS_WOT_ANNIVERSARY_SECTION_VISITED = 'isWotAnniversarySectionVisited'
 QUESTS = 'quests'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
@@ -200,6 +202,14 @@ RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
 RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
+CN_LOOT_BOXES_INTRO_WAS_SHOWN = 'cnLootBoxesIntroWasShown'
+CN_LOOT_BOXES_FINISH_SHOWN = 'cnLootBoxesIntroFinishShown'
+CN_LOOT_BOXES_OPEN_ANIMATION_STATE = 'cnLootBoxesOpenAnimationState'
+CN_LOOT_BOXES_VIEWED_COUNT = 'cnLootBoxesViewedCount'
+WOT_ANNIVERSARY_SECTION = 'wotAnniversarySection'
+WOT_ANNIVERSARY_SEEN_DAILY_QUEST = 'wotAnniversarySeenDailyQuest'
+WOT_ANNIVERSARY_SEEN_WEEKLY_QUEST = 'wotAnniversarySeenWeeklyQuest'
+WOT_ANNIVERSARY_SEEN_EVENT_WILL_END_SOON_NOTIFICATION = 'wotAnniversarySeenEventWillEndSoonNotification'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -950,7 +960,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
                 FUN_RANDOM_LAST_CYCLE_ID: None,
-                SHOW_DEMO_ACC_REGISTRATION: False},
+                SHOW_DEMO_ACC_REGISTRATION: False,
+                WOT_ANNIVERSARY_SECTION: {WOT_ANNIVERSARY_SEEN_DAILY_QUEST: ('', 0),
+                                          WOT_ANNIVERSARY_SEEN_WEEKLY_QUEST: '',
+                                          WOT_ANNIVERSARY_SEEN_EVENT_WILL_END_SOON_NOTIFICATION: False},
+                CN_LOOT_BOXES_INTRO_WAS_SHOWN: False,
+                CN_LOOT_BOXES_VIEWED_COUNT: 0,
+                CN_LOOT_BOXES_OPEN_ANIMATION_STATE: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -966,7 +982,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
                 RECERTIFICATION_FORM_SEEN: False,
-                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
+                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False,
+                                IS_WOT_ANNIVERSARY_SECTION_VISITED: True},
                 VPP_ENTRY_POINT_LAST_SEEN_STEP: {}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
@@ -978,7 +995,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
                      CLAN_NEWS_SEEN: False,
                      RESOURCE_WELL_START_SHOWN: False,
-                     RESOURCE_WELL_END_SHOWN: False},
+                     RESOURCE_WELL_END_SHOWN: False,
+                     CN_LOOT_BOXES_FINISH_SHOWN: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,

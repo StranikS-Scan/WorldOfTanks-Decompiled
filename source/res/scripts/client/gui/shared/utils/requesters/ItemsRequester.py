@@ -5,10 +5,10 @@ from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
 import typing
 import BigWorld
+import async as future_async
 import constants
 import dossiers2
 import nations
-import async as future_async
 from account_shared import LayoutIterator
 from adisp import async, process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY

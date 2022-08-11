@@ -1,21 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import collections
 import logging
 import time
-from typing import TYPE_CHECKING, List, Dict, Optional, Any, Type
-import collections
 import weakref
 from collections import defaultdict
+import typing
 from PlayerEvents import g_playerEvents
-from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY, SwitchState
-from battle_pass_common import FinalReward
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN
+from account_helpers.AccountSettings import CN_LOOT_BOXES_INTRO_WAS_SHOWN, IS_BATTLE_PASS_EXTRA_STARTED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_START_SHOWN, CN_LOOT_BOXES_FINISH_SHOWN
 from adisp import process
 from async import async, await
+from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG
 from collector_vehicle import CollectorVehicleConsts
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -33,35 +32,38 @@ from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.recruit_helper import getAllRecruitsInfo
-from gui.shared import g_eventBus, events
-from gui.shared.formatters import time_formatters, text_styles
+from gui.shared import events, g_eventBus
+from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgcg.clan.contexts import GetClanInfoCtx
-from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
+from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from helpers.events_handler import EventsHandler
+from gui.wot_anniversary.wot_anniversary_helpers import WotAnniversaryEventState
 from helpers import time_utils, i18n, dependency
 from messenger import MessengerEntry
-from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, SCH_CLIENT_MSG_TYPE
+from messenger.formatters import TimeFormatter
+from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, FunRandomButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, FunRandomButtonDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, PsaCoinReminderMessageDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, WGNCPopUpDecorator, ChinaLootBoxesDecorator
+from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController, IFunRandomController
-from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICNLootBoxesController, IEventsNotificationsController, IFunRandomController, IGameSessionController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWotAnniversaryController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
+    from typing import Any, Dict, List, Optional, Type
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
 _logger = logging.getLogger(__name__)
@@ -1260,6 +1262,76 @@ class RecertificationFormStateListener(_NotificationListener):
             return
 
 
+class ChinaLootBoxListener(_NotificationListener, EventsHandler):
+    __slots__ = ('__isActive', '__isIntroWasShown')
+    __cnLootBoxes = dependency.descriptor(ICNLootBoxesController)
+    __START_ENTITY_ID = 0
+
+    def __init__(self):
+        super(ChinaLootBoxListener, self).__init__()
+        self.__isActive = False
+        self.__isIntroWasShown = False
+
+    def start(self, model):
+        super(ChinaLootBoxListener, self).start(model)
+        self._subscribe()
+        self.__isActive = self.__cnLootBoxes.isActive()
+        self.__isIntroWasShown = self.__cnLootBoxes.isIntroWasShown()
+        return True
+
+    def stop(self):
+        self._unsubscribe()
+        super(ChinaLootBoxListener, self).stop()
+
+    def _getEvents(self):
+        return ((self.__cnLootBoxes.onIntroShownChanged, self.__onIntroShownChanged),
+         (self.__cnLootBoxes.onStatusChange, self.__onStatusChange),
+         (self.__cnLootBoxes.onBoxInfoUpdated, self.__onStatusChange),
+         (self.__cnLootBoxes.onAvailabilityChange, self.__onAvailabilityChange))
+
+    def __onIntroShownChanged(self, wasShown):
+        if self.__cnLootBoxes.isActive() and not self.__isIntroWasShown and wasShown:
+            self.__pushStarted()
+            self.__isIntroWasShown = wasShown
+
+    def __onStatusChange(self):
+        isActive = self.__cnLootBoxes.isActive()
+        welcomeWasShown = AccountSettings.getSettings(CN_LOOT_BOXES_INTRO_WAS_SHOWN)
+        wasFinishNotificationShown = AccountSettings.getNotifications(CN_LOOT_BOXES_FINISH_SHOWN)
+        if welcomeWasShown and not isActive and not wasFinishNotificationShown:
+            self.__pushFinished(self.__cnLootBoxes.getBoxesCount())
+        self.__isActive = isActive
+
+    def __onAvailabilityChange(self, previous, current):
+        if previous is not None and previous != current and self.__isActive:
+            if current:
+                self.__pushLootBoxesEnabled()
+            else:
+                self.__pushLootBoxesDisabled()
+        return
+
+    def __pushStarted(self):
+        model = self._model()
+        if model is not None:
+            messageData = {'title': backport.text(R.strings.cn_loot_boxes.notification.eventStart.title()),
+             'text': backport.text(R.strings.cn_loot_boxes.notification.eventStart.text())}
+            model.addNotification(ChinaLootBoxesDecorator(message=messageData, entityID=self.__START_ENTITY_ID, model=model))
+        return
+
+    @staticmethod
+    def __pushFinished(boxesCount):
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.eventFinish.text()) if boxesCount > 0 else '', priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ChinaLootBoxFinish, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.eventFinish.title())})
+        AccountSettings.setNotifications(CN_LOOT_BOXES_FINISH_SHOWN, True)
+
+    @staticmethod
+    def __pushLootBoxesEnabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.ChinaLootBoxEnabled, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.title())})
+
+    @staticmethod
+    def __pushLootBoxesDisabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.ChinaLootBoxDisabled, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.title())})
+
+
 class RecruitReminderlListener(_NotificationListener):
     __loginManager = dependency.descriptor(ILoginManager)
     __bootCampController = dependency.descriptor(IBootcampController)
@@ -1593,6 +1665,45 @@ class FunRandomEventsListener(_NotificationListener, IGlobalListener):
             return
 
 
+class WotAnniversaryListener(_NotificationListener):
+    __wotAnniversaryCtrl = dependency.descriptor(IWotAnniversaryController)
+
+    def start(self, model):
+        result = super(WotAnniversaryListener, self).start(model)
+        if result:
+            self.__wotAnniversaryCtrl.onEventStateChanged += self.__notifyEventStateChanged
+            self.__wotAnniversaryCtrl.onEventWillEndSoon += self.__notifyEventWillEndSoon
+        return result
+
+    def stop(self):
+        self.__wotAnniversaryCtrl.onEventStateChanged -= self.__notifyEventStateChanged
+        self.__wotAnniversaryCtrl.onEventWillEndSoon -= self.__notifyEventWillEndSoon
+        super(WotAnniversaryListener, self).stop()
+
+    def __notifyEventStateChanged(self, state):
+        if state == WotAnniversaryEventState.PAUSE:
+            self.__pushPause()
+        elif state == WotAnniversaryEventState.ENABLED:
+            self.__pushEnabled()
+        elif state == WotAnniversaryEventState.FINISHED:
+            self.__pushFinished()
+
+    def __notifyEventWillEndSoon(self):
+        self.__pushEventWillEndSoon()
+
+    def __pushPause(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_pause.body()), type=SystemMessages.SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
+
+    def __pushEnabled(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_enabled.body()), type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.HIGH)
+
+    def __pushFinished(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_disable.body()), type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM)
+
+    def __pushEventWillEndSoon(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.body()), type=SystemMessages.SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.header())})
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1615,7 +1726,9 @@ class NotificationsListeners(_NotificationListener):
          PsaCoinReminderListener(),
          BattlePassSwitchChapterReminder(),
          ResourceWellListener(),
-         FunRandomEventsListener())
+         FunRandomEventsListener(),
+         ChinaLootBoxListener(),
+         WotAnniversaryListener())
 
     def start(self, model):
         for listener in self.__listeners:

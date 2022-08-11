@@ -32,7 +32,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
-from skeletons.gui.game_control import IBattlePassController, IMapboxController, IResourceWellController, IFunRandomController
+from skeletons.gui.game_control import IBattlePassController, IMapboxController, IResourceWellController, IFunRandomController, ICNLootBoxesController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -1077,3 +1077,43 @@ class FunRandomButtonDecorator(MessageDecorator):
         else:
             tooltipText = backport.text(self.__STR_PATH.disabledButton.disabledEvent.tooltip())
         return makeTooltip(body=tooltipText)
+
+
+class ChinaLootBoxesDecorator(MessageDecorator):
+    __cnLootBoxes = dependency.descriptor(ICNLootBoxesController)
+
+    def __init__(self, entityID, message, model):
+        super(ChinaLootBoxesDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
+        self.__cnLootBoxes.onStatusChange += self.__update
+        self.__cnLootBoxes.onAvailabilityChange += self.__update
+
+    def clear(self):
+        self.__cnLootBoxes.onStatusChange -= self.__update
+        self.__cnLootBoxes.onAvailabilityChange -= self.__update
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateEntityButtons()
+        super(ChinaLootBoxesDecorator, self)._make(formatted, settings)
+
+    def __makeEntity(self, message):
+        return g_settings.msgTemplates.format('ChinaLootBoxStartSysMessage', ctx=message)
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            if self.__cnLootBoxes.isActive() and self.__cnLootBoxes.isLootBoxesAvailable():
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            else:
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            self._entity['buttonsStates'] = {'submit': state}
+            return
+
+    def __update(self, *_):
+        self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return

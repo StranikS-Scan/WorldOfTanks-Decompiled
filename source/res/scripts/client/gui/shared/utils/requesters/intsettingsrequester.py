@@ -81,7 +81,8 @@ class IntSettingsRequester(object):
      MAPBOX_CAROUSEL_FILTER_2: 104,
      'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR,
      FUN_RANDOM_CAROUSEL_FILTER_1: 107,
-     FUN_RANDOM_CAROUSEL_FILTER_2: 108}
+     FUN_RANDOM_CAROUSEL_FILTER_2: 108,
+     'WOT_ANNIVERSARY_STORAGE': constants.USER_SERVER_SETTINGS.WOT_ANNIVERSARY}
 
     def __init__(self):
         self.__isSynced = False

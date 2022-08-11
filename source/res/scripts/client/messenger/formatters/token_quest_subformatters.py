@@ -20,6 +20,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
+from gui.wot_anniversary import wot_anniversary_helpers
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
@@ -674,3 +675,31 @@ class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
     def _isQuestOfThisGroup(cls, questID):
         tmp = cls.__RENEWABLE_SUB_TOKEN_QUEST_PATTERN in questID
         return tmp
+
+
+class WotAnniversaryTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'wotAnniversaryAward'
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            rewards = getRewardsForQuests(message, completedQuestIDs)
+            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
+            if fmt is not None:
+                templateParams = {'text': fmt}
+                settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+                formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+                messageDataList.append(MessageData(formatted, settings))
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return wot_anniversary_helpers.isFinalTokenQuest(questID)

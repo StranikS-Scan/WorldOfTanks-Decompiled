@@ -73,6 +73,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.fun_random_controller import FunRandomController
+    from gui.game_control.cn_lootbox_controller import CNLootBoxesController
+    from gui.entitlements.entitlements_controller import EntitlementsController
+    from gui.game_control.wot_anniversary_controller import WotAnniversaryController as _WotAnniversaryController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -144,4 +147,7 @@ def getGameControllersConfig(manager):
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
+    _config(_interface.ICNLootBoxesController, CNLootBoxesController())
+    _config(_interface.IEntitlementsController, EntitlementsController())
+    _config(_interface.IWotAnniversaryController, _WotAnniversaryController())
     collectGameControllers(_config)

@@ -25,6 +25,7 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.utils import ValidationResult
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
+from gui.wot_anniversary.wot_anniversary_helpers import isWotAnniversaryQuest, WOT_ANNIVERSARY_DAILY_QUEST_PREFIX, WOT_ANNIVERSARY_WEEKLY_QUEST_PREFIX
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST, PM_FLAG, PM_STATE as _PMS
 from personal_missions_config import getQuestConfig
@@ -521,6 +522,14 @@ class DailyEpicTokenQuest(TokenQuest):
 
     def getUserName(self):
         return backport.text(R.strings.quests.dailyQuests.postBattle.genericTitle_epic())
+
+
+class WotAnniversaryQuest(Quest):
+
+    def getUserName(self):
+        if self.getID().startswith(WOT_ANNIVERSARY_DAILY_QUEST_PREFIX):
+            return backport.text(R.strings.wot_anniversary.quest.title.daily())
+        return backport.text(R.strings.wot_anniversary.quest.title.weekly()) if self.getID().startswith(WOT_ANNIVERSARY_WEEKLY_QUEST_PREFIX) else super(WotAnniversaryQuest, self).getUserName()
 
 
 class PersonalQuest(Quest):
@@ -1300,6 +1309,8 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
         questClass = PremiumQuest
     elif isDailyQuest(qID):
         questClass = DailyQuest
+    elif isWotAnniversaryQuest(qID):
+        questClass = WotAnniversaryQuest
     return questClass(qID, data, progress)
 
 

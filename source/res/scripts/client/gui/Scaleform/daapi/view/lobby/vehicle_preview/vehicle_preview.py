@@ -42,6 +42,7 @@ from gui.shared.formatters import getRoleTextWithIcon, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from gui.wot_anniversary.wot_anniversary_helpers import WOT_ANNIVERSARY_REWARDS
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
@@ -75,7 +76,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
  VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW: None,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None,
- VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell'}
+ VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell',
+ WOT_ANNIVERSARY_REWARDS: 'wotAnniversaryRewards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,

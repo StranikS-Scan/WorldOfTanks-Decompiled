@@ -23,6 +23,7 @@ from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, isDailyQuest, isLinkedSet
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
+from gui.wot_anniversary.wot_anniversary_helpers import isWotAnniversaryQuest
 from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from nations import ALLIANCE_TO_NATIONS
@@ -194,7 +195,7 @@ class _EventInfo(EventInfoModel):
          'isSelectable': True,
          'isNew': quest_settings.isNewCommonEvent(self.event),
          'isAvailable': isAvailable,
-         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_TASK}
+         'linkTooltip': self._getTooltipLink()}
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
@@ -256,6 +257,9 @@ class _EventInfo(EventInfoModel):
 
     def _getBonuses(self, svrEvents, bonuses=None):
         return []
+
+    def _getTooltipLink(self):
+        return TOOLTIPS.QUESTS_LINKBTN_WOTANNIVERSARY if isWotAnniversaryQuest(str(self.event.getID())) else TOOLTIPS.QUESTS_LINKBTN_TASK
 
 
 class _QuestInfo(_EventInfo, QuestInfoModel):

@@ -1907,6 +1907,7 @@ class USER_SERVER_SETTINGS:
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
     CONTOUR = 106
+    WOT_ANNIVERSARY = 109
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1915,7 +1916,8 @@ class USER_SERVER_SETTINGS:
      DOG_TAGS,
      GAME_EXTENDED_2,
      BATTLE_HUD,
-     CONTOUR)
+     CONTOUR,
+     WOT_ANNIVERSARY)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -2023,7 +2025,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  104: 'Mapbox carousel filter 2',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
  107: 'Fun Random carousel filter 1',
- 108: 'Fun Random carousel filter 2'}
+ 108: 'Fun Random carousel filter 2',
+ USER_SERVER_SETTINGS.WOT_ANNIVERSARY: 'wot anniversary settings'}
 
 class WG_GAMES:
     TANKS = 'wot'

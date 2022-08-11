@@ -5782,4 +5782,51 @@
     </projection_decal>
     <name>	Iron age	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	774	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_434.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_434_style	</userString>
+      <tags>	styleOnly formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	775	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_435.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_435	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	776	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_444.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_444	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	777	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_436.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_436	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	778	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_443.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_443	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	12th Anniversary	</name>
+  </itemGroup>
 </projection_decals.xml>

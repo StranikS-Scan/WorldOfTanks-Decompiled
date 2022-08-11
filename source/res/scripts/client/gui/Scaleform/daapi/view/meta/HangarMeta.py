@@ -87,3 +87,9 @@ class HangarMeta(View):
 
     def as_setDQWidgetLayoutS(self, lyout):
         return self.flashObject.as_setDQWidgetLayout(lyout) if self._isDAAPIInited() else None
+
+    def as_setChinaLootboxesVisibleS(self, value):
+        return self.flashObject.as_setChinaLootboxesVisible(value) if self._isDAAPIInited() else None
+
+    def as_setEventEntryPointVisibleS(self, value):
+        return self.flashObject.as_setEventEntryPointVisible(value) if self._isDAAPIInited() else None

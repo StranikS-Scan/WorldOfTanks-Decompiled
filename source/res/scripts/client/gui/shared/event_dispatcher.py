@@ -51,6 +51,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getUniqueViewName, getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -61,7 +62,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IFunRandomController
+from skeletons.gui.game_control import IBrowserController, ICNLootBoxesController, IClanNotificationController, IFunRandomController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -796,12 +797,12 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None, callbackOnClose=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None, callbackOnClose=None, parent=None):
     if url:
         if browserParams is None:
             browserParams = {}
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url,
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url,
          'allowRightClick': False,
          'callbackOnLoad': callbackOnLoad,
          'webHandlers': webHandlers,
@@ -1768,3 +1769,30 @@ def showFunRandomInfoPage(funRandomCtrl=None):
         _logger.error('Invalid url to open infoPage about fun random mode')
         return
     showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+
+def showCNLootBoxesWelcomeScreen():
+    cnLootBoxesCtrl = dependency.instance(ICNLootBoxesController)
+    if cnLootBoxesCtrl.isActive() and cnLootBoxesCtrl.isLootBoxesAvailable():
+        from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_welcome_screen import ChinaLootBoxesWelcomeScreenWindow
+        window = ChinaLootBoxesWelcomeScreenWindow()
+        window.load()
+
+
+def showCNLootBoxStorageWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_storage_screen import ChinaLootBoxesStorageScreenWindow
+    window = ChinaLootBoxesStorageScreenWindow()
+    window.load()
+
+
+def showCNLootBoxOpenWindow(boxType, rewards):
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_screen import ChinaLootBoxesOpenBoxScreenWindow
+    window = ChinaLootBoxesOpenBoxScreenWindow(boxType=boxType, rewards=rewards)
+    window.load()
+
+
+def showCNLootBoxOpenErrorWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_error_view import ChinaLootBoxesOpenBoxErrorWindow
+    window = ChinaLootBoxesOpenBoxErrorWindow()
+    window.load()
+    SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.lootboxes.open.server_error.DISABLED()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.Error)

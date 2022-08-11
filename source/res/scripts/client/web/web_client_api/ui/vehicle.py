@@ -537,13 +537,15 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
+    def _getVehicleStylePreviewReturnAlias(self, cmd):
+        return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr or 'hangar')())
+
     def __showStylePreview(self, vehicleCD, cmd):
         styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
             showStyle = _getStylePreviewShowFunc(styleInfo, cmd.price)
-            descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
-            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params)
+            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=self._getVehicleStylePreviewReturnAlias(cmd), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params)
             return True
         else:
             return False

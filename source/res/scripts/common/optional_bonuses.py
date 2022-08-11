@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import random
 import copy
+import random
 import time
-from typing import Optional, Dict
+from collections import defaultdict
+from typing import Dict, Optional
 from account_shared import getCustomizationItem
-from soft_exception import SoftException
-from items import tankmen
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
+from soft_exception import SoftException
 
 def _packTrack(track):
     result = []
@@ -543,14 +542,14 @@ class ProbabilityVisitor(NodeVisitor):
         limitIDs, bonusNodes = values
         acceptor = self.__nodeAcceptor
         shouldVisitNodes = acceptor.getNodesForVisit(limitIDs)
-        probablitiesStage = acceptor.getCurrentProbabilityStage()
+        probabilitiesStage = acceptor.getCurrentProbabilityStage()
         useBonusProbability = acceptor.getUseBonusProbability()
         if shouldVisitNodes:
             check = lambda _, nodeLimitIDs: nodeLimitIDs and nodeLimitIDs.intersection(shouldVisitNodes)
         else:
             check = lambda probability, _: probability > rand
         for i, (probabilities, bonusProbability, nodeLimitIDs, bonusValue) in enumerate(bonusNodes):
-            probability = probabilities[probablitiesStage]
+            probability = probabilities[probabilitiesStage]
             if check(bonusProbability if useBonusProbability else probability, nodeLimitIDs):
                 selectedIdx = i
                 selectedValue = bonusValue
@@ -560,13 +559,14 @@ class ProbabilityVisitor(NodeVisitor):
 
         isAcceptable = acceptor.isAcceptable
         if not isAcceptable(selectedValue):
-            availableBonusNodes = []
-            sumOfAvailableProbabilities = 0
-            sumOfPreviousProbabilities = 0
+            probSum, nodes = range(2)
+            availableBonuses = defaultdict(lambda : {probSum: 0,
+             nodes: []})
+            sumOfPreviousProbabilities = 0.0
             previousOwnProbability = 0.0
             canUsePrevInsteadOfZeroProbability = False
             for index, (probabilities, bonusProbability, _, bonusValue) in enumerate(bonusNodes):
-                ownProbability = bonusProbability if useBonusProbability else probabilities[probablitiesStage]
+                ownProbability = bonusProbability if useBonusProbability else probabilities[probabilitiesStage]
                 if ownProbability != 0.0:
                     ownProbability, sumOfPreviousProbabilities = ownProbability - sumOfPreviousProbabilities, ownProbability
                 if ownProbability != 0.0:
@@ -577,30 +577,36 @@ class ProbabilityVisitor(NodeVisitor):
                     probability = previousOwnProbability
                 else:
                     continue
-                if index != selectedIdx and bonusValue.get('properties', {}).get('compensation', False) and isAcceptable(bonusValue):
-                    sumOfAvailableProbabilities += probability
-                    availableBonusNodes.append((index, probability, bonusValue))
+                bonusValueProps = bonusValue.get('properties', {})
+                isSameIndex = index == selectedIdx
+                isCompensation = bonusValueProps.get('compensation', False)
+                if not isSameIndex and isCompensation and isAcceptable(bonusValue):
+                    priority = bonusValueProps.get('priority', 0)
+                    availableBonuses[priority][probSum] += probability
+                    availableBonuses[priority][nodes].append((index, probability, bonusValue))
                     canUsePrevInsteadOfZeroProbability = False
 
-            if not availableBonusNodes:
+            highPriority = min(availableBonuses) if availableBonuses else 0
+            preferred = availableBonuses[highPriority]
+            if not preferred[nodes]:
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
                 if not isAcceptable(selectedValue, False) or shouldCompensated:
                     for i in xrange(len(bonusNodes)):
                         self.__trackChoice(False)
 
                     return
-            elif len(availableBonusNodes) == 1:
-                selectedIdx, _, selectedValue = availableBonusNodes[0]
+            elif len(preferred[nodes]) == 1:
+                selectedIdx, _, selectedValue = availableBonuses[highPriority][nodes][0]
             else:
-                randomValue = random.random() * sumOfAvailableProbabilities
+                randomValue = random.random() * preferred[probSum]
                 sumOfPreviousProbabilities = 0
-                for bonusNode in availableBonusNodes:
+                for bonusNode in preferred[nodes]:
                     sumOfPreviousProbabilities += bonusNode[1]
-                    if randomValue < sumOfPreviousProbabilities:
+                    if randomValue <= sumOfPreviousProbabilities:
                         selectedIdx, _, selectedValue = bonusNode
                         break
                 else:
-                    raise SoftException('Unreachable code, oneof probability bug, random value: {}, available bonus nodes: {}'.format(randomValue, availableBonusNodes))
+                    raise SoftException('Unreachable code, oneof probability bug, random value: {}, available bonus nodes: {}'.format(randomValue, preferred[nodes]))
 
         for i in xrange(selectedIdx):
             self.__trackChoice(False)
@@ -645,16 +651,18 @@ class StripVisitor(NodeVisitor):
         def copyMerger(storage, name, value, isLeaf):
             storage[name] = value
 
-    def __init__(self):
+    def __init__(self, needProbabilitiesInfo=False):
+        self.__needProbabilitiesInfo = needProbabilitiesInfo
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([-1],
+            strippedValues.append(([probability if needProbabilitiesInfo else -1],
              -1,
              None,
              stippedValue))
@@ -664,10 +672,11 @@ class StripVisitor(NodeVisitor):
 
     def onAllOf(self, storage, values):
         strippedValues = []
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([-1],
+            strippedValues.append(([probability if needProbabilitiesInfo else -1],
              -1,
              None,
              stippedValue))

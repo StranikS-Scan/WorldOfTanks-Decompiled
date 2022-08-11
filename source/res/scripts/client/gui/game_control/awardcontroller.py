@@ -59,12 +59,14 @@ from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, 
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.wot_anniversary import wot_anniversary_helpers
+from gui.wot_anniversary.wot_anniversary_helpers import showWotAnniversaryAwardWindow
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
@@ -193,7 +195,8 @@ class AwardController(IAwardController, IGlobalListener):
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
          LinkedSetQuestsHandler(self),
-         ResourceWellRewardHandler(self)]
+         ResourceWellRewardHandler(self),
+         WotAnniversaryQuestsHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1739,3 +1742,23 @@ class ResourceWellRewardHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))
+
+
+class WotAnniversaryQuestsHandler(MultiTypeServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(WotAnniversaryQuestsHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = message.data.copy()
+        finalRewardQuestIDs = []
+        for questID in data.get('completedQuestIDs', set()):
+            if wot_anniversary_helpers.isFinalTokenQuest(questID):
+                finalRewardQuestIDs.append(questID)
+
+        for questID in finalRewardQuestIDs:
+            questData = data.get('detailedRewards', {}).get(questID, {})
+            questDataFiltered = {key:val for key, val in questData.items() if key in ('vehicles', 'customizations')}
+            if questDataFiltered:
+                showWotAnniversaryAwardWindow(questID, questDataFiltered, useQueue=True)

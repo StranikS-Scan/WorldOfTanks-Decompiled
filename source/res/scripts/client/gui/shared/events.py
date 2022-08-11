@@ -776,3 +776,7 @@ class GunMarkerEvent(HasCtxEvent):
 class ResourceWellLoadingViewEvent(HasCtxEvent):
     LOAD = 'load'
     DESTROY = 'destroy'
+
+
+class WotAnniversaryEvent(HasCtxEvent):
+    ON_WIDGET_STATE_UPDATED = 'onWidgetStateUpdated'

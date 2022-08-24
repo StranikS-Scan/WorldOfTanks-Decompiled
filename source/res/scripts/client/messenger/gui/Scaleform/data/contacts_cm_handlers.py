@@ -6,6 +6,7 @@ from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHan
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared import events, EVENT_BUS_SCOPE
+from messenger import normalizeGroupId
 from messenger.m_constants import USER_TAG
 
 class CONTACTS_ACTION_ID(object):
@@ -34,7 +35,7 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return [self._makeItem(CONTACTS_ACTION_ID.EDIT_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_EDITGROUP), self._makeItem(CONTACTS_ACTION_ID.REMOVE_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_REMOVEGROUP)]
 
     def _initFlashValues(self, ctx):
-        self.targetGroupName = ctx.targetGroupName
+        self.targetGroupName = normalizeGroupId(ctx.targetGroupName)
 
     def _clearFlashValues(self):
         self.targetGroupName = None
@@ -73,7 +74,7 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
 
     def _initFlashValues(self, ctx):
         super(PlayerContactsCMHandler, self)._initFlashValues(ctx)
-        self.targetGroupName = ctx.targetGroupName
+        self.targetGroupName = normalizeGroupId(ctx.targetGroupName)
         self.showUserNotes = getattr(ctx, 'showUserNotes', True)
 
     def _clearFlashValues(self):

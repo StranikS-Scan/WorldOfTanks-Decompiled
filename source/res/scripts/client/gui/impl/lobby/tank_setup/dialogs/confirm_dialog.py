@@ -44,6 +44,10 @@ class TankSetupConfirmDialog(BuyAndExchange):
     def viewModel(self):
         return self.getViewModel()
 
+    @property
+    def items(self):
+        return self.__items
+
     def _onLoading(self, *args, **kwargs):
         super(TankSetupConfirmDialog, self)._onLoading(*args, **kwargs)
         vehicle = self._itemsCache.items.getVehicle(self.__vehicleInvID)
@@ -117,3 +121,15 @@ class TankSetupExitConfirmDialog(TankSetupConfirmDialog):
     def _onCancelClicked(self):
         self.__rollBack = True
         self._onCancel()
+
+    def _onInventoryResync(self, *args, **kwargs):
+        if self.__isNeedToCheckCount() and self.__isChangedInInventory():
+            self._onCancel()
+            return
+        super(TankSetupExitConfirmDialog, self)._onInventoryResync(*args, **kwargs)
+
+    def __isNeedToCheckCount(self):
+        return self._itemsType == _SECTION_TO_FITTING_TYPE[TankSetupConstants.OPT_DEVICES]
+
+    def __isChangedInInventory(self):
+        return any((cachedItem.isInInventory != self._itemsCache.items.getItemByCD(cachedItem.intCD).isInInventory for cachedItem in self.items))

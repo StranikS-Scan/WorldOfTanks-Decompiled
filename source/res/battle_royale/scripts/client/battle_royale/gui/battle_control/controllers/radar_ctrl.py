@@ -134,7 +134,7 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
     @staticmethod
     def _getRadarCooldownTotalTime():
         avatar = BigWorld.player()
-        return avatar.vehicle.typeDescriptor.radio.radarCooldown
+        return avatar.vehicle.typeDescriptor.radio.radarCooldown if avatar.vehicle else 0
 
     def _iterAllListeners(self):
         for view in self._viewComponents:
@@ -187,7 +187,7 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
     @staticmethod
     def __getRadarRadius():
         avatar = BigWorld.player()
-        return avatar.vehicle.typeDescriptor.radio.radarRadius
+        return avatar.vehicle.typeDescriptor.radio.radarRadius if avatar.vehicle else 0
 
     def __onRadarInfoReceived(self, radarInfo):
         if len(radarInfo) != 3:

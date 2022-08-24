@@ -863,10 +863,10 @@
       <terrainResistance>	1.1 1.5 2.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	25	</rotationSpeed>
+      <rotationSpeed>	29	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1928,7 +1928,7 @@
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1940,8 +1940,8 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9.4	</reloadTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	9	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1962,7 +1962,7 @@
             </armor_9>
             <gun>	45	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_04.model	</undamaged>

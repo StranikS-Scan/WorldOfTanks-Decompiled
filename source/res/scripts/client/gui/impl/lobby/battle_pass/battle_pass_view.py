@@ -136,6 +136,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         elif not self.__isIntroVideoIsShowing:
             self.__showExtraVideoIfNeeded()
 
+    @nextTick
     def __showExtraVideoIfNeeded(self):
         if not self.__hasTrueInBPStorage(_EXTRA_VIDEO_SHOWN) and self.__battlePassController.hasExtra():
             _showOverlayVideo(getExtraIntroVideoURL())

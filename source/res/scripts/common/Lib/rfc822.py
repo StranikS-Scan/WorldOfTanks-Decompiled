@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/rfc822.py
-# Compiled at: 2017-01-30 18:31:44
+# Compiled at: 2073-06-18 08:40:35
 r"""RFC 2822 message manipulation.
 
 Note: This is only a very rough sketch of a full RFC-822 parser; in particular

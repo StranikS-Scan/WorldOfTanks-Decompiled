@@ -36,6 +36,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
     def _populate(self):
         super(RetrainCrewWindow, self)._populate()
         g_clientUpdateManager.addMoneyCallback(self.__updateDataCallBack)
+        g_clientUpdateManager.addCallbacks({'inventory.1.compDescr': self.__onVehiclesInInventoryUpdate})
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.__updateAllData()
 
@@ -156,3 +157,8 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
             self.destroy()
         else:
             self.__updateAllData()
+
+    def __onVehiclesInInventoryUpdate(self, diff):
+        if self.__vehicle.invID in diff and diff[self.__vehicle.invID] is None:
+            self.onWindowClose()
+        return

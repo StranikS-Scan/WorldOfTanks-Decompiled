@@ -26,5 +26,8 @@ class PlayerLogin(BigWorld.Entity):
     def handleKeyEvent(self, event):
         return False
 
+    def setPeripheryRoutingGroup(self, peripheryRoutingGroup, availableHosts):
+        g_playerEvents.onPeripheryRoutingGroupReceived(peripheryRoutingGroup, availableHosts)
+
 
 Login = PlayerLogin

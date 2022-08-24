@@ -58,6 +58,7 @@ class ConnectionData(object):
         self.inactivityTimeout = None
         self.publicKeyPath = None
         self.clientContext = None
+        self.peripheryRoutingGroup = None
         return
 
 
@@ -70,11 +71,13 @@ class ConnectionManager(IConnectionManager):
         self.__connectionStatus = LOGIN_STATUS.NOT_SET
         self.__lastLoginName = None
         self.__hostItem = g_preDefinedHosts._makeHostItem('', '', '')
+        self.__availableHosts = None
         self.__retryConnectionPeriod = _MIN_RECONNECTION_TIMEOUT
         self.__retryConnectionCallbackID = None
         self.__connectionInProgress = False
         g_playerEvents.onKickWhileLoginReceived += self.__processKick
         g_playerEvents.onLoginQueueNumberReceived += self.__processQueue
+        g_playerEvents.onPeripheryRoutingGroupReceived += self.setPeripheryRoutingGroup
         self.__eManager = EventManager()
         self.onLoggedOn = Event(self.__eManager)
         self.onConnected = Event(self.__eManager)
@@ -83,9 +86,11 @@ class ConnectionManager(IConnectionManager):
         self.onKickedFromServer = Event(self.__eManager)
         self.onKickWhileLoginReceived = Event(self.__eManager)
         self.onQueued = Event(self.__eManager)
+        self.onPeripheryRoutingGroupUpdated = Event(self.__eManager)
         return
 
     def fini(self):
+        g_playerEvents.onPeripheryRoutingGroupReceived -= self.setPeripheryRoutingGroup
         g_playerEvents.onKickWhileLoginReceived -= self.__processKick
         g_playerEvents.onLoginQueueNumberReceived -= self.__processQueue
         self.__eManager.clear()
@@ -181,6 +186,8 @@ class ConnectionManager(IConnectionManager):
             password = ''
         else:
             password = pwd_token.generate(password)
+        if 'allowed_peripheries' in params:
+            g_preDefinedHosts.setAvailablePeripheriesByRoutingGroup([ int(x) for x in params['allowed_peripheries'].split() if x.isdigit() ])
         self.__connectionData.username = username_
         self.__connectionData.password = password
         self.__connectionData.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT
@@ -266,6 +273,25 @@ class ConnectionManager(IConnectionManager):
     def connectionMethod(self):
         return self.__connectionMethod
 
+    @property
+    def peripheryRoutingGroup(self):
+        return self.__connectionData.peripheryRoutingGroup
+
+    @property
+    def availableHosts(self):
+        if self.peripheryRoutingGroup is not None and self.__availableHosts is not None:
+            return [ p for p in g_preDefinedHosts.peripheries() if p.peripheryID in self.__availableHosts ]
+        else:
+            return g_preDefinedHosts.hosts()
+
+    def isAvailablePeriphery(self, peripheryID=None):
+        if self.__connectionData.peripheryRoutingGroup is None or self.__availableHosts is None:
+            return True
+        else:
+            if peripheryID is None:
+                peripheryID = self.peripheryID
+            return peripheryID in self.__availableHosts
+
     def disconnect(self):
         BigWorld.disconnect()
 
@@ -290,3 +316,9 @@ class ConnectionManager(IConnectionManager):
 
     def setLastLogin(self, email):
         self.__lastLoginName = email
+
+    def setPeripheryRoutingGroup(self, routingGroup, availableHosts):
+        self.__connectionData.peripheryRoutingGroup = routingGroup
+        self.__availableHosts = availableHosts
+        g_preDefinedHosts.setAvailablePeripheriesByRoutingGroup(availableHosts)
+        self.onPeripheryRoutingGroupUpdated()

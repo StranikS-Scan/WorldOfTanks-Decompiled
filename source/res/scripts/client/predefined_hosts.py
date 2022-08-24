@@ -307,6 +307,7 @@ class _PreDefinedHostList(object):
         self.__csisAction = CSIS_ACTION.DEFAULT
         self.__recommended = []
         self.__pingRequester = _PingRequester(self.__onPingPerformed)
+        self.__availablePeripheriesByRoutingGroup = []
         return
 
     def fini(self):
@@ -314,6 +315,7 @@ class _PreDefinedHostList(object):
         self._urlMap.clear()
         self._nameMap.clear()
         self._peripheryMap.clear()
+        self.__availablePeripheriesByRoutingGroup = None
         self._isDataLoaded = False
         self.__csisResponse.clear()
         self.__csisUrl = ''
@@ -548,6 +550,17 @@ class _PreDefinedHostList(object):
     def isRoamingPeriphery(self, peripheryID):
         return peripheryID not in [ p.peripheryID for p in self.peripheries() ]
 
+    def setAvailablePeripheriesByRoutingGroup(self, availablePeripheries):
+        if availablePeripheries is None:
+            availablePeripheries = []
+        self.__availablePeripheriesByRoutingGroup = availablePeripheries
+        for item in self.__recommended:
+            if item[0].peripheryID not in self.__availablePeripheriesByRoutingGroup:
+                self.__recommended = []
+                break
+
+        return
+
     def _makeHostItem(self, name, shortName, url, urlToken='', urlIterator=None, keyPath=None, areaID=None, peripheryID=0):
         if not shortName:
             shortName = name
@@ -556,13 +569,17 @@ class _PreDefinedHostList(object):
     def _determineRecommendHost(self):
         defAvail = HOST_AVAILABILITY.NOT_AVAILABLE
         csisResGetter = self.__csisResponse.get
-        queryResult = [ (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)) for host in self.peripheries() ]
+        if self.__availablePeripheriesByRoutingGroup:
+            peripheries = [ host for host in self.peripheries() if host.peripheryID in self.__availablePeripheriesByRoutingGroup ]
+        else:
+            peripheries = self.peripheries()
+        queryResult = [ (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)) for host in peripheries ]
         self.__recommended = [ item for item in queryResult if item[2] == HOST_AVAILABILITY.RECOMMENDED ]
         if not self.__recommended:
             self.__recommended = [ item for item in queryResult if item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED ]
         recommendLen = len(self.__recommended)
         if not recommendLen:
-            if len(queryResult) > 1:
+            if queryResult:
                 LOG_DEBUG('List of recommended is empty. Gets host by ping')
                 self.__recommended = self.__filterRecommendedByPing(queryResult)
                 LOG_DEBUG('Recommended by ping', self.__recommended)

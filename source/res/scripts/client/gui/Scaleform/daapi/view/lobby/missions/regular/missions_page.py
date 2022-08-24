@@ -17,7 +17,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import checkEventExist
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import HIDE_DONE, HIDE_UNAVAILABLE
 from gui.Scaleform.daapi.view.lobby.missions.regular import group_packers
-from gui.Scaleform.daapi.view.lobby.missions.regular.sound_constants import TASKS_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.missions.regular.sound_constants import TASKS_SOUND_SPACE, SOUNDS
 from gui.Scaleform.daapi.view.meta.MissionsListViewBaseMeta import MissionsListViewBaseMeta
 from gui.Scaleform.daapi.view.meta.MissionsPageMeta import MissionsPageMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
@@ -85,7 +85,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     _COMMON_SOUND_SPACE = TASKS_SOUND_SPACE
     __sound_env__ = LobbySubViewEnv
-    __VOICED_TABS = {QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS: (backport.sound(R.sounds.ev_mapbox_enter()), backport.sound(R.sounds.ev_mapbox_exit()))}
+    __VOICED_TABS = {QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS: (backport.sound(R.sounds.ev_mapbox_enter()), backport.sound(R.sounds.ev_mapbox_exit())),
+     QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS: (backport.sound(R.sounds.bm_enter()), backport.sound(R.sounds.bm_exit()))}
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsController = dependency.descriptor(IEventBoardController)
@@ -201,6 +202,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__updateHeader()
         self.__tryOpenMissionDetails()
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_ACTIVATE), EVENT_BUS_SCOPE.LOBBY)
+        if self.__currentTabAlias not in self.__VOICED_TABS:
+            self.soundManager.playSound(SOUNDS.ENTER)
         return
 
     def _invalidate(self, ctx=None):

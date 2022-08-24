@@ -7,6 +7,7 @@ import time
 import types
 from Queue import Queue
 from collections import defaultdict, deque, OrderedDict
+from copy import copy
 from itertools import islice
 import typing
 import ArenaType
@@ -409,6 +410,7 @@ class ServerRebootCancelledFormatter(ServiceChannelFormatter):
 
 class FormatSpecialReward(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleMattersController = dependency.descriptor(IBattleMattersController)
 
     def getString(self, message):
         formattedItems = self.__formattedItems(message)
@@ -417,6 +419,7 @@ class FormatSpecialReward(object):
     def __formattedItems(self, message):
         data = message.data
         itemsNames = []
+        data = self.__extractExcludedItems(data)
         itemsNames.extend(self.__getCrewBookNames(data.get(u'items', {})))
         itemsNames.extend(self.__getBlueprintNames(data.get(u'blueprints', {})))
         return None if not itemsNames else g_settings.htmlTemplates.format(u'specialRewardItems', ctx={u'names': u'<br/>'.join(itemsNames)})
@@ -452,6 +455,24 @@ class FormatSpecialReward(object):
             fragmentsCount = backport.getIntegralFormat(universalFragments)
             result.append(backport.text(R.strings.messenger.serviceChannelMessages.specialReward.intelligenceBlueprints(), fragmentsCount=fragmentsCount))
         return result
+
+    def __extractExcludedItems(self, data):
+        excludeFilters = (self.__battleMattersController.isBattleMattersQuestID,)
+        excludedQuests = (qID for qID in data.get(u'completedQuestIDs', set()) if any((excludeFilter(qID) for excludeFilter in excludeFilters)))
+        processingTypes = (u'blueprints', u'items')
+        resultData = {rewardType:copy(data.get(rewardType, {})) for rewardType in processingTypes}
+        for rewardType in processingTypes:
+            for questID in excludedQuests:
+                rewards = data[u'detailedRewards'][questID].get(rewardType, {})
+                for k, v in rewards.iteritems():
+                    resultData[rewardType][k] -= v
+                    if resultData[rewardType][k] <= 0:
+                        resultData[rewardType].pop(k)
+
+            if not resultData[rewardType]:
+                resultData.pop(rewardType)
+
+        return resultData
 
 
 class BattleResultsFormatter(WaitItemsSyncFormatter):
@@ -905,9 +926,12 @@ class AchievementFormatter(ServiceChannelFormatter):
 
 
 class CurrencyUpdateFormatter(ServiceChannelFormatter):
-    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction(),
+    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.integratedAuction(),
      2524: R.strings.messenger.serviceChannelMessages.currencyUpdate.battlepass()}
     _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
+    _FREE_XP = u'freeXp'
+    _CURRENCY_CODES_MAP = {CURRENCIES_CONSTANTS.FREE_XP: _FREE_XP}
+    _CURRENCY_TO_STYLE = {CURRENCIES_CONSTANTS.FREE_XP: text_styles.expText}
 
     def format(self, message, *args):
         data = message.data
@@ -916,20 +940,24 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
         transactionTime = data[u'date']
         emitterID = data.get(u'emitterID')
         if currencyCode and amountDelta and transactionTime:
+            iconCurrencyCode = self._CURRENCY_CODES_MAP.get(currencyCode, currencyCode)
             xmlKey = u'currencyUpdate'
             formatted = g_settings.msgTemplates.format(xmlKey, ctx={u'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
              u'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
              u'currency': self.__getCurrencyString(currencyCode, amountDelta),
-             u'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={u'icon': currencyCode.title() + u'Icon'})
+             u'amount': self.__getCurrencyStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={u'icon': iconCurrencyCode.title() + u'Icon'})
             return [MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [MessageData(None, None)]
 
     def __ifPlatformCurrency(self, currencyCode):
-        return currencyCode not in Currency.ALL
+        return currencyCode not in Currency.ALL + (CURRENCIES_CONSTANTS.FREE_XP,)
 
     def __getCurrencyString(self, currencyCode, amountDelta):
         return backport.text(R.strings.messenger.platformCurrencyMsg.dyn(u'debited' if amountDelta < 0 else u'received').dyn(currencyCode)()) if self.__ifPlatformCurrency(currencyCode) else backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn(u'debited' if amountDelta < 0 else u'received').dyn(currencyCode)())
+
+    def __getCurrencyStyle(self, currencyCode):
+        return self._CURRENCY_TO_STYLE.get(currencyCode, getStyle(currencyCode))
 
 
 class GiftReceivedFormatter(ServiceChannelFormatter):

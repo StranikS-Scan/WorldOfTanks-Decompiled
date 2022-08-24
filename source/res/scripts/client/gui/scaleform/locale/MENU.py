@@ -111,6 +111,7 @@ class MENU(object):
     LOGIN_STATUS_SOCIAL_SESSION_END = '#menu:login/status/SOCIAL_SESSION_END'
     LOGIN_STATUS_ACCOUNTNOTREADY = '#menu:login/status/accountNotReady'
     LOGIN_STATUS_VERSIONMISMATCH = '#menu:login/status/versionMismatch'
+    LOGIN_STATUS_ACCESSFORBIDDENTOPERIPHERY = '#menu:login/status/accessForbiddenToPeriphery'
     LOGIN_STATUS_CENTERRESTART = '#menu:login/status/centerRestart'
     LOGIN_STATUS_CLIENT_SERVER_VERSIONS_ARE_DIFFERENT = '#menu:login/status/CLIENT_SERVER_VERSIONS_ARE_DIFFERENT'
     LOADING_GAME = '#menu:loading/game'

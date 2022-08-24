@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/socket.py
-# Compiled at: 2017-04-14 06:27:48
+# Compiled at: 2073-08-28 07:13:12
 """This module provides socket operations and some related functions.
 On Unix, it supports IP (Internet Protocol) and Unix domain sockets.
 On other systems, it only supports IP. Functions specific for a

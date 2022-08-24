@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.meta.ContactsTreeComponentMeta import ContactsTree
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.contacts_data_provider import ContactsDataProvider
 from messenger.gui.Scaleform.view.lobby import ACCOUNT_NAME_MIN_CHARS_LENGTH, ACCOUNT_NAME_MAX_CHARS_LENGTH
+from messenger import normalizeGroupId
 import Event
 
 class ContactsTreeComponent(ContactsTreeComponentMeta):
@@ -20,7 +21,7 @@ class ContactsTreeComponent(ContactsTreeComponentMeta):
         return self._mainDP
 
     def onGroupSelected(self, mainGroup, groupData):
-        groupName = groupData.groupName
+        groupName = normalizeGroupId(groupData.groupName)
         self._mainDP.toggleGroup(mainGroup, groupName)
         self.onGroupToggled(mainGroup, groupName, not groupData.currentOpened)
 

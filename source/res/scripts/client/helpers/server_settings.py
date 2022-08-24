@@ -964,6 +964,24 @@ class _BattleMattersConfig(namedtuple('_BattleMattersConfig', ('isEnabled',
         return cls()
 
 
+class PeripheryRoutingConfig(namedtuple('_PeripheryRoutingConfig', ('isEnabled', 'peripheryRoutingGroups'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryRoutingGroups={})
+        defaults.update(kwargs)
+        return super(PeripheryRoutingConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls({})
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1001,6 +1019,7 @@ class ServerSettings(object):
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
+        self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1107,6 +1126,8 @@ class ServerSettings(object):
             self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
+        if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
+            self.__peripheryRoutingConfig = makeTupleByDict(PeripheryRoutingConfig, self.__serverSettings[Configs.PERIPHERY_ROUTING_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1187,6 +1208,8 @@ class ServerSettings(object):
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         if Configs.RESOURCE_WELL.value in serverSettingsDiff:
             self.__updateResourceWellConfig(serverSettingsDiff)
+        if Configs.PERIPHERY_ROUTING_CONFIG.value in serverSettingsDiff:
+            self.__updatePeripheryRoutingConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
         self.__updateReactiveCommunicationConfig(serverSettingsDiff)
         if Configs.CUSTOMIZATION_QUESTS.value in serverSettingsDiff:
@@ -1315,6 +1338,10 @@ class ServerSettings(object):
     @property
     def battleMattersConfig(self):
         return self.__battleMattersConfig
+
+    @property
+    def peripheryRoutingConfig(self):
+        return self.__peripheryRoutingConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1726,6 +1753,9 @@ class ServerSettings(object):
 
     def __updateBattleMatters(self, targetSettings):
         self.__battleMattersConfig = self.__battleMattersConfig.replace(targetSettings[Configs.BATTLE_MATTERS_CONFIG.value])
+
+    def __updatePeripheryRoutingConfig(self, diff):
+        self.__peripheryRoutingConfig = self.__peripheryRoutingConfig.replace(diff[Configs.PERIPHERY_ROUTING_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

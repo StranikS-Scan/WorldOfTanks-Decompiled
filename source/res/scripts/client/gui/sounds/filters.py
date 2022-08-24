@@ -188,14 +188,6 @@ class WWISEEventPageFilter(WWISEHangarTasksFilter):
 
 class WWISEBattleMattersFilter(WWISEHangarTasksFilter):
 
-    def start(self):
-        super(WWISEBattleMattersFilter, self).start()
-        WWISE.WW_eventGlobal(Events.BATTLE_MATTERS_ENTER)
-
-    def stop(self):
-        super(WWISEBattleMattersFilter, self).stop()
-        WWISE.WW_eventGlobal(Events.BATTLE_MATTERS_EXIT)
-
     def _getStartState(self):
         return States.HANGAR_PLACE_TASKS_BATTLE_MATTERS
 

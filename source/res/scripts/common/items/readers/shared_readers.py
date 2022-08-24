@@ -60,7 +60,7 @@ def _readProjectionDecalSlot(ctx, subsection, slotType):
 
 def _readCompatibleModels(subsection, ctx):
     compatibleModels = component_constants.EMPTY_TUPLE
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         if subsection.has_key('compatibleModels'):
             compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
     return compatibleModels

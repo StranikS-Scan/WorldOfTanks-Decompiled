@@ -18,6 +18,7 @@ class IConnectionManager(object):
     onKickedFromServer = None
     onKickWhileLoginReceived = None
     onQueued = None
+    onPeripheryRoutingGroupUpdated = None
 
     @property
     def serverUserName(self):
@@ -55,6 +56,17 @@ class IConnectionManager(object):
     def connectionMethod(self):
         raise NotImplementedError
 
+    @property
+    def peripheryRoutingGroup(self):
+        raise NotImplementedError
+
+    @property
+    def availableHosts(self):
+        raise NotImplementedError
+
+    def isAvailablePeriphery(self, peripheryID=None):
+        raise NotImplementedError
+
     def initiateConnection(self, params, password, serverName):
         raise NotImplementedError
 
@@ -80,4 +92,7 @@ class IConnectionManager(object):
         raise NotImplementedError
 
     def setLastLogin(self, email):
+        raise NotImplementedError
+
+    def setPeripheryRoutingGroup(self, routingGroup, availableHosts):
         raise NotImplementedError

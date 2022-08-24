@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/warnings.py
-# Compiled at: 2017-03-24 00:59:58
+# Compiled at: 2073-08-05 16:22:18
 """Python part of the warnings subsystem."""
 import linecache
 import sys

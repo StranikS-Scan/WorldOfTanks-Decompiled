@@ -19,6 +19,11 @@
     <receiveLoginQueueNumber>
       <Arg>	UINT64	</Arg>
     </receiveLoginQueueNumber>
+    <setPeripheryRoutingGroup>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </setPeripheryRoutingGroup>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>

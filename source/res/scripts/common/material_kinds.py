@@ -97,9 +97,9 @@ def getWaterMatKind():
 
 if IS_EDITOR:
 
-    def isArmorMaterial(matKind):
+    def needToWriteZeroMaterial(matKind):
         name = NAMES_BY_IDS.get(matKind)
-        return True if 'armor_' in name else False
+        return True if 'armor_' in name or 'gunBreech' in name else False
 
 
 _init()

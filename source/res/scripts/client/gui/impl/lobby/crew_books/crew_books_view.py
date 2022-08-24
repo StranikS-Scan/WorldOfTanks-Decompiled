@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_view.py
 from CurrentVehicle import g_currentVehicle
+from gui.shared.event_dispatcher import showHangar
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewStatus, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -175,11 +176,17 @@ class CrewBooksView(ViewImpl):
         return
 
     def __onInventoryUpdate(self, invDiff):
-        with self.viewModel.transaction() as vm:
-            if GUI_ITEM_TYPE.TANKMAN in invDiff:
-                self.__updateTankmenListModelData(vm, invDiff[GUI_ITEM_TYPE.TANKMAN])
-            if GUI_ITEM_TYPE.CREW_BOOKS in invDiff:
-                self.__updateBooksViewModelData(vm)
+        vehsCompDescr = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {}).get('compDescr', {})
+        if self.__vehicle.invID in vehsCompDescr and vehsCompDescr[self.__vehicle.invID] is None:
+            self.__onWindowClose()
+            return
+        else:
+            with self.viewModel.transaction() as vm:
+                if GUI_ITEM_TYPE.TANKMAN in invDiff:
+                    self.__updateTankmenListModelData(vm, invDiff[GUI_ITEM_TYPE.TANKMAN])
+                if GUI_ITEM_TYPE.CREW_BOOKS in invDiff:
+                    self.__updateBooksViewModelData(vm)
+            return
 
     def __updateGuiItemList(self):
         criteria = REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT ^ ~REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES(CREW_BOOK_RARITY.UNIVERSAL)
@@ -208,9 +215,10 @@ class CrewBooksView(ViewImpl):
     def __updateTankmenListModelData(self, screenVM, diff):
         crewListVM = screenVM.crewBookTankmenList.getItems()
         self.__vehicle = g_currentVehicle.item
+        tankmenCompDescr = diff.get('compDescr', {})
         roles = self.__vehicle.descriptor.type.crewRoles
         crew = sortCrew(self.__vehicle.crew, roles)
-        crewDiff = [ (i, tankman) for i, (_, tankman) in enumerate(crew) if tankman is not None and tankman.invID in diff['compDescr'] ]
+        crewDiff = [ (i, tankman) for i, (_, tankman) in enumerate(crew) if tankman is not None and tankman.invID in tankmenCompDescr ]
         for slotIdx, tankman in crewDiff:
             tankmanVM = crewListVM[slotIdx]
             tankmanVM.setRoleLevel(str(tankman.roleLevel))
@@ -238,7 +246,7 @@ class CrewBooksView(ViewImpl):
         g_clientUpdateManager.removeCallback('inventory', self.__onInventoryUpdate)
 
     def __onWindowClose(self):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+        showHangar()
         self.destroyWindow()
 
     @async
@@ -513,14 +521,16 @@ class CrewBooksLackView(ViewImpl):
         self.viewModel.onBuyBtnClick += self.__onBuyBtnClick
         self.viewModel.onHangarBtnClick += self.__onHangarBtnClick
         self.viewModel.onCloseBtnClick += self.__onWindowClose
+        g_clientUpdateManager.addCallbacks({'inventory.1.compDescr': self.__onVehiclesInInventoryUpdate})
 
     def __removeListeners(self):
+        g_clientUpdateManager.removeCallback('inventory.1.compDescr', self.__onVehiclesInInventoryUpdate)
         self.viewModel.onBuyBtnClick -= self.__onBuyBtnClick
         self.viewModel.onHangarBtnClick -= self.__onHangarBtnClick
         self.viewModel.onCloseBtnClick -= self.__onWindowClose
 
     def __onWindowClose(self):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+        showHangar()
         self.destroyWindow()
 
     @async
@@ -581,3 +591,8 @@ class CrewBooksLackView(ViewImpl):
             if i == self.THIRD_SLOT:
                 itemModel.setHasArrow(False)
             noBookList.addViewModel(itemModel)
+
+    def __onVehiclesInInventoryUpdate(self, diff):
+        if self.__vehicle.invID in diff and diff[self.__vehicle.invID] is None:
+            self.__onWindowClose()
+        return

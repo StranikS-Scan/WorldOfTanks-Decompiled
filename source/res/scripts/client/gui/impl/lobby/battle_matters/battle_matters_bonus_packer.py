@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_bonus_packer.py
 import typing
+import logging
 from constants import PREMIUM_ENTITLEMENTS
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -21,8 +22,10 @@ from nations import NONE_INDEX
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from shared_utils import first
+from gui.shared.missions.packers.bonus import BaseBonusUIPacker
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
+_logger = logging.getLogger(__name__)
 _REWARDS_ORDER = ('vehicles',
  'battleToken',
  'tokens',
@@ -78,7 +81,8 @@ def getBattleMattersBonusPacker():
     mapping = getDefaultBonusPackersMap()
     mapping.update({VehiclesBonus.VEHICLES_BONUS: BattleMattersVehiclesBonusUIPacker(),
      BlueprintBonusTypes.BLUEPRINTS: BattleMattersBlueprintBonusUIPacker(),
-     SELECTABLE_BONUS_NAME: BattleMattersTokenBonusUIPacker()})
+     SELECTABLE_BONUS_NAME: BattleMattersTokenBonusUIPacker(),
+     'entitlements': BattleMattersEntitlementsBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -157,3 +161,16 @@ class BattleMattersVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         currentVehicle.setUserName(vehicle.userName)
         currentVehicle.setIsElite(vehicle.isElite)
         return currentVehicle
+
+
+class BattleMattersEntitlementsBonusUIPacker(BaseBonusUIPacker):
+    _ITEMS_TO_SKIP = {'battle_matters_rent_cromwell'}
+
+    @classmethod
+    def _pack(cls, bonus):
+        if bonus.getValue().id in cls._ITEMS_TO_SKIP:
+            result = []
+        else:
+            _logger.error('Not supported entitlement %s', bonus.getValue().id)
+            result = super(BattleMattersEntitlementsBonusUIPacker, cls)._pack(bonus)
+        return result

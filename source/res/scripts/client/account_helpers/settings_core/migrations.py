@@ -878,6 +878,8 @@ def _migrateTo94(core, data, initialized):
     onceOnlyHintsData = data['onceOnlyHints2']
     onceOnlyHintsData[OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT] = False
     onceOnlyHintsData[OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT] = False
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = {'shown': 0}
 
 
 _versions = ((1,

@@ -576,7 +576,8 @@ class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFo
                 body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.medium.body(), count=text_styles.stats(str(questIdx)))
             else:
                 quest = self.__battleMattersController.getQuestByIdx(questIdx - 1)
-                body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.body(), questName=text_styles.stats(quest.getUserName() if quest else ''))
+                awardText = R.strings.messenger.serviceChannelMessages.battleMatters.awards
+                body = backport.text(awardText.body(), questIdx=text_styles.stats(backport.text(awardText.questIdx(), questIdx=str(questIdx))), questName=text_styles.stats(quest.getUserName() if quest else ''))
             templateParams = {'achieves': fmt or '',
              'body': body}
             template = self.__MESSAGE_TEMPLATE.format(self.__TOKEN_TYPE if isWithButton else self.__AWARD_TYPE)

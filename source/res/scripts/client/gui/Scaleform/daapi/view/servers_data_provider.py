@@ -2,14 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/servers_data_provider.py
 import logging
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import icons
 from gui.shared.formatters.servers import formatPingStatus
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from predefined_hosts import AUTO_LOGIN_QUERY_URL
 from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES, g_preDefinedHosts
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 _logger = logging.getLogger(__name__)
 
 class _INDICATOR_STATUSES(object):
@@ -26,6 +27,7 @@ class _INDICATOR_STATUSES(object):
 class ServersDataProvider(SortableDAAPIDataProvider):
     __PING_MAX_VALUE = 999
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __connectionManager = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(ServersDataProvider, self).__init__()
@@ -122,15 +124,20 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         pingIndicatorState = self.__getUpdatedPingStatus(pingStatus, item)
         enabled = item.get('enabled', csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE)
         pingValueStr = formatPingStatus(csisStatus, self.__isColorBlind, False, pingStatus, pingValue)
+        host = g_preDefinedHosts.byName(serverName)
+        haveAccess = not host.peripheryID or self.__connectionManager.isAvailablePeriphery(host.peripheryID)
         vo = {'id': item.get('id', 0),
          'data': hostName,
          'csisStatus': csisStatus,
          'label': serverName,
          'pingState': pingIndicatorState,
          'pingValue': pingValueStr,
-         'enabled': enabled}
-        if csisStatus == HOST_AVAILABILITY.NOT_RECOMMENDED:
-            vo['tooltip'] = {'tooltip': _ms(TOOLTIPS.SERVER_NOTRECOMENDED, icon=icons.serverAlert(), server=serverName)}
+         'enabled': enabled and haveAccess,
+         'haveAccess': haveAccess}
+        if not haveAccess:
+            vo['tooltip'] = {'tooltip': backport.text(R.strings.tooltips.server.notAccess())}
+        elif csisStatus == HOST_AVAILABILITY.NOT_RECOMMENDED:
+            vo['tooltip'] = {'tooltip': backport.text(R.strings.tooltips.server.notRecomended(), icon=icons.serverAlert(), server=serverName)}
         elif 'tooltip' in item:
             vo['tooltip'] = item['tooltip']
         return vo

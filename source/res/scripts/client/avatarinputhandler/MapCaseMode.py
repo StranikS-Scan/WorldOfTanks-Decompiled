@@ -29,6 +29,7 @@ from items import vehicles as vehs_core, artefacts
 from constants import AIMING_MODE
 from items import makeIntCompactDescrByID
 from nations import NONE_INDEX
+from DynamicCameras.ArcadeCamera import ArcadeCameraState
 _logger = logging.getLogger(__name__)
 
 class _DefaultStrikeSelector(CallbackDelayer):
@@ -568,6 +569,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     _MODE_NAME = 1
     _AIM_MODE = 2
     _DISTANCE = 3
+    _ZOOMSWICHER_STATE = 4
 
     def __init__(self, dataSection, avatarInputHandler):
         CallbackDelayer.__init__(self)
@@ -584,6 +586,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         self.__class__.prevCtlMode = [Vector3(0, 0, 0),
          '',
          0,
+         None,
          None]
         return
 
@@ -786,14 +789,14 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         if not self.__aimingModeUserDisabled:
             self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
         arcadeState = None
-        if self.__aih.ctrlModeName == CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD:
+        if self.acceptsArcadeState:
             pos = prevMode[self._PREFERED_POSITION]
             if prevMode[self._DISTANCE] is not None:
-                arcadeState = self.__aih.ctrl.camera.cloneState(prevMode[self._DISTANCE])
+                arcadeState = self.__aih.ctrl.camera.cloneState(distance=prevMode[self._DISTANCE], state=prevMode[self._ZOOMSWICHER_STATE])
         else:
             pos = self._getPreferedPositionOnQuit()
-        if self.acceptsArcadeState and arcadeState is None:
-            arcadeState = self.__aih.ctrl.camera.cloneState()
+        if not arcadeState and prevMode[self._DISTANCE] and prevMode[self._ZOOMSWICHER_STATE]:
+            arcadeState = ArcadeCameraState(prevMode[self._DISTANCE], prevMode[self._ZOOMSWICHER_STATE])
         self.__aih.onControlModeChanged(prevMode[self._MODE_NAME], preferredPos=pos, aimingMode=self.__aimingMode, saveDist=False, saveZoom=True, arcadeState=arcadeState)
         self.stopCallback(self.__tick)
         self.__cam.update(0.0, 0.0, 0.0, False)
@@ -907,11 +910,16 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
                 pos = camera.aimingSystem.getDesiredShotPoint()
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
-        camDist = arcadeState.camDist if arcadeState else None
+        camDist = None
+        zoomSwitcherState = None
+        if arcadeState:
+            camDist = arcadeState.camDist
+            zoomSwitcherState = arcadeState.zoomSwitcherState
         controlMode.prevCtlMode = [pos,
          currentMode,
          inputHandler.ctrl.aimingMode,
-         camDist]
+         camDist,
+         zoomSwitcherState]
         inputHandler.onControlModeChanged(controlMode.MODE_NAME, preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False, arcadeState=arcadeState)
     return
 

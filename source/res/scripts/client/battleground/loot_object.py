@@ -135,6 +135,8 @@ class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
         super(SteelHunterDynamicObjectsCachingManager, self).__init__()
         self.__lootCache = {}
         self.__cachingQueue = defaultdict(lambda : [])
+        self.__cachedConfig = None
+        return
 
     def hasCachedLoot(self, lootType):
         return lootType in self.__lootCache
@@ -145,7 +147,7 @@ class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
 
     def activate(self):
         self.__lootCache = {}
-        config = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
+        config = self.__getConfig()
         loots = config.getLoots().iteritems()
         for lootType, loot in loots:
             self.__orderLootCache(lootType, loot)
@@ -199,3 +201,8 @@ class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
                 _loadLootForeground(reference, self.spaceID, lootDesc)
 
         del self.__cachingQueue[lootType]
+
+    def __getConfig(self):
+        if self.__cachedConfig is None:
+            self.__cachedConfig = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
+        return self.__cachedConfig

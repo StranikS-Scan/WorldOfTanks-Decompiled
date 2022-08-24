@@ -41,9 +41,11 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         self._height = height
         self._activeColor = activeColor
         self._waitingColor = waitingColor
+        self.__hashedBoundingBox = None
+        return
 
     def activate(self):
-        boundingBox = BigWorld.player().arena.arenaType.boundingBox
+        boundingBox = self.__getBoundingBox()
         self._cornerPosition = Math.Vector3(boundingBox[0][0], 0, boundingBox[0][1])
         self._zoneSizeX, self._zoneSizeY = (boundingBox[1] - boundingBox[0]).tuple()
         self._zoneSizeX /= ZONES_X
@@ -108,6 +110,11 @@ class DeathZoneDrawManager(CGF.ComponentManager):
             deathZones.visibilityMskZones[zId] = visibilityMask
             return True
         return False
+
+    def __getBoundingBox(self):
+        if self.__hashedBoundingBox is None:
+            self.__hashedBoundingBox = BigWorld.player().arena.arenaType.boundingBox
+        return self.__hashedBoundingBox
 
 
 class DeathZonesRule(Rule):

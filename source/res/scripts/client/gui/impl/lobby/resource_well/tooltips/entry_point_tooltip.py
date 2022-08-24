@@ -24,6 +24,7 @@ class EntryPointTooltip(ViewImpl):
         return super(EntryPointTooltip, self).getViewModel()
 
     def _onLoading(self, *args, **kwargs):
+        super(EntryPointTooltip, self)._onLoading(*args, **kwargs)
         self.__resourceWell.startNumberRequesters()
         with self.viewModel.transaction() as model:
             self.__fillEventTime(model=model)

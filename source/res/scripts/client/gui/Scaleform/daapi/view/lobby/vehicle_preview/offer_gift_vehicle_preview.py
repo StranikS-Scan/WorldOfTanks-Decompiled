@@ -35,13 +35,15 @@ class OfferGiftVehiclePreview(VehiclePreview):
         self._offer = self.__offersProvider.getOffer(ctx['offerID'])
         self._gift = self._offer.getGift(ctx['giftID'])
         self._vehicle = self._gift.bonus.displayedItem
-        self._customCallbacks = ctx.get('customCallbacks', {})
+        customCallbacks = ctx.get('customCallbacks', {})
+        self._customCallbacks = customCallbacks if customCallbacks is not None else {}
         ctx['itemCD'] = self._vehicle.intCD
         ctx['previewBackCb'] = self._customCallbacks.get('previewBackCb', partial(event_dispatcher.showOfferGiftsWindow, self._offer.id))
         super(OfferGiftVehiclePreview, self).__init__(ctx)
         self._confirmCallback = ctx.get('confirmCallback')
         self.__itemsPack = self._generateItemsPack()
         addBuiltInEquipment(self.__itemsPack, self._itemsCache, self._vehicleCD)
+        return
 
     def setBottomPanel(self):
         self.as_setBottomPanelS(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_OFFER_GIFT_LINKAGE)

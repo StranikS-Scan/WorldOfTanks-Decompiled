@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urllib.py
-# Compiled at: 2017-02-02 02:45:49
+# Compiled at: 2073-08-06 00:50:31
 """Open an arbitrary URL.
 
 See the following document for more info on URLs:

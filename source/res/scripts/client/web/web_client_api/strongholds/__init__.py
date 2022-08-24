@@ -33,6 +33,7 @@ class _GetReserveParamsSchema(W2CSchema):
 @w2capi(name='strongholds_battle', key='action')
 class StrongholdsWebApi(object):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
 
     @w2c(W2CSchema, 'open_list')
     @process
@@ -103,3 +104,7 @@ class StrongholdsWebApi(object):
             result[intCD] = {pName:pValue for pName, pValue in formatters.getFormattedParamsList(item.descriptor, rawParams)}
 
         return result
+
+    @w2c(W2CSchema, 'get_available_peripheries')
+    def getAvailablePeripheries(self, _):
+        return [ p.peripheryID for p in self.__connectionMgr.availableHosts ]

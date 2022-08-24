@@ -72,6 +72,13 @@
       <undamaged>	vehicles/russian/R115_IS-3_auto/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R115_IS-3_auto/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R115_IS-3_auto_OCN_3DSt>
+          <undamaged>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Hull.model	</exploded>
+        </R115_IS-3_auto_OCN_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -95,10 +102,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.520941 0.500849 2.46402	</rayStart>
-        <rayEnd>	0.470749 0.334515 2.36495	</rayEnd>
-        <rayUp>	-0.624486 0.0568008 -0.778968	</rayUp>
-        <size>	0.24	</size>
+        <rayStart>	-0.248555 0.509618 2.585623	</rayStart>
+        <rayEnd>	-0.198273 0.34062 2.491217	</rayEnd>
+        <rayUp>	0.585588 0.521093 -0.620926	</rayUp>
+        <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -898,6 +905,32 @@
         <clipAngle>	0.341477	</clipAngle>
         <anchorShift>	-0.109996	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R115_IS-3_auto_OCN_3DSt	</compatibleModels>
+        <position>	1.18079 1.06499 2.94106	</position>
+        <rotation>	0.507951 -0.000961997 3.13961	</rotation>
+        <scale>	0.7986 0.339272 0.798594	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.20103	</clipAngle>
+        <anchorShift>	0.101999	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R115_IS-3_auto_OCN_3DSt	</compatibleModels>
+        <position>	-1.18078 1.06501 2.94106	</position>
+        <rotation>	0.507951 -0.000961997 3.13961	</rotation>
+        <scale>	0.798599 0.339272 0.798594	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.20103	</clipAngle>
+        <anchorShift>	0.101999	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -939,6 +972,13 @@
         <undamaged>	vehicles/russian/R115_IS-3_auto/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R115_IS-3_auto/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R115_IS-3_auto_OCN_3DSt>
+            <undamaged>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Chassis.model	</exploded>
+          </R115_IS-3_auto_OCN_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -948,9 +988,152 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.7	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-2.7	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.018413	</renderModelOffset>
+              <lengthwiseSpringLength>	0.163153	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.636992	</widthwiseSpringLength>
+              <hingeJointStiffness>	1554.900635	</hingeJointStiffness>
+              <torsionStiffnessStep>	7	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L4	</wheelName>
+                  <groupRadius>	0.380387	</groupRadius>
+                  <groupInnerOffset>	0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	-0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L5	</wheelName>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.301956	</groupRadius>
+                  <groupInnerOffset>	0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	-0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L3	</wheelName>
+                  <wheelName>	WD_L2	</wheelName>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.232928	</groupRadius>
+                  <groupInnerOffset>	0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	-0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.309887	</groupRadius>
+                  <groupInnerOffset>	0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	-0.32538	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.745708 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.113141 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.870510	</row2>
+                  <row3>	0.000000 1.000329 -0.019585	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.986832 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.498609	</row2>
+                  <row3>	-0.121000 1.289000 -0.061748	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.840025 0.146283 0.127097	</row0>
+                  <row1>	-0.067608 0.197049 0.220051	</row1>
+                  <row2>	0.027352 -0.740499 0.671501	</row2>
+                  <row3>	-1.206272 1.187880 3.154300	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.184692 -0.236408	</row1>
+                  <row2>	0.000000 0.582458 0.455041	</row2>
+                  <row3>	-1.200038 1.216639 -3.328189	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.018546	</renderModelOffset>
+              <lengthwiseSpringLength>	0.163258	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.636971	</widthwiseSpringLength>
+              <hingeJointStiffness>	1551.865601	</hingeJointStiffness>
+              <torsionStiffnessStep>	7	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R4	</wheelName>
+                  <groupRadius>	0.38051	</groupRadius>
+                  <groupInnerOffset>	-0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R5	</wheelName>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.301956	</groupRadius>
+                  <groupInnerOffset>	-0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R3	</wheelName>
+                  <wheelName>	WD_R2	</wheelName>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.233051	</groupRadius>
+                  <groupInnerOffset>	-0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	0.32538	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.31001	</groupRadius>
+                  <groupInnerOffset>	-0.42538	</groupInnerOffset>
+                  <groupOuterOffset>	0.32538	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.745708 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.113141 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.870510	</row2>
+                  <row3>	0.000000 1.000329 -0.019585	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.266600 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.498610	</row2>
+                  <row3>	0.978000 1.289000 -0.061745	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.844906 0.131115 0.110172	</row0>
+                  <row1>	-0.059623 0.198364 0.221175	</row1>
+                  <row2>	0.027352 -0.740499 0.671501	</row2>
+                  <row3>	1.206000 1.187880 3.154300	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.184692 -0.236408	</row1>
+                  <row2>	0.000000 0.582458 0.455041	</row2>
+                  <row3>	1.200000 1.216640 -3.328190	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+        </trackPair>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -1401,6 +1584,12 @@
             <model>	vehicles/russian/R115_IS-3_auto/track/segment2.model	</model>
             <length>	0.175267	</length>
           </secSegment>
+          <modelSets>
+            <R115_IS-3_auto_OCN_3DSt>
+              <mainSegmentModel>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/track/segment1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/track/segment2.model	</secSegmentModel>
+            </R115_IS-3_auto_OCN_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1693,6 +1882,13 @@
             <undamaged>	vehicles/russian/R115_IS-3_auto/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R115_IS-3_auto/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R115_IS-3_auto_OCN_3DSt>
+                <undamaged>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </R115_IS-3_auto_OCN_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Gun_01.model	</collisionModelServer>
@@ -1764,6 +1960,13 @@
         <undamaged>	vehicles/russian/R115_IS-3_auto/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R115_IS-3_auto/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R115_IS-3_auto_OCN_3DSt>
+            <undamaged>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R115_IS-3_auto/_skins/R115_IS-3_auto_OCN_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </R115_IS-3_auto_OCN_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Turret_01.model	</collisionModelServer>
@@ -2402,6 +2605,32 @@
           <clipAngle>	1.12667	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	-0.048561	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R115_IS-3_auto_OCN_3DSt	</compatibleModels>
+          <position>	1.15896 1.87736 0.881004	</position>
+          <rotation>	1.00006 1.25053 -3.11671	</rotation>
+          <scale>	0.438067 0.438067 0.438067	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.06924	</clipAngle>
+          <anchorShift>	0.02537	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R115_IS-3_auto_OCN_3DSt	</compatibleModels>
+          <position>	-1.21332 1.94574 0.138183	</position>
+          <rotation>	2.07105 1.32873 -0.0240593	</rotation>
+          <scale>	0.280831 0.464408 0.280826	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.12667	</clipAngle>
+          <anchorShift>	-0.028556	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

@@ -135,5 +135,59 @@
         </outfit>
       </outfits>
     </style>
+    <style>
+      <id>	530	</id>
+      <texture>	gui/maps/vehicles/styles/bp8_auction_1.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp8_auction_1	</userString>
+      <description>	#vehicle_customization:special_style/bp8_auction_1_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	439	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	440	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	21	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	236	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	757	</id>
+              <tags>	front formfactor_rect1x2 safe	</tags>
+            </item>
+            <item>
+              <id>	758	</id>
+              <tags>	direction_left_to_right formfactor_rect1x2 safe left	</tags>
+            </item>
+            <item>
+              <id>	759	</id>
+              <tags>	direction_left_to_right formfactor_rect1x2 right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
   </itemGroup>
 </germany_nonRU.xml>

@@ -124,12 +124,8 @@ def overrideCrosshairView(newMode):
     g_eventBus.handleEvent(GameEvent(GameEvent.CROSSHAIR_VIEW, {'ctrlMode': newMode}), scope=_SCOPE)
 
 
-def hideAutoAimMarker():
-    g_eventBus.handleEvent(GameEvent(GameEvent.HIDE_AUTO_AIM_MARKER), scope=_SCOPE)
-
-
-def addAutoAimMarker(vehicle):
-    g_eventBus.handleEvent(GameEvent(GameEvent.ADD_AUTO_AIM_MARKER, {'vehicle': vehicle}), scope=_SCOPE)
+def changeTargetVehicle(vehicleID):
+    g_eventBus.handleEvent(GameEvent(GameEvent.ON_TARGET_VEHICLE_CHANGED, {'vehicleID': vehicleID}), scope=_SCOPE)
 
 
 def chargeReleased(keyDown=False):

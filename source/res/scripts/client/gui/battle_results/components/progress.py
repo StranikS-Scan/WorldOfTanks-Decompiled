@@ -253,7 +253,7 @@ class VehicleProgressBlock(base.StatsBlock):
 PMComplete = namedtuple('PMComplete', ['isMainComplete', 'isAddComplete'])
 
 class BattlePassProgressBlock(base.StatsBlock):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     def setRecord(self, result, reusable):
         bpp = reusable.battlePassProgress
@@ -306,7 +306,7 @@ class BattlePassProgressBlock(base.StatsBlock):
          'currentProgrVal': progress.pointsNew,
          'tasksCount': -1,
          'progrBarType': cls.__getProgressBarType(not progress.isDone),
-         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
+         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID and not cls.__battlePass.isChapterCompleted(chapterID) else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
 
     @classmethod
     def __makeProgressList(cls, progress, level):

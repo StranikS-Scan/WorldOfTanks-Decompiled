@@ -38,6 +38,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
     def _subscribeOnEvents(self):
         self._es.subscribeToEvent(self._guiSessionProvider.onUpdateObservedVehicleData, self._onUpdateObservedVehicleData)
+        self._es.subscribeToEvent(self.entity.onAppearanceReady, self._onAppearanceReady)
         if self._avatar is not None and self._avatar.inputHandler is not None:
             self._es.subscribeToEvent(self._avatar.inputHandler.onCameraChanged, self.__onCameraChanged)
             self._es.subscribeToEvent(self._avatar.onSwitchingViewPoint, self.__onSwitchingViewPoint)
@@ -88,7 +89,8 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
             return
 
     def _getTimerData(self, isShow=True):
-        data = {'duration': self._getDuration() if isShow else 0.0}
+        data = {'duration': self._getDuration() if isShow else 0.0,
+         'endTime': self._finishTime}
         return data
 
     def _getMarkerData(self, isShow=True):
@@ -107,6 +109,17 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
             self.__isSwitching = False
             self.__postponeCallProcessing()
         self._updateVisuals()
+
+    def _onAppearanceReady(self):
+        vehicle = self.entity
+        appearance = vehicle.appearance
+        if appearance is None or not appearance.isConstructed:
+            return
+        elif vehicle.health <= 0:
+            return
+        else:
+            self._updateVisuals()
+            return
 
     def __onSwitchingViewPoint(self):
         self.__isSwitching = True

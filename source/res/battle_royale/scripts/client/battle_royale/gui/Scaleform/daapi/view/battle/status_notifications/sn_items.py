@@ -406,16 +406,10 @@ class _BuffSN(TimerSN):
         pass
 
     def _update(self, value):
-        equipmentName = self._getEquipmentName()
-        if equipmentName:
-            equipmentID = vehicles.g_cache.equipmentIDs().get(equipmentName)
-            equipment = vehicles.g_cache.equipments()[equipmentID]
-            startTime = value['endTime'] - equipment.duration
-        else:
-            startTime = BigWorld.serverTime()
-        if value['endTime'] - BigWorld.serverTime() > 0:
+        duration = value['duration']
+        if duration > 0:
             self._isVisible = True
-            self._updateTimeParams(value['endTime'] - startTime, value['endTime'])
+            self._updateTimeParams(duration, value['endTime'])
             self._vo['title'] = self._constructTitle(value)
             self._sendUpdate()
         else:
@@ -435,8 +429,7 @@ class ShotPassionSN(_BuffSN):
         stage = value.get('stage', 0)
         self._vo['additionalInfo'] = self.__constructCounter(stage)
         self._vo['additionalState'] = self.__getCounterState(stage)
-        data = {'endTime': BigWorld.serverTime() + value.get('duration', 0)}
-        super(ShotPassionSN, self)._update(data)
+        super(ShotPassionSN, self)._update(value)
 
     def _constructTitle(self, value):
         return backport.text(R.strings.battle_royale.timersPanel.shotPassion())
@@ -568,10 +561,6 @@ class InspireSN(_BuffSN):
     def getItemID(self):
         return VEHICLE_VIEW_STATE.INSPIRE
 
-    def _update(self, value):
-        value['endTime'] = value['duration'] + BigWorld.serverTime()
-        super(InspireSN, self)._update(value)
-
 
 class BerserkerSN(_BuffSN):
 
@@ -584,13 +573,6 @@ class BerserkerSN(_BuffSN):
 
     def getViewTypeID(self):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.BERSERKER
-
-    def _update(self, data):
-        isVisible = False
-        if data['duration'] > 0:
-            isVisible = True
-            self._updateTimeParams(data['duration'], data['duration'] + BigWorld.serverTime())
-        self._setVisible(isVisible)
 
 
 class _SmokeBase(TimerSN):

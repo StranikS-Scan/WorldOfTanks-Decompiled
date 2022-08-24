@@ -842,7 +842,7 @@ class CommonTankAppearance(ScriptGameObject):
         if BigWorld.isForwardPipeline() or quality >= len(TrackCrashWithDebrisComponent.MAX_DEBRIS_COUNT):
             return False
         maxDebrisCount = TrackCrashWithDebrisComponent.MAX_DEBRIS_COUNT[quality]
-        debrisCount = Vehicular.PhysicalDestroyedTrack.getInstanceCount()
+        debrisCount = TrackCrashWithDebrisComponent.CURRENT_DEBRIS_COUNT
         return False if debrisCount >= maxDebrisCount and not self._vehicle.isPlayerVehicle else True
 
     def __shouldUseTrackCrashWithDebris(self, pairIndex, shouldCreateDebris):
@@ -853,7 +853,7 @@ class CommonTankAppearance(ScriptGameObject):
             tracks = self.typeDescriptor.chassis.tracks
             return tracks is not None and tracks.trackPairs[pairIndex].tracksDebris is not None and shouldCreateDebris
 
-    def __getTrackPairIndicesToDestroy(self, pairIndex):
+    def _getTrackPairIndicesToDestroy(self, pairIndex):
         chassis = self.typeDescriptor.chassis
         if chassis.chassisType == CHASSIS_ITEM_TYPE.MONOLITHIC:
             pairsCount = len(chassis.tracks.trackPairs) if chassis.tracks is not None else 1
@@ -862,7 +862,7 @@ class CommonTankAppearance(ScriptGameObject):
             return (pairIndex,)
 
     def _addCrashedTrack(self, isLeft, pairIndex, isSideFlying, hitPoint):
-        indices = self.__getTrackPairIndicesToDestroy(pairIndex)
+        indices = self._getTrackPairIndicesToDestroy(pairIndex)
         shouldCreateDebris = self.__shouldCreatePhysicalDestroyedTracks()
         if not self.__shouldUseTrackCrashWithDebris(pairIndex, shouldCreateDebris):
             if self.crashedTracksController is not None:
@@ -873,17 +873,14 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             for idx in indices:
                 track = self.tracks.getTrackGameObject(isLeft, idx)
-                debris = track.createComponent(TrackCrashWithDebrisComponent, isLeft, idx, self.typeDescriptor, self.gameObject, self.boundEffects, self.filter)
-                debris.shouldCreateDebris = shouldCreateDebris
-                debris.isPlayer = self._vehicle.isPlayerVehicle
-                debris.hitPoint = hitPoint
+                track.createComponent(TrackCrashWithDebrisComponent, isLeft, idx, self.typeDescriptor, self.gameObject, self.boundEffects, self.filter, self._vehicle.isPlayerVehicle, shouldCreateDebris, hitPoint)
                 if self.crashedTracksController is not None:
                     self.crashedTracksController.addDebrisCrashedTrack(isLeft, idx)
 
             return
 
     def _delCrashedTrack(self, isLeft, pairIndex):
-        indices = self.__getTrackPairIndicesToDestroy(pairIndex)
+        indices = self._getTrackPairIndicesToDestroy(pairIndex)
         foundCrashedTrackWithDebris = False
         if self.tracks is not None:
             for idx in indices:
@@ -891,7 +888,6 @@ class CommonTankAppearance(ScriptGameObject):
                 if track.isValid():
                     debris = track.findComponentByType(TrackCrashWithDebrisComponent)
                     if debris is not None:
-                        debris.markAsRepaired()
                         track.removeComponent(debris)
                         foundCrashedTrackWithDebris = True
                         if self.crashedTracksController is not None:

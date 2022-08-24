@@ -37,9 +37,7 @@ from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from skeletons.connection_mgr import IConnectionManager
-from battle_pass_common import CurrencyBP
 from battle_pass_common import getPresentLevel
-from skeletons.gui.shared import IItemsCache
 from messenger.storage import storage_getter
 from gui.battle_pass.battle_pass_constants import ChapterState
 if typing.TYPE_CHECKING:
@@ -74,7 +72,6 @@ class BrBattleResultsViewInLobby(ViewImpl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
-    __itemsCache = dependency.descriptor(IItemsCache)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -235,9 +232,9 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
         if battlePassData['battlePassComplete']:
-            battlePassModel.setFreePoints(self.__freePoints)
+            battlePassModel.setFreePoints(battlePassData['availablePoints'])
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
-            battlePassModel.setIsBattlePassPurchased(state == BattlePassProgress.BP_STATE_BOUGHT)
+            battlePassModel.setIsBattlePassPurchased(isBought)
         else:
             battlePassModel.setFreePoints(currentLevelPoints)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
@@ -429,7 +426,3 @@ class BrBattleResultsViewInLobby(ViewImpl):
         model.setDatabaseID(info.get('databaseID', 0))
         model.setClanAbbrev(info.get('clanAbbrev', info.get('userClanAbbrev', '')))
         model.setHiddenUserName(info.get('hiddenName', ''))
-
-    @property
-    def __freePoints(self):
-        return self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.BIT.value, 0)

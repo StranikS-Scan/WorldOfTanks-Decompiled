@@ -1375,9 +1375,9 @@ class InstructionEpicBattleBonusFormatter(SimpleBonusFormatter):
 
         giftsCount = 0
         for bonusOffer in bonusOffers:
-            gift = bonusOffer.getFirstGift()
-            if gift is not None:
-                giftsCount += gift.giftCount
+            if bonusOffer and hasattr(bonusOffer, 'getFirstGift'):
+                gift = bonusOffer.getFirstGift()
+                giftsCount += gift.giftCount if gift is not None else 0
 
         return giftsCount
 

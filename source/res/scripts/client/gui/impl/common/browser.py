@@ -48,6 +48,10 @@ class Browser(ViewImpl[BrowserModel], typing.Generic[TViewModel]):
     def browser(self):
         return self.__browser
 
+    @property
+    def url(self):
+        return self.__url
+
     def setWaitingMessage(self, message):
         self.getViewModel().setWaitingMessage(message)
 

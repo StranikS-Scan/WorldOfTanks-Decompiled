@@ -14,6 +14,7 @@ from Preferences import Preferences
 from Servers import Servers, DevelopmentServers
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, makeHtmlString, GUI_SETTINGS
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -68,8 +69,10 @@ class Manager(ILoginManager):
         else:
             self.__servers = Servers(self._preferences)
         self.connectionMgr.onLoggedOn += self._onLoggedOn
+        g_clientUpdateManager.addCallbacks({'serverSettings.periphery_routing_config': self.__onServerSettingsChanged})
 
     def fini(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
         self.connectionMgr.onLoggedOn -= self._onLoggedOn
         self._preferences = None
         self.__servers.fini()
@@ -254,6 +257,15 @@ class Manager(ILoginManager):
 
     def checkWgcCouldRetry(self, status):
         return self.__wgcManager.checkWgcCouldRetry(status) if self.wgcAvailable else False
+
+    def __onServerSettingsChanged(self, diff):
+        if 'isEnabled' in diff and not diff['isEnabled']:
+            self.connectionMgr.setPeripheryRoutingGroup(None, None)
+            return
+        else:
+            if 'peripheryRoutingGroups' in diff:
+                self.connectionMgr.setPeripheryRoutingGroup(self.connectionMgr.peripheryRoutingGroup, diff['peripheryRoutingGroups'].get(self.connectionMgr.peripheryRoutingGroup))
+            return
 
 
 class _WgcModeManager(object):

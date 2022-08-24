@@ -7,9 +7,15 @@ if typing.TYPE_CHECKING:
 
 class IBattleMattersController(object):
     onStateChanged = None
+    onFinish = None
+    __slots__ = ()
 
     @staticmethod
     def isBattleMattersQuest(quest):
+        raise NotImplementedError
+
+    @staticmethod
+    def isBattleMattersQuestID(quest):
         raise NotImplementedError
 
     @staticmethod

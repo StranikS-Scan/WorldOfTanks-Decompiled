@@ -58,11 +58,9 @@ class GameEvent(HasCtxEvent):
     SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     ON_BACKGROUND_ALPHA_CHANGE = 'game/onBackgroundAlphaChange'
-    HIDE_AUTO_AIM_MARKER = 'game/hideAutoIamMarker'
     HIDE_LOBBY_SUB_CONTAINER_ITEMS = 'game/hideLobbySubContainerItems'
     REVEAL_LOBBY_SUB_CONTAINER_ITEMS = 'game/revealLobbySubContainerItems'
     BATTLE_LOADING = 'game/battleLoading'
-    ADD_AUTO_AIM_MARKER = 'game/addAutoIamMarker'
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
@@ -82,6 +80,7 @@ class GameEvent(HasCtxEvent):
     COMMANDER_HINT = 'game/commanderHint'
     CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
     TOGGLE_DEBUG_PIERCING_PANEL = 'game/toggleDebugPiercingPanel'
+    ON_TARGET_VEHICLE_CHANGED = 'game/onTargetVehicleChanged'
 
 
 class GUICommonEvent(SharedEvent):

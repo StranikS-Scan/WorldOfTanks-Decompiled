@@ -60,6 +60,7 @@ class _PlayerEvents(object):
         self.onAvatarVehicleLeaveWorld = Event.Event()
         self.onLoginQueueNumberReceived = Event.Event()
         self.onKickWhileLoginReceived = Event.Event()
+        self.onPeripheryRoutingGroupReceived = Event.Event()
         self.onGuiCacheSyncCompleted = Event.Event()
         self.onPMLocksChanged = Event.Event()
         self.onDailyQuestsInfoChange = Event.Event()

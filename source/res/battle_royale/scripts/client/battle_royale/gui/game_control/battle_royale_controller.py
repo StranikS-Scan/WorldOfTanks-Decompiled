@@ -47,10 +47,12 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.connection_mgr import IConnectionManager
 from gui.game_control.links import URLMacros
 from gui.game_control.season_provider import SeasonProvider
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from web.web_client_api.battle_royale import createBattleRoyaleWebHanlders
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.utils.functions import getUniqueViewName
+from gui.shared.utils import SelectorBattleTypesUtils
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
@@ -308,6 +310,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         if self.__switchingFromBR and self.isBattleRoyaleMode():
             self.__switchingFromBR = False
             return
+        self.__modeEntered()
         self.__updateMode()
         self.__updateSpace()
 
@@ -382,6 +385,11 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def getIntroVideoURL(self):
         introVideoUrl = GUI_SETTINGS.battleRoyaleVideo.get('introVideo')
         return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(introVideoUrl)
+
+    def __modeEntered(self):
+        if self.isBattleRoyaleMode() and not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
+            SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+            self.showIntroWindow()
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()

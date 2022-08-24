@@ -375,7 +375,7 @@ def getMapName(arenaTypeID):
         return
     else:
         arenaType = ArenaType.g_cache[arenaTypeID]
-        if arenaType.gameplayName != 'ctf':
+        if arenaType.gameplayName not in ('ctf', 'maps_training'):
             label = None
             if arenaType.gameplayName not in GAMEPLAY_NAMES_WITH_DISABLED_QUESTS:
                 label = '%s (%s)' % (arenaType.name, i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName))

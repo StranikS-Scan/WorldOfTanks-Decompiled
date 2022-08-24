@@ -4,10 +4,8 @@ from collections import namedtuple
 from itertools import chain
 import math
 import BigWorld
-import Vehicle
 from Math import Vector3, Matrix
 import math_utils
-from gui.battle_control import event_dispatcher as gui_event_dispatcher
 
 class MagneticAimSettings(object):
     MAGNETIC_ANGLE = 2.25
@@ -20,20 +18,10 @@ class MagneticAimSettings(object):
 
 _TargetVeh = namedtuple('TargetVehicle', ('vehicleRef', 'dotResult', 'distance'))
 
-def autoAimProcessor(target):
-    if target is not None and isinstance(target, Vehicle.Vehicle):
-        allyOrSelfVehicle = target.publicInfo['team'] == BigWorld.player().team or target.isPlayerVehicle
-        if allyOrSelfVehicle or not target.isStarted or not target.isAlive():
-            return
-        gui_event_dispatcher.addAutoAimMarker(vehicle=target)
-    return
-
-
 def magneticAimProcessor(previousSimpleTarget=None, previousMagneticTarget=None):
     if BigWorld.target() is None:
         target = magneticAimFindTarget()
         if target and target != previousSimpleTarget and target != previousMagneticTarget:
-            gui_event_dispatcher.addAutoAimMarker(vehicle=target)
             BigWorld.player().autoAim(target=target, magnetic=True)
             return target
     return previousSimpleTarget
@@ -108,7 +96,7 @@ def isVehicleVisibleFromCamera(vehicle, aimCamera):
         testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
         if testResStatic is None:
             testResDynamic = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
-            return testResDynamic is None and True
-        continue
+            if testResDynamic is None:
+                return True
 
     return False

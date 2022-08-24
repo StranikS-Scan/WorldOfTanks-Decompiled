@@ -593,6 +593,12 @@ class PREBATTLE_TYPE:
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     RTS_PREBATTLES = (RTS, RTS_TRAINING)
     REMOVED = (COMPANY, CLUBS)
+    TRANSFER_PREBATTLES = (TRAINING,
+     TOURNAMENT,
+     CLAN,
+     EPIC_TRAINING,
+     RTS_TRAINING,
+     STRONGHOLD)
 
 
 PREBATTLE_TYPE_NAMES = dict([ (v, k) for k, v in PREBATTLE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
@@ -878,6 +884,7 @@ class Configs(enum.Enum):
     CUSTOMIZATION_QUESTS = 'customizationQuests'
     UI_LOGGING = 'ui_logging_config'
     BATTLE_MATTERS_CONFIG = 'battle_matters_config'
+    PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
 
 
 class RESTRICTION_TYPE:
@@ -3008,6 +3015,9 @@ class EventPhase(enum.Enum):
 
 
 class ACCOUNT_KICK_REASONS(object):
+    UNAVAILABLE_PERIPHERY = -4
+    VERSION_MISMATCH = -3
+    NO_CONNECTION = -2
     UNKNOWN = 0
     LOGIN_TO_OTHER_GAME = 1
     SESSION_TRACKER_KICK = 2

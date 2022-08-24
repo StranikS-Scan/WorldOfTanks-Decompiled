@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	60	</forward>
-    <backward>	18	</backward>
+    <forward>	45	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.046	</moving>
@@ -1724,11 +1724,11 @@
             <rate>	21.82	</rate>
           </clip>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	21.5	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	25	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.18	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2687,7 +2687,7 @@
       <engines>
         <SFA_F12>
           <smplEnginePower>	810	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </SFA_F12>
       </engines>
       <chassis>

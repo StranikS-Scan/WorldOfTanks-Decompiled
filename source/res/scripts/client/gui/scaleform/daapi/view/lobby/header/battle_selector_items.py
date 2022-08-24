@@ -672,10 +672,7 @@ class _BattleRoyaleItem(SelectorItem):
             nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
             if isActiveCycle or nextCycle:
                 self.__battleRoyaleController.setDefaultHangarEntryPoint()
-                isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
-                if isSuccess and self._isNew:
-                    selectorUtils.setBattleTypeAsKnown(self._selectorType)
-                    self.__battleRoyaleController.showIntroWindow()
+                yield dispatcher.doSelectAction(PrbAction(self._data))
             return
 
     def _update(self, state):

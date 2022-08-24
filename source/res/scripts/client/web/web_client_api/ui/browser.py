@@ -117,7 +117,7 @@ class CloseBrowserViewWebApiMixin(object):
         browserAlias = ctx.get('browser_alias')
         browserView = ctx.get('browser_view')
         if browserView and isinstance(browserView, wulf.View):
-            _tryToCloseWulfView(browserView)
+            browserView.onCloseView()
         else:
             appLoader = dependency.instance(IAppLoader)
             app = appLoader.getApp()

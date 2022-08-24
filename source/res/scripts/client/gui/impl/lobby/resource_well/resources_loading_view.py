@@ -65,6 +65,7 @@ class ResourcesLoadingView(ViewImpl):
             return super(ResourcesLoadingView, self).createToolTip(event)
 
     def _onLoading(self, *args, **kwargs):
+        super(ResourcesLoadingView, self)._onLoading(*args, **kwargs)
         self.__resourceWell.startNumberRequesters()
         with self.viewModel.transaction() as model:
             self.__fillProgression(model=model)

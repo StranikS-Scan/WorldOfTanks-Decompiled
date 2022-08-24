@@ -25,7 +25,7 @@ def makeSettings(url, webHandlers=None, isClosable=False, useSpecialKeys=False, 
 
 
 class BrowserView(Browser[BrowserViewModel]):
-    __slots__ = ('__settings', '__closedByUser')
+    __slots__ = ('__settings', '__closedByUser', '__forceClosed')
     __background_alpha__ = 1.0
     __appLoader = dependency.descriptor(IAppLoader)
 
@@ -34,11 +34,16 @@ class BrowserView(Browser[BrowserViewModel]):
         super(BrowserView, self).__init__(url=settings.url, settings=BrowserSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BrowserViewModel()), webHandlersMap=settings.webHandlers, preload=True)
         self.__settings = settings
         self.__closedByUser = False
+        self.__forceClosed = False
         if self.browser is not None:
             self.__setupBrowser()
         else:
             self.onBrowserObtained += self.__onBrowserObtained
         return
+
+    def onCloseView(self):
+        self.__forceClosed = True
+        self.destroyWindow()
 
     def _onLoading(self, *args, **kwargs):
         super(BrowserView, self)._onLoading(*args, **kwargs)
@@ -58,13 +63,13 @@ class BrowserView(Browser[BrowserViewModel]):
         self.onBrowserObtained -= self.__onBrowserObtained
         returnCallback = self.__settings.returnClb
         if returnCallback is not None:
-            returnCallback(byUser=self.__closedByUser, url=self.browser.url if self.browser else '')
+            returnCallback(byUser=self.__closedByUser, url=self.browser.url if self.browser else '', forceClosed=self.__forceClosed)
         super(BrowserView, self)._finalize()
         return
 
     def __onClose(self):
         self.__closedByUser = True
-        self.destroyWindow()
+        self.onCloseView()
 
     def __setupBrowser(self):
         self.browser.useSpecialKeys = self.__settings.useSpecialKeys

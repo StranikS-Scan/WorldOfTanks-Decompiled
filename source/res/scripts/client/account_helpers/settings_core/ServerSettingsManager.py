@@ -1107,6 +1107,10 @@ class ServerSettingsManager(object):
         clearRoyaleFilterCarousel2 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, 0)
         if royaleFilterCarousel2 or clearRoyaleFilterCarousel2:
             settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, royaleFilterCarousel2) ^ clearRoyaleFilterCarousel2
+        battleMatters = data.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {})
+        clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
+        if battleMatters or clearBattleMatters:
+            settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

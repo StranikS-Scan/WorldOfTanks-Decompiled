@@ -155,7 +155,6 @@ class GLOBAL_FLAG(object):
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
     VEH_POST_PROGRESSION_PURCHASABLE = '_VehPostProgressionPurchasable'
     WOTPLUS_ENABLED = '_WotPlusEnabled'
-    BATTLE_MATTERS_FIGHT_BTN = '_BattleMattersFightBtn'
     BATTLE_MATTERS_ENTRY_POINT = '_BattleMattersEntryPoint'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
@@ -170,7 +169,6 @@ class GLOBAL_FLAG(object):
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
      WOTPLUS_ENABLED,
-     BATTLE_MATTERS_FIGHT_BTN,
      BATTLE_MATTERS_ENTRY_POINT)
 
 

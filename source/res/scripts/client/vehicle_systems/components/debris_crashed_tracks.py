@@ -18,13 +18,13 @@ _logger = logging.getLogger(__name__)
 
 class TrackCrashWithDebrisComponent(object):
     MAX_DEBRIS_COUNT = (14, 10, 4)
+    CURRENT_DEBRIS_COUNT = 0
     isLeft = property(lambda self: self.__isLeft)
     pairIndex = property(lambda self: self.__pairIndex)
     vehicleDescriptor = property(lambda self: self.__vehicleDescriptor)
     wheelsGameObject = property(lambda self: self.__wheelsGameObject)
     boundEffects = property(lambda self: self.__boundEffects)
     vehicleFilter = property(lambda self: self.__vehicleFilter)
-    repaired = property(lambda self: self.__repaired)
     debrisGameObject = property(lambda self: self.__debrisGameObject)
     trackPairDesc = property(lambda self: self.vehicleDescriptor.chassis.tracks.trackPairs[self.pairIndex])
 
@@ -36,38 +36,27 @@ class TrackCrashWithDebrisComponent(object):
     def hitPoint(self):
         return self.__hitPoint
 
-    @hitPoint.setter
-    def hitPoint(self, value):
-        self.__hitPoint = value
-
     @property
     def shouldCreateDebris(self):
         return self.__shouldCreateDebris
-
-    @shouldCreateDebris.setter
-    def shouldCreateDebris(self, value):
-        self.__shouldCreateDebris = value
 
     @property
     def isPlayer(self):
         return self.__isPlayer
 
-    @isPlayer.setter
-    def isPlayer(self, value):
-        self.__isPlayer = value
-
-    def __init__(self, isLeft, pairIndex, vehicleDescriptor, wheelsGameObject, boundEffects, vehicleFilter):
+    def __init__(self, isLeft, pairIndex, vehicleDescriptor, wheelsGameObject, boundEffects, vehicleFilter, isPlayerVehicle, shouldCreateDebris, hitPoint):
         self.__isLeft = isLeft
         self.__pairIndex = pairIndex
         self.__vehicleDescriptor = vehicleDescriptor
         self.__wheelsGameObject = wheelsGameObject
         self.__boundEffects = boundEffects
         self.__vehicleFilter = vehicleFilter
-        self.__hitPoint = None
+        self.__isPlayer = isPlayerVehicle
+        self.__shouldCreateDebris = shouldCreateDebris
+        self.__hitPoint = hitPoint
         self.__debrisGameObject = None
-        self.__repaired = False
-        self.__shouldCreateDebris = False
-        self.__isPlayer = False
+        if shouldCreateDebris:
+            TrackCrashWithDebrisComponent.CURRENT_DEBRIS_COUNT += 1
         return
 
     def createDebrisGameObject(self, spaceID):
@@ -82,9 +71,6 @@ class TrackCrashWithDebrisComponent(object):
             CGF.removeGameObject(self.__debrisGameObject)
             self.__debrisGameObject = None
         return
-
-    def markAsRepaired(self):
-        self.__repaired = True
 
 
 class NodeRemapperComponent(object):
@@ -221,13 +207,9 @@ class DebrisCrashedTracksManager(CGF.ComponentManager):
         self.__unmapNodes(debris)
         amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, True)
         self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject)
-        if debris.repaired:
-            debris.removeDebrisGameObject()
-        else:
-            go = debris.debrisGameObject
-            if go is not None:
-                go.createComponent(GenericComponents.RemoveGoDelayedComponent, self.DEBRIS_MAX_LIFETIME)
-        return
+        debris.removeDebrisGameObject()
+        if debris.shouldCreateDebris:
+            TrackCrashWithDebrisComponent.CURRENT_DEBRIS_COUNT -= 1
 
 
 if not IS_CGF_DUMP:

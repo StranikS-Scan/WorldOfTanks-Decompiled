@@ -37,7 +37,7 @@
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
     <density>	0.90 0.90	</density>
@@ -2284,7 +2284,7 @@
             <collisionModelClient>	vehicles/american/A146_TL_7_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <density>	125.171 125.685	</density>

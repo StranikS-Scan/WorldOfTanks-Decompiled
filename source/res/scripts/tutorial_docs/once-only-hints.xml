@@ -578,6 +578,7 @@
       </arrow>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
       <checked-ui-state>
         <simple-state>
           <state>	visible	</state>
@@ -867,20 +868,6 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	BattleMattersFightButtonHint	  <item-id>	FightButton	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <condition>
-        <global-active>	_BattleMattersFightBtn	</global-active>
-      </condition>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
     </hint>
     <hint>	BattleMattersEntryPointHint	  <item-id>	BattleMattersEntryPoint	</item-id>
       <ignore-outside-click>	True	</ignore-outside-click>

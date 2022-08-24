@@ -25,8 +25,13 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
     loaders = {}
     effDescr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getMinesEffect()
     isAlly = False
-    playerTeam = avatar_getter.getPlayerTeam()
     ownerVehicleInfo = battleSession.getArenaDP().getVehicleInfo(ownerVehicleID)
+    if not avatar_getter.isObserver():
+        playerTeam = avatar_getter.getPlayerTeam()
+    else:
+        observedVehicleID = avatar_getter.getVehicleIDAttached()
+        observedVehicleInfo = battleSession.getArenaDP().getVehicleInfo(observedVehicleID)
+        playerTeam = observedVehicleInfo.team
     if ownerVehicleInfo is not None:
         isAlly = playerTeam == ownerVehicleInfo.team
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy

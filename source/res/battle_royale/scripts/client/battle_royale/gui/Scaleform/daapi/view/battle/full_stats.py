@@ -6,8 +6,9 @@ from gui.impl.gen.resources import R
 from gui.impl import backport
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.Scaleform.daapi.view.meta.BattleRoyaleFullStatsMeta import BattleRoyaleFullStatsMeta
-from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.classic.full_stats import IFullStatsComponent
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
+from skeletons.gui.battle_session import IBattleSessionProvider
 from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 
 class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IFullStatsComponent, IVehicleCountListener):
@@ -47,7 +48,8 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
 
     def setVehicles(self, count, vehicles, teams):
         vehiclesByType = []
-        for classType, data in vehicles.items():
+        vehiclesSortedByType = sorted(vehicles.items(), key=lambda (classType, _): VEHICLE_TYPES_ORDER_INDICES_REVERSED[classType])
+        for classType, data in vehiclesSortedByType:
             sortedVehicles = sorted(data.items(), key=lambda (_, isDead): isDead)
             vehiclesByType.append({'classType': classType,
              'platoons': []})

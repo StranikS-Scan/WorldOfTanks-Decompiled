@@ -587,6 +587,7 @@ def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attach
     else:
         animator = loadedAnimators.pop(animatorName)
         animator.bindTo(wrapperToBind)
+        animator.setEnabled(False)
         if hasattr(animator, 'setBoolParam'):
             animator.setBoolParam('isDeferred', _isDeferredRenderer)
         return LoadedModelAnimator(animator, node, attachmentPartNode)

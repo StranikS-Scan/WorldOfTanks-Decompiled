@@ -84,6 +84,7 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
+    ON_TARGET_VEHICLE_CHANGED = 'onTargetVehicleChanged'
     MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
 
 

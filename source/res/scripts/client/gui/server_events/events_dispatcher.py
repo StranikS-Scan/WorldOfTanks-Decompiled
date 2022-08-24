@@ -10,12 +10,12 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay
+from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
 from gui.shared.events import PersonalMissionsEvent
 from gui.wot_anniversary.wot_anniversary_helpers import showMainView, isWotAnniversaryQuest
 from helpers import dependency
@@ -59,6 +59,7 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_29: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_30: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_31: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_32: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_MARINA: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_PATRICK: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
@@ -325,6 +326,12 @@ def showPiggyBankRewardWindow(creditsValue, isPremActive):
      'isPremActive': isPremActive}
     rewardWindow = PiggyBankRewardWindow(ctx)
     rewardWindow.load()
+
+
+def showMetaBonusOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, forcedSkipEscape=False, browserParams=None):
+    notificationMgr = dependency.instance(INotificationWindowController)
+    event = NotificationEvent(method=showBrowserOverlayView, url=url, alias=alias, forcedSkipEscape=forcedSkipEscape, browserParams=browserParams)
+    notificationMgr.append(EventNotificationCommand(event))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

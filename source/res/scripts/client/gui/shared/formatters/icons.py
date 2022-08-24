@@ -58,6 +58,10 @@ def creditsBig():
     return _getIcon('creditsBig')
 
 
+def creditsExtraBig():
+    return _getIcon('creditsExtraBig')
+
+
 def notAvailable():
     return _getIcon('notAvailable')
 
@@ -94,6 +98,10 @@ def freeXP():
     return _getIcon('freeXP')
 
 
+def freeXPExtraBig():
+    return _getIcon('freeXPExtraBig')
+
+
 def xpCost():
     return _getIcon('xpCost')
 
@@ -110,12 +118,20 @@ def goldBig():
     return _getIcon('goldBig')
 
 
+def goldExtraBig():
+    return _getIcon('goldExtraBig')
+
+
 def crystal():
     return _getIcon(Currency.CRYSTAL)
 
 
 def crystalBig():
     return _getIcon('crystalBig')
+
+
+def crystalExtraBig():
+    return _getIcon('crystalExtraBig')
 
 
 def eventCoin():

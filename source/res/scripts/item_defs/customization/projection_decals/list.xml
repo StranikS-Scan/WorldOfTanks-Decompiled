@@ -5562,6 +5562,34 @@
       <tags>	styleOnly hiddenInUI formfactor_square direction_right_to_left	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
+    <projection_decal>
+      <id>	757	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_428.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_428	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	758	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_429.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_428	</userString>
+      <tags>	formfactor_rect1x2 direction_right_to_left styleOnly	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	759	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_430.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_428	</userString>
+      <tags>	formfactor_rect1x2 direction_left_to_right styleOnly	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	762	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_433.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_433	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
     <name>	Battle Pass 2022	</name>
   </itemGroup>
   <itemGroup>
@@ -5597,6 +5625,20 @@
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_401	</userString>
       <tags>	formfactor_square	</tags>
       <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	760	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_431.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_431	</userString>
+      <tags>	formfactor_square direction_right_to_left styleOnly	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	761	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_432.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_431	</userString>
+      <tags>	styleOnly formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
     </projection_decal>
     <name>	Battle Pass 2022	</name>
   </itemGroup>
@@ -7127,6 +7169,34 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	Yandex: 2022	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	376	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_418.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_418	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	428	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_419.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_419	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_282/description	</description>
+      <tags>	formfactor_square direction_right_to_left disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Twitch August 2022	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>

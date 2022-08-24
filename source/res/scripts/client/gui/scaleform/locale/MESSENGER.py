@@ -381,6 +381,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BOOTCAMP_CREW = '#messenger:serviceChannelMessages/bootcamp/crew'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_AUCTION = '#messenger:serviceChannelMessages/currencyUpdate/auction'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_BATTLEPASS = '#messenger:serviceChannelMessages/currencyUpdate/battlepass'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_INTEGRATEDAUCTION = '#messenger:serviceChannelMessages/currencyUpdate/integratedAuction'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/currencyUpdate/financial_transaction'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DATE = '#messenger:serviceChannelMessages/currencyUpdate/date'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/received/credits'
@@ -1085,6 +1086,17 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_RESOURCEWELL_NOSERIALVEHICLES_TEXT = '#messenger:serviceChannelMessages/resourceWell/noSerialVehicles/text'
     SERVICECHANNELMESSAGES_RESOURCEWELL_NOSERIALVEHICLES_BUTTON = '#messenger:serviceChannelMessages/resourceWell/noSerialVehicles/button'
     SERVICECHANNELMESSAGES_RESOURCEWELL_NOVEHICLESWITHRETURN_TEXT = '#messenger:serviceChannelMessages/resourceWell/noVehiclesWithReturn/text'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_BUTTON = '#messenger:serviceChannelMessages/integratedAuction/button'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_STAGESTART_TITLE = '#messenger:serviceChannelMessages/integratedAuction/stageStart/title'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_STAGESTART_TEXT = '#messenger:serviceChannelMessages/integratedAuction/stageStart/text'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_STAGEFINISH_TITLE = '#messenger:serviceChannelMessages/integratedAuction/stageFinish/title'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_STAGEFINISH_TEXT = '#messenger:serviceChannelMessages/integratedAuction/stageFinish/text'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_RATEERROR_HEADER = '#messenger:serviceChannelMessages/integratedAuction/rateError/header'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_RATEERROR_TEXT = '#messenger:serviceChannelMessages/integratedAuction/rateError/text'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_BELOWCOMPETITIVERATE_HEADER = '#messenger:serviceChannelMessages/integratedAuction/belowCompetitiveRate/header'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_BELOWCOMPETITIVERATE_TEXT = '#messenger:serviceChannelMessages/integratedAuction/belowCompetitiveRate/text'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_LOSTRATE_HEADER = '#messenger:serviceChannelMessages/integratedAuction/lostRate/header'
+    SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_LOSTRATE_TEXT = '#messenger:serviceChannelMessages/integratedAuction/lostRate/text'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

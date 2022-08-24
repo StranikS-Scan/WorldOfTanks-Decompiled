@@ -5,8 +5,10 @@ import adisp
 from async import async, await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
+from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.event_dispatcher import showCrystalWindow
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from skeletons.gui.game_control import IBrowserController
 from web.web_client_api import W2CSchema, w2c, Field
@@ -71,6 +73,10 @@ class HangarWindowsWebApiMixin(object):
     @w2c(W2CSchema, 'show_buy_berth_window')
     def openBuyBerthWindow(self, _):
         ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
+
+    @w2c(W2CSchema, 'show_crystal_info_window')
+    def openCrystalInfoWindow(self, _):
+        showCrystalWindow(HeaderMenuVisibilityState.ALL)
 
     def validateItems(self, itemCD):
         item = self.itemsCache.items.getItemByCD(itemCD)

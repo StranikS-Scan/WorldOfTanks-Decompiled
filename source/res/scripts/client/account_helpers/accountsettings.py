@@ -20,6 +20,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.integrated_auction.constants import AUCTION_STAGE_START_SEEN, AUCTION_FINISH_STAGE_SEEN
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
@@ -210,6 +211,7 @@ WOT_ANNIVERSARY_SECTION = 'wotAnniversarySection'
 WOT_ANNIVERSARY_SEEN_DAILY_QUEST = 'wotAnniversarySeenDailyQuest'
 WOT_ANNIVERSARY_SEEN_WEEKLY_QUEST = 'wotAnniversarySeenWeeklyQuest'
 WOT_ANNIVERSARY_SEEN_EVENT_WILL_END_SOON_NOTIFICATION = 'wotAnniversarySeenEventWillEndSoonNotification'
+INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -996,7 +998,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      CLAN_NEWS_SEEN: False,
                      RESOURCE_WELL_START_SHOWN: False,
                      RESOURCE_WELL_END_SHOWN: False,
-                     CN_LOOT_BOXES_FINISH_SHOWN: False},
+                     CN_LOOT_BOXES_FINISH_SHOWN: False,
+                     INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
+                                                        AUCTION_FINISH_STAGE_SEEN: set()}},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,

@@ -35,6 +35,7 @@
     <_130mm_vz_54_2A>	33	</_130mm_vz_54_2A>
     <_105mm_vz_38N_auto>	34	</_105mm_vz_38N_auto>
     <_100mm_BS_3>	35	</_100mm_BS_3>
+    <_130mm_vz_54_2A_CN>	36	</_130mm_vz_54_2A_CN>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -2037,5 +2038,63 @@
         </_130mm_Narazovy_vz_55>
       </shots>
     </_130mm_vz_54_2A>
+    <_130mm_vz_54_2A_CN>
+      <userString>	#czech_vehicles:_130mm_vz_54_2A_CN	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	315000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15.4285714285714	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.39	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_Prurazny_vz_55>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 230	</piercingPower>
+        </_130mm_Prurazny_vz_55>
+        <_130mm_Prurazny_vz_55_s_oc_jadrem>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1125	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	306 266	</piercingPower>
+        </_130mm_Prurazny_vz_55_s_oc_jadrem>
+        <_130mm_Narazovy_vz_55>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	863	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_130mm_Narazovy_vz_55>
+      </shots>
+    </_130mm_vz_54_2A_CN>
   </shared>
 </guns.xml>

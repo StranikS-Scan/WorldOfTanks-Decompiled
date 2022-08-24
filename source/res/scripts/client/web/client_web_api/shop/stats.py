@@ -16,6 +16,7 @@ class BalanceEventHandler(C2WHandler):
         super(BalanceEventHandler, self).init()
         self.__walletController.onWalletStatusChanged += self.__onWalletUpdate
         g_clientUpdateManager.addCallbacks({'stats.{}'.format(c):self.__onBalanceUpdate for c in Currency.ALL})
+        g_clientUpdateManager.addCallback('stats.freeXP', self.__onBalanceUpdate)
         g_clientUpdateManager.addCallbacks({'cache.dynamicCurrencies': self.__onBalanceUpdate})
 
     def fini(self):

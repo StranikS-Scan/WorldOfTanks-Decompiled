@@ -4,6 +4,7 @@ import typing
 from copy import deepcopy
 import BigWorld
 from debug_utils import LOG_ERROR
+from frameworks.wulf import WindowLayer
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
@@ -33,6 +34,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
 from skeletons.gui.game_control import IBattlePassController, IMapboxController, IResourceWellController, IFunRandomController, ICNLootBoxesController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -1117,3 +1119,48 @@ class ChinaLootBoxesDecorator(MessageDecorator):
         if self._model is not None:
             self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
         return
+
+
+class IntegratedAuctionDecorator(MessageDecorator):
+    __OVERLAYS = (WindowLayer.FULLSCREEN_WINDOW, WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW)
+    __gui = dependency.descriptor(IGuiLoader)
+
+    def __init__(self, entityID):
+        super(IntegratedAuctionDecorator, self).__init__(entityID, self._makeEntity(), self._makeSettings())
+
+    def getGroup(self):
+        return NotificationGroup.INFO
+
+    def _makeEntity(self):
+        raise NotImplementedError
+
+    def _makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=self.__getPriority())
+
+    def __getPriority(self):
+        windows = self.__gui.windowsManager.findWindows(lambda w: w.layer in self.__OVERLAYS)
+        return NotificationPriorityLevel.LOW if windows else NotificationPriorityLevel.MEDIUM
+
+
+class IntegratedAuctionStageStartDecorator(IntegratedAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.AUCTION_STAGE_START
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.text())
+        return g_settings.msgTemplates.format('IntegratedAuctionStageStart', ctx={'title': title,
+         'text': text})
+
+
+class IntegratedAuctionStageFinishDecorator(IntegratedAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.AUCTION_STAGE_FINISH
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.text())
+        return g_settings.msgTemplates.format('IntegratedAuctionStageFinish', ctx={'title': title,
+         'text': text})

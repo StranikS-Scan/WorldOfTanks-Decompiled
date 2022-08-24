@@ -426,6 +426,22 @@ def discountText(text):
     return _formatText('discountText', text)
 
 
+def goldTitle(text):
+    return _formatText('goldTitle', text)
+
+
+def creditsTitle(text):
+    return _formatText('creditsTitle', text)
+
+
+def crystalTitle(text):
+    return _formatText('crystalTitle', text)
+
+
+def expTitle(text):
+    return _formatText('expTitle', text)
+
+
 def getRawStyles(names):
     return dict(((name, _getStyle(name)) for name in names))
 

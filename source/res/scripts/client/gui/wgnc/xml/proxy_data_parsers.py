@@ -277,6 +277,34 @@ class _MapboxRewardReceivedParser(SectionParser):
          'isFinal': section.readBool('is_last_reward')})
 
 
+class _IntegratedAuctionRateErrorParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.ShowAuctionRateErrorMessage()
+
+
+class _IntegratedAuctionBelowCompetitiveRateParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.ShowAuctionBelowCompetitiveRateMessage()
+
+
+class _IntegratedAuctionLostRateParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        messageData = json.loads(section['data'].asString)
+        return proxy_data.ShowAuctionLostRateMessage(messageData=messageData)
+
+
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):
 
     def __init__(self):
@@ -300,4 +328,7 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _MapboxSurveyAvailableParser(),
          _MapboxEventStartedParser(),
          _MapboxEventEndedParser(),
-         _MapboxRewardReceivedParser()))
+         _MapboxRewardReceivedParser(),
+         _IntegratedAuctionRateErrorParser(),
+         _IntegratedAuctionBelowCompetitiveRateParser(),
+         _IntegratedAuctionLostRateParser()))

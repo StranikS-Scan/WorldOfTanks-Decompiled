@@ -10,7 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getPlayerSeniorityAwardsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getPlayerSeniorityAwardsUrl, getIntegratedAuctionUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -1108,6 +1108,42 @@ class _OpenCNLootBoxesExternalShopHandler(_NavigationDisabledActionHandler):
             self.__cnLootBoxes.openExternalShopPage()
 
 
+class _OpenIntegratedAuction(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showShop(getIntegratedAuctionUrl())
+
+
+class _OpenIntegratedAuctionStart(_OpenIntegratedAuction):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.AUCTION_STAGE_START
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+
+class _OpenIntegratedAuctionFinish(_OpenIntegratedAuction):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.AUCTION_STAGE_FINISH
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -1159,8 +1195,10 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenResourceWellProgressionNoVehiclesWindow,
  _OpenEpicBattlesAfterBattleWindow,
  _SelectFunRandomMode,
- _OpenMissingEventsHandler,
- _OpenCNLootBoxesExternalShopHandler)
+ _OpenCNLootBoxesExternalShopHandler,
+ _OpenIntegratedAuction,
+ _OpenIntegratedAuctionStart,
+ _OpenIntegratedAuctionFinish)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

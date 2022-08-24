@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
 import collections
+import json
 import logging
 import time
+import typing
 import weakref
 from collections import defaultdict
-import typing
+from functools import partial
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CN_LOOT_BOXES_INTRO_WAS_SHOWN, IS_BATTLE_PASS_EXTRA_STARTED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_START_SHOWN, CN_LOOT_BOXES_FINISH_SHOWN
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN, INTEGRATED_AUCTION_NOTIFICATIONS, CN_LOOT_BOXES_INTRO_WAS_SHOWN, CN_LOOT_BOXES_FINISH_SHOWN
 from adisp import process
 from async import async, await
 from battle_pass_common import FinalReward
@@ -27,6 +29,7 @@ from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
+from gui.integrated_auction.constants import AUCTION_START_EVENT_TYPE, AUCTION_FINISH_EVENT_TYPE, AUCTION_STAGE_START_SEEN, AUCTION_FINISH_STAGE_SEEN
 from gui.periodic_battles.models import PeriodType
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
@@ -36,13 +39,15 @@ from gui.shared import events, g_eventBus
 from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
+from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from helpers.events_handler import EventsHandler
 from gui.wot_anniversary.wot_anniversary_helpers import WotAnniversaryEventState
-from helpers import time_utils, i18n, dependency
+from helpers import dependency, i18n, time_utils
+from helpers.events_handler import EventsHandler
+from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.formatters import TimeFormatter
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
@@ -50,7 +55,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, FunRandomButtonDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, PsaCoinReminderMessageDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, WGNCPopUpDecorator, ChinaLootBoxesDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, FunRandomButtonDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, PsaCoinReminderMessageDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, WGNCPopUpDecorator, ChinaLootBoxesDecorator, IntegratedAuctionStageStartDecorator, IntegratedAuctionStageFinishDecorator
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICNLootBoxesController, IEventsNotificationsController, IFunRandomController, IGameSessionController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWotAnniversaryController
@@ -1704,6 +1709,110 @@ class WotAnniversaryListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.body()), type=SystemMessages.SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.header())})
 
 
+class IntegratedAuctionListener(_NotificationListener):
+    __slots__ = ('__startNotifiers', '__finishNotifiers')
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+    __EVENT_TYPE_TO_SETTING = {AUCTION_START_EVENT_TYPE: AUCTION_STAGE_START_SEEN,
+     AUCTION_FINISH_EVENT_TYPE: AUCTION_FINISH_STAGE_SEEN}
+    __EVENT_TYPE_TO_DECORATOR = {AUCTION_START_EVENT_TYPE: IntegratedAuctionStageStartDecorator,
+     AUCTION_FINISH_EVENT_TYPE: IntegratedAuctionStageFinishDecorator}
+    __TIME_TO_SHOW_SOON = 2
+
+    def __init__(self):
+        self.__startNotifiers = {}
+        self.__finishNotifiers = {}
+        super(IntegratedAuctionListener, self).__init__()
+
+    def start(self, model):
+        result = super(IntegratedAuctionListener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__clearNotifiers()
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(IntegratedAuctionListener, self).stop()
+
+    def __clearNotifiers(self):
+        for notifier in self.__startNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__startNotifiers.clear()
+        for notifier in self.__finishNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__finishNotifiers.clear()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType in (AUCTION_START_EVENT_TYPE, AUCTION_FINISH_EVENT_TYPE):
+                notificationData = json.loads(notification.data)
+                self.__addNotification(notificationData, notification.eventType)
+
+    def __addNotification(self, data, eventType):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            settings = AccountSettings.getNotifications(INTEGRATED_AUCTION_NOTIFICATIONS)
+            settingName = self.__EVENT_TYPE_TO_SETTING[eventType]
+            notificationID = str(data['id'])
+            if notificationID not in settings[settingName]:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate <= time_utils.getServerUTCTime() < endDate and self.__isNotificationNeeded(eventType):
+                    decorator = self.__EVENT_TYPE_TO_DECORATOR.get(eventType)
+                    if callable(decorator):
+                        model.addNotification(decorator(entityID=int(notificationID)))
+                        self.__setNotificationShown(settings, settingName, notificationID)
+                        self.__removeNotifier(notificationID, eventType)
+                elif startDate > time_utils.getServerUTCTime():
+                    self.__addNotifier(notificationID, eventType, startDate)
+            return
+
+    def __addNotifier(self, notificationID, eventType, startDate):
+        notifiers = self.__startNotifiers if eventType == AUCTION_START_EVENT_TYPE else self.__finishNotifiers
+        if notificationID not in notifiers:
+            notifiers[notificationID] = SimpleNotifier(partial(self.__getTimeToStart, startDate), self.__onNotifierUpdate)
+            notifiers[notificationID].startNotification()
+
+    def __removeNotifier(self, notificationID, eventType):
+        notifiers = self.__startNotifiers if eventType == AUCTION_START_EVENT_TYPE else self.__finishNotifiers
+        if notificationID in notifiers:
+            notifiers[notificationID].stopNotification()
+            notifiers[notificationID].clear()
+            notifiers.pop(notificationID)
+
+    def __onNotifierUpdate(self):
+        self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    def __setNotificationShown(self, settings, settingName, notificationID):
+        settings[settingName].add(notificationID)
+        AccountSettings.setNotifications(INTEGRATED_AUCTION_NOTIFICATIONS, settings)
+
+    def __isFinishNotificationActive(self):
+        for notification in self.__eventNotifications.getEventsNotifications():
+            if notification.eventType == AUCTION_FINISH_EVENT_TYPE:
+                data = json.loads(notification.data)
+                if self.__getTimeToStart(getTimestampByStrDate(str(data['startDate']))) <= self.__TIME_TO_SHOW_SOON:
+                    return True
+
+        return False
+
+    def __isNotificationNeeded(self, eventType):
+        return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -1728,7 +1837,8 @@ class NotificationsListeners(_NotificationListener):
          ResourceWellListener(),
          FunRandomEventsListener(),
          ChinaLootBoxListener(),
-         WotAnniversaryListener())
+         WotAnniversaryListener(),
+         IntegratedAuctionListener())
 
     def start(self, model):
         for listener in self.__listeners:

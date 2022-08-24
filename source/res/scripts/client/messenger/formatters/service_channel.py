@@ -47,7 +47,7 @@ from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBo
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.currency import applyAll, getBWFormatter, getStyle
 from gui.shared.formatters.time_formatters import RentDurationKeys, getTillTimeByResource, getTimeLeftInfo
 from gui.shared.gui_items.Tankman import Tankman
@@ -901,9 +901,14 @@ class AchievementFormatter(ServiceChannelFormatter):
 
 
 class CurrencyUpdateFormatter(ServiceChannelFormatter):
-    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction(),
+    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.integratedAuction(),
      2524: R.strings.messenger.serviceChannelMessages.currencyUpdate.battlepass()}
     _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
+    __FREE_XP = 'freeXp'
+    __FREE_XP_ICON = 'freeXPSmallIcon'
+    __CURRENCY_CODES_MAP = {CURRENCIES_CONSTANTS.FREE_XP: __FREE_XP}
+    __CURRENCY_TO_STYLE = {__FREE_XP: text_styles.expText}
+    __CURRENCY_ICONS = {__FREE_XP: __FREE_XP_ICON}
 
     def format(self, message, *args):
         data = message.data
@@ -912,20 +917,24 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
         transactionTime = data['date']
         emitterID = data.get('emitterID')
         if currencyCode and amountDelta and transactionTime:
+            currencyCode = self.__CURRENCY_CODES_MAP.get(currencyCode, currencyCode)
             xmlKey = 'currencyUpdate'
             formatted = g_settings.msgTemplates.format(xmlKey, ctx={'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
              'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
              'currency': self.__getCurrencyString(currencyCode, amountDelta),
-             'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
+             'amount': self.__getCurrencyStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': self.__CURRENCY_ICONS.get(currencyCode, currencyCode.title() + 'Icon')})
             return [MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [MessageData(None, None)]
 
     def __ifPlatformCurrency(self, currencyCode):
-        return currencyCode not in Currency.ALL
+        return currencyCode not in Currency.ALL + (self.__FREE_XP,)
 
     def __getCurrencyString(self, currencyCode, amountDelta):
         return backport.text(R.strings.messenger.platformCurrencyMsg.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()) if self.__ifPlatformCurrency(currencyCode) else backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)())
+
+    def __getCurrencyStyle(self, currencyCode):
+        return self.__CURRENCY_TO_STYLE.get(currencyCode, getStyle(currencyCode))
 
 
 class GiftReceivedFormatter(ServiceChannelFormatter):
@@ -4879,3 +4888,37 @@ class ResourceWellNoVehiclesFormatter(WaitItemsSyncFormatter):
         else:
             callback([MessageData(None, None)])
         return
+
+
+class IntegratedAuctionLostRateFormatter(ServiceChannelFormatter):
+    __TEMPLATE = 'IntegratedAuctionLostErrorSysMessage'
+    __AUCTION_MESSAGES = R.strings.messenger.serviceChannelMessages.integratedAuction.lostRate
+    __CURRENCY_TO_STYLE = {Currency.CREDITS: text_styles.creditsTitle,
+     Currency.GOLD: text_styles.goldTitle,
+     Currency.CRYSTAL: text_styles.crystalTitle,
+     CURRENCIES_CONSTANTS.FREE_XP: text_styles.expTitle}
+    __FREE_XP = 'free_xp'
+    __WGM_CURRENCY_TO_NAME = {__FREE_XP: CURRENCIES_CONSTANTS.FREE_XP}
+
+    def format(self, message, *args):
+        messageData = message.get('data', {})
+        if 'currency' not in messageData or 'amount' not in messageData:
+            return [MessageData(None, None)]
+        else:
+            headerStr = backport.text(self.__AUCTION_MESSAGES.header())
+            currencyStr = self.__getCurrencyString(str(messageData['currency']), int(messageData['amount']))
+            header = text_styles.concatStylesWithSpace(headerStr, currencyStr)
+            text = backport.text(self.__AUCTION_MESSAGES.text())
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'header': header,
+             'text': text})
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+
+    def __getCurrencyString(self, currency, amount):
+        currencyName = self.__WGM_CURRENCY_TO_NAME.get(currency, currency)
+        icon = getattr(icons, currencyName + 'ExtraBig')()
+        amountStr = self.__getCurrencyStyle(currency)(getBWFormatter(currency)(amount))
+        return text_styles.concatStylesToSingleLine(amountStr, icon)
+
+    def __getCurrencyStyle(self, currencyCode):
+        currencyName = self.__WGM_CURRENCY_TO_NAME.get(currencyCode, currencyCode)
+        return self.__CURRENCY_TO_STYLE.get(currencyName, getStyle(currencyName))

@@ -6373,6 +6373,7 @@ class VEHICLE_CUSTOMIZATION(object):
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_441_DESCRIPTION = '#vehicle_customization:projection_decals/special/projection_decal_441/description'
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_442 = '#vehicle_customization:projection_decals/special/projection_decal_442'
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_442_DESCRIPTION = '#vehicle_customization:projection_decals/special/projection_decal_442/description'
+    PROJECTION_DECALS_COOL_PROJECTION_DECAL_67 = '#vehicle_customization:projection_decals/cool/projection_decal_67'
     PROJECTION_DECALS_COOL_PROJECTION_DECAL_68 = '#vehicle_customization:projection_decals/cool/projection_decal_68'
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_434_STYLE = '#vehicle_customization:projection_decals/special/projection_decal_434_style'
     PROJECTION_DECALS_SPECIAL_PROJECTION_DECAL_444 = '#vehicle_customization:projection_decals/special/projection_decal_444'

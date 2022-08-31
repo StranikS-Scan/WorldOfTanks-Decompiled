@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/textwrap.py
-# Compiled at: 2073-06-19 01:34:08
+# Compiled at: 2058-02-14 16:17:04
 """Text wrapping and filling.
 """
 __revision__ = '$Id$'

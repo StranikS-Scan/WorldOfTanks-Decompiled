@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Ch01_Type59>
     <id>	0	</id>
     <userString>	#china_vehicles:Ch01_Type59	</userString>
@@ -52,7 +53,7 @@
     <userString>	#china_vehicles:Ch04_T34_1	</userString>
     <description>	#china_vehicles:Ch04_T34_1_descr	</description>
     <price>	1400000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	7	</level>
   </Ch04_T34_1>
   <Ch06_Renault_NC31>
@@ -69,7 +70,7 @@
     <userString>	#china_vehicles:Ch05_T34_2	</userString>
     <description>	#china_vehicles:Ch05_T34_2_descr	</description>
     <price>	2480000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	8	</level>
   </Ch05_T34_2>
   <Ch18_WZ-120>
@@ -160,7 +161,7 @@
     <userString>	#china_vehicles:Ch21_T34	</userString>
     <description>	#china_vehicles:Ch21_T34_descr	</description>
     <price>	430000	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	5	</level>
   </Ch21_T34>
   <Ch15_59_16>
@@ -266,7 +267,7 @@
     <description>	#china_vehicles:Ch35_T-34-2G_FT_descr	</description>
     <shortUserString>	#china_vehicles:Ch35_T-34-2G_FT_short	</shortUserString>
     <price>	1440000	</price>
-    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	7	</level>
   </Ch35_T-34-2G_FT>
   <Ch36_WZ111_1G_FT>
@@ -408,7 +409,7 @@
     <price>	19700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_universal HD secret mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	9	</level>
   </Ch40_WZ120G_FT>
   <Ch39_WZ120_1G_FT>
@@ -458,7 +459,7 @@
     <price>	9900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	8	</level>
   </Ch14_T34_3>
   <Ch04_T34_1_training>
@@ -467,7 +468,7 @@
     <description>	#china_vehicles:Ch04_T34_1_descr	</description>
     <price>	1355000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable	</tags>
+    <tags>	mediumTank private HD secret unrecoverable t34_disclaimer	</tags>
     <level>	1	</level>
   </Ch04_T34_1_training>
   <Ch23_112>

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy_reg.py
-# Compiled at: 2070-08-14 05:20:11
+# Compiled at: 2055-02-06 22:34:38
 """Helper to provide extensibility for pickle/cPickle.
 
 This is only useful to add pickle support for extension types defined in

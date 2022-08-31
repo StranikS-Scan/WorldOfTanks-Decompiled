@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/utf_8.py
-# Compiled at: 2023-01-08 16:53:34
+# Compiled at: 1992-11-18 05:44:15
 """ Python 'utf-8' Codec
 
 

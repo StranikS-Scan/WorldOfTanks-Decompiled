@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWUtil.py
-# Compiled at: 2022-09-14 16:10:09
+# Compiled at: 1992-07-27 08:27:25
 import sys
 import os
 from functools import partial, wraps

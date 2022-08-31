@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/abc.py
-# Compiled at: 2022-10-18 16:54:54
+# Compiled at: 1992-08-10 23:03:31
 """Abstract Base Classes (ABCs) according to PEP 3119."""
 import types
 from _weakrefset import WeakSet

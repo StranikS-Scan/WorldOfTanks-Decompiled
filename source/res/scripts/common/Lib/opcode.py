@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/opcode.py
-# Compiled at: 2023-03-05 02:28:40
+# Compiled at: 1993-01-22 14:47:20
 """
 opcode module - potentially shared between dis and other modules which
 operate on bytecodes (e.g. peephole optimizers).

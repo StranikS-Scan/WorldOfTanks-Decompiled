@@ -1806,27 +1806,27 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</exploded>
             <sets>
               <Cz17_Vz_55_3DSt_MD_21_XXII>
-                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</exploded>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</exploded>
               </Cz17_Vz_55_3DSt_MD_21_XXII>
               <Cz17_Vz_55_OCN_3DSt>
-                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/crash/lod0/Gun_01.model	</exploded>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_OCN_3DSt/crash/lod0/Gun_02.model	</exploded>
               </Cz17_Vz_55_OCN_3DSt>
             </sets>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_largeext	</effects>
+          <effects>	shot_largeext_mb	</effects>
           <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>

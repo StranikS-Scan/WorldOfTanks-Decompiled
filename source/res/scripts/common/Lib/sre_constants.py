@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_constants.py
-# Compiled at: 2023-05-29 05:20:55
+# Compiled at: 1993-04-11 04:07:01
 """Internal support module for sre"""
 MAGIC = 20031017
 try:

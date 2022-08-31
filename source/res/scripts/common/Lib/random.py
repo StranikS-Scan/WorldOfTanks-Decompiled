@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/random.py
-# Compiled at: 2073-06-17 12:57:10
+# Compiled at: 2058-01-02 14:32:17
 """Random variable generators.
 
     integers

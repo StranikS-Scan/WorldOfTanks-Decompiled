@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bisect.py
-# Compiled at: 2022-10-10 18:03:58
+# Compiled at: 1992-08-27 11:02:12
 """Bisection algorithms."""
 
 def insort_right(a, x, lo=0, hi=None):

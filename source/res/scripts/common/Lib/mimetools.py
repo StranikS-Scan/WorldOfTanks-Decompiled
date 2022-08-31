@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimetools.py
-# Compiled at: 2023-02-26 07:51:25
+# Compiled at: 1993-01-20 12:03:27
 """Various tools used by MIME-reading or MIME-writing programs."""
 import os
 import sys

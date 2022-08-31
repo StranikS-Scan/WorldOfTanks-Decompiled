@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/collections.py
-# Compiled at: 2070-08-13 06:48:49
+# Compiled at: 2055-01-23 11:07:49
 """This module implements specialized container datatypes providing
 alternatives to Python's general purpose built-in containers, dict,
 list, set, and tuple.

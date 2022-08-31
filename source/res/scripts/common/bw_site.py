@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bw_site.py
-# Compiled at: 2073-09-10 17:08:07
+# Compiled at: 2058-04-27 00:15:39
 import __builtin__
 import os
 import traceback

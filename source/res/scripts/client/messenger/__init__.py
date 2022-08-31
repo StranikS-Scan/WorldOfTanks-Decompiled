@@ -15,4 +15,4 @@ class error(SoftException):
 g_settings = MessengerSettings()
 
 def normalizeGroupId(itemId):
-    return unicode_from_utf8(itemId)[0] if isinstance(itemId, StringType) else itemId
+    return unicode_from_utf8(itemId)[1] if isinstance(itemId, StringType) else itemId

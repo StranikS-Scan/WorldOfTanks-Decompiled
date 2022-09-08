@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/importlib/__init__.py
-# Compiled at: 1992-12-16 08:09:12
+# Compiled at: 2032-08-31 21:30:27
 """Backport of importlib.import_module from 3.x."""
 import sys
 

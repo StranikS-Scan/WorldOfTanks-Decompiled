@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_weakrefset.py
-# Compiled at: 1992-08-11 10:19:06
+# Compiled at: 2032-05-18 07:47:37
 from _weakref import ref
 __all__ = ['WeakSet']
 

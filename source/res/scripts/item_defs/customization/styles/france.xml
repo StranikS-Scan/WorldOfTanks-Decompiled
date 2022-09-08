@@ -1274,4 +1274,90 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F88_AMX_13_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	665	</id>
+      <texture>	gui/maps/vehicles/styles/F88_AMX_13_105_B9BS_3DSt.png	</texture>
+      <modelsSet>	F88_AMX_13_105_B9BS_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F88_AMX_13_105_B9BS_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F88_AMX_13_105_B9BS_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02 tank_upgrade_02_skinned	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 tank_upgrade_03_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	463	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 tank_upgrade_04_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	463	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	1	</palette>
+                </item>
+              </camouflages>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	352	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

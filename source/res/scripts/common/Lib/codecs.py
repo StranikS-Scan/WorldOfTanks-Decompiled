@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/codecs.py
-# Compiled at: 2057-06-10 23:45:05
+# Compiled at: 2032-05-19 14:43:04
 """ codecs -- Python Codec Registry, API and helpers.
 
 

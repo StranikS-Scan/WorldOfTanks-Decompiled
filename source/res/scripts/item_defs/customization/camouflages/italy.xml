@@ -1367,4 +1367,43 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It08_Progetto_M40_mod_65	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	462	</id>
+      <texture>	vehicles/russian/Camouflage/It08_Progetto_M40_mod_65_B9BS_3DSt.dds	</texture>
+      <description>	#vehicle_customization:camouflage/It08_Progetto_M40_mod_65_B9BS_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/It08_Progetto_M40_mod_65_B9BS_3DSt/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	92 72 66 0	</c0>
+          <c1>	145 132 106 255	</c1>
+          <c2>	72 76 60 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	92 72 66 255	</c0>
+          <c1>	145 132 106 255	</c1>
+          <c2>	72 76 60 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0.34 0.45	</offset>
+      </tilingSettings>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
 </italy.xml>

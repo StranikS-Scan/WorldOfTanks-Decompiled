@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/atexit.py
-# Compiled at: 1992-08-11 18:47:49
+# Compiled at: 2032-05-20 10:25:51
 """
 atexit.py - allow programmer to define multiple exit functions to be executed
 upon normal program termination.

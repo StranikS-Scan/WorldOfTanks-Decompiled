@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy.py
-# Compiled at: 2055-02-07 01:21:00
+# Compiled at: 2032-06-02 14:23:26
 """Generic (shallow and deep) copying operations.
 
 Interface summary:

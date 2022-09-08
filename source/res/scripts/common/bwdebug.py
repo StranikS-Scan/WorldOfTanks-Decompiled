@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwdebug.py
-# Compiled at: 1993-04-28 23:44:23
+# Compiled at: 2032-11-15 23:58:32
 import BigWorld
 import sys
 printPath = False

@@ -3608,4 +3608,30 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	3D Styles for Battle Pass S9	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	352	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_color_06.png	</texture>
+      <color>	65 71 64 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/F88_AMX_13_105_B9BS_3DSt	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
 </custom_paints.xml>

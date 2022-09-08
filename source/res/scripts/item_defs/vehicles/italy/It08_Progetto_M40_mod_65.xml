@@ -73,6 +73,11 @@
           <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Hull.model	</exploded>
         </It08_Progetto_M40_mod_65_3Dst>
+        <It08_Progetto_M40_mod_65_B9BS_3DSt>
+          <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Hull.model	</exploded>
+        </It08_Progetto_M40_mod_65_B9BS_3DSt>
       </sets>
     </models>
     <swinging>
@@ -97,9 +102,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.10245 0.488378 2.29196	</rayStart>
-        <rayEnd>	0.102451 0.296962 2.234	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	0.120044 0.568083 2.006632	</rayStart>
+        <rayEnd>	0.120045 0.376668 1.948672	</rayEnd>
+        <rayUp>	-0.000002 0.289804 -0.957086	</rayUp>
         <size>	0.4	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -950,41 +955,41 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15068	</slotId>
-        <compatibleModels>	It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
         <position>	-1.64244 0.830791 2.25133	</position>
         <rotation>	1.53999 2.47819 0.872016	</rotation>
         <scale>	0.584764 0.584764 0.584763	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.000000	</clipAngle>
-        <tags>	formfactor_square	</tags>
-        <anchorShift>	0.000000	</anchorShift>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	0	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15069	</slotId>
-        <compatibleModels>	It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
         <position>	-1.64244 0.830792 -0.7208	</position>
         <rotation>	1.53999 2.4782 0.872027	</rotation>
         <scale>	0.584764 0.584764 0.584763	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.000000	</clipAngle>
-        <tags>	formfactor_square	</tags>
-        <anchorShift>	0.000000	</anchorShift>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	0	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15070	</slotId>
-        <compatibleModels>	It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
         <position>	1.63496 0.837461 2.25133	</position>
         <rotation>	1.53997 -0.676762 0.871356	</rotation>
         <scale>	0.584763 0.584763 0.584763	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.000000	</clipAngle>
-        <tags>	formfactor_square	</tags>
-        <anchorShift>	0.000000	</anchorShift>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	0	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1038,6 +1043,19 @@
         <clipAngle>	1.04089	</clipAngle>
         <anchorShift>	0.050508	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt	</compatibleModels>
+        <position>	-1.093001 1.351343 2.457121	</position>
+        <rotation>	0.238796 -0.022531 3.1362	</rotation>
+        <scale>	0.528045 0.528045 0.528044	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	0.000002	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1086,6 +1104,11 @@
             <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Chassis.model	</exploded>
           </It08_Progetto_M40_mod_65_3Dst>
+          <It08_Progetto_M40_mod_65_B9BS_3DSt>
+            <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Chassis.model	</exploded>
+          </It08_Progetto_M40_mod_65_B9BS_3DSt>
         </sets>
       </models>
       <traces>
@@ -1358,6 +1381,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <It08_Progetto_M40_mod_65_B9BS_3DSt>
+            <segmentModelLeft>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment1.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment1.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment2.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment2.model	</segment2ModelRight>
+          </It08_Progetto_M40_mod_65_B9BS_3DSt>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.00579882	</trackThickness>
       <trackNodes>
@@ -1511,6 +1542,12 @@
             <model>	vehicles/italy/It08_Progetto_M40_mod_65/track/segment2.model	</model>
             <length>	0.0882332	</length>
           </secSegment>
+          <modelSets>
+            <It08_Progetto_M40_mod_65_B9BS_3DSt>
+              <mainSegmentModel>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment2.model	</secSegmentModel>
+            </It08_Progetto_M40_mod_65_B9BS_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1774,6 +1811,12 @@
             <model>	vehicles/italy/It08_Progetto_M40_mod_65/track/segment2.model	</model>
             <length>	0.0878554	</length>
           </secSegment>
+          <modelSets>
+            <It08_Progetto_M40_mod_65_B9BS_3DSt>
+              <mainSegmentModel>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/track/segment2.model	</secSegmentModel>
+            </It08_Progetto_M40_mod_65_B9BS_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -2119,6 +2162,11 @@
                 <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Gun_01.model	</exploded>
               </It08_Progetto_M40_mod_65_3Dst>
+              <It08_Progetto_M40_mod_65_B9BS_3DSt>
+                <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </It08_Progetto_M40_mod_65_B9BS_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2190,6 +2238,16 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.021058 -0.010497 3.59592	</rayStart>
+              <rayEnd>	0.021058 -0.010497 4.19592	</rayEnd>
+              <rayUp>	0.115 0 0	</rayUp>
+              <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt	</compatibleModels>
+              <size>	0.6	</size>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2215,6 +2273,11 @@
             <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Turret_01.model	</exploded>
           </It08_Progetto_M40_mod_65_3Dst>
+          <It08_Progetto_M40_mod_65_B9BS_3DSt>
+            <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_B9BS_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </It08_Progetto_M40_mod_65_B9BS_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2673,14 +2736,14 @@
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35032	</slotId>
-          <compatibleModels>	It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It08_Progetto_M40_mod_65_B9BS_3DSt It08_Progetto_M40_mod_65_3Dst	</compatibleModels>
           <position>	-1.05593 2.06769 0.324979	</position>
           <rotation>	2.12407 1.4472 -0.028929	</rotation>
           <scale>	0.504728 0.504728 0.504728	</scale>
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
-          <clipAngle>	0.000000	</clipAngle>
-          <tags>	formfactor_square	</tags>
+          <clipAngle>	0	</clipAngle>
           <anchorShift>	-0.000003	</anchorShift>
         </slot>
         <slot>

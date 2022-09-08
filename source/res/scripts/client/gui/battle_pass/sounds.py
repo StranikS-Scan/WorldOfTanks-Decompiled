@@ -22,15 +22,15 @@ class BattlePassSounds(CONST_CONTAINER):
     CONFIRM_BUY = 'bp_overlay_pay'
     REWARD_SCREEN = 'bp_reward_screen'
     TANK_POINTS_CAP = 'bp_tank_point_done'
-    VIDEO_STYLE_430_2 = 'bp_s08_video_430_level_02_start'
-    VIDEO_STYLE_430_3 = 'bp_s08_video_430_level_03_start'
-    VIDEO_STYLE_430_4 = 'bp_s08_video_430_level_04_start'
-    VIDEO_STYLE_E100_2 = 'bp_s08_video_e100_level_02_start'
-    VIDEO_STYLE_E100_3 = 'bp_s08_video_e100_level_03_start'
-    VIDEO_STYLE_E100_4 = 'bp_s08_video_e100_level_04_start'
-    VIDEO_STYLE_STB_2 = 'bp_s08_video_stb_level_02_start'
-    VIDEO_STYLE_STB_3 = 'bp_s08_video_stb_level_03_start'
-    VIDEO_STYLE_STB_4 = 'bp_s08_video_stb_level_04_start'
+    VIDEO_STYLE_60TP_2 = 'bp_s09_video_60tp_level_02_start'
+    VIDEO_STYLE_60TP_3 = 'bp_s09_video_60tp_level_03_start'
+    VIDEO_STYLE_60TP_4 = 'bp_s09_video_60tp_level_04_start'
+    VIDEO_STYLE_PROGETTO_65_2 = 'bp_s09_video_progetto_65_level_02_start'
+    VIDEO_STYLE_PROGETTO_65_3 = 'bp_s09_video_progetto_65_level_03_start'
+    VIDEO_STYLE_PROGETTO_65_4 = 'bp_s09_video_progetto_65_level_04_start'
+    VIDEO_STYLE_AMX_13_105_2 = 'bp_s09_video_amx_13_105_level_02_start'
+    VIDEO_STYLE_AMX_13_105_3 = 'bp_s09_video_amx_13_105_level_03_start'
+    VIDEO_STYLE_AMX_13_105_4 = 'bp_s09_video_amx_13_105_level_04_start'
     VIDEO_PAUSE = 'bp_video_pause'
     VIDEO_RESUME = 'bp_video_resume'
     VIDEO_STOP = 'bp_video_stop'
@@ -51,15 +51,15 @@ class AwardVideoSoundControl(IVideoSoundManager):
     __LANGUAGE_STATES = {'ru': BattlePassLanguageSwitch.RU,
      'en': BattlePassLanguageSwitch.EN,
      'cn': BattlePassLanguageSwitch.CN}
-    __VIDEO_TO_SOUND = {'c_157516_2': BattlePassSounds.VIDEO_STYLE_430_2,
-     'c_157516_3': BattlePassSounds.VIDEO_STYLE_430_3,
-     'c_157516_4': BattlePassSounds.VIDEO_STYLE_430_4,
-     'c_157260_2': BattlePassSounds.VIDEO_STYLE_E100_2,
-     'c_157260_3': BattlePassSounds.VIDEO_STYLE_E100_3,
-     'c_157260_4': BattlePassSounds.VIDEO_STYLE_E100_4,
-     'c_157772_2': BattlePassSounds.VIDEO_STYLE_STB_2,
-     'c_157772_3': BattlePassSounds.VIDEO_STYLE_STB_3,
-     'c_157772_4': BattlePassSounds.VIDEO_STYLE_STB_4}
+    __VIDEO_TO_SOUND = {'c_170060_2': BattlePassSounds.VIDEO_STYLE_60TP_2,
+     'c_170060_3': BattlePassSounds.VIDEO_STYLE_60TP_3,
+     'c_170060_4': BattlePassSounds.VIDEO_STYLE_60TP_4,
+     'c_172364_2': BattlePassSounds.VIDEO_STYLE_PROGETTO_65_2,
+     'c_172364_3': BattlePassSounds.VIDEO_STYLE_PROGETTO_65_3,
+     'c_172364_4': BattlePassSounds.VIDEO_STYLE_PROGETTO_65_4,
+     'c_170316_2': BattlePassSounds.VIDEO_STYLE_AMX_13_105_2,
+     'c_170316_3': BattlePassSounds.VIDEO_STYLE_AMX_13_105_3,
+     'c_170316_4': BattlePassSounds.VIDEO_STYLE_AMX_13_105_4}
 
     def __init__(self, videoID):
         self.__videoID = videoID

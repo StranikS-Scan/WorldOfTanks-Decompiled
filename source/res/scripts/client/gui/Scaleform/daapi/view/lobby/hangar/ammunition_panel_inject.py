@@ -1,40 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel_inject.py
+from shared_utils import nextTick
 from frameworks.wulf import ViewFlags
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelInjectMeta import AmmunitionPanelInjectMeta
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar_view import HangarAmmunitionPanelView
 from gui.impl.lobby.tank_setup.bootcamp.ammunition_panel import BootcampAmmunitionPanelView
+from gui.impl.lobby.tank_setup.comp7.ammunition_panel import Comp7AmmunitionPanelView
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IComp7Controller
 
 class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     __bootcampController = dependency.descriptor(IBootcampController)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def onPrbEntitySwitching(self):
         self.getInjectView().setPrbSwitching(True)
 
     def onPrbEntitySwitched(self):
-        self.getInjectView().update()
+        injectView = self.getInjectView()
+        if type(injectView) is self.__getInjectViewClass():
+            injectView.update()
+        else:
+            nextTick(self.__recreateInjectView)()
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         self.getInjectView().update()
-
-    def getOnPanelSectionSelected(self):
-        return self.getInjectView().onPanelSectionSelected
-
-    def getOnEscKeyDown(self):
-        return self.getInjectView().onEscKeyDown
 
     def onHangarSwitchAnimComplete(self, isComplete):
         self.getInjectView().setHangarSwitchAnimState(isComplete)
 
     def _makeInjectView(self):
-        if self.__bootcampController.isInBootcamp():
-            ammunitionPanel = BootcampAmmunitionPanelView(flags=ViewFlags.COMPONENT)
-        else:
-            ammunitionPanel = HangarAmmunitionPanelView(flags=ViewFlags.COMPONENT)
-        return ammunitionPanel
+        viewClass = self.__getInjectViewClass()
+        return viewClass(flags=ViewFlags.COMPONENT)
 
     def _addInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._addInjectContentListeners()
@@ -61,3 +59,12 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
 
     def __onVehicleChanged(self):
         self.as_clearHelpLayoutS()
+
+    def __getInjectViewClass(self):
+        if self.__bootcampController.isInBootcamp():
+            return BootcampAmmunitionPanelView
+        return Comp7AmmunitionPanelView if self.__comp7Controller.isComp7PrbActive() else HangarAmmunitionPanelView
+
+    def __recreateInjectView(self):
+        self._destroyInjected()
+        self._createInjectView()

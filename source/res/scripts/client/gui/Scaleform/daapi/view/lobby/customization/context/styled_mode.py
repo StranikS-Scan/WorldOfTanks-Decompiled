@@ -3,7 +3,7 @@
 import logging
 import typing
 from CurrentVehicle import g_currentVehicle
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from constants import CLIENT_COMMAND_SOURCES
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
 from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle
@@ -12,7 +12,7 @@ from gui.customization.shared import C11nId, PurchaseItem
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import CustomizationsSeller, OutfitApplier
 from gui.shared.gui_items.processors.vehicle import VehicleAutoStyleEquipProcessor
-from gui.shared.utils.decorators import process as wrappedProcess
+from gui.shared.utils.decorators import adisp_process as wrappedProcess
 from items.components.c11n_constants import SeasonType
 from items.customizations import CustomizationOutfit
 from vehicle_outfit.outfit import Area, Outfit
@@ -238,7 +238,7 @@ class StyledMode(CustomizationMode):
             vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
             baseOutfit = self.__modifiedStyle.getOutfit(season, vehicleCD=vehicleCD)
             fitOutfit(baseOutfit, getCurrentVehicleAvailableRegionsMap())
-            removeItemFromEditableStyle(outfit, baseOutfit, slotId)
+            self._modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
             diff = getEditableStyleOutfitDiff(outfit, baseOutfit)
             self._ctx.stylesDiffsCache.saveDiff(self.__modifiedStyle, season, diff)
             return
@@ -247,8 +247,8 @@ class StyledMode(CustomizationMode):
         super(StyledMode, self)._cancelChanges()
         self.__modifiedStyle = self.__originalStyle
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _applyItems(self, purchaseItems, isModeChanged, callback):
         results = []
         style = self.__modifiedStyle
@@ -281,7 +281,7 @@ class StyledMode(CustomizationMode):
         callback(self)
         return
 
-    @async
+    @adisp_async
     @wrappedProcess('sellItem')
     def _sellItem(self, item, count, callback):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:

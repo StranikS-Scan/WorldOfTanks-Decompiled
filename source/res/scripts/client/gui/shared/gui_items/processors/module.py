@@ -220,7 +220,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         return
 
     def _response(self, code, callback, errStr='', ctx=None):
-        super(OptDeviceInstaller, self)._response(code, callback, errStr, ctx)
+        super(OptDeviceInstaller, self)._response(code, callback, errStr=errStr, ctx=ctx)
         from gui.Scaleform.Waiting import Waiting
         Waiting.hide('applyModule')
 

@@ -1,8 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/money.py
 from collections import namedtuple
+from typing import TYPE_CHECKING
 from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from typing import Optional, Any, Union, Dict, Tuple, Iterable, Literal, Callable, List
+    CURRENCY_TYPE = Literal['credits', 'gold', 'crystal', 'eventCoin', 'bpcoin']
+    CURRENCIES_TYPE = Tuple[int, int, int, int, int]
+    CURRENCIES_NAMES_TYPE = Tuple[CURRENCY_TYPE, CURRENCY_TYPE, CURRENCY_TYPE, CURRENCY_TYPE, CURRENCY_TYPE]
+    OPTIONAL_NUMBER_TYPE = Optional[float]
 
 class Currency(CONST_CONTAINER):
     CREDITS = 'credits'

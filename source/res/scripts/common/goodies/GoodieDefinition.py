@@ -1,9 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieDefinition.py
 import time
+from typing import TYPE_CHECKING
 from Goodie import Goodie
 from goodie_constants import GOODIE_VARIETY, GOODIE_STATE
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from typing import Optional
+    from goodies.GoodieConditions import Condition
+    from goodies.GoodieResources import GoodieResource
+    from goodies.GoodieTargets import GoodieTarget
+    from goodies.GoodieValue import GoodieValue
 
 class OverLimitException(SoftException):
     pass
@@ -71,16 +78,11 @@ class GoodieDefinition(object):
 
         return
 
-    def apply_delta(self, resources, applyToZero):
-        if not isinstance(resources, set):
-            resources = {resources}
-        for resource in resources:
-            if resource.value == 0 and not applyToZero:
-                continue
-            if resource.__class__ == self.resource:
-                return resource.__class__(self.value.delta(resource.value))
-
-        return None
+    def apply_delta(self, resource, applyToZero):
+        if resource.value == 0 and not applyToZero:
+            return None
+        else:
+            return resource.__class__(self.value.delta(resource.value)) if resource.__class__ == self.resource else None
 
     def createGoodie(self, state=None, expiration=None, counter=None):
         if not self.enabled:

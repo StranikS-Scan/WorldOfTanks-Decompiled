@@ -98,8 +98,8 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return None
 
     @property
-    def arenaGuiType(self):
-        return self.sessionProvider.arenaVisitor.gui
+    def arenaVisitor(self):
+        return self.sessionProvider.arenaVisitor
 
     def fini(self):
         g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -167,7 +167,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         if self.sessionProvider.isReplayPlaying:
             return options
         if not self.__userInfo.isBot:
-            options = self.__addDyncSquadInfo(options)
+            options = self.__addDynSquadInfo(options)
             options = self.__addFriendshipInfo(options)
             options = self.__addIgnoreInfo(options)
             options = self.__addCommunicationInfo(options)
@@ -187,10 +187,12 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return {'enabled': isEnabled,
          'iconType': cls._getOptionIcon(optionID)}
 
-    def __addDyncSquadInfo(self, options):
+    def __addDynSquadInfo(self, options):
         make = self._makeItem
         ctx = self.sessionProvider.getCtx()
-        if not ctx.isInvitationEnabled() or ctx.hasSquadRestrictions():
+        if not self.arenaVisitor.hasDynSquads():
+            return options
+        elif not ctx.isInvitationEnabled() or ctx.hasSquadRestrictions():
             return options
         elif not self.__userInfo.isAlly:
             return options
@@ -235,7 +237,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return options
 
     def __addCommunicationInfo(self, options):
-        isForbiddenBattleType = self.arenaGuiType.isTrainingBattle() or self.arenaGuiType.isTutorialBattle()
+        isForbiddenBattleType = self.arenaVisitor.gui.isTrainingBattle() or self.arenaVisitor.gui.isTutorialBattle()
         if self.__userInfo.isAlly and not isForbiddenBattleType:
             isEnabled = True
             if self.__userInfo.isTemporaryIgnored:
@@ -249,7 +251,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return options
 
     def __addMutedInfo(self, options):
-        isVisible = self.bwProto.voipController.isVOIPEnabled() and (self.__userInfo.isAlly or self.arenaGuiType.isTrainingBattle())
+        isVisible = self.bwProto.voipController.isVOIPEnabled() and (self.__userInfo.isAlly or self.arenaVisitor.gui.isTrainingBattle())
         isEnabled = not self.__userInfo.isIgnored or self.__userInfo.isTemporaryIgnored
         if self.__userInfo.isMuted:
             optionID = USER.UNSET_MUTED
@@ -265,7 +267,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def __addDenunciationsInfo(self, options):
         make = self._makeItem
-        if self.__userInfo.isAlly or self.arenaGuiType.isTrainingBattle():
+        if self.__userInfo.isAlly or self.arenaVisitor.gui.isTrainingBattle():
             order = DENUNCIATIONS.ORDER
         else:
             order = DENUNCIATIONS.ENEMY_ORDER

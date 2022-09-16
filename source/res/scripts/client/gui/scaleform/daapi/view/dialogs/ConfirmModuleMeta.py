@@ -9,7 +9,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from helpers import i18n
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import adisp_process
 from gui.shared.gui_items.processors.module import ModuleBuyer, ModuleSeller
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money, CurrencyCollection
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -79,7 +79,7 @@ class SellModuleMeta(ConfirmModuleMeta):
     def getDefaultValue(self, module):
         return module.inventoryCount
 
-    @process('sellItem')
+    @adisp_process('sellItem')
     def submit(self, item, count, currency):
         result = yield ModuleSeller(item, min(count, MAX_ITEMS_FOR_OPERATION)).request()
         if result.userMsg:
@@ -144,7 +144,7 @@ class BuyModuleMeta(ConfirmModuleMeta):
         defaultPrices = self.getDefaultPrices(module)
         return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), True, prices, defaultPrices)
 
-    @process('buyItem')
+    @adisp_process('buyItem')
     def submit(self, item, count, currency):
         result = yield ModuleBuyer(item, count, currency).request()
         if result.userMsg:

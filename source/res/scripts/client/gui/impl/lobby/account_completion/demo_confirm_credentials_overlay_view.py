@@ -12,7 +12,7 @@ from gui.shared.event_dispatcher import showDemoAddCredentialsOverlay, showDemoC
 from helpers import dependency
 from skeletons.gui.platform.wgnp_controllers import IWGNPDemoAccRequestController
 if typing.TYPE_CHECKING:
-    from async import _Future
+    from wg_async import _Future
     from gui.platform.wgnp.demo_account.request import ConfirmCredentialsParams
 res = R.strings.dialogs.accountCompletion
 

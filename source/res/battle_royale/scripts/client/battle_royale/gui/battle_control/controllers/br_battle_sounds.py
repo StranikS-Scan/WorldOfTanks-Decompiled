@@ -223,22 +223,23 @@ class ClingBranderSoundPlayer(object):
     __CLING_BRANDER_VEH_NAME = 'china:Ch00_ClingeBot_SH'
 
     def init(self):
-        ctrl = self.__sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onVehicleKilled += self.__onVehicleKilled
         return
 
     def destroy(self):
-        ctrl = self.__sessionProvider.shared.feedback
-        if ctrl is not None:
-            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onVehicleKilled -= self.__onVehicleKilled
         return
 
-    def __onVehicleFeedbackReceived(self, eventID, vehicleID, _):
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD:
-            vehicle = BigWorld.entities[vehicleID]
-            if vehicle.masterVehID == BigWorld.player().playerVehicleID and vehicle.typeDescriptor.name == self.__CLING_BRANDER_VEH_NAME:
-                BREvents.playSound(BREvents.BR_CLING_BRANDER_DESTROYED)
+    def __onVehicleKilled(self, targetID, attackerID, equipmentID, reason, numVehiclesAffected):
+        targetVeh = BigWorld.entity(targetID)
+        playerVeh = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
+        if targetVeh is not None and playerVeh is not None and targetVeh.masterVehID == playerVeh.id and targetVeh.typeDescriptor.name == self.__CLING_BRANDER_VEH_NAME:
+            BREvents.playSound(BREvents.BR_CLING_BRANDER_DESTROYED)
+        return
 
 
 class DeathScreenSoundPlayer(object):

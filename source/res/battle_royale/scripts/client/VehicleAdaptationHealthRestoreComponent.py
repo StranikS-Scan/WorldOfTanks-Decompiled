@@ -16,4 +16,6 @@ class VehicleAdaptationHealthRestoreComponent(VehicleAbilityBaseComponent):
         self.set_restoreHealth()
 
     def set_restoreHealth(self, _=None):
-        self._updateTimer({'restoreHealth': self.restoreHealth})
+        data = self._getTimerData()
+        data['restoreHealth'] = self.restoreHealth
+        self._updateTimer(data)

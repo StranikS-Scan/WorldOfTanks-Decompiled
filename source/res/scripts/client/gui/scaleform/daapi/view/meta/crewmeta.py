@@ -16,7 +16,7 @@ class CrewMeta(BaseDAAPIComponent):
     def updateTankmen(self):
         self._printOverrideError('updateTankmen')
 
-    def openPersonalCase(self, value, tabNumber):
+    def openPersonalCase(self, value, tabID):
         self._printOverrideError('openPersonalCase')
 
     def onCrewDogMoreInfoClick(self):

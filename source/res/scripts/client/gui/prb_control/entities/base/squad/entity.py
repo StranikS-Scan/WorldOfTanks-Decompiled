@@ -10,12 +10,13 @@ from gui.prb_control.entities.base.unit.entity import UnitEntryPoint, UnitEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.prb_control.items import SelectResult
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.impl.gen.resources import R
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from async import async, await
+from wg_async import wg_async, wg_await
 
 class SquadEntryPoint(UnitEntryPoint):
 
@@ -81,6 +82,19 @@ class SquadEntity(UnitEntity):
     def showDialog(self, meta, callback):
         self.__showDefaultDialog(meta, callback)
 
+    def doSelectAction(self, action):
+        name = action.actionName
+        if name in self._showUnitActionNames:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            if action.accountsToInvite:
+                self._actionsHandler.processInvites(action.accountsToInvite)
+            return SelectResult(True)
+        return super(SquadEntity, self).doSelectAction(action)
+
+    @property
+    def _showUnitActionNames(self):
+        pass
+
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
         return SquadPermissions(roles, flags, isCurrentPlayer, isPlayerReady)
 
@@ -127,7 +141,7 @@ class SquadEntity(UnitEntity):
 
             return current
 
-    @async
+    @wg_async
     def __showDefaultDialog(self, meta, callback):
         from gui.shared.event_dispatcher import showDynamicButtonInfoDialogBuilder
         key = meta.getKey()
@@ -135,6 +149,6 @@ class SquadEntity(UnitEntity):
         if res:
             app = self.__appLoader.getApp()
             parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-            result = yield await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
+            result = yield wg_await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
             callback(result)
         return

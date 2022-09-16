@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleWindow.py
 from CurrentVehicle import g_currentVehicle
-from adisp import process
+from adisp import adisp_process
 from constants import MODULE_NAME_SEPARATOR
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
@@ -66,7 +66,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     def bwProto(self):
         return None
 
-    @process
+    @adisp_process
     def requestToReady(self, value):
         if value:
             waitingID = 'prebattle/player_ready'
@@ -269,7 +269,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
                 self.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__handlePrbChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    @process
+    @adisp_process
     def _doLeave(self, isExit=True):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit))
 

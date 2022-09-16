@@ -3,7 +3,7 @@
 import math
 from typing import Optional
 import nations
-from adisp import process
+from adisp import adisp_process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nSellMeta
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import LEVELS_RANGE
@@ -134,7 +134,7 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
         else:
             event_dispatcher.showHangar()
 
-    @process
+    @adisp_process
     def sellCustomizationItem(self, itemCD, vehicleCD=None):
         item = self._itemsCache.items.getItemByCD(int(itemCD))
         vehicleCD = int(vehicleCD) if vehicleCD is not None and not math.isnan(vehicleCD) else None

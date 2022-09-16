@@ -22,13 +22,6 @@
     <wwmusicResultDefeat>	music_redshire_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
-  <soundRemapping>
-    <loadBanks>
-      <bank>
-        <name>	env_Mountain.bnk	</name>
-      </bank>
-    </loadBanks>
-  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -75,6 +68,52 @@
         <team2></team2>
       </teamBasePositions>
     </assault>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-136.630005 407.114990	</position>
+        </team1>
+        <team2>
+          <position>	-35.727001 -291.106995	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-419.008484 -4.817872	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	23.510000 -70.660004	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-23.823000 231.761002	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	324.566010 -8.619000	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-199.788345 39.723320	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

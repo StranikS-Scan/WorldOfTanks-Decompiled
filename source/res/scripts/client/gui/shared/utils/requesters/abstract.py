@@ -7,7 +7,7 @@ from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
 from helpers import isPlayerAccount
 from ids_generators import Int32IDGenerator
 from gui.shared.utils import code2str
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.decorators import ReprInjector
 _logger = logging.getLogger(__name__)
@@ -18,8 +18,8 @@ class AbstractRequester(object):
         self._data = self._getDefaultDataValue()
         self.__synced = False
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def request(self, callback):
         _logger.debug('Prepare requester %s', self.__class__.__name__)
         self.__synced = False
@@ -49,7 +49,7 @@ class AbstractRequester(object):
             callback(self._preprocessValidData(value))
         return
 
-    @async
+    @adisp_async
     def _requestCache(self, callback):
         self._response(0, self._getDefaultDataValue(), callback)
 

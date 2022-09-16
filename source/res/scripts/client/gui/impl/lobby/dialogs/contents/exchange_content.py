@@ -3,7 +3,7 @@
 import logging
 from enum import Enum
 import Event
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.auxiliary.exchanger import Exchanger
@@ -55,8 +55,8 @@ class ExchangeContent(BaseSubModelView):
             fromItemCount, toItemCount = self.__exchanger.calculateFromItemCount(self.__needItem)
         self.__fillItemsModel(fromItemCount, toItemCount)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def exchange(self, callback=None):
         if not self.__validateCount():
             if callback is not None:

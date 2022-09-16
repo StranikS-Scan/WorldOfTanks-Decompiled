@@ -24,5 +24,13 @@
       <pattern>	.*/server_xml/example_ext_battles_config\.xml$	</pattern>
       <type>	include	</type>
     </rule>
+    <rule>
+      <pattern>	.*/development/test_xml/.*/.*\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/server_xml/battle_modifiers/.*\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
   </xml_whitelist>
 </extension_rules.xml>

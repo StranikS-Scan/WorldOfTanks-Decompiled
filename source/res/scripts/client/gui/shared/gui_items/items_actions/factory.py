@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/factory.py
 import logging
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui.shared.gui_items.items_actions import actions
 _logger = logging.getLogger(__name__)
 SELL_ITEM = 'sellItemAction'
@@ -17,7 +17,9 @@ BC_BUY_AND_INSTALL_ITEM = 'bcBuyAndInstallItemAction'
 VEHICLE_AUTO_FILL_LAYOUT = 'vehicleAutoFillLayoutAction'
 BUY_BERTHS = 'buyBerths'
 BUY_VEHICLE_SLOT = 'buyVehClot'
+ACTIVATE_BOOSTER = 'activateBooster'
 BUY_BOOSTER = 'buyBooster'
+BUY_AND_ACTIVATE_BOOSTER = 'buyAndActivateBooster'
 CONVERT_BLUEPRINT_FRAGMENT = 'convertFragment'
 USE_CREW_BOOK = 'useCrewBook'
 CHANGE_NATION = 'changeNation'
@@ -46,7 +48,9 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  VEHICLE_AUTO_FILL_LAYOUT: actions.VehicleAutoFillLayoutAction,
  BUY_BERTHS: actions.BuyBerthsAction,
  BUY_VEHICLE_SLOT: actions.BuyVehicleSlotAction,
+ ACTIVATE_BOOSTER: actions.ActivateBoosterAction,
  BUY_BOOSTER: actions.BuyBoosterAction,
+ BUY_AND_ACTIVATE_BOOSTER: actions.BuyAndActivateBooster,
  CONVERT_BLUEPRINT_FRAGMENT: actions.ConvertBlueprintFragmentAction,
  USE_CREW_BOOK: actions.UseCrewBookAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
@@ -64,7 +68,7 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SET_EQUIPMENT_SLOT_TYPE: actions.SetEquipmentSlotType,
  SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY: actions.SwitchPrebattleAmmoPanelAvailabilityAction}
 
-@process
+@adisp_process
 def doAction(actionType, *args, **kwargs):
     action = getAction(actionType, *args, **kwargs)
     if action is not None:
@@ -75,8 +79,8 @@ def doAction(actionType, *args, **kwargs):
     return
 
 
-@async
-@process
+@adisp_async
+@adisp_process
 def asyncDoAction(action, callback):
     result = False
     if action is not None:

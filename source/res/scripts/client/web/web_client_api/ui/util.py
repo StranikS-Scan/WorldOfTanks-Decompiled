@@ -234,7 +234,8 @@ class UtilWebApiMixin(object):
         ctx = PlatformFetchProductListCtx(cmd)
         response = yield self._webCtrl.sendRequest(ctx=ctx)
         if response.isSuccess():
-            yield {'result': response.getData()}
+            data = response.getData()
+            yield {'result': {'body': data}}
         else:
             yield {'error': self.__getErrorResponse(response.data, 'Unable to fetch product list.')}
 

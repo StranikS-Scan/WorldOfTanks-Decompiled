@@ -17,6 +17,7 @@ from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, Ranke
 from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
 from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
+from gui.prb_control.entities.comp7.pre_queue.entity import Comp7Entity, Comp7EntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -31,6 +32,7 @@ registerQueueEntity(QUEUE_TYPE.EPIC, EpicEntity)
 registerQueueEntity(QUEUE_TYPE.MAPBOX, MapboxEntity)
 registerQueueEntity(QUEUE_TYPE.MAPS_TRAINING, MapsTrainingEntity)
 registerQueueEntity(QUEUE_TYPE.EVENT_BATTLES, EventBattleEntity)
+registerQueueEntity(QUEUE_TYPE.COMP7, Comp7Entity)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANDOM, RandomEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, TutorialEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.SANDBOX, SandboxEntryPoint)
@@ -40,6 +42,7 @@ registerEntryPoint(PREBATTLE_ACTION_NAME.EPIC, EpicEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX, MapboxEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
+registerEntryPoint(PREBATTLE_ACTION_NAME.COMP7, Comp7EntryPoint)
 
 class PreQueueFactory(ControlFactory):
 
@@ -51,6 +54,8 @@ class PreQueueFactory(ControlFactory):
         self.mapboxStorage = prequeue_storage_getter(QUEUE_TYPE.MAPBOX)()
         self.mapsTrainingStorage = prequeue_storage_getter(QUEUE_TYPE.MAPS_TRAINING)()
         self.eventBattlesStorage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
+        self.funRandomStorage = prequeue_storage_getter(QUEUE_TYPE.FUN_RANDOM)()
+        self.comp7Storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
         self.recentArenaStorage = storage_getter(RECENT_ARENA_STORAGE)()
 
     def createEntry(self, ctx):
@@ -83,19 +88,24 @@ class PreQueueFactory(ControlFactory):
     def __createDefaultEntity(self):
         if prb_getters.isInBootcampAccount():
             return BootcampEntity()
-        if self.pveStorage.isModeSelected():
+        elif self.pveStorage.isModeSelected():
             return SandboxEntity()
-        if self.rankedStorage.isModeSelected():
+        elif self.rankedStorage.isModeSelected():
             return RankedEntity()
-        if self.epicStorage.isModeSelected():
+        elif self.epicStorage.isModeSelected():
             return EpicEntity()
-        if self.battleRoyaleStorage.isModeSelected():
+        elif self.battleRoyaleStorage.isModeSelected():
             return self.__createByQueueType(QUEUE_TYPE.BATTLE_ROYALE)
-        if self.mapboxStorage.isModeSelected():
+        elif self.mapboxStorage.isModeSelected():
             return MapboxEntity()
-        if self.mapsTrainingStorage.isModeSelected():
+        elif self.mapsTrainingStorage.isModeSelected():
             return MapsTrainingEntity()
-        if self.eventBattlesStorage.isModeSelected():
+        elif self.eventBattlesStorage.isModeSelected():
             return EventBattleEntity()
-        prbEntity = self.__createByQueueType(self.recentArenaStorage.queueType)
-        return prbEntity if prbEntity else RandomEntity()
+        elif self.funRandomStorage is not None and self.funRandomStorage.isModeSelected():
+            return self.__createByQueueType(QUEUE_TYPE.FUN_RANDOM)
+        elif self.comp7Storage.isModeSelected():
+            return Comp7Entity()
+        else:
+            prbEntity = self.__createByQueueType(self.recentArenaStorage.queueType)
+            return prbEntity if prbEntity else RandomEntity()

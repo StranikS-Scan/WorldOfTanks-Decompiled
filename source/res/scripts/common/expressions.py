@@ -92,6 +92,12 @@ class ExpressionParser(object):
             tokenizer.match(token.NAME)
             right = self._parseOrExpression(tokenizer)
             return lambda context: left(context) or right(context)
+        elif tokval == 'if':
+            tokenizer.match(token.NAME)
+            condition = self._parseCondition(tokenizer)
+            tokenizer.match(token.NAME)
+            right = self._parseExpression(tokenizer)
+            return lambda context: left(context) if condition(context) else right(context)
         else:
             return left
 

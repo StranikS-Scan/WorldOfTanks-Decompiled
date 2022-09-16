@@ -60,7 +60,11 @@ class FunctionalState(object):
             return True
         if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
             return True
-        return True if self.isInUnit(PREBATTLE_TYPE.MAPBOX) and queueType == QUEUE_TYPE.MAPBOX else False
+        if self.isInUnit(PREBATTLE_TYPE.MAPBOX) and queueType == QUEUE_TYPE.MAPBOX:
+            return True
+        if self.isInUnit(PREBATTLE_TYPE.FUN_RANDOM) and queueType == QUEUE_TYPE.FUN_RANDOM:
+            return True
+        return True if self.isInUnit(PREBATTLE_TYPE.COMP7) and queueType == QUEUE_TYPE.COMP7 else False
 
     def doLeaveToAcceptInvite(self, prbType=0):
         if not self.hasModalEntity:
@@ -89,7 +93,9 @@ class FunctionalState(object):
          PREBATTLE_TYPE.EVENT: QUEUE_TYPE.EVENT_BATTLES,
          PREBATTLE_TYPE.STRONGHOLD: QUEUE_TYPE.STRONGHOLD_UNITS,
          PREBATTLE_TYPE.EPIC: QUEUE_TYPE.EPIC,
-         PREBATTLE_TYPE.MAPBOX: QUEUE_TYPE.MAPBOX}
+         PREBATTLE_TYPE.MAPBOX: QUEUE_TYPE.MAPBOX,
+         PREBATTLE_TYPE.FUN_RANDOM: QUEUE_TYPE.FUN_RANDOM,
+         PREBATTLE_TYPE.COMP7: QUEUE_TYPE.COMP7}
         return prbToQueue.get(prbType, QUEUE_TYPE.UNKNOWN)
 
 

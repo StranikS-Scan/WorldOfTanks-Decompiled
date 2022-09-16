@@ -693,6 +693,8 @@ class VehicleStatePlugin(CrosshairPlugin):
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__maxHealth = 0
             self.__healthPercent = 0
+        elif state == VEHICLE_VIEW_STATE.GUN_RELOAD_BOOST:
+            self.__onGunReloadBoost()
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__updateVehicleInfo()
@@ -700,6 +702,9 @@ class VehicleStatePlugin(CrosshairPlugin):
     def __onVehicleFeedbackReceived(self, eventID, _, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_HAS_AMMO and self._parentObj.getViewID() == CROSSHAIR_VIEW_ID.POSTMORTEM:
             self._parentObj.setHasAmmo(value)
+
+    def __onGunReloadBoost(self):
+        self._parentObj.as_blinkReloadTimeS(CROSSHAIR_CONSTANTS.CROSSHAIR_BLINK_GREEN_HORIZONTAL)
 
 
 class _DistancePlugin(CrosshairPlugin):

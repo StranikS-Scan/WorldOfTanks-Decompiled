@@ -1,0 +1,26 @@
+<ApplicationPoint.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <vehicleID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleID>
+    <equipmentID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <launchTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </launchTime>
+    <level>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </level>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <CellMethods></CellMethods>
+  <BaseMethods></BaseMethods>
+  <shouldBackup>	false	</shouldBackup>
+</ApplicationPoint.def>

@@ -22,11 +22,12 @@ PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
 PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege, isTrackWithinTrack')
-PrecachedEngine = namedtuple('PrecachedEngine', 'hasTurboshaftEngine')
+PrecachedEngine = namedtuple('PrecachedEngine', 'hasTurboshaftEngine, hasRocketAcceleration')
 
 class _PrecachedEngineTypes(object):
-    DEFAULT = PrecachedEngine(hasTurboshaftEngine=False)
-    TURBOSHAFT = PrecachedEngine(hasTurboshaftEngine=True)
+    DEFAULT = PrecachedEngine(hasTurboshaftEngine=False, hasRocketAcceleration=False)
+    TURBOSHAFT = PrecachedEngine(hasTurboshaftEngine=True, hasRocketAcceleration=False)
+    ROCKET_ACCELERATION = PrecachedEngine(hasTurboshaftEngine=False, hasRocketAcceleration=True)
 
 
 class _PrecachedChassisTypes(object):
@@ -206,6 +207,9 @@ class _ParamsCache(object):
     def hasTurboshaftEngine(self, itemCD):
         return self.getPrecachedParameters(itemCD).hasTurboshaftEngine
 
+    def hasRocketAcceleration(self, itemCD):
+        return self.getPrecachedParameters(itemCD).hasRocketAcceleration
+
     def getSimplifiedCoefficients(self):
         return self.__simplifiedParamsCoefficients
 
@@ -375,6 +379,8 @@ class _ParamsCache(object):
                     engineCD = vEng.compactDescr
                     if vDescr.hasTurboshaftEngine:
                         cachedEngineByNation[engineCD] = _PrecachedEngineTypes.TURBOSHAFT
+                    elif vDescr.hasRocketAcceleration:
+                        cachedEngineByNation[engineCD] = _PrecachedEngineTypes.ROCKET_ACCELERATION
                     else:
                         cachedEngineByNation[engineCD] = _PrecachedEngineTypes.DEFAULT
                     processedItems.add(engineCD)

@@ -27,37 +27,26 @@
     <auxBus>	AUX_env_Mountain	</auxBus>
     <controlValue>	1.0	</controlValue>
   </wwDefaultReverb>
-  <soundRemapping>
-    <loadBanks>
-      <bank>
-        <name>	env_Mountain.bnk	</name>
-      </bank>
-    </loadBanks>
-  </soundRemapping>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-273.785675 -436.600922	</position1>
+          <position1>	-273.785645 -436.600922	</position1>
         </team1>
         <team2>
-          <position1>	-251.606262 434.591003	</position1>
+          <position1>	-251.606842 434.590698	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-286 -450	</position>
+          <position>	-286.000000 -450.000000	</position>
         </team1>
         <team2>
-          <position>	-248 449	</position>
+          <position>	-248.000000 449.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
-      </teamBasePositions>
       <controlPoint>	-6.690361 0.175830	</controlPoint>
     </domination>
     <assault2>
@@ -66,17 +55,63 @@
       <teamSpawnPoints>
         <team1></team1>
         <team2>
-          <position>	-285.944 -451.039	</position>
+          <position>	-285.944000 -451.039001	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-252.066513 434.820923	</position1>
-          <position2>	228.184692 176.506927	</position2>
+          <position1>	-252.066788 434.820038	</position1>
+          <position2>	228.184616 176.506653	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-216.908005 385.134003	</position>
+        </team1>
+        <team2>
+          <position>	-193.473999 -377.054993	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-439.218994 -23.355000	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-241.346588 -13.653757	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	323.251007 7.994000	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	186.093445 -2.605331	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-6.894791 0.260254	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities>

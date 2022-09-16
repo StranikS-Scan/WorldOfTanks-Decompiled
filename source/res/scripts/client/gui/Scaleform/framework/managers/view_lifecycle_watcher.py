@@ -115,9 +115,8 @@ class ViewLifecycleWatcher(object):
 
     def __onViewDisposed(self, view):
         if view.key in self.__monitoredViewKeys:
+            self.__unsubscribeFromViewEvents(view.key)
+            self.__subscribedViewsKeys.remove(view.key)
             for handler in self.__handlers:
                 if view.key in handler.monitoredViewKeys:
                     handler.onViewDestroyed(view)
-
-            self.__unsubscribeFromViewEvents(view.key)
-            self.__subscribedViewsKeys.remove(view.key)

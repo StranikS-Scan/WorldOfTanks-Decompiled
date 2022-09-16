@@ -7,7 +7,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from helpers import dependency
@@ -416,7 +416,7 @@ class SettingsCore(ISettingsCore):
 
         return confirmators
 
-    @process
+    @adisp_process
     def confirmChanges(self, confirmators):
         yield lambda callback: callback(None)
         for confirmation, revert in confirmators:

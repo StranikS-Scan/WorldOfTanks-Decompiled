@@ -28,6 +28,7 @@ from helpers import int2roman
 from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control import avatar_getter
 from gui.battle_control.dog_tag_composer import layoutComposer
 from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
 if typing.TYPE_CHECKING:
@@ -127,8 +128,10 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
                 pass
             elif equipment is not None:
-                code = '_'.join((code, equipment.name.split('_')[0].upper()))
-                entityID = 0
+                if not self.sessionProvider.arenaVisitor.gui.isComp7Battle():
+                    entityID = 0
+                name = equipment.code if equipment.code else equipment.name
+                code = '_'.join((code, name.split('_')[0].upper()))
         elif postfix:
             extCode = '{0}_{1}'.format(code, postfix)
             if extCode in self.__messages:
@@ -205,7 +208,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self._deathAlreadySet = False
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         self.__userInfoHelper = UsersInfoHelper()
-        self.__arenaInfo = BigWorld.player().arena.arenaInfo
+        arena = avatar_getter.getArena()
+        self.__arenaInfo = arena.arenaInfo if arena is not None else None
         return
 
     def _populate(self):

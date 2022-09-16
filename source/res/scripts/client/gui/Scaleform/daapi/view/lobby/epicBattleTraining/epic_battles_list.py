@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattleTraining/epic_battles_list.py
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.trainings.trainings_list_base import TrainingsListBase
@@ -40,7 +40,7 @@ class EpicBattlesList(TrainingsListBase):
          'descr': backport.text(R.strings.menu.training.description()),
          'battleTypeID': BATTLE_TYPES.EPIC_TRAINING}
 
-    @process
+    @adisp_process
     def joinTrainingRequest(self, prbID):
         yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, waitingID='prebattle/join'))
 

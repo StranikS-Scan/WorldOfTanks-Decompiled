@@ -98,8 +98,10 @@
     <Mathis_300_exp>	113	</Mathis_300_exp>
     <Maybach_HL_233P50>	114	</Maybach_HL_233P50>
     <SOFAM_12GSds_B>	115	</SOFAM_12GSds_B>
+    <Astazou_XVI>	116	</Astazou_XVI>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
+    <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -309,6 +311,23 @@
       <rpm_min>	700	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </SOFAM_8Gxb_B>
+    <SOFAM_8Gxb_B_7x7>
+      <userString>	#france_vehicles:SOFAM_8Gxb_B	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	400	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </SOFAM_8Gxb_B_7x7>
     <_6F11SRY>
       <userString>	#france_vehicles:_6F11SRY	</userString>
       <tags>	diesel	</tags>
@@ -1231,6 +1250,23 @@
       <rpm_min>	431	</rpm_min>
       <rpm_max>	2420	</rpm_max>
     </Mathis_300_exp>
+    <Astazou_XVI>
+      <userString>	#france_vehicles:Astazou_XVI	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	206	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </Astazou_XVI>
     <Maybach_HL_295_F>
       <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
       <tags>	gasoline	</tags>
@@ -1904,16 +1940,16 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	315	</rpm_min>
-      <rpm_max>	2791	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>
       <userString>	#france_vehicles:Detroit_Diesel_6V53T_SH	</userString>
@@ -1929,8 +1965,8 @@
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	321	</rpm_min>
-      <rpm_max>	2236	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>
       <userString>	#france_vehicles:Hispano-Suiza_HS110_SH	</userString>
@@ -1946,8 +1982,8 @@
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	245	</rpm_min>
-      <rpm_max>	2464	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>
       <userString>	#france_vehicles:_6F11SRY	</userString>

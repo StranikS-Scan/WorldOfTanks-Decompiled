@@ -3,7 +3,7 @@
 import BigWorld
 import BattleReplay
 from PlayerEvents import g_playerEvents
-from adisp import process
+from adisp import adisp_process
 from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from gui import DialogsInterface
 from gui.impl.gen import R
@@ -69,7 +69,7 @@ class DisconnectDialogAction(ShowDialogAction):
 class ReplayVersionDiffersDialogAction(ShowDialogAction):
     __slots__ = ()
 
-    @process
+    @adisp_process
     def doAction(self):
         result = yield DialogsInterface.showI18nConfirmDialog('replayNotification')
         if result:
@@ -83,7 +83,7 @@ class ReplayFinishDialogAction(ShowDialogAction):
     def getAppNS(self):
         return APP_NAME_SPACE.SF_BATTLE
 
-    @process
+    @adisp_process
     def doAction(self):
         result = yield DialogsInterface.showI18nConfirmDialog('replayStopped')
         if result:

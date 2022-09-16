@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/boosters_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import contexts
+from gui.shared.tooltips import contexts, common
 from gui.shared.tooltips import battle_booster
 from gui.shared.tooltips import boosters
 from gui.shared.tooltips import advanced
@@ -31,4 +31,16 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.ClanReserveContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BOOSTER, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.BoosterContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SHOP_BOOSTER, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.ShopBoosterContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.BOOSTERS_QUESTS, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.QuestsBoosterContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.BOOSTERS_QUESTS, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.QuestsBoosterContext())),
+     PersonalReservesBuilder(TOOLTIPS_CONSTANTS.PERSONAL_RESERVES_WIDGET, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))
+
+
+class PersonalReservesBuilder(DataBuilder):
+    __slots__ = ()
+
+    def __init__(self, tooltipType, linkage):
+        super(PersonalReservesBuilder, self).__init__(tooltipType, linkage, common.PersonalReservesWidgetTooltipContent(contexts.ToolTipContext(None)))
+        return
+
+    def build(self, manager, formatType, advanced_, *args, **kwargs):
+        return self._provider

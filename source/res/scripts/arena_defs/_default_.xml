@@ -4,6 +4,7 @@
   <maxTeamsInArena>	2	</maxTeamsInArena>
   <minTeamsInArena>	2	</minTeamsInArena>
   <runDelay>	30	</runDelay>
+  <runDelayDev>	3	</runDelayDev>
   <roundLength>	900	</roundLength>
   <winnerIfTimeout>	0	</winnerIfTimeout>
   <winnerIfExtermination>	0	</winnerIfExtermination>
@@ -158,6 +159,23 @@
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
       <runDelay>	20	</runDelay>
     </MAPS_TRAINING>
+    <COMP7>
+      <runDelay>	60	</runDelay>
+      <runDelayDev>	45	</runDelayDev>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+    </COMP7>
+    <BATTLE_ROYALE_SOLO>
+      <runDelayDev>	15	</runDelayDev>
+    </BATTLE_ROYALE_SOLO>
+    <BATTLE_ROYALE_SQUAD>
+      <runDelayDev>	15	</runDelayDev>
+    </BATTLE_ROYALE_SQUAD>
+    <BATTLE_ROYALE_TRN_SOLO>
+      <runDelayDev>	15	</runDelayDev>
+    </BATTLE_ROYALE_TRN_SOLO>
+    <BATTLE_ROYALE_TRN_SQUAD>
+      <runDelayDev>	15	</runDelayDev>
+    </BATTLE_ROYALE_TRN_SQUAD>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -290,6 +308,11 @@
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </maps_training>
+    <comp7>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </comp7>
   </gameplayTypes>
   <extraSoundRemapping>
     <bootcamp>
@@ -343,5 +366,17 @@
         </loadBanks>
       </soundRemapping>
     </stronghold>
+    <comp7>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	comp_7.bnk	</name>
+          </bank>
+          <bank>
+            <name>	comp_7.pck	</name>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </comp7>
   </extraSoundRemapping>
 </_default_.xml>

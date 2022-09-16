@@ -277,7 +277,7 @@ class PurchaseCache(IPurchaseCache):
             purchasePackage.destroy()
             del k
 
-    @adisp.async
+    @adisp.adisp_async
     def requestPurchaseByID(self, productCode, callback=None):
         if productCode:
             pUrl = self.__constructFullUrl(productCode)

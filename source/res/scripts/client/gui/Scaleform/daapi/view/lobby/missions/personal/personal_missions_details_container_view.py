@@ -68,27 +68,27 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         ctx = ctx or {}
         self.__selectedQuestID = int(ctx.get('eventID', 0))
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def _processMission(self, eventID):
         quest = self.__quests[int(eventID)]
         result = yield quests_proc.PMQuestSelect(quest, self._eventsCache.getPersonalMissions(), self.__branch).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def _discardMission(self, eventID):
         result = yield quests_proc.PMDiscard(self.__quests[int(eventID)], self.__branch).request()
         if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def _pauseMission(self, eventID):
         quest = self.__quests[int(eventID)]
         result = yield quests_proc.PMPause(quest, not quest.isOnPause, self.__branch).request()
         if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def _pawnMission(self, eventID):
         quest = self.__quests[int(eventID)]
         result = yield quests_proc.PMPawn(quest).request()

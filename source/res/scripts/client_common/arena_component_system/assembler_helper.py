@@ -12,6 +12,7 @@ from arena_component_system.epic_battle_component_assembler import EpicBattleCom
 from arena_component_system.protection_zone_component import ProtectionZoneComponent
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from arena_components.battle_royale_component import BattleRoyaleComponent
+from arena_components.comp7_equipment_component import Comp7EquipmentComponent
 COMPONENT_ASSEMBLER = {ARENA_BONUS_TYPE.EPIC_RANDOM: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler,
@@ -23,4 +24,5 @@ ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS
  'protectionZoneComponent': (ARENA_BONUS_TYPE_CAPS.PROTECTION_ZONE, ProtectionZoneComponent),
  'airDropComponent': (ARENA_BONUS_TYPE_CAPS.LOOT_DROP, AirdropsComponent),
  'battleRoyaleComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, BattleRoyaleComponent),
- 'berserkerEffectComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, BerserkerEffectComponent)}
+ 'berserkerEffectComponent': (ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, BerserkerEffectComponent),
+ 'comp7EquipmentComponent': (ARENA_BONUS_TYPE_CAPS.COMP7, Comp7EquipmentComponent)}

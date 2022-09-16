@@ -1,0 +1,13 @@
+<VehicleHealController.def>
+  <Properties>
+    <displayedStates>
+      <Type>	ARRAY	  <of>	STATE_WITH_TIME_INTERVAL	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </displayedStates>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	VehicleHealController	</DefaultKeyName>
+</VehicleHealController.def>

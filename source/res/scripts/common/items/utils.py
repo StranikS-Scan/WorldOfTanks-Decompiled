@@ -163,6 +163,10 @@ def getGunAimingTime(vehicleDescr, factors):
     return vehicleDescr.gun.aimingTime * vehicleDescr.miscAttrs['gunAimingTimeFactor'] * max(factors['gun/aimingTime'], 0.0)
 
 
+def getClipTimeBetweenShots(vehicleDescr, factors):
+    return vehicleDescr.gun.clip[1] * max(factors['gun/clipTimeBetweenShots'], 0.0)
+
+
 def getChassisRotationSpeed(vehicleDescr, factors):
     return vehicleDescr.chassis.rotationSpeed * max(factors['vehicle/rotationSpeed'], 0.0) * max(vehicleDescr.miscAttrs['onMoveRotationSpeedFactor'], vehicleDescr.miscAttrs['onStillRotationSpeedFactor'])
 
@@ -170,7 +174,7 @@ def getChassisRotationSpeed(vehicleDescr, factors):
 def getInvisibility(vehicleDescr, factors, baseInvisibility, isMoving):
     baseValue = baseInvisibility[0 if isMoving else 1]
     additiveTerm = factors['invisibility'][0] + factors.get('invisibilityAdditiveTerm', 0.0) + vehicleDescr.miscAttrs['invisibilityBaseAdditive'] + vehicleDescr.miscAttrs['invisibilityAdditiveTerm']
-    multFactor = factors['invisibility'][1]
+    multFactor = factors['invisibility'][1] * factors.get('invisibilityMultFactor', 1.0)
     return (baseValue + additiveTerm) * multFactor
 
 

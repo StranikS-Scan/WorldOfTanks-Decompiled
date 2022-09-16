@@ -291,7 +291,7 @@ class BattleBoostersBlock(BaseBlock):
         affectsAtTTC = slotItem.isAffectsOnVehicle(self._vehicle)
         slotModel.setWithAttention(not affectsAtTTC)
         if slotItem.isCrewBooster():
-            isPerkReplace = not slotItem.isAffectedSkillLearnt(self._vehicle)
+            isPerkReplace = not slotItem.isAffectedSkillLearnt(self._vehicle) and not slotItem.isBuiltinPerkBooster()
             if isPerkReplace:
                 slotModel.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
             else:

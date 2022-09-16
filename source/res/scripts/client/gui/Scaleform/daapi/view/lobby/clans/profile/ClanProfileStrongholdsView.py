@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileStrongholdsView.py
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from helpers import dependency
 from gui.clans.clan_helpers import getStrongholdClanCardUrl, isStrongholdsEnabled
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
@@ -18,7 +18,7 @@ class ClanProfileStrongholdsView(ClanProfileBaseView):
         self.__size = None
         return
 
-    @process
+    @adisp_process
     def setClanDossier(self, clanDossier):
         if not isStrongholdsEnabled():
             self._dummyMustBeShown = True

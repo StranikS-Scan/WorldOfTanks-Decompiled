@@ -25,7 +25,7 @@ class BarracksMeta(View):
     def setTankmenFilter(self):
         self._printOverrideError('setTankmenFilter')
 
-    def openPersonalCase(self, value, tabNumber):
+    def openPersonalCase(self, value, tabID):
         self._printOverrideError('openPersonalCase')
 
     def onCountersVisited(self, visitedIds):

@@ -4,10 +4,12 @@ import logging
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-from async import async
+from wg_async import wg_async
 from frameworks.wulf import ViewStatus
 from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionPanelView
 from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import AmmunitionPanelViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -23,9 +25,12 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
             super(HangarAmmunitionPanelView, self).update(fullUpdate)
-            if g_currentVehicle.isPresent():
-                state, _ = g_currentVehicle.item.getState()
-                self._ammunitionPanel.viewModel.setAmmoNotFull(state == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL)
+            self._updateViewModel()
+
+    def _updateViewModel(self):
+        if g_currentVehicle.isPresent():
+            state, _ = g_currentVehicle.item.getState()
+            self._ammunitionPanel.viewModel.setAmmoNotFull(state == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL)
 
     def _addListeners(self):
         super(HangarAmmunitionPanelView, self)._addListeners()
@@ -46,7 +51,7 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
                 serverSettings.setOnceOnlyHintsSettings({hintName: True})
                 serverSettings.saveInUIStorage({uiStorage: True})
 
-    @async
+    @wg_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
         yield showIntro(selectedSection, self.getParentWindow())
@@ -64,4 +69,4 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
             return
 
     def __onEscKeyDown(self):
-        self.onEscKeyDown()
+        g_eventBus.handleEvent(AmmunitionPanelViewEvent(AmmunitionPanelViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)

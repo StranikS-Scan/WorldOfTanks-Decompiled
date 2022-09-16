@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/QueuedVehicleDossierReceiver.py
 from Event import Event
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -24,7 +24,7 @@ class QueuedVehicleDossierReceiver(object):
         else:
             self.__requestData(databaseID, vehicleID)
 
-    @process
+    @adisp_process
     def __requestData(self, databaseID, vehicleID):
         self.__isUnderRequesting = True
         vehDossier = yield self.itemsCache.items.requestUserVehicleDossier(int(databaseID), vehicleID)

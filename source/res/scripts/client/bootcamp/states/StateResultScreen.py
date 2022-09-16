@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/states/StateResultScreen.py
 from copy import deepcopy
-from adisp import process
+from adisp import adisp_process
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
 from bootcamp.states import STATE
@@ -32,7 +32,7 @@ class StateResultScreen(AbstractState):
     def handleKeyEvent(self, event):
         pass
 
-    @process
+    @adisp_process
     def _doActivate(self):
         from bootcamp.Bootcamp import g_bootcamp
         yield self.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
@@ -61,7 +61,7 @@ class StateResultScreen(AbstractState):
         if event.ns == settings.APP_NAME_SPACE.SF_LOBBY and self.__storedArenaUniqueID:
             self.__requestBattleResults(self.__storedArenaUniqueID)
 
-    @process
+    @adisp_process
     def __requestBattleResults(self, arenaUniqueID):
         from gui.battle_results import RequestResultsContext
         yield self.battleResults.requestResults(RequestResultsContext(arenaUniqueID))

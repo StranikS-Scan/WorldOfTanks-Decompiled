@@ -25,15 +25,15 @@ from gui.server_events import settings, events_helpers
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup
+from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -244,6 +244,7 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
         super(QuestsGroupsBuilder, self).__init__()
@@ -269,6 +270,10 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
             rankedPlatform = getRankedPlatformGroup()
             if rankedPlatform and RANKED_PLATFORM_GROUP_ID not in self._cache['groupedEvents']:
                 self._cache['groupedEvents'][RANKED_PLATFORM_GROUP_ID] = self._createGroupedEventsBlock(rankedPlatform)
+        if self.__funRandomController.isBattlesPossible():
+            funRandomGroup = getFunRandomDailyGroup()
+            if funRandomGroup and FUN_RANDOM_GROUP_ID not in self._cache['groupedEvents']:
+                self._cache['groupedEvents'][FUN_RANDOM_GROUP_ID] = self._createGroupedEventsBlock(funRandomGroup)
         group = getPremiumGroup()
         if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()

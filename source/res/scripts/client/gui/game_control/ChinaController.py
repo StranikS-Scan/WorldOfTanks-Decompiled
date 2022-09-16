@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/ChinaController.py
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.locale.MENU import MENU
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IChinaController, IGameSessionController
@@ -25,7 +25,7 @@ class ChinaController(IChinaController):
             self.__browserClosed(self.__browserID)
         return
 
-    @process
+    @adisp_process
     def showBrowser(self):
         self.__browserID = yield self.browser.load(title=MENU.BROWSER_WINDOW_TITLE, browserID=self.__browserID)
         self.browser.onBrowserDeleted += self.__browserClosed

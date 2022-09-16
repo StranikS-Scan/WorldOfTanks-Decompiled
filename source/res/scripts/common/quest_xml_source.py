@@ -166,6 +166,7 @@ class Source(object):
             bonusLimit = commonNode.getChildNode('bonusLimit')
             cumulative = commonNode.getChildNode('cumulative')
             cumulativeExt = commonNode.getChildNode('cumulativeExt')
+            cumulativeSum = commonNode.getChildNode('cumulativeSum')
             vehicleKills = commonNode.getChildNode('vehicleKills')
             battles = commonNode.getChildNode('battles')
             battleCount = battles.getChildNode('count').getFirstChildValue() if battles else None
@@ -174,15 +175,15 @@ class Source(object):
                 bonusLimitNode.addChild(1 if eventType in EVENT_TYPE.ONE_BONUS_QUEST else MAX_BONUS_LIMIT)
                 commonNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
-                if (cumulative or cumulativeExt or unit or vehicleKills) and inrow:
-                    raise SoftException('battleQuest: Unexpected tags (vehicleKills, cumulative, cumulativeExtunit/cumulative, unit/cumulativeExt) with inrow')
-                if not (cumulative or cumulativeExt or unit or vehicleKills or bonusLimit or battles) and (daily or weekly or groupBy):
-                    raise SoftException('battleQuest: daily, weekly and groupBy should be used with cumulative, cumulativeExt, unit, vehicleKills, bonusLimit or battles tags')
+                if (cumulative or cumulativeExt or cumulativeSum or unit or vehicleKills) and inrow:
+                    raise SoftException('battleQuest: Unexpected tags (vehicleKills, cumulative, cumulativeExtcumulativeSum, unit/cumulative, unit/cumulativeExt) with inrow')
+                if not (cumulative or cumulativeExt or cumulativeSum or unit or vehicleKills or bonusLimit or battles) and (daily or weekly or groupBy):
+                    raise SoftException('battleQuest: daily, weekly and groupBy should be used with cumulative, cumulativeExt, cumulativeSum, unit, vehicleKills, bonusLimit or battles tags')
                 if battles and not battleCount:
                     raise SoftException('Invalid battles section')
             elif eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
-                if cumulative or cumulativeExt or unit or vehicleKills or groupBy or battles:
-                    raise SoftException('tokenQuest: Unexpected tags (cumulative, cumulativeExt, unit, vehicleKills, groupBy, battles)')
+                if cumulative or cumulativeExt or cumulativeSum or unit or vehicleKills or groupBy or battles:
+                    raise SoftException('tokenQuest: Unexpected tags (cumulative, cumulativeExt, cumulativeSum, unit, vehicleKills, groupBy, battles)')
                 if not bonusLimit and (daily or weekly):
                     raise SoftException('tokenQuest: daily or weekly should be used with bonusLimit tag')
             mainNode.bonus = readBonusSection(availableBonuses, questSection['bonus'], eventType)
@@ -384,6 +385,7 @@ class Source(object):
              'isAlive': self.__readConditionComplex_true,
              'isSquad': self.__readCondition_bool,
              'clanMembership': self.__readCondition_string,
+             'unitSize': self.__readCondition_int,
              'allAlive': self.__readCondition_true,
              'aliveCnt': self.__readCondition_int,
              'achievements': self.__readCondition_achievements,
@@ -440,6 +442,8 @@ class Source(object):
              'correspondedModification': self.__readConditionComplex_true,
              'correspondedProjectionDecal': self.__readConditionComplex_true,
              'correspondedPersonalNumber': self.__readConditionComplex_true,
+             'customization': self.__readBattleResultsConditionList,
+             'styleId': self.__readCondition_int,
              'correspondedEquipment': self.__readCondition_correspondedEquipment,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
@@ -461,6 +465,7 @@ class Source(object):
              'groupName': self.__readCondition_groupBy,
              'cumulative': self.__readCondition_cumulative,
              'cumulativeExt': self.__readBattleResultsConditionList,
+             'cumulativeSum': self.__readCondition_cumulativeSum,
              'crits': self.__readBattleResultsConditionList,
              'destroyed': self.__readBattleResultsConditionList,
              'tankman': self.__readBattleResultsConditionList,
@@ -468,7 +473,9 @@ class Source(object):
              'crit': self.__readBattleResultsConditionList,
              'critName': self.__readCritName,
              'unregularAmmo': self.__readCondition_true,
-             'isNotLeaver': self.__readCondition_true})
+             'isNotLeaver': self.__readCondition_true,
+             'isFirstBlood': self.__readConditionComplex_true,
+             'winAloneAgainstVehicleCount': self.__readCondition_int})
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,
@@ -517,7 +524,8 @@ class Source(object):
          'dogTagComponent',
          'battlePassPoints',
          'currency',
-         'freePremiumCrew'}
+         'freePremiumCrew',
+         'entitlementList'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
@@ -632,6 +640,26 @@ class Source(object):
             node.addChild(results)
 
         return
+
+    def __readCondition_cumulativeSum(self, conditionReaders, section, node):
+        for name, sub in section.items():
+            if name == 'description':
+                node.questClientConditions.append(('description', self.__readMetaSection(sub)))
+                break
+
+        for name, sub in section.items():
+            if name in ('meta', 'title', 'description'):
+                continue
+            subNode = XMLNode(name)
+            if name == 'sum':
+                for _name, _sub in sub.items():
+                    if _name not in getBattleResultsNames():
+                        raise SoftException("Unsupported misc variable '%s'" % _name)
+                    subNode.addChild(_name)
+
+            if name in ('greater', 'equal', 'less', 'lessOrEqual', 'greaterOrEqual'):
+                conditionReaders[name](conditionReaders, sub, subNode)
+            node.addChild(subNode)
 
     def __readBattleResultsConditionList(self, conditionReaders, section, node):
         for name, sub in section.items():

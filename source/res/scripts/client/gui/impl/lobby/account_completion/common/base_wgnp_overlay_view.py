@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/account_completion/common/base_wgnp_overlay_view.py
 from abc import ABCMeta, abstractmethod
 import typing
-import async
+import wg_async
 from gui.impl.gen import R
 from gui.impl.lobby.account_completion.common.base_overlay_view import BaseOverlayView
 from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
 if typing.TYPE_CHECKING:
-    from async import _Future
+    from wg_async import _Future
     from gui.impl.gen.view_models.views.lobby.account_completion.common.base_wgnp_overlay_view_model import BaseWgnpOverlayViewModel
 
 class BaseWGNPOverlayView(BaseOverlayView):
@@ -35,7 +35,7 @@ class BaseWGNPOverlayView(BaseOverlayView):
         self.viewModel.setTitle(self._TITLE)
         self.viewModel.setSubTitle(self._SUBTITLE)
 
-    @async.async
+    @wg_async.wg_async
     def _confirmClickedHandler(self):
         if not self.isActive:
             return
@@ -43,7 +43,7 @@ class BaseWGNPOverlayView(BaseOverlayView):
         if not self._validateInput():
             return
         self._setWaiting(True)
-        response = yield async.await(self._doRequest())
+        response = yield wg_async.wg_await(self._doRequest())
         if not self.isActive:
             return
         self._setWaiting(False)

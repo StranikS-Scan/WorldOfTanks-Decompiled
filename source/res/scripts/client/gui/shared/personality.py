@@ -2,14 +2,15 @@
 # Embedded file name: scripts/client/gui/shared/personality.py
 import logging
 import time
+import typing
 import weakref
 import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.account_validator import ValidationCodes, InventoryVehiclesValidator, InventoryOutfitValidator, InventoryTankmenValidator
-from adisp import process
-import async as future_async
+from adisp import adisp_process
+import wg_async as future_async
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, miniclient
@@ -39,7 +40,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IGameStateTracker, IBootcampController
-from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.goodies import IGoodiesCache, IBoostersStateProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.offers import IOffersDataProvider
@@ -49,6 +50,8 @@ from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.web import IWebController
 from skeletons.helpers.statistics import IStatisticsCollector
+if typing.TYPE_CHECKING:
+    from gui.goodies.booster_state_provider import BoosterStateProvider
 _logger = logging.getLogger(__name__)
 try:
     from gui import mods
@@ -69,6 +72,7 @@ class ServicesLocator(object):
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    boosterStateProvider = dependency.descriptor(IBoostersStateProvider)
     battleResults = dependency.descriptor(IBattleResultsService)
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -96,7 +100,7 @@ class ServicesLocator(object):
         cls.clear()
 
 
-@future_async.async
+@future_async.wg_async
 def onAccountShowGUI(ctx):
     Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
@@ -155,7 +159,7 @@ def onServerReplayExiting():
     ServicesLocator.gameState.onServerReplayExiting()
 
 
-@process
+@adisp_process
 def onAvatarBecomePlayer():
     ServicesLocator.battleResults.clear()
     yield ServicesLocator.settingsCache.update()
@@ -166,9 +170,14 @@ def onAvatarBecomePlayer():
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
+    ServicesLocator.boosterStateProvider.onAvatarBecomePlayer()
     ServicesLocator.loginManager.writePeripheryLifetime()
     guiModsSendEvent('onAvatarBecomePlayer')
     Waiting.cancelCallback()
+
+
+def onAvatarBecomeNonPlayer():
+    ServicesLocator.boosterStateProvider.onAvatarBecomeNonPlayer()
 
 
 def onAccountBecomePlayer():
@@ -177,7 +186,7 @@ def onAccountBecomePlayer():
     guiModsSendEvent('onAccountBecomePlayer')
 
 
-@process
+@adisp_process
 def onClientUpdate(diff, updateOnlyLobbyCtx):
     yield lambda callback: callback(None)
     if updateOnlyLobbyCtx:
@@ -195,17 +204,17 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
 
 
 def onShopResyncStarted():
-    Waiting.show('sinhronize')
+    Waiting.show('synchronize')
 
 
-@process
+@adisp_process
 def onShopResync():
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
     if not ServicesLocator.itemsCache.isSynced():
-        Waiting.hide('sinhronize')
+        Waiting.hide('synchronize')
         return
     yield ServicesLocator.eventsCache.update()
-    Waiting.hide('sinhronize')
+    Waiting.hide('synchronize')
     now = time_utils.getCurrentTimestamp()
     SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=backport.getLongDateFormat(now), time=backport.getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
 
@@ -242,6 +251,7 @@ def init(loadingScreenGUI=None):
     g_playerEvents.onAccountBecomeNonPlayer += onAccountBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer += onAccountBecomePlayer
     g_playerEvents.onAvatarBecomePlayer += onAvatarBecomePlayer
+    g_playerEvents.onAvatarBecomeNonPlayer += onAvatarBecomeNonPlayer
     g_playerEvents.onClientUpdated += onClientUpdate
     g_playerEvents.onShopResyncStarted += onShopResyncStarted
     g_playerEvents.onShopResync += onShopResync
@@ -285,6 +295,7 @@ def fini():
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
     g_playerEvents.onAvatarBecomePlayer -= onAvatarBecomePlayer
     g_playerEvents.onAccountBecomePlayer -= onAccountBecomePlayer
+    g_playerEvents.onAvatarBecomeNonPlayer -= onAvatarBecomeNonPlayer
     g_playerEvents.onClientUpdated -= onClientUpdate
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
@@ -354,7 +365,7 @@ def onRecreateDevice():
             LOG_CURRENT_EXCEPTION()
 
 
-@process
+@adisp_process
 def __runItemsCacheSync(_, callback=None):
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
     if not ServicesLocator.itemsCache.isSynced():
@@ -364,7 +375,7 @@ def __runItemsCacheSync(_, callback=None):
     callback(True)
 
 
-@process
+@adisp_process
 def __runQuestSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
@@ -372,7 +383,7 @@ def __runQuestSync(_, callback=None):
     callback(True)
 
 
-@process
+@adisp_process
 def __runSettingsSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
@@ -380,7 +391,7 @@ def __runSettingsSync(_, callback=None):
     callback(True)
 
 
-@process
+@adisp_process
 def __processEULA(_, callback=None):
     eula = EULADispatcher()
     yield eula.processLicense()
@@ -388,7 +399,7 @@ def __processEULA(_, callback=None):
     callback(True)
 
 
-@future_async.async
+@future_async.wg_async
 def __processValidator(validator, callback):
     code = yield future_async.await_callback(validator.validate)()
     if code != ValidationCodes.OK:
@@ -410,7 +421,7 @@ def __validateInventoryTankmen(_, callback=None):
     __processValidator(InventoryTankmenValidator(), callback)
 
 
-@future_async.async
+@future_async.wg_async
 def __cacheVehicles(_, callback=None):
     yield future_async.await_callback(ServicesLocator.itemsCache.items.getItemsAsync)(itemTypeID=GUI_ITEM_TYPE.VEHICLE)
     callback(True)
@@ -434,7 +445,7 @@ def __requestDossier(_, callback=None):
     callback(True)
 
 
-@future_async.async
+@future_async.wg_async
 def __initializeHangarSpace(_, callback=None):
     premium = ServicesLocator.itemsCache.items.stats.isPremium
     if ServicesLocator.hangarSpace.inited:
@@ -461,7 +472,7 @@ def __initializeHangar(ctx=None, callback=None):
     callback(True)
 
 
-@process
+@adisp_process
 def __processWebCtrl(_, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
     ServicesLocator.webCtrl.start()
@@ -470,7 +481,7 @@ def __processWebCtrl(_, callback=None):
     callback(True)
 
 
-@process
+@adisp_process
 def __processElen(_, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
     if serverSettings.isElenEnabled():

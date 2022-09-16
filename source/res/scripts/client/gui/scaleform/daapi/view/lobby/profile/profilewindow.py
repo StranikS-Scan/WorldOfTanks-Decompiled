@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileWindow.py
 from PlayerEvents import g_playerEvents
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
@@ -123,7 +123,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     def userAddFriend(self):
         self.proto.contacts.addFriend(self.__databaseID, self.__userName)
 
-    @process
+    @adisp_process
     def userAddToClan(self):
         self.as_showWaitingS(backport.msgid(R.strings.waiting.clans.invites.send()), {})
         profile = self.webCtrl.getAccountProfile()

@@ -13,7 +13,7 @@ from gui import makeHtmlString, GUI_SETTINGS
 from gui.shared.events import CloseWindowEvent, LoadViewEvent
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from Event import Event
-from adisp import async
+from adisp import adisp_async
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import ISteamCompletionController, IDemoAccCompletionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -58,7 +58,7 @@ class EULADispatcher(EventSystemEntity):
         else:
             self.fini()
 
-    @async
+    @adisp_async
     def processLicense(self, callback=None):
         self.EULACallback = callback
         from account_helpers.AccountSettings import AccountSettings, EULA_VERSION

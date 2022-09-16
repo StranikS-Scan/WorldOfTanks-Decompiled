@@ -229,12 +229,19 @@ class GuiController(IGuiController):
         _logger.debug('hideBootcampHint: %r', componentID)
         self.__doHideEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT)
 
-    def setupViewContextHints(self, viewTutorialID, hintsData):
+    def setupViewContextHints(self, viewTutorialID, hintsData, hintsArgs=None):
         hintsDataCopy = hintsData.copy()
+        for hint in hintsDataCopy.get('hints', []):
+            hintArgs = hintsArgs.get(hint.get('tooltipSpecial'))
+            if hintArgs is not None:
+                hint['args'] = hintArgs
+
         builder = hintsDataCopy.pop('builderLnk', '')
         effectType = _EFFECT_TYPES.DEFAULT_OVERLAY
         for gui in self.__guiImpls:
             gui.showEffect('', viewTutorialID, effectType, hintsDataCopy, builder)
+
+        return
 
     def overrideHangarMenuButtons(self, buttonsList=None):
         if buttonsList != self.__hangarMenuButtonsOverride:

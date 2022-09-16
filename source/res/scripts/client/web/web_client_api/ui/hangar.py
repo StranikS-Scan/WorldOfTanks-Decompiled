@@ -2,11 +2,13 @@
 # Embedded file name: scripts/client/web/web_client_api/ui/hangar.py
 import logging
 import adisp
-from async import async, await
+from wg_async import wg_async, wg_await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
+from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.event_dispatcher import showCrystalWindow
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from skeletons.gui.game_control import IBrowserController
 from web.web_client_api import W2CSchema, w2c, Field
@@ -72,6 +74,10 @@ class HangarWindowsWebApiMixin(object):
     def openBuyBerthWindow(self, _):
         ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
 
+    @w2c(W2CSchema, 'show_crystal_info_window')
+    def openCrystalInfoWindow(self, _):
+        showCrystalWindow(HeaderMenuVisibilityState.ALL)
+
     def validateItems(self, itemCD):
         item = self.itemsCache.items.getItemByCD(itemCD)
         if item is None or item.itemTypeID == GUI_ITEM_TYPE.FUEL_TANK:
@@ -80,11 +86,11 @@ class HangarWindowsWebApiMixin(object):
         else:
             return True
 
-    @adisp.async
-    @async
+    @adisp.adisp_async
+    @wg_async
     def __showExchangeItemDialog(self, itemCD, count, callback):
         for browser in self.__browserController.getAllBrowsers().values():
             browser.unfocus()
 
-        result = yield await(showExchangeToBuyItemsDialog(itemsCountMap={itemCD: count}))
+        result = yield wg_await(showExchangeToBuyItemsDialog(itemsCountMap={itemCD: count}))
         callback(result)

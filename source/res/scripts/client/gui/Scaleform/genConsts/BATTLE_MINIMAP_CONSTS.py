@@ -11,3 +11,5 @@ class BATTLE_MINIMAP_CONSTS(object):
     STATE_DEFAULT = 'default'
     STATE_IDLE = 'idle'
     STATE_ATTACK = 'attack'
+    STATE_ACTIVE = 'active'
+    STATE_NOT_ACTIVE = 'notActive'

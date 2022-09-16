@@ -4,4 +4,4 @@
 
 class PREBATTLE_TIMER(object):
     QP_ANIM_FLAG_LINKAGE = 'QuestInfoFlagUI'
-    APP_MIN_HEIGHT_BREAKING = 800
+    COMP7_PREBATTLE_INFO_VIEW_LINKAGE = 'Comp7PrebattleInfoViewUI'

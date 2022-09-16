@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/__init__.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowLayer
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ComponentSettings
+from gui.Scaleform.framework import GroupedViewSettings
 from gui.Scaleform.framework import ScopeTemplates, ConditionalViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride

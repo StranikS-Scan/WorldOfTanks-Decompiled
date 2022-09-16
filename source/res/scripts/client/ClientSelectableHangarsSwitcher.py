@@ -6,7 +6,7 @@ from ClientSelectableObject import ClientSelectableObject
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.shared.hangar_spaces_switcher import IHangarSpacesSwitcher
+from constants import FESTIVAL_SCENE, BATTLE_ROYALE_SCENE
 from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 _logger = logging.getLogger(__name__)
@@ -14,7 +14,6 @@ _logger = logging.getLogger(__name__)
 class ClientSelectableHangarsSwitcher(ClientSelectableObject):
     battleRoyale = dependency.descriptor(IBattleRoyaleController)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    hangarSpacesSwitcher = dependency.descriptor(IHangarSpacesSwitcher)
 
     def __init__(self):
         super(ClientSelectableHangarsSwitcher, self).__init__()
@@ -24,8 +23,8 @@ class ClientSelectableHangarsSwitcher(ClientSelectableObject):
 
     def onEnterWorld(self, prereqs):
         super(ClientSelectableHangarsSwitcher, self).onEnterWorld(prereqs)
-        self.__modeSelector = {self.hangarSpacesSwitcher.itemsToSwitch.BATTLE_ROYALE: self.__selectRoyaleBattle,
-         self.hangarSpacesSwitcher.itemsToSwitch.FESTIVAL: self.__selectRandomBattle}
+        self.__modeSelector = {BATTLE_ROYALE_SCENE: self.__selectRoyaleBattle,
+         FESTIVAL_SCENE: self.__selectRandomBattle}
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated)
 
     def onLeaveWorld(self):

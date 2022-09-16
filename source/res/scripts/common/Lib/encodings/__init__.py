@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/__init__.py
-# Compiled at: 2032-07-11 10:51:05
+# Compiled at: 2100-03-15 16:41:13
 """ Standard "encodings" Package
 
     Standard Python encoding modules are stored in this package

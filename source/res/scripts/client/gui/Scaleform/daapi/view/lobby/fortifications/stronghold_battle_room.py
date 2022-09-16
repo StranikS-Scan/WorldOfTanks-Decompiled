@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/stronghold_battle_room.py
 import weakref
 from UnitBase import UNIT_OP
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
@@ -163,7 +163,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def chooseVehicleRequest(self):
         self._chooseVehicleRequest(self.prbEntity.getRosterSettings().getLevelsRange())
 
-    @process
+    @adisp_process
     def openConfigureWindow(self):
         url = getStrongholdChangeModeUrl()
         title = i18n.makeString(TOOLTIPS.CYBERSPORT_MODECHANGEFROZEN_HEADER)

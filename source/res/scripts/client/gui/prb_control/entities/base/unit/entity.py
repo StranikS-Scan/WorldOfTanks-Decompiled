@@ -85,6 +85,9 @@ class BaseUnitEntity(BasePrbEntity):
     def getPlayers(self, unitMgrID=None):
         return {}
 
+    def getMembers(self, unitMgrID=None):
+        return {}
+
     def getCandidates(self, unitMgrID=None):
         return {}
 
@@ -611,6 +614,18 @@ class UnitEntity(_UnitEntity):
             players = unit.getPlayers()
             for dbID, data in players.iteritems():
                 result[dbID] = self._buildPlayerInfo(unitMgrID, unit, dbID, slotGetter(dbID), data)
+
+            return result
+
+    def getMembers(self, unitMgrID=None):
+        result = {}
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
+        if unit is None:
+            return super(UnitEntity, self).getMembers(unitMgrID=unitMgrID)
+        else:
+            for member in unit.getMembers().itervalues():
+                dbID = member['accountDBID']
+                result[dbID] = self.getPlayerInfo(dbID, unitMgrID)
 
             return result
 

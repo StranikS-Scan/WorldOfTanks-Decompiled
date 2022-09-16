@@ -10,13 +10,13 @@ import ResMgr
 import constants
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
-from gui.ClientHangarSpace import ClientHangarSpace, _getHangarPath
+from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import BoundMethodWeakref
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IGameSessionController, IIGRController
+from skeletons.gui.game_control import IGameSessionController, IIGRController, IHangarSpaceSwitchController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from gui import g_keyEventHandlers
@@ -142,6 +142,7 @@ class HangarSpace(IHangarSpace):
     gameSession = dependency.descriptor(IGameSessionController)
     igrCtrl = dependency.descriptor(IIGRController)
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    hangarSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
 
     def __init__(self):
         self.__space = None
@@ -355,11 +356,8 @@ class HangarSpace(IHangarSpace):
         self.__space.setVehicleSelectable(flag)
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
-        premiumHangar = _getHangarPath(True, self.__igrSpaceType)
-        defaultHangar = _getHangarPath(False, self.__igrSpaceType)
-        if premiumHangar != defaultHangar:
-            self.refreshSpace(isPremium)
         self.__isSpacePremium = isPremium
+        self.hangarSwitchController.processPossibleSceneChange()
 
     @uniprof.regionDecorator(label='hangar.space.loading', scope='exit')
     def __spaceDone(self):

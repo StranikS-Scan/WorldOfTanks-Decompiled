@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/maps_blacklist_view.py
 import logging
 import ArenaType
-from async import await, async
+from wg_async import wg_await, wg_async
 from constants import PREMIUM_TYPE, EMPTY_GEOMETRY_ID, PremiumConfigs
 from frameworks.wulf import View, ViewSettings, ViewFlags
 from gui import SystemMessages
@@ -273,7 +273,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
 
         return None
 
-    @async
+    @wg_async
     def __showMapConfirmDialog(self, mapId):
         changeableMaps = []
         for item in self.viewModel.disabledMaps.getItems():
@@ -284,11 +284,11 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
                 break
 
         cooldown = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()['slotCooldown']
-        result, choice = yield await(dialogs.mapsBlacklistConfirm(mapId, cooldown, changeableMaps, self))
+        result, choice = yield wg_await(dialogs.mapsBlacklistConfirm(mapId, cooldown, changeableMaps, self))
         if result:
             self.__sendMapChangingRequest(mapId, choice)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def __sendMapChangingRequest(self, mapToSet, mapToChange):
         serverSettings = self.__lobbyContext.getServerSettings()
         cooldown = time_utils.getTillTimeString(serverSettings.getPreferredMapsConfig()['slotCooldown'], MENU.MAPBLACKLIST_TIMELEFTSHORT, isRoundUp=True, removeLeadingZeros=True)
@@ -309,7 +309,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
              'time': cooldown}, type=result.sysMsgType)
         return
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def __sendMapRemovingRequest(self, removeMapName):
         yield MapsBlackListRemover(self.__mapNameToID(removeMapName)).request()
 

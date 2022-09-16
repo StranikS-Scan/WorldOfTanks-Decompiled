@@ -5,7 +5,7 @@ from itertools import imap
 from collections import namedtuple, defaultdict
 from copy import deepcopy
 import BigWorld
-from adisp import async
+from adisp import adisp_async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from debug_utils import LOG_DEBUG
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
@@ -256,7 +256,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getDynSlotTypeID(self, vehIntCD):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('customRoleSlots', {}).get(vehIntCD, 0)
 
-    @async
+    @adisp_async
     def _requestCache(self, callback=None):
         BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))
 
@@ -266,8 +266,10 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             for invID, vCompDescr in invData[GUI_ITEM_TYPE.VEHICLE]['compDescr'].iteritems():
                 self.__vehsCDsByID[invID] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.parseVehicleCompactDescr(vCompDescr))
 
+            self.__vehPostProgression = VehiclesPostProgression(invData[GUI_ITEM_TYPE.VEHICLE])
+        else:
+            self.__vehPostProgression = _DUMMY_VEH_POST_PROGRESSION
         self.__vehsIDsByCD = dict(((v, k) for k, v in self.__vehsCDsByID.iteritems()))
-        self.__vehPostProgression = VehiclesPostProgression(invData[GUI_ITEM_TYPE.VEHICLE])
         super(InventoryRequester, self)._response(resID, invData, callback)
         return
 

@@ -43,8 +43,11 @@ def isBattlePassActiveSeason():
     return battlePassController.isVisible()
 
 
-def getPointsInfoStringID():
-    return R.strings.battle_pass.points.top()
+def getPointsInfoStringID(gameMode=ARENA_BONUS_TYPE.REGULAR):
+    points = R.strings.battle_pass.points.top()
+    if gameMode == ARENA_BONUS_TYPE.COMP7:
+        points = R.strings.battle_pass.prestige.top()
+    return points
 
 
 def isSeasonEndingSoon():
@@ -116,7 +119,8 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
         arenaBonusTypeByQueueType = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE.REGULAR,
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
          QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
-         QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE}
+         QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE,
+         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
 
@@ -213,7 +217,7 @@ def getDataByTankman(tankman):
     nation = getRecruitNation(tankman)
     iconName = tankman.getIconByNation(nation)
     tankmanName = tankman.getFullUserNameByNation(nation)
-    skills = tankman.getLearntSkills()
+    skills = tankman.getAllKnownSkills()
     newSkillCount, _ = tankman.getNewSkillCount(onlyFull=True)
     if newSkillCount > 0:
         skills += [SKILLS.TYPE_NEW_SKILL] * (newSkillCount - skills.count(SKILLS.TYPE_NEW_SKILL))

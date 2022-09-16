@@ -363,6 +363,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def comp7(self):
+        raise NotImplementedError
+
+    @property
     def tutorialsCompleted(self):
         raise NotImplementedError
 
@@ -713,6 +717,10 @@ class IGoodiesRequester(IRequester):
 
     @property
     def goodies(self):
+        raise NotImplementedError
+
+    @property
+    def pr2ConversionResult(self):
         raise NotImplementedError
 
     def getActiveClanReserves(self):

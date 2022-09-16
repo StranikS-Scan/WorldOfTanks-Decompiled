@@ -127,7 +127,7 @@ def _readGoodies(reader, subsectionName):
              autostart,
              condition,
              resource)
-            if price:
+            if price is not None:
                 goodies['prices'][uid] = price
             if notInShop or price is None:
                 goodies['notInShop'].add(uid)

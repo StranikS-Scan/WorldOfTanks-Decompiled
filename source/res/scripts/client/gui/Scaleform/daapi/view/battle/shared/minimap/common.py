@@ -91,6 +91,9 @@ class SimplePlugin(IPlugin):
     def _isInRespawnDeath(self):
         return self._ctrlMode == CTRL_MODE_NAME.RESPAWN_DEATH
 
+    def _isVehicleSelection(self):
+        return self._ctrlMode == CTRL_MODE_NAME.VEHICLES_SELECTION
+
 
 class EntriesPlugin(SimplePlugin):
     __slots__ = ('_entries', '_clazz')

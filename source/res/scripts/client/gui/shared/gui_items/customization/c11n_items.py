@@ -437,9 +437,9 @@ class Customization(FittingItem):
             if self.intCD in customizationCache.itemToQuestProgressionStyle:
                 styleDescr = customizationCache.itemToQuestProgressionStyle[self.intCD]
                 qProg = styleDescr.questsProgression
-                hasOtherItemsInChain = False
                 for token in sorted(qProg.getGroupTokens()):
-                    groupItems = qProg.getItemsForGroup(token)
+                    groupItems = filter(bool, qProg.getItemsForGroup(token))
+                    hasOtherItemsInChain = False
                     for level, itemsForLevel in enumerate(groupItems, 1):
                         itemsIdsForType = itemsForLevel.get(self.descriptor.itemType, ())
                         if self.id in itemsIdsForType:
@@ -1209,4 +1209,5 @@ class Style(Customization):
                 _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)
             else:
                 component = component.applyDiff(diffComponent)
+        component = self.descriptor.addPartsToOutfit(season, component, vehicleCD)
         return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)

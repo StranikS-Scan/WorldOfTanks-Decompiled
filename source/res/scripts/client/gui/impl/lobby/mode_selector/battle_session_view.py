@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/battle_session_view.py
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import g_entitiesFactories
@@ -57,7 +57,7 @@ class BattleSessionView(ViewImpl):
     def __closeClickedHandler(self):
         self.destroyWindow()
 
-    @process
+    @adisp_process
     def __openUrl(self, name):
         url = yield self.__externalLinks.getURL(name)
         self.__externalLinks.open(url)

@@ -54,7 +54,7 @@ class BattlePassProgress(object):
         self.__hasBattlePass = kwargs.get('hasBattlePass', False)
         self.__questsProgress = kwargs.get('questsProgress', {})
         self.__battlePassComplete = kwargs.get('battlePassComplete', False)
-        self.__availablePoints = kwargs.get('availablePoints', 0)
+        self.__availablePoints = kwargs.get('availablePoints', False)
         self.__prevLevel = 0
         self.__currLevel = 0
         self.__pointsNew = 0
@@ -454,7 +454,15 @@ class Progression2dStyleFormater(object):
             if isinstance(cond, conditions._Cumulativable):
                 for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
                     label = cond.getUserString()
-                    if not diff and not label:
+                    customDescription = cond.getCustomDescription()
+                    if customDescription is not None:
+                        label = customDescription
+                    for orItem in event.postBattleCond.getConditions().items:
+                        customDescription = orItem.getCustomDescription()
+                        if customDescription is not None:
+                            label = customDescription
+
+                    if not diff or not label:
                         continue
                     state = cls.getStatus(isCompleted) if isCompleted else None
                     progresses.append({'progrTooltip': None,
@@ -466,6 +474,22 @@ class Progression2dStyleFormater(object):
                      'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
                      'questState': state})
 
+        firstPostCond = first(event.postBattleCond.getConditions().items)
+        if firstPostCond and not progresses:
+            label = ''
+            customDescription = firstPostCond.getCustomDescription()
+            if customDescription is not None:
+                label = customDescription
+            if label:
+                state = cls.getStatus(True)
+                progresses.append({'progrTooltip': None,
+                 'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                 'maxProgrVal': 1,
+                 'currentProgrVal': 1,
+                 'description': label,
+                 'progressDiff': '+ %s' % backport.getIntegralFormat(0),
+                 'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE,
+                 'questState': state})
         if event.accountReqs.getTokens():
             state = cls.getStatus(isCompleted)
             progresses.append({'progrTooltip': None,
@@ -480,9 +504,9 @@ class Progression2dStyleFormater(object):
         itemCD = cls.c11nService.getItemCDByQuestID(event.getID())
         if itemCD:
             item = cls.c11nService.getItemByCD(itemCD)
-            groupID, level = item.getQuestsProgressionInfo()
+            groupID, _ = item.getQuestsProgressionInfo()
             if groupID:
-                title = backport.text(R.strings.vehicle_customization.customization.quests.pbsItem(), itemType=item.userType, itemName=item.userName, level=int2roman(level))
+                title = backport.text(R.strings.vehicle_customization.customization.quests.pbsItem(), itemType=item.userType, itemName=item.userName)
         if progresses:
             progresses[0]['title'] = title
         return progresses
@@ -534,7 +558,9 @@ def get2dProgressionStylePostBattleInfo(styleID, quests, c11nService=None):
         for eventData in quests:
             questRate = fromatter.getProgressRate(*eventData)
             event = eventData[0]
-            _, branch, level = getDataByC11nQuest(event)
+            progressData = getDataByC11nQuest(event)
+            branch = progressData.branch
+            level = progressData.level
             if branch <= 0 or level <= 0:
                 continue
             if (branch, level) not in filteredQuests:

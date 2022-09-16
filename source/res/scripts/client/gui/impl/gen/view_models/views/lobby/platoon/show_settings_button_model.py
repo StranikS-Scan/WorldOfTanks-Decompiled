@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.platoon.button_model import ButtonMode
 class ShowSettingsButtonModel(ButtonModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(ShowSettingsButtonModel, self).__init__(properties=properties, commands=commands)
 
     def getIsPressed(self):
-        return self._getBool(4)
+        return self._getBool(6)
 
     def setIsPressed(self, value):
-        self._setBool(4, value)
+        self._setBool(6, value)
 
     def getHasPopover(self):
-        return self._getBool(5)
+        return self._getBool(7)
 
     def setHasPopover(self, value):
-        self._setBool(5, value)
+        self._setBool(7, value)
 
     def _initialize(self):
         super(ShowSettingsButtonModel, self)._initialize()

@@ -8,6 +8,8 @@ from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class HangarTutorialTooltipData(BlocksTooltipData):
 
@@ -65,6 +67,24 @@ class PersonalCaseSkillsPacker(HeaderPacker):
         return items
 
 
+class PersonalCaseFreeSkillsPacker(HeaderPacker):
+
+    def __init__(self, context):
+        super(PersonalCaseFreeSkillsPacker, self).__init__(context)
+        self._title = TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_FREESKILLS_TITLE
+        self._descr = TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_FREESKILLS_HEADERDESCRIPTION
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(PersonalCaseFreeSkillsPacker, self)._packBlocks(*args, **kwargs)
+        blocksGap = 2
+        imgPdg = {'left': 0,
+         'right': 10,
+         'top': 4}
+        txtGap = 0
+        items.append(formatters.packBuildUpBlockData([formatters.packImageTextBlockData(text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_FREESKILLS_NEWPERKTITLE), text_styles.standard(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_FREESKILLS_NEWPERKDESCRIPTION), RES_COMMON.MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL, imgPdg, txtGap=txtGap)], blocksGap, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        return items
+
+
 class PersonalCasePerksPacker(HeaderPacker):
 
     def __init__(self, context):
@@ -84,18 +104,22 @@ class PersonalCasePerksPacker(HeaderPacker):
 
 
 class PersonalCaseAdditionalPacker(HeaderPacker):
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(PersonalCaseAdditionalPacker, self).__init__(context)
         self._title = TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TITLE
 
-    def _packBlocks(self, *args, **kwargs):
+    def _packBlocks(self, tmanInvIdInList, *args, **kwargs):
+        tmanInvID = tmanInvIdInList[0]
+        tankman = self._itemsCache.items.getTankman(tmanInvID)
         items = super(PersonalCaseAdditionalPacker, self)._packBlocks(*args, **kwargs)
         blocksGap = 10
-        items.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDDESCRIPTION)),
-         formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGDESCRIPTION)),
-         formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSDESCRIPTION)),
-         formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSDESCRIPTION))], blocksGap))
+        blocks = [formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDDESCRIPTION)), formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGDESCRIPTION))]
+        if tankman.newFreeSkillsCount > 0:
+            blocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_FREEPERKSTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_FREEPERKSDESCRIPTION)))
+        blocks.extend([formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSDESCRIPTION)), formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSTITLE), text_styles.main(TOOLTIPS.HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSDESCRIPTION))])
+        items.append(formatters.packBuildUpBlockData(blocks, gap=blocksGap))
         return items
 
 

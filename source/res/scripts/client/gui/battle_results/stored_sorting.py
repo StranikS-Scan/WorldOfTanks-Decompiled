@@ -3,18 +3,23 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STATS_REGULAR_SORTING
 from account_helpers.AccountSettings import STATS_SORTIE_SORTING
+from account_helpers.AccountSettings import STATS_COMP7_SORTING
 from soft_exception import SoftException
-__all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'writeStatsSorting', 'readStatsSorting')
+from constants import ARENA_BONUS_TYPE
+__all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'STATS_COMP7_SORTING', 'writeStatsSorting', 'readStatsSorting')
+AVAILABLE_STATS_SORTINGS = [STATS_REGULAR_SORTING, STATS_SORTIE_SORTING, STATS_COMP7_SORTING]
 
 def writeStatsSorting(bonusType, iconType, sortDirection):
     key = STATS_REGULAR_SORTING
+    if bonusType == ARENA_BONUS_TYPE.COMP7:
+        key = STATS_COMP7_SORTING
     value = {'iconType': iconType,
      'sortDirection': sortDirection}
     AccountSettings.setSettings(key, value)
 
 
 def readStatsSorting(key):
-    if key not in (STATS_REGULAR_SORTING, STATS_SORTIE_SORTING):
+    if key not in AVAILABLE_STATS_SORTINGS:
         raise SoftException('Sorting key {} is invalid'.format(key))
     settings = AccountSettings.getSettings(key)
     return (settings.get('iconType'), settings.get('sortDirection'))

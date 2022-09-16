@@ -5,14 +5,16 @@ import BigWorld
 import GUI
 import SoundGroups
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
+from gui.Scaleform.daapi.view.meta.RocketAcceleratorIndicatorMeta import RocketAcceleratorIndicatorMeta
 from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
+from gui.Scaleform.genConsts.ROCKET_ACCELERATOR_INDICATOR import ROCKET_ACCELERATOR_INDICATOR
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM, DEVICE_STATE_DESTROYED
@@ -21,6 +23,7 @@ from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCRE
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, HitType
 from gui.shared.crits_mask_parser import critsParserGenerator
+from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
 from helpers import i18n
 from gui.impl import backport
@@ -528,7 +531,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
     def __init__(self):
         super(SiegeModeIndicator, self).__init__()
-        self._isEnabled = False
+        self.__isEnabled = False
+        self.__isAllowedByContext = True
         self._siegeState = _SIEGE_STATE.DISABLED
         self._devices = {}
         self._switchTime = 0.0
@@ -553,7 +557,11 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
-        self.as_setVisibleS(self._isEnabled)
+        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        if prbCtrl is not None:
+            prbCtrl.onBattleStarted += self.__onBattleStarted
+            self.__updateContextAvailability()
+        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
         return
 
     def _dispose(self):
@@ -566,12 +574,18 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        if prbCtrl is not None:
+            prbCtrl.onBattleStarted -= self.__onBattleStarted
         self._switchTimeTable.clear()
         self._siegeComponent.clear()
         self._siegeComponent = None
         return
 
     def __updateIndicatorView(self, isSmooth=False):
+        if self._siegeState not in self._switchTimeTable:
+            LOG_WARNING('Invalid state: indicator is not properly configured')
+            return
         LOG_DEBUG('Updating siege mode: indicator')
         engineState = self._devices.get('engine', DEVICE_STATE_NORMAL)
         totalTime = self._switchTimeTable[self._siegeState][engineState]
@@ -599,7 +613,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.as_setSiegeModeTypeS(uiType)
             self._devices = self.__createDevicesMap(vTypeDesc)
             self._deviceStateConverter = self.__getDeviceStateConverter(vTypeDesc)
-            self._isEnabled = True
+            self.__isEnabled = True
             states = [VEHICLE_VIEW_STATE.DEVICES]
             if hasSiegeMode:
                 siegeModeParams = vType.siegeModeParams
@@ -623,18 +637,18 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDevicesView()
         else:
             self._siegeState = _SIEGE_STATE.DISABLED
-            self._isEnabled = False
-        self.as_setVisibleS(self._isEnabled)
+            self.__isEnabled = False
+        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
         return
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__resetDevices()
             if not value:
-                self._isEnabled = False
-                self.as_setVisibleS(self._isEnabled)
+                self.__isEnabled = False
+                self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
         else:
-            if not self._isEnabled:
+            if not self.__isEnabled:
                 return
             if state == VEHICLE_VIEW_STATE.SIEGE_MODE:
                 self.__updateSiegeState(*value)
@@ -646,7 +660,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
                 self.__updateDestroyed(value)
 
     def __onCrosshairPositionChanged(self, *args):
-        if not self._isEnabled:
+        if not self.__isEnabled:
             return
         crosshairCtrl = self.sessionProvider.shared.crosshair
         scaledPosition = crosshairCtrl.getScaledPosition()
@@ -656,7 +670,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
             self.as_setVisibleS(False)
         else:
-            self.as_setVisibleS(self._isEnabled)
+            self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
 
     def __updateSiegeState(self, siegeState, switchTime):
         if self._siegeState in _SIEGE_STATE.SWITCHING:
@@ -674,12 +688,24 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDevicesView()
 
     def __updateDestroyed(self, _):
-        self._isEnabled = False
+        self.__isEnabled = False
         self.as_setVisibleS(False)
 
     def __resetDevices(self):
         for deviceName in self._devices:
             self._devices[deviceName] = DEVICE_STATE_NORMAL
+
+    def __onBattleStarted(self):
+        self.__updateContextAvailability()
+        self.as_setVisibleS(self.__isAllowedByContext and self.__isEnabled)
+
+    def __updateContextAvailability(self):
+        prebattleCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        if prebattleCtrl is not None:
+            self.__isAllowedByContext = prebattleCtrl.isVehicleStateIndicatorAllowed()
+        else:
+            self.__isAllowedByContext = True
+        return
 
     @classmethod
     def __getDeviceStateConverter(cls, vTypeDesc):
@@ -977,3 +1003,140 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
         width, height = GUI.screenResolution()
         self.as_setScreenSettingsS(scale, width, height)
         return
+
+
+UI_ROCKET_STATE_MAP = {ROCKET_ACCELERATION_STATE.NOT_RUNNING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
+ ROCKET_ACCELERATION_STATE.DEPLOYING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
+ ROCKET_ACCELERATION_STATE.PREPARING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
+ ROCKET_ACCELERATION_STATE.READY: ROCKET_ACCELERATOR_INDICATOR.READY,
+ ROCKET_ACCELERATION_STATE.ACTIVE: ROCKET_ACCELERATOR_INDICATOR.ACTIVE,
+ ROCKET_ACCELERATION_STATE.DISABLED: ROCKET_ACCELERATOR_INDICATOR.DISABLE,
+ ROCKET_ACCELERATION_STATE.EMPTY: ROCKET_ACCELERATOR_INDICATOR.PREPARING}
+
+class RocketIndicatorUpdater(object):
+
+    def __init__(self, indicator):
+        super(RocketIndicatorUpdater, self).__init__()
+        self.__indicator = indicator
+        self.__rocketCmp = None
+        self.__timeInterval = TimeInterval(0.1, self, '_updateProgress')
+        return
+
+    def clear(self):
+        self.__indicator = None
+        if self.__rocketCmp is not None:
+            self.__rocketCmp.unsubscribe(self.__onRocketAcceleratorStateChanged)
+        self.__rocketCmp = None
+        self.__timeInterval.stop()
+        self.__timeInterval = None
+        return
+
+    def setRocketCmp(self, rocketCmp):
+        self.removeRocketCmp()
+        self.__rocketCmp = rocketCmp
+        if self.__rocketCmp is not None:
+            self.__rocketCmp.subscribe(self.__onRocketAcceleratorStateChanged)
+            self.__timeInterval.start()
+        return
+
+    def removeRocketCmp(self):
+        if self.__rocketCmp is not None:
+            self.__rocketCmp.unsubscribe(self.__onRocketAcceleratorStateChanged)
+        self.__rocketCmp = None
+        self.__timeInterval.stop()
+        return
+
+    def _updateProgress(self):
+        if self.__rocketCmp:
+            stateStatus = self.__rocketCmp.stateStatus
+            status = stateStatus.status
+            leftTime = max(0, stateStatus.endTime - BigWorld.serverTime())
+            progress = 1.0 if status == ROCKET_ACCELERATION_STATE.READY else 0.0
+            duration = stateStatus.timeLeft
+            if duration:
+                if status == ROCKET_ACCELERATION_STATE.ACTIVE:
+                    progress = leftTime / duration
+                    self.__indicator.as_setActiveTimeS(leftTime)
+                else:
+                    progress = 1.0 - leftTime / duration
+            self.__indicator.as_setProgressS(progress)
+
+    def __onRocketAcceleratorStateChanged(self, stateStatus):
+        uiState = UI_ROCKET_STATE_MAP[stateStatus.status]
+        self.__indicator.as_setStateS(uiState)
+        self.__indicator.as_setCountS(stateStatus.reuseCount)
+        self._updateProgress()
+
+
+class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        super(RocketAcceleratorIndicator, self).__init__()
+        self.__isEnabled = False
+        self.__updater = RocketIndicatorUpdater(self)
+
+    def _populate(self):
+        super(RocketAcceleratorIndicator, self)._populate()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vehicle = vStateCtrl.getControllingVehicle()
+            if vehicle is not None:
+                self.__onVehicleControlling(vehicle)
+        self.as_setVisibleS(self.__isEnabled)
+        return
+
+    def _dispose(self):
+        self.__updater.clear()
+        self.__updater = None
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        super(RocketAcceleratorIndicator, self)._dispose()
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        self.__updater.removeRocketCmp()
+        self.__isEnabled = False
+        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration:
+            rocketCmp = vehicle.dynamicComponents.get('rocketAccelerationController', None)
+            if rocketCmp is not None:
+                self.__updater.setRocketCmp(rocketCmp)
+                self.__isEnabled = True
+        self.__onCrosshairPositionChanged()
+        self.as_setVisibleS(self.__isEnabled)
+        return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__updateDestroyed(value)
+        elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
+            self.__updateDestroyed(value)
+
+    def __updateDestroyed(self, _):
+        self.__isEnabled = False
+        self.as_setVisibleS(self.__isEnabled)
+
+    def __onCrosshairPositionChanged(self, *args):
+        if not self.__isEnabled:
+            return
+        self.as_updateLayoutS(*self.sessionProvider.shared.crosshair.getScaledPosition())
+
+    def __onCrosshairViewChanged(self, viewID):
+        if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
+            self.as_setVisibleS(False)
+        else:
+            self.as_setVisibleS(self.__isEnabled)

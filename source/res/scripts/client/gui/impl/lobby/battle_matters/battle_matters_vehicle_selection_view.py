@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_vehicle_selection_view.py
 from collections import OrderedDict
-from frameworks.wulf import ViewFlags, ViewSettings
+from functools import partial
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui import GUI_NATIONS_ORDER_INDEX, GUI_NATIONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.gen import R
@@ -59,7 +60,7 @@ def _sortVehicles(vehicles):
 
 
 class BattleMattersVehicleSelectionView(ViewImpl):
-    __slots__ = ('__selectableBonus', '__vehicles', '__savedCD', '__filters')
+    __slots__ = ('__selectableBonus', '__vehicles', '__savedCD', '__filters', '__filterPopover')
     _battleMattersController = dependency.descriptor(IBattleMattersController)
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -74,17 +75,22 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         vehicles = {v['option'].displayedItem.intCD:{'vehicle': v['option'],
          'giftID': k} for k, v in bonuses.iteritems() if not (v['option'].displayedItem.isUnlocked or v['option'].displayedItem.isCollectible)}
         self.__vehicles = OrderedDict(_sortVehicles(vehicles))
-        self.__filters = {_NATIONS_KEY_NAME: OrderedDict(((nation, False) for nation in GUI_NATIONS)),
-         _TYPES_KEY_NAME: OrderedDict(((t, False) for t in VEHICLE_TYPES_ORDER))}
+        self.__filterPopover = None
+        self.__filters = {}
+        self.__resetFilters(True)
         self.__savedCD = -1
         super(BattleMattersVehicleSelectionView, self).__init__(settings)
+        return
 
     @property
     def viewModel(self):
         return super(BattleMattersVehicleSelectionView, self).getViewModel()
 
     def createPopOverContent(self, event):
-        return BattleMattersFilterPopoverView(self.__filters, self.onUpdateFilter) if event.contentID == R.views.lobby.battle_matters.popovers.BattleMattersFilterPopoverView() else super(BattleMattersVehicleSelectionView, self).createPopOverContent(event)
+        if event.contentID == R.views.lobby.battle_matters.popovers.BattleMattersFilterPopoverView():
+            self.__filterPopover = BattleMattersFilterPopoverView(self.__filters, self.onUpdateFilter)
+            return self.__filterPopover
+        return super(BattleMattersVehicleSelectionView, self).createPopOverContent(event)
 
     def onCompareVehicle(self, event):
         vehCD = int(event.get(BattleMattersVehicleSelectionViewModel.ARG_VEHICLE_ID))
@@ -94,30 +100,29 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         vehCD = int(event.get(BattleMattersVehicleSelectionViewModel.ARG_VEHICLE_ID))
         self.__savedCD = vehCD
         giftID = self.__getIdByCD(vehCD)
-        showOfferGiftVehiclePreview(self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, self.onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, customCallbacks={'previewBackCb': showDelayedReward,
+        onConfirm = partial(showBonusDelayedConfirmationDialog, self.__vehicles[self.__savedCD]['vehicle'].displayedItem, partial(_onDialogConfirm, bonus=self.__selectableBonus, giftID=giftID))
+        showOfferGiftVehiclePreview(self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, customCallbacks={'previewBackCb': showDelayedReward,
          'offerEndedCb': lambda : None})
 
-    def onUpdateFilter(self, filters):
-        self.__filters = filters
+    def onResetFilter(self):
+        self.__resetFilters()
+
+    def onUpdateFilter(self, filters=None):
+        if filters:
+            self.__filters = filters
         self._updateVehicles(self.viewModel.getVehicles())
-
-    def onConfirm(self):
-        showBonusDelayedConfirmationDialog(self.__vehicles[self.__savedCD]['vehicle'].displayedItem, self._onDialogConfirm)
-
-    def _onDialogConfirm(self, result):
-        isOk, _ = result
-        if isOk:
-            self._selectableBonusManager.chooseReward(self.__selectableBonus, giftID=self.__getIdByCD(self.__savedCD), callback=self._showAwardView)
-
-    def _showAwardView(self, result):
-        if result and result.auxData:
-            self._battleMattersController.showAwardView(questsData=None, clientCtx=result.auxData)
-        return
 
     def _onLoading(self):
         super(BattleMattersVehicleSelectionView, self)._onLoading()
         self.viewModel.getVehicles().reserve(len(self.__vehicles))
         self._update()
+
+    def _finalize(self):
+        self.__filters = None
+        self.__filterPopover = None
+        self.__vehicles = None
+        super(BattleMattersVehicleSelectionView, self)._finalize()
+        return
 
     def _update(self):
         expires = self._itemsCache.items.tokens.getTokenInfo(self._battleMattersController.getDelayedRewardCurrencyToken())[0]
@@ -142,7 +147,8 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         return ((self._battleMattersController.onStateChanged, showBattleMatters),
          (self.viewModel.onGoBack, showBattleMattersMainView),
          (self.viewModel.onCompareVehicle, self.onCompareVehicle),
-         (self.viewModel.onShowVehicle, self.onShowVehicle))
+         (self.viewModel.onShowVehicle, self.onShowVehicle),
+         (self.viewModel.onResetFilter, self.onResetFilter))
 
     def __getIdByCD(self, vehCD):
         return self.__vehicles.get(vehCD, {}).get('giftID', -1)
@@ -155,3 +161,24 @@ class BattleMattersVehicleSelectionView(ViewImpl):
 
     def __typeFit(self, vehCD):
         return self.__filters[_TYPES_KEY_NAME][self.__vehicles[vehCD]['vehicle'].displayedItem.type]
+
+    def __resetFilters(self, init=False):
+        self.__filters = {_NATIONS_KEY_NAME: OrderedDict(((nation, False) for nation in GUI_NATIONS)),
+         _TYPES_KEY_NAME: OrderedDict(((t, False) for t in VEHICLE_TYPES_ORDER))}
+        if self.__filterPopover and self.__filterPopover.viewStatus == ViewStatus.LOADED:
+            self.__filterPopover.updateFilterFromOutside(self.__filters)
+        elif not init:
+            self.onUpdateFilter()
+
+
+def _onDialogConfirm(result, bonus, giftID):
+    isOk, _ = result
+    if isOk:
+        BattleMattersSelectableRewardManager.chooseReward(bonus, giftID=giftID, callback=_showAwardView)
+
+
+@dependency.replace_none_kwargs(bmController=IBattleMattersController)
+def _showAwardView(result, bmController=None):
+    if result and result.auxData:
+        bmController.showAwardView(questsData=None, clientCtx=result.auxData)
+    return

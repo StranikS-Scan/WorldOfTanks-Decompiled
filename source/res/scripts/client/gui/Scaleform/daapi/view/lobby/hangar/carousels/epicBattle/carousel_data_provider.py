@@ -17,8 +17,8 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle):
-        super(EpicBattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache):
+        super(EpicBattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__separatorItems = []
         self.__filteredSeparators = []
         self.__indexToScroll = -1
@@ -58,7 +58,6 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
         self.__indexToScroll = -1
         isSeparatorsNeeded = self.__epicController.isUnlockVehiclesInBattleEnabled()
         vehLevelsToScroll = self.__epicController.getModeSettings().unlockableInBattleVehLevels
-        currentVehicleInvID = self._currentVehicle.invID
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
         self.__filteredSeparators = []
@@ -76,7 +75,7 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
                         self._filteredIndices += self._getFrontAdditionalItemsIndexes()
                         frontAdded = True
                 self._filteredIndices.append(idx)
-                if currentVehicleInvID == vehicle.invID:
+                if self._currentVehicleInvID == vehicle.invID:
                     self._selectedIdx = len(self._filteredIndices) - 1
 
         self._filteredIndices += self._getAdditionalItemsIndexes()

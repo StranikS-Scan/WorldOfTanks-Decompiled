@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/event_boards/event_boards_controller.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ELEN_NOTIFICATIONS
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
@@ -65,28 +65,28 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             self.__hangarFlagData.cleanEventsData()
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def sendRequest(self, ctx, callback):
         response = yield self.clanController.sendRequest(ctx)
         self.__handleResponseNotifications(response, ctx)
         callback(response if self.__isSuccessResponse(response) else None)
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def joinEvent(self, eventID, callback):
         yield self.sendRequest(EventBoardsJoinEventCtx(eventID))
         callback(self)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def leaveEvent(self, eventID, callback):
         yield self.sendRequest(EventBoardsLeaveEventCtx(eventID))
         callback(self)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getHangarFlag(self, callback, onLogin=False):
         if not self.__isLoggedIn or self.__isLoggedIn and not onLogin:
             response = yield self.sendRequest(EventBoardsGetHangarFlagCtx())
@@ -97,8 +97,8 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
         callback(self)
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getEvents(self, callback, onlySettings=False, isTabVisited=False, onLogin=False, prefetchKeyArtBig=True):
         statusCode = SET_DATA_STATUS_CODE.ERROR
         eventsSettings = self.__eventBoardsSettings.getEventsSettings()
@@ -144,39 +144,34 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
         callback(self)
         return
 
-    @async
-    @process
-    def getMyLeaderboardInfo(self, eventID, leaderboardID, callback):
-        statusCode = SET_DATA_STATUS_CODE.ERROR
-        milbResponse = yield self.sendRequest(EventBoardsGetMyLeaderboardPositionCtx(eventID, leaderboardID))
+    @adisp_async
+    @adisp_process
+    def getMyLeaderboardInfo(self, eventID, leaderboardID, callback, showNotification=True):
+        milbResponse = yield self.sendRequest(EventBoardsGetMyLeaderboardPositionCtx(eventID, leaderboardID, showNotification))
         if milbResponse is not None:
             myInfoData = MyInfoInLeaderBoard()
             statusCode = myInfoData.setData(milbResponse.getData(), eventID, leaderboardID)
-        if statusCode == SET_DATA_STATUS_CODE.OK:
-            callback(myInfoData)
-        else:
-            callback(None)
+            if statusCode == SET_DATA_STATUS_CODE.OK:
+                callback(myInfoData)
+                return
+        callback(None)
         return
 
-    @async
-    @process
-    def getLeaderboard(self, eventID, leaderboardID, pageNumber, callback):
-        statusCode = SET_DATA_STATUS_CODE.ERROR
-        lbResponse = yield self.sendRequest(EventBoardsGetLeaderboardCtx(eventID, leaderboardID, pageNumber))
+    @adisp_async
+    @adisp_process
+    def getLeaderboard(self, eventID, leaderboardID, pageNumber, callback, leaderBoardClass=None, showNotification=True):
+        lbResponse = yield self.sendRequest(EventBoardsGetLeaderboardCtx(eventID, leaderboardID, pageNumber, showNotification))
         if lbResponse is not None:
             eventSettings = self.__eventBoardsSettings.getEventsSettings().getEvent(eventID)
             mType = eventSettings.getMethod()
             lbType = eventSettings.getType()
-            leaderboardData = LeaderBoard()
+            leaderboardData = LeaderBoard() if leaderBoardClass is None else leaderBoardClass()
             statusCode = leaderboardData.setData(lbResponse.getData(), leaderboardID, mType, lbType)
-        if statusCode == SET_DATA_STATUS_CODE.OK:
-            callback(leaderboardData)
-        else:
-            callback(None)
+            if statusCode == SET_DATA_STATUS_CODE.OK:
+                callback(leaderboardData)
+                return
+        callback(None)
         return
-
-    def __isSuccessResponse(self, response):
-        return isinstance(response, Response) and (response.getCode() == ResponseCodes.NO_ERRORS or response.extraCode in SUCCESS_STATUSES)
 
     def __checkStartedFinishedEvents(self, isTabVisited):
         eventsSettings = self.__eventBoardsSettings
@@ -198,11 +193,11 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                 if isTabVisited and event.isStarted() and not event.isFinished():
                     visited.add(eventID)
                 if event.isAtBeginning():
-                    if eventID not in started:
+                    if eventID not in started and not event.hasCustomUI():
                         SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_BODY, eventName=event.getName()), messageData={'header': _ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_HEADER)}, type=SM_TYPE.OpenEventBoards)
                         started.add(eventID)
                 if event.isAfterEnd() and eventID in visited:
-                    if eventID not in finished:
+                    if eventID not in finished and not event.hasCustomUI():
                         self.__complexWarningNotification(_ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_HEADER), _ms(EVENT_BOARDS.NOTIFICATION_EVENTFINISHED_BODY, eventName=event.getName()))
                         finished.add(eventID)
 
@@ -256,12 +251,6 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                     self.__complexWarningNotification(_ms(EVENT_BOARDS.NOTIFICATION_EVENTLEAVE_BEFORESTART_HEADER), _ms(EVENT_BOARDS.NOTIFICATION_EVENTLEAVE_BEFORESTART_BODY))
         return
 
-    def __complexWarningNotification(self, header, body):
-        SystemMessages.pushMessage(body, messageData={'header': header}, type=SM_TYPE.WarningHeader)
-
-    def __standardErrorNotification(self):
-        SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_UNKNOWNERROR_BODY), type=SM_TYPE.Error)
-
     def __getAvailableVehicles(self, vehicleIds):
         items = self.itemsCache.items
         availableVehicles = []
@@ -272,3 +261,15 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                     availableVehicles.append(vehicle)
 
         return availableVehicles
+
+    @staticmethod
+    def __isSuccessResponse(response):
+        return isinstance(response, Response) and (response.getCode() == ResponseCodes.NO_ERRORS or response.extraCode in SUCCESS_STATUSES)
+
+    @staticmethod
+    def __complexWarningNotification(header, body):
+        SystemMessages.pushMessage(body, messageData={'header': header}, type=SM_TYPE.WarningHeader)
+
+    @staticmethod
+    def __standardErrorNotification():
+        SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_UNKNOWNERROR_BODY), type=SM_TYPE.Error)

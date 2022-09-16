@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/nturl2path.py
-# Compiled at: 2032-09-30 08:24:07
+# Compiled at: 2100-06-08 08:40:10
 """Convert a NT pathname to a file URL and vice versa."""
 
 def url2pathname(url):

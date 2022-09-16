@@ -2278,6 +2278,36 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_Shot>
+  <_120mm_AP_T_M358R>
+    <id>	188	</id>
+    <userString>	#usa_vehicles:_120mm_AP_T_M358R	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_T_M358R>
+  <_120mm_HEAT_M469R>
+    <id>	189	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_M469R	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_M469R>
   <_120mm_AP-T_M358>
     <id>	60	</id>
     <userString>	#usa_vehicles:_120mm_AP-T_M358	</userString>

@@ -15,7 +15,7 @@ from skeletons.gui.game_control import IResourceWellController
 _FULL_PROGRESS = 100
 
 class ResourcesLoadingConfirm(FullScreenDialogView):
-    __slots__ = ('__resources', '__operation', '__additionalData')
+    __slots__ = ('__resources', '__operation', '__additionalData', '__tooltips')
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
     __resourceWell = dependency.descriptor(IResourceWellController)
 

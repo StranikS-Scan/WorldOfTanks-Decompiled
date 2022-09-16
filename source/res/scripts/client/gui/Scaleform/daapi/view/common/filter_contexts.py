@@ -16,7 +16,8 @@ def getFilterSetupContexts(xpRateMultiplier):
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_small'),
      'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}'),
-     'battleRoyale': FilterSetupContext(asset='battle_royale_toggle')}
+     'battleRoyale': FilterSetupContext(asset='battle_royale_toggle'),
+     'rented': FilterSetupContext(asset='marathon/time_icon')}
 
 
 def getFilterPopoverSetupContexts(xpRateMultiplier):

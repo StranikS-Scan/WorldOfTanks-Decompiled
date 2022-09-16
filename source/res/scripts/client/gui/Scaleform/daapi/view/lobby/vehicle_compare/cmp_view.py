@@ -15,16 +15,25 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from tutorial.hints_manager import HINT_SHOWN_STATUS
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
  VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree'}
+
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
+def _updateVehicleConfigHint(settingsCore=None):
+    hintID = OnceOnlyHints.VEH_COMPARE_CONFIG_HINT
+    hintShown = bool(settingsCore.serverSettings.getOnceOnlyHintsSetting(hintID))
+    if not hintShown:
+        settingsCore.serverSettings.setOnceOnlyHintsSettings({hintID: HINT_SHOWN_STATUS})
+
 
 class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     __background_alpha__ = 0.0
@@ -42,9 +51,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.onBackClick()
 
     def onSelectModulesClick(self, vehicleID, index):
-        tutorStorage = getTutorialGlobalStorage()
-        if tutorStorage:
-            tutorStorage.setValue(OnceOnlyHints.VEH_COMPARE_CONFIG_HINT, False)
+        _updateVehicleConfigHint()
         event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR), ctx={'index': int(index)})
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 

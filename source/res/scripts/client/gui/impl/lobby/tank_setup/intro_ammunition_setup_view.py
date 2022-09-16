@@ -4,7 +4,7 @@ import logging
 import typing
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
-import async
+import wg_async
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
@@ -34,7 +34,7 @@ class _IntroAmmunitionSetupView(InfoView):
         super(_IntroAmmunitionSetupView, self)._finalize()
 
 
-@async.async
+@wg_async.wg_async
 def showIntro(introKey, *args, **kwargs):
     tankSetupToIntroWindowProc = {TankSetupConstants.OPT_DEVICES: getIntroAmmunitionSetupWindowProc,
      TankSetupConstants.BATTLE_ABILITIES: getIntroBattleAbilitiesSetupWindowProc}

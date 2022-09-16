@@ -5,7 +5,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
-from adisp import async
+from adisp import adisp_async
 from nations import INDICES, NONE_INDEX
 from frameworks.wulf.view.array import Array
 from gui.impl.gen import R
@@ -79,7 +79,7 @@ class _CrewBooksViewedCache(object):
 
             return False
 
-    @async
+    @adisp_async
     def onCrewBooksUpdated(self, diff, callback):
         inventory = diff.get('inventory', {})
         if GUI_ITEM_TYPE.CREW_BOOKS in inventory:

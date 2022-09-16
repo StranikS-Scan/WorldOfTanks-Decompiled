@@ -178,7 +178,7 @@ class _BlurManager(object):
         if self._lobby is not None:
             self._lobby.blurBackgroundViews(blur.ownLayer, blur.blurAnimRepeatCount)
         elif self._battle is not None:
-            self._battle.blurBackgroundViews()
+            self._battle.blurBackgroundViews(blur.ownLayer, blur.blurAnimRepeatCount)
         return
 
     def _resetGlobalBlur(self):

@@ -1,0 +1,14 @@
+<VehiclePrestigePoint.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <prestigePoints>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </prestigePoints>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	VehiclePrestigePoint	</DefaultKeyName>
+</VehiclePrestigePoint.def>

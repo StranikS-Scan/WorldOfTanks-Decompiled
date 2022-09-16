@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/weakref.py
-# Compiled at: 2032-11-24 07:53:59
+# Compiled at: 2100-06-17 09:31:08
 """Weak reference support for Python.
 
 This module is an implementation of PEP 205:

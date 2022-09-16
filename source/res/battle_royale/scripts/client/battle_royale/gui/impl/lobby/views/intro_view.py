@@ -2,22 +2,25 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/intro_view.py
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
 from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroSlideModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IHangarSpaceSwitchController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
 
-class IntroView(ViewImpl):
+class IntroView(ViewImpl, IGlobalListener):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
 
     def __init__(self):
         settings = ViewSettings(R.views.battle_royale.lobby.views.IntroView())
@@ -31,19 +34,28 @@ class IntroView(ViewImpl):
     def viewModel(self):
         return super(IntroView, self).getViewModel()
 
+    def onPrbEntitySwitched(self):
+        if not self.__battleRoyaleController.isBattleRoyaleMode():
+            self.destroyWindow()
+
     def _onLoading(self, *args, **kwargs):
         super(IntroView, self)._onLoading(*args, **kwargs)
         self.viewModel.onClose += self.__onClose
         self.viewModel.onVideo += self.__onVideo
-        self.__battleRoyaleController.onSpaceUpdated += self.__onSpaceUpdated
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.LOBBY)
+        if currentHangarIsBattleRoyale():
+            self.__onSpaceUpdated()
+        else:
+            self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
+        self.startGlobalListening()
         self.__updateViewModel()
 
     def _finalize(self):
         self.viewModel.onClose -= self.__onClose
         self.viewModel.onVideo -= self.__onVideo
-        self.__battleRoyaleController.onSpaceUpdated -= self.__onSpaceUpdated
+        self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.stopGlobalListening()
         super(IntroView, self)._finalize()
 
     def __handleLoadView(self, event):

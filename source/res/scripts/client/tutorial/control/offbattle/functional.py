@@ -4,7 +4,7 @@ import collections
 import urllib
 import MusicControllerWWISE
 import ResMgr
-from adisp import process
+from adisp import adisp_process
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.dispatcher import g_prbLoader
@@ -42,7 +42,7 @@ class FunctionalEnterModeEffect(FunctionalEffect):
             self._tutorial.refuse()
         return self.__result
 
-    @process
+    @adisp_process
     def _doEffect(self, dispatcher):
         self.__stillRunning = True
         self.__result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
@@ -77,7 +77,7 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
             self._tutorial.refuse()
         return self.__result
 
-    @process
+    @adisp_process
     def _doEffect(self, dispatcher):
         self.__stillRunning = True
         self.__result = yield dispatcher.sendPrbRequest(QueueCtx())
@@ -107,7 +107,7 @@ class FunctionalExitQueueEffect(FunctionalEffect):
         self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
         return self.__result
 
-    @process
+    @adisp_process
     def _doEffect(self, dispatcher):
         self.__stillRunning = True
         self.__result = yield dispatcher.sendPrbRequest(DequeueCtx())
@@ -242,6 +242,6 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
     def isInstantaneous(self):
         return False
 
-    @process
+    @adisp_process
     def _doEffect(self, dispatcher):
         yield dispatcher.doLeaveAction(LeavePrbAction())

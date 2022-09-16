@@ -77,7 +77,7 @@ class BorderVisual(object):
                 self.__attachNodes[idx] = attachNode = rootModel.node('', offset)
                 attachNode.attach(area)
                 area.setup(g_borderVisualSettings.modelPath, dashesParams.size, g_borderVisualSettings.overTerrainHeight, dashesParams.color)
-                area.doYCutOff(False)
+                area.enableYCutOff(False)
                 area.enableAccurateCollision(False)
                 offset.translation = dashesParams.offset
                 dashesParams.offset.x += dashesParams.shift

@@ -6,7 +6,7 @@ from collections import namedtuple
 from enum import Enum
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import WindowLayer
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -103,7 +103,7 @@ class _HeroAdventActionHelper(object):
             self.__timer = None
         return
 
-    @process
+    @adisp_process
     def __fetchInfo(self):
         if self.__isByServerSwitchEnabled():
             response = yield self.__webController.sendRequest(ctx=AdventCalendarFetchHeroTankInfoCtx())
@@ -291,7 +291,7 @@ class CalendarController(GameWindowController, ICalendarController):
         self.__heroAdventHelper = None
         return
 
-    @process
+    @adisp_process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):
         browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi, OpenWindowWebApi)
 

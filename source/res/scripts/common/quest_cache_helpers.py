@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_cache_helpers.py
+import logging
 import time
 from constants import EVENT_TYPE, IS_CLIENT
 from debug_utils import LOG_WARNING
@@ -9,6 +10,7 @@ if IS_CLIENT:
     from helpers import i18n
 else:
     from web_stubs import i18n
+_logger = logging.getLogger(__name__)
 
 def makeI18nString(string):
     return i18n.makeString(string)
@@ -24,7 +26,7 @@ def readQuestsFromFile(filePath, eventType):
     nodes = nodes.get(eventType, None)
     questIDs = set()
     if nodes is None:
-        LOG_WARNING(filePath, 'No quests of type {} were found in {}.'.format(_getEventName(eventType), filePath))
+        _logger.info('No quests of type %s were found in %s.', _getEventName(eventType), filePath)
         return
     else:
         for node in nodes:

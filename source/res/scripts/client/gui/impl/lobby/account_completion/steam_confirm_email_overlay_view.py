@@ -10,7 +10,7 @@ from gui.shared.event_dispatcher import showSteamAddEmailOverlay
 from helpers import dependency
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 if typing.TYPE_CHECKING:
-    from async import _Future
+    from wg_async import _Future
     from gui.platform.wgnp.steam_account.request import ConfirmEmailParams as WGNPSAConfirmEmailParams
 res = R.strings.dialogs.accountCompletion
 

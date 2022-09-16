@@ -6,8 +6,8 @@ import BigWorld
 import WWISE
 import constants
 from PlayerEvents import g_playerEvents
-from adisp import process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from connection_mgr import LOGIN_STATUS
 from external_strings_utils import isAccountLoginValid, isPasswordValid
 from frameworks.wulf import WindowFlags, WindowStatus
@@ -86,13 +86,13 @@ class LoginView(LoginPageMeta):
     def onSetRememberPassword(self, rememberUser):
         self._loginMode.setRememberPassword(rememberUser)
 
-    @async
+    @wg_async
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
         if self._loginMode.showRememberServerWarning:
             builder = ResSimpleDialogBuilder()
             builder.setFlags(WindowFlags.DIALOG | WindowFlags.WINDOW_FULLSCREEN)
             builder.setMessagesAndButtons(R.strings.dialogs.dyn('loginToPeripheryAndRemember'))
-            success = yield await(showSimple(builder.build(self)))
+            success = yield wg_await(showSimple(builder.build(self)))
             if not success:
                 return
         self._loginMode.doLogin(userName, password, serverName, isSocialToken2Login)
@@ -321,7 +321,7 @@ class LoginView(LoginPageMeta):
         if invalidField == INVALID_FIELDS.PWD_INVALID:
             self.as_resetPasswordS()
 
-    @process
+    @adisp_process
     def __loginRejectedUpdateNeeded(self):
         success = yield DialogsInterface.showI18nConfirmDialog('updateNeeded')
         if success and not BigWorld.wg_quitAndStartLauncher():
@@ -410,9 +410,9 @@ class LoginView(LoginPageMeta):
         for window in self.__gui.windowsManager.findWindows(DialogPredicate):
             window.destroy()
 
-    @async
+    @wg_async
     def __showExitDialog(self):
-        isOk = yield await(dialogs.quitGame(self.getParentWindow()))
+        isOk = yield wg_await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.destroy()
             BigWorld.quit()

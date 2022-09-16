@@ -7,6 +7,7 @@ from types import NoneType
 from typing import TYPE_CHECKING
 import BigWorld
 import CommandMapping
+from battle_modifiers_common import BattleParams
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from items import vehicles
@@ -107,8 +108,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.__emptyEquipmentsSlice = [0] * (self._EQUIPMENT_END_IDX - self._EQUIPMENT_START_IDX + 1)
         self._cds = [None] * self._PANEL_MAX_LENGTH
         self._mask = 0
-        self.__keys = {}
-        self.__extraKeys = {}
+        self._keys = {}
+        self._extraKeys = {}
         self.__currentActivatedSlotIdx = -1
         self.__equipmentsGlowCallbacks = {}
         if self.sessionProvider.isReplayPlaying:
@@ -134,10 +135,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if handler:
                 extraKeys[idx] = keys[bwKey] = handler
 
-        self.__keys.clear()
-        self.__keys = keys
-        self.__extraKeys.clear()
-        self.__extraKeys = extraKeys
+        self._keys.clear()
+        self._keys = keys
+        self._extraKeys.clear()
+        self._extraKeys = extraKeys
 
     def onPanelShown(self):
         self.__isViewActive = True
@@ -161,8 +162,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _dispose(self):
         self.__clearAllEquipmentGlow()
         self.__removeListeners()
-        self.__keys.clear()
-        self.__extraKeys.clear()
+        self._keys.clear()
+        self._extraKeys.clear()
         super(ConsumablesPanel, self)._dispose()
 
     def _getPanelSettings(self):
@@ -180,8 +181,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _reset(self):
         self._resetCds()
         self._mask = 0
-        self.__keys.clear()
-        self.__extraKeys.clear()
+        self._keys.clear()
+        self._extraKeys.clear()
         self.__currentActivatedSlotIdx = -1
         self._resetDelayedReload()
         self.as_resetS()
@@ -204,11 +205,11 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         for idx in storageRange:
             self._cds[idx] = None
             if clearKeys:
-                if self.__extraKeys.has_key(idx):
-                    del self.__extraKeys[idx]
-                keyCode, _ = self.__genKey(idx)
-                if self.__keys.has_key(keyCode):
-                    del self.__keys[keyCode]
+                if self._extraKeys.has_key(idx):
+                    del self._extraKeys[idx]
+                keyCode, _ = self._genKey(idx)
+                if self._keys.has_key(keyCode):
+                    del self._keys[keyCode]
 
         self._mask &= ~storageMask
         resetIDXs = [ idx for idx in storageRange ]
@@ -217,8 +218,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings):
         self._cds[idx] = intCD
-        keyCode, sfKeyCode = self.__genKey(idx)
-        self.__extraKeys[idx] = self.__keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
+        keyCode, sfKeyCode = self._genKey(idx)
+        self._extraKeys[idx] = self._keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
         tooltipText = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
@@ -238,7 +239,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 cdSecVal = descriptor.cooldownTime
             else:
                 cdSecVal = descriptor.cooldownSeconds
-            cooldownSeconds = str(int(cdSecVal))
+            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
+            cooldownSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, cdSecVal)))
             paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
             body = '\n\n'.join((body, paramsString))
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
@@ -247,7 +249,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _addEquipmentSlot(self, idx, intCD, item):
         self._cds[idx] = intCD
         if item is None:
-            bwKey, sfKey = self.__genKey(idx)
+            bwKey, sfKey = self._genKey(idx)
             self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=0, timeRemaining=0, reloadingTime=0, iconPath='', tooltipText=EMPTY_EQUIPMENT_TOOLTIP, animation=ANIMATION_TYPES.NONE)
             snap = self._cds[self._EQUIPMENT_START_IDX:self._EQUIPMENT_END_IDX + 1]
             if snap == self.__emptyEquipmentsSlice:
@@ -255,20 +257,20 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         else:
             tags = item.getTags()
             if tags:
-                bwKey, sfKey = self.__genKey(idx)
+                bwKey, sfKey = self._genKey(idx)
                 if item.isEntityRequired():
-                    handler = partial(self.__handleEquipmentExpanded, intCD)
+                    handler = partial(self._handleEquipmentExpanded, intCD)
                 else:
-                    handler = partial(self.__handleEquipmentPressed, intCD)
+                    handler = partial(self._handleEquipmentPressed, intCD)
                 if item.getQuantity() > 0:
-                    self.__extraKeys[idx] = self.__keys[bwKey] = handler
+                    self._extraKeys[idx] = self._keys[bwKey] = handler
             else:
                 bwKey, sfKey = (None, None)
             descriptor = item.getDescriptor()
             quantity = item.getQuantity()
             timeRemaining = item.getTimeRemaining()
             reloadingTime = item.getTotalTime()
-            iconPath = self._getEquipmentIcon(idx, descriptor.icon[0])
+            iconPath = self._getEquipmentIcon(idx, item, descriptor.icon[0])
             animationType = item.getAnimationType()
             toolTip = self._buildEquipmentSlotTooltipText(item)
             self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=toolTip, animation=animationType)
@@ -283,8 +285,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _getOptionalDeviceIcon(self, icon):
         return backport.image(self._R_ARTEFACT_ICON.dyn(icon)())
 
-    def _getEquipmentIcon(self, _, icon):
-        return backport.image(self._getEquipmentIconPath().dyn(icon)())
+    def _getEquipmentIcon(self, idx, item, icon):
+        return backport.image(self._getEquipmentIconPath(item).dyn(icon)())
 
     def _updateShellSlot(self, idx, quantity):
         self.as_setItemQuantityInSlotS(idx, quantity)
@@ -294,13 +296,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
         self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
-        bwKey, _ = self.__genKey(idx)
-        if item.getQuantity() > 0 and bwKey not in self.__keys:
-            if item.isEntityRequired():
-                handler = partial(self.__handleEquipmentExpanded, self._cds[idx])
-            else:
-                handler = partial(self.__handleEquipmentPressed, self._cds[idx])
-            self.__keys[bwKey] = handler
+        bwKey, _ = self._genKey(idx)
+        self._setKeyHandler(item, bwKey, idx)
+        self._updateEquipmentGlow(idx, item)
+        self._updateActivatedSlot(idx, item)
+
+    def _updateEquipmentGlow(self, idx, item):
         if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
             glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
             if self.__canApplyingGlowEquipment(item):
@@ -309,12 +310,22 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 self._showEquipmentGlow(idx, glowType)
             elif idx in self.__equipmentsGlowCallbacks:
                 self.__clearEquipmentGlow(idx)
+
+    def _updateActivatedSlot(self, idx, item):
         if item.getStage() == EQUIPMENT_STAGES.PREPARING:
             self.__currentActivatedSlotIdx = idx
             self.as_setEquipmentActivatedS(idx, True)
         elif item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentActivatedSlotIdx == idx:
             self.__currentActivatedSlotIdx = -1
             self.as_setEquipmentActivatedS(idx, False)
+
+    def _setKeyHandler(self, item, bwKey, idx):
+        if item.getQuantity() > 0 and bwKey not in self._keys:
+            if item.isEntityRequired():
+                handler = partial(self._handleEquipmentExpanded, self._cds[idx])
+            else:
+                handler = partial(self._handleEquipmentPressed, self._cds[idx])
+            self._keys[bwKey] = handler
 
     def _updateOptionalDeviceSlot(self, idx, optDeviceInBattle):
         intCD = optDeviceInBattle.getIntCD()
@@ -327,9 +338,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def _resetEquipmentSlot(self, idx, intCD, item):
         self._cds[idx] = intCD
-        bwKey, _ = self.__genKey(idx)
-        if bwKey in self.__keys:
-            self.__keys.pop(bwKey)
+        bwKey, _ = self._genKey(idx)
+        if bwKey in self._keys:
+            self._keys.pop(bwKey)
         self._updateEquipmentSlot(idx, item)
 
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
@@ -405,7 +416,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _isAvatarEquipment(self, item):
         return item.isAvatar()
 
-    def _getEquipmentIconPath(self):
+    def _getEquipmentIconPath(self, *_):
         return self._R_ARTEFACT_ICON
 
     def __addListeners(self):
@@ -497,7 +508,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._mask |= 1 << idx
         return idx
 
-    def __genKey(self, idx):
+    def _genKey(self, idx):
         cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
         bwKey = CommandMapping.g_instance.get(cmdMappingKey)
         sfKey = 0
@@ -535,7 +546,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                  None,
                  None,
                  None)
-            bwKey, sfKey = self.__genKey(idx)
+            bwKey, sfKey = self._genKey(idx)
             handler = None
             if idx in self.__ammoRange:
                 handler = partial(self.__handleAmmoPressed, intCD)
@@ -543,9 +554,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 item = getEquipment(intCD)
                 if item is not None and item.getTags():
                     if item.isEntityRequired():
-                        handler = partial(self.__handleEquipmentExpanded, intCD)
+                        handler = partial(self._handleEquipmentExpanded, intCD)
                     else:
-                        handler = partial(self.__handleEquipmentPressed, intCD)
+                        handler = partial(self._handleEquipmentPressed, intCD)
             yield (idx,
              bwKey,
              sfKey,
@@ -564,10 +575,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 slots.append((idx, bwKey, sfKey))
 
         self.as_setKeysToSlotsS(slots)
-        self.__keys.clear()
-        self.__keys = keys
-        self.__extraKeys.clear()
-        self.__extraKeys = extraKeys
+        self._keys.clear()
+        self._keys = keys
+        self._extraKeys.clear()
+        self._extraKeys = extraKeys
 
     def __handleConsumableChoice(self, event):
         self.__handleBWKey(event.ctx['key'])
@@ -577,9 +588,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def __handleBWKey(self, bwKey, idx=None):
         if bwKey == 0 and idx is not None:
-            handler = self.__extraKeys.get(idx)
+            handler = self._extraKeys.get(idx)
         else:
-            handler = self.__keys.get(bwKey)
+            handler = self._keys.get(bwKey)
         if handler and callable(handler):
             handler()
         return
@@ -590,7 +601,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             ctrl.changeSetting(intCD)
         return
 
-    def __handleEquipmentPressed(self, intCD, entityName=None):
+    def _handleEquipmentPressed(self, intCD, entityName=None):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is None:
             return
@@ -606,7 +617,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 self.__collapseEquipmentSlot()
             return
 
-    def __handleEquipmentExpanded(self, intCD):
+    def _handleEquipmentExpanded(self, intCD):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is None:
             return
@@ -635,8 +646,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             keys = {}
             extraKeys = {}
             for entityIdx, (itemName, entityName, entityState) in enumerate(item.getGuiIterator()):
-                bwKey, sfKey = self.__genKey(entityIdx)
-                extraKeys[entityIdx] = keys[bwKey] = partial(self.__handleEquipmentPressed, intCD, entityName)
+                bwKey, sfKey = self._genKey(entityIdx)
+                extraKeys[entityIdx] = keys[bwKey] = partial(self._handleEquipmentPressed, intCD, entityName)
                 slots.append({'bwKeyCode': bwKey,
                  'sfKeyCode': sfKey,
                  'entityName': itemName,
@@ -644,10 +655,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                  'entityIdx': entityIdx})
 
             self.__expandEquipmentSlot(self._cds.index(intCD), slots)
-            self.__keys.clear()
-            self.__keys = keys
-            self.__extraKeys.clear()
-            self.__extraKeys = extraKeys
+            self._keys.clear()
+            self._keys = keys
+            self._extraKeys.clear()
+            self._extraKeys = extraKeys
             return
 
     def __onDebuffStarted(self, debuffTime=None):
@@ -735,14 +746,14 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                             self.__clearEquipmentGlow(self._cds.index(intCD))
 
                 idx = int(self.as_updateEntityStateS(itemName, actualState))
-                if idx > 0 and idx < len(self._cds):
+                if 0 < idx < len(self._cds):
                     intCD = self._cds[idx]
                     if not ctrl.hasEquipment(intCD):
                         return
                     item = ctrl.getEquipment(intCD)
                     if item and item.isEntityRequired():
-                        self.__replaceEquipmentKeyHandler(self.__keys, self._cds[idx], deviceName)
-                        self.__replaceEquipmentKeyHandler(self.__extraKeys, self._cds[idx], deviceName)
+                        self.__replaceEquipmentKeyHandler(self._keys, self._cds[idx], deviceName)
+                        self.__replaceEquipmentKeyHandler(self._extraKeys, self._cds[idx], deviceName)
             elif state == VEHICLE_VIEW_STATE.STUN:
                 if value.duration > 0:
                     for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
@@ -779,7 +790,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         tempDeviceName = VEHICLE_DEVICE_IN_COMPLEX_ITEM.get(deviceName, deviceName)
         for key in keysContainer:
             if tempDeviceName in keysContainer[key].args:
-                keysContainer[key] = partial(self.__handleEquipmentPressed, intCD, deviceName)
+                keysContainer[key] = partial(self._handleEquipmentPressed, intCD, deviceName)
 
     def __canApplyingGlowEquipment(self, equipment):
         equipmentTags = equipment.getTags()

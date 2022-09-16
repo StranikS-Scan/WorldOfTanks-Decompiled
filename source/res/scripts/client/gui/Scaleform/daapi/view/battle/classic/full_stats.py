@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/full_stats.py
 import BattleReplay
+import BigWorld
 from ReplayEvents import g_replayEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
-from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
@@ -17,6 +19,7 @@ from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
@@ -33,6 +36,7 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
     settingsCore = dependency.descriptor(ISettingsCore)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(FullStatsComponent, self).__init__()
@@ -67,6 +71,9 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
         if qProgressCtrl:
             qProgressCtrl.showQuestProgressAnimation()
 
+    def isBoosterProcessingAvailable(self):
+        return self.lobbyContext.getServerSettings().isReservesInBattleActivationEnabled() and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
+
     def _populate(self):
         super(FullStatsComponent, self)._populate()
         qProgressCtrl = self.sessionProvider.shared.questProgress
@@ -82,6 +89,8 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
         tabs = [{'label': backport.text(R.strings.ingame_gui.statistics.tab.line_up.header())}]
         if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
             tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.quests.header())})
+        if self.isBoosterProcessingAvailable():
+            tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.personalReserves.header())})
         self.as_updateTabsS(tabs)
         return
 

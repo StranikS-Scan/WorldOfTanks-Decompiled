@@ -5,6 +5,7 @@ import json
 import ResMgr
 import BigWorld
 import constants
+import pwd_token
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
@@ -12,7 +13,6 @@ from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage, uniprof
 from account_shared import isValidClientVersion
-from account_helpers import pwd_token
 from skeletons.connection_mgr import IConnectionManager
 _MIN_RECONNECTION_TIMEOUT = 5
 _RECONNECTION_TIMEOUT_INCREMENT = 5
@@ -188,6 +188,8 @@ class ConnectionManager(IConnectionManager):
             password = pwd_token.generate(password)
         if 'allowed_peripheries' in params:
             g_preDefinedHosts.setAvailablePeripheriesByRoutingGroup([ int(x) for x in params['allowed_peripheries'].split() if x.isdigit() ])
+        else:
+            LOG_NOTE('Not found allowed_peripheries in params: ', params)
         self.__connectionData.username = username_
         self.__connectionData.password = password
         self.__connectionData.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT

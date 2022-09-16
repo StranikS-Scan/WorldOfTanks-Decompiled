@@ -4,6 +4,8 @@ import cPickle
 import logging
 import math
 from collections import namedtuple, defaultdict
+from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
+from gui.impl.pub import ToolTipWindow
 from helpers.i18n import makeString
 import ArenaType
 import ResMgr
@@ -45,6 +47,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.icons import serverBlockerIcon
 from gui.shared.formatters.servers import formatPingStatus
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByResource
@@ -528,9 +531,9 @@ class SettingsButtonTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(SettingsButtonTooltipData, self)._packBlocks(*args, **kwargs)
-        items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.HEADER_MENU_HEADER)), formatters.packTextBlockData(text_styles.standard(TOOLTIPS.HEADER_MENU_DESCRIPTION))]))
+        items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.tooltips.header.menu.header()))), formatters.packTextBlockData(text_styles.standard(backport.text(R.strings.tooltips.header.menu.description())))]))
         serverBlocks = list()
-        serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_SERVER), padding=formatters.packPadding(0, 0, 4)))
+        serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.menu.server())), padding=formatters.packPadding(0, 0, 4)))
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         isColorBlind = self.settingsCore.getSetting('isColorBlind')
         if self.connectionMgr.peripheryID == 0:
@@ -543,32 +546,34 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         if constants.IS_SHOW_SERVER_STATS:
             serversStats, _ = self.serverStats.getFormattedStats()
         if not constants.IS_CHINA:
-            items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER)), formatters.packImageTextBlockData('', serversStats, RES_ICONS.MAPS_ICONS_LIBRARY_CREW_ONLINE, imgPadding=formatters.packPadding(-4, -10), padding=formatters.packPadding(5))]))
+            items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.menu.playersOnServer()))), formatters.packImageTextBlockData('', serversStats, backport.image(R.images.gui.maps.icons.library.crew_online()), imgPadding=formatters.packPadding(-4, -10), padding=formatters.packPadding(5))]))
         return items
 
-    @classmethod
-    def __packServerBlock(cls, name, pingData, csisStatus, isSelected=False, isColorBlind=False):
-        pingValue, pingStatus = pingData
-        pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
-        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), pintStr, valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
-
-    @classmethod
-    def __packServerListBlock(cls, simpleHostList, currServUrl, isColorBlind=False):
+    def __packServerListBlock(self, simpleHostList, currServUrl, isColorBlind=False):
         serverNames = []
         pingTexts = []
-        for key, name, csisStatus, _ in simpleHostList:
-            pingValue, pingStatus = cls.__getPingData(key)
+        for key, name, csisStatus, peripheryID in simpleHostList:
+            pingValue, pingStatus = self.__getPingData(key)
             isSelected = currServUrl == key
-            pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
-            serverNames.append(cls.__formatServerName(name, isSelected))
-            pingTexts.append(pintStr)
+            if not peripheryID or self.connectionMgr.isAvailablePeriphery(peripheryID):
+                pingStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
+            else:
+                pingStr = text_styles.concatStylesToSingleLine(text_styles.main(' '), serverBlockerIcon())
+            serverNames.append(self.__formatServerName(name, isSelected))
+            pingTexts.append(pingStr)
 
         return formatters.packTextParameterBlockData(concatStylesToMultiLine(*serverNames), concatStylesToMultiLine(*pingTexts), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
 
     @classmethod
+    def __packServerBlock(cls, name, pingData, csisStatus, isSelected=False, isColorBlind=False):
+        pingValue, pingStatus = pingData
+        pingStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
+        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), pingStr, valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
     def __formatServerName(cls, name, isSelected=False):
         if isSelected:
-            result = text_styles.main(name + ' ' + makeString(TOOLTIPS.HEADER_MENU_SERVER_CURRENT))
+            result = text_styles.main(name + ' ' + backport.text(R.strings.tooltips.header.menu.server.current()))
         else:
             result = text_styles.standard(name)
         return result
@@ -1388,7 +1393,7 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         item = self.context.buildItem(*args, **kwargs)
         content = super(VehicleHistoricalReferenceTooltipData, self)._packBlocks(*args, **kwargs)
         blocks = list()
-        blocks.append(formatters.packImageBlockData(img='../maps/icons/tooltip/flag_160x100/{}.png'.format(item.nationName), align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding={'left': -19}))
+        blocks.append(formatters.packImageBlockData(img='../maps/icons/flags/160x100/{}.png'.format(item.nationName), align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding={'left': -19}))
         blocks.append(formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE), padding={'top': -72}))
         blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
         content.append(formatters.packBuildUpBlockData(blocks))
@@ -1551,4 +1556,22 @@ class AdditionalRewardsTooltipContentWindowData(ToolTipBaseData):
         super(AdditionalRewardsTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS)
 
     def getDisplayableData(self, bonuses, bonusPacker=None, *args, **kwargs):
-        return DecoratedTooltipWindow(AdditionalRewardsTooltip(bonuses, bonusPacker), useDecorator=False)
+        from gui.impl.lobby.awards.packers import getAdditionalAwardsBonusPacker
+        packer = bonusPacker or getAdditionalAwardsBonusPacker()
+        packedBonuses = []
+        for bonus in bonuses:
+            if bonus.isShowInGUI():
+                packedBonuses.extend(packer.pack(bonus))
+
+        return DecoratedTooltipWindow(AdditionalRewardsTooltip(packedBonuses), useDecorator=False)
+
+
+class PersonalReservesWidgetTooltipContent(BlocksTooltipData):
+
+    def __init__(self, ctx):
+        super(PersonalReservesWidgetTooltipContent, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
+
+    def getDisplayableData(self, *args):
+        content = PersonalReservesTooltipView()
+        window = ToolTipWindow(None, content, content.getParentWindow())
+        return window

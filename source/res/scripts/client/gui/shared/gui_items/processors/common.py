@@ -4,6 +4,7 @@ import logging
 from string import lower
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
+from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
@@ -164,6 +165,7 @@ class OutfitApplier(Processor):
             if outfit.style:
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
                 style = self.itemsCache.items.getItemByCD(intCD)
+                outfit = removePartsFromOutfit(season, outfit)
                 if style and style.isProgressive:
                     outfit = c11nService.removeAdditionalProgressionData(outfit=outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=season)
                     component = outfit.pack()
@@ -172,7 +174,7 @@ class OutfitApplier(Processor):
             if component.styleId and isEditedStyle(component):
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
                 style = self.itemsCache.items.getItemByCD(intCD)
-                baseOutfit = style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr())
+                baseOutfit = removePartsFromOutfit(season, style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr()))
                 baseComponent = baseOutfit.pack()
                 component = component.getDiff(baseComponent)
             self.__validateOutfitComponent(component)

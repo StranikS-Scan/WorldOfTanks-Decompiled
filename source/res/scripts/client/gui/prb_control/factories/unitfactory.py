@@ -6,6 +6,7 @@ from gui.shared.system_factory import registerUnitEntity, collectUnitEntity
 from gui.shared.system_factory import registerUnitEntryPoint, collectUnitEntryPoint
 from gui.shared.system_factory import registerUnitEntryPointByType, collectUnitEntryPointByType
 from gui.prb_control import prb_getters
+from gui.prb_control.entities.comp7.squad.entity import Comp7SquadEntity, Comp7SquadEntryPoint
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
 from gui.prb_control.entities.base.unit.entity import UnitIntroEntity
@@ -27,12 +28,14 @@ registerUnitEntryPoint(PREBATTLE_ACTION_NAME.E_SPORT, ESportIntroEntry)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.PUBLICS_LIST, PublicBrowserEntryPoint)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, StrongholdBrowserEntryPoint)
 registerUnitEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, MapboxSquadEntryPoint)
+registerUnitEntryPoint(PREBATTLE_ACTION_NAME.COMP7_SQUAD, Comp7SquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.SQUAD, RandomSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.EVENT, EventBattleSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.EPIC, EpicSquadEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.UNIT, PublicEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntryPoint)
 registerUnitEntryPointByType(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntryPoint)
+registerUnitEntryPointByType(PREBATTLE_TYPE.COMP7, Comp7SquadEntryPoint)
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.STRONGHOLD: StrongholdBrowserEntity}
@@ -42,6 +45,7 @@ registerUnitEntity(PREBATTLE_TYPE.EPIC, EpicSquadEntity)
 registerUnitEntity(PREBATTLE_TYPE.UNIT, PublicEntity)
 registerUnitEntity(PREBATTLE_TYPE.STRONGHOLD, StrongholdEntity)
 registerUnitEntity(PREBATTLE_TYPE.MAPBOX, MapboxSquadEntity)
+registerUnitEntity(PREBATTLE_TYPE.COMP7, Comp7SquadEntity)
 
 class UnitFactory(ControlFactory):
 

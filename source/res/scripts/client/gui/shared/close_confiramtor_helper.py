@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/close_confiramtor_helper.py
 import adisp
-from async import async, await
+from wg_async import wg_async, wg_await
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -63,8 +63,8 @@ class CloseConfirmatorsHelper(object):
     def _deletePlatoonCreationConfirmator(self):
         self._lobbyContext.deletePlatoonCreationConfirmator(self.__confirmPlatoonCreation)
 
-    @adisp.async
-    @async
+    @adisp.adisp_async
+    @wg_async
     def __confirmEvent(self, event, callback):
         if event.eventType == events.ViewEventType.LOAD_VIEW:
             if event.alias not in self.getRestrictedSfViews():
@@ -79,17 +79,17 @@ class CloseConfirmatorsHelper(object):
                 if event.action.ignoreConfirmation:
                     callback(True)
                     return
-        result = yield await(self.__closeConfirmator())
+        result = yield wg_await(self.__closeConfirmator())
         callback(result)
 
-    @adisp.async
-    @async
+    @adisp.adisp_async
+    @wg_async
     def __confirmHeaderNavigation(self, callback):
-        result = yield await(self.__closeConfirmator())
+        result = yield wg_await(self.__closeConfirmator())
         callback(result)
 
-    @adisp.async
-    @async
+    @adisp.adisp_async
+    @wg_async
     def __confirmPlatoonCreation(self, callback):
-        result = yield await(self.__closeConfirmator())
+        result = yield wg_await(self.__closeConfirmator())
         callback(result)

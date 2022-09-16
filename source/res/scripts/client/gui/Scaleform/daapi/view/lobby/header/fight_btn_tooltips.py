@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/fight_btn_tooltips.py
+from __future__ import absolute_import
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
@@ -24,10 +25,10 @@ def getSquadFightBtnTooltipData(state):
     elif state == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadVehicle.body())
-    elif state == UNIT_RESTRICTION.SPG_IS_FULL or state == UNIT_RESTRICTION.SPG_IS_FORBIDDEN:
+    elif state in (UNIT_RESTRICTION.SPG_IS_FULL, UNIT_RESTRICTION.SPG_IS_FORBIDDEN):
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.body())
-    elif state == UNIT_RESTRICTION.SCOUT_IS_FULL or state == UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN:
+    elif state in (UNIT_RESTRICTION.SCOUT_IS_FULL, UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN):
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.body())
     else:
@@ -106,11 +107,19 @@ def getMapsTrainingTooltipData():
     return makeTooltip(header, body)
 
 
-def getUnsuitableToQueueTooltipData(result):
+def getEpicBattlesOnlyVehicleTooltipData(result):
     state = result.restriction
     if state in (PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED, UNIT_RESTRICTION.VEHICLE_WRONG_MODE, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER):
-        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleOnly.header())
-        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleOnly.body())
+        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
+        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.body())
+        return makeTooltip(header, body)
+
+
+def getComp7BattlesOnlyVehicleTooltipData(result):
+    state = result.restriction
+    if state in (PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED, UNIT_RESTRICTION.VEHICLE_WRONG_MODE, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER):
+        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.header())
+        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.body())
         return makeTooltip(header, body)
 
 
@@ -159,7 +168,7 @@ def getMapboxFightBtnTooltipData(result):
     strPath = R.strings.mapbox.headerButtons.fightBtn.tooltip
     strAddPath = R.strings.tooltips.hangar
     restriction = result.restriction
-    if restriction == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE or restriction == UNIT_RESTRICTION.CURFEW:
+    if restriction in (PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE, UNIT_RESTRICTION.CURFEW):
         header = backport.text(strPath.disabled.header())
         body = backport.text(strPath.disabled.text())
     elif restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
@@ -172,9 +181,48 @@ def getMapboxFightBtnTooltipData(result):
     elif restriction == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
         header = backport.text(strAddPath.tankCarusel.wrongSquadVehicle.header())
         body = backport.text(strAddPath.tankCarusel.wrongSquadVehicle.body())
-    elif restriction == UNIT_RESTRICTION.SPG_IS_FULL or restriction == UNIT_RESTRICTION.SPG_IS_FORBIDDEN:
+    elif restriction in (UNIT_RESTRICTION.SPG_IS_FULL, UNIT_RESTRICTION.SPG_IS_FORBIDDEN):
         header = backport.text(strAddPath.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(strAddPath.tankCarusel.wrongSquadSPGVehicle.body())
     else:
         return getRandomTooltipData(result)
+    return makeTooltip(header, body)
+
+
+def getFunRandomFightBtnTooltipData(result, isInSquad):
+    state = result.restriction
+    resShortCut = R.strings.menu.headerButtons.fightBtn.tooltip
+    if state in (PRE_QUEUE_RESTRICTION.MODE_NOT_SET, UNIT_RESTRICTION.MODE_NOT_SET):
+        header = backport.text(resShortCut.funRandomNotSet.header())
+        body = backport.text(resShortCut.funRandomNotSet.body())
+    elif state in (PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE, UNIT_RESTRICTION.MODE_NOT_AVAILABLE):
+        header = backport.text(resShortCut.funRandomDisabled.header())
+        body = backport.text(resShortCut.funRandomDisabled.body())
+    elif state in PRE_QUEUE_RESTRICTION.VEHICLE_LIMITS + UNIT_RESTRICTION.VEHICLE_LIMITS:
+        header = backport.text(resShortCut.funRandomVehLimits.header())
+        body = backport.text(resShortCut.funRandomVehLimits.body())
+    else:
+        if isInSquad:
+            return getSquadFightBtnTooltipData(state)
+        return ''
+    return makeTooltip(header, body)
+
+
+def getComp7FightBtnTooltipData(result):
+    state = result.restriction
+    resShortCut = R.strings.menu.headerButtons.fightBtn.tooltip
+    if state == PRE_QUEUE_RESTRICTION.MODE_OFFLINE:
+        header = backport.text(resShortCut.comp7Offline.header())
+        body = backport.text(resShortCut.comp7Offline.body())
+    elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_SET:
+        header = backport.text(resShortCut.comp7NotSet.header())
+        body = backport.text(resShortCut.comp7NotSet.body())
+    elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
+        header = backport.text(resShortCut.comp7Disabled.header())
+        body = backport.text(resShortCut.comp7Disabled.body())
+    elif state == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
+        header = backport.text(resShortCut.comp7BanIsSet.header())
+        body = backport.text(resShortCut.comp7BanIsSet.body())
+    else:
+        return ''
     return makeTooltip(header, body)

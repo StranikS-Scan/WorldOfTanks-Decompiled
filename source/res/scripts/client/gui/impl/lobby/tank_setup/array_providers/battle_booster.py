@@ -53,13 +53,17 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
     def _getItemSortKey(self, item, ctx):
         return (item.getBuyPrice().price, item.userName)
 
+    def _getInstaledBoosterSet(self):
+        invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        installedSet = set((booster for veh in invVehicles.itervalues() for booster in veh.battleBoosters.installed.getIntCDs()))
+        return installedSet
+
 
 class OptDeviceBattleBoosterProvider(BaseBattleBoosterProvider):
     __slots__ = ()
 
     def _getItemCriteria(self):
-        invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
-        installedSet = set((booster for veh in invVehicles.itervalues() for booster in veh.battleBoosters.installed.getIntCDs()))
+        installedSet = self._getInstaledBoosterSet()
         return REQ_CRITERIA.CUSTOM(lambda item: not item.isCrewBooster() and (not item.isHidden or item.isInInventory or item.intCD in installedSet))
 
     def _fillDescription(self, model, item):
@@ -70,11 +74,12 @@ class CrewBattleBoosterProvider(BaseBattleBoosterProvider):
     __slots__ = ()
 
     def _getItemCriteria(self):
-        return REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
+        installedSet = self._getInstaledBoosterSet()
+        return REQ_CRITERIA.CUSTOM(lambda item: item.isCrewBooster() and (not item.isHideIfNotInShop() or item.isInInventory or item.intCD in installedSet))
 
     def _fillHighlights(self, model, item):
         super(CrewBattleBoosterProvider, self)._fillHighlights(model, item)
-        if not item.isAffectedSkillLearnt(self._getVehicle()):
+        if not item.isAffectedSkillLearnt(self._getVehicle()) and not item.isBuiltinPerkBooster():
             model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
 
     def _fillDescription(self, model, item):

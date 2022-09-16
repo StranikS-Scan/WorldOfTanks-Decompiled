@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/RankedRequester.py
 import BigWorld
-from adisp import async
+from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IRankedRequester
 
@@ -47,7 +47,7 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
     def dailyBonusBattles(self):
         return self.getCacheValue('dailyBonusBattlesCount', 0)
 
-    @async
+    @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().ranked.getCache(lambda resID, value: self._response(resID, value, callback))
 

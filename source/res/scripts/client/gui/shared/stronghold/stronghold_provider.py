@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/stronghold/stronghold_provider.py
 import logging
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui import DialogsInterface
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -76,7 +76,7 @@ class ClientStrongholdProvider(IGlobalListener):
                         self.__leave()
                         self.__showPopupDlg()
 
-    @process
+    @adisp_process
     def __leave(self):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
 
@@ -104,6 +104,6 @@ class ClientStrongholdProvider(IGlobalListener):
     def __onStrogholdLoaded(self, event):
         self.__browserID = event.ctx.get('browserID')
 
-    @process
+    @adisp_process
     def __showPopupDlg(self):
         yield DialogsInterface.showI18nInfoDialog('fortDisabled')

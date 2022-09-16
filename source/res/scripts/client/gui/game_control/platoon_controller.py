@@ -9,13 +9,14 @@ import Event
 import SoundGroups
 import VOIP
 from CurrentVehicle import g_currentVehicle
+from shared_utils import findFirst
 from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
 from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from PlatoonTank import PlatoonTank, PlatoonTankInfo
 from account_helpers.AccountSettings import AccountSettings, UNIT_FILTER, GUI_START_BEHAVIOR
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import GAME, GuiSettingsBehavior, OnceOnlyHints
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -25,7 +26,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
-from gui.impl.lobby.platoon.view.platoon_welcome_view import SelectionWindow
+from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -64,21 +65,26 @@ _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTI
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,
- QUEUE_TYPE.MAPBOX: PREBATTLE_ACTION_NAME.MAPBOX_SQUAD}
+ QUEUE_TYPE.MAPBOX: PREBATTLE_ACTION_NAME.MAPBOX_SQUAD,
+ QUEUE_TYPE.FUN_RANDOM: PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD,
+ QUEUE_TYPE.COMP7: PREBATTLE_ACTION_NAME.COMP7_SQUAD}
 _QUEUE_TYPE_TO_PREBATTLE_TYPE = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_TYPE.EVENT,
  QUEUE_TYPE.RANDOMS: PREBATTLE_TYPE.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_TYPE.EPIC,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
  QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT: PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT,
  QUEUE_TYPE.MAPBOX: PREBATTLE_TYPE.MAPBOX,
- QUEUE_TYPE.MAPS_TRAINING: PREBATTLE_TYPE.MAPS_TRAINING}
+ QUEUE_TYPE.MAPS_TRAINING: PREBATTLE_TYPE.MAPS_TRAINING,
+ QUEUE_TYPE.FUN_RANDOM: PREBATTLE_TYPE.FUN_RANDOM,
+ QUEUE_TYPE.COMP7: PREBATTLE_TYPE.COMP7}
 _RANDOM_VEHICLE_CRITERIA = ~(REQ_CRITERIA.VEHICLE.EPIC_BATTLE ^ REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.MAPS_TRAINING)
 _PREBATTLE_TYPE_TO_VEH_CRITERIA = {PREBATTLE_TYPE.SQUAD: _RANDOM_VEHICLE_CRITERIA,
  PREBATTLE_TYPE.EPIC: ~(REQ_CRITERIA.VEHICLE.BATTLE_ROYALE ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE),
  PREBATTLE_TYPE.BATTLE_ROYALE: REQ_CRITERIA.VEHICLE.BATTLE_ROYALE,
  PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT: REQ_CRITERIA.VEHICLE.BATTLE_ROYALE,
  PREBATTLE_TYPE.EVENT: REQ_CRITERIA.VEHICLE.EVENT_BATTLE,
- PREBATTLE_TYPE.MAPBOX: _RANDOM_VEHICLE_CRITERIA}
+ PREBATTLE_TYPE.MAPBOX: _RANDOM_VEHICLE_CRITERIA,
+ PREBATTLE_TYPE.COMP7: _RANDOM_VEHICLE_CRITERIA}
 _MIN_PERF_PRESET_NAME = 'MIN'
 _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING = 3
 SquadInfo = namedtuple('SquadInfo', ['platoonState', 'squadManStates', 'commanderIndex'])
@@ -258,8 +264,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def getPermissions(self):
         return self.prbEntity.getPermissions()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def processPlatoonActions(self, mapID, entity, currentVehicle, callback):
         if not self.__isActiveSearchView:
             callback(False)
@@ -284,7 +290,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         event = events.PrbActionEvent(action, events.PrbActionEvent.LEAVE)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
-    @process
+    @adisp_process
     def createPlatoon(self, startAutoSearchOnUnitJoin=False):
         queueType = self.getQueueType()
         if queueType in _QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME:
@@ -319,8 +325,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.prbEntity.doAutoSearch(ctx, callback=None)
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def togglePlayerReadyAction(self, callback):
         changeStatePossible = True
         notReady = not self.prbEntity.getPlayerInfo().isReady
@@ -392,7 +398,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 self.__showWindow(_EPlatoonLayout.MEMBER)
         elif self.__shouldChangeToRandomAndShowWindow():
             self.__jumpToBattleMode(PREBATTLE_ACTION_NAME.RANDOM, _EPlatoonLayout.WELCOME, xPopoverOffset)
-        elif self.hasSearchSupport():
+        elif self.hasSearchSupport() or self.canSelectSquadSize():
             self.__showWindow(_EPlatoonLayout.WELCOME, xPopoverOffset)
         else:
             self.createPlatoon(startAutoSearchOnUnitJoin=False)
@@ -450,7 +456,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             if unitFullData.unit is None:
                 return orderedSlots
             _, slots = vo_converters.makeSlotsVOs(entity, entity.getID(), withPrem=True)
-            orderedSlots = self.__orderSlotsBasedOnDisplaySlotsIndices(slots)
+            squadSize = unitFullData.unit.getSquadSize() or len(slots)
+            orderedSlots = self.__orderSlotsBasedOnDisplaySlotsIndices(slots)[:squadSize]
         return orderedSlots
 
     def buildExtendedSquadInfoVo(self):
@@ -502,6 +509,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if currPlayer is not None and hasattr(currPlayer, 'requestQueueInfo'):
             currPlayer.requestQueueInfo(QUEUE_TYPE.UNIT_ASSEMBLER)
         return
+
+    def canSelectSquadSize(self):
+        prbType = self.getPrbEntityType()
+        return prbType in [PREBATTLE_TYPE.COMP7]
 
     def hasSearchSupport(self):
         prbType = self.getPrbEntityType()
@@ -637,9 +648,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __orderSlotsBasedOnDisplaySlotsIndices(self, slots):
         self.__updateDisplaySlotsIndices()
-        orderedSlots = [ slot for slot in slots ]
+        emptySlot = findFirst(lambda slot: slot['player'] is None, slots)
+        orderedSlots = [emptySlot] * len(slots)
         for slot in slots:
-            validPlayerSlot = False
             playerAccId = slot['player']['accID'] if slot['player'] else -1
             for playerId, displayIndex in self.__tankDisplayPosition.items():
                 if playerAccId == playerId:
@@ -647,18 +658,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                         _logger.warning('The number %s of display slots in the platoon is invalid', displayIndex)
                         return slots
                     orderedSlots[displayIndex] = slot
-                    validPlayerSlot = True
                     break
-
-            if not validPlayerSlot:
-                availableSlotIndex = 0
-                while availableSlotIndex in self.__tankDisplayPosition.values():
-                    availableSlotIndex += 1
-
-                if availableSlotIndex < len(orderedSlots):
-                    orderedSlots[availableSlotIndex] = slot
-                else:
-                    _logger.warning('could not find an available index for the empty slot when resorting player')
 
         return orderedSlots
 
@@ -670,7 +670,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             else:
                 self.onMembersUpdate()
 
-    @process
+    @adisp_process
     def __jumpToBattleMode(self, prbActionName, ePlatoonLayout, xPopoverOffset=None):
         result = yield self.prbDispatcher.doSelectAction(PrbAction(prbActionName))
         if result:
@@ -705,13 +705,13 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return isAutoSearch
         return False
 
-    @process
+    @adisp_process
     def __doSelect(self, prebattelActionName):
         yield self.prbDispatcher.doSelectAction(PrbAction(prebattelActionName))
 
     def __showWindow(self, ePlatoonLayout, dropdownOffset=None):
         view = self.__getView(ePlatoonLayout)
-        if view:
+        if self.__isViewProperPrbType(view):
             if view.getParentWindow().isHidden():
                 view.getParentWindow().show()
             return
@@ -732,7 +732,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 if self.__isPlatoonVisualizationEnabled:
                     self.onPlatoonTankVisualizationChanged(True)
                 from gui.prb_control.events_dispatcher import g_eventDispatcher
-                if not self.isInSearch():
+                if not self.isInSearch() and not self.prbEntity.isInQueue():
                     g_eventDispatcher.loadHangar()
             return
 
@@ -773,7 +773,15 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __getView(self, ePlatoonLayout):
         layout = self.__ePlatoonLayouts.get(ePlatoonLayout)
         uiLoader = dependency.instance(IGuiLoader)
-        return uiLoader.windowsManager.getViewByLayoutID(layoutID=layout.layoutID)
+        view = uiLoader.windowsManager.getViewByLayoutID(layoutID=layout.layoutID)
+        return view
+
+    def __isViewProperPrbType(self, view):
+        if view is None:
+            return False
+        else:
+            prbEntityType = self.getPrbEntityType()
+            return prbEntityType and view.getPrbEntityType() == prbEntityType
 
     def __startListening(self):
         _logger.debug('PlatoonController: start listening')
@@ -1000,7 +1008,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                         tankInfo = PlatoonTankInfo(canDisplayModel, profileVehicle.vehCompDescr, profileVehicle.vehOutfitCD, profileVehicle.seasonType, profileVehicle.marksOnGun, player.clanDBID, player.getFullName())
                     else:
                         tankInfo = None
-                    displaySlotIndex = self.__tankDisplayPosition[player.accID]
+                    displaySlotIndex = self.__tankDisplayPosition.get(player.accID, 0)
                     result[displaySlotIndex] = tankInfo
                     isPlayerOnSlotAvailable[displaySlotIndex] = True
 
@@ -1053,7 +1061,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             if playerId in playerIds:
                 playerIds.remove(playerId)
                 continue
-            self.__tankDisplayPosition.pop(playerId)
+            self.__removeAccFromPositions(playerId)
 
         availableSlotIndex = 0
         for newPlayerId in playerIds:
@@ -1071,16 +1079,21 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             newSlotIdx, removeSlotIdx = (2, 0) if currentPlayer.isCommander() else (0, 2)
             if self.__tankDisplayPosition.get(teamMateAccID) == removeSlotIdx:
                 self.onPlatoonTankRemove(removeSlotIdx)
-                self.__tankDisplayPosition.pop(teamMateAccID)
+                self.__removeAccFromPositions(teamMateAccID)
             self.__tankDisplayPosition[teamMateAccID] = newSlotIdx
         else:
             allTeams = [ data for data in self.__tankDisplayPosition.iteritems() if data[0] != currentPlayer.accID ]
             if allTeams:
                 teamMateAccID, teamMateIdx = allTeams[0]
                 self.onPlatoonTankRemove(teamMateIdx)
-                self.__tankDisplayPosition.pop(teamMateAccID, None)
+                self.__removeAccFromPositions(teamMateAccID)
             currentPlayerIdx = 0
         self.__tankDisplayPosition[currentPlayer.accID] = currentPlayerIdx
+
+    def __removeAccFromPositions(self, accID):
+        removedIdx = self.__tankDisplayPosition.pop(accID, None)
+        if removedIdx is not None:
+            self.__tankDisplayPosition = {k:(v if v < removedIdx else v - 1) for k, v in self.__tankDisplayPosition.items()}
         return
 
     def __onVehicleStateChanged(self, updateReason, _):

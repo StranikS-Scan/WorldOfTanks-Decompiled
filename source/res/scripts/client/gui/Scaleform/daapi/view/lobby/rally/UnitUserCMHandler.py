@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/UnitUserCMHandler.py
 from account_helpers import getAccountDatabaseID
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
 from gui.Scaleform.locale.MENU import MENU
@@ -147,18 +147,18 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
          GIVE_INSPIRE_EQUIPMENT_COMMANDER: 'giveInspireEquipmentCommander'})
         return handlers
 
-    @process
+    @adisp_process
     def _kickPlayerFromUnit(self, databaseID):
         yield self.prbDispatcher.sendPrbRequest(KickPlayerUnitCtx(databaseID, 'prebattle/kick'))
 
-    @process
+    @adisp_process
     def _giveLeadership(self, databaseID):
         yield self.prbDispatcher.sendPrbRequest(GiveLeadershipUnitCtx(databaseID, 'prebattle/giveLeadership'))
 
-    @process
+    @adisp_process
     def _takeLeadership(self):
         yield self.prbDispatcher.sendPrbRequest(GiveLeadershipUnitCtx(getAccountDatabaseID(), 'prebattle/takeLeadership'))
 
-    @process
+    @adisp_process
     def _giveEquipmentCommander(self, databaseID, role):
         yield self.prbDispatcher.sendPrbRequest(GiveEquipmentCommanderCtx(databaseID, role, 'prebattle/giveEquipmentCommander'))

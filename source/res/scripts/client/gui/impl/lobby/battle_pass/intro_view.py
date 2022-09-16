@@ -33,9 +33,6 @@ class IntroView(ViewImpl):
     def viewModel(self):
         return super(IntroView, self).getViewModel()
 
-    def markVisited(self):
-        self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
-
     def _onLoading(self, *args, **kwargs):
         super(IntroView, self)._onLoading(*args, **kwargs)
         self.__updateBattlePassState()
@@ -67,8 +64,8 @@ class IntroView(ViewImpl):
         slide.setDescription(backport.text(_TEXTS.dyn(slideName).text(), **kwargs))
         return slide
 
-    @staticmethod
-    def __close():
+    def __close(self):
+        self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
         showMissionsBattlePass()
 
     @staticmethod

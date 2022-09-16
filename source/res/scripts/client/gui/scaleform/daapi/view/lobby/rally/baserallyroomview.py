@@ -3,7 +3,7 @@
 import account_helpers
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
@@ -66,7 +66,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
         self.sendRequest(c)
 
-    @process
+    @adisp_process
     def sendRequest(self, request):
         yield self.prbDispatcher.sendPrbRequest(request)
 

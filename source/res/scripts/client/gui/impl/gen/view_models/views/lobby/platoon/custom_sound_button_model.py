@@ -6,14 +6,14 @@ from gui.impl.gen.view_models.views.lobby.platoon.button_model import ButtonMode
 class CustomSoundButtonModel(ButtonModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(CustomSoundButtonModel, self).__init__(properties=properties, commands=commands)
 
     def getSoundClickName(self):
-        return self._getResource(4)
+        return self._getResource(6)
 
     def setSoundClickName(self, value):
-        self._setResource(4, value)
+        self._setResource(6, value)
 
     def _initialize(self):
         super(CustomSoundButtonModel, self)._initialize()

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingRoomBase.py
 import BigWorld
 import ArenaType
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -165,7 +165,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
-    @process
+    @adisp_process
     def changeTeam(self, accID, slot):
         roster = int(slot)
         if not slot:
@@ -177,13 +177,13 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         if not result:
             self._showActionErrorMessage(ctx.getLastErrorString())
 
-    @process
+    @adisp_process
     def swapTeams(self):
         result = yield self.prbDispatcher.sendPrbRequest(SwapTeamsCtx(waitingID='prebattle/swap'))
         if not result:
             self._showActionErrorMessage()
 
-    @process
+    @adisp_process
     def selectObserver(self, isObserver):
         if not isObserver:
             playersCount = 0
@@ -208,7 +208,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self.as_setObserverS(False)
             self._showActionErrorMessage()
 
-    @process
+    @adisp_process
     def selectCommonVoiceChat(self, index):
         result = yield self.prbDispatcher.sendPrbRequest(ChangeArenaVoipCtx(int(index), waitingID='prebattle/change_arena_voip'))
         if not result:
@@ -336,11 +336,11 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self.__changeTrainingRoomSettings(event.ctx.get('settings', None))
         return
 
-    @process
+    @adisp_process
     def _doLeave(self, isExit=True):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))
 
-    @process
+    @adisp_process
     def __changeTrainingRoomSettings(self, settings):
         if settings and settings.areSettingsChanged(self.prbEntity.getSettings()):
             settings.setWaitingID('prebattle/change_settings')
@@ -427,7 +427,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
                 self.as_setPlayerTagsInOtherS(dbID, tags)
             return
 
-    @process
+    @adisp_process
     def __doStartTraining(self):
         result = yield self.prbDispatcher.sendPrbRequest(SetTeamStateCtx(1, True))
         if result:
@@ -439,7 +439,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self.as_disableControlsS(False)
             self._updateStartButton(self.prbEntity)
 
-    @process
+    @adisp_process
     def __currentPlayerEntered(self):
         if self.__currentPlayerIsOut:
             if self.prbEntity.storage.isObserver:

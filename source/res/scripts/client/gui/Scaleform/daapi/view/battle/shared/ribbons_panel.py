@@ -252,7 +252,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         return
 
     def _shouldShowRibbon(self, ribbon):
-        return self.__checkUserPreferences(ribbon)
+        return self.__checkUserPreferences(ribbon) and self.__checkControllingOwnVehicle()
 
     def __playSound(self, eventName):
         if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
@@ -321,6 +321,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
 
     def __checkUserPreferences(self, ribbon):
         return self.__userPreferences.get(ribbon.getType(), True)
+
+    def __checkControllingOwnVehicle(self):
+        return avatar_getter.getPlayerVehicleID() == self.sessionProvider.shared.vehicleState.getControllingVehicleID()
 
     def __setupView(self):
         self.as_setupS([[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],

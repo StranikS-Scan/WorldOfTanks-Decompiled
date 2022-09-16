@@ -63,9 +63,9 @@ class RewardsBlock(base.StatsBlock):
         goldPremuimExtras = []
         showPremium = lessonNum == lastLessonNum and bootcampController.needAwarding()
         if showPremium:
-            premiumType = g_bootcamp.getPremiumType(lessonNum)
+            premiumType = g_bootcamp.getPremiumType()
             if premiumType not in _PREMIUM_RESOURCES:
-                _logger.error('Premium type %s is not supported or it is not in the bonuses')
+                _logger.error('Premium type %s is not supported or it is not in the bonuses', premiumType)
             else:
                 goldPremuimExtras.append({'id': premiumType,
                  'label': _PREMIUM_RESOURCES[premiumType]['label'],

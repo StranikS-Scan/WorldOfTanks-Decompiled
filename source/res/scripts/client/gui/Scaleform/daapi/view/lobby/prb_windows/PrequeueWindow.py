@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrequeueWindow.py
 from CurrentVehicle import g_currentVehicle
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.view.meta.PrequeueWindowMeta import PrequeueWindowMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
@@ -59,6 +59,6 @@ class PrequeueWindow(PrequeueWindowMeta, IPreQueueListener):
     def _handleCurrentVehicleChanged(self):
         self.as_enableEnqueueBtnS(self.isEnqueueBtnEnabled())
 
-    @process
+    @adisp_process
     def _doLeave(self, isExit=True):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit))

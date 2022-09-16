@@ -1,0 +1,16 @@
+<VehicleInspireController.def>
+  <Properties>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <displayedState>
+      <Type>	STATE_WITH_TIME_INTERVAL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </displayedState>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	VehicleInspireController	</DefaultKeyName>
+</VehicleInspireController.def>

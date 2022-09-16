@@ -5,8 +5,8 @@ import constants
 from PlayerEvents import g_playerEvents as events
 from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN, LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN
 from account_helpers.counter_settings import getCountNewSettings
-from adisp import process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
@@ -70,22 +70,22 @@ class LobbyMenu(LobbyMenuMeta):
     def onEscapePress(self):
         self.destroy()
 
-    @process
+    @adisp_process
     def refuseTraining(self):
         isOk = yield DialogsInterface.showI18nConfirmDialog('refuseTraining')
         if isOk:
             event_dispatcher.stopTutorial()
         self.destroy()
 
-    @process
+    @adisp_process
     def logoffClick(self):
         isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.gameplay.goToLoginByDisconnectRQ()
 
-    @async
+    @wg_async
     def quitClick(self):
-        isOk = yield await(dialogs.quitGame(self.getParentWindow()))
+        isOk = yield wg_await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.gameplay.quitFromGame()
 

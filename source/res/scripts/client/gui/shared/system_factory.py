@@ -3,17 +3,24 @@
 from collections import defaultdict
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
-SCALEFORM_BATTLE_PACKAGES = 3
+SCALEFORM_COMMON_PACKAGES = 3
 SCALEFORM_LOBBY_PACKAGES = 4
-TOOLTIP_BUILDERS = 5
-GAME_CONTROLLERS = 6
-QUEUE = 7
-ENTRY_POINT = 8
-UNIT_ENTITY = 9
-UNIT_ENTRY_POINT = 10
-UNIT_ENTITY_BY_TYPE = 11
-UNIT_ENTRY_POINT_BY_TYPE = 12
-PBR_STORAGE = 14
+SCALEFORM_BATTLE_PACKAGES = 5
+LOBBY_TOOLTIP_BUILDERS = 6
+BATTLE_TOOLTIP_BUILDERS = 7
+GAME_CONTROLLERS = 8
+QUEUE = 9
+QUEUE_ENTRY_POINT = 10
+UNIT_ENTITY = 11
+UNIT_ENTRY_POINT = 12
+UNIT_ENTITY_BY_TYPE = 13
+UNIT_ENTRY_POINT_BY_TYPE = 14
+PBR_STORAGE = 15
+PRB_INVITE_HTML_FORMATTER = 16
+NOTIFICATIONS_LISTENERS = 17
+NOTIFICATIONS_ACTIONS_HANDLERS = 18
+MOD_SELECTOR_ITEM = 19
+ENTRY_POINT_VALIDATOR = 20
 
 class _CollectEventsManager(object):
 
@@ -60,16 +67,28 @@ def collectScaleformLobbyPackages():
     return __collectEM.handleEvent(SCALEFORM_LOBBY_PACKAGES, {'packages': []})['packages']
 
 
+def registerBattleTooltipsBuilders(builders):
+
+    def onCollect(ctx):
+        ctx['builders'].extend(builders)
+
+    __collectEM.addListener(BATTLE_TOOLTIP_BUILDERS, onCollect)
+
+
+def collectBattleTooltipsBuilders():
+    return __collectEM.handleEvent(BATTLE_TOOLTIP_BUILDERS, {'builders': []})['builders']
+
+
 def registerLobbyTooltipsBuilders(builders):
 
     def onCollect(ctx):
         ctx['builders'].extend(builders)
 
-    __collectEM.addListener(TOOLTIP_BUILDERS, onCollect)
+    __collectEM.addListener(LOBBY_TOOLTIP_BUILDERS, onCollect)
 
 
 def collectLobbyTooltipsBuilders():
-    return __collectEM.handleEvent(TOOLTIP_BUILDERS, {'builders': []})['builders']
+    return __collectEM.handleEvent(LOBBY_TOOLTIP_BUILDERS, {'builders': []})['builders']
 
 
 def registerEquipmentItem(equipmentName, itemCls, replayItemCls):
@@ -91,8 +110,8 @@ def registerGameControllers(controllersList):
 
     def onCollect(ctx):
         configurator = ctx['configurator']
-        for iface, controllerCls in controllersList:
-            configurator(iface, controllerCls())
+        for iface, controllerCls, replace in controllersList:
+            configurator(iface, controllerCls(), replace)
 
     __collectEM.addListener(GAME_CONTROLLERS, onCollect)
 
@@ -132,11 +151,11 @@ def registerEntryPoint(actionName, entryPointCls):
     def onCollect(ctx):
         ctx['entry'] = entryPointCls()
 
-    __collectEM.addListener((ENTRY_POINT, actionName), onCollect)
+    __collectEM.addListener((QUEUE_ENTRY_POINT, actionName), onCollect)
 
 
 def collectEntryPoint(queueType):
-    return __collectEM.handleEvent((ENTRY_POINT, queueType), ctx={}).get('entry')
+    return __collectEM.handleEvent((QUEUE_ENTRY_POINT, queueType), ctx={}).get('entry')
 
 
 def registerUnitEntity(pbrType, entityCls):
@@ -233,3 +252,76 @@ def collectAllStorages():
                 storages.append(ctx['storage'])
 
     return storages
+
+
+def registerNotificationsListeners(listenerClasses):
+
+    def onCollect(ctx):
+        ctx['listeners'].extend((listenerCls() for listenerCls in listenerClasses))
+
+    __collectEM.addListener(NOTIFICATIONS_LISTENERS, onCollect)
+
+
+def collectAllNotificationsListeners():
+    ctx = {'listeners': []}
+    for handler in __collectEM.handlers[NOTIFICATIONS_LISTENERS]:
+        handler(ctx)
+
+    return ctx['listeners']
+
+
+def registerNotificationsActionsHandlers(handlersClasses):
+
+    def onCollect(ctx):
+        ctx['handlers'].extend(handlersClasses)
+
+    __collectEM.addListener(NOTIFICATIONS_ACTIONS_HANDLERS, onCollect)
+
+
+def collectAllNotificationsActionsHandlers():
+    ctx = {'handlers': []}
+    for handler in __collectEM.handlers[NOTIFICATIONS_ACTIONS_HANDLERS]:
+        handler(ctx)
+
+    return ctx['handlers']
+
+
+def registerPrbInviteHtmlFormatter(prbType, formatterCls):
+
+    def onCollect(ctx):
+        ctx['formatter'] = formatterCls()
+
+    __collectEM.addListener((PRB_INVITE_HTML_FORMATTER, prbType), onCollect)
+
+
+def registerPrbInvitesHtmlFormatter(prbTypes, formatterCls):
+    for prbType in prbTypes:
+        registerPrbInviteHtmlFormatter(prbType, formatterCls)
+
+
+def collectPrbInviteHtmlFormatter(prbType):
+    return __collectEM.handleEvent((PRB_INVITE_HTML_FORMATTER, prbType), ctx={}).get('formatter')
+
+
+def registerModSelectorItem(prbActionName, itemCls):
+
+    def onCollect(ctx):
+        ctx['item'] = itemCls
+
+    __collectEM.addListener((MOD_SELECTOR_ITEM, prbActionName), onCollect)
+
+
+def collectModSelectorItem(prbActionName):
+    return __collectEM.handleEvent((MOD_SELECTOR_ITEM, prbActionName), ctx={}).get('item')
+
+
+def registerEntryPointValidator(alias, validator):
+
+    def onCollect(ctx):
+        ctx['validator'] = validator
+
+    __collectEM.addListener((ENTRY_POINT_VALIDATOR, alias), onCollect)
+
+
+def collectEntryPointValidator(alias):
+    return __collectEM.handleEvent((ENTRY_POINT_VALIDATOR, alias), ctx={}).get('validator')

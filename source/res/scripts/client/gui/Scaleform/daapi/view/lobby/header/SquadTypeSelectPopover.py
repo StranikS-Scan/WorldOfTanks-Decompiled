@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/SquadTypeSelectPopover.py
-from adisp import process
+from __future__ import absolute_import
+from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
@@ -38,6 +39,6 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
         super(SquadTypeSelectPopover, self)._populate()
         self.update()
 
-    @process
+    @adisp_process
     def __doSelect(self, prebattleActionName):
         yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName))

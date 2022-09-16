@@ -58,7 +58,7 @@ def getProgressionPostBattleInfo(itemIntCD, vehicleIntCD, progressionData, items
 C11nProgressionLinkBtnParams = namedtuple('C11nProgressionLinkBtnParams', ('isLinkEnabled', 'linkBtnTooltip'))
 
 def getC11nProgressionLinkBtnParams(vehicle):
-    isLinkEnabled = vehicle.isCustomizationEnabled()
+    isLinkEnabled = vehicle.isCustomizationEnabled() if vehicle is not None else False
     linkBtnTooltip = R.strings.tooltips.quests.linkBtn.customizationProgression
     linkBtnTooltip = linkBtnTooltip.enabled() if isLinkEnabled else linkBtnTooltip.disabled()
     return C11nProgressionLinkBtnParams(isLinkEnabled, linkBtnTooltip)

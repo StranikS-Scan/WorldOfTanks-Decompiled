@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from tutorial.control.functional import FunctionalEffect
@@ -56,7 +56,7 @@ class FunctionalSwitchToRandom(FunctionalEffect):
             LOG_ERROR('Prebattle dispatcher is not defined')
             return False
 
-    @process
+    @adisp_process
     def __doSelect(self, dispatcher):
         from gui.prb_control.entities.base.ctx import PrbAction
         from gui.prb_control.settings import PREBATTLE_ACTION_NAME

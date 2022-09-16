@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/post_progression_cfg_component.py
 import typing
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from Event import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
@@ -128,13 +128,13 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(PostProgressionCfgComponentView, self)._removeListeners()
 
-    @process
+    @adisp_process
     def _onMainStepActionClick(self, args):
         vehicle = self._vehicle
         action = vehicle.postProgression.getStep(int(args['stepID'])).action.getServerAction(factory, vehicle)
         yield factory.asyncDoAction(action)
 
-    @process
+    @adisp_process
     def _onPrebattleSwitchToggleClick(self, args):
         stepID = int(args['stepID'])
         if stepID in self.__togglingSteps:
@@ -151,7 +151,7 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
             self.__togglingSteps.discard(stepID)
             return
 
-    @process
+    @adisp_process
     def _onMultiStepActionClick(self, args):
         vehicle = self._vehicle
         stepID, modificationID = int(args['stepID']), int(args['modificationID'])
@@ -229,7 +229,7 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
             stepModel.setIsPrebattleSwitchEnabled(True)
         return
 
-    @process
+    @adisp_process
     def __onPurchaseClick(self):
         vehicle = self._vehicle
         toPurchaseIDs = self.__getStepsToPurchase(vehicle.postProgression)

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/deal_base_setup.py
 from BWUtil import AsyncReturn
-from async import async, await_callback, await
 from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_setup import BaseSetupSubView
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
+from wg_async import wg_async, await_callback, wg_await
 
 class DealBaseSetupSubView(BaseSetupSubView):
     __slots__ = ()
@@ -17,13 +17,13 @@ class DealBaseSetupSubView(BaseSetupSubView):
         super(DealBaseSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         self._updateDealPanel()
 
-    @async
+    @wg_async
     def canQuit(self, skipApplyAutoRenewal=None):
         result = True
         if self._asyncActionLock.isLocked:
             raise AsyncReturn(False)
         elif self._interactor.hasChanged():
-            dialogResult = yield await(self._asyncActionLock.tryAsyncCommand(self._interactor.showExitConfirmDialog))
+            dialogResult = yield wg_await(self._asyncActionLock.tryAsyncCommand(self._interactor.showExitConfirmDialog))
             if dialogResult is None or dialogResult.busy:
                 raise AsyncReturn(False)
             isOK, data = dialogResult.result
@@ -68,9 +68,9 @@ class DealBaseSetupSubView(BaseSetupSubView):
             self._viewModel.dealPanel.setCanAccept(self._interactor.hasChanged())
             return
 
-    @async
+    @wg_async
     def _onDealConfirmed(self, _=None):
-        result = yield await(self._asyncActionLock.tryAsyncCommandWithCallback(self._onConfirm))
+        result = yield wg_await(self._asyncActionLock.tryAsyncCommandWithCallback(self._onConfirm))
         if result:
             playSound(TankSetupSoundEvents.ACCEPT)
             yield await_callback(self._interactor.applyAutoRenewal)()

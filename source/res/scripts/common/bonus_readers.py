@@ -11,12 +11,13 @@ from account_shared import validateCustomizationItem
 from battle_pass_common import NON_VEH_CD
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import isUniversalFragment
+from dossiers2.custom.account_layout import ACCOUNT_DOSSIER_DICT_BLOCKS
 from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
 if TYPE_CHECKING:
@@ -680,17 +681,39 @@ def __readBonus_enhancement(bonus, _name, section, eventType, checkLimit):
 
 
 def __readBonus_entitlement(bonus, _name, section, eventType, checkLimit):
-    id = section['id'].asString
-    entitlement = bonus.setdefault('entitlements', {})[id] = {}
+    entID, entData = _readEntitlementSection(section, checkLimit)
+    bonus.setdefault('entitlements', {})[entID] = entData
+
+
+def __readBonus_entitlementList(bonus, _name, section, eventType, checkLimit):
+    entItems = bonus.setdefault('entitlementList', {}).setdefault('items', [])
+    for name, itemSection in section.items():
+        if name != 'item':
+            raise SoftException('Not expected element', name)
+        entID, entData = _readEntitlementSection(itemSection, checkLimit, readOp=True)
+        if entData['count'] <= 0:
+            raise SoftException('Not positive count for entitlement with operation', entID, entData)
+        entData['id'] = entID
+        entItems.append(entData)
+
+
+def _readEntitlementSection(section, checkLimit, readOp=False):
+    entitlement = {}
+    entID = section['id'].asString
     if section.has_key('count'):
         entitlement['count'] = section['count'].asInt
     else:
         entitlement['count'] = 1
+    if readOp:
+        entitlement['op'] = operation = section.readString('operation', '')
+        if operation not in ENTITLEMENT_OPS.ALL:
+            raise SoftException('Invalid op for entitlement:', entID, operation, ENTITLEMENT_OPS.ALL)
     if checkLimit and entitlement['count'] > INVOICE_LIMITS.ENTITLEMENTS_MAX:
-        raise SoftException('Invalid count of entitlement id %s with amount %d when limit is %d.' % (id, entitlement['count'], INVOICE_LIMITS.ENTITLEMENTS_MAX))
+        raise SoftException('Invalid count of entitlement id %s with amount %d when limit is %d.' % (entID, entitlement['count'], INVOICE_LIMITS.ENTITLEMENTS_MAX))
     if section.has_key('expires'):
         entitlement['expires'] = expires = {}
         __readBonus_expires(id, expires, section)
+    return (entID, entitlement)
 
 
 def __readBonus_currency(bonus, _name, section, eventType, checkLimit):
@@ -731,6 +754,12 @@ def __readBonus_dossier(bonus, _name, section, eventType, checkLimit):
     if section.has_key('dossierType'):
         dossierType = section['dossierType'].asInt
     if dossierType == DOSSIER_TYPE.ACCOUNT:
+        if blockName in ACCOUNT_DOSSIER_DICT_BLOCKS:
+            try:
+                record = int(record)
+            except ValueError:
+                pass
+
         isValid, message = checkAccountDossierOperation(dossierType, blockName, record, operation)
         if not isValid:
             raise SoftException('Invalid dossier bonus %s: %s' % (blockName + ':' + record, message))
@@ -944,20 +973,15 @@ def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
 def __readBonus_dogTag(bonus, _name, section, eventType, checkLimit):
     componentId = section['id'].asInt
     data = {'id': componentId}
-    value = section.readFloat('value', None)
-    grade = section.readInt('grade', None)
-    unlock = section.readBool('unlock', None)
-    needRecalculate = section.readBool('needRecalculate', None)
-    if value is not None:
-        data['value'] = value
-    if grade is not None:
-        data['grade'] = grade
-    if unlock is not None:
-        data['unlock'] = unlock
-    if needRecalculate is not None:
-        data['needRecalculate'] = needRecalculate
+    if section.has_key('value'):
+        data['value'] = section['value'].asFloat
+    if section.has_key('grade'):
+        data['grade'] = section['grade'].asInt
+    if section.has_key('unlock'):
+        data['unlock'] = section['unlock'].asBool
+    if section.has_key('needRecalculate'):
+        data['needRecalculate'] = section['needRecalculate'].asBool
     bonus.setdefault('dogTagComponents', []).append(data)
-    return
 
 
 def __readBonus_battlePassPoints(bonus, _name, section, eventType, checkLimit):
@@ -1026,6 +1050,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'customizations': __readBonus_customizations,
  'crewSkin': __readBonus_crewSkin,
  'entitlement': __readBonus_entitlement,
+ 'entitlementList': __readBonus_entitlementList,
  'rankedDailyBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_DAILY_BATTLES_MAX, __readBonus_int),
  'rankedBonusBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_BONUS_BATTLES_MAX, __readBonus_int),
  'dogTagComponent': __readBonus_dogTag,

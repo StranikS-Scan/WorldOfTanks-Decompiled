@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.instructions.booster_buy_model import 
 from gui.impl.lobby.common.buy_sell_item_base_dialog import DialogBuySellItemBaseView
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
-from adisp import process
+from adisp import adisp_process
 from helpers.func_utils import oncePerPeriod
 
 class BoosterBuyWindowView(DialogBuySellItemBaseView):
@@ -70,7 +70,7 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         return
 
     @oncePerPeriod(1)
-    @process
+    @adisp_process
     def _onAcceptClicked(self):
         count = self.viewModel.getItemCount()
         isRearm = self.viewModel.getIsRearm()

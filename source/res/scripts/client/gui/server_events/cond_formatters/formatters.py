@@ -111,6 +111,20 @@ class SimpleMissionsFormatter(MissionFormatter):
         return packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
 
+class EmptyMissionsFormatter(SimpleMissionsFormatter):
+
+    def _getDescription(self, condition):
+        return packDescriptionField('')
+
+    @classmethod
+    def _getTitle(cls, *args, **kwargs):
+        return packSimpleTitle('')
+
+    @classmethod
+    def _getIconKey(cls, condition=None):
+        return None
+
+
 class MissionsVehicleListFormatter(MissionFormatter):
 
     def _format(self, condition, event):

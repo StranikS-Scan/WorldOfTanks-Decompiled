@@ -14,7 +14,7 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.shared.gui_items.processors.common import CustomizationsBuyer
 from gui.shared.money import Currency, CurrencyCollection
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import adisp_process
 from items.components.c11n_constants import MAX_ITEMS_FOR_BUY_OPERATION
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -44,7 +44,7 @@ class ConfirmC11nBuyMeta(IDialogMeta):
     def destroy(self):
         pass
 
-    @process('buyItem')
+    @adisp_process('buyItem')
     def submit(self, item, count, _, vehicle):
         try:
             self.__soundEventChecker.lockPlayingSounds()

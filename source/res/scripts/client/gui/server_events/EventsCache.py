@@ -10,13 +10,13 @@ import customization_quests
 import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
-from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform
+from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isFunRandomQuest
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
@@ -29,7 +29,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first
-from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController
+from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -78,6 +78,7 @@ class EventsCache(IEventsCache):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
         self.__waitForSync = False
@@ -176,8 +177,8 @@ class EventsCache(IEventsCache):
 
         return result
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def update(self, diff=None, callback=None):
         clearModifiersCache()
         yield self.getPersonalMissions().questsProgressRequest()
@@ -248,6 +249,7 @@ class EventsCache(IEventsCache):
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         isRankedSeasonOff = self.rankedController.getCurrentSeason() is None
+        isFunRandomOff = not self.__funRandomController.isBattlesPossible()
         isEpicBattleEnabled = self.__epicController.isEnabled()
 
         def userFilterFunc(q):
@@ -268,7 +270,9 @@ class EventsCache(IEventsCache):
                     return False
             if isMapsTraining(qGroup):
                 return q.shouldBeShown()
-            return False if isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)) else filterFunc(q)
+            if isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
+                return False
+            return False if isFunRandomOff and isFunRandomQuest(qID) else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 

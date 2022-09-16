@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/emblems.py
-from adisp import process
+from adisp import adisp_process
 from gui.battle_results.settings import EMBLEM_TYPE
 from gui.shared.ClanCache import g_clanCache
 
@@ -33,7 +33,7 @@ class ClanEmblemFetcher(EmblemFetcher):
         super(ClanEmblemFetcher, self).__init__(formationDBID)
         self._url = textureID
 
-    @process
+    @adisp_process
     def fetch(self, callback):
         self._url = yield g_clanCache.getClanEmblemTextureID(self._formationDBID, False, self._url)
         callback(self._url)

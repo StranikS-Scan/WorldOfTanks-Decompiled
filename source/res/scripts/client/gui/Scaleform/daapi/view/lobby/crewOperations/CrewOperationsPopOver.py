@@ -176,7 +176,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         tmenBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
         return berthsNeeded > 0 and berthsNeeded > tmenBerthsCount - len(barracksTmen)
 
-    @decorators.process('crewReturning')
+    @decorators.adisp_process('crewReturning')
     def __processReturnCrew(self):
         result = yield TankmanReturn(g_currentVehicle.item).request()
         if result.userMsg:

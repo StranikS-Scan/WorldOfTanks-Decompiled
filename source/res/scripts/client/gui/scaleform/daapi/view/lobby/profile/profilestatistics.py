@@ -3,18 +3,18 @@
 from collections import namedtuple
 from debug_utils import LOG_ERROR
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
+from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
 from gui.shared.formatters import text_styles
 from helpers import dependency
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ProfileStatisticEvent
 from gui.shared import g_eventBus
@@ -33,7 +33,8 @@ _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.RANKED: 'ranked_15x15',
  PROFILE_DROPDOWN_KEYS.RANKED_10X10: BATTLE_TYPES.RANKED_10X10,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: 'battle_royale',
- PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale'}
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale',
+ PROFILE_DROPDOWN_KEYS.COMP7: 'comp7'}
 
 def _packProviderType(mainType, addValue=None):
     return '%s/%s' % (mainType, str(addValue)) if addValue is not None else mainType
@@ -46,6 +47,7 @@ def _parseProviderType(value):
 class ProfileStatistics(ProfileStatisticsMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args):
         try:
@@ -102,6 +104,8 @@ class ProfileStatistics(ProfileStatisticsMeta):
         dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS))
+        if self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getSeasonPassed():
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
         self.as_setInitDataS({'dropDownProvider': dropDownProvider})
         return
 

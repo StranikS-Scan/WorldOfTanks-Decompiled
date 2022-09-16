@@ -10,6 +10,9 @@ class CarouselEnvironmentMeta(BaseDAAPIComponent):
     def resetFilters(self):
         self._printOverrideError('resetFilters')
 
+    def updateHotFilters(self):
+        self._printOverrideError('updateHotFilters')
+
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
 
@@ -27,3 +30,9 @@ class CarouselEnvironmentMeta(BaseDAAPIComponent):
 
     def as_blinkCounterS(self):
         return self.flashObject.as_blinkCounter() if self._isDAAPIInited() else None
+
+    def as_setCarouselFilterS(self, data):
+        return self.flashObject.as_setCarouselFilter(data) if self._isDAAPIInited() else None
+
+    def as_initCarouselFilterS(self, data):
+        return self.flashObject.as_initCarouselFilter(data) if self._isDAAPIInited() else None

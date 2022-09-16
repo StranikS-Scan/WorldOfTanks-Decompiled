@@ -203,6 +203,7 @@ class SYSTEM_MESSAGES(object):
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
+    CUSTOMIZATION_INVALIDVEHICLE = '#system_messages:customization/invalidVehicle'
     CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED = '#system_messages:customization/personal_number_prohibited'
     CUSTOMIZATION_SERVER_ERROR = '#system_messages:customization/server_error'
     CUSTOMIZATION_CREDITS_NOT_ENOUGH = '#system_messages:customization/credits_not_enough'
@@ -392,6 +393,11 @@ class SYSTEM_MESSAGES(object):
     ADD_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:add_tankman_skill/invalid_vehicle'
     ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:add_tankman_skill/vehicle_need_repair'
     ADD_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:add_tankman_skill/vehicle_locked'
+    LEARN_TANKMAN_FREE_SKILL_SUCCESS = '#system_messages:learn_tankman_free_skill/success'
+    LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR = '#system_messages:learn_tankman_free_skill/server_error'
+    LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE = '#system_messages:learn_tankman_free_skill/invalid_vehicle'
+    LEARN_TANKMAN_FREE_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:learn_tankman_free_skill/vehicle_need_repair'
+    LEARN_TANKMAN_FREE_SKILL_VEHICLE_LOCKED = '#system_messages:learn_tankman_free_skill/vehicle_locked'
     DROP_TANKMAN_SKILL_SUCCESS = '#system_messages:drop_tankman_skill/success'
     DROP_TANKMAN_SKILL_SERVER_ERROR = '#system_messages:drop_tankman_skill/server_error'
     DROP_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:drop_tankman_skill/invalid_vehicle'
@@ -932,6 +938,8 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS = '#system_messages:unit/errors/SWITCH_SIZE_CONSTRAINTS'
     UNIT_ERRORS_BAD_VEHICLES_SET = '#system_messages:unit/errors/BAD_VEHICLES_SET'
     UNIT_ERRORS_WRONG_VEHICLE = '#system_messages:unit/errors/WRONG_VEHICLE'
+    UNIT_ERRORS_ACCOUNT_BANNED = '#system_messages:unit/errors/ACCOUNT_BANNED'
+    UNIT_ERRORS_NO_ARENA_VEHICLES = '#system_messages:unit/errors/NO_ARENA_VEHICLES'
     IGR_CUSTOMIZATION_BEGIN = '#system_messages:igr/customization/begin'
     IGR_CUSTOMIZATION_END = '#system_messages:igr/customization/end'
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
@@ -1217,6 +1225,8 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCH_DISABLE_RANKED_BODY = '#system_messages:battlePass/switch_disable/ranked/body'
     BATTLEPASS_SWITCH_ENABLED_EPICBATTLE_BODY = '#system_messages:battlePass/switch_enabled/epicBattle/body'
     BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY = '#system_messages:battlePass/switch_disable/epicBattle/body'
+    BATTLEPASS_SWITCH_ENABLED_COMP7_BODY = '#system_messages:battlePass/switch_enabled/comp7/body'
+    BATTLEPASS_SWITCH_DISABLE_COMP7_BODY = '#system_messages:battlePass/switch_disable/comp7/body'
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
@@ -1231,6 +1241,7 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_GAMEMODEENABLED_BODY_22 = '#system_messages:battlePass/gameModeEnabled/body/22'
     BATTLEPASS_GAMEMODEENABLED_BODY_27 = '#system_messages:battlePass/gameModeEnabled/body/27'
     BATTLEPASS_GAMEMODEENABLED_BODY_37 = '#system_messages:battlePass/gameModeEnabled/body/37'
+    BATTLEPASS_GAMEMODEENABLED_BODY_43 = '#system_messages:battlePass/gameModeEnabled/body/43'
     BATTLEPASS_SEASONEND_TEXT = '#system_messages:battlePass/seasonEnd/text'
     BATTLEPASS_SEASONEND_REWARDS_STYLE = '#system_messages:battlePass/seasonEnd/rewards/style'
     BATTLEPASS_SEASONEND_REWARDS_CREWBOOK = '#system_messages:battlePass/seasonEnd/rewards/crewBook'
@@ -1263,6 +1274,10 @@ class SYSTEM_MESSAGES(object):
     DOG_TAGS_SWITCH_OFF_BODY = '#system_messages:dog_tags/switch_off/body'
     DOG_TAGS_SWITCH_ON_TITLE = '#system_messages:dog_tags/switch_on/title'
     DOG_TAGS_SWITCH_ON_BODY = '#system_messages:dog_tags/switch_on/body'
+    PLAYER_SUBSCRIPTIONS_SWITCH_OFF_TITLE = '#system_messages:player_subscriptions/switch_off/title'
+    PLAYER_SUBSCRIPTIONS_SWITCH_OFF_BODY = '#system_messages:player_subscriptions/switch_off/body'
+    PLAYER_SUBSCRIPTIONS_SWITCH_ON_TITLE = '#system_messages:player_subscriptions/switch_on/title'
+    PLAYER_SUBSCRIPTIONS_SWITCH_ON_BODY = '#system_messages:player_subscriptions/switch_on/body'
     VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE = '#system_messages:vehiclePostProgression/researchSteps/title'
     VEHICLEPOSTPROGRESSION_EXPERIENCESPENT = '#system_messages:vehiclePostProgression/experienceSpent'
     VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT = '#system_messages:vehiclePostProgression/freeExperienceSpent'
@@ -1371,7 +1386,9 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS,
      UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS,
      UNIT_ERRORS_BAD_VEHICLES_SET,
-     UNIT_ERRORS_WRONG_VEHICLE)
+     UNIT_ERRORS_WRONG_VEHICLE,
+     UNIT_ERRORS_ACCOUNT_BANNED,
+     UNIT_ERRORS_NO_ARENA_VEHICLES)
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_EXTERNAL_LEGIONARIES_MATCHING_CANCELED,
@@ -1637,6 +1654,7 @@ class SYSTEM_MESSAGES(object):
      DENUNCIATION_SUCCESS,
      CUSTOMIZATION_UNAVAILABLE,
      CUSTOMIZATION_PROHIBITED,
+     CUSTOMIZATION_INVALIDVEHICLE,
      CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED,
      CUSTOMIZATION_SERVER_ERROR,
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
@@ -1826,6 +1844,11 @@ class SYSTEM_MESSAGES(object):
      ADD_TANKMAN_SKILL_INVALID_VEHICLE,
      ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      ADD_TANKMAN_SKILL_VEHICLE_LOCKED,
+     LEARN_TANKMAN_FREE_SKILL_SUCCESS,
+     LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR,
+     LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE,
+     LEARN_TANKMAN_FREE_SKILL_VEHICLE_NEED_REPAIR,
+     LEARN_TANKMAN_FREE_SKILL_VEHICLE_LOCKED,
      DROP_TANKMAN_SKILL_SUCCESS,
      DROP_TANKMAN_SKILL_SERVER_ERROR,
      DROP_TANKMAN_SKILL_INVALID_VEHICLE,
@@ -2366,6 +2389,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_SWITCH_SIZE_CONSTRAINTS,
      UNIT_ERRORS_BAD_VEHICLES_SET,
      UNIT_ERRORS_WRONG_VEHICLE,
+     UNIT_ERRORS_ACCOUNT_BANNED,
+     UNIT_ERRORS_NO_ARENA_VEHICLES,
      IGR_CUSTOMIZATION_BEGIN,
      IGR_CUSTOMIZATION_END,
      INFO_NOAVAILABLE,
@@ -2651,6 +2676,8 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_DISABLE_RANKED_BODY,
      BATTLEPASS_SWITCH_ENABLED_EPICBATTLE_BODY,
      BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY,
+     BATTLEPASS_SWITCH_ENABLED_COMP7_BODY,
+     BATTLEPASS_SWITCH_DISABLE_COMP7_BODY,
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_BADGEREMOVED_TEXT,
@@ -2665,6 +2692,7 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_GAMEMODEENABLED_BODY_22,
      BATTLEPASS_GAMEMODEENABLED_BODY_27,
      BATTLEPASS_GAMEMODEENABLED_BODY_37,
+     BATTLEPASS_GAMEMODEENABLED_BODY_43,
      BATTLEPASS_SEASONEND_TEXT,
      BATTLEPASS_SEASONEND_REWARDS_STYLE,
      BATTLEPASS_SEASONEND_REWARDS_CREWBOOK,
@@ -2697,6 +2725,10 @@ class SYSTEM_MESSAGES(object):
      DOG_TAGS_SWITCH_OFF_BODY,
      DOG_TAGS_SWITCH_ON_TITLE,
      DOG_TAGS_SWITCH_ON_BODY,
+     PLAYER_SUBSCRIPTIONS_SWITCH_OFF_TITLE,
+     PLAYER_SUBSCRIPTIONS_SWITCH_OFF_BODY,
+     PLAYER_SUBSCRIPTIONS_SWITCH_ON_TITLE,
+     PLAYER_SUBSCRIPTIONS_SWITCH_ON_BODY,
      VEHICLEPOSTPROGRESSION_RESEARCHSTEPS_TITLE,
      VEHICLEPOSTPROGRESSION_EXPERIENCESPENT,
      VEHICLEPOSTPROGRESSION_FREEEXPERIENCESPENT,

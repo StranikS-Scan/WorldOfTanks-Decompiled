@@ -144,12 +144,12 @@ class View(AbstractViewMeta, ViewInterface):
             _logger.debug('Unique name cannot be set to None: %r', self)
         return
 
-    def setupContextHints(self, hintID):
+    def setupContextHints(self, hintID, hintsArgs=None):
         if hintID is not None:
             hintsData = hints_layout.getLayout(hintID)
             if hintsData is not None:
                 viewTutorialID = self.__tutorialLoader.gui.getViewTutorialID(self.__key.name)
-                self.__tutorialLoader.gui.setupViewContextHints(viewTutorialID, hintsData)
+                self.__tutorialLoader.gui.setupViewContextHints(viewTutorialID, hintsData, hintsArgs=hintsArgs)
             else:
                 _logger.error('Hint layout is not defined %r', hintID)
         return

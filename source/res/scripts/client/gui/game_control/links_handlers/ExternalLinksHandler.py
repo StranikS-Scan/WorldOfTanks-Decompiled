@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/links_handlers/ExternalLinksHandler.py
 import typing
 import logging
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui import GUI_SETTINGS
 from gui.game_control.links import URLMacros
 from gui.shared import g_eventBus
@@ -85,8 +85,8 @@ class ExternalLinksHandler(IExternalLinksController):
         if not handled:
             _logger.error('Cant handle external link: %s', url)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getURL(self, name, params=None, callback=lambda *args: None):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
@@ -106,7 +106,7 @@ class ExternalLinksHandler(IExternalLinksController):
     def _handleSpecifiedURL(self, event):
         self.open(event.url)
 
-    @process
+    @adisp_process
     def __openParsedUrl(self, urlName, params=None):
         parsedUrl = yield self.getURL(urlName, params)
         self.open(parsedUrl)

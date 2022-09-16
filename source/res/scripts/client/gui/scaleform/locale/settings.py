@@ -574,6 +574,7 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_SHOWHUD = '#settings:keyboard/keysBlocks/command/showHUD'
     KEYBOARD_KEYSBLOCKS_COMMAND_FRONTLINESELFDESTRUCTION = '#settings:keyboard/keysBlocks/command/frontlineSelfDestruction'
     KEYBOARD_KEYSBLOCKS_COMMAND_SHOWQUESTPROGRESS = '#settings:keyboard/keysBlocks/command/showQuestProgress'
+    KEYBOARD_KEYSBLOCKS_COMMAND_SHOWPERSONALRESERVES = '#settings:keyboard/keysBlocks/command/showPersonalReserves'
     KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP = '#settings:keyboard/keysBlocks/group/minimap'
     KEYBOARD_KEYSBLOCKS_COMMAND_SIZEUP = '#settings:keyboard/keysBlocks/command/sizeUp'
     KEYBOARD_KEYSBLOCKS_COMMAND_SIZEDOWN = '#settings:keyboard/keysBlocks/command/sizeDown'

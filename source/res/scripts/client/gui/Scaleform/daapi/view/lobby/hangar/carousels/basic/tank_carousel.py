@@ -6,7 +6,7 @@ from account_helpers.settings_core import settings_constants
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
+from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -16,9 +16,7 @@ from gui.shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showVehicleRentalPage, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
-from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -57,9 +55,6 @@ class TankCarousel(TankCarouselMeta):
         else:
             showVehicleRentalPage()
 
-    def updateHotFilters(self):
-        self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})
-
     def getCarouselAlias(self):
         return self.getAlias()
 
@@ -76,10 +71,6 @@ class TankCarousel(TankCarouselMeta):
     def updateAviability(self):
         super(TankCarousel, self).updateAviability()
         self.updateParams()
-
-    def resetFilters(self):
-        super(TankCarousel, self).resetFilters()
-        self.updateHotFilters()
 
     def setFilter(self, idx):
         self.filter.switch(self._usedFilters[idx])
@@ -135,12 +126,7 @@ class TankCarousel(TankCarouselMeta):
         if self.filter is not None:
             filters = self.filter.getFilters(self._usedFilters)
             for entry in self._usedFilters:
-                filterCtx = contexts.get(entry, FilterSetupContext())
-                filtersVO['hotFilters'].append({'id': entry,
-                 'value': getButtonsAssetPath(filterCtx.asset or entry),
-                 'selected': filters[entry],
-                 'enabled': True,
-                 'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx))})
+                filtersVO['hotFilters'].append(self._makeFilterVO(entry, contexts, filters))
 
         return filtersVO
 

@@ -4,7 +4,7 @@ from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from Event import Event
 import adisp
-from async import async, await
+from wg_async import wg_async, wg_await
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -176,13 +176,13 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.viewModel.ammunitionPanel.onSpecializationSelect -= self.__onSpecializationSelect
         g_eventBus.removeListener(AmmunitionSetupViewEvent.CLOSE_VIEW, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
 
-    @async
+    @wg_async
     def _onClose(self):
-        quitResult = yield await(self._tankSetup.canQuit())
+        quitResult = yield wg_await(self._tankSetup.canQuit())
         if quitResult:
             self.__closeWindow()
 
-    @adisp.process
+    @adisp.adisp_process
     def __onSpecializationSelect(self, args=None):
         action = ActionsFactory.getAction(ActionsFactory.SET_EQUIPMENT_SLOT_TYPE, self._vehItem.getItem())
         if action is not None:
@@ -297,11 +297,11 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
             playExitTankSetupView()
         return
 
-    @async
+    @wg_async
     def __closeConfirmator(self):
         if self.__isClosed:
             raise AsyncReturn(True)
-        result = yield await(self._tankSetup.canQuit())
+        result = yield wg_await(self._tankSetup.canQuit())
         if result:
             self.__closeWindow()
         raise AsyncReturn(result)

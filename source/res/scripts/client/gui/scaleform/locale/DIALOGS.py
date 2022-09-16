@@ -35,25 +35,19 @@ class DIALOGS(object):
     QUIT_SUBMIT = '#dialogs:quit/submit'
     QUIT_CANCEL = '#dialogs:quit/cancel'
     QUITBATTLE_TITLE = '#dialogs:quitBattle/title'
-    QUITBATTLE_MESSAGE = '#dialogs:quitBattle/message'
     QUITBATTLE_SUBMIT = '#dialogs:quitBattle/submit'
     QUITBATTLE_CANCEL = '#dialogs:quitBattle/cancel'
-    QUITREPLAY_TITLE = '#dialogs:quitReplay/title'
-    QUITREPLAY_MESSAGE = '#dialogs:quitReplay/message'
-    QUITREPLAY_SUBMIT = '#dialogs:quitReplay/submit'
-    QUITREPLAY_CANCEL = '#dialogs:quitReplay/cancel'
-    QUITBATTLE_DESERTER_TITLE = '#dialogs:quitBattle/deserter/title'
-    QUITBATTLE_DESERTER_MESSAGE = '#dialogs:quitBattle/deserter/message'
-    QUITBATTLE_DESERTER_SUBMIT = '#dialogs:quitBattle/deserter/submit'
-    QUITBATTLE_DESERTER_CANCEL = '#dialogs:quitBattle/deserter/cancel'
-    QUITBATTLEIGR_TITLE = '#dialogs:quitBattleIGR/title'
-    QUITBATTLEIGR_MESSAGE = '#dialogs:quitBattleIGR/message'
-    QUITBATTLEIGR_SUBMIT = '#dialogs:quitBattleIGR/submit'
-    QUITBATTLEIGR_CANCEL = '#dialogs:quitBattleIGR/cancel'
-    QUITBATTLEIGR_DESERTER_TITLE = '#dialogs:quitBattleIGR/deserter/title'
-    QUITBATTLEIGR_DESERTER_MESSAGE = '#dialogs:quitBattleIGR/deserter/message'
-    QUITBATTLEIGR_DESERTER_SUBMIT = '#dialogs:quitBattleIGR/deserter/submit'
-    QUITBATTLEIGR_DESERTER_CANCEL = '#dialogs:quitBattleIGR/deserter/cancel'
+    QUITBATTLE_LEAVER_TITLE = '#dialogs:quitBattle/leaver/title'
+    QUITBATTLE_LEAVER_SUBMIT = '#dialogs:quitBattle/leaver/submit'
+    QUITBATTLE_LEAVER_CANCEL = '#dialogs:quitBattle/leaver/cancel'
+    QUITBATTLE_LEAVER_DESCRIPTIONALIVE = '#dialogs:quitBattle/leaver/descriptionAlive'
+    QUITBATTLE_IGR_LEAVER_TITLE = '#dialogs:quitBattle/IGR/leaver/title'
+    QUITBATTLE_IGR_LEAVER_SUBMIT = '#dialogs:quitBattle/IGR/leaver/submit'
+    QUITBATTLE_IGR_LEAVER_CANCEL = '#dialogs:quitBattle/IGR/leaver/cancel'
+    QUITBATTLE_IGR_LEAVER_DESCRIPTIONALIVE = '#dialogs:quitBattle/IGR/leaver/descriptionAlive'
+    QUITBATTLE_REPLAY_TITLE = '#dialogs:quitBattle/replay/title'
+    QUITBATTLE_REPLAY_SUBMIT = '#dialogs:quitBattle/replay/submit'
+    QUITBATTLE_REPLAY_CANCEL = '#dialogs:quitBattle/replay/cancel'
     QUITPREBATTLE_TITLE = '#dialogs:quitPreBattle/title'
     QUITPREBATTLE_MESSAGE = '#dialogs:quitPreBattle/message'
     QUITPREBATTLE_SUBMIT = '#dialogs:quitPreBattle/submit'
@@ -199,6 +193,7 @@ class DIALOGS(object):
     UPGRADETANKMANSCOOLCONFIRMATION_SUBMIT = '#dialogs:upgradeTankmanScoolConfirmation/submit'
     UPGRADETANKMANSCOOLCONFIRMATION_CANCEL = '#dialogs:upgradeTankmanScoolConfirmation/cancel'
     ADDSKILLWINDOW_TITLE = '#dialogs:addSkillWindow/title'
+    ADDFREESKILLWINDOW_LABEL = '#dialogs:addFreeSkillWindow/label'
     ADDSKILLWINDOW_LABEL = '#dialogs:addSkillWindow/label'
     ADDSKILLWINDOW_LABEL_COMMON = '#dialogs:addSkillWindow/label/common'
     ADDSKILLWINDOW_LABEL_COMMANDER = '#dialogs:addSkillWindow/label/commander'
@@ -206,6 +201,7 @@ class DIALOGS(object):
     ADDSKILLWINDOW_LABEL_DRIVER = '#dialogs:addSkillWindow/label/driver'
     ADDSKILLWINDOW_LABEL_RADIOMAN = '#dialogs:addSkillWindow/label/radioman'
     ADDSKILLWINDOW_LABEL_LOADER = '#dialogs:addSkillWindow/label/loader'
+    ADDFREESKILLWINDOW_SUBMIT = '#dialogs:addFreeSkillWindow/submit'
     ADDSKILLWINDOW_SUBMIT = '#dialogs:addSkillWindow/submit'
     ADDSKILLWINDOW_CANCEL = '#dialogs:addSkillWindow/cancel'
     ADDSKILLWINDOW_DESC1 = '#dialogs:addSkillWindow/desc1'
@@ -222,6 +218,8 @@ class DIALOGS(object):
     UPGRADETANKMANACADEMYNOTENOUGHMONEY_MESSAGE = '#dialogs:upgradeTankmanAcademyNotEnoughMoney/message'
     UPGRADETANKMANACADEMYNOTENOUGHMONEY_SUBMIT = '#dialogs:upgradeTankmanAcademyNotEnoughMoney/submit'
     UPGRADETANKMANACADEMYNOTENOUGHMONEY_CANCEL = '#dialogs:upgradeTankmanAcademyNotEnoughMoney/cancel'
+    RECRUITDIALOG_TITLE = '#dialogs:recruitDialog/title'
+    RECRUITDIALOG_NAME_TITLE = '#dialogs:recruitDialog/name/title'
     RECRUITWINDOW_TITLE = '#dialogs:recruitWindow/title'
     RECRUITWINDOW_NATION = '#dialogs:recruitWindow/nation'
     RECRUITWINDOW_NATIONDROPDOWN_USSR = '#dialogs:recruitWindow/nationDropdown/ussr'
@@ -1133,6 +1131,21 @@ class DIALOGS(object):
     DROPSKILL_FULLSCREEN_DESCRIPTION = '#dialogs:dropSkill/fullscreen/description'
     DROPSKILL_FULLSCREEN_OK = '#dialogs:dropSkill/fullscreen/ok'
     DROPSKILL_FULLSCREEN_COSTFREE = '#dialogs:dropSkill/fullscreen/costFree'
+    FREESKILLSINFO_TITLE = '#dialogs:freeSkillsInfo/title'
+    FREESKILLSINFO_MESSAGE = '#dialogs:freeSkillsInfo/message'
+    FREESKILLSINFO_SUBMIT = '#dialogs:freeSkillsInfo/submit'
+    FREESKILLSLEARNING_TITLE_LEARNING = '#dialogs:freeSkillsLearning/title/learning'
+    FREESKILLSLEARNING_TITLE_RELEARNING = '#dialogs:freeSkillsLearning/title/relearning'
+    FREESKILLSLEARNING_MESSAGE = '#dialogs:freeSkillsLearning/message'
+    COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
+    COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
+    COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
+    COMP7_DESERTER_SUBMIT = '#dialogs:comp7/deserter/submit'
+    COMP7_DESERTER_CANCEL = '#dialogs:comp7/deserter/cancel'
+    COMP7_PUNISHMENTWINDOW_TITLE = '#dialogs:comp7/punishmentWindow/title'
+    COMP7_PUNISHMENTWINDOW_MSGTITLE = '#dialogs:comp7/punishmentWindow/msgTitle'
+    COMP7_PUNISHMENTWINDOW_MESSAGE = '#dialogs:comp7/punishmentWindow/message'
+    COMP7_PUNISHMENTWINDOW_CANCEL = '#dialogs:comp7/punishmentWindow/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1163,25 +1176,19 @@ class DIALOGS(object):
      QUIT_SUBMIT,
      QUIT_CANCEL,
      QUITBATTLE_TITLE,
-     QUITBATTLE_MESSAGE,
      QUITBATTLE_SUBMIT,
      QUITBATTLE_CANCEL,
-     QUITREPLAY_TITLE,
-     QUITREPLAY_MESSAGE,
-     QUITREPLAY_SUBMIT,
-     QUITREPLAY_CANCEL,
-     QUITBATTLE_DESERTER_TITLE,
-     QUITBATTLE_DESERTER_MESSAGE,
-     QUITBATTLE_DESERTER_SUBMIT,
-     QUITBATTLE_DESERTER_CANCEL,
-     QUITBATTLEIGR_TITLE,
-     QUITBATTLEIGR_MESSAGE,
-     QUITBATTLEIGR_SUBMIT,
-     QUITBATTLEIGR_CANCEL,
-     QUITBATTLEIGR_DESERTER_TITLE,
-     QUITBATTLEIGR_DESERTER_MESSAGE,
-     QUITBATTLEIGR_DESERTER_SUBMIT,
-     QUITBATTLEIGR_DESERTER_CANCEL,
+     QUITBATTLE_LEAVER_TITLE,
+     QUITBATTLE_LEAVER_SUBMIT,
+     QUITBATTLE_LEAVER_CANCEL,
+     QUITBATTLE_LEAVER_DESCRIPTIONALIVE,
+     QUITBATTLE_IGR_LEAVER_TITLE,
+     QUITBATTLE_IGR_LEAVER_SUBMIT,
+     QUITBATTLE_IGR_LEAVER_CANCEL,
+     QUITBATTLE_IGR_LEAVER_DESCRIPTIONALIVE,
+     QUITBATTLE_REPLAY_TITLE,
+     QUITBATTLE_REPLAY_SUBMIT,
+     QUITBATTLE_REPLAY_CANCEL,
      QUITPREBATTLE_TITLE,
      QUITPREBATTLE_MESSAGE,
      QUITPREBATTLE_SUBMIT,
@@ -1327,6 +1334,7 @@ class DIALOGS(object):
      UPGRADETANKMANSCOOLCONFIRMATION_SUBMIT,
      UPGRADETANKMANSCOOLCONFIRMATION_CANCEL,
      ADDSKILLWINDOW_TITLE,
+     ADDFREESKILLWINDOW_LABEL,
      ADDSKILLWINDOW_LABEL,
      ADDSKILLWINDOW_LABEL_COMMON,
      ADDSKILLWINDOW_LABEL_COMMANDER,
@@ -1334,6 +1342,7 @@ class DIALOGS(object):
      ADDSKILLWINDOW_LABEL_DRIVER,
      ADDSKILLWINDOW_LABEL_RADIOMAN,
      ADDSKILLWINDOW_LABEL_LOADER,
+     ADDFREESKILLWINDOW_SUBMIT,
      ADDSKILLWINDOW_SUBMIT,
      ADDSKILLWINDOW_CANCEL,
      ADDSKILLWINDOW_DESC1,
@@ -1350,6 +1359,8 @@ class DIALOGS(object):
      UPGRADETANKMANACADEMYNOTENOUGHMONEY_MESSAGE,
      UPGRADETANKMANACADEMYNOTENOUGHMONEY_SUBMIT,
      UPGRADETANKMANACADEMYNOTENOUGHMONEY_CANCEL,
+     RECRUITDIALOG_TITLE,
+     RECRUITDIALOG_NAME_TITLE,
      RECRUITWINDOW_TITLE,
      RECRUITWINDOW_NATION,
      RECRUITWINDOW_NATIONDROPDOWN_USSR,
@@ -2260,7 +2271,22 @@ class DIALOGS(object):
      DROPSKILL_FULLSCREEN_TITLE,
      DROPSKILL_FULLSCREEN_DESCRIPTION,
      DROPSKILL_FULLSCREEN_OK,
-     DROPSKILL_FULLSCREEN_COSTFREE)
+     DROPSKILL_FULLSCREEN_COSTFREE,
+     FREESKILLSINFO_TITLE,
+     FREESKILLSINFO_MESSAGE,
+     FREESKILLSINFO_SUBMIT,
+     FREESKILLSLEARNING_TITLE_LEARNING,
+     FREESKILLSLEARNING_TITLE_RELEARNING,
+     FREESKILLSLEARNING_MESSAGE,
+     COMP7_DESERTER_TITLE,
+     COMP7_DESERTER_MSGTITLE,
+     COMP7_DESERTER_MESSAGE,
+     COMP7_DESERTER_SUBMIT,
+     COMP7_DESERTER_CANCEL,
+     COMP7_PUNISHMENTWINDOW_TITLE,
+     COMP7_PUNISHMENTWINDOW_MSGTITLE,
+     COMP7_PUNISHMENTWINDOW_MESSAGE,
+     COMP7_PUNISHMENTWINDOW_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

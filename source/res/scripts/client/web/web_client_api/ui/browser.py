@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
-from adisp import process
+from adisp import adisp_process
 from frameworks import wulf
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -60,7 +60,7 @@ class OpenBrowserWindowWebApiMixin(object):
     def _createHandlers(self):
         return []
 
-    @process
+    @adisp_process
     def __loadBrowser(self, url, title, width, height, isModal, showRefresh, showCreateWaiting):
         browserCtrl = dependency.instance(IBrowserController)
         browserId = yield browserCtrl.load(url=url, title=title, browserSize=(width, height), isModal=isModal, showActionBtn=showRefresh, showCreateWaiting=showCreateWaiting, handlers=self._createHandlers())

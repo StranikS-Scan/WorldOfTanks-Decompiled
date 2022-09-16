@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/customization/progressive_items_view/progressive_items_view.py
 import logging
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf import ViewFlags, ViewSettings
@@ -141,7 +141,7 @@ class ProgressiveItemsView(ViewImpl):
     def _showVideoPage(self, args=None):
         self.__showVideo()
 
-    @process
+    @adisp_process
     def __showVideo(self):
         url = yield self.__urlMacros.parse(self.__guiSettings.get('url'))
         webHandlers = webApiCollection(ui_web_api.CloseViewWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)

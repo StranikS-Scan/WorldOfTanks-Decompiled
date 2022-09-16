@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/arena_blocks.py
-import BigWorld
-from block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
-from constants import IS_CELLAPP, IS_CLIENT
+import Math
 from soft_exception import SoftException
-from visual_script.misc import errorVScript
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
+from visual_script.misc import errorVScript, ASPECT
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 
 class ArenaMeta(Meta):
@@ -103,3 +102,30 @@ class GetDataFromStorageBase(Block, ArenaMeta):
         storage = self.arena.arenaInfo.mapsTrainingStorageComponent
         if self.componentName == 'globalGoal':
             self._valueSlot.setValue(storage.getGlobalGoal(self._keySlot.getValue()))
+
+
+class GetFlyDirection(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetFlyDirection, self).__init__(*args, **kwargs)
+        self._arena = self._makeDataInputSlot('arena', SLOT_TYPE.ARENA)
+        self._teamID = self._makeDataInputSlot('teamID', SLOT_TYPE.INT)
+        self._res = self._makeDataOutputSlot('flyDirection', SLOT_TYPE.VECTOR3, self._exec)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+    def _exec(self):
+        arena = self._arena.getValue()
+        teamID = self._teamID.getValue()
+        direction = None
+        arenaType = arena.arenaType
+        reconSettings = getattr(arenaType, 'recon')
+        if reconSettings is not None:
+            direction = reconSettings.flyDirections.get(teamID)
+        if direction is None:
+            errorVScript(self, 'Missing flyDirection for arena [geometryName={}, gameplayName={}]; teamID={}'.format(arenaType.geometryName, arenaType.gameplayName, teamID))
+            direction = Math.Vector3(1.0, 0.0, 0.0)
+        self._res.setValue(direction)
+        return

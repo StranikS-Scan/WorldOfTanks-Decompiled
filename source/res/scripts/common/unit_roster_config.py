@@ -38,32 +38,20 @@ class MapboxSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (8, 10)
 
 
+class FunRandomSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (8, 10)
+
+
+class Comp7Slot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (10, 10)
+
+
 class SquadRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
-
-
-class FalloutClassicRoster(BaseUnitRoster):
-    MAX_SLOTS = 3
-    MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    LIMITS_TYPE = BaseUnitRosterLimits
-    MIN_VEHICLES = 3
-    MAX_VEHICLES = 3
-
-
-class FalloutMultiteamRoster(BaseUnitRoster):
-    MAX_SLOTS = 3
-    MAX_EMPTY_SLOTS = 1
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    LIMITS_TYPE = BaseUnitRosterLimits
-    MIN_VEHICLES = 1
-    MAX_VEHICLES = 3
 
 
 class SpecRoster(BaseUnitRoster):
@@ -107,3 +95,20 @@ class MapBoxRoster(BaseUnitRoster):
     SLOT_TYPE = MapboxSlot
     DEFAULT_SLOT_PACK = MapboxSlot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class FunRandomRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = FunRandomSlot
+    DEFAULT_SLOT_PACK = FunRandomSlot().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class Comp7Roster(BaseUnitRoster):
+    MAX_SLOTS = 7
+    MAX_EMPTY_SLOTS = 6
+    SLOT_TYPE = Comp7Slot
+    DEFAULT_SLOT_PACK = Comp7Slot().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MAX_VEHICLES = 10000

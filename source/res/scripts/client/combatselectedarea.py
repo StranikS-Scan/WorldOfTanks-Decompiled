@@ -28,13 +28,19 @@ class CombatSelectedArea(object):
         self.__area = None
         return
 
+    def updateSize(self, size):
+        if self.__terrainSelectedArea is not None:
+            self.__terrainSelectedArea.setSize(size)
+            self.__size = size
+        return
+
     def setup(self, position, direction, size, visualPath, color, marker):
         self.__fakeModel = model = BigWorld.Model('')
         rootNode = model.node('')
         self.__terrainSelectedArea = area = BigWorld.PyTerrainSelectedArea()
         area.setup(visualPath, size, self.__overTerrainHeight, color)
         area.enableAccurateCollision(True)
-        area.setYCutOffDistance(MARKER_HEIGHT)
+        area.setCutOffDistance(MARKER_HEIGHT)
         rootNode.attach(area)
         self.__size = size
         self.__color = color
@@ -63,7 +69,7 @@ class CombatSelectedArea(object):
             self.__terrainRotatedArea = area = BigWorld.PyTerrainSelectedArea()
             area.setup(DEFAULT_ROTATE_MODEL, objectSize, self.__overTerrainHeight, self.__color)
             area.enableAccurateCollision(True)
-            area.setYCutOffDistance(MARKER_HEIGHT)
+            area.setCutOffDistance(MARKER_HEIGHT)
             self.__rotateModelNode.attach(area)
         elif not value and self.__terrainRotatedArea is not None:
             self.__rotateModelNode.detach(self.__terrainRotatedArea)

@@ -252,3 +252,16 @@ class IsSoundPlaying(Block, SoundMeta):
             self._isPlaying.setValue(sound.isPlaying)
         else:
             self._isPlaying.setValue(False)
+
+
+class PlayGlobalSound(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(PlayGlobalSound, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._sound = self._makeDataInputSlot('soundToPlay', SLOT_TYPE.STR)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        SoundGroups.g_instance.playSound2D(self._sound.getValue())
+        self._out.call()

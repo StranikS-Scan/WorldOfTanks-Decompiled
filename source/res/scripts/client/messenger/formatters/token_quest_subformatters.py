@@ -6,13 +6,15 @@ import typing
 from itertools import chain
 import constants
 import personal_missions
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
+from comp7_common import Comp7QuestType
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.comp7 import comp7_quest_helpers, comp7_shared
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
@@ -85,8 +87,8 @@ class RecruitQuestsFormatter(AsyncTokenQuestsSubFormatter):
     __eventsCache = dependency.descriptor(IEventsCache)
     __TEMPLATE_NAME = 'goldDataInvoiceReceived'
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         formatted, settings = (None, None)
@@ -134,8 +136,8 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
      ('style', lambda b: b),
      ('styles', lambda b: b))
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         if isSynced:
@@ -275,8 +277,8 @@ class RankedFinalTokenQuestFormatter(RankedTokenQuestFormatter):
     __HTML_POINTS_TEMPLATE = 'rankedFinalYearPoints'
     __HTML_COMPENSATION_TEMPLATE = 'rankedFinalYearCompensation'
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageData = MessageData(None, None)
@@ -347,8 +349,8 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
         super(PersonalMissionsTokenQuestsFormatter, self).__init__()
         self._achievesFormatter = PersonalMissionsQuestAchievesFormatter()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageDataList = []
@@ -492,8 +494,8 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
     __MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     __SENIORITY_AWARDS_TOKEN_QUEST_PATTERN = 'SeniorityAwardsQuest'
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageDataList = []
@@ -540,7 +542,6 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
 class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFormatter):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __MESSAGE_TEMPLATE = 'BattleMatters{}'
-    __BATTLE_MATTERS_QUEST_PATTERN = 'battle_matters'
     __TOKEN_TYPE = 'TokenQuest'
     __AWARD_TYPE = 'AwardsQuest'
 
@@ -561,7 +562,7 @@ class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFo
 
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
-        return cls.__BATTLE_MATTERS_QUEST_PATTERN in questID
+        return cls.__battleMattersController.isBattleMattersQuestID(questID)
 
     def __buildMessage(self, questID, message):
         data = message.data or {}
@@ -594,8 +595,8 @@ class BattleMattersAwardsFormatter(AsyncTokenQuestsSubFormatter, BattleMattersAw
         AsyncTokenQuestsSubFormatter.__init__(self)
         BattleMattersAwardsFormatterBase.__init__(self)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageDataList = []
@@ -616,8 +617,8 @@ class BattleMattersClientAwardsFormatter(BattleMattersAwardsFormatterBase):
 class LootBoxTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
     __TEMPLATE_NAME = 'tokenQuestLootbox'
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         result = yield InvoiceReceivedFormatter().format(self.__getInvoiceFormatMessage(message))
         callback(result)
@@ -652,8 +653,8 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
         super(BattlePassDefaultAwardsFormatter, self).__init__()
         self._achievesFormatter = BattlePassQuestAchievesFormatter()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageDataList = []
@@ -693,8 +694,8 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
 
 class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         formattedMessage = None
@@ -727,8 +728,8 @@ class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
     __RENEWABLE_SUB_TOKEN_QUEST_PATTERN = 'wotplus:'
     __MESSAGE_TEMPLATE = 'WotPlusRenewMessage'
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         messageDataList = []
@@ -752,3 +753,55 @@ class WotPlusDirectivesFormatter(AsyncTokenQuestsSubFormatter):
     def _isQuestOfThisGroup(cls, questID):
         tmp = cls.__RENEWABLE_SUB_TOKEN_QUEST_PATTERN in questID
         return tmp
+
+
+class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
+    __PERIODIC_REWARD_MESSAGE_TEMPLATE = 'comp7PeriodicRewardMessage'
+    __REGULAR_REWARD_MESSAGE_TEMPLATE = 'comp7RegularRewardMessage'
+    __R_SYS_MESSAGES = R.strings.comp7.system_messages
+
+    def format(self, message, *_):
+        if message.data:
+            messageData = []
+            settings = self._getGuiSettings(message)
+            completedIDs = self.getQuestOfThisGroup(message.data.get('completedQuestIDs', set()))
+            for questID in completedIDs:
+                questType = comp7_quest_helpers.getComp7QuestType(questID)
+                if questType == Comp7QuestType.PERIODIC:
+                    formatted = self.__formatPeriodicRewardMessage(message, questID)
+                elif questType in (Comp7QuestType.RANKS, Comp7QuestType.WINS):
+                    formatted = self.__formatRegularRewardMessage(message, questID)
+                else:
+                    formatted = None
+                if formatted is not None:
+                    messageData.append(MessageData(formatted, settings))
+
+            if messageData:
+                return messageData
+        return [MessageData(None, None)]
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return comp7_quest_helpers.isComp7Quest(questID)
+
+    def __formatPeriodicRewardMessage(self, message, questID):
+        division = comp7_quest_helpers.parseComp7PeriodicQuestID(questID)
+        rank = comp7_shared.getRankEnumValue(division)
+        rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
+        if not rewardsData:
+            return None
+        else:
+            formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False, processCustomizations=False, processTokens=False)
+            formattedMessage = g_settings.msgTemplates.format(self.__PERIODIC_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.periodicReward.title()),
+             'body': backport.text(self.__R_SYS_MESSAGES.periodicReward.body(), rank=backport.text(R.strings.comp7.rank.num(rank)()), rewards=formattedRewards)})
+            return formattedMessage
+
+    def __formatRegularRewardMessage(self, message, questID):
+        rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
+        if not rewardsData:
+            return None
+        else:
+            formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False, processCustomizations=True, processTokens=True)
+            formattedMessage = g_settings.msgTemplates.format(self.__REGULAR_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.regularReward.title()),
+             'body': backport.text(self.__R_SYS_MESSAGES.regularReward.body(), at=TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)), rewards=formattedRewards)})
+            return formattedMessage

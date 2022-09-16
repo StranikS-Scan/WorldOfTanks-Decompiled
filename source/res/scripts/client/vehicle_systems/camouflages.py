@@ -168,6 +168,7 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
                 outfitComponent = baseOutfitComponent.applyDiff(outfitComponent)
             else:
                 outfitComponent = baseOutfitComponent
+            outfitComponent = styleDescr.addPartsToOutfit(seasonType, outfitComponent, vehicleDescriptor.makeCompactDescr() if vehicleDescriptor else '')
             if IS_EDITOR:
 
                 def setupAlternateItem(itemType, outfit, sourceOutfit, collectionName):

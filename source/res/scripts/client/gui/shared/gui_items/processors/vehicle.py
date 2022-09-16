@@ -15,7 +15,7 @@ from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMs
 from items import EQUIPMENT_TYPES
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -632,8 +632,8 @@ class VehicleRepairer(ItemProcessor):
         return makeI18nSuccess(sysMsgKey='vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
 
 
-@async
-@process
+@adisp_async
+@adisp_process
 def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     defaultLayout = []
     for shell in vehicle.shells.layout.getItems():

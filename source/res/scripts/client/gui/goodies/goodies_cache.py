@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/goodies_cache.py
 from collections import defaultdict
-from typing import TYPE_CHECKING, Optional, Dict, Tuple
+from typing import TYPE_CHECKING
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
 from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
+    from typing import Optional, Dict, Tuple, List, Union
+    from gui.shared.utils.requesters.GoodiesRequester import GoodieVariable
     from gui.goodies.goodie_items import _Goodie, _PersonalDiscount
-    from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
+    from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData, _ResourceData
 
 def _createBooster(boosterID, boosterDescription, proxy):
     return Booster(boosterID, boosterDescription, proxy)
@@ -47,7 +49,8 @@ class GoodiesCache(IGoodiesCache):
 
     def __init__(self):
         self.__goodiesCache = defaultdict(dict)
-        self.__activeBoostersTypes = None
+        self.__activeResourceData = None
+        self.__activeBoosterTypes = None
         return
 
     def init(self):
@@ -57,7 +60,8 @@ class GoodiesCache(IGoodiesCache):
         self.itemsCache.onSyncStarted -= self.__clearCache
 
     def clear(self):
-        self.__activeBoostersTypes = None
+        self.__activeResourceData = None
+        self.__activeBoosterTypes = None
         while self.__goodiesCache:
             _, cache = self.__goodiesCache.popitem()
             cache.clear()
@@ -94,19 +98,28 @@ class GoodiesCache(IGoodiesCache):
     def getItemByTargetValue(self, targetValue):
         return self._items.getItemByCD(targetValue)
 
-    def getActiveBoostersTypes(self):
-        if self.__activeBoostersTypes is not None:
-            return self.__activeBoostersTypes
+    def getActiveBoosterTypes(self):
+        if self.__activeBoosterTypes is None:
+            self.getActiveResources()
+        return self.__activeBoosterTypes
+
+    def getActiveResources(self):
+        if self.__activeResourceData is not None:
+            return self.__activeResourceData
         else:
-            activeBoosterTypes = []
+            activeResourceData = []
+            activeResourceTypes = set()
             for boosterID, boosterValues in self.personalGoodies.iteritems():
                 if boosterValues.state == GOODIE_STATE.ACTIVE:
                     boosterDescription = self._items.shop.boosters.get(boosterID, None)
                     if boosterDescription:
-                        activeBoosterTypes.append(boosterDescription.resource)
+                        resource = boosterDescription.resource
+                        activeResourceData.append(resource)
+                        activeResourceTypes.add(resource.resourceType)
 
-            self.__activeBoostersTypes = activeBoosterTypes
-            return self.__activeBoostersTypes
+            self.__activeBoosterTypes = activeResourceTypes
+            self.__activeResourceData = activeResourceData
+            return self.__activeResourceData
 
     def getBooster(self, boosterID):
         boosterDescription = self._items.shop.boosters.get(boosterID, None)

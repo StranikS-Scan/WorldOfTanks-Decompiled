@@ -362,6 +362,20 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_TMAN_ADD_SKILL, tmanInvID, skillIdx, 0, proxy)
             return
 
+    def learnTankmanFreeSkill(self, tmanInvID, skillName, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            skillIdx = tankmen.SKILL_INDICES[skillName]
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt2(AccountCommands.CMD_LEARN_TMAN_FREE_SKILL, tmanInvID, skillIdx, proxy)
+            return
+
     def dropTankmanSkills(self, tmanInvID, dropSkillsCostIdx, useRecertificationForm, callback):
         if self.__ignore:
             if callback is not None:
@@ -524,9 +538,8 @@ class Inventory(object):
             self.__account._doCmdStr(AccountCommands.CMD_OBTAIN_VEHICLE, name, proxy)
             return
 
-    def addGoodie(self, goodieID, amount):
-        self.__account._doCmdInt2(AccountCommands.CMD_ADD_GOODIE, goodieID, amount, callback=None)
-        return
+    def addGoodie(self, goodieID, amount, callback=None):
+        self.__account._doCmdInt2(AccountCommands.CMD_ADD_GOODIE, goodieID, amount, callback)
 
     def equipOptDevsSequence(self, vehInvID, devices, callback):
         if self.__ignore:

@@ -113,6 +113,7 @@
     <Continental_AOSI_1195_5_Y_II_B>	136	</Continental_AOSI_1195_5_Y_II_B>
     <GM_Diesel_P_V1>	137	</GM_Diesel_P_V1>
     <GM_Diesel_P_V2>	138	</GM_Diesel_P_V2>
+    <Continental_AV_1790_5B_3>	140	</Continental_AV_1790_5B_3>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
@@ -127,6 +128,7 @@
     <Ford_GAF_V8_SH>	326	</Ford_GAF_V8_SH>
     <Continental_AV-1790-5_FL>	501	</Continental_AV-1790-5_FL>
     <Continental_AV-1790-1M2_FL>	502	</Continental_AV-1790-1M2_FL>
+    <Continental_AV-1790-7B_7x7>	503	</Continental_AV-1790-7B_7x7>
     <Continental_AOSI-895-5A_FL>	504	</Continental_AOSI-895-5A_FL>
     <Guiberson_T-1020-4_bootcamp>	64001	</Guiberson_T-1020-4_bootcamp>
     <Twin_Cadillac_42series_bootcamp>	64002	</Twin_Cadillac_42series_bootcamp>
@@ -797,8 +799,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
     </AOI_695>
     <Continental_AV-1790-1>
       <userString>	#usa_vehicles:Continental_AV-1790-1	</userString>
@@ -1046,6 +1048,24 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-5B>
+    <Continental_AV_1790_5B_3>
+      <userString>	#usa_vehicles:Continental_AV_1790_5B_3	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV_1790_5B_3_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
+    </Continental_AV_1790_5B_3>
     <Continental_AV-1790-5B_E2>
       <userString>	#usa_vehicles:Continental_AV-1790-5B_E2	</userString>
       <tags>	gasoline	</tags>
@@ -1743,6 +1763,24 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-7B>
+    <Continental_AV-1790-7B_7x7>
+      <userString>	#usa_vehicles:Continental_AV-1790-7B	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-7B_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	1171	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
+    </Continental_AV-1790-7B_7x7>
     <Continental_AVI-1790-8>
       <userString>	#usa_vehicles:Continental_AVI-1790-8	</userString>
       <shortUserString>	#usa_vehicles:Continental_AVI-1790-8_short	</shortUserString>
@@ -2017,8 +2055,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	368	</rpm_min>
-      <rpm_max>	2096	</rpm_max>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
     </GM_12V71T>
     <Ford_GAF_R1>
       <userString>	#usa_vehicles:Ford_GAF_R1	</userString>

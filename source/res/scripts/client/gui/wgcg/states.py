@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/wgcg/states.py
 from collections import namedtuple
 import BigWorld
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
@@ -75,15 +75,15 @@ class _State(object):
     def update(self):
         self._changeState(self._getNextState())
 
-    @async
+    @adisp_async
     def sendRequest(self, ctx, callback, allowDelay=None):
         callback(self._makeErrorResponse())
 
     def login(self):
         pass
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def loginAsync(self, callback):
         yield lambda callback: callback(True)
         callback(False)
@@ -91,8 +91,8 @@ class _State(object):
     def logout(self):
         pass
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getAccessTokenData(self, force=False, callback=None):
         yield lambda callback: callback(True)
         callback(None)
@@ -191,13 +191,13 @@ class _WebState(_State):
     def compare(self, state):
         return super(_WebState, self).compare(state) and state.__gateUrl == self.__gateUrl if state is not None and isinstance(state, _WebState) else super(_WebState, self).compare(state)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def sendRequest(self, ctx, callback, allowDelay=None):
         result = yield self._sendRequest(ctx, allowDelay=allowDelay)
         callback(result)
 
-    @async
+    @adisp_async
     def _sendRequest(self, ctx, callback, allowDelay=None):
         requestControler = self.__requestsCtrl
 
@@ -230,8 +230,8 @@ class UnavailableState(_WebState):
     def invalidate(self):
         self._ping()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _sendRequest(self, ctx, callback, allowDelay=True):
         if ctx.getRequestType() == WebRequestDataType.PING:
             result = yield super(UnavailableState, self)._sendRequest(ctx, allowDelay=allowDelay)
@@ -240,7 +240,7 @@ class UnavailableState(_WebState):
         callback(result)
         return
 
-    @process
+    @adisp_process
     def _ping(self):
         if self.__isPingRunning:
             return
@@ -298,8 +298,8 @@ class AvailableState(_WebState):
                 self._webCtrl.onStateUpdated()
                 self.__clanSync = True
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _sendRequest(self, ctx, callback, allowDelay=True):
         if ctx.isAuthorizationRequired() and not self.isLoggedOn():
             self.__waitingRequests.append((ctx,
@@ -337,23 +337,23 @@ class AvailableState(_WebState):
                 callback(result)
         return
 
-    @process
+    @adisp_process
     def login(self):
         yield self.__doLogin()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def loginAsync(self, callback):
         yield self.__doLogin()
         callback(True)
 
-    @process
+    @adisp_process
     def logout(self):
         if self.isLoggedOn():
             yield self.__doLogOut()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getAccessTokenData(self, force=False, callback=None):
         yield lambda callback: callback(True)
         timeOut = self.__accessTokenData is None or time_utils.getServerUTCTime() > self.__accessTokenData.expiresAt
@@ -373,8 +373,8 @@ class AvailableState(_WebState):
             state = AvailableState(self._webCtrl)
         return state
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __doLogin(self, callback):
         if not LOGIN_STATE.canDoLogin(self.__loginState):
             callback(self.isLoggedOn())
@@ -406,8 +406,8 @@ class AvailableState(_WebState):
         self.__processWaitingRequests()
         callback(self.isLoggedOn())
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __doLogOut(self, callback):
         LOG_DEBUG('Wgcg gate logout processing...')
         result = yield self.sendRequest(LogOutCtx())
@@ -417,7 +417,7 @@ class AvailableState(_WebState):
         self._webCtrl.onStateUpdated()
         callback(result)
 
-    @process
+    @adisp_process
     def __processWaitingRequests(self):
         for callback in self.__accessTokenCallbacks:
             callback(self.__accessTokenData)

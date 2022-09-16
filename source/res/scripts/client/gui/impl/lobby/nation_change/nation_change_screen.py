@@ -311,7 +311,7 @@ class NationChangeScreen(ViewImpl):
     def __onDogClick(self):
         SoundGroups.g_instance.playSound2D(self._DOG_SOUND)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def __onSwitchBtnClick(self):
         processor = VehicleChangeNation(self.__currentVehicle, self.__targetVehicle)
         result = yield processor.request()

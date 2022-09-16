@@ -5,7 +5,7 @@ import itertools
 import weakref
 import BigWorld
 import ResMgr
-from async import async, await, await_callback, AsyncScope, AsyncSemaphore
+from wg_async import wg_async, wg_await, await_callback, AsyncScope, AsyncSemaphore
 from constants import DailyQuestDecorationMap, EVENT_TYPE
 from debug_utils import LOG_WARNING
 from gui import GUI_SETTINGS
@@ -52,7 +52,7 @@ class SubRequester(object):
 
         return demanded
 
-    @async
+    @wg_async
     def _run(self, url, headers, ticket, filecache):
         name, content = yield await_callback(filecache.get)(url, headers=headers)
         try:
@@ -292,7 +292,7 @@ class Prefetcher(object):
         for requester in self._requesters.itervalues():
             requester.ask(filecache, fileserver)
 
-    @async
+    @wg_async
     def demand(self):
         demanded = []
         filecache = BigWorld.player().customFilesCache
@@ -301,5 +301,5 @@ class Prefetcher(object):
             demanded.extend(requester.demand(filecache, fileserver))
 
         while demanded:
-            yield await(self._semaphore.acquire())
+            yield wg_await(self._semaphore.acquire())
             demanded.pop()

@@ -8,9 +8,9 @@ import BigWorld
 import constants
 import dossiers2
 import nations
-import async as future_async
+import wg_async as future_async
 from account_shared import LayoutIterator
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
 from debug_utils import LOG_DEBUG, LOG_WARNING
@@ -18,7 +18,7 @@ from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters import vehicle_items_getter
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
 from items.components.c11n_constants import CustomizationDisplayType, SeasonType
 from items.components.crew_skins_constants import CrewSkinType
@@ -29,6 +29,7 @@ from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
+    from gui.shared.gui_items.Tankman import Tankman
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
 DO_LOG_BROKEN_SYNC = False
@@ -279,6 +280,7 @@ class REQ_CRITERIA(object):
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
         CLAN_WARS = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForClanWarsBattles))
+        COMP7 = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForComp7Battles))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -311,9 +313,10 @@ class REQ_CRITERIA(object):
         ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
         IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
         BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
+        BOOSTER_CATEGORIES = staticmethod(lambda boosterCategories: RequestCriteria(PredicateCondition(lambda item: item.category in boosterCategories)))
         IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
         QUALITY = staticmethod(lambda qualityValues: RequestCriteria(PredicateCondition(lambda item: item.quality in qualityValues)))
-        DURATION = staticmethod(lambda durationTimes: RequestCriteria(PredicateCondition(lambda item: item.effectTime in durationTimes)))
+        LIMITED = RequestCriteria(PredicateCondition(lambda item: item.expiryTime))
 
     class DEMOUNT_KIT(object):
         IS_ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
@@ -495,8 +498,8 @@ class ItemsRequester(IItemsRequester):
     def resourceWell(self):
         return self.__resourceWell
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def request(self, callback=None):
         from gui.Scaleform.Waiting import Waiting
         Waiting.show('download/inventory')
@@ -559,8 +562,8 @@ class ItemsRequester(IItemsRequester):
     def isSynced(self):
         return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__gameRestrictions.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def requestUserDossier(self, databaseID, callback):
         dr = self.__dossiers.getUserDossierRequester(databaseID)
         userAccDossier = yield dr.getAccountDossier()
@@ -579,8 +582,8 @@ class ItemsRequester(IItemsRequester):
             del container[databaseID]
             self.__dossiers.closeUserDossier(databaseID)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def requestUserVehicleDossier(self, databaseID, vehTypeCompDescr, callback):
         dr = self.__dossiers.getUserDossierRequester(databaseID)
         userVehDossier = yield dr.getVehicleDossier(vehTypeCompDescr)
@@ -840,7 +843,7 @@ class ItemsRequester(IItemsRequester):
 
         return result
 
-    @future_async.async
+    @future_async.wg_async
     def getItemsAsync(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, callback=None):
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
@@ -864,7 +867,7 @@ class ItemsRequester(IItemsRequester):
 
             return
 
-        yield future_async.await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
+        yield future_async.wg_await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
         callback(result)
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
@@ -1060,7 +1063,8 @@ class ItemsRequester(IItemsRequester):
         if uid in container:
             return container[uid]
         else:
-            self.__checkFittingItemsSync(itemTypeIdx)
+            if not isPlayerAvatar():
+                self.__checkFittingItemsSync(itemTypeIdx)
             item = self.itemsFactory.createGuiItem(itemTypeIdx, *args, **kwargs)
             if item is not None:
                 container[uid] = item

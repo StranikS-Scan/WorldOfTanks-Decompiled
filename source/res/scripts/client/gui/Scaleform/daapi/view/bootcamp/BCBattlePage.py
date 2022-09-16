@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCBattlePage.py
 import base64
 import cPickle as pickle
+from typing import TYPE_CHECKING
 import BigWorld
 import SoundGroups
 from PlayerEvents import g_playerEvents
@@ -28,6 +29,8 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter, minimap_utils
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+if TYPE_CHECKING:
+    from gui.Scaleform.daapi.view.battle.shared.indicators import SixthSenseIndicator
 _BOOTCAMP_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, BootcampMarkersComponent)
 _BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY = 'bootcampMinimapSize'
 
@@ -179,6 +182,7 @@ class BCBattlePage(BCBattlePageMeta):
         if inCountdown and BATTLE_VIEW_ALIASES.PLAYERS_PANEL in visiblePanels:
             self.__hideOnCountdownPanels.add(BATTLE_VIEW_ALIASES.PLAYERS_PANEL)
         self._setComponentsVisibility(visible=set(visiblePanels).difference(self.__hideOnCountdownPanels), hidden=set(hiddenPanels).union(self.__hideOnCountdownPanels))
+        self.__setComponentEnabled(BATTLE_VIEW_ALIASES.SIXTH_SENSE, BATTLE_VIEW_ALIASES.SIXTH_SENSE in visiblePanels)
         uselessConsumable = HINT_NAMES[HINT_TYPE.HINT_USELESS_CONSUMABLE]
         if uselessConsumable in battleSettings.hints:
             errorMessages = self.getComponent(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES)

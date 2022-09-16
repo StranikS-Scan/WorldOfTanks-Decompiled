@@ -9,10 +9,15 @@ from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, b
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
+from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
+from gui.battle_control.controllers.comp7_prebattle_setup_ctrl import Comp7PrebattleSetupController
+from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
+from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import battle_hints_ctrl
+from gui.battle_control.controllers import points_of_interest_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -260,6 +265,22 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def soundPlayers(self):
         return self._repository.getController(BATTLE_CTRL_ID.SOUND_PLAYERS_CTRL)
 
+    @property
+    def appearanceCache(self):
+        return self._repository.getController(BATTLE_CTRL_ID.APPEARANCE_CACHE_CTRL)
+
+    @property
+    def pointsOfInterest(self):
+        return self._repository.getController(BATTLE_CTRL_ID.POINTS_OF_INTEREST_CTRL)
+
+    @property
+    def comp7PrebattleSetup(self):
+        return self._repository.getController(BATTLE_CTRL_ID.COMP7_PREBATTLE_SETUP_CTRL)
+
+    @property
+    def comp7VOIPController(self):
+        return self._repository.getController(BATTLE_CTRL_ID.COMP7_VOIP_CTRL)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -381,8 +402,12 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
             repository.addViewController(team_health_bar_ctrl.TeamHealthBarController(setup), setup)
         if arenaVisitor.hasDogTag():
             repository.addController(dog_tags_ctrl.DogTagsController(setup))
+        if arenaVisitor.hasDynSquads():
+            repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         if arenaVisitor.hasBattleNotifier():
             repository.addViewController(battle_notifier_ctrl.BattleNotifierController(setup), setup)
+        if arenaVisitor.hasPointsOfInterest():
+            repository.addController(points_of_interest_ctrl.PointsOfInterestController(setup))
         return repository
 
 
@@ -393,12 +418,15 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
     def create(cls, setup):
         repository = super(ClassicControllersRepository, cls).create(setup)
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
-        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
+        repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
         return repository
+
+    @staticmethod
+    def _getAppearanceCacheController(setup):
+        return DefaultAppearanceCacheController(setup)
 
 
 class EpicControllersRepository(_ControllersRepository):
@@ -457,12 +485,29 @@ class MapsTrainingControllerRepository(_ControllersRepositoryByBonuses):
 
 
 class StrongholdControllerRepository(ClassicControllersRepository):
+    __slots__ = ()
 
     @classmethod
     def create(cls, setup):
         repository = super(StrongholdControllerRepository, cls).create(setup)
         repository.addController(StrongholdBattleSoundController())
         return repository
+
+
+class Comp7ControllerRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(Comp7ControllerRepository, cls).create(setup)
+        repository.addArenaViewController(Comp7PrebattleSetupController(), setup)
+        repository.addArenaController(Comp7VOIPController(), setup)
+        repository.addController(Comp7BattleSoundController())
+        return repository
+
+    @staticmethod
+    def _getAppearanceCacheController(setup):
+        return Comp7AppearanceCacheController(setup)
 
 
 for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
@@ -473,4 +518,5 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
+registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.TUTORIAL, None)

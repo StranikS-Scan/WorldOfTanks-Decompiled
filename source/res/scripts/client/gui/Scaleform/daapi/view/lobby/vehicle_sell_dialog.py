@@ -439,7 +439,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
         return False
 
-    @decorators.process('sellVehicle')
+    @decorators.adisp_process('sellVehicle')
     def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew, itemsForDemountKit, boosters):
         vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit)
         currentMoneyGold = self.__itemsCache.items.stats.money.get(Currency.GOLD, 0)

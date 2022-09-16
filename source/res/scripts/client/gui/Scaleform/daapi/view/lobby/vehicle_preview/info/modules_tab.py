@@ -122,9 +122,8 @@ class ModulesPanel(ModulesPanelMeta):
         return
 
     def __onSettingsChanged(self, diff):
-        if SETTINGS_SECTIONS.UI_STORAGE not in diff:
-            return
-        self._update()
+        if SETTINGS_SECTIONS.UI_STORAGE in diff or SETTINGS_SECTIONS.UI_STORAGE_2 in diff:
+            self._update()
 
 
 def _makeStatusText(textRes, iconRes, style):

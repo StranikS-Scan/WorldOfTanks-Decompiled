@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/account_completion/contact_support_overlay_view.py
-from adisp import process
+from adisp import adisp_process
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.account_completion.contact_support_model import ContactSupportModel
 from gui.impl.lobby.account_completion.common.base_overlay_view import BaseOverlayView
@@ -38,7 +38,7 @@ class ContactSupportOverlayView(BaseOverlayView):
         if not self._isCloseVisible:
             openMenu()
 
-    @process
+    @adisp_process
     def _contactClickedHandler(self):
         parsedUrl = yield self._links.getURL(SUPPORT_URL)
         self._links.open(parsedUrl)

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class ButtonModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=6, commands=1):
         super(ButtonModel, self).__init__(properties=properties, commands=commands)
 
     def getCaption(self):
@@ -32,10 +32,24 @@ class ButtonModel(ViewModel):
     def setHasTooltip(self, value):
         self._setBool(3, value)
 
+    def getText(self):
+        return self._getString(4)
+
+    def setText(self, value):
+        self._setString(4, value)
+
+    def getTooltipCaption(self):
+        return self._getString(5)
+
+    def setTooltipCaption(self, value):
+        self._setString(5, value)
+
     def _initialize(self):
         super(ButtonModel, self)._initialize()
         self._addStringProperty('caption', '')
         self._addBoolProperty('isEnabled', True)
         self._addStringProperty('description', '')
         self._addBoolProperty('hasTooltip', True)
+        self._addStringProperty('text', '')
+        self._addStringProperty('tooltipCaption', '')
         self.onClick = self._addCommand('onClick')

@@ -24,6 +24,7 @@ class DynamicScriptComponent(BigWorld.DynamicScriptComponent):
         _logger.debug('%s.onDestroy. EntityID=%s', self.__class__.__name__, self.entity.id)
 
     def onLeaveWorld(self):
+        g_playerEvents.onAvatarReady -= self.__onAvatarReady
         self.onDestroy()
 
     @property

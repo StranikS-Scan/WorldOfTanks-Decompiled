@@ -28,7 +28,7 @@ from gui.SystemMessages import pushI18nMessage, SM_TYPE
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD
+from constants import ARENA_PERIOD, Configs
 from helpers import dependency
 from gui.app_loader import settings
 from post_progression_common import SERVER_SETTINGS_KEY
@@ -1148,6 +1148,7 @@ class BattleReplay(object):
             self.__serverSettings['battle_royale_config'] = serverSettings['battle_royale_config']
             self.__serverSettings['epic_config'] = serverSettings['epic_config']
             self.__serverSettings[SERVER_SETTINGS_KEY] = serverSettings[SERVER_SETTINGS_KEY]
+            self.__serverSettings[Configs.COMP7_CONFIG.value] = serverSettings.get(Configs.COMP7_CONFIG.value)
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
@@ -1219,11 +1220,14 @@ class BattleReplay(object):
         self.__replayCtrl.onSetEquipmentID(value)
 
     def onSetEquipmentId(self, equipmentId):
+        inputHandler = BigWorld.player().inputHandler
         if equipmentId != -1:
             self.__equipmentId = equipmentId
-            BigWorld.player().inputHandler.showGunMarker(False)
+            inputHandler.showGunMarker(False)
+            if self.getControlMode() == CTRL_MODE_NAME.MAP_CASE and inputHandler.ctrl.equipmentID != equipmentId:
+                inputHandler.ctrl.activateEquipment(equipmentId)
         else:
-            BigWorld.player().inputHandler.showGunMarker(True)
+            inputHandler.showGunMarker(True)
             self.__equipmentId = None
         return
 

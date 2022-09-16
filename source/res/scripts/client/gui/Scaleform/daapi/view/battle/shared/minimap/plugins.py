@@ -477,8 +477,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 self._invoke(self.__animationID, 'setAnimation', marker)
 
     def _calcCircularVisionRadius(self):
+        visibilityMinRadius = self._arenaVisitor.getVisibilityMinRadius()
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
-        return min(vehAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS)
+        return min(vehAttrs.get('circularVisionRadius', visibilityMinRadius), VISIBILITY.MAX_RADIUS)
 
     def _getViewRangeRadius(self):
         return self._calcCircularVisionRadius()
@@ -514,7 +515,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE:
             return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MIN_RADIUS)
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MIN_SPOTTING_CIRCLE, settings.CIRCLE_STYLE.COLOR.MIN_SPOTTING_RANGE, settings.CIRCLE_STYLE.ALPHA, self._arenaVisitor.getVisibilityMinRadius())
 
     def __removeMinSpottingRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MIN_SPOTTING_RANGE
@@ -912,12 +913,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if entry.wasSpotted() and entry.isAlive():
                 self.__setActive(entry, flag)
 
-    def __showMinimapHP(self, flag):
-        tmpShowVehicleHP = flag
-        if tmpShowVehicleHP == self.__canShowVehicleHp:
+    def __showMinimapHP(self, showHp):
+        if showHp == self.__canShowVehicleHp:
             return
-        self.__canShowVehicleHp = tmpShowVehicleHP
+        self.__canShowVehicleHp = showHp
         for key, entry in self._entries.iteritems():
+            if not entry.isActive():
+                continue
             self.__showVehicleHp(key, entry.getID())
 
     def __getSpottedAnimation(self, entry, isSpotted):
@@ -1070,7 +1072,7 @@ class EquipmentsPlugin(common.IntervalPlugin):
         if model is not None:
             if team is not None:
                 self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
-            self._setCallback(uniqueID, int(interval))
+            self._setCallback(uniqueID, interval)
         return
 
 

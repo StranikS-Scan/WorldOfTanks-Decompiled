@@ -14,7 +14,7 @@ from gui.shared.formatters.text_styles import builder
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.gui_items.processors.common import FreeXPExchanger
 from gui.shared.money import Currency, Money
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import adisp_process
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
@@ -117,7 +117,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
          'descendingIconSource': '../maps/icons/buttons/tab_sort_button/descendingSortArrow.png',
          'buttonHeight': 30}
 
-    @process('exchangeVehiclesXP')
+    @adisp_process('exchangeVehiclesXP')
     def exchange(self, data):
         exchangeXP = data.exchangeXp
         vehTypeCompDescrs = map(int, data.selectedVehicles)

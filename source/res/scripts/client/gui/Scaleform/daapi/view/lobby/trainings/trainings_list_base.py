@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/trainings_list_base.py
 import ArenaType
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -99,7 +99,7 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
     def _getViewData(self):
         raise NotImplementedError('Data should be implemented. Must be overridden in subclass')
 
-    @process
+    @adisp_process
     def _createTrainingRoom(self, event):
         settings = event.ctx.get('settings', None)
         if settings:
@@ -112,6 +112,6 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
         if info:
             self.as_setInfoS(info)
 
-    @process
+    @adisp_process
     def __doLeave(self, isExit=True):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))

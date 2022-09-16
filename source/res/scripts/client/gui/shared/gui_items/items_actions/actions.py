@@ -4,10 +4,11 @@ import typing
 import logging
 from collections import namedtuple
 from functools import partial
-import async as future_async
+import wg_async as future_async
+from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -26,17 +27,20 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
+from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS, BUY_AND_ACTIVATE_TIMEOUT
 from gui.impl.gen import R
 from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyAndExchangeStateEnum
+from gui.impl.lobby.personal_reserves import personal_reserves_dialogs
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import canBuyBooster as utilsCanBuyBooster
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
-from gui.shared.gui_items.processors.goodies import BoosterBuyer
+from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
 from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
 from gui.shared.gui_items.processors.module import ModuleSeller
@@ -46,8 +50,10 @@ from gui.shared.gui_items.processors.module import getInstallerProcessor
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
-from gui.shared.money import ZERO_MONEY, Money
+from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.utils import decorators
+from gui.shared.utils.requesters import RequestCriteria, REQ_CRITERIA
+from gui.shop import showBuyGoldForPersonalReserves
 from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
@@ -58,6 +64,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.goodies.goodie_items import Booster
 _logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
@@ -154,7 +161,7 @@ class SellItemAction(CachedItemAction):
         super(SellItemAction, self).__init__()
         self.__itemTypeCD = itemTypeCD
 
-    @process
+    @adisp_process
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__itemTypeCD)
         if item.isInInventory:
@@ -172,7 +179,7 @@ class SellMultipleItems(IGUIItemAction):
         super(SellMultipleItems, self).__init__()
         self.__items = itemSellSpecs
 
-    @process
+    @adisp_process
     def doAction(self):
         Waiting.show('storage/forSell')
         if allEqual(self.__items, lambda i: i.intCD):
@@ -191,7 +198,7 @@ class ModuleBuyAction(BuyAction):
         super(ModuleBuyAction, self).__init__()
         self.__intCD = intCD
 
-    @process
+    @adisp_process
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__intCD)
         if not self._mayObtainForMoney(item):
@@ -214,7 +221,7 @@ class ChangeVehicleNationAction(IGUIItemAction):
         super(ChangeVehicleNationAction, self).__init__()
         self.__vehCD = vehCD
 
-    @process
+    @adisp_process
     def doAction(self):
         AccountSettings.setSettings(NATION_CHANGE_VIEWED, True)
         shared_events.showChangeVehicleNationDialog(self.__vehCD)
@@ -233,7 +240,7 @@ class VehicleBuyAction(BuyAction):
         self.__returnAlias = returnAlias
         self.__actionType = actionType
 
-    @process
+    @adisp_process
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__vehCD)
         if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
@@ -326,7 +333,7 @@ class _UnlockItem(CachedItemAction):
 
 class UnlockItemAction(_UnlockItem):
 
-    @process
+    @adisp_process
     def doAction(self):
         if not self._isEnoughXpToUnlock():
             isOk, _ = yield DialogsInterface.showDialog(ExchangeXpMeta(self._item.intCD, self._unlockProps.parentID, self._unlockProps.xpCost))
@@ -339,7 +346,7 @@ class UnlockItemAction(_UnlockItem):
         plugins = self._createPlugins()
         self.__doUnlockItem(plugins)
 
-    @decorators.process('research')
+    @decorators.adisp_process('research')
     def __doUnlockItem(self, plugins):
         result = yield unlock.UnlockItemProcessor(self._unlockProps.parentID, self._unlockProps.unlockIdx, plugins=plugins).request()
         self._showResult(result)
@@ -352,8 +359,8 @@ class BCUnlockItemAction(UnlockItemAction):
 
 class UnlockItemActionWithResult(_UnlockItem):
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def doAsyncAction(self, callback):
         result = None
         if not self._isEnoughXpToUnlock():
@@ -365,8 +372,8 @@ class UnlockItemActionWithResult(_UnlockItem):
         callback(result)
         return
 
-    @async
-    @decorators.process('research')
+    @adisp_async
+    @decorators.adisp_process('research')
     def __unlockAsyncItem(self, callback):
         plugins = self._createPlugins()
         result = yield unlock.UnlockItemProcessor(self._unlockProps.parentID, self._unlockProps.unlockIdx, plugins=plugins).request()
@@ -386,7 +393,7 @@ class InstallItemAction(BuyAction):
             SystemMessages.pushI18nMessage('#system_messages:inventory/item/equip_in_processing', type=SystemMessages.SM_TYPE.Warning)
         self.installItem(self._itemCD, self._rootCD, 'install')
 
-    @process
+    @adisp_process
     def installItem(self, itemCD, rootCD, state):
         itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
         if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
@@ -409,14 +416,14 @@ class InstallItemAction(BuyAction):
 class BuyAndInstallItemAction(InstallItemAction):
     _buyAndInstallItemProcessorCls = BuyAndInstallItemProcessor
 
-    @process
+    @adisp_process
     def doAction(self):
         if RequestState.inProcess('buyAndInstall'):
             SystemMessages.pushI18nMessage('#system_messages:shop/item/buy_and_equip_in_processing', type=SystemMessages.SM_TYPE.Warning)
         yield self.buyAndInstallItem(self._itemCD, self._rootCD, 'buyAndInstall')
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def buyAndInstallItem(self, itemCD, rootCD, state, callback):
         itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
         if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
@@ -450,7 +457,7 @@ class BuyAndInstallItemAction(InstallItemAction):
 class BuyAndInstallWithOptionalSellItemAction(BuyAndInstallItemAction):
     AUTO_SELL_KEY = 'sellPreviousModule'
 
-    @process
+    @adisp_process
     def doAction(self):
         if RequestState.inProcess('buyAndInstall'):
             SystemMessages.pushI18nMessage('#system_messages:shop/item/buy_and_equip_in_processing', type=SystemMessages.SM_TYPE.Warning)
@@ -466,7 +473,7 @@ class BuyAndInstallWithOptionalSellItemAction(BuyAndInstallItemAction):
         installedModuleCD = vehicle.descriptor.getComponentsByType(ITEM_TYPE_NAMES[itemTypeIdx])[0].compactDescr
         return installedModuleCD
 
-    @process
+    @adisp_process
     def sellModule(self, moduleToSellCD):
         moduleToSell = self._itemsCache.items.getItemByCD(moduleToSellCD)
         _logger.debug('sellModule module %s isInInventory=%s itemsCache synced %s', moduleToSell.userName, moduleToSell.isInInventory, self._itemsCache.isSynced())
@@ -489,7 +496,7 @@ class VehicleAutoFillLayoutAction(IGUIItemAction):
         super(VehicleAutoFillLayoutAction, self).__init__()
         self.__vehicle = vehicle
 
-    @decorators.process('techMaintenance')
+    @decorators.adisp_process('techMaintenance')
     def doAction(self):
         result = yield AutoFillVehicleLayoutProcessor(self.__vehicle).request()
         self._showResult(result)
@@ -507,8 +514,8 @@ class VehicleAutoFillLayoutAction(IGUIItemAction):
 class AsyncGUIItemAction(IGUIItemAction):
     __slots__ = ()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def doAction(self, callback):
         confirm = True
         if not self.skipConfirm:
@@ -523,12 +530,12 @@ class AsyncGUIItemAction(IGUIItemAction):
     def isAsync(self):
         return True
 
-    @async
+    @adisp_async
     def _confirm(self, callback):
         callback(True)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _action(self, callback):
         result = yield lambda callback: callback(None)
         callback(result)
@@ -547,8 +554,8 @@ class AmmunitionBuyAndInstall(AsyncGUIItemAction):
         self.__confirmOnlyExchange = confirmOnlyExchange
         super(AmmunitionBuyAndInstall, self).__init__()
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         if self._changedItems and _needExchangeForBuy(sum([ item.getBuyPrice().price for item in self._changedItems if not item.isInInventory ], ZERO_MONEY)):
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
@@ -559,7 +566,7 @@ class AmmunitionBuyAndInstall(AsyncGUIItemAction):
         if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             callback(True)
         else:
-            result = yield future_async.await(shared_events.showTankSetupConfirmDialog(items=self._changedItems, vehicle=self._vehicle, startState=startState))
+            result = yield future_async.wg_await(shared_events.showTankSetupConfirmDialog(items=self._changedItems, vehicle=self._vehicle, startState=startState))
             callback(result.result[0] if not result.busy else False)
 
 
@@ -571,8 +578,8 @@ class BuyAndInstallOptDevices(AmmunitionBuyAndInstall):
         changeItems = [ item for item in optDevices.layout.getItems() if not vehicle.optDevices.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallOptDevices, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield OptDevicesInstaller(self._vehicle).request()
         callback(result)
@@ -585,8 +592,8 @@ class BuyAndInstallConsumables(AmmunitionBuyAndInstall):
         changeItems = [ item for item in vehicle.consumables.layout.getItems() if not vehicle.consumables.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallConsumables, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield BuyAndInstallConsumablesProcessor(self._vehicle).request()
         callback(result)
@@ -599,8 +606,8 @@ class BuyAndInstallBattleBoosters(AmmunitionBuyAndInstall):
         changeItems = [ item for item in vehicle.battleBoosters.layout.getItems() if not vehicle.battleBoosters.setupLayouts.isInSetup(item) ]
         super(BuyAndInstallBattleBoosters, self).__init__(vehicle, changeItems, confirmOnlyExchange)
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield BuyAndInstallBattleBoostersProcessor(self._vehicle).request()
         callback(result)
@@ -616,14 +623,14 @@ class BuyAndInstallShells(AsyncGUIItemAction):
         self.__confirmOnlyExchange = confirmOnlyExchange
         self.__price = getVehicleShellsLayoutPrice(vehicle)
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield BuyAndInstallShellsProcessor(self.__vehicle).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         if _needExchangeForBuy(self.__price.price):
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
@@ -634,7 +641,7 @@ class BuyAndInstallShells(AsyncGUIItemAction):
         if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             callback(True)
         else:
-            result = yield future_async.await(shared_events.showRefillShellsDialog(price=self.__price, shells=self.__vehicle.shells.layout.getItems(), startState=startState))
+            result = yield future_async.wg_await(shared_events.showRefillShellsDialog(price=self.__price, shells=self.__vehicle.shells.layout.getItems(), startState=startState))
             callback(result.result[0] if not result.busy else False)
 
 
@@ -646,28 +653,28 @@ class VehicleRepairAction(AsyncGUIItemAction):
         self.__wrappedViewClass = wrappedViewClass
         self.__repairClazz = repairClazz
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield VehicleRepairer(self.__vehicle).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         if self.__vehicle.repairCost > 0:
             price = Money(credits=self.__vehicle.repairCost)
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT if _needExchangeForBuy(price) else None
         else:
             startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
-        result = yield future_async.await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState, wrappedViewClass=self.__wrappedViewClass, repairClazz=self.__repairClazz))
+        result = yield future_async.wg_await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState, wrappedViewClass=self.__wrappedViewClass, repairClazz=self.__repairClazz))
         callback(result.result if not result.busy else False)
         return
 
 
 class BuyVehicleSlotAction(CachedItemAction):
 
-    @decorators.process('buySlot')
+    @decorators.adisp_process('buySlot')
     def doAction(self):
         result = yield VehicleSlotBuyer().request()
         if result.userMsg:
@@ -676,7 +683,7 @@ class BuyVehicleSlotAction(CachedItemAction):
 
 class BuyBerthsAction(CachedItemAction):
 
-    @decorators.process('buyBerths')
+    @decorators.adisp_process('buyBerths')
     def doAction(self):
         items = self._itemsCache.items
         berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
@@ -687,17 +694,144 @@ class BuyBerthsAction(CachedItemAction):
 
 class BuyBoosterAction(CachedItemAction):
 
-    def __init__(self, boosterID, count, currency):
+    def __init__(self, booster, count, currency):
         super(BuyBoosterAction, self).__init__()
-        self.__boosterID = boosterID
-        self.__count = count
-        self.__currency = currency
+        self.booster = booster
+        self.count = count
+        self.currency = currency
 
-    @decorators.process('buyItem')
-    def doAction(self):
-        result = yield BoosterBuyer(self.__boosterID, self.__count, self.__currency).request()
+    @adisp_async
+    @decorators.adisp_process('buyItem')
+    def doAction(self, callback):
+        result = yield BoosterBuyer(self.booster, self.count, self.currency).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        callback(result.success)
+
+
+class ActivateBoosterAction(CachedItemAction):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, booster):
+        super(ActivateBoosterAction, self).__init__()
+        self.booster = booster
+
+    @adisp_process
+    def doAction(self):
+        canActivate = True
+        if not self.skipConfirm:
+            canActivate = yield self.canActivate()
+        if canActivate:
+            result = yield BoosterActivator(self.booster).request()
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+    @adisp_async
+    @adisp_process
+    def canActivate(self, callback):
+        booster = self.booster
+        if not booster.isInAccount:
+            callback(False)
+        canActivate = True
+        if self.isReplacement():
+            canActivate = yield self.canReplace()
+        callback(canActivate)
+
+    def isReplacement(self):
+        activeBoosterTypes = [ boosterType for boosterType, _, _ in self.goodiesCache.getActiveResources() ]
+        return self.booster.boosterType in activeBoosterTypes
+
+    def isPremium(self, booster):
+        return booster.boosterID in PREMIUM_BOOSTER_IDS
+
+    def isUpgrade(self, newBooster, currentBooster):
+        return self.isPremium(newBooster) and not self.isPremium(currentBooster)
+
+    @adisp_async
+    @adisp_process
+    def canReplace(self, callback):
+        booster = self.booster
+        criteria = RequestCriteria(REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([booster.boosterType]), REQ_CRITERIA.BOOSTER.ACTIVE)
+        boosters = self.goodiesCache.getBoosters(criteria=criteria).values()
+        currentBooster = boosters[0]
+        canActivate = False
+        if self.isUpgrade(booster, currentBooster):
+            dialog = personal_reserves_dialogs.getUpgradeBoosterDialog(booster=booster, previousBooster=currentBooster)
+            canActivate = yield personal_reserves_dialogs.showDialog(dialog)
+        callback(canActivate)
+
+
+class BuyAndActivateBooster(ActivateBoosterAction):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, booster):
+        super(BuyAndActivateBooster, self).__init__(booster)
+        self.currency = Currency.GOLD
+        self.__asyncEvent = future_async.AsyncEvent()
+
+    def canBuyBooster(self, booster):
+        return utilsCanBuyBooster(booster, self._itemsCache)
+
+    @adisp_process
+    def doAction(self):
+        booster = self.booster
+        canActivate = booster.isInAccount
+        mustBuy = not canActivate
+        canDoAction = False
+        if mustBuy:
+            canPurchase, reason = self.canBuyBooster(booster)
+            if not canPurchase:
+                if reason == GUI_ITEM_ECONOMY_CODE.getCurrencyError(self.currency):
+                    yield self.handleGoldPurchase(booster)
+                _logger.info('[BuyAndActivateBooster] booster can not be bought, reason %s', reason)
+                return
+        if self.isReplacement():
+            canDoAction = yield self.canReplace()
+        elif mustBuy:
+            dialog = personal_reserves_dialogs.getBuyAndActivateBoosterDialog(booster)
+            canDoAction = yield personal_reserves_dialogs.showDialog(dialog)
+        if canDoAction and mustBuy:
+            action = BuyBoosterAction(booster, 1, self.currency)
+            canActivate = yield action.doAction()
+            if canActivate and not booster.isInAccount:
+                yield self.waitForClientUpdate()
+        if canDoAction and canActivate:
+            action = ActivateBoosterAction(booster)
+            action.skipConfirm = True
+            action.doAction()
+
+    @adisp_async
+    @adisp_process
+    def handleGoldPurchase(self, booster, callback):
+        dialog = personal_reserves_dialogs.getBuyGoldDialog(booster)
+        isConfirm = yield personal_reserves_dialogs.showDialog(dialog)
+        if isConfirm:
+            showBuyGoldForPersonalReserves(booster.getBuyPrice().price.get(self.currency, 0))
+        callback(False)
+
+    @adisp_async
+    @future_async.wg_async
+    def waitForClientUpdate(self, callback):
+        _logger.debug('[BuyAndActivate] waiting for cache update')
+        clientUpdated = True
+        Waiting.show('synchronize')
+        g_playerEvents.onClientUpdated += self.__checkBoosterCount
+        try:
+            try:
+                clientUpdated = yield future_async.await(self.__asyncEvent.wait(), timeout=BUY_AND_ACTIVATE_TIMEOUT)
+            except future_async.TimeoutError:
+                _logger.warning('TimeoutError: while waiting for client update after buying booster. Timeout period %d', BUY_AND_ACTIVATE_TIMEOUT)
+                clientUpdated = False
+
+        finally:
+            g_playerEvents.onClientUpdated -= self.__checkBoosterCount
+            Waiting.hide('synchronize')
+            callback(clientUpdated)
+
+    def __checkBoosterCount(self, diff, _):
+        if self.booster.count > 0:
+            g_playerEvents.onClientUpdated -= self.__checkBoosterCount
+            self.__asyncEvent.set()
 
 
 class ConvertBlueprintFragmentAction(IGUIItemAction):
@@ -709,7 +843,7 @@ class ConvertBlueprintFragmentAction(IGUIItemAction):
         self.__fragmentCount = fragmentCount
         self.__usedNationalFragments = usedNationalFragments
 
-    @decorators.process('blueprints/convertFragments')
+    @decorators.adisp_process('blueprints/convertFragments')
     def doAction(self):
         result = yield ConvertBlueprintFragmentProcessor(self.__vehicleCD, self.__fragmentCount, self.__fragmentPosition, self.__usedNationalFragments).request()
         if not result or not result.success:
@@ -724,7 +858,7 @@ class UseCrewBookAction(IGUIItemAction):
         self.__vehicleCD = vehicleCD
         self.__tankmanId = tankmanId
 
-    @decorators.process('crewBooks/useCrewBook')
+    @decorators.adisp_process('crewBooks/useCrewBook')
     def doAction(self):
         result = yield UseCrewBookProcessor(self.__bookCD, self.__vehicleCD, self.__tankmanId).request()
         if result.success:
@@ -744,19 +878,19 @@ class UpgradeOptDeviceAction(AsyncGUIItemAction):
         self.__setupIdx = setupIdx
         self.__slotIdx = slotIdx
 
-    @async
-    @decorators.process('moduleUpgrade')
+    @adisp_async
+    @decorators.adisp_process('moduleUpgrade')
     def _action(self, callback):
         result = yield ModuleUpgradeProcessor(self.__module, self.__vehicle, self.__setupIdx, self.__slotIdx).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         from gui.impl.dialogs import dialogs
-        result, data = yield future_async.await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent))
+        result, data = yield future_async.wg_await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent))
         if result and data.get('needCreditsExchange', False):
-            exchangeResult = yield future_async.await(dialogs.showExchangeToUpgradeDeviceDialog(self.__module, parent=self.__parent))
+            exchangeResult = yield future_async.wg_await(dialogs.showExchangeToUpgradeDeviceDialog(self.__module, parent=self.__parent))
             callback(not exchangeResult.busy and exchangeResult.result)
         else:
             callback(result)
@@ -770,8 +904,8 @@ class InstallBattleAbilities(AsyncGUIItemAction):
         self.__vehicle = vehicle
         self.__classVehs = classVehs
 
-    @async
-    @decorators.process('techMaintenance')
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield InstallBattleAbilitiesProcessor(self.__vehicle, self.__classVehs).request()
         callback(result)
@@ -791,8 +925,8 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
         self.__everywhere = everywhere
         self.__removeProcessor = OptDeviceInstaller(self.__vehicle, self.__device, self.__slotID, install=False, allSetups=self.__everywhere, financeOperation=not self.__destroy and self.__everywhere, skipConfirm=True)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         if self.__device.isRemovable:
             callback(True)
@@ -813,8 +947,8 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
             self.__removeProcessor.requestCtx['useDemountKit'] = data.get('useDemountKit', False)
             callback(isOk)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _action(self, callback):
         result = yield self.__removeProcessor.request()
         callback(result)
@@ -829,8 +963,8 @@ class ChangeSetupEquipmentsIndex(AsyncGUIItemAction):
         self.__groupID = groupID
         self.__layoutIdx = layoutIdx
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _action(self, callback):
         result = yield ChangeVehicleSetupEquipments(self.__vehicle, self.__groupID, self.__layoutIdx).request()
         callback(result)
@@ -845,8 +979,8 @@ class SwitchPrebattleAmmoPanelAvailabilityAction(AsyncGUIItemAction):
         self.__groupID = groupID
         self.__enabled = enabled
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _action(self, callback):
         result = yield SwitchPrebattleAmmoPanelAvailability(self.__vehicle, self.__groupID, self.__enabled).request()
         callback(result)
@@ -861,16 +995,16 @@ class DiscardPostProgressionPairs(AsyncGUIItemAction):
         self.__stepIDs = stepIDs
         self.__modIDs = modIDs
 
-    @async
-    @decorators.process('loadPage')
+    @adisp_async
+    @decorators.adisp_process('loadPage')
     def _action(self, callback):
         result = yield DiscardPairsProcessor(self.__vehicle, self.__stepIDs, self.__modIDs).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
+        result = yield future_async.wg_await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -883,16 +1017,16 @@ class PurchasePostProgressionPair(AsyncGUIItemAction):
         self.__stepID = stepID
         self.__modificationID = modificationID
 
-    @async
-    @decorators.process('loadPage')
+    @adisp_async
+    @decorators.adisp_process('loadPage')
     def _action(self, callback):
         result = yield PurchasePairProcessor(self.__vehicle, self.__stepID, self.__modificationID).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
+        result = yield future_async.wg_await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -904,16 +1038,16 @@ class PurchasePostProgressionSteps(AsyncGUIItemAction):
         self.__vehicle = vehicle
         self.__stepIDs = stepIDs
 
-    @async
-    @decorators.process('loadPage')
+    @adisp_async
+    @decorators.adisp_process('loadPage')
     def _action(self, callback):
         result = yield PurchaseStepsProcessor(self.__vehicle, self.__stepIDs).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
-        result = yield future_async.await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
+        result = yield future_async.wg_await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -926,21 +1060,21 @@ class SetEquipmentSlotType(AsyncGUIItemAction):
         self.__vehicle = vehicle
         self.__slotID = 0
 
-    @async
-    @decorators.process('loadContent')
+    @adisp_async
+    @decorators.adisp_process('loadContent')
     def _action(self, callback):
         result = yield SetEquipmentSlotTypeProcessor(self.__vehicle, self.__slotID).request()
         callback(result)
 
-    @async
-    @future_async.async
+    @adisp_async
+    @future_async.wg_async
     def _confirm(self, callback):
         if self.__uiLoader.windowsManager.getViewByLayoutID(layoutID=R.views.lobby.common.SelectSlotSpecDialog()):
             callback(False)
             return
         Waiting.show('loadModalWindow', softStart=True)
         from gui.impl.lobby.common.select_slot_spec_dialog import showDialog
-        result = yield future_async.await(showDialog(self.__vehicle))
+        result = yield future_async.wg_await(showDialog(self.__vehicle))
         if result.busy:
             callback(False)
         else:

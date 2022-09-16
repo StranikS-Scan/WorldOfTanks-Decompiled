@@ -35,3 +35,7 @@ class wchoices(object):
                     raise LookupError('At least one option must be selected from %s', welist)
 
         return wrapper()
+
+
+def getValueWithDeviationInPercent(value, deviation):
+    return value + value * (random.randint(-deviation, deviation) / 100.0)

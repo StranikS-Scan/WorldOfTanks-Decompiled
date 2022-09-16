@@ -509,7 +509,7 @@ class ArcadeControlMode(_GunControlMode):
     def enable(self, **args):
         super(ArcadeControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(0)
-        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', None), gunPitch=args.get('gunPitch', None), initialVehicleMatrix=args.get('initialVehicleMatrix', None), arcadeState=args.get('arcadeState', None))
+        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', None), gunPitch=args.get('gunPitch', None), initialVehicleMatrix=args.get('initialVehicleMatrix', None), arcadeState=args.get('arcadeState', None), camTransitionParams=args.get('camTransitionParams', {}))
         player = BigWorld.player()
         if player.isObserver() and not player.observerSeesAll():
             player.updateObservedVehicleData()
@@ -535,59 +535,61 @@ class ArcadeControlMode(_GunControlMode):
                 return
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        isMagneticAimEnabled = self._aih.isMagneticAimEnabled
-        if isMagneticAimEnabled and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
-            if isDown:
-                self.__lockKeyPressedTime = time.time()
-            else:
-                self.__lockKeyUpTime = time.time()
-        if self._aih.dualGunControl and self._aih.dualGunControl.handleKeyEvent(isDown, key, mods, event):
-            return True
-        isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
-        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
-        if isFiredFreeCamera:
-            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-        if isFiredLockTarget and isDown:
-            BigWorld.player().autoAim(BigWorld.target())
-            self.__simpleAimTarget = BigWorld.target()
-        if isMagneticAimEnabled and isFiredLockTarget and not isDown:
-            if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
-                if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
-                    self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
-        if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-            BigWorld.player().shoot()
-            return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
-            BigWorld.player().autoAim(None)
-            return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
-            self._aih.switchAutorotation(True)
-            return True
-        elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
-         CommandMapping.CMD_CM_INCREASE_ZOOM,
-         CommandMapping.CMD_CM_DECREASE_ZOOM), key):
-            dx = dy = dz = 0.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
-                dx = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
-                dx = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
-                dy = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
-                dy = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
-                dz = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
-                dz = -1.0
-            self._cam.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
-            return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
-            self.__activateAlternateMode()
-            return True
         else:
+            isMagneticAimEnabled = self._aih.isMagneticAimEnabled
+            if isMagneticAimEnabled and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+                if isDown:
+                    self.__lockKeyPressedTime = time.time()
+                else:
+                    self.__lockKeyUpTime = time.time()
+            if self._aih.dualGunControl and self._aih.dualGunControl.handleKeyEvent(isDown, key, mods, event):
+                return True
+            isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
+            isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
+            if isFiredFreeCamera:
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            if isFiredLockTarget and isDown:
+                BigWorld.player().autoAim(BigWorld.target())
+                self.__simpleAimTarget = BigWorld.target()
+            if isMagneticAimEnabled and isFiredLockTarget and not isDown:
+                if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
+                    if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
+                        self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
+            if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
+                BigWorld.player().shoot()
+                return True
+            elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
+                BigWorld.player().autoAim(None)
+                return True
+            elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
+                self._aih.switchAutorotation(True)
+                return True
+            elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
+             CommandMapping.CMD_CM_INCREASE_ZOOM,
+             CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+                dx = dy = dz = 0.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
+                    dx = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
+                    dx = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
+                    dy = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
+                    dy = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
+                    dz = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
+                    dz = -1.0
+                self._cam.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
+                return True
+            if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
+                ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+                if ownVehicle and ownVehicle.isStarted:
+                    self.__activateAlternateMode()
+                    return True
             return False
 
     def handleMouseEvent(self, dx, dy, dz):

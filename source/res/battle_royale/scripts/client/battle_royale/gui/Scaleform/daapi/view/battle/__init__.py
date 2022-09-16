@@ -4,7 +4,7 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from battle_royale.gui.Scaleform.daapi.view.battle.page import BattleRoyalePage
 from battle_royale.gui.Scaleform.daapi.view.battle.radar import RadarButton
-from battle_royale.gui.Scaleform.daapi.view.battle.status_notifications.panel import StatusNotificationTimerPanel
+from battle_royale.gui.Scaleform.daapi.view.battle.status_notifications.panel import BRStatusNotificationTimerPanel
 from battle_royale.gui.Scaleform.daapi.view.battle.player_stats_in_battle import BattleRoyalePlayerStats
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
@@ -24,10 +24,12 @@ def getViewSettings():
     from battle_royale.gui.Scaleform.daapi.view.battle.consumables_panel import BattleRoyaleConsumablesPanel
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
+    from gui.Scaleform.daapi.view.battle.shared import damage_panel
     from battle_royale.gui.Scaleform.daapi.view.battle import battle_loading
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
+    from gui.Scaleform.daapi.view.battle.shared import messages
     from battle_royale.gui.Scaleform.daapi.view.battle import veh_configurator
     from battle_royale.gui.Scaleform.daapi.view.battle.battle_level_panel import BattleLevelPanel
     import battle_royale.gui.Scaleform.daapi.view.battle.players_panel as battle_royale_players_panel
@@ -44,7 +46,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, BattleRoyaleMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, StatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, BRStatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BattleRoyaleConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -62,7 +65,9 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE, BattleRoyalePlayerStats, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CORRODING_SHOT_INDICATOR, CorrodingShotIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, observer_players_panel.ObserverPlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, BattleRoyalePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, BattleRoyalePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, battle_timers.PreBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

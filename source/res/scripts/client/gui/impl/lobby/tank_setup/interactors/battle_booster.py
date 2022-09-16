@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/battle_booster.py
 import typing
-from adisp import process
-from async import async, await_callback
+from adisp import adisp_process
+from wg_async import wg_async, await_callback
 from gui import shop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
@@ -19,7 +19,7 @@ class BattleBoosterAutoRenewal(BaseAutoRenewal):
     def getValue(self):
         return self._vehicle.isAutoBattleBoosterEquip()
 
-    @decorators.process('techMaintenance')
+    @decorators.adisp_process('techMaintenance')
     def changeValue(self, callback):
         value = self.getLocalValue()
         if value != self.getValue():
@@ -58,13 +58,13 @@ class BattleBoosterInteractor(BaseBattleBoosterInteractor):
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
         self.itemUpdated()
 
-    @async
+    @wg_async
     def applyQuit(self, callback, skipApplyAutoRenewal):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)
         super(BattleBoosterInteractor, self).applyQuit(callback, skipApplyAutoRenewal)
 
-    @process
+    @adisp_process
     def confirm(self, callback, skipDialog=False):
         action = ActionsFactory.getAction(ActionsFactory.BUY_AND_INSTALL_BATTLE_BOOSTERS, self.getItem(), confirmOnlyExchange=True, skipConfirm=skipDialog)
         if action is not None:

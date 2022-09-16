@@ -7,8 +7,6 @@ from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProv
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.mapbox.pre_queue.vehicles_watcher import MapboxVehiclesWatcher
-from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.mapbox.squad.actions_validator import MapboxSquadActionsValidator
@@ -82,15 +80,6 @@ class MapboxSquadEntity(SquadEntity):
     def getQueueType(self):
         return QUEUE_TYPE.MAPBOX
 
-    def doSelectAction(self, action):
-        name = action.actionName
-        if name == PREBATTLE_ACTION_NAME.MAPBOX_SQUAD:
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            if action.accountsToInvite:
-                self._actionsHandler.processInvites(action.accountsToInvite)
-            return SelectResult(True)
-        return super(MapboxSquadEntity, self).doSelectAction(action)
-
     def getMaxSPGCount(self):
         return self.__restrictedSPGDataProvider.getMaxPossibleVehicles()
 
@@ -132,6 +121,10 @@ class MapboxSquadEntity(SquadEntity):
         super(MapboxSquadEntity, self).unit_onUnitPlayerRemoved(playerID, playerData)
         if playerID == account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()
+
+    @property
+    def _showUnitActionNames(self):
+        return (PREBATTLE_ACTION_NAME.MAPBOX_SQUAD,)
 
     def _createActionsHandler(self):
         return MapboxSquadActionsHandler(self)

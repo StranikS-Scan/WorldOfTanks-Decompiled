@@ -34,6 +34,7 @@
     <GTD_M2>	33	</GTD_M2>
     <SGT_3Cz_M>	34	</SGT_3Cz_M>
     <Rytla_Wernera_M>	35	</Rytla_Wernera_M>
+    <GTD_M11>	40	</GTD_M11>
     <Development_Engine>	65000	</Development_Engine>
     <Maybach_VL_2_SH>	36	</Maybach_VL_2_SH>
     <SGT_3Cz_SH>	37	</SGT_3Cz_SH>
@@ -301,6 +302,23 @@
       <rpm_min>	365	</rpm_min>
       <rpm_max>	2104	</rpm_max>
     </W_2_53M>
+    <GTD_M11>
+      <userString>	#poland_vehicles:GTD_M11	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	47600	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	710	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	551	</rpm_min>
+      <rpm_max>	2539	</rpm_max>
+    </GTD_M11>
     <GTD_M1>
       <userString>	#poland_vehicles:GTD_M1	</userString>
       <tags>	gasoline	</tags>
@@ -615,16 +633,16 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2901	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Maybach_VL_2_SH>
     <SGT_3Cz_SH>
       <userString>	#poland_vehicles:SGT_3Cz_SH	</userString>
@@ -632,16 +650,16 @@
       <level>	3	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1060	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	443	</rpm_min>
+      <rpm_max>	2179	</rpm_max>
     </SGT_3Cz_SH>
     <W_12_5_P_SH>
       <userString>	#poland_vehicles:W_12_5_P_SH	</userString>
@@ -657,8 +675,8 @@
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	306	</rpm_min>
-      <rpm_max>	2280	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </W_12_5_P_SH>
   </shared>
 </engines.xml>

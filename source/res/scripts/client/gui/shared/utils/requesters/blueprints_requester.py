@@ -5,7 +5,7 @@ from collections import namedtuple, defaultdict, OrderedDict
 from copy import copy
 import BigWorld
 import nations
-from adisp import async
+from adisp import adisp_async
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentLayouts import Layout
 from blueprints.FragmentTypes import NationalBlueprintFragment, IntelligenceDataFragment
@@ -209,7 +209,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
     def hasBlueprintsOrFragments(self):
         return bool(self.__vehicleFragments) or self.hasUniversalFragments()
 
-    @async
+    @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().blueprints.getCache(lambda resID, value: self._response(resID, value, callback))
 

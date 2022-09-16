@@ -15,6 +15,7 @@ class MENU(object):
     HEADERBUTTONS_BTNLABEL = '#menu:headerButtons/btnLabel/'
     PROMO_TEASERTIMEFORMAT = '#menu:promo/teaserTimeFormat'
     BOOSTERS_TIMELEFT = '#menu:boosters/timeLeft'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET = '#menu:headerButtons/fightBtn/tooltip/comp7BanIsSet'
     COPY = '#menu:copy'
     LEGAL = '#menu:legal'
     LEGALINFO_CLOSEBTN = '#menu:legalInfo/closeBtn'
@@ -169,6 +170,10 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_26 = '#menu:loading/battleTypes/desc/26'
     LOADING_BATTLETYPES_28 = '#menu:loading/battleTypes/28'
     LOADING_BATTLETYPES_DESC_28 = '#menu:loading/battleTypes/desc/28'
+    LOADING_BATTLETYPES_29 = '#menu:loading/battleTypes/29'
+    LOADING_BATTLETYPES_DESC_29 = '#menu:loading/battleTypes/desc/29'
+    LOADING_BATTLETYPES_30 = '#menu:loading/battleTypes/30'
+    LOADING_BATTLETYPES_DESC_30 = '#menu:loading/battleTypes/desc/30'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -207,6 +212,7 @@ class MENU(object):
     TANKMANPERSONALCASE_PERSONALDOCS = '#menu:tankmanPersonalCase/personalDocs'
     TANKMANPERSONALCASE_CHANGEDOCSBTN = '#menu:tankmanPersonalCase/changeDocsBtn'
     TANKMANPERSONALCASE_USINGLEVEL = '#menu:tankmanPersonalCase/usingLevel'
+    TANKMANPERSONALCASE_COMMANDERFEATURE = '#menu:tankmanPersonalCase/commanderFeature'
     TANKMANPERSONALCASE_MODIFIERS_FROMCOMMANDER = '#menu:tankmanPersonalCase/modifiers/fromCommander'
     TANKMANPERSONALCASE_MODIFIERS_FROMEQUIPMENT = '#menu:tankmanPersonalCase/modifiers/fromEquipment'
     TANKMANPERSONALCASE_MODIFIERS_CUSTOMIZATION = '#menu:tankmanPersonalCase/modifiers/customization'
@@ -237,6 +243,7 @@ class MENU(object):
     TANKMANPERSONALCASE_NOACHIVS = '#menu:tankmanPersonalCase/noAchivs'
     TANKMANPERSONALCASE_ACHIVS = '#menu:tankmanPersonalCase/achivs'
     TANKMANPERSONALCASE_TABDOCS = '#menu:tankmanPersonalCase/tabDocs'
+    TANKMANPERSONALCASE_TABFREESKILLS = '#menu:tankmanPersonalCase/tabFreeSkills'
     TANKMANPERSONALCASE_TABSKILLS = '#menu:tankmanPersonalCase/tabSkills'
     TANKMANPERSONALCASE_SKILLSDESC = '#menu:tankmanPersonalCase/skillsDesc'
     TANKMANPERSONALCASE_DROPSKILLSBUTTONLABEL = '#menu:tankmanPersonalCase/dropSkillsButtonLabel'
@@ -539,6 +546,9 @@ class MENU(object):
     TANK_PARAMS_WHEELEDSPEEDMODESPEED = '#menu:tank_params/wheeledSpeedModeSpeed'
     TANK_PARAMS_TURBOSHAFTSPEEDMODESPEED = '#menu:tank_params/turboshaftSpeedModeSpeed'
     TANK_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:tank_params/turboshaftEnginePower'
+    TANK_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:tank_params/rocketAccelerationEnginePower'
+    TANK_PARAMS_ROCKETACCELERATIONSPEEDLIMITS = '#menu:tank_params/rocketAccelerationSpeedLimits'
+    TANK_PARAMS_ROCKETACCELERATIONREUSEANDDURATION = '#menu:tank_params/rocketAccelerationReuseAndDuration'
     TANK_PARAMS_TIMEOFREACHING = '#menu:tank_params/timeOfReaching'
     TANK_PARAMS_ATTAINABLESPEED = '#menu:tank_params/attainableSpeed'
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
@@ -604,6 +614,8 @@ class MENU(object):
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
+    TANK_PARAMS_VPS = '#menu:tank_params/vps'
+    TANK_PARAMS_QPT = '#menu:tank_params/qpt'
     TANK_PARAMS_M = '#menu:tank_params/m'
     TANK_PARAMS_H = '#menu:tank_params/h'
     TANK_PARAMS_SQM = '#menu:tank_params/sqm'
@@ -727,7 +739,14 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOXSQUAD = '#menu:headerButtons/battle/types/mapboxSquad'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7SQUAD = '#menu:headerButtons/battle/types/comp7Squad'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX = '#menu:headerButtons/battle/types/mapbox'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7 = '#menu:headerButtons/battle/types/comp7'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7_DESCR = '#menu:headerButtons/battle/types/comp7/descr'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_FROZEN = '#menu:headerButtons/battle/types/comp7/extra/frozen'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_FINISHED = '#menu:headerButtons/battle/types/comp7/extra/finished'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_ENDSIN = '#menu:headerButtons/battle/types/comp7/extra/endsIn'
+    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/comp7/extra/startsAt'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FROZEN = '#menu:headerButtons/battle/types/mapbox/extra/frozen'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FINISHED = '#menu:headerButtons/battle/types/mapbox/extra/finished'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_ENDSIN = '#menu:headerButtons/battle/types/mapbox/extra/endsIn'
@@ -735,6 +754,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/mapbox/availability/days'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/mapbox/availability/hours'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_LESSTHANHOUR = '#menu:headerButtons/battle/types/mapbox/availability/lessThanHour'
+    HEADERBUTTONS_BATTLE_TYPES_FUNRANDOMSQUAD = '#menu:headerButtons/battle/types/funRandomSquad'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -782,8 +802,8 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEVEHLEVEL_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleVehLevel/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEVEHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleVehLevel/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEVEHLEVEL_REQUIREMENTS = '#menu:headerButtons/fightBtn/tooltip/epicBattleVehLevel/requirements'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7BattleOnly/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7BattleOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_LEVELS_FORSTARTBATTLE = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/levels/forStartBattle'
@@ -808,6 +828,20 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_NOVEHICLE_BODY = '#menu:headerButtons/fightBtn/tooltip/noVehicle/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_HEADER = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7DISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Disabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7BanIsSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7BanIsSet/body'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
@@ -1087,6 +1121,7 @@ class MENU(object):
     MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
     MODULEINFO_PARAMS_SHOTSPEED = '#menu:moduleInfo/params/shotSpeed'
     MODULEINFO_TURBOSHAFTENGINE = '#menu:moduleInfo/turboshaftEngine'
+    MODULEINFO_ROCKETACCELERATIONENGINE = '#menu:moduleInfo/rocketAccelerationEngine'
     MODULEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:moduleInfo/params/chassisRepairTime'
     MODULEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:moduleInfo/params/chassisRepairTimeYoh'
     MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
@@ -1146,6 +1181,7 @@ class MENU(object):
     MODULEINFO_PARAMS_STUNMINDURATIONLIST = '#menu:moduleInfo/params/stunMinDurationList'
     MODULEINFO_PARAMS_STUNDURATIONLIST = '#menu:moduleInfo/params/stunDurationList'
     MODULEINFO_PARAMS_COOLDOWNSECONDS = '#menu:moduleInfo/params/cooldownSeconds'
+    MODULEINFO_PARAMS_RELOADCOOLDOWNSECONDS = '#menu:moduleInfo/params/reloadCooldownSeconds'
     MODULEINFO_PARAMS_RADARRADIUS = '#menu:moduleInfo/params/radarRadius'
     MODULEINFO_PARAMS_RADARCOOLDOWN = '#menu:moduleInfo/params/radarCooldown'
     MODULEINFO_PARAMS_MAXHEALTH = '#menu:moduleInfo/params/maxHealth'
@@ -1157,6 +1193,7 @@ class MENU(object):
     MODULEINFO_PARAMS_DRIVINGCONTROL = '#menu:moduleInfo/params/drivingControl'
     MODULEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:moduleInfo/params/enginePowerPerTon'
     MODULEINFO_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:moduleInfo/params/turboshaftEnginePower'
+    MODULEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:moduleInfo/params/rocketAccelerationEnginePower'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
@@ -1210,7 +1247,10 @@ class MENU(object):
     VEHICLEINFO_PARAMS_WHEELEDSWITCHTIME = '#menu:vehicleInfo/params/wheeledSwitchTime'
     VEHICLEINFO_PARAMS_WHEELEDSPEEDMODESPEED = '#menu:vehicleInfo/params/wheeledSpeedModeSpeed'
     VEHICLEINFO_PARAMS_TURBOSHAFTSPEEDMODESPEED = '#menu:vehicleInfo/params/turboshaftSpeedModeSpeed'
+    VEHICLEINFO_PARAMS_ROCKETACCELERATIONSPEEDLIMITS = '#menu:vehicleInfo/params/rocketAccelerationSpeedLimits'
     VEHICLEINFO_PARAMS_TURBOSHAFTENGINEPOWER = '#menu:vehicleInfo/params/turboshaftEnginePower'
+    VEHICLEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:vehicleInfo/params/rocketAccelerationEnginePower'
+    VEHICLEINFO_PARAMS_ROCKETACCELERATIONREUSEANDDURATION = '#menu:vehicleInfo/params/rocketAccelerationReuseAndDuration'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:vehicleInfo/params/chassisRepairTime'
@@ -1593,6 +1633,8 @@ class MENU(object):
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
+    CONTEXTMENU_CREATEFUNRANDOMSQUAD = '#menu:contextMenu/createFunRandomSquad'
+    CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1728,6 +1770,8 @@ class MENU(object):
     BONUSTYPE_29 = '#menu:bonusType/29'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
+    BONUSTYPE_42 = '#menu:bonusType/42'
+    BONUSTYPE_43 = '#menu:bonusType/43'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1991,6 +2035,11 @@ class MENU(object):
     BOOSTER_DESCRIPTION_BOOSTER_CREW_XP = '#menu:booster/description/booster_crew_xp'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP = '#menu:booster/description/bonusValueTime/booster_crew_xp'
     BOOSTER_BONUS_BOOSTER_CREW_XP = '#menu:booster/bonus/booster_crew_xp'
+    BOOSTER_USERNAME_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/userName/booster_free_xp_and_crew_xp'
+    BOOSTER_INFLUENCE_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/influence/booster_free_xp_and_crew_xp'
+    BOOSTER_DESCRIPTION_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/description/booster_free_xp_and_crew_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/description/bonusValueTime/booster_free_xp_and_crew_xp'
+    BOOSTER_BONUS_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/bonus/booster_free_xp_and_crew_xp'
     BOOSTER_USERNAME_BOOSTER_CREDITS = '#menu:booster/userName/booster_credits'
     BOOSTER_INFLUENCE_BOOSTER_CREDITS = '#menu:booster/influence/booster_credits'
     BOOSTER_DESCRIPTION_BOOSTER_CREDITS = '#menu:booster/description/booster_credits'
@@ -2300,6 +2349,8 @@ class MENU(object):
      CONTEXTMENU_CREATEEVENTSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
+     CONTEXTMENU_CREATEFUNRANDOMSQUAD,
+     CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2587,6 +2638,9 @@ class MENU(object):
      TANK_PARAMS_WHEELEDSPEEDMODESPEED,
      TANK_PARAMS_TURBOSHAFTSPEEDMODESPEED,
      TANK_PARAMS_TURBOSHAFTENGINEPOWER,
+     TANK_PARAMS_ROCKETACCELERATIONENGINEPOWER,
+     TANK_PARAMS_ROCKETACCELERATIONSPEEDLIMITS,
+     TANK_PARAMS_ROCKETACCELERATIONREUSEANDDURATION,
      TANK_PARAMS_TIMEOFREACHING,
      TANK_PARAMS_ATTAINABLESPEED,
      TANK_PARAMS_HULLARMOR,
@@ -2652,6 +2706,8 @@ class MENU(object):
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
+     TANK_PARAMS_VPS,
+     TANK_PARAMS_QPT,
      TANK_PARAMS_M,
      TANK_PARAMS_H,
      TANK_PARAMS_SQM,
@@ -2694,7 +2750,9 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_DESC_25,
      LOADING_BATTLETYPES_DESC_26,
-     LOADING_BATTLETYPES_DESC_28)
+     LOADING_BATTLETYPES_DESC_28,
+     LOADING_BATTLETYPES_DESC_29,
+     LOADING_BATTLETYPES_DESC_30)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2746,7 +2804,11 @@ class MENU(object):
      LOADING_BATTLETYPES_26,
      LOADING_BATTLETYPES_DESC_26,
      LOADING_BATTLETYPES_28,
-     LOADING_BATTLETYPES_DESC_28)
+     LOADING_BATTLETYPES_DESC_28,
+     LOADING_BATTLETYPES_29,
+     LOADING_BATTLETYPES_DESC_29,
+     LOADING_BATTLETYPES_30,
+     LOADING_BATTLETYPES_DESC_30)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,
@@ -2802,12 +2864,14 @@ class MENU(object):
     BOOSTER_USERNAME_ENUM = (BOOSTER_USERNAME_BOOSTER_XP,
      BOOSTER_USERNAME_BOOSTER_FREE_XP,
      BOOSTER_USERNAME_BOOSTER_CREW_XP,
+     BOOSTER_USERNAME_BOOSTER_FREE_XP_AND_CREW_XP,
      BOOSTER_USERNAME_BOOSTER_CREDITS,
      BOOSTER_USERNAME_BOOSTER_REPAIR,
      BOOSTER_USERNAME_BOOSTER_FL_XP)
     BOOSTER_INFLUENCE_ENUM = (BOOSTER_INFLUENCE_BOOSTER_XP,
      BOOSTER_INFLUENCE_BOOSTER_FREE_XP,
      BOOSTER_INFLUENCE_BOOSTER_CREW_XP,
+     BOOSTER_INFLUENCE_BOOSTER_FREE_XP_AND_CREW_XP,
      BOOSTER_INFLUENCE_BOOSTER_CREDITS,
      BOOSTER_INFLUENCE_BOOSTER_FL_XP)
     BOOSTER_DESCRIPTION_ENUM = (BOOSTER_DESCRIPTION_BOOSTER_XP,
@@ -2816,6 +2880,8 @@ class MENU(object):
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
      BOOSTER_DESCRIPTION_BOOSTER_CREW_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
+     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP_AND_CREW_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP_AND_CREW_XP,
      BOOSTER_DESCRIPTION_BOOSTER_CREDITS,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS,
      BOOSTER_DESCRIPTION_BOOSTER_REPAIR,
@@ -2826,12 +2892,14 @@ class MENU(object):
     BOOSTER_DESCRIPTION_BONUSVALUETIME_ENUM = (BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP_AND_CREW_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FL_XP)
     BOOSTER_QUALITY_ENUM = (BOOSTER_QUALITY_SMALL, BOOSTER_QUALITY_MEDIUM, BOOSTER_QUALITY_BIG)
     BOOSTER_BONUS_ENUM = (BOOSTER_BONUS_BOOSTER_XP,
      BOOSTER_BONUS_BOOSTER_FREE_XP,
      BOOSTER_BONUS_BOOSTER_CREW_XP,
+     BOOSTER_BONUS_BOOSTER_FREE_XP_AND_CREW_XP,
      BOOSTER_BONUS_BOOSTER_CREDITS,
      BOOSTER_BONUS_BOOSTER_FL_XP)
     BOOSTER_LIMIT_ENUM = (BOOSTER_LIMIT_BOOSTER_FL_XP,)

@@ -4,8 +4,8 @@ from collections import namedtuple
 import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings
-from adisp import process as adisp_process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import WindowFlags
 from gui import DialogsInterface
@@ -326,9 +326,9 @@ class CustomizationCartView(ViewImpl):
         self.__setTotalData(model)
         return
 
-    @async
+    @wg_async
     def __onBuy(self):
-        positive = yield await(tryToShowReplaceExistingStyleDialog(self))
+        positive = yield wg_await(tryToShowReplaceExistingStyleDialog(self))
         if not positive:
             return
         if self.__moneyState is MoneyForPurchase.NOT_ENOUGH:
@@ -343,7 +343,7 @@ class CustomizationCartView(ViewImpl):
             builder = ResSimpleDialogBuilder()
             builder.setPreset(DialogPresets.CUSTOMIZATION_INSTALL_BOUND)
             builder.setMessagesAndButtons(R.strings.dialogs.customization.buy_install_bound)
-            isOk = yield await(dialogs.showSimple(builder.build(self)))
+            isOk = yield wg_await(dialogs.showSimple(builder.build(self)))
             self.__onBuyConfirmed(isOk)
             return
         self.__onBuyConfirmed(True)

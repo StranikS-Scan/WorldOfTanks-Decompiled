@@ -3,10 +3,10 @@
 import logging
 from functools import wraps
 from copy import copy
-from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2, FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
+from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2, FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_1, COMP7_CAROUSEL_FILTER_2
 import BigWorld
 import constants
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
 _logger = logging.getLogger(__name__)
@@ -81,7 +81,10 @@ class IntSettingsRequester(object):
      MAPBOX_CAROUSEL_FILTER_2: 104,
      'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR,
      FUN_RANDOM_CAROUSEL_FILTER_1: 107,
-     FUN_RANDOM_CAROUSEL_FILTER_2: 108}
+     FUN_RANDOM_CAROUSEL_FILTER_2: 108,
+     'UI_STORAGE_2': constants.USER_SERVER_SETTINGS.UI_STORAGE_2,
+     COMP7_CAROUSEL_FILTER_1: 109,
+     COMP7_CAROUSEL_FILTER_2: 110}
 
     def __init__(self):
         self.__isSynced = False
@@ -94,8 +97,8 @@ class IntSettingsRequester(object):
         self.__isSynced = False
         self.__cache = dict()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def request(self, callback=None):
         self.__cache = yield self._requestCache()
         callback(self)
@@ -104,12 +107,12 @@ class IntSettingsRequester(object):
         return self.__cache.get(key, defaultValue)
 
     @requireSync
-    @process
+    @adisp_process
     def setSetting(self, key, value):
         yield self._addIntSettings({self.__SETTINGS[key]: int(value)})
 
     @requireSync
-    @process
+    @adisp_process
     def setSettings(self, settings):
         intSettings = {self.__SETTINGS[k]:int(v) for k, v in settings.iteritems()}
         yield self._addIntSettings(intSettings)
@@ -119,7 +122,7 @@ class IntSettingsRequester(object):
         return self.getCacheValue(self.__SETTINGS[key], defaultValue)
 
     @requireSync
-    @process
+    @adisp_process
     def delSettings(self, settings):
         yield self._delIntSettings(settings)
 
@@ -130,7 +133,7 @@ class IntSettingsRequester(object):
         self.__isSynced = True
         callback(copy(value))
 
-    @async
+    @adisp_async
     def _requestCache(self, callback=None):
         player = BigWorld.player()
         if player is not None and player.intUserSettings is not None:
@@ -140,7 +143,7 @@ class IntSettingsRequester(object):
             _logger.warning('Player or intUserSettings is not defined: %r, %r', player, player.intUserSettings if player is not None else None)
         return
 
-    @async
+    @adisp_async
     def _addIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
@@ -152,7 +155,7 @@ class IntSettingsRequester(object):
                 _logger.warning('Player is not defined, int setting can not be added: %r', settings)
         return
 
-    @async
+    @adisp_async
     def _delIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:

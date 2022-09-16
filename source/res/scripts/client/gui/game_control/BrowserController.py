@@ -5,7 +5,7 @@ import typing
 import BigWorld
 import Event
 from WebBrowser import WebBrowser
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -76,8 +76,8 @@ class BrowserController(IBrowserController):
     def nextBrowserID(self):
         return self.__browserIDGenerator.next()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
         if showCreateWaiting:
             Waiting.show('browser/init')

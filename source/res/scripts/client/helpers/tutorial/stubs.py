@@ -71,7 +71,7 @@ class StubGuiController(IGuiController):
     def hideBootcampHint(self, componentID):
         pass
 
-    def setupViewContextHints(self, viewTutorialID, hintsData):
+    def setupViewContextHints(self, viewTutorialID, hintsData, hintsArgs=None):
         pass
 
     def overrideHangarMenuButtons(self, buttonsList=None):

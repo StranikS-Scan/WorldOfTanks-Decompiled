@@ -4,7 +4,7 @@ from collections import namedtuple
 import BigWorld
 from Event import Event
 from account_helpers import getAccountDatabaseID
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
 from helpers import dependency
@@ -78,7 +78,7 @@ class _ClanCache(object):
     def waitForSync(self):
         return self.__waitForSync
 
-    @async
+    @adisp_async
     def update(self, diff=None, callback=None):
         self.__invalidateData(diff, callback)
 
@@ -159,8 +159,8 @@ class _ClanCache(object):
     def strongholdProvider(self):
         return self.__strongholdProvider
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getClanEmblemID(self, callback):
         clanEmblem = None
         if self.isInClan:
@@ -169,7 +169,7 @@ class _ClanCache(object):
         callback(clanEmblem)
         return
 
-    @async
+    @adisp_async
     def getFileFromServer(self, clanId, fileType, callback):
         if not BigWorld.player().serverSettings['file_server'].has_key(fileType):
             LOG_ERROR("Invalid server's file type: %s" % fileType)
@@ -180,8 +180,8 @@ class _ClanCache(object):
             BigWorld.player().customFilesCache.get(clan_emblems['url_template'] % clanId, lambda url, file: self._valueResponse(0, (url, file), callback), True)
             return None
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getClanEmblemTextureID(self, clanDBID, isBig, textureID, callback):
         import imghdr
         if clanDBID is not None and clanDBID != 0:

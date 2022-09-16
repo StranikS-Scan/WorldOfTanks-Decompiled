@@ -4,7 +4,7 @@ import time
 from collections import namedtuple
 import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from collector_vehicle import CollectorVehicleConsts
 from constants import GameSeasonType, RentType
 from gui import DialogsInterface
@@ -347,7 +347,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                     g_currentPreviewVehicle.previewStyle(style)
             return
 
-    @process
+    @adisp_process
     def __updateBtnState(self, *_):
         item = g_currentPreviewVehicle.item
         if item is None:
@@ -605,7 +605,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             self.__startTimer(gmTime.tm_sec + 1)
         return
 
-    @process
+    @adisp_process
     def __purchasePackage(self):
         if self.__items is not None:
             product = self.__title if self.__couponInfo is None else g_currentPreviewVehicle.item.shortUserName
@@ -638,7 +638,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
     def __purchaseSingleVehicle(self, vehicle):
         event_dispatcher.showVehicleBuyDialog(vehicle, returnAlias=self.__backAlias, returnCallback=self.__backCallback)
 
-    @process
+    @adisp_process
     def __purchaseHeroTank(self):
         if self._heroTanks.isAdventHero():
             self.__calendarController.showWindow(invokedFrom=CalendarInvokeOrigin.HANGAR)
@@ -650,8 +650,8 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             url = yield self.__urlMacros.parse(self._heroTanks.getCurrentRelatedURL())
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __hasExternalLink(self, callback=None):
         url = ''
         if self._marathonEvent and not self._marathonEvent.hasIgbLink():
@@ -661,7 +661,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                 url = self._heroTanks.getCurrentRelatedURL()
         callback(self.__linksCtrl.externalAllowed(url) if url else False)
 
-    @process
+    @adisp_process
     def __purchaseMarathonPackage(self):
         if self._marathonEvent.hasIgbLink():
             url = yield self._marathonEvent.getMarathonVehicleUrlIgb()

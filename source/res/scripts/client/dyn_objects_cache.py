@@ -4,10 +4,12 @@ import logging
 from collections import namedtuple
 import typing
 import BigWorld
+import CGF
 import resource_helper
 from constants import ARENA_GUI_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.component_constants import ZERO_FLOAT
+from shared_utils import first
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from vehicle_systems.stricted_loading import makeCallbackWeak
 _CONFIG_PATH = 'scripts/dynamic_objects.xml'
@@ -22,7 +24,7 @@ _MinesEffects = namedtuple('_MinesEffects', ('plantEffect', 'idleEffect', 'destr
 _BerserkerEffects = namedtuple('_BerserkerEffects', ('turretEffect', 'hullEffect', 'transformPath'))
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
-_TerrainCircleSettings = namedtuple('_TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffYDistance'))
+_TerrainCircleSettings = namedtuple('_TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'enableWaterCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffDistance', 'cutOffAngle', 'minHeight', 'maxHeight'))
 
 def _createScenarioEffect(section, path):
     return _ScenariosEffect(section.readString(path, ''), section.readFloat('rate', ZERO_FLOAT), section.readVector3('offset', (ZERO_FLOAT, ZERO_FLOAT, ZERO_FLOAT)), section.readFloat('scaleRatio', ZERO_FLOAT))
@@ -71,10 +73,14 @@ def _createLoots(dataSection, typeSection, prerequisites):
 def _createTerrainCircleSettings(section):
     sectionKeys = ('ally', 'enemy')
     result = dict.fromkeys(sectionKeys)
+
+    def readFloatOrNone(subSection, key):
+        return subSection.readFloat(key, default=None) if subSection.has_key(key) else None
+
     for sectionKey in sectionKeys:
         subSection = section[sectionKey]
         if subSection is not None:
-            result[sectionKey] = _TerrainCircleSettings(subSection.readString('visual'), int(subSection.readString('color'), 0), subSection.readBool('enableAccurateCollision'), max(MIN_UPDATE_INTERVAL, subSection.readFloat('maxUpdateInterval')), max(MIN_OVER_TERRAIN_HEIGHT, subSection.readFloat('overTerrainHeight')), subSection.readFloat('cutOffYDistance', default=-1.0))
+            result[sectionKey] = _TerrainCircleSettings(subSection.readString('visual'), int(subSection.readString('color'), 0), subSection.readBool('enableAccurateCollision'), subSection.readBool('enableWaterCollision', default=False), max(MIN_UPDATE_INTERVAL, subSection.readFloat('maxUpdateInterval')), max(MIN_OVER_TERRAIN_HEIGHT, subSection.readFloat('overTerrainHeight')), readFloatOrNone(subSection, 'cutOffDistance'), readFloatOrNone(subSection, 'cutOffAngle'), readFloatOrNone(subSection, 'minHeight'), readFloatOrNone(subSection, 'maxHeight'))
 
     return result
 
@@ -179,6 +185,12 @@ class DynObjectsBase(object):
 
     def destroy(self):
         pass
+
+    def getInspiringEffect(self):
+        return {}
+
+    def getHealPointEffect(self):
+        return {}
 
 
 class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
@@ -337,12 +349,141 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__resourcesCache = resourceRefs
 
 
+class _Comp7DynObjects(DynObjectsBase):
+    _AOE_HEAL_KEY = 'aoeHeal'
+    _AOE_INSPIRE_KEY = 'aoeInspire'
+    __ALL_KEYS = (_AOE_HEAL_KEY, _AOE_INSPIRE_KEY)
+    _SPAWNPOINT_VISUAL_PATH_KEY = 'spawnPointVisualPath'
+
+    def __init__(self):
+        super(_Comp7DynObjects, self).__init__()
+        self.__prefabPaths = {}
+        self.__cachedPrefabs = set()
+        self.__spawnPointConfig = None
+        self.__pointsOfInterestConfig = None
+        return
+
+    def init(self, dataSection):
+        if self._initialized:
+            return
+        for prefabKey in self.__ALL_KEYS:
+            self.__prefabPaths[prefabKey] = self.__readPrefab(dataSection, prefabKey)
+
+        self.__spawnPointConfig = _SpawnPointsConfig.createFromXML(dataSection['spawnPointsConfig'])
+        self.__pointsOfInterestConfig = _PointsOfInterestConfig.createFromXML(dataSection['pointOfInterest'])
+        self.__cachedPrefabs.update(set(self.__prefabPaths.values()))
+        self.__cachedPrefabs.update(set(self.__pointsOfInterestConfig.getPrefabs()))
+        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+        super(_Comp7DynObjects, self).init(dataSection)
+
+    def clear(self):
+        if self.__cachedPrefabs:
+            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
+            self.__cachedPrefabs.clear()
+        self.__spawnPointConfig = None
+        self.__pointsOfInterestConfig = None
+        self._initialized = False
+        return
+
+    def destroy(self):
+        self.clear()
+        self.__prefabPaths.clear()
+
+    def getAoeHealPrefab(self):
+        return self.__prefabPaths[self._AOE_HEAL_KEY]
+
+    def getAoeInspirePrefab(self):
+        return self.__prefabPaths[self._AOE_INSPIRE_KEY]
+
+    def getSpawnPointsConfig(self):
+        return self.__spawnPointConfig
+
+    def getPointOfInterestConfig(self):
+        return self.__pointsOfInterestConfig
+
+    @staticmethod
+    def __readPrefab(dataSection, key):
+        return dataSection[key].readString('prefab')
+
+
+class _SpawnPointsConfig(object):
+
+    def __init__(self, size, visualsPath, colors, overTerrainHeight):
+        self.__size = size
+        self.__visualsPath = visualsPath
+        self.__colors = colors
+        self.__overTerrainHeight = overTerrainHeight
+
+    @property
+    def size(self):
+        return self.__size
+
+    @property
+    def overTerrainHeight(self):
+        return self.__overTerrainHeight
+
+    def getColor(self, isMyOwn, isConfirmed):
+        ownageKey = 'own' if isMyOwn else 'ally'
+        confirmationKey = 'confirmed' if isConfirmed else 'notConfirmed'
+        return self.__colors[ownageKey][confirmationKey]
+
+    def getVisualPath(self, positionNumber):
+        positionName = 'position{}'.format(positionNumber)
+        return self.__visualsPath.get(positionName)
+
+    @classmethod
+    def createFromXML(cls, section):
+        return cls(size=section.readVector2('areaSize'), visualsPath=cls.__readVisualsPath(section['visualsPath']), colors=cls.__readColors(section['colors']), overTerrainHeight=section.readFloat('overTerrainHeight'))
+
+    @staticmethod
+    def __readVisualsPath(section):
+        return {key:section.readString(key) for key in section.keys()}
+
+    @staticmethod
+    def __readColors(section):
+        colors = {}
+        renderKey = 'deferred' if isRendererPipelineDeferred() else 'forward'
+        for ownageType, colorsConfig in section[renderKey].items():
+            colors[ownageType] = {'confirmed': int(colorsConfig.readString('confirmed'), 16),
+             'notConfirmed': int(colorsConfig.readString('notConfirmed'), 16)}
+
+        return colors
+
+
+class _PointsOfInterestConfig(object):
+
+    def __init__(self, prefabs):
+        self.__prefabs = prefabs
+
+    def getPointOfInterestPrefab(self, radius):
+        for (minRange, maxRange), path in self.__prefabs.iteritems():
+            if minRange <= radius < maxRange:
+                return path
+
+        _logger.error('Failed to get prefab for PointOfInterest (radius=%d)', radius)
+        return first(self.__prefabs.itervalues())
+
+    def getPrefabs(self):
+        return self.__prefabs.values()
+
+    @classmethod
+    def createFromXML(cls, section):
+        points = {}
+        for _, prefab in section.items():
+            radiusRange = prefab.readVector2('radiusRange')
+            path = prefab.readString('path')
+            points[radiusRange.x, radiusRange.y] = path
+
+        return cls(points)
+
+
 _CONF_STORAGES = {ARENA_GUI_TYPE.SORTIE_2: _StrongholdDynObjects,
  ARENA_GUI_TYPE.FORT_BATTLE_2: _StrongholdDynObjects,
  ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
  ARENA_GUI_TYPE.EPIC_BATTLE: _EpicBattleDynObjects,
  ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects,
- ARENA_GUI_TYPE.EVENT_BATTLES: _EpicBattleDynObjects}
+ ARENA_GUI_TYPE.EVENT_BATTLES: _EpicBattleDynObjects,
+ ARENA_GUI_TYPE.COMP7: _Comp7DynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
@@ -355,13 +496,14 @@ class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 
     def load(self, arenaType):
         _logger.info('Trying to load resources for arenaType = %s', arenaType)
-        if arenaType not in self.__configStorage:
-            if arenaType in _CONF_STORAGES:
-                confStorage = _CONF_STORAGES[arenaType]()
-                self.__configStorage[arenaType] = confStorage
-                _, section = resource_helper.getRoot(_CONFIG_PATH)
-                confStorage.init(section)
-                resource_helper.purgeResource(_CONFIG_PATH)
+        _, section = resource_helper.getRoot(_CONFIG_PATH)
+        if arenaType in self.__configStorage:
+            self.__configStorage[arenaType].init(section)
+        elif arenaType in _CONF_STORAGES:
+            confStorage = _CONF_STORAGES[arenaType]()
+            self.__configStorage[arenaType] = confStorage
+            confStorage.init(section)
+            resource_helper.purgeResource(_CONFIG_PATH)
 
     def unload(self, arenaType):
         for cV in self.__configStorage.itervalues():

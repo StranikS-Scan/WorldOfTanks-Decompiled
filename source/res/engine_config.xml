@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -404,6 +404,9 @@
           <name>	Personal_missions.bnk	</name>
         </bank>
         <bank>
+          <name>	personal_reserves.bnk	</name>
+        </bank>
+        <bank>
           <name>	customization.bnk	</name>
         </bank>
         <bank>
@@ -450,6 +453,15 @@
         </bank>
         <bank>
           <name>	resources_well.bnk	</name>
+        </bank>
+        <bank>
+          <name>	account_dashboard.bnk	</name>
+        </bank>
+        <bank>
+          <name>	comp_7.bnk	</name>
+        </bank>
+        <bank>
+          <name>	comp_7.pck	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -532,6 +544,12 @@
         </bank>
         <bank>
           <name>	custom_styles.pck	</name>
+        </bank>
+        <bank>
+          <name>	rocket_accelerator.bnk	</name>
+        </bank>
+        <bank>
+          <name>	rocket_accelerator.pck	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
@@ -630,6 +648,9 @@
         </bank>
         <bank>
           <name>	Personal_missions.bnk	</name>
+        </bank>
+        <bank>
+          <name>	personal_reserves.bnk	</name>
         </bank>
         <bank>
           <name>	customization.bnk	</name>

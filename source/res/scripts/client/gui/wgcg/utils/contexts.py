@@ -36,16 +36,16 @@ class SPAAccountAttributeCtx(CommonWebRequestCtx):
 class PlatformFetchProductListCtx(CommonWebRequestCtx):
 
     def __init__(self, ctx, waitingID=''):
-        self.__params = {'header': {},
-         'body': {'storefront': ctx.storefront,
-                  'wgid': ctx.wgid,
-                  'language': ctx.language,
-                  'additional_data': ctx.additional_data,
-                  'country': ctx.country,
-                  'response_fields': ctx.response_fields,
-                  'product_codes': ctx.product_codes,
-                  'response_fields_profile': ctx.response_fields_profile,
-                  'category': ctx.category}}
+        self.__params = {'storefront': ctx.storefront,
+         'wgid': ctx.wgid,
+         'language': ctx.language,
+         'additional_data': ctx.additional_data,
+         'country': ctx.country,
+         'response_fields': ctx.response_fields,
+         'response_fields_profile': ctx.response_fields_profile,
+         'category': ctx.category}
+        if ctx.product_codes:
+            self.__params.update(product_codes=ctx.product_codes)
         super(PlatformFetchProductListCtx, self).__init__(waitingID=waitingID)
 
     def getRequestType(self):

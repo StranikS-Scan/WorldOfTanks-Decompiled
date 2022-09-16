@@ -72,7 +72,7 @@ class VScriptEnum(object):
             for item in enum.all():
                 entriesData[item.name()] = item.index()
 
-        if isinstance(cls.vs_enum(), IntEnum):
+        elif isinstance(cls.vs_enum(), IntEnum):
             enum = cls.vs_enum()
             for item in enum:
                 entriesData[item.name] = item.value

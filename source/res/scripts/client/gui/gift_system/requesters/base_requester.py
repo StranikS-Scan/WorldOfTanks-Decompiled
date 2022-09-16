@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/gift_system/requesters/base_requester.py
 import typing
 import BigWorld
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 
 class IGiftSystemRequester(object):
 
@@ -55,11 +55,11 @@ class GiftSystemBaseRequester(IGiftSystemRequester):
     def _getInvokeDelay(self):
         raise NotImplementedError
 
-    @async
+    @adisp_async
     def _doExternalRequest(self, reqEventIds, callback):
         raise NotImplementedError
 
-    @process
+    @adisp_process
     def __invoke(self):
         self.__callbackID = None
         isSuccess, result = yield self._doExternalRequest(list(self.__reqEventIds))

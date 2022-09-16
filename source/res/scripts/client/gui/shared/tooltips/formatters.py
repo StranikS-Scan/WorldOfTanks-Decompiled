@@ -521,11 +521,12 @@ def packCounterTextBlockData(countLabel, desc, linkage=BLOCKS_TOOLTIP_TYPES.TOOL
     return packBlockDataItem(linkage, data, padding)
 
 
-def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BADGE_INFO_BLOCK_LINKAGE, padding=None):
+def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, stripImgSource='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BADGE_INFO_BLOCK_LINKAGE, padding=None):
     data = {'badgeImgSource': badgeImgSource,
      'vehImgSource': vehImgSource,
      'playerName': playerName,
-     'vehName': vehName}
+     'vehName': vehName,
+     'stripImgSource': stripImgSource}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -598,3 +599,15 @@ def packCustomizationCharacteristicBlockData(icon, text, linkage=BLOCKS_TOOLTIP_
 def packImageListIconData(imgSrc, imgAlpha=1):
     return {'imgSrc': imgSrc,
      'imgAlpha': imgAlpha}
+
+
+def getImage(resource, width=16, height=16, vspace=0, hspace=0):
+    return makeHtmlString('html_templates:common', 'image', {'icon': resource,
+     'width': width,
+     'height': height,
+     'vspace': vspace,
+     'hspace': hspace})
+
+
+def packMultipleText(separator=' ', *args, **kwargs):
+    return packTextBlockData(separator.join(args), **kwargs)

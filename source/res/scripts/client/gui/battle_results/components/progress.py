@@ -146,14 +146,20 @@ class VehicleProgressHelper(object):
                     continue
                 tmanBattleXp = tankmenXps.get(tman.invID, 0)
                 avgBattles2NewSkill = 0
+                showNewFreeSkill = False
+                showNewEarnedSkill = False
                 if tman.hasNewSkill(useCombinedRoles=True):
                     if tmanBattleXp - tman.descriptor.freeXP > 0:
-                        skilledTankmans.append(self.__makeTankmanVO(tman, avgBattles2NewSkill))
+                        showNewEarnedSkill = True
                 else:
                     tmanDossier = self.itemsCache.items.getTankmanDossier(tman.invID)
                     avgBattles2NewSkill = self.__getAvgBattles2NewSkill(tmanDossier.getAvgXP(), tman)
                     if 0 < avgBattles2NewSkill <= _MIN_BATTLES_TO_SHOW_PROGRESS:
-                        skilledTankmans.append(self.__makeTankmanVO(tman, avgBattles2NewSkill))
+                        showNewEarnedSkill = True
+                if tman.newFreeSkillsCount > 0:
+                    showNewFreeSkill = True
+                if showNewFreeSkill or showNewEarnedSkill:
+                    skilledTankmans.append(self.__makeTankmanVO(tman, showNewFreeSkill, showNewEarnedSkill, avgBattles2NewSkill))
 
         return skilledTankmans
 
@@ -173,14 +179,18 @@ class VehicleProgressHelper(object):
         vehicleName = text_styles.main(vehicle.userName)
         return _ms(BATTLE_RESULTS.COMMON_VEHICLE_DETAILS, vehicle=vehicleName, type=vehicleType)
 
-    def __makeTankmanVO(self, tman, avgBattles2NewSkill):
+    def __makeTankmanVO(self, tman, showNewFreeSkill, showNewEarnedSkill, avgBattles2NewSkill):
         prediction = ''
-        if avgBattles2NewSkill > 0:
+        if 0 < avgBattles2NewSkill <= _MIN_BATTLES_TO_SHOW_PROGRESS:
             prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=backport.getIntegralFormat(avgBattles2NewSkill))
-        data = {'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
-         'prediction': prediction,
-         'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE,
-         'linkId': tman.invID}
+        data = {'linkId': tman.invID}
+        if showNewEarnedSkill:
+            data.update({'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
+             'prediction': prediction,
+             'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE})
+        if showNewFreeSkill:
+            data.update({'freeSkillsTitle': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWFREESKILL),
+             'freeSkillsLinkEvent': PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE})
         if tman.skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             skinItem = self.itemsCache.items.getCrewSkin(tman.skinID)
             data['tankmenIcon'] = getCrewSkinIconSmall(skinItem.getIconID())
@@ -233,7 +243,20 @@ class VehicleProgressHelper(object):
 
 
 class VehicleProgressBlock(base.StatsBlock):
+    _itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ()
+
+    def getVO(self):
+        vo = super(VehicleProgressBlock, self).getVO()
+        for item in vo:
+            isNewEarnedSkill = item.get('linkEvent') == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE
+            isNewFreeSkill = item.get('freeSkillsLinkEvent') == PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE
+            if not isNewEarnedSkill and not isNewFreeSkill:
+                continue
+            tankman = self._itemsCache.items.getTankman(item['linkId'])
+            item['linkBtnEnabled'] = tankman.canLearnSkills()
+
+        return vo
 
     def setRecord(self, result, reusable):
         xpEarnings = reusable.personal.xpProgress
@@ -310,10 +333,10 @@ class BattlePassProgressBlock(base.StatsBlock):
 
     @classmethod
     def __makeProgressList(cls, progress, level):
-        return [{'description': backport.text(_POST_BATTLE_RES.progress()),
+        return [{'description': cls._getDescription(),
           'maxProgrVal': progress.pointsMax,
           'progressDiff': '+ {}'.format(progress.pointsAdd),
-          'progressDiffTooltip': backport.text(_POST_BATTLE_RES.progress.tooltip(), points=progress.pointsAdd),
+          'progressDiffTooltip': cls._getProgressDiffTooltip(progress),
           'currentProgrVal': progress.pointsNew,
           'progrBarType': cls.__getProgressBarType(not progress.pointsAux)}] if not progress.isDone or progress.pointsAux and not progress.isLevelMax or level == progress.currLevel else []
 
@@ -322,12 +345,31 @@ class BattlePassProgressBlock(base.StatsBlock):
         return backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()) if chapterID else ''
 
     @staticmethod
+    def _getDescription():
+        return backport.text(_POST_BATTLE_RES.progress())
+
+    @staticmethod
+    def _getProgressDiffTooltip(progress):
+        return backport.text(_POST_BATTLE_RES.progress.tooltip(), points=progress.pointsAdd)
+
+    @staticmethod
     def __getMissionState(isDone):
         return MISSIONS_STATES.COMPLETED if isDone else MISSIONS_STATES.IN_PROGRESS
 
     @staticmethod
     def __getProgressBarType(needShow):
         return formatters.PROGRESS_BAR_TYPE.SIMPLE if needShow else formatters.PROGRESS_BAR_TYPE.NONE
+
+
+class Comp7BattlePassProgressBlock(BattlePassProgressBlock):
+
+    @staticmethod
+    def _getDescription():
+        return backport.text(_POST_BATTLE_RES.comp7.progress())
+
+    @staticmethod
+    def _getProgressDiffTooltip(progress):
+        return backport.text(_POST_BATTLE_RES.comp7.progress.tooltip(), points=progress.pointsAdd)
 
 
 class QuestsProgressBlock(base.StatsBlock):
@@ -350,11 +392,12 @@ class QuestsProgressBlock(base.StatsBlock):
                 pGroupBy, pPrev, pCur = qProgress
                 isCompleted = isQuestCompleted(pGroupBy, pPrev, pCur)
                 if isC11nQuest(qID):
-                    quest = allCommonQuests[qID]
-                    c11nQuests.append((quest,
-                     {pGroupBy: pCur},
-                     {pGroupBy: pPrev},
-                     isCompleted))
+                    quest = allCommonQuests.get(qID)
+                    if quest is not None:
+                        c11nQuests.append((quest,
+                         {pGroupBy: pCur},
+                         {pGroupBy: pPrev},
+                         isCompleted))
                 if qID in allCommonQuests:
                     quest = allCommonQuests[qID]
                     isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
@@ -400,7 +443,8 @@ class QuestsProgressBlock(base.StatsBlock):
 
         questsByStyle = {}
         for e, pCur, pPrev, complete in c11nQuests:
-            styleID, _, __ = getDataByC11nQuest(e)
+            progressData = getDataByC11nQuest(e)
+            styleID = progressData.styleID
             if styleID <= 0:
                 continue
             quests = questsByStyle.setdefault(styleID, list())

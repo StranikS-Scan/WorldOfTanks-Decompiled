@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
 from functools import partial
 import BigWorld
-from adisp import process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
@@ -109,7 +109,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def getSuitableEvents(self):
         return []
 
-    @process
+    @adisp_process
     def reload(self):
         browser = self._browserCtrl.getBrowser(self.__browserID)
         if browser is not None and self._marathonEvent and self.__browserView:
@@ -138,7 +138,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def markVisited(self):
         pass
 
-    @process
+    @adisp_process
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.BROWSER and self._marathonEvent:
             if self.__browserID is None:
@@ -153,9 +153,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
 
-    @async
+    @wg_async
     def _onEventsUpdate(self, *args):
-        yield await(self.eventsCache.prefetcher.demand())
+        yield wg_await(self.eventsCache.prefetcher.demand())
         if self._builder:
             self.__updateEvents()
 
@@ -225,7 +225,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         ctx = {'eventID': eventID}
         self.__openDetailsContainer(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_AWARDS_LINKAGE, ctx)
 
-    @process
+    @adisp_process
     def serverClick(self, eventID, serverID):
 
         def doJoin():
@@ -238,7 +238,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
             reloginCtrl.doRelogin(int(serverID), extraChainSteps=(actions.OnLobbyInitedAction(onInited=doJoin),))
 
     @checkEventExist
-    @process
+    @adisp_process
     def registrationClick(self, eventID):
         self.as_setWaitingVisibleS(True)
         yield self.eventsController.joinEvent(eventID)
@@ -246,7 +246,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         self._onEventsUpdate()
 
     @checkEventExist
-    @process
+    @adisp_process
     def participateClick(self, eventID):
         eventData = self.__eventsData.getEvent(eventID)
         started = eventData.isStarted()
@@ -325,7 +325,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
             view.onDisposed += self.__tableViewDisposed
         return
 
-    @process
+    @adisp_process
     def __tableViewDisposed(self, view):
         self.as_setPlayFadeInTweenEnabledS(False)
         view.onDisposed -= self.__tableViewDisposed

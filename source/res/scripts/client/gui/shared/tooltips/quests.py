@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/quests.py
-import constants
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
@@ -21,12 +20,14 @@ from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils import flashObject2Dict
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
 _MAX_AWARDS_PER_TOOLTIP = 5
@@ -51,6 +52,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     _questController = dependency.descriptor(IQuestsController)
     _eventsCache = dependency.descriptor(IEventsCache)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -58,10 +60,13 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         self._setMargins(afterBlock=0)
         self._setWidth(297)
 
+    def _getQuests(self, vehicle):
+        return sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+        quests = self._getQuests(vehicle)
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
@@ -70,22 +75,28 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     break
 
             rest = len(quests) - len(items) + 1
-            if rest > 0:
+            if rest > 0 and self._isShowBottom(vehicle):
                 items.append(self._getBottom(rest))
         elif not self.__battleRoyaleController.isBattleRoyaleMode():
-
-            def _filter(q):
-                return q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()
-
-            allQuests = self._eventsCache.getQuests(filterFunc=_filter)
-            if allQuests:
-                items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
+            if self.__hasAnyUncompletedQuests():
+                items.append(self._getHeader(0, vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
                 items.append(self._getBody(TOOLTIPS.HANGAR_HEADER_QUESTS_EMPTY_VEHICLE))
             else:
-                items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description()))
+                items.append(self._getHeader(0, vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description()))
                 items.append(self._getBody(TOOLTIPS.HANGAR_HEADER_QUESTS_EMPTY))
-            items.append(self._getBottom(0))
+            if self._isShowBottom(vehicle):
+                items.append(self._getBottom(0))
         return items
+
+    def __hasAnyUncompletedQuests(self):
+        requestCriteria = REQ_CRITERIA.INVENTORY
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        vehicles = self.__itemsCache.items.getVehicles(requestCriteria).values() or []
+        getCurrentModeQuestsForVehicle = self._questController.getCurrentModeQuestsForVehicle
+        return any([ bool(getCurrentModeQuestsForVehicle(veh, True)) for veh in vehicles ])
 
     def __getQuestItem(self, quest):
         if self.__battleRoyaleController.isBattleRoyaleMode():
@@ -150,6 +161,9 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
 
     def _getBody(self, text):
         return formatters.packBuildUpBlockData([formatters.packTextBlockData(text=text_styles.main(text), padding=formatters.packPadding(left=20, top=-10, bottom=10))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+    def _isShowBottom(self, vehicle=None):
+        return True
 
 
 class ScheduleQuestTooltipData(BlocksTooltipData):

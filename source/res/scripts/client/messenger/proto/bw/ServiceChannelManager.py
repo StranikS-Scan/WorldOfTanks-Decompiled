@@ -12,7 +12,7 @@ from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from messenger.proto.events import g_messengerEvents
-from adisp import process
+from adisp import adisp_process
 
 class ServiceChannelManager(ChatActionsListener):
 
@@ -89,7 +89,7 @@ class ServiceChannelManager(ChatActionsListener):
         else:
             serviceChannel.onClientMessageReceived(clientID, formatted, settings)
 
-    @process
+    @adisp_process
     def __addServerMessage(self, message):
         yield lambda callback: callback(True)
         formatter = collections_by_type.SERVER_FORMATTERS.get(message.type)

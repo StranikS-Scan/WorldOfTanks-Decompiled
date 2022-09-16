@@ -6,7 +6,7 @@ import BigWorld
 import constants
 import dossiers2
 import AccountCommands
-from adisp import async
+from adisp import adisp_async
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
@@ -111,7 +111,7 @@ class UserDossier(object):
         self.__processQueue()
         return
 
-    @async
+    @adisp_async
     def getAccountDossier(self, callback):
         if not self.isValid:
             callback(None)
@@ -122,7 +122,7 @@ class UserDossier(object):
             callback(self.__cache['account'])
             return
 
-    @async
+    @adisp_async
     def getClanInfo(self, callback):
         if not self.isValid:
             callback(None)
@@ -133,7 +133,7 @@ class UserDossier(object):
             callback(self.__cache['clan'])
             return
 
-    @async
+    @adisp_async
     def getRated7x7Seasons(self, callback):
         if not self.isValid:
             callback({})
@@ -144,7 +144,7 @@ class UserDossier(object):
             callback(self.__cache['rated7x7Seasons'])
             return
 
-    @async
+    @adisp_async
     def getRankedInfo(self, callback):
         if not self.isValid:
             callback({})
@@ -155,7 +155,7 @@ class UserDossier(object):
             callback(self.__cache['ranked'])
             return
 
-    @async
+    @adisp_async
     def getGlobalRating(self, callback):
         if not self.isValid:
             callback(None)
@@ -166,7 +166,7 @@ class UserDossier(object):
             callback(self.__cache['rating'])
             return
 
-    @async
+    @adisp_async
     def getVehicleDossier(self, vehCompDescr, callback):
         if not self.isValid:
             callback(None)
@@ -177,7 +177,7 @@ class UserDossier(object):
             callback(self.__cache['vehicles'][vehCompDescr])
             return
 
-    @async
+    @adisp_async
     def getDogTag(self, callback):
         if not self.isValid:
             callback(None)
@@ -188,7 +188,7 @@ class UserDossier(object):
             callback(self.__cache['dogTag'])
             return
 
-    @async
+    @adisp_async
     def getBattleRoyaleStats(self, callback):
         if not self.isValid:
             callback({})
@@ -218,7 +218,7 @@ class DossierRequester(AbstractSyncDataRequester, IDossierRequester):
         super(DossierRequester, self).__init__()
         self.__users = {}
 
-    @async
+    @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().dossierCache.getCache(lambda resID, value: self._response(resID, value, callback))
 

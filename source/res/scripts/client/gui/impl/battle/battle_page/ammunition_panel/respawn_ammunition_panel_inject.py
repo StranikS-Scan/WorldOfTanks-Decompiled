@@ -2,14 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/ammunition_panel/respawn_ammunition_panel_inject.py
 from gui.battle_control.controllers.respawn_ctrl import IRespawnView
 from gui.battle_control.controllers.epic_respawn_ctrl import IEpicRespawnView
-from gui.veh_post_progression.helpers import getInstalledShells, updateInvInstalled, setFeatures, setDisabledSwitches
+from gui.battle_control.gui_vehicle_builder import VehicleBuilder
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor, hasAliveInject
 from gui.shared.gui_items.artefacts import BattleAbility
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.impl.battle.battle_page.ammunition_panel.respawn_ammunition_panel_view import RespawnAmmunitionPanelView
 from gui.veh_post_progression.sounds import playSound, Sounds
 from helpers import dependency
-from post_progression_common import EXT_DATA_SLOT_KEY, EXT_DATA_PROGRESSION_KEY, VehicleState
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -53,26 +51,17 @@ class RespawnAmmunitionPanelInject(InjectComponentAdaptor, IRespawnView):
         return RespawnAmmunitionPanelView(vehicle)
 
     def _updateGuiVehicle(self, vehicleInfo, setupIndexes):
-        emptyVehicle = Vehicle(strCompactDescr=vehicleInfo.strCD)
-        shellsCDs = [ shell.intCD for shell in emptyVehicle.gun.defaultAmmo ]
-        shellsLayoutKey = (emptyVehicle.turret.intCD, emptyVehicle.gun.intCD)
+        builder = VehicleBuilder()
+        builder.setStrCD(vehicleInfo.strCD)
+        builder.setShells(vehicleInfo.strCD, vehicleInfo.vehSetups)
+        builder.setCrew(vehicleInfo.crewDescrs)
         actualSetupIndexes = vehicleInfo.vehSetupsIndexes.copy()
         actualSetupIndexes.update(setupIndexes)
-        invData = {'battleCrewCDs': vehicleInfo.crewDescrs,
-         'shells': getInstalledShells(shellsCDs, vehicleInfo.vehSetups['shellsSetups']),
-         'shellsLayout': {shellsLayoutKey: vehicleInfo.vehSetups['shellsSetups']},
-         'eqsLayout': vehicleInfo.vehSetups['eqsSetups'],
-         'boostersLayout': vehicleInfo.vehSetups['boostersSetups'],
-         'devicesLayout': vehicleInfo.vehSetups['devicesSetups'],
-         'layoutIndexes': actualSetupIndexes}
-        updateInvInstalled(invData, actualSetupIndexes)
-        vehState = VehicleState()
-        setFeatures(vehState, vehicleInfo.vehPostProgression)
-        setDisabledSwitches(vehState, vehicleInfo.disabledSwitchGroupIDs)
-        extData = {EXT_DATA_SLOT_KEY: vehicleInfo.customRoleSlotTypeId,
-         EXT_DATA_PROGRESSION_KEY: vehState}
-        vehicle = self._vehicle = Vehicle(strCompactDescr=vehicleInfo.strCD, extData=extData.copy(), invData=invData)
-        vehicle.installPostProgressionItem(self.__itemsFactory.createVehPostProgression(vehicle.compactDescr, extData[EXT_DATA_PROGRESSION_KEY], vehicle.typeDescr))
+        builder.setAmmunitionSetups(vehicleInfo.vehSetups, actualSetupIndexes)
+        builder.setRoleSlot(vehicleInfo.customRoleSlotTypeId)
+        builder.setPostProgressionState(vehicleInfo.vehPostProgression, vehicleInfo.disabledSwitchGroupIDs)
+        builder.setModifiers(self.__sessionProvider.arenaVisitor.getArenaModifiers())
+        self._vehicle = builder.getResult()
 
     def __onSwitchLayout(self, vehCD, groupID, layoutIdx):
         self.__sessionProvider.dynamic.respawn.switchVehSetupsLayout(vehCD, groupID, layoutIdx)

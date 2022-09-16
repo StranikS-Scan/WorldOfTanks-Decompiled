@@ -9,7 +9,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.gen.view_models.common.browser_model import BrowserModel, BrowserState, PageState
 from gui.impl.gen import R
 from helpers import dependency
-from adisp import process
+from adisp import adisp_process
 from skeletons.gui.game_control import IBrowserController
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -25,7 +25,7 @@ class BrowserSettings(ViewSettings):
 
 TViewModel = typing.TypeVar('TViewModel', bound=BrowserModel)
 
-class Browser(ViewImpl[BrowserModel], typing.Generic[TViewModel]):
+class Browser(ViewImpl[TViewModel]):
     __slots__ = ('__url', '__browserId', '__browser', '__webCommandHandler', '__webHandlersMap', 'onBrowserObtained', '__eventManager')
     __browserCtrl = dependency.descriptor(IBrowserController)
 
@@ -79,7 +79,7 @@ class Browser(ViewImpl[BrowserModel], typing.Generic[TViewModel]):
         self.__eventManager.clear()
         super(Browser, self)._finalize()
 
-    @process
+    @adisp_process
     def __loadBrowser(self):
         self.__browserId = yield self.__browserCtrl.load(url=self.__url, useBrowserWindow=False)
         self.__browser = self.__browserCtrl.getBrowser(self.__browserId)

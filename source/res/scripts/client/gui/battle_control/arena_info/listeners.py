@@ -115,7 +115,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller += self.__arena_onTeamKiller
             arena.onInteractiveStats += self.__arena_onInteractiveStats
-            arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
+            arena.onGameModeSpecificStats += self.__arena_onGameModeSpecificStats
             arena.onFogOfWarEnabled += self.__arena_onFogOfWarEnabled
             arena.onChatCommandTargetUpdate += self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered += self.__arena_onChatCommandTriggered
@@ -135,7 +135,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller -= self.__arena_onTeamKiller
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
-            arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
+            arena.onGameModeSpecificStats -= self.__arena_onGameModeSpecificStats
             arena.onFogOfWarEnabled -= self.__arena_onFogOfWarEnabled
             arena.onChatCommandTargetUpdate -= self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered -= self.__arena_onChatCommandTriggered
@@ -209,7 +209,7 @@ class ArenaVehiclesListener(_Listener):
         if stats:
             self._invokeListenersMethod('updateVehiclesStats', stats, self._arenaDP)
 
-    def __arena_onGameModeSpecifcStats(self, isStatic, stats):
+    def __arena_onGameModeSpecificStats(self, isStatic, stats):
         for vehicleID, vehicleStats in stats.iteritems():
             flags, vo = self._arenaDP.updateGameModeSpecificStats(vehicleID, isStatic, vehicleStats)
             if isStatic:

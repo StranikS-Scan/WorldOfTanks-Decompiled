@@ -3,7 +3,7 @@
 import logging
 import typing
 from functools import partial
-import async
+import wg_async
 from BWUtil import AsyncReturn
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, WindowFlags
@@ -113,10 +113,10 @@ class _InfoWindowProcessor(IInfoWindowProcessor):
             self.__uiSpamController.setVisited(self.hintKey)
         return
 
-    @async.async
+    @wg_async.wg_async
     def show(self, parent=None):
         if self.showAllowed():
-            yield async.await_callback(partial(self.__loadWindow, parent))()
+            yield wg_async.await_callback(partial(self.__loadWindow, parent))()
         raise AsyncReturn(None)
         return
 

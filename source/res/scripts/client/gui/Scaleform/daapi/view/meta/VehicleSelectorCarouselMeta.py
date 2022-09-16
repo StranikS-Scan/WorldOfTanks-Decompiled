@@ -6,6 +6,3 @@ class VehicleSelectorCarouselMeta(CarouselEnvironment):
 
     def setFilter(self, id, selected):
         self._printOverrideError('setFilter')
-
-    def as_initCarouselFilterS(self, data):
-        return self.flashObject.as_initCarouselFilter(data) if self._isDAAPIInited() else None

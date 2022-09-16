@@ -21,8 +21,9 @@ class HintPriority(object):
     HELP = 2
     BATTLE_COMMUNICATION = 3
     QUESTS = 4
-    RADAR = 5
-    SIEGE = 6
+    RESERVES = 5
+    RADAR = 6
+    SIEGE = 7
 
 
 class HintPanelPlugin(IPlugin):

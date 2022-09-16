@@ -13,6 +13,8 @@ class _WARNING_FONT_COLOR(object):
 _DYN_SQUAD_IMAGE = 'squad_silver_{0}'
 
 def getMessageFormatter(actionMessage):
+    if actionMessage.getType() == ACTION_MESSAGE_TYPE.ERROR:
+        return ErrorMessageFormatter(actionMessage)
     return WarningMessageFormatter(actionMessage) if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING else BaseMessageFormatter(actionMessage)
 
 
@@ -50,3 +52,10 @@ class WarningMessageFormatter(BaseMessageFormatter):
         if self._actionMessage.squadType == DYN_SQUAD_TYPE.ALLY:
             fillColor = FILL_COLORS.GREEN
         return fillColor
+
+
+class ErrorMessageFormatter(BaseMessageFormatter):
+
+    def getFormattedMessage(self):
+        formatted = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': self._actionMessage.getMessage()})
+        return formatted

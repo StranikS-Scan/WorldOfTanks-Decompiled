@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client_common/shared_utils/vehicle_utils.py
 import NetworkFilters
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
@@ -124,7 +124,7 @@ class ModuleDependencies(object):
         self.__hasConflicted = False
         self.__conflictedModulesCD = [ [] for _ in GUI_ITEM_TYPE.VEHICLE_MODULES ]
 
-    @process
+    @adisp_process
     def _installModule(self, vehicle, module):
         yield getPreviewInstallerProcessor(vehicle, module).request()
 

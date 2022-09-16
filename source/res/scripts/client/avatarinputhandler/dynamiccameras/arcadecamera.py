@@ -328,15 +328,21 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             if cameraTransitionDuration > 0:
                 self._ArcadeCamera__setupCameraTransition(cameraTransitionDuration)
             else:
-                BigWorld.camera(self._ArcadeCamera__cam)
+                self._ArcadeCamera__setCamera()
         else:
-            BigWorld.camera(self._ArcadeCamera__cam)
+            self._ArcadeCamera__setCamera()
         self._ArcadeCamera__cameraUpdate()
         self.delayCallback(0.0, self._ArcadeCamera__cameraUpdate)
         from gui import g_guiResetters
         g_guiResetters.add(self._ArcadeCamera__onRecreateDevice)
         self._ArcadeCamera__updateAdvancedCollision()
         self._ArcadeCamera__updateLodBiasForTanks()
+
+    def __setCamera(self):
+        if self._ArcadeCamera__cameraTransition.isInTransition():
+            self._ArcadeCamera__cameraTransition.finish()
+        else:
+            BigWorld.camera(self._ArcadeCamera__cam)
 
     def __setupCameraTransition(self, duration):
         self._ArcadeCamera__cameraTransition.start(BigWorld.camera().matrix, self._ArcadeCamera__cam, duration)

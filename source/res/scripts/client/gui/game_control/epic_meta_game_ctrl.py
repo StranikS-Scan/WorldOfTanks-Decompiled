@@ -32,7 +32,7 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG
 from helpers.statistics import HARDWARE_SCORE_PARAMS
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui import DialogsInterface
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from player_ranks import getSettings as getRankSettings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -368,7 +368,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getStats(self):
         return self.__itemsCache.items.epicMetaGame
 
-    @process
+    @adisp_process
     def openURL(self, url=None):
         requestUrl = url or self.getModeSettings().url
         if requestUrl:
@@ -626,8 +626,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             _FrontLineSounds.onChange(isEpicSoundMode)
             self.__isEpicSoundMode = isEpicSoundMode
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __confirmFightButtonPressEnabled(self, callback):
         if not self.__isInValidPrebattle():
             callback(True)

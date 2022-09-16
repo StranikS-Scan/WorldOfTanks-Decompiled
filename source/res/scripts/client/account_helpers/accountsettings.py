@@ -20,6 +20,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.integrated_auction.constants import AUCTION_STAGE_START_SEEN, AUCTION_FINISH_STAGE_SEEN
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
@@ -59,6 +60,12 @@ MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
 MAPBOX_CAROUSEL_FILTER_CLIENT_1 = 'MAPBOX_CAROUSEL_FILTER_CLIENT_1'
 FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
 FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
+FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1 = 'FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1'
+COMP7_CAROUSEL_FILTER_1 = 'COMP7_CAROUSEL_FILTER_1'
+COMP7_CAROUSEL_FILTER_2 = 'COMP7_CAROUSEL_FILTER_2'
+COMP7_CAROUSEL_FILTER_CLIENT_1 = 'COMP7_CAROUSEL_FILTER_CLIENT_1'
+COMP7_PREBATTLE_CAROUSEL_ROW_VALUE = 'comp7PrebattleCarouselRowValue'
+COMP7_PREBATTLE_MINIMAP_SIZE = 'comp7PrebattleMinimapSize'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -117,6 +124,7 @@ DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
+STATS_COMP7_SORTING = 'statsSortingComp7'
 MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
@@ -146,13 +154,16 @@ SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
 TURBO_SHAFT_ENGINE_MODE_HINT_SECTION = 'turboShaftEngineModeHint'
+ROCKET_ACCELERATION_MODE_HINT_SECTION = 'rocketAccelerationModeHint'
 DYN_SQUAD_HINT_SECTION = 'dynSquadHint'
 RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 PRE_BATTLE_ROLE_HINT_SECTION = 'preBattleRoleHintSection'
+FUN_RANDOM_HINT_SECTION = 'funRandomHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 IBC_HINT_SECTION = 'battleCommunicationHint'
+RESERVES_HINT_SECTION = 'reservesHintSection'
 COMMANDER_CAM_HINT_SECTION = 'commanderCamHintSection'
 MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
 WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
@@ -201,9 +212,15 @@ RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
 RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
+INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
+SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
+MINIMAP_SIZE = 'minimapSize'
+COMP7_UI_SECTION = 'comp7'
+COMP7_WIN_REWARDS_PAGE_WINS_COUNT = 'comp7WinRewardsPageWinsCount'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
+FUN_RANDOM_LAST_CYCLE_ID = 'funRandomLastCycleID'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
                'scroll_to_item': None,
@@ -561,6 +578,61 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_LT_universal': False,
                                               'role_LT_wheeled': False,
                                               'role_SPG': False},
+               FUN_RANDOM_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
+                                                     'clanRented': False},
+               COMP7_CAROUSEL_FILTER_1: {'ussr': False,
+                                         'germany': False,
+                                         'usa': False,
+                                         'china': False,
+                                         'france': False,
+                                         'uk': False,
+                                         'japan': False,
+                                         'czech': False,
+                                         'sweden': False,
+                                         'poland': False,
+                                         'italy': False,
+                                         'lightTank': False,
+                                         'mediumTank': False,
+                                         'heavyTank': False,
+                                         'SPG': False,
+                                         'AT-SPG': False,
+                                         'level_1': False,
+                                         'level_2': False,
+                                         'level_3': False,
+                                         'level_4': False,
+                                         'level_5': False,
+                                         'level_6': False,
+                                         'level_7': False,
+                                         'level_8': False,
+                                         'level_9': False,
+                                         'level_10': False},
+               COMP7_CAROUSEL_FILTER_2: {'premium': False,
+                                         'elite': False,
+                                         'igr': False,
+                                         'rented': True,
+                                         'event': True,
+                                         'gameMode': False,
+                                         'favorite': False,
+                                         'bonus': False,
+                                         'crystals': False,
+                                         'comp7': True,
+                                         'role_HT_assault': False,
+                                         'role_HT_break': False,
+                                         'role_HT_support': False,
+                                         'role_HT_universal': False,
+                                         'role_MT_universal': False,
+                                         'role_MT_sniper': False,
+                                         'role_MT_assault': False,
+                                         'role_MT_support': False,
+                                         'role_ATSPG_assault': False,
+                                         'role_ATSPG_universal': False,
+                                         'role_ATSPG_sniper': False,
+                                         'role_ATSPG_support': False,
+                                         'role_LT_universal': False,
+                                         'role_LT_wheeled': False,
+                                         'role_SPG': False},
+               COMP7_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
+                                                'clanRented': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -575,7 +647,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isDisplayPlatoonMembersClicked': False,
                                     GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True,
-                                    GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: False},
+                                    GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: False,
+                                    'birthdayCalendarIntroShowed': False,
+                                    'isComp7IntroShown': False},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -727,6 +801,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltVehicleName': False,
                                      'markerAltPlayerName': True,
                                      'markerAltAimMarker2D': False}},
+                COMP7_PREBATTLE_CAROUSEL_ROW_VALUE: -1,
+                COMP7_PREBATTLE_MINIMAP_SIZE: -1,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -736,7 +812,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'showDamageIcon': True,
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
-                'minimapSize': 1,
+                MINIMAP_SIZE: 1,
                 GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL: 1,
                 GAME.SHOW_VEHICLE_HP_IN_MINIMAP: 1,
                 'minimapRespawnSize': 0,
@@ -768,6 +844,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  'sortDirection': 'descending'},
                 'statsSortingSortie': {'iconType': 'tank',
                                        'sortDirection': 'descending'},
+                'statsSortingComp7': {'iconType': 'prestigePoints',
+                                      'sortDirection': 'descending'},
                 'backDraftInvert': False,
                 QUESTS: {'lastVisitTime': -1,
                          'visited': [],
@@ -866,7 +944,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             'showQuestProgress': True,
                                                             'chargeFire': True,
                                                             'affirmative': True,
-                                                            'negative': True},
+                                                            'negative': True,
+                                                            'showPersonalReserves': True},
                                        'AimSettings': {AIM.SPG: {SPGAim.AUTO_CHANGE_AIM_MODE: True,
                                                                  SPGAim.SPG_SCALE_WIDGET: True,
                                                                  SPGAim.SPG_STRATEGIC_CAM_MODE: True,
@@ -898,8 +977,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                         LAST_DISPLAY_DAY: 0,
                                                                         NUM_BATTLES: 0},
                                           HELP_SCREEN_HINT_SECTION: {},
-                                          IBC_HINT_SECTION: {HINTS_LEFT: 10}},
+                                          IBC_HINT_SECTION: {HINTS_LEFT: 10},
+                                          RESERVES_HINT_SECTION: {HINTS_LEFT: 10}},
                 PRE_BATTLE_ROLE_HINT_SECTION: {},
+                FUN_RANDOM_HINT_SECTION: {HINTS_LEFT: 3},
                 COMMANDER_CAM_HINT_SECTION: {HINTS_LEFT: 5},
                 MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
@@ -912,6 +993,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TURBO_SHAFT_ENGINE_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                                        LAST_DISPLAY_DAY: 0,
                                                        NUM_BATTLES: 0},
+                ROCKET_ACCELERATION_MODE_HINT_SECTION: {HINTS_LEFT: 3,
+                                                        LAST_DISPLAY_DAY: 0,
+                                                        NUM_BATTLES: 0},
                 RADAR_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
@@ -947,9 +1031,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 UNLOCK_VEHICLES_IN_BATTLE_HINTS: 5,
                 MODE_SELECTOR_BATTLE_PASS_SHOWN: {},
                 RANKED_LAST_CYCLE_ID: None,
+                FUN_RANDOM_LAST_CYCLE_ID: None,
                 SHOW_DEMO_ACC_REGISTRATION: False,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
-                CUSTOMIZATION_STYLE_ITEMS_VISITED: set()},
+                CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
+                SHOWN_PERSONAL_RESERVES_INTRO: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -978,7 +1064,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
                      CLAN_NEWS_SEEN: False,
                      RESOURCE_WELL_START_SHOWN: False,
-                     RESOURCE_WELL_END_SHOWN: False},
+                     RESOURCE_WELL_END_SHOWN: False,
+                     INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
+                                                        AUCTION_FINISH_STAGE_SEEN: set()}},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1075,7 +1163,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
                         OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set(),
                         SENIORITY_AWARDS_WINDOW_SHOWN: False},
- KEY_UI_FLAGS: {}}
+ KEY_UI_FLAGS: {COMP7_UI_SECTION: {COMP7_WIN_REWARDS_PAGE_WINS_COUNT: 0}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1110,7 +1198,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 54
+    version = 55
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1648,6 +1736,21 @@ class AccountSettings(object):
                     obsoleteKey = 'battleRoyaleHangarBottomPanelViewed'
                     if obsoleteKey in keySettings.keys():
                         keySettings.deleteSection(obsoleteKey)
+
+            if currVersion < 55:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
+                        preBattleSection = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()
+                        defPre = preBattleSection[RESERVES_HINT_SECTION].copy()
+                        for key1, section1 in accSettings.items()[:]:
+                            if key1 == PRE_BATTLE_HINT_SECTION:
+                                preBattleSection = _unpack(section1.asString)
+                                preBattleSection[RESERVES_HINT_SECTION] = defPre
+                                accSettings.deleteSection(key1)
+                                break
+
+                        accSettings.write(PRE_BATTLE_HINT_SECTION, _pack(preBattleSection))
 
         return
 

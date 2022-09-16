@@ -7,13 +7,14 @@ _DO_DEBUG_LOG = False
 
 class VehicleDescrCrew(object):
 
-    def __init__(self, vehicleDescr, crewCompactDescrs, activityFlags=None, isFire=False):
+    def __init__(self, vehicleDescr, crewCompactDescrs, activityFlags=None, isFire=False, defaultSixthSenseDisabled=False):
         if activityFlags is None:
             activityFlags = [True] * len(crewCompactDescrs)
         self._vehicleDescr = vehicleDescr
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
+        self._defaultSixthSenseDisabled = defaultSixthSenseDisabled
         self._skills = skills = self._validateAndComputeCrew()
         if _DO_DEBUG_LOG:
             items = skills.iteritems()
@@ -401,6 +402,8 @@ class VehicleDescrCrew(object):
                     res.setdefault(skillName, []).append((idxInCrew, level))
 
             idxInCrew += 1
+            if not self._defaultSixthSenseDisabled:
+                res['commander_sixthSense'] = [(0, MAX_SKILL_LEVEL * 1.0)]
 
         return res
 

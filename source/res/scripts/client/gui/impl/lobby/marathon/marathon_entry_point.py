@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_entry_point.py
 import time
 from functools import partial
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -130,7 +130,7 @@ class MarathonEntryPoint(ViewImpl):
             return
         self.__purchasePackage(marathonEvent)
 
-    @process
+    @adisp_process
     def __purchasePackage(self, marathonEvent):
         if marathonEvent.isRewardObtained():
             urlStyle = yield marathonEvent.getMarathonStyleUrlIgb()

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_setup/base.py
 from account_helpers.settings_core.settings_constants import CONTROLS
-from async import async, await, await_callback
+from wg_async import wg_async, wg_await, await_callback
 from BWUtil import AsyncReturn
 from frameworks.wulf import ViewStatus
 from gui.impl.backport import BackportTooltipWindow
@@ -125,11 +125,11 @@ class BaseAmmunitionSetupView(ViewImpl):
     def _getBackportContextMenuData(self, event):
         return None
 
-    @async
+    @wg_async
     def _onPanelSelected(self, args):
         sectionName, slotID = args.get('selectedSection'), int(args.get('selectedSlot'))
         if sectionName:
-            switch = yield await(self._tankSetup.switch(sectionName, slotID))
+            switch = yield wg_await(self._tankSetup.switch(sectionName, slotID))
             if switch and self.viewStatus == ViewStatus.LOADED:
                 if sectionName == TankSetupConstants.OPT_DEVICES:
                     playOptDeviceSlotEnter(self._vehItem.getItem(), slotID)
@@ -141,14 +141,14 @@ class BaseAmmunitionSetupView(ViewImpl):
         self._tankSetup.getCurrentSubView().revertItem(slotID)
         self._tankSetup.update()
 
-    @async
+    @wg_async
     def _doChangeSetupLayoutIndex(self, groupID, layoutIdx):
         changeSetupLayout = True
         self._tankSetup.setLocked(True)
         sections = self._ammunitionPanel.getSectionsByGroup(groupID)
         currentSection = self._tankSetup.getSelectedSetup()
         if sections and currentSection in sections:
-            changeSetupLayout = yield await(self._tankSetup.canQuit(skipApplyAutoRenewal=True))
+            changeSetupLayout = yield wg_await(self._tankSetup.canQuit(skipApplyAutoRenewal=True))
         if changeSetupLayout:
             yield await_callback(self._ammunitionPanel.onChangeSetupLayoutIndex)(groupID, layoutIdx)
         self._tankSetup.setLocked(False)

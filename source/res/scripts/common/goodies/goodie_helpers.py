@@ -1,15 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
+from typing import TYPE_CHECKING, Type
 from collections import namedtuple
 from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
 from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill
-from GoodieValue import GoodieValue
+from goodie_multiple_resources import FreeXpCrewXpMultiResourceList, FreeXpMainXpMultiResourceList
 from Goodies import GoodieException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
+if TYPE_CHECKING:
+    from typing import Tuple, Dict
+    from goodies.Goodies import Goodies
+    from goodies.GoodieResources import GoodieResourceType
 GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby counter autostart condition resource')
 _CONDITIONS = {GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL: MaxVehicleLevel}
 _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
@@ -27,14 +32,18 @@ _RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.XP: Experience,
  GOODIE_RESOURCE_TYPE.CREW_XP: CrewExperience,
  GOODIE_RESOURCE_TYPE.FREE_XP: FreeExperience,
- GOODIE_RESOURCE_TYPE.FL_XP: FrontlineExperience}
+ GOODIE_RESOURCE_TYPE.FL_XP: FrontlineExperience,
+ GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: FreeXpCrewXpMultiResourceList,
+ GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: FreeXpMainXpMultiResourceList}
+RESOURCE_TO_GOODIE_LOOKUP = {resource:goodieType for goodieType, resource in _RESOURCES.iteritems()}
 GOODIE_CONDITION_TO_TEXT = {MaxVehicleLevel: 'max_vehicle_level'}
 GOODIE_RESOURCE_TO_TEXT = {Gold: 'gold',
  Credits: 'credits',
  Experience: 'experience',
  CrewExperience: 'crew_experience',
  FreeExperience: 'free_experience',
- FrontlineExperience: 'fl_experience'}
+ FrontlineExperience: 'fl_experience',
+ FreeXpCrewXpMultiResourceList: 'free_xp_and_crew_xp'}
 GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  BuySlot: 'slot',
  PostBattle: 'post_battle',
@@ -51,7 +60,9 @@ GOODIE_TEXT_TO_RESOURCE = {'credits': GOODIE_RESOURCE_TYPE.CREDITS,
  'crew_experience': GOODIE_RESOURCE_TYPE.CREW_XP,
  'free_experience': GOODIE_RESOURCE_TYPE.FREE_XP,
  'gold': GOODIE_RESOURCE_TYPE.GOLD,
- 'fl_experience': GOODIE_RESOURCE_TYPE.FL_XP}
+ 'fl_experience': GOODIE_RESOURCE_TYPE.FL_XP,
+ 'free_xp_and_crew_xp': GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP,
+ 'free_xp_and_main_xp': GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP}
 GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'slot': GOODIE_TARGET_TYPE.ON_BUY_SLOT,
  'post_battle': GOODIE_TARGET_TYPE.ON_POST_BATTLE,
@@ -78,10 +89,7 @@ def loadDefinitions(d):
             condition = None
         target = _TARGETS[v_target[0]](v_target[1], v_target[2])
         resource = _RESOURCES[v_resource[0]]
-        if v_resource[2]:
-            value = GoodieValue.percent(v_resource[1])
-        else:
-            value = GoodieValue.absolute(v_resource[1])
+        value = resource.provideCompatibleValueDescr(actualVal=v_resource[1], isPercent=v_resource[2])
         goodies['goodies'][uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
 
     return goodies
@@ -110,9 +118,9 @@ def getPremiumCost(premiumCosts, goodie):
 
 
 def loadPdata(pdataGoodies, goodies, logID):
-    for uid, goodie in pdataGoodies.iteritems():
+    for uid, (status, expireTime, count) in pdataGoodies.iteritems():
         try:
-            goodies.load(uid, goodie[0], goodie[1], goodie[2])
+            goodies.load(uid, status, expireTime, count)
         except GoodieException as detail:
             LOG_CURRENT_EXCEPTION()
             LOG_ERROR('Cannot load a goodie', detail, logID)
@@ -146,4 +154,6 @@ def wipe(goodies, pdata, leaveGold):
 
     else:
         pdata['goodies'].clear()
+    if 'pr2_conversion' in pdata:
+        del pdata['pr2_conversion']
     return

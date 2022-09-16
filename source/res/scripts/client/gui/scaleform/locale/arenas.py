@@ -51,6 +51,9 @@ class ARENAS(object):
     TYPE_RTS_DESCRIPTION_TANKMAN = '#arenas:type/rts/description/tankman'
     TYPE_RTS_BOOTCAMP_NAME = '#arenas:type/rts_bootcamp/name'
     TYPE_RTS_BOOTCAMP_DESCRIPTION_COMMANDER = '#arenas:type/rts_bootcamp/description/commander'
+    TYPE_COMP7_NAME = '#arenas:type/comp7/name'
+    TYPE_COMP7_DESCRIPTION = '#arenas:type/comp7/description'
+    TYPE_COMP7_SHORT_DESCRIPTION = '#arenas:type/comp7/short_description'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -202,6 +205,9 @@ class ARENAS(object):
      TYPE_RTS_DESCRIPTION_TANKMAN,
      TYPE_RTS_BOOTCAMP_NAME,
      TYPE_RTS_BOOTCAMP_DESCRIPTION_COMMANDER,
+     TYPE_COMP7_NAME,
+     TYPE_COMP7_DESCRIPTION,
+     TYPE_COMP7_SHORT_DESCRIPTION,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,

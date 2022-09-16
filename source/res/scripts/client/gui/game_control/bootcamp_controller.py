@@ -5,7 +5,7 @@ from functools import partial
 import AccountCommands
 import BigWorld
 from constants import QUEUE_TYPE
-from async import async, await
+from wg_async import wg_async, wg_await
 from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE
 from account_helpers import isLongDisconnectedFromCenter
 from frameworks.wulf import WindowLayer
@@ -71,6 +71,10 @@ class BootcampController(IBootcampController):
     @property
     def nation(self):
         return g_bootcamp.nation
+
+    @property
+    def version(self):
+        return g_bootcamp.getVersion()
 
     def startBootcamp(self, inBattle):
         if g_playerEvents.isPlayerEntityChanging:
@@ -222,7 +226,7 @@ class BootcampController(IBootcampController):
     def prbDispatcher(self):
         return None
 
-    @async
+    @wg_async
     def __doBootcamp(self, isSkip):
         isFromLobbyMenu = self.__isLobbyMenuOpened()
         if isFromLobbyMenu:
@@ -243,7 +247,7 @@ class BootcampController(IBootcampController):
             else:
                 rewardStr = _REWARD.format(self.__format(startAcc.reward(), _GREEN))
                 message = self.__format(startAcc.message(), _GRAY, reward=rewardStr)
-            result = yield await(showResSimpleDialog(startAcc, icon, message))
+            result = yield wg_await(showResSimpleDialog(startAcc, icon, message))
             if result:
                 self.__goBootcamp()
             elif isFromLobbyMenu:

@@ -4,7 +4,7 @@ import logging
 import BigWorld
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
-from adisp import process
+from adisp import adisp_process
 import constants
 from gui.wgcg.rank.contexts import RankedYearPositionCtx
 from gui.ranked_battles.constants import YEAR_STRIPE_CLIENT_TOKEN, YEAR_STRIPE_SERVER_TOKEN
@@ -54,7 +54,7 @@ class RankedYearPositionProvider(object):
         if constants.IS_DEVELOPMENT:
             self.__fakePosition = position
 
-    @process
+    @adisp_process
     def __invoke(self):
         self.__callbackID = None
         if self.__fakePosition is None or not constants.IS_DEVELOPMENT:

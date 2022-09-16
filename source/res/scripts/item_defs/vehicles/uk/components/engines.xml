@@ -84,6 +84,7 @@
     <Leyland_1A>	105	</Leyland_1A>
     <Meteorite_Mk_202_Gonsalo>	107	</Meteorite_Mk_202_Gonsalo>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
+    <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -309,8 +310,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	497	</rpm_min>
-      <rpm_max>	2663	</rpm_max>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
     </Meteorite_Mk_202_Gonsalo>
     <Rolls_Royce_Meteorite_202>
       <userString>	#gb_vehicles:Rolls_Royce_Meteorite_202	</userString>
@@ -914,6 +915,23 @@
       <rpm_min>	474	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </Rolls_Royce_Griffon_FL>
+    <Rolls_Royce_Griffon_7x7>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_7x7>
     <Rolls_Royce_Griffon_A>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_A	</userString>
       <tags>	gasoline	</tags>
@@ -1326,8 +1344,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
     </Leyland_L60_No_4_Mk_1A>
     <Continental_AOI-1195-5>
       <userString>	#gb_vehicles:Continental_AOI-1195-5	</userString>

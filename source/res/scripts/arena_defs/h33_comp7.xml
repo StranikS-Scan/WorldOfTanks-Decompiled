@@ -1,0 +1,33 @@
+<h33_comp7.xml>
+  <wwmusic>	comp_7_hangar_drone	</wwmusic>
+  <wwambientSound>	comp7_hangar_wind	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_Forest_env	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	hangar_premium_2018_trees_coniferous	</name>
+        <mod>	ambient_trees_coniferous_01	</mod>
+      </event>
+      <event>
+        <name>	hangar_premium_2018_trees_coniferous_comb	</name>
+        <mod>	ambient_trees_coniferous_comb_big_01	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	95.357201 95.357201	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</h33_comp7.xml>

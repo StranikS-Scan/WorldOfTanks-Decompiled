@@ -6,7 +6,7 @@ import MusicControllerWWISE
 import constants
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
 from frameworks.wulf import WindowLayer
@@ -18,6 +18,7 @@ from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStrongholdsQueueMeta
+from gui.impl.lobby.comp7 import comp7_shared
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -47,6 +48,7 @@ TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
+_RANKS = 'ranks'
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _needShowLongWaitingWarning(lobbyContext=None):
@@ -102,6 +104,9 @@ class _QueueProvider(object):
 
     def getTankIcon(self, vehicle):
         return getTypeBigIconPath(vehicle.type)
+
+    def getTankName(self, vehicle):
+        return vehicle.shortUserName
 
     def getLayoutStr(self):
         pass
@@ -197,12 +202,49 @@ class _BattleRoyaleQueueProvider(_RandomQueueProvider):
         pass
 
 
+class _Comp7QueueProvider(_RandomQueueProvider):
+
+    def processQueueInfo(self, qInfo):
+        info = dict(qInfo)
+        ranks = info.get(_RANKS, {})
+        self._createCommonPlayerString(info.get('players', sum(ranks)))
+        if ranks:
+            ranksData = []
+            division = comp7_shared.getPlayerDivision()
+            for rankIdx, playersCount in enumerate(ranks):
+                rankName = rankIdx + 1
+                rankImg = R.images.gui.maps.icons.comp7.ranks.c_40.num(rankName)
+                if rankImg:
+                    ranksData.append({'type': backport.text(R.strings.comp7.rank.num(rankName)()),
+                     'icon': backport.image(rankImg()),
+                     'count': playersCount,
+                     'highlight': division.rank == rankIdx})
+
+            ranksData.reverse()
+            self._proxy.as_setDPS(ranksData)
+        self._proxy.as_showStartS(self._isStartButtonDisplayed(ranks))
+
+    def getLayoutStr(self):
+        pass
+
+    def getTankInfoLabel(self):
+        pass
+
+    def getTankIcon(self, vehicle):
+        pass
+
+    def getTankName(self, vehicle):
+        pass
+
+
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
  constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider,
- constants.QUEUE_TYPE.MAPBOX: _MapboxQueueProvider}
+ constants.QUEUE_TYPE.MAPBOX: _MapboxQueueProvider,
+ constants.QUEUE_TYPE.FUN_RANDOM: _RandomQueueProvider,
+ constants.QUEUE_TYPE.COMP7: _Comp7QueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)
@@ -278,7 +320,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 additional = ''
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
-            tankName = vehicle.shortUserName
+            tankName = self.__provider.getTankName(vehicle)
             iconPath = self.__provider.getTankIcon(vehicle)
             layoutStr = self.__provider.getLayoutStr()
             self.as_setTypeInfoS({'iconLabel': iconlabel,
@@ -441,8 +483,8 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
             title = ''
         return title
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __parseClanData(self, clanData, serviceLeaguesEnabled, callback):
         updateData = {}
         myClanName = getClanTag(clanData.get('tag'), clanData.get('color') or '')
@@ -469,8 +511,8 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
             updateData['myClanElo'] = textStyle(backport.getNiceNumberFormat(myClanElo))
         callback(updateData)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __parseGroupsData(self, groupsData, callback):
         groups = []
         for group in groupsData:
@@ -504,7 +546,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
 
         callback(groups)
 
-    @process
+    @adisp_process
     def __onMatchmakingInfo(self, response):
         if response.getCode() == ResponseCodes.NO_ERRORS and response.getData():
             data = response.getData()

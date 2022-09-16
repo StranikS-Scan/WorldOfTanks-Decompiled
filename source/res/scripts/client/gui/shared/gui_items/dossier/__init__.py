@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
 import math
 import cPickle
+from typing import Dict, List, Optional
 import BigWorld
 import dossiers2
 from constants import DOSSIER_TYPE
@@ -169,20 +170,28 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         return self.getTotalStats().getBattlesCount()
 
     def getStats(self, tankman):
-        imageType, image = self.__getCurrentSkillIcon(tankman)
         result = [{'label': 'common',
           'stats': (self.__packStat('battlesCount', self.getBattlesCount()), self.__packStat('avgExperience', self.getAvgXP()))}]
-        studyingBlock = {'label': 'studying',
-         'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
-         'isRowSeparator': True,
-         'isPremium': self.__currentVehicleIsPremium,
-         'stats': [self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image, isSecondActive=self.__currentVehicleIsPremium), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True, isSecondActive=self.__currentVehicleIsPremium)]}
-        showPassiveCrewXpInfo = self._renewableSubInfo.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
-        if showPassiveCrewXpInfo:
-            statsBlock = studyingBlock.get('stats', [])
-            statsBlock.append(self.__packWotPlus(tankman))
-        result.append(studyingBlock)
+        studyingBlock = self._getStudyingBlock(tankman)
+        if studyingBlock is not None:
+            result.append(studyingBlock)
         return result
+
+    def _getStudyingBlock(self, tankman):
+        if not tankman.hasSkillToLearn() and tankman.descriptor.lastSkillLevel >= tankmen.MAX_SKILL_LEVEL:
+            return None
+        else:
+            imageType, image = self.__getCurrentSkillIcon(tankman)
+            studyingBlock = {'label': 'studying',
+             'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
+             'isRowSeparator': True,
+             'isPremium': self.__currentVehicleIsPremium,
+             'stats': [self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image, isSecondActive=self.__currentVehicleIsPremium), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True, isSecondActive=self.__currentVehicleIsPremium)]}
+            showPassiveCrewXpInfo = self._renewableSubInfo.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
+            if showPassiveCrewXpInfo:
+                statsBlock = studyingBlock.get('stats', [])
+                statsBlock.append(self.__packWotPlus(tankman))
+            return studyingBlock
 
     def _getDossierItem(self):
         return self

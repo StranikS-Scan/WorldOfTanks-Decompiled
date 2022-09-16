@@ -3,7 +3,7 @@
 import cPickle as pickle
 import time
 from typing import TYPE_CHECKING, Optional
-from async import await, async
+from wg_async import wg_await, wg_async
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import SwitchState
 from gui.impl.dialogs.dialogs import showDropSkillDialog
@@ -143,7 +143,7 @@ class SkillDropWindow(SkillDropMeta):
         tankman = Tankman(tmanDescr.makeCompactDescr())
         return (tankman.roleLevel,) + tankman.newSkillCount
 
-    @async
+    @wg_async
     def dropSkills(self, flashDropSkillCostIdx):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         dropSkillCostIdx = int(flashDropSkillCostIdx)
@@ -159,12 +159,12 @@ class SkillDropWindow(SkillDropMeta):
             if currentGold < dropSkillCost and not freeDropSave100:
                 showBuyGoldForCrew(dropSkillCost)
                 return
-        isOk, _ = yield await(showDropSkillDialog(tankman, price=price, isBlank=useRecertificationForm, freeDropSave100=freeDropSave100))
+        isOk, _ = yield wg_await(showDropSkillDialog(tankman, price=price, isBlank=useRecertificationForm, freeDropSave100=freeDropSave100))
         if isOk:
             self.__processDrop(tankman, dropSkillCostIdx, price, freeDropSave100)
         return
 
-    @decorators.process('deleting')
+    @decorators.adisp_process('deleting')
     def __processDrop(self, tankman, dropSkillCostIdx, price, freeDrop):
         useRecertificationForm = price is None
         proc = TankmanDropSkills(tankman, dropSkillCostIdx, useRecertificationForm)

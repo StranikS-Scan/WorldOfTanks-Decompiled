@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanSendInvitesWindow.py
-from adisp import process
+from adisp import adisp_process
 from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
@@ -20,7 +20,7 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
         super(ClanSendInvitesWindow, self).__init__(ctx)
         self.__clanDbID = ctx['clanDbID']
 
-    @process
+    @adisp_process
     def sendInvites(self, accountsToInvite, comment):
         self.as_showWaitingS(backport.msgid(R.strings.waiting.clans.invites.send()), {})
         accountsToInvite = [ int(userDbID) for userDbID in accountsToInvite ]

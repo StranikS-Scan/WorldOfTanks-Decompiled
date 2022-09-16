@@ -4,7 +4,7 @@ import logging
 import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserViewStackExPaddingMeta import BrowserViewStackExPaddingMeta
 from helpers import dependency
@@ -85,7 +85,7 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
             self.__createBrowser()
         return
 
-    @process
+    @adisp_process
     def __createBrowser(self):
         width, height = self.__size
         self.__browserId = yield self.browserCtrl.load(url=self.__url, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=(width, height))

@@ -10,12 +10,12 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay
+from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from shared_utils import first
@@ -277,11 +277,9 @@ def showMotiveAward(quest):
 
 
 def showTankwomanAward(questID, tankmanData):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.QUESTS_RECRUIT_WINDOW), ctx={'questID': questID,
-     'isPremium': tankmanData.isPremium,
-     'fnGroup': tankmanData.fnGroupID,
-     'lnGroup': tankmanData.lnGroupID,
-     'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
+    ctx = {'isFemale': tankmanData.isFemale,
+     'questID': questID}
+    shared_events.showTankwomanRecruitAwardDialog(ctx)
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
@@ -294,8 +292,8 @@ def showRecruitWindow(recruitID, eventsCache=None):
         if needToGetTankman and bonus.tankman is not None:
             showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()))
     else:
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.TOKEN_RECRUIT_WINDOW), ctx={'tokenName': recruitID,
-         'tokenData': recruitData}), EVENT_BUS_SCOPE.LOBBY)
+        shared_events.showTokenRecruitDialog({'tokenName': recruitID,
+         'tokenData': recruitData})
     return
 
 
@@ -340,6 +338,12 @@ def showPiggyBankRewardWindow(creditsValue, isPremActive):
      'isPremActive': isPremActive}
     rewardWindow = PiggyBankRewardWindow(ctx)
     rewardWindow.load()
+
+
+def showMetaBonusOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, forcedSkipEscape=False, browserParams=None):
+    notificationMgr = dependency.instance(INotificationWindowController)
+    event = NotificationEvent(method=showBrowserOverlayView, url=url, alias=alias, forcedSkipEscape=forcedSkipEscape, browserParams=browserParams)
+    notificationMgr.append(EventNotificationCommand(event))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

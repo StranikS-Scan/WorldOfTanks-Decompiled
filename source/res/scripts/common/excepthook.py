@@ -8,6 +8,7 @@ from traceback import format_exception_only
 from constants import IS_BASEAPP
 _MAX_OBJECT_SIZE = 16384
 _MAX_DEPTH = 10
+_SEQUENCE_TYPES = (list, set, tuple)
 _LINE_LIMIT = 25
 _ENABLE_EXTENDED_TRACEBACK = False
 
@@ -104,13 +105,12 @@ def __checkObjectSize(d, meta):
         if meta['size'] >= _MAX_OBJECT_SIZE:
             return False
         meta['cycleReferences'].add(id(d))
-        t = type(d)
-        if t == dict:
+        if isinstance(d, dict):
             for v in d.itervalues():
                 if not __checkObjectSize(v, meta):
                     return False
 
-        elif t in (list, set, tuple):
+        elif isinstance(d, _SEQUENCE_TYPES):
             for v in d:
                 if not __checkObjectSize(v, meta):
                     return False

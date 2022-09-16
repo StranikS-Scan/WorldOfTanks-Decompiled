@@ -239,7 +239,7 @@ def getDateFromSeasonID(seasonID):
 def getSeasonNumber(config, seasonID):
     seasons = config.get('seasons', {})
     if not seasons:
-        return
+        return None
     else:
-        seasonData = seasons.get(seasonID, None)
+        seasonData = seasons.get(seasonID, {})
         return seasonData.get('number', None)

@@ -110,10 +110,10 @@ class SpaAccessor(BaseAccessor):
         return self._data_source.get_account_attribute_by_prefix(callback, attr_prefix, fields=fields)
 
 
-class FreyaAccessor(BaseAccessor):
+class AgateAccessor(BaseAccessor):
 
-    def freya_v1_fetch_product_list(self, callback, params, fields=None):
-        return self._data_source.freya_v1_fetch_product_list(callback, params, fields=fields)
+    def agate_v4_fetch_product_list_state(self, callback, params, fields=None):
+        return self._data_source.agate_v4_fetch_product_list_state(callback, params, fields=fields)
 
 
 class ClansAccessor(BaseAccessor):
@@ -381,7 +381,7 @@ class Requester(object):
     wgelen = RequestDescriptor(WGElenAccessor)
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
-    freya = RequestDescriptor(FreyaAccessor)
+    agate = RequestDescriptor(AgateAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)

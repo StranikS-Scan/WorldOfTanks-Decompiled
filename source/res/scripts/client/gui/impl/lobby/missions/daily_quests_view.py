@@ -348,7 +348,7 @@ class DailyQuestsView(ViewImpl):
         counter = len(settings.getNewCommonEvents(quests.values()))
         self.eventsCache.onEventsVisited({'missions': counter})
 
-    @decorators.process('dailyQuests/waitReroll')
+    @decorators.adisp_process('dailyQuests/waitReroll')
     @args2params(str)
     def __onReRoll(self, questId):
         quests = self.eventsCache.getDailyQuests()

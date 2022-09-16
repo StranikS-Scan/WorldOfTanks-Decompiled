@@ -44,7 +44,9 @@ def isBattleChatEnabled(common=False):
          constants.ARENA_GUI_TYPE.RANKED,
          constants.ARENA_GUI_TYPE.EPIC_RANDOM,
          constants.ARENA_GUI_TYPE.EPIC_BATTLE,
-         constants.ARENA_GUI_TYPE.MAPBOX):
+         constants.ARENA_GUI_TYPE.MAPBOX,
+         constants.ARENA_GUI_TYPE.FUN_RANDOM,
+         constants.ARENA_GUI_TYPE.COMP7):
             result = not g_settings.userPrefs.disableBattleChat
         if result and common:
             result = arena.bonusType in (constants.ARENA_BONUS_TYPE.TRAINING, constants.ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)

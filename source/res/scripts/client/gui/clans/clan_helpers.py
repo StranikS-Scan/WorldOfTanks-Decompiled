@@ -3,7 +3,7 @@
 from collections import namedtuple
 from datetime import datetime
 import Event
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, GUI_SETTINGS
@@ -59,7 +59,7 @@ def showClanInviteSystemMsg(userName, isSuccess, code, data=None):
     return
 
 
-@async
+@adisp_async
 def showAcceptClanInviteDialog(clanName, clanAbbrev, callback):
     from gui import DialogsInterface
     DialogsInterface.showDialog(I18nConfirmDialogMeta('clanConfirmJoining', messageCtx={'icon': icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, 16, 16, -4, 0),
@@ -143,7 +143,7 @@ class ClanFinder(ListPaginator, UsersInfoHelper):
         else:
             LOG_DEBUG('Has not been success result yet. Operation is unavailable.')
 
-    @process
+    @adisp_process
     def _request(self, isReset=False):
         self._offset = max(self._offset, 0)
         count = self._count + 1
@@ -310,7 +310,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
             self.onListItemsUpdated(self, [ self.__invitesCache[self.__cacheMapping[invID]] for invID in updatedInvites ])
         return
 
-    @process
+    @adisp_process
     def _request(self, isReset=False, sort=tuple()):
         self.__sentRequestCount += 1
         self._offset = max(self._offset, 0)
@@ -345,8 +345,8 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
     def getUserName(self, userDbID):
         return super(ClanInvitesPaginator, self).getUserName(userDbID) if userDbID else None
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __requestInvites(self, offset, count, isReset, callback):
         ctx = self.__ctxClass(clanDbID=self.__clanDbID, offset=offset, limit=count, statuses=self.__statuses, getTotalCount=isReset)
         result = yield self._requester.sendRequest(ctx, allowDelay=True)
@@ -389,7 +389,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
     def __rebuildMapping(self):
         self.__cacheMapping = dict(((invite.getDbID(), index) for index, invite in enumerate(self.__invitesCache)))
 
-    @process
+    @adisp_process
     def __sendRequest(self, invite, context, successStatus):
         self.__sentRequestCount += 1
         userDbID = getPlayerDatabaseID()
@@ -497,7 +497,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         self._request(isReset=True, sort=sort)
         return
 
-    @process
+    @adisp_process
     def accept(self, inviteID):
         inviteWrapper = self.getInviteByDbID(inviteID)
         if inviteWrapper:
@@ -533,7 +533,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
             self.onListItemsUpdated(self, [ self.__invitesCache[self.__cacheMapping[invID]] for invID in updatedInvites ])
         return
 
-    @process
+    @adisp_process
     def _request(self, isReset=False, sort=tuple()):
         self.__sentRequestCount += 1
         self._offset = max(self._offset, 0)
@@ -565,8 +565,8 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
             result = self.__invitesCache[offset:]
         return result
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __requestInvites(self, offset, count, isReset, callback):
         ctx = AccountInvitesCtx(accountDbID=self.__accountDbID, offset=offset, limit=count, statuses=self.__statuses, getTotalCount=isReset)
         result = yield self._requester.sendRequest(ctx, allowDelay=True)
@@ -615,7 +615,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
     def __rebuildMapping(self):
         self.__cacheMapping = dict(((invite.getDbID(), index) for index, invite in enumerate(self.__invitesCache)))
 
-    @process
+    @adisp_process
     def __sendADRequest(self, context, sucessStatus, callback=None):
         self.__sentRequestCount += 1
         result = yield self._requester.sendRequest(context, allowDelay=True)
@@ -629,7 +629,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         if callback:
             callback(result)
 
-    @process
+    @adisp_process
     def __sendADListRequest(self, context, sucessStatus):
         self.__sentRequestCount += 1
         result = yield self._requester.sendRequest(context, allowDelay=True)

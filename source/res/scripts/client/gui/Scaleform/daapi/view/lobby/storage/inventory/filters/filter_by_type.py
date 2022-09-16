@@ -5,7 +5,7 @@ import typing
 from helpers import dependency
 from constants import SwitchState
 from account_helpers import AccountSettings
-from adisp import process
+from adisp import adisp_process
 from gui import DialogsInterface
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
@@ -44,7 +44,7 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
     def setActiveState(self, isActive):
         self.setActive(isActive)
 
-    @process
+    @adisp_process
     def sellItem(self, itemId):
         dataCompactId = int(itemId)
         typeID = self._itemsCache.items.getItemByCD(dataCompactId).itemTypeID if dataCompactId else UNDEFINED_ITEM_CD

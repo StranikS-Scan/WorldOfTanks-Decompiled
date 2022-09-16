@@ -15,6 +15,8 @@ from gui.impl.lobby.tank_setup.backports.context_menu import getHangarContextMen
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getSlotSpecTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, clearLastSlotAction
 from gui.impl.pub import ViewImpl
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import AmmunitionPanelViewEvent
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -23,7 +25,7 @@ _logger = logging.getLogger(__name__)
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionSelected', 'onPanelSectionResized', 'onVehicleChanged', 'onEscKeyDown')
+    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionResized', 'onVehicleChanged')
 
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
@@ -32,10 +34,8 @@ class BaseAmmunitionPanelView(ViewImpl):
         super(BaseAmmunitionPanelView, self).__init__(settings)
         self._ammunitionPanel = None
         self.onSizeChanged = Event()
-        self.onPanelSectionSelected = Event()
         self.onPanelSectionResized = Event()
         self.onVehicleChanged = Event()
-        self.onEscKeyDown = Event()
         return
 
     def createToolTip(self, event):
@@ -96,7 +96,6 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def destroy(self):
         self.onSizeChanged.clear()
-        self.onPanelSectionSelected.clear()
         self.onPanelSectionResized.clear()
         super(BaseAmmunitionPanelView, self).destroy()
 
@@ -142,7 +141,7 @@ class BaseAmmunitionPanelView(ViewImpl):
     def _onPanelSectionSelected(self, args):
         if not self._getIsDisabled() and self.__canChangeVehicle():
             clearLastSlotAction(self.viewModel)
-            self.onPanelSectionSelected(**args)
+            g_eventBus.handleEvent(AmmunitionPanelViewEvent(AmmunitionPanelViewEvent.SECTION_SELECTED, args), EVENT_BUS_SCOPE.LOBBY)
 
     def _onPanelSectionResized(self, kwargs):
         self.onPanelSectionResized(**kwargs)

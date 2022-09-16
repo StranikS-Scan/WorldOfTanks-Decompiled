@@ -766,4 +766,63 @@
     <path>	particles/Environment/Battle_Royal/Heal/Turret_03_cycle.seq	</path>
     <path>	particles/Environment/Battle_Royal/Heal/Turret_03_end.seq	</path>
   </battleRoyaleStubs>
+  <pointOfInterest>
+    <prefab>
+      <path>	content/CGFPrefabs/Battle/points_of_interest/poi.prefab	</path>
+      <radiusRange>	17 22	</radiusRange>
+    </prefab>
+    <prefab>
+      <path>	content/CGFPrefabs/Battle/points_of_interest/poi_02.prefab	</path>
+      <radiusRange>	22 26	</radiusRange>
+    </prefab>
+    <prefab>
+      <path>	content/CGFPrefabs/Battle/points_of_interest/poi_03.prefab	</path>
+      <radiusRange>	13 17	</radiusRange>
+    </prefab>
+    <prefab>
+      <path>	content/CGFPrefabs/Battle/points_of_interest/poi_04.prefab	</path>
+      <radiusRange>	10 13	</radiusRange>
+    </prefab>
+  </pointOfInterest>
+  <aoeHeal>
+    <prefab>	content/CGFPrefabs/Battle/comp7/heal_area.prefab	</prefab>
+  </aoeHeal>
+  <aoeInspire>
+    <prefab>	content/CGFPrefabs/Battle/comp7/inspire_area.prefab	</prefab>
+  </aoeInspire>
+  <spawnPointsConfig>
+    <visualsPath>
+      <position1>	content/CGFPrefabs/Battle/comp7/prebattle_area_01.visual	</position1>
+      <position2>	content/CGFPrefabs/Battle/comp7/prebattle_area_02.visual	</position2>
+      <position3>	content/CGFPrefabs/Battle/comp7/prebattle_area_03.visual	</position3>
+      <position4>	content/CGFPrefabs/Battle/comp7/prebattle_area_04.visual	</position4>
+      <position5>	content/CGFPrefabs/Battle/comp7/prebattle_area_05.visual	</position5>
+      <position6>	content/CGFPrefabs/Battle/comp7/prebattle_area_06.visual	</position6>
+      <position7>	content/CGFPrefabs/Battle/comp7/prebattle_area_07.visual	</position7>
+    </visualsPath>
+    <areaSize>	5.5 9	</areaSize>
+    <colors>
+      <forward>
+        <own>
+          <notConfirmed>	0xffffa44f	</notConfirmed>
+          <confirmed>	0xa1cfa44f	</confirmed>
+        </own>
+        <ally>
+          <notConfirmed>	0xffc7c7c7	</notConfirmed>
+          <confirmed>	0xa1c7c7c7	</confirmed>
+        </ally>
+      </forward>
+      <deferred>
+        <own>
+          <notConfirmed>	0xffff6400	</notConfirmed>
+          <confirmed>	0x20dba530	</confirmed>
+        </own>
+        <ally>
+          <notConfirmed>	0xffc7c7c7	</notConfirmed>
+          <confirmed>	0x20c7c7c7	</confirmed>
+        </ally>
+      </deferred>
+    </colors>
+    <overTerrainHeight>	0.3	</overTerrainHeight>
+  </spawnPointsConfig>
 </dynamic_objects.xml>

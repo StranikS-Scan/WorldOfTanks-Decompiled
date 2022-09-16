@@ -175,27 +175,30 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updateVehiclesInfoS(data)
 
     def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        arenaTeamSwitched = False
-        if self._battleCtx.isPlayerObserver():
-            currentArenaTeam = arenaDP.getNumberOfTeam()
-            if currentArenaTeam != self.__avatarTeam:
-                if self.__avatarTeam is not None:
-                    arenaDP.switchCurrentTeam(self.__avatarTeam)
-                arenaTeamSwitched = True
-        isEnemy = self.__isEnemyTeam(arenaDP, vo.team)
-        exchange = self._exchangeBroker.getVehicleStatusExchange(isEnemy)
-        exchange.addVehicleInfo(vo)
-        if flags & INVALIDATE_OP.SORTING > 0:
-            exchange.addSortIDs(arenaDP)
-        if not vo.isObserver():
-            self._statsCollector.addVehicleStatusUpdate(vo)
-        exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
-        data = exchange.get()
-        if data:
-            self.as_updateVehicleStatusS(data)
-        if arenaTeamSwitched:
-            arenaDP.switchCurrentTeam(currentArenaTeam)
-        return
+        if vo is None:
+            return
+        else:
+            arenaTeamSwitched = False
+            if self._battleCtx.isPlayerObserver():
+                currentArenaTeam = arenaDP.getNumberOfTeam()
+                if currentArenaTeam != self.__avatarTeam:
+                    if self.__avatarTeam is not None:
+                        arenaDP.switchCurrentTeam(self.__avatarTeam)
+                    arenaTeamSwitched = True
+            isEnemy = self.__isEnemyTeam(arenaDP, vo.team)
+            exchange = self._exchangeBroker.getVehicleStatusExchange(isEnemy)
+            exchange.addVehicleInfo(vo)
+            if flags & INVALIDATE_OP.SORTING > 0:
+                exchange.addSortIDs(arenaDP)
+            if not vo.isObserver():
+                self._statsCollector.addVehicleStatusUpdate(vo)
+            exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
+            data = exchange.get()
+            if data:
+                self.as_updateVehicleStatusS(data)
+            if arenaTeamSwitched:
+                arenaDP.switchCurrentTeam(currentArenaTeam)
+            return
 
     def updateVehiclesStats(self, updated, arenaDP):
         exchange = self._exchangeBroker.getVehiclesStatsExchange()
@@ -336,6 +339,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def _createExchangeCollector(self):
         raise NotImplementedError
 
+    def _getArenaWinTextShort(self):
+        return self._battleCtx.getArenaWinString()
+
     def __setPersonalStatus(self):
         self.__personalStatus = _makePersonalStatusFromSettingsStorage(self.settingsCore)
         self.__personalStatus |= PERSONAL_STATUS.SHOW_ALLY_INVITES
@@ -360,6 +366,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         questProgress = self.sessionProvider.shared.questProgress
         arenaInfoData = {'mapName': battleCtx.getArenaTypeName(),
          'winText': battleCtx.getArenaWinString(),
+         'winTextShort': self._getArenaWinTextShort(),
          'battleTypeLocaleStr': battleCtx.getArenaDescriptionString(isInBattle=False),
          'battleTypeFrameLabel': battleCtx.getFrameLabel(),
          'allyTeamName': battleCtx.getTeamName(enemy=False),

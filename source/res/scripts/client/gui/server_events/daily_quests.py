@@ -3,7 +3,7 @@
 import logging
 import BigWorld
 import AccountCommands
-import async
+import wg_async
 from helpers import dependency, time_utils
 from skeletons.gui.server_events import IEventsCache
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -44,7 +44,7 @@ class DQNotCompletedValidator(SyncValidator):
 
 class DQRerollConfirmator(AwaitConfirmator):
 
-    @async.async
+    @wg_async.wg_async
     def _confirm(self, callback):
         criteria = REQ_CRITERIA.IN_OWNERSHIP | REQ_CRITERIA.VEHICLE.IS_IN_BATTLE
         numTanksInBattle = len(self.itemsCache.items.getVehicles(criteria=criteria))
@@ -68,7 +68,7 @@ class DQRerollConfirmator(AwaitConfirmator):
             builder = ResSimpleDialogBuilder()
             builder.setMessagesAndButtons(dialogParams)
             builder.setMessageArgs(fmtArgs=[FmtArgs(timeLimitMsg, 'timeLimitMsg', R.styles.NeutralTextBigStyle())])
-        result = yield async.await(dialogs.showSimple(builder.build()))
+        result = yield wg_async.wg_await(dialogs.showSimple(builder.build()))
         callback(makeSuccess() if result else makeError())
 
 

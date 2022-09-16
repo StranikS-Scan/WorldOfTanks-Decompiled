@@ -1,15 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_view.py
 import copy
+from functools import partial
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from helpers.i18n import makeString as _ms
 from account_helpers import AccountSettings
-from adisp import process
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
+from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, isStorageSessionTimeout
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPersonalReservesUrl
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.Scaleform.daapi.view.meta.StorageCategoryPersonalReservesViewMeta import StorageCategoryPersonalReservesViewMeta
+from gui.impl.lobby.personal_reserves import boosterActivationFlow
+from gui.shared.formatters.time_formatters import getTimeLeftInfoEx
+from helpers import time_utils
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
@@ -17,19 +23,15 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS, MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showShop
+from gui.shared.event_dispatcher import showShop, showPersonalReservesIntro, showStorage
 from gui.shared.formatters import text_styles, getItemPricesVO
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, func_utils
-from helpers.time_utils import ONE_HOUR
-from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IBoostersController, IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IBoostersController, IEpicBattleMetaGameController
-from gui.shared.utils.functions import makeTooltip
-from gui.shared import event_dispatcher as shared_events
-from gui.Scaleform.daapi.view.meta.StorageCategoryPersonalReservesViewMeta import StorageCategoryPersonalReservesViewMeta
 
 class _FilterBit(CONST_CONTAINER):
     XP = 1
@@ -40,59 +42,27 @@ class _FilterBit(CONST_CONTAINER):
     TWO = 32
     FOUR = 64
     SIX = 128
+    FREE_XP_CREW_XP = 256
 
 
 _TYPE_BIT_TO_RESOURCE_TYPE_MAP = {_FilterBit.XP: GOODIE_RESOURCE_TYPE.XP,
  _FilterBit.CREW_XP: GOODIE_RESOURCE_TYPE.CREW_XP,
  _FilterBit.FREE_XP: GOODIE_RESOURCE_TYPE.FREE_XP,
- _FilterBit.CREDITS: GOODIE_RESOURCE_TYPE.CREDITS}
-_DURATION_BIT_TO_DURATION_VALUE = {_FilterBit.ONE: 1,
- _FilterBit.TWO: 2,
- _FilterBit.FOUR: 4,
- _FilterBit.SIX: 6}
-
-def getDurationInSeconds(hour):
-    return hour * ONE_HOUR
-
-
-_DURATION_FILTER_ITEMS = [{'filterValue': _FilterBit.ONE,
-  'selected': False,
-  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.ONE))),
-  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.ONE))},
- {'filterValue': _FilterBit.TWO,
-  'selected': False,
-  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.TWO))),
-  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.TWO))},
- {'filterValue': _FilterBit.FOUR,
-  'selected': False,
-  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.FOUR))),
-  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.FOUR))},
- {'filterValue': _FilterBit.SIX,
-  'selected': False,
-  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.SIX))),
-  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.SIX))}]
+ _FilterBit.CREDITS: GOODIE_RESOURCE_TYPE.CREDITS,
+ _FilterBit.FREE_XP_CREW_XP: GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP}
 _TYPE_FILTER_ITEMS = [{'filterValue': _FilterBit.XP,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_VEHICLEEXP),
-  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_XP_SMALL_BW},
- {'filterValue': _FilterBit.CREW_XP,
-  'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREWEXP),
-  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_CREW_XP_SMALL_BW},
- {'filterValue': _FilterBit.FREE_XP,
-  'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_FREEEXP),
-  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_FREE_XP_SMALL_BW},
- {'filterValue': _FilterBit.CREDITS,
+  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_XP_SMALL_BW}, {'filterValue': _FilterBit.CREDITS,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREDITS),
-  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_CREDITS_SMALL_BW}]
+  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_CREDITS_SMALL_BW}, {'filterValue': _FilterBit.FREE_XP_CREW_XP,
+  'selected': False,
+  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_COMBOEXP),
+  'icon': RES_ICONS.MAPS_ICONS_BOOSTERS_BOOSTER_FREE_XP_AND_CREW_XP_SMALL_BW}]
 
 def getCriteriaFromFilterMask(filterMask):
     criteria = REQ_CRITERIA.EMPTY
-    durationSet = {getDurationInSeconds(_DURATION_BIT_TO_DURATION_VALUE[bit]) for bit in _DURATION_BIT_TO_DURATION_VALUE.iterkeys() if filterMask & bit}
-    if durationSet:
-        criteria |= REQ_CRITERIA.BOOSTER.DURATION(durationSet)
     typesSet = {_TYPE_BIT_TO_RESOURCE_TYPE_MAP[bit] for bit in _TYPE_BIT_TO_RESOURCE_TYPE_MAP.iterkeys() if filterMask & bit}
     if typesSet:
         criteria |= REQ_CRITERIA.BOOSTER.BOOSTER_TYPES(typesSet)
@@ -123,9 +93,12 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.__filterMask = filterMask
         self.__onUpdateBoosters()
 
-    @process
+    def onInfoClicked(self):
+        callback = partial(showStorage, defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
+        showPersonalReservesIntro(callbackOnClose=callback)
+
     def activateReserve(self, boosterID):
-        _ = yield shared_events.showBoosterActivateDialog(boosterID)
+        boosterActivationFlow(boosterID)
 
     def _getClientSectionKey(self):
         pass
@@ -173,7 +146,6 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.__onUpdateBoosters()
 
     def __onUpdateBoosters(self, *args):
-        activeBoostersCount = len(self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
         totalBoostersCount = len(self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT).values())
         filteredBoostersCount = 0
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT | REQ_CRITERIA.BOOSTER.ENABLED
@@ -190,7 +162,12 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                     additionalInfo = text_styles.alert(backport.text(limitResource()))
                 else:
                     additionalInfo = ''
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=additionalInfo)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=None, additionalInfo=additionalInfo)
+                if booster.expiryTime:
+                    timeLeft = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(booster.expiryTime)))
+                    timeKey, timeLeft = getTimeLeftInfoEx(timeLeft)
+                    expTimeStr = makeHtmlString('html_templates:lobby/textStyle/', 'clockWithText', {'text': backport.text(R.strings.personal_reserves.booster.useby.timeLeft.dyn(timeKey)(), d=timeLeft)})
+                    vo['customData'] = {'expiryTime': expTimeStr}
                 dataProviderValues.append(vo)
                 filteredBoostersCount += 1
 
@@ -200,7 +177,6 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
             filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
         self._dataProvider.buildList(dataProviderValues)
         self.__updateFilterCounter(filteredBoostersCount, totalBoostersCount)
-        self.__updateActiveBoostersCounter(activeBoostersCount, totalBoostersCount)
         self.as_showFilterWarningS(filterWarningVO)
         self.as_showDummyScreenS(showDummyScreen)
         return
@@ -211,26 +187,15 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
     def __sort(self, a, b):
         return cmp(BOOSTERS_ORDERS[a.boosterType], BOOSTERS_ORDERS[b.boosterType]) or cmp(b.effectValue, a.effectValue) or cmp(b.effectTime, a.effectTime)
 
-    def __updateActiveBoostersCounter(self, active, total):
-        self.as_initS({'activeText': text_styles.main(_ms(STORAGE.PERSONALRESERVES_ACTIVECOUNTLABEL, activeCount=text_styles.error(active) if active == 0 else text_styles.stats(active), totalCount=MAX_ACTIVE_BOOSTERS_COUNT)),
-         'hasActiveReserve': active != 0})
-
     def __initFilter(self):
-        durationItems = copy.deepcopy(_DURATION_FILTER_ITEMS)
-        for item in durationItems:
-            if self.__filterMask & item['filterValue'] == item['filterValue']:
-                item.update({'selected': True})
-
         typeItems = copy.deepcopy(_TYPE_FILTER_ITEMS)
         for item in typeItems:
             if self.__filterMask & item['filterValue'] == item['filterValue']:
                 item.update({'selected': True})
 
-        durationFilters = {'items': durationItems,
-         'minSelectedItems': 0}
         typeFilters = {'items': typeItems,
          'minSelectedItems': 0}
-        self.as_initFilterS(typeFilters, durationFilters)
+        self.as_initFilterS(typeFilters)
 
     def __updateFilterCounter(self, count, total):
         shouldShow = self.__filterMask != 0

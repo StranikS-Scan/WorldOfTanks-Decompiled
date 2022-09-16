@@ -16,6 +16,8 @@ _logger = logging.getLogger(__name__)
 def buildPagesData(ctx):
     datailedList = []
     defaultHeaderTitle = buildTitle(ctx)
+    if ctx.get('isFunRandom'):
+        datailedList.extend(buildFunRandomPages(backport.text(R.strings.ingame_help.detailsHelp.funRandom.title())))
     if ctx.get('roleType'):
         datailedList.extend(buildRoleTypePages(backport.text(R.strings.ingame_help.detailsHelp.role.title()), ctx.get('roleType')))
     if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
@@ -30,8 +32,13 @@ def buildPagesData(ctx):
         datailedList.extend(buildBattleRoyalePages(defaultHeaderTitle, ctx['mapGeometryName']))
     if ctx.get('hasTurboshaftEngine'):
         datailedList.extend(buildTurboshaftEnginePages(defaultHeaderTitle))
+    if ctx.get('hasRocketAcceleration'):
+        datailedList.extend(buildRocketAccelerationPages(defaultHeaderTitle))
     if ctx.get('isTrackWithinTrack'):
         datailedList.extend(buildTrackWithinTrackPages(defaultHeaderTitle))
+    if ctx.get('isComp7'):
+        comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
+        datailedList.extend(buildComp7Pages(comp7Header))
     return datailedList
 
 
@@ -77,6 +84,14 @@ def buildTrackWithinTrackPages(headerTitle):
     return pages
 
 
+def buildComp7Pages(headerTitle):
+    pages = []
+    for pageName in ('poi', 'roleSkills', 'rules'):
+        _addPage(datailedList=pages, headerTitle=headerTitle, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
+
+    return pages
+
+
 def buildDualGunPages(headerTitle):
     pages = []
     shootKeyName = getReadableKey(CommandMapping.CMD_CM_SHOOT)
@@ -112,6 +127,15 @@ def buildTurboshaftEnginePages(headerTitle):
     return pages
 
 
+def buildRocketAccelerationPages(headerTitle):
+    pages = []
+    siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+    siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_1()))
+    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_2()))
+    return pages
+
+
 def buildRoleTypePages(headerTitle, roleType):
     roleActions = []
     rolesToActions = getRolesActions()
@@ -123,6 +147,16 @@ def buildRoleTypePages(headerTitle, roleType):
     roleTypeLabel = ROLE_TYPE_TO_LABEL[roleType]
     pages = []
     _addPage(pages, headerTitle, text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions)
+    return pages
+
+
+def buildFunRandomPages(headerTitle):
+    pages = []
+    numPages = R.images.gui.maps.icons.battleHelp.funRandom.length()
+    for i in xrange(numPages):
+        dynKey = 'mode%s' % (i + 1)
+        _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.funRandom.dyn(dynKey)()))
+
     return pages
 
 

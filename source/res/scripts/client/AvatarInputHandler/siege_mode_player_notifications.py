@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/AvatarInputHandler/siege_mode_player_notifications.py
 import BigWorld
 import Math
+from cgf_obsolete_script.py_component import Component
 import SoundGroups
 from constants import VEHICLE_SIEGE_STATE
-from cgf_obsolete_script.py_component import Component
+from gui.battle_control import avatar_getter
 from vehicle_systems.tankStructure import TankNodeNames
 
 class SOUND_NOTIFICATIONS(object):
@@ -45,9 +46,8 @@ class TurboshaftModeSoundNotifications(SiegeModeNotificationsBase):
         if newState not in self.__sounds:
             return
         else:
-            avatar = BigWorld.player()
-            vehicle = BigWorld.entities[avatar.observedVehicleID] if avatar.observedVehicleID else avatar.vehicle
-            if not vehicle.isAlive():
+            vehicle = avatar_getter.getPlayerVehicle()
+            if vehicle is None or not vehicle.isAlive():
                 return
             isEngineDestroyed = BigWorld.player().deviceStates.get('engine') == 'destroyed'
             if isEngineDestroyed != self.__engineWasDestroyed:

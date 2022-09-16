@@ -419,6 +419,23 @@ class TankmanAddSkill(ItemProcessor):
         BigWorld.player().inventory.addTankmanSkill(self.item.invID, self.skillName, lambda code: self._response(code, callback))
 
 
+class TankmanLearnFreeSkill(ItemProcessor):
+
+    def __init__(self, tankman, skillName):
+        super(TankmanLearnFreeSkill, self).__init__(tankman, (plugins.TankmanLearnFreeSkillValidator(tankman.descriptor, skillName),))
+        self.skillName = skillName
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='learn_tankman_free_skill/{}'.format(errStr), defaultSysMsgKey='learn_tankman_free_skill/server_error')
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='learn_tankman_free_skill/success', type=SM_TYPE.Information)
+
+    def _request(self, callback):
+        _logger.debug('Make server request to add tankman skill: %s, %s', self.item, self.skillName)
+        BigWorld.player().inventory.learnTankmanFreeSkill(self.item.invID, self.skillName, lambda code: self._response(code, callback))
+
+
 class TankmanChangeRole(ItemProcessor):
 
     def __init__(self, tankman, role, vehTypeCompDescr):

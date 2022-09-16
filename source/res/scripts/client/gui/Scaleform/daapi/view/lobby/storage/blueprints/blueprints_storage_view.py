@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_storage_view.py
 import nations
-from CurrentVehicle import g_currentVehicle
 from blueprints.BlueprintTypes import BlueprintTypes
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -63,7 +62,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         super(StorageCategoryBlueprintsView, self).clear()
 
     def _createDataProvider(self):
-        return BlueprintsStorageCarouselDataProvider(BlueprintsStorageCarouselFilter(), self._itemsCache, g_currentVehicle, WeakMethodProxy(self.__updateFilterWarning))
+        return BlueprintsStorageCarouselDataProvider(BlueprintsStorageCarouselFilter(), self._itemsCache, WeakMethodProxy(self.__updateFilterWarning))
 
     def _onCacheResync(self, reason, diff):
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:

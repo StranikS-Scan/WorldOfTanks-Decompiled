@@ -7,7 +7,7 @@ import BigWorld
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
 
-class process(object):
+class adisp_process(object):
 
     def __init__(self, *kargs):
         self.__currentMessage = None
@@ -37,18 +37,18 @@ class process(object):
 
         def wrapper(*kargs, **kwargs):
             self.__nextWaiting()
-            return adisp.process(func, self.__stepCallback)(*kargs, **kwargs)
+            return adisp.adisp_process(func, self.__stepCallback)(*kargs, **kwargs)
 
         return wrapper
 
 
-def async(func, cbname='callback', cbwrapper=lambda x: x):
+def adisp_async(func, cbname='callback', cbwrapper=lambda x: x):
 
     def wrapper(*kargs, **kwargs):
         if cbname in func.func_code.co_varnames:
             idx = func.func_code.co_varnames.index(cbname)
             if idx >= len(kargs) and cbname not in kwargs:
-                return adisp.async(func, cbname, cbwrapper)(*kargs, **kwargs)
+                return adisp.adisp_async(func, cbname, cbwrapper)(*kargs, **kwargs)
         return func(*kargs, **kwargs)
 
     return wrapper

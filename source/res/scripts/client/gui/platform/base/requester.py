@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/platform/base/requester.py
 import typing
 import sys
-import async
+import wg_async
 from BWUtil import AsyncReturn
 from gui.Scaleform.Waiting import Waiting
 from gui.platform.base import logger
@@ -16,17 +16,17 @@ class Pending(object):
     __slots__ = ('_event', '_request', '_response', '_logger')
 
     def __init__(self, request):
-        self._event = async.AsyncEvent()
+        self._event = wg_async.AsyncEvent()
         self._request = request
         self._response = request.params.response.createUnexpectedError('Failed to send request')
         self._logger = logger.getWithContext(instance=self)
         self._logger.debug('Initialized.')
 
-    @async.async
+    @wg_async.wg_async
     def wait(self):
         try:
-            yield async.await(self._event.wait())
-        except async.BrokenPromiseError:
+            yield wg_async.wg_await(self._event.wait())
+        except wg_async.BrokenPromiseError:
             self._logger.debug('Event was destroyed while waiting for event.')
 
         raise AsyncReturn(self._response)
@@ -57,7 +57,7 @@ class PlatformRequester(object):
         self._pendings.clear()
         self._logger.debug('Pendings released and cleared.')
 
-    @async.async
+    @wg_async.wg_async
     def request(self, params, timeout=REQUEST_TIMEOUT, waitingID=None):
         if waitingID is not None:
             Waiting.show(waitingID)
@@ -69,10 +69,10 @@ class PlatformRequester(object):
             self._pendings[paramsHash] = Pending(request)
             try:
                 self._logger.debug('Sending request with id=%s and timeout=%s.', requestId, timeout)
-                response = yield async.await(request.send(), timeout=timeout)
-            except async.TimeoutError:
+                response = yield wg_async.wg_await(request.send(), timeout=timeout)
+            except wg_async.TimeoutError:
                 response = params.response.createRequestTimeout()
-            except async.BrokenPromiseError:
+            except wg_async.BrokenPromiseError:
                 response = params.response.createRequestDestroyed()
             except Exception:
                 response = params.response.createUnexpectedError('Failed to send request')
@@ -87,7 +87,7 @@ class PlatformRequester(object):
                 self._logger.debug('No pending to release for requestId=%s.', requestId)
         else:
             self._logger.debug('Waiting response for requestId=%s.', pending.requestId)
-            response = yield async.await(pending.wait())
+            response = yield wg_async.wg_await(pending.wait())
             self._logger.debug('Got pending response=%s for requestId=%s.', response, pending.requestId)
         if waitingID is not None:
             Waiting.hide(waitingID)

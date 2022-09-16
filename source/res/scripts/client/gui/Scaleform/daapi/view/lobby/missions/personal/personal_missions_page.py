@@ -406,7 +406,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
 
         return _ChainState(hasUnlocked, hasVehicle, isCompleted, isFullCompleted, questInProgress)
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def __pawnMission(self, questInProgress):
         if not questInProgress.isDisabled():
             result = yield quests.PMPawn(questInProgress).request()

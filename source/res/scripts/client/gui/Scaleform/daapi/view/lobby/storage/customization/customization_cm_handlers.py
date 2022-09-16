@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/customization/customization_cm_handlers.py
 import math
-from adisp import process
+from adisp import adisp_process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nSellMeta
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel, ContextMenu
@@ -24,7 +24,7 @@ class CustomizationCMHandler(ContextMenu, EventSystemEntity):
         customizationPreview(itemCD=self._id, vehicleCD=self._vehicleCD)
 
     @option(__sqGen.next(), CMLabel.SELL)
-    @process
+    @adisp_process
     def sell(self):
         item = self.__itemsCache.items.getItemByCD(self._id)
         vehicle = self.__itemsCache.items.getItemByCD(self._vehicleCD) if self._vehicleCD is not None else None

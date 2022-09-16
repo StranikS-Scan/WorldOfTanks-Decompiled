@@ -4,8 +4,8 @@
   <geometry>	spaces/06_ensk	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-300.0 -300.0	</bottomLeft>
-    <upperRight>	300.0 300.0	</upperRight>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	300.000000 300.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/06_ensk/mmap.dds	</minimap>
@@ -28,34 +28,77 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	20.299990 249.699997	</position1>
+          <position1>	20.299936 249.699921	</position1>
         </team1>
         <team2>
-          <position1>	19.099981 -248.700150	</position1>
+          <position1>	19.099901 -248.700485	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	129 271	</position>
+          <position>	129.000000 271.000000	</position>
         </team1>
         <team2>
-          <position>	111 -263	</position>
+          <position>	111.000000 -263.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-82.768745 0.675798	</controlPoint>
+      <controlPoint>	-82.768745 0.675796	</controlPoint>
     </domination>
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	20.299990 249.699997	</position1>
+          <position1>	20.299936 249.699921	</position1>
         </team1>
         <team2>
-          <position1>	19.099981 -248.700150	</position1>
+          <position1>	19.099901 -248.700485	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	38.167999 270.420990	</position>
+        </team1>
+        <team2>
+          <position>	77.943001 -265.811005	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/06_ensk/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-186.742996 -37.199001	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	140.024994 9.983000	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-83.446182 0.616430	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	5.873001 10.181000	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

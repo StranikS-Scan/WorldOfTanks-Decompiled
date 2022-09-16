@@ -143,7 +143,7 @@ class HitDirectionController(IViewComponentsController):
             self._hideAllHits()
 
     def __onVehicleControlling(self, vehicle):
-        if not vehicle.isPlayerVehicle:
+        if self.__arenaDP.getPlayerVehicleID() != self.sessionProvider.shared.vehicleState.getControllingVehicleID():
             self._hideAllHits()
 
 

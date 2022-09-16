@@ -571,6 +571,7 @@ class FilterAliases(object):
     FANTASTICAL = 'fantastical'
     EDITABLE_STYLES = 'editableStyles'
     NON_EDITABLE_STYLES = 'nonEditableStyles'
+    LOCKED = 'locked'
 
 
 class SimpleCarouselFilter(object):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/unit_items.py
+import copy
 import itertools
 import weakref
 from collections import namedtuple
@@ -82,6 +83,12 @@ class PlayerUnitInfo(object):
 
     def isCurrentPlayer(self):
         return self.dbID == getAccountDatabaseID()
+
+    def getTimeJoin(self):
+        return self.timeJoin
+
+    def getExtraData(self):
+        return copy.deepcopy(self.extraData)
 
     def getVehiclesCDs(self):
         requestCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP

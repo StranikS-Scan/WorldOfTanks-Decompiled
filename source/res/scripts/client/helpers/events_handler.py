@@ -8,6 +8,7 @@ if typing.TYPE_CHECKING:
     from Event import Event
 
 class EventsHandler(object):
+    __slots__ = ()
 
     def _getCallbacks(self):
         pass

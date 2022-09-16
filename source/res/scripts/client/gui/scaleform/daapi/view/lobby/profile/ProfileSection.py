@@ -43,7 +43,8 @@ class ProfileSection(ProfileSectionMeta):
          PROFILE_DROPDOWN_KEYS.RANKED_10X10: (False, 'getRanked10x10Stats'),
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: (False, 'getEpicRandomStats'),
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: (False, 'getBattleRoyaleSoloStats'),
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: (False, 'getBattleRoyaleSquadStats')}
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: (False, 'getBattleRoyaleSquadStats'),
+         PROFILE_DROPDOWN_KEYS.COMP7: (False, 'getComp7Stats')}
 
     def __getData(self, battleType, obj):
         data = self.__battleTypeHandlers.get(battleType)

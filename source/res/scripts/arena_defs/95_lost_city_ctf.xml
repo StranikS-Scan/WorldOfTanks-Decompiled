@@ -85,5 +85,51 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	48.545 317.769	</position>
+        </team1>
+        <team2>
+          <position>	51.368 -315.613	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	382.687012 232.240997	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	372.800995 -232.384003	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-440.919006 -1.021000	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-116.900002 0.279000	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	0.000000 0.000000	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </95_lost_city_ctf.xml>

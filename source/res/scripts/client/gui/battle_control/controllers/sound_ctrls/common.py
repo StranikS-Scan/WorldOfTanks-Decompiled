@@ -9,6 +9,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
+from shared_utils import nextTick
 
 class SoundPlayersController(object):
 
@@ -59,7 +60,7 @@ class SoundPlayersBattleController(IBattleController):
 class SoundPlayer(object):
 
     def init(self):
-        self._subscribe()
+        nextTick(self._subscribe)()
 
     def destroy(self):
         self._unsubscribe()

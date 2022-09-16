@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/report_bug.py
 from account_helpers import getAccountDatabaseID
-from adisp import process
+from adisp import adisp_process
 from avatar_helpers import getAvatarDatabaseID
 from gui import GUI_SETTINGS, DialogsInterface
 from gui import makeHtmlString
@@ -45,7 +45,7 @@ def makeHyperLink(linkType, textId):
     return linkHtml
 
 
-@process
+@adisp_process
 def reportBugOpenConfirm(accountId):
     isOk = yield DialogsInterface.showI18nConfirmDialog('reportBug', focusedID=DIALOG_BUTTON_ID.SUBMIT)
     if isOk:

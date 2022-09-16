@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_
 from gui.server_events import formatters
 from gui.server_events.cond_formatters import FORMATTER_IDS
 from gui.server_events.cond_formatters import FormattableField
-from gui.server_events.cond_formatters import postbattle
+from gui.server_events.cond_formatters import prebattle, postbattle, vehicle
 from gui.server_events.cond_formatters.bonus import BattlesCountFormatter
 from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter
 from gui.server_events.formatters import PreFormattedCondition
@@ -235,12 +235,20 @@ class PostBattleConditionPacker(UIConditionPacker):
         return packer.pack(playBattleCondition, CONDITION_DEFAULT_NAME)
 
 
-def getDefaultBonusCondsPacker():
+def getDefaultBonusCondPacker():
     return BonusConditionPacker()
+
+
+def getDefaultPreBattleCondFormatter():
+    return prebattle.MissionsPreBattleConditionsFormatter()
 
 
 def getDefaultPostBattleCondFormatter():
     return postbattle.MissionsPostBattleConditionsFormatter()
+
+
+def getDefaultVehicleCondFormatter():
+    return vehicle.MissionsVehicleConditionsFormatter()
 
 
 def getDefaultMissionsBonusConditionsFormatter():

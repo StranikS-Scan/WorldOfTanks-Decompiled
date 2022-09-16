@@ -13,7 +13,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.server_events.events_helpers import getC11nQuestsConfig, isC11nQuest
 from gui.shared.event_dispatcher import hideVehiclePreview
 from helpers import dependency, time_utils
-from customization_quests_common import CustQuestsCache, deserelizeToken
+from customization_quests_common import CustQuestsCache, deserializeToken
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
 from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, C11nId
@@ -28,7 +28,7 @@ from skeletons.gui.server_events import IEventsCache
 from vehicle_outfit.outfit import Outfit, Area
 from gui.shared.gui_items.processors.common import CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import adisp_process
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from items.vehicles import makeIntCompactDescrByID, VehicleDescr
 from skeletons.gui.customization import ICustomizationService
@@ -136,13 +136,13 @@ class _ServiceHelpersMixin(object):
     def isStyleInstalled(self):
         return g_currentVehicle.item.isStyleInstalled
 
-    @process('buyItem')
+    @adisp_process('buyItem')
     def buyItems(self, item, count, vehicle=None):
         result = yield CustomizationsBuyer(vehicle, item, count).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    @process('sellItem')
+    @adisp_process('sellItem')
     def sellItem(self, item, count, vehicle=None):
         result = yield CustomizationsSeller(vehicle, item, count).request()
         if result.userMsg:
@@ -229,7 +229,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.__showCustomizationCallbackId = None
         return
 
-    @adisp.process
+    @adisp.adisp_process
     def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
         if self.__customizationCtx is None:
             lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
@@ -604,7 +604,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         styles = cache.getQuestProgressionStyles()
         for token, level, _, finishTime, idn in CustQuestsCache(questsConfig):
             if idn in c11nQuests:
-                styleId, __ = deserelizeToken(token)
+                styleId, __ = deserializeToken(token)
                 if styleId in styles:
                     style = styles[styleId]
                     items = style.questsProgression.getItemsForGroup(token)

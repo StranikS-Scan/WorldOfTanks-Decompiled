@@ -6,7 +6,7 @@ from gui.prb_control.entities.base.ctx import LeavePrbAction
 from PlayerEvents import g_playerEvents
 from gui.shared.events import ArgsEvent, BCLoginEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from adisp import process
+from adisp import adisp_process
 
 class BCLoginQueue(LoginQueueWindowMeta):
 
@@ -21,7 +21,7 @@ class BCLoginQueue(LoginQueueWindowMeta):
     def onAccountBecomeNonPlayer(self):
         self.destroy()
 
-    @process
+    @adisp_process
     def onCancelClick(self):
         if self.prbDispatcher is not None:
             yield self.prbDispatcher.doLeaveAction(LeavePrbAction())

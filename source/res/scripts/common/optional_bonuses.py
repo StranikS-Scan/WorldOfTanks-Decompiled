@@ -120,6 +120,11 @@ def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
             total['expires'] = entitlementData['expires']
 
 
+def __mergeEntitlementList(total, key, value, isLeaf=False, count=1, *args):
+    entitlementList = total.setdefault(key, {})
+    entitlementList.setdefault('items', []).extend(value.get('items', []) * count)
+
+
 def __mergeCurrencies(total, key, value, isLeaf=False, count=1, *args):
     totalCurrency = total.setdefault(key, {})
     for currencyCode, currencyData in value.iteritems():
@@ -151,6 +156,8 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
                 total['value'] += dataValue * count
             total['unique'] = data['unique']
             total['type'] = data['type']
+            if 'actualValue' in data:
+                total['actualValue'] = data['actualValue']
 
 
 def __mergeBlueprints(total, key, value, isLeaf=False, count=1, *args):
@@ -191,6 +198,10 @@ def __mergeFreePremiumCrew(total, key, value, isLeaf=False, count=1, *args):
         freePremiumCrewBonus[vehLevel] += freePremiumCrewCount * count
 
 
+def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
+    total[key] = value
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -222,13 +233,14 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprints': __mergeBlueprints,
  'enhancements': __mergeEnhancements,
  'entitlements': __mergeEntitlements,
+ 'entitlementList': __mergeEntitlementList,
  'currencies': __mergeCurrencies,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
  'freePremiumCrew': __mergeFreePremiumCrew,
- 'meta': lambda *args, **kwargs: None}
+ 'meta': __mergeMeta}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}

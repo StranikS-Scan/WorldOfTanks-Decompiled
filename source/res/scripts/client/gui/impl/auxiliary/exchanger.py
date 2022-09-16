@@ -4,7 +4,7 @@ import logging
 import math
 import typing
 import Event
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui.shared.gui_items.processors.common import GoldToCreditsExchanger
 from gui.shared.money import Currency
 from helpers import dependency
@@ -22,7 +22,7 @@ class ExchangeSubmitterBase(object):
     def fini(self):
         self.onUpdated.clear()
 
-    @async
+    @adisp_async
     def submit(self, fromItemCount, toItemCount, callback=None):
         pass
 
@@ -44,8 +44,8 @@ class ExchangeCreditsSubmitter(ExchangeSubmitterBase):
         self.__itemsCache.onSyncCompleted -= self.__update
         self.onUpdated.clear()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def submit(self, fromItemCount, toItemCount, withConfirm=True, callback=None):
         result = yield GoldToCreditsExchanger(fromItemCount, withConfirm=withConfirm).request()
         if callback is not None:
@@ -86,8 +86,8 @@ class Exchanger(object):
         self.__submitter.onUpdated -= self.__updateRate
         self.__submitter.fini()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def tryExchange(self, fromItemCount, withConfirm=True, callback=None):
         result = yield self.__submitter.submit(fromItemCount, self.calculateToItemCount(fromItemCount), withConfirm=withConfirm)
         if callback is not None:

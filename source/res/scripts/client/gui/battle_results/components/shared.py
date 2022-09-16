@@ -105,6 +105,13 @@ class SortieSortingBlock(SortingBlock):
         super(SortieSortingBlock, self).__init__(stored_sorting.STATS_SORTIE_SORTING, meta, field, *path)
 
 
+class Comp7SortingBlock(SortingBlock):
+    __slots__ = ()
+
+    def __init__(self, meta=None, field='', *path):
+        super(Comp7SortingBlock, self).__init__(stored_sorting.STATS_COMP7_SORTING, meta, field, *path)
+
+
 class AchievementIcon(base.StatsBlock):
     __slots__ = ('big', 'small')
 

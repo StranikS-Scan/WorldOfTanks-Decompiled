@@ -21,7 +21,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IBootcampController
-from adisp import process
+from adisp import adisp_process
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
@@ -118,7 +118,7 @@ class BootcampEntity(PreQueueEntity):
     def _exitFromQueueUI(self):
         g_eventDispatcher.unloadBootcampQueue()
 
-    @process
+    @adisp_process
     def onQueueCancel(self, event):
         if event.alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL:
             if self.isInQueue():

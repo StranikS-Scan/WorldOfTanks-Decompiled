@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/rent_vehicles_tab.py
-from CurrentVehicle import g_currentVehicle
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
 from gui.Scaleform.daapi.view.meta.RentVehiclesTabViewMeta import RentVehiclesTabViewMeta
@@ -29,8 +28,8 @@ class _RentStorageCarouselFilter(StorageCarouselFilter):
 
 class _RentVehiclesDataProvider(StorageCarouselDataProvider):
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle):
-        super(_RentVehiclesDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache):
+        super(_RentVehiclesDataProvider, self).__init__(carouselFilter, itemsCache)
         self._baseCriteria = REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.WOTPLUS_RENT ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.TELECOM
 
     def _addCriteria(self):
@@ -82,7 +81,7 @@ class RentVehiclesTabView(RentVehiclesTabViewMeta):
         pass
 
     def _createDataProvider(self):
-        return _RentVehiclesDataProvider(_RentStorageCarouselFilter(), self._itemsCache, g_currentVehicle)
+        return _RentVehiclesDataProvider(_RentStorageCarouselFilter(), self._itemsCache)
 
     def __onCacheResync(self, reason, diff):
         forceUpdateReasons = (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE)

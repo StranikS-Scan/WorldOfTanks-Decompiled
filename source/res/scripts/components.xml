@@ -1,5 +1,11 @@
 <components.xml>
-  <StaticComponents></StaticComponents>
+  <StaticComponents>
+    <PoiTeamInfoComponent></PoiTeamInfoComponent>
+    <ArenaInBattleVehicleSwitch></ArenaInBattleVehicleSwitch>
+    <AvatarInBattleVehicleSwitch></AvatarInBattleVehicleSwitch>
+    <VehicleInBattleSwitch></VehicleInBattleSwitch>
+    <TeamInfoInBattleVehicleSwitch></TeamInfoInBattleVehicleSwitch>
+  </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
     <InAoEZone></InAoEZone>
@@ -13,5 +19,23 @@
     <MapsTrainingStorageComponent></MapsTrainingStorageComponent>
     <BattleHintsComponent></BattleHintsComponent>
     <Fire></Fire>
+    <RocketAccelerationController></RocketAccelerationController>
+    <RocketAcceleration></RocketAcceleration>
+    <VisualScriptEquipment></VisualScriptEquipment>
+    <VisualScriptCache></VisualScriptCache>
+    <VehicleCircle></VehicleCircle>
+    <VehicleRadarDetection></VehicleRadarDetection>
+    <VehicleBuff></VehicleBuff>
+    <GunReloadBoost></GunReloadBoost>
+    <NextClipsReloader></NextClipsReloader>
+    <EnemyVehiclesController></EnemyVehiclesController>
+    <VehicleSkillCounter></VehicleSkillCounter>
+    <Autodestroy></Autodestroy>
+    <Proximity></Proximity>
+    <Capturable></Capturable>
+    <CaptureControl></CaptureControl>
+    <PoiCaptureBlockerComponent></PoiCaptureBlockerComponent>
+    <PoiComponent></PoiComponent>
+    <PoiVehicleComponent></PoiVehicleComponent>
   </DynamicComponents>
 </components.xml>

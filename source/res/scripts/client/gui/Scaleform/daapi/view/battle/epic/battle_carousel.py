@@ -8,23 +8,20 @@ from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBA
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_CLIENT_1
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform import getButtonsAssetPath
-from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
+from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.daapi.view.meta.BattleTankCarouselMeta import BattleTankCarouselMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
-from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 import nations
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
-_DISABLED_FILTERS = ['bonus']
 
 class BattleCarouselFilter(CarouselFilter):
 
@@ -55,12 +52,14 @@ def getEpicVehicleDataVO(vehicle):
 class BattleCarouselDataProvider(CarouselDataProvider):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle):
-        super(BattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache):
+        super(BattleCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__separatorItems = []
         self.__filteredSeparators = []
         self.__availableLevels = []
         self.__indexToScroll = -1
+        self.__currentVehicle = None
+        return
 
     @property
     def collection(self):
@@ -93,7 +92,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         self._selectedIdx = -1
         self.__indexToScroll = -1
         isSeparatorsNeeded = self.__isVehicleLevelsFilterNeeded()
-        currentVehicleInvID = self._currentVehicle.invID
+        currentVehicleInvID = self.__currentVehicle.invID if self.__currentVehicle is not None else None
         vehLevelsToScroll = self.__getVehLevelsUnlockInBattle()
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
@@ -115,6 +114,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         needUpdate = forceApply or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
         if needUpdate:
             self._filterByIndices()
+        return
 
     def updateVehicleStates(self, slotsStatesData):
         updateIndices = []
@@ -136,19 +136,19 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         realIdx = self._filteredIndices[filteredIdx]
         vehicle = self._vehicles[realIdx]
         self._selectedIdx = filteredIdx
-        self._currentVehicle = vehicle
+        self.__currentVehicle = vehicle
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.chooseVehicleForRespawn(vehicle.intCD)
-        return
+        return self.__currentVehicle.invID
 
     def getSelectedVehicle(self):
-        return self._currentVehicle
+        return self.__currentVehicle
 
     def selectVehicleByID(self, vehicleID):
         for vehicle in self._vehicles:
             if vehicle.intCD == vehicleID:
-                self._currentVehicle = vehicle
+                self.__currentVehicle = vehicle
                 self._selectedIdx = -1
 
         self.applyFilter()
@@ -259,6 +259,7 @@ class VehicleData(object):
 
 
 class BattleTankCarousel(BattleTankCarouselMeta):
+    _DISABLED_FILTERS = ['bonus']
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -268,22 +269,8 @@ class BattleTankCarousel(BattleTankCarouselMeta):
         self.__vehicleData = VehicleData(self)
         self.__isUnlockedVehiclesShown = False
 
-    def updateHotFilters(self):
-        hotFilters = []
-        for key in self._usedFilters:
-            filter_ = self.filter.get(key)
-            if key in _DISABLED_FILTERS:
-                filter_ = False
-            hotFilters.append(filter_)
-
-        self.as_setCarouselFilterS({'hotFilters': hotFilters})
-
     def sortVehicles(self, _):
         self._carouselDP.applyFilter()
-
-    def resetFilters(self):
-        super(BattleTankCarousel, self).resetFilters()
-        self.updateHotFilters()
 
     def setFilter(self, idx):
         self.filter.switch(self._usedFilters[idx])
@@ -331,8 +318,7 @@ class BattleTankCarousel(BattleTankCarouselMeta):
 
     def _initDataProvider(self):
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),
-         'itemsCache': self.__vehicleData,
-         'currentVehicle': self._currentVehicle})
+         'itemsCache': self.__vehicleData})
         self._carouselDP = self._carouselDPCls(**self._carouselDPConfig)
 
     def _getFiltersVisible(self):
@@ -345,21 +331,17 @@ class BattleTankCarousel(BattleTankCarouselMeta):
          'hotFilters': [],
          'isVisible': self._getFiltersVisible()}
         for entry in self._usedFilters:
-            filterCtx = contexts.get(entry, FilterSetupContext())
-            filtersVO['hotFilters'].append({'id': entry,
-             'value': getButtonsAssetPath(filterCtx.asset or entry),
-             'selected': filters[entry],
-             'enabled': True,
-             'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx))})
-
-        length = len(filtersVO['hotFilters'])
-        for id_ in range(0, length):
-            entry = filtersVO['hotFilters'][id_]
-            if entry['id'] in _DISABLED_FILTERS:
-                entry['enabled'] = False
-                entry['selected'] = False
+            filtersVO['hotFilters'].append(self._makeFilterVO(entry, contexts, filters))
 
         return filtersVO
+
+    @classmethod
+    def _makeFilterVO(cls, filterID, contexts, filters):
+        filterVO = super(BattleTankCarousel, cls)._makeFilterVO(filterID, contexts, filters)
+        if filterID in cls._DISABLED_FILTERS:
+            filterVO['enabled'] = False
+            filterVO['selected'] = False
+        return filterVO
 
     def _getFilters(self):
         pass

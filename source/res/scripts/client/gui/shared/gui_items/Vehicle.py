@@ -163,6 +163,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     MAPS_TRAINING = 'maps_training'
     T34_DISCLAIMER = 't34_disclaimer'
     CLAN_WARS_BATTLES = 'clanWarsBattles'
+    COMP7_BATTLES = 'comp7'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -1362,6 +1363,10 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.CLAN_WARS_BATTLES)
 
     @property
+    def isOnlyForComp7Battles(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.COMP7_BATTLES)
+
+    @property
     def isTelecom(self):
         return checkForTags(self.tags, VEHICLE_TAGS.TELECOM)
 
@@ -1848,13 +1853,16 @@ class Vehicle(FittingItem):
             component.decals.extend(emblems)
         diff = proxy.inventory.getOutfitData(self.intCD, season)
         if diff is None:
+            component = style.addPartsToOutfit(season, component, self._descriptor.makeCompactDescr())
             return component.copy()
         else:
             diffComponent = customizations.parseC11sComponentDescr(diff)
             if component.styleId != diffComponent.styleId:
                 _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)
                 return component.copy()
-            return component.applyDiff(diffComponent)
+            component = component.applyDiff(diffComponent)
+            component = style.addPartsToOutfit(season, component, self._descriptor.makeCompactDescr())
+            return component.copy()
 
     def __getEmptyOutfitComponent(self):
         if self.descriptor.type.hasCustomDefaultCamouflage:

@@ -5,10 +5,10 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_model import BattleMattersVehicleModel
 
 class BattleMattersVehicleSelectionViewModel(ViewModel):
-    __slots__ = ('onGoBack', 'onShowVehicle', 'onCompareVehicle')
+    __slots__ = ('onGoBack', 'onShowVehicle', 'onCompareVehicle', 'onResetFilter')
     ARG_VEHICLE_ID = 'vehCD'
 
-    def __init__(self, properties=3, commands=3):
+    def __init__(self, properties=3, commands=4):
         super(BattleMattersVehicleSelectionViewModel, self).__init__(properties=properties, commands=commands)
 
     def getEndDate(self):
@@ -41,3 +41,4 @@ class BattleMattersVehicleSelectionViewModel(ViewModel):
         self.onGoBack = self._addCommand('onGoBack')
         self.onShowVehicle = self._addCommand('onShowVehicle')
         self.onCompareVehicle = self._addCommand('onCompareVehicle')
+        self.onResetFilter = self._addCommand('onResetFilter')

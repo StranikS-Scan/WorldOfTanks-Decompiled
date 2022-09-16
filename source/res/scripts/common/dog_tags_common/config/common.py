@@ -81,6 +81,7 @@ class ValidateException(DogTagsException):
     SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY = 11
     DEFAULT_HIDDEN = 12
     CANNOT_BE_DEFAULT = 13
+    UNLOCK_KEY_AND_EXTERNAL_UNLOCK = 14
     ERR_STR = {HAS_GRADES: PREFIX + 'Component with id = %s cannot have grades. Grades: %s',
      HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s cannot have unlockKey. UnlockKey: %s',
      WRONG_NUMBER_OF_GRADES: PREFIX + 'Component with id = %s has wrong number of grades. It should have %s grades.',
@@ -89,9 +90,10 @@ class ValidateException(DogTagsException):
      STARTING_COMPONENT_INVALID_TYPE: PREFIX + 'Starting components cannot be %s view type.',
      STARTING_COMPONENT_WRONG_DATA: PREFIX + 'Starting components should contain only types: %s but contains: %s',
      STARTING_COMPONENT_NON_DEFAULT: PREFIX + 'Starting component with id=%s is not default.',
-     SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s should be default or has unlock key',
+     SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s should be default or has unlock key or has external unlock flag',
      DEFAULT_HIDDEN: PREFIX + 'Component with id=%s is default AND hidden. This is forbidden.',
-     CANNOT_BE_DEFAULT: PREFIX + 'Component with id=%s is default but this is forbidden.'}
+     CANNOT_BE_DEFAULT: PREFIX + 'Component with id=%s is default but this is forbidden.',
+     UNLOCK_KEY_AND_EXTERNAL_UNLOCK: PREFIX + 'Component with id=%s has unlock key and external unlock flag.'}
 
     def __str__(self):
         return ValidateException.ERR_STR[self.err] % ((self.err,) + self.args)

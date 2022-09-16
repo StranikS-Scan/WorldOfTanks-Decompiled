@@ -9,7 +9,7 @@ from gui.shared.utils import sortByFields
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from adisp import process
+from adisp import adisp_process
 from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.daapi.view.meta.ClanProfileTableStatisticsViewMeta import ClanProfileTableStatisticsViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
@@ -50,7 +50,7 @@ class ClanProfileTableStatisticsView(ClanProfileTableStatisticsViewMeta):
         self.__provincesDP = None
         return
 
-    @process
+    @adisp_process
     def setProxy(self, proxy, clanDossier):
         proxy.showWaiting()
         provinces = yield clanDossier.requestProvinces()

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/frontline.py
-from async import await, async
+from wg_async import wg_await, wg_async
 from BWUtil import AsyncReturn
-from adisp import process
+from adisp import adisp_process
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.interactors.base_equipment import BaseEquipmentInteractor
@@ -43,7 +43,7 @@ class FrontlineInteractor(BaseEquipmentInteractor):
         if not onlyInstalled:
             self.getItem().battleAbilities.setLayout(*vehicle.battleAbilities.layout)
 
-    @process
+    @adisp_process
     def confirm(self, callback, skipDialog=False):
         action = ActionsFactory.getAction(ActionsFactory.INSTALL_BATTLE_ABILITIES, self.getItem(), self._checkboxState)
         if action is not None:
@@ -56,12 +56,12 @@ class FrontlineInteractor(BaseEquipmentInteractor):
     def setCheckboxState(self, state):
         self._checkboxState = state
 
-    @async
+    @wg_async
     def showExitConfirmDialog(self):
         vehicle = self.getItem()
         if not self._checkboxState:
             setupItems = self.getChangedList()
         else:
             setupItems = vehicle.battleAbilities.layout.getStorage
-        result = yield await(showBattleAbilitiesConfirmDialog(items=setupItems, withInstall=bool(setupItems), vehicleType=vehicle.type, applyForAllVehiclesByType=self._checkboxState))
+        result = yield wg_await(showBattleAbilitiesConfirmDialog(items=setupItems, withInstall=bool(setupItems), vehicleType=vehicle.type, applyForAllVehiclesByType=self._checkboxState))
         raise AsyncReturn(result)

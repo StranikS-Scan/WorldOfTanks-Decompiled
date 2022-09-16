@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfilePersonnelView.py
 from account_helpers import getAccountDatabaseID
-from adisp import process
+from adisp import adisp_process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.clans.profile import MAX_MEMBERS_IN_CLAN
@@ -119,7 +119,7 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
     def channelsStorage(self):
         return None
 
-    @process
+    @adisp_process
     def setClanDossier(self, clanDossier):
         super(ClanProfilePersonnelView, self).setClanDossier(clanDossier)
         self._showWaiting()

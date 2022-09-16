@@ -129,7 +129,12 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
         vehicle = self.configuration.vehicle
         header = formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.tooltips.battleBooster.installationEffects())), padding=formatters.packPadding(bottom=5))
         block.append(header)
-        if module.isCrewBooster():
+        if module.isBuiltinPerkBooster():
+            boostText = text_styles.bonusAppliedText(module.getBuiltinPerkBoosterAction())
+            description = text_styles.standard(module.getBuiltinPerkBoosterDescription())
+            block.append(formatters.packImageTextBlockData(title=boostText, img=backport.image(R.images.gui.maps.icons.buttons.checkmark()), imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
+            block.append(formatters.packImageTextBlockData(title=description, txtOffset=20))
+        elif module.isCrewBooster():
             skillLearnt = module.isAffectedSkillLearnt(vehicle)
             skillName = backport.text(R.strings.item_types.tankman.skills.dyn(module.getAffectedSkillName())())
             replaceText = module.getCrewBoosterAction(True)
@@ -166,11 +171,12 @@ class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
             inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
             totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
             installedVehicles = totalInstalledVehicles[:_MAX_INSTALLED_LIST_LEN]
-            canNotBuyBlock = None
-            if module.isHidden:
-                canNotBuyBlock = [self.__getCannotBuyBlock(module, self.configuration)]
-            if canNotBuyBlock is not None:
-                block.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, right=_DEFAULT_PADDING), gap=4))
+            if not module.isBuiltinPerkBooster():
+                canNotBuyBlock = None
+                if module.isHidden:
+                    canNotBuyBlock = [self.__getCannotBuyBlock(module, self.configuration)]
+                if canNotBuyBlock is not None:
+                    block.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, right=_DEFAULT_PADDING), gap=4))
             if installedVehicles:
                 tooltipText = ', '.join(installedVehicles)
                 if len(totalInstalledVehicles) > _MAX_INSTALLED_LIST_LEN:

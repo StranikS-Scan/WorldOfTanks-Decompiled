@@ -81,6 +81,46 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         return bonuses
 
 
+class TwitchAwardsComposer(CurtailingAwardsComposer):
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        compensationReason = None
+        if bonus.compensationReason is not None:
+            compensationReason = self._packBonus(bonus.compensationReason, size)
+        packed = {'label': bonus.label,
+         'tooltip': bonus.tooltip,
+         'isSpecial': bonus.isSpecial,
+         'specialAlias': bonus.specialAlias,
+         'specialArgs': bonus.specialArgs,
+         'hasCompensation': bonus.isCompensation,
+         'hasAnimation': False,
+         'compensationReason': compensationReason,
+         'align': bonus.align,
+         'highlightType': bonus.getHighlightType(size),
+         'overlayType': bonus.getOverlayType(size),
+         'highlightIcon': bonus.getHighlightIcon(size),
+         'overlayIcon': bonus.getOverlayIcon(size)}
+        imagePath = bonus.getImage(size)
+        image = imagePath.split('/')[-1] if imagePath else ''
+        packed['imgSource'] = image
+        name = bonus.bonusName
+        if name == 'dossier':
+            name = 'dossier_achievement'
+        packed['name'] = name
+        return packed
+
+    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
+        mergedBonusCount = len(mergedBonuses)
+        imgPath = RES_ICONS.getBonusIcon(size, 'default')
+        imgSource = imgPath.split('/')[-1]
+        return {'name': 'groups',
+         'imgSource': imgSource,
+         'label': i18n.makeString(QUESTS.MISSIONS_AWARDS_MERGED, count=mergedBonusCount),
+         'isSpecial': True,
+         'specialAlias': TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS,
+         'specialArgs': self._getShortBonusesData(mergedBonuses, size)}
+
+
 class BattlePassAwardsComposer(CurtailingAwardsComposer):
 
     def __init__(self, displayedAwardsCount=1, awardsFormatter=None):

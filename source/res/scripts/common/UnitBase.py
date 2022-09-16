@@ -13,7 +13,7 @@ from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, rep
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, FunRandomRoster, Comp7Roster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -180,6 +180,10 @@ class UNIT_ERROR:
     UNIT_ASSEMBLER_DISABLED = 107
     UNIT_ASSEMBLER_TIMEOUT = 108
     KICKED_SEARCH_ONLY_PLAYER = 109
+    INVALID_ACCOUNT = 110
+    ACCOUNT_BANNED = 111
+    MODE_OFFLINE = 112
+    NO_ARENA_VEHICLES = 113
 
 
 OK = UNIT_ERROR.OK
@@ -218,7 +222,6 @@ class UNIT_OP:
     EXTRAS_RESET = 19
     GAMEPLAYS_MASK = 20
     SET_VEHICLE_LIST = 21
-    CHANGE_FALLOUT_TYPE = 22
     ARENA_TYPE = 23
     SET_PLAYER_PROFILE = 24
     DEL_PLAYER_PROFILE = 25
@@ -227,6 +230,7 @@ class UNIT_OP:
     CLEAR_SEARCH_FLAGS = 28
     REMOVE_SEARCH_FLAGS = 29
     SET_SEARCH_FLAGS = 30
+    SQUAD_SIZE = 31
 
 
 class UNIT_ROLE:
@@ -294,7 +298,6 @@ class UNIT_NOTIFY_CMD:
     SET_MEMBER_READY = 5
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
-    FALLOUT_TYPE_CHANGE = 10
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
     REMOVED_VEHICLE = 13
@@ -303,6 +306,7 @@ class UNIT_NOTIFY_CMD:
     REMOVED_VEHICLE_FROM_FILTER = 16
     INCORRECT_EVENT_ENQUEUE_DATA = 17
     REMOVED_VEHICLE_MAX_SCOUT_EXCEED = 18
+    CHANGE_SQUAD_SIZE = 19
 
 
 class CLIENT_UNIT_CMD:
@@ -328,10 +332,10 @@ class CLIENT_UNIT_CMD:
     GIVE_LEADERSHIP = 19
     SET_GAMEPLAYS_MASK = 22
     SET_VEHICLE_LIST = 23
-    CHANGE_FALLOUT_TYPE = 24
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
     SET_ONLY_10_MODE = 27
+    SET_SQUAD_SIZE = 28
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -355,6 +359,7 @@ class UNIT_MGR_FLAGS:
     MAPBOX = 32768
     RTS = 65536
     FUN_RANDOM = 131072
+    COMP7 = 262144
 
 
 class UnitAssemblerSearchFlags(object):
@@ -428,9 +433,7 @@ class BitfieldHelper:
 
 
 def _prebattleTypeFromFlags(flags):
-    if flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
-        return PREBATTLE_TYPE.FALLOUT
-    elif flags & UNIT_MGR_FLAGS.EVENT:
+    if flags & UNIT_MGR_FLAGS.EVENT:
         return PREBATTLE_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.EPIC:
         return PREBATTLE_TYPE.EPIC
@@ -438,6 +441,10 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.BATTLE_ROYALE
     elif flags & UNIT_MGR_FLAGS.MAPBOX:
         return PREBATTLE_TYPE.MAPBOX
+    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
+        return PREBATTLE_TYPE.FUN_RANDOM
+    elif flags & UNIT_MGR_FLAGS.COMP7:
+        return PREBATTLE_TYPE.COMP7
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -453,12 +460,14 @@ def _prebattleTypeFromFlags(flags):
 def _entityNameFromFlags(flags):
     if flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
         return 'SpecUnitMgr'
-    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
-        return 'FalloutUnitMgr'
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return 'EventUnitMgr'
     elif flags & UNIT_MGR_FLAGS.MAPBOX:
         return 'MapBoxUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
+        return 'FunRandomUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.COMP7:
+        return 'Comp7UnitMgr'
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return 'SquadUnitMgr'
     elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
@@ -476,6 +485,10 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.BATTLE_ROYALE
     elif flags & UNIT_MGR_FLAGS.MAPBOX:
         return INVITATION_TYPE.MAPBOX
+    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
+        return INVITATION_TYPE.FUN_RANDOM
+    elif flags & UNIT_MGR_FLAGS.COMP7:
+        return INVITATION_TYPE.COMP7
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:
@@ -495,6 +508,10 @@ def _queueTypeFromFlags(flags):
         return QUEUE_TYPE.BATTLE_ROYALE
     elif flags & UNIT_MGR_FLAGS.MAPBOX:
         return QUEUE_TYPE.MAPBOX
+    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
+        return QUEUE_TYPE.FUN_RANDOM
+    elif flags & UNIT_MGR_FLAGS.COMP7:
+        return QUEUE_TYPE.COMP7
     else:
         return QUEUE_TYPE.RANDOMS if flags & UNIT_MGR_FLAGS.SQUAD else None
 
@@ -515,7 +532,9 @@ class ROSTER_TYPE:
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
     BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
     MAPBOX_ROSTER = UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.SQUAD
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX
+    FUN_RANDOM_ROSTER = UNIT_MGR_FLAGS.FUN_RANDOM | UNIT_MGR_FLAGS.SQUAD
+    COMP7_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.COMP7
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.FUN_RANDOM | COMP7_ROSTER
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -551,19 +570,17 @@ class UnitPlayerDataKey(object):
     EXTRA_DATA = 'extraData'
 
 
-FALLOUT_QUEUE_TYPE_TO_ROSTER = {QUEUE_TYPE.FALLOUT_CLASSIC: ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER,
- QUEUE_TYPE.FALLOUT_MULTITEAM: ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER}
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SQUAD_ROSTER: SquadRoster,
  ROSTER_TYPE.SPEC_ROSTER: SpecRoster,
- ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER: FalloutClassicRoster,
- ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER: FalloutMultiteamRoster,
  ROSTER_TYPE.EVENT_ROSTER: EventRoster,
  ROSTER_TYPE.STRONGHOLD_ROSTER: SpecRoster,
  ROSTER_TYPE.TOURNAMENT_ROSTER: SpecRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
  ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
- ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster}
+ ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster,
+ ROSTER_TYPE.FUN_RANDOM_ROSTER: FunRandomRoster,
+ ROSTER_TYPE.COMP7_ROSTER: Comp7Roster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -599,12 +616,12 @@ class UnitBase(OpsUnpacker):
                                 '_setVehicleList',
                                 'N',
                                 [('H', 'iH')]),
-     UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType'),
      UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
      UNIT_OP.ESTIMATED_TIME_IN_QUEUE: ('i', '_setEstimatedTimeInQueue'),
      UNIT_OP.ONLY_10_MODE: ('?', '_setOnly10Mode'),
+     UNIT_OP.SQUAD_SIZE: ('i', '_setSquadSize'),
      UNIT_OP.SET_SEARCH_FLAGS: ('qH', 'setAutoSearchFlags'),
      UNIT_OP.CLEAR_SEARCH_FLAGS: (None, 'clearAutoSearchFlags'),
      UNIT_OP.REMOVE_SEARCH_FLAGS: ('H', 'removeAutoSearchFlags')})
@@ -647,6 +664,7 @@ class UnitBase(OpsUnpacker):
         self._modalTimestamp = 0
         self._estimatedTimeInQueue = 0
         self._isOnly10ModeEnabled = False
+        self._squadSize = 0
         self._unitAssemblerSearchFlags = {}
 
     def _initExtrasHandler(self):
@@ -801,12 +819,12 @@ class UnitBase(OpsUnpacker):
 
         return True
 
-    _HEADER = '<HHHHHHHHBiiii?'
+    _HEADER = '<HHHHHHHHBiiii?i'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
-    _IDS = '<HBB'
+    _IDS = '<IBB'
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Hi'
     _VEHICLE_PROFILE_HEADER = '<qBB'
@@ -845,7 +863,8 @@ class UnitBase(OpsUnpacker):
          self._estimatedTimeInQueue,
          self._gameplaysMask,
          self._arenaType,
-         self._isOnly10ModeEnabled)
+         self._isOnly10ModeEnabled,
+         self._squadSize)
         packed += struct.pack(self._HEADER, *args)
         for accountDBID, vehList in vehs.iteritems():
             packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
@@ -880,7 +899,7 @@ class UnitBase(OpsUnpacker):
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled = struct.unpack_from(self._HEADER, unpacking)
+        memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled, self._squadSize = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
@@ -899,7 +918,7 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
             playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
              UnitPlayerDataKey.TIME_JOIN: timeJoin,
@@ -913,7 +932,7 @@ class UnitBase(OpsUnpacker):
              UnitPlayerDataKey.IGRTYPE: igrType,
              UnitPlayerDataKey.BADGES: badges,
              UnitPlayerDataKey.IS_PREMIUM: isPremium,
-             UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
+             UnitPlayerDataKey.EXTRA_DATA: extraData}
             self._addPlayer(accountDBID, **playerData)
 
         for i in xrange(0, profilesCount):
@@ -1079,6 +1098,8 @@ class UnitBase(OpsUnpacker):
         slotIdx = self._playerSlots.get(accountDBID)
         if slotIdx is None:
             return UNIT_ERROR.BAD_SLOT_IDX
+        elif isReady and not self._isValidMember(accountDBID):
+            return UNIT_ERROR.INVALID_ACCOUNT
         else:
             prevReadyMask = self._readyMask
             if isReady:
@@ -1162,6 +1183,30 @@ class UnitBase(OpsUnpacker):
             self._isOnly10ModeEnabled = newIsOnly10Mode
             self.storeOp(UNIT_OP.ONLY_10_MODE, newIsOnly10Mode)
         return OK
+
+    def _setSquadSize(self, newSquadSize):
+        LOG_DEBUG_DEV('_setSquadSize', newSquadSize, len(self._players), self._squadSize)
+        if len(self._players) > newSquadSize:
+            return UNIT_ERROR.BAD_PARAMS
+        else:
+            squadSize = self._squadSize
+            if squadSize != newSquadSize or self._freeSlots > squadSize:
+                playerSlotsIterator = iter(sorted(self._playerSlots.iteritems(), key=lambda x: x[1]))
+                for squadSlotIdx in xrange(newSquadSize):
+                    accountDBID, prevSlotIdx = next(playerSlotsIterator, (None, None))
+                    if squadSlotIdx == LEADER_SLOT:
+                        continue
+                    if accountDBID and prevSlotIdx != squadSlotIdx:
+                        self._setMember(accountDBID, squadSlotIdx)
+
+                self._refreshFreeSlots(squadSize, newSquadSize)
+                self._squadSize = newSquadSize
+                self.storeOp(UNIT_OP.SQUAD_SIZE, newSquadSize)
+                for accountDBID, _ in self._players.iteritems():
+                    self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.CHANGE_SQUAD_SIZE, [newSquadSize])
+
+                self._dirty = 1
+            return OK
 
     def _setArenaType(self, newArenaType):
         prevArenaType = self._arenaType
@@ -1346,7 +1391,7 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventEnqueueData = self.__unpackPlayerData(packedOps)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData = self.__unpackPlayerData(packedOps)
         playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
          UnitPlayerDataKey.TIME_JOIN: timeJoin,
          UnitPlayerDataKey.ROLE: role,
@@ -1359,7 +1404,7 @@ class UnitBase(OpsUnpacker):
          UnitPlayerDataKey.IGRTYPE: igrType,
          UnitPlayerDataKey.BADGES: badges,
          UnitPlayerDataKey.IS_PREMIUM: isPremium,
-         UnitPlayerDataKey.EXTRA_DATA: dict(eventEnqueueData=eventEnqueueData)}
+         UnitPlayerDataKey.EXTRA_DATA: extraData}
         self._addPlayer(accountDBID, **playerData)
         return packedOps[blockLength:]
 
@@ -1389,36 +1434,8 @@ class UnitBase(OpsUnpacker):
             for indx in xrange(prevMax, newMax):
                 self._freeSlots.add(indx)
 
-    def _getFalloutRosterType(self, queueType):
-        prevRosterTypeID = self._rosterTypeID
-        newRosterTypeID = FALLOUT_QUEUE_TYPE_TO_ROSTER.get(queueType, None)
-        if newRosterTypeID is None:
-            LOG_DEBUG_DEV('Wrong fallout queue type={}.', queueType)
-            return
-        elif newRosterTypeID == prevRosterTypeID:
-            LOG_DEBUG_DEV('Queue type has not changed.')
-            return
-        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID, None)
-        if RosterType is None:
-            LOG_DEBUG_DEV('Wrong RosterTypeID={}', newRosterTypeID)
-            return
-        else:
-            return (newRosterTypeID, RosterType)
-
-    def _changeFalloutQueueType(self, queueType):
-        prevRosterTypeID = self._rosterTypeID
-        prevRoster = self._roster
-        LOG_DEBUG_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
-        res = self._getFalloutRosterType(queueType)
-        if res is None:
-            return False
-        else:
-            self._rosterTypeID, RosterType = res
-            self._roster = RosterType()
-            LOG_DEBUG_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
-            self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
-            self.storeOp(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)
-            return True
+        for idx in self._freeSlots - set(xrange(0, newMax)):
+            self._freeSlots.discard(idx)
 
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
@@ -1429,6 +1446,12 @@ class UnitBase(OpsUnpacker):
     def getRosterType(self):
         return self._rosterTypeID
 
+    def getSquadSize(self):
+        return self._squadSize
+
+    def _isValidMember(self, accountDBID):
+        return True
+
     def _checkAllVehiclesMatchSlot(self, accountDBID, unitSlotIdx):
         vehList = self._vehicles.get(accountDBID, [])
         for veh in vehList:
@@ -1438,13 +1461,16 @@ class UnitBase(OpsUnpacker):
 
         return (True, None)
 
+    def _makePlayerExtraDataForClient(self, extraData):
+        return {}
+
     def __packPlayerData(self, accountDBID, **kwargs):
         packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get(UnitPlayerDataKey.ACCOUNT_ID, 0), kwargs.get(UnitPlayerDataKey.TIME_JOIN, 0), kwargs.get(UnitPlayerDataKey.ROLE, 0), kwargs.get(UnitPlayerDataKey.IGRTYPE, 0), kwargs.get(UnitPlayerDataKey.RATING, 0), kwargs.get(UnitPlayerDataKey.ACCOUNT_WTR, 0), kwargs.get(UnitPlayerDataKey.PERIPHERY_ID, 0), kwargs.get(UnitPlayerDataKey.CLAN_DBID, 0), kwargs.get(UnitPlayerDataKey.IS_PREMIUM, False))
         packed += packPascalString(kwargs.get(UnitPlayerDataKey.NICKNAME, ''))
         packed += packPascalString(kwargs.get(UnitPlayerDataKey.CLAN_ABBREV, ''))
         badges = kwargs.get(UnitPlayerDataKey.BADGES, BadgesCommon.selectedBadgesEmpty())
         packed += BadgesCommon.packPlayerBadges(badges)
-        packed += self.__packEventEnqueueContainerData(kwargs.get('extraData', {}).get('eventEnqueueData', {}))
+        packed += self.__packPlayerExtraData(self._makePlayerExtraDataForClient(kwargs.get('extraData', {})))
         return packed
 
     def __unpackPlayerData(self, packedData):
@@ -1457,8 +1483,8 @@ class UnitBase(OpsUnpacker):
         offset += lenClanBytes
         badges, lenBadgesInfo = BadgesCommon.unpackPlayerBadges(packedData, offset)
         offset += lenBadgesInfo
-        eventEnqueueData, lenEventDataInfo = self.__unpackEventEnqueueContainerData(packedData, offset)
-        offset += lenEventDataInfo
+        extraData, lenExtraData = self.__unpackPlayerExtraData(packedData, offset)
+        offset += lenExtraData
         return (offset,
          accountDBID,
          accountID,
@@ -1473,11 +1499,36 @@ class UnitBase(OpsUnpacker):
          nickName,
          clanAbbrev,
          badges,
-         eventEnqueueData)
+         extraData)
 
     @staticmethod
-    def __packEventEnqueueContainerData(packedData):
-        LOG_DEBUG_DEV('eventEnqueueData = ', packedData)
+    def __packPlayerExtraData(extraData):
+        packed = struct.pack('<B', len(extraData))
+        for k in extraData:
+            packed += packPascalString(k)
+            kData = extraData.get(k, {})
+            packed += UnitBase.__packEnqueueContainerData(kData)
+
+        return packed
+
+    @staticmethod
+    def __unpackPlayerExtraData(packedData, offset):
+        extraDataLen = struct.unpack_from('<B', packedData, offset)[0]
+        startingOffset = offset
+        offset += struct.calcsize('<B')
+        extraData = dict()
+        for _ in xrange(extraDataLen):
+            key, sz = unpackPascalString(packedData, offset)
+            offset += sz
+            keyData, sz = UnitBase.__unpackEnqueueContainerData(packedData, offset)
+            offset += sz
+            extraData.setdefault(key, keyData)
+
+        return (extraData, offset - startingOffset)
+
+    @staticmethod
+    def __packEnqueueContainerData(packedData):
+        LOG_DEBUG_DEV('enqueueData = ', packedData)
         packed = struct.pack('<B', len(packedData))
         for key, value in packedData.iteritems():
             packed += packPascalString(key)
@@ -1486,7 +1537,7 @@ class UnitBase(OpsUnpacker):
         return packed
 
     @staticmethod
-    def __unpackEventEnqueueContainerData(packedData, offset):
+    def __unpackEnqueueContainerData(packedData, offset):
         return UnitBase.__unpackContainerDataWithFormat(packedData, offset, '<I')
 
     @staticmethod

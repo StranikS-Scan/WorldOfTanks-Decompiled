@@ -3,7 +3,7 @@
 import BigWorld
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
-from adisp import process
+from adisp import adisp_process
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import WindowLayer
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -61,7 +61,7 @@ class EventBattlePage(ClassicPage):
         settings = event.ctx.get('settings')
         self.__fadeProcess(settings)
 
-    @process
+    @adisp_process
     def __fadeProcess(self, settings):
         manager = self.app.fadeMgr
         yield manager.startFade(settings=settings)

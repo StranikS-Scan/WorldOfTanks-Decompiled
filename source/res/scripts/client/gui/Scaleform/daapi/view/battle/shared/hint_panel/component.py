@@ -14,23 +14,25 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
 
     def __init__(self):
         super(BattleHintPanel, self).__init__()
-        self.__hints = {}
-        self.__plugins = None
+        self._hints = {}
+        self._plugins = None
         self.__isBattleLoaded = False
         return
 
     def setBtnHint(self, btnID, hintData):
         if hintData:
-            self.__hints[btnID] = hintData
+            self._hints[btnID] = hintData
             self.__invalidateBtnHint()
 
     def removeBtnHint(self, btnID):
-        if btnID in self.__hints:
-            self.__hints.pop(btnID)
+        if btnID in self._hints:
+            self._hints.pop(btnID)
         self.__invalidateBtnHint()
 
     def setPeriod(self, period):
-        self.__plugins.setPeriod(period)
+        if self._plugins is not None:
+            self._plugins.setPeriod(period)
+        return
 
     def getActiveHint(self):
         hintData = self.__getActiveHintData()
@@ -49,23 +51,33 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def _populate(self):
         super(BattleHintPanel, self)._populate()
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
-        self.__plugins = HintPluginsCollection(self)
-        self.__plugins.addPlugins(plugins.createPlugins())
-        self.__plugins.init()
-        self.__plugins.start()
+        self._initPlugins()
 
     def _dispose(self):
-        if self.__plugins is not None:
-            self.__plugins.stop()
-            self.__plugins.fini()
-            self.__plugins = None
-        self.__hints = None
+        self._finiPlugins()
+        self._hints = None
         self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
         super(BattleHintPanel, self)._dispose()
         return
 
+    def _initPlugins(self):
+        self._plugins = HintPluginsCollection(self)
+        self._plugins.addPlugins(self._createPlugins())
+        self._plugins.init()
+        self._plugins.start()
+
+    def _finiPlugins(self):
+        if self._plugins is not None:
+            self._plugins.stop()
+            self._plugins.fini()
+            self._plugins = None
+        return
+
+    def _createPlugins(self):
+        return plugins.createPlugins()
+
     def __getActiveHintData(self):
-        return first(sorted(self.__hints.iteritems(), key=lambda h: h[1].priority, reverse=False))
+        return first(sorted(self._hints.iteritems(), key=lambda h: h[1].priority, reverse=False))
 
     def __invalidateBtnHint(self):
         hintData = self.__getActiveHintData()

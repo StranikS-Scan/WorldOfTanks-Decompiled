@@ -179,7 +179,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         title = _ms(MENU.MODULEFITS_TITLE, moduleName=getTypeInfoByName(self._slotType)['userString'], vehicleName=self.__vehicle.userName if self.__vehicle is not None else '')
         rendererDataClass = FITTING_TYPES.MODULE_FITTING_RENDERER_DATA_CLASS_NAME
         if self._slotType == FITTING_TYPES.VEHICLE_ENGINE:
-            if self.__vehicle.descriptor.hasTurboshaftEngine:
+            if self.__vehicle.descriptor.hasTurboshaftEngine or self.__vehicle.descriptor.hasRocketAcceleration:
                 rendererName = FITTING_TYPES.ENGINE_FITTING_BIG_ITEM_RENDERER
             else:
                 rendererName = FITTING_TYPES.ENGINE_FITTING_ITEM_RENDERER
@@ -243,6 +243,7 @@ class PopoverLogicProvider(object):
         self._needToResetAutoReload = False
         self._needToResetDualGun = False
         self._needToResetTurboshaft = False
+        self._needToResetRocketAcceleration = False
         self.__moduleExtenders = fittingSelectModuleExtenders()
         return
 
@@ -278,6 +279,8 @@ class PopoverLogicProvider(object):
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
         elif self._needToResetTurboshaft:
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
+        elif self._needToResetRocketAcceleration:
+            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
 
     def _checkCounters(self, vehicleModule):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
@@ -288,6 +291,8 @@ class PopoverLogicProvider(object):
         elif vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             if not self._needToResetTurboshaft and vehicleModule.hasTurboshaftEngine():
                 self._needToResetTurboshaft = True
+            if not self._needToResetRocketAcceleration and vehicleModule.hasRocketAcceleration():
+                self._needToResetRocketAcceleration = True
 
     def _buildCommonModuleData(self, module, reason):
         return {'id': module.intCD,

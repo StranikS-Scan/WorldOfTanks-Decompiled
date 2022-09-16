@@ -7,15 +7,6 @@ class BattleTankCarouselMeta(CarouselEnvironment):
     def setFilter(self, id):
         self._printOverrideError('setFilter')
 
-    def updateHotFilters(self):
-        self._printOverrideError('updateHotFilters')
-
-    def as_setCarouselFilterS(self, data):
-        return self.flashObject.as_setCarouselFilter(data) if self._isDAAPIInited() else None
-
-    def as_initCarouselFilterS(self, data):
-        return self.flashObject.as_initCarouselFilter(data) if self._isDAAPIInited() else None
-
     def as_useExtendedCarouselS(self, value):
         return self.flashObject.as_useExtendedCarousel(value) if self._isDAAPIInited() else None
 

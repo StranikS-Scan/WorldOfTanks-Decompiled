@@ -6,14 +6,18 @@ import VOIP
 import CommandMapping
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from debug_utils import LOG_WARNING
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui import GUI_SETTINGS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from gui.shared.utils.key_mapping import getReadableKey
 from helpers import dependency
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IVOIPChatController
 from account_helpers.settings_core.settings_constants import SOUND
+from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE, ClientActionMessage
 from skeletons.account_helpers.settings_core import ISettingsCore
 
 class VOIPChatController(IVOIPChatController):
@@ -78,7 +82,7 @@ class VOIPChatController(IVOIPChatController):
         if not BigWorld.isKeyDown(keyCode):
             self.setMicrophoneMute(isMuted=True, force=True)
 
-    @async
+    @adisp_async
     def requestCaptureDevices(self, firstTime=False, callback=None):
         voipMgr = VOIP.getVOIPManager()
         if voipMgr.getVOIPDomain() == '':
@@ -106,7 +110,7 @@ class VOIPChatController(IVOIPChatController):
     def enableCurrentChannel(self, isEnableChannel):
         VOIP.getVOIPManager().enableCurrentChannel(isEnableChannel)
 
-    @process
+    @adisp_process
     def __initialize(self):
         serverSettings = getattr(BigWorld.player(), 'serverSettings', {})
         if serverSettings and 'voipDomain' in serverSettings:
@@ -118,7 +122,7 @@ class VOIPChatController(IVOIPChatController):
         yield self.__initializeSettings(domain, server)
         yield self.requestCaptureDevices(True)
 
-    @async
+    @adisp_async
     def __initializeSettings(self, domain, server, callback):
         if self.isReady():
             self.__applyUserSettings()
@@ -171,4 +175,14 @@ class VOIPChatController(IVOIPChatController):
 
     def __onToggleChannelEnabled(self, event):
         voipMgr = VOIP.getVOIPManager()
-        voipMgr.enableCurrentChannel(not voipMgr.isCurrentChannelEnabled())
+        isEnabled = not voipMgr.isCurrentChannelEnabled()
+        voipMgr.enableCurrentChannel(isEnabled)
+        self.__showMessage(isEnabled)
+
+    @staticmethod
+    def __showMessage(enable):
+        if enable:
+            msg = backport.text(R.strings.messenger.client.dynSquad.enableVOIP())
+        else:
+            msg = backport.text(R.strings.messenger.client.dynSquad.disableVOIP(), keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
+        g_messengerEvents.onWarningReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))

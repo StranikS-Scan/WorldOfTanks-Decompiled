@@ -1,0 +1,25 @@
+<PointOfInterestUDO.def>
+  <Domain>	CELL	</Domain>
+  <NonChunk>	True	</NonChunk>
+  <Properties>
+    <pointID>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </pointID>
+    <type>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </type>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0.0	</Default>
+    </radius>
+    <equipment>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </equipment>
+  </Properties>
+</PointOfInterestUDO.def>

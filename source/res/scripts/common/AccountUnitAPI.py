@@ -83,14 +83,17 @@ class UnitClientAPI(object):
     def createBattleRoyaleSquad(self):
         return self._doCreate(PREBATTLE_TYPE.BATTLE_ROYALE)
 
-    def createFalloutSquad(self, queueType):
-        return self._doCreate(PREBATTLE_TYPE.FALLOUT, queueType)
-
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
 
     def createMapboxSquad(self):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
+
+    def createFunRandomSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM)
+
+    def createComp7Squad(self, squadSize):
+        return self._doCreate(PREBATTLE_TYPE.COMP7, squadSize)
 
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
@@ -185,11 +188,11 @@ class UnitClientAPI(object):
     def setOnly10Mode(self, isOnly10ModeEnabled):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ONLY_10_MODE, isOnly10ModeEnabled)
 
+    def setSquadSize(self, squadSize):
+        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_SQUAD_SIZE, squadSize)
+
     def setArenaType(self, arenaTypeID):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ARENA_TYPE, arenaTypeID)
 
     def setVehicleList(self, vehicleList):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_VEHICLE_LIST, 0, 0, ','.join(map(str, vehicleList)))
-
-    def changeFalloutType(self, newQueueType):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.CHANGE_FALLOUT_TYPE, newQueueType)

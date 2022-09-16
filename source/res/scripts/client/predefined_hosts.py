@@ -13,7 +13,7 @@ import constants
 from Event import Event, EventManager
 from helpers.time_utils import ONE_MINUTE
 from shared_utils import BitmaskHelper
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_NOTE
 from helpers import i18n
 AUTO_LOGIN_QUERY_ENABLED = not constants.IS_DEVELOPMENT
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
@@ -573,6 +573,7 @@ class _PreDefinedHostList(object):
             peripheries = [ host for host in self.peripheries() if host.peripheryID in self.__availablePeripheriesByRoutingGroup ]
         else:
             peripheries = self.peripheries()
+        LOG_NOTE('Peripheries for autoconnect: ', peripheries)
         queryResult = [ (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)) for host in peripheries ]
         self.__recommended = [ item for item in queryResult if item[2] == HOST_AVAILABILITY.RECOMMENDED ]
         if not self.__recommended:
@@ -593,6 +594,7 @@ class _PreDefinedHostList(object):
                 self.__recommended = self.__filterRecommendedByPing(self.__recommended)
                 LOG_DEBUG('Recommended by ping', self.__recommended)
             result = self.__choiceFromRecommended()
+        LOG_NOTE('Chosen periphery for autoconnect: ', result)
         return result
 
     def __startCsisTimer(self):

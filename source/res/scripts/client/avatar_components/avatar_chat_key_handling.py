@@ -163,7 +163,7 @@ class AvatarChatKeyHandling(object):
                 maxDistance = 600.0
                 playerVehiclePosition = BigWorld.player().getOwnVehiclePosition()
                 if Vector3(position).distSqrTo(playerVehiclePosition) > maxDistance * maxDistance:
-                    direction = position - playerVehiclePosition
+                    direction = Vector3(position) - playerVehiclePosition
                     direction.normalise()
                     return createTranslationMatrix(playerVehiclePosition + direction * maxDistance)
                 return createTranslationMatrix(position)

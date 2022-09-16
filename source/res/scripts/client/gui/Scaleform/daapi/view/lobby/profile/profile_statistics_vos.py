@@ -4,7 +4,7 @@ import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT, BATTLE_ROYALE_STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT, BATTLE_ROYALE_STATISTICS_LAYOUT, COMP7_STATISTICS_LAYOUT
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
@@ -454,6 +454,29 @@ class ProfileStatisticsBattleRoyaleVO(BaseDictStatisticsVO):
         return PUtils.packLditItemData(backport.getIntegralFormat(res), PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE_SHORT, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT, 'maxExp40x32.png')
 
 
+class ProfileComp7StatisticsVO(ProfileDictStatisticsVO):
+
+    def _getHeaderText(self, data):
+        return backport.text(R.strings.profile.section.statistics.headerText.comp7())
+
+    def _getHeaderData(self, data):
+        targetData, _ = data
+        avgPrestigePoints = PUtils.getValueOrUnavailable(targetData.getAvgPrestigePoints())
+        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
+         PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
+         _packAvgDmgLditItemData(self._avgDmg),
+         PUtils.packLditItemData(backport.getIntegralFormat(avgPrestigePoints), PROFILE.SECTION_STATISTICS_SCORES_AVGPRESTIGEPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGPRESTIGEPOINTS, 'avgPrestigePoints40x32.png'))
+
+    def _getDetailedData(self, data):
+        targetData, _ = data
+        stats = targetData.getBattlesStats()
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser, COMP7_STATISTICS_LAYOUT), _formatChartsData((_getVehStatsByTypes(stats),
+          _getVehStatsByNation(stats),
+          tuple(),
+          tuple(),
+          tuple())))
+
+
 _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FALLOUT: ProfileFalloutStatisticsVO,
  PROFILE_DROPDOWN_KEYS.HISTORICAL: ProfileHistoricalStatisticsVO,
@@ -466,7 +489,8 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.RANKED_10X10: ProfileRanked10x10StatisticsVO,
  PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: ProfileStatisticsBattleRoyaleVO,
- PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: ProfileStatisticsBattleRoyaleVO}
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: ProfileStatisticsBattleRoyaleVO,
+ PROFILE_DROPDOWN_KEYS.COMP7: ProfileComp7StatisticsVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):
     return _VO_MAPPING[battlesType](targetData=targetData, accountDossier=accountDossier, isCurrentUser=isCurrentUser)

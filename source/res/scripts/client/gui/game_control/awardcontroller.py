@@ -8,33 +8,31 @@ from copy import deepcopy
 from functools import partial
 from itertools import chain, ifilter
 import typing
-import ArenaType
 import BigWorld
-import async
-import gui.awards.event_dispatcher as shared_events
+from shared_utils import first
+import ArenaType
+import wg_async
+import gui.awards.event_dispatcher as award_events
 import personal_missions
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AWARDS, AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND
-from account_shared import getFairPlayViolationName
-from adisp import process
+from adisp import adisp_process
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
+from comp7_common import Comp7QuestType
 from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.DialogsInterface import showDialog
+from gui.DialogsInterface import showPunishmentDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.EVENT import EVENT
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.awards.event_dispatcher import showCrewSkinAward, showDynamicAward
@@ -48,6 +46,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
+from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7Quest, getComp7QuestType, parseComp7RanksQuestID, parseComp7WinsQuestID
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -59,6 +58,7 @@ from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, 
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -68,12 +68,10 @@ from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
-from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController
@@ -88,7 +86,9 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
+    from comp7_ranks_common import Comp7Division
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
+    from gui.server_events.event_items import TokenQuest
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -194,7 +194,8 @@ class AwardController(IAwardController, IGlobalListener):
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
          BattleMattersQuestsHandler(self),
-         ResourceWellRewardHandler(self)]
+         ResourceWellRewardHandler(self),
+         Comp7RewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -382,28 +383,9 @@ class PunishWindowHandler(ServiceChannelHandler):
         arenaCreateTime = message.data.get('arenaCreateTime', None)
         fairplayViolations = message.data.get('fairplayViolations', None)
         if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
-            penaltyType = None
-            violation = None
-            if fairplayViolations[1] != 0:
-                penaltyType = 'penalty'
-                violation = fairplayViolations[1]
-            elif fairplayViolations[0] != 0:
-                penaltyType = 'warning'
-                violation = fairplayViolations[0]
-            violationName = getFairPlayViolationName(violation)
-            msgID = 'punishmentWindow/reason/%s' % violationName
-            showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
-             'arenaName': i18n.makeString(arenaType.name),
-             'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-             'reason': i18n.makeString(self.__getLocalizationString(msgID, violationName))}), lambda *args: None)
+            banDuration = message.data['restriction'][1] if 'restriction' in message.data else None
+            showPunishmentDialog(arenaType, arenaCreateTime, fairplayViolations, banDuration)
         return
-
-    def __getLocalizationString(self, msgID, violationName):
-        if 'event' in violationName:
-            res = EVENT.all(msgID)
-        else:
-            res = DIALOGS.all(msgID)
-        return res
 
 
 class PersonalMissionBonusHandler(ServiceChannelHandler):
@@ -1102,7 +1084,7 @@ class VehiclesResearchHandler(SpecialAchievement):
             self.handle()
 
     def showAwardWindow(self, achievementCount, messageNumber):
-        return shared_events.showResearchAward(achievementCount, messageNumber)
+        return award_events.showResearchAward(achievementCount, messageNumber)
 
     def _needToShowAward(self, ctx=None):
         isNeededToShow = super(VehiclesResearchHandler, self)._needToShowAward()
@@ -1140,7 +1122,7 @@ class VictoryHandler(SpecialAchievement):
         return self.itemsCache.items.getAccountDossier().getTotalStats().getWinsCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
-        return shared_events.showVictoryAward(achievementCount, messageNumber)
+        return award_events.showVictoryAward(achievementCount, messageNumber)
 
 
 class BattlesCountHandler(SpecialAchievement):
@@ -1171,7 +1153,7 @@ class BattlesCountHandler(SpecialAchievement):
         return self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
-        return shared_events.showBattleAward(achievementCount, messageNumber)
+        return award_events.showBattleAward(achievementCount, messageNumber)
 
     def _getAwardCountToMessage(self):
         return BattlesCountHandler.BATTLE_AMOUNT
@@ -1186,7 +1168,7 @@ class PveBattlesCountHandler(BattlesCountHandler):
         return self.itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
-        return shared_events.showPveBattleAward(achievementCount, messageNumber)
+        return award_events.showPveBattleAward(achievementCount, messageNumber)
 
     def _getAwardCountToMessage(self):
         return {BATTLES_TO_SELECT_RANDOM_MIN_LIMIT: 1}
@@ -1227,7 +1209,7 @@ class TelecomHandler(ServiceChannelHandler):
         hasBrotherhood = TelecomReceivedInvoiceFormatter.invoiceHasBrotherhood(data)
         vehicleDesrs = self.__getVehileDesrs(data)
         if vehicleDesrs:
-            shared_events.showTelecomAward(vehicleDesrs, data['bundleID'], hasCrew, hasBrotherhood)
+            award_events.showTelecomAward(vehicleDesrs, data['bundleID'], hasCrew, hasBrotherhood)
         else:
             _logger.error("Can't show telecom award window!")
 
@@ -1419,13 +1401,13 @@ class VehicleCollectorAchievementHandler(ServiceChannelHandler):
             return
         else:
             for nationID in self.__nationAwards:
-                shared_events.showVehicleCollectorAward(nationID)
+                award_events.showVehicleCollectorAward(nationID)
 
             return
 
     def __showVehicleCollectorOfEverythingAward(self):
         if self.__isCollectionAssembled:
-            shared_events.showVehicleCollectorOfEverythingAward()
+            award_events.showVehicleCollectorOfEverythingAward()
 
     def __clear(self):
         self.__nationAwards = []
@@ -1664,14 +1646,14 @@ class MapboxProgressionRewardHandler(AwardHandler):
         _, __, settings = args
         return settings.messageSubtype == SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD
 
-    @async.async
+    @wg_async.wg_async
     def _showAward(self, ctx):
         _, message, __ = ctx
         bonuses = chain.from_iterable([ getServiceBonuses(name, value) for name, value in message['savedData'].get('rewards', {}).iteritems() ])
         window = MapBoxAwardsViewWindow(message['savedData']['battles'], bonuses)
         self.__notificationMgr.append(WindowNotificationCommand(window))
         self.__eventsCache.onEventsVisited()
-        yield async.await(self.__mapboxCtrl.forceUpdateProgressData())
+        yield wg_async.wg_await(self.__mapboxCtrl.forceUpdateProgressData())
 
 
 class PurchaseHandler(ServiceChannelHandler):
@@ -1692,7 +1674,7 @@ class PurchaseHandler(ServiceChannelHandler):
             else:
                 _logger.debug('Data can not be requested from the product! Award window will not be shown!')
 
-    @process
+    @adisp_process
     def __tryToShowAwards(self, invoiceData):
         yield lambda callback: callback(True)
         metaData = invoiceData.get('meta', {})
@@ -1739,3 +1721,74 @@ class ResourceWellRewardHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))
+
+
+class Comp7RewardHandler(MultiTypeServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(Comp7RewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        self.__completedQuestIDs = set()
+
+    def fini(self):
+        self.__completedQuestIDs.clear()
+        self.eventsCache.onSyncCompleted -= self.__showAward
+        super(Comp7RewardHandler, self).fini()
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = message.data
+        self.__completedQuestIDs.update((qID for qID in data.get('completedQuestIDs', set()) if isComp7Quest(qID)))
+        if not self.__completedQuestIDs:
+            return
+        if self.eventsCache.waitForSync:
+            self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
+        else:
+            self.__showAward()
+
+    def __showAward(self):
+        ranksQuests, winsQuests, periodicQuests = self.__getComp7CompletedQuests()
+        self.__completedQuestIDs.clear()
+        for quest in ranksQuests:
+            event_dispatcher.showComp7RanksRewardsScreen(quest=quest, periodicQuests=periodicQuests)
+
+        for quest in winsQuests:
+            event_dispatcher.showComp7WinsRewardsScreen(quest=quest)
+
+    def __getComp7CompletedQuests(self):
+        ranksQuests = []
+        winsQuests = []
+        periodicQuests = []
+        if not self.__completedQuestIDs:
+            return (ranksQuests, winsQuests, periodicQuests)
+        else:
+            allQuests = self.eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()))
+            for qID in self.__completedQuestIDs:
+                quest = allQuests.get(qID)
+                if quest is None:
+                    _logger.error('Missing Comp7 Quest qID=%s', qID)
+                    continue
+                qType = getComp7QuestType(qID)
+                if qType == Comp7QuestType.RANKS:
+                    ranksQuests.append(quest)
+                if qType == Comp7QuestType.WINS:
+                    winsQuests.append(quest)
+                if qType == Comp7QuestType.PERIODIC:
+                    periodicQuests.append(quest)
+
+            ranksQuests.sort(key=self.__getRanksQuestSortKey)
+            winsQuests.sort(key=self.__getWinsQuestSortKey)
+            return (ranksQuests, winsQuests, periodicQuests)
+
+    def __onEventCacheSyncCompleted(self, *_):
+        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
+        self.__showAward()
+
+    @staticmethod
+    def __getRanksQuestSortKey(quest):
+        division = parseComp7RanksQuestID(quest.getID())
+        return (division.rank, division.index)
+
+    @staticmethod
+    def __getWinsQuestSortKey(quest):
+        winsCount = parseComp7WinsQuestID(quest.getID())
+        return winsCount

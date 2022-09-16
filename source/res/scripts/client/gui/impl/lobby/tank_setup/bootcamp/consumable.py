@@ -5,6 +5,7 @@ from gui.impl.lobby.tank_setup.configurations.consumable import ConsumableTabsCo
 from gui.impl.lobby.tank_setup.sub_views.consumable_setup import ConsumableSetupSubView
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from bootcamp.Bootcamp import g_bootcamp
 
 class BootcampConsumableDeviceProvider(ConsumableDeviceProvider):
 
@@ -28,12 +29,18 @@ class BootcampConsumableSetupSubView(ConsumableSetupSubView):
         super(BootcampConsumableSetupSubView, self).onLoading(currentSlotID, *args, **kwargs)
         if any(self._interactor.getCurrentLayout()):
             return
-        items = self._provider.getItemsList()
-        for item in items:
-            if item.isInInventory:
-                self._onSelectItem({'intCD': item.intCD,
-                 'isAutoSelect': True})
-                break
+        itemCD = g_bootcamp.getNationData()['consumable']
+        item = self._itemsCache.items.getItemByCD(itemCD)
+        if item.isInInventory:
+            self._onSelectItem({'intCD': itemCD,
+             'isAutoSelect': True})
+        else:
+            items = self._provider.getItemsList()
+            for item in items:
+                if item.isInInventory:
+                    self._onSelectItem({'intCD': item.intCD,
+                     'isAutoSelect': True})
+                    break
 
     def finalize(self):
         if self._currentTabName:

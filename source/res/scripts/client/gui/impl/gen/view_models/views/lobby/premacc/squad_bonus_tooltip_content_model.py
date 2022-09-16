@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class SquadBonusTooltipContentModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(SquadBonusTooltipContentModel, self).__init__(properties=properties, commands=commands)
 
     def getCreditsBonusWithPremium(self):
@@ -26,8 +26,15 @@ class SquadBonusTooltipContentModel(ViewModel):
     def setExperienceBonus(self, value):
         self._setNumber(2, value)
 
+    def getBattleType(self):
+        return self._getString(3)
+
+    def setBattleType(self, value):
+        self._setString(3, value)
+
     def _initialize(self):
         super(SquadBonusTooltipContentModel, self)._initialize()
         self._addNumberProperty('creditsBonusWithPremium', 0)
         self._addNumberProperty('creditsBonusWithoutPremium', 0)
         self._addNumberProperty('experienceBonus', 0)
+        self._addStringProperty('battleType', '')

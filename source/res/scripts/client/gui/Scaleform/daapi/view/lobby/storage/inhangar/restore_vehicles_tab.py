@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/restore_vehicles_tab.py
-from CurrentVehicle import g_currentVehicle
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
@@ -15,7 +14,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
-from adisp import process
+from adisp import adisp_process
 
 class _RestoreStorageCarouselFilter(StorageCarouselFilter):
 
@@ -30,8 +29,8 @@ class _RestoreStorageCarouselFilter(StorageCarouselFilter):
 
 class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle):
-        super(_RestoreVehiclesDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache):
+        super(_RestoreVehiclesDataProvider, self).__init__(carouselFilter, itemsCache)
         self._baseCriteria = REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE | ~REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT
 
     def _addCriteria(self):
@@ -59,7 +58,7 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
 class RestoreVehiclesTabView(RestoreVehiclesTabViewMeta):
     _restoreCtrl = dependency.descriptor(IRestoreController)
 
-    @process
+    @adisp_process
     def restoreItem(self, itemId):
         itemCD = int(itemId)
         item = self._itemsCache.items.getItemByCD(itemCD)
@@ -85,7 +84,7 @@ class RestoreVehiclesTabView(RestoreVehiclesTabViewMeta):
         super(RestoreVehiclesTabView, self)._dispose()
 
     def _createDataProvider(self):
-        return _RestoreVehiclesDataProvider(_RestoreStorageCarouselFilter(), self._itemsCache, g_currentVehicle)
+        return _RestoreVehiclesDataProvider(_RestoreStorageCarouselFilter(), self._itemsCache)
 
     def _onCacheResync(self, reason, diff):
         forceUpdateReasons = (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE)

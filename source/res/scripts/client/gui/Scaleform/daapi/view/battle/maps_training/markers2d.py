@@ -26,8 +26,8 @@ class _MapsTrainingVehicleMarkerPlugin(vehicle_plugins.VehicleMarkerPlugin):
         super(_MapsTrainingVehicleMarkerPlugin, self).stop()
         return
 
-    def _setMarkerInitialState(self, marker, accountDBID=0):
-        super(_MapsTrainingVehicleMarkerPlugin, self)._setMarkerInitialState(marker, accountDBID)
+    def _setMarkerInitialState(self, marker, vInfo):
+        super(_MapsTrainingVehicleMarkerPlugin, self)._setMarkerInitialState(marker, vInfo)
         self.__updateGoal(marker)
 
     def __onLocalKillGoalsUpdated(self, localGoals):

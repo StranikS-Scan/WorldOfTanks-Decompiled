@@ -4,16 +4,16 @@ import logging
 import typing
 from functools import partial
 from CurrentVehicle import g_currentVehicle
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsSeller
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
 from gui.Scaleform.daapi.view.lobby.customization import shared
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, removeUnselectedItemsFromEditableStyle, getUnsuitableDependentData
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, removeUnselectedItemsFromEditableStyle, getUnsuitableDependentData, changePartsOutfit
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import PurchaseItem, getAvailableRegions, EDITABLE_STYLE_IRREMOVABLE_TYPES, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, C11nId
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.decorators import process as wrapperdProcess
+from gui.shared.utils.decorators import adisp_process as wrapperdProcess
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, MAX_USERS_PROJECTION_DECALS, CustomizationType
 from vehicle_outfit.containers import SlotData
@@ -240,8 +240,8 @@ class EditableStyleMode(CustomMode):
         self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)
         super(EditableStyleMode, self)._onStop()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _applyItems(self, purchaseItems, isModeChanged, callback):
         results = []
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
@@ -273,25 +273,19 @@ class EditableStyleMode(CustomMode):
         return
 
     def _fillOutfits(self):
-        isInstalled = self._service.isStyleInstalled()
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        for season in SeasonType.COMMON_SEASONS:
-            diff = self._ctx.stylesDiffsCache.getDiff(self.__style, season)
-            if not isInstalled and diff is not None:
-                diffOutfit = Outfit(strCompactDescr=diff, vehicleCD=vehicleCD)
-                self._removeHiddenFromOutfit(diffOutfit, g_currentVehicle.item.intCD)
-                diff = diffOutfit.pack().makeCompDescr()
-            outfit = self.__style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
-            self._originalOutfits[season] = outfit.copy()
-            self._modifiedOutfits[season] = outfit.copy()
-
-        return
+        originalOutfits = self._ctx.mode.getOriginalOutfits()
+        modifiedOutfits = self._ctx.mode.getModifiedOutfits()
+        self._originalOutfits = originalOutfits
+        self._modifiedOutfits = modifiedOutfits
 
     def _installItem(self, intCD, slotId, season=None, component=None):
         if component is None:
             baseSlotData = self.getSlotDataFromBaseOutfit(slotId, season)
             if baseSlotData is not None and baseSlotData.intCD == intCD:
                 component = baseSlotData.component.copy()
+        season = season or self.season
+        slotData = self.getSlotDataFromSlot(slotId, season)
+        self._modifiedOutfits[season] = changePartsOutfit(season, self._modifiedOutfits[season], intCD, slotData.intCD)
         return super(EditableStyleMode, self)._installItem(intCD, slotId, season, component)
 
     def _selectItem(self, intCD, progressionLevel=0):
@@ -334,7 +328,7 @@ class EditableStyleMode(CustomMode):
                 outfit = self.__style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
             yield (season, outfit)
 
-    @async
+    @adisp_async
     @wrapperdProcess('sellItem')
     def _sellItem(self, item, count, callback):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
@@ -353,7 +347,7 @@ class EditableStyleMode(CustomMode):
         season = season or self.season
         outfit = self._modifiedOutfits[season]
         baseOutfit = self.__baseOutfits[season]
-        removeItemFromEditableStyle(outfit, baseOutfit, slotId)
+        self._modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
 
     def _getAnchorVOs(self):
         if self.slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:

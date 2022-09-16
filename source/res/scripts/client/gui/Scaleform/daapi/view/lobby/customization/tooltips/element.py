@@ -23,7 +23,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.items_parameters import formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
-from gui.shared.missions.packers.conditions import getDefaultMissionsBonusConditionsFormatter, getDefaultPostBattleCondFormatter
+from gui.shared.missions.packers.conditions import getDefaultMissionsBonusConditionsFormatter, getDefaultPostBattleCondFormatter, getDefaultVehicleCondFormatter
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils.graphics import isRendererPipelineDeferred
@@ -171,7 +171,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
-        self._setContentMargin(top=20, left=19, bottom=20, right=0)
+        self._setContentMargin(top=10, left=19, bottom=20, right=0)
         self._setMargins(afterBlock=14)
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
         self._item = None
@@ -314,14 +314,17 @@ class ElementTooltip(BlocksTooltipData):
             return None
         else:
             rStatus = R.strings.vehicle_customization.customization.tooltip.quests.status
+            _, level = self._item.getQuestsProgressionInfo()
             if not self._item.requiredToken:
-                blocks.append(formatters.packImageTextBlockData(desc=text_styles.bonusAppliedText(backport.text(rStatus.completed(), level=int2roman(1))), img=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1()), imgPadding=formatters.packPadding(top=2)))
+                blocks.append(formatters.packImageTextBlockData(desc=text_styles.bonusAppliedText(backport.text(rStatus.completed(), level=int2roman(level))), img=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1()), imgPadding=formatters.packPadding(top=2)))
             else:
                 quests = self._item.getUnlockingQuests()
                 tokenCount = self.__itemsCache.items.tokens.getTokenCount(self._item.requiredToken)
                 isCompleted = any((quest.isCompleted() for quest in quests)) if quests else False
                 if isCompleted or tokenCount >= self._item.descriptor.requiredTokenCount:
-                    blocks.append(formatters.packImageTextBlockData(desc=text_styles.bonusAppliedText(backport.text(rStatus.completed(), level=int2roman(self._item.descriptor.requiredTokenCount + 1))), img=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1()), imgPadding=formatters.packPadding(top=2)))
+                    if level < 1:
+                        return None
+                    blocks.append(formatters.packImageTextBlockData(desc=text_styles.bonusAppliedText(backport.text(rStatus.completed(), level=int2roman(level))), img=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1()), imgPadding=formatters.packPadding(top=2)))
                 else:
                     isAvailable = tokenCount == self._item.descriptor.requiredTokenCount - 1
                     isValid = not self._item.isUnlockingExpired()
@@ -372,7 +375,8 @@ class ElementTooltip(BlocksTooltipData):
             isAvailable = tokenCount == self._item.descriptor.requiredTokenCount - 1
             delimitersToPost = len(quests) - 1
             for quest in quests:
-                pbCond = getDefaultPostBattleCondFormatter().format(quest.postBattleCond, quest)
+                vehCond = getDefaultVehicleCondFormatter().format(quest.vehicleReqs, quest)
+                postBattleCond = getDefaultPostBattleCondFormatter().format(quest.postBattleCond, quest)
                 bonusCond = getDefaultMissionsBonusConditionsFormatter().format(quest.bonusCond, quest)
                 isCompleted = quest is not None and quest.isCompleted() or tokenCount >= self._item.descriptor.requiredTokenCount
                 isLevelCompleted = isLevelCompleted or isCompleted
@@ -380,10 +384,10 @@ class ElementTooltip(BlocksTooltipData):
                 battlesCount = None
                 hasBattleConditions = False
                 if battleCountCondition is not None:
-                    battlesCount = first(BattlesCountFormatter(bool(pbCond)).format(battleCountCondition, quest))
-                for orItem in pbCond:
+                    battlesCount = first(BattlesCountFormatter(bool(postBattleCond)).format(battleCountCondition, quest))
+                for orItem in postBattleCond:
                     progress = 0
-                    andItems = orItem + first(bonusCond, [])
+                    andItems = orItem + first(vehCond, []) + first(bonusCond, [])
                     for andItem in andItems:
                         descrData = andItem.descrData
                         if andItem.conditionData:
@@ -411,7 +415,7 @@ class ElementTooltip(BlocksTooltipData):
 
             if not isLevelCompleted and isAvailable:
                 blocks.append(formatters.packQuestProgressBlockData(max(progressPercents), padding=formatters.packPadding(left=-19, top=13, bottom=-35)))
-            return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3, bottom=-8))
+            return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-8))
 
     def _packCharacteristicsBlock(self):
         blocks = []
@@ -509,7 +513,7 @@ class ElementTooltip(BlocksTooltipData):
             icn = getSuitableText(self._item, self.__vehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
             blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
-            return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-13))
+            return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-18))
 
     def _packAppliedBlock(self):
         if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
@@ -662,7 +666,7 @@ class ElementTooltip(BlocksTooltipData):
         else:
             component = None
             img = self._item.getIconApplied(component)
-        return formatters.packCustomizationImageBlockData(img=img, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(bottom=2, right=20), formfactor=formfactor, isDim=isDim)
+        return formatters.packCustomizationImageBlockData(img=img, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(top=-5, bottom=-3, right=20), formfactor=formfactor, isDim=isDim)
 
     def _packBonusBlock(self, bonus, camo, isApplied):
         blocks = []
@@ -811,7 +815,7 @@ class ElementAwardTooltip(ElementTooltip):
         elif self._item.itemTypeName == 'camouflage':
             bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_CAMOUFLAGE
         bonusPercent = '{min:.0f}-{max:.0f}%'.format(min=CamouflageBonus.MIN * 100, max=CamouflageBonus.MAX * 100)
-        blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(text_styles.main(bonusDescription)), icon=bonusPercent, isTextIcon=True))
+        blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(text_styles.main(bonusDescription)), icon=bonusPercent, isTextIcon=True, padding=formatters.packPadding(right=20)))
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 

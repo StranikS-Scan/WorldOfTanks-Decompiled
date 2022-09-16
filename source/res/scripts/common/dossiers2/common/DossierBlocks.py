@@ -12,7 +12,23 @@ if TYPE_CHECKING:
     from dossiers2.common.DossierDescr import DossierDescr
     from .DossierBlockBuilders import EVENT_HANDLERS_TYPE
 
-class StaticDossierBlockDescr(object):
+class DossierBlockDescrInterface(object):
+    eventsEnabled = True
+
+    def expand(self):
+        raise NotImplementedError()
+
+    def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
+        raise NotImplementedError()
+
+    def getChanges(self):
+        raise NotImplementedError()
+
+    def clear(self):
+        raise NotImplementedError()
+
+
+class StaticDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
     def __init__(self, name, dossierDescr, compDescr, eventsHandlers, popUpRecords, recordsLayout, packing, format, blockSize, initialData, logRecords):
@@ -82,6 +98,10 @@ class StaticDossierBlockDescr(object):
         self.__isExpanded = True
         return self
 
+    def clear(self):
+        for key, _ in self.__recordsLayout:
+            self[key] = 0
+
     def getChanges(self):
         return self.__changed
 
@@ -114,7 +134,7 @@ class StaticDossierBlockDescr(object):
         return [ data[rec] for rec, _ in self.__recordsLayout ]
 
 
-class DictDossierBlockDescr(object):
+class DictDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
     def __init__(self, name, dossierDescr, compDescr, eventsHandlers, keyFormat, valueFormat):
@@ -283,7 +303,7 @@ class DictDossierBlockDescr(object):
         return (data, offsets)
 
 
-class ListDossierBlockDescr(object):
+class ListDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
     def __init__(self, name, dossierDescr, compDescr, eventsHandlers, itemFormat):
@@ -410,7 +430,7 @@ class ListDossierBlockDescr(object):
         return data
 
 
-class BinarySetDossierBlockDescr(object):
+class BinarySetDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
     def __init__(self, name, dossierDescr, blockCompDescr, eventHandlers, popUpRecords, valueNames, valueToPosition, logRecords):
@@ -431,6 +451,10 @@ class BinarySetDossierBlockDescr(object):
     def expand(self):
         self.__isExpanded = True
         return self
+
+    def clear(self):
+        for valueName in self.__values:
+            self[valueName] = False
 
     def getChanges(self):
         return self.__changed
@@ -529,7 +553,7 @@ class BinarySetDossierBlockDescr(object):
             return (dossierCompDescrArray[:offset] + array('c', struct.pack(_format, *data)) + dossierCompDescrArray[offset + size:], newSize)
 
 
-class SerializableBlockDescr(object):
+class SerializableBlockDescr(DossierBlockDescrInterface):
 
     def __init__(self, name, dossierDescr, serializableComponentClass, parserCallback, compDescr, eventsHandlers, popUpRecords, logRecords, initialData=None):
         self.name = name
@@ -581,6 +605,12 @@ class SerializableBlockDescr(object):
         self.__data = data
         self.__isExpanded = True
         return self
+
+    def clear(self):
+        for key in self.__data:
+            self[key] = None
+
+        return
 
     def getChanges(self):
         return self.__changed

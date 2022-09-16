@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofRatingUrlForVehicle, getHofDisabledKeys, onServerSettingsChange, isHofButtonNew, setHofButtonOld
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT, BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT, BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT, COMP7_VEHICLE_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
@@ -26,7 +26,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.gui_items.dossier.stats import UNAVAILABLE_MARKS_OF_MASTERY
 from helpers import i18n, dependency
 from nations import NAMES
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
@@ -37,6 +37,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
@@ -86,6 +87,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
         dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
+        if self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getSeasonPassed():
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
         storedData = self._getStorageData()
         return {'dropDownProvider': dropDownProvider,
          'tableHeader': self.__getTableHeader(isFallout),
@@ -123,15 +126,19 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return AccountSettings.getFilter(self._getStorageId())
 
     def _getDefaultTableHeader(self, isFallout=False):
-        markOfMasteryEnabled = self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
-        return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
+        result = [self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
          self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, inverted=True, sortType='string'),
          self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
          self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
-         self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
-         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, enabled=markOfMasteryEnabled))
+         self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE)]
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7:
+            result.append(self._createTableBtnInfo('prestigePoints', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_PRESTIGEPOINTS))
+        else:
+            markOfMasteryEnabled = self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
+            result.append(self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, enabled=markOfMasteryEnabled))
+        return result
 
     def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True, enabled=True):
         return {'id': iconId,
@@ -162,7 +169,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES,
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM,
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESOLO,
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD}
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD,
+         PROFILE_DROPDOWN_KEYS.COMP7: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_COMP7}
         return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
 
     def _sendAccountData(self, targetData, accountDossier):
@@ -223,7 +231,14 @@ class ProfileTechnique(ProfileTechniqueMeta):
         else:
             __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL,)
         showMarkOfMastery = self._battlesType in __markOfMasteryBattles and targetData.getMarksOfMastery() != UNAVAILABLE_MARKS_OF_MASTERY
-        for intCD, (battlesCount, wins, xp) in targetData.getVehicles().iteritems():
+        showPrestigePoints = self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7
+        for intCD, vehParams in targetData.getVehicles().iteritems():
+            if showPrestigePoints:
+                battlesCount, wins, xp, prestigePoints = vehParams
+                avgPrestigePoints = round(float(prestigePoints) / float(battlesCount))
+            else:
+                battlesCount, wins, xp = vehParams
+                avgPrestigePoints = ProfileUtils.UNAVAILABLE_VALUE
             avgXP = xp / battlesCount if battlesCount else 0
             vehicle = self.itemsCache.items.getItemByCD(intCD)
             if vehicle is not None:
@@ -259,7 +274,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
                  'tankIconPath': vehicle.iconSmall,
                  'typeIconPath': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
                  'isInHangar': isInHangar,
-                 'compareModeAvailable': self.comparisonBasket.isEnabled()})
+                 'compareModeAvailable': self.comparisonBasket.isEnabled(),
+                 'prestigePoints': avgPrestigePoints})
 
         return result
 
@@ -317,6 +333,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 stats = vehDossier.getBattleRoyaleSquadStats(vehicleIntCD)
                 if not stats:
                     return
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7:
+                stats = vehDossier.getComp7Stats()
             else:
                 raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
             if achievementsList is not None:
@@ -333,7 +351,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
             return FALLOUT_STATISTICS_LAYOUT
         if self._battlesType == PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO:
             return BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT
-        return BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT if self._battlesType == PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD else STATISTICS_LAYOUT
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD:
+            return BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT
+        return COMP7_VEHICLE_STATISTICS_LAYOUT if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7 else STATISTICS_LAYOUT
 
     def __getAchievementsList(self, targetData, vehDossier):
         packedList = []

@@ -8,7 +8,7 @@ import typing
 import BigWorld
 import personal_missions
 from account_helpers.AccountSettings import QUEST_DELTAS_PROGRESS, QUEST_DELTAS_COMPLETION
-from adisp import async
+from adisp import adisp_async
 from gui.server_events import events_helpers
 from gui.shared.utils.requesters.quest_deltas_settings import QuestDeltasSettings
 from gui.shared.utils.requesters.token import Token
@@ -36,7 +36,7 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
     def getTokensData(self):
         return self.itemsCache.items.tokens.getTokens()
 
-    @async
+    @adisp_async
     def _requestCache(self, callback=None):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 

@@ -1824,6 +1824,30 @@
       </damage>
     </armorSpalls>
   </_100mm_UOF-412B>
+  <_100mm_UOF-412A>
+    <id>	315	</id>
+    <userString>	#ussr_vehicles:_100mm_UOF-412A	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1170	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_UOF-412A>
   <_100mm_3UOF10>
     <id>	100	</id>
     <userString>	#ussr_vehicles:_100mm_3UOF10	</userString>
@@ -1904,6 +1928,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_3UBK4M>
+  <_100mm_3UBK4A>
+    <id>	314	</id>
+    <userString>	#ussr_vehicles:_100mm_3UBK4A	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_3UBK4A>
   <_100mm_3UBK4M_fallout>
     <id>	140	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4M_fallout	</userString>
@@ -1934,6 +1974,20 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_BR-412D>
+  <_100mm_BR-412A>
+    <id>	313	</id>
+    <userString>	#ussr_vehicles:_100mm_BR-412A	</userString>
+    <icon>	ap	</icon>
+    <price>	1230	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_BR-412A>
   <_100mm_3VBM>
     <id>	165	</id>
     <userString>	#ussr_vehicles:_100mm_3VBM	</userString>

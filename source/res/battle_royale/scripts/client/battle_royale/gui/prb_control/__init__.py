@@ -3,7 +3,7 @@
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.shared.system_factory import registerQueueEntity, registerEntryPoint, registerUnitEntryPoint, registerUnitEntryPointByType, registerUnitEntity, registerLegacyEntryPointByType, registerPrbStorage
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.prb_control.storages import _makeQueueName
+from gui.prb_control.storages import makeQueueName
 from battle_royale.gui.prb_control.entities.regular.squad.entity import BattleRoyaleSquadEntryPoint, BattleRoyaleSquadEntity
 from battle_royale.gui.prb_control.entities.regular.pre_queue import entity as br_entity
 from battle_royale.gui.prb_control.entities.tournament.pre_queue import entity as br_tournament
@@ -19,4 +19,4 @@ def registerBRPrebattles():
     registerUnitEntryPointByType(PREBATTLE_TYPE.BATTLE_ROYALE, BattleRoyaleSquadEntryPoint)
     registerUnitEntity(PREBATTLE_TYPE.BATTLE_ROYALE, BattleRoyaleSquadEntity)
     registerLegacyEntryPointByType(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT, BattleRoyaleTournamentEntryPoint)
-    registerPrbStorage(_makeQueueName(QUEUE_TYPE.BATTLE_ROYALE), BattleRoyaleStorage())
+    registerPrbStorage(makeQueueName(QUEUE_TYPE.BATTLE_ROYALE), BattleRoyaleStorage())

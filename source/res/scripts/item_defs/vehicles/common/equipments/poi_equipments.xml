@@ -1,0 +1,91 @@
+<poi_equipments.xml>
+  <poi_artillery_aoe>
+    <id>	9401	</id>
+    <userString>	#artefacts:poi_artillery_aoe/name	</userString>
+    <description>	#artefacts:poi_artillery_aoe/descr	</description>
+    <icon>	poi_artillery 0 0	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger poiEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <code>	artillery	</code>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	PoiArtilleryEquipment	  <shortDescription>	#artefacts:poi_artillery_aoe/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:poi_artillery_aoe/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <requireAssists>	true	</requireAssists>
+      <delay>	2	</delay>
+      <duration>	1.0	</duration>
+      <maxCount>	1	</maxCount>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaVisibleToEnemies>	false	</areaVisibleToEnemies>
+      <areaColor>	0xFF25FF25	</areaColor>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	30	</offsetDeviation>
+          <repeatCount>	15	</repeatCount>
+          <repeatDelay>	0	</repeatDelay>
+          <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicleWithDispersion	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	400	</damage>
+            <damageDispersionPercent>	25	</damageDispersionPercent>
+          </args>
+        </action>
+        <action>
+          <type>	StunVehicleAndSendResults	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <shellCompactDescr>	88858	</shellCompactDescr>
+            <sendAttackResults>	True	</sendAttackResults>
+            <ignoreStunResistanceDuration>	False	</ignoreStunResistanceDuration>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </poi_artillery_aoe>
+  <poi_radar>
+    <id>	9402	</id>
+    <userString>	#artefacts:poi_radar/name	</userString>
+    <description>	#artefacts:poi_radar/descr	</description>
+    <icon>	poi_radar 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale poiEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	PoiRadarEquipment	  <visualScript>
+        <server>
+          <plan>	PointsOfInterest/abilities/radar_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	3	  <exports>	vse tooltip	</exports>
+      </duration>
+    </script>
+  </poi_radar>
+</poi_equipments.xml>

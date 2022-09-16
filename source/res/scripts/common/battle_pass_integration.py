@@ -5,7 +5,6 @@ from collections import namedtuple
 from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
 from items import vehicles
 from soft_exception import SoftException
-from debug_utils import LOG_WARNING
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Type, Union
@@ -131,9 +130,19 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
         return False if len(pointsValues) != thresholdTargetCount else True
 
 
+class BattlePassIntegrationComp7(BattlePassIntegrationRandom):
+
+    def calculatePointsSettings(self, storage):
+        vehTypeCompDescr, results = storage['tempResults'].items()[0]
+        rank = storage['avatarResults'].get('fareTeamPrestigePointsPosition', 0)
+        isWinner = 'winnerTeam' in results and 'team' in results and results['team'] == results['winnerTeam']
+        return BpPointsSettings(vehTypeCompDescr, isWinner, rank)
+
+
 _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='REGULAR'),
  ARENA_BONUS_TYPE.RANKED: BattlePassIntegrationRandom(teamSize=10, bonusTypeName='RANKED'),
  ARENA_BONUS_TYPE.MAPBOX: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='MAPBOX'),
+ ARENA_BONUS_TYPE.COMP7: BattlePassIntegrationComp7(teamSize=7, bonusTypeName='COMP7'),
  ARENA_BONUS_TYPE.EPIC_BATTLE: BattlePassIntegrationEpicBattle(teamSize=30, bonusTypeName='EPIC_BATTLE'),
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: BattlePassIntegrationBattleRoyale(teamSize=20, bonusTypeName='BATTLE_ROYALE_SOLO'),
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: BattlePassIntegrationBattleRoyale(teamSize=10, bonusTypeName='BATTLE_ROYALE_SQUAD')}

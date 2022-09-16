@@ -2,7 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/veh_configurator.py
 import logging
 import GUI
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
@@ -122,7 +122,7 @@ class BattleVehicleConfiguratorCmp(VehicleModulesConfiguratorCmp, IProgressionLi
     def __getProgressionCtrl(self):
         return self.__sessionProvider.dynamic.progression
 
-    @process
+    @adisp_process
     def __installModuleOnLocalVehicle(self, module):
         yield getPreviewInstallerProcessor(self._vehicle, module).request()
 

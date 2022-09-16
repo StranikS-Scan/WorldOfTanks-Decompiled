@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/gun_marker_ctrl.py
 import logging
 import math
+import typing
 from collections import namedtuple
 import BattleReplay
 import BigWorld
@@ -18,6 +19,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from math_utils import almostZero
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import g_eventBus
 from gui.shared.events import GunMarkerEvent
 from gui.shared import EVENT_BUS_SCOPE
@@ -147,12 +149,13 @@ class _CrosshairShotResults(object):
     _CRIT_ONLY_SHOT_RESULT = _SHOT_RESULT.NOT_PIERCED
     _VEHICLE_TRACE_BACKWARD_LENGTH = 0.1
     _VEHICLE_TRACE_FORWARD_LENGTH = 20.0
-    shellExtraData = namedtuple('shellExtraData', ('normAngle', 'ricochetAngle', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
-    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(math.radians(5.0), math.cos(math.radians(70.0)), True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(math.radians(2.0), math.cos(math.radians(70.0)), True, True, 0.0),
-     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(0.0, 0.0, False, False, 0.0),
-     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(0.0, math.cos(math.radians(85.0)), True, False, 0.5),
-     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(0.0, 0.0, False, False, 0.0)}
+    shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
+    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
+     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
+     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0)}
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod
     def _getAllCollisionDetails(cls, hitPoint, direction, entity):
@@ -171,32 +174,35 @@ class _CrosshairShotResults(object):
         return _computePiercingPowerRandomizationImpl(piercingPowerRandomization, cls._PP_RANDOM_ADJUSTMENT_MIN, cls._PP_RANDOM_ADJUSTMENT_MAX)
 
     @classmethod
-    def _shouldRicochet(cls, shellKind, hitAngleCos, matInfo, caliber):
+    def _shouldRicochet(cls, shell, hitAngleCos, matInfo):
         if not matInfo.mayRicochet:
             return False
-        shellExtraData = cls._SHELL_EXTRA_DATA[shellKind]
+        shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
         if not shellExtraData.mayRicochet:
             return False
-        if hitAngleCos <= shellExtraData.ricochetAngle:
+        if hitAngleCos <= cls.__sessionProvider.arenaVisitor.modifiers.getShellRicochetCos(shell.kind):
             if not matInfo.checkCaliberForRichet:
                 return True
             if not shellExtraData.checkCaliberForRicochet:
                 return True
             armor = matInfo.armor
-            if armor * 3 >= caliber:
+            if armor * 3 >= shell.caliber:
                 return True
         return False
 
     @classmethod
-    def _computePenetrationArmor(cls, shellKind, hitAngleCos, matInfo, caliber):
+    def _computePenetrationArmor(cls, shell, hitAngleCos, matInfo):
         armor = matInfo.armor
         if not matInfo.useHitAngle:
             return armor
-        normalizationAngle = cls._SHELL_EXTRA_DATA[shellKind].normAngle
+        normalizationAngle = 0.0
+        shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
+        if shellExtraData.hasNormalization:
+            normalizationAngle = cls.__sessionProvider.arenaVisitor.modifiers.getShellNormalization(shell.kind)
         if normalizationAngle > 0.0 and hitAngleCos < 1.0:
             if matInfo.checkCaliberForHitAngleNorm:
-                if caliber > armor * 2 > 0:
-                    normalizationAngle *= 1.4 * caliber / (armor * 2)
+                if shell.caliber > armor * 2 > 0:
+                    normalizationAngle *= 1.4 * shell.caliber / (armor * 2)
             hitAngle = math.acos(hitAngleCos) - normalizationAngle
             if hitAngle < 0.0:
                 hitAngleCos = 1.0
@@ -258,7 +264,7 @@ class _CrosshairShotResults(object):
                 piercingPercent = 1000.0
                 penetrationArmor = 0
                 if fullPiercingPower > 0.0:
-                    penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
+                    penetrationArmor = cls._computePenetrationArmor(shell, hitAngleCos, matInfo)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                 if matInfo.vehicleDamageFactor:
                     piercingPower -= penetrationArmor
@@ -319,12 +325,12 @@ class _CrosshairShotResults(object):
                     continue
                 hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
                 piercingPercent = 1000.0
-                if not isJet and cls._shouldRicochet(shell.kind, hitAngleCos, matInfo, shell.caliber):
+                if not isJet and cls._shouldRicochet(shell, hitAngleCos, matInfo):
                     cls.__collectDebugPiercingData(debugPiercingsList, None, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, _SHOT_RESULT.NOT_PIERCED)
                     break
                 penetrationArmor = 0
                 if piercingPower > 0.0:
-                    penetrationArmor = cls._computePenetrationArmor(shell.kind, hitAngleCos, matInfo, shell.caliber)
+                    penetrationArmor = cls._computePenetrationArmor(shell, hitAngleCos, matInfo)
                     piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
                     piercingPower -= penetrationArmor
                     minPiercingPower = round(minPiercingPower - penetrationArmor)

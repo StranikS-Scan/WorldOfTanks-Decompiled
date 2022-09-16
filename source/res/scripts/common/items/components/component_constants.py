@@ -3,6 +3,7 @@
 import collections
 from soft_exception import SoftException
 from wrapped_reflection_framework import reflectedNamedTuple
+from Math import Vector3
 Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostStartTime',
  'boostResidueTime',
@@ -19,6 +20,7 @@ DualGun = reflectedNamedTuple('DualGun', ['chargeTime',
 UNDEFINED_ITEM_TYPE_ID = 0
 ZERO_FLOAT = 0.0
 ZERO_INT = 0
+ZERO_VECTOR3 = Vector3(0.0, 0.0, 0.0)
 EMPTY_STRING = ''
 EMPTY_TUPLE = ()
 INFLUENCE_ALL = 0

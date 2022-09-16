@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/event_boards_controllers.py
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 
 class IEventBoardController(object):
 
@@ -25,32 +25,32 @@ class IEventBoardController(object):
     def cleanEventsData(self):
         raise NotImplementedError
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def joinEvent(self, eventID, callback):
         raise NotImplementedError
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def leaveEvent(self, eventID, callback):
         raise NotImplementedError
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getHangarFlag(self, callback, onLogin=False):
         raise NotImplementedError
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getEvents(self, callback, onlySettings=True, isTabVisited=False, onLogin=False, prefetchKeyArtBig=True):
         raise NotImplementedError
 
-    @async
-    @process
-    def getMyLeaderboardInfo(self, eventID, leaderboardID, callback):
+    @adisp_async
+    @adisp_process
+    def getMyLeaderboardInfo(self, eventID, leaderboardID, callback, showNotification=True):
         raise NotImplementedError
 
-    @async
-    @process
-    def getLeaderboard(self, eventID, leaderboardID, pageNumber, callback):
+    @adisp_async
+    @adisp_process
+    def getLeaderboard(self, eventID, leaderboardID, pageNumber, callback, leaderBoardClass=None, showNotification=True):
         raise NotImplementedError

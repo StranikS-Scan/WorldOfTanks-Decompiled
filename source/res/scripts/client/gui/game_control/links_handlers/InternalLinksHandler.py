@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/links_handlers/InternalLinksHandler.py
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.game_control.links import URLMacros
@@ -47,8 +47,8 @@ class InternalLinksHandler(IInternalLinksController):
         super(InternalLinksHandler, self).fini()
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def getURL(self, name, callback):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
@@ -57,7 +57,7 @@ class InternalLinksHandler(IInternalLinksController):
             url = yield lambda callback: callback('')
         callback(url)
 
-    @process
+    @adisp_process
     def __openInternalBrowse(self, urlName, title='', browserSize=None, showActionBtn=True, showCloseBtn=False):
         parsedUrl = yield self.getURL(urlName)
         if parsedUrl:

@@ -17,7 +17,7 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.platform.wgnp_controllers import IWGNPDemoAccRequestController
 rAccCompletion = R.strings.dialogs.accountCompletion
 if typing.TYPE_CHECKING:
-    from async import _Future
+    from wg_async import _Future
     from gui.platform.wgnp.demo_account.request import AddCredentialsParams
 
 class DemoAddCredentialsOverlayView(BaseCredentialsOverlayView):

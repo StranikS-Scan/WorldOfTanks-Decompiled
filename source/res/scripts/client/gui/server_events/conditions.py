@@ -59,7 +59,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'cumulativeExt', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
+_SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'customization', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEvent', 'firstBloodcumulative', 'cumulativeExt', 'cumulativeSum', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -1053,6 +1053,23 @@ class ClanKills(_Condition, _Negatable):
         return self._camos2ids
 
 
+class Customization(_Requirement):
+
+    def __init__(self, path, data):
+        super(Customization, self).__init__('customization', dict(data), path)
+        self._styleId = self._data.get('styleId')
+        self._isInstalled = True
+
+    def __repr__(self):
+        return 'Customization<styleId=%d; isInstalled=%r>' % (self._styleId, self._isInstalled)
+
+    def negate(self):
+        self._isInstalled = not self._isInstalled
+
+    def getValue(self):
+        return self._isInstalled
+
+
 class _Cumulativable(_Condition):
     __metaclass__ = ABCMeta
 
@@ -1561,6 +1578,44 @@ class MultiStunEvent(_Condition, _Negatable):
     @property
     def relation(self):
         return self._relation
+
+
+class FirstBlood(_Condition, _Negatable):
+
+    def __init__(self, path, data):
+        super(FirstBlood, self).__init__('firstBlood', dict(data), path)
+        self._isFirstBlood = True
+
+    def __repr__(self):
+        return 'FirstBlood<value=%r>' % self._isFirstBlood
+
+    def negate(self):
+        self._isFirstBlood = not self._isFirstBlood
+
+    def getValue(self):
+        return self._isFirstBlood
+
+
+class CumulativeSum(_Cumulativable):
+
+    def __init__(self, path, data, bonusCond):
+        super(CumulativeSum, self).__init__('cumulativeSum', dict(data), path)
+        self._relation = _findRelation(self._data.keys())
+        self._relationValue = _getNodeValue(self._data, self._relation)
+        self._bonus = weakref.proxy(bonusCond)
+
+    def __repr__(self):
+        conditions = tuple((value[1] for value in self._data.get('sum', ())))
+        return 'CumulativeSum<conditions=%s>' % conditions
+
+    def getBonusData(self):
+        return self._bonus
+
+    def getKey(self):
+        pass
+
+    def getTotalValue(self):
+        return self._relationValue
 
 
 def getProgressFromQuestWithSingleAccumulative(quest):

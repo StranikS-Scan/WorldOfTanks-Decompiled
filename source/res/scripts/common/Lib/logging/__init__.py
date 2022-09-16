@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/logging/__init__.py
-# Compiled at: 2032-09-30 16:47:34
+# Compiled at: 2100-05-20 15:21:05
 """
 Logging package for Python. Based on PEP 282 and comments thereto in
 comp.lang.python.

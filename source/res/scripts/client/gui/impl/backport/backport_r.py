@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/backport/backport_r.py
+import typing
 import logging
 from frameworks import wulf
 _logger = logging.getLogger(__name__)

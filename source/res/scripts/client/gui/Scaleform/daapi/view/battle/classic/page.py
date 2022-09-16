@@ -163,6 +163,9 @@ class ClassicPage(SharedPage):
     def _handleToggleFullStatsQuestProgress(self, event):
         self._toggleFullStats(event.ctx['isDown'], tabIndex=1)
 
+    def _handleToggleFullStatsPersonalReserves(self, event):
+        self._toggleFullStats(event.ctx['isDown'], tabIndex=2)
+
     def _handleBattleNotifierVisibility(self):
         battleNotifierLinkage = BATTLE_VIEW_ALIASES.BATTLE_NOTIFIER
         if self.getComponent(battleNotifierLinkage):
@@ -205,6 +208,8 @@ class ClassicPage(SharedPage):
             vehicle = ctrl.getControllingVehicle()
             if vehicle and invalidateSiegeVehicle(vehicle.typeDescriptor):
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+            if vehicle and vehicle.typeDescriptor.hasRocketAcceleration:
+                components.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)
         else:
@@ -212,4 +217,4 @@ class ClassicPage(SharedPage):
 
     def __hideDamageLogPanel(self):
         damageLogPanel = self.getComponent(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL)
-        return damageLogPanel.isSwitchToVehicle()
+        return not damageLogPanel.isSwitchToVehicle()

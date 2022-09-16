@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/invitations.py
 import BattleReplay
-from adisp import process
+from adisp import adisp_process
 from constants import INVITATION_TYPE
 from BattleReplay import CallbackDataNames
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS as _STATUS
@@ -163,7 +163,7 @@ class _SquadInvitationsHandler(ISquadInvitationsHandler):
             self.prbInvites.declineInvite(inviteID)
         return
 
-    @process
+    @adisp_process
     def __onSendInviteToSquad(self, sessionID):
         vehicleID = self.__sessionProvider.getCtx().getVehIDBySessionID(sessionID)
         yield self.__sessionProvider.sendRequest(SendInvitesCtx(playerIDs=(vehicleID,)))

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/gf_builders.py
 import typing
-from gui.impl.dialogs.dialog_template import DialogTemplateView
+from frameworks.wulf import WindowLayer
+from gui.impl.dialogs.dialog_template import DialogTemplateView, DEFAULT_DIMMER_ALPHA
+from gui.impl.dialogs.sub_views.content.text_warning_content import TextWithWarning
 from gui.impl.dialogs.dialog_template_button import ButtonPresenter, CancelButton, ConfirmButton
 from gui.impl.dialogs.dialog_template_utils import toString
 from gui.impl.dialogs.sub_views.content.simple_text_content import SimpleTextContent
@@ -10,6 +12,7 @@ from gui.impl.dialogs.sub_views.title.simple_text_title import SimpleTextTitle
 from gui.impl.dialogs.sub_views.top_right.money_balance import MoneyBalance
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
+from gui.impl.gen.view_models.views.dialogs.sub_views.icon_set_view_model import IconPositionLogicEnum
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
 from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
@@ -26,7 +29,7 @@ class BuilderDialogTemplateView(DialogTemplateView):
 
 
 class BaseDialogBuilder(object):
-    __slots__ = ('__title', '__description', '__icon', '__buttons', '__uniqueID', '__backgroundID', '__backgroundDimmed', '__layoutID', '__selectedButtonID')
+    __slots__ = ('__title', '__description', '__icon', '__buttons', '__uniqueID', '__backgroundID', '__dimmerAlpha', '__layoutID', '__selectedButtonID', '__doBlur', '__layer', '__displayFlags')
 
     def __init__(self, uniqueID=None):
         super(BaseDialogBuilder, self).__init__()
@@ -36,9 +39,12 @@ class BaseDialogBuilder(object):
         self.__buttons = []
         self.__uniqueID = uniqueID
         self.__backgroundID = None
-        self.__backgroundDimmed = True
+        self.__dimmerAlpha = DEFAULT_DIMMER_ALPHA
         self.__layoutID = None
         self.__selectedButtonID = None
+        self.__doBlur = True
+        self.__layer = WindowLayer.UNDEFINED
+        self.__displayFlags = []
         return
 
     def buildView(self):
@@ -48,7 +54,7 @@ class BaseDialogBuilder(object):
         if self.__description:
             template.setSubView(DefaultDialogPlaceHolders.CONTENT, SimpleTextContent(self.__description))
         if self.__icon:
-            template.setSubView(DefaultDialogPlaceHolders.ICON, IconSet(*self.__icon))
+            template.setSubView(DefaultDialogPlaceHolders.ICON, IconSet(**self.__icon))
         if self.__buttons:
             focusedButtonIndex = -1
             for index, buttonData in enumerate(self.__buttons):
@@ -59,13 +65,14 @@ class BaseDialogBuilder(object):
             template.setFocusedIndex(focusedButtonIndex)
         if self.__backgroundID:
             template.setBackgroundImagePath(self.__backgroundID)
-        if not self.__backgroundDimmed:
-            template.removeBackgroundDimmer()
+        template.setBackgroundDimmerAlpha(self.__dimmerAlpha)
+        if self.__displayFlags:
+            template.setDisplayFlags(*self.__displayFlags)
         self._extendTemplate(template)
         return template
 
     def build(self):
-        return FullScreenDialogWindowWrapper(self.buildView())
+        return FullScreenDialogWindowWrapper(self.buildView(), doBlur=self.__doBlur, layer=self.__layer)
 
     def setTitle(self, text):
         self.__title = toString(text)
@@ -73,8 +80,12 @@ class BaseDialogBuilder(object):
     def setDescription(self, text):
         self.__description = toString(text)
 
-    def setIcon(self, mainIcon, backgrounds=None, overlays=None):
-        self.__icon = (mainIcon, backgrounds, overlays)
+    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
+        self.__icon = {'iconResID': mainIcon,
+         'backgroundResIDList': backgrounds,
+         'overlayResIDList': overlays,
+         'layoutID': layoutID,
+         'iconPositionLogic': iconPositionLogic}
 
     def addButton(self, buttonSettings):
         self.__buttons.append(buttonSettings)
@@ -85,14 +96,23 @@ class BaseDialogBuilder(object):
     def setBackground(self, resourceID):
         self.__backgroundID = resourceID
 
-    def setBackgroundDimmed(self, value=True):
-        self.__backgroundDimmed = value
+    def setDimmerAlpha(self, value):
+        self.__dimmerAlpha = value
 
     def setLayoutID(self, layoutID):
         self.__layoutID = layoutID
 
     def setFocusedButtonID(self, buttonID):
         self.__selectedButtonID = buttonID
+
+    def setBlur(self, value=True):
+        self.__doBlur = value
+
+    def setLayer(self, layerID):
+        self.__layer = layerID
+
+    def setDisplayFlags(self, *displayFlags):
+        self.__displayFlags = displayFlags
 
     def _extendTemplate(self, template):
         pass
@@ -138,6 +158,30 @@ class ConfirmCancelDialogBuilder(BaseDialogBuilder):
 
     def setCancelButtonLabel(self, text):
         self.getButton(DialogButtons.CANCEL).label = text
+
+
+class ConfirmCancelWarningDialogBuilder(ConfirmCancelDialogBuilder):
+    __slots__ = ('__descriptionMsg', '__warningMsg')
+
+    def __init__(self, uniqueID=None):
+        super(ConfirmCancelWarningDialogBuilder, self).__init__(uniqueID)
+        self.__descriptionMsg = None
+        self.__warningMsg = None
+        return
+
+    def setDescription(self, text):
+        pass
+
+    def setDescriptionMsg(self, text):
+        self.__descriptionMsg = toString(text)
+
+    def setWarningMsg(self, text):
+        self.__warningMsg = toString(text)
+
+    def _extendTemplate(self, template):
+        super(ConfirmCancelWarningDialogBuilder, self)._extendTemplate(template)
+        if self.__descriptionMsg and self.__warningMsg:
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning(self.__descriptionMsg, self.__warningMsg))
 
 
 class AlertBuilder(BaseDialogBuilder):

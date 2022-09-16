@@ -1,0 +1,58 @@
+<AvatarInBattleVehicleSwitch.def>
+  <CellMethods>
+    <sendVehicleSpawnList>
+      <Arg>	ARRAY	  <of>	SPAWN_AVAILABLE_VEHICLE	</of>
+      </Arg>
+      <Arg>	RESPAWN_INFO_VEHICLE	</Arg>
+      <Arg>	INT64	</Arg>
+    </sendVehicleSpawnList>
+    <confirmVehicleSelection>
+      <Exposed></Exposed>
+    </confirmVehicleSelection>
+    <chooseVehicle>
+      <Exposed></Exposed>
+      <Arg>	INT64	</Arg>
+    </chooseVehicle>
+    <requestSwitch>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	ARRAY	  <of>	MAILBOX	</of>
+      </Arg>
+      <Arg>	INT64	</Arg>
+    </requestSwitch>
+    <switchSetup>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Exposed></Exposed>
+    </switchSetup>
+  </CellMethods>
+  <Properties>
+    <vehicleSpawnList>
+      <Type>	ARRAY	  <of>	SPAWN_AVAILABLE_VEHICLE	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <VariableLengthHeaderSize>	4	  <WarnLevel>	callstack	</WarnLevel>
+      </VariableLengthHeaderSize>
+    </vehicleSpawnList>
+    <isVehicleConfirmed>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isVehicleConfirmed>
+    <spawnInfoForVehicle>
+      <Type>	RESPAWN_INFO_VEHICLE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <VariableLengthHeaderSize>	2	  <WarnLevel>	callstack	</WarnLevel>
+      </VariableLengthHeaderSize>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </spawnInfoForVehicle>
+    <spawnPoints>
+      <Type>	ARRAY	  <of>	SPAWN_POINT_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </spawnPoints>
+  </Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+</AvatarInBattleVehicleSwitch.def>

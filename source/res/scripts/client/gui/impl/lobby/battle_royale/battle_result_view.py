@@ -234,11 +234,10 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if battlePassData['battlePassComplete']:
             battlePassModel.setFreePoints(battlePassData['availablePoints'])
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_COMPLETED)
-            battlePassModel.setIsBattlePassPurchased(isBought)
         else:
             battlePassModel.setFreePoints(currentLevelPoints)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
-            battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
+        battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
         battlePassModel.setBattlePassState(state)
 
     def __setLeaderboard(self, leaderboardModel):

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_quest_award_screen.py
 import personal_missions
-from adisp import async
+from adisp import adisp_async
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getDetailedMissionData, getHtmlAwardSheetIcon
@@ -18,7 +18,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getTypeShortUserName
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.utils import toUpper
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import adisp_process
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import first
@@ -132,7 +132,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_SCEEN_CLOSE, ctx={'operationID': self._quest.getOperationID(),
              'eventID': self._quest.getID()}), EVENT_BUS_SCOPE.LOBBY)
 
-    @process('updating')
+    @adisp_process('updating')
     def _processMission(self, quest):
         result = yield quests_proc.PMQuestSelect(quest, self._eventsCache.getPersonalMissions(), quest.getQuestBranch()).request()
         if result and result.userMsg:
@@ -233,14 +233,14 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
 
         return result
 
-    @process('updating')
+    @adisp_process('updating')
     def __tryGetAward(self):
         result = yield self.__getPersonalMissionAward()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
-    @async
-    @process('updating')
+    @adisp_async
+    @adisp_process('updating')
     def __getPersonalMissionAward(self, callback):
         bonus = self._quest.getTankmanBonus()
         needToGetTankman = self._quest.needToGetAddReward() and not bonus.isMain or self._quest.needToGetMainReward() and bonus.isMain

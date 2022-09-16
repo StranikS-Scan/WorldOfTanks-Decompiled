@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/web/web_client_api/strongholds/__init__.py
 import logging
 from functools import partial
-from adisp import process
+from adisp import adisp_process
 from constants import JOIN_FAILURE, PREBATTLE_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import dependency
@@ -36,19 +36,19 @@ class StrongholdsWebApi(object):
     __connectionMgr = dependency.descriptor(IConnectionManager)
 
     @w2c(W2CSchema, 'open_list')
-    @process
+    @adisp_process
     def handleOpenList(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
         yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST))
 
     @w2c(W2CSchema, 'leave_mode')
-    @process
+    @adisp_process
     def handleLeaveMode(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
         yield dispatcher.doLeaveAction(LeavePrbAction(isExit=True))
 
     @w2c(W2CSchema, 'battle_chosen')
-    @process
+    @adisp_process
     def handleBattleChosen(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
 
@@ -59,17 +59,17 @@ class StrongholdsWebApi(object):
         yield dispatcher.create(CreateBaseExternalUnitCtx(PREBATTLE_TYPE.STRONGHOLD, waitingID='prebattle/create', onTimeoutCallback=onTimeout))
 
     @w2c(_StrongholdsJoinBattleSchema, 'join_battle')
-    @process
+    @adisp_process
     def handleJoinBattle(self, cmd):
 
-        @process
+        @adisp_process
         def joinBattle(dispatcher, unitMgrId, onErrorCallback):
             yield dispatcher.join(JoinBaseExternalUnitCtx(unitMgrId, PREBATTLE_TYPE.STRONGHOLD, onErrorCallback=onErrorCallback, waitingID='prebattle/join'))
 
         def doJoin(restoreOnError):
             dispatcher = g_prbLoader.getDispatcher()
 
-            @process
+            @adisp_process
             def onError(errorData):
                 if restoreOnError:
                     dispatcher.restorePrevious()

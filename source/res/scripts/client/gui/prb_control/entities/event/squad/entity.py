@@ -12,7 +12,6 @@ from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.event.squad.actions_handler import EventBattleSquadActionsHandler
 from gui.prb_control.entities.event.squad.actions_validator import EventBattleSquadActionsValidator
-from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.shared.utils import getPlayerDatabaseID
 from gui.shared.utils.decorators import ReprInjector
@@ -73,15 +72,6 @@ class EventBattleSquadEntity(SquadEntity):
     def getQueueType(self):
         return QUEUE_TYPE.EVENT_BATTLES
 
-    def doSelectAction(self, action):
-        name = action.actionName
-        if name in (PREBATTLE_ACTION_NAME.EVENT_SQUAD, PREBATTLE_ACTION_NAME.EVENT_BATTLE):
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            if action.accountsToInvite:
-                self._actionsHandler.processInvites(action.accountsToInvite)
-            return SelectResult(True)
-        return super(EventBattleSquadEntity, self).doSelectAction(action)
-
     def getLeaderEventEnqueueData(self):
         selfDBID = getPlayerDatabaseID()
         if self.isCommander(dbID=selfDBID):
@@ -127,6 +117,10 @@ class EventBattleSquadEntity(SquadEntity):
             ctx = SetReadyUnitCtx(notReady, waitingID)
             LOG_DEBUG('Unit request', ctx)
             self.setPlayerReady(ctx)
+
+    @property
+    def _showUnitActionNames(self):
+        return (PREBATTLE_ACTION_NAME.EVENT_SQUAD, PREBATTLE_ACTION_NAME.EVENT_BATTLE)
 
     def _createActionsValidator(self):
         return EventBattleSquadActionsValidator(self)

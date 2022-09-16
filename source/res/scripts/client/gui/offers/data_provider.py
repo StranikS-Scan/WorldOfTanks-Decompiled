@@ -134,7 +134,7 @@ class OffersDataProvider(IOffersDataProvider):
 
     @_ifFeatureDisabled(lambda callback: callback(CachePrefetchResult.CLOSED))
     @_ifNotSynced(lambda callback: callback(CachePrefetchResult.CLOSED))
-    @adisp.async
+    @adisp.adisp_async
     def isCdnResourcesReady(self, callback=None, timeout=_CDN_SYNC_TIMEOUT):
         _logger.debug('[Offers provider] CDN resources cache ready check')
         self._cdnCache.sync(callback=callback, timeout=timeout)
@@ -212,7 +212,7 @@ class OffersDataProvider(IOffersDataProvider):
         return self._pendingNotify and self._ready and isPlayerAccount()
 
     @_ifFeatureDisabled(None)
-    @adisp.process
+    @adisp.adisp_process
     def _notify(self):
         if self._readyToNotify:
             yield self._states.request()

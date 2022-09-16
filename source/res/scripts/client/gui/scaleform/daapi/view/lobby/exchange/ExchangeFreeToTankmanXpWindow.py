@@ -27,7 +27,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
     def apply(self):
         self.doRequest()
 
-    @decorators.process('updatingSkillWindow')
+    @decorators.adisp_process('updatingSkillWindow')
     def doRequest(self):
         tankman = self.itemsCache.items.getTankman(self.__tankManId)
         xpConverter = TankmanFreeToOwnXpConvertor(tankman, self.__selectedXpForConvert)
@@ -121,7 +121,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
                     nextSkillLevel += 1
 
             data = {'tankmanID': self.__tankManId,
-             'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1], tankman),
+             'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1]),
              'lastSkillLevel': tDescr.lastSkillLevel,
              'nextSkillLevel': nextSkillLevel}
             self.as_setInitDataS(data)

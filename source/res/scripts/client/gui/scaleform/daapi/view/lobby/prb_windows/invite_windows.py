@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/invite_windows.py
 from PlayerEvents import g_playerEvents
-from adisp import process
+from adisp import adisp_process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.meta.ReceivedInviteWindowMeta import ReceivedInviteWindowMeta
 from gui.prb_control import prbPeripheriesHandlerProperty, prbAutoInvitesProperty
@@ -77,7 +77,7 @@ class AutoInviteWindow(_InviteWindow):
     def prbAutoInvites(self):
         return None
 
-    @process
+    @adisp_process
     def acceptInvite(self):
         yield lambda callback: callback(None)
         prbID = self._inviteInfo.getID()

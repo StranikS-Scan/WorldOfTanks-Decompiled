@@ -22,7 +22,7 @@ class BCConsumablesPanel(ConsumablesPanel):
     def _getPanelSettings(self):
         return CONSUMABLES_PANEL_SETTINGS.BIG_SETTINGS_ID if self.__isBigIcons else super(BCConsumablesPanel, self)._getPanelSettings()
 
-    def _getEquipmentIconPath(self):
+    def _getEquipmentIconPath(self, *_):
         return R_EQUIPMENT_ICON_PATH_BIG if self.__isBigIcons else R_EQUIPMENT_ICON_PATH_DEFAULT
 
     def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings):

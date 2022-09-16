@@ -55,13 +55,13 @@ class ClassicMinimapComponent(component.MinimapComponent):
         return _CLASSIC_MINIMAP_DIMENSIONS
 
 class GlobalSettingsPlugin(common.SimplePlugin):
-    __slots__ = ('__currentSizeSettings', '__isVisible', '__sizeIndex', '__canChangeAlpha')
+    __slots__ = ('_currentSizeSettings', '__isVisible', '_sizeIndex', '__canChangeAlpha')
     _AccountSettingsClass = AccountSettings
     def __init__(self, parentObj):
         super(GlobalSettingsPlugin, self).__init__(parentObj)
-        self._GlobalSettingsPlugin__currentSizeSettings = 'minimapSize'
+        self._currentSizeSettings = 'minimapSize'
         self._GlobalSettingsPlugin__isVisible = True
-        self._GlobalSettingsPlugin__sizeIndex = 0
+        self._sizeIndex = 0
         self._GlobalSettingsPlugin__canChangeAlpha = parentObj.canChangeAlpha()
 
     def start(self):
@@ -77,10 +77,10 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         super(GlobalSettingsPlugin, self).stop()
 
     def setSettings(self):
-        newSize = settings.clampMinimapSizeIndex(self._AccountSettingsClass.getSettings(self._GlobalSettingsPlugin__currentSizeSettings))
-        if self._GlobalSettingsPlugin__sizeIndex != newSize:
-            self._GlobalSettingsPlugin__sizeIndex = newSize
-            self._parentObj.as_setSizeS(self._GlobalSettingsPlugin__sizeIndex)
+        newSize = settings.clampMinimapSizeIndex(self._AccountSettingsClass.getSettings(self._currentSizeSettings))
+        if self._sizeIndex != newSize:
+            self._sizeIndex = newSize
+            self._parentObj.as_setSizeS(self._sizeIndex)
         self._GlobalSettingsPlugin__updateAlpha()
 
     def updateSettings(self, diff):
@@ -89,15 +89,15 @@ class GlobalSettingsPlugin(common.SimplePlugin):
 
     def applyNewSize(self, sizeIndex):
         LOG_DEBUG('Size index of minimap is changed', sizeIndex)
-        self._GlobalSettingsPlugin__sizeIndex = sizeIndex
-        self._GlobalSettingsPlugin__saveSettings()
+        self._sizeIndex = sizeIndex
+        self._saveSettings()
 
     def _changeSizeSettings(self, newSizeSettings):
-        if newSizeSettings == self._GlobalSettingsPlugin__currentSizeSettings:
+        if newSizeSettings == self._currentSizeSettings:
             return newSizeSettings
         else:
-            previousSettings = self._GlobalSettingsPlugin__currentSizeSettings
-            self._GlobalSettingsPlugin__currentSizeSettings = newSizeSettings
+            previousSettings = self._currentSizeSettings
+            self._currentSizeSettings = newSizeSettings
             self.setSettings()
             return previousSettings
 
@@ -105,12 +105,12 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self._GlobalSettingsPlugin__isVisible = not self._GlobalSettingsPlugin__isVisible
         self._parentObj.as_setVisibleS(self._GlobalSettingsPlugin__isVisible)
 
-    def __saveSettings(self):
-        self._AccountSettingsClass.setSettings(self._GlobalSettingsPlugin__currentSizeSettings, self._GlobalSettingsPlugin__sizeIndex)
+    def _saveSettings(self):
+        self._AccountSettingsClass.setSettings(self._currentSizeSettings, self._sizeIndex)
 
     def __setSizeByStep(self, step):
-        newIndex = settings.clampMinimapSizeIndex(self._GlobalSettingsPlugin__sizeIndex + step)
-        if self._GlobalSettingsPlugin__sizeIndex != newIndex:
+        newIndex = settings.clampMinimapSizeIndex(self._sizeIndex + step)
+        if self._sizeIndex != newIndex:
             LOG_DEBUG('Try to change size index of minimap by step', newIndex)
             self._parentObj.as_setSizeS(newIndex)
 

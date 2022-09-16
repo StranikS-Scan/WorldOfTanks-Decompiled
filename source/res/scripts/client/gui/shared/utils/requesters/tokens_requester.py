@@ -5,7 +5,7 @@ import logging
 import time
 import BigWorld
 from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui.shared.utils.requesters.quest_deltas_settings import QuestDeltasSettings
 from gui.shared.utils.requesters.common import BaseDelta
@@ -125,8 +125,8 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__tokensProgressDelta.update(data)
         return data
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _requestCache(self, callback):
         result = yield self.__requestTokensCache()
         if 'tokens' in result:
@@ -135,7 +135,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             self.__updateLootBoxes(result['tokens'])
         callback(result)
 
-    @async
+    @adisp_async
     def __requestTokensCache(self, callback):
         BigWorld.player().tokens.getCache(lambda resID, value: self._response(resID, value, callback))
 

@@ -38,8 +38,8 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
                 self.__addLockedInformationToEpicEquipment(idx)
             return
 
-    def _getEquipmentIcon(self, idx, icon):
-        return backport.image(self._R_EPIC_EQUIPMENT_ICON.dyn(icon)()) if idx in self.__battleReserveSlots else super(EpicBattleConsumablesPanel, self)._getEquipmentIcon(idx, icon)
+    def _getEquipmentIcon(self, idx, item, icon):
+        return backport.image(self._R_EPIC_EQUIPMENT_ICON.dyn(icon)()) if idx in self.__battleReserveSlots else super(EpicBattleConsumablesPanel, self)._getEquipmentIcon(idx, item, icon)
 
     def _resetEquipmentSlot(self, idx, intCD, item):
         super(EpicBattleConsumablesPanel, self)._resetEquipmentSlot(idx, intCD, item)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/badges_controller.py
 import Event
 import constants
-from adisp import process
+from adisp import adisp_process
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items.processors.common import BadgesSelector
@@ -117,7 +117,7 @@ class BadgesController(IBadgesController, Notifiable):
             self.startNotification()
             return
 
-    @process
+    @adisp_process
     def __selectOnServer(self):
         result = yield BadgesSelector(self.__pendingBadges).request()
         if result and result.userMsg:

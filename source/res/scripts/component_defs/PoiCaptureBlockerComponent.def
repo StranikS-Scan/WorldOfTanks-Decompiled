@@ -1,0 +1,18 @@
+<PoiCaptureBlockerComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <pointID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pointID>
+    <blockReasons>
+      <Type>	ARRAY	  <of>	STATUS_WITH_TIME_INTERVAL	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </blockReasons>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	poiCaptureBlockerComponent	</DefaultKeyName>
+</PoiCaptureBlockerComponent.def>

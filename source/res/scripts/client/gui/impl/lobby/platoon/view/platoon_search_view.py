@@ -31,7 +31,11 @@ class SearchView(ViewImpl, CallbackDelayer):
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.lobby.platoon.SearchingDropdown(), model=SearchingDropdownModel())
         self.__tiersLimitSubview = TiersLimitSubview()
+        self.__prbEntityType = self.__platoonCtrl.getPrbEntityType()
         super(SearchView, self).__init__(settings)
+
+    def getPrbEntityType(self):
+        return self.__prbEntityType
 
     @staticmethod
     def resetState():
@@ -110,15 +114,15 @@ class SearchView(ViewImpl, CallbackDelayer):
     def _setBackgroundImage(self):
         queueType = self.__platoonCtrl.getQueueType()
         backgrounds = R.images.gui.maps.icons.platoon.dropdown_backgrounds
+        background = backgrounds.squad()
         with self.viewModel.transaction() as model:
             if queueType == QUEUE_TYPE.EVENT_BATTLES:
-                model.setBackgroundImage(backport.image(backgrounds.event()))
+                background = backgrounds.event()
             elif queueType == QUEUE_TYPE.EPIC:
-                model.setBackgroundImage(backport.image(backgrounds.epic()))
+                background = backgrounds.epic()
             elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
-                model.setBackgroundImage(backport.image(backgrounds.battle_royale()))
-            else:
-                model.setBackgroundImage(backport.image(backgrounds.standard()))
+                background = backgrounds.battle_royale()
+        model.setBackgroundImage(backport.image(background))
 
 
 class SearchWindow(PreloadableWindow):

@@ -217,18 +217,8 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
 
 
 class BattleRoyaleSettingsPlugin(SettingsPlugin):
-    __CUSTOM = (('markerBaseLevel', 0), ('markerAltLevel', 0))
+    __OVERRIDES = {name:(('markerBaseLevel', 0), ('markerAltLevel', 0)) for name in MARKERS.ALL()}
 
-    def _setMarkerSettings(self, notify=False):
-        getter = self.settingsCore.getSetting
-        result = {}
-        for name in MARKERS.ALL():
-            stgs = getter(name)
-            for custOptName, custOptVal in self.__CUSTOM:
-                if custOptName not in stgs:
-                    _logger.warning('Option "%s" is not in list of options', custOptName)
-                stgs[custOptName] = custOptVal
-
-            result[name] = stgs
-
-        self._parentObj.setMarkerSettings(result, notify=notify)
+    def __init__(self, parentObj):
+        super(BattleRoyaleSettingsPlugin, self).__init__(parentObj)
+        self._overrides = self.__OVERRIDES

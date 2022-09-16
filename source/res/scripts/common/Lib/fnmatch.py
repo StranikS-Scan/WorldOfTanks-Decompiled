@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fnmatch.py
-# Compiled at: 2032-08-08 13:09:11
+# Compiled at: 2100-03-28 08:16:26
 """Filename matching with shell patterns.
 
 fnmatch(FILENAME, PATTERN) matches according to the local convention.

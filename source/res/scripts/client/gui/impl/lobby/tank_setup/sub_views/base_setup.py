@@ -3,7 +3,7 @@
 import logging
 import typing
 from BWUtil import AsyncReturn
-from async import async, await_callback
+from wg_async import wg_async, await_callback
 from gui.impl.lobby.tank_setup.array_providers.base import BaseVehSectionContext
 from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.lobby.tank_setup.tank_setup_helper import TankSetupAsyncCommandLock
@@ -53,7 +53,7 @@ class BaseSetupSubView(BaseSubModelView):
         self._curSlotID = slotID
         self._updateSlots(fullUpdate, updateData)
 
-    @async
+    @wg_async
     def canQuit(self, skipApplyAutoRenewal=None):
         yield await_callback(lambda callback: callback())()
         raise AsyncReturn(True)

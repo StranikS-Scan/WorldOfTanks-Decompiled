@@ -3,9 +3,7 @@
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, VEHICLE_CLASS_INDICES
 from gui.prb_control.entities.epic.squad.actions_validator import EpicSquadActionsValidator
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
-from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from helpers import dependency
@@ -72,14 +70,9 @@ class EpicSquadEntity(SquadEntity):
     def getQueueType(self):
         return QUEUE_TYPE.EPIC
 
-    def doSelectAction(self, action):
-        name = action.actionName
-        if name == PREBATTLE_ACTION_NAME.SQUAD:
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            if action.accountsToInvite:
-                self._actionsHandler.processInvites(action.accountsToInvite)
-            return SelectResult(True)
-        return super(EpicSquadEntity, self).doSelectAction(action)
+    @property
+    def _showUnitActionNames(self):
+        return (PREBATTLE_ACTION_NAME.SQUAD,)
 
     def getMaxSPGCount(self):
         return self.lobbyContext.getServerSettings().getMaxSPGinSquads()

@@ -266,6 +266,9 @@ class VehicleEngine(VehicleModule):
     def hasTurboshaftEngine(self):
         return g_paramsCache.hasTurboshaftEngine(self.intCD)
 
+    def hasRocketAcceleration(self):
+        return g_paramsCache.hasRocketAcceleration(self.intCD)
+
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_ENGINE
@@ -274,7 +277,10 @@ class VehicleEngine(VehicleModule):
         return self.icon if size == 'small' else backport.image(R.images.gui.maps.icons.modules.engineBig())
 
     def getExtraIconInfo(self, vehDescr=None):
-        return RES_ICONS.MAPS_ICONS_MODULES_TURBINEENGINEICON if self.hasTurboshaftEngine() else None
+        if self.hasTurboshaftEngine():
+            return RES_ICONS.MAPS_ICONS_MODULES_TURBINEENGINEICON
+        else:
+            return RES_ICONS.MAPS_ICONS_MODULES_ROCKETACCELERATIONICON if self.hasRocketAcceleration() else None
 
 
 class VehicleFuelTank(VehicleModule):

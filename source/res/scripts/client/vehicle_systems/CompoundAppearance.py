@@ -774,18 +774,18 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         else:
             return 0
 
+    def __vehicleUpdated(self, vehicleId):
+        if self._vehicle is not None and self._vehicle.id == vehicleId and self.__engineStarted:
+            self.__setTurbochargerSound(self._vehicle.getOptionalDevices())
+        return
+
     def __setTurbochargerSound(self, optDevices):
         isEnabled = findFirst(lambda d: d is not None and d.groupName == 'turbocharger', optDevices) is not None
         if isEnabled == self.__turbochargerSoundPlaying:
             return
         else:
-            engineSoundObject = self.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
             if self.engineAudition is not None:
+                engineSoundObject = self.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
                 engineSoundObject.play('cons_turbine_start' if isEnabled else 'cons_turbine_stop')
                 self.__turbochargerSoundPlaying = isEnabled
             return
-
-    def __vehicleUpdated(self, vehicleId):
-        if self._vehicle is not None and self._vehicle.id == vehicleId and self.__engineStarted:
-            self.__setTurbochargerSound(self._vehicle.getOptionalDevices())
-        return

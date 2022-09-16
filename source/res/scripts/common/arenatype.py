@@ -245,6 +245,8 @@ def __readBonusTypeCfgs(geometryName, section, defaultXml, bonusType):
                 cfg['maxPlayersInTeam'] = __readMaxPlayersInTeam(bonusOverrides, defaultXml)
             if __hasKey('runDelay', bonusOverrides, defaultXml):
                 cfg['runDelay'] = _readInt('runDelay', bonusOverrides, defaultXml)
+            if __hasKey('runDelayDev', bonusOverrides, defaultXml):
+                cfg['runDelayDev'] = _readInt('runDelayDev', bonusOverrides, defaultXml)
         except Exception as e:
             LOG_CURRENT_EXCEPTION()
             raise SoftException("wrong %s bonusTypeOverrides section '%s' : %s" % (geometryName, bonusType, e))
@@ -348,6 +350,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['minTeamsInArena'] = __readTeamsCount('minTeamsInArena', section, defaultXml)
     if raiseIfMissing or __hasKey('runDelay', section, defaultXml):
         cfg['runDelay'] = _readInt('runDelay', section, defaultXml)
+    if raiseIfMissing or __hasKey('runDelayDev', section, defaultXml):
+        cfg['runDelayDev'] = _readInt('runDelayDev', section, defaultXml)
     if raiseIfMissing or __hasKey('roundLength', section, defaultXml):
         cfg['roundLength'] = _readInt('roundLength', section, defaultXml)
     if raiseIfMissing or __hasKey('winnerIfTimeout', section, defaultXml):
@@ -437,6 +441,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
         cfg['botPoints'] = __readBotPoints(section)
+        cfg['pointsOfInterest'] = __readPointsOfInterest(section)
     if not IS_CLIENT:
         if raiseIfMissing or __hasKey('battleScenarios', section, defaultXml):
             cfg['battleScenarios'] = __readBattleScenarios(section, defaultXml)
@@ -909,6 +914,20 @@ def __readBotPoints(section):
             res[index] = pos
 
     return res if res else None
+
+
+def __readPointsOfInterest(section):
+    res = []
+    pointsSection = section['pointsOfInterestUDO']
+    if pointsSection is not None:
+        for name, value in pointsSection.items():
+            if name == 'point':
+                pointType = value.readInt('type')
+                pointPosition = value.readVector2('position')
+                res.append({'type': pointType,
+                 'position': pointPosition})
+
+    return res
 
 
 def __readTeamBasePositions(section, maxTeamsInArena):

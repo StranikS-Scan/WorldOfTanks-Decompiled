@@ -43,7 +43,9 @@ class DAAPIDataProvider(BaseDAAPIModule):
         return self.pyRequestItemRange(startIndex, endIndex)
 
     def refresh(self):
-        self.flashObject.invalidate(self.pyLength())
+        if self.flashObject is not None:
+            self.flashObject.invalidate(self.pyLength())
+        return
 
     def pyLength(self):
         return len(self.collection)

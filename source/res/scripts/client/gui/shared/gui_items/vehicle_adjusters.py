@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_adjusters.py
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from helpers import dependency
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import module as installer_module
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
 
-@process
+@adisp_process
 def installModulesSet(vehicle, modules, notFitted):
     UNDEFINED_INDEX = -1
 

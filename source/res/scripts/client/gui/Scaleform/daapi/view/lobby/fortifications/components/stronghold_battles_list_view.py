@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/stronghold_battles_list_view.py
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import WindowLayer
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
@@ -66,7 +66,7 @@ class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
             viewPy.init(self.__browserId, createStrongholdsWebHandlers(onBrowserOpen=BoundMethodWeakref(self.addChildBrowserAlias)))
             self.__browserCreated = True
 
-    @process
+    @adisp_process
     def __loadBrowser(self, width, height):
         battlesListUrl = getStrongholdBattlesListUrl()
         if battlesListUrl is not None:

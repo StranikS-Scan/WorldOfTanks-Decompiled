@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/browser_in_view_component.py
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from helpers import dependency
@@ -33,7 +33,7 @@ class BrowserInViewComponent(BrowserInViewComponentMeta):
         if alias == VIEW_ALIAS.BROWSER:
             viewPy.init(self.__browserId)
 
-    @process
+    @adisp_process
     def __loadBrowser(self):
         url = self.__url
         width, height = self.__size

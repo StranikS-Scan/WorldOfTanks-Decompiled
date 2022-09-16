@@ -3,7 +3,7 @@
 from functools import partial
 from collections import namedtuple
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from helpers import dependency
@@ -99,7 +99,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
                  'excelItem': item}), scope=EVENT_BUS_SCOPE.LOBBY)
                 break
 
-    @process
+    @adisp_process
     def participateStatusClick(self):
         self.__setWaiting(True)
         yield self.eventsController.joinEvent(self.__eventID)
@@ -289,7 +289,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
         return
 
-    @process
+    @adisp_process
     def __fetchLeaderboardPageData(self, page, rank):
         self.__setWaiting(True)
         leaderboard = yield self.eventsController.getLeaderboard(self.__eventID, self.__leaderboardID, page)
@@ -330,7 +330,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
                 self.as_setEmptyDataS(_ms(EVENT_BOARDS.EXCEL_NODATA))
         return
 
-    @process
+    @adisp_process
     def __fetchMyLeaderboardInfo(self, onSuccess):
         self.__setWaiting(True)
         myInfo = yield self.eventsController.getMyLeaderboardInfo(self.__eventID, self.__leaderboardID)

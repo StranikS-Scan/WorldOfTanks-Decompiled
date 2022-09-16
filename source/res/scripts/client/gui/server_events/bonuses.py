@@ -7,16 +7,18 @@ from functools import partial
 from operator import itemgetter
 import typing
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
+from external_strings_utils import strtobool
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -32,6 +34,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN
+from gui.server_events.events_helpers import parseC11nProgressToken
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -62,6 +65,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from epic_constants import EPIC_OFFER_TOKEN_PREFIX, EPIC_SELECT_BONUS_NAME
 from web.web_client_api.common import ItemPackEntry, ItemPackTypeGroup, getItemPackByGroupAndName, ItemPackType
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.customization import C11nStyleProgressData
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
@@ -71,6 +76,8 @@ _CUSTOMIZATION_BONUSES = frozenset(['camouflage',
  'modification',
  'projection_decal',
  'personal_number'])
+_META_BONUS_BROWSER_VIEW_TYPE = {'internal': VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB,
+ 'overlay': VIEW_ALIAS.WEB_VIEW_TRANSPARENT}
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -123,6 +130,9 @@ class SimpleBonus(object):
 
     def getContext(self):
         return self._ctx
+
+    def updateContext(self, ctx):
+        self._ctx.update(ctx)
 
     def formatValue(self):
         return str(self._value) if self._value else None
@@ -438,9 +448,10 @@ class MetaBonus(SimpleBonus):
         else:
             NotImplementedError('Action "%s" handler is not implemented', action)
 
-    @process
+    @adisp_process
     def __handleBrowseAction(self, params):
-        from gui.shared.event_dispatcher import showBrowserOverlayView
+        from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getClientControlledCloseCtx
+        from gui.server_events.events_dispatcher import showMetaBonusOverlayView
         url = params.get('url')
         if url is None:
             _logger.warning('Browse url is empty')
@@ -451,12 +462,16 @@ class MetaBonus(SimpleBonus):
             if target is None:
                 _logger.warning('Browse target is empty')
                 return
-            if target == 'internal':
+            if target in _META_BONUS_BROWSER_VIEW_TYPE:
+                viewType = _META_BONUS_BROWSER_VIEW_TYPE[target]
+                kwargs = {}
+                if strtobool(params.get('isClientCloseControl', 'False')):
+                    kwargs.update(getClientControlledCloseCtx())
                 if self.__isLobbyLoaded():
-                    showBrowserOverlayView(url)
+                    showMetaBonusOverlayView(url=url, alias=viewType, **kwargs)
                 else:
                     self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
-                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url))
+                    self.__onLobbyLoadedCallbacks.append(partial(showMetaBonusOverlayView, url, viewType, **kwargs))
             elif target == 'external':
                 BigWorld.wg_openWebBrowser(url)
             else:
@@ -593,9 +608,6 @@ class EpicSelectTokensBonus(TokensBonus):
 
     def isShowInGUI(self):
         return True
-
-    def updateContext(self, ctx):
-        self._ctx.update(ctx)
 
     def getWrappedEpicBonusList(self):
         bonusList = []
@@ -861,6 +873,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             createBonusFromTokens(result, CURRENCY_TOKEN_PREFIX, tID, tValue)
         if tID.startswith(RESOURCE_TOKEN_PREFIX):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
+        if tID.startswith(CUSTOMIZATION_PROGRESS_PREFIX):
+            result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -913,6 +927,31 @@ class CompletionTokensBonus(TokensBonus):
 
     def format(self):
         return makeHtmlString('html_templates:lobby/quests/bonuses', self._name, {'value': self.formatValue()})
+
+
+class C11nProgressTokenBonus(TokensBonus):
+    BONUS_NAME = 'styleProgress'
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(C11nProgressTokenBonus, self).__init__(self.BONUS_NAME, value, isCompensation, ctx)
+        token = first(self.getTokens().values())
+        self.__tokenID = token.id
+        self.__progressData = parseC11nProgressToken(token)
+
+    def isShowInGUI(self):
+        return True
+
+    def getTokenID(self):
+        return self.__tokenID
+
+    def getStyleID(self):
+        return self.__progressData.styleID
+
+    def getBranchID(self):
+        return self.__progressData.branch
+
+    def getProgressLevel(self):
+        return self.__progressData.level
 
 
 class ItemsBonus(SimpleBonus):
@@ -975,7 +1014,7 @@ class ItemsBonus(SimpleBonus):
         return pack
 
     def getLightViewModelData(self):
-        return (next(self.getItems().iterkeys()).name,)
+        return (first(self.getItems().iterkeys()).name,)
 
     def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
         itemInfo = {'imgSource': item.getBonusIcon(iconSize),

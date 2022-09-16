@@ -83,6 +83,7 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,
  BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
  BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
+ BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR,
  BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL,
  BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL,
  BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,
@@ -139,6 +140,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
                         BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                         BATTLE_VIEW_ALIASES.BATTLE_TIMER,
                         BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
+                        BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR,
                         BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL})}
 _EPIC_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.EpicMarkersManager)
 
@@ -192,6 +194,13 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
                 elif BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL in hiddenUI:
                     visibleUI.add(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
                     hiddenUI.remove(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
+                if not vehicle.typeDescriptor.hasRocketAcceleration:
+                    if BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR in visibleUI:
+                        visibleUI.remove(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+                        hiddenUI.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+                elif BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR in hiddenUI:
+                    visibleUI.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+                    hiddenUI.remove(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
             ctrl = self.sessionProvider.dynamic.maps
             if ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI:
                 ctrl.setOverviewMapScreenVisibility(True)

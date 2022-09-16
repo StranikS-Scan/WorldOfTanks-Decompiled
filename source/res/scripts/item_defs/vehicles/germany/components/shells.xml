@@ -4423,4 +4423,27 @@
     <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
     <tags>	minefield	</tags>
   </mine_shell_fl_low_damage_8lvl_level3>
+  <comp7_poi_artillery_aoe>
+    <id>	347	</id>
+    <userString>	#comp7:poi_artillery_aoe	</userString>
+    <icon>	he_spg_stun	</icon>
+    <price>	1170	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	20	</stunDuration>
+    <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	epicAirbombStrike	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
+    <tags>	bomber	</tags>
+  </comp7_poi_artillery_aoe>
 </shells.xml>

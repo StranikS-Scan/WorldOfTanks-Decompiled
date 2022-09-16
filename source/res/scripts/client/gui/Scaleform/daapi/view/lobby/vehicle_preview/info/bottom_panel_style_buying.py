@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/bottom_panel_style_buying.py
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
-from adisp import process
+from adisp import adisp_process
 from battle_pass_common import CurrencyBP
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import DialogsInterface
@@ -47,7 +47,7 @@ class VehiclePreviewBottomPanelStyleBuying(VehiclePreviewBottomPanelStyleBuyingM
 
 
 class _StyleBuyingPanelView(ViewImpl):
-    __slots__ = ('__style', '__ordPrice', '__dynPrice', '__level')
+    __slots__ = ('__style', '__ordPrice', '__dynPrice', '__level', '__buyParams')
     __battlePass = dependency.descriptor(IBattlePassController)
     __customizationService = dependency.descriptor(ICustomizationService)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -144,7 +144,7 @@ class _StyleBuyingPanelView(ViewImpl):
         else:
             self.__onBuyForOrdinaryCurrency(self.__style.userName)
 
-    @process
+    @adisp_process
     def __onBuyForOrdinaryCurrency(self, productName):
         money = Money(**self.__ordPrice)
         if not mayObtainForMoney(money) and mayObtainWithMoneyExchange(money):
@@ -161,7 +161,7 @@ class _StyleBuyingPanelView(ViewImpl):
             elif money.gold > self.__itemsCache.items.stats.gold:
                 showBuyGoldForBundle(money.gold, self.__buyParams)
 
-    @process
+    @adisp_process
     def __onBuyForDynamicCurrency(self, productName):
         currency, priceVal = first(((c, v) for c, v in self.__dynPrice.iteritems()))
         priceStr = formatPrice({currency: priceVal}, currency=currency, reverse=True, useIcon=True)

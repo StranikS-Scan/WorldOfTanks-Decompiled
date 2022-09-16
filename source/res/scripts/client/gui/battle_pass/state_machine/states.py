@@ -119,16 +119,6 @@ class ChoiceItemState(State):
         return
 
 
-class ChoiceStyleState(State):
-    __slots__ = ()
-
-    def __init__(self):
-        super(ChoiceStyleState, self).__init__(stateID=BattlePassRewardStateID.CHOICE_STYLE)
-
-    def _onEntered(self):
-        pass
-
-
 class PreviewState(State):
     __slots__ = ()
 

@@ -15,7 +15,7 @@ from gui.shared.gui_items import KPI, kpiFormatValue
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION
 from helpers.i18n import makeString
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
@@ -40,6 +40,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'flyDelayRange': MENU.TANK_PARAMS_S,
  'enginePower': MENU.TANK_PARAMS_P,
  TURBOSHAFT_ENGINE_POWER: MENU.TANK_PARAMS_P,
+ ROCKET_ACCELERATION_ENGINE_POWER: MENU.TANK_PARAMS_P,
+ ROCKET_ACCELERATION_REUSE_AND_DURATION: MENU.TANK_PARAMS_QPT,
+ ROCKET_ACCELERATION_SPEED_LIMITS: MENU.TANK_PARAMS_MPH,
  'enginePowerPerTon': MENU.TANK_PARAMS_PT,
  'explosionRadius': MENU.TANK_PARAMS_M,
  'gunYawLimits': MENU.TANK_PARAMS_GRADS,
@@ -116,6 +119,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'increaseHealth': MENU.TANK_PARAMS_VAL}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
+ 'reloadCooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'caliber': MENU.TANK_PARAMS_NO_BRACKETS_MM}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
@@ -133,6 +137,7 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                              CHASSIS_REPAIR_TIME),
  ITEM_TYPES.vehicleEngine: ('enginePower',
                             TURBOSHAFT_ENGINE_POWER,
+                            ROCKET_ACCELERATION_ENGINE_POWER,
                             'fireStartingChance',
                             'weight'),
  ITEM_TYPES.vehicleTurret: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
@@ -337,6 +342,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'weight': _niceRangeFormat,
  'enginePower': _integralFormat,
  TURBOSHAFT_ENGINE_POWER: _integralFormat,
+ ROCKET_ACCELERATION_ENGINE_POWER: _integralFormat,
  'enginePowerPerTon': _niceListFormat,
  'speedLimits': _niceListFormat,
  'chassisRotationSpeed': _niceFormat,
@@ -389,6 +395,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'shotSpeed': _integralFormat,
  'extraRepairSpeed': _percentFormat,
  TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat,
+ ROCKET_ACCELERATION_SPEED_LIMITS: _niceListFormat,
+ ROCKET_ACCELERATION_REUSE_AND_DURATION: _niceListFormat,
  'vehicleGunShotDispersionAfterShot': _integralFormat,
  'vehicleGunShotDispersionChassisMovement': _integralFormat,
  'vehicleGunShotDispersionChassisRotation': _integralFormat,

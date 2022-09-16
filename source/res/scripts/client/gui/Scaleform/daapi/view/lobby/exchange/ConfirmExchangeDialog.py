@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ConfirmExchangeDialog.py
-from adisp import process
+from adisp import adisp_process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.ConfirmExchangeDialogMeta import ConfirmExchangeDialogMeta
 
@@ -26,7 +26,7 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
         self._callHandler(False)
         self.destroy()
 
-    @process
+    @adisp_process
     def exchange(self, goldValue):
         if self.__exchangeMutex:
             return

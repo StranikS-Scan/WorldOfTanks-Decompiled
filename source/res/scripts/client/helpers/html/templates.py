@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/html/templates.py
 from types import DictType
+from typing import TYPE_CHECKING
 from collections import defaultdict
 import ResMgr
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers import html
+if TYPE_CHECKING:
+    from typing import Optional, Dict
 
 class Template(object):
 

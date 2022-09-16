@@ -4,6 +4,7 @@ import random
 import struct
 from functools import partial
 from itertools import izip
+from typing import List, Dict, Any, Tuple, Optional
 import nations
 from items import vehicles, ITEM_TYPES, parseIntCompactDescr
 from items.components import skills_components, crew_skins_constants, crew_books_constants
@@ -18,7 +19,7 @@ from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
 from vehicles import VEHICLE_CLASS_TAGS
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from constants import ITEM_DEFS_PATH
 from account_shared import AmmoIterator
 from soft_exception import SoftException
@@ -296,6 +297,10 @@ class TankmanDescr(object):
         return list(self.__skills[:self.freeSkillsNumber])
 
     @property
+    def earnedSkills(self):
+        return list(self.__skills[self.freeSkillsNumber:])
+
+    @property
     def lastSkillLevel(self):
         return self.__lastSkillLevel
 
@@ -316,6 +321,10 @@ class TankmanDescr(object):
             return groups[self.gid].isUnique
         else:
             return False
+
+    @property
+    def vehicleTypeCompDescr(self):
+        return vehicles.makeIntCompactDescrByID('vehicle', self.nationID, self.vehicleTypeID)
 
     def efficiencyFactorOnVehicle(self, vehicleDescrType):
         _, _, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescrType.compactDescr)
@@ -372,8 +381,10 @@ class TankmanDescr(object):
 
         return xp
 
-    def addXP(self, xp):
-        self.freeXP = min(_MAX_FREE_XP, self.freeXP + xp)
+    def addXP(self, xp, truncateXP=True):
+        self.freeXP = self.freeXP + xp
+        if truncateXP:
+            self.truncateXP()
         while self.roleLevel < MAX_SKILL_LEVEL:
             xpCost = self.levelUpXpCost(self.roleLevel, 0)
             if xpCost > self.freeXP:
@@ -382,7 +393,7 @@ class TankmanDescr(object):
             self.roleLevel += 1
             self.__updateRankAtSkillLevelUp()
 
-        if self.roleLevel == MAX_SKILL_LEVEL and self.__skills:
+        if self.roleLevel == MAX_SKILL_LEVEL:
             self.__levelUpLastSkill()
 
     def checkRestrictionsByVehicleTags(self):
@@ -394,6 +405,8 @@ class TankmanDescr(object):
             raise SoftException('Skill already leaned (%s)' % skillName)
         if skillName not in skills_constants.ACTIVE_SKILLS:
             raise SoftException('Unknown skill (%s)' % skillName)
+        if skillName in skills_constants.UNLEARNABLE_SKILLS:
+            raise SoftException('Skill (%s) cannot be learned' % skillName)
         if self.role != 'commander' and skillName in skills_constants.COMMANDER_SKILLS:
             raise SoftException('Cannot learn commander skill (%s) for another role (%s)' % (skillName, self.role))
         if self.roleLevel != MAX_SKILL_LEVEL:
@@ -404,12 +417,15 @@ class TankmanDescr(object):
         self.__lastSkillLevel = 0
         self.__levelUpLastSkill()
 
+    def truncateXP(self):
+        self.freeXP = min(_MAX_FREE_XP, self.freeXP)
+
     def isFreeDropSkills(self):
         if self.lastSkillNumber < 1 + self.freeSkillsNumber:
             return True
         return True if self.lastSkillNumber == 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0 else False
 
-    def dropSkills(self, xpReuseFraction=0.0, throwIfNoChange=True):
+    def dropSkills(self, xpReuseFraction=0.0, throwIfNoChange=True, truncateXP=True):
         if len(self.__skills) == 0:
             if throwIfNoChange:
                 raise SoftException('attempt to reset empty skills')
@@ -430,7 +446,7 @@ class TankmanDescr(object):
         else:
             self.__lastSkillLevel = 0
         if xpReuseFraction != 0.0:
-            self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
+            self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())), truncateXP=truncateXP)
 
     def dropSkill(self, skillName, xpReuseFraction=0.0):
         idx = self.__skills.index(skillName)
@@ -448,6 +464,23 @@ class TankmanDescr(object):
             self.numLevelsToNextRank += levelsDropped
         if xpReuseFraction != 0.0:
             self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
+
+    def validateLearningFreeSkill(self, skillName):
+        if 'any' not in self.freeSkills:
+            return (False, 'no free skill slots available', False)
+        if skillName in self.freeSkills:
+            return (False, 'free skill (%s) is already learned' % skillName, False)
+        if skillName not in skills_constants.ACTIVE_SKILLS:
+            return (False, 'Unknown skill (%s)' % skillName, False)
+        if skillName in skills_constants.UNLEARNABLE_SKILLS:
+            return (False, 'Skill (%s) cannot be learned' % skillName, False)
+        return (False, 'Cannot learn free skill (%s) for this tankman' % skillName, False) if skillName not in COMMON_SKILLS and skillName not in SKILLS_BY_ROLES[self.role] else (True, '', skillName in self.earnedSkills)
+
+    def replaceFreeSkill(self, oldSkillName, newSkillName):
+        idx = self.__skills.index(oldSkillName)
+        if idx > self.freeSkillsNumber - 1:
+            raise SoftException('skill is not free')
+        self.__skills[idx] = newSkillName
 
     def respecialize(self, newVehicleTypeID, minNewRoleLevel, vehicleChangeRoleLevelLoss, classChangeRoleLevelLoss, becomesPremium):
         newVehTags = vehicles.g_list.getList(self.nationID)[newVehicleTypeID].tags
@@ -582,7 +615,7 @@ class TankmanDescr(object):
             else:
                 for skillID in unpack(str(numSkills) + 'B', cd[:numSkills]):
                     skillName = SKILL_NAMES[skillID]
-                    if skillName not in skills_constants.ACTIVE_SKILLS:
+                    if skillName not in skills_constants.ACTIVE_FREE_SKILLS:
                         raise SoftException('Incorrect skill name', skillName)
                     self.__skills.append(skillName)
 
@@ -639,6 +672,8 @@ class TankmanDescr(object):
 
     def __levelUpLastSkill(self):
         numSkills = self.lastSkillNumber - self.freeSkillsNumber
+        if numSkills <= 0:
+            return
         while self.__lastSkillLevel < MAX_SKILL_LEVEL:
             xpCost = self.levelUpXpCost(self.__lastSkillLevel, numSkills)
             if xpCost > self.freeXP:
@@ -661,6 +696,7 @@ def makeTmanDescrByTmanData(tmanData):
     roleLevel = tmanData.get('roleLevel', 50)
     if not 50 <= roleLevel <= MAX_SKILL_LEVEL:
         raise SoftException('Wrong tankman level')
+    lastSkillLevel = tmanData.get('lastSkillLevel', MAX_SKILL_LEVEL)
     skills = tmanData.get('skills', [])
     freeSkills = tmanData.get('freeSkills', [])
     if skills is None:
@@ -718,7 +754,7 @@ def makeTmanDescrByTmanData(tmanData):
      firstNameID,
      lastNameID,
      iconID)
-    tankmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills, freeSkills=freeSkills)
+    tankmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills, lastSkillLevel=lastSkillLevel, freeSkills=freeSkills)
     freeXP = tmanData.get('freeXP', 0)
     if freeXP != 0:
         tankmanDescr = TankmanDescr(tankmanCompDescr)
@@ -892,87 +928,112 @@ def getRecruitInfoFromToken(tokenName):
             else:
                 nationNames = parts[1].split('!')
                 if len(nationNames) != len(set(nationNames)):
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: nation duplicates'.format(tokenName))
                     return None
                 for nation in nationNames:
                     if nation not in nations.AVAILABLE_NAMES:
+                        LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: unknown nation name "{}"'.format(tokenName, nation))
                         return None
                     result['nations'].append(nations.INDICES[nation])
 
             if parts[2] == '' or parts[2] == 'true':
                 result['isPremium'] = True
             elif parts[2] != 'false':
+                LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: wrong "isPremium" value "{}'.format(tokenName, parts[2]))
                 return None
             for nation in result['nations']:
                 if len(filter(lambda g: g.name == parts[3], getNationGroups(nation, result['isPremium']).itervalues())) != 1:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: wrong group name'.format(tokenName))
                     return None
 
             result['group'] = parts[3]
             if parts[4] != '':
                 freeXP = int(parts[4])
                 if freeXP < 0 or freeXP > _MAX_FREE_XP:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: XP out of bounds'.format(tokenName))
                     return None
                 result['freeXP'] = freeXP
+            earnedSkillsSet = set()
             if parts[5] != '':
                 skills = parts[5].split('!')
                 if len(skills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: too many earned skills'.format(tokenName))
                     return None
-                if len(skills) != len(set(skills)):
+                earnedSkillsSet = set(skills)
+                if len(skills) != len(earnedSkillsSet):
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: earned skills are duplicated'.format(tokenName))
                     return None
                 for skill in skills:
                     if skill not in skills_constants.ACTIVE_SKILLS:
+                        LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: earned skill "{}" is not active'.format(tokenName, skill))
                         return None
                     result['skills'].append(skill)
 
             if parts[6] != '':
                 lastSkillLevel = int(parts[6])
                 if lastSkillLevel < 0 or lastSkillLevel > MAX_SKILL_LEVEL:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: lastSkillLevel out of bounds'.format(tokenName))
                     return None
                 result['lastSkillLevel'] = lastSkillLevel
+            freeSkillsSet = set()
             if parts[7] != '':
                 freeSkills = parts[7].split('!')
                 if len(freeSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: too many free skills'.format(tokenName))
                     return None
-                if len(freeSkills) != len(set(freeSkills)):
+                chosenFreeSkills = [ s for s in freeSkills if s != 'any' ]
+                freeSkillsSet = set(chosenFreeSkills)
+                if len(chosenFreeSkills) != len(freeSkillsSet):
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: free skills are duplicated'.format(tokenName))
                     return None
                 for skill in freeSkills:
-                    if skill not in skills_constants.ACTIVE_SKILLS:
+                    if skill not in skills_constants.ACTIVE_FREE_SKILLS:
+                        LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: free skill "{}" is not active'.format(tokenName, skill))
                         return None
                     result['freeSkills'].append(skill)
 
+            if len(earnedSkillsSet) + len(freeSkillsSet) != len(earnedSkillsSet | freeSkillsSet):
+                LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: free and earned skills are duplicated'.format(tokenName))
+                return None
             if parts[8] != '':
                 roleLevel = int(parts[8])
                 if roleLevel < MIN_ROLE_LEVEL or roleLevel > MAX_SKILL_LEVEL:
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: roleLevel out of bounds'.format(tokenName))
                     return None
                 result['roleLevel'] = roleLevel
             sourceID = parts[9]
             if sourceID == '':
+                LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: empty sourceID'.format(tokenName))
                 return None
             result['sourceID'] = sourceID
             if parts[10] != '':
                 roles = parts[10].split('!')
                 if len(roles) != len(set(roles)):
+                    LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: roles are duplicated'.format(tokenName))
                     return None
                 for role in roles:
                     if role not in skills_constants.ROLES:
+                        LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: unknown role name "{}"'.format(tokenName, role))
                         return None
                     result['roles'].append(SKILL_INDICES[role])
 
         except ValueError:
+            LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: value error'.format(tokenName))
             return None
 
         return result
 
 
-def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=0, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, freeSkills=(), roleLevel=MAX_SKILL_LEVEL, roles=[]):
+def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=0, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, freeSkills=(), roleLevel=MAX_SKILL_LEVEL, roles=()):
     tokenParts = [RECRUIT_TMAN_TOKEN_PREFIX]
-    selectedNations = set()
+    selectedNations = []
     if len(nationList) == 0:
         selectedNations = set(nations.AVAILABLE_NAMES)
     else:
         for nation in nationList:
             if nation not in nations.AVAILABLE_NAMES:
                 return None
-            selectedNations.add(nation)
+            selectedNations.append(nation)
 
     if len(selectedNations) == len(nations.AVAILABLE_NAMES):
         tokenParts.append('')
@@ -988,11 +1049,11 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
         return None
     else:
         tokenParts.append('' if freeXP == 0 else str(freeXP))
-        selectedSkills = set()
+        selectedSkills = []
         for skill in skills:
             if skill not in skills_constants.ACTIVE_SKILLS:
                 return None
-            selectedSkills.add(skill)
+            selectedSkills.append(skill)
 
         if len(selectedSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
             return None
@@ -1000,11 +1061,11 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
         if lastSkillLevel < 0 or lastSkillLevel > MAX_SKILL_LEVEL:
             return None
         tokenParts.append('' if lastSkillLevel == MAX_SKILL_LEVEL else str(lastSkillLevel))
-        selectedFreeSkills = set()
+        selectedFreeSkills = []
         for skill in freeSkills:
-            if skill not in skills_constants.ACTIVE_SKILLS:
+            if skill not in skills_constants.ACTIVE_FREE_SKILLS:
                 return None
-            selectedFreeSkills.add(skill)
+            selectedFreeSkills.append(skill)
 
         if len(selectedFreeSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
             return None
@@ -1013,14 +1074,18 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
             return None
         tokenParts.append('' if roleLevel == MAX_SKILL_LEVEL else str(roleLevel))
         tokenParts.append(sourceID)
-        selectedRecruitRoles = set()
+        selectedRecruitRoles = []
         for recruitRole in roles:
             if recruitRole not in skills_constants.SKILL_NAMES:
                 return None
-            selectedRecruitRoles.add(recruitRole)
+            selectedRecruitRoles.append(recruitRole)
 
         tokenParts.append('!'.join(selectedRecruitRoles))
         return ':'.join(tokenParts)
+
+
+def getTokenFromRecruitInfo(recruit):
+    return generateRecruitToken(group=recruit['group'], sourceID=recruit['sourceID'], nationList=[ nations.NAMES[nationID] for nationID in recruit['nations'] ], isPremium=recruit['isPremium'], freeXP=recruit['freeXP'], skills=recruit['skills'], lastSkillLevel=recruit['lastSkillLevel'], freeSkills=recruit['freeSkills'], roleLevel=recruit['roleLevel'], roles=[ skills_constants.SKILL_NAMES[roleID] for roleID in recruit['roles'] ])
 
 
 def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):

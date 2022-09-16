@@ -1,0 +1,23 @@
+<GunReloadBoost.def>
+  <Properties>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActive>
+    <displayedState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </displayedState>
+    <timeInterval>
+      <Type>	TIME_INTERVAL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </timeInterval>
+  </Properties>
+  <ClientMethods>
+    <onReloadBoost></onReloadBoost>
+  </ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	GunReloadBoost	</DefaultKeyName>
+</GunReloadBoost.def>

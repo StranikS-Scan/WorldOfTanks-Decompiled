@@ -5,7 +5,7 @@ from constants import CustomizationInvData
 from gui.SystemMessages import pushMessagesFromResult
 from items.components.c11n_constants import SeasonType
 from Event import Event, EventManager
-from adisp import process
+from adisp import adisp_process
 from gui import g_tankActiveCamouflage
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from vehicle_outfit.outfit import Area
@@ -271,6 +271,9 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isOnlyForEpicBattles(self):
         return self.isPresent() and self.item.isOnlyForEpicBattles
+
+    def isOnlyForComp7Battles(self):
+        return self.isPresent() and self.item.isOnlyForComp7Battles
 
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
@@ -593,7 +596,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
         return False
 
-    @process
+    @adisp_process
     def installComponent(self, newId):
         newComponentItem = self.itemsCache.items.getItemByCD(newId)
         Waiting.show('applyModule', overlapsUI=False)

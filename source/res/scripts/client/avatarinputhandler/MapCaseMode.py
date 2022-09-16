@@ -224,7 +224,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, self._getAreaSize())
         self.area.setOverTerrainOffset(10.0)
         self.maxHeightShift = None
         self.minHeightShift = None
@@ -276,6 +276,9 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         _, hitPosition, direction = replayCtrl.getGunMarkerParams(self.area.position, self.direction)
         self.area.setNextPosition(hitPosition, direction)
 
+    def _getAreaSize(self):
+        return Vector2(self.equipment.areaWidth, self.equipment.areaLength)
+
     def __areaUpdate(self):
         currentTime = BigWorld.time()
         deltaTime = BigWorld.time() - self.__lastUpdateTime
@@ -297,18 +300,15 @@ class _ArenaBoundsAreaStrikeSelector(_AreaStrikeSelector):
         self.__wasInsideArenaBounds = True
         self.__outFromBoundsAimArea = None
         self.__insetRadius = 0
-        size = Vector2(equipment.areaWidth, equipment.areaLength)
+        size = self._getAreaSize()
         visualPath = equipment.areaVisual
         color = None
-        if isinstance(equipment, ArcadeEquipmentConfigReader):
-            aimLimits = equipment.arenaAimLimits
-            if aimLimits:
-                self.__insetRadius = aimLimits.insetRadius
-                color = aimLimits.areaColor
-                if aimLimits.areaSwitch:
-                    visualPath = aimLimits.areaSwitch
-        else:
-            LOG_WARNING("Equipment:'{}' is using '{}' strike selector, but doesn't have '{}' params".format(equipment, _ArenaBoundsAreaStrikeSelector.__name__, ArcadeEquipmentConfigReader.__name__))
+        aimLimits = getattr(equipment, 'arenaAimLimits', None)
+        if aimLimits:
+            self.__insetRadius = aimLimits.insetRadius
+            color = aimLimits.areaColor
+            if aimLimits.areaSwitch:
+                visualPath = aimLimits.areaSwitch
         self.__outFromBoundsAimArea = CombatSelectedArea()
         self.__outFromBoundsAimArea.setup(position, direction, size, visualPath, color, marker=None)
         self.__outFromBoundsAimArea.setGUIVisible(False)
@@ -457,6 +457,7 @@ class _ArcadeBomberStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelec
     def __init__(self, position, equipment):
         _ArenaBoundsAreaStrikeSelector.__init__(self, position, equipment)
         _VehiclesSelector.__init__(self, self.__intersected)
+        self.area.enableWaterCollision(True)
         self.__updateDirection(position)
 
     def destroy(self):
@@ -524,10 +525,10 @@ class _ArcadeFLMinesSelector(_ArcadeBomberStrikeSelector, _FLMinesSensor):
             self.area.setColor(int(4278255360L))
 
 
-class _AttackArtilleryFortStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelector):
+class _ArenaBoundArtilleryStrikeSelector(_ArenaBoundsAreaStrikeSelector, _VehiclesSelector):
 
-    def __init__(self, position, equipment):
-        _ArenaBoundsAreaStrikeSelector.__init__(self, position, equipment)
+    def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
+        _ArenaBoundsAreaStrikeSelector.__init__(self, position, equipment, direction)
         _VehiclesSelector.__init__(self, self.__intersected, selectPlayer=True)
         self.area.enableWaterCollision(True)
 
@@ -538,10 +539,65 @@ class _AttackArtilleryFortStrikeSelector(_ArenaBoundsAreaStrikeSelector, _Vehicl
     def tick(self):
         self.highlightVehicles()
 
+    def _getRadius(self):
+        return self.equipment.areaRadius
+
     def __intersected(self, vehicles):
         for v in vehicles:
-            if self.area.pointInsideCircle(v.position, self.equipment.areaRadius):
+            if self.area.pointInsideCircle(v.position, self._getRadius()):
                 yield v
+
+
+class _Comp7ArenaBoundArtilleryStrikeSelector(_ArenaBoundArtilleryStrikeSelector):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
+        super(_Comp7ArenaBoundArtilleryStrikeSelector, self).__init__(position, equipment, direction)
+        equipmentCtrl = self.__sessionProvider.shared.equipments
+        if equipmentCtrl is not None:
+            equipmentCtrl.onRoleEquipmentStateChanged += self.__onRoleEquipmentStateChanged
+        return
+
+    def destroy(self):
+        super(_Comp7ArenaBoundArtilleryStrikeSelector, self).destroy()
+        equipmentCtrl = self.__sessionProvider.shared.equipments
+        if equipmentCtrl is not None:
+            equipmentCtrl.onRoleEquipmentStateChanged -= self.__onRoleEquipmentStateChanged
+        return
+
+    def _getAreaSize(self):
+        radius = self._getRadius()
+        return Vector2(radius * 2, radius * 2)
+
+    def _getRadius(self):
+        equipmentCtrl = self.__sessionProvider.shared.equipments
+        level = equipmentCtrl.getRoleEquipmentState().level
+        return self.equipment.getRadiusBasedOnSkillLevel(level)
+
+    def __onRoleEquipmentStateChanged(self, state, previousState=None):
+        if state is None or previousState is None:
+            return
+        else:
+            if state.level > previousState.level:
+                if self.area is not None:
+                    self.area.updateSize(self._getAreaSize())
+            return
+
+
+class _Comp7ArenaBoundPlaneStrikeSelector(_Comp7ArenaBoundArtilleryStrikeSelector):
+
+    def __init__(self, position, equipment):
+        player = BigWorld.player()
+        arenaType = player.arena.arenaType
+        reconSettings = getattr(arenaType, 'recon')
+        direction = None
+        if reconSettings is not None:
+            direction = reconSettings.flyDirections.get(player.team)
+        if direction is None:
+            _logger.error('Missing flyDirection for arena [geometryName=%s, gameplayName=%s]; teamID=%s', arenaType.geometryName, arenaType.gameplayName, player.team)
+            direction = _DEFAULT_STRIKE_DIRECTION
+        super(_Comp7ArenaBoundPlaneStrikeSelector, self).__init__(position, equipment, direction)
+        return
 
 
 _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
@@ -553,7 +609,10 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.FrontLineMinefield: _ArcadeFLMinesSelector,
  artefacts.AreaOfEffectEquipment: _ArcadeBomberStrikeSelector,
  artefacts.AttackBomberEquipment: _ArcadeBomberStrikeSelector,
- artefacts.AttackArtilleryFortEquipment: _AttackArtilleryFortStrikeSelector}
+ artefacts.AttackArtilleryFortEquipment: _ArenaBoundArtilleryStrikeSelector,
+ artefacts.Comp7ReconEquipment: _Comp7ArenaBoundPlaneStrikeSelector,
+ artefacts.Comp7RedlineEquipment: _Comp7ArenaBoundArtilleryStrikeSelector,
+ artefacts.PoiArtilleryEquipment: _ArenaBoundArtilleryStrikeSelector}
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -647,6 +706,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             self.__cam.writeUserPreferences()
             if BigWorld.player().gunRotator is not None:
                 BigWorld.player().gunRotator.ignoreAimingMode = False
+            self.__equipmentID = -1
             return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
@@ -659,7 +719,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
                 return True
             shouldClose = self.__activeSelector.processSelection(self.__getDesiredShotPoint())
             if shouldClose:
-                self.turnOff()
+                self.turnOff(sendStopEquipment=False)
             return True
         elif key == Keys.KEY_RIGHTMOUSE and mods != Keys.MODIFIER_CTRL and isDown:
             replayCtrl = BattleReplay.g_replayCtrl
@@ -910,11 +970,13 @@ def activateMapCase(equipmentID, deactivateCallback, controlMode):
                 pos = camera.aimingSystem.getDesiredShotPoint()
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
-        camDist = None
         zoomSwitcherState = None
         if arcadeState:
             camDist = arcadeState.camDist
             zoomSwitcherState = arcadeState.zoomSwitcherState
+        else:
+            camDist = None
+            zoomSwitcherState = None
         controlMode.prevCtlMode = [pos,
          currentMode,
          inputHandler.ctrl.aimingMode,
@@ -929,5 +991,5 @@ def turnOffMapCase(equipmentID, controlMode):
     if isinstance(inputHandler.ctrl, controlMode):
         if inputHandler.ctrl.equipmentID == equipmentID:
             controlMode.deactivateCallback = None
-            inputHandler.ctrl.turnOff(False)
+            inputHandler.ctrl.turnOff(sendStopEquipment=False)
     return

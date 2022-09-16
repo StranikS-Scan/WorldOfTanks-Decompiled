@@ -88,8 +88,8 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
     __itemsCache = dependency.descriptor(IItemsCache)
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle, filterCallback):
-        super(BlueprintsStorageCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache, filterCallback):
+        super(BlueprintsStorageCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         g_techTreeDP.load()
         self._baseCriteria = _BlueprintsCriteriesGroup.getGroupCriteria()
         self.__filterCallback = filterCallback

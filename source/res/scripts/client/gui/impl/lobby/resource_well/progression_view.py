@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/resource_well/progression_view.py
 from PlayerEvents import g_playerEvents
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -155,7 +155,7 @@ class ProgressionView(ViewImpl):
     def __contributeResources(self):
         showResourcesLoadingWindow()
 
-    @process
+    @adisp_process
     def __extractResources(self):
         yield ResourceWellTakeBackProcessor().request()
 

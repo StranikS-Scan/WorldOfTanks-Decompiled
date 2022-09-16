@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urlparse.py
-# Compiled at: 2032-11-02 15:34:15
+# Compiled at: 2100-06-16 16:36:56
 """Parse (absolute and relative) URLs.
 
 urlparse module is based upon the following RFC specifications.

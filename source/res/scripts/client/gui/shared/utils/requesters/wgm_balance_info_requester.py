@@ -3,7 +3,7 @@
 from functools import partial
 import BigWorld
 import AccountCommands
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui.shared.utils.requesters.common import RequestProcessor
 from gui.shared.money import Currency
 from debug_utils import LOG_WARNING
@@ -42,7 +42,7 @@ class WGMBalanceInfoRequester(object):
             self.__request.cancel()
         del self.__callbacks[:]
 
-    @process
+    @adisp_process
     def requestInfo(self, callback):
         if callback not in self.__callbacks:
             self.__callbacks.append(callback)
@@ -53,7 +53,7 @@ class WGMBalanceInfoRequester(object):
 
             self.__callbacks = []
 
-    @async
+    @adisp_async
     def __requestWGMBalanceInfo(self, callback):
         proxy = partial(self.__processResponse, callback)
         self.__request = RequestProcessor(self.__nextRequestTime(), lambda : self.__cooldownCallback(proxy))

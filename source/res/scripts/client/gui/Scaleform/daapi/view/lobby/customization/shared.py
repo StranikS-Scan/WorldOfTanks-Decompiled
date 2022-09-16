@@ -169,10 +169,10 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
         purchaseItem = PurchaseItem(style, style.getBuyPrice(), areaID=None, slotType=None, regionIdx=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, locked=True)
         purchaseItems.append(purchaseItem)
     for season in SeasonType.COMMON_SEASONS:
-        modifiedOutfit = modifiedOutfits[season]
+        modifiedOutfit = removePartsFromOutfit(season, modifiedOutfits[season])
         if style.isProgressive:
             modifiedOutfit = c11nService.removeAdditionalProgressionData(outfit=modifiedOutfit, style=style, vehCD=vehicleCD, season=season)
-        baseOutfit = style.getOutfit(season, vehicleCD)
+        baseOutfit = removePartsFromOutfit(season, style.getOutfit(season, vehicleCD))
         for intCD, component, regionIdx, container, _ in modifiedOutfit.itemsFull():
             item = c11nService.getItemByCD(intCD)
             itemTypeID = item.itemTypeID
@@ -650,21 +650,26 @@ def removeUnselectedItemsFromEditableStyle(modifiedOutfits, baseOutfits, purchas
         slotId = C11nId(pItem.areaID, pItem.slotType, pItem.regionIdx)
         outfit = modifiedOutfits[season]
         baseOutfit = baseOutfits[season]
-        removeItemFromEditableStyle(outfit, baseOutfit, slotId)
+        modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
 
 
-def removeItemFromEditableStyle(outfit, baseOutfit, slotId):
+@dependency.replace_none_kwargs(service=ICustomizationService)
+def removeItemFromEditableStyle(outfit, baseOutfit, slotId, season, service=None):
     slotType = slotId.slotType
     if slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
+        slotData = getSlotDataFromSlot(outfit, slotId)
+        outfit = removePartsFromOutfit(season, outfit, [slotData.intCD])
         __removeItemFromEditableStyleAllAreas(outfit, baseOutfit, slotType)
+        slotData = getSlotDataFromSlot(outfit, slotId)
         if slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
-            slotData = getSlotDataFromSlot(outfit, slotId)
             parsedData = parseIntCompactDescr(compactDescr=slotData.intCD)
             for _, uSlotId in getUnsuitableDependentData(outfit, parsedData[2], outfit.style.dependencies):
                 __doItemRemoveFromEditableStyleOutfit(outfit, baseOutfit, uSlotId, True)
 
+        outfit = addPartsToOutfit(season, outfit, [slotData.intCD])
     else:
         __removeItemFromEditableStyleOutfit(outfit, baseOutfit, slotId)
+    return outfit
 
 
 @dependency.replace_none_kwargs(service=ICustomizationService)
@@ -770,3 +775,19 @@ def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nServic
             removedCounts[intCD] = 0
 
     return inventoryCounts + removedCounts
+
+
+def changePartsOutfit(season, outfit, intCD, removeIntCD):
+    style = outfit.style
+    if removeIntCD != intCD:
+        vehicleCD = outfit.vehicleCD
+        return Outfit(component=style.addPartsToOutfit(season, style.removePartrsFromOutfit(season, outfit.pack(), vehicleCD, intCDs=[removeIntCD]), vehicleCD, intCDs=[intCD]), vehicleCD=vehicleCD)
+    return outfit
+
+
+def addPartsToOutfit(season, outfit, intCDs=None):
+    return outfit if outfit.style is None else Outfit(component=outfit.style.addPartsToOutfit(season, outfit.pack(), outfit.vehicleCD, intCDs=intCDs), vehicleCD=outfit.vehicleCD)
+
+
+def removePartsFromOutfit(season, outfit, intCDs=None):
+    return outfit if outfit.style is None else Outfit(component=outfit.style.removePartrsFromOutfit(season, outfit.pack(), outfit.vehicleCD, intCDs=intCDs), vehicleCD=outfit.vehicleCD)

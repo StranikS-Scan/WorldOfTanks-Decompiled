@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/resource_well_requester.py
 import typing
 import BigWorld
-from adisp import async
+from adisp import adisp_async
 from gui.resource_well.resource_well_constants import RESOURCE_WELL_PDATA_KEY
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IResourceWellRequester
@@ -23,6 +23,6 @@ class ResourceWellRequester(AbstractSyncDataRequester, IResourceWellRequester):
     def _preprocessValidData(self, data):
         return dict(data.get(RESOURCE_WELL_PDATA_KEY, {}))
 
-    @async
+    @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().resourceWell.getCache(lambda resID, value: self._response(resID, value, callback))

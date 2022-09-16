@@ -5,6 +5,8 @@ from collections import defaultdict
 from operator import itemgetter
 from gui.shared.gui_items import KPI
 from items import utils, tankmen
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
 
 class _KpiDict(object):
 
@@ -49,6 +51,9 @@ class _KpiDict(object):
             kpiType = self.__typeDict[kpiName]
             yield KPI(kpiName, (1.0 if kpiType == KPI.Type.MUL else 0.0) + kpiValue, kpiType)
 
+    def getCoeff(self, kpiName):
+        return self.getFactor(kpiName) / 100 + 1
+
 
 def aggregateKpi(kpiList):
     result = _KpiDict()
@@ -89,6 +94,15 @@ def getKpiFactors(vehicle):
             otherKPI.addKPI(kpi.name, kpi.value, kpi.type)
 
     return baseKPI * otherKPI
+
+
+def getRocketAccelerationKpiFactors(vehDescr):
+    rocketKPI = _KpiDict()
+    if vehDescr.hasRocketAcceleration:
+        for kpi in vehDescr.type.rocketAccelerationParams.kpi:
+            rocketKPI.addKPI(kpi.name, kpi.value, kpi.type)
+
+    return rocketKPI
 
 
 def getVehicleFactors(vehicle):

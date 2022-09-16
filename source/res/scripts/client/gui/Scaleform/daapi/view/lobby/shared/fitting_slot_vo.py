@@ -75,4 +75,8 @@ class FittingSlotVO(dict):
                     uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
                     if not uiStorage.get(UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
+                if vehicleModule.hasRocketAcceleration():
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
+                    if not uiStorage.get(UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN):
+                        self['counter'] = self.get('counter', 0) + 1
             return

@@ -16,6 +16,8 @@
           <condition>
             <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
             <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
+            <inactive>	PersonalCaseOpen	</inactive>
+            <inactive>	WrongVehicle	</inactive>
           </condition>
           <effects>
             <request-exclusive-hint>	FirstTankman	</request-exclusive-hint>
@@ -48,7 +50,6 @@
       </runtime-effects>
       <gui-items>
         <gui-item>	PersonalCaseClose	  <on-scene-effects>
-            <set-gui-item-criteria>	TankmanSkillCriteria	</set-gui-item-criteria>
             <activate>	PersonalCaseOpen	</activate>
           </on-scene-effects>
           <not-on-scene-effects>
@@ -260,7 +261,6 @@
       <effects>
         <set-var>	FirstVehicleSetter	</set-var>
         <set-var>	SecondVehicleSetter	</set-var>
-        <set-var>	TankmanSkillSetter	</set-var>
         <activate>	NationDataInitialized	</activate>
         <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
             <arg>	EnabledHangarMenuButtons_Initial	  <name>	buttonsListVarID	</name>
@@ -329,24 +329,12 @@
       </effects>
     </checkpoint>
     <checkpoint>	SkillLearnedCheckpoint	  <condition>
-        <game-item>	SecondVehicleCD	  <crew-has-skill>	commander TankmanSkillName	</crew-has-skill>
+        <game-item>	SecondVehicleCD	  <crew-has-any-skill>	commander	</crew-has-any-skill>
         </game-item>
         <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
       </condition>
       <effects>
         <show-dialog>	CrewSkillsDialog	</show-dialog>
-        <effects-group>
-          <condition>
-            <active>	PersonalCaseOpen	</active>
-          </condition>
-          <effects>
-            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
-            </play-sound>
-            <play-animation>	SkillSlot	  <type>	clip	</type>
-              <wait_for_finish>	True	</wait_for_finish>
-            </play-animation>
-          </effects>
-        </effects-group>
       </effects>
     </checkpoint>
     <checkpoint>	EndCheckpoint	  <condition>
@@ -366,10 +354,6 @@
       <name>	TankmanID	</name>
       <args>	SecondVehicleCD commander	</args>
     </game-attribute>
-    <game-attribute>	TankmanSkillSetter	  <var-ref>	TankmanSkillName	</var-ref>
-      <name>	BootcampNationDataField	</name>
-      <args>	perk	</args>
-    </game-attribute>
     <gui-item-criteria>	TechTreeItemNodeCriteria	  <item-id>	TechTreeItemNodeID	</item-id>
       <value>	id=$FirstVehicleCD$	</value>
     </gui-item-criteria>
@@ -379,14 +363,10 @@
     <gui-item-criteria>	ResearchRootNodeCriteria	  <item-id>	ResearchRootNodeID	</item-id>
       <value>	id=$SecondVehicleCD$	</value>
     </gui-item-criteria>
-    <gui-item-criteria>	TankmanSkillCriteria	  <item-id>	PersonalCaseSkillID	</item-id>
-      <value>	title=$TankmanSkillName$	</value>
-    </gui-item-criteria>
     <gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	  <components>
         <component-id>	PersonalCaseSkill	</component-id>
         <component-id>	PersonalCaseSkillSelect	</component-id>
         <component-id>	PersonalCaseClose	</component-id>
-        <component-id>	SkillSlot	</component-id>
       </components>
       <value>	personalCase_$SecondVehicleCommanderID$	</value>
     </gui-item-view-criteria>

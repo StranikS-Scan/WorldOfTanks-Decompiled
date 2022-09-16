@@ -796,6 +796,9 @@
       <isSuitableForReferralBonus>
         <Type>	BOOL	</Type>
       </isSuitableForReferralBonus>
+      <isElite>
+        <Type>	BOOL	</Type>
+      </isElite>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -942,6 +945,9 @@
       <isSsrPlayEnabled>
         <Type>	BOOL	</Type>
       </isSsrPlayEnabled>
+      <componentsData>
+        <Type>	PYTHON	</Type>
+      </componentsData>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1637,10 +1643,10 @@
         <Type>	INT32	</Type>
       </endTime>
       <baseTime>
-        <Type>	UINT16	</Type>
+        <Type>	INT32	</Type>
       </baseTime>
       <leftTime>
-        <Type>	INT16	</Type>
+        <Type>	INT32	</Type>
       </leftTime>
     </Properties>
   </COOLDOWN_INFO>
@@ -2192,4 +2198,151 @@
   </DEBUFF_INFO>
   <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
   </DEBUFF_INFO_LIST>
+  <ROCKET_ACCELERATION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <status>
+        <Type>	UINT8	</Type>
+      </status>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <timeLeft>
+        <Type>	UINT16	</Type>
+      </timeLeft>
+      <reuseCount>
+        <Type>	INT8	</Type>
+      </reuseCount>
+    </Properties>
+  </ROCKET_ACCELERATION_STATE_STATUS>
+  <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <type>
+        <Type>	UINT8	</Type>
+      </type>
+      <value>
+        <Type>	UINT16	</Type>
+      </value>
+      <isPercentage>
+        <Type>	BOOL	</Type>
+      </isPercentage>
+    </Properties>
+  </GOODIE_RESOURCE>
+  <GOODIE_STATE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <finishTime>
+        <Type>	FLOAT64	</Type>
+      </finishTime>
+      <count>
+        <Type>	UINT16	</Type>
+      </count>
+    </Properties>
+  </GOODIE_STATE_INFO>
+  <BATTLE_GOODIE_RECORD>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <goodieID>
+        <Type>	UINT32	</Type>
+      </goodieID>
+      <lifetime>
+        <Type>	UINT16	</Type>
+      </lifetime>
+      <useby>
+        <Type>	UINT64	</Type>
+      </useby>
+      <resource>
+        <Type>	GOODIE_RESOURCE	</Type>
+      </resource>
+      <stateInfo>
+        <Type>	GOODIE_STATE_INFO	</Type>
+      </stateInfo>
+    </Properties>
+  </BATTLE_GOODIE_RECORD>
+  <BATTLE_GOODIES_LIST>	ARRAY	  <of>	BATTLE_GOODIE_RECORD	</of>
+  </BATTLE_GOODIES_LIST>
+  <ROLE_EQUIPMENT_STATE>	FIXED_DICT	  <Properties>
+      <level>
+        <Type>	UINT8	</Type>
+      </level>
+      <progress>
+        <Type>	FLOAT32	</Type>
+      </progress>
+    </Properties>
+  </ROLE_EQUIPMENT_STATE>
+  <STATUS_WITH_TIME_INTERVAL>	FIXED_DICT	  <Properties>
+      <statusID>
+        <Type>	UINT8	</Type>
+      </statusID>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </STATUS_WITH_TIME_INTERVAL>
+  <TIME_INTERVAL>	FIXED_DICT	  <Properties>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </TIME_INTERVAL>
+  <STATE_WITH_TIME_INTERVAL>	FIXED_DICT	  <Properties>
+      <stateID>
+        <Type>	UINT8	</Type>
+      </stateID>
+      <timeInterval>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeInterval>
+      <isSourceVehicle>
+        <Type>	BOOL	</Type>
+      </isSourceVehicle>
+    </Properties>
+  </STATE_WITH_TIME_INTERVAL>
+  <VISUAL_SCRIPT_EQUIPMENT_STATE>	FIXED_DICT	  <Properties>
+      <quantity>
+        <Type>	INT32	</Type>
+      </quantity>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <totalTime>
+        <Type>	FLOAT32	</Type>
+      </totalTime>
+      <prevStage>
+        <Type>	UINT8	</Type>
+      </prevStage>
+      <stage>
+        <Type>	UINT8	</Type>
+      </stage>
+    </Properties>
+  </VISUAL_SCRIPT_EQUIPMENT_STATE>
+  <SPAWN_AVAILABLE_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <settings>
+        <Type>	UINT16	</Type>
+      </settings>
+      <isRent>
+        <Type>	BOOL	</Type>
+      </isRent>
+      <isElite>
+        <Type>	BOOL	</Type>
+      </isElite>
+    </Properties>
+  </SPAWN_AVAILABLE_VEHICLE>
+  <SPAWN_POINT_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <number>
+        <Type>	INT8	</Type>
+      </number>
+    </Properties>
+  </SPAWN_POINT_INFO>
 </alias.xml>

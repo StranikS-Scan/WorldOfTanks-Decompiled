@@ -6,7 +6,7 @@ import BigWorld
 import Event
 import BattleReplay
 from PlayerEvents import g_playerEvents
-from adisp import async
+from adisp import adisp_async
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
 from gui.battle_control import arena_visitor
@@ -73,7 +73,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def getCtx(self):
         return self.__ctx
 
-    @async
+    @adisp_async
     def sendRequest(self, ctx, callback, allowDelay=None):
         self.__requestsCtrl.request(ctx, callback=callback, allowDelay=allowDelay)
 
@@ -331,7 +331,9 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.startVehicleVisual(vProxy, isImmediate)
         ctrl = self.__dynamicRepo.battleField
         if ctrl is not None:
-            ctrl.setVehicleVisible(vehicleID, vProxy.health)
+            vehSwitchCtrl = self.__dynamicRepo.comp7PrebattleSetup
+            vHealth = vehSwitchCtrl.getVehicleHealth(vProxy) if vehSwitchCtrl is not None else vProxy.health
+            ctrl.setVehicleVisible(vehicleID, vHealth)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None and BigWorld.player().observedVehicleID == vehicleID:
             ctrl.refreshObserverVehicleVisual()

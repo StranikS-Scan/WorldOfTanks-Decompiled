@@ -5,6 +5,7 @@ import weakref
 import typing
 import BigWorld
 import account_helpers
+from constants import BootcampVersion
 from skeletons.tutorial import ITutorialLoader
 from tutorial.gui.Scaleform.gui_impl import ScaleformGuiImpl
 from tutorial.gui.controller import GuiController
@@ -185,7 +186,11 @@ class TutorialLoader(ITutorialLoader):
         bootcampController = dependency.instance(IBootcampController)
         isInBootcampAccount = bootcampController.isInBootcampAccount()
         if isInBootcampAccount and not self.demoAccController.isInDemoAccRegistration:
-            selectedSettings = self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS, _SETTINGS.BOOTCAMP_LOBBY), state)
+            if bootcampController.version == BootcampVersion.SHORT:
+                lobbySetting = _SETTINGS.SHORT_BOOTCAMP_LOBBY
+            else:
+                lobbySetting = _SETTINGS.BOOTCAMP_LOBBY
+            selectedSettings = self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS, lobbySetting), state)
         else:
             selectedSettings = None
         if selectedSettings is None or selectedSettings.hintsEnabled:

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_compare/ammunition_panel.py
-import async as future_async
+import wg_async as future_async
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -126,11 +126,11 @@ class CompareAmmunitionPanelView(ViewImpl):
             cmp_helpers.getCmpConfiguratorMainView().swapEquipment(leftID, rightID)
             self.__sendDragAndDropSlotAction(sectionName, self.__vehItem.getItem().consumables.layout, leftID, rightID)
 
-    @future_async.async
+    @future_async.wg_async
     def __onSpecializationSelect(self, *_):
         Waiting.show('loadModalWindow', softStart=True)
         cmpConfiguratorView = cmp_helpers.getCmpConfiguratorMainView()
-        result = yield future_async.await(showDialog(cmpConfiguratorView.getCurrentVehicle()))
+        result = yield future_async.wg_await(showDialog(cmpConfiguratorView.getCurrentVehicle()))
         if result.result[0]:
             cmpConfiguratorView.changeDynRoleSlot(result.result[1])
 

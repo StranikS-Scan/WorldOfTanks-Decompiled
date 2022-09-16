@@ -22,7 +22,9 @@ _RANDOM_TIPS_PATTERN = '^(tip\\d+)'
 _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
+_FUN_RANDOM_TIPS_PATTERN = '^(funRandom\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
+_COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1
@@ -139,10 +141,33 @@ class _RankedTipsCriteria(_TipsCriteria):
         return _rankedTips
 
 
+class _FunRandomTipsCriteria(_TipsCriteria):
+
+    def _getTargetList(self):
+        return _funRandomTips
+
+
 class _EpicRandomTipsCriteria(_TipsCriteria):
 
     def _getTargetList(self):
         return _epicRandomTips
+
+
+class _Comp7TipsCriteria(_TipsCriteria):
+
+    def find(self):
+        foundTip = self._findRandomTip()
+        if foundTip is not None:
+            foundTip.markWatched()
+            return foundTip.getData()
+        else:
+            return _TipData(R.invalid(), R.invalid(), R.invalid())
+
+    def _getTargetList(self):
+        return _comp7Tips
+
+    def _getArenaGuiType(self):
+        return ARENA_GUI_TYPE.COMP7
 
 
 class BattleRoyaleTipsCriteria(_TipsCriteria):
@@ -182,7 +207,11 @@ def getTipsCriteria(arenaVisitor):
         return _EpicRandomTipsCriteria()
     if arenaVisitor.gui.isInEpicRange():
         return _EpicBattleTipsCriteria()
-    return BattleRoyaleTipsCriteria(arenaVisitor) if arenaVisitor.gui.isBattleRoyale() else _RandomTipsCriteria()
+    if arenaVisitor.gui.isBattleRoyale():
+        return BattleRoyaleTipsCriteria(arenaVisitor)
+    if arenaVisitor.gui.isFunRandom():
+        return _FunRandomTipsCriteria()
+    return _Comp7TipsCriteria() if arenaVisitor.gui.isComp7Battle() else _RandomTipsCriteria()
 
 
 def _readTips(pattern):
@@ -373,7 +402,7 @@ class _RealmsValidator(object):
 
     @staticmethod
     def validate(tipFilter, _):
-        possibleRealms = tipFilter['vehicleClass']
+        possibleRealms = tipFilter['realms']
         return not possibleRealms or CURRENT_REALM in possibleRealms
 
 
@@ -446,6 +475,8 @@ _watchedTipsCache = None
 _tipsConfig = getPreBattleTipsConfig()
 _randomTips = _readTips(_RANDOM_TIPS_PATTERN)
 _rankedTips = _readTips(_RANKED_BATTLES_TIPS_PATTERN)
+_funRandomTips = _readTips(_FUN_RANDOM_TIPS_PATTERN)
 _epicBattleTips = _readTips(_EPIC_BATTLE_TIPS_PATTERN)
 _epicRandomTips = _readTips(_EPIC_RANDOM_TIPS_PATTERN)
 _battleRoyaleTips = _readTips(_BATTLE_ROYALE_TIPS_PATTERN)
+_comp7Tips = _readTips(_COMP7_TIPS_PATTERN)

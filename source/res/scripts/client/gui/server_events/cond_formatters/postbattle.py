@@ -9,7 +9,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
-from gui.server_events.cond_formatters.formatters import ConditionFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter
+from gui.server_events.cond_formatters.formatters import ConditionFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter, EmptyMissionsFormatter
 from gui.server_events.formatters import RELATIONS_SCHEME
 from gui.shared.gui_items.dossier import factories
 from helpers import i18n
@@ -54,7 +54,8 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
          'results': _BattleResultsFormatter(),
          'unitResults': _UnitResultsFormatter(),
          'crits': _CritsFormatter(),
-         'multiStunEvent': _MultiStunEventFormatter()})
+         'multiStunEvent': _MultiStunEventFormatter(),
+         'firstBlood': _FirstBloodFormatter()})
 
 
 class _ClanKillsFormatter(SimpleMissionsFormatter):
@@ -210,6 +211,10 @@ class _MultiStunEventFormatter(SimpleMissionsFormatter):
     @classmethod
     def _getTitleKey(cls, condition=None):
         return _makeKeyNegativeIf(QUESTS.DETAILS_CONDITIONS_MULTISTUNEVENT_TITLE, condition.isNegative())
+
+
+class _FirstBloodFormatter(EmptyMissionsFormatter):
+    pass
 
 
 class _BattleResultsFormatter(SimpleMissionsFormatter):

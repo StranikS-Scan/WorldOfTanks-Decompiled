@@ -175,9 +175,11 @@
       <module>	client.cgf_components.hover_component	</module>
       <module>	client.cgf_components.on_click_components	</module>
       <module>	client.cgf_components.hangar_rules	</module>
+      <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
+      <module>	client.cgf_components.rocket_acceleration_component	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -200,6 +202,7 @@
       <path>	content/CGFPrefabs/steel_hunter/lightning.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/death_zones_rules.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/kamikaze_activated.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

@@ -28,9 +28,6 @@ _ACTION_BY_TAG = {(USER_TAG.FRIEND, True): USER_ACTION_ID.FRIEND_ADDED,
 _CREATION_UPDATED_TAGS = (USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED)
 _IGNORED_DEPS_TAGS = [USER_TAG.IGNORED]
 _IGNORE_TMP_DEPS_TAGS = [USER_TAG.IGNORED_TMP]
-if not constants.IS_CHINA:
-    _IGNORED_DEPS_TAGS.append(USER_TAG.MUTED)
-    _IGNORE_TMP_DEPS_TAGS.append(USER_TAG.MUTED)
 
 class _RelationData(object):
     __slots__ = ('vehicleID', 'sessionID', 'databaseID', 'name')
@@ -85,7 +82,7 @@ class AnonymizerFakesController(IAnonymizerFakesController):
         self.usersStorage.addUser(CurrentBattleUserEntity(self.__avatarSessionID, currentInfo.player.getPlayerLabel()))
         self.__fakeIDs.add(self.__avatarSessionID)
         for vInfo in self.__arenaDP.getVehiclesInfoIterator():
-            self.__addBattleUser(_RelationData(vInfo))
+            self.__notifyModification(_RelationData(vInfo))
 
         g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP})
 

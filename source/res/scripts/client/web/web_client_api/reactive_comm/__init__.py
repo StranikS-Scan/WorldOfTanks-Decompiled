@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/reactive_comm/__init__.py
 import adisp
-import async
+import wg_async
 from gui.game_control.reactive_comm import Subscription, SubscriptionClientStatus, SubscriptionServerStatus
 from helpers import dependency
 from skeletons.gui.game_control import IReactiveCommunicationService
@@ -62,10 +62,10 @@ class ReactiveCommunicationWebApi(object):
 
         self.__subscriptions.clear()
 
-    @adisp.async
-    @async.async
+    @adisp.adisp_async
+    @wg_async.wg_async
     def __doSubscribe(self, subscription, callback):
-        status = yield async.await(self.__service.subscribeToChannel(subscription))
+        status = yield wg_async.wg_await(self.__service.subscribeToChannel(subscription))
         callback(status)
 
     def __onSubscriptionClosed(self, subscription, _):

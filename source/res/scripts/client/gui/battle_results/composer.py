@@ -39,7 +39,7 @@ class StatsComposer(IStatsComposer):
         self._registerTabs(reusable)
         self._block.addNextComponent(text)
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.BATTLE_PASS_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(self._getBattlePassBlock().clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(common)
@@ -84,6 +84,10 @@ class StatsComposer(IStatsComposer):
             self._block.addNextComponent(templates.MULTI_TEAM_TABS_BLOCK.clone())
         else:
             self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
+
+    @staticmethod
+    def _getBattlePassBlock():
+        return templates.BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
 class RegularStatsComposer(StatsComposer):
@@ -250,6 +254,18 @@ class MapsTrainingStatsComposer(IStatsComposer):
             MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
 
 
+class Comp7StatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(Comp7StatsComposer, self).__init__(reusable, templates.COMP7_COMMON_STATS_BLOCK.clone(), templates.COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
+        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
+
+    @staticmethod
+    def _getBattlePassBlock():
+        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
@@ -272,6 +288,8 @@ def createComposer(reusable):
         composer = BattleRoyaleStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
         composer = MapsTrainingStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.COMP7:
+        composer = Comp7StatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

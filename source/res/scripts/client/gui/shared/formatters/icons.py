@@ -58,6 +58,10 @@ def creditsBig():
     return _getIcon('creditsBig')
 
 
+def creditsExtraBig():
+    return _getIcon('creditsExtraBig')
+
+
 def notAvailable():
     return _getIcon('notAvailable')
 
@@ -94,6 +98,10 @@ def freeXP():
     return _getIcon('freeXP')
 
 
+def freeXPExtraBig():
+    return _getIcon('freeXPExtraBig')
+
+
 def xpCost():
     return _getIcon('xpCost')
 
@@ -110,12 +118,20 @@ def goldBig():
     return _getIcon('goldBig')
 
 
+def goldExtraBig():
+    return _getIcon('goldExtraBig')
+
+
 def crystal():
     return _getIcon(Currency.CRYSTAL)
 
 
 def crystalBig():
     return _getIcon('crystalBig')
+
+
+def crystalExtraBig():
+    return _getIcon('crystalExtraBig')
 
 
 def eventCoin():
@@ -204,3 +220,8 @@ def getRoleIcon(role, vSpace=-6, width=24, height=24):
 def lightning(vSpace=-4):
     source = backport.image(R.images.gui.maps.icons.library.lightning())
     return makeImageTag(source, width=10, height=16, vSpace=vSpace)
+
+
+def serverBlockerIcon():
+    source = backport.image(R.images.gui.maps.icons.library.blocker())
+    return makeImageTag(source, width=14, height=14, vSpace=-3)

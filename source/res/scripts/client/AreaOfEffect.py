@@ -8,8 +8,8 @@ import AnimationSequence
 import CGF
 import GenericComponents
 import Math
-import CombatSelectedArea
 import math_utils
+import CombatSelectedArea
 from ProjectileMover import collideDynamicAndStatic
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -19,28 +19,23 @@ from ids_generators import SequenceIDGenerator
 from items import vehicles
 from items.artefacts import AoeEffects, AreaShow
 from skeletons.account_helpers.settings_core import ISettingsCore
+from random_utils import getValueWithDeviationInPercent
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class AreaOfEffect(BigWorld.Entity):
+class EffectRunner(object):
     SHOT_HEIGHT = 100.0
     MAX_SHOTS = 1000
     GRAVITY = 9.8
     SHELL_VELOCITY = (0, -500, 0)
-    MAX_LAG = 0.5
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __settingsCore = dependency.descriptor(ISettingsCore)
-    _idGen = SequenceIDGenerator()
 
-    def __init__(self):
-        super(AreaOfEffect, self).__init__()
+    def __init__(self, entity, equipment):
         self._sequences = []
         self._callbacks = {}
         self._areas = {}
-        self.__areaGO = None
-        self.__mainAreaID = None
-        self._equipment = vehicles.g_cache.equipments()[self.equipmentID]
+        self._idGen = SequenceIDGenerator()
         self.salvo = BigWorld.PySalvo(self.MAX_SHOTS, 0, -self.SHOT_HEIGHT)
-        return
+        self._entity = entity
+        self._equipment = equipment
 
     @property
     def areaColor(self):
@@ -54,7 +49,7 @@ class AreaOfEffect(BigWorld.Entity):
             if not effect:
                 continue
             for sequence in effect['sequences']:
-                prereqs.append(AnimationSequence.Loader(sequence, self.spaceID))
+                prereqs.append(AnimationSequence.Loader(sequence, self._entity.spaceID))
 
         return prereqs
 
@@ -64,11 +59,13 @@ class AreaOfEffect(BigWorld.Entity):
             return
         else:
             delayOffset = 0
+            repeatDelay = effect['repeatDelay']
+            repeatDelayDeviationPercent = effect['repeatDelayDeviationPercent']
             for _ in xrange(effect['repeatCount']):
                 playID = self._idGen.next()
                 play = partial(self._play, playID, effect, position)
                 self._callbacks[playID] = BigWorld.callback(delayOffset, play)
-                delayOffset += effect['repeatDelay']
+                delayOffset += getValueWithDeviationInPercent(repeatDelay, repeatDelayDeviationPercent)
 
             if effect['areaColor']:
                 area = CombatSelectedArea.CombatSelectedArea()
@@ -76,38 +73,6 @@ class AreaOfEffect(BigWorld.Entity):
                 areaID = self._idGen.next()
                 self._areas[areaID] = area
             return
-
-    def onEnterWorld(self, prereqs):
-        timeOffset = BigWorld.serverTime() - self.launchTime
-        if timeOffset < self.MAX_LAG:
-            self.playEffect(AoeEffects.START, self.position, self._equipment.areaRadius)
-        self._showArea()
-        if self._isMarkersManagerReady:
-            self._showMarker()
-        else:
-            g_eventBus.addListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
-        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
-
-    def onLeaveWorld(self):
-        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        g_eventBus.removeListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
-        for callbackID in self._callbacks.itervalues():
-            BigWorld.cancelCallback(callbackID)
-
-        self._callbacks = {}
-        self.__destroyAreaGameObject()
-        for area in self._areas.itervalues():
-            area.destroy()
-
-        self._areas = {}
-        self.__mainAreaID = None
-        for animator in self._sequences:
-            if animator:
-                animator.stop()
-
-        self._sequences = []
-        self._equipment = None
-        return
 
     def _play(self, playID, effect, targetPosition):
         self._callbacks.pop(playID)
@@ -133,10 +98,10 @@ class AreaOfEffect(BigWorld.Entity):
         if effect['sequences']:
             sequenceID, sequenceData = random.choice(effect['sequences'].items())
             matrix = Math.Matrix()
-            matrix.setRotateY(self.yaw)
+            matrix.setRotateY(self._entity.yaw)
             matrix.setScale(sequenceData['scale'])
             matrix.translation = targetPosition
-            loader = AnimationSequence.Loader(sequenceID, self.spaceID)
+            loader = AnimationSequence.Loader(sequenceID, self._entity.spaceID)
             animator = loader.loadSync()
             animator.bindToWorld(matrix)
             animator.speed = 1
@@ -145,8 +110,58 @@ class AreaOfEffect(BigWorld.Entity):
             self._sequences.append(animator)
         return
 
+
+class AreaOfEffect(BigWorld.Entity, EffectRunner):
+    MAX_LAG = 0.5
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        BigWorld.Entity.__init__(self)
+        self._equipment = vehicles.g_cache.equipments()[self.equipmentID]
+        self.__areaGO = None
+        self.__mainAreaID = None
+        EffectRunner.__init__(self, self, self._equipment)
+        return
+
+    @property
+    def areaColor(self):
+        return self._equipment.areaColorBlind if self.__settingsCore.getSetting(GRAPHICS.COLOR_BLIND) and self._equipment.areaColorBlind is not None else self._equipment.areaColor or CombatSelectedArea.COLOR_WHITE
+
+    def onEnterWorld(self, prereqs):
+        timeOffset = BigWorld.serverTime() - self.launchTime
+        if timeOffset < self.MAX_LAG:
+            self.playEffect(AoeEffects.START, self.position, self._equipment.areaRadius)
+        self._showArea()
+        if self._isMarkersManagerReady:
+            self._showMarker()
+        else:
+            g_eventBus.addListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
+        equipmentsCtrl = self.sessionProvider.shared.equipments
+        if equipmentsCtrl:
+            equipmentsCtrl.onEquipmentAreaCreated(self._equipment, self.position, self._entity.launchTime + self._equipment.delay)
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+
+    def onLeaveWorld(self):
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        g_eventBus.removeListener(MarkersManagerEvent.MARKERS_CREATED, self._onMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
+        for callbackID in self._callbacks.itervalues():
+            BigWorld.cancelCallback(callbackID)
+
+        self._callbacks = {}
+        for area in self._areas.itervalues():
+            area.destroy()
+
+        self._areas = {}
+        for animator in self._sequences:
+            if animator:
+                animator.stop()
+
+        self._sequences = []
+        self._equipment = None
+        return
+
     def _areaDestroy(self, areaID):
-        self.__destroyAreaGameObject()
         self._callbacks.pop(areaID)
         area = self._areas.pop(areaID)
         area.destroy()
@@ -172,31 +187,39 @@ class AreaOfEffect(BigWorld.Entity):
         return Math.Matrix(self.matrix).applyToAxis(2)
 
     def _showArea(self):
-        areaTimeout = self._adjustedDelay
-        if self._equipment.areaShow == AreaShow.ALWAYS:
-            areaTimeout += self._equipment.duration
-        areaVisual = self._equipment.areaVisual
-        if areaVisual and areaTimeout > 0:
-            areaSize = Math.Vector2(self._equipment.areaWidth, self._equipment.areaLength)
-            area = CombatSelectedArea.CombatSelectedArea()
-            area.setup(self.position, self._direction, areaSize, areaVisual, self.areaColor, None)
-            area.enableAccurateCollision(self._equipment.areaAccurateCollision)
-            area.enableWaterCollision(True)
-            areaID = self._idGen.next()
-            self._areas[areaID] = area
-            self._callbacks[areaID] = BigWorld.callback(areaTimeout, partial(self._areaDestroy, areaID))
-            self.__mainAreaID = areaID
-            if self._equipment.areaUsedPrefab:
-                CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self.entityGameObject, Math.Vector3(), self.__areaGameObjectLoaded)
-        return
+        if not self._equipment.areaVisibleToEnemies and self._isAttackerEnemy():
+            return
+        else:
+            areaTimeout = self._adjustedDelay
+            if self._equipment.areaShow == AreaShow.ALWAYS:
+                areaTimeout += self._equipment.duration
+            areaVisual = self._equipment.areaVisual
+            if areaVisual and areaTimeout > 0:
+                areaSize = Math.Vector2(self._equipment.areaWidth, self._equipment.areaLength)
+                area = CombatSelectedArea.CombatSelectedArea()
+                area.setup(self.position, self._direction, areaSize, areaVisual, self.areaColor, None)
+                area.enableAccurateCollision(self._equipment.areaAccurateCollision)
+                area.enableWaterCollision(True)
+                areaID = self._idGen.next()
+                self._areas[areaID] = area
+                self._callbacks[areaID] = BigWorld.callback(areaTimeout, partial(self._areaDestroy, areaID))
+                self.__mainAreaID = areaID
+                if self._equipment.areaUsedPrefab:
+                    CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self.entityGameObject, Math.Vector3(), self.__onAreaGOLoaded)
+            return
 
     def _showMarker(self):
-        delay = self.strikeTime - BigWorld.serverTime()
+        if not self._equipment.areaVisibleToEnemies and self._isAttackerEnemy():
+            return
+        delay = self._adjustedDelay + self._equipment.duration
         equipmentsCtrl = self.sessionProvider.shared.equipments
         if equipmentsCtrl and delay > 0:
             equipmentsCtrl.showMarker(self._equipment, self.position, self._direction, delay)
 
-    def __areaGameObjectLoaded(self, gameObject):
+    def _isAttackerEnemy(self):
+        return self.sessionProvider.getArenaDP().getVehicleInfo(self.vehicleID).team != BigWorld.player().team
+
+    def __onAreaGOLoaded(self, gameObject):
         if self.isDestroyed:
             return
         self.__areaGO = gameObject
@@ -206,7 +229,7 @@ class AreaOfEffect(BigWorld.Entity):
         zScale = self._equipment.areaLength * 0.5
         t.transform = math_utils.createSRTMatrix(Math.Vector3(xScale, 1.0, zScale), (0.0, 0.0, 0.0), (0.0, floatEpsilon, 0.0))
 
-    def __destroyAreaGameObject(self):
+    def __destroyAreaGO(self):
         if self.__areaGO is not None:
             CGF.removeGameObject(self.__areaGO)
         self.__areaGO = None

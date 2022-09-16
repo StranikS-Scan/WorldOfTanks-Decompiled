@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/users.py
 import weakref
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui.wgcg.clan.contexts import AccountClanRatingsCtx
 
 class UserCache(object):
@@ -11,8 +11,8 @@ class UserCache(object):
         self.__cache = dict()
         self.__clanCtrl = weakref.proxy(clanCtrl)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def requestUsers(self, dbIDs, callback):
         status = True
         missingUser = [ usrID for usrID in dbIDs if usrID not in self.__cache ]

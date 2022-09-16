@@ -9,7 +9,7 @@ from Event import Event
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD, IS_CUSTOMIZATION_INTRO_VIEWED
 import adisp
-from async import async, await
+from wg_async import wg_async, wg_await
 from gui import g_tankActiveCamouflage, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
@@ -219,7 +219,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def showQuestProgressionInfoWindow(self):
         showOnboardingView()
 
-    @async
+    @wg_async
     def showBuyWindow(self, ctx=None):
         if self.__propertiesSheet.handleBuyWindow():
             return
@@ -231,7 +231,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         purchaseItems = self.__ctx.mode.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
         if cart.totalPrice == ITEM_PRICE_EMPTY:
-            positive = yield await(tryToShowReplaceExistingStyleDialog(self))
+            positive = yield wg_await(tryToShowReplaceExistingStyleDialog(self))
             if not positive:
                 self.onBuyConfirmed(False)
                 return
@@ -240,7 +240,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 builder = ResSimpleDialogBuilder()
                 builder.setPreset(DialogPresets.CUSTOMIZATION_INSTALL_BOUND)
                 builder.setMessagesAndButtons(R.strings.dialogs.customization.change_install_bound)
-                isOk = yield await(dialogs.showSimple(builder.build(self)))
+                isOk = yield wg_await(dialogs.showSimple(builder.build(self)))
                 self.onBuyConfirmed(isOk)
             else:
                 self.__applyItems(purchaseItems)
@@ -548,8 +548,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def resetC11nItemsNovelty(self, itemsList):
         self.__ctx.resetItemsNovelty(itemsList)
 
-    @adisp.async
-    @adisp.process
+    @adisp.adisp_async
+    @adisp.adisp_process
     def applyItems(self, purchaseItems, callback=None):
         self.service.stopHighlighter()
         yield self.__ctx.applyItems(purchaseItems)
@@ -1096,7 +1096,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             else:
                 itemsCounter = text_styles.stats(backport.text(R.strings.vehicle_customization.customization.header.counter.style.notInstalled()))
         elif self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
-            isQuestProgressionInfoBtnVisible = self.__ctx.mode.currentOutfit.style.isQuestsProgression
+            isQuestProgressionInfoBtnVisible = self.__ctx.mode.style.isQuestsProgression
             itemsCounter = text_styles.bonusPreviewText(backport.text(R.strings.vehicle_customization.customization.header.counter.editablestyle.installed(), name=self.__ctx.mode.style.userName))
         elif isVehicleCanBeCustomized(g_currentVehicle.item, slotType):
             typeName = GUI_ITEM_TYPE_NAMES[slotType]
@@ -1205,13 +1205,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __getProgressiveView(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView())
 
-    @async
+    @wg_async
     def __confirmClose(self):
         if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
             return
-        yield await(self.__closeConfirmator())
+        yield wg_await(self.__closeConfirmator())
 
-    @async
+    @wg_async
     def __closeConfirmator(self):
         if self.__closed or not self.__ctx.isOutfitsModified():
             result = True
@@ -1219,12 +1219,12 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             builder = ResPureDialogBuilder()
             builder.setMessagesAndButtons(R.strings.dialogs.customization.close, focused=DialogButtons.CANCEL)
             self.__onViewCreatedCallback()
-            result = yield await(dialogs.showSimple(builder.build(self)))
+            result = yield wg_await(dialogs.showSimple(builder.build(self)))
             self.__onViewDestroyedCallback()
         if result:
             self.__onCloseWindow()
         raise AsyncReturn(result)
 
-    @adisp.process
+    @adisp.adisp_process
     def __applyItems(self, purchaseItems):
         yield self.applyItems(purchaseItems)

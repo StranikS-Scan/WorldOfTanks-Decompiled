@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
-from adisp import process
+from __future__ import absolute_import
+from adisp import adisp_process
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
@@ -13,12 +14,13 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from helpers import dependency
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
@@ -64,6 +66,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.MAPBOX:
                 tooltip = TOOLTIPS_CONSTANTS.MAPBOX_SELECTOR_INFO
                 isSpecial = True
+            elif itemData == PREBATTLE_ACTION_NAME.COMP7:
+                tooltip, isSpecial = self.__getComp7AvailabilityData()
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             self._tooltip = tooltip
@@ -91,7 +95,11 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def __getEpicAvailabilityData(self):
         return (TOOLTIPS_CONSTANTS.EPIC_BATTLE_SELECTOR_INFO, True)
 
-    @process
+    @adisp_process
+    def __getComp7AvailabilityData(self):
+        return (TOOLTIPS_CONSTANTS.COMP7_SELECTOR_INFO, True) if self.__comp7Controller.isAvailable() else (TOOLTIPS_CONSTANTS.COMP7_SELECTOR_UNAVAILABLE_INFO, True)
+
+    @adisp_process
     def __selectFight(self, actionName):
         navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
         if not navigationPossible:

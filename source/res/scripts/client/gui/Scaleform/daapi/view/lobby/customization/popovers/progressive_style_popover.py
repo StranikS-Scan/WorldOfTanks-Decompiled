@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/popovers/progressive_style_popover.py
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import SimpleCarouselFilter, DisjunctionCarouselFilter, FilterAliases
+from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import DisjunctionCarouselFilter, FilterAliases
 from gui.Scaleform.daapi.view.lobby.customization.popovers import C11nPopoverItemData, orderKey
-from gui.Scaleform.daapi.view.lobby.customization.shared import isStyleEditedForCurrentVehicle, getCurrentVehicleAvailableRegionsMap, fitOutfit, ITEM_TYPE_TO_SLOT_TYPE
+from gui.Scaleform.daapi.view.lobby.customization.shared import getCurrentVehicleAvailableRegionsMap, fitOutfit, ITEM_TYPE_TO_SLOT_TYPE, removePartsFromOutfit
 from gui.Scaleform.daapi.view.meta.CustomizationProgressiveKitPopoverMeta import CustomizationProgressiveKitPopoverMeta
+from gui.customization.constants import CustomizationModes
 from gui.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, EDITABLE_STYLE_IRREMOVABLE_TYPES, C11nId
 from gui.impl import backport
 from gui.impl.gen import R
@@ -31,7 +32,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         super(ProgressiveStylePopover, self).__init__(ctx)
         self.__ctx = None
         self.__style = None
-        self.__filters = {}
+        self.__filters = None
         self.__itemsList = []
         self.__initFilters()
         return
@@ -43,21 +44,25 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         self.__ctx.mode.removeFromSlots(slotIds, season)
 
     def removeAll(self):
-        filterMethod = self.__getFilterReq()
-        for season in SeasonType.COMMON_SEASONS:
-            self.__ctx.mode.removeItemsFromSeason(season, filterMethod=filterMethod, refresh=False)
-            self.__ctx.refreshOutfit(season)
+        if self.__style is not None:
+            reqCriteria = self.__getFilterReq()
+            if not reqCriteria.conditions:
+                self.__ctx.changeMode(CustomizationModes.STYLED)
+                self.__ctx.mode.removeStyle(self.__style.intCD)
+            else:
+                for season in SeasonType.COMMON_SEASONS:
+                    self.__ctx.mode.removeItemsFromSeason(season=season, filterMethod=self.__getFilterReq())
 
-        self.__ctx.events.onItemsRemoved()
+        return
 
     def setToDefault(self):
         self.__ctx.mode.clearStyle()
 
     def onFilterChanged(self, showHistoric, showNonHistoric, showFantastic, showProgressiveLocked):
-        self.__filters[FilterTypes.HISTORIC].update(showHistoric, FilterAliases.HISTORIC)
-        self.__filters[FilterTypes.HISTORIC].update(showNonHistoric, FilterAliases.NON_HISTORIC)
-        self.__filters[FilterTypes.HISTORIC].update(showFantastic, FilterAliases.FANTASTICAL)
-        self.__filters[FilterTypes.LOCKED].update(showProgressiveLocked)
+        self.__filters.update(showHistoric, FilterAliases.HISTORIC)
+        self.__filters.update(showNonHistoric, FilterAliases.NON_HISTORIC)
+        self.__filters.update(showFantastic, FilterAliases.FANTASTICAL)
+        self.__filters.update(showProgressiveLocked, FilterAliases.LOCKED)
         self.__update()
 
     def _populate(self):
@@ -91,7 +96,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         self.as_setItemsS({'items': self.__itemsList})
         self.__setHeader()
         self.__setClearMessage()
-        self.__updateDefaultButton()
+        self.as_setDefaultButtonEnabledS(self.__hasIsRemovable())
         return
 
     def __setHeader(self):
@@ -109,15 +114,6 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         else:
             clearMessage = ''
         self.as_showClearMessageS(clearMessage)
-        return
-
-    def __updateDefaultButton(self):
-        if self.__style is not None:
-            modifiedOutfits = self.__ctx.mode.getModifiedOutfits()
-            enabled = isStyleEditedForCurrentVehicle(modifiedOutfits, self.__style)
-        else:
-            enabled = False
-        self.as_setDefaultButtonEnabledS(enabled)
         return
 
     def __buildList(self):
@@ -172,7 +168,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
             slotId = C11nId(pItem.areaID, pItem.slotType, pItem.regionIdx)
             itemData[key].slotsIds.append(slotId._asdict())
 
-        baseOutfit = self.__style.getOutfit(season, vehicleCD=vehicleDescriptor.makeCompactDescr())
+        baseOutfit = removePartsFromOutfit(season, self.__style.getOutfit(season, vehicleCD=vehicleDescriptor.makeCompactDescr()))
         fitOutfit(baseOutfit, availableRegionsMap)
         nationalEmblemItem = self.__service.getItemByID(GUI_ITEM_TYPE.EMBLEM, vehicleDescriptor.type.defaultPlayerEmblemID)
         showStyle = False
@@ -259,15 +255,17 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         return seasonGroupVO
 
     def __initFilters(self):
-        self.__filters[FilterTypes.HISTORIC] = DisjunctionCarouselFilter(criteria={FilterAliases.HISTORIC: REQ_CRITERIA.CUSTOMIZATION.HISTORICAL,
+        self.__filters = DisjunctionCarouselFilter(criteria={FilterAliases.HISTORIC: REQ_CRITERIA.CUSTOMIZATION.HISTORICAL,
          FilterAliases.NON_HISTORIC: REQ_CRITERIA.CUSTOMIZATION.NON_HISTORICAL,
-         FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL})
-        self.__filters[FilterTypes.LOCKED] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not item.isUnlockedByToken()))
+         FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL,
+         FilterAliases.LOCKED: REQ_CRITERIA.CUSTOM(lambda item: not item.isUnlockedByToken())})
 
     def __getFilterReq(self):
-        requirement = REQ_CRITERIA.EMPTY
-        for carouselFilter in self.__filters.itervalues():
-            if carouselFilter.isEnabled():
-                requirement |= carouselFilter.criteria
+        return self.__filters.criteria if self.__filters.isApplied() else REQ_CRITERIA.EMPTY
 
-        return requirement
+    def __hasIsRemovable(self):
+        for item in self.__itemsList:
+            if item.get('isRemovable'):
+                return True
+
+        return False

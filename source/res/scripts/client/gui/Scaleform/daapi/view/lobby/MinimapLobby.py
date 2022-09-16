@@ -2,9 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
 import ArenaType
 from gui.Scaleform.daapi.view.meta.MinimapPresentationMeta import MinimapPresentationMeta
+from gui.Scaleform.genConsts.MINIMAPENTRIES_CONSTANTS import MINIMAPENTRIES_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from points_of_interest_shared import PoiType
+_POI_TYPE_TO_STR = {PoiType.ARTILLERY: MINIMAPENTRIES_CONSTANTS.POI_TYPE_ARTY,
+ PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON}
 
 class MinimapLobby(MinimapPresentationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -54,11 +58,17 @@ class MinimapLobby(MinimapPresentationMeta):
     def setArena(self, arenaTypeID):
         self.__arenaTypeID = int(arenaTypeID)
         arenaType = ArenaType.g_cache[self.__arenaTypeID]
-        cfg = {'texture': RES_ICONS.getMapPath(arenaType.geometryName),
+        gameplayTypeIconPath = '../maps/icons/map/{}/{}.png'.format(arenaType.gameplayName, arenaType.geometryName)
+        if gameplayTypeIconPath in RES_ICONS.MAPS_ICONS_MAP_ENUM:
+            mapIconPath = gameplayTypeIconPath
+        else:
+            mapIconPath = RES_ICONS.getMapPath(arenaType.geometryName)
+        cfg = {'texture': mapIconPath,
          'size': arenaType.boundingBox,
          'teamBasePositions': arenaType.teamBasePositions,
          'teamSpawnPoints': arenaType.teamSpawnPoints,
-         'controlPoints': arenaType.controlPoints}
+         'controlPoints': arenaType.controlPoints,
+         'pointsOfInterest': arenaType.pointsOfInterest}
         self.setConfig(cfg)
 
     def setEmpty(self):
@@ -83,14 +93,22 @@ class MinimapLobby(MinimapPresentationMeta):
         for team, teamSpawnPoints in enumerate(self.__cfg['teamSpawnPoints'], 1):
             for spawn, spawnPoint in enumerate(teamSpawnPoints, 1):
                 posX, posY = _normalizePoint(spawnPoint[0], spawnPoint[1])
-                self.as_addPointS(posX, posY, 'spawn', 'blue' if team == self.__playerTeam else 'red', spawn + 1 if len(teamSpawnPoints) > 1 else 1)
+                self.as_addPointS(posX, posY, MINIMAPENTRIES_CONSTANTS.POINT_TYPE_SPAWN, self.__getTeamColor(team == self.__playerTeam), spawn + 1 if len(teamSpawnPoints) > 1 else 1)
 
         for team, teamBasePoints in enumerate(self.__cfg['teamBasePositions'], 1):
             for baseNumber, basePoint in enumerate(teamBasePoints.values(), 2):
                 posX, posY = _normalizePoint(basePoint[0], basePoint[1])
-                self.as_addPointS(posX, posY, 'base', 'blue' if team == self.__playerTeam else 'red', baseNumber if len(teamBasePoints) > 1 else 1)
+                self.as_addPointS(posX, posY, MINIMAPENTRIES_CONSTANTS.POINT_TYPE_BASE, self.__getTeamColor(team == self.__playerTeam), baseNumber if len(teamBasePoints) > 1 else 1)
+
+        for idx, point in enumerate(self.__cfg['pointsOfInterest'], 1):
+            x, y = _normalizePoint(*point['position'])
+            poiType = point['type']
+            self.as_addPoiS(x, y, _POI_TYPE_TO_STR[poiType], str(idx))
 
         if self.__cfg['controlPoints']:
             for index, controlPoint in enumerate(self.__cfg['controlPoints'], 2):
                 posX, posY = _normalizePoint(controlPoint[0], controlPoint[1])
-                self.as_addPointS(posX, posY, 'control', 'empty', index if len(self.__cfg['controlPoints']) > 1 else 1)
+                self.as_addPointS(posX, posY, MINIMAPENTRIES_CONSTANTS.POINT_TYPE_CONTROL, MINIMAPENTRIES_CONSTANTS.COLOR_EMPTY, index if len(self.__cfg['controlPoints']) > 1 else 1)
+
+    def __getTeamColor(self, isPlayerTeam):
+        return MINIMAPENTRIES_CONSTANTS.COLOR_BLUE if isPlayerTeam else MINIMAPENTRIES_CONSTANTS.COLOR_RED

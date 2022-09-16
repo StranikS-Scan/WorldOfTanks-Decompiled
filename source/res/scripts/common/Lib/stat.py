@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/stat.py
-# Compiled at: 2032-11-16 02:44:53
+# Compiled at: 2100-06-10 17:31:40
 """Constants/functions for interpreting results of os.stat() and os.lstat().
 
 Suggested usage: from stat import *

@@ -14,7 +14,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 class HangarAmmunitionPanel(BaseAmmunitionPanel):
     _settingsCore = dependency.descriptor(ISettingsCore)
 
-    @adisp.process
+    @adisp.adisp_process
     def onChangeSetupLayoutIndex(self, hudGroupID, layoutIdx, callback=None):
         result = False
         if self.isNewSetupLayoutIndexValid(hudGroupID, layoutIdx) and hudGroupID in GROUPS_MAP:

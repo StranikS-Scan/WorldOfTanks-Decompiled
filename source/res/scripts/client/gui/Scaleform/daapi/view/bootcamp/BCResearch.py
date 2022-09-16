@@ -127,7 +127,7 @@ class BCResearch(Research):
             self.uiBootcampLogger.logOnce(action=BC_LOG_ACTIONS.BUTTON_VIEW_IN_HANGAR)
             shared_events.selectVehicleInHangar(itemCD)
 
-    def setupContextHints(self, hintID):
+    def setupContextHints(self, hintID, hintsArgs=None):
         pass
 
     def redraw(self):

@@ -4,8 +4,8 @@ import BigWorld
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM, STORAGE_BLUEPRINTS_CAROUSEL_FILTER
-from adisp import process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
@@ -155,16 +155,16 @@ class BlueprintScreen(ViewImpl):
         self.viewModel.onOpenVehicleViewBtnClicked -= self.__onOpenVehicleViewBtnClicked
         g_clientUpdateManager.removeObjectCallbacks(self)
 
-    @async
+    @wg_async
     def __onGoToConversionScreen(self, args):
-        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD))
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield wg_await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD))
         if isResearchClicked and self.viewStatus == ViewStatus.LOADED:
             layoutId = int(args['value'])
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, fragmentCount, layoutId, usedNationalFragments=usedFragmentsData)
 
-    @async
+    @wg_async
     def __onGoToAllConversion(self, _=None):
-        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD, fragmentCount=self.viewModel.getMaxConvertibleFragmentCount()))
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield wg_await(dialogs.blueprintsConversion(parent=self.getParentWindow(), vehicleCD=self.__vehicle.intCD, fragmentCount=self.viewModel.getMaxConvertibleFragmentCount()))
         if isResearchClicked and self.viewStatus == ViewStatus.LOADED:
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self.__vehicle.intCD, fragmentCount, usedNationalFragments=usedFragmentsData)
 
@@ -182,7 +182,7 @@ class BlueprintScreen(ViewImpl):
     def __onOpenVehicleViewBtnClicked(self):
         event_dispatcher.showResearchView(self.__vehicle.intCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': self.__vehicle.nationName}))
 
-    @process
+    @adisp_process
     def __onResearchVehicle(self, _=None):
         self.viewModel.setBlueprintAnimPaused(True)
         result = yield UnlockItemActionWithResult(self.__vehicle.intCD, g_techTreeDP.getUnlockProps(self.__vehicle.intCD, self.__vehicle.level)).doAsyncAction()

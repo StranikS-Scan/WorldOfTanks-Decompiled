@@ -30,7 +30,7 @@ class BrowserView(Browser[BrowserViewModel]):
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, layoutID, settings):
-        self._COMMON_SOUND_SPACE = settings.soundSpaceSettings
+        BrowserView._COMMON_SOUND_SPACE = settings.soundSpaceSettings
         super(BrowserView, self).__init__(url=settings.url, settings=BrowserSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BrowserViewModel()), webHandlersMap=settings.webHandlers, preload=True)
         self.__settings = settings
         self.__closedByUser = False

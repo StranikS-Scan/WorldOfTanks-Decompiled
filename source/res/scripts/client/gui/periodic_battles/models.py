@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/periodic_battles/models.py
+import logging
 import typing
 from enum import Enum
 from functools import partial
@@ -7,11 +8,13 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from shared_utils import collapseIntervals, findFirst, first, CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.impl.gen_utils import DynAccessor
     from season_common import GameSeason, GameSeasonCycle
+_logger = logging.getLogger(__name__)
 
 class PrimeTimeStatus(CONST_CONTAINER):
     NOT_SET = 1
@@ -223,6 +226,7 @@ class AlertData(object):
      PeriodType.NOT_AVAILABLE,
      PeriodType.ALL_NOT_AVAILABLE,
      PeriodType.STANDALONE_NOT_AVAILABLE)
+    _RES_REASON_ROOT = None
     __slots__ = ('alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible', 'tooltip', 'isSimpleTooltip')
 
     def __init__(self, alertIcon=None, buttonIcon='', buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText='', popoverAlias=None, bgVisible=True, shadowFilterVisible=False, tooltip=None, isSimpleTooltip=False):
@@ -242,6 +246,18 @@ class AlertData(object):
     def construct(cls, periodInfo, serverShortName):
         isPrimeAlert = periodInfo.periodType in cls._PERIOD_TYPES_PRIME_ALERT
         return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if isPrimeAlert else None, buttonLabel=backport.text(cls._RES_ROOT.button.changeServer()), buttonVisible=periodInfo.periodType in cls._PERIOD_TYPES_WITH_BUTTON, statusText=text_styles.vehicleStatusCriticalText(cls._getAlertLabel(periodInfo, serverShortName)), shadowFilterVisible=isPrimeAlert, tooltip=cls._getTooltip(periodInfo))
+
+    @classmethod
+    def constructForVehicle(cls, levelsStr, vehicleIsAvailableForBuy, vehicleIsAvailableForRestore, tooltip=None):
+        if cls._RES_REASON_ROOT is None:
+            _logger.error('AlertData._RES_REASON_ROOT is None. Please define it to use constructForVehicle method!')
+        reason = cls._RES_REASON_ROOT.vehicleUnavailable()
+        if vehicleIsAvailableForBuy:
+            reason = cls._RES_REASON_ROOT.vehicleAvailableForBuy()
+        elif vehicleIsAvailableForRestore:
+            reason = cls._RES_REASON_ROOT.vehicleAvailableForRestore()
+        tooltipValue = tooltip if tooltip is not None else makeTooltip(body=backport.text(reason, levels=levelsStr))
+        return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonLabel=backport.text(cls._RES_ROOT.button.moreInfo()), buttonVisible=True, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.unsuitableVehicles(), levels=levelsStr)), shadowFilterVisible=True, tooltip=tooltipValue, isSimpleTooltip=tooltip is None)
 
     def asDict(self):
         return {'alertIcon': self.alertIcon,

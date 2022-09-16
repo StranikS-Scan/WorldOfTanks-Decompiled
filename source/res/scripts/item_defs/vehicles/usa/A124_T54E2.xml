@@ -79,6 +79,11 @@
           <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Hull.model	</exploded>
         </A124_T54E2_Renegade_3Dst>
+        <A124_T54E2_GJ_3DSt>
+          <undamaged>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Hull.model	</exploded>
+        </A124_T54E2_GJ_3DSt>
       </sets>
     </models>
     <swinging>
@@ -615,6 +620,19 @@
         <hiddenForUser>	true	</hiddenForUser>
         <anchorShift>	0.094995	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15039	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+        <position>	0.498028 1.4112 2.73666	</position>
+        <rotation>	0.38294 -0.0132852 2.97762	</rotation>
+        <scale>	0.379912 0.113973 0.379908	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.852157	</clipAngle>
+        <anchorShift>	0.044997	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
@@ -657,6 +675,11 @@
             <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Chassis.model	</exploded>
           </A124_T54E2_Renegade_3Dst>
+          <A124_T54E2_GJ_3DSt>
+            <undamaged>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A124_T54E2_GJ_3DSt>
         </sets>
       </models>
       <traces>
@@ -732,14 +755,14 @@
                 <boxCollider>
                   <row0>	3.675072 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 4.895648	</row2>
-                  <row3>	0.000000 1.623965 -0.617177	</row3>
+                  <row2>	0.000000 0.000000 4.895647	</row2>
+                  <row3>	0.000000 1.657693 -0.617177	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.675070 -0.000005 -0.000002	</row0>
-                  <row1>	0.000000 0.299336 0.019958	</row1>
-                  <row2>	0.000001 -0.118465 1.776816	</row2>
-                  <row3>	0.000000 1.571673 2.476241	</row3>
+                  <row0>	3.675070 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299527 0.016841	</row1>
+                  <row2>	0.000000 -0.093913 1.670324	</row2>
+                  <row3>	0.000000 1.566141 2.476239	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.675070 -0.000001 -0.000001	</row0>
@@ -816,14 +839,14 @@
                 <boxCollider>
                   <row0>	3.675072 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 4.895648	</row2>
-                  <row3>	0.000000 1.623965 -0.617177	</row3>
+                  <row2>	0.000000 0.000000 4.895647	</row2>
+                  <row3>	0.000000 1.657693 -0.617177	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.675070 -0.000005 -0.000002	</row0>
-                  <row1>	0.000000 0.299336 0.019958	</row1>
-                  <row2>	0.000001 -0.118465 1.776816	</row2>
-                  <row3>	0.000000 1.571673 2.476241	</row3>
+                  <row0>	3.675070 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299527 0.016841	</row1>
+                  <row2>	0.000000 -0.093913 1.670324	</row2>
+                  <row3>	0.000000 1.566141 2.476239	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.675070 -0.000001 -0.000001	</row0>
@@ -867,6 +890,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <A124_T54E2_GJ_3DSt>
+            <segmentModelLeft>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_01.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_01.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_02.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_02.model	</segment2ModelRight>
+          </A124_T54E2_GJ_3DSt>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0107	</trackThickness>
       <wheels>
@@ -1116,6 +1147,12 @@
             <model>	vehicles/american/A124_T54E2/track/segment_02.model	</model>
             <length>	0.0809986	</length>
           </secSegment>
+          <modelSets>
+            <A124_T54E2_GJ_3DSt>
+              <mainSegmentModel>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_02.model	</secSegmentModel>
+            </A124_T54E2_GJ_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1382,6 +1419,12 @@
             <model>	vehicles/american/A124_T54E2/track/segment_02.model	</model>
             <length>	0.0809985	</length>
           </secSegment>
+          <modelSets>
+            <A124_T54E2_GJ_3DSt>
+              <mainSegmentModel>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/track/segment_02.model	</secSegmentModel>
+            </A124_T54E2_GJ_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1746,6 +1789,11 @@
                 <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Gun_01.model	</exploded>
               </A124_T54E2_Renegade_3Dst>
+              <A124_T54E2_GJ_3DSt>
+                <undamaged>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A124_T54E2_GJ_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1811,6 +1859,16 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 2.46	</rayStart>
+              <rayEnd>	0 0 2.96	</rayEnd>
+              <rayUp>	0.12 0 0	</rayUp>
+              <size>	0.5	</size>
+              <isUVProportional>	true	</isUVProportional>
+              <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+            </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
@@ -1835,6 +1893,11 @@
             <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_Renegade_3Dst/crash/lod0/Turret_01.model	</exploded>
           </A124_T54E2_Renegade_3Dst>
+          <A124_T54E2_GJ_3DSt>
+            <undamaged>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A124_T54E2/_skins/A124_T54E2_GJ_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A124_T54E2_GJ_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -1878,9 +1941,9 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	-1.06533 1.19013 0.230774	</rayStart>
-          <rayEnd>	-0.39293 0.451475 0.183402	</rayEnd>
-          <rayUp>	0.770517 0.637415 -0.00224442	</rayUp>
+          <rayStart>	-1.05296 1.18181 0.397688	</rayStart>
+          <rayEnd>	-0.396791 0.436377 0.280427	</rayEnd>
+          <rayUp>	0.822388 0.568761 -0.0137504	</rayUp>
           <size>	0.25	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
@@ -2426,6 +2489,58 @@
           <clipAngle>	0.997456	</clipAngle>
           <hiddenForUser>	true	</hiddenForUser>
           <anchorShift>	0.134996	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+          <position>	-0.709901 2.27292 1.10369	</position>
+          <rotation>	0.666005 -1.51377 2.94775	</rotation>
+          <scale>	0.443053 0.25561 0.443053	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.997456	</clipAngle>
+          <anchorShift>	0.155003	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+          <position>	1.10981 2.40604 -0.186606	</position>
+          <rotation>	1.5043 1.49421 2.93883	</rotation>
+          <scale>	0.388947 0.189856 0.388947	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.997456	</clipAngle>
+          <anchorShift>	0.036965	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+          <position>	-0.00608097 2.65085 1.09994	</position>
+          <rotation>	0.264841 0.00388401 3.14	</rotation>
+          <scale>	0.807505 0.807505 0.807507	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorShift>	-0.000003	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A124_T54E2_GJ_3DSt	</compatibleModels>
+          <position>	-0.370853 2.32331 -1.89361	</position>
+          <rotation>	1.56681 -0.00465276 -0.00465339	</rotation>
+          <scale>	0.422534 0.173791 0.422536	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.259181	</clipAngle>
+          <anchorShift>	0.015001	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

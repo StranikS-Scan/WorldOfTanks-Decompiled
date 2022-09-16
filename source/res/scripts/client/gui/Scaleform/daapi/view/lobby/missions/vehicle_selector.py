@@ -134,8 +134,8 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
 
 class _MissionsCarouselDataProvider(CarouselDataProvider):
 
-    def __init__(self, carouselFilter, itemsCache, currentVehicle):
-        super(_MissionsCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+    def __init__(self, carouselFilter, itemsCache):
+        super(_MissionsCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__suitableVehiclesIDs = []
         self.__extraConditions = []
 

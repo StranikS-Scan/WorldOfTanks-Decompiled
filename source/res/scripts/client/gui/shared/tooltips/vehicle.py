@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
+from itertools import chain
 import logging
 import typing
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
@@ -36,7 +37,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, CHASSIS_REPAIR_TIME, isRomanNumberForbidden
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, CHASSIS_REPAIR_TIME, isRomanNumberForbidden, ROCKET_ACCELERATION_SPEED_LIMITS
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from post_progression_common import ACTION_TYPES
@@ -112,7 +113,8 @@ _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'turboshaftEnginePower',
  'turboshaftInvisibilityMovingFactor',
  'turboshaftInvisibilityStillFactor',
- 'turretRotationSpeed'])
+ 'turretRotationSpeed',
+ 'rocketAccelerationEnginePower'])
 _BONUS_TYPES_ORDER = {constants.BonusTypes.SKILL: 1,
  constants.BonusTypes.ROLE: 1,
  constants.BonusTypes.PERK: 1,
@@ -168,18 +170,18 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if telecomBlock:
             headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
-        items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
-        if vehicle.isEarnCrystals:
+        items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
+        if vehicle.isEarnCrystals and statsConfig.showEarnCrystals:
             crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if crystalBlock:
-                items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=leftRightPadding))
+                items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=-3)))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
-                items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
+                items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-3)))
         if self.context.getParams().get(_IS_SENIORITY, False):
             awardCrewAndHangarBlock = AwardCrewAndHangar(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100).construct()
             if awardCrewAndHangarBlock:
@@ -767,26 +769,19 @@ class CrystalBlockConstructor(VehicleTooltipBlockConstructor):
         imgPaddingLeft = -4
         imgPaddingTop = 0
         if current == 0:
-            title = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.common.title())
             limitStatus = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.common.description(), max=text_styles.stats(limit))
         elif current >= limit:
             daysLeft = time_utils.getServerRegionalDaysLeftInGameWeek() * time_utils.ONE_DAY
             timeLeft = daysLeft + time_utils.getDayTimeLeft()
             timeLeftStr = time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUESHORT, isRoundUp=True, removeLeadingZeros=True)
-            title = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.limitReached.title())
             limitStatus = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.limitReached.description(), timeLeft=text_styles.neutral(timeLeftStr))
             icon = backport.image(R.images.gui.maps.icons.library.time_icon())
             linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_GRAY_LINKAGE
             imgPaddingLeft = 4
             imgPaddingTop = 4
         else:
-            title = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.progress.title())
             limitStatus = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.progress.description(), current=text_styles.stats(current), max=limit)
-        block.append(formatters.packTextBlockData(text_styles.middleTitle(title), padding=formatters.packPadding(top=-4)))
-        block.append(formatters.packImageTextBlockData(img=icon, desc=text_styles.main(limitStatus), imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop, right=6), padding=formatters.packPadding(left=54, top=3, bottom=4), titleAtMiddle=True))
-        if 0 < current < limit:
-            block.append(formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_EPIC_PROGRESS_BLOCK_LINKAGE, data={'value': current,
-             'maxValue': limit}, padding=formatters.packPadding(top=-5, left=82, bottom=8), blockWidth=304))
+        block.append(formatters.packImageTextBlockData(img=icon, desc=text_styles.main(limitStatus), imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop, right=6), padding=formatters.packPadding(left=54, top=2, bottom=2), titleAtMiddle=True))
         return (block, linkage)
 
 
@@ -946,6 +941,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
      VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime'),
      'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
+    __CONDITIONAL_PARAMS = ((ROCKET_ACCELERATION_SPEED_LIMITS, ('speedLimits', ROCKET_ACCELERATION_SPEED_LIMITS)),)
 
     def __init__(self, vehicle, configuration, valueWidth, leftPadding, rightPadding):
         super(CommonStatsBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
@@ -954,23 +950,32 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
     def construct(self):
         paramsDict = params_helper.getParameters(self.vehicle)
         block = []
-        highlightPossible = False
-        if self.vehicle.descriptor.hasTurboshaftEngine:
-            serverSettings = dependency.instance(ISettingsCore).serverSettings
-            highlightPossible = serverSettings.checkTurboshaftHighlights(increase=True)
+        highlightedParams = self.__getHighlightedParams()
         comparator = params_helper.idealCrewComparator(self.vehicle)
         if self.configuration.params and not self.configuration.simplifiedOnly:
-            for paramName in self.PARAMS.get(self.vehicle.type, 'default'):
-                if paramName in paramsDict:
-                    paramInfo = comparator.getExtendedData(paramName)
-                    fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.BASE_SCHEME)
-                    if fmtValue is not None:
-                        block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1), highlight=highlightPossible and paramName in (TURBOSHAFT_SPEED_MODE_SPEED,)))
+            for paramName in self.__getShownParameters(paramsDict):
+                paramInfo = comparator.getExtendedData(paramName)
+                fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.BASE_SCHEME)
+                if fmtValue is not None:
+                    block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1), highlight=paramName in highlightedParams))
 
         if block:
-            title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
+            title = text_styles.middleTitle(backport.text(R.strings.tooltips.vehicleParams.common.title()))
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
         return block
+
+    def __getHighlightedParams(self):
+        serverSettings = dependency.instance(ISettingsCore).serverSettings
+        descr = self.vehicle.descriptor
+        params = []
+        if descr.hasTurboshaftEngine and serverSettings.checkTurboshaftHighlights(increase=True):
+            params.append(TURBOSHAFT_SPEED_MODE_SPEED)
+        if descr.hasRocketAcceleration and serverSettings.checkRocketAccelerationHighlights(increase=True):
+            params.append(ROCKET_ACCELERATION_SPEED_LIMITS)
+        return params
+
+    def __getShownParameters(self, paramsDict):
+        return chain([ p for p in self.PARAMS.get(self.vehicle.type, 'default') if p in paramsDict ], [ p for group in self.__CONDITIONAL_PARAMS if group[0] in paramsDict for p in group[1] ])
 
 
 class AwardCrewAndHangar(VehicleTooltipBlockConstructor):
@@ -1015,7 +1020,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, delta=delta, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
         if block:
-            block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
+            block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.vehicleParams.simplified.title())), padding=formatters.packPadding(top=-4)))
         return block
 
 

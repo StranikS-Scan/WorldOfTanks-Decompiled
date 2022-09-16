@@ -8,6 +8,7 @@ from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE
 helpers, dependency = dependencyImporter('helpers', 'helpers.dependency')
+Math = dependencyImporter('Math')
 
 class BattleHUDMeta(Meta):
 

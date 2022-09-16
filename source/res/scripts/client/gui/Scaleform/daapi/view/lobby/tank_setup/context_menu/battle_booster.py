@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/battle_booster.py
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui import shop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
@@ -72,8 +72,8 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
             return False
         return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(HangarBattleBoosterSlotContextMenu, self)._isVisible(label)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _doPutOnAction(self, vehicle, callback):
         action = ActionsFactory.getAction(ActionsFactory.BUY_AND_INSTALL_BATTLE_BOOSTERS, vehicle, confirmOnlyExchange=True)
         result = yield ActionsFactory.asyncDoAction(action)
@@ -82,7 +82,7 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     def _getVehicleItems(self):
         return self._getVehicle().battleBoosters
 
-    @process
+    @adisp_process
     def __unloadAction(self):
         copyVehicle = self._getCopyVehicle()
         copyVehicle.battleBoosters.layout[self._installedSlotId] = None

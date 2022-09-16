@@ -1,0 +1,23 @@
+<PoiTeamInfoComponent.def>
+  <Properties>
+    <capturedPoints>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </capturedPoints>
+  </Properties>
+  <ClientMethods>
+    <onPoiEquipmentUsed>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT16	</Arg>
+    </onPoiEquipmentUsed>
+    <onPoiCaptured>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </onPoiCaptured>
+  </ClientMethods>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	PoiTeamInfoComponent	</DefaultKeyName>
+</PoiTeamInfoComponent.def>

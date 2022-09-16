@@ -137,7 +137,7 @@ class BuyAndExchange(FullScreenDialogView, typing.Generic[TViewModel]):
     def _getCurrentDialogState(self):
         return self.__stateMachine.getCurrentState()
 
-    @decorators.process('transferMoney')
+    @decorators.adisp_process('transferMoney')
     def __exchange(self):
         result = yield self._exchangeContent.exchange()
         self._exchangeComplete(result)

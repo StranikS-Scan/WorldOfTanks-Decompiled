@@ -27,6 +27,9 @@ class BattleMattersFilterPopoverView(PopOverViewImpl):
         changes = {k:{v: not self.__filters[k][v]} for k, v in changesFromEvent.iteritems() if k and v}
         self._updateFilter(changes)
 
+    def updateFilterFromOutside(self, changes):
+        self._updateFilter(changes)
+
     def _onLoading(self, *args, **kwargs):
         super(BattleMattersFilterPopoverView, self)._onLoading(*args, **kwargs)
         self._update()

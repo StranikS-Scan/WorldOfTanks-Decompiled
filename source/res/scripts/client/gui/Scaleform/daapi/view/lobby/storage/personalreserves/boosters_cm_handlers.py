@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_cm_handlers.py
-from adisp import process
+from adisp import adisp_process
 from gui import shop
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
@@ -20,7 +20,7 @@ class PersonalReservesCMHandler(ContextMenu):
         shared_events.showStorageBoosterInfo(self._id)
 
     @option(__sqGen.next(), CMLabel.ACTIVATE)
-    @process
+    @adisp_process
     def activate(self):
         _ = yield shared_events.showBoosterActivateDialog(self._id)
 

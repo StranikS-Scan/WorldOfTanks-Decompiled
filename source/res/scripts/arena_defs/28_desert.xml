@@ -22,13 +22,6 @@
     <wwmusicResultDefeat>	music_sand_river_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_desert_01	</wwambientSound>
-  <soundRemapping>
-    <loadBanks>
-      <bank>
-        <name>	env_Mountain.bnk	</name>
-      </bank>
-    </loadBanks>
-  </soundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <water>
@@ -50,12 +43,12 @@
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	408 148	</position>
-          <position>	461.753 -51.174	</position>
+          <position>	408.000000 148.000000	</position>
+          <position>	461.752991 -51.174000	</position>
         </team1>
         <team2>
-          <position>	-150 250	</position>
-          <position>	-437.991 244.365	</position>
+          <position>	-150.000000 250.000000	</position>
+          <position>	-437.990997 244.365005	</position>
         </team2>
       </teamSpawnPoints>
       <controlPoint>	-89.697029 -323.644165	</controlPoint>
@@ -65,10 +58,10 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	430 186	</position>
+          <position>	430.000000 186.000000	</position>
         </team1>
         <team2>
-          <position>	-433.379 152.272	</position>
+          <position>	-433.378998 152.272003	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
@@ -76,6 +69,7 @@
           <position1>	249.900940 -208.700195	</position1>
           <position2>	116.863976 310.117004	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
     <maps_training>
@@ -88,5 +82,52 @@
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/28_desert/mmap_comp7.dds	</minimap>
+      <teamSpawnPoints>
+        <team1>
+          <position>	300.214996 -210.442001	</position>
+        </team1>
+        <team2>
+          <position>	-348.260986 45.106998	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-145.156998 -397.769989	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	36.030998 73.267998	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-39.902874 -87.670715	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-93.015274 -280.166382	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-72.151001 -184.570007	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </28_desert.xml>

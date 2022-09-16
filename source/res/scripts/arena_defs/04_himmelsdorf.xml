@@ -65,6 +65,53 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	75.536003 326.539001	</position>
+        </team1>
+        <team2>
+          <position>	11.108000 -227.046005	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/04_himmelsdorf/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	40.230999 40.389999	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-248.788406 84.539139	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	177.077240 29.240419	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	258.119659 50.491982	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-144.937195 73.648186	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities>

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/BrowserView.py
 import BigWorld
-from adisp import process
+from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -122,7 +122,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         ctx = self.__ctx
         return ctx.get(name, default) if ctx else default
 
-    @process
+    @adisp_process
     def __loadBrowser(self):
         url = self.__getFromCtx('url')
         if url is not None:

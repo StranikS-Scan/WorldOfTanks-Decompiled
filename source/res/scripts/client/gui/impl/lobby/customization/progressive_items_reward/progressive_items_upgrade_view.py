@@ -3,7 +3,7 @@
 import BigWorld
 import WWISE
 from CurrentVehicle import g_currentVehicle
-from adisp import process
+from adisp import adisp_process
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -187,7 +187,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
         if self.__itemsInNeedToUpgrade:
             self.__upgradeItems()
 
-    @process
+    @adisp_process
     def __upgradeItems(self):
         self.__resetItemNovelty()
         vehicle = self.__vehicle

@@ -19,7 +19,7 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_BATTLE]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_BATTLE, ARENA_BONUS_TYPE.COMP7]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -169,6 +169,8 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             self.__createRankedCardsModel(viewModel, ARENA_BONUS_TYPE.RANKED)
         elif gameType == ARENA_BONUS_TYPE.EPIC_BATTLE:
             self.__createEpicBattleCardsModel(viewModel)
+        elif gameType == ARENA_BONUS_TYPE.COMP7:
+            self.__createComp7CardsModel(gameType, viewModel)
 
     def __createRankedCardsModel(self, viewModel, gameType):
         self.__createSpecialVehCard(viewModel, gameType)
@@ -177,15 +179,19 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createEpicBattleCardsModel(self, viewModel):
         self.__createEpicBattlePointsCard(viewModel)
 
+    def __createComp7CardsModel(self, gameType, viewModel):
+        self.__createSpecialVehCard(viewModel, gameType)
+        self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
+
     def __createRandomCardsModel(self, gameType, viewModel):
         self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.REGULAR)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 
     @staticmethod
-    def __createDailyCard(gameType, viewModel):
+    def __createDailyCard(gameType, viewModel, pointsCardType=PointsCardType.DAILY):
         gameModeCard = GameModeCardModel()
-        gameModeCard.setCardType(PointsCardType.DAILY)
+        gameModeCard.setCardType(pointsCardType)
         gameModeCard.setViewId(str(gameType))
         viewModel.cards.addViewModel(gameModeCard)
 

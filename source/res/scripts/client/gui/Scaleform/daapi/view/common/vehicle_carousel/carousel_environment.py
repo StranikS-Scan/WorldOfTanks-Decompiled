@@ -4,6 +4,8 @@ import constants
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from gui.Scaleform import getButtonsAssetPath
+from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.daapi.view.meta.CarouselEnvironmentMeta import CarouselEnvironmentMeta
@@ -14,7 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency
+from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
@@ -53,11 +55,17 @@ class ICarouselEnvironment(object):
     def setPopoverCallback(self, callback=None):
         pass
 
+    def setRowCount(self, value):
+        pass
+
     def hasRoles(self):
         return False
 
     def getCustomParams(self):
         return dict()
+
+    def updateHotFilters(self):
+        pass
 
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
@@ -70,13 +78,13 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     rankedController = dependency.descriptor(IRankedBattlesController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __battleSession = dependency.descriptor(IBattleSessionProvider)
+    _DISABLED_FILTERS = []
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
         self._usedFilters = self._getFilters()
         self._carouselDPConfig = {'carouselFilter': None,
-         'itemsCache': None,
-         'currentVehicle': None}
+         'itemsCache': None}
         self._carouselDPCls = CarouselDataProvider
         self._carouselFilterCls = CarouselFilter
         self._carouselDP = None
@@ -129,6 +137,11 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def resetFilters(self):
         self.filter.reset()
         self.applyFilter()
+        self.updateHotFilters()
+
+    def updateHotFilters(self):
+        hotFilters = [ (False if key in self._DISABLED_FILTERS else self.filter.get(key)) for key in self._usedFilters ]
+        self.as_setCarouselFilterS({'hotFilters': hotFilters})
 
     def applyFilter(self):
         self._carouselDP.applyFilter()
@@ -147,7 +160,9 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def selectVehicle(self, idx):
         if self.__battleSession.isReplayPlaying:
             return
-        self._carouselDP.selectVehicle(idx)
+        vInvID = self._carouselDP.selectVehicle(idx)
+        if vInvID:
+            self._currentVehicle.selectVehicle(vInvID)
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         if self._carouselDP is not None:
@@ -208,8 +223,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def _initDataProvider(self):
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),
-         'itemsCache': self.itemsCache,
-         'currentVehicle': self._currentVehicle})
+         'itemsCache': self.itemsCache})
         self._carouselDP = self._carouselDPCls(**self._carouselDPConfig)
 
     def _onCarouselSettingsChange(self, diff):
@@ -217,6 +231,15 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
             setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
             self._carouselDP.setShowStats(setting.get())
             self._carouselDP.updateVehicles()
+
+    @classmethod
+    def _makeFilterVO(cls, filterID, contexts, filters):
+        filterCtx = contexts.get(filterID, FilterSetupContext())
+        return {'id': filterID,
+         'value': getButtonsAssetPath(filterCtx.asset or filterID),
+         'selected': filters[filterID],
+         'enabled': True,
+         'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(filterID), i18n.makeString('#tank_carousel_filter:tooltip/{}/body'.format(filterID), **filterCtx.ctx))}
 
     def __updateRent(self, vehicles):
         self.updateVehicles(vehicles)
@@ -254,7 +277,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.updateAviability()
         if self._carouselDP is not None:
             filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
-            if self._carouselDP.pyGetSelectedIdx() != filteredIndex:
+            if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
                 self._carouselDP.selectVehicle(filteredIndex)
                 self._carouselDP.refresh()
         return

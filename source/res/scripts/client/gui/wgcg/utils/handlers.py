@@ -14,4 +14,4 @@ class UtilsRequestHandlers(RequestHandlers):
         return self._requester.doRequestEx(ctx, callback, ('spa', 'get_account_attribute_by_prefix'), ctx.getRequestedAttr())
 
     def __fetchProductList(self, ctx, callback):
-        return self._requester.doRequestEx(ctx, callback, ('freya', 'freya_v1_fetch_product_list'), ctx.getParams())
+        return self._requester.doRequestEx(ctx, callback, ('agate', 'agate_v4_fetch_product_list_state'), ctx.getParams())

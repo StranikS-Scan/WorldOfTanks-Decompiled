@@ -386,6 +386,7 @@ class ARTEFACTS(object):
     CREWBATTLEBOOSTER_DESCR_BOOST = '#artefacts:crewBattleBooster/descr/boost'
     CREWBATTLEBOOSTER_DESCR_PERK = '#artefacts:crewBattleBooster/descr/perk'
     CREWBATTLEBOOSTER_DESCR_SKILL = '#artefacts:crewBattleBooster/descr/skill'
+    CREWBATTLEBOOSTER_DESCR_COMMANDER_SPECIAL = '#artefacts:crewBattleBooster/descr/commander_special'
     CAMOUFLAGEBATTLEBOOSTER_NAME = '#artefacts:camouflageBattleBooster/name'
     CAMOUFLAGEBATTLEBOOSTER_ACTION_PERK = '#artefacts:camouflageBattleBooster/action/perk'
     CAMOUFLAGEBATTLEBOOSTER_ACTION_BOOST = '#artefacts:camouflageBattleBooster/action/boost'
@@ -412,8 +413,8 @@ class ARTEFACTS(object):
     FIREFIGHTINGBATTLEBOOSTER_SHORT_SPECIAL = '#artefacts:fireFightingBattleBooster/short_special'
     FIREFIGHTINGBATTLEBOOSTER_LONG_SPECIAL = '#artefacts:fireFightingBattleBooster/long_special'
     SIXTHSENSEBATTLEBOOSTER_NAME = '#artefacts:sixthSenseBattleBooster/name'
-    SIXTHSENSEBATTLEBOOSTER_ACTION_PERK = '#artefacts:sixthSenseBattleBooster/action/perk'
-    SIXTHSENSEBATTLEBOOSTER_ACTION_BOOST = '#artefacts:sixthSenseBattleBooster/action/boost'
+    SIXTHSENSEBATTLEBOOSTER_ACTION_BUILTINPERKBOOSTER = '#artefacts:sixthSenseBattleBooster/action/builtinPerkBooster'
+    SIXTHSENSEBATTLEBOOSTER_DESCRIPTION_BUILTINPERKBOOSTER = '#artefacts:sixthSenseBattleBooster/description/builtinPerkBooster'
     SIXTHSENSEBATTLEBOOSTER_SHORT_SPECIAL = '#artefacts:sixthSenseBattleBooster/short_special'
     SIXTHSENSEBATTLEBOOSTER_LONG_SPECIAL = '#artefacts:sixthSenseBattleBooster/long_special'
     RANCOROUSBATTLEBOOSTER_NAME = '#artefacts:rancorousBattleBooster/name'
@@ -529,6 +530,8 @@ class ARTEFACTS(object):
     STEALTHRADAR_DESCR = '#artefacts:stealthRadar/descr'
     STEALTHRADAR_SHORT_DESCR = '#artefacts:stealthRadar/short_descr'
     STEALTHRADAR_LONG_DESCR = '#artefacts:stealthRadar/long_descr'
+    EXAMPLEABILITY_NAME = '#artefacts:exampleAbility/name'
+    EXAMPLEABILITY_DESCR = '#artefacts:exampleAbility/descr'
     ACTIONSTUB_NAME = '#artefacts:actionStub/name'
     SHELLS_CONSUMABLES_SWITCH_NAME = '#artefacts:shells_consumables_switch/name'
     OPT_DEV_BOOSTERS_SWITCH_NAME = '#artefacts:opt_dev_boosters_switch/name'
@@ -756,6 +759,41 @@ class ARTEFACTS(object):
     FORT_AOE_ARTILLERY_NAME = '#artefacts:fort_aoe_artillery/name'
     FORT_AOE_ARTILLERY_SHORTDESCR = '#artefacts:fort_aoe_artillery/shortDescr'
     FORT_AOE_ARTILLERY_LONGDESCR = '#artefacts:fort_aoe_artillery/longDescr'
+    COMP7_AOE_HEAL_NAME = '#artefacts:comp7_aoe_heal/name'
+    COMP7_AOE_HEAL_DESCR_ACTIVE = '#artefacts:comp7_aoe_heal/descr/active'
+    COMP7_ALLY_SUPPORT_NAME = '#artefacts:comp7_ally_support/name'
+    COMP7_ALLY_SUPPORT_DESCR_ACTIVE = '#artefacts:comp7_ally_support/descr/active'
+    COMP7_HUNTER_NAME = '#artefacts:comp7_hunter/name'
+    COMP7_HUNTER_DESCR_ACTIVE = '#artefacts:comp7_hunter/descr/active'
+    COMP7_HUNTER_DESCR_PASSIVE = '#artefacts:comp7_hunter/descr/passive'
+    COMP7_CONCENTRATION_NAME = '#artefacts:comp7_concentration/name'
+    COMP7_CONCENTRATION_DESCR_ACTIVE = '#artefacts:comp7_concentration/descr/active'
+    COMP7_BERSERK_NAME = '#artefacts:comp7_berserk/name'
+    COMP7_BERSERK_DESCR_ACTIVE = '#artefacts:comp7_berserk/descr/active'
+    COMP7_AOE_INSPIRE_NAME = '#artefacts:comp7_aoe_inspire/name'
+    COMP7_AOE_INSPIRE_DESCR_ACTIVE = '#artefacts:comp7_aoe_inspire/descr/active'
+    COMP7_REDLINE_NAME = '#artefacts:comp7_redline/name'
+    COMP7_REDLINE_DESCR_ACTIVE = '#artefacts:comp7_redline/descr/active'
+    COMP7_FAST_RECHARGE_NAME = '#artefacts:comp7_fast_recharge/name'
+    COMP7_FAST_RECHARGE_DESCR_ACTIVE = '#artefacts:comp7_fast_recharge/descr/active'
+    COMP7_JUGGERNAUT_NAME = '#artefacts:comp7_juggernaut/name'
+    COMP7_JUGGERNAUT_DESCR_ACTIVE = '#artefacts:comp7_juggernaut/descr/active'
+    COMP7_SURE_SHOT_NAME = '#artefacts:comp7_sure_shot/name'
+    COMP7_SURE_SHOT_DESCR_ACTIVE = '#artefacts:comp7_sure_shot/descr/active'
+    COMP7_SNIPER_NAME = '#artefacts:comp7_sniper/name'
+    COMP7_SNIPER_DESCR_ACTIVE = '#artefacts:comp7_sniper/descr/active'
+    COMP7_RISKY_ATTACK_NAME = '#artefacts:comp7_risky_attack/name'
+    COMP7_RISKY_ATTACK_DESCR_ACTIVE = '#artefacts:comp7_risky_attack/descr/active'
+    COMP7_RECON_NAME = '#artefacts:comp7_recon/name'
+    COMP7_RECON_DESCR_ACTIVE = '#artefacts:comp7_recon/descr/active'
+    COMP7_AGGRESSIVE_DETECTION_NAME = '#artefacts:comp7_aggressive_detection/name'
+    COMP7_AGGRESSIVE_DETECTION_DESCR_ACTIVE = '#artefacts:comp7_aggressive_detection/descr/active'
+    COMP7_MARCH_NAME = '#artefacts:comp7_march/name'
+    COMP7_MARCH_DESCR_ACTIVE = '#artefacts:comp7_march/descr/active'
+    POI_RADAR_NAME = '#artefacts:poi_radar/name'
+    POI_RADAR_DESCR = '#artefacts:poi_radar/descr'
+    POI_ARTILLERY_AOE_NAME = '#artefacts:poi_artillery_aoe/name'
+    POI_ARTILLERY_AOE_DESCR = '#artefacts:poi_artillery_aoe/descr'
     ALL_GAIN_ENUM = (IMPROVEDCONFIGURATIONBATTLEBOOSTER_GAIN_SIMPLE,
      IMPROVEDCONFIGURATIONBATTLEBOOSTER_GAIN_DELUXE,
      IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE,
@@ -784,14 +822,14 @@ class ARTEFACTS(object):
      SMOOTHDRIVINGBATTLEBOOSTER_ACTION_BOOST,
      FIREFIGHTINGBATTLEBOOSTER_ACTION_PERK,
      FIREFIGHTINGBATTLEBOOSTER_ACTION_BOOST,
-     SIXTHSENSEBATTLEBOOSTER_ACTION_PERK,
-     SIXTHSENSEBATTLEBOOSTER_ACTION_BOOST,
+     SIXTHSENSEBATTLEBOOSTER_ACTION_BUILTINPERKBOOSTER,
      RANCOROUSBATTLEBOOSTER_ACTION_PERK,
      RANCOROUSBATTLEBOOSTER_ACTION_BOOST,
      PEDANTBATTLEBOOSTER_ACTION_PERK,
      PEDANTBATTLEBOOSTER_ACTION_BOOST,
      LASTEFFORTBATTLEBOOSTER_ACTION_PERK,
      LASTEFFORTBATTLEBOOSTER_ACTION_BOOST)
+    ALL_DESCRIPTION_ENUM = (SIXTHSENSEBATTLEBOOSTER_DESCRIPTION_BUILTINPERKBOOSTER,)
 
     @classmethod
     def getDeviceGainForBattleBooster(cls, boosterName, deviceType):
@@ -806,6 +844,15 @@ class ARTEFACTS(object):
     def getCrewActionForBattleBooster(cls, crewBoosterName, crewFactor):
         outcome = '#artefacts:{}/action/{}'.format(crewBoosterName, crewFactor)
         if outcome not in cls.ALL_ACTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getDescriptionForBattleBooster(cls, crewBoosterName, crewFactor):
+        outcome = '#artefacts:{}/description/{}'.format(crewBoosterName, crewFactor)
+        if outcome not in cls.ALL_DESCRIPTION_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

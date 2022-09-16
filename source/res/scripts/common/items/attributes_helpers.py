@@ -43,6 +43,7 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'increaseEnemySpottingTime',
  'invisibilityBaseAdditive',
  'invisibilityAdditiveTerm',
+ 'invisibilityMultFactor',
  'invisibilityFactorAtShot',
  'maxWeight',
  'multShotDispersionFactor',
@@ -87,7 +88,11 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'stunResistanceEffect',
  'turret/rotationSpeed',
  'vehicle/maxSpeed',
- 'vehicle/rotationSpeed'}
+ 'vehicle/maxSpeed/forward',
+ 'vehicle/maxSpeed/backward',
+ 'vehicle/rotationSpeed',
+ 'vehicle/bkMaxSpeedBonus',
+ 'vehicle/fwMaxSpeedBonus'}
 ALLOWED_ATTRS = {STATIC_ATTR_PREFIX: ALLOWED_STATIC_ATTRS,
  DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS}
 ALLOWED_ATTR_PREFIXES = set(ALLOWED_ATTRS.keys())

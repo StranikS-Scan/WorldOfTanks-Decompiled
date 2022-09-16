@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/consumable.py
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui import shop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
@@ -107,8 +107,8 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         layout = copyVehicle.consumables.layout
         self._makePutOnAction(TankSetupConstants.CONSUMABLES, onId, copyVehicle, layout)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _doPutOnAction(self, vehicle, callback):
         action = ActionsFactory.getAction(ActionsFactory.BUY_AND_INSTALL_CONSUMABLES, vehicle, confirmOnlyExchange=True)
         result = yield ActionsFactory.asyncDoAction(action)
@@ -117,7 +117,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
     def _getVehicleItems(self):
         return self._getVehicle().consumables
 
-    @process
+    @adisp_process
     def __unloadAction(self):
         copyVehicle = self._getCopyVehicle()
         copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)

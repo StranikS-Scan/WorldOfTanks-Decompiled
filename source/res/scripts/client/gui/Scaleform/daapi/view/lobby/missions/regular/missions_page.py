@@ -8,8 +8,8 @@ import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
-from adisp import async as adispasync, process
-from async import async, await
+from adisp import adisp_async as adispasync, adisp_process
+from wg_async import wg_async, wg_await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -43,9 +43,9 @@ from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPag
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
-from skeletons.gui.app_loader import GuiGlobalSpaceID, IAppLoader
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IUISpamController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, IUISpamController
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -263,11 +263,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             self.__currentTabAlias = requestedTab
         else:
             self.__currentTabAlias = caches.getNavInfo().getMissionsTab()
-            if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasEvents():
+            if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasDisplayableEvents():
                 self.__currentTabAlias = None
             if not self.__currentTabAlias:
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
-                if self.__elenHasEvents():
+                if self.__elenHasDisplayableEvents():
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
                 elif self.marathonsCtrl.doesShowAnyMissionsTab():
                     enabledMarathon = self.marathonsCtrl.getFirstEnabledMarathon()
@@ -396,7 +396,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             marathonEvent = self.marathonsCtrl.getMarathon(tabData.prefix)
             tab['prefix'] = tabData.prefix
             headerTab['prefix'] = tabData.prefix
-        if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasEvents() or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not (marathonEvent and marathonEvent.isEnabled()) or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and (self.marathonsCtrl.doesShowAnyMissionsTab() or self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.getCurrentCycleID() is not None) or alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.battlePass.isDisabled() or alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS and (not self.__mapboxCtrl.isEnabled() or self.__mapboxCtrl.getCurrentCycleID() is None) or alias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS and not self.__battleMattersTabIsEnabled():
+        if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasDisplayableEvents() or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not (marathonEvent and marathonEvent.isEnabled()) or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and (self.marathonsCtrl.doesShowAnyMissionsTab() or self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.getCurrentCycleID() is not None) or alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.battlePass.isDisabled() or alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS and (not self.__mapboxCtrl.isEnabled() or self.__mapboxCtrl.getCurrentCycleID() is None) or alias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS and not self.__battleMattersTabIsEnabled():
             if alias == self.__currentTabAlias and marathonEvent and marathonEvent.prefix == self.__marathonPrefix:
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
             elif self.__currentTabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.battlePass.isDisabled():
@@ -461,8 +461,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             return []
         return [ quest for quest in tab.getSuitableEvents() if not isBattleMattersQuestID(quest.getGroupID()) or quest.isAvailable().isValid ]
 
-    def __elenHasEvents(self):
-        return self.lobbyContext.getServerSettings().isElenEnabled() and self.eventsController.hasEvents()
+    def __elenHasDisplayableEvents(self):
+        if self.lobbyContext.getServerSettings().isElenEnabled() and self.eventsController.hasEvents():
+            for eventData in self.eventsController.getEventsSettingsData().getEvents():
+                if not eventData.hasCustomUI():
+                    return True
+
+        return False
 
     def __filterApplied(self):
         for attr in self.__filterData:
@@ -567,7 +572,8 @@ class MissionView(MissionViewBase):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     gameSession = dependency.descriptor(IGameSessionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
         super(MissionView, self).__init__()
@@ -601,7 +607,8 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         self.__rankedController.onUpdated += self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated += self._onEventsUpdate
-        self.__battleRoyaleController.onSpaceUpdated += self._onEventsUpdate
+        self.__funRandomController.onGameModeStatusUpdated += self._onEventsUpdate
+        self.__spaceSwitchController.onSpaceUpdated += self._onEventsUpdate
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
 
@@ -611,7 +618,8 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged -= self.__onPremiumTypeChanged
         self.__rankedController.onUpdated -= self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated -= self._onEventsUpdate
-        self.__battleRoyaleController.onSpaceUpdated -= self._onEventsUpdate
+        self.__spaceSwitchController.onSpaceUpdated -= self._onEventsUpdate
+        self.__funRandomController.onGameModeStatusUpdated -= self._onEventsUpdate
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 
@@ -650,10 +658,10 @@ class MissionView(MissionViewBase):
          'btnEvent': '',
          'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK}
 
-    @async
+    @wg_async
     def _onEventsUpdate(self, *args):
         self.as_setWaitingVisibleS(True)
-        yield await(self.eventsCache.prefetcher.demand())
+        yield wg_await(self.eventsCache.prefetcher.demand())
         self.as_setWaitingVisibleS(False)
         if self._builder:
             self.__updateEvents()
@@ -703,12 +711,12 @@ class ElenMissionView(MissionViewBase):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE), ctx={'eventID': eventID,
          'leaderboardID': int(blockID)}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @process
+    @adisp_process
     def _onEventsUpdate(self, *args):
         yield self._onEventsUpdateAsync(*args)
 
     @adispasync
-    @process
+    @adisp_process
     def _onEventsUpdateAsync(self, callback, *args):
         self.as_setWaitingVisibleS(True)
         yield self.eventsController.getEvents(isTabVisited=True)

@@ -4,7 +4,7 @@ import copy
 import cPickle
 import math
 import collections
-from typing import List
+from typing import List, Dict
 from constants import SwitchState
 from gui.shared.money import Money, Currency
 from helpers import dependency, i18n
@@ -17,7 +17,7 @@ from gui.shared.gui_items import Tankman, Vehicle
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 
-def packTankmanSkill(skill, isPermanent=False, tankman=None):
+def packTankmanSkill(skill, isPermanent=False):
     if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
         roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
     else:
@@ -37,7 +37,7 @@ def packTankmanSkill(skill, isPermanent=False, tankman=None):
      'isPermanent': isPermanent}
 
 
-def packTankman(tankman, isCountPermanentSkills=True):
+def packTankman(tankman, isCountPermanentSkills=True, splitFreeAndEarnedSkills=False):
 
     def vehicleIcon(vDescr, subtype=''):
         return ICONS_MASK % {'type': 'vehicle',
@@ -55,13 +55,21 @@ def packTankman(tankman, isCountPermanentSkills=True):
          'userName': Vehicle.getShortUserName(tankman.vehicleDescr.type),
          'icon': vehicleIcon(tankman.vehicleDescr),
          'iconContour': vehicleIcon(tankman.vehicleDescr, 'contour/')}
+    freeSkills = []
     skills = []
-    td = tankman.descriptor
-    tManFreeSkillsNum = td.freeSkillsNumber
-    startSkillNumber = 0 if isCountPermanentSkills else tManFreeSkillsNum
-    tManSkills = tankman.skills
-    for i in range(startSkillNumber, len(tManSkills)):
-        skills.append(packTankmanSkill(tManSkills[i], isPermanent=True if i < tManFreeSkillsNum else False, tankman=tankman))
+    if splitFreeAndEarnedSkills:
+        for tankmanSkill in tankman.freeSkills:
+            freeSkills.append(packTankmanSkill(tankmanSkill, isPermanent=True))
+
+        for tankmanSkill in tankman.earnedSkills:
+            skills.append(packTankmanSkill(tankmanSkill, isPermanent=False))
+
+    else:
+        tManChosenFreeSkillsNum = tankman.chosenFreeSkillsCount
+        startSkillNumber = 0 if isCountPermanentSkills else tManChosenFreeSkillsNum
+        tManSkills = tankman.skills
+        for i in xrange(startSkillNumber, len(tManSkills)):
+            skills.append(packTankmanSkill(tManSkills[i], isPermanent=i < tManChosenFreeSkillsNum))
 
     return {'strCD': cPickle.dumps(tankman.strCD),
      'inventoryID': tankman.invID,
@@ -71,6 +79,8 @@ def packTankman(tankman, isCountPermanentSkills=True):
      'roleName': tankman.descriptor.role,
      'rankUserName': tankman.rankUserName,
      'roleUserName': tankman.roleUserName,
+     'freeSkills': freeSkills,
+     'newFreeSkillsCount': tankman.newFreeSkillsCount,
      'skills': skills,
      'efficiencyRoleLevel': tankman.efficiencyRoleLevel,
      'realRoleLevel': tankman.realRoleLevel,

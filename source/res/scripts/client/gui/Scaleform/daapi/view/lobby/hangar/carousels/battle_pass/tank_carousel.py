@@ -8,7 +8,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 
 class BattlePassTankCarousel(TankCarousel):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    _battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
         super(BattlePassTankCarousel, self).__init__()
@@ -22,13 +22,13 @@ class BattlePassTankCarousel(TankCarousel):
 
     def _populate(self):
         super(BattlePassTankCarousel, self)._populate()
-        self.__battlePassController.onPointsUpdated += self.__onPointsUpdated
-        self.__battlePassController.onBattlePassSettingsChange += self.__onServerSettingChanged
+        self._battlePassController.onPointsUpdated += self.__onPointsUpdated
+        self._battlePassController.onBattlePassSettingsChange += self.__onServerSettingChanged
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
 
     def _dispose(self):
-        self.__battlePassController.onPointsUpdated -= self.__onPointsUpdated
-        self.__battlePassController.onBattlePassSettingsChange -= self.__onServerSettingChanged
+        self._battlePassController.onPointsUpdated -= self.__onPointsUpdated
+        self._battlePassController.onBattlePassSettingsChange -= self.__onServerSettingChanged
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(BattlePassTankCarousel, self)._dispose()
 
@@ -46,7 +46,7 @@ class BattlePassTankCarousel(TankCarousel):
     def __updateFilter(self):
         carouselFilter = self._carouselDPConfig.get('carouselFilter', None)
         if carouselFilter is not None:
-            if carouselFilter.currentSeasonID != self.__battlePassController.getSeasonID():
-                carouselFilter.currentSeasonID = self.__battlePassController.getSeasonID()
+            if carouselFilter.currentSeasonID != self._battlePassController.getSeasonID():
+                carouselFilter.currentSeasonID = self._battlePassController.getSeasonID()
                 carouselFilter.save()
         return

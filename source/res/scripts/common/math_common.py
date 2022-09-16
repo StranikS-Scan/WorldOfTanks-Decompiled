@@ -18,3 +18,11 @@ def roundToPower10(value, power):
 
 def isAlmostEqual(first, second, epsilon=0.0004):
     return second - epsilon <= first <= second + epsilon
+
+
+def trim(v, min, max):
+    if v < min:
+        v = min
+    elif v > max:
+        v = max
+    return v

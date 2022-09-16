@@ -1,0 +1,19 @@
+<ArenaInBattleVehicleSwitch.def>
+  <BaseMethods>
+    <requestSwitch>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+    </requestSwitch>
+  </BaseMethods>
+  <CellMethods>
+    <setPositions>
+      <Args>
+        <positionsByTeam>	PYTHON	</positionsByTeam>
+      </Args>
+    </setPositions>
+  </CellMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</ArenaInBattleVehicleSwitch.def>

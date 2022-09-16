@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
 from account_helpers import getAccountDatabaseID
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.locale.MENU import MENU
 from gui.awards.event_dispatcher import showRecruiterAward
+from gui.integrated_auction.messages import pushRateErrorMessage, pushBelowCompetitiveRateMessage
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.wgnc.common import WebHandlersContainer
@@ -229,7 +230,7 @@ class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.SHOW_IN_BROWSER
 
-    @process
+    @adisp_process
     def show(self, _):
         browserId = yield self.browserCtrl.load(self.__url, browserSize=self.__size, title=self.__getTitle(), showActionBtn=self.__showRefresh, handlers=self.getWebHandler(self.__webHandlerName), isSolidBorder=self.__isSolidBorder)
         browser = self.browserCtrl.getBrowser(browserId)
@@ -356,6 +357,40 @@ class ShowMapboxRewardReceivedMessage(_ProxyDataItem):
          'battles': self.__rewardData['battles'],
          'isFinal': self.__rewardData['isFinal'],
          'msgType': SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD}, SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD)
+
+
+class ShowAuctionRateErrorMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.INTEGRATED_AUCTION_RATE_ERROR
+
+    def show(self, _):
+        pushRateErrorMessage(systemMessages=self.__systemMessages)
+
+
+class ShowAuctionBelowCompetitiveRateMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.INTEGRATED_AUCTION_RATE_BELOW_COMPETITIVE
+
+    def show(self, _):
+        pushBelowCompetitiveRateMessage(systemMessages=self.__systemMessages)
+
+
+class ShowAuctionLostRateMessage(_ProxyDataItem):
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def __init__(self, messageData):
+        self.__messageData = messageData
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.INTEGRATED_AUCTION_RATE_LOST
+
+    def show(self, _):
+        self.__systemMessages.proto.serviceChannel.pushClientMessage({'data': self.__messageData,
+         'msgType': SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE}, SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE)
 
 
 class ProxyDataHolder(object):

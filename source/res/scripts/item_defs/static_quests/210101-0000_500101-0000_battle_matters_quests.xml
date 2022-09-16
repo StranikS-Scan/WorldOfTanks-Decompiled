@@ -158,7 +158,7 @@
           <zh_sg>	以任意等级的战车开始进行随机战。	</zh_sg>
           <be>	Уступіце ў Выпадковы бой на машыне любога ўзроўню.	</be>
           <uk>	Вийдіть у Випадковий бій на машині будь-якого рівня.	</uk>
-          <kk>	Кездейсоқ шайқасқа кез келген деңгейдегі машинамен шығыңыз,	</kk>
+          <kk>	Кездейсоқ шайқасқа кез келген деңгейдегі машинамен шығыңыз.	</kk>
           <sr>	Započni nasumičnu borbu u vozilu bilo kog nivoa.	</sr>
           <zh_cn>	驾驶任意等级的坦克参加一场标准模式战斗。	</zh_cn>
         </description>
@@ -2091,7 +2091,7 @@
         <zh_sg>	战斗等级越高，您将需要越多银币来维护您的战车、补充弹药和购买模块和装备。	</zh_sg>
         <be>	Чым вышэйшы ўзровень баёў, тым больш крэдытаў патрэбна на абслугоўванне тэхнікі, папаўненне боекамплекта, куплю модуляў і абсталявання.	</be>
         <uk>	Що вищий рівень боїв, то більше кредитів потрібно для обслуговування техніки, поповнення боєкомплекту, купівлі модулів і обладнання.	</uk>
-        <kk>	Шайқас деңгейі неғұрлым жоғары болса, техникаға қызмет көрсетуге, оқ-дәрі толтыруға, модуль пен құрылғы сатып алуға қажет кредит мөлшері де соғұрлым өседі	</kk>
+        <kk>	Шайқас деңгейі неғұрлым жоғары болса, техникаға қызмет көрсетуге, оқ-дәрі толтыруға, модуль пен құрылғы сатып алуға қажет кредит мөлшері де соғұрлым өседі.	</kk>
         <sr>	Što je veći nivo borbe to ćeš više trebati kredita da održavaš svoje vozilo, popuniš municiju i kupiš module i opremu.	</sr>
         <zh_cn>	在战斗中驾驶的坦克等级越高，您就需要越多的银币来维修坦克、补充弹药，以及购买模块和配件。	</zh_cn>
       </description>
@@ -2163,7 +2163,7 @@
         </common>
       </conditions>
       <bonus>
-        <credits>	75000	</credits>
+        <credits>	175000	</credits>
         <token>
           <id>	battle_matters_14_unlock	</id>
           <expires>	01.02.2050 00:00	</expires>
@@ -2407,7 +2407,7 @@
         <zh_sg>	高级光学观察镜或改进型通风系统？正确的装备可以提升战车的优势和弥补它的短板。	</zh_sg>
         <be>	Прасветленая оптыка або Палепшаная вентыляцыя? Узмацніць вартыя бакі машыны і нівеліраваць яе недахопы дазволіць правільны выбар абсталявання.	</be>
         <uk>	Просвітлена оптика чи поліпшена вентиляція? Посилити переваги машини та нівелювати її недоліки ви зможете, правильно підібравши обладнання.	</uk>
-        <kk>	Жарқын оптика әлде Жақсартылған желдеткіш? Машинаның артықшылығын күшейтіп, кемшілігін азайу үшін құрылғыны дұрыс таңдаңыз,	</kk>
+        <kk>	Жарқын оптика әлде Жақсартылған желдеткіш? Машинаның артықшылығын күшейтіп, кемшілігін азайу үшін құрылғыны дұрыс таңдаңыз.	</kk>
         <sr>	Obložena optika ili poboljšana ventilacija? Prava oprema može da pojača jake tačke tvog vozila i smanji mane.	</sr>
         <zh_cn>	高级光学观察镜还是改进型通风系统？正确的配件能够让您的坦克扬长避短。	</zh_cn>
       </description>
@@ -2487,7 +2487,7 @@
       </conditions>
       <bonus>
         <credits>	25000	</credits>
-        <item>	29435	  <count>	15	</count>
+        <item>	28411	  <count>	15	</count>
         </item>
         <token>
           <id>	battle_matters_16_unlock	</id>
@@ -2818,7 +2818,7 @@
           </item>
         </customizations>
         <credits>	25000	</credits>
-        <item>	29435	  <count>	15	</count>
+        <item>	28411	  <count>	15	</count>
         </item>
         <token>
           <id>	battle_matters_18_unlock	</id>
@@ -3030,7 +3030,7 @@
           </expires>
           <count>	6	</count>
         </token>
-        <item>	29435	  <count>	15	</count>
+        <item>	28411	  <count>	15	</count>
         </item>
         <token>
           <id>	battle_matters_19_unlock	</id>
@@ -3543,7 +3543,7 @@
       <bonus>
         <item>	15646	  <count>	2	</count>
         </item>
-        <item>	29435	  <count>	15	</count>
+        <item>	28411	  <count>	15	</count>
         </item>
         <token>
           <id>	battle_matters_22_unlock	</id>
@@ -5531,7 +5531,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.02.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	battle_matters_update_offer	</id>
+      <id>	hidden_battle_matters_update_offer	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>

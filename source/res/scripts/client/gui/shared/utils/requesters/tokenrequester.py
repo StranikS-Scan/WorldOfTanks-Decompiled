@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
+import logging
 import time
 import cPickle
 from functools import partial
 import BigWorld
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from TokenResponse import TokenResponse
 from ids_generators import SequenceIDGenerator
 from helpers import isPlayerAccount
+_logger = logging.getLogger(__name__)
 
 def _getAccountRepository():
     import Account
@@ -72,11 +74,11 @@ class TokenRequester(object):
     def canAllowRequest(self):
         return self.__tokenType != TOKEN_TYPE.WGNI if not isPlayerAccount() else True
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def request(self, timeout=None, callback=None, allowDelay=False):
 
-        @async
+        @adisp_async
         def wait(t, callback):
             BigWorld.callback(t, lambda : callback(None))
 
@@ -94,6 +96,11 @@ class TokenRequester(object):
             delta = self.lastResponseDelta()
             if allowDelay and delta < self.getReqCoolDown():
                 yield wait(self.getReqCoolDown() - delta)
+            if requester != self._getRequester():
+                _logger.warning('Request cancelled because requester has been changed')
+                if callback:
+                    callback(None)
+                return
             self.__callback = callback
             self.__requestID = self.__idsGen.next()
             if timeout:

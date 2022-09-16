@@ -9,6 +9,7 @@ from account_helpers.settings_core.settings_constants import BattleCommStorageKe
 from chat_commands_consts import _PERSONAL_MESSAGE_MUTE_DURATION, BATTLE_CHAT_COMMAND_NAMES
 from frameworks.wulf import WindowLayer
 from gui import GUI_CTRL_MODE_FLAG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
@@ -29,7 +30,7 @@ _logger = logging.getLogger(__name__)
 _CALLOUT_MESSAGES_BLOCK_DURATION = 15
 _HINT_TIMEOUT = 10
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
-_CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS,)
+_CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS, VIEW_ALIAS.COMP7_BATTLE_PAGE)
 CommandReceivedData = namedtuple('CommandReceivedData', ('name', 'targetIdToAnswer'))
 _CALLOUT_COMMANDS_TO_REPLY_COMMANDS = {BATTLE_CHAT_COMMAND_NAMES.HELPME: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: BATTLE_CHAT_COMMAND_NAMES.POSITIVE,

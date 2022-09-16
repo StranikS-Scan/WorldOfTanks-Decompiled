@@ -10,7 +10,7 @@ from helpers.i18n import makeString as _ms
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from adisp import process
+from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getLinkedSetBonuses
 from gui.server_events.awards_formatters import getDefaultAwardFormatter
 from gui.server_events.bonuses import mergeBonuses
@@ -163,7 +163,7 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
                 self._selectedQuestID = 0
             self._updateView()
 
-    @process
+    @adisp_process
     def _goToBootcamp(self):
         if self.isPlayBootcampMission() and self.prbDispatcher is not None and self.battleMatters.isEnabled():
             yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP))

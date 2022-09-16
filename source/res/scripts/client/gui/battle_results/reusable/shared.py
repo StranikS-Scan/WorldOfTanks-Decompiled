@@ -375,7 +375,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_artilleryFortEquipDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingEnemyHits', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_artilleryFortEquipDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directEnemyHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_numDefended', '_vehicleNumCaptured', '_numRecovered', '_destructiblesNumDestroyed', '_destructiblesDamageDealt', '_achievedLevel', '_prestigePoints', '_roleSkillUsed', '_healthRepair', '_alliedHealthRepair', '_entityCaptured')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -431,6 +431,11 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._destructiblesDamageDealt = 0
         self._numDefended = 0
         self._achievedLevel = 0
+        self._prestigePoints = 0
+        self._roleSkillUsed = 0
+        self._healthRepair = 0
+        self._alliedHealthRepair = 0
+        self._entityCaptured = {}
 
     @property
     def vehicle(self):
@@ -644,6 +649,26 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
+    @property
+    def prestigePoints(self):
+        return self._prestigePoints
+
+    @property
+    def roleSkillUsed(self):
+        return self._roleSkillUsed
+
+    @property
+    def healthRepair(self):
+        return self._healthRepair
+
+    @property
+    def alliedHealthRepair(self):
+        return self._alliedHealthRepair
+
+    @property
+    def entityCaptured(self):
+        return self._entityCaptured
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._directEnemyHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._piercingEnemyHits != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -706,6 +731,11 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
         info._achievedLevel = vehicleRecords.get('achivedLevel', 0)
+        info._prestigePoints = vehicleRecords.get('comp7PrestigePoints', 0)
+        info._roleSkillUsed = vehicleRecords.get('roleSkillUsed', 0)
+        info._healthRepair = vehicleRecords.get('healthRepair', 0)
+        info._alliedHealthRepair = vehicleRecords.get('alliedHealthRepair', 0)
+        info._entityCaptured = vehicleRecords.get('entityCaptured', {})
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -966,6 +996,26 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
+
+    @property
+    def prestigePoints(self):
+        return self.__accumulate('prestigePoints')
+
+    @property
+    def roleSkillUsed(self):
+        return self.__accumulate('roleSkillUsed')
+
+    @property
+    def healthRepair(self):
+        return self.__accumulate('healthRepair')
+
+    @property
+    def alliedHealthRepair(self):
+        return self.__accumulate('alliedHealthRepair')
+
+    @property
+    def entityCaptured(self):
+        return self.__collectToDict('entityCaptured')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

@@ -6,7 +6,7 @@ import time
 import BigWorld
 import Event
 import constants
-from adisp import process
+from adisp import adisp_process
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.web import IWebController
@@ -69,7 +69,7 @@ class RankedWebSeasonProvider(object):
         if constants.IS_DEVELOPMENT:
             self.__fakeInfo = WebSeasonInfo(league, position, isSprinter, isTop)
 
-    @process
+    @adisp_process
     def __invoke(self):
         self.__callbackID = None
         if not self.__fakeInfo or not constants.IS_DEVELOPMENT:

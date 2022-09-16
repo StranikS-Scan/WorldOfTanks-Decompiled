@@ -8,7 +8,7 @@ import nations
 import constants
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from helpers import dependency
 from items.tankmen import getSkillsConfig
 from helpers.i18n import convert
@@ -219,8 +219,8 @@ class RecruitWindow(RecruitWindowMeta):
     def onWindowClose(self):
         self.destroy()
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __buyTankman(self, nationID, vehTypeID, role, studyType, callback):
         recruiter = TankmanRecruit(int(nationID), int(vehTypeID), role, int(studyType))
         success, msg, msgType, _, _, tmanInvID = yield recruiter.request()
@@ -232,23 +232,23 @@ class RecruitWindow(RecruitWindowMeta):
         callback(tankman)
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __equipTankman(self, tankman, vehicle, slot, callback):
         result = yield TankmanEquip(tankman, vehicle, slot).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         callback(result.success)
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __buyAndEquipTankman(self, vehicle, slot, studyType, callback):
         result = yield TankmanRecruitAndEquip(vehicle, slot, studyType).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         callback(result.success)
 
-    @decorators.process('recruting')
+    @decorators.adisp_process('recruting')
     def buyTankman(self, nationID, vehTypeID, role, studyType, slot):
         studyTypeIdx = int(studyType)
         studyGoldCost = self.itemsCache.items.shop.tankmanCost[studyTypeIdx][Currency.GOLD] or 0

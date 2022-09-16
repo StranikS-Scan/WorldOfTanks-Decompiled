@@ -7,6 +7,7 @@ import BigWorld
 import nations
 from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
+from gui.goodies.goodies_constants import BoosterCategory
 from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -17,17 +18,21 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS, MAX_ACTIVATED_BY_CATEGORY
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
+    from gui.shared.money import Money
     from skeletons.gui.goodies import IGoodiesCache
+    from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -43,20 +48,36 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
  GOODIE_RESOURCE_TYPE.XP: 'booster_xp',
  GOODIE_RESOURCE_TYPE.CREW_XP: 'booster_crew_xp',
  GOODIE_RESOURCE_TYPE.FREE_XP: 'booster_free_xp',
- GOODIE_RESOURCE_TYPE.FL_XP: 'booster_fl_xp'}
+ GOODIE_RESOURCE_TYPE.FL_XP: 'booster_fl_xp',
+ GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: 'booster_free_xp_and_crew_xp',
+ GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: 'booster_free_xp_and_crew_xp'}
 _BOOSTER_TYPE_TEXT = {v:k for k, v in GOODIE_TEXT_TO_RESOURCE.iteritems()}
 BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.FL_XP: 0,
  GOODIE_RESOURCE_TYPE.XP: 1,
  GOODIE_RESOURCE_TYPE.CREW_XP: 2,
  GOODIE_RESOURCE_TYPE.FREE_XP: 3,
- GOODIE_RESOURCE_TYPE.CREDITS: 4,
- GOODIE_RESOURCE_TYPE.GOLD: 5}
+ GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: 4,
+ GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: 5,
+ GOODIE_RESOURCE_TYPE.CREDITS: 6,
+ GOODIE_RESOURCE_TYPE.GOLD: 7}
 GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
  GOODIE_RESOURCE_TYPE.FREE_XP: KPI.Name.GAME_FREE_XP,
  GOODIE_RESOURCE_TYPE.CREW_XP: KPI.Name.GAME_CREW_XP,
  GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS,
  GOODIE_RESOURCE_TYPE.FL_XP: KPI.Name.GAME_FL_XP}
 DEMOUNT_KIT_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'common'}
+_CLAN_RESERVE_TO_GUI_TYPE = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: GOODIE_RESOURCE_TYPE.CREDITS,
+ FORT_ORDER_TYPE.COMBAT_PAYMENTS_2_0: GOODIE_RESOURCE_TYPE.CREDITS,
+ FORT_ORDER_TYPE.TACTICAL_TRAINING: GOODIE_RESOURCE_TYPE.XP,
+ FORT_ORDER_TYPE.TACTICAL_TRAINING_2_0: GOODIE_RESOURCE_TYPE.XP,
+ FORT_ORDER_TYPE.MILITARY_EXERCISES: GOODIE_RESOURCE_TYPE.FREE_XP,
+ FORT_ORDER_TYPE.MILITARY_EXERCISES_2_0: GOODIE_RESOURCE_TYPE.FREE_XP,
+ FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: GOODIE_RESOURCE_TYPE.CREW_XP,
+ FORT_ORDER_TYPE.ADDITIONAL_BRIEFING_2_0: GOODIE_RESOURCE_TYPE.CREW_XP}
+
+def getBoosterGuiType(boosterType):
+    return _BOOSTER_TYPE_NAMES[boosterType]
+
 
 class _Goodie(object):
 
@@ -243,7 +264,15 @@ class BoosterUICommon(_Goodie):
 
     @property
     def bigTooltipIcon(self):
-        return RES_ICONS.boosterTTBigIconPath(self.boosterGuiType)
+        tooltipIconResId = R.images.gui.maps.icons.quests.bonuses.s180x135.dyn(self._getFullNameForResource())()
+        return backport.image(tooltipIconResId)
+
+    @property
+    def category(self):
+        raise NotImplementedError
+
+    def getIsPremium(self):
+        return self.boosterID in PREMIUM_BOOSTER_IDS
 
     def getCooldownAsPercent(self):
         percent = 0
@@ -268,6 +297,9 @@ class BoosterUICommon(_Goodie):
             value = '{}%'.format(self.effectValue)
         return formatter(value) if formatter is not None else value
 
+    def _getFullNameForResource(self):
+        return '{}{}'.format(self.boosterGuiType, '_premium' if self.getIsPremium() else '')
+
 
 class Booster(BoosterUICommon):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -276,6 +308,10 @@ class Booster(BoosterUICommon):
         super(Booster, self).__init__(boosterID, boosterDescription, stateProvider)
         self.__buyPrices = ITEM_PRICES_EMPTY
         self.__sellPrices = ITEM_PRICES_EMPTY
+
+    @property
+    def isEventBooster(self):
+        return self.boosterType == GOODIE_RESOURCE_TYPE.FL_XP
 
     @property
     def buyPrices(self):
@@ -314,13 +350,13 @@ class Booster(BoosterUICommon):
 
     @property
     def isReadyToUse(self):
-        activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__getActiveBoosters() ]
-        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoosters()) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes and self.__readyForEvent() if self.enabled else False
+        activeBoosterTypes = self.__getActiveBoosterTypes()
+        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoostersByCategory()) < MAX_ACTIVATED_BY_CATEGORY[self.category] and self.boosterType not in activeBoosterTypes and self.__readyForEvent() if self.enabled else False
 
     @property
     def isReadyToUpdate(self):
         if self.enabled:
-            for aBoosterType, aEffectValue, _ in self.__getActiveBoosters():
+            for aBoosterType, aEffectValue, _ in self.__getActiveResources():
                 if self.boosterType == aBoosterType and self.count > 0 and self.__readyForEvent():
                     return self.effectValue > aEffectValue
 
@@ -350,6 +386,10 @@ class Booster(BoosterUICommon):
             kpiList.append(KPI(name, 1.0 + self.effectValue / 100.0, KPI.Type.MUL))
         return kpiList
 
+    @property
+    def category(self):
+        return BoosterCategory.EVENT if self.isEventBooster else BoosterCategory.PERSONAL
+
     def getTypeAsString(self):
         return _BOOSTER_TYPE_TEXT[self.boosterType]
 
@@ -366,7 +406,7 @@ class Booster(BoosterUICommon):
         return RES_ICONS.boosterQualitySourcePath(self.quality)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getBoosterIcon(size, self.boosterGuiType)
+        return RES_SHOP_EXT.getBoosterIcon(size, self._getFullNameForResource())
 
     def getExpiryDate(self):
         return backport.getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
@@ -403,8 +443,15 @@ class Booster(BoosterUICommon):
             return (False, GUI_ITEM_ECONOMY_CODE.getCurrencyError(currency))
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
 
-    def __getActiveBoosters(self):
-        return [] if not self._stateProvider else self._stateProvider.getActiveBoostersTypes()
+    def __getActiveResources(self):
+        return [] if not self._stateProvider else self._stateProvider.getActiveResources()
+
+    def __getActiveBoosterTypes(self):
+        return [] if not self._stateProvider else self._stateProvider.getActiveBoosterTypes()
+
+    def __getActiveBoostersByCategory(self):
+        criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_CATEGORIES([self.category])
+        return self._stateProvider.getBoosters(criteria=criteria).values()
 
     def __buildPrice(self):
         if not self._stateProvider:
@@ -421,18 +468,18 @@ class Booster(BoosterUICommon):
             return
 
     def __readyForEvent(self):
-        return self.__epicController.isEnabled() and self.__epicController.isInPrimeTime() if self.boosterType == GOODIE_RESOURCE_TYPE.FL_XP else True
+        return self.__epicController.isEnabled() and self.__epicController.isInPrimeTime() if self.isEventBooster else True
+
+    def __repr__(self):
+        stateStr = 'Inactive'
+        if self.state == GOODIE_STATE.ACTIVE:
+            stateStr = 'Activated'
+        elif self.state == GOODIE_STATE.USED:
+            stateStr = 'Used'
+        return 'Booster(id={} ({}), state={}, count={})'.format(self.boosterID, self.getTypeAsString(), stateStr, self.count)
 
 
 class ClanReservePresenter(BoosterUICommon):
-    _CLAN_RESERVE_TO_GUI_TYPE = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: GOODIE_RESOURCE_TYPE.CREDITS,
-     FORT_ORDER_TYPE.COMBAT_PAYMENTS_2_0: GOODIE_RESOURCE_TYPE.CREDITS,
-     FORT_ORDER_TYPE.TACTICAL_TRAINING: GOODIE_RESOURCE_TYPE.XP,
-     FORT_ORDER_TYPE.TACTICAL_TRAINING_2_0: GOODIE_RESOURCE_TYPE.XP,
-     FORT_ORDER_TYPE.MILITARY_EXERCISES: GOODIE_RESOURCE_TYPE.FREE_XP,
-     FORT_ORDER_TYPE.MILITARY_EXERCISES_2_0: GOODIE_RESOURCE_TYPE.FREE_XP,
-     FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: GOODIE_RESOURCE_TYPE.CREW_XP,
-     FORT_ORDER_TYPE.ADDITIONAL_BRIEFING_2_0: GOODIE_RESOURCE_TYPE.CREW_XP}
 
     def __init__(self, reserveID, expirationTime, factors, duration):
         super(ClanReservePresenter, self).__init__(reserveID, None)
@@ -443,7 +490,7 @@ class ClanReservePresenter(BoosterUICommon):
 
     @property
     def boosterType(self):
-        return self._CLAN_RESERVE_TO_GUI_TYPE[self.boosterID]
+        return _CLAN_RESERVE_TO_GUI_TYPE[self.boosterID]
 
     @property
     def finishTime(self):
@@ -456,6 +503,10 @@ class ClanReservePresenter(BoosterUICommon):
     @property
     def effectValue(self):
         return self.__factors.values()
+
+    @property
+    def category(self):
+        return BoosterCategory.CLAN
 
     def getFormattedValue(self, formatter=None):
         valuesSet = set(self.effectValue)

@@ -5,7 +5,7 @@ import random
 from functools import partial
 import ResMgr
 from account_helpers.offers.cache import CachePrefetchResult
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from constants import RentType, PREMIUM_ENTITLEMENTS
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages
@@ -78,7 +78,7 @@ class OfferGiftsWindow(ViewImpl):
         self._itemsCache.onSyncCompleted -= self._onItemsCacheResync
         self._offersProvider.onOffersUpdated -= self._onOffersUpdated
 
-    @process
+    @adisp_process
     def _onLoading(self, *args, **kwargs):
         super(OfferGiftsWindow, self)._onLoading(*args, **kwargs)
         offerItem = self._offerItem
@@ -101,8 +101,8 @@ class OfferGiftsWindow(ViewImpl):
                 self._generateGifts(model)
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def syncOfferResources(self, callback=None):
         Waiting.show('loadContent')
         result = yield self._offersProvider.isCdnResourcesReady()
@@ -187,7 +187,7 @@ class OfferGiftsWindow(ViewImpl):
                 onGiftConfirm()
             return
 
-    @process
+    @adisp_process
     def _onGiftConfirm(self, offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
         result = yield ReceiveOfferGiftProcessor(offerID, giftID, cdnTitle).request()
         if result.success:

@@ -3,9 +3,11 @@
 import math
 import os
 from re import findall
+from enum import Enum, unique
 from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
 import items
 import nations
+from ArenaType import readVisualScriptSection
 from ResMgr import DataSection
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
 from debug_utils import LOG_DEBUG_DEV
@@ -40,6 +42,12 @@ else:
 
 if IS_CELLAPP:
     from actions import vehicle as vehicleActions
+
+@unique
+class ExportParamsTag(Enum):
+    VSE = 'vse'
+    TOOLTIP = 'tooltip'
+
 
 class CommonXmlSectionReader(object):
 
@@ -87,7 +95,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '_exportParams', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -99,6 +107,7 @@ class Artefact(BasicItem):
         self._vehWeightFraction = component_constants.ZERO_FLOAT
         self._weight = component_constants.ZERO_FLOAT
         self._maxWeightChange = component_constants.ZERO_FLOAT
+        self._exportParams = {}
         self.__vehicleFilter = None
         self.__artefactFilter = None
         self.isImproved = None
@@ -116,6 +125,10 @@ class Artefact(BasicItem):
     @property
     def isAvatarEquipment(self):
         return 'avatar' in self.tags
+
+    @property
+    def tooltipParams(self):
+        return self._getExportParamsDict(ExportParamsTag.TOOLTIP)
 
     def updatePrice(self, newPrice, showInShop):
         self.price = newPrice
@@ -205,7 +218,21 @@ class Artefact(BasicItem):
         self.isImproved = section.readBool('improved', False)
         if (IS_CLIENT or IS_WEB) and section.has_key('groupName'):
             self._groupName = section.readString('groupName')
+        self._exportParams = self._readExportParams(section['script'])
         return
+
+    def _getExportParamsDict(self, exportTag):
+        return {k:getattr(self, k) for k in self._exportParams.get(exportTag.value, set())}
+
+    @staticmethod
+    def _readExportParams(section):
+        params = {}
+        for param, subsection in section.items():
+            exports = subsection.readString('exports').split()
+            for exportTag in exports:
+                params.setdefault(exportTag, set()).add(param)
+
+        return params
 
 
 class OptionalDevice(Artefact):
@@ -444,7 +471,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'code')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -457,6 +484,7 @@ class Equipment(Artefact):
         self.soundNotification = None
         self.playerMessagesKey = None
         self.clientSelector = None
+        self.code = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -470,6 +498,8 @@ class Equipment(Artefact):
         self.clientSelector = _xml.readStringOrNone(xmlCtx, scriptSection, 'clientSelector')
         self.ownerPrefab = _xml.readStringOrNone(xmlCtx, section, 'ownerPrefab')
         self.usagePrefab = _xml.readStringOrNone(xmlCtx, section, 'usagePrefab')
+        self.code = section.readString('code') if section.has_key('code') else None
+        return
 
     def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect, *args, **kwargs):
         pass
@@ -870,28 +900,80 @@ class TooltipConfigReader(object):
         return
 
 
-class MarkerConfigReader(object):
-    _MARKER_SLOTS_ = ('areaVisual', 'areaColor', 'areaMarker', 'areaRadius', 'areaLength', 'areaWidth')
+class BaseMarkerConfigReader(object):
+    _MARKER_SLOTS_ = ('areaVisual', 'areaColor', 'areaMarker', 'areaUsedPrefab')
 
     def initMarkerInformation(self):
         self.areaVisual = None
         self.areaColor = None
         self.areaMarker = None
-        self.areaRadius = component_constants.ZERO_FLOAT
-        self.areaLength = component_constants.ZERO_FLOAT
-        self.areaWidth = component_constants.ZERO_FLOAT
+        self.areaUsedPrefab = None
         return
 
     def readMarkerConfig(self, xmlCtx, section):
-        self.areaRadius = _xml.readPositiveFloat(xmlCtx, section, 'areaRadius')
         self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
         self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
         self.areaMarker = _xml.readStringOrNone(xmlCtx, section, 'areaMarker')
+        self.areaUsedPrefab = section.readString('areaUsedPrefab') or None
+        return
+
+
+class AreaMarkerConfigReader(BaseMarkerConfigReader):
+    _MARKER_SLOTS_ = BaseMarkerConfigReader._MARKER_SLOTS_ + ('areaRadius', 'areaLength', 'areaWidth')
+
+    def initMarkerInformation(self):
+        super(AreaMarkerConfigReader, self).initMarkerInformation()
+        self.areaRadius = component_constants.ZERO_FLOAT
+        self.areaLength = component_constants.ZERO_FLOAT
+        self.areaWidth = component_constants.ZERO_FLOAT
+
+    def readMarkerConfig(self, xmlCtx, section):
+        super(AreaMarkerConfigReader, self).readMarkerConfig(xmlCtx, section)
+        self.areaRadius = _xml.readPositiveFloat(xmlCtx, section, 'areaRadius')
         self.areaLength = self.areaWidth = self.areaRadius * 2
 
 
-class ArtilleryConfigReader(MarkerConfigReader):
-    _ARTILLERY_SLOTS = MarkerConfigReader._MARKER_SLOTS_ + ('delay', 'duration', 'shotsNumber', 'areaRadius', 'shellCompactDescr', 'piercingPower', 'noOwner', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed')
+class EffectsConfigReader(object):
+    _EFFECTS_SLOTS_ = ('effects',)
+
+    def initEffectsInformation(self):
+        self.effects = None
+        return
+
+    def readEffectConfig(self, xmlCtx, section):
+        self.effects = {name:self._readEffect((xmlCtx, 'effects'), effect) for name, effect in section['effects'].items()}
+        return self.effects
+
+    def _readEffect(self, xmlCtx, section):
+        if not section:
+            return None
+        else:
+            effect = {'shotEffects': section.readString('shotEffects').split(),
+             'sequences': self._readSequencesConfig(section['sequences']),
+             'groundRaycast': section.readBool('groundRaycast'),
+             'offsetDeviation': section.readFloat('offsetDeviation'),
+             'repeatCount': section.readInt('repeatCount', 1),
+             'repeatDelay': section.readFloat('repeatDelay'),
+             'areaColor': _xml.readIntOrNone(xmlCtx, section, 'areaColor'),
+             'repeatDelayDeviationPercent': 0}
+            if section.has_key('repeatDelayDeviationPercent'):
+                effect['repeatDelayDeviationPercent'] = _xml.readInt(xmlCtx, section, 'repeatDelayDeviationPercent', minVal=0, maxVal=100)
+            return effect
+
+    def _readSequencesConfig(self, section):
+        if not section:
+            return {}
+        sequences = {}
+        for name, subsection in section.items():
+            if name == 'sequence':
+                sequenceID = subsection.readString('name')
+                sequences[sequenceID] = {'scale': subsection.readVector3('scale', Vector3(1, 1, 1))}
+
+        return sequences
+
+
+class ArtilleryConfigReader(AreaMarkerConfigReader):
+    _ARTILLERY_SLOTS = AreaMarkerConfigReader._MARKER_SLOTS_ + ('delay', 'duration', 'shotsNumber', 'areaRadius', 'shellCompactDescr', 'piercingPower', 'noOwner', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed')
 
     def initArtillerySlots(self):
         super(ArtilleryConfigReader, self).__init__()
@@ -1658,14 +1740,19 @@ class FortConsumableInspire(ConsumableInspire):
     pass
 
 
-class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader):
-    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaColorBlind', 'areaShow', 'noOwner', 'attackerType', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'effects', 'actionsConfig', 'explodeDestructible', 'areaUsedPrefab', 'areaAccurateCollision') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader, EffectsConfigReader):
+    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaColorBlind', 'areaShow', 'noOwner', 'attackerType', 'areaVisibleToEnemies', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'actionsConfig', 'explodeDestructible', 'areaUsedPrefab', 'areaAccurateCollision') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + EffectsConfigReader._EFFECTS_SLOTS_
+
+    def __init__(self):
+        super(AreaOfEffectEquipment, self).__init__()
+        self.initEffectsInformation()
 
     def _readConfig(self, xmlCtx, section):
         super(AreaOfEffectEquipment, self)._readConfig(xmlCtx, section)
         self.readTooltipInformation(xmlCtx, section)
         self.readSharedCooldownConsumableConfig(xmlCtx, section)
         self.readArcadeInformation(xmlCtx, section)
+        self.readEffectConfig(xmlCtx, section)
         self.delay = section.readFloat('delay')
         self.duration = section.readFloat('duration')
         self.lifetime = section.readFloat('lifetime')
@@ -1678,6 +1765,7 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
         self.areaColorBlind = _xml.readIntOrNone(xmlCtx, section, 'areaColorBlind')
         self.areaShow = section.readString('areaShow').lower() or None
         self.areaAccurateCollision = section.readBool('areaAccurateCollision', True)
+        self.areaVisibleToEnemies = section.readBool('areaVisibleToEnemies', True)
         self.areaUsedPrefab = section.readString('areaUsedPrefab') or None
         self.noOwner = section.readBool('noOwner')
         self.attackerType = section.readString('attackerType').upper()
@@ -1685,7 +1773,6 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
         self.wwsoundShot = section.readString('wwsoundShot')
         self.wwsoundEquipmentUsed = section.readString('wwsoundEquipmentUsed')
         self.shotEffect = section.readString('shotEffect')
-        self.effects = {name:self._readEffectConfig(effect) for name, effect in section['effects'].items()}
         if IS_CELLAPP:
             self.actionsConfig = [ self._readActionConfig(conf) for conf in section['actions'].values() ]
             self.explodeDestructible = section.readBool('explodeDestructible')
@@ -1693,15 +1780,6 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
             self.actionsConfig = None
             self.explodeDestructible = None
         return
-
-    def _readEffectConfig(self, section):
-        return None if not section else {'shotEffects': section.readString('shotEffects').split(),
-         'sequences': self._readSequencesConfig(section['sequences']),
-         'groundRaycast': section.readBool('groundRaycast'),
-         'offsetDeviation': section.readFloat('offsetDeviation'),
-         'repeatCount': section.readInt('repeatCount', 1),
-         'repeatDelay': section.readFloat('repeatDelay'),
-         'areaColor': _xml.readIntOrNone(None, section, 'areaColor')}
 
     def _readActionConfig(self, section):
         if not section:
@@ -1712,17 +1790,6 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
             return {'type': actionType,
              'applyTo': section.readString('applyTo'),
              'args': actionClass.parseXML(section['args'])}
-
-    def _readSequencesConfig(self, section):
-        if not section:
-            return {}
-        sequences = {}
-        for name, subsection in section.items():
-            if name == 'sequence':
-                sequenceID = subsection.readString('name')
-                sequences[sequenceID] = {'scale': subsection.readVector3('scale', Vector3(1, 1, 1))}
-
-        return sequences
 
 
 class AttackBomberEquipment(AreaOfEffectEquipment):
@@ -2196,8 +2263,8 @@ class FrontLineMinefield(Equipment, TooltipConfigReader, SharedCooldownConsumabl
         self.readArcadeInformation(xmlCtx, section)
 
 
-class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConfigReader, MarkerConfigReader, ArcadeEquipmentConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + MarkerConfigReader._MARKER_SLOTS_ + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay', 'cooldownTime', 'disableAllyDamage')
+class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConfigReader, AreaMarkerConfigReader, ArcadeEquipmentConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + AreaMarkerConfigReader._MARKER_SLOTS_ + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay', 'cooldownTime', 'disableAllyDamage')
 
     def __init__(self):
         super(ConsumableSpawnBot, self).__init__()
@@ -2244,6 +2311,333 @@ class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConf
                 self.clientVisuals = _ClientSpawnBotVisuals(scriptSection, scriptSection['clientVisuals'])
             self.longDescription = i18n.makeString(self.longDescription, duration=int(self.botLifeTime))
         return
+
+
+class VisualScriptEquipment(Equipment):
+    __slots__ = ('visualScript',)
+
+    def __init__(self):
+        super(VisualScriptEquipment, self).__init__()
+        self.visualScript = {}
+
+    def _readConfig(self, xmlCtx, section):
+        self.visualScript = readVisualScriptSection(section)
+
+    def _exportSlotsToVSE(self):
+        params = self._getExportParamsDict(ExportParamsTag.VSE)
+        if not params:
+            return
+        for _, plans in self.visualScript.iteritems():
+            for planDef in plans:
+                planDef['params'].update(params)
+
+        self._exportParams[ExportParamsTag.VSE.value].clear()
+
+
+class LevelBasedVisualScriptEquipment(VisualScriptEquipment):
+    _LEVEL_BASED_SLOTS = ('radius',)
+
+    def __init__(self):
+        super(LevelBasedVisualScriptEquipment, self).__init__()
+        self.radius = ()
+
+    def _readConfig(self, xmlCtx, section):
+        super(LevelBasedVisualScriptEquipment, self)._readConfig(xmlCtx, section)
+        self.radius = tuple(map(float, section.readString('radius').split()))
+        if len(self.radius) == 0:
+            _xml.raiseWrongXml(xmlCtx, 'radius', 'should be multiple values separated by space.')
+
+    def getRadiusBasedOnSkillLevel(self, skillLevel):
+        return self.radius[skillLevel - 1]
+
+
+class Comp7AoeHealEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'radius', 'heal', 'secondaryHealDebuff', 'tickInterval')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7AoeHealEquipment, self).tooltipParams
+        params['heal'] = tuple(map(lambda h: h * self.tickInterval * self.duration, self.heal))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7AoeHealEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.radius = section.readFloat('radius')
+        self.heal = tuple(map(float, section.readString('heal').split()))
+        self.secondaryHealDebuff = section.readFloat('secondaryHealDebuff')
+        self.tickInterval = section.readFloat('tickInterval')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7AllySupportEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'radius', 'crewBuff')
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7AllySupportEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.radius = section.readInt('radius')
+        self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7AllyHunterEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'heal', 'gunReloadTimeBuff', 'tickInterval')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7AllyHunterEquipment, self).tooltipParams
+        params['heal'] = tuple(map(lambda h: h * self.tickInterval * self.duration, self.heal))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7AllyHunterEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.heal = tuple(map(float, section.readString('heal').split()))
+        self.gunReloadTimeBuff = section.readFloat('gunReloadTimeBuff')
+        self.tickInterval = section.readFloat('tickInterval')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7ConcentrationEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'aimingTimeBuff', 'shotDispersionFactors', 'clipReloadTimeBoost')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7ConcentrationEquipment, self).tooltipParams
+        params['shotDispersionFactorsBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.shotDispersionFactors))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7ConcentrationEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.aimingTimeBuff = tuple(map(float, section.readString('aimingTimeBuff').split()))
+        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
+        self.clipReloadTimeBoost = tuple(map(float, section.readString('clipReloadTimeBoost').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7BerserkEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'gunReloadTimeBuff', 'damageDistance')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7BerserkEquipment, self).tooltipParams
+        params['gunReloadTimeBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.gunReloadTimeBuff))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7BerserkEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
+        self.damageDistance = section.readFloat('damageDistance')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7AoeInspireEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'radius', 'crewBuff')
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7AoeInspireEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.radius = section.readFloat('radius')
+        self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7RedlineEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader, EffectsConfigReader):
+    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + EffectsConfigReader._EFFECTS_SLOTS_ + ('delay', 'damage', 'stunDuration', 'areaShow', 'fraction', 'requireAssists')
+
+    def __init__(self):
+        super(Comp7RedlineEquipment, self).__init__()
+        self.initMarkerInformation()
+        self.initEffectsInformation()
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7RedlineEquipment, self)._readConfig(xmlCtx, section)
+        self.delay = section.readFloat('delay')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.damage = tuple(map(float, section.readString('damage').split()))
+        self.stunDuration = tuple(map(float, section.readString('stunDuration').split()))
+        self.areaShow = section.readString('areaShow').lower() or None
+        self.duration = section.readFloat('duration')
+        self.readMarkerConfig(xmlCtx, section)
+        self.readEffectConfig(xmlCtx, section)
+        self.fraction = section.readFloat('fraction')
+        self.requireAssists = section.readBool('requireAssists', False)
+        self._exportSlotsToVSE()
+        return
+
+
+class Comp7FastRechargeEquipment(VisualScriptEquipment):
+    __slots__ = ('gunReloadTimeBuff',)
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7FastRechargeEquipment, self).tooltipParams
+        params['gunReloadTimeBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.gunReloadTimeBuff))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7FastRechargeEquipment, self)._readConfig(xmlCtx, section)
+        self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7JuggernautEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'enginePowerFactor', 'stunDurationFactor', 'repairBuff', 'gunReloadBoost')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7JuggernautEquipment, self).tooltipParams
+        params['enginePowerBuff'] = (self.enginePowerFactor - 1.0) * 100
+        params['stunDurationResist'] = self.stunDurationFactor * 100
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7JuggernautEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = tuple(map(float, section.readString('duration').split()))
+        self.enginePowerFactor = section.readFloat('enginePowerFactor')
+        self.stunDurationFactor = section.readFloat('stunDurationFactor')
+        self.repairBuff = section.readFloat('repairBuff')
+        self.gunReloadBoost = section.readFloat('gunReloadBoost')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7SureShotEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'shotDispersionFactors', 'slvl', 'sdlvl')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7SureShotEquipment, self).tooltipParams
+        params['shotDispersionFactorsBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.shotDispersionFactors))
+        params['gunReloadBuff'] = tuple(map(lambda b: b * 100, self.slvl))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7SureShotEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
+        self.slvl = tuple(map(float, section.readString('slvl').split()))
+        self.sdlvl = tuple(map(float, section.readString('sdlvl').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7SniperEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'dispersionFactor', 'damageDistance')
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7SniperEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = tuple(map(float, section.readString('duration').split()))
+        self.dispersionFactor = section.readFloat('dispersionFactor')
+        self.damageDistance = section.readFloat('damageDistance')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7RiskyAttackEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'healDuration', 'baseHeal', 'extraHealFactor', 'fwdSpeedBoost', 'bkwSpeedBoost', 'enginePowerBuff')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7RiskyAttackEquipment, self).tooltipParams
+        params['extraHealFactor'] = tuple(map(lambda b: b * 100, self.extraHealFactor))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7RiskyAttackEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.healDuration = section.readFloat('healDuration')
+        self.baseHeal = section.readInt('baseHeal')
+        self.extraHealFactor = tuple(map(float, section.readString('extraHealFactor').split()))
+        self.fwdSpeedBoost = section.readFloat('fwdSpeedBoost')
+        self.bkwSpeedBoost = section.readFloat('bkwSpeedBoost')
+        self.enginePowerBuff = section.readFloat('enginePowerBuff')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7ReconEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader):
+    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'delay')
+
+    def __init__(self):
+        super(Comp7ReconEquipment, self).__init__()
+        self.initMarkerInformation()
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7ReconEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = tuple(map(float, section.readString('duration').split()))
+        self.delay = section.readFloat('delay')
+        self.readMarkerConfig(xmlCtx, section)
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7AggressiveDetectionEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'visionFactor')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7AggressiveDetectionEquipment, self).tooltipParams
+        params['visionBuff'] = tuple(map(lambda b: (b - 1.0) * 100, self.visionFactor))
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7AggressiveDetectionEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.visionFactor = tuple(map(float, section.readString('visionFactor').split()))
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class Comp7MarchEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'enginePowerBuff', 'fwdSpeedBoost', 'invisibilityFactor')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7MarchEquipment, self).tooltipParams
+        params['enginePowerBuff'] = self.enginePowerBuff * 100
+        params['invisibilityFactor'] = (self.invisibilityFactor - 1.0) * 100
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(Comp7MarchEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = tuple(map(float, section.readString('duration').split()))
+        self.enginePowerBuff = section.readFloat('enginePowerBuff')
+        self.fwdSpeedBoost = section.readFloat('fwdSpeedBoost')
+        self.invisibilityFactor = section.readFloat('invisibilityFactor')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self._exportSlotsToVSE()
+
+
+class PoiRadarEquipment(VisualScriptEquipment):
+    __slots__ = ('duration',)
+
+    def _readConfig(self, xmlCtx, section):
+        super(PoiRadarEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self._exportSlotsToVSE()
+
+
+class PoiArtilleryEquipment(AreaOfEffectEquipment):
+    __slots__ = ('maxCount', 'requireAssists')
+
+    def _readConfig(self, xmlCtx, section):
+        super(PoiArtilleryEquipment, self)._readConfig(xmlCtx, section)
+        maxCount = section.readInt('maxCount')
+        if maxCount < 1:
+            maxCount = 1
+        self.maxCount = maxCount
+        self.requireAssists = section.readBool('requireAssists', False)
 
 
 _readTags = vehicles._readTags

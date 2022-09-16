@@ -66,7 +66,7 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
         finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == operationChain, finalQuests)
         showPersonalMissionsChain(finalQuest.getOperationID(), finalQuest.getChainID())
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def buyMissionsByVehicleType(self, operationChain):
         finalQuests = self.getOperation().getFinalQuests().values()
         finalQuest = findFirst(lambda q: q.getQuestClassifier().classificationAttr == operationChain, finalQuests)

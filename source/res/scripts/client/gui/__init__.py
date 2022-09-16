@@ -134,7 +134,7 @@ def getGuiServicesConfig(manager):
     from gui import hangar_cameras
     from gui import impl
     from gui import offers
-    from gui.platform import wgnp, catalog_service
+    from gui.platform import wgnp, catalog_service, products_fetcher
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -157,6 +157,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(offers.getOffersConfig)
     manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(wgnp.getWGNPRequestControllers)
+    manager.addConfig(products_fetcher.getProductFetchControllers)
     manager.addConfig(catalog_service.getPurchaseCache)
     if HAS_DEV_RESOURCES:
         try:

@@ -15,6 +15,7 @@ class CustomModeName(object):
 COLUMN_SETTINGS = {PREBATTLE_ACTION_NAME.RANDOM: (ModeSelectorColumns.COLUMN_0, -1),
  PREBATTLE_ACTION_NAME.EPIC: (ModeSelectorColumns.COLUMN_1, 10),
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE: (ModeSelectorColumns.COLUMN_1, 10),
+ PREBATTLE_ACTION_NAME.COMP7: (ModeSelectorColumns.COLUMN_1, 10),
  PREBATTLE_ACTION_NAME.MAPBOX: (ModeSelectorColumns.COLUMN_2, 30),
  PREBATTLE_ACTION_NAME.RANKED: (ModeSelectorColumns.COLUMN_2, 10),
  PREBATTLE_ACTION_NAME.EVENT_BATTLE: (ModeSelectorColumns.COLUMN_2, 40),
@@ -34,4 +35,5 @@ class ModeSelectorRewardID(Enum):
     IMPROVED_EQUIPMENT = 'improvedEquipment'
     OTHER = 'other'
     STYLE = 'style'
+    PROGRESSION_STYLE = 'progressionStyle'
     VEHICLE = 'vehicle'

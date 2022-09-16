@@ -62,13 +62,13 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def dataProvider(self):
         return self.__dataProvider
 
-    def openPersonalCase(self, tankmanInvID, tabNumber):
+    def openPersonalCase(self, tankmanInvID, tabID):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
             return
         tmanInvID = int(tankmanInvID)
         tankman = self.itemsCache.items.getTankman(tmanInvID)
         if tankman and not tankman.isDismissed:
-            shared_events.showPersonalCase(tmanInvID, int(tabNumber), EVENT_BUS_SCOPE.LOBBY)
+            shared_events.showPersonalCase(tmanInvID, tabID, EVENT_BUS_SCOPE.LOBBY)
 
     def closeBarracks(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -104,7 +104,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         AccountSettings.setFilter(BARRACKS_FILTER, self.filter)
         self.__updateTankmen()
 
-    @decorators.process('updating')
+    @decorators.adisp_process('updating')
     def actTankman(self, invID):
         if self.filter['location'] != BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
             tankman = self.itemsCache.items.getTankman(int(invID))

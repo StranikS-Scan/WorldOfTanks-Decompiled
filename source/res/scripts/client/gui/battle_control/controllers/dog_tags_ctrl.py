@@ -44,7 +44,8 @@ class DogTagsController(IBattleController):
         victimsDogTags = self._extendDogTagInfo(victimsDogTags)
         self._updateArenaVehicleVictimsDogTags(victimsDogTags)
         for victimDogTag in victimsDogTags:
-            self.onVictimDogTagSet(victimDogTag)
+            if victimDogTag['dogTag']['playerName']:
+                self.onVictimDogTagSet(victimDogTag)
 
     def _initDogTagsInfo(self, vehicle):
         if not self.__isEnabled:

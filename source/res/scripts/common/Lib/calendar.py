@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/calendar.py
-# Compiled at: 2032-05-20 18:56:31
+# Compiled at: 2100-01-06 04:23:39
 """Calendar printing functions
 
 Note when comparing these calendars to the ones printed by cal(1): By

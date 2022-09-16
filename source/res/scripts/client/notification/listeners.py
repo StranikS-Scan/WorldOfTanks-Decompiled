@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import json
 import logging
 import time
-from typing import TYPE_CHECKING, List, Dict, Optional, Any, Type
+from functools import partial
+from typing import TYPE_CHECKING
 import collections
 import weakref
 from collections import defaultdict
 from PlayerEvents import g_playerEvents
-from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY, SwitchState
+from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY, SwitchState, PLAYER_SUBSCRIPTIONS_CONFIG
 from battle_pass_common import FinalReward
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN
-from adisp import process
-from async import async, await
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN, INTEGRATED_AUCTION_NOTIFICATIONS
+from adisp import adisp_process
+from gui.goodies.pr2_conversion_result import getConversionResult
+from wg_async import wg_async, wg_await
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG
 from collector_vehicle import CollectorVehicleConsts
@@ -28,6 +31,7 @@ from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
+from gui.integrated_auction.constants import AUCTION_START_EVENT_TYPE, AUCTION_FINISH_EVENT_TYPE, AUCTION_STAGE_START_SEEN, AUCTION_FINISH_STAGE_SEEN
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
@@ -36,11 +40,14 @@ from gui.shared import g_eventBus, events
 from gui.shared.formatters import time_formatters, text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
+from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.shared.system_factory import registerNotificationsListeners, collectAllNotificationsListeners
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import time_utils, i18n, dependency
+from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
@@ -48,7 +55,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, C2DProgressionStyleDecorator, IntegratedAuctionStageStartDecorator, IntegratedAuctionStageFinishDecorator, PersonalReservesConversionMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from shared_utils import first
 from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController
@@ -61,6 +68,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
 if TYPE_CHECKING:
+    from typing import Callable, List, Dict, Optional, Any, Type
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
 _logger = logging.getLogger(__name__)
@@ -111,6 +119,10 @@ class _StateExtractor(object):
         return cls.__lobbyContext.getServerSettings().isDogTagEnabled()
 
     @classmethod
+    def getPlayerSubscriptionsState(cls):
+        return cls.__lobbyContext.getServerSettings().isPlayerSubscriptionsEnabled()
+
+    @classmethod
     def getMapsTrainingState(cls):
         return cls.__lobbyContext.getServerSettings().isMapsTrainingEnabled()
 
@@ -139,6 +151,9 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
  DOG_TAGS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.dog_tags.switch_on.title(), R.strings.system_messages.dog_tags.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                    _FeatureState.OFF: (R.strings.system_messages.dog_tags.switch_off.title(), R.strings.system_messages.dog_tags.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                    _FUNCTION: _StateExtractor.getDogTagsUnlockingState},
+ PLAYER_SUBSCRIPTIONS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.player_subscriptions.switch_on.title(), R.strings.system_messages.player_subscriptions.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                               _FeatureState.OFF: (R.strings.system_messages.player_subscriptions.switch_off.title(), R.strings.system_messages.player_subscriptions.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                               _FUNCTION: _StateExtractor.getPlayerSubscriptionsState},
  MAPS_TRAINING_ENABLED_KEY: {_FeatureState.ON: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                              _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                              _FUNCTION: _StateExtractor.getMapsTrainingState}}
@@ -220,6 +235,8 @@ class ServiceChannelListener(_NotificationListener):
                 return MapboxButtonDecorator
             if messageType == SYS_MESSAGE_TYPE.resourceWellNoVehicles.index():
                 return ResourceWellLockButtonDecorator
+            if messageType == SYS_MESSAGE_TYPE.customization2dProgressionChanged.index():
+                return C2DProgressionStyleDecorator
         return MessageDecorator
 
 
@@ -257,6 +274,8 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
         if result and prbInvites:
             prbInvites.onInvitesListInited += self.__onInviteListInited
             prbInvites.onReceivedInviteListModified += self.__onInviteListModified
+            g_clientUpdateManager.addCallbacks({'inventory.1': self.__onInventoryUpdated})
+            g_clientUpdateManager.addCallbacks({'stats.unlocks': self.__onInventoryUpdated})
             if prbInvites.isInited():
                 self.__addInvites()
         return result
@@ -268,6 +287,7 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
         if prbInvites:
             prbInvites.onInvitesListInited -= self.__onInviteListInited
             prbInvites.onReceivedInviteListModified -= self.__onInviteListModified
+            g_clientUpdateManager.removeObjectCallbacks(self)
 
     def onPrbEntitySwitched(self):
         self.__updateInvites()
@@ -309,6 +329,9 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
                     model.updateNotification(NOTIFICATION_TYPE.INVITE, inviteID, invite, True)
 
             return
+
+    def __onInventoryUpdated(self, *_):
+        self.__updateInvites()
 
     def __addInvites(self):
         model = self._model()
@@ -573,7 +596,7 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
 
         return storedClanAPPs
 
-    @process
+    @adisp_process
     def _addSingleNotification(self, item):
         ctx = GetClanInfoCtx(item.getAccountID())
         self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item), item)
@@ -972,7 +995,8 @@ class BattlePassListener(_NotificationListener):
         self.__isFinished = self.__battlePassController.isSeasonFinished()
         self.__arenaBonusTypesHandlers = {ARENA_BONUS_TYPE.RANKED: self.__pushEnableChangeRanked,
          ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange,
-         ARENA_BONUS_TYPE.EPIC_BATTLE: self.__pushEpicBattleModeChanged}
+         ARENA_BONUS_TYPE.EPIC_BATTLE: self.__pushEpicBattleModeChanged,
+         ARENA_BONUS_TYPE.COMP7: self.__pushComp7ModeChanged}
         self.__battlePassController.onSeasonStateChanged += self.__onSeasonStateChange
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         self.__notificationCtrl.onEventNotificationsChanged += self.__onEventNotification
@@ -1135,6 +1159,16 @@ class BattlePassListener(_NotificationListener):
             msgType = SystemMessages.SM_TYPE.Warning
         else:
             msg = backport.text(R.strings.system_messages.battlePass.switch_disable.epicBattle.body())
+            msgType = SystemMessages.SM_TYPE.ErrorSimple
+        SystemMessages.pushMessage(text=msg, type=msgType)
+
+    @staticmethod
+    def __pushComp7ModeChanged(isEnabled):
+        if isEnabled:
+            msg = backport.text(R.strings.system_messages.battlePass.switch_enabled.comp7.body())
+            msgType = SystemMessages.SM_TYPE.Warning
+        else:
+            msg = backport.text(R.strings.system_messages.battlePass.switch_disable.comp7.body())
             msgType = SystemMessages.SM_TYPE.ErrorSimple
         SystemMessages.pushMessage(text=msg, type=msgType)
 
@@ -1344,12 +1378,12 @@ class EmailConfirmationReminderListener(_NotificationListener):
         self.__wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.CONFIRMED, self.__removeNotify)
         self.__wgnpSteamAccCtrl.statusEvents.unsubscribe(StatusTypes.ADD_NEEDED, self.__removeNotify)
 
-    @async
+    @wg_async
     def __tryNotify(self):
         if self.__bootCampController.isInBootcamp() or not self.__steamRegistrationCtrl.isSteamAccount:
             return
         else:
-            status = yield await(self.__wgnpSteamAccCtrl.getEmailStatus())
+            status = yield wg_await(self.__wgnpSteamAccCtrl.getEmailStatus())
             if not self.__bootCampController.isInBootcamp() and status.typeIs(StatusTypes.ADDED):
                 model = self._model()
                 if model is not None:
@@ -1508,28 +1542,147 @@ class ResourceWellListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
 
 
+class IntegratedAuctionListener(_NotificationListener):
+    __slots__ = ('__startNotifiers', '__finishNotifiers')
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+    __EVENT_TYPE_TO_SETTING = {AUCTION_START_EVENT_TYPE: AUCTION_STAGE_START_SEEN,
+     AUCTION_FINISH_EVENT_TYPE: AUCTION_FINISH_STAGE_SEEN}
+    __EVENT_TYPE_TO_DECORATOR = {AUCTION_START_EVENT_TYPE: IntegratedAuctionStageStartDecorator,
+     AUCTION_FINISH_EVENT_TYPE: IntegratedAuctionStageFinishDecorator}
+    __TIME_TO_SHOW_SOON = 2
+
+    def __init__(self):
+        self.__startNotifiers = {}
+        self.__finishNotifiers = {}
+        super(IntegratedAuctionListener, self).__init__()
+
+    def start(self, model):
+        result = super(IntegratedAuctionListener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__clearNotifiers()
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(IntegratedAuctionListener, self).stop()
+
+    def __clearNotifiers(self):
+        for notifier in self.__startNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__startNotifiers.clear()
+        for notifier in self.__finishNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__finishNotifiers.clear()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType in (AUCTION_START_EVENT_TYPE, AUCTION_FINISH_EVENT_TYPE):
+                notificationData = json.loads(notification.data)
+                self.__addNotification(notificationData, notification.eventType)
+
+    def __addNotification(self, data, eventType):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            settings = AccountSettings.getNotifications(INTEGRATED_AUCTION_NOTIFICATIONS)
+            settingName = self.__EVENT_TYPE_TO_SETTING[eventType]
+            notificationID = str(data['id'])
+            if notificationID not in settings[settingName]:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate <= time_utils.getServerUTCTime() < endDate and self.__isNotificationNeeded(eventType):
+                    decorator = self.__EVENT_TYPE_TO_DECORATOR.get(eventType)
+                    if callable(decorator):
+                        model.addNotification(decorator(entityID=int(notificationID)))
+                        self.__setNotificationShown(settings, settingName, notificationID)
+                        self.__removeNotifier(notificationID, eventType)
+                elif startDate > time_utils.getServerUTCTime():
+                    self.__addNotifier(notificationID, eventType, startDate)
+            return
+
+    def __addNotifier(self, notificationID, eventType, startDate):
+        notifiers = self.__startNotifiers if eventType == AUCTION_START_EVENT_TYPE else self.__finishNotifiers
+        if notificationID not in notifiers:
+            notifiers[notificationID] = SimpleNotifier(partial(self.__getTimeToStart, startDate), self.__onNotifierUpdate)
+            notifiers[notificationID].startNotification()
+
+    def __removeNotifier(self, notificationID, eventType):
+        notifiers = self.__startNotifiers if eventType == AUCTION_START_EVENT_TYPE else self.__finishNotifiers
+        if notificationID in notifiers:
+            notifiers[notificationID].stopNotification()
+            notifiers[notificationID].clear()
+            notifiers.pop(notificationID)
+
+    def __onNotifierUpdate(self):
+        self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    def __setNotificationShown(self, settings, settingName, notificationID):
+        settings[settingName].add(notificationID)
+        AccountSettings.setNotifications(INTEGRATED_AUCTION_NOTIFICATIONS, settings)
+
+    def __isFinishNotificationActive(self):
+        for notification in self.__eventNotifications.getEventsNotifications():
+            if notification.eventType == AUCTION_FINISH_EVENT_TYPE:
+                data = json.loads(notification.data)
+                if self.__getTimeToStart(getTimestampByStrDate(str(data['startDate']))) <= self.__TIME_TO_SHOW_SOON:
+                    return True
+
+        return False
+
+    def __isNotificationNeeded(self, eventType):
+        return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
+
+
+class PersonalReservesConversionListener(_NotificationListener):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def start(self, model):
+        result = super(PersonalReservesConversionListener, self).start(model)
+        if self.__lobbyContext.getServerSettings().displayConversionNotification() and getConversionResult(self.__itemsCache.items.goodies.pr2ConversionResult):
+            model.addNotification(PersonalReservesConversionMessageDecorator())
+        return result
+
+
+registerNotificationsListeners((ServiceChannelListener,
+ MissingEventsListener,
+ PrbInvitesListener,
+ FriendshipRqsListener,
+ _WGNCListenersContainer,
+ BattleTutorialListener,
+ ProgressiveRewardListener,
+ SwitcherListener,
+ TankPremiumListener,
+ BattlePassListener,
+ UpgradeTrophyDeviceListener,
+ RecertificationFormStateListener,
+ RecruitReminderlListener,
+ EmailConfirmationReminderListener,
+ VehiclePostProgressionUnlockListener,
+ PsaCoinReminderListener,
+ BattlePassSwitchChapterReminder,
+ ResourceWellListener,
+ IntegratedAuctionListener,
+ PersonalReservesConversionListener))
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
         super(NotificationsListeners, self).__init__()
-        self.__listeners = (ServiceChannelListener(),
-         MissingEventsListener(),
-         PrbInvitesListener(),
-         FriendshipRqsListener(),
-         _WGNCListenersContainer(),
-         BattleTutorialListener(),
-         ProgressiveRewardListener(),
-         SwitcherListener(),
-         TankPremiumListener(),
-         BattlePassListener(),
-         UpgradeTrophyDeviceListener(),
-         RecertificationFormStateListener(),
-         RecruitReminderlListener(),
-         EmailConfirmationReminderListener(),
-         VehiclePostProgressionUnlockListener(),
-         PsaCoinReminderListener(),
-         BattlePassSwitchChapterReminder(),
-         ResourceWellListener())
+        self.__listeners = collectAllNotificationsListeners()
 
     def start(self, model):
         for listener in self.__listeners:

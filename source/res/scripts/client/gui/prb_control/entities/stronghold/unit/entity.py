@@ -642,6 +642,10 @@ class StrongholdEntity(UnitEntity):
         self.__slotVehicleFilters = response.getData()
         self._invokeListeners('onSlotVehileFiltersChanged')
 
+    @property
+    def _showUnitActionNames(self):
+        return (PREBATTLE_ACTION_NAME.STRONGHOLD,)
+
     def _createActionsValidator(self):
         return StrongholdActionsValidator(self)
 

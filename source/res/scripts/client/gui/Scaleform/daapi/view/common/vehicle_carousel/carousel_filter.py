@@ -81,9 +81,7 @@ class _CarouselFilter(object):
         for key, value in params.iteritems():
             self._filters[key] = value
 
-        for group in self._criteriesGroups:
-            group.update(self._filters)
-
+        self._updateCriteriesGroups()
         if save:
             self.save()
 
@@ -92,6 +90,10 @@ class _CarouselFilter(object):
 
     def load(self):
         raise NotImplementedError
+
+    def _updateCriteriesGroups(self):
+        for group in self._criteriesGroups:
+            group.update(self._filters)
 
 
 class CriteriesGroup(object):
@@ -225,13 +227,18 @@ class BasicCriteriesGroup(CriteriesGroup):
 
     def update(self, filters):
         super(BasicCriteriesGroup, self).update(filters)
-        selectedNationsIds = []
-        for nation, nId in nations.INDICES.iteritems():
-            if filters[nation]:
-                selectedNationsIds.append(nId)
+        self._setNationsCriteria(filters)
+        self._setClassesCriteria(filters)
+        self._setLevelsCriteria(filters)
+        self._setEliteAndPremiumCriteria(filters)
+        self._setRentedCriteria(filters)
+        self._setIGRCriteria(filters)
+        self._setXPBonusCriteria(filters)
+        self._setFavoriteVehicleCriteria(filters)
+        self._setEarnCrystalsCriteria(filters)
+        self._setVehicleNameCriteria(filters)
 
-        if selectedNationsIds:
-            self._criteria |= REQ_CRITERIA.NATIONS(selectedNationsIds)
+    def _setNationsCriteria(self, filters):
         selectedVehiclesIds = []
         for vehicleType, _ in constants.VEHICLE_CLASS_INDICES.iteritems():
             if filters[vehicleType]:
@@ -239,6 +246,17 @@ class BasicCriteriesGroup(CriteriesGroup):
 
         if selectedVehiclesIds:
             self._criteria |= REQ_CRITERIA.VEHICLE.CLASSES(selectedVehiclesIds)
+
+    def _setClassesCriteria(self, filters):
+        selectedNationsIds = []
+        for nation, nId in nations.INDICES.iteritems():
+            if filters[nation]:
+                selectedNationsIds.append(nId)
+
+        if selectedNationsIds:
+            self._criteria |= REQ_CRITERIA.NATIONS(selectedNationsIds)
+
+    def _setLevelsCriteria(self, filters):
         selectedLevels = []
         for level in VEHICLE_LEVELS:
             if filters['level_%d' % level]:
@@ -246,26 +264,40 @@ class BasicCriteriesGroup(CriteriesGroup):
 
         if selectedLevels:
             self._criteria |= REQ_CRITERIA.VEHICLE.LEVELS(selectedLevels)
+
+    def _setEliteAndPremiumCriteria(self, filters):
         if filters['elite'] and not filters['premium']:
             self._criteria |= REQ_CRITERIA.VEHICLE.ELITE | ~REQ_CRITERIA.VEHICLE.PREMIUM
         elif filters['elite'] and filters['premium']:
             self._criteria |= REQ_CRITERIA.VEHICLE.ELITE
         elif filters['premium']:
             self._criteria |= REQ_CRITERIA.VEHICLE.PREMIUM
-        if filters['igr'] and constants.IS_KOREA:
-            self._criteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+
+    def _setRentedCriteria(self, filters):
         if filters['rented'] and filters['clanRented']:
             self._criteria |= REQ_CRITERIA.VEHICLE.RENT
         elif filters['clanRented']:
             self._criteria |= REQ_CRITERIA.VEHICLE.CLAN_WARS
         elif not filters['rented']:
             self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS
+
+    def _setIGRCriteria(self, filters):
+        if filters['igr'] and constants.IS_KOREA:
+            self._criteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+
+    def _setXPBonusCriteria(self, filters):
         if filters['bonus']:
             self._criteria |= REQ_CRITERIA.VEHICLE.HAS_XP_FACTOR
+
+    def _setFavoriteVehicleCriteria(self, filters):
         if filters['favorite']:
             self._criteria |= REQ_CRITERIA.VEHICLE.FAVORITE
+
+    def _setEarnCrystalsCriteria(self, filters):
         if filters['crystals']:
             self._criteria |= REQ_CRITERIA.VEHICLE.EARN_CRYSTALS
+
+    def _setVehicleNameCriteria(self, filters):
         if filters['searchNameVehicle']:
             self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
 
@@ -274,6 +306,9 @@ class RoleCriteriesGroup(BasicCriteriesGroup):
 
     def update(self, filters):
         super(RoleCriteriesGroup, self).update(filters)
+        self._setRolesCriteria(filters)
+
+    def _setRolesCriteria(self, filters):
         roles = [ role for role in VEHICLE_ROLES_LABELS if filters[role] ]
         if roles:
             self._criteria |= REQ_CRITERIA.VEHICLE.ROLES(roles)

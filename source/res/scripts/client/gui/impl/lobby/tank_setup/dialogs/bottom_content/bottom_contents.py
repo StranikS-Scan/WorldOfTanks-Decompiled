@@ -100,7 +100,7 @@ class NeedRepairBottomContent(PriceBottomContent):
             self.__autoRepair = repair
             self._viewModel.setIsAutoRenewalEnabled(repair)
 
-    @decorators.process('loadStats')
+    @decorators.adisp_process('loadStats')
     def processAutoRepair(self):
         if self.__autoRepair != self.__vehicle.isAutoRepair:
             yield VehicleAutoRepairProcessor(self.__vehicle, self.__autoRepair).request()

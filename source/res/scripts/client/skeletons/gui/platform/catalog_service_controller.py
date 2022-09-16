@@ -10,7 +10,7 @@ class IPurchaseCache(object):
     def fini(self):
         raise NotImplementedError
 
-    @adisp.async
+    @adisp.adisp_async
     def requestPurchaseByID(self, pId, callback=None):
         pass
 

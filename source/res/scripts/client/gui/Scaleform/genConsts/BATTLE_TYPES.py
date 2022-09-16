@@ -35,3 +35,4 @@ class BATTLE_TYPES(object):
     CTF_30X30 = 'ctf30x30'
     DOMINATION_30X30 = 'domination30x30'
     EPIC_BATTLE = 'epicbattle'
+    COMP7 = 'comp7'

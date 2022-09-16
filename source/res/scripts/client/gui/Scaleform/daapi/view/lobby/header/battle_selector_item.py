@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_item.py
+from __future__ import absolute_import
+from builtins import object
+from functools import total_ordering
 import logging
-from adisp import process
+from adisp import adisp_process
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.dispatcher import g_prbLoader
 from helpers import dependency
@@ -15,6 +18,7 @@ _logger = logging.getLogger(__name__)
 _R_HEADER_BUTTONS = R.strings.menu.headerButtons
 _R_ICONS = R.images.gui.maps.icons
 
+@total_ordering
 class SelectorItem(object):
     __slots__ = ('_label', '_data', '_order', '_selectorType', '_isVisible', '_isExtra', '_isSelected', '_isNew', '_isDisabled', '_isLocked')
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -32,8 +36,14 @@ class SelectorItem(object):
         self._isExtra = isExtra
         self._selectorType = selectorType
 
-    def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder())
+    def __hash__(self):
+        return hash(self._order)
+
+    def __eq__(self, other):
+        return self._order == other.getOrder()
+
+    def __lt__(self, other):
+        return self._order < other.getOrder()
 
     def getLabel(self):
         return self._label
@@ -81,7 +91,7 @@ class SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.MAPBOX)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE) or state.isInUnit(PREBATTLE_TYPE.MAPBOX) or state.isInUnit(PREBATTLE_TYPE.FUN_RANDOM) or state.isInUnit(PREBATTLE_TYPE.COMP7)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -129,6 +139,6 @@ class SelectorItem(object):
     def _update(self, state):
         raise NotImplementedError
 
-    @process
+    @adisp_process
     def _doSelect(self, dispatcher):
         yield dispatcher.doSelectAction(PrbAction(self.getData()))

@@ -4,6 +4,7 @@ import logging
 import typing
 import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
+from battle_modifiers_common import EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE
 from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -108,6 +109,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def startControl(self, battleCtx, arenaVisitor):
         self.__hasValidCaps = arenaVisitor.bonus.hasSwitchSetups()
         self.__extData[_EXT_SIEGE_STATE_KEY] = VEHICLE_SIEGE_STATE.DISABLED
+        self.__extData[EXT_DATA_MODIFIERS_KEY] = arenaVisitor.getArenaModifiers()
 
     def stopControl(self):
         self.clear(reset=True)
@@ -127,6 +129,9 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
 
     def isSelectionStarted(self):
         return bool(self.__state & _States.SELECTION_STARTED)
+
+    def isSelectionEnded(self):
+        return bool(self.__state & (_States.SELECTION_ENDED | _States.SELECTION_STOPPED))
 
     @MethodsRules.delayable()
     def setPlayerVehicle(self, vehicleID, vehDescr):
@@ -320,14 +325,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             self.__updateState(_States.SELECTION_STARTED)
 
     def __updateAmmoCtrl(self):
-        ammoCtrl = self.__sessionProvider.shared.ammo
-        currentShellCD, nextShellCD = ammoCtrl.getCurrentShellCD(), ammoCtrl.getNextShellCD()
-        ammoCtrl.clear(leave=False)
-        ammoCtrl.setGunSettings(self.__vehicle.descriptor.gun)
-        for shell in self.__vehicle.shells.installed.getItems():
-            ammoCtrl.setShells(shell.intCD, shell.count, 0)
-
-        ammoCtrl.resetShellsSettings(currentShellCD, nextShellCD)
+        self.__sessionProvider.shared.ammo.updateForNewSetup(self.__vehicle.descriptor.gun, self.__vehicle.shells.installed.getItems())
 
     def __updateAmmoCtrlParams(self, factors):
         ammoCtrl = self.__sessionProvider.shared.ammo
@@ -386,8 +384,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__updateFeedbackParams(newFactors)
         for component in self._viewComponents:
             component.updateVehicleParams(self.__vehicle, newFactors)
-
-        for component in self._viewComponents:
             component.updateVehicleSetups(self.__vehicle)
 
         if self.__sessionProvider.isReplayPlaying:

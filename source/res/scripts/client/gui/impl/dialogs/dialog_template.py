@@ -14,15 +14,17 @@ if typing.TYPE_CHECKING:
     from typing import List, Dict, Optional
     from frameworks.wulf import View
     from gui.impl.dialogs.dialog_template_button import ButtonPresenter
+DEFAULT_DIMMER_ALPHA = 0.5
 
 class DialogTemplateView(FullScreenDialogBaseView):
     __slots__ = ('_subViews', '__buttonPresenters', '__uniqueID', '__focusingSystem')
     __appLoader = dependency.descriptor(IAppLoader)
     LAYOUT_ID = R.views.dialogs.DefaultDialog()
+    VIEW_MODEL = DialogTemplateViewModel
 
     def __init__(self, layoutID=None, uniqueID=None, *args, **kwargs):
         settings = ViewSettings(layoutID or self.LAYOUT_ID)
-        model = settings.model = DialogTemplateViewModel()
+        model = settings.model = self.VIEW_MODEL()
         settings.args = args
         settings.kwargs = kwargs
         super(DialogTemplateView, self).__init__(settings, *args, **kwargs)
@@ -30,7 +32,10 @@ class DialogTemplateView(FullScreenDialogBaseView):
         self.__buttonPresenters = {}
         self.__uniqueID = uniqueID
         self.__focusingSystem = DialogTemplateFocusingSystem(model)
-        self.__appLoader.getApp().gameInputManager.addEscapeListener(self._closeClickHandler)
+        model.setDimmerAlpha(DEFAULT_DIMMER_ALPHA)
+        gameInputManager = self.__appLoader.getApp().gameInputManager
+        if gameInputManager:
+            gameInputManager.addEscapeListener(self._closeClickHandler)
 
     @property
     def uniqueID(self):
@@ -68,7 +73,9 @@ class DialogTemplateView(FullScreenDialogBaseView):
 
     def _onLoaded(self, *args, **kwargs):
         super(DialogTemplateView, self)._onLoaded(*args, **kwargs)
-        self.__appLoader.getApp().gameInputManager.removeEscapeListener(self._closeClickHandler)
+        gameInputManager = self.__appLoader.getApp().gameInputManager
+        if gameInputManager:
+            gameInputManager.removeEscapeListener(self._closeClickHandler)
         for _, resourceID, view in self._subViews:
             self.setChildView(resourceID, view)
 
@@ -112,7 +119,18 @@ class DialogTemplateView(FullScreenDialogBaseView):
         self.viewModel.setBackground(resourceID)
 
     def removeBackgroundDimmer(self):
-        self.viewModel.setIsBackgroundDimmed(False)
+        self.viewModel.setDimmerAlpha(0)
+
+    def setBackgroundDimmerAlpha(self, alpha):
+        self.viewModel.setDimmerAlpha(alpha)
+
+    def setDisplayFlags(self, *flags):
+        with self.viewModel.getDisplayFlags().transaction() as tx:
+            for flag in flags:
+                tx.addString(flag)
+
+    def clearDisplayFlags(self):
+        self.viewModel.getDisplayFlags().clear()
 
     def setFocusedIndex(self, value):
         self.__focusingSystem.setFocusingIndex(value)

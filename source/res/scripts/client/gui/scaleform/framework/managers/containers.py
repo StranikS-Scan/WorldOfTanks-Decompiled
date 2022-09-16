@@ -724,6 +724,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
                 viewContainer = self.__globalContainer.findContainer(layer)
                 viewContainer.addView(view)
                 view.validate(*args, **kwargs)
+                self.as_bringToFrontS(layer, viewKey.name)
         return view
 
     def getContainer(self, layer):

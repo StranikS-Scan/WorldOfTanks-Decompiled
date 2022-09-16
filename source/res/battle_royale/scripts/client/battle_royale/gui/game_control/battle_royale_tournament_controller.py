@@ -7,7 +7,7 @@ import BigWorld
 from gui.prb_control.items import prb_seqs
 import AccountCommands
 import Event
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_TYPE
 from gui import SystemMessages
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -129,7 +129,7 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
             self.__doSelectRandomPrb(dispatcher)
             return
 
-    @process
+    @adisp_process
     def __doSelectRandomPrb(self, dispatcher):
         yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
 

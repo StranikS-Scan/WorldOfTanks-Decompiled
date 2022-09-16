@@ -24,13 +24,6 @@
     <wwmusicResultDefeat>	music_el_halluf_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
-  <soundRemapping>
-    <loadBanks>
-      <bank>
-        <name>	env_Mountain.bnk	</name>
-      </bank>
-    </loadBanks>
-  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -68,5 +61,44 @@
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	97.981003 357.014008	</position>
+        </team1>
+        <team2>
+          <position>	-326.989990 -161.020996	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/29_el_hallouf/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-469.732239 395.976257	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	11.028585 -40.121689	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-194.927673 204.043686	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </29_el_hallouf.xml>

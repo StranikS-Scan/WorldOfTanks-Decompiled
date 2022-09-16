@@ -360,7 +360,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         freeEnabled = isStudyEnabled
         self.as_setStateS(academyEnabled, schoolEnabled, freeEnabled, isBuyEnabled)
 
-    @decorators.process('buyItem')
+    @decorators.adisp_process('buyItem')
     def __requestForMoneyObtain(self, data):
         isTradeIn = data.tradeOff != -1
         result = None

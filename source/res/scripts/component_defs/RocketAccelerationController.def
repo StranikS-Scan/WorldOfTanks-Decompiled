@@ -1,0 +1,14 @@
+<RocketAccelerationController.def>
+  <Properties>
+    <stateStatus>
+      <Type>	ROCKET_ACCELERATION_STATE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <DefaultKeyName>	rocketAccelerationController	</DefaultKeyName>
+</RocketAccelerationController.def>

@@ -1,0 +1,21 @@
+<VisualScriptEquipment.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <compactDescr>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </compactDescr>
+    <equipmentState>
+      <Type>	VISUAL_SCRIPT_EQUIPMENT_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentState>
+    <errorState>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </errorState>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	visualScriptEquipment	</DefaultKeyName>
+</VisualScriptEquipment.def>

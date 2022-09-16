@@ -1,0 +1,42 @@
+<sweden_nonRU.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S22_Strv_S1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	647	</id>
+      <texture>	gui/maps/vehicles/styles/S22_Strv_S1_GJ_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/S22_Strv_S1_GJ_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	S22_Strv_S1_GJ_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/S22_Strv_S1_GJ_3DSt	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</sweden_nonRU.xml>

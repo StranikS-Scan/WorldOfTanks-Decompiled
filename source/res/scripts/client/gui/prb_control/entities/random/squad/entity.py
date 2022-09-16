@@ -108,18 +108,6 @@ class RandomSquadEntity(SquadEntity):
     def getQueueType(self):
         return QUEUE_TYPE.RANDOMS
 
-    def doSelectAction(self, action):
-        name = action.actionName
-        if name == PREBATTLE_ACTION_NAME.SQUAD:
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            if action.accountsToInvite:
-                self._actionsHandler.processInvites(action.accountsToInvite)
-            return SelectResult(True)
-        if name == PREBATTLE_ACTION_NAME.RANDOM:
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            return SelectResult(True)
-        return super(RandomSquadEntity, self).doSelectAction(action)
-
     def doAction(self, action=None):
         self._mmData = 0 if action is None else action.mmData
         super(RandomSquadEntity, self).doAction(action)
@@ -174,6 +162,18 @@ class RandomSquadEntity(SquadEntity):
         super(RandomSquadEntity, self).unit_onUnitPlayerRemoved(playerID, playerData)
         if self._isBalancedSquad and playerID == account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()
+
+    def doSelectAction(self, action):
+        name = action.actionName
+        if name == PREBATTLE_ACTION_NAME.SQUAD:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            if action.accountsToInvite:
+                self._actionsHandler.processInvites(action.accountsToInvite)
+            return SelectResult(True)
+        if name == PREBATTLE_ACTION_NAME.RANDOM:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            return SelectResult(True)
+        return super(RandomSquadEntity, self).doSelectAction(action)
 
     def _createRosterSettings(self):
         if self._isBalancedSquad:

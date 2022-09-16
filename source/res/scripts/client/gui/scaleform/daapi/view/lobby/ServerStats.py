@@ -3,7 +3,7 @@
 import logging
 import BigWorld
 import constants
-from async import await, async
+from wg_async import wg_await, wg_async
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.impl.dialogs.builders import ResSimpleDialogBuilder
 from gui.impl.dialogs.dialogs import showSimple
@@ -33,7 +33,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         super(ServerStats, self).__init__()
         self.__isListSelected = False
 
-    @async
+    @wg_async
     def relogin(self, peripheryID):
         confirmationType = 'changePeripheryAndRemember'
         if g_preDefinedHosts.isRoamingPeriphery(peripheryID):
@@ -42,7 +42,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         builder = ResSimpleDialogBuilder()
         builder.setFlags(DialogFlags.TOP_FULLSCREEN_WINDOW)
         builder.setMessagesAndButtons(R.strings.dialogs.dyn(confirmationType))
-        success = yield await(showSimple(builder.buildInLobby()))
+        success = yield wg_await(showSimple(builder.buildInLobby()))
         if success:
             BigWorld.callback(0.0, lambda : self.reloginCtrl.doRelogin(peripheryID, self.__onReloing))
         else:

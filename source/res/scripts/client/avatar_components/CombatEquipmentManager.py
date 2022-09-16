@@ -269,9 +269,9 @@ class CombatEquipmentManager(object):
         return
 
     @staticmethod
-    def createEquipmentSelectedArea(pos, direction, equipment):
+    def createEquipmentSelectedArea(pos, direction, equipment, areaSize=None):
         area = CombatSelectedArea.CombatSelectedArea()
-        size = Vector2(equipment.areaWidth, equipment.areaLength)
+        size = areaSize if areaSize else Vector2(equipment.areaWidth, equipment.areaLength)
         visual = equipment.areaVisual
         color = equipment.areaColor
         if visual is None:

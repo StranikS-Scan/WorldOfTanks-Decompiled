@@ -5,7 +5,7 @@ from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    import Dict
+    from typing import Dict
 
 class DogTagComponent(object):
 

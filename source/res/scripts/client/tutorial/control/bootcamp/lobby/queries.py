@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/queries.py
 from math import ceil
-from constants import PREMIUM_ENTITLEMENTS
+from constants import PREMIUM_ENTITLEMENTS, BootcampVersion
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
@@ -79,6 +79,9 @@ class MessageDialogContentQuery(ContentQuery):
             if 'bonuses' not in ctx:
                 return
             lessonBonuses = ctx['bonuses']['battle'][self.bootcampController.getLessonNum() - 1]
+            version = self.bootcampController.version
+            lastBattleField = 'last_battle_short' if version == BootcampVersion.SHORT else 'last_battle'
+            lessonBonuses.update(ctx['bonuses'][lastBattleField]['bonus'])
             if labelFormat == 'getCredits':
                 nationId = ctx['nation']
                 nationsData = lessonBonuses.get('nations', None)

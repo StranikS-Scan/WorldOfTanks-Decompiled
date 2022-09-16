@@ -3,7 +3,7 @@
 from collections import namedtuple
 from battle_royale.gui.constants import AmmoTypes
 from CurrentVehicle import g_currentVehicle
-from adisp import process
+from adisp import adisp_process
 from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
 from battle_royale.gui.impl.lobby.tooltips.rent_icon_tooltip_view import RentIconTooltipView
 from battle_royale.gui.impl.lobby.tooltips.test_drive_info_tooltip_view import TestDriveInfoTooltipView
@@ -87,7 +87,7 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
         self.__removeListeners()
         super(HangarBottomPanelView, self)._finalize()
 
-    @decorators.process('updateMyVehicles')
+    @decorators.adisp_process('updateMyVehicles')
     def __repair(self):
         vehicle = g_currentVehicle.item
         result = yield VehicleRepairer(vehicle).request()
@@ -124,7 +124,7 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
     def __onRentBtnClicked(self):
         self.__rentVehiclesController.purchaseRent()
 
-    @process
+    @adisp_process
     def __onRepairBtnClicked(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/servers.py
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES
@@ -18,7 +19,7 @@ def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue
         else:
             pingValue = _UNAVAILABLE_DATA_PLACEHOLDER
             pingStatus = PING_STATUSES.UNDEFINED
-            formattedPing = text_styles.standard(pingValue)
+            formattedPing = text_styles.standartPing(pingValue)
         colorBlindName = ''
         if isColorBlind and pingStatus == PING_STATUSES.HIGH:
             colorBlindName = '_color_blind'
@@ -27,5 +28,5 @@ def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue
 
 
 def makePingStatusIcon(pingStatus, colorBlindName=''):
-    icon = RES_ICONS.pingStatusIcon(str(pingStatus), colorBlindName)
+    icon = backport.image(R.images.gui.maps.icons.pingStatus.dyn('stairs_indicator_{}{}'.format(pingStatus, colorBlindName), R.invalid)())
     return icons.makeImageTag(icon, 14, 14, -3)

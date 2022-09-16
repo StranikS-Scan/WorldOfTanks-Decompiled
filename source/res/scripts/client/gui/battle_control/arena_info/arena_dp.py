@@ -161,9 +161,13 @@ class ArenaDataProvider(IArenaDataProvider):
         return (flags, vStatsVO)
 
     def updateVehicleDogTag(self, vID, vInfo):
-        vInfoVO = self.__vInfoVOs[vID]
-        flags = vInfoVO.updateVehicleDogTag(**vInfo)
-        return (flags, vInfoVO)
+        if vID not in self.__vInfoVOs:
+            _logger.info('ArenaDataProvider.updateVehicleDogTag: no info about vehicle %s', vID)
+            return (None, None)
+        else:
+            vInfoVO = self.__vInfoVOs[vID]
+            flags = vInfoVO.updateVehicleDogTag(**vInfo)
+            return (flags, vInfoVO)
 
     def isRequiredDataExists(self):
         return self.__checkRequiredData()

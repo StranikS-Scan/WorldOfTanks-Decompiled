@@ -5,7 +5,7 @@ from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -40,6 +40,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
     FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
     FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
+    COMP7_CAROUSEL_FILTER_1 = 'COMP7_CAROUSEL_FILTER_1'
+    COMP7_CAROUSEL_FILTER_2 = 'COMP7_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -55,6 +57,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_BORDER_MAP = 'FEEDBACK_BORDER_MAP'
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     UI_STORAGE = 'UI_STORAGE'
+    UI_STORAGE_2 = 'UI_STORAGE_2'
     BATTLE_MATTERS_QUESTS = 'BATTLE_MATTERS_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
@@ -78,7 +81,9 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     DISABLE_EDITABLE_STYLE_REWRITE_WARNING = 'disable_editable_style_rewrite_warning'
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
+    ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER = 'rocket_acceleration_highlights_count'
     TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
+    ROCKET_ACCELERATION_MARK_IS_SHOWN = 'rocket_acceleration_mark_shown'
     EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
@@ -338,6 +343,57 @@ class ServerSettingsManager(object):
                                                       'role_LT_wheeled': 24,
                                                       'role_SPG': 25}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
+     SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                 'germany': 1,
+                                                 'usa': 2,
+                                                 'china': 3,
+                                                 'france': 4,
+                                                 'uk': 5,
+                                                 'japan': 6,
+                                                 'czech': 7,
+                                                 'sweden': 8,
+                                                 'poland': 9,
+                                                 'italy': 10,
+                                                 'lightTank': 15,
+                                                 'mediumTank': 16,
+                                                 'heavyTank': 17,
+                                                 'SPG': 18,
+                                                 'AT-SPG': 19,
+                                                 'level_1': 20,
+                                                 'level_2': 21,
+                                                 'level_3': 22,
+                                                 'level_4': 23,
+                                                 'level_5': 24,
+                                                 'level_6': 25,
+                                                 'level_7': 26,
+                                                 'level_8': 27,
+                                                 'level_9': 28,
+                                                 'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                 'elite': 1,
+                                                 'rented': 2,
+                                                 'igr': 3,
+                                                 'gameMode': 4,
+                                                 'favorite': 5,
+                                                 'bonus': 6,
+                                                 'event': 7,
+                                                 'crystals': 8,
+                                                 'comp7': 9,
+                                                 'role_HT_assault': 11,
+                                                 'role_HT_break': 12,
+                                                 'role_HT_support': 13,
+                                                 'role_HT_universal': 14,
+                                                 'role_MT_universal': 15,
+                                                 'role_MT_sniper': 16,
+                                                 'role_MT_assault': 17,
+                                                 'role_MT_support': 18,
+                                                 'role_ATSPG_assault': 19,
+                                                 'role_ATSPG_universal': 20,
+                                                 'role_ATSPG_sniper': 21,
+                                                 'role_ATSPG_support': 22,
+                                                 'role_LT_universal': 23,
+                                                 'role_LT_wheeled': 24,
+                                                 'role_SPG': 25}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -345,7 +401,9 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25,
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
                                             GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
-                                            GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: 28}, offsets={}),
+                                            GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: 28,
+                                            GuiSettingsBehavior.CREW_LAMP_WELCOME_SCREEN_SHOWN: 29,
+                                            GuiSettingsBehavior.COMP7_INTRO_SHOWN: 30}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -420,7 +478,9 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
                                            OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
                                            OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
-                                           OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26}, offsets={}),
+                                           OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
+                                           OnceOnlyHints.PERSONAL_RESERVES_HANGAR_HINT: 27,
+                                           OnceOnlyHints.PERSONAL_RESERVES_ACTIVATION_HINT: 28}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -475,6 +535,7 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
+     SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: 0}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 255)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
                                          QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
@@ -669,11 +730,12 @@ class ServerSettingsManager(object):
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
+    _MAX_ROCKET_ACCELERATION_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
 
-    @process
+    @adisp_process
     def applySettings(self):
         import BattleReplay
         if not BattleReplay.isPlaying():
@@ -741,6 +803,12 @@ class ServerSettingsManager(object):
     def saveInUIStorage(self, fields):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
 
+    def getUIStorage2(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.UI_STORAGE_2, defaults)
+
+    def saveInUIStorage2(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.UI_STORAGE_2], fields)
+
     def getBPStorage(self, defaults=None):
         if not self.settingsCache.isSynced():
             return {}
@@ -762,10 +830,17 @@ class ServerSettingsManager(object):
     def checkTurboshaftHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER, self._MAX_TURBOSHAFT_HIGHLIGHTS_COUNT, increase)
 
+    def checkRocketAccelerationHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER, self._MAX_ROCKET_ACCELERATION_HIGHLIGHTS_COUNT, increase)
+
     def updateUIStorageCounter(self, key, step=1):
         storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
         if key in storageSection:
             self.saveInUIStorage({key: storageSection[key] + step})
+        else:
+            storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE_2)
+            if key in storageSection:
+                self.saveInUIStorage2({key: storageSection[key] + step})
 
     def setDisableAnimTooltipFlag(self):
         self.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 1})
@@ -951,8 +1026,8 @@ class ServerSettingsManager(object):
     def _hasKeyInSection(self, section, key):
         return key in self.SECTIONS[section].masks or key in self.SECTIONS[section].offsets
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _updateToVersion(self, callback=None):
         currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
@@ -972,9 +1047,12 @@ class ServerSettingsManager(object):
          'onceOnlyHints': {},
          'onceOnlyHints2': {},
          'uiStorage': {},
+         SETTINGS_SECTIONS.UI_STORAGE_2: {},
          'epicCarouselFilter2': {},
          'rankedCarouselFilter1': {},
          'rankedCarouselFilter2': {},
+         'comp7CarouselFilter1': {},
+         'comp7CarouselFilter2': {},
          'sessionStats': {},
          'battleComm': {},
          'dogTags': {},
@@ -1046,6 +1124,14 @@ class ServerSettingsManager(object):
         clearRankedFilterCarousel2 = clear.get('rankedCarouselFilter2', 0)
         if rankedFilterCarousel2 or clearRankedFilterCarousel2:
             settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel2) ^ clearRankedFilterCarousel2
+        comp7FilterCarousel1 = data.get('comp7CarouselFilter1', {})
+        clearComp7FilterCarousel1 = clear.get('comp7CarouselFilter1', 0)
+        if comp7FilterCarousel1 or clearComp7FilterCarousel1:
+            settings[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_1] = self._buildSectionSettings(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_1, comp7FilterCarousel1) ^ clearComp7FilterCarousel1
+        comp7FilterCarousel2 = data.get('comp7CarouselFilter2', {})
+        clearComp7FilterCarousel2 = clear.get('comp7CarouselFilter2', 0)
+        if comp7FilterCarousel2 or clearComp7FilterCarousel2:
+            settings[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, comp7FilterCarousel2) ^ clearComp7FilterCarousel2
         feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
         if feedbackDamageIndicator:
             settings[SETTINGS_SECTIONS.DAMAGE_INDICATOR] = self._buildSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, feedbackDamageIndicator)
@@ -1067,6 +1153,10 @@ class ServerSettingsManager(object):
         clearUIStorage = clear.get('uiStorage', 0)
         if uiStorage or clearUIStorage:
             settings[SETTINGS_SECTIONS.UI_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, uiStorage) ^ clearUIStorage
+        uiStorage2 = data.get(SETTINGS_SECTIONS.UI_STORAGE_2, {})
+        clearUIStorage2 = clear.get(SETTINGS_SECTIONS.UI_STORAGE_2, 0)
+        if uiStorage2 or clearUIStorage2:
+            settings[SETTINGS_SECTIONS.UI_STORAGE_2] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE_2, uiStorage2) ^ clearUIStorage2
         sessionStats = data.get('sessionStats', {})
         clearSessionStats = clear.get('sessionStats', 0)
         if sessionStats or clearSessionStats:
@@ -1122,7 +1212,10 @@ class ServerSettingsManager(object):
         return
 
     def __checkUIHighlights(self, key, maxVal, increase):
-        res = self.getUIStorage().get(key) < maxVal
+        storage = self.getUIStorage()
+        if key not in storage:
+            storage = self.getUIStorage2()
+        res = storage.get(key) < maxVal
         if res and increase:
             self.updateUIStorageCounter(key)
         return res

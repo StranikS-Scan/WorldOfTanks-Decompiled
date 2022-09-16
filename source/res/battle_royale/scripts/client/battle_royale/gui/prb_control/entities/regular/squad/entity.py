@@ -8,7 +8,6 @@ from battle_royale.gui.prb_control.entities.regular.squad.action_handler import 
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, UNIT_RESTRICTION
 from gui.prb_control.storages import prequeue_storage_getter
 from helpers import dependency
@@ -61,18 +60,13 @@ class BattleRoyaleSquadEntity(SquadEntity):
     def getConfirmDialogMeta(self, ctx):
         return None if not self.__battleRoyaleController.isEnabled() else super(BattleRoyaleSquadEntity, self).getConfirmDialogMeta(ctx)
 
-    def doSelectAction(self, action):
-        name = action.actionName
-        if name in (PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, PREBATTLE_ACTION_NAME.BATTLE_ROYALE):
-            g_eventDispatcher.showUnitWindow(self._prbType)
-            if action.accountsToInvite:
-                self._actionsHandler.processInvites(action.accountsToInvite)
-            return SelectResult(True)
-        return super(BattleRoyaleSquadEntity, self).doSelectAction(action)
-
     def isVehiclesReadyToBattle(self):
         result = self._actionsValidator.getVehiclesValidator().canPlayerDoAction()
         return result is None or result.isValid or result.restriction in self._VALID_RESTRICTIONS
+
+    @property
+    def _showUnitActionNames(self):
+        return (PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, PREBATTLE_ACTION_NAME.BATTLE_ROYALE)
 
     def _createActionsValidator(self):
         return BattleRoyaleSquadActionsValidator(self)

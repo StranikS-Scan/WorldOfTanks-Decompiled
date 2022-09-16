@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/io.py
-# Compiled at: 2032-09-09 14:16:04
+# Compiled at: 2100-04-21 04:57:38
 """The io module provides the Python interfaces to stream handling. The
 builtin open function is defined in this module.
 

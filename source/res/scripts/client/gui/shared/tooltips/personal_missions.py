@@ -16,7 +16,7 @@ from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.settings import ICONS_SIZES
+from gui.Scaleform.settings import BADGES_ICONS, BADGES_STRIPS_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter
@@ -124,7 +124,7 @@ class BadgeTooltipData(BlocksTooltipData):
         self._setMargins(afterBlock=16)
         self._setWidth(364)
 
-    def _packBlocks(self, badgeID):
+    def _packBlocks(self, badgeID, isSuffixLayout=False):
         badge = self.__itemsCache.items.getBadges()[badgeID]
         blocks = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName()), padding=formatters.packPadding(bottom=10))]
         imgBlock = self.__getImageBlock(badge)
@@ -132,13 +132,13 @@ class BadgeTooltipData(BlocksTooltipData):
             blocks.append(imgBlock)
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            blocks.append(formatters.packBadgeInfoBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X24), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName), padding=formatters.packPadding(bottom=25, top=0 if imgBlock is not None else 15)))
+            blocks.append(formatters.packBadgeInfoBlockData(badge.getAwardBadgeIcon(BADGES_ICONS.X24), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName), RES_ICONS.getBadgeStripIcon(BADGES_STRIPS_ICONS.X64, badgeID) if isSuffixLayout else '', padding=formatters.packPadding(bottom=25, top=0 if imgBlock is not None else 15)))
         blocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.badge.dyn('badge_{}_descr'.format(badgeID))()))))
         return [formatters.packBuildUpBlockData(blocks)]
 
     @staticmethod
     def __getImageBlock(badge):
-        badgeIcon = badge.getAwardBadgeIcon(ICONS_SIZES.X220)
+        badgeIcon = badge.getAwardBadgeIcon(BADGES_ICONS.X220)
         return formatters.packImageBlockData(badgeIcon, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11)) if badgeIcon is not None else None
 
 

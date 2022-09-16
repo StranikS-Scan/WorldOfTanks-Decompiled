@@ -128,10 +128,10 @@ class InfluenceZoneVisualizationManager(CGF.ComponentManager):
     def terrainAreaInit(self, transform, influenceZoneEquipment, terrainArea):
         fullRadius = influenceZoneEquipment.radius + influenceZoneEquipment.zoneRadius
         terrainArea.fullZoneArea = CombatSelectedArea.CombatSelectedArea()
-        terrainArea.fullZoneArea.setup(transform.worldPosition, Math.Vector3(0, 0, 1), Math.Vector2(fullRadius * 2, fullRadius * 2), terrainArea.fullZoneVisual, None, None)
+        terrainArea.fullZoneArea.setup(position=transform.worldPosition, direction=Math.Vector3(0, 0, 1), size=Math.Vector2(fullRadius * 2, fullRadius * 2), visualPath=terrainArea.fullZoneVisual, color=None, marker=None)
         terrainArea.fullZoneArea.area.setMaxHeight(transform.worldPosition.y + terrainArea.dropOffset)
-        terrainArea.fullZoneArea.area.doYCutOff(True)
-        terrainArea.fullZoneArea.area.setYCutOffDistance(self.CUT_OFF_DISTANCE)
+        terrainArea.fullZoneArea.area.enableYCutOff(True)
+        terrainArea.fullZoneArea.area.setCutOffDistance(self.CUT_OFF_DISTANCE)
         terrainArea.fullZoneArea.area.setCutOffAngle(self.CUT_OFF_ANGLE)
         return
 

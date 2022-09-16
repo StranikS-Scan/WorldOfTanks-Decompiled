@@ -4,7 +4,7 @@ import logging
 import BigWorld
 import Event
 import BattleReplay
-from adisp import process
+from adisp import adisp_process
 from constants import UpgradeProhibitionReason
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -370,7 +370,7 @@ class _VehicleHolder(object):
         else:
             raise SoftException('Incorrect level! Current level=%s, module level=%s', str(self.__currentVehicleLevel), str(moduleLevel))
 
-    @process
+    @adisp_process
     def __processInstallModule(self, module):
         yield getPreviewInstallerProcessor(self.__vehicle, module).request()
 

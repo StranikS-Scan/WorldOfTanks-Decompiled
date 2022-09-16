@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/ammo_ctrl.py
 import logging
+import typing
 import weakref
 from collections import namedtuple
 from math import fabs
@@ -27,6 +28,9 @@ _DualGunShellChangeTime = namedtuple('_DualGunShellChangeTime', 'left right acti
 _TIME_CORRECTION_THRESHOLD = 0.01
 _IGNORED_RELOADING_TIME = 0.15
 _logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.vehicle_modules import Shell
+    from items.vehicle_items import Gun
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload isDualGun')):
 
@@ -46,18 +50,20 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         for shotIdx, shotDescr in enumerate(gun.shots):
             nationID, itemID = shotDescr.shell.id
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
-            shots[intCD] = (shotIdx, shotDescr.piercingPower[0], shotDescr.speed)
+            shots[intCD] = (shotIdx,
+             shotDescr.piercingPower[0],
+             shotDescr.speed,
+             shotDescr.shell)
 
         autoReload = gun.autoreload if 'autoreload' in gun.tags else None
         isDualGun = 'dualGun' in gun.tags
         return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload, isDualGun)
 
-    def getShotIndex(self, intCD):
-        if intCD in self.shots:
-            index = self.shots[intCD][0]
-        else:
-            index = -1
-        return index
+    def isCassetteClip(self):
+        return self.clip.size > 1 or self.burst.size > 1
+
+    def hasAutoReload(self):
+        return self.autoReload is not None
 
     def getPiercingPower(self, intCD):
         if intCD in self.shots:
@@ -66,11 +72,19 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
             power = 0
         return power
 
-    def isCassetteClip(self):
-        return self.clip.size > 1 or self.burst.size > 1
+    def getShellDescriptor(self, intCD):
+        if intCD in self.shots:
+            shellDescriptor = self.shots[intCD][3]
+        else:
+            shellDescriptor = vehicles.getItemByCompactDescr(intCD)
+        return shellDescriptor
 
-    def hasAutoReload(self):
-        return self.autoReload is not None
+    def getShotIndex(self, intCD):
+        if intCD in self.shots:
+            index = self.shots[intCD][0]
+        else:
+            index = -1
+        return index
 
     def getShotSpeed(self, intCD):
         if intCD in self.shots:
@@ -452,6 +466,15 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def getGunSettings(self):
         return self.__gunSettings
 
+    def updateForNewSetup(self, gun, shells, resetShells=True):
+        currentShellCD, nextShellCD = self.getCurrentShellCD(), self.getNextShellCD()
+        self.clear(leave=False)
+        self.setGunSettings(gun)
+        for shell in shells:
+            self.setShells(shell.intCD, shell.count, 0)
+
+        self.resetShellsSettings(currentShellCD, nextShellCD)
+
     def resetShellsSettings(self, currentShellCD, nextShellCD):
         if self.shellInAmmo(currentShellCD):
             curQuantity, _ = self.__ammo[currentShellCD]
@@ -526,7 +549,8 @@ class AmmoController(MethodsRules, ViewComponentsController):
         if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
             if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
-                baseTime = interval
+                if interval <= baseTime:
+                    baseTime = interval
         elif baseTime == 0.0:
             baseTime = timeLeft
         isIgnored = False
@@ -596,7 +620,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def getOrderedShellsLayout(self):
         result = []
         for intCD in self._order:
-            descriptor = vehicles.getItemByCompactDescr(intCD)
+            descriptor = self.__gunSettings.getShellDescriptor(intCD)
             quantity, quantityInClip = self.__ammo[intCD]
             result.append((intCD,
              descriptor,
@@ -636,6 +660,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         result = SHELL_SET_RESULT.UNDEFINED
+        if self.__gunSettings.getShotIndex(intCD) < 0:
+            _logger.warning('Trying to set data for shell %d, which is not suitable for current gun', intCD)
+            return result
         if intCD in self.__ammo:
             prevAmmo = self.__ammo[intCD]
             self.__ammo[intCD] = (quantity, quantityInClip)
@@ -649,7 +676,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.__ammo[intCD] = (quantity, quantityInClip)
             self._order.append(intCD)
             result |= SHELL_SET_RESULT.ADDED
-            descriptor = vehicles.getItemByCompactDescr(intCD)
+            descriptor = self.__gunSettings.getShellDescriptor(intCD)
             self.onShellsAdded(intCD, descriptor, quantity, quantityInClip, self.__gunSettings)
         if self.canQuickShellChange():
             self.onQuickShellChangerUpdated(True, self.getQuickShellChangeTime())

@@ -39,6 +39,7 @@ class ComponentBuilder(XMLObjBuilder):
      'isHidden': (ParameterType.BOOL, Visibility.ALL),
      'isSecret': (ParameterType.BOOL, Visibility.ALL),
      'isDefault': (ParameterType.BOOL, Visibility.ALL),
+     'isExternalUnlockOnly': (ParameterType.BOOL, Visibility.ALL),
      'grades': (ParameterType.FLOAT_LIST, Visibility.ALL),
      'isDeprecated': (ParameterType.BOOL, Visibility.ALL),
      'numberType': (ParameterType.NUMBER_TYPE, Visibility.ALL),
@@ -50,6 +51,7 @@ class ComponentBuilder(XMLObjBuilder):
      'isHidden': False,
      'isDefault': False,
      'isDeprecated': False,
+     'isExternalUnlockOnly': False,
      'numberType': ComponentNumberType.NUMBER,
      'glossaryName': ''}
     VALIDATORS = {ComponentPurpose.TRIUMPH_MEDAL: [validateCommon, partial(validateViewType, viewType=ComponentViewType.BACKGROUND, purpose=ComponentPurpose.TRIUMPH_MEDAL), validateTriumphMedal],
@@ -91,6 +93,9 @@ class ComponentBuilder(XMLObjBuilder):
 
     def isDefault(self, value):
         self._component.isDefault = value
+
+    def isExternalUnlockOnly(self, value):
+        self._component.isExternalUnlockOnly = value
 
     def grades(self, value):
         self._component.grades = value
@@ -163,6 +168,7 @@ class ComponentDefinition(object):
         self.isHidden = False
         self.isSecret = False
         self.isDefault = False
+        self.isExternalUnlockOnly = False
         self.grades = None
         self.isDeprecated = False
         self.src = None
@@ -173,7 +179,7 @@ class ComponentDefinition(object):
         return
 
     def __str__(self):
-        return "[id: {componentId}, {purpose}, {viewType}, unlock keys: {unlockKey}, progress keys: {progressKey}, hidden: {isHidden}, default: {isDefault}, deprecated: {isDeprecated}, grades: {grades}, secret: {isSecret}, src: '{src}']".format(componentId=self.componentId, purpose='None' if self.purpose is None else self.purpose.value, viewType='None' if self.viewType is None else self.viewType.value, unlockKey=self.unlockKey, progressKey=self.progressKey, isHidden=self.isHidden, isDefault=self.isDefault, isDeprecated=self.isDeprecated, grades=self.grades, isSecret=self.isSecret, src=self.src)
+        return "[id: {componentId}, {purpose}, {viewType}, unlock keys: {unlockKey}, progress keys: {progressKey}, hidden: {isHidden}, default: {isDefault}, deprecated: {isDeprecated}, grades: {grades}, secret: {isSecret}, only external unlock: {isExternalUnlockOnly}, src: '{src}']".format(componentId=self.componentId, purpose='None' if self.purpose is None else self.purpose.value, viewType='None' if self.viewType is None else self.viewType.value, unlockKey=self.unlockKey, progressKey=self.progressKey, isHidden=self.isHidden, isDefault=self.isDefault, isDeprecated=self.isDeprecated, grades=self.grades, isSecret=self.isSecret, isExternalUnlockOnly=self.isExternalUnlockOnly, src=self.src)
 
     def __repr__(self):
         return self.__str__()

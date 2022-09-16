@@ -16,13 +16,13 @@ from items.components.c11n_constants import CustomizationType, CustomizationType
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
-from customization_quests_common import serelizeToken, PREFIX
+from customization_quests_common import serializeToken, PREFIX
 from bonus_readers import readUTC
 from soft_exception import SoftException
 if IS_EDITOR:
+    from items.components.c11n_components import CUSTOMIZATION_CLASSES
     from reflection_framework.unintrusive_weakref import ref as UnintrusiveWeakRef
     from meta_objects.items.components.c11n_components_meta import I18nExposedComponentMeta
-    from items.components.c11n_components import CUSTOMIZATION_CLASSES
 
     @contextmanager
     def storeChangedProperties(obj, props):
@@ -290,6 +290,8 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
                 palettes.append(res)
                 target.palettes = tuple(palettes)
 
+        if section.has_key('style'):
+            target.styleId = section.readInt('style')
         return
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
@@ -513,6 +515,7 @@ def readCustomizationCacheFromXml(cache, folder):
 
     ResMgr.purge(pgFile)
     _validateStyles(cache)
+    _validateCamouflages(cache)
     return None
 
 
@@ -557,6 +560,14 @@ def _validateStyles(cache):
 
     if any((item is None or not item.isStyleOnly for item in styleOnlyItemsFromStyles)):
         raise SoftException('Items shall contain styleOnly tag in tags to be used in alternateItems')
+
+
+def _validateCamouflages(cache):
+    for camouflage in cache.camouflages.itervalues():
+        styleId = camouflage.styleId
+        if styleId:
+            if styleId not in cache.styles:
+                raise SoftException('Link style {} in camouflage {} not exist '.format(styleId, camouflage.id))
 
 
 def _readProhibitedNumbers(xmlCtx, section):
@@ -837,7 +848,7 @@ def readQuestProgression(cache, xmlCtx, section, sectionName):
             except:
                 ix.raiseWrongXml(xmlCtx, tname, 'Wrong section format use: {}'.format('cust_progress_{groupID}'))
 
-            token = serelizeToken(styleId, groupId)
+            token = serializeToken(styleId, groupId)
             if token in unlockChains:
                 ix.raiseWrongXml(xmlCtx, tname, 'GroupId dublicate id {}'.format(groupId))
             concurrent = ix.readBool(xmlCtx, psection, 'concurrent', False)

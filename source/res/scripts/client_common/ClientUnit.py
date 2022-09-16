@@ -39,6 +39,7 @@ class ClientUnit(UnitBase):
         self.onUnitEstimateInQueueChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitSearchFlagsChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitExtraChanged = Event.SuspendedEvent(self.__eManager)
+        self.onSquadSizeChanged = Event.SuspendedEvent(self.__eManager)
         self.onUnitUpdated = Event.SuspendedEvent(self.__eManager)
         self._creatorDBID = 0
         UnitBase.__init__(self, limitsDefs or {}, slotDefs or {}, slotCount, packedRoster, extrasInit, packedUnit)
@@ -197,6 +198,8 @@ class ClientUnit(UnitBase):
             self.onUnitRosterChanged()
         if {UNIT_OP.EXTRAS_UPDATE, UNIT_OP.EXTRAS_RESET} & invokedOps:
             self.onUnitExtraChanged(self._extras)
+        if {UNIT_OP.SQUAD_SIZE} & invokedOps:
+            self.onSquadSizeChanged()
 
     def updateUnitExtras(self, updateStr):
         UnitBase.updateUnitExtras(self, updateStr)

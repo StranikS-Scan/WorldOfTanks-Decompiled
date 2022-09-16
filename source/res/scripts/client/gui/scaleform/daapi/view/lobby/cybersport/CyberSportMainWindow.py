@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportMainWindow.py
 from UnitBase import UNIT_BROWSER_ERROR
-from adisp import process
+from adisp import adisp_process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
@@ -184,15 +184,15 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    @process
+    @adisp_process
     def __requestToCreate(self):
         yield self.prbDispatcher.create(CreateUnitCtx(PREBATTLE_TYPE.UNIT, waitingID='prebattle/create'))
 
-    @process
+    @adisp_process
     def __requestToJoin(self, ctx):
         yield self.prbDispatcher.join(ctx)
 
-    @process
+    @adisp_process
     def __requestToReloginAndJoin(self, peripheryID, ctx):
         result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': self.lobbyContext.getPeripheryName(peripheryID)}))
         if result:

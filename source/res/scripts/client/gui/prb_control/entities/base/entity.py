@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/entity.py
-from adisp import process
+from adisp import adisp_process
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control.entities.base.actions_validator import IActionsValidator
@@ -57,6 +57,9 @@ class BasePrbEntryPoint(PrbFunctionalFlags):
 
     def setKeepCurrentView(self, keepCurrentView):
         pass
+
+    def configure(self, action):
+        self.setAccountsToInvite(action.accountsToInvite)
 
 
 class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
@@ -177,7 +180,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def _createCooldownManager(self):
         return None
 
-    @process
+    @adisp_process
     def __showDefaultDialog(self, meta, callback):
         from gui import DialogsInterface
         result = yield DialogsInterface.showDialog(meta)

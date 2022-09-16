@@ -352,6 +352,11 @@ class ValueReplay:
     def __opSubCoeff(self, other, coeff, x=None):
         return self.__addCoeffImpl(x, other, coeff, lambda a, b: a - b)
 
+    def getFactorDiffForTag(self, seekForTagName):
+        for op, (tagName, originalValue), (_, finalResult) in self.__iter__():
+            if op == ValueReplay.FACTOR and seekForTagName == tagName:
+                return int(finalResult - finalResult / (1 + float(originalValue) / 100))
+
     __OPERATORS = {ADD: __opAdd,
      SUB: __opSub,
      MUL: __opMul,

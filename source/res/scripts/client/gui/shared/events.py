@@ -49,6 +49,7 @@ class GameEvent(HasCtxEvent):
     FULL_STATS = 'game/fullStats'
     EVENT_STATS = 'game/eventStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
+    FULL_STATS_PERSONAL_RESERVES = 'game/fullStats/personalReserves'
     HIDE_VEHICLE_UPGRADE = 'game/battleRoyale/hideVehicleUpgrade'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
@@ -81,6 +82,9 @@ class GameEvent(HasCtxEvent):
     CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
     TOGGLE_DEBUG_PIERCING_PANEL = 'game/toggleDebugPiercingPanel'
     ON_TARGET_VEHICLE_CHANGED = 'game/onTargetVehicleChanged'
+    POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
+    POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
+    PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
 
 
 class GUICommonEvent(SharedEvent):
@@ -202,11 +206,11 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CYBER_SPORT_DIALOG = 'showCyberSportDialog'
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
+    SHOW_COMP7_PUNISHMENT_DIALOG = 'showComp7PunishmentDialog'
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_EXCHANGE_DIALOG_MODAL = 'showExchangeDialogModal'
     SHOW_DETAILED_EXCHANGE_XP_DIALOG = 'showDetailedExchangeXPDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
-    SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
@@ -661,6 +665,10 @@ class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
 
 
+class Comp7Event(SharedEvent):
+    OPEN_META = 'openMeta'
+
+
 class AirDropEvent(HasCtxEvent):
     AIR_DROP_SPAWNED = 'onAirDropSpawned'
     AIR_DROP_LANDED = 'onAirDropLanded'
@@ -692,6 +700,7 @@ class BattlePassEvent(HasCtxEvent):
     AWARD_VIEW_CLOSE = 'onAwardViewClose'
     ON_PURCHASE_LEVELS = 'onPurchaseLevels'
     ON_PREVIEW_PROGRESSION_STYLE_CLOSE = 'onPreviewProgressionStyleClose'
+    VIDEO_SHOWN = 'videoShown'
 
 
 class ItemRemovalByDemountKitEvent(HasCtxEvent):
@@ -744,6 +753,11 @@ class AmmunitionSetupViewEvent(HasCtxEvent):
     CLOSE_VIEW = 'ammunitionSetupViewEvent/closeView'
 
 
+class AmmunitionPanelViewEvent(HasCtxEvent):
+    SECTION_SELECTED = 'ammunitionPanelViewEvent/sectionSelected'
+    CLOSE_VIEW = 'ammunitionPanelViewEvent/closeView'
+
+
 class RadialMenuEvent(SharedEvent):
     RADIAL_MENU_ACTION = 'radialMenuAction'
 
@@ -775,3 +789,13 @@ class GunMarkerEvent(HasCtxEvent):
 class ResourceWellLoadingViewEvent(HasCtxEvent):
     LOAD = 'load'
     DESTROY = 'destroy'
+
+
+class PointOfInterestEvent(HasCtxEvent):
+    ADDED = 'poi/added'
+    REMOVED = 'poi/removed'
+
+
+class RoleSkillEvent(HasCtxEvent):
+    STATE_CHANGED = 'roleSkill/stateChanged'
+    COUNTER_CHANGED = 'roleSkill/counterChanged'

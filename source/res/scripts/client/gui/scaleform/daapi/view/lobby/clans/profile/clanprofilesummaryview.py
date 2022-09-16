@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
-from adisp import process
+from adisp import adisp_process
 from constants import IS_CHINA
 from gui.impl import backport
 from helpers import i18n, dependency
@@ -108,7 +108,7 @@ class StrongholdDataReceiver(object):
         self.__imagesFetchCoordinator.fini()
         return
 
-    @process
+    @adisp_process
     def updateStrongholdStatistics(self):
         self.__strongholdStats = yield self.__clanDossier.requestStrongholdStatistics()
         if self.__disposed:
@@ -139,7 +139,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return
 
-    @process
+    @adisp_process
     def setClanDossier(self, clanDossier):
         super(ClanProfileSummaryView, self).setClanDossier(clanDossier)
         self._showWaiting()
@@ -186,7 +186,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         if clanDbID == self._clanDossier.getDbID():
             self.__updateStatus()
 
-    @process
+    @adisp_process
     def onAccountClanProfileChanged(self, profile):
         clanInfo = yield self._clanDossier.requestClanInfo()
         if not self.isDisposed():
@@ -199,7 +199,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         if emblem:
             self.as_setClanEmblemS(self.getMemoryTexturePath(emblem))
 
-    @process
+    @adisp_process
     def onUserNamesReceived(self, names):
         clanInfo = yield self._clanDossier.requestClanInfo()
         if not self.isDisposed():

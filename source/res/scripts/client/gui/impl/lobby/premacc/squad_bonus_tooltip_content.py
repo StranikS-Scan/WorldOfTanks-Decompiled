@@ -33,3 +33,16 @@ class SquadBonusTooltipContent(View):
             model.setCreditsBonusWithPremium(_floatToPercents(creditsBonuses.ownCredits))
             model.setCreditsBonusWithoutPremium(_floatToPercents(creditsBonuses.mateCredits))
             model.setExperienceBonus(_floatToPercents(self.__eventsCache.getSquadXPFactor()))
+
+
+class Comp7SquadBonusTooltipContent(SquadBonusTooltipContent):
+
+    def __init__(self, battleType=None):
+        self.__battleType = battleType
+        super(Comp7SquadBonusTooltipContent, self).__init__()
+
+    def _initialize(self, *args, **kwargs):
+        super(Comp7SquadBonusTooltipContent, self)._initialize(*args, **kwargs)
+        with self.viewModel.transaction() as model:
+            if self.__battleType:
+                model.setBattleType(self.__battleType)

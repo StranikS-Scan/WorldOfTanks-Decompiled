@@ -3,7 +3,7 @@
 import weakref
 from collections import namedtuple, defaultdict
 from account_helpers import getAccountDatabaseID
-from adisp import process
+from adisp import adisp_process
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
 from gui.awards.event_dispatcher import showClanJoinAward
@@ -138,7 +138,7 @@ class ClanAccountProfile(object):
         if self.isInClan():
             self.getClanDossier().resync(force=force)
 
-    @process
+    @adisp_process
     def resyncWebClanInfo(self, force=False):
         if self._waitForSync & SYNC_KEYS.CLAN_INFO:
             return

@@ -7,9 +7,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import AlertData
 from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID, ZERO_DIVISION_ID
-from gui.shared.utils.functions import makeTooltip
-from gui.shared.formatters import text_styles
-from gui.shared.formatters.ranges import toRomanRangeString
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from season_common import GameSeason
@@ -368,17 +365,7 @@ class RankedDossier(namedtuple('RankedDossier', 'rank, step, vehRankCount, ladde
 
 class RankedAlertData(AlertData):
     _RES_ROOT = R.strings.ranked_battles.alertMessage
-
-    @classmethod
-    def constructForVehicle(cls, levels, vehicleIsAvailableForBuy, vehicleIsAvailableForRestore):
-        minLvl, maxLvl = levels
-        levels = toRomanRangeString(range(minLvl, maxLvl + 1))
-        reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleUnavailable()
-        if vehicleIsAvailableForBuy:
-            reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForBuy()
-        elif vehicleIsAvailableForRestore:
-            reason = R.strings.ranked_battles.rankedBattlesUnreachableView.vehicleAvailableForRestore()
-        return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonLabel=backport.text(cls._RES_ROOT.button.moreInfo()), buttonVisible=True, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.unsuitableVehicles(), levels=levels)), shadowFilterVisible=True, tooltip=makeTooltip(body=backport.text(reason, levels=levels)), isSimpleTooltip=True)
+    _RES_REASON_ROOT = R.strings.ranked_battles.rankedBattlesUnreachableView
 
     @classmethod
     def _getTooltip(cls, _):

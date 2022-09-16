@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -106,7 +105,7 @@
     <price>	10800	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A13_T34_hvy>
   <A04_M3_Grant>
@@ -686,6 +685,19 @@
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
   </A71_T21_MapsTraining_Dummy_LT_2>
+  <A156_T54_2022>
+    <id>	130	</id>
+    <userString>	#usa_vehicles:A156_T54	</userString>
+    <description>	#usa_vehicles:A156_T54_descr	</description>
+    <shortUserString>	#usa_vehicles:A156_T54_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A156_T54_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A156_T54_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	9	</level>
+  </A156_T54_2022>
   <A149_AMBT>
     <id>	133	</id>
     <userString>	#usa_vehicles:A149_AMBT	</userString>
@@ -1266,7 +1278,7 @@
     <price>	10800	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A13_T34_hvy_BF>
   <A118_M4_Thunderbolt>
@@ -1330,7 +1342,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
+    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A13_T34_hvy_FL>
   <A80_T26_E4_SuperPershing_FL>
@@ -1478,14 +1490,16 @@
     <tags>	lightTank role_LT_universal HD scout epic_battles improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </A97_M41_Bulldog_FL>
-  <A69_T110E5_bob>
+  <A120_M48A5_7x7>
     <id>	253	</id>
-    <userString>	#usa_vehicles:T110_bob	</userString>
-    <description>	#usa_vehicles:T110_descr	</description>
-    <price>	6100000	</price>
+    <userString>	#usa_vehicles:A120_M48A5_7x7	</userString>
+    <description>	#usa_vehicles:A120_M48A5_descr	</description>
+    <shortUserString>	#usa_vehicles:A120_M48A5_7x7_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank role_HT_universal private HD secret bob cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	mediumTank role_MT_universal HD patton mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 earn_crystals special	</tags>
     <level>	10	</level>
-  </A69_T110E5_bob>
+  </A120_M48A5_7x7>
 </list.xml>

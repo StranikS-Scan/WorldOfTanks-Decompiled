@@ -4,13 +4,15 @@ import logging
 from copy import copy, deepcopy
 from functools import partial
 import typing
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from gui import SystemMessages
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, getItemAppliedCount, isItemLimitReached, getComponentFromSlot, getItemInventoryCount, getPurchaseLimit, CustomizationTabs, getItemFromSlot, getSlotDataFromSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, ITEM_TYPE_TO_SLOT_TYPE, removeItemsFromOutfit
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.customization.shared import SeasonType, C11nId
-from gui.shared.utils.decorators import process as wrappedProcess
+from gui.shared.utils.decorators import adisp_process as wrappedProcess
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -199,15 +201,15 @@ class CustomizationMode(object):
             self._events.onItemsRemoved()
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def applyItems(self, purchaseItems, isModeChanged, callback):
         purchaseItems = copy(purchaseItems)
         yield self._applyItems(purchaseItems, isModeChanged)
         callback(None)
         return
 
-    @process
+    @adisp_process
     def sellItem(self, intCD, count, _):
         if not count:
             return
@@ -254,7 +256,7 @@ class CustomizationMode(object):
         return copy(self._modifiedOutfits)
 
     def getOriginalOutfits(self):
-        return deepcopy(self._originalOutfits)
+        return copy(self._originalOutfits)
 
     def getOutfitsInfo(self):
         outfitsInfo = {}
@@ -327,12 +329,12 @@ class CustomizationMode(object):
         anchorParams = self._service.getAnchorParams(slotId.areaId, slotId.slotType, slotId.regionIdx)
         return anchorParams
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def _applyItems(self, modifiedOutfits, isModeChanged, callback):
         raise NotImplementedError
 
-    @async
+    @adisp_async
     @wrappedProcess('sellItem')
     def _sellItem(self, item, count, callback):
         raise NotImplementedError
@@ -396,6 +398,9 @@ class CustomizationMode(object):
         errors = []
         if isItemLimitReached(item, self._modifiedOutfits, self):
             error = partial(SystemMessages.pushI18nMessage, key=SYSTEM_MESSAGES.CUSTOMIZATION_PROHIBITED, type=SystemMessages.SM_TYPE.Warning, itemName=item.userName)
+            errors.append(error)
+        if not item.mayInstall(self._ctx.vehicle):
+            error = partial(SystemMessages.pushMessage, text=backport.text(R.strings.system_messages.customization.invalidVehicle()), type=SystemMessages.SM_TYPE.Warning)
             errors.append(error)
         return errors
 

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_cm_handlers.py
-from async import await, async
+from wg_async import wg_await, wg_async
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -16,16 +16,16 @@ class BlueprintsCMHandler(ContextMenu):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT)
-    @async
+    @wg_async
     def convertBlueprintFragment(self):
-        isResearchClicked, (usedFragmentsData, _) = yield await(dialogs.blueprintsConversion(self._id))
+        isResearchClicked, (usedFragmentsData, _) = yield wg_await(dialogs.blueprintsConversion(self._id))
         if isResearchClicked:
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, usedNationalFragments=usedFragmentsData)
 
     @option(__sqGen.next(), CMLabel.CONVERT_BLUEPRINT_MAX)
-    @async
+    @wg_async
     def convertMaxBlueprintFragments(self):
-        isResearchClicked, (usedFragmentsData, fragmentCount) = yield await(dialogs.blueprintsConversion(self._id, fragmentCount=self.__getMaxFragmentCount()))
+        isResearchClicked, (usedFragmentsData, fragmentCount) = yield wg_await(dialogs.blueprintsConversion(self._id, fragmentCount=self.__getMaxFragmentCount()))
         if isResearchClicked:
             factory.doAction(factory.CONVERT_BLUEPRINT_FRAGMENT, self._id, fragmentCount, usedNationalFragments=usedFragmentsData)
 

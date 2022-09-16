@@ -24,7 +24,7 @@ class ExchangeWindow(ExchangeWindowMeta):
          'actionMode': True})
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
 
-    @decorators.process('transferMoney')
+    @decorators.adisp_process('transferMoney')
     def exchange(self, gold):
         result = yield GoldToCreditsExchanger(gold).request()
         if result and result.userMsg:

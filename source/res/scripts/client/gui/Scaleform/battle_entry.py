@@ -4,8 +4,8 @@ import weakref
 import BigWorld
 from frameworks.wulf import WindowLayer
 from gui import DEPTH_OF_Battle
+from gui.shared.system_factory import collectBattleTooltipsBuilders
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
@@ -113,7 +113,8 @@ class BattleEntry(AppEntry):
         return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.HIDDEN_SERVICE_LAYOUT), DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), TopWindowContainer(WindowLayer.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(WindowLayer.SERVICE_LAYOUT), PopUpContainer(WindowLayer.OVERLAY))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, {}, GuiGlobalSpaceID.BATTLE_LOADING)
+        builders = collectBattleTooltipsBuilders()
+        tooltip = ToolTip(builders, {}, GuiGlobalSpaceID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 

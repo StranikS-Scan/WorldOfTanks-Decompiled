@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_dialog.py
 import logging
 from gui.ClientUpdateManager import g_clientUpdateManager
-from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
+from wg_async import wg_async, wg_await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
 from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.impl.auxiliary.crew_books_helper import TankmanModelPresenterBase, TankmanSkillListPresenter
@@ -46,10 +46,10 @@ class CrewBooksDialog(Window):
     def contentViewModel(self):
         return self.content.getViewModel()
 
-    @async
+    @wg_async
     def wait(self):
         try:
-            yield await(self.__event.wait())
+            yield wg_await(self.__event.wait())
         except BrokenPromiseError:
             _logger.debug('%s has been destroyed without user decision', self)
 

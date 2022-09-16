@@ -69,7 +69,7 @@ class PlayerDataComponent(ClientArenaComponent):
         if arena is not None:
             key = 'playerGroup'
             gameModeStats = dict(((vehID, {key: playerGroup}) for vehID, playerGroup in args.iteritems()))
-            arena.onGameModeSpecifcStats(True, gameModeStats)
+            arena.onGameModeSpecificStats(True, gameModeStats)
         self.onPlayerGroupsUpdated(args)
         return
 
@@ -103,7 +103,7 @@ class PlayerDataComponent(ClientArenaComponent):
                 if playerVehicleId in ranksPerTeam:
                     self.__playerRank = ranksPerTeam[playerVehicleId]
                 gameModeStats = dict(((vehID, {key: rank}) for vehID, rank in ranksPerTeam.iteritems()))
-                arena.onGameModeSpecifcStats(False, gameModeStats)
+                arena.onGameModeSpecificStats(False, gameModeStats)
 
         self.onVehicleRanksUpdated(args)
         return

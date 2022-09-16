@@ -43,29 +43,32 @@ class AppearanceCache(IAppearanceCache):
         self.__loadingAssemblerQueue = {}
         self.__loadingResourceQueue = {}
 
-    def getAppearance(self, vId, info, onCreatedCallback=None):
+    def getAppearance(self, vId, info, onCreatedCallback=None, strCD=None):
         _logger.debug('getAppearance(%d)', vId)
-        self.__validateAppearanceCache(vId)
-        if vId in self.__appearanceCache:
+        key = self.__makeUniqueKey(vId, strCD)
+        self.__validateAppearanceCache(key)
+        if key in self.__appearanceCache:
             _logger.debug('getAppearance of (%d) is in __appearanceCache', vId)
-            appearance = self.__appearanceCache.get(vId)
+            appearance = self.__appearanceCache.get(key)
             if onCreatedCallback is not None:
                 onCreatedCallback(appearance)
             return appearance
         else:
-            return self.__construct(vId, onCreatedCallback) if vId in self.__assemblerCache else self.__load(vId, info, onCreatedCallback)
+            return self.__construct(key, onCreatedCallback) if key in self.__assemblerCache else self.__load(key, info, onCreatedCallback)
 
-    def removeAppearance(self, vId):
+    def removeAppearance(self, vId, strCD=None):
         _logger.debug('removeAppearance(%d)', vId)
-        self.__validateAppearanceCache(vId)
-        appearance = self.__appearanceCache.pop(vId, None)
-        self.__assemblerCache.pop(vId, None)
-        self.stopLoading(vId)
+        key = self.__makeUniqueKey(vId, strCD)
+        self.__validateAppearanceCache(key)
+        appearance = self.__appearanceCache.pop(key, None)
+        self.__assemblerCache.pop(key, None)
+        self.stopLoading(vId, strCD)
         return appearance
 
-    def stopLoading(self, vId):
+    def stopLoading(self, vId, strCD=None):
         _logger.debug('stopLoading(%d)', vId)
-        info = self.__loadingAssemblerQueue.pop(vId, None)
+        key = self.__makeUniqueKey(vId, strCD)
+        info = self.__loadingAssemblerQueue.pop(key, None)
         if info is not None:
             _logger.debug('stopLoadResourceListBGTask vehicle = (%d), task = (%d)', vId, info.taskId)
             info.onConstructed.clear()
@@ -105,16 +108,16 @@ class AppearanceCache(IAppearanceCache):
 
         self.__loadingResourceQueue.clear()
 
-    def __validateAppearanceCache(self, vId):
+    def __validateAppearanceCache(self, key):
         checker = 0
-        if vId in self.__loadingAssemblerQueue:
+        if key in self.__loadingAssemblerQueue:
             checker += 1
-        if vId in self.__assemblerCache:
+        if key in self.__assemblerCache:
             checker += 1
-        if vId in self.__appearanceCache:
+        if key in self.__appearanceCache:
             checker += 1
         if checker > 1:
-            raise SoftException('Invalid appearance cache state for id = {}!'.format(vId))
+            raise SoftException('Invalid appearance cache state for id = {}!'.format(key))
 
     def __validateResourceCache(self, compactDescr):
         checker = 0
@@ -125,41 +128,41 @@ class AppearanceCache(IAppearanceCache):
         if checker > 1:
             raise SoftException('Invalid resource cache state for id = {}!'.format(repr(compactDescr)))
 
-    def __construct(self, vId, onFinishedCallback):
-        _logger.debug('__construct(%d)', vId)
-        data = self.__assemblerCache.pop(vId, None)
+    def __construct(self, key, onFinishedCallback):
+        _logger.debug('__construct(%d)', key[0])
+        data = self.__assemblerCache.pop(key, None)
         if data is None:
             return
         else:
             data.typeDescr.keepPrereqs(data.prereqsNames)
             appearance = data.appearance
-            appearance.construct(BigWorld.player().playerVehicleID == vId, data.prereqsNames)
-            self.__appearanceCache[vId] = appearance
+            appearance.construct(BigWorld.player().playerVehicleID == key[0], data.prereqsNames)
+            self.__appearanceCache[key] = appearance
             onFinishedCallback(appearance)
             return appearance
 
-    def __load(self, vId, info, onLoadedCallback=None):
-        _logger.debug('__load(%d)', vId)
-        loadInfo = self.__loadingAssemblerQueue.get(vId)
+    def __load(self, key, info, onLoadedCallback=None):
+        _logger.debug('__load(%d)', key[0])
+        loadInfo = self.__loadingAssemblerQueue.get(key)
         if loadInfo is not None:
             if onLoadedCallback is not None:
                 loadInfo.onConstructed += onLoadedCallback
             return loadInfo.appearance
         else:
             appearance = CompoundAppearance()
-            prereqs = appearance.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
-            taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, vId), loadingPriority(vId))
-            _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', vId, taskId)
-            self.__loadingAssemblerQueue[vId] = _LoadInfo(appearance, taskId, info.typeDescr, onLoadedCallback)
+            prereqs = appearance.prerequisites(info.typeDescr, key[0], info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
+            taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, key), loadingPriority(key[0]))
+            _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', key[0], taskId)
+            self.__loadingAssemblerQueue[key] = _LoadInfo(appearance, taskId, info.typeDescr, onLoadedCallback)
             return appearance
 
-    def __onAppearanceLoaded(self, vId, resourceRefs):
-        _logger.debug('__onAppearanceLoaded(%d)', vId)
-        info = self.__loadingAssemblerQueue.pop(vId, None)
+    def __onAppearanceLoaded(self, key, resourceRefs):
+        _logger.debug('__onAppearanceLoaded(%d)', key[0])
+        info = self.__loadingAssemblerQueue.pop(key, None)
         if info is None:
-            raise SoftException('appearance {} is loaded but is missing from loadingQueue! info = {}'.format(vId, info))
-        self.__assemblerCache[vId] = _AssemblerData(info.appearance, info.typeDescr, resourceRefs)
-        self.__construct(vId, info.onConstructed)
+            raise SoftException('appearance {} is loaded but is missing from loadingQueue! info = {}'.format(key, info))
+        self.__assemblerCache[key] = _AssemblerData(info.appearance, info.typeDescr, resourceRefs)
+        self.__construct(key, info.onConstructed)
         return
 
     def __onResourceLoaded(self, compactDescr, resourceRefs):
@@ -167,3 +170,7 @@ class AppearanceCache(IAppearanceCache):
         if compactDescr in self.__resourceCache:
             raise SoftException('resource {} is already loaded!'.format(repr(compactDescr)))
         self.__resourceCache[compactDescr] = resourceRefs
+
+    @staticmethod
+    def __makeUniqueKey(vehID, strCD):
+        return (vehID, strCD)

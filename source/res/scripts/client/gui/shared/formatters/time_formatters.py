@@ -18,6 +18,7 @@ class RentDurationKeys(object):
     TIME = 'time'
     DAYS = 'days'
     HOURS = 'hours'
+    MINUTES = 'minutes'
     BATTLES = 'battles'
     WINS = 'wins'
 
@@ -46,16 +47,13 @@ def getTimeLeftInfo(timeLeft, timeStyle=None):
         return (RentDurationKeys.HOURS, formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
 
 
-def getRentEpicSeasonTimeLeft(timeLeft, timeStyle=None):
+def getTimeLeftInfoEx(timeLeft, timeStyle=None):
     if timeLeft > 0 and timeLeft != float('inf'):
         if timeLeft > time_utils.ONE_DAY:
-            fmtKey, timeNum = 'daysLeft', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle)
-        elif timeLeft >= time_utils.ONE_HOUR:
-            fmtKey, timeNum = 'hoursLeft', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle)
-        else:
-            timeLeft = timeLeft if timeLeft > time_utils.ONE_MINUTE else time_utils.ONE_MINUTE
-            fmtKey, timeNum = 'minsLeft', formatTime(timeLeft, time_utils.ONE_MINUTE, timeStyle)
-        return i18n.makeString('#tooltips:vehicle/rentLeft/epic/%s' % fmtKey, timeNum=timeNum)
+            return (RentDurationKeys.DAYS, formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
+        if timeLeft > time_utils.ONE_HOUR:
+            return (RentDurationKeys.HOURS, formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
+    return (RentDurationKeys.MINUTES, formatTime(timeLeft, time_utils.ONE_MINUTE, timeStyle))
 
 
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):

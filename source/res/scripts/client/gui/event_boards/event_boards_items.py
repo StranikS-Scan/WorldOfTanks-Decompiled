@@ -3,6 +3,7 @@
 import itertools
 from collections import defaultdict
 import BigWorld
+from constants import ARENA_BONUS_TYPE
 from gui import GUI_NATIONS
 from gui.shared.utils import mapTextureToTheMemory, removeTextureFromMemory
 from shared_utils import findFirst, CONST_CONTAINER
@@ -20,6 +21,7 @@ class CALCULATION_METHODS(CONST_CONTAINER):
     SUMSEQN = 'sumSeqN'
     SUMALL = 'sumAll'
     SUMMSEQN = 'sumMSeqN'
+    BATTLECOUNTSTAT3 = 'battleCountStat3'
 
 
 class OBJECTIVE_PARAMETERS(CONST_CONTAINER):
@@ -35,6 +37,8 @@ class EVENT_TYPE(CONST_CONTAINER):
     NATION = 'nation'
     LEVEL = 'level'
     CLASS = 'class'
+    TEAMS = 'teams'
+    ROLE = 'role'
 
 
 class EVENT_STATE(CONST_CONTAINER):
@@ -107,7 +111,6 @@ class EventBoardsSettings(object):
 
 class EventsSettings(object):
     EXPECTED_FIELDS = ['battle_type',
-     'cardinality',
      'end_date',
      'event_id',
      'is_squad_allowed',
@@ -123,8 +126,7 @@ class EventsSettings(object):
      'rewarding_date',
      'rewards_by_rank',
      'start_date',
-     'type',
-     'distance']
+     'type']
     EXPECTED_FIELDS_PRIME_TIMES = ['server', 'start_time', 'end_time']
     EXPECTED_FIELDS_LIMITS = ['win_rate_min',
      'win_rate_max',
@@ -142,6 +144,7 @@ class EventsSettings(object):
      'rank_min',
      'rank_max',
      'rewards']
+    EXPECTED_FIELDS_METHOD = ['name']
 
     def __init__(self):
         self.__events = []
@@ -228,6 +231,8 @@ class EventsSettings(object):
                 if not isDataSchemaValid(self.EXPECTED_FIELDS_PRIME_TIMES, primeTimeItem):
                     return False
 
+            if not isDataSchemaValid(self.EXPECTED_FIELDS_METHOD, item['method']):
+                return False
             if not isDataSchemaValid(self.EXPECTED_FIELDS_LIMITS, item['limits']):
                 return False
             for rewardsByRank in item['rewards_by_rank']:
@@ -244,7 +249,10 @@ class EventSettings(object):
     __mapping = {EVENT_TYPE.VEHICLE: ('vehicles', 'vehicles', None),
      EVENT_TYPE.NATION: ('nations', 'nation', GUI_NATIONS),
      EVENT_TYPE.LEVEL: ('vehicles_levels', 'level', range(1, 11)),
-     EVENT_TYPE.CLASS: ('vehicles_classes', 'class', VEHICLE_TYPES_ORDER)}
+     EVENT_TYPE.CLASS: ('vehicles_classes', 'class', VEHICLE_TYPES_ORDER),
+     EVENT_TYPE.TEAMS: ('teams', 'team', None),
+     EVENT_TYPE.ROLE: ('roles', 'role', None)}
+    __CUSTOM_UI_BATTLE_TYPES = (ARENA_BONUS_TYPE.COMP7,)
     EVENT_DAYS_LEFT_TO_START = 5
     EVENT_FINISHED_DURATION = 5 * time_utils.ONE_DAY
     EVENT_STARTED_DURATION_PERCENTAGE = 0.1
@@ -255,17 +263,16 @@ class EventSettings(object):
         self.__name = None
         self.__type = None
         self.__objectiveParameter = None
-        self.__method = None
+        self.__method = Method()
         self.__publishDate = None
         self.__startDate = None
         self.__participantsFreezeDeadline = None
         self.__endDate = None
         self.__rewardingDate = None
-        self.__cardinality = None
-        self.__distance = None
         self.__manual = None
         self.__battleType = None
         self.__isSquadAllowed = None
+        self.__pageSize = None
         self.__leaderboardViewSize = None
         self.__primeTimes = PrimeTimes()
         self.__limits = Limits()
@@ -295,17 +302,16 @@ class EventSettings(object):
         self.__name = rawData['name']
         self.__type = rawData['type']
         self.__objectiveParameter = rawData['objective_parameter']
-        self.__method = rawData['method']
+        self.__method.setData(rawData['method'])
         self.__publishDate = rawData['publish_date']
         self.__startDate = rawData['start_date']
         self.__participantsFreezeDeadline = rawData['participants_freeze_deadline']
         self.__endDate = rawData['end_date']
         self.__rewardingDate = rawData['rewarding_date']
-        self.__cardinality = rawData['cardinality']
-        self.__distance = rawData['distance']
         self.__manual = rawData['manual']
         self.__battleType = rawData['battle_type']
         self.__isSquadAllowed = rawData['is_squad_allowed']
+        self.__pageSize = rawData['leaderboard_page_size']
         self.__leaderboardViewSize = rawData['leaderboard_view_size']
         self.__limits.setData(rawData['limits'])
         self.__primeTimes.setData(rawData['prime_times'])
@@ -342,7 +348,7 @@ class EventSettings(object):
         return self.__objectiveParameter
 
     def getMethod(self):
-        return self.__method
+        return self.__method.getName()
 
     def getPublishDate(self):
         return self.__publishDate
@@ -419,10 +425,10 @@ class EventSettings(object):
         return self.__rewardingDate
 
     def getCardinality(self):
-        return self.__cardinality
+        return self.__method.getCardinality()
 
     def getDistance(self):
-        return self.__distance
+        return self.__method.getDistance()
 
     def getManual(self):
         return self.__manual
@@ -435,6 +441,9 @@ class EventSettings(object):
 
     def getLeaderboardViewSize(self):
         return self.__leaderboardViewSize
+
+    def getPageSize(self):
+        return self.__pageSize
 
     def getLimits(self):
         return self.__limits
@@ -459,6 +468,9 @@ class EventSettings(object):
 
     def getPromoBonuses(self):
         return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_PROMO_REWARD_BLANK)
+
+    def hasCustomUI(self):
+        return self.__battleType in self.__CUSTOM_UI_BATTLE_TYPES
 
     def __requestImage(self, url):
         bwPlayer = BigWorld.player()
@@ -486,16 +498,19 @@ class EventSettings(object):
         self.__leaderboardsIndex = {}
         if self.__type in self.__mapping:
             listKey, itemKey, _ = self.__mapping[self.__type]
-            for leaderboard in rawData[listKey]:
-                key = int(leaderboard['leaderboard_id'])
-                val = leaderboard[itemKey]
-                if isinstance(val, list):
-                    val = val[0]
-                self.__leaderboards[key] = val
-                self.__leaderboardsIndex[val] = key
+            leaderboards = rawData[listKey]
+            if leaderboards is not None:
+                for leaderboard in leaderboards:
+                    key = int(leaderboard['leaderboard_id'])
+                    val = leaderboard[itemKey]
+                    if isinstance(val, list):
+                        val = val[0]
+                    self.__leaderboards[key] = val
+                    self.__leaderboardsIndex[val] = key
 
         else:
             LOG_WARNING('__makeLeaderboards: Unknown event type')
+        return
 
 
 class PrimeTimes(object):
@@ -556,6 +571,30 @@ class PrimeTime(object):
         return event_boards_timer.isPeripheryActiveAtCurrentMoment(self)[1]
 
 
+class Method(object):
+
+    def __init__(self):
+        self.__cardinality = None
+        self.__distance = None
+        self.__name = None
+        return
+
+    def setData(self, data):
+        self.__cardinality = data.get('cardinality', None)
+        self.__distance = data.get('distance', None)
+        self.__name = data['name']
+        return
+
+    def getCardinality(self):
+        return self.__cardinality
+
+    def getDistance(self):
+        return self.__distance
+
+    def getName(self):
+        return self.__name
+
+
 class Limits(object):
 
     def __init__(self):
@@ -589,7 +628,7 @@ class Limits(object):
         if data['vehicles_levels'] is not None:
             self.__vehiclesLevels = []
             for vehicleLevels in data['vehicles_levels']:
-                self.__vehiclesLevels.append(vehicleLevels['level'])
+                self.__vehiclesLevels.append(vehicleLevels['levels'])
 
         if data['vehicles_classes'] is not None:
             self.__vehiclesClasses = []
@@ -1125,7 +1164,8 @@ class LeaderBoard(object):
                                     'damage',
                                     'assisted_damage',
                                     'frags',
-                                    'used_in_calculations']}
+                                    'used_in_calculations'],
+     CALCULATION_METHODS.BATTLECOUNTSTAT3: []}
 
     def __init__(self):
         self.__infoByType = {}
@@ -1233,6 +1273,35 @@ class LeaderBoard(object):
                         return False
 
         return True
+
+
+class Comp7LeaderBoard(LeaderBoard):
+    __CUSTOM_EXPECTED_FIELDS_META = ['elite_rank_position_threshold', 'elite_rank_points_threshold', 'master_rank_position_threshold']
+    EXPECTED_FIELDS_META = LeaderBoard.EXPECTED_FIELDS_META + __CUSTOM_EXPECTED_FIELDS_META
+
+    def __init__(self):
+        super(Comp7LeaderBoard, self).__init__()
+        self.__lastEliteUserPosition = None
+        self.__lastEliteUserRating = None
+        self.__lastMasterRankPositionThreshold = None
+        return
+
+    def setData(self, rawData, leaderboardID, infoType, leaderboardType):
+        result = super(Comp7LeaderBoard, self).setData(rawData, leaderboardID, infoType, leaderboardType)
+        meta = rawData['meta']
+        self.__lastEliteUserPosition = meta['elite_rank_position_threshold']
+        self.__lastEliteUserRating = meta['elite_rank_points_threshold']
+        self.__lastMasterRankPositionThreshold = meta['master_rank_position_threshold'] or 0
+        return result
+
+    def getRecordsCount(self):
+        return self.__lastMasterRankPositionThreshold
+
+    def getLastEliteUserPosition(self):
+        return self.__lastEliteUserPosition
+
+    def getLastEliteUserRating(self):
+        return self.__lastEliteUserRating
 
 
 class InfoItem(object):

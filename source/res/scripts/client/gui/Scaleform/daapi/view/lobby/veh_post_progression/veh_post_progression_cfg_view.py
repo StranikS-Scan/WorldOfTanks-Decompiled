@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/veh_post_progression/veh_post_progression_cfg_view.py
 from functools import partial
-from adisp import process
+from adisp import adisp_process
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
@@ -47,7 +47,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     def compareVehicle(self):
         self.__cmpBasket.addVehicle(self._intCD)
 
-    @process
+    @adisp_process
     def demountAllPairs(self):
         vehicle = self._vehicle
         toDiscardIDs = vehicle.postProgression.getInstalledMultiIds()

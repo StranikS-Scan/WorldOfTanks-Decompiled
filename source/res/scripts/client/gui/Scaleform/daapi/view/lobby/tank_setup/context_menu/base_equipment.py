@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/base_equipment.py
 from CurrentVehicle import g_currentVehicle
-from adisp import async, process
+from adisp import adisp_async, adisp_process
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import BaseItemContextMenu, BaseSlotContextMenu, TankSetupCMLabel, FIRST_SLOT, SECOND_SLOT, THIRD_SLOT
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
@@ -120,7 +120,7 @@ class BaseHangarEquipmentSlotContextMenu(BaseSlotContextMenu):
     def _putOnAction(self, onId):
         pass
 
-    @process
+    @adisp_process
     def _makePutOnAction(self, setupName, onId, copyVehicle, layout):
         leftID, rightID = sorted((onId, self._installedSlotId))
         leftItem, rightItem = layout[leftID], layout[rightID]
@@ -132,7 +132,7 @@ class BaseHangarEquipmentSlotContextMenu(BaseSlotContextMenu):
              'leftIntCD': leftItem.intCD if leftItem else NONE_ID,
              'rightIntCD': rightItem.intCD if rightItem else NONE_ID})
 
-    @async
+    @adisp_async
     def _doPutOnAction(self, vehicle, callback):
         callback(False)
 

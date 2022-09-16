@@ -6,8 +6,8 @@ import Event
 import SoundGroups
 from account_helpers.AccountSettings import AccountSettings, SESSION_STATS_SECTION, SESSION_STATS_PREV_BATTLE_COUNT, BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD
 from account_helpers.settings_core.settings_constants import SESSION_STATS
-from adisp import process
-from async import async, await
+from adisp import adisp_process
+from wg_async import wg_async, wg_await
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
@@ -111,13 +111,13 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         super(SessionStatsOverview, self)._dispose()
         return
 
-    @process
+    @adisp_process
     def _showHof(self):
         urlParser = URLMacros()
         url = yield urlParser.parse(url=_HOF_URL_BY_TAB_ALIAS[self._currentTabAlias]())
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'hofPageUrl': url}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @async
+    @wg_async
     def _showStatsResetDialog(self):
         container = self.app.containerManager.getContainer(WindowLayer.VIEW)
         lobby = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY})
@@ -129,7 +129,7 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
             builder = ResSimpleDialogBuilder()
             builder.setMessageArgs([self.__timeToClearText(timeToClear)])
         builder.setMessagesAndButtons(R.strings.dialogs.sessionStats.confirmReset, btnDownSounds={DialogButtons.SUBMIT: R.sounds.session_stats_clear()})
-        result = yield await(dialogs.showSimple(builder.build(lobby)))
+        result = yield wg_await(dialogs.showSimple(builder.build(lobby)))
         if result:
             self.__resetStats()
 
@@ -140,7 +140,7 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         if isinstance(viewPy, SessionBattleStatsView):
             self.__sessionBattleStatsView = viewPy
 
-    @process
+    @adisp_process
     def __resetStats(self):
         resetResult = yield ResetSessionStatsProcessor().request()
         AccountSettings.setSessionSettings(SESSION_STATS_PREV_BATTLE_COUNT, 0)

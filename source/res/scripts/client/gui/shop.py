@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shop.py
 import logging
 from collections import namedtuple
-from adisp import process
+from adisp import adisp_process
 from constants import GameSeasonType, RentType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
@@ -42,6 +42,7 @@ class _GoldPurchaseReason(object):
     BUNDLE = 'bundle'
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
+    PERSONAL_RESERVES = 'personal_reserves'
 
 
 class Source(object):
@@ -173,6 +174,10 @@ def showBuyGoldForBattlePassLevels(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
 
 
+def showBuyGoldForPersonalReserves(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.PERSONAL_RESERVES, fullPrice))
+
+
 def showBuyGoldForBundle(fullPrice, params=None):
     params = dict(params) or {}
     params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
@@ -184,7 +189,7 @@ def showBlueprintsExchangeOverlay(url=None, parent=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
-@process
+@adisp_process
 def _showBlurredWebOverlay(url, params=None, parent=None, isClientCloseControl=False):
     url = yield URLMacros().parse(url, params)
     ctx = {'url': url,
@@ -194,7 +199,7 @@ def _showBlurredWebOverlay(url, params=None, parent=None, isClientCloseControl=F
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, parent=parent), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
-@process
+@adisp_process
 def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
     url = yield URLMacros().parse(url)
     params = {}
@@ -206,7 +211,7 @@ def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.O
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
-@process
+@adisp_process
 def showBuyGoldWebOverlay(params=None, parent=None):
     url = helpers.getBuyMoreGoldUrl()
     if url:
@@ -222,7 +227,7 @@ def showRentProductOverlay(params=None):
     _showOverlayWebStoreDefault(helpers.getBuyProductUrl(), params)
 
 
-@process
+@adisp_process
 def _showOverlayWebStoreDefault(url, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)

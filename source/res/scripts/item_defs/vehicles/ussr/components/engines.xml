@@ -156,6 +156,7 @@
     <TD-12_cl>	236	</TD-12_cl>
     <General_Motors_6046_ussr>	237	</General_Motors_6046_ussr>
     <V_12BN>	238	</V_12BN>
+    <V_12_7>	239	</V_12_7>
     <V_2_34A>	240	</V_2_34A>
     <KCH_30_A_CN>	242	</KCH_30_A_CN>
     <V-2IS_R1_CN>	243	</V-2IS_R1_CN>
@@ -174,6 +175,7 @@
     <V_2K>	327	</V_2K>
     <V_2>	328	</V_2>
     <V-55U_FL>	501	</V-55U_FL>
+    <V-12_7x7>	503	</V-12_7x7>
     <M-80_prem_bootcamp>	64001	</M-80_prem_bootcamp>
     <Maybach_HL_120_TRM_A_bootcamp>	64002	</Maybach_HL_120_TRM_A_bootcamp>
     <M-5-400_bootcamp>	64003	</M-5-400_bootcamp>
@@ -1259,6 +1261,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </V-12>
+    <V-12_7x7>
+      <userString>	#ussr_vehicles:V-12	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	128000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </V-12_7x7>
     <V-12A>
       <userString>	#ussr_vehicles:V-12A	</userString>
       <tags>	diesel	</tags>
@@ -1491,6 +1510,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </V-12-6M1>
+    <V_12_7>
+      <userString>	#ussr_vehicles:V_12_7	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
+    </V_12_7>
     <V_12BN>
       <userString>	#ussr_vehicles:V_12BN	</userString>
       <tags>	diesel	</tags>
@@ -2475,8 +2511,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </V-2IS_R1_CN>
     <V-2IS_R1_SP>
       <userString>	#ussr_vehicles:V-2IS_R	</userString>
@@ -2876,8 +2912,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	272	</rpm_min>
-      <rpm_max>	2384	</rpm_max>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </V_64R>
     <V_64S>
       <userString>	#ussr_vehicles:V_64S	</userString>

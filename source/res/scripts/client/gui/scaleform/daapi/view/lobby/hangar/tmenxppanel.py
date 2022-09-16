@@ -18,7 +18,7 @@ class TmenXpPanel(TmenXpPanelMeta):
         g_currentVehicle.onChanged -= self._onVehicleChange
         super(TmenXpPanel, self)._dispose()
 
-    @decorators.process('updateTankmen')
+    @decorators.adisp_process('updateTankmen')
     def accelerateTmenXp(self, selected):
         vehicle = g_currentVehicle.item
         result = yield VehicleTmenXPAccelerator(vehicle, bool(selected)).request()

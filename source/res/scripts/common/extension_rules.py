@@ -13,13 +13,17 @@ class READ_METHOD(object):
 
 def init():
     global g_cache
-    g_cache = {}
-    sec = ResMgr.openSection(EXTENSION_RULES_FILE)
-    if not sec:
-        raise SoftException("Fail to read '%s'" % EXTENSION_RULES_FILE)
-    whitelist = sec['xml_whitelist']
-    g_cache['merge_whitelist'] = [ (re.compile(rule['pattern'].asString), rule['type'].asString) for rule in whitelist.values() ]
-    ResMgr.purge(EXTENSION_RULES_FILE, True)
+    if g_cache is not None:
+        return
+    else:
+        g_cache = {}
+        sec = ResMgr.openSection(EXTENSION_RULES_FILE)
+        if not sec:
+            raise SoftException("Fail to read '%s'" % EXTENSION_RULES_FILE)
+        whitelist = sec['xml_whitelist']
+        g_cache['merge_whitelist'] = [ (re.compile(rule['pattern'].asString), rule['type'].asString) for rule in whitelist.values() ]
+        ResMgr.purge(EXTENSION_RULES_FILE, True)
+        return
 
 
 def isExtXML(path):

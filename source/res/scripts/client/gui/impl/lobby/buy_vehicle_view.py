@@ -267,13 +267,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             self.__updateTotalPrice()
             return
 
-    @adisp.process
+    @adisp.adisp_process
     def __onInHangar(self, *_):
         event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
         self.__startTutorial()
         self.__destroyWindow()
         self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=True))
-        if self.prbEntity.getEntityType() == QUEUE_TYPE.MAPS_TRAINING:
+        if self.prbEntity.getQueueType() == QUEUE_TYPE.MAPS_TRAINING:
             yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
 
     def __onCheckboxWithoutCrewChanged(self, args):
@@ -453,7 +453,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                 vm.setBtnLbl(R.strings.store.congratulationAnim.showPreviewBtnLabel())
             return
 
-    @decorators.process('buyItem')
+    @decorators.adisp_process('buyItem')
     def __requestForMoneyObtain(self):
         try:
             self.__soundEventChecker.lockPlayingSounds()
@@ -463,8 +463,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             self.__soundEventChecker.unlockPlayingSounds()
             self.__tradeInProgress = False
 
-    @adisp.async
-    @adisp.process
+    @adisp.adisp_async
+    @adisp.adisp_process
     def __requestForMoneyObtainImpl(self, callback):
         equipmentBlock = self.viewModel.equipmentBlock
         isTradeIn = self.__isTradeIn() and self.__tradeInVehicleToSell is not None and not self.__isRentVisible

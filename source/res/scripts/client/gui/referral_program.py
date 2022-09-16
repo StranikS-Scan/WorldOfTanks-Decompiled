@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/referral_program.py
-from adisp import process
+from adisp import adisp_process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.referral_program import referral_program_helpers as helpers
 from gui.game_control.links import URLMacros
@@ -13,7 +13,7 @@ class REFERRAL_PROGRAM_SOUNDS(CONST_CONTAINER):
     RECRUITER_AWARD = 'gui_hangar_simple_execution_screen'
 
 
-@process
+@adisp_process
 def showGetVehiclePage(vehicle, params=None):
     if vehicle.isInInventory and not vehicle.isRented:
         showInventoryMsg('already_exists', vehicle, msgType=SystemMessages.SM_TYPE.Warning)

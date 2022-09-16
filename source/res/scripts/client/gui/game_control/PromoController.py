@@ -6,7 +6,7 @@ from collections import namedtuple
 import BigWorld
 from Event import Event, EventManager
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from adisp import process, async
+from adisp import adisp_process, adisp_async
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -129,7 +129,7 @@ class PromoController(IPromoController):
         loadingCallback = self.__logger.getLoggingFuture(action=PromoLogActions.OPEN_FROM_MENU, type=PromoLogSubjectType.INDEX, url=url)
         self.__showBrowserView(url, loadingCallback, soundSpaceID='field_post')
 
-    @process
+    @adisp_process
     def showLastTeaserPromo(self):
         rowUrl = self.__promoData.get('url', '')
         loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
@@ -178,7 +178,7 @@ class PromoController(IPromoController):
             showBubbleTooltip(i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT))
             self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: True})
 
-    @process
+    @adisp_process
     def __updateWebBrgData(self):
         ctx = PromoGetTeaserRequestCtx()
         if self.__battlesFromLastTeaser == 0:
@@ -206,7 +206,7 @@ class PromoController(IPromoController):
         actionType = PromoLogActions.CLOSED_BY_USER if kwargs.get('byUser') else PromoLogActions.KILLED_BY_SYSTEM
         self.__logger.logAction(action=actionType, type=PromoLogSubjectType.PROMO_SCREEN_OR_INDEX, url=kwargs.get('url'))
 
-    @process
+    @adisp_process
     def __requestPromoCount(self):
         if not self.isActive():
             _logger.warning('Trying to request unread promos count when promo functionality is disabled')
@@ -237,7 +237,7 @@ class PromoController(IPromoController):
         else:
             _logger.warning('Impossible to show teaser, functionality is disabled')
 
-    @process
+    @adisp_process
     def __onTeaserShown(self, promoID):
         self.__isTeaserOpen = True
         self.onTeaserShown()
@@ -292,7 +292,7 @@ class PromoController(IPromoController):
         self.__externalCloseCallback = closeCallback
         self.__showBrowserView(url, loadingCallback)
 
-    @process
+    @adisp_process
     def __showBrowserView(self, url, loadingCallback=None, soundSpaceID=None):
         promoUrl = yield self.__urlMacros.parse(url)
         self.__registerLoadingCallback(promoUrl, loadingCallback)
@@ -330,8 +330,8 @@ class PromoController(IPromoController):
                 browser.onLoadEnd -= watcher
         return
 
-    @async
-    @process
+    @adisp_async
+    @adisp_process
     def __addAuthParams(self, url, callback):
         if not url or not self.__webController:
             callback(url)

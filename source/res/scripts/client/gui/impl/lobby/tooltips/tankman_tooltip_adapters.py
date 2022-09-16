@@ -57,7 +57,7 @@ class TokenTankmanInfoAdapter(TankmanAdapter):
         return [ backport.image(_IMG_PATH.tankmen.skills.big.dyn(skill)()) for skill in self._getSkills() ]
 
     def _getSkills(self):
-        return self._tankmanInfo.getLearntSkills(multiplyNew=True)
+        return self._tankmanInfo.getAllKnownSkills(multiplyNew=True)
 
 
 class TankmanInfoAdapter(TankmanAdapter):

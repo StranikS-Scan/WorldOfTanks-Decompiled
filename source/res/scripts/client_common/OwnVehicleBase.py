@@ -3,10 +3,9 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
-from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
+from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, RECHARGE_SIGNIFICANT_DIGITS, RECHARGE_TIME_MULTIPLIER
 from items import vehicles, ITEM_TYPES
 from math_common import roundToPower10
-from time_converters import time2decisec
 from wotdecorators import noexcept
 Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
 _DO_LOG = False
@@ -129,7 +128,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             useEndTime = self.__isAttachingToVehicle
             for cd in dualGunState.cooldowns:
                 if cd.endTime > 0 and useEndTime:
-                    cooldowns.append(Cooldowns(cd.id, max(0.0, time2decisec(cd.endTime / 10.0 - self._serverTime())), cd.baseTime))
+                    cooldowns.append(Cooldowns(cd.id, max(0.0, roundToPower10(cd.endTime * RECHARGE_TIME_MULTIPLIER - self._serverTime(), RECHARGE_SIGNIFICANT_DIGITS)), cd.baseTime))
                 cooldowns.append(Cooldowns(cd.id, cd.leftTime, cd.baseTime))
 
             avatar.updateDualGunState(self.entity.id, dualGunState.activeGun, dualGunState.gunStates, cooldowns)
@@ -274,6 +273,9 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     def getReloadTime(self):
         return self.__getTimeLeftBaseTime(self.vehicleGunReloadTime, True) if self.vehicleGunReloadTime else (0, 0)
 
+    def getSiegeStateTimeLeft(self):
+        return self.__getTimeLeft(self.siegeStateStatus, useEndTime=True) if self.siegeStateStatus else 0
+
     def setNested_vehicleAmmoList(self, path, prev):
         avatar = self._avatar()
         if not avatar:
@@ -296,7 +298,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             useEndTime = self.__isAttachingToVehicle
         if data.timeLeft <= 0:
             timeLeft = data.timeLeft
-        elif useEndTime:
+        elif useEndTime and data.endTime > 0:
             timeLeft = max(0, data.endTime - self._serverTime())
         else:
             timeLeft = roundToPower10(data.timeLeft, -2)

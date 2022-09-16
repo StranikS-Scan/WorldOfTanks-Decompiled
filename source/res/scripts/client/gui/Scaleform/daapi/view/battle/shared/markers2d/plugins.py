@@ -155,6 +155,12 @@ class ControlModePlugin(MarkerPlugin):
 
 
 class SettingsPlugin(MarkerPlugin):
+    __slots__ = ('_overrides', '_additionalSettings')
+
+    def __init__(self, parentObj):
+        super(SettingsPlugin, self).__init__(parentObj)
+        self._overrides = {}
+        self._additionalSettings = {}
 
     def start(self, *args):
         super(SettingsPlugin, self).init(*args)
@@ -172,7 +178,20 @@ class SettingsPlugin(MarkerPlugin):
 
     def _setMarkerSettings(self, notify=False):
         getter = self.settingsCore.getSetting
-        self._parentObj.setMarkerSettings(dict(((name, getter(name)) for name in MARKERS.ALL())), notify=notify)
+        result = {}
+        for name in MARKERS.ALL():
+            stgs = getter(name)
+            for custOptName, custOptVal in self._overrides.get(name, tuple()):
+                if custOptName not in stgs:
+                    _logger.warning('Option "%s" is not in list of options', custOptName)
+                stgs[custOptName] = custOptVal
+
+            for custOptName, custOptVal in self._additionalSettings.get(name, tuple()):
+                stgs[custOptName] = custOptVal
+
+            result[name] = stgs
+
+        self._parentObj.setMarkerSettings(result, notify=notify)
 
     def __setColorsSchemes(self):
         colors = GuiColorsLoader.load()

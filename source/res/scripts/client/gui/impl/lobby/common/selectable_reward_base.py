@@ -194,7 +194,7 @@ class SelectableRewardBase(ViewImpl):
 
     def __updateRewardsState(self):
         with self.viewModel.selectableRewardModel.getRewards().transaction() as vm:
-            for rewardName, _, _, _, state in self.__prepareRewardsData(self.__selectedTab):
+            for rewardName, _, state in self.__prepareRewardsData(self.__selectedTab):
                 for rewardModel in vm:
                     if rewardModel.getType() != rewardName:
                         continue
@@ -245,12 +245,12 @@ class SelectableRewardBase(ViewImpl):
         rewards = self.viewModel.selectableRewardModel.getRewards()
         with rewards.transaction() as vm:
             vm.clear()
-            for rewardName, reward, _, packSize, state in self.__prepareRewardsData(tabName):
+            for rewardName, reward, state in self.__prepareRewardsData(tabName):
                 newReward = SelectableRewardItemModel()
                 newReward.setType(rewardName)
                 newReward.setCount(0 if initial else self._getRewardsInCartCount(rewardName))
                 if state != SelectableRewardItemModel.STATE_RECEIVED:
-                    newReward.setPackSize(packSize)
+                    newReward.setPackSize(reward['packSize'])
                 newReward.setStorageCount(reward['storageCount'])
                 newReward.setState(state)
                 vm.addViewModel(newReward)
@@ -258,20 +258,13 @@ class SelectableRewardBase(ViewImpl):
     def __prepareRewardsData(self, tabName):
         for rewardName, reward in self.__tabs[tabName]['rewards'].iteritems():
             count = self._getRewardsInCartCount(rewardName) + reward['receivedRewards']
-            resultSize = 1
             if reward['receivedRewards'] >= reward['limit'] > 0:
                 state = SelectableRewardItemModel.STATE_RECEIVED
             elif count >= reward['limit'] > 0 or count >= self.__tabs[tabName]['limit'] or self.__getTotalTabCount(tabName) >= self.__tabs[tabName]['limit']:
                 state = SelectableRewardItemModel.STATE_LIMITED
             else:
                 state = SelectableRewardItemModel.STATE_NORMAL
-            if state != SelectableRewardItemModel.STATE_RECEIVED:
-                resultSize = reward['packSize'] * count or reward['packSize']
-            yield (rewardName,
-             reward,
-             count,
-             resultSize,
-             state)
+            yield (rewardName, reward, state)
 
     def __fillTabs(self):
         with self.viewModel.selectableRewardModel.transaction() as vm:

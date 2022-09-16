@@ -132,7 +132,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
          'nationID': tankman.nationID,
          'iconPath': '../maps/icons/tankmen/roles/medium/%s' % tankman.iconRole}
 
-    @decorators.process('crewRetraining')
+    @decorators.adisp_process('crewRetraining')
     def __processCrewRetrianing(self, operationId):
         items = self.itemsCache.items
         vehicle = g_currentVehicle.item

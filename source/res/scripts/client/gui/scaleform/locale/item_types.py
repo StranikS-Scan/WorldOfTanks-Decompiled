@@ -57,6 +57,11 @@ class ITEM_TYPES(object):
     TANKMAN_ROLES_RADIOMAN = '#item_types:tankman/roles/radioman'
     TANKMAN_ROLES_GUNNER = '#item_types:tankman/roles/gunner'
     TANKMAN_ROLES_LOADER = '#item_types:tankman/roles/loader'
+    TANKMAN_ROLES_FEMALE_COMMANDER = '#item_types:tankman/roles/female/commander'
+    TANKMAN_ROLES_FEMALE_DRIVER = '#item_types:tankman/roles/female/driver'
+    TANKMAN_ROLES_FEMALE_RADIOMAN = '#item_types:tankman/roles/female/radioman'
+    TANKMAN_ROLES_FEMALE_GUNNER = '#item_types:tankman/roles/female/gunner'
+    TANKMAN_ROLES_FEMALE_LOADER = '#item_types:tankman/roles/female/loader'
     TANKMAN_SKILL_NOT_BE_USED = '#item_types:tankman/Skill_not_be_used'
     TANKMAN_SKILLS_REPAIR = '#item_types:tankman/skills/repair'
     TANKMAN_SKILLS_REPAIR_DESCR = '#item_types:tankman/skills/repair_descr'
@@ -68,7 +73,6 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_PERMANENT_DESCR = '#item_types:tankman/skills/permanent_descr'
     TANKMAN_SKILLS_BROTHERHOOD = '#item_types:tankman/skills/brotherhood'
     TANKMAN_SKILLS_BROTHERHOOD_DESCR = '#item_types:tankman/skills/brotherhood_descr'
-    TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR = '#item_types:tankman/skills/brotherhood_female_descr'
     TANKMAN_SKILLS_BROTHERHOOD_SABATON = '#item_types:tankman/skills/brotherhood_sabaton'
     TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING = '#item_types:tankman/skills/brotherhood_offspring'
     TANKMAN_SKILLS_BROTHERHOOD_YHA = '#item_types:tankman/skills/brotherhood_yha'
@@ -179,7 +183,6 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_PERMANENT_DESCR,
      TANKMAN_SKILLS_BROTHERHOOD,
      TANKMAN_SKILLS_BROTHERHOOD_DESCR,
-     TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR,
      TANKMAN_SKILLS_BROTHERHOOD_SABATON,
      TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING,
      TANKMAN_SKILLS_BROTHERHOOD_YHA,
@@ -236,7 +239,12 @@ class ITEM_TYPES(object):
      TANKMAN_ROLES_DRIVER,
      TANKMAN_ROLES_RADIOMAN,
      TANKMAN_ROLES_GUNNER,
-     TANKMAN_ROLES_LOADER)
+     TANKMAN_ROLES_LOADER,
+     TANKMAN_ROLES_FEMALE_COMMANDER,
+     TANKMAN_ROLES_FEMALE_DRIVER,
+     TANKMAN_ROLES_FEMALE_RADIOMAN,
+     TANKMAN_ROLES_FEMALE_GUNNER,
+     TANKMAN_ROLES_FEMALE_LOADER)
     TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL,
      TANKMAN_SKILLS_TYPE_SKILL_SHORT,
      TANKMAN_SKILLS_TYPE_PERK,

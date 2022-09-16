@@ -1,0 +1,25 @@
+<TeamInfoComp7Component.def>
+  <Properties>
+    <roleSkillLevels>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </roleSkillLevels>
+    <teamVivoxChannel>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </teamVivoxChannel>
+  </Properties>
+  <CellMethods>
+    <setVivoxPresence>
+      <Arg>	BOOL	</Arg>
+      <Exposed></Exposed>
+    </setVivoxPresence>
+  </CellMethods>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+</TeamInfoComp7Component.def>

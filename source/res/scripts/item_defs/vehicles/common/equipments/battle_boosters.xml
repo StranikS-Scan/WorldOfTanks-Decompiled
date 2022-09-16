@@ -415,7 +415,8 @@
     <icon>	commander_sixthSense	</icon>
     <price>	20000	</price>
     <type>	battleBoosters	</type>
-    <tags>	notForSale crewSkillBattleBooster armor	</tags>
+    <tags>	notForSale crewSkillBattleBooster armor notBuyWhenAutoEquip hideIfNotInShop builtinPerkBooster	</tags>
+    <notInShop>	true	</notInShop>
     <script>	SixthSenseBattleBooster	  <delay>	2	</delay>
     </script>
     <kpi>

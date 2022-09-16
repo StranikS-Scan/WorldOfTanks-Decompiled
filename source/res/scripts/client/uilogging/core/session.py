@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/uilogging/core/session.py
 import typing
 import adisp
-import async
+import wg_async
 from BWUtil import AsyncReturn
 from gui.wgcg.uilogging.contexts import UILoggingSessionCtx
 from helpers import dependency, time_utils
@@ -95,7 +95,7 @@ class Session(object):
             return True
         return False
 
-    @async.async
+    @wg_async.wg_async
     def request(self):
         if self._destroyed:
             self._logger.debug('Ui logging session destroyed.')
@@ -110,7 +110,7 @@ class Session(object):
         retries = MAX_SESSION_GET_RETRIES
         try:
             while True:
-                self._sessionData = yield async.await_callback(self._getSessionData)()
+                self._sessionData = yield wg_async.await_callback(self._getSessionData)()
                 if not self._sessionData or not self._sessionData.isExpired:
                     break
                 retries -= 1
@@ -118,7 +118,7 @@ class Session(object):
                     self._sessionData = None
                     break
 
-        except async.BrokenPromiseError:
+        except wg_async.BrokenPromiseError:
             self._logger.debug('Promise was destroyed while waiting for result.')
             self._sessionData = None
         except Exception:
@@ -135,14 +135,14 @@ class Session(object):
         self._clear()
         self._logger.debug('Destroyed.')
 
-    @async.async
+    @wg_async.wg_async
     def _update(self):
         self._logger.debug('Updating.')
         try:
             yield self.request()
         except WaitingSessionData:
             self._logger.debug('Already waiting session.')
-        except async.BrokenPromiseError:
+        except wg_async.BrokenPromiseError:
             self._logger.debug('Promise was destroyed while waiting for result.')
 
         raise AsyncReturn(None)
@@ -157,7 +157,7 @@ class Session(object):
         self._sessionData = None
         return
 
-    @adisp.process
+    @adisp.adisp_process
     def _getSessionData(self, callback):
         self._logger.debug('Request session data.')
         response = yield self.webController.sendRequest(ctx=UILoggingSessionCtx())

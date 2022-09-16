@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
+from typing import TYPE_CHECKING, Sequence
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT, makeHtmlString
@@ -9,10 +10,14 @@ from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
 from gui.impl.gen import R
 from gui.impl import backport
+from helpers import dependency
 from items.components import skills_constants
 from constants import SkinInvData
 from items.vehicles import VEHICLE_CLASS_TAGS
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from skeletons.gui.shared import IItemsCache
+if TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewTypes(object):
     SKILL_100 = 100
@@ -70,6 +75,7 @@ class TankmenComparator(object):
 
 
 class Tankman(GUIItem):
+    _itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID', '_comparator', '__brotherhoodMarkedAsActive')
 
     class ROLES(object):
@@ -122,7 +128,7 @@ class Tankman(GUIItem):
         return self._comparator(self, other)
 
     def _buildSkills(self, proxy):
-        return [ getTankmanSkill(skill, self, proxy) for skill in self.descriptor.skills ]
+        return [ getTankmanSkill(skill, self, proxy) for skill in self.descriptor.skills if skill != 'any' ]
 
     def _buildSkillsMap(self):
         return dict([ (skill.name, skill) for skill in self.skills ])
@@ -190,6 +196,18 @@ class Tankman(GUIItem):
     @property
     def skills(self):
         return self._skills
+
+    @property
+    def chosenFreeSkillsCount(self):
+        return self.descriptor.freeSkillsNumber - self.newFreeSkillsCount
+
+    @property
+    def freeSkills(self):
+        return self._skills[:self.chosenFreeSkillsCount]
+
+    @property
+    def earnedSkills(self):
+        return self._skills[self.chosenFreeSkillsCount:]
 
     @property
     def skillsMap(self):
@@ -287,6 +305,7 @@ class Tankman(GUIItem):
         else:
             availSkills = tankmen.SKILLS_BY_ROLES.get(self.descriptor.role, set())
         availSkills -= set(self.descriptor.skills)
+        availSkills -= set(skills_constants.UNLEARNABLE_SKILLS)
         return availSkills
 
     def hasNewSkill(self, useCombinedRoles=False):
@@ -302,6 +321,10 @@ class Tankman(GUIItem):
                 skills_list = list(skills_constants.ACTIVE_SKILLS)
             else:
                 skills_list = list(self._NON_COMMANDER_SKILLS)
+            for skillName in skills_constants.UNLEARNABLE_SKILLS:
+                if skillName in skills_list:
+                    skills_list.remove(skillName)
+
             while 1:
                 if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or not tmanDescr.skills) and skills_list:
                     skillname = skills_list.pop()
@@ -309,6 +332,10 @@ class Tankman(GUIItem):
                     i += 1
 
             return (i, tmanDescr.lastSkillLevel)
+
+    @property
+    def newFreeSkillsCount(self):
+        return self.descriptor.freeSkills.count('any')
 
     @property
     def efficiencyRoleLevel(self):
@@ -360,6 +387,13 @@ class Tankman(GUIItem):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
             return tag
 
+    def canLearnSkills(self):
+        if self.isInTank:
+            vehicle = self._itemsCache.items.getVehicle(self.vehicleInvID)
+            if vehicle.isLocked:
+                return False
+        return False if self.isDismissed else True
+
     def getSkillsToLearn(self):
         result = []
         commonSkills = []
@@ -375,12 +409,31 @@ class Tankman(GUIItem):
                 continue
             skills = []
             for skill in roleSkills:
-                if skill not in tankmen.COMMON_SKILLS and skill not in self.descriptor.skills:
+                if skill not in tankmen.COMMON_SKILLS and skill not in self.descriptor.skills and skill not in skills_constants.UNLEARNABLE_SKILLS:
                     skills.append(self.__packSkill(getTankmanSkill(skill)))
 
             result.append({'id': role,
              'skills': skills})
 
+        return result
+
+    def getFreeSkillsToLearn(self):
+        result = []
+        commonSkills = []
+        for skill in tankmen.COMMON_SKILLS:
+            if skill not in self.descriptor.freeSkills:
+                commonSkills.append(self.__packSkill(getTankmanSkill(skill, tankman=self)))
+
+        result.append({'id': 'common',
+         'skills': commonSkills})
+        roleSkills = tankmen.SKILLS_BY_ROLES.get(self.role, tuple())
+        skills = []
+        for skill in roleSkills:
+            if skill not in tankmen.COMMON_SKILLS and skill not in self.descriptor.freeSkills and skill not in skills_constants.UNLEARNABLE_SKILLS:
+                skills.append(self.__packSkill(getTankmanSkill(skill)))
+
+        result.append({'id': self.role,
+         'skills': skills})
         return result
 
     def hasSkillToLearn(self):
@@ -389,6 +442,16 @@ class Tankman(GUIItem):
                 return True
 
         return False
+
+    def roles(self):
+        return self.vehicleDescr.type.crewRoles[self.vehicleSlotIdx] if self.isInTank else self.rolesInNativeVehicle()
+
+    def rolesInNativeVehicle(self):
+        for roles in self.vehicleNativeDescr.type.crewRoles:
+            if self.role in roles:
+                return roles
+
+        return (self.role,)
 
     def isRestorable(self):
         return self.descriptor.isRestorable()
@@ -522,8 +585,6 @@ class TankmanSkill(GUIItem):
 
     @property
     def description(self):
-        if self.name == BROTHERHOOD_SKILL_NAME and self.isFemale:
-            return backport.text(R.strings.item_types.tankman.skills.brotherhood_female_descr())
         if self.isPermanent:
             permanentDescr = makeHtmlString('html_templates:lobby/tooltips', 'skill_permanent', {'body': backport.text(R.strings.item_types.tankman.skills.permanent_descr())})
             return getSkillUserDescription(self.name) + permanentDescr

@@ -81,6 +81,8 @@ class PreQueueFactory(ControlFactory):
         return collectQueueEntity(queueType)
 
     def __createDefaultEntity(self):
+        recentQueueType = self.recentArenaStorage.queueType
+        self.recentArenaStorage.clear()
         if prb_getters.isInBootcampAccount():
             return BootcampEntity()
         if self.pveStorage.isModeSelected():
@@ -97,5 +99,5 @@ class PreQueueFactory(ControlFactory):
             return MapsTrainingEntity()
         if self.eventBattlesStorage.isModeSelected():
             return EventBattleEntity()
-        prbEntity = self.__createByQueueType(self.recentArenaStorage.queueType)
+        prbEntity = self.__createByQueueType(recentQueueType)
         return prbEntity if prbEntity else RandomEntity()

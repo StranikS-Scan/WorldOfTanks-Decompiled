@@ -16,7 +16,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResourceID
 from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
-from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.game_control import IHeroTankController, IEventBattlesController
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 _SHOW_CLOSE_BTN = False
@@ -29,6 +30,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
+    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -44,6 +47,11 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
+        self.__previewCloseCb = None
+        if self.__gameEventCtrl.isEventPrbActive():
+            if self.__prebattleVehicle.item is not None:
+                self.__prebattleVehicle.selectNone()
+            self.__previewCloseCb = self.__prebattleVehicle.selectPreviousVehicle
         return
 
     def closeView(self):
@@ -86,6 +94,9 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
+        if self.__previewCloseCb is not None:
+            self.__previewCloseCb()
+            self.__previewCloseCb = None
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):

@@ -36,9 +36,9 @@ class SelectRespawnComponent(InjectComponentAdaptor, ISpawnListener):
         self.__view = None
         return
 
-    def setSpawnPoints(self, points):
+    def setSpawnPoints(self, points, pointId=None):
         if self.__view:
-            self.__view.setPoints(points)
+            self.__view.setPoints(points, pointId)
 
     def updateCloseTime(self, timeLeft, state):
         if self.__view:
@@ -102,7 +102,7 @@ class SelectRespawnView(ViewImpl):
     def dispose(self):
         pass
 
-    def setPoints(self, points):
+    def setPoints(self, points, selectedPointId=None):
         with self.viewModel.transaction() as vm:
             vmPoints = vm.getPoints()
             vmPoints.clear()
@@ -113,6 +113,7 @@ class SelectRespawnView(ViewImpl):
                 pointVM.setPointID(pointId)
                 pointVM.setCoordX(coordX)
                 pointVM.setCoordY(coordY)
+                pointVM.setSelected(pointId == selectedPointId)
                 vmPoints.addViewModel(pointVM)
 
             vmPoints.invalidate()

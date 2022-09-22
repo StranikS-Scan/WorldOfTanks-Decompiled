@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dis.py
-# Compiled at: 2032-06-01 07:27:29
+# Compiled at: 2002-07-15 21:39:56
 """Disassembler of Python byte code into mnemonics."""
 import sys
 import types

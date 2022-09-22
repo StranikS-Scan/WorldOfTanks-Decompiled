@@ -10,6 +10,7 @@ class ModeSelectorCardTypes(ViewModel):
     MAPBOX = 3
     EPIC_BATTLE = 4
     BATTLE_ROYALE = 5
+    WT = 6
 
     def __init__(self, properties=0, commands=0):
         super(ModeSelectorCardTypes, self).__init__(properties=properties, commands=commands)

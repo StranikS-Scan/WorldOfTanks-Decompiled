@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/token.py
-# Compiled at: 2032-10-31 09:57:54
+# Compiled at: 2003-05-19 19:11:38
 """Token constants (from "token.h")."""
 ENDMARKER = 0
 NAME = 1

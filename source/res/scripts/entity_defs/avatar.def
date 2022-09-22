@@ -562,6 +562,11 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>
     </activateEquipment>
+    <activateVehicleEquipment>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+    </activateVehicleEquipment>
     <setEquipmentApplicationPoint>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>

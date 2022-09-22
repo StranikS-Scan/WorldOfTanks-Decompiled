@@ -1,0 +1,16 @@
+<BombPickUp.def>
+  <Properties>
+    <totalTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </totalTime>
+    <endTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endTime>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	bombPickUp	</DefaultKeyName>
+</BombPickUp.def>

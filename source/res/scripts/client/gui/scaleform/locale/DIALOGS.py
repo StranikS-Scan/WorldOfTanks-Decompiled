@@ -1133,6 +1133,14 @@ class DIALOGS(object):
     DROPSKILL_FULLSCREEN_DESCRIPTION = '#dialogs:dropSkill/fullscreen/description'
     DROPSKILL_FULLSCREEN_OK = '#dialogs:dropSkill/fullscreen/ok'
     DROPSKILL_FULLSCREEN_COSTFREE = '#dialogs:dropSkill/fullscreen/costFree'
+    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
+    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
+    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
+    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
+    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
+    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
+    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
+    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -2260,7 +2268,15 @@ class DIALOGS(object):
      DROPSKILL_FULLSCREEN_TITLE,
      DROPSKILL_FULLSCREEN_DESCRIPTION,
      DROPSKILL_FULLSCREEN_OK,
-     DROPSKILL_FULLSCREEN_COSTFREE)
+     DROPSKILL_FULLSCREEN_COSTFREE,
+     CONFIRMREWARD_TITLE,
+     CONFIRMREWARD_MESSAGE,
+     CONFIRMREWARD_SUBMIT,
+     CONFIRMREWARD_CANCEL,
+     REROLLREWARD_TITLE,
+     REROLLREWARD_MESSAGE,
+     REROLLREWARD_CONFIRM,
+     REROLLREWARD_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

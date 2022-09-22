@@ -17,9 +17,10 @@ class BaseVehiclesWatcher(object):
 
     def __init__(self):
         self._isWatching = False
+        self._vehicleCdsWithChangedState = set()
 
     def start(self):
-        self.__setCustomStates()
+        self._setCustomStates()
         g_clientUpdateManager.addCallbacks({'inventory': self._update,
          'eventsData': self._update})
         self._isWatching = True
@@ -36,33 +37,34 @@ class BaseVehiclesWatcher(object):
 
     def _update(self, *_):
         if self._isWatching:
-            self.__setCustomStates()
+            self._setCustomStates()
 
     def _getVehiclesCustomStates(self, onClear=False):
         return {Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: self._getUnsuitableVehicles(onClear)}
 
-    def __setCustomStates(self):
+    def _setCustomStates(self):
         states = self._getVehiclesCustomStates()
-        intCDs = set()
         for state, vehicles in states.iteritems():
             for vehicle in vehicles:
-                if vehicle.intCD in intCDs and self.__compareVehStateByPriority(vehicle.getCustomState(), state):
+                if vehicle.intCD in self._vehicleCdsWithChangedState and self.__compareVehStateByPriority(vehicle.getCustomState(), state):
                     continue
                 vehicle.setCustomState(state)
-                intCDs.add(vehicle.intCD)
+                self._vehicleCdsWithChangedState.add(vehicle.intCD)
 
-        if intCDs:
-            g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
+        self._sendVehiclesStateChangeEvent()
 
     def _clearCustomsStates(self):
         vehicles = [ v for vehicles in self._getVehiclesCustomStates(True).itervalues() for v in vehicles ]
-        intCDs = set()
         for vehicle in vehicles:
             vehicle.clearCustomState()
-            intCDs.add(vehicle.intCD)
+            self._vehicleCdsWithChangedState.add(vehicle.intCD)
 
-        if intCDs:
-            g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
+        self._sendVehiclesStateChangeEvent()
+
+    def _sendVehiclesStateChangeEvent(self):
+        if self._vehicleCdsWithChangedState:
+            g_prbCtrlEvents.onVehicleClientStateChanged(self._vehicleCdsWithChangedState)
+        self._vehicleCdsWithChangedState.clear()
 
     def __compareVehStateByPriority(self, oldState, newState):
         return self._VEH_STATE_PRIORITIES.get(oldState, -1) >= self._VEH_STATE_PRIORITIES.get(newState, -1)

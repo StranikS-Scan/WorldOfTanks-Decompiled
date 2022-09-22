@@ -871,7 +871,7 @@
       <userString>	#vehicle_customization:emblem/group42/special_343	</userString>
       <vehicleFilter>
         <include>
-          <nations>	usa uk sweden japan	</nations>
+          <nations>	japan sweden uk usa	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -882,7 +882,7 @@
       <userString>	#vehicle_customization:emblem/group42/special_344	</userString>
       <vehicleFilter>
         <include>
-          <nations>	usa uk sweden japan	</nations>
+          <nations>	japan sweden uk usa	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -893,7 +893,7 @@
       <userString>	#vehicle_customization:emblem/group42/special_345	</userString>
       <vehicleFilter>
         <include>
-          <nations>	usa uk sweden japan	</nations>
+          <nations>	japan sweden uk usa	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -904,7 +904,7 @@
       <userString>	#vehicle_customization:emblem/group43/special_346	</userString>
       <vehicleFilter>
         <include>
-          <nations>	germany france czech poland	</nations>
+          <nations>	czech france germany poland	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -915,7 +915,7 @@
       <userString>	#vehicle_customization:emblem/group43/special_347	</userString>
       <vehicleFilter>
         <include>
-          <nations>	germany france czech poland	</nations>
+          <nations>	czech france germany poland	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -926,7 +926,7 @@
       <userString>	#vehicle_customization:emblem/group43/special_348	</userString>
       <vehicleFilter>
         <include>
-          <nations>	germany france czech poland	</nations>
+          <nations>	czech france germany poland	</nations>
         </include>
       </vehicleFilter>
       <mirror>	true	</mirror>
@@ -1714,7 +1714,6 @@
       <userString>	#vehicle_customization:Maps_training_emblem	</userString>
       <historical>	1	</historical>
       <mirror>	false	</mirror>
-      <type>	emblem	</type>
     </decal>
     <decal>
       <id>	671	</id>
@@ -3188,63 +3187,54 @@
     <decal>
       <id>	790	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_690.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_690	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	792	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_691.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_691	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	793	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_692.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_692	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	797	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_693.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_693	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	798	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_694.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_694	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	799	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_695.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_695	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	800	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_696.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_696	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	801	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_697.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_697	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	802	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_698.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:emblem/special/sticker_698	</userString>
       <mirror>	false	</mirror>
     </decal>
@@ -3618,5 +3608,19 @@
     </decal>
     <name>	Gamescom 2022	</name>
     <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	White Tiger 2022 Emblems	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 285g notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	15948	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_710.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_710	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <userString>	#vehicle_customization:emblem/special	</userString>
   </itemGroup>
 </emblems_special.xml>

@@ -7,6 +7,7 @@ from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.processors import Processor, makeI18nError
 from messenger.formatters.service_channel import QuestAchievesFormatter
 _logger = logging.getLogger(__name__)
+_DEFAULT_ERROR_KEY = 'lootboxes/open/server_error'
 
 class LootBoxOpenProcessor(Processor):
 
@@ -16,8 +17,7 @@ class LootBoxOpenProcessor(Processor):
         self.__count = count
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        defaultKey = 'lootboxes/open/server_error'
-        return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
+        return makeI18nError('/'.join((_DEFAULT_ERROR_KEY, errStr)), _DEFAULT_ERROR_KEY)
 
     def _successHandler(self, code, ctx=None):
         fmt = QuestAchievesFormatter.formatQuestAchieves(getMergedBonusesFromDicts(ctx['bonus']), False)
@@ -28,3 +28,27 @@ class LootBoxOpenProcessor(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to open loot box by id: %r, count: %d', self.__lootBox, self.__count)
         BigWorld.player().tokens.openLootBox(self.__lootBox.getID(), self.__count, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+
+
+class LootBoxReRollHistoryProcessor(Processor):
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('/'.join((_DEFAULT_ERROR_KEY, errStr)), _DEFAULT_ERROR_KEY)
+
+    def _request(self, callback):
+        _logger.debug('Make server request to re-roll history')
+        BigWorld.player().tokens.getLootBoxReRollRecords(lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+
+
+class LootBoxReRollProcessor(Processor):
+
+    def __init__(self, lootBoxItem):
+        super(LootBoxReRollProcessor, self).__init__()
+        self.__lootBox = lootBoxItem
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('/'.join((_DEFAULT_ERROR_KEY, errStr)), _DEFAULT_ERROR_KEY)
+
+    def _request(self, callback):
+        _logger.debug('Make server request to re-roll loot box by id: %r', self.__lootBox)
+        BigWorld.player().tokens.reRollLootBox(self.__lootBox.getID(), lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))

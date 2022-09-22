@@ -2,14 +2,11 @@
 # Embedded file name: scripts/client/cgf_components/highlight_component.py
 import BigWorld
 import CGF
+from cgf_components import IsHighlighted
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
 from GenericComponents import DynamicModelComponent
 from hover_component import IsHovered
-
-class IsHighlighted(CGFComponent):
-    pass
-
 
 class HighlightComponent(CGFComponent):
     editorTitle = 'Highlight'

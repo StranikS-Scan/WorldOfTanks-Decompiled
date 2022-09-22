@@ -14,7 +14,7 @@ from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CO
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collector_vehicle import CollectorVehicleConsts
-from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, IS_TUTORIAL_ENABLED, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG
+from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, IS_TUTORIAL_ENABLED, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, PREM_BONUS_TYPES, PREMIUM_ENTITLEMENTS, ENTITLEMENT_TO_PREM_TYPE, POSTBATTLE20_CONFIG
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -796,11 +796,21 @@ class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
- 'cycleTimes'))):
+ 'cycleTimes',
+ 'progression',
+ 'specialVehicles',
+ 'stampsPerProgressionStage',
+ 'stamp',
+ 'ticketToken',
+ 'quickBossTicketToken',
+ 'quickHunterTicketToken',
+ 'ticketsToDraw',
+ 'lootBoxDailyPurchaseLimit',
+ 'lootBoxCounterEntitlementID'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, progression=[], specialVehicles=[], stampsPerProgressionStage=0, stamp='', ticketToken='', quickBossTicketToken='', quickHunterTicketToken='', ticketsToDraw=0, lootBoxDailyPurchaseLimit=0, lootBoxCounterEntitlementID='')
         defaults.update(kwargs)
         return super(_EventBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -1191,6 +1201,8 @@ class ServerSettings(object):
             self.__updateSquadBonus(serverSettingsDiff)
         if PremiumConfigs.PREFERRED_MAPS in serverSettingsDiff:
             self.__serverSettings[PremiumConfigs.PREFERRED_MAPS] = serverSettingsDiff[PremiumConfigs.PREFERRED_MAPS]
+        if POSTBATTLE20_CONFIG in serverSettingsDiff:
+            self.__serverSettings[POSTBATTLE20_CONFIG] = serverSettingsDiff[POSTBATTLE20_CONFIG]
         if BATTLE_PASS_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[BATTLE_PASS_CONFIG_NAME] = serverSettingsDiff[BATTLE_PASS_CONFIG_NAME]
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
@@ -1453,6 +1465,9 @@ class ServerSettings(object):
     def getPremQuestsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREM_QUESTS, {})
 
+    def isPostbattle20Enabled(self):
+        return self.__getGlobalSetting(POSTBATTLE20_CONFIG, {}).get('enabled', True)
+
     def getDailyQuestConfig(self):
         return self.__getGlobalSetting(DAILY_QUESTS_CONFIG, {})
 
@@ -1524,6 +1539,18 @@ class ServerSettings(object):
 
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
+
+    def getPremiumPlusXPBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
+
+    def getPremiumPlusCreditsBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.CREDITS, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
+
+    def getPremiumPlusTmenXPBonus(self):
+        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
+        return battleBonuses.get(PREM_BONUS_TYPES.TMEN_XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
 
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)

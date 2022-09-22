@@ -795,7 +795,7 @@
       <userString>	#vehicle_customization:inscription/special/special_199	</userString>
       <vehicleFilter>
         <include>
-          <nations>	ussr poland czech china germany italy japan	</nations>
+          <nations>	china czech germany italy japan poland ussr	</nations>
         </include>
       </vehicleFilter>
       <mirror>	false	</mirror>
@@ -806,7 +806,7 @@
       <userString>	#vehicle_customization:inscription/special/special_198	</userString>
       <vehicleFilter>
         <include>
-          <nations>	france uk usa sweden	</nations>
+          <nations>	france sweden uk usa	</nations>
         </include>
       </vehicleFilter>
       <mirror>	false	</mirror>
@@ -2520,7 +2520,6 @@
     <decal>
       <id>	343	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_401.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_401	</userString>
       <mirror>	false	</mirror>
     </decal>
@@ -2534,56 +2533,48 @@
     <decal>
       <id>	794	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_536.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_536	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	795	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_537.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_537	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	796	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_538.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_538	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	803	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_539.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_539	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	804	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_540.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_540	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	805	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_541.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_541	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	806	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_542.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_542	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	807	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_543.dds	</texture>
-      <maxNumber>	3	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_543	</userString>
       <mirror>	false	</mirror>
     </decal>
@@ -3440,5 +3431,19 @@
     </decal>
     <name>	Gamescom 2022	</name>
     <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	White Tiger 2022 Inscriptions	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 285g notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	15949	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_620.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_620	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <userString>	#vehicle_customization:inscription/special	</userString>
   </itemGroup>
 </inscriptions_special.xml>

@@ -23,6 +23,7 @@ class MARKER_SYMBOL_NAME(object):
     STEP_REPAIR_MARKER_TYPE = 'ResupplyMarkerUI'
     WAYPOINT_MARKER = 'SectorWaypointMarkerUI'
     SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
+    EVENT_VEHICLE_MARKER = 'EventVehicleMarkerUI'
 
 
 class DAMAGE_TYPE(object):

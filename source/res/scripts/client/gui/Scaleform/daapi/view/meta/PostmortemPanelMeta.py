@@ -27,3 +27,6 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_preloadComponentsS(self, components):
         return self.flashObject.as_preloadComponents(components) if self._isDAAPIInited() else None
+
+    def as_setSpectatorPanelVisibleS(self, value):
+        return self.flashObject.as_setSpectatorPanelVisible(value) if self._isDAAPIInited() else None

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/locale.py
-# Compiled at: 2032-10-03 23:36:50
+# Compiled at: 2003-04-11 21:40:16
 """Locale support module.
 
 The module provides low-level access to the C lib's locale APIs and adds high

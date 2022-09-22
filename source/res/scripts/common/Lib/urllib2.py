@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urllib2.py
-# Compiled at: 2032-11-03 08:27:42
+# Compiled at: 2003-05-24 14:13:18
 """An extensible library for opening URLs using a variety of protocols
 
 The simplest way to use this module is to call the urlopen function,

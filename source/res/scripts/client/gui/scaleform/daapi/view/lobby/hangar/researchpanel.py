@@ -19,7 +19,7 @@ from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import i18n, dependency
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
-from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController, IEventBattlesController
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
@@ -29,6 +29,7 @@ class ResearchPanel(ResearchPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     igrCtrl = dependency.descriptor(IIGRController)
+    gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
         super(ResearchPanel, self).__init__()
@@ -114,7 +115,7 @@ class ResearchPanel(ResearchPanelMeta):
             if vehCD in elite:
                 self.as_setEliteS(True)
 
-    def __onCompareBasketChanged(self, changedData):
+    def __onCompareBasketChanged(self, changedData, _=None):
         if changedData.isFullChanged:
             self.onCurrentVehicleChanged()
 
@@ -130,7 +131,7 @@ class ResearchPanel(ResearchPanelMeta):
         if vehicle.xp > 0 and isAvailable:
             purchasableStep = vehicle.postProgression.getFirstPurchasableStep(ExtendedMoney(xp=vehicle.xp))
             if purchasableStep is not None:
-                isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
+                isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep and not self.gameEventCtrl.isEventPrbActive()
         tutorialStorage = getTutorialGlobalStorage()
         if tutorialStorage is not None:
             tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)

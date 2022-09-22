@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/__future__.py
-# Compiled at: 2032-05-07 21:03:54
+# Compiled at: 2002-06-14 06:17:59
 """Record of phased-in incompatible language changes.
 
 Each line is of the form:

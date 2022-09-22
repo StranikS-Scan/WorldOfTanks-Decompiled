@@ -240,6 +240,8 @@ CMD_SHOW_FRONTLINE_SYS_MSG = 10100
 CMD_FRONTLINE_UNLOCK_RESERVES = 10101
 CMD_RESOURCE_WELL_PUT = 10102
 CMD_RESOURCE_WELL_TAKE = 10103
+CMD_LOOTBOX_REROLL = 10104
+CMD_LOOTBOX_REROLL_RECORDS = 10105
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

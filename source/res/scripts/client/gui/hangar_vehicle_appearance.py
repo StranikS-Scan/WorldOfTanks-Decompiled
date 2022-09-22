@@ -122,6 +122,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
+    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -434,6 +435,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
+
+        self._onOutfitReady()
 
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
@@ -801,7 +804,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateSequences(self, outfit):
         resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        if not resources:
+        if not resources and not self.__attachments:
             self.__clearModelAnimators()
             if not self.__isVehicleDestroyed:
                 from vehicle_systems import model_assembler
@@ -1021,3 +1024,6 @@ class HangarVehicleAppearance(ScriptGameObject):
             if progressionOutfit:
                 return progressionOutfit
         return outfit
+
+    def _onOutfitReady(self):
+        pass

@@ -13,5 +13,162 @@
     <MapsTrainingStorageComponent></MapsTrainingStorageComponent>
     <BattleHintsComponent></BattleHintsComponent>
     <Fire></Fire>
+    <VisualScriptCache></VisualScriptCache>
+    <VehicleEquipment></VehicleEquipment>
+    <Followee></Followee>
+    <Marker></Marker>
+    <AvatarRespawnComponent>
+      <vs>	{
+			'spawns': ['SpawnPoint'],
+			'delay': float,
+		}	</vs>
+    </AvatarRespawnComponent>
+    <AvatarLivesComponent>
+      <vs>	{
+			'lives': int,
+		}	</vs>
+    </AvatarLivesComponent>
+    <TeamInfoLivesComponent>
+      <vs>	{}	</vs>
+    </TeamInfoLivesComponent>
+    <VehicleBuff>
+      <vs>	{
+			'factors': [object],
+		}	</vs>
+    </VehicleBuff>
+    <VehicleShellOverride>
+      <vs>	{
+			'defaultPortion': float,
+			'piercing100m': int,
+			'piercing500m': int,
+			'speed': int,
+			'gravity': float,
+			'maxDistance': float,
+			'maxHeight': float,
+			'shellCompactDescr': int,
+		}	</vs>
+    </VehicleShellOverride>
+    <VehicleProtect>
+      <vs>	{
+			'external': bool,
+			'internal': bool,
+			'tankmen': bool,
+			'stun': bool,
+			'armor': float,
+			'devices': float,
+		}	</vs>
+    </VehicleProtect>
+    <HealthTracker>
+      <vs>	{}	</vs>
+    </HealthTracker>
+    <AreaMarker>
+      <vs>	{
+			'style': str,
+		}	</vs>
+    </AreaMarker>
+    <AlwaysVisible>
+      <vs>	{}	</vs>
+    </AlwaysVisible>
+    <UdoOccupier>
+      <vs>	{
+			'udo': 'PVESpawnPoint',
+			'ignored': bool
+		}	</vs>
+    </UdoOccupier>
+    <PublicHealth>
+      <vs>	{}	</vs>
+    </PublicHealth>
+    <EntityStressTimer>
+      <vs>	{
+			'time': float,
+			'stressFactor': float,
+			'stressRadius': float,
+			'stressEntity': 'Entity',
+			'speedThreshold': float,
+			'speedFactor': float,
+		}	</vs>
+    </EntityStressTimer>
+    <EntityInfo>
+      <vs>	{
+			'maxID': int,
+			'label': str,
+		}	</vs>
+    </EntityInfo>
+    <ArenaTimer>
+      <vs>	{
+			'time': float,
+		}	</vs>
+    </ArenaTimer>
+    <PublicCounter>
+      <vs>	{
+			'counter': int,
+			'max': int,
+		}	</vs>
+    </PublicCounter>
+    <PrefabComponent>
+      <vs>	{
+			'matrix': Matrix,
+			'prefab': str,
+		}	</vs>
+    </PrefabComponent>
+    <BspComponent>
+      <vs>	{
+			'matrix': Matrix,
+			'bsp': str,
+		}	</vs>
+    </BspComponent>
+    <Follower>
+      <vs>	{
+			'who': 'Entity',
+		}	</vs>
+    </Follower>
+    <Tag>
+      <vs>	{
+			'delayedDestroy': bool,
+			'time': float
+		}	</vs>
+    </Tag>
+    <Proximity>
+      <vs>	{
+			'radius': float,
+			'isAlive': bool,
+			'isPlayer': bool,
+		}	</vs>
+    </Proximity>
+    <Capturable>
+      <vs>	{
+			'planNames': [str],
+			'updateSec': float,
+		}	</vs>
+    </Capturable>
+    <GeneratorActivation>
+      <vs>	{
+			'resetOnStun': bool,
+			'resetOnDamage': bool,
+		}	</vs>
+    </GeneratorActivation>
+    <BombPickUp>
+      <vs>	{
+			'resetOnStun': bool,
+			'resetOnDamage': bool,
+			'pickUpTime': float,
+		}	</vs>
+    </BombPickUp>
+    <CaptureReward>
+      <vs>	{
+			'content': [object],
+		}	</vs>
+    </CaptureReward>
+    <Generator>
+      <vs>	{}	</vs>
+    </Generator>
+    <GeneratorActivator>
+      <vs>	{}	</vs>
+    </GeneratorActivator>
+    <PlayersPanelComponent>
+      <vs>	{
+			'style': str,
+		}	</vs>
+    </PlayersPanelComponent>
   </DynamicComponents>
 </components.xml>

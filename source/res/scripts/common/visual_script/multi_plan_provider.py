@@ -165,7 +165,7 @@ if IS_DEVELOPMENT:
         def __init__(self, aspect, name, arenaBonusType=0):
             super(CallablePlanProvider, self).__init__(aspect, arenaBonusType)
             self._name = name
-            self.providers[name].add(self)
+            self.providers.setdefault(name, set()).add(self)
 
         def destroy(self):
             self.providers[self._name].remove(self)

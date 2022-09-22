@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/templates/battle_royale.py
 from gui.battle_results.components import base, battle_royale
-from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
+from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 BR_TOTAL_VO_META = base.DictMeta({'tabInfo': [],

@@ -66,10 +66,11 @@ def getCustomizationItemData(itemId, customizationName):
     item = getCustomizationItem(itemId, customizationName)
     itemName = item.userName
     itemTypeName = item.itemFullTypeName
-    return _CustomizationItemData(itemTypeName, itemName)
+    tags = item.tags
+    return _CustomizationItemData(itemTypeName, itemName, tags)
 
 
-_CustomizationItemData = namedtuple('_CustomizationItemData', ('guiItemType', 'userName'))
+_CustomizationItemData = namedtuple('_CustomizationItemData', ('guiItemType', 'userName', 'tags'))
 
 def getDefaultMessage(normal='', bold=''):
     return g_settings.msgTemplates.format(DEFAULT_MESSAGE, {'normal': normal,

@@ -5,7 +5,7 @@ from gui.shared.system_factory import registerBattleControllerRepo
 from constants import ARENA_GUI_TYPE
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, arena_info_ctrl, players_panel_ctrl, boss_info_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
@@ -209,6 +209,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
 
     @property
+    def arenaInfo(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ARENA_INFO_CTRL)
+
+    @property
     def repair(self):
         return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
 
@@ -259,6 +263,14 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def soundPlayers(self):
         return self._repository.getController(BATTLE_CTRL_ID.SOUND_PLAYERS_CTRL)
+
+    @property
+    def playersPanel(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PLAYERS_PANEL_CTRL)
+
+    @property
+    def bossPanel(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BOSS_INFO_CTRL)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -427,14 +439,21 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
 
     @classmethod
     def create(cls, setup):
+        from battle_royale.gui.battle_control.controllers import spawn_ctrl
         repository = super(EventControllerRepository, cls).create(setup)
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        repository.addArenaViewController(boss_info_ctrl.BossInfoController(), setup)
+        repository.addArenaController(arena_info_ctrl.ArenaInfoController(), setup)
+        repository.addViewController(spawn_ctrl.TeleportSpawnController(), setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
+        from gui.battle_control.controllers import area_marker_ctrl
+        repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
+        repository.addArenaViewController(players_panel_ctrl.PlayersPanelController(), setup)
         return repository
 
 

@@ -1,0 +1,24 @@
+<EntityInfo.def>
+  <Properties>
+    <index>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </index>
+    <maxID>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </maxID>
+    <label>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </label>
+    <absoluteIndex>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </absoluteIndex>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	entityInfo	</DefaultKeyName>
+</EntityInfo.def>

@@ -38,6 +38,7 @@ _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
 _R_BATTLE_MENU = R.strings.menu.headerButtons.battle.menu
 _R_ICONS = R.images.gui.maps.icons
 _R_BR_TOURNAMENT_BUTTON = R.strings.battle_royale.tournament.fightButton
+_R_EVENT_BATTLE = R.strings.event.menu.selector
 
 class _SelectorItem(object):
     __slots__ = ('_label', '_data', '_order', '_selectorType', '_isVisible', '_isExtra', '_isSelected', '_isNew', '_isDisabled', '_isLocked')
@@ -341,15 +342,25 @@ class _SandboxItem(_SelectorItem):
 
 
 class _EventBattlesItem(_SelectorItem):
-    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
-    def isRandomBattle(self):
-        return True
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.__gameEventCtrl.isAvailable() else ''
+
+    @process
+    def _doSelect(self, dispatcher):
+        if self.__gameEventCtrl.isModeActive():
+            isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
+            if isSuccess:
+                selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):
-        self._isDisabled = state.hasLockedState
+        eventCtrl = self.__gameEventCtrl
+        self._isDisabled = state.hasLockedState or eventCtrl.isFrozen() or not eventCtrl.isModeActive()
+        if self._isDisabled and self._isNew:
+            self._isNew = False
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
-        self._isVisible = self.__eventBattlesCtrl.isEnabled()
+        self._isVisible = eventCtrl.isEnabled()
 
 
 class _BattleSelectorItems(object):
@@ -522,18 +533,27 @@ class _SpecialSquadItem(_SquadItem):
 
 
 class _EventSquadItem(_SpecialSquadItem):
-    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_EventSquadItem, self).__init__(label, data, order, selectorType, isVisible)
         self._prebattleType = PREBATTLE_TYPE.EVENT
-        self._isVisible = self.__eventBattlesCtrl.isEnabled()
+        primeTimeStatus, _, _ = self.__gameEventCtrl.getPrimeTimeStatus()
+        self._isVisible = self.__gameEventCtrl.isEnabled() and self.__gameEventCtrl.isInPrimeTime()
         self._isSpecialBgIcon = True
         self._isDescription = False
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
     @property
     def squadIcon(self):
         return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
+
+    def _update(self, state):
+        super(_EventSquadItem, self)._update(state)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        primeTimeStatus, _, _ = self.__gameEventCtrl.getPrimeTimeStatus()
+        self._isVisible = self.__gameEventCtrl.isEnabled() and self.__gameEventCtrl.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.EVENT_BATTLES)
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
 
 class _BattleRoyaleSquadItem(_SpecialSquadItem):
@@ -928,7 +948,7 @@ def _addEpicTrainingBattleType(items, lobbyContext=None):
 
 
 def _addEventBattlesType(items):
-    items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
+    items.append(_EventBattlesItem(backport.text(_R_BATTLE_TYPES.event()), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,

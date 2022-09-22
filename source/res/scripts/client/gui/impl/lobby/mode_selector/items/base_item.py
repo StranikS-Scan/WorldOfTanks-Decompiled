@@ -175,7 +175,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         if R.images.gui.maps.icons.mode_selector.mode.dyn(modeName).isValid():
             self.viewModel.setResourcesFolderName(modeName)
         self._preferredColumn, self._priority = self._getPositionByModeName()
-        modeStrings = _rMode.dyn(modeName)
+        modeStrings = _rMode.dyn(self.modeName)
         if modeStrings.isValid():
             condition = modeStrings.dyn('condition')
             self.viewModel.setConditions(backport.text(condition()) if condition.exists() else '')

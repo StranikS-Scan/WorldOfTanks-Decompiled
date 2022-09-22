@@ -137,7 +137,7 @@ class SearchWindow(PreloadableWindow):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': False}))
 
     def _onContentReady(self):
-        if not self._isPreloading():
+        if not self.isPreloading:
             g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': True}))
         super(SearchWindow, self)._onContentReady()
 

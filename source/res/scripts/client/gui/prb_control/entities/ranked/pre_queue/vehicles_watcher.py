@@ -33,7 +33,8 @@ class RankedVehiclesWatcher(ForbiddenVehiclesWatcher):
         epicVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE).itervalues()
         battleRoyaleVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BATTLE_ROYALE).itervalues()
         clanWarsVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLAN_WARS).itervalues()
-        return chain(vehs, baseVehs, eventVehs, epicVehs, battleRoyaleVehs, clanWarsVehs) if not onClear else allVehs
+        randomOnlyVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.RANDOM_ONLY).itervalues()
+        return chain(vehs, baseVehs, eventVehs, epicVehs, battleRoyaleVehs, clanWarsVehs, randomOnlyVehs) if not onClear else allVehs
 
     def _getForbiddenVehicleClasses(self):
         return self.__lobbyContext.getServerSettings().rankedBattles.forbiddenClassTags

@@ -464,7 +464,7 @@ class ElementTooltip(BlocksTooltipData):
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.rentable())), padding=formatters.packPadding(top=-2), icon=self.RENTABLE_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.STYLE:
             modifiedStrRoot = rCharacteristics.collapsible
-            if self._item.isEditable:
+            if self._item.isEditable and self.__vehicle is not None:
                 vehicleIntCD = self.__vehicle.intCD
                 if not self._item.canBeEditedForVehicle(vehicleIntCD) and self._progressionLevel <= 0:
                     modifiedStr = modifiedStrRoot.mutableWithDecal()
@@ -811,7 +811,7 @@ class ElementAwardTooltip(ElementTooltip):
         elif self._item.itemTypeName == 'camouflage':
             bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_CAMOUFLAGE
         bonusPercent = '{min:.0f}-{max:.0f}%'.format(min=CamouflageBonus.MIN * 100, max=CamouflageBonus.MAX * 100)
-        blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(text_styles.main(bonusDescription)), icon=bonusPercent, isTextIcon=True))
+        blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(text_styles.main(bonusDescription)), icon=bonusPercent, isTextIcon=True, padding=formatters.packPadding(left=-75)))
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 

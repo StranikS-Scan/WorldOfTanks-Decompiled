@@ -119,10 +119,23 @@ def getSandboxTooltipData(result):
     return makeTooltip(i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_HEADER), i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_LEVEL_BODY, levels=toRomanRangeString(result.ctx['levels'], 1))) if state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL else ''
 
 
-def getEventTooltipData():
-    header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
-    body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
-    return makeTooltip(header, body)
+def getEventTooltipData(result):
+    state = result.restriction
+    rClass = R.strings.tooltips.hangar.startBtn
+    rSubClass = rClass.primeNotAvailable
+    if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
+        rSubClass = R.strings.event.hangar.startBtn.eventSquadNotReady.wrongVehicleCount
+    elif state == UNIT_RESTRICTION.EVENT_VEHICLE_NOT_SELECTED:
+        rSubClass = rClass.squadNotReady
+    elif state == PREBATTLE_RESTRICTION.TICKETS_SHORTAGE:
+        rSubClass = rClass.noTicket
+    elif state == PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE:
+        rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
+    elif state == UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE:
+        rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
+    elif state == UNIT_RESTRICTION.IS_IN_ARENA:
+        return makeTooltip(None, None)
+    return makeTooltip(backport.text(rSubClass.header()), backport.text(rSubClass.body()))
 
 
 def getPreviewTooltipData():

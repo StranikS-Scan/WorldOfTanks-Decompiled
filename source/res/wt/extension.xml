@@ -1,0 +1,17 @@
+<extension.xml>
+  <FeatureName>	WT	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <WtComponent></WtComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <WtStatBossDamage></WtStatBossDamage>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities></ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

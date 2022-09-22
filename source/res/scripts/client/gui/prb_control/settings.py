@@ -271,6 +271,7 @@ class PREBATTLE_RESTRICTION(object):
     CREW_NOT_FULL = 'crew/notFull'
     UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
+    TICKETS_SHORTAGE = 'vehicle/ticketsShortage'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
      LIMIT_LEVEL,
@@ -363,6 +364,7 @@ class UNIT_RESTRICTION(object):
     PREVIEW_VEHICLE_IS_PRESENT = 47
     SCOUT_IS_FULL = 48
     SCOUT_IS_FORBIDDEN = 49
+    EVENT_VEHICLE_NOT_SELECTED = 50
 
 
 class PRE_QUEUE_RESTRICTION(object):

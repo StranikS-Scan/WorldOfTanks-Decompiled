@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'HangarSimpleEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -81,6 +81,8 @@ class GameEvent(HasCtxEvent):
     CHANGE_AMMUNITION_SETUP = 'game/changeAmmunitionSetup'
     TOGGLE_DEBUG_PIERCING_PANEL = 'game/toggleDebugPiercingPanel'
     ON_TARGET_VEHICLE_CHANGED = 'game/onTargetVehicleChanged'
+    SHOW_SPAWN_POINTS = 'game/showSpawnPoints'
+    HIDE_SPAWN_POINTS = 'game/hideSpawnPoints'
 
 
 class GUICommonEvent(SharedEvent):
@@ -645,6 +647,14 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
+class WtEventPortalsEvent(HasCtxEvent):
+    ON_PORTAL_VIEW_CLOSED = 'wtEvent/onPortalViewClosed'
+    ON_PORTAL_AWARD_VIEW_CLOSED = 'wtEvent/onPortalAwardViewClosed'
+    ON_VEHICLE_AWARD_VIEW_CLOSED = 'wtEvent/onVehicleAwardViewClosed'
+    ON_ALL_PORTAL_VIEWS_CLOSED = 'wtEvent/onAllPortalViewClosed'
+    ON_BACK_TO_PORTAL = 'wtEvent/onBackToPortal'
+
+
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -775,3 +785,17 @@ class GunMarkerEvent(HasCtxEvent):
 class ResourceWellLoadingViewEvent(HasCtxEvent):
     LOAD = 'load'
     DESTROY = 'destroy'
+
+
+class HangarSimpleEvent(HasCtxEvent):
+    HANGAR_LOADED = 'HangarSimpleEvent/hangarLoaded'
+    HANGAR_UNLOADED = 'HangarSimpleEvent/hangarUnLoaded'
+    VEHICLE_PREVIEW_LOADED = 'HangarSimpleEvent/vehiclePreviewLoaded'
+    VEHICLE_PREVIEW_UNLOADED = 'HangarSimpleEvent/vehiclePreviewUnLoaded'
+    EVENT_PORTAL_SELECTED = 'HangarSimpleEvent/eventPortalSelected'
+    EVENT_VEHICLE_SELECTED = 'HangarSimpleEvent/eventVehicleSelected'
+    SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
+    CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
+    DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
+    PORTAL_MANAGER_ACTIVATED = 'HangarSimpleEvent/PortalManagerActivated'
+    UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'

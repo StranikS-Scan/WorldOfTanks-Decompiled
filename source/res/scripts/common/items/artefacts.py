@@ -444,7 +444,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'consumeSeconds', 'deploySeconds', 'rechargeSeconds', 'soundPressedReady', 'soundPressedNotReady')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -454,9 +454,14 @@ class Equipment(Artefact):
         self.repeatedStunDurationFactor = 1.0
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
+        self.consumeSeconds = component_constants.ZERO_INT
+        self.rechargeSeconds = component_constants.ZERO_INT
+        self.deploySeconds = component_constants.ZERO_INT
         self.soundNotification = None
         self.playerMessagesKey = None
         self.clientSelector = None
+        self.soundPressedReady = None
+        self.soundPressedNotReady = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -464,9 +469,12 @@ class Equipment(Artefact):
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
         self.playerMessagesKey = _xml.readStringOrNone(xmlCtx, section, 'playerMessagesKey')
+        self.soundPressedReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedReady')
+        self.soundPressedNotReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedNotReady')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
-        self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
+        params = _readReuseParams(xmlCtx, scriptSection)
+        self.reuseCount, self.cooldownSeconds, self.consumeSeconds, self.deploySeconds, self.rechargeSeconds = params
         self.clientSelector = _xml.readStringOrNone(xmlCtx, scriptSection, 'clientSelector')
         self.ownerPrefab = _xml.readStringOrNone(xmlCtx, section, 'ownerPrefab')
         self.usagePrefab = _xml.readStringOrNone(xmlCtx, section, 'usagePrefab')
@@ -2246,6 +2254,18 @@ class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConf
         return
 
 
+class VisualScriptEquipment(Equipment):
+    __slots__ = ('visualScript',)
+
+    def __init__(self):
+        super(VisualScriptEquipment, self).__init__()
+        self.visualScript = {}
+
+    def _readConfig(self, xmlCtx, section):
+        from ArenaType import _readVisualScript
+        self.visualScript = _readVisualScript(section)
+
+
 _readTags = vehicles._readTags
 
 def _readStun(xmlCtx, scriptSection):
@@ -2256,7 +2276,11 @@ def _readStun(xmlCtx, scriptSection):
 
 
 def _readReuseParams(xmlCtx, scriptSection):
-    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0, _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0)
+    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'consumeSeconds', minVal=0) if scriptSection.has_key('consumeSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'deploySeconds', minVal=0) if scriptSection.has_key('deploySeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'rechargeSeconds', minVal=0) if scriptSection.has_key('rechargeSeconds') else 0)
 
 
 class OPT_DEV_TYPE_TAG(object):

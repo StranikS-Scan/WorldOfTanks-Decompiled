@@ -92,7 +92,6 @@ class BATTLE_ROYALE(object):
     HANGARVEHICLEINFO_TOOLTIPS_BATTLEPROGRESSION_NOTEHIGHLIGHT2 = '#battle_royale:hangarVehicleInfo/tooltips/battleProgression/noteHighlight2'
     HANGARVEHICLEINFO_TOOLTIPS_BATTLEPROGRESSION_TUTORIAL = '#battle_royale:hangarVehicleInfo/tooltips/battleProgression/tutorial'
     HANGARVEHICLEINFO_TOOLTIPS_BATTLEPROGRESSION_TUTORIALHIGHLIGHT = '#battle_royale:hangarVehicleInfo/tooltips/battleProgression/tutorialHighlight'
-    HANGAR_CLOSEBTN = '#battle_royale:hangar/closeBtn'
     TOOLTIPS_AWARDS_PATTERN = '#battle_royale:tooltips/awards/pattern'
     TOOLTIPS_AWARDS_BADGE = '#battle_royale:tooltips/awards/badge'
     TOOLTIPS_AWARDS_ACHIEVEMENT = '#battle_royale:tooltips/awards/achievement'

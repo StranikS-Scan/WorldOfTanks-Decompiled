@@ -128,10 +128,14 @@ class EntriesPlugin(SimplePlugin):
         return True
 
     def _setMatrixEx(self, uniqueID, matrix):
-        model = self._entries.get(uniqueID, None)
+        model = self._entries.get(uniqueID)
         if model:
             self._setMatrix(model.getID(), matrix)
-        return
+
+    def _invokeEx(self, uniqueID, name, *args):
+        model = self._entries.get(uniqueID)
+        if model:
+            self._invoke(model.getID(), name, *args)
 
 
 class IntervalPlugin(EntriesPlugin):
@@ -200,6 +204,9 @@ class BaseAreaMarkerEntriesPlugin(EntriesPlugin):
 
     def setMatrix(self, uniqueID, matrix):
         self._setMatrixEx(uniqueID, matrix)
+
+    def invoke(self, uniqueID, name, *args):
+        self._invokeEx(uniqueID, name, *args)
 
     def update(self, *args, **kwargs):
         super(BaseAreaMarkerEntriesPlugin, self).update()

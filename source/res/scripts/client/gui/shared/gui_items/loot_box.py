@@ -27,7 +27,6 @@ class EventCategories(CONST_CONTAINER):
 class EventLootBoxes(CONST_CONTAINER):
     WT_HUNTER = 'wt_hunter'
     WT_BOSS = 'wt_boss'
-    WT_SPECIAL = 'wt_special'
 
 
 class LunarNYLootBoxTypes(Enum):
@@ -39,11 +38,12 @@ class LunarNYLootBoxTypes(Enum):
 ALL_LUNAR_NY_LOOT_BOX_TYPES = ('lunar_base', 'lunar_simple', 'lunar_special')
 LUNAR_NY_LOOT_BOXES_CATEGORIES = 'LunarNY'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
-GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
+GUI_ORDER = (EventLootBoxes.WT_HUNTER, EventLootBoxes.WT_BOSS)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
  NewYearCategories.CHRISTMAS,
  NewYearCategories.ORIENTAL,
- NewYearCategories.FAIRYTALE)
+ NewYearCategories.FAIRYTALE,
+ EventCategories.EVENT)
 
 class LootBox(GUIItem):
     __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName')
@@ -100,12 +100,12 @@ class LootBox(GUIItem):
         self.__type = lootBoxConfig.get('type')
         self.__category = lootBoxConfig.get('category')
         self.__historyName = lootBoxConfig.get('historyName')
-        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
+        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readGuaranteedFreqLimits(lootBoxConfig.get('guaranteedFrequency', {}))
 
     @staticmethod
-    def __readLimits(limitsCfg):
-        for limitName, limit in limitsCfg.iteritems():
-            if 'useBonusProbabilityAfter' in limit:
-                return (limitName, limit['useBonusProbabilityAfter'] + 1)
+    def __readGuaranteedFreqLimits(limitsCfg):
+        for limitName, limits in limitsCfg.iteritems():
+            if 'guaranteedFrequency' in limits:
+                return (limitName, limits['guaranteedFrequency'])
 
         return (None, 0)

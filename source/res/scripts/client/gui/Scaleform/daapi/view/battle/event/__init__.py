@@ -4,6 +4,7 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.battle.event.page import EventBattlePage
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
+from gui.Scaleform.genConsts.BATTLE_CONTEXT_MENU_HANDLER_TYPE import BATTLE_CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
@@ -11,49 +12,54 @@ from gui.shared import EVENT_BUS_SCOPE
 __all__ = ('EventBattlePage',)
 
 def getContextMenuHandlers():
-    pass
+    from gui.Scaleform.daapi.view.battle.classic import player_menu_handler
+    return ((BATTLE_CONTEXT_MENU_HANDLER_TYPE.PLAYERS_PANEL, player_menu_handler.PlayerMenuHandler),)
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
-    from gui.Scaleform.daapi.view.battle.classic import minimap
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
-    from gui.Scaleform.daapi.view.battle.shared import battle_timers
-    from gui.Scaleform.daapi.view.battle.shared import consumables_panel
+    from gui.Scaleform.daapi.view.battle.classic.base_stats import StatsBase
+    from gui.Scaleform.daapi.view.battle.event import battle_timer
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
-    from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
-    from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
+    from gui.Scaleform.daapi.view.battle.event import game_messages_panel
+    from gui.Scaleform.daapi.view.battle.event import stats_exchange
     from gui.Scaleform.daapi.view.battle.event import battle_hint
     from gui.Scaleform.daapi.view.battle.event import players_panel as event_players_panel
     from gui.Scaleform.daapi.view.battle.event.event_loading_page import EventLoadingPage
     from gui.Scaleform.daapi.view.battle.event import event_point_counter
-    from gui.Scaleform.daapi.view.battle.event import event_timer
-    from gui.Scaleform.daapi.view.battle.event import stats
-    from gui.Scaleform.daapi.view.battle.event import event_destroy_timers_panel
+    from gui.Scaleform.daapi.view.battle.event import minimap
+    from gui.Scaleform.daapi.view.battle.event.status_notifications.panel import EventStatusNotificationTimerPanel
     from gui.Scaleform.daapi.view.battle.event import event_buffs_panel
     from gui.Scaleform.daapi.view.battle.event import event_objectives
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
+    from gui.Scaleform.daapi.view.battle.event import consumables_panel
+    from gui.Scaleform.daapi.view.battle.event import hunter_respawn
+    from gui.Scaleform.daapi.view.battle.event import boss_teleport
+    from gui.Scaleform.daapi.view.battle.event import boss_widget
+    from gui.Scaleform.daapi.view.battle.event.team_bases_panel import EventTeamBasesPanel
     return (ViewSettings(VIEW_ALIAS.EVENT_BATTLE_PAGE, EventBattlePage, 'eventBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, event_destroy_timers_panel.EventDestroyTimersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EventStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, EventTeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, EventStatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EventBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.EventConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.EventGameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL_EVENT, event_players_panel.EventPlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.ClassicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.EventMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_POINT_COUNTER, event_point_counter.EventPointCounter, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_HINT, battle_hint.BattleHint, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.EVENT_LOADING, EventLoadingPage, 'eventLoading.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_TIMER, event_timer.EventTimer, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_STATS, stats.EventStats, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_STATS, StatsBase, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_BUFFS_PANEL, event_buffs_panel.EventBuffsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_OBJECTIVES, event_objectives.EventObjectivesPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_HUNTER_RESPAWN, hunter_respawn.EventHunterRespawnView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_BOSS_TELEPORT, boss_teleport.EventBossTeleportView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.EVENT_BOSS_WIDGET, boss_widget.EventBossWidget, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

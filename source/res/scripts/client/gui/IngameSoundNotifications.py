@@ -19,6 +19,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     __CIRCUMSTANCES_PATH = 'gui/sound_circumstances.xml'
     __DEFAULT_LIFETIME = 3.0
     __TICK_DELAY = 0.5
+    __VO_NOTIFICATION_USING_SOUND_GROUPS = ('wt_krieger_vo_wt_lose', 'wt_krieger_vo_wt_win')
     QueueItem = namedtuple('QueueItem', ('eventName', 'priority', 'time', 'vehicleID', 'checkFn', 'position', 'boundVehicleID'))
     PlayingEvent = namedtuple('PlayingEvent', ('eventName', 'vehicle', 'position', 'boundVehicle', 'is2D'))
 
@@ -216,6 +217,9 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             self.__eventsPriorities[eventName] = {'priority': priority,
              'time': hold}
 
+    def hasEvent(self, eventName):
+        return eventName in self.__events
+
     def setCircumstanceWeight(self, circIndex, weight, hold):
         if circIndex in self.__circumstances:
             self.__circumstancesWeights[circIndex] = {'weight': weight,
@@ -251,6 +255,12 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
                 vehicle = BigWorld.entity(queueItem.vehicleID) if queueItem.vehicleID is not None else None
                 boundVehicle = BigWorld.entity(queueItem.boundVehicleID) if queueItem.boundVehicleID is not None else None
                 position = vehicle.position if vehicle else queueItem.position
+                if queueItem.eventName in self.__VO_NOTIFICATION_USING_SOUND_GROUPS:
+                    wwEventName = self.getEventInfo(queueItem.eventName, 'infEvent')
+                    if wwEventName:
+                        SoundGroups.g_instance.playSound2D(wwEventName)
+                        self.__queues[queueNum] = []
+                    return
                 self.__playingEvents[queueNum] = self.PlayingEvent(queueItem.eventName, vehicle, position, boundVehicle, position is None)
                 self.onPlayEvent(queueItem.eventName)
             else:

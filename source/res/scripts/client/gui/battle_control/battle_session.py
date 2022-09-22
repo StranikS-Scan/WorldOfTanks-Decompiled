@@ -23,6 +23,7 @@ from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.battle_session import IBattleSessionProvider
+from cgf_components import wt_helpers
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
 class BattleSessionProvider(IBattleSessionProvider):
@@ -180,6 +181,8 @@ class BattleSessionProvider(IBattleSessionProvider):
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
+            elif self.__arenaVisitor.hasVSERespawns():
+                isDeserter = wt_helpers.getPlayerLives() > 0 or wt_helpers.isBoss() and avatar_getter.isVehicleAlive()
             else:
                 isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
             return BattleExitResult(isDeserter, vInfo.player)
@@ -259,13 +262,17 @@ class BattleSessionProvider(IBattleSessionProvider):
             ammoCtrl.updateVehicleQuickShellChanger(isActive)
         return
 
-    def movingToRespawnBase(self):
+    def movingToRespawnBase(self, vehicle):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
+            if vehicle:
+                ctrl.setGunSettings(vehicle.typeDescriptor.gun)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
+            if vehicle:
+                ctrl.notifyPlayerVehicleSet(vehicle.id)
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)

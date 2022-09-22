@@ -57,7 +57,8 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
          'highlightType': bonus.getHighlightType(size),
          'overlayType': bonus.getOverlayType(size),
          'highlightIcon': bonus.getHighlightIcon(size),
-         'overlayIcon': bonus.getOverlayIcon(size)}
+         'overlayIcon': bonus.getOverlayIcon(size),
+         'isWulfTooltip': bonus.isWulfTooltip}
 
     def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
         mergedBonusCount = len(mergedBonuses)

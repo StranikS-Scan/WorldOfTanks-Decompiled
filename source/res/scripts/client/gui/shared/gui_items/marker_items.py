@@ -1,13 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/marker_items.py
-from enum import IntEnum
+from enum import IntEnum, unique
 import Math
+from gui.Scaleform.daapi.view.battle.event import markers as EventMarkers
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import ComponentBitMask as FLAG
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NAME, ENTRY_SYMBOL_NAME
 
+@unique
 class MarkerItem(IntEnum):
-    DEFAULT = 0
-    DEATHZONE = 1
+    DEFAULT = 1
+    DEATHZONE = 2
+    BOMB = 3
+    CAMP = 4
+    GEN_ON = 5
+    GEN_OFF = 6
 
 
 class MarkerParamsFactory(object):
@@ -42,14 +48,43 @@ class MarkerParamsFactory(object):
                                               'min-distance': 0.0,
                                               'max-distance': 0.0,
                                               'distance': 0.0,
-                                              'distanceFieldColor': 'white'}]}}
+                                              'distanceFieldColor': 'white'}]},
+     MarkerItem.BOMB: {FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapBombMarkerComponent,
+                                              'symbol': 'EventBombMinimapEntryUI',
+                                              'container': CONTAINER_NAME.PERSONAL,
+                                              'onlyTranslation': True}],
+                       FLAG.MARKER_2D: [{'clazz': EventMarkers.World2DBombMarkerComponent,
+                                         'isSticky': True}]},
+     MarkerItem.CAMP: {FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapCampMarkerComponent,
+                                              'symbol': 'EventCampMinimapEntryUI',
+                                              'container': CONTAINER_NAME.ICONS,
+                                              'onlyTranslation': True}],
+                       FLAG.MARKER_2D: [{'clazz': EventMarkers.World2DCampMarkerComponent,
+                                         'isSticky': True,
+                                         'alpha': 1.0}]},
+     MarkerItem.GEN_ON: {FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapGeneratorMarkerComponent,
+                                                'symbol': 'EventGeneratorMinimapEntryUI',
+                                                'container': CONTAINER_NAME.ICONS,
+                                                'onlyTranslation': True,
+                                                'alpha': 1.0}],
+                         FLAG.MARKER_2D: [{'clazz': EventMarkers.World2DGeneratorMarkerComponent,
+                                           'isSticky': True,
+                                           'alpha': 1.0}]},
+     MarkerItem.GEN_OFF: {FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapGeneratorMarkerComponent,
+                                                 'symbol': 'EventGeneratorMinimapEntryUI',
+                                                 'container': CONTAINER_NAME.ICONS,
+                                                 'onlyTranslation': True,
+                                                 'alpha': 0.5}],
+                          FLAG.MARKER_2D: [{'clazz': EventMarkers.World2DGeneratorMarkerComponent,
+                                            'isSticky': False,
+                                            'alpha': 0.5}]}}
 
     @classmethod
     def getMarkerParams(cls, matrix, markerStyle=MarkerItem.DEFAULT, bitMask=FLAG.NONE):
         params = cls.MARKER_DATA.get(markerStyle, {})
         if bitMask == FLAG.NONE:
             bitMask = MarkerParamsFactory.buildBitMask(params)
-        offset = params.get('offset', (0, 10, 0))
+        offset = params.get('offset', (0, 0, 0))
         mp = Math.MatrixProduct()
         mp.a = matrix
         mp.b = Math.Matrix()

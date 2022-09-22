@@ -4,7 +4,7 @@ import account_helpers
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
-from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
+from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider, RestrictedSquadDataProvider
 from gui.prb_control.entities.random.pre_queue.vehicles_watcher import RandomVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
@@ -68,8 +68,10 @@ class RandomSquadEntity(SquadEntity):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = True
         self._isUseScoutValidateRule = True
+        self._isUseSquadRestrictedValidateRule = True
         self.__restrictedSPGDataProvider = RestrictedSPGDataProvider()
         self.__restrictedScoutDataProvider = RestrictedScoutDataProvider()
+        self.__restrictedSquadRestrictedDataProvider = RestrictedSquadDataProvider()
         self._mmData = 0
         self.__watcher = None
         super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
@@ -78,6 +80,7 @@ class RandomSquadEntity(SquadEntity):
     def init(self, ctx=None):
         self.__restrictedSPGDataProvider.init(self)
         self.__restrictedScoutDataProvider.init(self)
+        self.__restrictedSquadRestrictedDataProvider.init(self)
         rv = super(RandomSquadEntity, self).init(ctx)
         self._isBalancedSquad = self.isBalancedSquadEnabled()
         self._switchActionsValidator()
@@ -97,12 +100,14 @@ class RandomSquadEntity(SquadEntity):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = False
         self._isUseScoutValidateRule = False
+        self._isUseSquadRestrictedValidateRule = False
         self.invalidateVehicleStates()
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
         self.__restrictedSPGDataProvider.fini()
         self.__restrictedScoutDataProvider.fini()
+        self.__restrictedSquadRestrictedDataProvider.fini()
         return super(RandomSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def getQueueType(self):
@@ -142,11 +147,17 @@ class RandomSquadEntity(SquadEntity):
     def getMaxScoutCount(self):
         return self.__restrictedScoutDataProvider.getMaxPossibleVehicles()
 
+    def getMaxSquadRestrictedCount(self):
+        return self.__restrictedSquadRestrictedDataProvider.getMaxPossibleVehicles()
+
     def hasSlotForSPG(self):
         return self.__restrictedSPGDataProvider.hasSlotForVehicle()
 
     def hasSlotForScout(self):
         return self.__restrictedScoutDataProvider.hasSlotForVehicle()
+
+    def hasSlotForSquadRestricted(self):
+        return self.__restrictedSquadRestrictedDataProvider.hasSlotForVehicle()
 
     def getCurrentSPGCount(self):
         return self.__restrictedSPGDataProvider.getCurrentVehiclesCount()
@@ -194,7 +205,9 @@ class RandomSquadEntity(SquadEntity):
                 return False
         if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG:
             return self.__restrictedSPGDataProvider.isTagVehicleAvailable()
-        return self.__restrictedScoutDataProvider.isTagVehicleAvailable() if self._isUseScoutValidateRule and v.isScout and v.level in self.getMaxScoutLevels() else super(RandomSquadEntity, self)._vehicleStateCondition(v)
+        if self._isUseScoutValidateRule and v.isScout and v.level in self.getMaxScoutLevels():
+            return self.__restrictedScoutDataProvider.isTagVehicleAvailable()
+        return self.__restrictedSquadRestrictedDataProvider.isTagVehicleAvailable() if self._isUseSquadRestrictedValidateRule and v.isSquadRestricted else super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         balancedEnabled = self.isBalancedSquadEnabled()

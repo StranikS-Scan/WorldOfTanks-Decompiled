@@ -918,10 +918,11 @@ class BaseAreaMarkerPlugin(MarkerPlugin):
         self.__markers = {}
         super(BaseAreaMarkerPlugin, self).stop()
 
-    def createMarker(self, uniqueID, matrixProvider, active):
+    def createMarker(self, uniqueID, symbol, matrixProvider, active):
         if uniqueID in self.__markers:
             return False
-        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER, matrixProvider, active=active)
+        symbol = symbol or settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER
+        markerID = self._createMarkerWithMatrix(symbol, matrixProvider, active)
         self.__markers[uniqueID] = markerID
         return True
 
@@ -933,15 +934,27 @@ class BaseAreaMarkerPlugin(MarkerPlugin):
         else:
             return False
 
+    def setMarkerSticky(self, uniqueID, isSticky):
+        if uniqueID in self.__markers:
+            self._setMarkerSticky(self.__markers[uniqueID], isSticky)
+
+    def setMarkerRenderInfo(self, uniqueID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
+        if uniqueID in self.__markers:
+            self._setMarkerRenderInfo(self.__markers[uniqueID], minScale, offset, innerOffset, cullDistance, boundsMinScale)
+
+    def setMarkerLocationOffset(self, uniqueID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        if uniqueID in self.__markers:
+            self._setMarkerLocationOffset(self.__markers[uniqueID], minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
+
+    def invokeMarker(self, uniqueID, name, *args):
+        if uniqueID in self.__markers:
+            self._invokeMarker(self.__markers[uniqueID], name, *args)
+
     def setupMarker(self, uniqueID, shape, minDistance, maxDistance, distance, distanceFieldColor):
-        if uniqueID not in self.__markers:
-            return
-        self._invokeMarker(self.__markers[uniqueID], 'init', shape, minDistance, maxDistance, distance, backport.text(R.strings.ingame_gui.marker.meters()), distanceFieldColor)
+        self.invokeMarker(uniqueID, 'init', shape, minDistance, maxDistance, distance, backport.text(R.strings.ingame_gui.marker.meters()), distanceFieldColor)
 
     def markerSetDistance(self, uniqueID, distance):
-        if uniqueID not in self.__markers:
-            return
-        self._invokeMarker(self.__markers[uniqueID], 'setDistance', distance)
+        self.invokeMarker(uniqueID, 'setDistance', distance)
 
     def setMarkerMatrix(self, uniqueID, matrix):
         markerID = self.__markers.pop(uniqueID, None)

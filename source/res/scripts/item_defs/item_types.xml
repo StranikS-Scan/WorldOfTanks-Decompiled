@@ -80,6 +80,12 @@
       <private></private>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
+      <event_boss></event_boss>
+      <event_hunter></event_hunter>
+      <special_event_boss></special_event_boss>
+      <squad_restricted></squad_restricted>
+      <random_only></random_only>
+      <event_bot></event_bot>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -138,6 +144,18 @@
       <role_SPG></role_SPG>
       <disableIBA></disableIBA>
       <t34_disclaimer></t34_disclaimer>
+      <builtinLargeMedkit_wt_user></builtinLargeMedkit_wt_user>
+      <builtinRepairkit_wt_user></builtinRepairkit_wt_user>
+      <builtinInstantStunShoot_wt_user></builtinInstantStunShoot_wt_user>
+      <builtinImpulse_wt_user></builtinImpulse_wt_user>
+      <builtinAfterburning_wt_user></builtinAfterburning_wt_user>
+      <builtinShield_wt_user></builtinShield_wt_user>
+      <builtinStronghold_wt_user></builtinStronghold_wt_user>
+      <builtinTeleport_wt_user></builtinTeleport_wt_user>
+      <builtinChargedShot_wt_user></builtinChargedShot_wt_user>
+      <builtinDrop_wt_user></builtinDrop_wt_user>
+      <builtinAbsorb_wt_user></builtinAbsorb_wt_user>
+      <builtinOverload_wt_user></builtinOverload_wt_user>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -252,6 +270,7 @@
       <mobility></mobility>
       <premium_equipment></premium_equipment>
       <builtin></builtin>
+      <hideBuiltinInfo></hideBuiltinInfo>
       <trophyUpgraded></trophyUpgraded>
       <turbocharger></turbocharger>
       <healthReserve></healthReserve>
@@ -262,6 +281,9 @@
       <notBuyWhenAutoEquip></notBuyWhenAutoEquip>
       <repairKitBattleRoyale></repairKitBattleRoyale>
       <advancedLogging></advancedLogging>
+      <eventItem></eventItem>
+      <eventPassiveItem></eventPassiveItem>
+      <hidden></hidden>
     </tags>
   </equipment>
   <customizationItem>
@@ -325,6 +347,7 @@
       <Halloween></Halloween>
       <offspringArenaMusic></offspringArenaMusic>
       <sabatonArenaMusic></sabatonArenaMusic>
+      <WTEvent></WTEvent>
     </tags>
   </customizationItem>
   <crewSkin>

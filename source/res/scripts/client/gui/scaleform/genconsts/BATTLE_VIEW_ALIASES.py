@@ -86,3 +86,6 @@ class BATTLE_VIEW_ALIASES(object):
     EPIC_RESPAWN_AMMUNITION_PANEL = 'epicRespawnAmmunitionPanel'
     MAPS_TRAINING_GOALS = 'mapsTrainingGoals'
     PIERCING_DEBUG_PANEL = 'piercingDebugPanel'
+    EVENT_HUNTER_RESPAWN = 'eventHunterRespawn'
+    EVENT_BOSS_TELEPORT = 'eventBossTeleport'
+    EVENT_BOSS_WIDGET = 'eventBossWidget'

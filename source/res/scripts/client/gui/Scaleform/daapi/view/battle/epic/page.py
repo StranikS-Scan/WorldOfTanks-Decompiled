@@ -382,7 +382,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
     def _onAvatarCtrlModeChanged(self, ctrlMode):
         pass
 
-    def __onRoundFinished(self, winningTeam, reason):
+    def __onRoundFinished(self, winningTeam, reason, extraData):
         self.__pageState = PageStates.GAME_OVER
         self._invalidateState()
 

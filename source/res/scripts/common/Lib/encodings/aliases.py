@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/aliases.py
-# Compiled at: 2032-08-01 09:01:47
+# Compiled at: 2002-10-30 06:13:34
 """ Encoding Aliases Support
 
     This module is used by the encodings package search function to

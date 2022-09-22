@@ -1339,11 +1339,14 @@ class PostMortemControlMode(IControlMode):
         if arena is not None:
             arena.onVehicleKilled += self.__onArenaVehicleKilled
         if bool(args.get('respawn', False)):
+            self._targetCtrlModeAfterDelay = CTRL_MODE_NAME.RESPAWN_DEATH
             respawnCtrl = self.guiSessionProvider.dynamic.respawn
-            self._targetCtrlModeAfterDelay = None if respawnCtrl.respawnInfo is None else CTRL_MODE_NAME.RESPAWN_DEATH
-            respawnCtrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
-            if respawnCtrl.respawnInfo is not None:
-                self.__onRespawnInfoUpdated(respawnCtrl.respawnInfo)
+            if respawnCtrl:
+                respawnCtrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
+                if respawnCtrl.respawnInfo is not None:
+                    self.__onRespawnInfoUpdated(respawnCtrl.respawnInfo)
+                else:
+                    self._targetCtrlModeAfterDelay = None
         return
 
     def __startPostmortemDelay(self, vehicleID):

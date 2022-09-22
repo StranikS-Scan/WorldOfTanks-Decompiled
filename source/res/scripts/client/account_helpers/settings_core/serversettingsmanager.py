@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, WTEventStorageKeys, WTLootBoxesViewedKeys
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -64,7 +64,9 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
+    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
+    EVENT_STORAGE = 'EVENT_STORAGE'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -652,7 +654,10 @@ class ServerSettingsManager(object):
                                                       'role_ATSPG_support': 22,
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
-                                                      'role_SPG': 25}, offsets={})}
+                                                      'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.EVENT_STORAGE: Section(masks={WTEventStorageKeys.WT_INTRO_SHOWN: 0}, offsets={}),
+     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={WTLootBoxesViewedKeys.HUNTER_LAST_VIEWED: Offset(0, 65535),
+                                         WTLootBoxesViewedKeys.BOSS_LAST_VIEWED: Offset(16, 4294901760L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -752,6 +757,13 @@ class ServerSettingsManager(object):
     def saveInBPStorage(self, settings):
         if self.settingsCache.isSynced():
             self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
+
+    def getEventStorage(self, defaults=None):
+        storageData = self.getSection(SETTINGS_SECTIONS.EVENT_STORAGE, defaults)
+        return storageData
+
+    def saveInEventStorage(self, settings):
+        return self.setSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -985,6 +997,8 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
+         'eventStorage': {},
+         'lootboxViewed': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1091,6 +1105,13 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        EventStorage = data.get('eventStorage', {})
+        clearEventStorage = clear.get('eventStorage', 0)
+        if EventStorage or clearEventStorage:
+            settings[SETTINGS_SECTIONS.EVENT_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, EventStorage) ^ clearEventStorage
+        lootboxesViewedStorage = data.get('lootboxViewed', {})
+        if lootboxesViewedStorage:
+            settings[SETTINGS_SECTIONS.LOOT_BOX_VIEWED] = self._buildSectionSettings(SETTINGS_SECTIONS.LOOT_BOX_VIEWED, lootboxesViewedStorage)
         spgAimData = data.get('spgAim', {})
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:

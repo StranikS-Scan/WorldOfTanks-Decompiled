@@ -882,6 +882,13 @@ def _migrateTo94(core, data, initialized):
     data[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = {'shown': 0}
 
 
+def _migrateTo95(core, data, initialized):
+    from account_helpers.settings_core.settings_constants import WTEventStorageKeys, WTLootBoxesViewedKeys
+    data['eventStorage'][WTEventStorageKeys.WT_INTRO_SHOWN] = False
+    data['lootboxViewed'][WTLootBoxesViewedKeys.HUNTER_LAST_VIEWED] = 0
+    data['lootboxViewed'][WTLootBoxesViewedKeys.BOSS_LAST_VIEWED] = 0
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1252,6 +1259,10 @@ _versions = ((1,
   False),
  (94,
   _migrateTo94,
+  False,
+  False),
+ (95,
+  _migrateTo95,
   False,
   False))
 

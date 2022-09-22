@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tempfile.py
-# Compiled at: 2032-10-31 15:35:54
+# Compiled at: 2003-05-20 09:13:52
 """Temporary files.
 
 This module provides generic, low- and high-level interfaces for

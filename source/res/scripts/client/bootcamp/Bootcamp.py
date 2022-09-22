@@ -258,13 +258,13 @@ class Bootcamp(EventSystemEntity):
 
     def setBattleResults(self, arenaUniqueID, resultType, resultReason):
         self.__arenaUniqueID = arenaUniqueID
-        from gui.battle_results.settings import PLAYER_TEAM_RESULT
+        from gui.battle_results.br_constants import PlayerTeamResult
         if not resultType:
-            teamResult = PLAYER_TEAM_RESULT.DRAW
+            teamResult = PlayerTeamResult.DRAW
         elif resultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
-            teamResult = PLAYER_TEAM_RESULT.WIN
+            teamResult = PlayerTeamResult.WIN
         else:
-            teamResult = PLAYER_TEAM_RESULT.DEFEAT
+            teamResult = PlayerTeamResult.DEFEAT
         self.__battleResults = _BattleResults(resultType, makeHtmlString('html_templates:bootcamp/battle_results', teamResult))
 
     def getBattleResults(self):

@@ -201,7 +201,9 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'fireStartingChanceFactor',
  'multShotDispersionFactor',
  'chassisHealthAfterHysteresisFactor',
- 'centerRotationFwdSpeedFactor')
+ 'centerRotationFwdSpeedFactor',
+ 'receivedDamageFactor',
+ 'proofHealth')
 VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = dict(((value, index) for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)))
 
 class EnhancementItem(object):
@@ -260,6 +262,7 @@ def vehicleAttributeFactors():
      'repeatedStunDurationFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
+     'receivedDamageFactor': 1.0,
      'enginePowerFactor': 1.0,
      'deathZones/sensitivityFactor': 1.0,
      'multShotDispersionFactor': 1.0,
@@ -268,7 +271,8 @@ def vehicleAttributeFactors():
      'demaskFoliageFactor': 1.0,
      'invisibilityAdditiveTerm': 0.0,
      'engineReduceFineFactor': 1.0,
-     'ammoBayReduceFineFactor': 1.0}
+     'ammoBayReduceFineFactor': 1.0,
+     'proofHealth': 0}
 
 
 WHEEL_SIZE_COEF = 2.2
@@ -1420,6 +1424,7 @@ class VehicleDescriptor(object):
          'repeatedStunDurationFactor': 1.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
+         'receivedDamageFactor': 1.0,
          'enginePowerFactor': 1.0,
          'armorSpallsDamageDevicesFactor': 1.0,
          'increaseEnemySpottingTime': 0.0,
@@ -1456,7 +1461,8 @@ class VehicleDescriptor(object):
          'gun/shotDispersionFactors/turretRotation': gunShotDispersionFactors['turretRotation'],
          'gun/shotDispersionFactors/whileGunDamaged': gunShotDispersionFactors['whileGunDamaged'],
          'ammoBayReduceFineFactor': 1.0,
-         'engineReduceFineFactor': 1.0}
+         'engineReduceFineFactor': 1.0,
+         'proofHealth': 0}
         if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1779,6 +1785,7 @@ class VehicleType(object):
      'postProgressionTree',
      'postProgressionPricesOverrides',
      'customRoleSlotOptions',
+     'armorMaxHealth',
      '__weakref__')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
@@ -1870,6 +1877,7 @@ class VehicleType(object):
             self.extrasDict = copyMethod(commonConfig['extrasDict'])
             self.devices = copyMethod(commonConfig['_devices'])
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
+            self.armorMaxHealth = _xml.readIntOrNone(xmlCtx, section, 'armorMaxHealth')
         if IS_CLIENT or IS_WEB:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT or IS_UE_EDITOR:
@@ -2795,6 +2803,16 @@ def isVehicleTypeCompactDescr(vehDescr):
     return True if cdType is int or cdType is long else False
 
 
+def getEquipmentByName(name):
+    eqID = g_cache.equipmentIDs()[name]
+    return g_cache.equipments()[eqID]
+
+
+def getOptionalDeviceByName(name):
+    optDevID = g_cache.optionalDeviceIDs()[name]
+    return g_cache.optionalDevices()[optDevID]
+
+
 def getVehicleType(compactDescr):
     if isVehicleTypeCompactDescr(compactDescr):
         nationID = compactDescr >> 4 & 15
@@ -2966,8 +2984,12 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
 
 
 def getBuiltinEqsForVehicle(vehType):
-    builtins = vehType.builtins
-    return [ e.compactDescr for e in g_cache.equipments().itervalues() if e.name in builtins ][:vehType.supplySlots.getAmountForType(ITEM_TYPES.equipment, items.EQUIPMENT_TYPES.regular)]
+    result = []
+    for eqName in vehType.builtins:
+        eq = getEquipmentByName(eqName)
+        result.append(eq.compactDescr)
+
+    return sorted(result)
 
 
 def getUnlocksSources():
@@ -4791,7 +4813,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
     if IS_CLIENT or IS_WEB:
-        shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
+        shell.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
         if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)

@@ -1,0 +1,31 @@
+<AvatarRespawnComponent.def>
+  <CellMethods>
+    <chooseSpawnPoint>
+      <Exposed></Exposed>
+      <Arg>	STRING	</Arg>
+    </chooseSpawnPoint>
+  </CellMethods>
+  <Properties>
+    <points>
+      <Type>	ARRAY	  <of>	UDO_INFO	</of>
+      </Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </points>
+    <pointGuid>
+      <Type>	STRING	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </pointGuid>
+    <duration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </duration>
+    <endTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endTime>
+  </Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+  <DefaultKeyName>	respawnComponent	</DefaultKeyName>
+</AvatarRespawnComponent.def>

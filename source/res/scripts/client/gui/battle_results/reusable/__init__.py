@@ -3,7 +3,6 @@
 import weakref
 import typing
 from account_helpers import getAccountDatabaseID
-from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePassProgress
 from gui.battle_control.arena_info import squad_finder
@@ -12,9 +11,11 @@ from gui.battle_results.reusable.avatars import AvatarsInfo
 from gui.battle_results.reusable.common import CommonInfo
 from gui.battle_results.reusable.personal import PersonalInfo
 from gui.battle_results.reusable.players import PlayersInfo
-from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo
+from gui.battle_results.reusable.economics import EconomicsInfo
+from gui.battle_results.reusable.progress import ProgressInfo
+from gui.battle_results.reusable.shared import VehicleDetailedInfo, TeamBasesInfo, VehicleSummarizeInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
-from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PLAYER_TEAM_RESULT as _TEAM_RESULT, PREMIUM_STATE
+from gui.battle_results.br_constants import BattleResultsRecord as _RECORD, PlayerTeamResult as _TEAM_RESULT
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -54,6 +55,8 @@ def createReusableInfo(results):
     record = _fetchRecord(results, _RECORD.PERSONAL)
     if record is not None:
         personalInfo = _checkInfo(PersonalInfo(record), _RECORD.PERSONAL)
+        economicsInfo = _checkInfo(EconomicsInfo(record), _RECORD.PERSONAL)
+        progressInfo = _checkInfo(ProgressInfo(record), _RECORD.PERSONAL)
     else:
         return
     record = _fetchRecord(results, _RECORD.PLAYERS)
@@ -72,29 +75,28 @@ def createReusableInfo(results):
     else:
         return
     if not unpackedRecords:
-        return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
+        return ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo, economicsInfo, progressInfo)
     else:
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
 
-class _ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress')
+class ReusableInfo(object):
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__squadFinder', '__economics', '__common', '__personal', '__players', '__vehicles', '__avatars', '__progress', '__battlePassProgress')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars):
-        super(_ReusableInfo, self).__init__()
+    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars, econimics, progress):
+        super(ReusableInfo, self).__init__()
         self.__arenaUniqueID = arenaUniqueID
         self.__clientIndex = 0
-        self.__premiumState = PREMIUM_STATE.NONE
-        self.__premiumPlusState = PREMIUM_STATE.NONE
-        self.__isAddXPBonusApplied = False
         self.__common = common
         self.__personal = personal
         self.__players = players
         self.__vehicles = vehicles
         self.__avatars = avatars
+        self.__economics = econimics
+        self.__progress = progress
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
         self.__battlePassProgress = BattlePassProgress(self.__common.arenaBonusType, **self.__personal.avatar.extensionInfo)
@@ -110,58 +112,6 @@ class _ReusableInfo(object):
     @clientIndex.setter
     def clientIndex(self, index):
         self.__clientIndex = index
-
-    @property
-    def hasAnyPremiumInPostBattle(self):
-        return self.__personal.hasAnyPremium
-
-    @property
-    def premiumState(self):
-        return self.__premiumState
-
-    @premiumState.setter
-    def premiumState(self, state):
-        self.__premiumState = state
-
-    @property
-    def premiumPlusState(self):
-        return self.__premiumPlusState
-
-    @premiumPlusState.setter
-    def premiumPlusState(self, state):
-        self.__premiumPlusState = state
-
-    @property
-    def isPremiumBought(self):
-        return self.__premiumState & PREMIUM_STATE.BOUGHT > 0
-
-    @property
-    def isPremiumPlusBought(self):
-        return self.__premiumPlusState & PREMIUM_STATE.BOUGHT > 0
-
-    @property
-    def isPostBattlePremium(self):
-        return self.__personal.isPremium or self.isPremiumBought
-
-    @property
-    def isPostBattlePremiumPlus(self):
-        return self.__personal.isPremiumPlus or self.isPremiumPlusBought
-
-    @property
-    def isAddXPBonusApplied(self):
-        return self.__personal.isAddXPBonusApplied
-
-    @isAddXPBonusApplied.setter
-    def isAddXPBonusApplied(self, state):
-        self.__personal.isAddXPBonusApplied = state
-
-    @property
-    def canUpgradeToPremium(self):
-        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
-
-    @property
-    def canUpgradeToPremiumPlus(self):
-        return self.__premiumPlusState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumPlusState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremiumPlus and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
 
     @property
     def canResourceBeFaded(self):
@@ -184,6 +134,10 @@ class _ReusableInfo(object):
         return self.__personal
 
     @property
+    def economics(self):
+        return self.__economics
+
+    @property
     def players(self):
         return self.__players
 
@@ -194,6 +148,10 @@ class _ReusableInfo(object):
     @property
     def avatars(self):
         return self.__avatars
+
+    @property
+    def progress(self):
+        return self.__progress
 
     @property
     def battlePassProgress(self):

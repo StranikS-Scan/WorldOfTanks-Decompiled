@@ -1,0 +1,22 @@
+<EventVehicle.def>
+  <Parent>	ClientSelectableCameraVehicle	</Parent>
+  <Properties>
+    <eventType>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </eventType>
+    <vehicleGunPitch>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0.0	</Default>
+    </vehicleGunPitch>
+    <vehicleTurretYaw>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0.0	</Default>
+    </vehicleTurretYaw>
+  </Properties>
+</EventVehicle.def>

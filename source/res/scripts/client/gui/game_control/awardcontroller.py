@@ -44,6 +44,7 @@ from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, 
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
+from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
@@ -59,12 +60,14 @@ from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, 
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
+from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow, showWtEventAwardWindow, showWtEventSpecialAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.wt_event.wt_event_helpers import hasWTEventQuest, isWTEventProgressionQuest, isWtEventSpecialQuest
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
@@ -76,7 +79,7 @@ from nations import NAMES
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController, IEventBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -194,7 +197,8 @@ class AwardController(IAwardController, IGlobalListener):
          PurchaseHandler(self),
          RenewableSubscriptionHandler(self),
          BattleMattersQuestsHandler(self),
-         ResourceWellRewardHandler(self)]
+         ResourceWellRewardHandler(self),
+         WtEventQuestAwardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1739,3 +1743,53 @@ class ResourceWellRewardHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))
+
+
+class WtEventQuestAwardHandler(ServiceChannelHandler):
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
+    __STR_RES = R.strings.event.notifications.progression
+
+    def __init__(self, awardCtrl):
+        super(WtEventQuestAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        if not self.__gameEventCtrl.isModeActive():
+            return False
+        else:
+            _, message = ctx
+            if message is not None and message.data and isinstance(message.data, types.DictType):
+                if hasWTEventQuest(message.data.get('completedQuestIDs', set())):
+                    return True
+            return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        for questId in message.data.get('completedQuestIDs', set()):
+            if isWTEventProgressionQuest(questId):
+                self.__showProgressionCompletedMessage(questId)
+                showWtEventAwardWindow(questId)
+            if isWtEventSpecialQuest(questId):
+                showWtEventSpecialAwardWindow(questId)
+
+    def __showProgressionCompletedMessage(self, questId):
+        stageIdx = self.__getStageIdx(questId)
+        if stageIdx == -1:
+            return None
+        else:
+            rewards = self.__getRewards(questId)
+            if stageIdx == len(self.__gameEventCtrl.getConfig().progression) - 1:
+                SystemMessages.pushMessage(text=backport.text(self.__STR_RES.completed(), rewards=rewards), type=SystemMessages.SM_TYPE.WTEventProgression, priority=NotificationPriorityLevel.HIGH)
+            else:
+                SystemMessages.pushMessage(text=backport.text(self.__STR_RES.stageAchieved(), stageIdx=str(stageIdx + 1), rewards=rewards), type=SystemMessages.SM_TYPE.WTEventProgression, priority=NotificationPriorityLevel.MEDIUM)
+            return None
+
+    def __getStageIdx(self, questID):
+        progression = self.__gameEventCtrl.getConfig().progression
+        for idx, stage in enumerate(progression):
+            if questID == stage['quest']:
+                return idx
+
+    def __getRewards(self, questID):
+        rewards = self.__gameEventCtrl.getQuestRewards(questID)
+        formattedList = [ formatted for r in rewards for formatted in r.formattedList() ]
+        return ', '.join(formattedList)

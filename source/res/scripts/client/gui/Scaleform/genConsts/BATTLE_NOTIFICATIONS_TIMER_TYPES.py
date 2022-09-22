@@ -39,3 +39,7 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     HP_RESTORE_ON_DAMAGE = 'hpRestoreOnDamage'
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'
+    WT_BOMB_CAPTURE = 'wtBombCapture'
+    WT_BOMB_DEPLOY = 'wtBombDeploy'
+    WT_BOMB_ABSORB = 'wtBombAbsorb'
+    WT_BOMB_CARRY = 'wtBombCarry'

@@ -8769,7 +8769,6 @@
       <id>	536	</id>
       <texture>	gui/maps/vehicles/styles/white_tiger_2021.png	</texture>
       <description>	#vehicle_customization:special_style/white_tiger_2021_desc	</description>
-      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/white_tiger_2021	</userString>
       <tags>	progression_required	</tags>
       <outfits>
@@ -8806,7 +8805,6 @@
       <id>	537	</id>
       <texture>	gui/maps/vehicles/styles/white_tiger_2021_hounds.png	</texture>
       <description>	#vehicle_customization:special_style/white_tiger_2021_desc	</description>
-      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/white_tiger_2021_hounds	</userString>
       <tags>	progression_required	</tags>
       <outfits>
@@ -14542,6 +14540,276 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A120_M48A5_hound_TLXXL	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	990	</id>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	6	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F18_Bat_Chatillon25t_hound_TLXXL	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	991	</id>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <slotId>	48000	</slotId>
+              <id>	7	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R97_Object_140_hound_TLXXL	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	992	</id>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	8	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G98_Waffentrager_E100_TLXXL	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	993	</id>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	9	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G98_Waffentrager_E100_TLXXL_S	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	994	</id>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	899	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	9	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22223	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Red.png	</texture>
+      <userString>	#vehicle_customization:special_style/Network_Meltdown	</userString>
+      <description>	#vehicle_customization:special_style/Network_Meltdown_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1020	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15923	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22224	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Blue.png	</texture>
+      <userString>	#vehicle_customization:special_style/Lightning_Hunter	</userString>
+      <description>	#vehicle_customization:special_style/Lightning_Hunter_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1021	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15924	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22225	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Green.png	</texture>
+      <userString>	#vehicle_customization:special_style/Breadboard	</userString>
+      <description>	#vehicle_customization:special_style/Breadboard_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1022	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15925	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -17323,6 +17591,42 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	677	</id>
+      <texture>	gui/maps/vehicles/styles/twitch_september_2022.png	</texture>
+      <userString>	#vehicle_customization:special_style/twitch_september_2022	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/twitch_september_2022_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	468	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	355	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>

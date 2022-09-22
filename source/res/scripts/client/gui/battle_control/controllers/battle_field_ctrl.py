@@ -24,6 +24,9 @@ class IBattleFieldListener(object):
     def updateTeamHealth(self, alliesHP, enemiesHP, totalAlliesHP, totalEnemiesHP):
         pass
 
+    def updateSpottedStatus(self, vehicleID, status):
+        pass
+
 
 class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, ViewComponentsController):
 
@@ -267,6 +270,9 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             flags, vo = self.__battleCtx.getArenaDP().updateVehicleSpottedStatus(vehicleID, spottedState)
             if flags != INVALIDATE_OP.NONE:
                 self.onSpottedStatusChanged([(flags, vo)], self.__battleCtx.getArenaDP())
+                for viewCmp in self._viewComponents:
+                    viewCmp.updateSpottedStatus(vehicleID, spottedState)
+
             return
 
     def __clear(self):

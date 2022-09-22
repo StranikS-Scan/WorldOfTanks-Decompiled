@@ -603,7 +603,8 @@
     <shortUserString>	#germany_vehicles:Waffentrager_E100_short	</shortUserString>
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_support private HD secret unrecoverable heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_support squad_restricted private HD cannot_be_sold random_only unrecoverable heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100>
   <G83_Pz_IV_AusfA>
@@ -1863,4 +1864,146 @@
     <tags>	heavyTank private HD beast epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </G51_Lowe_FL>
+  <G1102_Pz_III_WT_bot>
+    <id>	130	</id>
+    <userString>	#germany_vehicles:PzIII_A_WT	</userString>
+    <shortUserString>	#germany_vehicles:PzIII_A_WT_short	</shortUserString>
+    <description>	#germany_vehicles:PzIII_A_WT_descr	</description>
+    <price>	35000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	3	</level>
+  </G1102_Pz_III_WT_bot>
+  <G1025_PzII_Luchs_WT_bot>
+    <id>	131	</id>
+    <userString>	#germany_vehicles:PzII_Luchs_WT	</userString>
+    <shortUserString>	#germany_vehicles:PzII_Luchs_WT_short	</shortUserString>
+    <description>	#germany_vehicles:PzII_Luchs_WT_descr	</description>
+    <price>	155000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	4	</level>
+  </G1025_PzII_Luchs_WT_bot>
+  <G1081_Pz_IV_AusfH_WT_bot>
+    <id>	132	</id>
+    <userString>	#germany_vehicles:Pz_IV_AusfH_WT	</userString>
+    <shortUserString>	#germany_vehicles:Pz_IV_AusfH_WT_short	</shortUserString>
+    <description>	#germany_vehicles:Pz_IV_AusfH_WT_descr	</description>
+    <price>	373000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	5	</level>
+  </G1081_Pz_IV_AusfH_WT_bot>
+  <G1004_PzVI_Tiger_I_WT_bot>
+    <id>	133	</id>
+    <userString>	#germany_vehicles:PzVI_WT	</userString>
+    <shortUserString>	#germany_vehicles:Tiger_WT_short	</shortUserString>
+    <description>	#germany_vehicles:PzVI_WT_descr	</description>
+    <price>	1390000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	7	</level>
+  </G1004_PzVI_Tiger_I_WT_bot>
+  <G1003_PzV_Panther_WT_bot>
+    <id>	134	</id>
+    <userString>	#germany_vehicles:PzV_WT	</userString>
+    <shortUserString>	#germany_vehicles:PzV_WT_short	</shortUserString>
+    <description>	#germany_vehicles:PzV_WT_descr	</description>
+    <price>	1380000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	7	</level>
+  </G1003_PzV_Panther_WT_bot>
+  <G1016_PzVIB_Tiger_II_WT_bot>
+    <id>	135	</id>
+    <userString>	#germany_vehicles:PzVIB_Tiger_II_WT	</userString>
+    <shortUserString>	#germany_vehicles:PzVIB_Tiger_II_WT_short	</shortUserString>
+    <description>	#germany_vehicles:PzVIB_Tiger_II_WT_descr	</description>
+    <price>	2450000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	8	</level>
+  </G1016_PzVIB_Tiger_II_WT_bot>
+  <G1056_E-100_WT_bot>
+    <id>	137	</id>
+    <userString>	#germany_vehicles:E-100_WT	</userString>
+    <shortUserString>	#germany_vehicles:E-100_WT_short	</shortUserString>
+    <description>	#germany_vehicles:E-100_WT_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	10	</level>
+  </G1056_E-100_WT_bot>
+  <G1015_VK3601H_WT_bot>
+    <id>	138	</id>
+    <userString>	#germany_vehicles:VK3601H_WT	</userString>
+    <shortUserString>	#germany_vehicles:VK3601H_WT_short	</shortUserString>
+    <description>	#germany_vehicles:VK3601H_WT_descr	</description>
+    <price>	935000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	6	</level>
+  </G1015_VK3601H_WT_bot>
+  <G1066_VK2801_WT_bot>
+    <id>	139	</id>
+    <userString>	#germany_vehicles:VK2801_WT	</userString>
+    <shortUserString>	#germany_vehicles:VK2801_WT_short	</shortUserString>
+    <description>	#germany_vehicles:VK2801_WT_descr	</description>
+    <price>	945000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	6	</level>
+  </G1066_VK2801_WT_bot>
+  <G1055_E-75_WT_bot>
+    <id>	140	</id>
+    <userString>	#germany_vehicles:E-75_WT	</userString>
+    <shortUserString>	#germany_vehicles:E-75_WT_short	</shortUserString>
+    <description>	#germany_vehicles:E-75_WT_descr	</description>
+    <price>	3480000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	9	</level>
+  </G1055_E-75_WT_bot>
+  <G1042_Maus_WT_bot>
+    <id>	141	</id>
+    <userString>	#germany_vehicles:Maus_WT	</userString>
+    <shortUserString>	#germany_vehicles:Maus_WT_short	</shortUserString>
+    <description>	#germany_vehicles:Maus_WT_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	10	</level>
+  </G1042_Maus_WT_bot>
+  <G1134_PzKpfw_VII_WT_bot>
+    <id>	142	</id>
+    <userString>	#germany_vehicles:G1134_PzKpfw_VII_WT_bot	</userString>
+    <shortUserString>	#germany_vehicles:G1134_PzKpfw_VII_WT_bot_short	</shortUserString>
+    <description>	#germany_vehicles:G1134_PzKpfw_VII_WT_bot_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault event_bot HD secret event_battles lockCrew lockOutfit cannot_be_sold	</tags>
+    <level>	10	</level>
+  </G1134_PzKpfw_VII_WT_bot>
+  <G98_Waffentrager_E100_TLXXL>
+    <id>	144	</id>
+    <userString>	#germany_vehicles:G98_Waffentrager_E100_TLXXL	</userString>
+    <description>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_desc	</description>
+    <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_short_special	</shortDescriptionSpecial>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD event_boss event_battles special secret unrecoverable lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold earn_crystals builtinInstantStunShoot_wt_user builtinImpulse_wt_user builtinTeleport_wt_user builtinAbsorb_wt_user	</tags>
+    <level>	10	</level>
+  </G98_Waffentrager_E100_TLXXL>
+  <G98_Waffentrager_E100_TLXXL_S>
+    <id>	145	</id>
+    <userString>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_S	</userString>
+    <description>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_S_desc	</description>
+    <shortUserString>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_S_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G98_Waffentrager_E100_TLXXL_S_short_special	</shortDescriptionSpecial>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD event_boss event_battles special_event_boss special secret unrecoverable lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold earn_crystals builtinInstantStunShoot_wt_user builtinImpulse_wt_user builtinTeleport_wt_user builtinAbsorb_wt_user	</tags>
+    <level>	10	</level>
+  </G98_Waffentrager_E100_TLXXL_S>
 </list.xml>

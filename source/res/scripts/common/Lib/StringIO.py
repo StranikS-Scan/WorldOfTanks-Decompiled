@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/StringIO.py
-# Compiled at: 2032-05-06 05:37:45
+# Compiled at: 2002-06-13 16:21:23
 r"""File-like objects that read from or write to a string buffer.
 
 This implements (nearly) all stdio methods.

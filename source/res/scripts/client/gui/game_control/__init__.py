@@ -72,6 +72,11 @@ def getGameControllersConfig(manager):
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
+    from gui.game_control.loot_boxes_controller import LootBoxesController
+    from event_settings.event_settings_controller import EventSettingsController
+    from gui.entitlements.entitlements_controller import EntitlementsController
+    from gui.wt_event.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -123,6 +128,7 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _NoChina())
     _config(_interface.IMapboxController, MapboxController())
     _config(_interface.IEventBattlesController, EventBattlesController())
+    _config(_interface.ILootBoxesController, LootBoxesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -142,4 +148,7 @@ def getGameControllersConfig(manager):
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
+    _config(_interface.IEventSettingsController, EventSettingsController())
+    _config(_interface.IEntitlementsController, EntitlementsController())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

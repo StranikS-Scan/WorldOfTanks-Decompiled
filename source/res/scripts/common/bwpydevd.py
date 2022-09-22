@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwpydevd.py
-# Compiled at: 2032-11-16 19:39:56
+# Compiled at: 2003-06-22 17:32:37
 import os
 import sys
 import ResMgr

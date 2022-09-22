@@ -18,6 +18,7 @@ from web.web_client_api.social import SocialWebApi
 from web.web_client_api.sound import HangarSoundWebApi, SoundStateWebApi, SoundWebApi
 from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, OpenTabWebApi, OpenWindowWebApi, UtilWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api.wt import WtWebApi
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional
 _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
@@ -41,7 +42,8 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  BattlePassWebApi,
  ClansWebApi,
  RankedBattlesWebApi,
- BattleRoyaleWebApi)
+ BattleRoyaleWebApi,
+ WtWebApi)
 
 def createWebHandlers(replaces=None):
     handlers = webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

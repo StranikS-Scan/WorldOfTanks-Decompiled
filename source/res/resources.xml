@@ -175,6 +175,12 @@
       <module>	client.cgf_components.hover_component	</module>
       <module>	client.cgf_components.on_click_components	</module>
       <module>	client.cgf_components.hangar_rules	</module>
+      <module>	client.cgf_components.registrars	</module>
+      <module>	client.cgf_components.sequence_components	</module>
+      <module>	client.cgf_components.sound_components	</module>
+      <module>	client.cgf_components.afterburning_ability	</module>
+      <module>	client.cgf_components.bomb_components	</module>
+      <module>	client.cgf_components.entity_model	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
@@ -193,6 +199,27 @@
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
+      <path>	content/WtPrefabs/Bomb.prefab	</path>
+      <path>	content/WtPrefabs/BossShield.prefab	</path>
+      <path>	content/WtPrefabs/BotAppear.prefab	</path>
+      <path>	content/WtPrefabs/Escape.prefab	</path>
+      <path>	content/WtPrefabs/EventManagers.prefab	</path>
+      <path>	content/WtPrefabs/Generator.prefab	</path>
+      <path>	content/WtPrefabs/GeneratorModel.prefab	</path>
+      <path>	content/WtPrefabs/Impulse.prefab	</path>
+      <path>	content/WtPrefabs/PlasmaHit.prefab	</path>
+      <path>	content/WtPrefabs/TeleportSource.prefab	</path>
+      <path>	content/WtPrefabs/TeleportDestination.prefab	</path>
+      <path>	content/WtPrefabs/Afterburning.prefab	</path>
+      <path>	content/WtPrefabs/BossIdle.prefab	</path>
+      <path>	content/WtPrefabs/Bat_Chatillon25t_Idle.prefab	</path>
+      <path>	content/WtPrefabs/M48A5_Idle.prefab	</path>
+      <path>	content/WtPrefabs/Object_140_Idle.prefab	</path>
+      <path>	content/WtPrefabs/AntennaTeleportSpawner.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ChargedShot.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Shield.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Stronghold.prefab	</path>
+      <path>	content/WtPrefabs/abilities/StrongholdEnd.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>

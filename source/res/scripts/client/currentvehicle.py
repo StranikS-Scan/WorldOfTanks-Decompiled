@@ -275,6 +275,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForComp7Battles(self):
         return self.isPresent() and self.item.isOnlyForComp7Battles
 
+    def isOnlyForRandomBattles(self):
+        return self.isPresent() and self.item.isOnlyForRandomBattles
+
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
 

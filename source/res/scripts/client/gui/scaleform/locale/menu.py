@@ -293,6 +293,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -360,6 +361,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
+    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -614,7 +616,6 @@ class MENU(object):
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
-    TANK_PARAMS_VPS = '#menu:tank_params/vps'
     TANK_PARAMS_QPT = '#menu:tank_params/qpt'
     TANK_PARAMS_M = '#menu:tank_params/m'
     TANK_PARAMS_H = '#menu:tank_params/h'
@@ -2433,6 +2434,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2706,7 +2708,6 @@ class MENU(object):
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
-     TANK_PARAMS_VPS,
      TANK_PARAMS_QPT,
      TANK_PARAMS_M,
      TANK_PARAMS_H,

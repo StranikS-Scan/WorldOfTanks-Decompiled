@@ -113,7 +113,7 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
     def __processClanNewsNotification(self):
         account = self.__clansCtrl.getAccountProfile()
         notificationStartTime = self.__lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.NOTIFICATION_START_TIME, 0)
-        if not account.isInClan() or account.getJoinedAt() > notificationStartTime:
+        if account and (not account.isInClan() or account.getJoinedAt() > notificationStartTime):
             return
         if not AccountSettings.getNotifications(CLAN_NEWS_SEEN):
             AccountSettings.setNotifications(CLAN_NEWS_SEEN, True)

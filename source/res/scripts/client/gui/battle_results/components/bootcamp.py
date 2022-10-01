@@ -15,6 +15,7 @@ from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from helpers.bots import preprocessBotName
 from shared_utils import first
 from skeletons.gui.game_control import IBootcampController
 _logger = logging.getLogger(__name__)
@@ -171,8 +172,7 @@ class PlayerResultItem(base.StatsItem):
         if killerID not in record['common']['bots']:
             return makeHtmlString('html_templates:bootcamp/player_status', 'dead', ctx=ctx)
         killerName = record['common']['bots'][killerID][1]
-        killerName = makeString('#bootcamp:' + killerName)
-        ctx['killer'] = killerName
+        ctx['killer'] = preprocessBotName(killerName)
         return makeHtmlString('html_templates:bootcamp/player_status', 'killed', ctx=ctx)
 
 

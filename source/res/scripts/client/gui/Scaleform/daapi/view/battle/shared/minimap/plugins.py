@@ -668,8 +668,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 model = self._entries[vehicleID]
             if model is not None:
                 self._setVehicleInfo(vehicleID, model, vInfo, getProps(vehicleID, vInfo.team), isSpotted=False)
-                if model.isActive():
-                    self._setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
 
         for vehicleID in set(self._entries).difference(handled):

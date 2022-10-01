@@ -98,7 +98,7 @@ class StrongholdsWebApi(object):
         for intCD in cmd.reserve_intCDs:
             item = self.__itemsCache.items.getItemByCD(int(intCD))
             if item is None:
-                _logger.warning('There is not a reserve with intCD=(%s)', intCD)
+                _logger.warning('There is no reserve with intCD=(%s)', intCD)
                 continue
             rawParams = params_helper.getParameters(item)
             result[intCD] = {pName:pValue for pName, pValue in formatters.getFormattedParamsList(item.descriptor, rawParams)}

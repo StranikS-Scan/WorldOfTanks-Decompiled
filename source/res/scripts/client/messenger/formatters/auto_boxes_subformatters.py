@@ -8,12 +8,12 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.dossier import getAchievementFactory
-from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, EventLootBoxes, NewYearLootBoxes
+from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, ChinaLootBoxes, EventLootBoxes, NewYearLootBoxes
 from gui.shared.notifications import NotificationGroup
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters.service_channel import LootBoxAchievesFormatter, QuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
-from messenger.formatters.service_channel_helpers import MessageData, getRewardsForBoxes, getCustomizationItemData
+from messenger.formatters.service_channel_helpers import MessageData, getCustomizationItemData, getRewardsForBoxes
 from skeletons.gui.shared import IItemsCache
 
 class IAutoLootBoxSubFormatter(object):
@@ -60,8 +60,6 @@ class SyncAutoLootBoxSubFormatter(ServiceChannelFormatter, AutoLootBoxSubFormatt
 
 class EventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
     __itemsCache = dependency.descriptor(IItemsCache)
-    __MESSAGE_TEMPLATE = 'EventLootBoxesAutoOpenMessage'
-    __R_LOOT_BOXES = R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.event
 
     @adisp_async
     @adisp_process
@@ -73,9 +71,9 @@ class EventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
             fmtBoxes = self.__getFormattedBoxes(message, openedBoxesIDs)
             fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processTokens=False)
             ctx = {'boxes': fmtBoxes,
-             'rewards': backport.text(self.__R_LOOT_BOXES.rewards(), rewards=fmt)}
-            formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx=ctx)
-            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+             'rewards': backport.text(self._getTextResPath().rewards(), rewards=fmt)}
+            formatted = g_settings.msgTemplates.format(self._getMessageTemplate(), ctx=ctx)
+            settings = self._getGuiSettings(message, self._getMessageTemplate())
             callback([MessageData(formatted, settings)])
         else:
             callback([MessageData(None, None)])
@@ -85,13 +83,36 @@ class EventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
     def _isBoxOfThisGroup(cls, boxID):
         return cls._isBoxOfRequiredTypes(boxID, EventLootBoxes.ALL())
 
+    @staticmethod
+    def _getMessageTemplate():
+        pass
+
+    @staticmethod
+    def _getTextResPath():
+        return R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.event
+
     def __getFormattedBoxes(self, message, openedBoxesIDs):
         boxes = []
         for boxID in openedBoxesIDs:
             box = self.__itemsCache.items.tokens.getLootBoxByID(boxID)
-            boxes.append(backport.text(self.__R_LOOT_BOXES.counter(), boxName=box.getUserName(), count=message.data[boxID]['count']))
+            boxes.append(backport.text(self._getTextResPath().counter(), boxName=box.getUserName(), count=message.data[boxID]['count']))
 
         return ', '.join(boxes)
+
+
+class CNLootBoxesFormatter(EventBoxesFormatter):
+
+    @classmethod
+    def _isBoxOfThisGroup(cls, boxID):
+        return cls._isBoxOfRequiredTypes(boxID, ChinaLootBoxes.ALL())
+
+    @staticmethod
+    def _getMessageTemplate():
+        pass
+
+    @staticmethod
+    def _getTextResPath():
+        return R.strings.cn_loot_boxes.notification.lootBoxesAutoOpen
 
 
 class NYPostEventBoxesFormatter(AsyncAutoLootBoxSubFormatter):

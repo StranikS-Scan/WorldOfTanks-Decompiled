@@ -86,17 +86,19 @@ class PlayerSubscriptionRewardWindowView(ViewImpl):
         return
 
     def _setMainRewards(self):
-        imageResources = R.images.gui.maps.icons.windows.rewardWindow
         stringResources = R.strings.ingame_gui.rewardWindow.dyn(self._eventName, None)
         index = 1
         with self.viewModel.transaction() as tx:
             mainRewardsModel = tx.getMainRewards()
             while True:
-                img = imageResources.dyn(self._eventName + BACKGROUND_POSTFIX + '_' + str(index))
+                imgName = ''.join((self._eventName,
+                 '_',
+                 MAIN_REWARD_PREFIX,
+                 str(index)))
                 descr = stringResources.dyn(MAIN_REWARD_PREFIX + str(index))
-                if img and descr:
+                if descr:
                     model = MainRewardModel()
-                    model.setImage(backport.image(img()))
+                    model.setImage(imgName)
                     model.setDescription(backport.text(descr()))
                     mainRewardsModel.addViewModel(model)
                     index += 1

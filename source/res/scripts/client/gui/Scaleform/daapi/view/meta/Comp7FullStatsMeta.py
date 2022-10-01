@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/Comp7FullStatsMeta.py
-from gui.Scaleform.daapi.view.battle.classic.base_stats import StatsBase
+from gui.Scaleform.daapi.view.battle.shared.tabbed_full_stats import TabbedFullStatsComponent
 
-class Comp7FullStatsMeta(StatsBase):
+class Comp7FullStatsMeta(TabbedFullStatsComponent):
 
     def onVoiceChatControlClick(self):
         self._printOverrideError('onVoiceChatControlClick')

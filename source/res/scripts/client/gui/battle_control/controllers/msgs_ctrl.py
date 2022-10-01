@@ -118,10 +118,10 @@ class BattleMessagesController(IBattleController):
             self.onShowPlayerMessageByCode(code, postfix, targetID, attackerID, equipmentID)
             return
 
-    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
+    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID, ignoreMessages=False):
         code, postfix = self.__getDamageInfo(avatar, code, entityID, targetID)
         self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID)
-        self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID)
+        self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID, ignoreMessages)
 
     def showVehicleMessage(self, key, args=None):
         self.onShowVehicleMessageByKey(key, args, None)
@@ -219,10 +219,10 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showDestructibleEntityDestroyedMessage(avatar, destructibleID, attackerID)
 
-    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
+    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID, ignoreMessages=False):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, targetID, entityID, extra, equipmentID)
+        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, targetID, entityID, extra, equipmentID, ignoreMessages)
 
     def showVehicleMessage(self, key, args=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:

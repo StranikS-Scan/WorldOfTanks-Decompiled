@@ -60,21 +60,24 @@ class VehicleMessages(fading_messages.FadingMessages):
             return
         self.showMessage('SCREENSHOT_CREATED', {'path': event.ctx['path']})
 
-    def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
-        LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra, equipmentID)
-        names = {'device': '',
-         'entity': '',
-         'target': ''}
-        if extra is not None:
-            names['device'] = extra.deviceUserString
-        if entityID:
-            names['entity'] = self.__formatEntity(entityID)
-        if equipmentID:
-            equipment = vehicles.g_cache.equipments().get(equipmentID)
-            if equipment is not None:
-                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
-        self.showMessage(code, names, postfix=postfix)
-        return
+    def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID, ignoreMessages):
+        LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra, equipmentID, ignoreMessages)
+        if ignoreMessages:
+            return
+        else:
+            names = {'device': '',
+             'entity': '',
+             'target': ''}
+            if extra is not None:
+                names['device'] = extra.deviceUserString
+            if entityID:
+                names['entity'] = self.__formatEntity(entityID)
+            if equipmentID:
+                equipment = vehicles.g_cache.equipments().get(equipmentID)
+                if equipment is not None:
+                    postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
+            self.showMessage(code, names, postfix=postfix)
+            return
 
     def __onShowVehicleMessageByKey(self, key, args=None, extra=None):
         self.showMessage(key, args, extra)

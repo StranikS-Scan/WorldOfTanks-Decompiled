@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/pr2_converter.py
+from typing import TYPE_CHECKING
 from math import ceil
+if TYPE_CHECKING:
+    from typing import List, Tuple
+    ConversionDataType = Tuple[int, int, int, int, int]
 XP = 121001
 CRED = 121003
 XP_CREW_FREE = 121005
@@ -70,7 +74,7 @@ class PR2Converter(object):
                      int(ceil(oCount * oldWeight * 1.0 / newWeight))))
 
         cDataProvider.applySingleItemsResult(result)
-        return bool(result)
+        return result
 
     def __getResultConversionData(self, oldID, cDataProvider):
         newWeight = 0.0

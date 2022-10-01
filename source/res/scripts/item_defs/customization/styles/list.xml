@@ -14149,10 +14149,10 @@
       <description>	#vehicle_customization:special_style/fw_2022_style_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/fw_2022_style_desc/long	</longDescriptionSpecial>
       <tags>	questsProgression	</tags>
-      <maxNumber>	4	</maxNumber>
+      <maxNumber>	5	</maxNumber>
       <alternateItems>
         <camouflage>
-          <id>	15923 15924 15925 15926 15927 15928 15929	</id>
+          <id>	15930 15931 15932 15933 15934 15928 15929	</id>
         </camouflage>
         <decal>
           <id>	881 882 883 884 885 886 887 888 889 890 891 892 893 894 895 896 897 898 899 900 901 902 903 904	</id>
@@ -14163,7 +14163,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15923	</id>
+              <id>	15930	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14171,13 +14171,6 @@
           </camouflages>
         </outfit>
       </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>
@@ -14735,7 +14728,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15923	</id>
+              <id>	15930	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14770,7 +14763,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15924	</id>
+              <id>	15931	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14805,7 +14798,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15925	</id>
+              <id>	15932	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14840,7 +14833,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15926	</id>
+              <id>	15933	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14875,7 +14868,7 @@
           <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	15927	</id>
+              <id>	15934	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -14969,6 +14962,138 @@
         </outfit>
       </outfits>
     </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22223	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Red.png	</texture>
+      <userString>	#vehicle_customization:special_style/Network_Meltdown	</userString>
+      <description>	#vehicle_customization:special_style/Network_Meltdown_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1020	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15923	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22224	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Blue.png	</texture>
+      <userString>	#vehicle_customization:special_style/Lightning_Hunter	</userString>
+      <description>	#vehicle_customization:special_style/Lightning_Hunter_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1021	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15924	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	22225	</id>
+      <texture>	gui/maps/vehicles/styles/White_Tiger_2022_Green.png	</texture>
+      <userString>	#vehicle_customization:special_style/Breadboard	</userString>
+      <description>	#vehicle_customization:special_style/Breadboard_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1022	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	15925	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <tags>	progression_required	</tags>
+    </style>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -17752,6 +17877,42 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	677	</id>
+      <texture>	gui/maps/vehicles/styles/twitch_september_2022.png	</texture>
+      <userString>	#vehicle_customization:special_style/twitch_september_2022	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/twitch_september_2022_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	468	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	355	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>

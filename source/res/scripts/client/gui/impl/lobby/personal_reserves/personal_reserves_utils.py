@@ -2,22 +2,24 @@
 # Embedded file name: scripts/client/gui/impl/lobby/personal_reserves/personal_reserves_utils.py
 import typing
 from frameworks.wulf import Array
-from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
-from gui.goodies.goodie_items import BoosterUICommon, Booster
+from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
 from gui.goodies.goodies_constants import BoosterCategory
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PERSONAL_RESOURCE_ORDER, EVENT_RESOURCE_ORDER, CLAN_RESOURCE_ORDER_BY_GROUP, getAllBoosterIds
 from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import getSummedBoosterCount, addBoosterModel
 from gui.shared.utils.requesters import REQ_CRITERIA
-from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import List, Union
+    from typing import List, Union, Dict
+    from skeletons.gui.goodies import IGoodiesCache
+    from skeletons.gui.shared import IItemsCache
+    from skeletons.gui.web import IWebController
+    from gui.goodies.goodie_items import BoostersType
 
-def getActiveBoosters(cache):
+def getActiveBoosters(goodiesCache, webController):
     criteria = REQ_CRITERIA.BOOSTER.ACTIVE
-    activeBoosters = cache.getBoosters(criteria=criteria).values()
-    clanBoosters = cache.getClanReserves().values()
-    activeBoosters.extend(clanBoosters)
+    activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()
+    if webController.getAccountProfile().isInClan():
+        clanBoosters = [ clanBooster for clanBooster in goodiesCache.getClanReserves().values() if clanBooster.state == GOODIE_STATE.ACTIVE ]
+        activeBoosters.extend(clanBoosters)
     return activeBoosters
 
 

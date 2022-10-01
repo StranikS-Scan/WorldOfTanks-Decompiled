@@ -132,7 +132,7 @@ def gainedLevels(tankmanInvId, crewBookCD, itemsCache=None):
 
         def _newSkillsCount(descr):
             if tankman.role == tankman.ROLES.COMMANDER:
-                skillsList = list(skills_constants.ACTIVE_SKILLS)
+                skillsList = list(skills_constants.LEARNABLE_ACTIVE_SKILLS)
             else:
                 skillsList = list(tankman._NON_COMMANDER_SKILLS)
             i = 0

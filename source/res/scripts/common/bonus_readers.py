@@ -858,6 +858,8 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
+    if section.has_key('priority'):
+        properties['priority'] = section['priority'].asInt
     if IS_DEVELOPMENT:
         if section.has_key('name'):
             properties['name'] = section['name'].asString
@@ -886,7 +888,7 @@ def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
     if config.get('useBonusProbability', False) and bonusProbability is None:
         raise SoftException("Missing bonusProbability attribute in 'optional'")
     properties = subBonus.get('properties', {})
-    for property in ('compensation', 'shouldCompensated'):
+    for property in ('compensation', 'shouldCompensated', 'priority'):
         if properties.get(property, None) is not None:
             raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
 
@@ -1071,7 +1073,8 @@ _RESERVED_NAMES = frozenset(['config',
  'name',
  'shouldCompensated',
  'probabilityStageDependence',
- 'bonusProbability'])
+ 'bonusProbability',
+ 'priority'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))
@@ -1120,6 +1123,10 @@ def __readBonusConfig(section):
         if name == 'useBonusProbability':
             config.setdefault('useBonusProbability', False)
             config['useBonusProbability'] = data.asBool
+        if name == 'showBonusInfo':
+            config['showBonusInfo'] = data.asBool
+        if name == 'showProbabilitiesInfo':
+            config['showProbabilitiesInfo'] = data.asBool
         raise SoftException('Unknown config section: {}'.format(name))
 
     limitIDsLen = sum([ len(limitID) for limitID in config.get('limits', {}) ])

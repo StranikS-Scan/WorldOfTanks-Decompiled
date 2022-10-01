@@ -20,3 +20,9 @@ class FullStatsComponent(Comp7FullStatsMeta):
     def _dispose(self):
         self.__voipHelper.dispose()
         super(FullStatsComponent, self)._dispose()
+
+    @staticmethod
+    def _buildTabs(builder):
+        builder.addStatisticsTab()
+        builder.addBoostersTab()
+        return builder.getTabs()

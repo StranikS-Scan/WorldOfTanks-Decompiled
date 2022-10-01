@@ -1,22 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_reserves/reserves_conversion_view.py
-from frameworks.wulf import ViewFlags, ViewSettings, Array
-from gui.goodies.goodie_items import Booster
+import typing
+from frameworks.wulf import ViewFlags, ViewSettings
+from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
+from gui.goodies.goodie_items import Booster, getBoosterGuiType
 from gui.goodies.pr2_conversion_result import getConversionDataProvider
 from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_list_item import ConvertedBoosterListItem
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_conversion_view_model import ReservesConversionViewModel
 from gui.impl.pub import ViewImpl
-from gui.impl.gen import R
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
-from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_model import ConvertedBoosterModel
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Tuple, Optional, List, Any
+    from frameworks.wulf import Array
 
 class ReservesConversionView(ViewImpl):
     __slots__ = ('__goodiesCache', '__itemsCache')
     __goodiesCache = dependency.instance(IGoodiesCache)
     __itemsCache = dependency.instance(IItemsCache)
+    BOOSTER_TYPE_TO_MODEL_DICT = {'booster_crew_xp': (lambda model: model.crewXPConverted, lambda model: model.crewXPConverted),
+     'booster_credits': (lambda model: model.creditsConverted, lambda model: model.creditsConverted),
+     'booster_free_xp': (None, lambda model: model.freeXPConverted),
+     'booster_xp': (lambda model: model.battleXPConverted, lambda model: model.battleXPConverted)}
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -26,7 +35,7 @@ class ReservesConversionView(ViewImpl):
 
     @property
     def _viewModel(self):
-        return super(ReservesConversionView, self).getViewModel()
+        return self.getViewModel()
 
     def _initialize(self, *args, **kwargs):
         super(ReservesConversionView, self)._initialize(args, kwargs)
@@ -46,74 +55,89 @@ class ReservesConversionView(ViewImpl):
         super(ReservesConversionView, self)._onLoading(*args, **kwargs)
         self._fillViewModel()
 
-    def _setBoosterModel(self, model, convertedData, boosterGUIType):
-        if boosterGUIType == 'booster_crew_xp':
-            model.setCrewXPConverted(convertedData)
-        elif boosterGUIType == 'booster_credits':
-            model.setCreditsConverted(convertedData)
-        elif boosterGUIType == 'booster_free_xp':
-            model.setFreeXPConverted(convertedData)
-        elif boosterGUIType == 'booster_xp':
-            model.setBattleXPConverted(convertedData)
-        else:
-            raise SoftException('Not expected booster type {}'.format(boosterGUIType))
-
     def _fillViewModel(self):
-        devTest = False
-        if devTest:
-            result = ((5020, 3),
-             (5026, 2),
-             (5042, 4),
-             (5049, 5),
-             (5035, 11),
-             (5036, 2),
-             (9029, 4),
-             (9030, 2),
-             (5028, 3),
-             (5034, 4))
-        else:
-            result = self.__itemsCache.items.goodies.pr2ConversionResult
         with self._viewModel.transaction() as model:
+            result = self.__itemsCache.items.goodies.pr2ConversionResult
             provider = getConversionDataProvider(result)
-            prConversionResult = provider.getResult()
-            appliedNewIDs = set([])
-            for bGuiType in ('booster_crew_xp', 'booster_free_xp'):
-                resultByGUIType = prConversionResult.get(bGuiType)
-                prConversionResultSum = provider.getResultSum()
-                if resultByGUIType:
-                    convertedData = Array()
-                    for oldId, _, oldCount, newId, newCount in resultByGUIType:
-                        boosterModel = ConvertedBoosterModel()
-                        boosterModel.setOldCount(oldCount)
-                        oldDescr = self._getBoosterDescr(oldId)
-                        boosterModel.setOldDescription(oldDescr)
-                        if newId not in appliedNewIDs:
-                            appliedNewIDs.add(newId)
-                            newCount = prConversionResultSum[newId]
-                            newDescr = self._getBoosterDescr(newId)
-                        else:
-                            newCount = 0
-                            newDescr = '----'
-                        boosterModel.setNewCount(newCount)
-                        boosterModel.setNewDescription(newDescr)
-                        convertedData.addViewModel(boosterModel)
+            self._buildConversionItemsListSimple(GOODIE_RESOURCE_TYPE.FREE_XP, provider, model)
+            self._buildConversionItemsListSpecial(provider, model)
+            self._buildConversionItemsListSimple(GOODIE_RESOURCE_TYPE.CREDITS, provider, model)
+            self._buildConversionItemsListSimple(GOODIE_RESOURCE_TYPE.XP, provider, model)
 
-                    self._setBoosterModel(model, convertedData, bGuiType)
-                    del prConversionResult[bGuiType]
+    def _buildConversionItemsListSimple(self, boosterType, provider, model):
+        prConversionResult = provider.getResult()
+        boosterGuiType = getBoosterGuiType(boosterType)
+        self._buildConversionItemsLists(model, boosterGuiType, *self._prepareData(prConversionResult.get(boosterGuiType)))
 
-            for boosterGUIType, converted in prConversionResult.iteritems():
-                convertedData = Array()
-                for oldId, _, oldCount, newId, newCount in converted:
-                    boosterModel = ConvertedBoosterModel()
-                    boosterModel.setOldCount(oldCount)
-                    boosterModel.setNewCount(newCount)
-                    oldDescr = self._getBoosterDescr(oldId)
-                    newDescr = self._getBoosterDescr(newId)
-                    boosterModel.setOldDescription(oldDescr)
-                    boosterModel.setNewDescription(newDescr)
-                    convertedData.addViewModel(boosterModel)
+    def _buildConversionItemsListSpecial(self, provider, model):
+        prConversionResult = provider.getResult()
+        prConversionResultSum = provider.getResultSum()
+        boosterGuiType = getBoosterGuiType(GOODIE_RESOURCE_TYPE.FREE_XP)
+        freeXPData = prConversionResult.get(boosterGuiType)
+        sumIds = set()
+        if freeXPData is not None:
+            sumIds = {data[3] for data in freeXPData}
+        boosterGuiType = getBoosterGuiType(GOODIE_RESOURCE_TYPE.CREW_XP)
+        oldIds, oldCounts, newIds, _ = self._prepareData(prConversionResult.get(boosterGuiType), sort=False)
+        sumIds.update(newIds)
+        newIds = sorted(sumIds, key=self._boosterComparisonKey, reverse=True)
+        newCounts = [ prConversionResultSum[newId] for newId in newIds ]
+        self._buildConversionItemsLists(model, boosterGuiType, oldIds, oldCounts, newIds, newCounts)
+        return
 
-                self._setBoosterModel(model, convertedData, boosterGUIType)
+    def _buildConversionItemsLists(self, model, boosterGuiType, oldIds, oldCounts, newIds, newCounts):
+        conversionListsNew, conversionListsOld = self._getModelByGuiType(boosterGuiType)
+        if conversionListsNew is not None:
+            self._buildConversionItemList(newIds, newCounts, conversionListsNew(model).getNewBoosters())
+        if conversionListsOld is not None:
+            self._buildConversionItemList(oldIds, oldCounts, conversionListsOld(model).getOldBoosters())
+        return
+
+    def _prepareData(self, resultByGUIType, sort=True):
+        if resultByGUIType is None:
+            return ([],
+             [],
+             [],
+             [])
+        else:
+            if sort:
+                sortedData = sorted(resultByGUIType, key=lambda value: self._boosterComparisonKey(value[3]), reverse=True)
+            else:
+                sortedData = resultByGUIType
+            oldIds, oldCounts, newIds, newCounts = ([],
+             [],
+             [],
+             [])
+            for result in sortedData:
+                oldIds.append(result[0])
+                oldCounts.append(result[2])
+                newIds.append(result[3])
+                newCounts.append(result[4])
+
+            return (oldIds,
+             oldCounts,
+             newIds,
+             newCounts)
+
+    def _getModelByGuiType(self, boosterGUIType):
+        try:
+            return self.BOOSTER_TYPE_TO_MODEL_DICT[boosterGUIType]
+        except KeyError:
+            raise SoftException('Unexpected booster type {}'.format(boosterGUIType))
+
+    def _boosterComparisonKey(self, boosterId):
+        booster = self.__goodiesCache.getBooster(boosterId)
+        return (booster.effectValue, booster.effectTime)
+
+    def _buildConversionItemList(self, boosterIds, counts, conversionModelArray):
+        conversionModelArray.clear()
+        conversionModelArray.reserve(len(boosterIds))
+        for boosterId, count in zip(boosterIds, counts):
+            conversionItem = ConvertedBoosterListItem()
+            conversionItem.setCount(count)
+            descr = self._getBoosterDescr(boosterId)
+            conversionItem.setDescription(descr)
+            conversionModelArray.addViewModel(conversionItem)
 
     def _onClose(self):
         self.destroyWindow()

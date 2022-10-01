@@ -18,4 +18,5 @@ class SandboxVehiclesWatcher(BaseVehiclesWatcher):
         epicVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE).itervalues()
         clanWarsVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLAN_WARS).itervalues()
         comp7Vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.COMP7).itervalues()
-        return chain(vehs, eventVehs, epicVehs, clanWarsVehs, comp7Vehs)
+        randomOnlyVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.RANDOM_ONLY).itervalues()
+        return chain(vehs, eventVehs, epicVehs, clanWarsVehs, comp7Vehs, randomOnlyVehs)

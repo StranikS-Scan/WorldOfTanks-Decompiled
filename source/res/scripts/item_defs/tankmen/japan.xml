@@ -2566,7 +2566,7 @@
       </icons>
     </tankmen_bp9_3>
     <commander_quickybaby>
-      <groupID>	110	</groupID>
+      <groupID>	112	</groupID>
       <weight>	0.0	</weight>
       <sex>	male	</sex>
       <notInShop>	true	</notInShop>
@@ -2582,5 +2582,56 @@
         <_3115>	commander_quickybaby.png	</_3115>
       </icons>
     </commander_quickybaby>
+    <wt22_boss_commander>
+      <groupID>	110	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ermelinda_SpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_2052>	#japan_tankmen:names/wt22_boss_commander_n	</_2052>
+      </firstNames>
+      <lastNames>
+        <_2052>	#japan_tankmen:names/wt22_boss_commander	</_2052>
+      </lastNames>
+      <icons>
+        <_2052>	wt_2022_boss.png	</_2052>
+      </icons>
+    </wt22_boss_commander>
+    <wt22_hunter_commander>
+      <groupID>	111	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader villanelle_SpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_2053>	#japan_tankmen:names/wt22_hunter_commander_n	</_2053>
+      </firstNames>
+      <lastNames>
+        <_2053>	#japan_tankmen:names/wt22_hunter_commander	</_2053>
+      </lastNames>
+      <icons>
+        <_2053>	wt_2022_hunter.png	</_2053>
+      </icons>
+    </wt22_hunter_commander>
+    <commander_rebranding>
+      <groupID>	113	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3116>	#japan_tankmen:names/commander_rebranding_n	</_3116>
+      </firstNames>
+      <lastNames>
+        <_3116>	#japan_tankmen:names/commander_rebranding	</_3116>
+      </lastNames>
+      <icons>
+        <_3116>	crossivent_ekipazh.png	</_3116>
+      </icons>
+    </commander_rebranding>
   </premiumGroups>
 </japan.xml>

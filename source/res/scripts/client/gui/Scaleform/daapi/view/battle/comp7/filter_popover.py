@@ -4,6 +4,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_PREBATTLE_CAROUSEL_ROW_VALUE
 from gui.Scaleform.daapi.view.battle.comp7.common import getSavedRowCountValue, rowValueToRowCount, rowCountToRowValue
 from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, FILTER_SECTION
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -14,6 +15,14 @@ class Comp7TankCarouselFilterPopover(TankCarouselFilterPopover):
         self._carouselRowCount = 1 if selected else 0
         self.__saveRowCountValue()
         self._carousel.setRowCount(rowValueToRowCount(self._carouselRowCount))
+
+    def _populate(self):
+        super(Comp7TankCarouselFilterPopover, self)._populate()
+        self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, enableAiming=False)
+
+    def _dispose(self):
+        self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER)
+        super(Comp7TankCarouselFilterPopover, self)._dispose()
 
     def _readRowCount(self, ctx):
         savedRowValue, isSavedByPlayer = getSavedRowCountValue()

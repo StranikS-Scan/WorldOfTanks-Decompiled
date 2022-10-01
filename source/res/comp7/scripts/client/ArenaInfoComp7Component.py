@@ -40,8 +40,7 @@ class ArenaInfoComp7Component(ScriptComponent):
             self.__updateGameModeStats(ranks)
 
     def __onNewVehicleListReceived(self):
-        if self._isAvatarReady:
-            self.__invalidateRanks()
+        self.__invalidateRanks()
 
     def __onVehicleAdded(self, vehicleID):
         if self._isAvatarReady:

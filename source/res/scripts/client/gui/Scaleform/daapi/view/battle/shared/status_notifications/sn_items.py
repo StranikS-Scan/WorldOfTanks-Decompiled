@@ -53,8 +53,8 @@ class _VehicleStateSN(StatusNotificationItem):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _HIDE_STATES_TRIGGERS = (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED, VEHICLE_VIEW_STATE.SWITCHING)
 
-    def __init__(self, updateCallback):
-        super(_VehicleStateSN, self).__init__(updateCallback)
+    def start(self):
+        super(_VehicleStateSN, self).start()
         ctrl = self._sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -168,8 +168,8 @@ class TimerSN(_VehicleStateSN):
 class _DestroyTimerSN(TimerSN):
     _ANY_SUPPORTED_LEVEL = 'anySupportedLevel'
 
-    def __init__(self, updateCallback):
-        super(_DestroyTimerSN, self).__init__(updateCallback)
+    def start(self):
+        super(_DestroyTimerSN, self).start()
         self._subscribeOnVehControlling()
 
     def _getSupportedLevel(self):
@@ -308,8 +308,8 @@ class DrownSN(DestroyMiscTimerSN):
 
 class UnderFireSN(_VehicleStateSN):
 
-    def __init__(self, updateCallback):
-        super(UnderFireSN, self).__init__(updateCallback)
+    def start(self):
+        super(UnderFireSN, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):
@@ -324,8 +324,8 @@ class UnderFireSN(_VehicleStateSN):
 
 class FireSN(_VehicleStateSN):
 
-    def __init__(self, updateCallback):
-        super(FireSN, self).__init__(updateCallback)
+    def start(self):
+        super(FireSN, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):
@@ -343,6 +343,9 @@ class StunSN(TimerSN):
     def __init__(self, updateCallback):
         super(StunSN, self).__init__(updateCallback)
         self._vo['title'] = backport.text(R.strings.ingame_gui.stun.indicator())
+
+    def start(self):
+        super(StunSN, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):
@@ -365,8 +368,8 @@ class StunSN(TimerSN):
 
 class _SmokeBase(LocalizationProvider, TimerSN):
 
-    def __init__(self, updateCallback):
-        super(_SmokeBase, self).__init__(updateCallback)
+    def start(self):
+        super(_SmokeBase, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):
@@ -498,8 +501,8 @@ class RepairingCooldownSN(_BaseRepairingSN):
 
 class _InspireBaseSN(BuffSN):
 
-    def __init__(self, updateCallback):
-        super(_InspireBaseSN, self).__init__(updateCallback)
+    def start(self):
+        super(_InspireBaseSN, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):

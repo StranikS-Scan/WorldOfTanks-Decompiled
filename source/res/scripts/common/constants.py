@@ -902,7 +902,6 @@ MISC_GUI_SETTINGS = 'misc_gui_settings'
 META_GAME_SETTINGS = 'meta_game_settings'
 MAPS_TRAINING_ENABLED_KEY = 'isMapsTrainingEnabled'
 OFFERS_ENABLED_KEY = 'isOffersEnabled'
-PERSONAL_RESERVES_CONFIG = 'personal_reserves_config'
 
 class Configs(enum.Enum):
     BATTLE_ROYALE_CONFIG = 'battle_royale_config'
@@ -918,6 +917,7 @@ class Configs(enum.Enum):
     PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
     COMP7_CONFIG = 'comp7_config'
     COMP7_PRESTIGE_RANKS_CONFIG = 'comp7_prestige_ranks_config'
+    PERSONAL_RESERVES_CONFIG = 'personal_reserves_config'
 
 
 class RESTRICTION_TYPE:
@@ -1359,6 +1359,22 @@ class EVENT_TYPE:
     QUESTS_WITH_SHOP_BUTTON = (BATTLE_QUEST, TOKEN_QUEST, PERSONAL_QUEST)
     QUEST_WITHOUT_DYNAMIC_UPDATE = (POTAPOV_QUEST, NT_QUEST)
     QUEST_USE_FOR_C11N_PROGRESS = (TOKEN_QUEST, BATTLE_QUEST)
+    MISC_DATA_RANGE = (BATTLE_QUEST, TOKEN_QUEST)
+
+
+class QUEST_DATA_IDX:
+    QUESTS = 0
+    IN_VARS = 1
+    OUT_VARS = 2
+    ALIASES = 3
+    KILLED_CLAN_SETS = 4
+    VEHICLE_SETS = 5
+    ACHIEVEMENT_SETS = 6
+    IN_CLAN_SETS = 7
+    CLAN_CAMOUFLAGES = 8
+    MISC = 9
+    TOKEN2IDXS = 10
+    INVENTORY_SETS = 11
 
 
 class QUEST_SOURCE:
@@ -3129,7 +3145,8 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'battle_royale',
  'clanWarsBattles',
  'fun_random',
- 'comp7'}
+ 'comp7',
+ 'random_only'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_FUN = BATTLE_MODE_VEHICLE_TAGS - {'fun_random'}
 
 @enum.unique

@@ -150,11 +150,11 @@ class _PrebattleCarouselDataProvider(CarouselDataProvider):
         if vehicleCD is None:
             return
         else:
-            for idx, vehicle in enumerate(self._vehicles):
+            for vehicle in self._vehicles:
                 if vehicle.compactDescr == vehicleCD:
-                    self._selectedIdx = idx
                     self.__selectedCD = vehicleCD
-                    self.buildList()
+                    self.applyFilter()
+                    self.refresh()
                     break
 
             return

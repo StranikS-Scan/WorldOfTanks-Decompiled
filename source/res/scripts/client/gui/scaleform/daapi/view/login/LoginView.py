@@ -158,8 +158,8 @@ class LoginView(LoginPageMeta):
     def startListenCsisUpdate(self, startListenCsis):
         self.loginManager.servers.startListenCsisQuery(startListenCsis)
 
-    def doUpdate(self):
-        pass
+    def onLoginNameUpdated(self):
+        self.__clearPeripheryRouting()
 
     @uniprof.regionDecorator(label='offline.login', scope='enter')
     def _populate(self):

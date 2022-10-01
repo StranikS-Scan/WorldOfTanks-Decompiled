@@ -17,4 +17,5 @@ SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(COMMANDER_SKILLS),
 ACTIVE_SKILLS = SKILLS_BY_ROLES['commander'] | SKILLS_BY_ROLES['radioman'] | SKILLS_BY_ROLES['driver'] | SKILLS_BY_ROLES['gunner'] | SKILLS_BY_ROLES['loader']
 ACTIVE_FREE_SKILLS = ACTIVE_SKILLS | {'any'}
 UNLEARNABLE_SKILLS = ('commander_sixthSense',)
+LEARNABLE_ACTIVE_SKILLS = ACTIVE_SKILLS.difference(UNLEARNABLE_SKILLS)
 PERKS = frozenset(('brotherhood', 'commander_sixthSense', 'commander_expert', 'commander_enemyShotPredictor', 'driver_tidyPerson', 'gunner_rancorous', 'gunner_sniper', 'loader_pedant', 'loader_desperado', 'radioman_lastEffort'))

@@ -103,7 +103,7 @@ class BoosterModel(ViewModel):
         self._addStringProperty('reserveType')
         self._addNumberProperty('inactivationTime', -1)
         self._addNumberProperty('inDepot', -1)
-        self._addNumberProperty('minBonus', 100)
+        self._addNumberProperty('minBonus', -1)
         self._addNumberProperty('maxBonus', 0)
         self._addNumberProperty('totalDuration', 60)
         self._addBoolProperty('isPremium', False)

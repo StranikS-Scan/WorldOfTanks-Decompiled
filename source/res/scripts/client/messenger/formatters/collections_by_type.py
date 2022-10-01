@@ -7,6 +7,7 @@ from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
+ auto_boxes_subformatters.CNLootBoxesFormatter(),
  auto_boxes_subformatters.NYPostEventBoxesFormatter(),
  auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
  auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter())

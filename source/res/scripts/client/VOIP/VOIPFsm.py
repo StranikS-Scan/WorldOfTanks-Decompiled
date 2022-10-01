@@ -3,6 +3,7 @@
 import logging
 import Event
 _logger = logging.getLogger(__name__)
+_logger.setLevel(logging.DEBUG)
 
 class VOIP_FSM_STATE(object):
     NONE = 0
@@ -64,6 +65,7 @@ class VOIPFsm(object):
         elif self.__state == _STATE.JOINING_CHANNEL and not voip.hasDesiredChannel():
             self.__setState(_STATE.LEAVING_CHANNEL)
         elif self.__state == _STATE.JOINED_CHANNEL and (not voip.isInDesiredChannel() or not voip.isEnabled() or not voip.getCurrentChannel()):
+            _logger.debug('goto LEAVING_CHANNEL state: %r %r %r', voip.isInDesiredChannel(), voip.isEnabled(), voip.getCurrentChannel())
             self.__setState(_STATE.LEAVING_CHANNEL)
         elif self.__state == _STATE.LEAVING_CHANNEL and not voip.getCurrentChannel():
             self.__setState(_STATE.LOGGED_IN)

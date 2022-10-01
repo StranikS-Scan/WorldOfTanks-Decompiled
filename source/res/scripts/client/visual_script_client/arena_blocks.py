@@ -96,7 +96,7 @@ class OnCaptureControlPoint(TunableEventBlock, ArenaMeta):
 
     def _isCurrControlPoint(self, baseID, team):
         controlPoint = self._controlPoint.getValue()
-        return controlPoint is not None and controlPoint.baseID is baseID and controlPoint.team is team
+        return controlPoint is not None and controlPoint.baseID == baseID and controlPoint.team == team
 
     def _capturingInfoUpdate(self, team, baseID, lastData, currData):
         if not self._isCurrControlPoint(baseID, team) or self.arena is None:

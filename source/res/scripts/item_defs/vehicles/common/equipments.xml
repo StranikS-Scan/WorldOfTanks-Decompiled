@@ -7070,12 +7070,12 @@
       <minApplyRadius>	20	</minApplyRadius>
       <maxApplyRadius>	300	</maxApplyRadius>
       <requireAssists>	true	</requireAssists>
-      <delay>	2	</delay>
+      <delay>	3	</delay>
       <duration>	1.0	</duration>
       <maxCount>	1	</maxCount>
       <shotsNumber>	1	</shotsNumber>
       <explodeDestructible>	true	</explodeDestructible>
-      <areaRadius>	30	</areaRadius>
+      <areaRadius>	25	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
       <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
       <areaVisibleToEnemies>	false	</areaVisibleToEnemies>
@@ -7099,8 +7099,8 @@
           <type>	DamageVehicleWithDispersion	</type>
           <applyTo>	enemy_team	</applyTo>
           <args>
-            <damage>	400	</damage>
-            <damageDispersionPercent>	25	</damageDispersionPercent>
+            <damage>	325	</damage>
+            <damageDispersionPercent>	10	</damageDispersionPercent>
           </args>
         </action>
         <action>
@@ -8177,7 +8177,7 @@
           <plan>	comp7Abilities/aoeHeal_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	45	  <exports>	vse	</exports>
+      <cooldownSeconds>	40	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	10	  <exports>	vse tooltip	</exports>
       </duration>
@@ -8185,7 +8185,7 @@
       </radius>
       <heal>	20 30 40	  <exports>	vse	</exports>
       </heal>
-      <secondaryHealDebuff>	50	  <exports>	vse tooltip	</exports>
+      <secondaryHealDebuff>	30	  <exports>	vse tooltip	</exports>
       </secondaryHealDebuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -8209,7 +8209,7 @@
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <radius>	250	  <exports>	vse tooltip	</exports>
+      <radius>	350	  <exports>	vse tooltip	</exports>
       </radius>
       <crewBuff>	3.0 5.0 7.0	  <exports>	vse tooltip	</exports>
       </crewBuff>
@@ -8232,13 +8232,13 @@
           <plan>	comp7Abilities/hunter_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	25	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	5	  <exports>	vse tooltip	</exports>
       </duration>
-      <heal>	15 19 23	  <exports>	vse	</exports>
+      <heal>	12 14 16	  <exports>	vse	</exports>
       </heal>
-      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	2	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -8262,9 +8262,9 @@
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <aimingTimeBuff>	0.8 0.7 0.6	  <exports>	vse	</exports>
+      <aimingTimeBuff>	0.85 0.75 0.65	  <exports>	vse	</exports>
       </aimingTimeBuff>
-      <shotDispersionFactors>	0.9 0.8 0.7	  <exports>	vse	</exports>
+      <shotDispersionFactors>	0.85 0.75 0.65	  <exports>	vse	</exports>
       </shotDispersionFactors>
       <clipReloadTimeBoost>	0.2 0.4 0.6	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
@@ -8284,13 +8284,13 @@
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15	  <exports>	vse tooltip	</exports>
+      <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
       <gunReloadTimeBuff>	0.85 0.8 0.75	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
-      <damageDistance>	300	  <exports>	vse tooltip	</exports>
+      <damageDistance>	250	  <exports>	vse tooltip	</exports>
       </damageDistance>
     </script>
   </comp7_berserk>
@@ -8310,9 +8310,9 @@
       </visualScript>
       <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	20	  <exports>	vse tooltip	</exports>
+      <duration>	25	  <exports>	vse tooltip	</exports>
       </duration>
-      <radius>	40	  <exports>	vse tooltip	</exports>
+      <radius>	50	  <exports>	vse tooltip	</exports>
       </radius>
       <crewBuff>	10 20 30	  <exports>	vse tooltip	</exports>
       </crewBuff>
@@ -8333,17 +8333,17 @@
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	30	  <exports>	vse	</exports>
+      <cooldownSeconds>	40	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <delay>	2	  <exports>	vse tooltip	</exports>
+      <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
       <radius>	15 20 25	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	100 200 300	  <exports>	vse tooltip	</exports>
+      <damage>	75 150 225	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	8 16 24	  <exports>	vse tooltip	</exports>
+      <stunDuration>	8 12 16	  <exports>	vse tooltip	</exports>
       </stunDuration>
-      <fraction>	0.25	  <exports>	vse tooltip	</exports>
+      <fraction>	0.10	  <exports>	vse tooltip	</exports>
       </fraction>
       <areaShow>	always	</areaShow>
       <duration>	1.0	</duration>
@@ -8409,7 +8409,7 @@
       </stunDurationFactor>
       <repairBuff>	10	  <exports>	vse tooltip	</exports>
       </repairBuff>
-      <gunReloadBoost>	2.0	  <exports>	vse tooltip	</exports>
+      <gunReloadBoost>	3.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
     </script>
   </comp7_juggernaut>
@@ -8453,13 +8453,13 @@
           <plan>	comp7Abilities/sniper_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	10 15 20	  <exports>	vse tooltip	</exports>
       </duration>
       <dispersionFactor>	0.01	  <exports>	vse tooltip	</exports>
       </dispersionFactor>
-      <damageDistance>	300	  <exports>	vse tooltip	</exports>
+      <damageDistance>	250	  <exports>	vse tooltip	</exports>
       </damageDistance>
     </script>
   </comp7_sniper>

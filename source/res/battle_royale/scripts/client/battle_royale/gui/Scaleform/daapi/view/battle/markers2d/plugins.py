@@ -123,7 +123,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         if vehicleID == BigWorld.player().getObservedVehicleID() and vehicleID in self._markers:
             self.__hideStunMarker(vehicleID, self._markers[vehicleID].getMarkerID())
 
-    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
+    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle, blinkAnim=True):
         extendedStatuses = self.__markersStatesExtended[vehicleID]
         if isShown and not self.__statusInActive(vehicleID, statusID):
             hasNeighbor = self.__hasNeighborInPrioritizes
@@ -141,7 +141,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         elif statusID == BATTLE_MARKER_STATES.DEBUFF_STATE:
             isSourceVehicle = False
         if isShown:
-            self._invokeMarker(handle, 'showStatusMarker', statusID, self._getMarkerStatusPriority(statusID), isSourceVehicle, duration, currentlyActiveStatusID, self._getMarkerStatusPriority(currentlyActiveStatusID), animated)
+            self._invokeMarker(handle, 'showStatusMarker', statusID, self._getMarkerStatusPriority(statusID), isSourceVehicle, duration, currentlyActiveStatusID, self._getMarkerStatusPriority(currentlyActiveStatusID), animated, blinkAnim)
         else:
             self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
 

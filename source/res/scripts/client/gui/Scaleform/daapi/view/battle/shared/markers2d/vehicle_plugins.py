@@ -303,7 +303,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 self._checkNextState(marker)
         return
 
-    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
+    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle, blinkAnim=True):
         activeStatuses = self._markersStates[vehicleID]
         marker = MarkerState(statusID, isSourceVehicle)
         isStatusActive = self.__isStatusActive(statusID, activeStatuses)
@@ -326,7 +326,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         elif statusID == BATTLE_MARKER_STATES.DEBUFF_STATE:
             isSourceVehicle = False
         if isShown:
-            self._invokeMarker(handle, 'showStatusMarker', statusID, self._getMarkerStatusPriority(MarkerState(statusID, isSourceVehicle)), isSourceVehicle, duration, currentlyActiveStatusID, self._getMarkerStatusPriority(currentActiveMarker), animated)
+            self._invokeMarker(handle, 'showStatusMarker', statusID, self._getMarkerStatusPriority(MarkerState(statusID, isSourceVehicle)), isSourceVehicle, duration, currentlyActiveStatusID, self._getMarkerStatusPriority(currentActiveMarker), animated, blinkAnim)
         elif self.__canUpdateStatus(handle):
             self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated, currentlyActiveIsSourceVehicle)
 

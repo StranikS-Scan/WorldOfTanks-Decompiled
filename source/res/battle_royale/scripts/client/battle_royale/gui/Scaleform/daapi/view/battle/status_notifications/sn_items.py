@@ -46,8 +46,11 @@ class LootPickUpSN(_BRLocalizationProvider, sn_items.TimerSN):
         super(LootPickUpSN, self).__init__(updateCallback)
         self.__loots = {}
         self.__vehicle = None
-        self._subscribeOnVehControlling()
         return
+
+    def start(self):
+        super(LootPickUpSN, self).start()
+        self._subscribeOnVehControlling()
 
     def destroy(self):
         self.__loots = None
@@ -127,6 +130,9 @@ class ShotPassionSN(BRBuffSN):
         eqID = vehicles.g_cache.equipmentIDs().get(self._getEquipmentName())
         self.__eq = vehicles.g_cache.equipments()[eqID]
         self.__maxStage = int(round(self.__eq.maxDamageIncreasePerShot / self.__eq.damageIncreasePerShot))
+
+    def start(self):
+        super(ShotPassionSN, self).start()
         self._subscribeOnVehControlling()
 
     def getItemID(self):
@@ -178,8 +184,8 @@ class BRRepairingCooldownSN(_BRLocalizationProvider, sn_items.RepairingCooldownS
 
 class BRInspireSN(BRBuffSN):
 
-    def __init__(self, updateCallback):
-        super(BRInspireSN, self).__init__(updateCallback)
+    def start(self):
+        super(BRInspireSN, self).start()
         self._subscribeOnVehControlling()
 
     def getViewTypeID(self):

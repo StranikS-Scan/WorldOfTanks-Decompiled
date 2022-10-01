@@ -6,6 +6,7 @@ from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
+from gui.Scaleform.daapi.view.battle.shared.tabbed_full_stats import TabsAliases
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from shared_utils import CONST_CONTAINER
@@ -69,7 +70,7 @@ class ClassicPage(SharedPage):
                 radialMenu.hide(allowAction)
             return
 
-    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
         if manager.isModalViewsIsExists():
             return
@@ -79,11 +80,11 @@ class ClassicPage(SharedPage):
             fullStats = self.getComponent(self._fullStatsAlias)
             if fullStats is None:
                 return
+            doTabSwitch = fullStats.hasTabs and tabAlias is not None and fullStats.hasTab(tabAlias)
+            if not doTabSwitch and tabAlias not in (None, TabsAliases.STATS):
+                return
             ctrl = self.sessionProvider.shared.calloutCtrl
             if ctrl is not None and ctrl.isRadialMenuOpened():
-                return
-            hasTabs = fullStats.hasTabs
-            if not hasTabs and tabIndex > 0:
                 return
             if self.as_isComponentVisibleS(self._fullStatsAlias) != isShown:
                 if isShown:
@@ -91,15 +92,15 @@ class ClassicPage(SharedPage):
                         self._fsToggling.update(self.as_getComponentsVisibilityS())
                     if permanent is not None:
                         self._fsToggling.difference_update(permanent)
-                    if hasTabs and tabIndex is not None:
-                        fullStats.setActiveTabIndex(tabIndex)
+                    if doTabSwitch:
+                        fullStats.setActiveTab(tabAlias)
                     self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._fsToggling)
+                    fullStats.onToggleVisibility(True)
                 else:
                     self._setComponentsVisibility(visible=self._fsToggling, hidden={self._fullStatsAlias})
-                    if hasTabs:
-                        if tabIndex is not None:
-                            fullStats.setActiveTabIndex(None)
-                        fullStats.showQuestProgressAnimation()
+                    fullStats.onToggleVisibility(False)
+                    if doTabSwitch:
+                        fullStats.setActiveTab(None)
                     self._fsToggling.clear()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
@@ -158,13 +159,13 @@ class ClassicPage(SharedPage):
         return
 
     def _handleToggleFullStats(self, event):
-        self._toggleFullStats(event.ctx['isDown'], tabIndex=0)
+        self._toggleFullStats(event.ctx['isDown'], tabAlias=TabsAliases.STATS)
 
     def _handleToggleFullStatsQuestProgress(self, event):
-        self._toggleFullStats(event.ctx['isDown'], tabIndex=1)
+        self._toggleFullStats(event.ctx['isDown'], tabAlias=TabsAliases.QUESTS_PROGRESS)
 
     def _handleToggleFullStatsPersonalReserves(self, event):
-        self._toggleFullStats(event.ctx['isDown'], tabIndex=2)
+        self._toggleFullStats(event.ctx['isDown'], tabAlias=TabsAliases.BOOSTERS)
 
     def _handleBattleNotifierVisibility(self):
         battleNotifierLinkage = BATTLE_VIEW_ALIASES.BATTLE_NOTIFIER

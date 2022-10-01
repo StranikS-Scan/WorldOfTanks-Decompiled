@@ -149,7 +149,7 @@ class SkillDropWindow(SkillDropMeta):
         dropSkillCostIdx = int(flashDropSkillCostIdx)
         useRecertificationForm = flashDropSkillCostIdx == self._recertificationFormOptionIndex
         price = None
-        freeDropSave100 = len(tankman.skills) == 1 and tankman.skills[0].level < 1
+        freeDropSave100 = len(tankman.earnedSkills) == 1 and tankman.earnedSkills[0].level < 1
         if useRecertificationForm:
             dropSkillCostIdx = self._goldOptionIndex
         else:

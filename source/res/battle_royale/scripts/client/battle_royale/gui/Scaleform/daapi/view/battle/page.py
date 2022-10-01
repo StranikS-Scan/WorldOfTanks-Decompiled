@@ -149,7 +149,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                     return False
             return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
 
-    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
         if manager.isModalViewsIsExists():
             return
@@ -164,7 +164,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                     progressionWindow.closeWindow()
             if self.__selectSpawnToggling:
                 return
-            super(BattleRoyalePage, self)._toggleFullStats(isShown, permanent, tabIndex)
+            super(BattleRoyalePage, self)._toggleFullStats(isShown, permanent, tabAlias)
             return
 
     def _populate(self):

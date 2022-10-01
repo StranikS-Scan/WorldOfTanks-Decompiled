@@ -24,12 +24,12 @@
       <minApplyRadius>	20	</minApplyRadius>
       <maxApplyRadius>	300	</maxApplyRadius>
       <requireAssists>	true	</requireAssists>
-      <delay>	2	</delay>
+      <delay>	3	</delay>
       <duration>	1.0	</duration>
       <maxCount>	1	</maxCount>
       <shotsNumber>	1	</shotsNumber>
       <explodeDestructible>	true	</explodeDestructible>
-      <areaRadius>	30	</areaRadius>
+      <areaRadius>	25	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
       <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
       <areaVisibleToEnemies>	false	</areaVisibleToEnemies>
@@ -53,8 +53,8 @@
           <type>	DamageVehicleWithDispersion	</type>
           <applyTo>	enemy_team	</applyTo>
           <args>
-            <damage>	400	</damage>
-            <damageDispersionPercent>	25	</damageDispersionPercent>
+            <damage>	325	</damage>
+            <damageDispersionPercent>	10	</damageDispersionPercent>
           </args>
         </action>
         <action>

@@ -318,13 +318,9 @@ class Tankman(GUIItem):
             tmanDescr = tankmen.TankmanDescr(self.strCD)
             i = 0
             if self.role == self.ROLES.COMMANDER:
-                skills_list = list(skills_constants.ACTIVE_SKILLS)
+                skills_list = list(skills_constants.LEARNABLE_ACTIVE_SKILLS)
             else:
                 skills_list = list(self._NON_COMMANDER_SKILLS)
-            for skillName in skills_constants.UNLEARNABLE_SKILLS:
-                if skillName in skills_list:
-                    skills_list.remove(skillName)
-
             while 1:
                 if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or not tmanDescr.skills) and skills_list:
                     skillname = skills_list.pop()
@@ -600,7 +596,7 @@ class TankmanSkill(GUIItem):
 
     @property
     def extensionLessIconName(self):
-        return getExtensionLessSkillIconName(self.name)
+        return self.icon[:-len('.png')]
 
     @property
     def bigIconPath(self):
@@ -766,10 +762,6 @@ def getRankSmallIconPath(nationID, rankID):
 
 def getSkillIconName(skillName):
     return i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
-
-
-def getExtensionLessSkillIconName(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).extensionLessIcon
 
 
 def getSkillBigIconPath(skillName):

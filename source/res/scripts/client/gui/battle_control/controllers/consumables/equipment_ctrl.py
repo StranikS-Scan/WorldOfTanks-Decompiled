@@ -1652,7 +1652,8 @@ class _ReplayRoleSkillVSItem(_ReplayItem, _RoleSkillVSItem):
         return _RoleSkillVSItem.getAnimationType(self)
 
     def update(self, quantity, stage, timeRemaining, totalTime):
-        return _RoleSkillVSItem.update(self, quantity, stage, timeRemaining, totalTime)
+        _ReplayItem.update(self, quantity, stage, timeRemaining, totalTime)
+        _RoleSkillVSItem.update(self, quantity, stage, timeRemaining, totalTime)
 
     def canActivate(self, entityName=None, avatar=None):
         return _RoleSkillVSItem.canActivate(self, entityName, avatar)
@@ -1810,7 +1811,7 @@ class EquipmentsReplayPlayer(EquipmentsController):
     def __timeLoopInSeconds(self):
         self.__callbackTimeID = None
         self.__tickInSeconds()
-        self.__callbackTimeID = BigWorld.callback(0.3, self.__timeLoopInSeconds)
+        self.__callbackTimeID = BigWorld.callback(1, self.__timeLoopInSeconds)
         return
 
     def __tick(self):

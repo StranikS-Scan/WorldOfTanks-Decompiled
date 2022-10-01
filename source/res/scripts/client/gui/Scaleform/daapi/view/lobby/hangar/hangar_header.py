@@ -352,8 +352,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             if not (self.__battleRoyaleController.isInPrimeTime() and self.__isShowPersonalMission):
                 return []
-        if self.__comp7Controller.isComp7PrbActive():
-            return []
         if self.isPersonalMissionEnabled():
             personalMissions = self.__getPersonalMissionsVO(vehicle)
             if personalMissions:
@@ -581,6 +579,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __getBattleQuestsVO(self, vehicle):
         quests = self._questController.getCurrentModeQuestsForVehicle(vehicle)
+        if self.__comp7Controller.isComp7PrbActive():
+            quests = [ quest for quest in quests if quest.hasBonusType(constants.ARENA_BONUS_TYPE.COMP7) ]
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         festivityFlagData = self._festivityController.getHangarQuestsFlagData()

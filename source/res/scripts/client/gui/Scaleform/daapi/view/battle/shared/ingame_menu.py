@@ -5,6 +5,7 @@ from functools import partial
 import constants
 import BattleReplay
 from adisp import adisp_process
+from gui.battle_control.event_dispatcher import showIngameMenu
 from wg_async import wg_async, wg_await
 from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface, GUI_SETTINGS
@@ -188,5 +189,5 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         return True if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE else False
 
     def __showBootcampExitWindow(self):
-        window = BootcampExitWindow(partial(self.bootcampController.stopBootcamp, True), True)
+        window = BootcampExitWindow(partial(self.bootcampController.stopBootcamp, True), True, showIngameMenu)
         window.load()

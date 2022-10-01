@@ -23,8 +23,11 @@ class _Comp7BuffSN(_Comp7LocalizationProvider, sn_items.TimerSN):
 
     def __init__(self, updateCallback):
         super(_Comp7BuffSN, self).__init__(updateCallback)
-        self._subscribeOnVehControlling()
         self._isSourceVehicle = False
+
+    def start(self):
+        super(_Comp7BuffSN, self).start()
+        self._subscribeOnVehControlling()
 
     def getItemID(self):
         return self._ITEM_ID

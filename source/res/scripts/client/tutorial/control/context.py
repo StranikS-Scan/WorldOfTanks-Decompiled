@@ -156,6 +156,7 @@ class GLOBAL_FLAG(object):
     VEH_POST_PROGRESSION_PURCHASABLE = '_VehPostProgressionPurchasable'
     WOTPLUS_ENABLED = '_WotPlusEnabled'
     BATTLE_MATTERS_ENTRY_POINT = '_BattleMattersEntryPoint'
+    PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -169,7 +170,8 @@ class GLOBAL_FLAG(object):
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
      WOTPLUS_ENABLED,
-     BATTLE_MATTERS_ENTRY_POINT)
+     BATTLE_MATTERS_ENTRY_POINT,
+     PERSONAL_RESERVES_AVAILABLE)
 
 
 class GlobalStorage(object):

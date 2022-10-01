@@ -22,6 +22,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import SOUND
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
+_logger.setLevel(logging.DEBUG)
 _BACK_OFF_MIN_DELAY = 1
 _BACK_OFF_MAX_DELAY = CLIENT_INACTIVITY_TIMEOUT
 _BACK_OFF_MODIFIER = 1
@@ -303,6 +304,8 @@ class VOIPManager(VOIPHandler):
             else:
                 isEnabled = self.__isAutoJoinChannel()
             self.enableCurrentChannel(isEnabled=isEnabled, autoEnableVOIP=False)
+        else:
+            _logger.warn('__evaluateAutoJoinChannel: cant use newChannel: %r. id: %r, newId: %r', newChannel, channelID, newChannelID)
 
     def __joinChannel(self, channel, password):
         _logger.info("JoinChannel '%s'", channel)
@@ -477,6 +480,7 @@ class VOIPManager(VOIPHandler):
     def onVoipDestroyed(self, data):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
             _logger.error('Voip is not destroyed: %r', data)
+        _logger.debug('onVoipDestroyed')
 
     def onCaptureDevicesArrived(self, data):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
@@ -549,6 +553,7 @@ class VOIPManager(VOIPHandler):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
             _logger.error('Session is not added: %r', data)
             return
+        _logger.debug('Session added: %r', data)
         currentChannel = self.__currentChannel = data[VOIPCommon.KEY_URI]
         self.__setVolume()
         self.__fsm.update(self)
@@ -559,6 +564,7 @@ class VOIPManager(VOIPHandler):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
             _logger.error('Session is not removed: %r', data)
             return
+        _logger.debug('Session removed: %r', data)
         for dbid in self.__channelUsers.iterkeys():
             self.onPlayerSpeaking(dbid, False)
 

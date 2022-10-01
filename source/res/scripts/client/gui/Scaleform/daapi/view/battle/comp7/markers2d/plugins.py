@@ -20,8 +20,23 @@ class Comp7SettingsPlugin(SettingsPlugin):
                     ('markerAltHp', 3),
                     ('markerAltVehicleName', True),
                     ('markerAltPlayerName', True),
-                    ('markerAltAimMarker2D', False))}
-    __ADDITIONAL_SETTINGS = {name:(('markerAltRoleName', 1), ('markerAltRoleSkillLevel', 1)) for name in MARKERS.ALL()}
+                    ('markerAltAimMarker2D', False),
+                    ('markerBaseIcon', False),
+                    ('markerBaseLevel', False),
+                    ('markerBaseHpIndicator', False),
+                    ('markerBaseDamage', False),
+                    ('markerBaseHp', 3),
+                    ('markerBaseVehicleName', True),
+                    ('markerBasePlayerName', True),
+                    ('markerBaseAimMarker2D', False))}
+    __ADDITIONAL_SETTINGS = {name:(('markerAltRoleName', True),
+     ('markerAltRoleSkillLevel', True),
+     ('markerBaseRoleName', False),
+     ('markerBaseRoleSkillLevel', False)) for name in MARKERS.ALL()}
+    __ADDITIONAL_SETTINGS_BEFORE_BATTLE = {name:(('markerAltRoleName', True),
+     ('markerAltRoleSkillLevel', False),
+     ('markerBaseRoleName', True),
+     ('markerBaseRoleSkillLevel', False)) for name in MARKERS.ALL()}
 
     def __init__(self, parentObj):
         super(Comp7SettingsPlugin, self).__init__(parentObj)
@@ -47,7 +62,9 @@ class Comp7SettingsPlugin(SettingsPlugin):
         return
 
     def __onArenaPeriodChange(self, period, *_, **__):
-        self._overrides = self.__BEFORE_BATTLE_OVERRIDES if period < ARENA_PERIOD.BATTLE else {}
+        isBeforeBattle = period < ARENA_PERIOD.BATTLE
+        self._overrides = self.__BEFORE_BATTLE_OVERRIDES if isBeforeBattle else {}
+        self._additionalSettings = self.__ADDITIONAL_SETTINGS_BEFORE_BATTLE if isBeforeBattle else self.__ADDITIONAL_SETTINGS
         self._setMarkerSettings(notify=True)
 
 
@@ -234,6 +251,9 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
     def __updateRedLineMarker(self, vehicleID, handle, state):
         self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ARTYLLERY_SUPPORT_STATE)
 
+    def __updateConfirmedMarker(self, vehicleID, handle, isShown):
+        self._updateStatusMarkerState(vehicleID=vehicleID, isShown=isShown, handle=handle, statusID=BATTLE_MARKER_STATES.CONFIRMED_STATE, duration=0, animated=True, isSourceVehicle=False, blinkAnim=False)
+
     def __updateAbilityMarker(self, vehicleID, state, handle, stateID, showCountdown=False):
         vehicle = BigWorld.entities.get(vehicleID)
         if vehicle is None or not vehicle.isAlive():
@@ -261,8 +281,7 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
         for vehicleID, status in statuses.iteritems():
             marker = self._markers.get(vehicleID)
             if marker is not None:
-                value = 'positive' if status else ''
-                self._invokeMarker(self._markers[vehicleID].getMarkerID(), 'changeObjectiveActionMarker', value)
+                self.__updateConfirmedMarker(vehicleID, marker.getMarkerID(), status)
 
         return
 

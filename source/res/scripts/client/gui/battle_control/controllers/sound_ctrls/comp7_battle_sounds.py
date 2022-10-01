@@ -136,7 +136,7 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
             self.__activeEquipment.add(item.getDescriptor().name)
         elif stageIsCooldown and prevStageIsActive:
             self.__play2dFromMapping(self.__EQUIPMENT_DEACTIVATED, item)
-            self.__activeEquipment.remove(item.getDescriptor().name)
+            self.__activeEquipment.discard(item.getDescriptor().name)
 
     def __play2dFromMapping(self, soundsMapping, item):
         soundName = soundsMapping.get(item.getDescriptor().name)
@@ -185,7 +185,7 @@ class _EquipmentZoneSoundPlayer(VehicleStateSoundPlayer):
             self.__vehicleStates.add(state)
         elif state in self.__EQUIPMENT_ZONE_EXIT and not self.__stateIsActive(value) and state in self.__vehicleStates:
             _play2d(self.__EQUIPMENT_ZONE_EXIT[state])
-            self.__vehicleStates.remove(state)
+            self.__vehicleStates.discard(state)
 
     def __stateIsActive(self, value):
         return value.duration > 0.0 if isinstance(value, StunInfo) else not value.get('finishing')

@@ -18,7 +18,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS, MAX_ACTIVATED_BY_CATEGORY
+from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS, MAX_ACTIVATED_BY_CATEGORY, UNATTAINABLE_BOOSTER_IDS
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -30,6 +30,7 @@ from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
+    from typing import Any, Callable, Tuple, List, Union
     from gui.shared.money import Money
     from skeletons.gui.goodies import IGoodiesCache
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
@@ -74,9 +75,17 @@ _CLAN_RESERVE_TO_GUI_TYPE = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: GOODIE_RESOURCE_TY
  FORT_ORDER_TYPE.MILITARY_EXERCISES_2_0: GOODIE_RESOURCE_TYPE.FREE_XP,
  FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: GOODIE_RESOURCE_TYPE.CREW_XP,
  FORT_ORDER_TYPE.ADDITIONAL_BRIEFING_2_0: GOODIE_RESOURCE_TYPE.CREW_XP}
+_GUI_TYPE_TO_CLAN_RESERVE = {GOODIE_RESOURCE_TYPE.CREDITS: 'COMBAT_PAYMENTS_2_0',
+ GOODIE_RESOURCE_TYPE.XP: 'TACTICAL_TRAINING_2_0',
+ GOODIE_RESOURCE_TYPE.FREE_XP: 'MILITARY_EXERCISES_2_0',
+ GOODIE_RESOURCE_TYPE.CREW_XP: 'ADDITIONAL_BRIEFING_2_0'}
 
 def getBoosterGuiType(boosterType):
     return _BOOSTER_TYPE_NAMES[boosterType]
+
+
+def getFullNameForBoosterIcon(boosterType, isPremium=False):
+    return '{}{}'.format(getBoosterGuiType(boosterType), '_premium' if isPremium else '')
 
 
 class _Goodie(object):
@@ -244,7 +253,7 @@ class BoosterUICommon(_Goodie):
 
     @property
     def boosterGuiType(self):
-        return _BOOSTER_TYPE_NAMES[self.boosterType]
+        return getBoosterGuiType(self.boosterType)
 
     @property
     def icon(self):
@@ -264,7 +273,7 @@ class BoosterUICommon(_Goodie):
 
     @property
     def bigTooltipIcon(self):
-        tooltipIconResId = R.images.gui.maps.icons.quests.bonuses.s180x135.dyn(self._getFullNameForResource())()
+        tooltipIconResId = R.images.gui.maps.icons.quests.bonuses.s180x135.dyn(self.getFullNameForResource())()
         return backport.image(tooltipIconResId)
 
     @property
@@ -297,8 +306,11 @@ class BoosterUICommon(_Goodie):
             value = '{}%'.format(self.effectValue)
         return formatter(value) if formatter is not None else value
 
-    def _getFullNameForResource(self):
-        return '{}{}'.format(self.boosterGuiType, '_premium' if self.getIsPremium() else '')
+    def getFullNameForResource(self):
+        return getFullNameForBoosterIcon(self.boosterType, self.getIsPremium())
+
+    def getIsAttainable(self):
+        return True
 
 
 class Booster(BoosterUICommon):
@@ -406,7 +418,7 @@ class Booster(BoosterUICommon):
         return RES_ICONS.boosterQualitySourcePath(self.quality)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getBoosterIcon(size, self._getFullNameForResource())
+        return RES_SHOP_EXT.getBoosterIcon(size, self.getFullNameForResource())
 
     def getExpiryDate(self):
         return backport.getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
@@ -423,6 +435,9 @@ class Booster(BoosterUICommon):
 
     def getSellPrice(self, preferred=True):
         return self.sellPrices.itemPrice
+
+    def getIsAttainable(self):
+        return self.boosterID not in UNATTAINABLE_BOOSTER_IDS
 
     def mayPurchase(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
@@ -493,6 +508,10 @@ class ClanReservePresenter(BoosterUICommon):
         return _CLAN_RESERVE_TO_GUI_TYPE[self.boosterID]
 
     @property
+    def clanReserveType(self):
+        return _GUI_TYPE_TO_CLAN_RESERVE[self.boosterType]
+
+    @property
     def finishTime(self):
         return self.__finishTime
 
@@ -503,6 +522,14 @@ class ClanReservePresenter(BoosterUICommon):
     @property
     def effectValue(self):
         return self.__factors.values()
+
+    @property
+    def state(self):
+        return GOODIE_STATE.ACTIVE if self.__finishTime > BigWorld.serverTime() else GOODIE_STATE.INACTIVE
+
+    @property
+    def inCooldown(self):
+        return self.state == GOODIE_STATE.ACTIVE
 
     @property
     def category(self):
@@ -670,3 +697,6 @@ class RecertificationForm(_Goodie):
     @property
     def inventoryCount(self):
         return self.count
+
+
+BoostersType = typing.TypeVar('BoostersType', bound=BoosterUICommon)

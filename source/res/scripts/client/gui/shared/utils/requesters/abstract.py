@@ -93,6 +93,9 @@ class RequestCtx(object):
     def getRequestType(self):
         pass
 
+    def getSingulizerKey(self):
+        return None
+
     def getWaitingID(self):
         return self._waitingID
 
@@ -204,6 +207,9 @@ class RequestsByIDProcessor(object):
         else:
             _logger.error('Name of method is invalid: %r', methodName)
         return result
+
+    def stopWithFailure(self, ctx, reason, callback=None):
+        self._stopProcessing(ctx, reason, callback)
 
     def _startProcessing(self, requestID, ctx, callback=None):
         ctx.startProcessing(callback)

@@ -5,9 +5,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.personal_reserves.reserves_group_model import ReservesGroupModel
 
 class ReservesActivationViewModel(ViewModel):
-    __slots__ = ('onInformationClicked', 'onClose', 'onBoosterActivate')
+    __slots__ = ('onInformationClicked', 'onNavigateToStore', 'onClose', 'onBoosterActivate')
 
-    def __init__(self, properties=3, commands=3):
+    def __init__(self, properties=3, commands=4):
         super(ReservesActivationViewModel, self).__init__(properties=properties, commands=commands)
 
     def getReserveGroups(self):
@@ -38,5 +38,6 @@ class ReservesActivationViewModel(ViewModel):
         self._addNumberProperty('gold', 0)
         self._addBoolProperty('canActivateClanReserves', False)
         self.onInformationClicked = self._addCommand('onInformationClicked')
+        self.onNavigateToStore = self._addCommand('onNavigateToStore')
         self.onClose = self._addCommand('onClose')
         self.onBoosterActivate = self._addCommand('onBoosterActivate')

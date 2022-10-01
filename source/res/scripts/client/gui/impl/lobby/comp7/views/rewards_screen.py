@@ -8,7 +8,7 @@ from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.views.rewards_screen_model import Type, Rank, RewardsScreenModel
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses, packWinsRewardsQuestBonuses
-from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7WinsQuestID, parseComp7PeriodicQuestID
+from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7WinsQuestID, parseComp7PeriodicQuestID, getComp7WinsQuests
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
@@ -20,12 +20,12 @@ if typing.TYPE_CHECKING:
     from gui.server_events.event_items import TokenQuest
 _RANKS_MAIN_REWARDS_COUNT = {Rank.FIRST: 1,
  Rank.SECOND: 3,
- Rank.THIRD: 3,
+ Rank.THIRD: 2,
  Rank.FOURTH: 2,
  Rank.FIFTH: 2,
  Rank.SIXTH: 3,
  Rank.SEVENTH: 4}
-_WINS_MAIN_REWARDS_COUNT = 4
+_WINS_MAIN_REWARDS_COUNT = (4, 3, 4, 4, 4, 4, 4, 4)
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class _BaseRewardsView(ViewImpl):
@@ -155,20 +155,27 @@ class RanksRewardsView(_BaseRewardsView):
 
 
 class WinsRewardsView(_BaseRewardsView):
-    __slots__ = ()
+    __slots__ = ('__winsCount',)
+
+    def __init__(self, *args, **kwargs):
+        super(WinsRewardsView, self).__init__(*args, **kwargs)
+        self.__winsCount = None
+        return
 
     def _packQuestBonuses(self, quest):
         return packWinsRewardsQuestBonuses(quest=quest)
 
     def _setModelData(self, quest):
+        self.__winsCount = parseComp7WinsQuestID(quest.getID())
         with self.viewModel.transaction() as vm:
-            winCount = parseComp7WinsQuestID(quest.getID())
             vm.setType(Type.WINREWARDS)
-            vm.setWinCount(winCount)
+            vm.setWinCount(self.__winsCount)
             self._setRewards(vm, quest)
 
     def _getMainRewardsCount(self):
-        return _WINS_MAIN_REWARDS_COUNT
+        allQuests = getComp7WinsQuests()
+        questNum = len([ winsCount for winsCount in allQuests.iterkeys() if winsCount < self.__winsCount ])
+        return _WINS_MAIN_REWARDS_COUNT[questNum]
 
 
 class RanksRewardsScreenWindow(LobbyNotificationWindow):

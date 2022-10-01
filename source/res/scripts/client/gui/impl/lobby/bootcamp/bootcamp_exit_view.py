@@ -19,19 +19,20 @@ from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 
 class BootcampExitView(ViewImpl):
-    __slots__ = ('__blur', '__tooltipData', '__callback', '__isInBattle')
+    __slots__ = ('__blur', '__tooltipData', '__onQuit', '__onCancel', '__isInBattle')
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcampController = dependency.descriptor(IBootcampController)
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_EXIT_VIEW)
 
-    def __init__(self, callback, isInBattle, *args, **kwargs):
+    def __init__(self, onQuit, isInBattle, onCancel=None, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.bootcamp.BootcampExitView())
         settings.model = BootcampExitModel()
         settings.args = args
         settings.kwargs = kwargs
         self.__blur = None
         self.__tooltipData = {}
-        self.__callback = callback
+        self.__onQuit = onQuit
+        self.__onCancel = onCancel
         self.__isInBattle = isInBattle
         super(BootcampExitView, self).__init__(settings)
         return
@@ -81,16 +82,20 @@ class BootcampExitView(ViewImpl):
             g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__blur:
             self.__blur.fini()
+        if callable(self.__onCancel):
+            self.__onCancel()
         super(BootcampExitView, self)._finalize()
 
     def __onLeave(self):
         self.uiBootcampLogger.log(BC_LOG_ACTIONS.LEAVE)
-        self.__callback()
+        self.__onCancel = None
+        self.__onQuit()
         self.destroyWindow()
+        return
 
 
 class BootcampExitWindow(LobbyNotificationWindow):
     __slots__ = ()
 
-    def __init__(self, callback, isInBattle=False):
-        super(BootcampExitWindow, self).__init__(content=BootcampExitView(callback, isInBattle), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+    def __init__(self, onQuit, isInBattle=False, onCancel=None):
+        super(BootcampExitWindow, self).__init__(content=BootcampExitView(onQuit, isInBattle, onCancel), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)

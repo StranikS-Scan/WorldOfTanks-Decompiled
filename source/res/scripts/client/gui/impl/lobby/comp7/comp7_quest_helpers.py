@@ -6,6 +6,7 @@ from comp7_common import COMP7_QUEST_PREFIX, COMP7_QUEST_DELIMITER, Comp7QuestTy
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from helpers.server_settings import Comp7PrestigeRanksConfig
@@ -37,6 +38,13 @@ def parseComp7WinsQuestID(qID):
 
 def parseComp7PeriodicQuestID(qID):
     return __getDivisionFromQuest(qID)
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getComp7WinsQuests(eventsCache=None):
+    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WINS)
+    quests = {parseComp7WinsQuestID(qID):quest for qID, quest in quests.iteritems()}
+    return quests
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)

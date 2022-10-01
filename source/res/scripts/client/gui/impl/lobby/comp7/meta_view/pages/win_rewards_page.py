@@ -5,7 +5,6 @@ from collections import namedtuple
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WIN_REWARDS_PAGE_WINS_COUNT
-from comp7_common import Comp7QuestType
 from frameworks.wulf.view.array import fillIntsArray
 from gui.impl import backport
 from gui.impl.gen import R
@@ -13,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.win_rewards_mode
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7.comp7_bonus_packer import packWinsRewardsQuestBonuses
-from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7Quest, getComp7QuestType, parseComp7WinsQuestID
+from gui.impl.lobby.comp7.comp7_quest_helpers import getComp7WinsQuests
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7.comp7_lobby_sounds import MetaViewSounds
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
@@ -57,7 +56,7 @@ class WinRewardsPage(PageSubModelPresenter):
 
     def initialize(self):
         super(WinRewardsPage, self).initialize()
-        self.__quests = self.__getComp7WinsQuests()
+        self.__quests = getComp7WinsQuests()
         with self.viewModel.transaction() as tx:
             self.__updateData(tx)
 
@@ -157,12 +156,6 @@ class WinRewardsPage(PageSubModelPresenter):
         self.parentView.soundManager.playSound(MetaViewSounds.REWARD_PROGRESSBAR_STOP.value)
 
     def __onEventsSyncCompleted(self):
-        self.__quests = self.__getComp7WinsQuests()
+        self.__quests = getComp7WinsQuests()
         with self.viewModel.transaction() as tx:
             self.__updateData(tx)
-
-    @classmethod
-    def __getComp7WinsQuests(cls):
-        quests = cls.__eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WINS)
-        quests = {parseComp7WinsQuestID(qID):quest for qID, quest in quests.iteritems()}
-        return quests

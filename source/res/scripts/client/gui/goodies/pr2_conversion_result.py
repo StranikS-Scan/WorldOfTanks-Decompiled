@@ -8,7 +8,9 @@ from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
+    from typing import Tuple, DefaultDict, List, Dict
     from gui.goodies.goodie_items import Booster
+    from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 
 class _PR2ConversionResultDataBridge(IPR2ConversionDataBridge):
     __goodiesCache = dependency.descriptor(IGoodiesCache)

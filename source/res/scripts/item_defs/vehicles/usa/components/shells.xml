@@ -1760,6 +1760,36 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_HEAT-T_T384E4>
+  <_105mm_M392_AP>
+    <id>	190	</id>
+    <userString>	#usa_vehicles:_105mm_M392_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	1005	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_M392_AP>
+  <_105mm_M456_HEAT>
+    <id>	191	</id>
+    <userString>	#usa_vehicles:_105mm_M456_HEAT	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_M456_HEAT>
   <_105mm_AP_T140E3>
     <id>	81	</id>
     <userString>	#usa_vehicles:_105mm_AP_T140E3	</userString>
@@ -2296,7 +2326,7 @@
     <id>	189	</id>
     <userString>	#usa_vehicles:_120mm_HEAT_M469R	</userString>
     <icon>	hc_premium	</icon>
-    <price>	4400	</price>
+    <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>

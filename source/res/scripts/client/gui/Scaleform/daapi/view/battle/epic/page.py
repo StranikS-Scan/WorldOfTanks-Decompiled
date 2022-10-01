@@ -294,7 +294,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             self._invalidateState()
             return
 
-    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         if not isShown and self.__topState == PageStates.TABSCREEN:
             self.__topState = PageStates.NONE
         elif isShown and self.__topState != PageStates.RADIAL:

@@ -73,10 +73,10 @@ class RoleSkillLobbyTooltipData(BlocksTooltipData):
     def __packDescriptionBlock(cls, equipment):
         blocks = []
         active, passive = getRoleSkillDescription(equipment)
-        if active:
-            blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.roleSkill.description.active())), desc=text_styles.main(cls.__formatEquipmentParams(active))))
         if passive:
             blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.roleSkill.description.passive())), desc=text_styles.main(cls.__formatEquipmentParams(passive))))
+        if active:
+            blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.roleSkill.description.active())), desc=text_styles.main(cls.__formatEquipmentParams(active))))
         return None if not blocks else formatters.packBuildUpBlockData(blocks=blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     @classmethod
@@ -162,5 +162,5 @@ class BattleResultsPrestigePointsTooltip(BlocksTooltipData):
 def getRoleEquipmentTooltipParts(equipment):
     active, passive = getRoleSkillDescription(equipment)
     cooldown = getCooldown(equipment)
-    body = '\n\n'.join(filter(None, (active, passive, cooldown)))
+    body = '\n\n'.join(filter(None, (passive, active, cooldown)))
     return (equipment.userString, stripColorTagDescrTags(body))

@@ -655,8 +655,9 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             self.__notifyViews('onShellsUpdated', selectedIndex=slotIndex)
 
     def selectCamouflage(self, select):
-        cmp_helpers.applyCamouflage(self.__vehicle, select)
-        self.__notifyViews('onCamouflageUpdated')
+        if not self.__vehicle.descriptor.type.hasCustomDefaultCamouflage:
+            cmp_helpers.applyCamouflage(self.__vehicle, select)
+            self.__notifyViews('onCamouflageUpdated')
 
     def resetToDefault(self):
         self.__vehicle, self.__crewSkillsManager = self.getInitialVehicleData()

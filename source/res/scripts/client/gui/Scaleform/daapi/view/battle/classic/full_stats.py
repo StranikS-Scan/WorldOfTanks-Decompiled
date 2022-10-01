@@ -1,83 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/full_stats.py
 import BattleReplay
-import BigWorld
 from ReplayEvents import g_replayEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
+from gui.Scaleform.daapi.view.meta.ClassicFullStatsMeta import ClassicFullStatsMeta
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
-class IFullStatsComponent(object):
-
-    def setActiveTabIndex(self, index):
-        raise NotImplementedError
-
-    def showQuestProgressAnimation(self):
-        raise NotImplementedError
-
-
-class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
-    settingsCore = dependency.descriptor(ISettingsCore)
-    eventsCache = dependency.descriptor(IEventsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    __battleSessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def __init__(self):
-        super(FullStatsComponent, self).__init__()
-        self.__isProgressTrackingEnabled = False
-
-    @property
-    def hasTabs(self):
-        return True
-
-    def setActiveTabIndex(self, index):
-        if index is not None:
-            self.as_setActiveTabS(index)
-        else:
-            self.as_resetActiveTabS()
-        return
-
-    def onProgressTrackingClick(self, isSelected):
-        self.__isProgressTrackingEnabled = isSelected
-        if self.__isProgressTrackingEnabled:
-            value = QuestsProgressViewType.TYPE_STANDARD
-        else:
-            value = QuestsProgressViewType.TYPE_HIDE
-        self.settingsCore.serverSettings.setQuestProgressSettings({QUESTS_PROGRESS.VIEW_TYPE: value})
+class FullStatsComponent(ClassicFullStatsMeta):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def onSelectQuest(self, questID):
         qProgressCtrl = self.sessionProvider.shared.questProgress
         qProgressCtrl.selectQuest(questID)
         self.__setQuestTrackingData()
 
-    def showQuestProgressAnimation(self):
-        qProgressCtrl = self.sessionProvider.shared.questProgress
-        if qProgressCtrl:
-            qProgressCtrl.showQuestProgressAnimation()
-
-    def isBoosterProcessingAvailable(self):
-        return self.lobbyContext.getServerSettings().isReservesInBattleActivationEnabled() and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
-
     def _populate(self):
         super(FullStatsComponent, self)._populate()
         qProgressCtrl = self.sessionProvider.shared.questProgress
-        self.settingsCore.onSettingsChanged += self.__onSettingsChange
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChange
         if qProgressCtrl is not None:
             qProgressCtrl.onQuestProgressInited += self.__onQuestProgressInited
             if qProgressCtrl.isInited():
@@ -86,24 +40,24 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
             g_replayEvents.onTimeWarpFinish += self.__onReplayTimeWarpFinished
-        tabs = [{'label': backport.text(R.strings.ingame_gui.statistics.tab.line_up.header())}]
-        if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
-            tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.quests.header())})
-        if self.isBoosterProcessingAvailable():
-            tabs.append({'label': backport.text(R.strings.ingame_gui.statistics.tab.personalReserves.header())})
-        self.as_updateTabsS(tabs)
         return
 
     def _dispose(self):
         super(FullStatsComponent, self)._dispose()
         qProgressCtrl = self.sessionProvider.shared.questProgress
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChange
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChange
         if qProgressCtrl is not None:
             qProgressCtrl.onQuestProgressInited -= self.__onQuestProgressInited
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
             g_replayEvents.onTimeWarpFinish -= self.__onReplayTimeWarpFinished
         return
+
+    def _onToggleVisibility(self, isVisible):
+        if not isVisible:
+            qProgressCtrl = self.sessionProvider.shared.questProgress
+            if qProgressCtrl:
+                qProgressCtrl.showQuestProgressAnimation()
 
     def __onQuestProgressInited(self):
         self.__setNoQuestsDescription()
@@ -130,14 +84,14 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
     def __setQuestTrackingData(self):
         questProgress = self.sessionProvider.shared.questProgress
         selectedQuest = questProgress.getSelectedQuest()
-        setting = self.settingsCore.getSetting(QUESTS_PROGRESS.VIEW_TYPE)
-        self.__isProgressTrackingEnabled = setting == QuestsProgressViewType.TYPE_STANDARD
+        progressViewType = self.__settingsCore.getSetting(QUESTS_PROGRESS.VIEW_TYPE)
+        isProgressTrackingEnabled = progressViewType == QuestsProgressViewType.TYPE_STANDARD
         trackingData = []
-        personalMissions = self.eventsCache.getPersonalMissions()
+        personalMissions = self.__eventsCache.getPersonalMissions()
         for quest in sorted(questProgress.getInProgressQuests().itervalues(), key=lambda q: q.getQuestBranch()):
             isSelected = quest == selectedQuest
             operation = personalMissions.getOperationsForBranch(quest.getQuestBranch())[quest.getOperationID()]
-            trackingData.append({'eyeBtnVisible': self.__isProgressTrackingEnabled and isSelected,
+            trackingData.append({'eyeBtnVisible': isProgressTrackingEnabled and isSelected,
              'selected': isSelected,
              'missionName': makeString(quest.getShortUserName()),
              'fullMissionName': makeString(quest.getUserName()),
@@ -153,7 +107,7 @@ class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
          'trackingData': trackingData})
 
     def __setNoQuestsDescription(self):
-        settings = self.lobbyContext.getServerSettings()
+        settings = self.__lobbyContext.getServerSettings()
         questProgress = self.sessionProvider.shared.questProgress
         if questProgress.areQuestsEnabledForArena():
             if not settings.isPMBattleProgressEnabled():

@@ -22,8 +22,8 @@ class LoginPageMeta(View):
     def onSetRememberPassword(self, remember):
         self._printOverrideError('onSetRememberPassword')
 
-    def doUpdate(self):
-        self._printOverrideError('doUpdate')
+    def onLoginNameUpdated(self):
+        self._printOverrideError('onLoginNameUpdated')
 
     def isToken(self):
         self._printOverrideError('isToken')

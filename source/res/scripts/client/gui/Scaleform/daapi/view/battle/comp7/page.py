@@ -139,12 +139,12 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         BigWorld.player().setIsObserver()
         self.__updateComponentsVisibility()
 
-    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         if self.__visibilityManager is not None:
             self.__visibilityManager.setFullStatsShown(isShown)
             if not isShown:
                 self._fsToggling.update(self.__visibilityManager.getVisible())
-        super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabIndex=tabIndex)
+        super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
         return
 
     def _onAvatarCtrlModeChanged(self, ctrlMode):
@@ -164,10 +164,11 @@ class Comp7BattlePage(Comp7BattlePageMeta):
     def __updateComponentsVisibility(self, arenaPeriod=None):
         if arenaPeriod is None:
             arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
-        if arenaPeriod <= ARENA_PERIOD.PREBATTLE:
-            self.app.enterGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE, enableAiming=False)
-        elif arenaPeriod == ARENA_PERIOD.BATTLE:
-            self.app.leaveGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE)
+        if not self.sessionProvider.isReplayPlaying:
+            if arenaPeriod <= ARENA_PERIOD.PREBATTLE:
+                self.app.enterGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE, enableAiming=False)
+            elif arenaPeriod == ARENA_PERIOD.BATTLE:
+                self.app.leaveGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE)
         self.__visibilityManager.updatePeriod(arenaPeriod)
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if vehStateCtrl is not None:

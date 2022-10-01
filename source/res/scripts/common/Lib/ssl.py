@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ssl.py
-# Compiled at: 2005-09-30 00:41:21
+# Compiled at: 1998-05-03 10:38:09
 """This module provides some more Pythonic support for SSL.
 
 Object types:

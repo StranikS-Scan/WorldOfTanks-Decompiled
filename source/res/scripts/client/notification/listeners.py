@@ -1,24 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import collections
 import json
 import logging
 import time
-from functools import partial
-from typing import TYPE_CHECKING
-import collections
 import weakref
 from collections import defaultdict
+from functools import partial
+import typing
 from PlayerEvents import g_playerEvents
-from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY, SwitchState, PLAYER_SUBSCRIPTIONS_CONFIG
-from battle_pass_common import FinalReward
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN, INTEGRATED_AUCTION_NOTIFICATIONS
+from account_helpers.AccountSettings import LOOT_BOXES_FINISH_SHOWN, LOOT_BOXES_INTRO_WAS_SHOWN, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_START_SHOWN
 from adisp import adisp_process
-from gui.goodies.pr2_conversion_result import getConversionResult
-from wg_async import wg_async, wg_await
+from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG
 from collector_vehicle import CollectorVehicleConsts
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -28,46 +25,50 @@ from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
+from gui.goodies.pr2_conversion_result import getConversionResult
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
-from gui.integrated_auction.constants import AUCTION_START_EVENT_TYPE, AUCTION_FINISH_EVENT_TYPE, AUCTION_STAGE_START_SEEN, AUCTION_FINISH_STAGE_SEEN
+from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.recruit_helper import getAllRecruitsInfo
-from gui.shared import g_eventBus, events
-from gui.shared.formatters import time_formatters, text_styles
+from gui.shared import events, g_eventBus
+from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from gui.shared.system_factory import registerNotificationsListeners, collectAllNotificationsListeners
 from gui.wgcg.clan.contexts import GetClanInfoCtx
-from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
+from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from helpers import time_utils, i18n, dependency
+from helpers import dependency, i18n, time_utils
+from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
-from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, SCH_CLIENT_MSG_TYPE
+from messenger.formatters import TimeFormatter
+from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, PsaCoinReminderMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, C2DProgressionStyleDecorator, IntegratedAuctionStageStartDecorator, IntegratedAuctionStageFinishDecorator, PersonalReservesConversionMessageDecorator
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ChinaLootBoxesDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PersonalReservesConversionMessageDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, PsaCoinReminderMessageDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, WGNCPopUpDecorator
+from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from shared_utils import first
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IEventsNotificationsController, ISteamCompletionController, ISeniorityAwardsController, IResourceWellController
-from skeletons.gui.impl import INotificationWindowController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICNLootBoxesController, IEventsNotificationsController, IGameSessionController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
-if TYPE_CHECKING:
+from wg_async import wg_async, wg_await
+if typing.TYPE_CHECKING:
+    from typing import Any, Dict, List, Optional, Type
     from typing import Callable, List, Dict, Optional, Any, Type
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -1086,14 +1087,15 @@ class BattlePassListener(_NotificationListener):
         isStarted = self.__battlePassController.isActive()
         isFinished = self.__battlePassController.isSeasonFinished()
         isModeChanged = oldMode is not None and newMode is not None and oldMode != newMode
-        if self.__isStarted != isStarted and isStarted:
+        isReactivated = newMode == 'enabled' and oldMode == 'paused'
+        if self.__isStarted != isStarted and isStarted and not isReactivated:
             self.__pushStarted()
         elif self.__isFinished != isFinished and isFinished or isModeChanged and newMode == 'disabled':
             self.__pushFinished()
         if isModeChanged:
             if newMode == 'paused':
                 self.__pushPause()
-            elif newMode == 'enabled' and oldMode == 'paused':
+            elif isReactivated:
                 self.__pushEnabled()
         self.__isStarted = isStarted
         self.__isFinished = isFinished
@@ -1290,6 +1292,78 @@ class RecertificationFormStateListener(_NotificationListener):
                 MessengerEntry.g_instance.protos.BW.serviceChannel.onReceivePersonalSysMessage(action)
             self._state = newState
             return
+
+
+class ChinaLootBoxListener(_NotificationListener, EventsHandler):
+    __slots__ = ('__isActive', '__isIntroWasShown')
+    __cnLootBoxes = dependency.descriptor(ICNLootBoxesController)
+    __START_ENTITY_ID = 0
+
+    def __init__(self):
+        super(ChinaLootBoxListener, self).__init__()
+        self.__isActive = False
+        self.__isIntroWasShown = False
+
+    def start(self, model):
+        super(ChinaLootBoxListener, self).start(model)
+        self._subscribe()
+        self.__isActive = self.__cnLootBoxes.isActive()
+        self.__isIntroWasShown = self.__cnLootBoxes.isIntroWasShown()
+        return True
+
+    def stop(self):
+        self._unsubscribe()
+        super(ChinaLootBoxListener, self).stop()
+
+    def _getEvents(self):
+        return ((self.__cnLootBoxes.onIntroShownChanged, self.__onIntroShownChanged),
+         (self.__cnLootBoxes.onStatusChange, self.__onStatusChange),
+         (self.__cnLootBoxes.onBoxInfoUpdated, self.__onStatusChange),
+         (self.__cnLootBoxes.onAvailabilityChange, self.__onAvailabilityChange))
+
+    def __onIntroShownChanged(self, wasShown):
+        if self.__cnLootBoxes.isActive() and not self.__isIntroWasShown and wasShown:
+            self.__pushStarted()
+            self.__isIntroWasShown = wasShown
+
+    def __onStatusChange(self):
+        isActive = self.__cnLootBoxes.isActive()
+        welcomeWasShown = AccountSettings.getSettings(LOOT_BOXES_INTRO_WAS_SHOWN)
+        wasFinishNotificationShown = AccountSettings.getNotifications(LOOT_BOXES_FINISH_SHOWN)
+        if welcomeWasShown and not isActive and not wasFinishNotificationShown:
+            self.__pushFinished(self.__cnLootBoxes.getBoxesCount())
+        self.__isActive = isActive
+
+    def __onAvailabilityChange(self, previous, current):
+        if previous is not None and previous != current and self.__isActive:
+            if current:
+                self.__pushLootBoxesEnabled()
+            else:
+                self.__pushLootBoxesDisabled()
+        return
+
+    def __pushStarted(self):
+        model = self._model()
+        if model is not None:
+            _, finish = self.__cnLootBoxes.getEventActiveTime()
+            localFinishTime = time_utils.makeLocalServerTime(finish)
+            messageData = {'title': backport.text(R.strings.cn_loot_boxes.notification.eventStart.title()),
+             'text': backport.text(R.strings.cn_loot_boxes.notification.eventStart.text(), date=TimeFormatter.getShortDateFormat(localFinishTime))}
+            model.addNotification(ChinaLootBoxesDecorator(message=messageData, entityID=self.__START_ENTITY_ID, model=model))
+        return
+
+    @staticmethod
+    def __pushFinished(boxesCount):
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.eventFinish.text()) if boxesCount > 0 else '', priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.ChinaLootBoxFinish, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.eventFinish.title())})
+        AccountSettings.setNotifications(LOOT_BOXES_FINISH_SHOWN, True)
+
+    @staticmethod
+    def __pushLootBoxesEnabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.ChinaLootBoxEnabled, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsEnabled.title())})
+
+    @staticmethod
+    def __pushLootBoxesDisabled():
+        SystemMessages.pushMessage(text=backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.ChinaLootBoxDisabled, messageData={'title': backport.text(R.strings.cn_loot_boxes.notification.lootBoxesIsDisabled.title())})
 
 
 class RecruitReminderlListener(_NotificationListener):
@@ -1652,7 +1726,7 @@ class PersonalReservesConversionListener(_NotificationListener):
 
     def start(self, model):
         result = super(PersonalReservesConversionListener, self).start(model)
-        if self.__lobbyContext.getServerSettings().displayConversionNotification() and getConversionResult(self.__itemsCache.items.goodies.pr2ConversionResult):
+        if self.__lobbyContext.getServerSettings().personalReservesConfig.displayConversionNotification and getConversionResult(self.__itemsCache.items.goodies.pr2ConversionResult):
             model.addNotification(PersonalReservesConversionMessageDecorator())
         return result
 
@@ -1676,7 +1750,8 @@ registerNotificationsListeners((ServiceChannelListener,
  BattlePassSwitchChapterReminder,
  ResourceWellListener,
  IntegratedAuctionListener,
- PersonalReservesConversionListener))
+ PersonalReservesConversionListener,
+ ChinaLootBoxListener))
 
 class NotificationsListeners(_NotificationListener):
 

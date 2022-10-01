@@ -25,7 +25,7 @@ class Comp7VehiclesWatcher(LimitedLevelVehiclesWatcher, ForbiddenVehiclesWatcher
         super(Comp7VehiclesWatcher, self).stop()
 
     def _getUnsuitableVehicles(self, onClear=False):
-        eventVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.CLAN_WARS).values()
+        eventVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE ^ REQ_CRITERIA.VEHICLE.CLAN_WARS ^ REQ_CRITERIA.VEHICLE.RANDOM_ONLY).values()
         return chain.from_iterable((LimitedLevelVehiclesWatcher._getUnsuitableVehicles(self, onClear), ForbiddenVehiclesWatcher._getUnsuitableVehicles(self, onClear), eventVehicles))
 
     def _getForbiddenVehicleClasses(self):

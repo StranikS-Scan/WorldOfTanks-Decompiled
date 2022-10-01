@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PoiBaseComponent.py
-import CGF
-import GenericComponents
+from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class PoiBaseComponent(DynamicScriptComponent):
     _POI_GO_NAME = 'PointOfInterest{id}'
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(PoiBaseComponent, self).__init__()
@@ -17,10 +18,5 @@ class PoiBaseComponent(DynamicScriptComponent):
 
     def __getPoiGameObject(self):
         name = self._POI_GO_NAME.format(id=self.pointID)
-        parent = self.entity.entityGameObject
-        poiGameObject = CGF.HierarchyManager(self.spaceID).findFirstNode(parent, name)
-        if not poiGameObject.isValid():
-            poiGameObject = CGF.GameObject(self.spaceID, name)
-            poiGameObject.createComponent(GenericComponents.HierarchyComponent, parent)
-            poiGameObject.activate()
-        return poiGameObject
+        poiCtrl = self.__sessionProvider.dynamic.pointsOfInterest
+        return poiCtrl.getVehicleCapturingPoiGO(name, self.entity.entityGameObject, self.spaceID)

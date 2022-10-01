@@ -24,23 +24,25 @@ class RequestsController(object):
         self._requester = requester
         self._cooldowns = cooldowns
         self._waiters = {}
-        self._rqQueue = []
-        self._rqCallbackID = None
-        self._rqCtx = None
-        self._rqHandler = None
+        self.__rqQueue = []
+        self.__rqCallbackID = None
+        self.__rqCtx = None
+        self.__rqHandler = None
+        self.__singulizer = RequestSingulizer()
         return
 
     def fini(self):
         self.stopProcessing()
+        self.__singulizer.clear()
         if self._requester:
             self._requester.fini()
             self._requester = None
         return
 
     def stopProcessing(self):
-        self._rqQueue = []
-        self._clearWaiters()
-        self._clearDelayedRequest()
+        self.__rqQueue = []
+        self.__clearWaiters()
+        self.__clearDelayedRequest()
         if self._requester is not None:
             self._requester.stopProcessing()
         return
@@ -48,29 +50,30 @@ class RequestsController(object):
     def request(self, ctx, callback=lambda *args: None, allowDelay=None):
         LOG_DEBUG('Send server request', self.__class__.__name__, ctx, callback, allowDelay)
         if allowDelay is None:
-            allowDelay = bool(self._cooldowns._commonCooldown)
+            allowDelay = bool(self._cooldowns.getCommonCooldown())
         requestType = ctx.getRequestType()
         handler = self._getHandlerByRequestType(requestType)
         if handler:
             cooldown = ctx.getCooldown()
 
             def _doRequest():
-                self._clearDelayedRequest()
-                cb = partial(self._callbackWrapper, requestType, callback, cooldown)
+                self.__clearDelayedRequest()
+                cb = partial(self.__callbackWrapper, ctx, callback, cooldown)
                 if handler(ctx, callback=cb):
-                    self._waiters[requestType] = BigWorld.callback(self._getRequestTimeOut(), partial(self._onTimeout, cb, requestType, ctx))
+                    self._waiters[requestType] = BigWorld.callback(self._getRequestTimeOut(), partial(self.__onTimeout, cb, requestType, ctx))
                     self._cooldowns.process(requestType, cooldown)
 
             if not allowDelay:
                 if self._cooldowns.validate(requestType, cooldown):
-                    self._doRequestError(ctx, 'cooldown', callback)
+                    self.__doRequestError(ctx, 'cooldown', callback)
                 else:
                     _doRequest()
             else:
-                self._rqQueue.append((requestType, ctx, _doRequest))
-                self._doNextRequest()
+                if not self.__singulizer.register(ctx, callback):
+                    self.__rqQueue.append((requestType, ctx, _doRequest))
+                self.__doNextRequest()
         else:
-            self._doRequestError(ctx, 'handler not found', callback)
+            self.__doRequestError(ctx, 'handler not found', callback)
         return
 
     def isInCooldown(self, requestTypeID):
@@ -85,35 +88,37 @@ class RequestsController(object):
     def hasHandler(self, requestTypeID):
         return self._getHandlerByRequestType(requestTypeID) is not None
 
-    def _doNextRequest(self, adjustCooldown=None):
-        if self._rqQueue and self._rqCallbackID is None:
-            requestType, ctx, request = self._rqQueue.pop(0)
-            cooldownLeft = self._cooldowns.getTime(requestType)
-            if cooldownLeft:
-                self._loadDelayedRequest(cooldownLeft, ctx, request)
-            else:
-                request()
-        elif adjustCooldown is not None and self._rqCallbackID is not None:
-            self._loadDelayedRequest(adjustCooldown, self._rqCtx, self._rqHandler)
-        return
-
     def _getHandlerByRequestType(self, requestTypeID):
         raise NotImplementedError
 
     def _getRequestTimeOut(self):
         pass
 
-    def _callbackWrapper(self, requestType, callback, cooldown, *args):
+    def __callbackWrapper(self, ctx, callback, cooldown, *args):
+        requestType = ctx.getRequestType()
         callbackID = self._waiters.pop(requestType, None)
         if callbackID is not None:
             safeCancelCallback(callbackID)
         self._cooldowns.adjust(requestType, cooldown)
         if callback:
             callback(*args)
-        self._doNextRequest(adjustCooldown=cooldown)
+        self.__singulizer.processResult(ctx, args)
+        self.__doNextRequest(adjustCooldown=cooldown)
         return
 
-    def _clearWaiters(self):
+    def __doNextRequest(self, adjustCooldown=None):
+        if self.__rqQueue and self.__rqCallbackID is None:
+            requestType, ctx, request = self.__rqQueue.pop(0)
+            cooldownLeft = self._cooldowns.getTime(requestType)
+            if cooldownLeft:
+                self.__loadDelayedRequest(cooldownLeft, ctx, request)
+            else:
+                request()
+        elif adjustCooldown is not None and self.__rqCallbackID is not None:
+            self.__loadDelayedRequest(adjustCooldown, self.__rqCtx, self.__rqHandler)
+        return
+
+    def __clearWaiters(self):
         if self._waiters is not None:
             while self._waiters:
                 _, callbackID = self._waiters.popitem()
@@ -121,30 +126,59 @@ class RequestsController(object):
 
         return
 
-    def _onTimeout(self, cb, requestType, ctx):
+    def __onTimeout(self, cb, requestType, ctx):
         LOG_ERROR('Request timed out', self, requestType, ctx)
-        self._doRequestError(ctx, 'time out', cb)
+        self.__doRequestError(ctx, 'time out', cb)
 
-    def _doRequestError(self, ctx, msg, callback=None):
+    def __doRequestError(self, ctx, msg, callback=None):
         if self._requester:
-            self._requester._stopProcessing(ctx, msg, callback)
+            self._requester.stopWithFailure(ctx, msg, callback)
         LOG_ERROR(msg, ctx)
         return False
 
-    def _loadDelayedRequest(self, seconds, ctx, request):
-        self._clearDelayedRequest()
-        self._rqCtx = ctx
-        self._rqHandler = request
-        self._rqCtx.startProcessing()
-        self._rqCallbackID = BigWorld.callback(seconds, request)
+    def __loadDelayedRequest(self, seconds, ctx, request):
+        self.__clearDelayedRequest()
+        self.__rqCtx = ctx
+        self.__rqHandler = request
+        self.__rqCtx.startProcessing()
+        self.__rqCallbackID = BigWorld.callback(seconds, request)
 
-    def _clearDelayedRequest(self):
-        if self._rqCallbackID is not None:
-            safeCancelCallback(self._rqCallbackID)
-            self._rqCallbackID = None
-        if self._rqCtx is not None:
-            self._rqCtx.stopProcessing()
-            self._rqCtx = None
-        if self._rqHandler is not None:
-            self._rqHandler = None
+    def __clearDelayedRequest(self):
+        if self.__rqCallbackID is not None:
+            safeCancelCallback(self.__rqCallbackID)
+            self.__rqCallbackID = None
+        if self.__rqCtx is not None:
+            self.__rqCtx.stopProcessing()
+            self.__rqCtx = None
+        if self.__rqHandler is not None:
+            self.__rqHandler = None
         return
+
+
+class RequestSingulizer(object):
+
+    def __init__(self):
+        self.__requestCallbacks = {}
+
+    def clear(self):
+        self.__requestCallbacks.clear()
+
+    def register(self, ctx, callback):
+        key = ctx.getSingulizerKey()
+        if key is not None:
+            if key in self.__requestCallbacks:
+                LOG_DEBUG('Adding consequent callback', key)
+                self.__requestCallbacks[key].append(callback)
+                return True
+            LOG_DEBUG('Adding first callback', key)
+            self.__requestCallbacks[key] = []
+        return False
+
+    def processResult(self, ctx, args):
+        key = ctx.getSingulizerKey()
+        if key in self.__requestCallbacks:
+            LOG_DEBUG('Retrieved results for singularized request', key, ', total saved calls:', len(self.__requestCallbacks[key]))
+            for clb in self.__requestCallbacks[key]:
+                clb(*args)
+
+            del self.__requestCallbacks[key]

@@ -1102,6 +1102,53 @@ class Comp7PrestigeRanksConfig(namedtuple('Comp7PrestigeRanksConfig', ('ranks',
         return self._replace(**dataToUpdate)
 
 
+class PersonalReservesConfig(namedtuple('_PersonalReserves', ('isReservesInBattleActivationEnabled', 'displayConversionNotification', 'supportedQueueTypes'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isReservesInBattleActivationEnabled=False, displayConversionNotification=False, supportedQueueTypes=frozenset())
+        defaults.update(**kwargs)
+        return super(PersonalReservesConfig, cls).__new__(cls, **defaults)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+CN_LOOT_BOXES_EVENT_CONFIG = 'cn_loot_boxes_event_config'
+
+class _CNLootBoxesEventConfig(object):
+    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit', '__externalShopUrl')
+
+    def __init__(self, **kwargs):
+        super(_CNLootBoxesEventConfig, self).__init__()
+        self.__isEnabled = kwargs.get('enabled', False)
+        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
+        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
+        self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
+        self.__externalShopUrl = kwargs.get('externalShopUrl', '')
+
+    @property
+    def isEnabled(self):
+        return self.__isEnabled
+
+    @property
+    def lootBoxBuyDayLimit(self):
+        return self.__lootBoxBuyDayLimit
+
+    @property
+    def externalShopUrl(self):
+        return self.__externalShopUrl
+
+    def getEventActiveTime(self):
+        return (self.__startDateInUTC, self.__finishDateInUTC)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1143,6 +1190,8 @@ class ServerSettings(object):
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.__comp7Config = Comp7Config()
         self.__comp7RanksConfig = Comp7PrestigeRanksConfig()
+        self.__personalReservesConfig = PersonalReservesConfig()
+        self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1222,6 +1271,7 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
+        self.__updateCNLootBoxesEventConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1263,6 +1313,10 @@ class ServerSettings(object):
             self.__comp7RanksConfig = makeTupleByDict(Comp7PrestigeRanksConfig, self.__serverSettings[Configs.COMP7_PRESTIGE_RANKS_CONFIG.value])
         else:
             self.__comp7RanksConfig = Comp7PrestigeRanksConfig.defaults()
+        if Configs.PERSONAL_RESERVES_CONFIG.value in self.__serverSettings:
+            self.__personalReservesConfig = makeTupleByDict(PersonalReservesConfig, self.__serverSettings[Configs.PERSONAL_RESERVES_CONFIG.value])
+        else:
+            self.__personalReservesConfig = PersonalReservesConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1356,6 +1410,8 @@ class ServerSettings(object):
         if Configs.CUSTOMIZATION_QUESTS.value in serverSettingsDiff:
             key = Configs.CUSTOMIZATION_QUESTS.value
             self.__serverSettings[key] = serverSettingsDiff[key]
+        self.__updatePersonalReserves(serverSettingsDiff)
+        self.__updateCNLootBoxesEventConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1495,6 +1551,10 @@ class ServerSettings(object):
     @property
     def peripheryRoutingConfig(self):
         return self.__peripheryRoutingConfig
+
+    @property
+    def personalReservesConfig(self):
+        return self.__personalReservesConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -1675,12 +1735,6 @@ class ServerSettings(object):
     def isAutoSellCheckBoxEnabled(self):
         return self.getMiscGUISettings().get('buyModuleDialog', {}).get('enableAutoSellCheckBox', False)
 
-    def isReservesInBattleActivationEnabled(self):
-        return self.__getGlobalSetting(constants.PERSONAL_RESERVES_CONFIG, {}).get('isReservesInBattleActivationEnabled', False)
-
-    def displayConversionNotification(self):
-        return self.__getGlobalSetting(constants.PERSONAL_RESERVES_CONFIG, {}).get('displayConversionNotification', False)
-
     def getMiscGUISettings(self):
         return self.__getGlobalSetting(MISC_GUI_SETTINGS, {})
 
@@ -1825,6 +1879,9 @@ class ServerSettings(object):
     def getTradeInConfig(self):
         return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
+    def getCNLootBoxesEventConfig(self):
+        return self.__cnLootBoxesEventConfig
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1931,6 +1988,22 @@ class ServerSettings(object):
 
     def __updatePeripheryRoutingConfig(self, diff):
         self.__peripheryRoutingConfig = self.__peripheryRoutingConfig.replace(diff[Configs.PERIPHERY_ROUTING_CONFIG.value])
+
+    def __updatePersonalReserves(self, serverSettingsDiff):
+        if Configs.PERSONAL_RESERVES_CONFIG.value in serverSettingsDiff:
+            self.__personalReservesConfig = self.__personalReservesConfig.replace(serverSettingsDiff[Configs.PERSONAL_RESERVES_CONFIG.value])
+
+    def __updateCNLootBoxesEventConfig(self, settings):
+        if CN_LOOT_BOXES_EVENT_CONFIG in settings:
+            config = settings[CN_LOOT_BOXES_EVENT_CONFIG]
+            if config is None:
+                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
+            elif isinstance(config, dict):
+                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig(**config)
+            else:
+                _logger.error('Unexpected format of subscriptions service config: %r', config)
+                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
+        return
 
 
 def serverSettingsChangeListener(*configKeys):

@@ -678,14 +678,15 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def _getHint(self):
+        serverSettings = self.lobbyContext.getServerSettings()
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             return self._makeHintData(R.strings.ingame_gui.helpScreen, HintPriority.HELP)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             return self._makeHintData(R.strings.ingame_gui.battleCommunication, HintPriority.BATTLE_COMMUNICATION)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
-            if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+            if serverSettings.isPersonalMissionsEnabled():
                 return self._makeHintData(R.strings.ingame_gui.battleProgress, HintPriority.QUESTS)
-        elif self.__hintInQueue is CommandMapping.CMD_SHOW_PERSONAL_RESERVES and self.lobbyContext.getServerSettings().isReservesInBattleActivationEnabled():
+        elif self.__hintInQueue is CommandMapping.CMD_SHOW_PERSONAL_RESERVES and serverSettings.personalReservesConfig.isReservesInBattleActivationEnabled:
             return self._makeHintData(R.strings.ingame_gui.personal_reserves, HintPriority.RESERVES)
 
     def _makeHintData(self, resourceRoot, priority):
@@ -761,7 +762,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def __canDisplayPersonalReservesActivationHint(self):
         battleBoostersCache = dependency.instance(IBoostersStateProvider)
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__reservesHintSettings) and not battleBoostersCache.getActiveResources() and self.lobbyContext.getServerSettings().isReservesInBattleActivationEnabled()
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__reservesHintSettings) and not battleBoostersCache.getActiveResources() and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled
 
     def __canDisplayQuestHint(self):
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled()

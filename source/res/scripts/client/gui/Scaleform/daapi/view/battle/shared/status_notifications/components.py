@@ -4,13 +4,17 @@ import logging
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES
 _logger = logging.getLogger(__name__)
 
-class BaseNotificationContainer(object):
+class StatusNotificationContainer(object):
 
-    def __init__(self, orderedItemClasses):
-        super(BaseNotificationContainer, self).__init__()
-        self._items = [ itemClass(updateCallback=self._onItemUpdated) for itemClass in orderedItemClasses ]
+    def __init__(self, orderedItemClasses, updateCallback):
+        super(StatusNotificationContainer, self).__init__()
+        self._items = [ itemClass(updateCallback=self.__onItemUpdated) for itemClass in orderedItemClasses ]
+        self.__updateCallback = updateCallback
+        for item in self._items:
+            item.start()
 
     def destroy(self):
+        self.__updateCallback = None
         while self._items:
             item = self._items.pop()
             item.destroy()
@@ -21,22 +25,7 @@ class BaseNotificationContainer(object):
     def getItemsData(self):
         return [ item.getVO() for item in self._items if item.isVisible() ]
 
-    def _onItemUpdated(self, itemID):
-        pass
-
-
-class StatusNotificationContainer(BaseNotificationContainer):
-
-    def __init__(self, orderedItemClasses, updateCallback):
-        super(StatusNotificationContainer, self).__init__(orderedItemClasses)
-        self.__updateCallback = updateCallback
-
-    def destroy(self):
-        self.__updateCallback = None
-        super(StatusNotificationContainer, self).destroy()
-        return
-
-    def _onItemUpdated(self, itemID):
+    def __onItemUpdated(self):
         self.__updateCallback(self.getItemsData())
 
 
@@ -78,6 +67,9 @@ class StatusNotificationItem(object):
          'pulseVisible': self._getIsPulseVisible()}
         self._isVisible = False
 
+    def start(self):
+        pass
+
     def getItemID(self):
         raise NotImplementedError
 
@@ -104,7 +96,7 @@ class StatusNotificationItem(object):
             self._sendUpdate()
 
     def _sendUpdate(self):
-        self.__updateCallback(self.getItemID())
+        self.__updateCallback()
 
     def _getIsPulseVisible(self):
         return self._isPulseVisible
@@ -119,6 +111,10 @@ class StatusNotificationsGroup(StatusNotificationItem):
         self.__items = [ nc(self.__onItemUpdated) for nc in notificationClasses ]
         self.__visibleItem = None
         return
+
+    def start(self):
+        for item in self.__items:
+            item.start()
 
     def getItemID(self):
         return self.GROUP_ITEM_ID
@@ -135,7 +131,14 @@ class StatusNotificationsGroup(StatusNotificationItem):
         super(StatusNotificationsGroup, self).destroy()
         return
 
-    def __onItemUpdated(self, _):
+    def getVO(self):
+        if self.__visibleItem is None:
+            _logger.warning('Attempt to get group data when there are no visible items inside!')
+            return super(StatusNotificationsGroup, self).getVO()
+        else:
+            return self.__visibleItem.getVO()
+
+    def __onItemUpdated(self):
         for itm in self.__items:
             if itm.isVisible():
                 self._isVisible = True
@@ -147,10 +150,3 @@ class StatusNotificationsGroup(StatusNotificationItem):
 
         self._sendUpdate()
         return
-
-    def getVO(self):
-        if self.__visibleItem is None:
-            _logger.warning('Attempt to get group data when there are no visible items inside!')
-            return super(StatusNotificationsGroup, self).getVO()
-        else:
-            return self.__visibleItem.getVO()

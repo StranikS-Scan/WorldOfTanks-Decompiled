@@ -3,6 +3,7 @@
 import collections
 from typing import TYPE_CHECKING
 from WeakMethod import WeakMethod
+from debug_utils import LOG_WARNING
 from goodie_constants import GOODIE_STATE, MAX_ACTIVE_BOOSTERS, GOODIE_NOTIFICATION_TYPE
 from soft_exception import SoftException
 from GoodieResources import GoodieResource
@@ -281,20 +282,25 @@ class Goodies(object):
     def activate(self, goodieID):
         goodie = self.actualGoodies.get(goodieID, None)
         if goodie is None:
+            LOG_WARNING("Couldn't find goodie by id={}", goodieID)
             return
         elif goodie.isActive():
+            LOG_WARNING("Couldn't activate goodie(id={}) because it is already activated!", goodieID)
             return
         else:
             defined = self.definedGoodies[goodieID]
             if not defined.isTimeLimited():
+                LOG_WARNING("Couldn't activate goodie(id={}) because it has unlimited time!".format(goodieID))
                 return
             oldGoodieID = self.actualGoodies.checkResource(goodieID)
             if oldGoodieID is not None:
                 if self.actualGoodies.compareByResource(oldGoodieID, goodieID):
                     self.remove(oldGoodieID)
                 else:
+                    LOG_WARNING("Couldn't activate goodie(id={}) because replacing is forbidden!".format(goodieID))
                     return
             if self.activeGoodiesCount() >= MAX_ACTIVE_BOOSTERS:
+                LOG_WARNING("Couldn't activate goodie(id={}) because limit of activated boosters is reached!".format(goodieID))
                 return
             goodie = defined.createGoodie(state=GOODIE_STATE.ACTIVE, counter=goodie.counter)
             self.actualGoodies[goodieID] = goodie

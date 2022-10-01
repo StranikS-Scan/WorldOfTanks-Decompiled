@@ -41,32 +41,34 @@ def showDialog(dialog, callback):
 
 def getUpgradeBoosterDialog(booster, previousBooster):
     builder = BuyAndActivateBoosterDialogBuilder(booster.getBuyPrice(), needsToBuy=not booster.isInAccount)
-    builder.setTitle(backport.text(R.strings.personal_reserves.activation.upgradeBoosterTitle(), boosterInfluence=backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
-    builder.setWarning(backport.text(R.strings.personal_reserves.activation.upgradeBoosterDescription(), previousBoosterInfluence=backport.text(R.strings.menu.booster.influence.dyn(previousBooster.boosterGuiType)()), previousBoosterBonus=previousBooster.getFormattedValue()))
+    builder.setTitle(backport.text(R.strings.personal_reserves.activation.upgradeBoosterTitle(), boosterTerm=backport.text(R.strings.personal_reserves.activation.terms.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
+    builder.setWarning(backport.text(R.strings.personal_reserves.activation.upgradeBoosterDescription(), previousBoosterTerm=backport.text(R.strings.personal_reserves.activation.terms.dyn(previousBooster.boosterGuiType)()), previousBoosterBonus=previousBooster.getFormattedValue()))
     builder.setIcon(mainIcon=UPGRADE_IMAGE_LOOKUP[booster.boosterType], iconPositionLogic=IconPositionLogicEnum.MOVECONTENTBELOW.value)
     return builder.build()
 
 
 def getBuyAndActivateBoosterDialog(booster):
     builder = BuyAndActivateBoosterDialogBuilder(booster.getBuyPrice())
-    builder.setTitle(backport.text(R.strings.personal_reserves.activation.buyAndActivateBoosterTitle(), boosterInfluence=backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
+    builder.setTitle(backport.text(R.strings.personal_reserves.activation.buyAndActivateBoosterTitle(), boosterTerm=backport.text(R.strings.personal_reserves.activation.terms.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
     builder.setIcon(mainIcon=BOOSTER_IMAGE_LOOKUP[booster.boosterType], iconPositionLogic=IconPositionLogicEnum.MOVECONTENTBELOW.value)
     return builder.build()
 
 
 def getBuyGoldDialog(booster):
     builder = BuyGoldDialogBuilder(booster.getBuyPrice())
-    builder.setTitle(backport.text(R.strings.personal_reserves.activation.buyGoldTitle(), boosterInfluence=backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
+    builder.setTitle(backport.text(R.strings.personal_reserves.activation.buyGoldTitle(), boosterTerm=backport.text(R.strings.personal_reserves.activation.terms.dyn(booster.boosterGuiType)()), boosterBonus=booster.getFormattedValue()))
     builder.setWarning(R.strings.personal_reserves.activation.buyGoldWarning)
     builder.setIcon(mainIcon=BOOSTER_IMAGE_LOOKUP[booster.boosterType], iconPositionLogic=IconPositionLogicEnum.MOVECONTENTBELOW.value)
     return builder.build()
 
 
 class BuyAndActivateBoosterDialogBuilder(ResDialogBuilder):
+    __slots__ = ('boosterPrice', 'needsToBuy', 'warning')
 
     def __init__(self, boosterPrice, needsToBuy=True, uniqueID=None):
         super(BuyAndActivateBoosterDialogBuilder, self).__init__(uniqueID=uniqueID)
         self.boosterPrice = boosterPrice
+        self.needsToBuy = needsToBuy
         self.addButton(ConfirmButton(label=self._getConfirmLabel(needsToBuy), buttonType=ButtonType.MAIN))
         self.setFocusedButtonID(DialogButtons.SUBMIT)
         self.addButton(CancelButton())
@@ -81,7 +83,7 @@ class BuyAndActivateBoosterDialogBuilder(ResDialogBuilder):
 
     def _extendTemplate(self, template):
         super(BuyAndActivateBoosterDialogBuilder, self)._extendTemplate(template)
-        if self.boosterPrice.isDefined():
+        if self.boosterPrice.isDefined() and self.needsToBuy:
             template.setSubView(DefaultDialogPlaceHolders.FOOTER, SinglePriceFooter(R.strings.personal_reserves.activation.price, self.boosterPrice, CurrencySize.BIG))
         if self.warning:
             image = ImageSubstitution(R.images.gui.maps.icons.personal_reserves.warning(), 'warning', 0, 0, 0, 0)
@@ -92,6 +94,7 @@ class BuyAndActivateBoosterDialogBuilder(ResDialogBuilder):
 
 
 class BuyGoldDialogBuilder(ResDialogBuilder):
+    __slots__ = ('boosterPrice', 'warning')
 
     def __init__(self, boosterPrice, uniqueID=None):
         super(BuyGoldDialogBuilder, self).__init__(uniqueID=uniqueID)

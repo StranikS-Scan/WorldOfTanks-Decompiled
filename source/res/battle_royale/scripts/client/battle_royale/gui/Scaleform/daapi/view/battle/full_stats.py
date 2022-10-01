@@ -6,12 +6,11 @@ from gui.impl.gen.resources import R
 from gui.impl import backport
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.Scaleform.daapi.view.meta.BattleRoyaleFullStatsMeta import BattleRoyaleFullStatsMeta
-from gui.Scaleform.daapi.view.battle.classic.full_stats import IFullStatsComponent
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
 from skeletons.gui.battle_session import IBattleSessionProvider
 from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 
-class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IFullStatsComponent, IVehicleCountListener):
+class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IVehicleCountListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -24,10 +23,7 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IF
     def hasTabs(self):
         return False
 
-    def setActiveTabIndex(self, index):
-        pass
-
-    def showQuestProgressAnimation(self):
+    def onToggleVisibility(self, _):
         pass
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):

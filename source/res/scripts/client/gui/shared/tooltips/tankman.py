@@ -377,7 +377,7 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
             return
         commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_FREESKILLS)})))
         for freeSkill in freeSkills:
-            commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main('#item_types:tankman/skills/{}'.format(freeSkill.name)), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.dyn(freeSkill.name)()), **self._skillIconNamePadding))
+            commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(freeSkill.userName), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.dyn(freeSkill.extensionLessIconName)()), **self._skillIconNamePadding))
 
     def _createEarnedSkillsBlock(self, commonStatsBlock):
         field = self._getSkillList()

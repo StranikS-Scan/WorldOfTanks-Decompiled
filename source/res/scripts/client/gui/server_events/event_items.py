@@ -444,6 +444,10 @@ class Quest(ServerEventAbstract):
     def getSuitableVehicles(self):
         return self.vehicleReqs.getSuitableVehicles()
 
+    def hasBonusType(self, bonusType):
+        bonusTypesCond = self.preBattleCond.getConditions().find('bonusTypes')
+        return bonusTypesCond is None or bonusType in bonusTypesCond.getValue()
+
     @staticmethod
     def _bonusDecorator(bonus):
         return bonus

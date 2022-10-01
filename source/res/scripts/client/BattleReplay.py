@@ -39,7 +39,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 _logger = logging.getLogger(__name__)
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
@@ -56,6 +56,7 @@ _FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM,
  CTRL_MODE_NAME.VIDEO,
  CTRL_MODE_NAME.CAT,
  CTRL_MODE_NAME.DEATH_FREE_CAM)
+_ARENA_GUI_TYPE_TO_MODE_TAG = {ARENA_GUI_TYPE.COMP7: 'Onslaught'}
 _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.ARTY,
@@ -852,6 +853,7 @@ class BattleReplay(object):
                     arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
+                self.__replayCtrl.recBattleModeTag = _ARENA_GUI_TYPE_TO_MODE_TAG.get(arena.guiType, '')
                 self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
             else:
                 self.__showInfoMessages()

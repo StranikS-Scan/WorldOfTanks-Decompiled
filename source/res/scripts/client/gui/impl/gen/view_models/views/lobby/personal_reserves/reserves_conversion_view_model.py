@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/personal_reserves/reserves_conversion_view_model.py
-from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_model import ConvertedBoosterModel
+from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_list import ConvertedBoosterList
 
 class ReservesConversionViewModel(ViewModel):
     __slots__ = ('onClose',)
@@ -10,50 +9,42 @@ class ReservesConversionViewModel(ViewModel):
     def __init__(self, properties=4, commands=1):
         super(ReservesConversionViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getBattleXPConverted(self):
-        return self._getArray(0)
-
-    def setBattleXPConverted(self, value):
-        self._setArray(0, value)
+    @property
+    def battleXPConverted(self):
+        return self._getViewModel(0)
 
     @staticmethod
     def getBattleXPConvertedType():
-        return ConvertedBoosterModel
+        return ConvertedBoosterList
 
-    def getCreditsConverted(self):
-        return self._getArray(1)
-
-    def setCreditsConverted(self, value):
-        self._setArray(1, value)
+    @property
+    def creditsConverted(self):
+        return self._getViewModel(1)
 
     @staticmethod
     def getCreditsConvertedType():
-        return ConvertedBoosterModel
+        return ConvertedBoosterList
 
-    def getCrewXPConverted(self):
-        return self._getArray(2)
-
-    def setCrewXPConverted(self, value):
-        self._setArray(2, value)
+    @property
+    def crewXPConverted(self):
+        return self._getViewModel(2)
 
     @staticmethod
     def getCrewXPConvertedType():
-        return ConvertedBoosterModel
+        return ConvertedBoosterList
 
-    def getFreeXPConverted(self):
-        return self._getArray(3)
-
-    def setFreeXPConverted(self, value):
-        self._setArray(3, value)
+    @property
+    def freeXPConverted(self):
+        return self._getViewModel(3)
 
     @staticmethod
     def getFreeXPConvertedType():
-        return ConvertedBoosterModel
+        return ConvertedBoosterList
 
     def _initialize(self):
         super(ReservesConversionViewModel, self)._initialize()
-        self._addArrayProperty('battleXPConverted', Array())
-        self._addArrayProperty('creditsConverted', Array())
-        self._addArrayProperty('crewXPConverted', Array())
-        self._addArrayProperty('freeXPConverted', Array())
+        self._addViewModelProperty('battleXPConverted', ConvertedBoosterList())
+        self._addViewModelProperty('creditsConverted', ConvertedBoosterList())
+        self._addViewModelProperty('crewXPConverted', ConvertedBoosterList())
+        self._addViewModelProperty('freeXPConverted', ConvertedBoosterList())
         self.onClose = self._addCommand('onClose')

@@ -1322,13 +1322,12 @@
         <slotId>	15095	</slotId>
         <tags>	formfactor_square	</tags>
         <compatibleModels>	F88_AMX_13_105_3DSt_TIR	</compatibleModels>
-        <position>	1.3387 0.921352 1.42166	</position>
-        <rotation>	1.49913 1.0233 2.63006	</rotation>
-        <scale>	0.39082 0.2 0.39082	</scale>
-        <doubleSided>	false	</doubleSided>
+        <position>	1.363375 0.922897 1.42252	</position>
+        <rotation>	1.49913 1.023299 2.630059	</rotation>
+        <scale>	0.39082 0.272343 0.39082	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	1.04127	</clipAngle>
-        <anchorShift>	0.000000	</anchorShift>
+        <clipAngle>	0.788889	</clipAngle>
+        <anchorShift>	0.04	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1348,23 +1347,22 @@
         <slotId>	15097	</slotId>
         <tags>	formfactor_square	</tags>
         <compatibleModels>	F88_AMX_13_105_B9BS_3DSt	</compatibleModels>
-        <position>	-1.31989 0.904487 1.63913	</position>
-        <rotation>	1.53075 0.0388019 -1.52943	</rotation>
-        <scale>	0.29642 0.0735653 0.29642	</scale>
+        <position>	1.04686 1.25731 1.04501	</position>
+        <rotation>	-0.038048 0.001745 -3.066893	</rotation>
+        <scale>	0.39082 0.2 0.39082	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.21541	</clipAngle>
-        <anchorShift>	0.08002	</anchorShift>
+        <anchorShift>	0.05002	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15098	</slotId>
         <tags>	formfactor_square	</tags>
         <compatibleModels>	F88_AMX_13_105_B9BS_3DSt	</compatibleModels>
-        <position>	1.36202 0.886281 1.29566	</position>
-        <rotation>	1.52439 -0.0371908 1.5314	</rotation>
-        <scale>	0.297302 0.0737841 0.297302	</scale>
-        <doubleSided>	false	</doubleSided>
+        <position>	-0.69126 1.24965 1.30238	</position>
+        <rotation>	0.300814 0.027794 -3.063431	</rotation>
+        <scale>	0.2876 0.147178 0.2876	</scale>
         <showOn>	16	</showOn>
         <clipAngle>	1.21541	</clipAngle>
         <anchorShift>	0.05002	</anchorShift>
@@ -2774,10 +2772,22 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
+              <rayStart>	0.000044 0.000218 3.13	</rayStart>
+              <rayEnd>	0.000044 0.000218 3.63	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
               <rayStart>	0.000044 0.000218 4.09731	</rayStart>
               <rayEnd>	0.000044 0.000218 4.59731	</rayEnd>
               <rayUp>	0.1 0 0	</rayUp>
               <applyToFabric>	true	</applyToFabric>
+              <compatibleModels>	F88_AMX_13_105_3Dst	</compatibleModels>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>

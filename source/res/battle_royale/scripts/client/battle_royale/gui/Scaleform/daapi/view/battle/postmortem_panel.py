@@ -6,11 +6,11 @@ from items import vehicles
 
 class BattleRoyalePostmortemPanel(PostmortemPanel, BattleRoyalePostmortemPanelMeta):
 
-    def _onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
+    def _onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID, ignoreMessages):
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
             if code not in _ALLOWED_EQUIPMENT_DEATH_CODES and equipment:
                 code = '_'.join((code, equipment.name.upper()))
                 self._prepareMessage(code, entityID, self._getDevice(extra))
                 return
-        super(BattleRoyalePostmortemPanel, self)._onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID)
+        super(BattleRoyalePostmortemPanel, self)._onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID, ignoreMessages)

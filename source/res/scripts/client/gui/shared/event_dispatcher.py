@@ -6,9 +6,6 @@ import typing
 from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
-from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
-from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
-from wg_async import wg_async, wg_await
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
@@ -55,6 +52,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getUniqueViewName, getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -65,12 +63,15 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, ISteamCompletionController
+from skeletons.gui.game_control import IBrowserController, ICNLootBoxesController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, ISteamCompletionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
@@ -1922,3 +1923,30 @@ def showComp7WinsRewardsScreen(quest, notificationMgr=None):
     from gui.impl.lobby.comp7.views.rewards_screen import WinsRewardsScreenWindow
     window = WinsRewardsScreenWindow(quest=quest)
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showCNLootBoxesWelcomeScreen():
+    cnLootBoxesCtrl = dependency.instance(ICNLootBoxesController)
+    if cnLootBoxesCtrl.isActive() and cnLootBoxesCtrl.isLootBoxesAvailable():
+        from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_welcome_screen import ChinaLootBoxesWelcomeScreenWindow
+        window = ChinaLootBoxesWelcomeScreenWindow()
+        window.load()
+
+
+def showCNLootBoxStorageWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_storage_screen import ChinaLootBoxesStorageScreenWindow
+    window = ChinaLootBoxesStorageScreenWindow()
+    window.load()
+
+
+def showCNLootBoxOpenWindow(boxType, rewards):
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_screen import ChinaLootBoxesOpenBoxScreenWindow
+    window = ChinaLootBoxesOpenBoxScreenWindow(boxType=boxType, rewards=rewards)
+    window.load()
+
+
+def showCNLootBoxOpenErrorWindow():
+    from gui.impl.lobby.cn_loot_boxes.china_loot_boxes_open_box_error_view import ChinaLootBoxesOpenBoxErrorWindow
+    window = ChinaLootBoxesOpenBoxErrorWindow()
+    window.load()
+    SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.lootboxes.open.server_error.DISABLED()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.Error)

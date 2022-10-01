@@ -191,6 +191,7 @@ SUBTITLES = 'subtitles'
 MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
 NEW_SHOP_TABS = 'newShopTabs'
 IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
+LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
 QUESTS = 'quests'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
@@ -217,6 +218,10 @@ SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
 MINIMAP_SIZE = 'minimapSize'
 COMP7_UI_SECTION = 'comp7'
 COMP7_WIN_REWARDS_PAGE_WINS_COUNT = 'comp7WinRewardsPageWinsCount'
+LOOT_BOXES_INTRO_WAS_SHOWN = 'lootBoxesIntroWasShown'
+LOOT_BOXES_FINISH_SHOWN = 'lootBoxesIntroFinishShown'
+LOOT_BOXES_OPEN_ANIMATION_STATE = 'lootBoxesOpenAnimationState'
+LOOT_BOXES_VIEWED_COUNT = 'lootBoxesViewedCount'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -1035,7 +1040,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOW_DEMO_ACC_REGISTRATION: False,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
                 CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
-                SHOWN_PERSONAL_RESERVES_INTRO: False},
+                SHOWN_PERSONAL_RESERVES_INTRO: False,
+                LOOT_BOXES_INTRO_WAS_SHOWN: False,
+                LOOT_BOXES_VIEWED_COUNT: 0,
+                LOOT_BOXES_OPEN_ANIMATION_STATE: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1066,7 +1074,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      RESOURCE_WELL_START_SHOWN: False,
                      RESOURCE_WELL_END_SHOWN: False,
                      INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
-                                                        AUCTION_FINISH_STAGE_SEEN: set()}},
+                                                        AUCTION_FINISH_STAGE_SEEN: set()},
+                     LOOT_BOXES_FINISH_SHOWN: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1176,7 +1185,7 @@ def _pack(value):
 
 
 def _unpack(value):
-    return pickle.loads(base64.b64decode(value))
+    return pickle.loads(base64.b64decode(value)) if value else None
 
 
 def _recursiveStep(defaultDict, savedDict, finalDict):
@@ -1198,7 +1207,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 55
+    version = 56
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1767,8 +1776,11 @@ class AccountSettings(object):
             accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
             if NEW_SETTINGS_COUNTER in accSettings.keys():
                 savedNewSettingsCounters = _unpack(accSettings[NEW_SETTINGS_COUNTER].asString)
-                newSettingsCounters = AccountSettings.updateNewSettingsCounter(currentDefaults, savedNewSettingsCounters)
-                accSettings.write(NEW_SETTINGS_COUNTER, _pack(newSettingsCounters))
+                if savedNewSettingsCounters is not None:
+                    newSettingsCounters = AccountSettings.updateNewSettingsCounter(currentDefaults, savedNewSettingsCounters)
+                    accSettings.write(NEW_SETTINGS_COUNTER, _pack(newSettingsCounters))
+
+        return
 
     @staticmethod
     def checkAndResetFireKeyIfInUse(expectedCommand, expectedKey):

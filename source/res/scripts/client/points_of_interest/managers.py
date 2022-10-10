@@ -56,9 +56,9 @@ class PoiViewStateManager(CGF.ComponentManager):
     @onAddedQuery(CGF.GameObject, PoiStateComponent)
     def onPointStateAdded(self, go, pointState):
         if self.__vehicleViewState is not None:
-            vehicleState = self.__vehicleViewState.state
-            if pointState.id == vehicleState.id:
-                vehicleState.pointState = CGF.ComponentLink(go, PoiStateComponent)
+            captureBlockerState = self.__vehicleViewState.state
+            if pointState.id == captureBlockerState.id:
+                captureBlockerState.poiState = CGF.ComponentLink(go, PoiStateComponent)
                 self.__pointViewState = PointViewStateUpdater(pointState)
         return
 
@@ -75,8 +75,8 @@ class PoiViewStateManager(CGF.ComponentManager):
     @onAddedQuery(PoiCaptureBlockerStateComponent, PoiVehicleStateComponent)
     def onPoiVehicleStateAdded(self, captureBlockerState, vehicleState):
         self.__vehicleViewState = VehicleViewStateUpdater(captureBlockerState)
-        if vehicleState.poiState is not None:
-            pointState = vehicleState.poiState()
+        if captureBlockerState.poiState is not None:
+            pointState = captureBlockerState.poiState()
             self.__pointViewState = PointViewStateUpdater(pointState)
         return
 

@@ -1,28 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/subprocess.py
-# Compiled at: 2100-06-11 07:32:29
-"""Subprocesses with accessible I/O streams
-
-This module allows you to spawn processes, connect to their
-input/output/error pipes, and obtain their return codes.
-
-For a complete description of this module see the Python documentation.
-
-Main API
-========
-call(...): Runs a command, waits for it to complete, then returns
-    the return code.
-check_call(...): Same as call() but raises CalledProcessError()
-    if return code is not 0
-check_output(...): Same as check_call() but returns the contents of
-    stdout instead of a return code
-Popen(...): A class for flexibly executing a command in a new process
-
-Constants
----------
-PIPE:    Special value that indicates a pipe should be created
-STDOUT:  Special value that indicates that stderr should go to stdout
-"""
 import sys
 mswindows = sys.platform == 'win32'
 import os
@@ -33,12 +10,6 @@ import signal
 import errno
 
 class CalledProcessError(Exception):
-    """This exception is raised when a process run by check_call() or
-    check_output() returns a non-zero exit status.
-    
-    Attributes:
-      cmd, returncode, output
-    """
 
     def __init__(self, returncode, cmd, output=None):
         self.returncode = returncode
@@ -127,8 +98,6 @@ def _eintr_retry_call(func, *args):
 
 
 def _args_from_interpreter_flags():
-    """Return a list of command-line arguments reproducing the current
-    settings in sys.flags and sys.warnoptions."""
     flag_opt_map = {'debug': 'd',
      'optimize': 'O',
      'dont_write_bytecode': 'B',
@@ -153,26 +122,10 @@ def _args_from_interpreter_flags():
 
 
 def call(*popenargs, **kwargs):
-    """Run command with arguments.  Wait for command to complete, then
-    return the returncode attribute.
-    
-    The arguments are the same as for the Popen constructor.  Example:
-    
-    retcode = call(["ls", "-l"])
-    """
     return Popen(*popenargs, **kwargs).wait()
 
 
 def check_call(*popenargs, **kwargs):
-    """Run command with arguments.  Wait for command to complete.  If
-    the exit code was zero then return, otherwise raise
-    CalledProcessError.  The CalledProcessError object will have the
-    return code in the returncode attribute.
-    
-    The arguments are the same as for the Popen constructor.  Example:
-    
-    check_call(["ls", "-l"])
-    """
     retcode = call(*popenargs, **kwargs)
     if retcode:
         cmd = kwargs.get('args')
@@ -183,25 +136,6 @@ def check_call(*popenargs, **kwargs):
 
 
 def check_output(*popenargs, **kwargs):
-    r"""Run command with arguments and return its output as a byte string.
-    
-    If the exit code was non-zero it raises a CalledProcessError.  The
-    CalledProcessError object will have the return code in the returncode
-    attribute and output in the output attribute.
-    
-    The arguments are the same as for the Popen constructor.  Example:
-    
-    >>> check_output(["ls", "-l", "/dev/null"])
-    'crw-rw-rw- 1 root root 1, 3 Oct 18  2007 /dev/null\n'
-    
-    The stdout argument is not allowed as it is used internally.
-    To capture standard error in the result, use stderr=STDOUT.
-    
-    >>> check_output(["/bin/sh", "-c",
-    ...               "ls -l non_existent_file ; exit 0"],
-    ...              stderr=STDOUT)
-    'ls: non_existent_file: No such file or directory\n'
-    """
     if 'stdout' in kwargs:
         raise ValueError('stdout argument not allowed, it will be overridden.')
     process = Popen(stdout=PIPE, *popenargs, **kwargs)
@@ -216,30 +150,6 @@ def check_output(*popenargs, **kwargs):
 
 
 def list2cmdline(seq):
-    """
-    Translate a sequence of arguments into a command line
-    string, using the same rules as the MS C runtime:
-    
-    1) Arguments are delimited by white space, which is either a
-       space or a tab.
-    
-    2) A string surrounded by double quotation marks is
-       interpreted as a single argument, regardless of white space
-       contained within.  A quoted string can be embedded in an
-       argument.
-    
-    3) A double quotation mark preceded by a backslash is
-       interpreted as a literal double quotation mark.
-    
-    4) Backslashes are interpreted literally, unless they
-       immediately precede a double quotation mark.
-    
-    5) If backslashes immediately precede a double quotation mark,
-       every pair of backslashes is interpreted as a literal
-       backslash.  If the number of backslashes is odd, the last
-       backslash escapes the next double quotation mark as
-       described in rule 3.
-    """
     result = []
     needquote = False
     for arg in seq:
@@ -271,44 +181,9 @@ def list2cmdline(seq):
 
 
 class Popen(object):
-    """ Execute a child program in a new process.
-    
-    For a complete description of the arguments see the Python documentation.
-    
-    Arguments:
-      args: A string, or a sequence of program arguments.
-    
-      bufsize: supplied as the buffering argument to the open() function when
-          creating the stdin/stdout/stderr pipe file objects
-    
-      executable: A replacement program to execute.
-    
-      stdin, stdout and stderr: These specify the executed programs' standard
-          input, standard output and standard error file handles, respectively.
-    
-      preexec_fn: (POSIX only) An object to be called in the child process
-          just before the child is executed.
-    
-      close_fds: Controls closing or inheriting of file descriptors.
-    
-      shell: If true, the command will be executed through the shell.
-    
-      cwd: Sets the current directory before the child is executed.
-    
-      env: Defines the environment variables for the new process.
-    
-      universal_newlines: If true, use universal line endings for file
-          objects stdin, stdout and stderr.
-    
-      startupinfo and creationflags (Windows only)
-    
-    Attributes:
-        stdin, stdout, stderr, pid, returncode
-    """
     _child_created = False
 
     def __init__(self, args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0):
-        """Create new Popen instance."""
         _cleanup()
         if not isinstance(bufsize, (int, long)):
             raise TypeError('bufsize must be an integer')
@@ -380,13 +255,6 @@ class Popen(object):
             return
 
     def communicate(self, input=None):
-        """Interact with process: Send data to stdin.  Read data from
-        stdout and stderr, until end-of-file is reached.  Wait for
-        process to terminate.  The optional input argument should be a
-        string to be sent to the child process, or None, if no data
-        should be sent to the child.
-        
-        communicate() returns a tuple (stdout, stderr)."""
         if [self.stdin, self.stdout, self.stderr].count(None) >= 2:
             stdout = None
             stderr = None
@@ -411,16 +279,11 @@ class Popen(object):
             return self._communicate(input)
 
     def poll(self):
-        """Check if child process has terminated. Set and return returncode
-        attribute."""
         return self._internal_poll()
 
     if mswindows:
 
         def _get_handles(self, stdin, stdout, stderr):
-            """Construct and return tuple with IO objects:
-            p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite
-            """
             to_close = set()
             if stdin is None and stdout is None and stderr is None:
                 return ((None, None, None, None, None, None), to_close)
@@ -480,11 +343,9 @@ class Popen(object):
                   errwrite), to_close)
 
         def _make_inheritable(self, handle):
-            """Return a duplicate of handle, which is inheritable"""
             return _subprocess.DuplicateHandle(_subprocess.GetCurrentProcess(), handle, _subprocess.GetCurrentProcess(), 0, 1, _subprocess.DUPLICATE_SAME_ACCESS)
 
         def _find_w9xpopen(self):
-            """Find and return absolut path to w9xpopen.exe"""
             w9xpopen = os.path.join(os.path.dirname(_subprocess.GetModuleFileName(0)), 'w9xpopen.exe')
             if not os.path.exists(w9xpopen):
                 w9xpopen = os.path.join(os.path.dirname(sys.exec_prefix), 'w9xpopen.exe')
@@ -493,7 +354,6 @@ class Popen(object):
             return w9xpopen
 
         def _execute_child(self, args, executable, preexec_fn, close_fds, cwd, env, universal_newlines, startupinfo, creationflags, shell, to_close, p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite):
-            """Execute program (MS Windows version)"""
             if not isinstance(args, types.StringTypes):
                 args = list2cmdline(args)
             if startupinfo is None:
@@ -538,21 +398,12 @@ class Popen(object):
             return
 
         def _internal_poll(self, _deadstate=None, _WaitForSingleObject=_subprocess.WaitForSingleObject, _WAIT_OBJECT_0=_subprocess.WAIT_OBJECT_0, _GetExitCodeProcess=_subprocess.GetExitCodeProcess):
-            """Check if child process has terminated.  Returns returncode
-            attribute.
-            
-            This method is called by __del__, so it can only refer to objects
-            in its local scope.
-            
-            """
             if self.returncode is None:
                 if _WaitForSingleObject(self._handle, 0) == _WAIT_OBJECT_0:
                     self.returncode = _GetExitCodeProcess(self._handle)
             return self.returncode
 
         def wait(self):
-            """Wait for child process to terminate.  Returns returncode
-            attribute."""
             if self.returncode is None:
                 _subprocess.WaitForSingleObject(self._handle, _subprocess.INFINITE)
                 self.returncode = _subprocess.GetExitCodeProcess(self._handle)
@@ -604,8 +455,6 @@ class Popen(object):
             return (stdout, stderr)
 
         def send_signal(self, sig):
-            """Send a signal to the process
-            """
             if sig == signal.SIGTERM:
                 self.terminate()
             elif sig == signal.CTRL_C_EVENT:
@@ -616,8 +465,6 @@ class Popen(object):
                 raise ValueError('Unsupported signal: {}'.format(sig))
 
         def terminate(self):
-            """Terminates the process
-            """
             try:
                 _subprocess.TerminateProcess(self._handle, 1)
             except OSError as e:
@@ -632,9 +479,6 @@ class Popen(object):
     else:
 
         def _get_handles(self, stdin, stdout, stderr):
-            """Construct and return tuple with IO objects:
-            p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite
-            """
             to_close = set()
             p2cread, p2cwrite = (None, None)
             c2pread, c2pwrite = (None, None)
@@ -691,7 +535,6 @@ class Popen(object):
                 fcntl.fcntl(fd, fcntl.F_SETFD, old & ~cloexec_flag)
 
         def pipe_cloexec(self):
-            """Create a pipe with FDs set CLOEXEC."""
             r, w = os.pipe()
             self._set_cloexec_flag(r)
             self._set_cloexec_flag(w)
@@ -725,7 +568,6 @@ class Popen(object):
             _disabling_gc_lock = _noop_context_manager()
 
         def _execute_child(self, args, executable, preexec_fn, close_fds, cwd, env, universal_newlines, startupinfo, creationflags, shell, to_close, p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite):
-            """Execute program (POSIX version)"""
             if isinstance(args, types.StringTypes):
                 args = [args]
             else:
@@ -848,13 +690,6 @@ class Popen(object):
                 raise RuntimeError('Unknown child exit status!')
 
         def _internal_poll(self, _deadstate=None, _waitpid=os.waitpid, _WNOHANG=os.WNOHANG, _os_error=os.error, _ECHILD=errno.ECHILD):
-            """Check if child process has terminated.  Returns returncode
-            attribute.
-            
-            This method is called by __del__, so it cannot reference anything
-            outside of the local scope (nor can any methods it calls).
-            
-            """
             if self.returncode is None:
                 try:
                     pid, sts = _waitpid(self.pid, _WNOHANG)
@@ -869,8 +704,6 @@ class Popen(object):
             return self.returncode
 
         def wait(self):
-            """Wait for child process to terminate.  Returns returncode
-            attribute."""
             while self.returncode is None:
                 try:
                     pid, sts = _eintr_retry_call(os.waitpid, self.pid, 0)
@@ -1015,18 +848,12 @@ class Popen(object):
             return (stdout, stderr)
 
         def send_signal(self, sig):
-            """Send a signal to the process
-            """
             os.kill(self.pid, sig)
 
         def terminate(self):
-            """Terminate the process with SIGTERM
-            """
             self.send_signal(signal.SIGTERM)
 
         def kill(self):
-            """Kill the process with SIGKILL
-            """
             self.send_signal(signal.SIGKILL)
 
 

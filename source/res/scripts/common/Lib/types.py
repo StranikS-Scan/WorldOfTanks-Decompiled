@@ -1,10 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/types.py
-# Compiled at: 2100-06-27 05:43:44
-"""Define names for all type symbols known in the standard interpreter.
-
-Types that are part of optional modules (e.g. array) are not listed.
-"""
 import sys
 NoneType = type(None)
 TypeType = type

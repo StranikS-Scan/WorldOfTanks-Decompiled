@@ -9,19 +9,21 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_list_item import ConvertedBoosterListItem
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_conversion_view_model import ReservesConversionViewModel
-from gui.impl.pub import ViewImpl
+from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
+from gui.shared.event_dispatcher import closeReservesIntroAndConversionView
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional, List, Any
     from frameworks.wulf import Array
 
-class ReservesConversionView(ViewImpl):
-    __slots__ = ('__goodiesCache', '__itemsCache')
-    __goodiesCache = dependency.instance(IGoodiesCache)
-    __itemsCache = dependency.instance(IItemsCache)
+class ReservesConversionView(ReservesViewMonitor):
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _uiLoader = dependency.descriptor(IGuiLoader)
     BOOSTER_TYPE_TO_MODEL_DICT = {'booster_crew_xp': (lambda model: model.crewXPConverted, lambda model: model.crewXPConverted),
      'booster_credits': (lambda model: model.creditsConverted, lambda model: model.creditsConverted),
      'booster_free_xp': (None, lambda model: model.freeXPConverted),
@@ -38,15 +40,16 @@ class ReservesConversionView(ViewImpl):
         return self.getViewModel()
 
     def _initialize(self, *args, **kwargs):
-        super(ReservesConversionView, self)._initialize(args, kwargs)
+        super(ReservesConversionView, self)._initialize(*args, **kwargs)
         self._viewModel.onClose += self._onClose
 
     def _finalize(self):
         self._viewModel.onClose -= self._onClose
+        self.__finalizeSounds()
         super(ReservesConversionView, self)._finalize()
 
     def _getBoosterDescr(self, boosterID):
-        booster = self.__goodiesCache.getBooster(boosterID)
+        booster = self._goodiesCache.getBooster(boosterID)
         value = booster.getFormattedValue()
         effectiveTime = booster.getEffectTimeStr(hoursOnly=True)
         return backport.text(R.strings.personal_reserves.conversionView.boosterDescription(), value=value, effectTime=effectiveTime)
@@ -55,9 +58,13 @@ class ReservesConversionView(ViewImpl):
         super(ReservesConversionView, self)._onLoading(*args, **kwargs)
         self._fillViewModel()
 
+    def _onLoaded(self, *args, **kwargs):
+        super(ReservesConversionView, self)._onLoaded(*args, **kwargs)
+        self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_personal_reserves')
+
     def _fillViewModel(self):
         with self._viewModel.transaction() as model:
-            result = self.__itemsCache.items.goodies.pr2ConversionResult
+            result = self._itemsCache.items.goodies.pr2ConversionResult
             provider = getConversionDataProvider(result)
             self._buildConversionItemsListSimple(GOODIE_RESOURCE_TYPE.FREE_XP, provider, model)
             self._buildConversionItemsListSpecial(provider, model)
@@ -78,11 +85,10 @@ class ReservesConversionView(ViewImpl):
         if freeXPData is not None:
             sumIds = {data[3] for data in freeXPData}
         boosterGuiType = getBoosterGuiType(GOODIE_RESOURCE_TYPE.CREW_XP)
-        oldIds, oldCounts, newIds, _ = self._prepareData(prConversionResult.get(boosterGuiType), sort=False)
+        oldIds, oldCounts, newIds, _ = self._prepareData(prConversionResult.get(boosterGuiType), sort=True)
         sumIds.update(newIds)
-        newIds = sorted(sumIds, key=self._boosterComparisonKey, reverse=True)
-        newCounts = [ prConversionResultSum[newId] for newId in newIds ]
-        self._buildConversionItemsLists(model, boosterGuiType, oldIds, oldCounts, newIds, newCounts)
+        newCounts = [ prConversionResultSum[newId] for newId in sumIds ]
+        self._buildConversionItemsLists(model, boosterGuiType, oldIds, oldCounts, list(sumIds), newCounts)
         return
 
     def _buildConversionItemsLists(self, model, boosterGuiType, oldIds, oldCounts, newIds, newCounts):
@@ -101,7 +107,7 @@ class ReservesConversionView(ViewImpl):
              [])
         else:
             if sort:
-                sortedData = sorted(resultByGUIType, key=lambda value: self._boosterComparisonKey(value[3]), reverse=True)
+                sortedData = sorted(resultByGUIType, key=lambda value: self._boosterComparisonKey(value[0]), reverse=True)
             else:
                 sortedData = resultByGUIType
             oldIds, oldCounts, newIds, newCounts = ([],
@@ -126,7 +132,7 @@ class ReservesConversionView(ViewImpl):
             raise SoftException('Unexpected booster type {}'.format(boosterGUIType))
 
     def _boosterComparisonKey(self, boosterId):
-        booster = self.__goodiesCache.getBooster(boosterId)
+        booster = self._goodiesCache.getBooster(boosterId)
         return (booster.effectValue, booster.effectTime)
 
     def _buildConversionItemList(self, boosterIds, counts, conversionModelArray):
@@ -140,4 +146,15 @@ class ReservesConversionView(ViewImpl):
             conversionModelArray.addViewModel(conversionItem)
 
     def _onClose(self):
-        self.destroyWindow()
+        closeReservesIntroAndConversionView()
+
+    def __finalizeSounds(self):
+        otherViews = [R.views.lobby.personal_reserves.ReservesIntroView(), R.views.lobby.personal_reserves.ReservesActivationView()]
+        isOnlyOne = True
+        for viewIdToClose in otherViews:
+            introView = self._uiLoader.windowsManager.getViewByLayoutID(viewIdToClose)
+            if introView:
+                isOnlyOne = False
+
+        if isOnlyOne:
+            self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_garage')

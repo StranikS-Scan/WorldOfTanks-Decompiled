@@ -1,24 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tempfile.py
-# Compiled at: 2100-06-11 13:09:32
-"""Temporary files.
-
-This module provides generic, low- and high-level interfaces for
-creating temporary files and directories.  All of the interfaces
-provided by this module can be used without fear of race conditions
-except for 'mktemp'.  'mktemp' is subject to race conditions and
-should not be used; it is provided for backward compatibility only.
-
-This module also provides some data items to the user:
-
-  TMP_MAX  - maximum number of names that will be tried before
-             giving up.
-  template - the default prefix for all temporary names.
-             You may change this to control the default prefix.
-  tempdir  - If this is set to a string before the first use of
-             any routine from this module, it will be considered as
-             another candidate location to store temporary files.
-"""
 __all__ = ['NamedTemporaryFile',
  'TemporaryFile',
  'SpooledTemporaryFile',
@@ -103,12 +84,6 @@ def _exists(fn):
 
 
 class _RandomNameSequence:
-    """An instance of _RandomNameSequence generates an endless
-    sequence of unpredictable strings which can safely be incorporated
-    into file names.  Each string is six characters long.  Multiple
-    threads can safely use the same instance at the same time.
-    
-    _RandomNameSequence is an iterator."""
     characters = 'abcdefghijklmnopqrstuvwxyz' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789_'
 
     def __init__(self):
@@ -140,8 +115,6 @@ class _RandomNameSequence:
 
 
 def _candidate_tempdir_list():
-    """Generate a list of candidate temporary directories which
-    _get_default_tempdir will try."""
     dirlist = []
     for envname in ('TMPDIR', 'TEMP', 'TMP'):
         dirname = _os.getenv(envname)
@@ -168,13 +141,6 @@ def _candidate_tempdir_list():
 
 
 def _get_default_tempdir():
-    """Calculate the default directory to use for temporary files.
-    This routine should be called exactly once.
-    
-    We determine whether or not a candidate temp dir is usable by
-    trying to create and write to a file in that directory.  If this
-    is successful, the test file is deleted.  To prevent denial of
-    service, the name of the test file must be randomized."""
     namer = _RandomNameSequence()
     dirlist = _candidate_tempdir_list()
     flags = _text_openflags
@@ -210,7 +176,6 @@ def _get_default_tempdir():
 _name_sequence = None
 
 def _get_candidate_names():
-    """Common setup sequence for all user-callable interfaces."""
     global _name_sequence
     if _name_sequence is None:
         _once_lock.acquire()
@@ -224,7 +189,6 @@ def _get_candidate_names():
 
 
 def _mkstemp_inner(dir, pre, suf, flags):
-    """Code common to mkstemp, TemporaryFile, and NamedTemporaryFile."""
     names = _get_candidate_names()
     for seq in xrange(TMP_MAX):
         name = names.next()
@@ -244,14 +208,12 @@ def _mkstemp_inner(dir, pre, suf, flags):
 
 
 def gettempprefix():
-    """Accessor for tempdir.template."""
     return template
 
 
 tempdir = None
 
 def gettempdir():
-    """Accessor for tempfile.tempdir."""
     global tempdir
     if tempdir is None:
         _once_lock.acquire()
@@ -265,30 +227,6 @@ def gettempdir():
 
 
 def mkstemp(suffix='', prefix=template, dir=None, text=False):
-    """User-callable function to create and return a unique temporary
-    file.  The return value is a pair (fd, name) where fd is the
-    file descriptor returned by os.open, and name is the filename.
-    
-    If 'suffix' is specified, the file name will end with that suffix,
-    otherwise there will be no suffix.
-    
-    If 'prefix' is specified, the file name will begin with that prefix,
-    otherwise a default prefix is used.
-    
-    If 'dir' is specified, the file will be created in that directory,
-    otherwise a default directory is used.
-    
-    If 'text' is specified and true, the file is opened in text
-    mode.  Else (the default) the file is opened in binary mode.  On
-    some operating systems, this makes no difference.
-    
-    The file is readable and writable only by the creating user ID.
-    If the operating system uses permission bits to indicate whether a
-    file is executable, the file is executable by no one. The file
-    descriptor is not inherited by children of this process.
-    
-    Caller is responsible for deleting the file when done with it.
-    """
     if dir is None:
         dir = gettempdir()
     if text:
@@ -299,17 +237,6 @@ def mkstemp(suffix='', prefix=template, dir=None, text=False):
 
 
 def mkdtemp(suffix='', prefix=template, dir=None):
-    """User-callable function to create and return a unique temporary
-    directory.  The return value is the pathname of the directory.
-    
-    Arguments are as for mkstemp, except that the 'text' argument is
-    not accepted.
-    
-    The directory is readable, writable, and searchable only by the
-    creating user.
-    
-    Caller is responsible for deleting the directory when done with it.
-    """
     if dir is None:
         dir = gettempdir()
     names = _get_candidate_names()
@@ -331,17 +258,6 @@ def mkdtemp(suffix='', prefix=template, dir=None):
 
 
 def mktemp(suffix='', prefix=template, dir=None):
-    """User-callable function to return a unique temporary file name.  The
-    file is not created.
-    
-    Arguments are as for mkstemp, except that the 'text' argument is
-    not accepted.
-    
-    This function is unsafe and should not be used.  The file name
-    refers to a file that did not exist at some point, but by the time
-    you get around to creating it, someone else may have beaten you to
-    the punch.
-    """
     if dir is None:
         dir = gettempdir()
     names = _get_candidate_names()
@@ -356,12 +272,6 @@ def mktemp(suffix='', prefix=template, dir=None):
 
 
 class _TemporaryFileWrapper:
-    """Temporary file wrapper
-    
-    This class provides a wrapper around files opened for
-    temporary use.  In particular, it seeks to automatically
-    remove the file when it is no longer needed.
-    """
 
     def __init__(self, file, name, delete=True):
         self.file = file
@@ -407,18 +317,6 @@ class _TemporaryFileWrapper:
 
 
 def NamedTemporaryFile(mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None, delete=True):
-    """Create and return a temporary file.
-    Arguments:
-    'prefix', 'suffix', 'dir' -- as for mkstemp.
-    'mode' -- the mode argument to os.fdopen (default "w+b").
-    'bufsize' -- the buffer size argument to os.fdopen (default -1).
-    'delete' -- whether the file is deleted on close (default True).
-    The file is created as mkstemp() would do it.
-    
-    Returns an object with a file-like interface; the name of the file
-    is accessible as its 'name' attribute.  The file will be automatically
-    deleted when it is closed unless the 'delete' argument is set to False.
-    """
     if dir is None:
         dir = gettempdir()
     if 'b' in mode:
@@ -444,16 +342,6 @@ if _os.name != 'posix' or _os.sys.platform == 'cygwin':
 else:
 
     def TemporaryFile(mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None):
-        """Create and return a temporary file.
-        Arguments:
-        'prefix', 'suffix', 'dir' -- as for mkstemp.
-        'mode' -- the mode argument to os.fdopen (default "w+b").
-        'bufsize' -- the buffer size argument to os.fdopen (default -1).
-        The file is created as mkstemp() would do it.
-        
-        Returns an object with a file-like interface.  The file has no
-        name, and will cease to exist when it is closed.
-        """
         if dir is None:
             dir = gettempdir()
         if 'b' in mode:
@@ -472,10 +360,6 @@ else:
 
 
 class SpooledTemporaryFile:
-    """Temporary file wrapper, specialized to switch from
-    StringIO to a real file when it exceeds a certain size or
-    when a fileno is needed.
-    """
     _rolled = False
 
     def __init__(self, max_size=0, mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None):

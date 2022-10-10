@@ -383,16 +383,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def __setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
         markerID = marker.getMarkerID()
         vType = vInfo.vehicleType
-        if avatar_getter.isVehiclesColorized():
-            guiPropsName = 'team{}'.format(vInfo.team)
-        else:
-            if avatar_getter.isObserver():
-                arenaDP = self.sessionProvider.getArenaDP()
-                obsVehId = BigWorld.player().observedVehicleID
-                vehId = vInfo.vehicleID
-                if vehId == obsVehId and arenaDP.isSquadMan(vehId, arenaDP.getVehicleInfo(obsVehId).prebattleID):
-                    guiProps = PLAYER_GUI_PROPS.squadman
-            guiPropsName = guiProps.name()
+        guiPropsName = 'team{}'.format(vInfo.team) if avatar_getter.isVehiclesColorized() else guiProps.name()
         if self._isSquadIndicatorEnabled and vInfo.squadIndex:
             squadIndex = vInfo.squadIndex
         else:

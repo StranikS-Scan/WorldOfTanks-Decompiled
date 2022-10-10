@@ -22,5 +22,8 @@ class Comp7BattlePageMeta(ClassicPage):
     def as_onVehicleSelectionConfirmedS(self):
         return self.flashObject.as_onVehicleSelectionConfirmed() if self._isDAAPIInited() else None
 
+    def as_onBattleStartedS(self):
+        return self.flashObject.as_onBattleStarted() if self._isDAAPIInited() else None
+
     def as_onPrebattleInputStateLockedS(self, isStateLocked):
         return self.flashObject.as_onPrebattleInputStateLocked(isStateLocked) if self._isDAAPIInited() else None

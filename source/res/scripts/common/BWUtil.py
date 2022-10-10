@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWUtil.py
-# Compiled at: 2099-12-08 06:33:56
 import sys
 import os
 from functools import partial, wraps
@@ -10,23 +9,14 @@ import BigWorld
 from bwdebug import TRACE_MSG
 
 class _BuiltinsAccessor(object):
-    """There are two of possible ways of __builtins__ global variable
-    implementation in python. So this abstraction helps to implement
-    hierarchy to manage all of those cases. See inherited classes"""
 
     def __init__(self, field_name):
-        """
-        :param field_name: __builtins__ entry field name which we will
-                           be working on
-        """
         self._field_name = field_name
         self._original = None
         return
 
     @property
     def original(self):
-        """Returns previously stored original field value or value itself
-        if it hasn't been changed"""
         return self._original or self._get()
 
     def set(self, value):
@@ -50,9 +40,6 @@ class _BuiltinsAccessor(object):
 
 
 class _ItemAccessor(_BuiltinsAccessor):
-    """Accessor which provide access to the target field as it's like item
-    by the indexing parentheses
-    """
 
     def _set(self, value):
         __builtins__[self._field_name] = value
@@ -62,9 +49,6 @@ class _ItemAccessor(_BuiltinsAccessor):
 
 
 class _AttrAccessor(_BuiltinsAccessor):
-    """Accessor which provide access to the target field as it's like item
-    by the 'coma operator'
-    """
 
     def _set(self, value):
         setattr(__builtins__, self._field_name, value)
@@ -80,12 +64,6 @@ except TypeError:
     _open_accessor = _AttrAccessor('open')
 
 class _BwFile(object):
-    """
-    This class helps to provide the same interface as a standard
-    file object, but not filly implemented: only those methods
-    which need for using in bw_site:addpackage function inside.
-    See details there
-    """
 
     def __init__(self, path):
         self._content = ResMgr.openSection(path).asBinary.split('\n')
@@ -101,17 +79,11 @@ class _BwFile(object):
 
 
 def bwResReplaceOpen(name, *args):
-    """Not just open given file resolving path by ResMgrm completely
-    open file and read the content using ResMgr
-    """
     return _BwFile(name)
 
 
 @partial
 def bwResRelativeOpen(name, *args):
-    """
-    This method has been decorated with 'partial' to avoid using a function as
-    a bound method when stored as a class attribute (see WOWP-638). """
     try:
         absname = ResMgr.resolveToAbsolutePath(name)
     except Exception as e:
@@ -136,13 +108,6 @@ def revertPatchedOpen():
 
 
 def extendPath(path, name):
-    """Extend path, this method is based on pkgutil.extend_path and will
-    allow aid on supporting inheriting resource paths.
-    
-    Example usage:
-    from BWUtil import extendPath
-    __path__ = extendPath(__path__, __name__)
-    """
     from pkgutil import extend_path
     path = extend_path(path, name)
     if not isinstance(path, list):
@@ -173,11 +138,9 @@ def async(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         gen = func(*args, **kwargs)
-        assert isinstance(gen, GeneratorType)
         promise = BigWorld.Promise()
 
         def stepGen(result):
-            assert isinstance(result, BigWorld.Future)
             result.then(handleResult)
 
         def handle(func, *args):
@@ -207,11 +170,6 @@ def async(func):
 
 
 def if_only_component(*components):
-    """Decorator which checks before call whether BigWorld.component
-    is in given range of accepted components
-    
-    :components: args list of BigWorld component types
-    """
 
     def _real_decorator(func):
 
@@ -225,11 +183,6 @@ def if_only_component(*components):
 
 
 def if_only_not_component(*components):
-    """Decorator which checks before call whether BigWorld.component
-    is not in given range of forbidden components
-    
-    :components: args list of BigWorld component types
-    """
 
     def _real_decorator(func):
 

@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BoostersController.py
+import logging
 from typing import TYPE_CHECKING
 from operator import itemgetter
 import BigWorld
 import Event
+from adisp import adisp_process
 from constants import Configs
+from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -23,6 +27,7 @@ if TYPE_CHECKING:
     from gui.lobby_context import LobbyContext
     from gui.shared.items_cache import ItemsCache
     from gui.goodies.goodies_cache import GoodiesCache
+_logger = logging.getLogger(__name__)
 
 class BoostersController(IBoostersController, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -54,16 +59,27 @@ class BoostersController(IBoostersController, IGlobalListener):
         self.updateGameModeStatus()
 
     def updateGameModeStatus(self):
-        if self.prbDispatcher:
+        if self.prbDispatcher is not None:
             prbEntity = self.prbDispatcher.getEntity()
             enabled = prbEntity.getQueueType() in self.__supportedQueueTypes
             if self.__gameModeSupported != enabled:
                 self.__gameModeSupported = enabled
                 self.toggleHangarHint(enabled)
                 self.onGameModeStatusChange()
+        return
 
     def toggleHangarHint(self, enabled):
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.PERSONAL_RESERVES_AVAILABLE, enabled)
+
+    @adisp_process
+    def selectRandomBattle(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+            if not result:
+                _logger.error('Could not switch to random battle.')
+        _logger.error('Prebattle dispatcher is not defined.')
+        return
 
     def onLobbyInited(self, event):
         self.startGlobalListening()

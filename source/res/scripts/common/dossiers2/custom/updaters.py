@@ -5637,8 +5637,6 @@ def __updateFromAccountDossier143(compDescr):
     addBlock(updateCtx, 'comp7Season1')
     addBlock(updateCtx, 'maxComp7Season1')
     addBlock(updateCtx, 'comp7CutSeason1')
-    formats = [('comp7Season1', 'H')]
-    addRecords(updateCtx, 'singleAchievements', formats, {})
     setVersion(updateCtx, 144)
     return (144, updateCtx['dossierCompDescr'])
 

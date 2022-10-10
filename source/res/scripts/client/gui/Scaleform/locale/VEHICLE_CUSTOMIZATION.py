@@ -1522,6 +1522,8 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_QUICKY_BABY_DESCRIPTION = '#vehicle_customization:camouflage/quicky_baby/description'
     CAMOUFLAGE_TWITCH_SEPTEMBER_2022_LABEL = '#vehicle_customization:camouflage/twitch_september_2022/label'
     CAMOUFLAGE_TWITCH_SEPTEMBER_2022_DESCRIPTION = '#vehicle_customization:camouflage/twitch_september_2022/description'
+    CAMOUFLAGE_REBRANDING_EVENT = '#vehicle_customization:camouflage/rebranding_event'
+    CAMOUFLAGE_REBRANDING_EVENT_DESCRIPTION = '#vehicle_customization:camouflage/rebranding_event/description'
     EMBLEM = '#vehicle_customization:emblem'
     EMBLEM_CLAN_CONTENT = '#vehicle_customization:emblem/clan_content'
     EMBLEM_SPECIAL = '#vehicle_customization:emblem/special'
@@ -6720,6 +6722,10 @@ class VEHICLE_CUSTOMIZATION(object):
     ONBOARDINGVIEW_BTNGOTO = '#vehicle_customization:onboardingView/btnGoto'
     ONBOARDINGVIEW_BTNSKIP = '#vehicle_customization:onboardingView/btnSkip'
     ONBOARDINGVIEW_BTNACCEPT = '#vehicle_customization:onboardingView/btnAccept'
+    SPECIAL_STYLE_REBRANDING_EVENT = '#vehicle_customization:special_style/rebranding_event'
+    SPECIAL_STYLE_REBRANDING_EVENT_DESC = '#vehicle_customization:special_style/rebranding_event_desc'
+    SPECIAL_STYLE_REBRANDING_EVENT_DESC_LONG = '#vehicle_customization:special_style/rebranding_event_desc/long'
+    PROJECTION_DECALS_SPECIAL_LST_CROSS_EVENT = '#vehicle_customization:projection_decals/special/lst_cross_event'
     BONUS_NAME_ENUM = (BONUS_NAME_CAMOUFLAGE, BONUS_NAME_EXTENDED_CAMOUFLAGE)
     BONUS_NAME_EXTENDED_ENUM = (BONUS_NAME_EXTENDED_CAMOUFLAGE,)
     SEASON_SELECTION_ENUM = (SEASON_SELECTION_SUMMER, SEASON_SELECTION_WINTER, SEASON_SELECTION_DESERT, SEASON_SELECTION_SELECTED_SUMMER, SEASON_SELECTION_SELECTED_WINTER, SEASON_SELECTION_SELECTED_DESERT, SEASON_SELECTION_TOOLTIP, SEASON_SELECTION_MAPNAME_SUMMER, SEASON_SELECTION_MAPNAME_WINTER, SEASON_SELECTION_MAPNAME_DESERT, SEASON_SELECTION_MAPNAME_ALL)

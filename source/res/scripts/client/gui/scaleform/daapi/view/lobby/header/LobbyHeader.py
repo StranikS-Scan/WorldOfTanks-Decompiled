@@ -48,6 +48,8 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.comp7.meta_view.meta_root_view import MetaRootViewWindow
+from gui.impl.lobby.comp7.views.intro_screen import IntroScreenWindow
+from gui.impl.lobby.comp7.views.no_vehicles_screen import NoVehiclesScreenWindow
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.wgnp.demo_account.controller import NICKNAME_CONTEXT
 from gui.prb_control import prb_getters
@@ -347,7 +349,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
         if navigationPossible:
             hideWebBrowserOverlay()
-            self.__hideComp7Meta()
+            self.__hideComp7Views()
             self.__triggerViewLoad(alias)
         else:
             self.as_doDeselectHeaderButtonS(alias)
@@ -722,10 +724,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         for alias in self.TABS.ALL():
             self.as_doDeselectHeaderButtonS(alias)
 
-    def __hideComp7Meta(self):
-        metaInst = MetaRootViewWindow.getInstances()
-        if metaInst:
-            first(metaInst).destroy()
+    @staticmethod
+    def __hideComp7Views():
+        for window in (MetaRootViewWindow, NoVehiclesScreenWindow, IntroScreenWindow):
+            instances = window.getInstances()
+            if instances:
+                first(instances).destroy()
 
     def __updatePlayerInfoPanel(self, clanInfo, diff=None):
         if not isPlayerAccount():

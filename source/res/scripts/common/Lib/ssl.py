@@ -1,92 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ssl.py
-# Compiled at: 1998-05-03 10:38:09
-"""This module provides some more Pythonic support for SSL.
-
-Object types:
-
-  SSLSocket -- subtype of socket.socket which does SSL over the socket
-
-Exceptions:
-
-  SSLError -- exception raised for I/O errors
-
-Functions:
-
-  cert_time_to_seconds -- convert time string used for certificate
-                          notBefore and notAfter functions to integer
-                          seconds past the Epoch (the time values
-                          returned from time.time())
-
-  fetch_server_certificate (HOST, PORT) -- fetch the certificate provided
-                          by the server running on HOST at port PORT.  No
-                          validation of the certificate is performed.
-
-Integer constants:
-
-SSL_ERROR_ZERO_RETURN
-SSL_ERROR_WANT_READ
-SSL_ERROR_WANT_WRITE
-SSL_ERROR_WANT_X509_LOOKUP
-SSL_ERROR_SYSCALL
-SSL_ERROR_SSL
-SSL_ERROR_WANT_CONNECT
-
-SSL_ERROR_EOF
-SSL_ERROR_INVALID_ERROR_CODE
-
-The following group define certificate requirements that one side is
-allowing/requiring from the other side:
-
-CERT_NONE - no certificates from the other side are required (or will
-            be looked at if provided)
-CERT_OPTIONAL - certificates are not required, but if provided will be
-                validated, and if validation fails, the connection will
-                also fail
-CERT_REQUIRED - certificates are required, and will be validated, and
-                if validation fails, the connection will also fail
-
-The following constants identify various SSL protocol variants:
-
-PROTOCOL_SSLv2
-PROTOCOL_SSLv3
-PROTOCOL_SSLv23
-PROTOCOL_TLS
-PROTOCOL_TLSv1
-PROTOCOL_TLSv1_1
-PROTOCOL_TLSv1_2
-
-The following constants identify various SSL alert message descriptions as per
-http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-6
-
-ALERT_DESCRIPTION_CLOSE_NOTIFY
-ALERT_DESCRIPTION_UNEXPECTED_MESSAGE
-ALERT_DESCRIPTION_BAD_RECORD_MAC
-ALERT_DESCRIPTION_RECORD_OVERFLOW
-ALERT_DESCRIPTION_DECOMPRESSION_FAILURE
-ALERT_DESCRIPTION_HANDSHAKE_FAILURE
-ALERT_DESCRIPTION_BAD_CERTIFICATE
-ALERT_DESCRIPTION_UNSUPPORTED_CERTIFICATE
-ALERT_DESCRIPTION_CERTIFICATE_REVOKED
-ALERT_DESCRIPTION_CERTIFICATE_EXPIRED
-ALERT_DESCRIPTION_CERTIFICATE_UNKNOWN
-ALERT_DESCRIPTION_ILLEGAL_PARAMETER
-ALERT_DESCRIPTION_UNKNOWN_CA
-ALERT_DESCRIPTION_ACCESS_DENIED
-ALERT_DESCRIPTION_DECODE_ERROR
-ALERT_DESCRIPTION_DECRYPT_ERROR
-ALERT_DESCRIPTION_PROTOCOL_VERSION
-ALERT_DESCRIPTION_INSUFFICIENT_SECURITY
-ALERT_DESCRIPTION_INTERNAL_ERROR
-ALERT_DESCRIPTION_USER_CANCELLED
-ALERT_DESCRIPTION_NO_RENEGOTIATION
-ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION
-ALERT_DESCRIPTION_CERTIFICATE_UNOBTAINABLE
-ALERT_DESCRIPTION_UNRECOGNIZED_NAME
-ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
-ALERT_DESCRIPTION_BAD_CERTIFICATE_HASH_VALUE
-ALERT_DESCRIPTION_UNKNOWN_PSK_IDENTITY
-"""
 import textwrap
 import re
 import sys
@@ -145,10 +58,6 @@ class CertificateError(ValueError):
 
 
 def _dnsname_match(dn, hostname, max_wildcards=1):
-    """Matching according to RFC 6125, section 6.4.3
-    
-    http://tools.ietf.org/html/rfc6125#section-6.4.3
-    """
     pats = []
     if not dn:
         return False
@@ -174,13 +83,6 @@ def _dnsname_match(dn, hostname, max_wildcards=1):
 
 
 def match_hostname(cert, hostname):
-    """Verify that *cert* (in decoded format as returned by
-    SSLSocket.getpeercert()) matches the *hostname*.  RFC 2818 and RFC 6125
-    rules are followed, but IP addresses are not accepted for *hostname*.
-    
-    CertificateError is raised on failure. On success, the function
-    returns nothing.
-    """
     if not cert:
         raise ValueError('empty or no certificate, match_hostname needs a SSL socket or SSL context with either CERT_OPTIONAL or CERT_REQUIRED')
     dnsnames = []
@@ -210,8 +112,6 @@ def match_hostname(cert, hostname):
 DefaultVerifyPaths = namedtuple('DefaultVerifyPaths', 'cafile capath openssl_cafile_env openssl_cafile openssl_capath_env openssl_capath')
 
 def get_default_verify_paths():
-    """Return paths to default cafile and capath.
-    """
     parts = _ssl.get_default_verify_paths()
     cafile = os.environ.get(parts[0], parts[1])
     capath = os.environ.get(parts[2], parts[3])
@@ -219,8 +119,6 @@ def get_default_verify_paths():
 
 
 class _ASN1Object(namedtuple('_ASN1Object', 'nid shortname longname oid')):
-    """ASN.1 object identifier lookup
-    """
     __slots__ = ()
 
     def __new__(cls, oid):
@@ -228,20 +126,14 @@ class _ASN1Object(namedtuple('_ASN1Object', 'nid shortname longname oid')):
 
     @classmethod
     def fromnid(cls, nid):
-        """Create _ASN1Object from OpenSSL numeric ID
-        """
         return super(_ASN1Object, cls).__new__(cls, *_nid2obj(nid))
 
     @classmethod
     def fromname(cls, name):
-        """Create _ASN1Object from short name, long name or OID
-        """
         return super(_ASN1Object, cls).__new__(cls, *_txt2obj(name, name=True))
 
 
 class Purpose(_ASN1Object):
-    """SSLContext purpose flags with X509v3 Extended Key Usage objects
-    """
     pass
 
 
@@ -250,8 +142,6 @@ Purpose.CLIENT_AUTH = Purpose('1.3.6.1.5.5.7.3.2')
 _certificates = {}
 
 class SSLContext(_SSLContext):
-    """An SSLContext holds various SSL-related configuration options and
-    data, such as certificates and possibly a private key."""
     __slots__ = ('protocol', '__weakref__')
     _windows_cert_stores = ('CA', 'ROOT')
 
@@ -318,12 +208,6 @@ class SSLContext(_SSLContext):
 
 
 def create_default_context(purpose=Purpose.SERVER_AUTH, cafile=None, capath=None, cadata=None):
-    """Create a SSLContext object with default settings.
-    
-    NOTE: The protocol and settings may change anytime without prior
-          deprecation. The values represent a fair balance between maximum
-          compatibility and security.
-    """
     if not isinstance(purpose, _ASN1Object):
         raise TypeError(purpose)
     context = SSLContext(PROTOCOL_TLS)
@@ -340,13 +224,6 @@ def create_default_context(purpose=Purpose.SERVER_AUTH, cafile=None, capath=None
 
 
 def _create_unverified_context(protocol=PROTOCOL_TLS, cert_reqs=None, check_hostname=False, purpose=Purpose.SERVER_AUTH, certfile=None, keyfile=None, cafile=None, capath=None, cadata=None):
-    """Create a SSLContext object for Python stdlib modules
-    
-    All Python stdlib modules shall use this function to create SSLContext
-    objects in order to keep common settings in one place. The configuration
-    is less restrict than create_default_context()'s to increase backward
-    compatibility.
-    """
     if not isinstance(purpose, _ASN1Object):
         raise TypeError(purpose)
     context = SSLContext(protocol)
@@ -378,7 +255,6 @@ def _get_https_context_factory():
 _create_default_https_context = _get_https_context_factory()
 
 def _https_verify_certificates(enable=True):
-    """Verify server HTTPS certificates by default?"""
     global _create_default_https_context
     if enable:
         _create_default_https_context = create_default_context
@@ -387,9 +263,6 @@ def _https_verify_certificates(enable=True):
 
 
 class SSLSocket(socket):
-    """This class implements a subtype of socket.socket that wraps
-    the underlying OS socket in an SSL context when necessary, and
-    provides read and write methods over that channel."""
 
     def __init__(self, sock=None, keyfile=None, certfile=None, server_side=False, cert_reqs=CERT_NONE, ssl_version=PROTOCOL_TLS, ca_certs=None, do_handshake_on_connect=True, family=AF_INET, type=SOCK_STREAM, proto=0, fileno=None, suppress_ragged_eofs=True, npn_protocols=None, ciphers=None, server_hostname=None, _context=None):
         self._makefile_refs = 0
@@ -481,8 +354,6 @@ class SSLSocket(socket):
             self.getpeername()
 
     def read(self, len=1024, buffer=None):
-        """Read up to LEN bytes and return them.
-        Return zero-length string on EOF."""
         self._checkClosed()
         if not self._sslobj:
             raise ValueError('Read on closed or unwrapped SSL socket.')
@@ -504,18 +375,12 @@ class SSLSocket(socket):
         return
 
     def write(self, data):
-        """Write DATA to the underlying SSL channel.  Returns
-        number of bytes of DATA actually transmitted."""
         self._checkClosed()
         if not self._sslobj:
             raise ValueError('Write on closed or unwrapped SSL socket.')
         return self._sslobj.write(data)
 
     def getpeercert(self, binary_form=False):
-        """Returns a formatted version of the data in the
-        certificate provided by the other end of the SSL channel.
-        Return None if no certificate was provided, {} if a
-        certificate was provided, but not validated."""
         self._checkClosed()
         self._check_connected()
         return self._sslobj.peer_certificate(binary_form)
@@ -669,7 +534,6 @@ class SSLSocket(socket):
         return
 
     def do_handshake(self, block=False):
-        """Perform a TLS/SSL handshake."""
         self._check_connected()
         timeout = self.gettimeout()
         try:
@@ -709,35 +573,21 @@ class SSLSocket(socket):
         return
 
     def connect(self, addr):
-        """Connects to remote ADDR, and then wraps the connection in
-        an SSL channel."""
         self._real_connect(addr, False)
 
     def connect_ex(self, addr):
-        """Connects to remote ADDR, and then wraps the connection in
-        an SSL channel."""
         return self._real_connect(addr, True)
 
     def accept(self):
-        """Accepts a new connection from a remote client, and returns
-        a tuple containing that new connection wrapped with a server-side
-        SSL channel, and the address of the remote client."""
         newsock, addr = socket.accept(self)
         newsock = self.context.wrap_socket(newsock, do_handshake_on_connect=self.do_handshake_on_connect, suppress_ragged_eofs=self.suppress_ragged_eofs, server_side=True)
         return (newsock, addr)
 
     def makefile(self, mode='r', bufsize=-1):
-        """Make and return a file-like object that
-        works with the SSL connection.  Just use the code
-        from the socket module."""
         self._makefile_refs += 1
         return _fileobject(self, mode, bufsize, close=True)
 
     def get_channel_binding(self, cb_type='tls-unique'):
-        """Get channel binding data for current connection.  Raise ValueError
-        if the requested `cb_type` is not supported.  Return bytes of the data
-        or None if the data is not available (e.g. before the handshake).
-        """
         if cb_type not in CHANNEL_BINDING_TYPES:
             raise ValueError('Unsupported channel binding type')
         if cb_type != 'tls-unique':
@@ -745,10 +595,6 @@ class SSLSocket(socket):
         return None if self._sslobj is None else self._sslobj.tls_unique_cb()
 
     def version(self):
-        """
-        Return a string identifying the protocol version used by the
-        current SSL channel, or None if there is no established channel.
-        """
         return None if self._sslobj is None else self._sslobj.version()
 
 
@@ -757,15 +603,6 @@ def wrap_socket(sock, keyfile=None, certfile=None, server_side=False, cert_reqs=
 
 
 def cert_time_to_seconds(cert_time):
-    """Return the time in seconds since the Epoch, given the timestring
-    representing the "notBefore" or "notAfter" date from a certificate
-    in ``"%b %d %H:%M:%S %Y %Z"`` strptime format (C locale).
-    
-    "notBefore" or "notAfter" dates must use UTC (RFC 5280).
-    
-    Month is one of: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-    UTC should be specified as GMT (see ASN1_TIME_print())
-    """
     from time import strptime
     from calendar import timegm
     months = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
@@ -783,15 +620,11 @@ PEM_HEADER = '-----BEGIN CERTIFICATE-----'
 PEM_FOOTER = '-----END CERTIFICATE-----'
 
 def DER_cert_to_PEM_cert(der_cert_bytes):
-    """Takes a certificate in binary DER format and returns the
-    PEM version of it as a string."""
     f = base64.standard_b64encode(der_cert_bytes).decode('ascii')
     return PEM_HEADER + '\n' + textwrap.fill(f, 64) + '\n' + PEM_FOOTER + '\n'
 
 
 def PEM_cert_to_DER_cert(pem_cert_string):
-    """Takes a certificate in ASCII PEM format and returns the
-    DER-encoded version of it as a byte sequence"""
     if not pem_cert_string.startswith(PEM_HEADER):
         raise ValueError('Invalid PEM encoding; must start with %s' % PEM_HEADER)
     if not pem_cert_string.strip().endswith(PEM_FOOTER):
@@ -801,10 +634,6 @@ def PEM_cert_to_DER_cert(pem_cert_string):
 
 
 def get_server_certificate(addr, ssl_version=PROTOCOL_TLS, ca_certs=None):
-    """Retrieve the certificate from the server at the specified address,
-    and return it as a PEM-encoded string.
-    If 'ca_certs' is specified, validate the server cert against it.
-    If 'ssl_version' is specified, use it in the connection attempt."""
     host, port = addr
     if ca_certs is not None:
         cert_reqs = CERT_REQUIRED
@@ -822,9 +651,6 @@ def get_protocol_name(protocol_code):
 
 
 def sslwrap_simple(sock, keyfile=None, certfile=None):
-    """A replacement for the old socket.ssl function.  Designed
-    for compability with Python 2.5 and earlier.  Will disappear in
-    Python 3.0."""
     if hasattr(sock, '_sock'):
         sock = sock._sock
     ctx = SSLContext(PROTOCOL_SSLv23)

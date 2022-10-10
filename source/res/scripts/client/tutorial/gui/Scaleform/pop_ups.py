@@ -24,6 +24,8 @@ class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
         return self._tutorial
 
     def _onMouseClicked(self, targetKey):
+        if not self._gui:
+            return
         if targetKey in self._content:
             targetID = self._content[targetKey]
             if targetID:

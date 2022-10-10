@@ -121,6 +121,7 @@ class AreaOfEffect(BigWorld.Entity, EffectRunner):
         self._equipment = vehicles.g_cache.equipments()[self.equipmentID]
         self.__areaGO = None
         self.__mainAreaID = None
+        self.__destroyGoCallback = None
         EffectRunner.__init__(self, self, self._equipment)
         return
 
@@ -149,6 +150,9 @@ class AreaOfEffect(BigWorld.Entity, EffectRunner):
             BigWorld.cancelCallback(callbackID)
 
         self._callbacks = {}
+        if self.__destroyGoCallback is not None:
+            BigWorld.cancelCallback(self.__destroyGoCallback)
+        self.__destroyGoCallback = None
         for area in self._areas.itervalues():
             area.destroy()
 
@@ -206,12 +210,15 @@ class AreaOfEffect(BigWorld.Entity, EffectRunner):
                 self.__mainAreaID = areaID
                 if self._equipment.areaUsedPrefab:
                     CGF.loadGameObjectIntoHierarchy(self._equipment.areaUsedPrefab, self.entityGameObject, Math.Vector3(), self.__onAreaGOLoaded)
+                    self.__destroyGoCallback = BigWorld.callback(areaTimeout, self.__destroyAreaGO)
             return
 
     def _showMarker(self):
         if not self._equipment.areaVisibleToEnemies and self._isAttackerEnemy():
             return
-        delay = self._adjustedDelay + self._equipment.duration
+        delay = self._adjustedDelay
+        if self._equipment.areaShow == AreaShow.ALWAYS:
+            delay += self._equipment.duration
         equipmentsCtrl = self.sessionProvider.shared.equipments
         if equipmentsCtrl and delay > 0:
             equipmentsCtrl.showMarker(self._equipment, self.position, self._direction, delay)
@@ -233,6 +240,7 @@ class AreaOfEffect(BigWorld.Entity, EffectRunner):
         if self.__areaGO is not None:
             CGF.removeGameObject(self.__areaGO)
         self.__areaGO = None
+        self.__destroyGoCallback = None
         return
 
     def __onSettingsChanged(self, diff):

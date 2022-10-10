@@ -714,12 +714,26 @@ class UnitBase(OpsUnpacker):
 
     def _setMember(self, accountDBID, slotChosenIdx):
         member = dict(accountDBID=accountDBID, slotIdx=slotChosenIdx)
+        self.__updateReadyMask(accountDBID, slotChosenIdx)
+        self._members.pop(self._playerSlots.get(accountDBID), None)
         self._members[slotChosenIdx] = member
         self._freeSlots.discard(slotChosenIdx)
         self._playerSlots[accountDBID] = slotChosenIdx
         self._fullReadyMask |= 1 << slotChosenIdx
         self.storeOp(UNIT_OP.SET_MEMBER, accountDBID, slotChosenIdx)
         self._dirty = 1
+        return
+
+    def __updateReadyMask(self, accountDBID, newSlotIdx):
+        currentSlotIdx = self._playerSlots.get(accountDBID)
+        if currentSlotIdx is not None and currentSlotIdx != newSlotIdx:
+            if self.isMemberReady(accountDBID):
+                self._readyMask |= 1 << newSlotIdx
+            else:
+                self._readyMask &= ~(1 << newSlotIdx)
+            self._readyMask &= ~(1 << currentSlotIdx)
+            self._fullReadyMask &= ~(1 << currentSlotIdx)
+        return
 
     def _delMemberBySlot(self, slotIdx):
         member = self._members.get(slotIdx, None)

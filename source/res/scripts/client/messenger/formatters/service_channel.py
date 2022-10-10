@@ -36,7 +36,6 @@ from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
 from gui.dog_tag_composer import dogTagComposer
 from gui.game_control.blueprints_convert_sale_controller import BCSActionState
-from gui.goodies.goodie_items import getBoosterGuiType
 from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat
 from gui.impl.gen import R
@@ -3147,8 +3146,8 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
     def getBoosterAdditionalParams(message):
         obtainedValue = message.data.get(u'obtainedValues', {})
         resourceRows = []
-        for goodieResourceType, value in obtainedValue.iteritems():
-            resourceRows.append(g_settings.htmlTemplates.format(u'boosterExpiredRow', ctx={u'resourceName': html.escape(backport.text(R.strings.messenger.serviceChannelMessages.boosterExpiredResourceName.dyn(getBoosterGuiType(goodieResourceType))())),
+        for bonusTypeName, value in obtainedValue.iteritems():
+            resourceRows.append(g_settings.htmlTemplates.format(u'boosterExpiredRow', ctx={u'resourceName': html.escape(backport.text(R.strings.messenger.serviceChannelMessages.boosterExpiredResourceName.dyn(bonusTypeName)())),
              u'value': html.escape(str(value))}))
 
         if resourceRows:

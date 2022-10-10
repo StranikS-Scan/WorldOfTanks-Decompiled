@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/nturl2path.py
-# Compiled at: 2100-06-08 08:40:10
-"""Convert a NT pathname to a file URL and vice versa."""
+
 
 def url2pathname(url):
-    """OS-specific conversion from a relative URL of the 'file' scheme
-    to a file system path; not recommended for general use."""
     import string, urllib
     url = url.replace(':', '|')
     if '|' not in url:
@@ -30,8 +27,6 @@ def url2pathname(url):
 
 
 def pathname2url(p):
-    """OS-specific conversion from a file system path to a relative URL
-    of the 'file' scheme; not recommended for general use."""
     import urllib
     if ':' not in p:
         if p[:2] == '\\\\':

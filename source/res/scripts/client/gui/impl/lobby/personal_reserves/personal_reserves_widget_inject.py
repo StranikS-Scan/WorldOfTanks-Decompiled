@@ -6,7 +6,7 @@ from gui.impl.lobby.personal_reserves.personal_reserves_widget import PersonalRe
 _logger = logging.getLogger(__name__)
 
 class PersonalReservesWidgetInject(PersonalReservesWidgetInjectMeta):
-    WIDGET_WIDTH_SMALL = 50
+    WIDGET_WIDTH_SMALL = 58
     WIDGET_ITEM_WIDTH = 40
 
     def _onPopulate(self):

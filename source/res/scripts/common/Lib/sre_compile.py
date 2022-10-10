@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_compile.py
-# Compiled at: 2100-06-19 15:02:21
-"""Internal support module for sre"""
 import _sre, sys
 import sre_parse
 from sre_constants import *
-assert _sre.MAGIC == MAGIC, 'SRE module mismatch'
 if _sre.CODESIZE == 2:
     MAXCODE = 65535
 else:
@@ -371,8 +368,6 @@ def _bytes_to_codes(b):
     else:
         code = 'I'
     a = array.array(code, bytes(b))
-    assert a.itemsize == _sre.CODESIZE
-    assert len(a) * a.itemsize == len(b)
     return a.tolist()
 
 

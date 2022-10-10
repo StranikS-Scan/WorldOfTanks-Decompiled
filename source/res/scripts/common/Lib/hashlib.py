@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hashlib.py
-# Compiled at: 2100-03-31 00:49:06
 r"""hashlib module - A common interface to many hash functions.
 
 new(name, string='') - returns a new hash object implementing the
@@ -95,16 +94,10 @@ def __get_openssl_constructor(name):
 
 
 def __py_new(name, string=''):
-    """new(name, string='') - Return a new hashing object using the named algorithm;
-    optionally initialized with a string.
-    """
     return __get_builtin_constructor(name)(string)
 
 
 def __hash_new(name, string=''):
-    """new(name, string='') - Return a new hashing object using the named algorithm;
-    optionally initialized with a string.
-    """
     try:
         return _hashlib.new(name, string)
     except ValueError:
@@ -136,12 +129,6 @@ except ImportError:
     _trans_36 = ''.join((chr(x ^ 54) for x in range(256)))
 
     def pbkdf2_hmac(hash_name, password, salt, iterations, dklen=None):
-        """Password based key derivation function 2 (PKCS #5 v2.0)
-        
-        This Python implementations based on the hmac module about as fast
-        as OpenSSL's PKCS5_PBKDF2_HMAC for short passwords and much faster
-        for long passwords.
-        """
         if not isinstance(hash_name, str):
             raise TypeError(hash_name)
         if not isinstance(password, (bytes, bytearray)):

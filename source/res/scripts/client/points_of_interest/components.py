@@ -72,18 +72,18 @@ class PoiStateUIListenerComponent(object):
 
 
 class PoiCaptureBlockerStateComponent(object):
-    __slots__ = ('id', 'blockReasons')
+    __slots__ = ('id', 'blockReasons', 'poiState')
 
     def __init__(self, poiID, blockReasons):
         self.id = poiID
         self.blockReasons = blockReasons
-
-
-class PoiVehicleStateComponent(object):
-    __slots__ = ('id', 'poiState')
-
-    def __init__(self, poiID):
-        self.id = poiID
         poi = BigWorld.entities.get(poiID)
         self.poiState = CGF.ComponentLink(poi.entityGameObject, PoiStateComponent) if poi is not None else None
         return
+
+
+class PoiVehicleStateComponent(object):
+    __slots__ = ('id',)
+
+    def __init__(self, poiID):
+        self.id = poiID

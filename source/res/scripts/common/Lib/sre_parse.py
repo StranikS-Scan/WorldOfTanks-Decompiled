@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_parse.py
-# Compiled at: 2100-06-09 04:18:31
-"""Internal support module for sre"""
 import sys
 from sre_constants import *
 SPECIAL_CHARS = '.\\[{()*+?^$|'

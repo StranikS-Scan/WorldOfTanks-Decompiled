@@ -1,35 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urlparse.py
-# Compiled at: 2100-06-16 16:36:56
-"""Parse (absolute and relative) URLs.
-
-urlparse module is based upon the following RFC specifications.
-
-RFC 3986 (STD66): "Uniform Resource Identifiers" by T. Berners-Lee, R. Fielding
-and L.  Masinter, January 2005.
-
-RFC 2732 : "Format for Literal IPv6 Addresses in URL's by R.Hinden, B.Carpenter
-and L.Masinter, December 1999.
-
-RFC 2396:  "Uniform Resource Identifiers (URI)": Generic Syntax by T.
-Berners-Lee, R. Fielding, and L. Masinter, August 1998.
-
-RFC 2368: "The mailto URL scheme", by P.Hoffman , L Masinter, J. Zwinski, July 1998.
-
-RFC 1808: "Relative Uniform Resource Locators", by R. Fielding, UC Irvine, June
-1995.
-
-RFC 1738: "Uniform Resource Locators (URL)" by T. Berners-Lee, L. Masinter, M.
-McCahill, December 1994
-
-RFC 3986 is considered the current standard and any future changes to
-urlparse module should conform with it.  The urlparse module is
-currently not entirely compliant with this RFC due to defacto
-scenarios for parsing, and for backward compatibility purposes, some
-parsing quirks from older RFCs are retained. The testcases in
-test_urlparse.py provides a good indicator of parsing behavior.
-
-"""
 import re
 __all__ = ['urlparse',
  'urlunparse',
@@ -134,12 +104,10 @@ MAX_CACHE_SIZE = 20
 _parse_cache = {}
 
 def clear_cache():
-    """Clear the parse cache."""
     _parse_cache.clear()
 
 
 class ResultMixin(object):
-    """Shared methods for the parsed result objects."""
 
     @property
     def username(self):
@@ -203,11 +171,6 @@ class ParseResult(namedtuple('ParseResult', 'scheme netloc path params query fra
 
 
 def urlparse(url, scheme='', allow_fragments=True):
-    """Parse a URL into 6 components:
-    <scheme>://<netloc>/<path>;<params>?<query>#<fragment>
-    Return a 6-tuple: (scheme, netloc, path, params, query, fragment).
-    Note that we don't break the components up in smaller bits
-    (e.g. netloc is a single string) and we don't expand % escapes."""
     tuple = urlsplit(url, scheme, allow_fragments)
     scheme, netloc, url, query, fragment = tuple
     if scheme in uses_params and ';' in url:
@@ -254,11 +217,6 @@ def _checknetloc(netloc):
 
 
 def urlsplit(url, scheme='', allow_fragments=True):
-    """Parse a URL into 5 components:
-    <scheme>://<netloc>/<path>?<query>#<fragment>
-    Return a 5-tuple: (scheme, netloc, path, query, fragment).
-    Note that we don't break the components up in smaller bits
-    (e.g. netloc is a single string) and we don't expand % escapes."""
     allow_fragments = bool(allow_fragments)
     key = (url,
      scheme,
@@ -311,10 +269,6 @@ def urlsplit(url, scheme='', allow_fragments=True):
 
 
 def urlunparse(data):
-    """Put a parsed URL back together again.  This may result in a
-    slightly different, but equivalent URL, if the URL that was parsed
-    originally had redundant delimiters, e.g. a ? with an empty query
-    (the draft states that these are equivalent)."""
     scheme, netloc, url, params, query, fragment = data
     if params:
         url = '%s;%s' % (url, params)
@@ -326,11 +280,6 @@ def urlunparse(data):
 
 
 def urlunsplit(data):
-    """Combine the elements of a tuple as returned by urlsplit() into a
-    complete URL as a string. The data argument can be any five-item iterable.
-    This may result in a slightly different, but equivalent URL, if the URL that
-    was parsed originally had unnecessary delimiters (for example, a ? with an
-    empty query; the RFC states that these are equivalent)."""
     scheme, netloc, url, query, fragment = data
     if netloc or scheme and scheme in uses_netloc and url[:2] != '//':
         if url and url[:1] != '/':
@@ -346,8 +295,6 @@ def urlunsplit(data):
 
 
 def urljoin(base, url, allow_fragments=True):
-    """Join a base URL and a possibly relative URL to form an absolute
-    interpretation of the latter."""
     if not base:
         return url
     if not url:
@@ -413,12 +360,6 @@ def urljoin(base, url, allow_fragments=True):
 
 
 def urldefrag(url):
-    """Removes any existing fragment from URL.
-    
-    Returns a tuple of the defragmented URL and the fragment.  If
-    the URL contained no fragments, the second element is the
-    empty string.
-    """
     if '#' in url:
         s, n, p, a, q, frag = urlparse(url)
         defrag = urlunparse((s,
@@ -451,7 +392,6 @@ _hextochr = dict(((a + b, chr(int(a + b, 16))) for a in _hexdig for b in _hexdig
 _asciire = re.compile('([\x00-\x7f]+)')
 
 def unquote(s):
-    """unquote('abc%20def') -> 'abc def'."""
     if _is_unicode(s):
         if '%' not in s:
             return s
@@ -480,26 +420,6 @@ def unquote(s):
 
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0, max_num_fields=None):
-    """Parse a query given as a string argument.
-    
-        Arguments:
-    
-        qs: percent-encoded query string to be parsed
-    
-        keep_blank_values: flag indicating whether blank values in
-            percent-encoded queries should be treated as blank strings.
-            A true value indicates that blanks should be retained as
-            blank strings.  The default false value indicates that
-            blank values are to be ignored and treated as if they were
-            not included.
-    
-        strict_parsing: flag indicating what to do with parsing errors.
-            If false (the default), errors are silently ignored.
-            If true, errors raise a ValueError exception.
-    
-        max_num_fields: int. If set, then throws a ValueError if there
-            are more than n fields read by parse_qsl().
-    """
     dict = {}
     for name, value in parse_qsl(qs, keep_blank_values, strict_parsing, max_num_fields):
         if name in dict:
@@ -510,27 +430,6 @@ def parse_qs(qs, keep_blank_values=0, strict_parsing=0, max_num_fields=None):
 
 
 def parse_qsl(qs, keep_blank_values=0, strict_parsing=0, max_num_fields=None):
-    """Parse a query given as a string argument.
-    
-    Arguments:
-    
-    qs: percent-encoded query string to be parsed
-    
-    keep_blank_values: flag indicating whether blank values in
-        percent-encoded queries should be treated as blank strings.  A
-        true value indicates that blanks should be retained as blank
-        strings.  The default false value indicates that blank values
-        are to be ignored and treated as if they were  not included.
-    
-    strict_parsing: flag indicating what to do with parsing errors. If
-        false (the default), errors are silently ignored. If true,
-        errors raise a ValueError exception.
-    
-    max_num_fields: int. If set, then throws a ValueError if there
-        are more than n fields read by parse_qsl().
-    
-    Returns a list, as G-d intended.
-    """
     if max_num_fields is not None:
         num_fields = 1 + qs.count('&') + qs.count(';')
         if max_num_fields < num_fields:

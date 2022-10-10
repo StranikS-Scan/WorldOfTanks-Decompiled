@@ -205,6 +205,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
 
     def __onBattleStarted(self):
         self.__setSelectionConfimed()
+        self.as_onBattleStartedS()
 
     def __setSelectionConfimed(self):
         self.__visibilityManager.updateSelectionConfirmed(True)

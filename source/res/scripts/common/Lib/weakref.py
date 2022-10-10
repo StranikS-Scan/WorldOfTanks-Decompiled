@@ -1,12 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/weakref.py
-# Compiled at: 2100-06-17 09:31:08
-"""Weak reference support for Python.
-
-This module is an implementation of PEP 205:
-
-http://www.python.org/dev/peps/pep-0205/
-"""
 import UserDict
 from _weakref import getweakrefcount, getweakrefs, ref, proxy, CallableProxyType, ProxyType, ReferenceType, _remove_dead_weakref
 from _weakrefset import WeakSet, _IterationGuard
@@ -26,11 +19,6 @@ __all__ = ['ref',
  'WeakSet']
 
 class WeakValueDictionary(UserDict.UserDict):
-    """Mapping class that references values weakly.
-    
-    Entries in the dictionary will be discarded when no strong
-    reference to the value exists anymore
-    """
 
     def __init__(*args, **kw):
         if not args:
@@ -181,15 +169,6 @@ class WeakValueDictionary(UserDict.UserDict):
     __iter__ = iterkeys
 
     def itervaluerefs(self):
-        """Return an iterator that yields the weak references to the values.
-        
-        The references are not guaranteed to be 'live' at the time
-        they are used, so the result of calling the references needs
-        to be checked before being used.  This can be used to avoid
-        creating references that will cause the garbage collector to
-        keep the values around longer than needed.
-        
-        """
         if self._pending_removals:
             self._commit_removals()
         with _IterationGuard(self):
@@ -271,15 +250,6 @@ class WeakValueDictionary(UserDict.UserDict):
         return
 
     def valuerefs(self):
-        """Return a list of weak references to the values.
-        
-        The references are not guaranteed to be 'live' at the time
-        they are used, so the result of calling the references needs
-        to be checked before being used.  This can be used to avoid
-        creating references that will cause the garbage collector to
-        keep the values around longer than needed.
-        
-        """
         if self._pending_removals:
             self._commit_removals()
         return self.data.values()
@@ -297,14 +267,6 @@ class WeakValueDictionary(UserDict.UserDict):
 
 
 class KeyedRef(ref):
-    """Specialized reference that includes a key corresponding to the value.
-    
-    This is used in the WeakValueDictionary to avoid having to create
-    a function object for each key stored in the mapping.  A shared
-    callback object can use the 'key' attribute of a KeyedRef instead
-    of getting a reference to the key from an enclosing scope.
-    
-    """
     __slots__ = ('key',)
 
     def __new__(type, ob, callback, key):
@@ -317,15 +279,6 @@ class KeyedRef(ref):
 
 
 class WeakKeyDictionary(UserDict.UserDict):
-    """ Mapping class that references keys weakly.
-    
-    Entries in the dictionary will be discarded when there is no
-    longer a strong reference to the key. This can be used to
-    associate additional data with an object owned by other parts of
-    an application without adding attributes to those objects. This
-    can be especially useful with objects that override attribute
-    accesses.
-    """
 
     def __init__(self, dict=None):
         self.data = {}
@@ -426,15 +379,6 @@ class WeakKeyDictionary(UserDict.UserDict):
         return
 
     def iterkeyrefs(self):
-        """Return an iterator that yields the weak references to the keys.
-        
-        The references are not guaranteed to be 'live' at the time
-        they are used, so the result of calling the references needs
-        to be checked before being used.  This can be used to avoid
-        creating references that will cause the garbage collector to
-        keep the keys around longer than needed.
-        
-        """
         with _IterationGuard(self):
             for wr in self.data.iterkeys():
                 yield wr
@@ -456,15 +400,6 @@ class WeakKeyDictionary(UserDict.UserDict):
                 yield value
 
     def keyrefs(self):
-        """Return a list of weak references to the keys.
-        
-        The references are not guaranteed to be 'live' at the time
-        they are used, so the result of calling the references needs
-        to be checked before being used.  This can be used to avoid
-        creating references that will cause the garbage collector to
-        keep the keys around longer than needed.
-        
-        """
         return self.data.keys()
 
     def keys(self):

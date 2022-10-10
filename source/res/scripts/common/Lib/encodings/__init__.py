@@ -1,35 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/__init__.py
-# Compiled at: 2100-03-15 16:41:13
-""" Standard "encodings" Package
-
-    Standard Python encoding modules are stored in this package
-    directory.
-
-    Codec modules must have names corresponding to normalized encoding
-    names as defined in the normalize_encoding() function below, e.g.
-    'utf-8' must be implemented by the module 'utf_8.py'.
-
-    Each codec module must export the following interface:
-
-    * getregentry() -> codecs.CodecInfo object
-    The getregentry() API must a CodecInfo object with encoder, decoder,
-    incrementalencoder, incrementaldecoder, streamwriter and streamreader
-    atttributes which adhere to the Python Codec Interface Standard.
-
-    In addition, a module may optionally also define the following
-    APIs which are then used by the package's codec search function:
-
-    * getaliases() -> sequence of encoding name strings to use as aliases
-
-    Alias names returned by getaliases() must be normalized encoding
-    names as defined by normalize_encoding().
-
-Written by Marc-Andre Lemburg (mal@lemburg.com).
-
-(c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
-
-"""
 import codecs
 from encodings import aliases
 import __builtin__
@@ -44,17 +14,6 @@ class CodecRegistryError(LookupError, SystemError):
 
 
 def normalize_encoding(encoding):
-    """ Normalize an encoding name.
-    
-        Normalization works as follows: all non-alphanumeric
-        characters except the dot used for Python package names are
-        collapsed and replaced with a single underscore, e.g. '  -;#'
-        becomes '_'. Leading and trailing underscores are removed.
-    
-        Note that encoding names should be ASCII only; if they do use
-        non-ASCII characters, these must be Latin-1 compatible.
-    
-    """
     if hasattr(__builtin__, 'unicode') and isinstance(encoding, unicode):
         encoding = encoding.encode('latin-1')
     return '_'.join(encoding.translate(_norm_encoding_map).split())

@@ -40,6 +40,7 @@ from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
+from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
@@ -63,7 +64,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, ICNLootBoxesController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, ISteamCompletionController
+from skeletons.gui.game_control import IBrowserController, ICNLootBoxesController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, ISteamCompletionController, IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -1864,32 +1865,53 @@ def showBattleMattersReward(ctx=None, notificationMgr=None):
 
 def showPersonalReservesPage():
     from account_helpers.AccountSettings import AccountSettings, SHOWN_PERSONAL_RESERVES_INTRO
+    showBoostersActivation()
     if not AccountSettings.getSettings(SHOWN_PERSONAL_RESERVES_INTRO):
         showPersonalReservesIntro(True, showBoostersActivation)
-    else:
-        showBoostersActivation()
 
 
 def showPersonalReservesIntro(changeShownFlag=False, callbackOnClose=None):
     from gui.impl.lobby.personal_reserves.personal_reserves_intro import PersonalReservesIntro
     from account_helpers.AccountSettings import AccountSettings, SHOWN_PERSONAL_RESERVES_INTRO
+    uiLoader = dependency.instance(IGuiLoader)
     if changeShownFlag:
         AccountSettings.setSettings(SHOWN_PERSONAL_RESERVES_INTRO, True)
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.personal_reserves.ReservesIntroView(), PersonalReservesIntro, ScopeTemplates.LOBBY_SUB_SCOPE), ctx={'callbackOnClose': callbackOnClose}), scope=EVENT_BUS_SCOPE.LOBBY)
+    contentResId = R.views.lobby.personal_reserves.ReservesIntroView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, PersonalReservesIntro, ScopeTemplates.LOBBY_SUB_SCOPE), ctx={'callbackOnClose': callbackOnClose}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showBoostersActivation():
     uiLoader = dependency.instance(IGuiLoader)
+    controller = dependency.instance(IBoostersController)
     contentResId = R.views.lobby.personal_reserves.ReservesActivationView()
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        if not controller.isGameModeSupported():
+            controller.selectRandomBattle()
         from gui.impl.lobby.personal_reserves.reserves_activation_view import ReservesActivationView
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, ReservesActivationView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    else:
+        closeReservesIntroAndConversionView()
     return
+
+
+def closeReservesIntroAndConversionView():
+    uiLoader = dependency.instance(IGuiLoader)
+    viewIdsToClose = [R.views.lobby.personal_reserves.ReservesIntroView(), R.views.lobby.personal_reserves.ReservesConversionView()]
+    for viewIdToClose in viewIdsToClose:
+        introView = uiLoader.windowsManager.getViewByLayoutID(viewIdToClose)
+        if introView:
+            introView.destroy()
 
 
 def showPersonalReservesConversion():
     from gui.impl.lobby.personal_reserves.reserves_conversion_view import ReservesConversionView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.personal_reserves.ReservesConversionView(), ReservesConversionView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.personal_reserves.ReservesConversionView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.personal_reserves.ReservesConversionView(), ReservesConversionView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showComp7MetaRootView(tabId=None, *args, **kwargs):

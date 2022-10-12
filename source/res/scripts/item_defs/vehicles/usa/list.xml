@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -105,7 +106,7 @@
     <price>	10800	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
     <level>	8	</level>
   </A13_T34_hvy>
   <A04_M3_Grant>
@@ -731,10 +732,10 @@
     <shortUserString>	#usa_vehicles:A146_TL_7_120_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A146_TL_7_120_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A146_TL_7_120_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	12750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_support improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_support improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
   </A146_TL_7_120>
   <A148_Convertible_Medium_Tank_T3>
@@ -1291,7 +1292,7 @@
     <price>	10800	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
     <level>	8	</level>
   </A13_T34_hvy_BF>
   <A118_M4_Thunderbolt>
@@ -1355,7 +1356,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user t34_disclaimer	</tags>
     <level>	8	</level>
   </A13_T34_hvy_FL>
   <A80_T26_E4_SuperPershing_FL>

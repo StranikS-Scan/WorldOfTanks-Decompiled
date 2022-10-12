@@ -59,7 +59,8 @@ class Manager(ILoginManager):
 
     def init(self):
         if WGC.prepare():
-            self.__wgcPublication = WGC.getPublication()
+            publication = WGC.getPublication()
+            self.__wgcPublication = constants.WGC_PUBLICATION.WGC_PC if constants.WGC_PUBLICATION.LGC_PC == publication else publication
         else:
             _logger.error('WGC API initialization failed')
         self.tryPrepareWGCLogin()

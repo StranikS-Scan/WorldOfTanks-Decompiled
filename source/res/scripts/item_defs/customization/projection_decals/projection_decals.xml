@@ -6270,4 +6270,23 @@
       <tags>	formfactor_square direction_left_to_right	</tags>
     </projection_decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Rebranding Event	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31001	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/lst_cross_event_decal.dds	</texture>
+      <mirror>	true	</mirror>
+      <userString>	#vehicle_customization:projection_decals/special/lst_cross_event	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+  </itemGroup>
 </projection_decals.xml>

@@ -57,7 +57,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	25	</count>
           </battles>
         </common>
         <postBattle>
@@ -128,7 +128,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	10	</count>
           </battles>
         </common>
         <postBattle>
@@ -165,7 +165,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	15	</count>
           </battles>
         </common>
         <postBattle>
@@ -206,7 +206,7 @@
             <results>
               <hideInGui></hideInGui>
               <key>	winAloneAgainstVehicleCount	</key>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <greaterOrEqual>	3	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -243,7 +243,7 @@
               <spotted></spotted>
               <kills></kills>
             </sum>
-            <greaterOrEqual>	150	</greaterOrEqual>
+            <greaterOrEqual>	750	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -269,7 +269,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	10	</count>
+            <count>	50	</count>
           </battles>
         </common>
         <postBattle>
@@ -307,7 +307,7 @@
             <description>
               <key>	#vehicle_customization:customization/tooltip/quests/rush_648/condition	</key>
             </description>
-            <greaterOrEqual>	3	</greaterOrEqual>
+            <greaterOrEqual>	4	</greaterOrEqual>
           </vehicleKills>
         </postBattle>
       </conditions>

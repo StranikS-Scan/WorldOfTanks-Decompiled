@@ -17,7 +17,7 @@
             <description>
               <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_648_1/condition	</key>
             </description>
-            <damageDealt>	5000	</damageDealt>
+            <damageDealt>	25000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -47,7 +47,7 @@
             <description>
               <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_648_2/condition	</key>
             </description>
-            <damageDealt>	25000	</damageDealt>
+            <damageDealt>	225000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -77,7 +77,7 @@
             <description>
               <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_648_3/condition	</key>
             </description>
-            <damageDealt>	50000	</damageDealt>
+            <damageDealt>	550000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -111,7 +111,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	10	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -146,7 +146,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	10	</count>
+            <count>	25	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -181,7 +181,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	15	</count>
+            <count>	50	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -216,7 +216,7 @@
               <droppedCapturePoints></droppedCapturePoints>
               <capturePoints></capturePoints>
             </sum>
-            <greaterOrEqual>	50	</greaterOrEqual>
+            <greaterOrEqual>	250	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -250,7 +250,7 @@
               <droppedCapturePoints></droppedCapturePoints>
               <capturePoints></capturePoints>
             </sum>
-            <greaterOrEqual>	100	</greaterOrEqual>
+            <greaterOrEqual>	500	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -284,7 +284,7 @@
               <droppedCapturePoints></droppedCapturePoints>
               <capturePoints></capturePoints>
             </sum>
-            <greaterOrEqual>	150	</greaterOrEqual>
+            <greaterOrEqual>	750	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -316,7 +316,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_648_1/condition	</key>
               </description>
               <key>	poiCapturedByOwnTeam	</key>
-              <greaterOrEqual>	5	</greaterOrEqual>
+              <greaterOrEqual>	15	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>
@@ -349,7 +349,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_648_2/condition	</key>
               </description>
               <key>	poiCapturedByOwnTeam	</key>
-              <greaterOrEqual>	10	</greaterOrEqual>
+              <greaterOrEqual>	150	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>
@@ -382,7 +382,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_648_3/condition	</key>
               </description>
               <key>	poiCapturedByOwnTeam	</key>
-              <greaterOrEqual>	15	</greaterOrEqual>
+              <greaterOrEqual>	375	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>
@@ -415,7 +415,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_648_1/condition	</key>
               </description>
               <key>	kills	</key>
-              <greaterOrEqual>	5	</greaterOrEqual>
+              <greaterOrEqual>	15	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>
@@ -448,7 +448,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_648_2/condition	</key>
               </description>
               <key>	kills	</key>
-              <greaterOrEqual>	10	</greaterOrEqual>
+              <greaterOrEqual>	150	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>
@@ -481,7 +481,7 @@
                 <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_648_3/condition	</key>
               </description>
               <key>	kills	</key>
-              <greaterOrEqual>	15	</greaterOrEqual>
+              <greaterOrEqual>	350	</greaterOrEqual>
             </results>
           </cumulativeExt>
         </common>

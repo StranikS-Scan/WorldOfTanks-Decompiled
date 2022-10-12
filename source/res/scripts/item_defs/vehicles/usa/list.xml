@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -731,10 +732,10 @@
     <shortUserString>	#usa_vehicles:A146_TL_7_120_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A146_TL_7_120_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A146_TL_7_120_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	12750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_support improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_support improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
   </A146_TL_7_120>
   <A148_Convertible_Medium_Tank_T3>
@@ -1033,6 +1034,7 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
+    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>

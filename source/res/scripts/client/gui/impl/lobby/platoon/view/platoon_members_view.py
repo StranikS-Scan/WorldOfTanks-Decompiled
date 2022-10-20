@@ -213,7 +213,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_messengerEvents.voip.onChannelLeft += self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelAvailable += self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelLost += self.__updateVoiceChatToggleState
-        g_currentVehicle.onChanged += self.__updateReadyButton
+        g_currentVehicle.onChanged += self._updateMembers
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self.__onUsersReceived
         usersEvents.onUserActionReceived += self.__onUserActionReceived
@@ -244,7 +244,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         g_messengerEvents.voip.onChannelLeft -= self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelAvailable -= self.__updateVoiceChatToggleState
         g_messengerEvents.voip.onChannelLost -= self.__updateVoiceChatToggleState
-        g_currentVehicle.onChanged -= self.__updateReadyButton
+        g_currentVehicle.onChanged -= self._updateMembers
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self.__onUsersReceived
         usersEvents.onUserActionReceived -= self.__onUserActionReceived
@@ -522,7 +522,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
     @adisp_process
     def _onSwitchReady(self):
-        result = yield self._platoonCtrl.togglePlayerReadyAction()
+        result = yield self._platoonCtrl.togglePlayerReadyAction(checkAmmo=True)
         if result:
             with self.viewModel.transaction() as model:
                 model.btnSwitchReady.setIsEnabled(False)
@@ -539,7 +539,8 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             return
         isInQueue = self._platoonCtrl.isInQueue()
         actionButtonStateVO = self.__getActionButtonStateVO()
-        simpleState = actionButtonStateVO.getSimpleState()
+        prbType = self._platoonCtrl.getPrbEntityType()
+        simpleState = actionButtonStateVO.getSimpleState(prbType)
         onlyReadinessText = actionButtonStateVO.isReadinessTooltip()
         with self.viewModel.transaction() as model:
             if not self._platoonCtrl.isInCoolDown(REQUEST_TYPE.SET_PLAYER_STATE):
@@ -651,6 +652,13 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 class EventMembersView(SquadMembersView):
     _prebattleType = PrebattleTypes.EVENT
 
+    @adisp_process
+    def _onSwitchReady(self):
+        result = yield self._platoonCtrl.togglePlayerReadyAction(checkAmmo=False)
+        if result:
+            with self.viewModel.transaction() as model:
+                model.btnSwitchReady.setIsEnabled(False)
+
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
 
@@ -664,11 +672,9 @@ class EventMembersView(SquadMembersView):
 
     def _setBonusInformation(self, bonusState):
         with self.viewModel.header.transaction() as model:
-            model.setShowInfoIcon(True)
+            model.setShowInfoIcon(False)
             model.setShowNoBonusPlaceholder(True)
-            infoText = R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()
-            model.noBonusPlaceholder.setText(infoText)
-            model.noBonusPlaceholder.setIcon(R.images.gui.maps.icons.battleTypes.c_64x64.event())
+            model.noBonusPlaceholder.setIcon(R.images.gui.maps.icons.battleTypes.c_40x40.eventSquad())
             self._currentBonusState = bonusState
 
     def _getBonusState(self):

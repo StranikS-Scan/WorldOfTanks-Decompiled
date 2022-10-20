@@ -134,6 +134,9 @@ class ServerEventAbstract(object):
     def getFinishTime(self):
         return time_utils.makeLocalServerTime(self._data['finishTime']) if 'finishTime' in self._data else time.time()
 
+    def noSkip(self):
+        return self._data.get('noSkip', False)
+
     def getUserName(self):
         return getLocalizedData(self._data, 'name')
 
@@ -241,8 +244,11 @@ class Group(ServerEventAbstract):
         groupQuests = []
         for questID in self.getGroupEvents():
             quest = srvEvents.get(questID)
-            if quest is not None:
-                groupQuests.append(quest)
+            if quest is None:
+                continue
+            if self.isHalloweenQuest() and not quest.isAvailable().isValid:
+                continue
+            groupQuests.append(quest)
 
         return groupQuests
 
@@ -254,6 +260,9 @@ class Group(ServerEventAbstract):
 
     def isRegularQuest(self):
         return events_helpers.isRegularQuest(self.getID())
+
+    def isHalloweenQuest(self):
+        return events_helpers.isHalloweenQuest(self.getID())
 
     def getLinkedAction(self, actions):
         return getLinkedActionID(self.getID(), actions)

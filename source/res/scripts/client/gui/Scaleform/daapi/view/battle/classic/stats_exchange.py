@@ -45,19 +45,21 @@ class FragsCollectableStats(broker.CollectableStats):
 
 class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
     settingsCore = dependency.descriptor(ISettingsCore)
-    __slots__ = ('_frags', '_vehicleID', '_chatCommand', '_chatCommandFlags', '_spottedStatus')
+    __slots__ = ('_frags', '_vehicleID', '_chatCommand', '_chatCommandFlags', '_spottedStatus', '_damageDealt')
 
     def __init__(self):
         super(DynamicVehicleStatsComponent, self).__init__()
         self._frags = 0
         self._chatCommand = ''
         self._chatCommandFlags = 0
+        self._damageDealt = 0
         self._spottedStatus = VehicleSpottedStatus.DEFAULT
 
     def clear(self):
         self._frags = 0
         self._chatCommand = ''
         self._chatCommandFlags = 0
+        self._damageDealt = 0
         self._spottedStatus = VehicleSpottedStatus.DEFAULT
         super(DynamicVehicleStatsComponent, self).clear()
 
@@ -65,6 +67,7 @@ class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
         if forced or self._frags:
             data = super(DynamicVehicleStatsComponent, self).get()
             data['frags'] = self._frags
+            data['damage'] = self._damageDealt
             data['chatCommand'] = self._chatCommand
             data['chatCommandFlags'] = self._chatCommandFlags
             data['spottedStatus'] = self._spottedStatus
@@ -75,6 +78,7 @@ class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
         self._vehicleID = vStatsVO.vehicleID
         self._frags = vStatsVO.frags
         self._spottedStatus = vStatsVO.spottedStatus
+        self._damageDealt = vStatsVO.interactive.damageDealt
         chatCmdState = vStatsVO.chatCommandState
         if chatCmdState:
             self._chatCommand = chatCmdState.activeChatCommand

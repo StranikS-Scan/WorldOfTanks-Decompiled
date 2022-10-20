@@ -38,6 +38,20 @@
     <WwsoundBaseCaptureSound>	eb_zone_capture	</WwsoundBaseCaptureSound>
     <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
   </sectorBase>
+  <teamBaseRecapturable>
+    <flagModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/flag.model	</flagModelName>
+    <flagNodeAliasName>	flag	</flagNodeAliasName>
+    <flagstaffModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/mle000_BaseFlagstaff01.model	</flagstaffModelName>
+    <radiusModel>	content/Interface/CheckPoint/CheckPoint.model	</radiusModel>
+    <flagAnim>	content/MilitaryEnvironment/mle000_BaseFlagstaff/animations/flag.fbx	</flagAnim>
+    <flagstaffFlagHP>	HP_UpFlag	</flagstaffFlagHP>
+    <flagBackgroundTex>	content/MilitaryEnvironment/mle000_BaseFlagstaff/mle016_Flagstaff_flag.dds	</flagBackgroundTex>
+    <flagEmblemTex>	system/maps/wg_emblem.dds	</flagEmblemTex>
+    <flagEmblemTexCoords>	0.2 0.4 0.6 0.8	</flagEmblemTexCoords>
+    <flagScale>	3.0 3.0 3.0	</flagScale>
+    <WwsoundBaseCaptureSound>	eb_zone_capture	</WwsoundBaseCaptureSound>
+    <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
+  </teamBaseRecapturable>
   <SectorBorderVisual>
     <modelPath>	content/Interface/border/border_02.model	</modelPath>
     <overTerrainHeight>	0.5	</overTerrainHeight>
@@ -355,6 +369,20 @@
       <id>	4	</id>
     </item>
   </lootTypes>
+  <halloweenLootTypes>
+    <item>	&gt;	  <name>	lootHalloween	</name>
+      <id>	5	</id>
+    </item>
+    <item>	&gt;	  <name>	lootHalloween	</name>
+      <id>	6	</id>
+    </item>
+    <item>	&gt;	  <name>	lootHalloween	</name>
+      <id>	7	</id>
+    </item>
+    <item>	&gt;	  <name>	lootHalloween	</name>
+      <id>	8	</id>
+    </item>
+  </halloweenLootTypes>
   <lootBase>
     <model>
       <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox01.model	</name>
@@ -397,6 +425,20 @@
       <path>	particles/eff_sequence/br_airdrop_end.seq	</path>
     </pickupEffect>
   </lootAir>
+  <lootHalloween>
+    <model>
+      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox01.model	</name>
+      <border>	content/Environment/env_null_model/null_model.model	</border>
+    </model>
+    <effect>
+      <path_fwd>	particles/eff_sequence/event_halloween_2022/hw22_pickup_loot.seq	</path_fwd>
+      <path>	particles/eff_sequence/event_halloween_2022/hw22_pickup_loot.seq	</path>
+    </effect>
+    <pickupEffect>
+      <path_fwd>	particles/eff_sequence/event_halloween_2022/hw22_pickup_loot_end.seq	</path_fwd>
+      <path>	particles/eff_sequence/event_halloween_2022/hw22_pickup_loot_end.seq	</path>
+    </pickupEffect>
+  </lootHalloween>
   <dropPlane>
     <model>	content/MilitaryEnvironment/hd_mle_UNI_AN12/normal/lod0/hd_mle_UNI_AN12.model	</model>
     <flyAnimation>	content/MilitaryEnvironment/hd_mle_UNI_AN12/animation/hd_mle_UNI_AN12.ssm	</flyAnimation>

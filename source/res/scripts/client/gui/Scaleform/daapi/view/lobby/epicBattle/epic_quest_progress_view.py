@@ -7,14 +7,14 @@ from skeletons.gui.battle_results import IBattleResultsService
 
 class EpicQuestProgressView(EpicQuestProgressInfoMeta):
     __slots__ = ()
-    __battleResults = dependency.descriptor(IBattleResultsService)
+    _battleResults = dependency.descriptor(IBattleResultsService)
 
     def showQuestById(self, questId, eventType):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, ctx={'questId': questId,
          'eventType': eventType}))
 
     def updateQuestsInfo(self, arenaUniqueID):
-        battleResultsVO = self.__battleResults.getResultsVO(arenaUniqueID)
+        battleResultsVO = self._getQuestVO(arenaUniqueID)
         if not battleResultsVO:
             return
         quests = []
@@ -36,6 +36,9 @@ class EpicQuestProgressView(EpicQuestProgressInfoMeta):
             questsArray.append(questModel)
 
         self.as_updateDataS(questsArray)
+
+    def _getQuestVO(self, arenaUniqueID):
+        return self._battleResults.getResultsVO(arenaUniqueID)
 
     @staticmethod
     def __getRewards(quest):

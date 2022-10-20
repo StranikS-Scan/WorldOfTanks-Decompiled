@@ -15,3 +15,4 @@ FUN_RANDOM_GROUP_ID = 'fun_random_group'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
 TECH_TREE_ACTION_POSTFIX = '_techtree'
+HALLOWEEN_GROUP_ID = 'hw22_phases_halloween'

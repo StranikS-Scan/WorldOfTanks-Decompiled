@@ -151,51 +151,7 @@ class AwardController(IAwardController, IGlobalListener):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        self.__handlers = [BattleQuestsAutoWindowHandler(self),
-         QuestBoosterAwardHandler(self),
-         BoosterAfterBattleAwardHandler(self),
-         PunishWindowHandler(self),
-         TokenQuestsWindowHandler(self),
-         MotiveQuestsWindowHandler(self),
-         VehiclesResearchHandler(self),
-         VictoryHandler(self),
-         BattlesCountHandler(self),
-         PveBattlesCountHandler(self),
-         PersonalMissionBonusHandler(self),
-         PersonalMissionWindowAfterBattleHandler(self),
-         PersonalMissionAutoWindowHandler(self),
-         PersonalMissionByAwardListHandler(self),
-         PersonalMissionOperationAwardHandler(self),
-         PersonalMissionOperationUnlockedHandler(self),
-         GoldFishHandler(self),
-         TelecomHandler(self),
-         MarkByInvoiceHandler(self),
-         MarkByQuestHandler(self),
-         CrewSkinsQuestHandler(self),
-         CrewBooksQuestHandler(self),
-         RecruitHandler(self),
-         SoundDeviceHandler(self),
-         EliteWindowHandler(self),
-         LootBoxByInvoiceHandler(self),
-         ProgressiveRewardHandler(self),
-         PiggyBankOpenHandler(self),
-         SeniorityAwardsWindowHandler(self),
-         RankedQuestsHandler(self),
-         BattlePassRewardHandler(self),
-         BattlePassStyleRecievedHandler(self),
-         BattlePassBuyEmptyHandler(self),
-         BattlePassCapHandler(self),
-         VehicleCollectorAchievementHandler(self),
-         DynamicBonusHandler(self),
-         ProgressiveItemsRewardHandler(self),
-         DedicationReward(self),
-         BadgesInvoiceHandler(self),
-         MapboxProgressionRewardHandler(self),
-         PurchaseHandler(self),
-         RenewableSubscriptionHandler(self),
-         BattleMattersQuestsHandler(self),
-         ResourceWellRewardHandler(self),
-         Comp7RewardHandler(self)]
+        self.__handlers = [ handler(self) for handler in AWARD_HANDLERS ]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -216,6 +172,19 @@ class AwardController(IAwardController, IGlobalListener):
         else:
             _logger.debug('Postponed award call: %s, %s', handler, ctx)
             self.__delayedHandlers.append((handler, ctx))
+
+    def handlePostponedByHandler(self, handlerCls):
+        removeIndexes = []
+        self.__delayedHandlers.sort(key=lambda handle: isinstance(handle, handlerCls), reverse=True)
+        for index, (handler, ctx) in enumerate(self.__delayedHandlers):
+            if not issubclass(handler.im_class, handlerCls):
+                continue
+            handler(ctx)
+            removeIndexes.append(index)
+
+        removeIndexes.reverse()
+        for index in removeIndexes:
+            self.__delayedHandlers.pop(index)
 
     def handlePostponed(self, *args):
         if self.canShow():
@@ -1792,3 +1761,50 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
     def __getWinsQuestSortKey(quest):
         winsCount = parseComp7WinsQuestID(quest.getID())
         return winsCount
+
+
+AWARD_HANDLERS = [BattleQuestsAutoWindowHandler,
+ QuestBoosterAwardHandler,
+ BoosterAfterBattleAwardHandler,
+ PunishWindowHandler,
+ TokenQuestsWindowHandler,
+ MotiveQuestsWindowHandler,
+ VehiclesResearchHandler,
+ VictoryHandler,
+ BattlesCountHandler,
+ PveBattlesCountHandler,
+ PersonalMissionBonusHandler,
+ PersonalMissionWindowAfterBattleHandler,
+ PersonalMissionAutoWindowHandler,
+ PersonalMissionByAwardListHandler,
+ PersonalMissionOperationAwardHandler,
+ PersonalMissionOperationUnlockedHandler,
+ GoldFishHandler,
+ TelecomHandler,
+ MarkByInvoiceHandler,
+ MarkByQuestHandler,
+ CrewSkinsQuestHandler,
+ CrewBooksQuestHandler,
+ RecruitHandler,
+ SoundDeviceHandler,
+ EliteWindowHandler,
+ LootBoxByInvoiceHandler,
+ ProgressiveRewardHandler,
+ PiggyBankOpenHandler,
+ SeniorityAwardsWindowHandler,
+ RankedQuestsHandler,
+ BattlePassRewardHandler,
+ BattlePassStyleRecievedHandler,
+ BattlePassBuyEmptyHandler,
+ BattlePassCapHandler,
+ VehicleCollectorAchievementHandler,
+ DynamicBonusHandler,
+ ProgressiveItemsRewardHandler,
+ DedicationReward,
+ BadgesInvoiceHandler,
+ MapboxProgressionRewardHandler,
+ PurchaseHandler,
+ RenewableSubscriptionHandler,
+ BattleMattersQuestsHandler,
+ ResourceWellRewardHandler,
+ Comp7RewardHandler]

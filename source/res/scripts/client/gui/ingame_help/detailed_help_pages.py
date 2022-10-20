@@ -42,6 +42,17 @@ def buildPagesData(ctx):
     return datailedList
 
 
+def buildEventPagesData(ctx):
+    R_HELP_STRINGS = R.strings.hw_ingame_help.detailsHelp
+    R_HELP_IMAGES = R.images.halloween.gui.maps.icons.battleHelp
+    pages = []
+    headerTitle = backport.text(R.strings.hw_ingame_help.detailsHelp.title())
+    for page in ('pageTask', 'pageRespawn', 'pageAbility', 'pageLanterns'):
+        _addPage(pages, headerTitle, backport.text(R_HELP_STRINGS.dyn(page).title()), text_styles.mainBig(backport.text(R_HELP_STRINGS.dyn(page).desc())), [], [], backport.image(R_HELP_IMAGES.dyn(page)()))
+
+    return pages
+
+
 def buildTitle(ctx):
     title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
     vehName = ctx.get('vehName')

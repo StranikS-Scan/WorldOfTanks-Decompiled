@@ -1,0 +1,12 @@
+<HWArenaInfoComponent.def>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <Properties>
+    <activePhaseIndex>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </activePhaseIndex>
+  </Properties>
+</HWArenaInfoComponent.def>

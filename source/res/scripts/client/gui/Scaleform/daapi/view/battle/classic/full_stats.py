@@ -6,6 +6,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.ClassicFullStatsMeta import ClassicFullStatsMeta
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -32,6 +33,8 @@ class FullStatsComponent(ClassicFullStatsMeta):
         super(FullStatsComponent, self)._populate()
         qProgressCtrl = self.sessionProvider.shared.questProgress
         self.__settingsCore.onSettingsChanged += self.__onSettingsChange
+        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+        self.as_isFDEventS(guiType == ARENA_GUI_TYPE.EVENT_BATTLES)
         if qProgressCtrl is not None:
             qProgressCtrl.onQuestProgressInited += self.__onQuestProgressInited
             if qProgressCtrl.isInited():

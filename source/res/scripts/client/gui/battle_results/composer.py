@@ -6,6 +6,7 @@ from gui.battle_results.components import base
 from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IMapsTrainingController
+from gui.shared.system_factory import registerStatsComposerByArenaBonusType, collectStatsComposerByArenaBonusType
 
 class IStatsComposer(object):
 
@@ -266,30 +267,20 @@ class Comp7StatsComposer(StatsComposer):
         return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.CYBERSPORT, CyberSportStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.RATED_SANDBOX, RatedSandboxStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.SANDBOX, SandboxStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
+registerStatsComposerByArenaBonusType(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
+for brBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+    registerStatsComposerByArenaBonusType(brBonusType, BattleRoyaleStatsComposer)
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
-    if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
-        composer = CyberSportStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.RATED_SANDBOX:
-        composer = RatedSandboxStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.SANDBOX:
-        composer = SandboxStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.FORT_BATTLE_2:
-        composer = StrongholdBattleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.SORTIE_2:
-        composer = StrongholdSortieBattleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.RANKED:
-        composer = RankedBattlesStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.BOOTCAMP:
-        composer = BootcampStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
-        composer = EpicStatsComposer(reusable)
-    elif bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-        composer = BattleRoyaleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
-        composer = MapsTrainingStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.COMP7:
-        composer = Comp7StatsComposer(reusable)
-    else:
-        composer = RegularStatsComposer(reusable)
-    return composer
+    composerClass = collectStatsComposerByArenaBonusType(bonusType)
+    return composerClass(reusable) if composerClass else RegularStatsComposer(reusable)

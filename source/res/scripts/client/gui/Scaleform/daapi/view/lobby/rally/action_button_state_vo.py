@@ -14,6 +14,7 @@ from helpers import i18n
 from shared_utils import BoundMethodWeakref
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
+from constants import PREBATTLE_TYPE
 
 class ActionButtonStateVO(dict):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
@@ -87,15 +88,17 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.MODE_OFFLINE: (backport.text(R.strings.comp7.unit.message.modeOffline()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
-        stateKey, stateCtx = self.__getState()
+        self.__EVENT_INVALID_UNIT_MESSAGES = {UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.hw_platoon.readyButton.footerMessage.unsuitableVehicle()), {})}
+        prbType = unitEntity.getEntityType()
+        stateKey, stateCtx = self.__getState(prbType)
         self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
         self['label'] = self._getLabel()
         self['isEnabled'] = self.__isEnabled
         self['isReady'] = self._playerInfo.isReady
         self['toolTipData'] = self.__toolTipData
 
-    def getSimpleState(self):
-        stateKey, stateCtx = self.__getState()
+    def getSimpleState(self, prbType):
+        stateKey, stateCtx = self.__getState(prbType)
         return re.sub('<.*/> ', '', i18n.makeString(stateKey, **stateCtx))
 
     def isReadinessTooltip(self):
@@ -134,7 +137,7 @@ class ActionButtonStateVO(dict):
     def _getUnitReadyMessage(self):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_GETREADY, {})
 
-    def __getState(self):
+    def __getState(self, prbType=None):
         if self.__isEnabled:
             if self._playerInfo.isInSlot:
                 if self._playerInfo.isReady:
@@ -149,7 +152,10 @@ class ActionButtonStateVO(dict):
             if self.__flags.isLocked():
                 return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISLOCKED, {})
             return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
-        return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]() if callable(self.__INVALID_UNIT_MESSAGES[self.__restrictionType]) else self.__INVALID_UNIT_MESSAGES[self.__restrictionType]
+        invalid_unit_message = self.__INVALID_UNIT_MESSAGES[self.__restrictionType]
+        if prbType and prbType == PREBATTLE_TYPE.EVENT and self.__restrictionType in self.__EVENT_INVALID_UNIT_MESSAGES:
+            invalid_unit_message = self.__EVENT_INVALID_UNIT_MESSAGES[self.__restrictionType]
+        return invalid_unit_message() if callable(invalid_unit_message) else invalid_unit_message
 
     @property
     def __toolTipData(self):

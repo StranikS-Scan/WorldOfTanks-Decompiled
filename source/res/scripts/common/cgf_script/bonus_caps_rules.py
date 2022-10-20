@@ -8,10 +8,10 @@ if IS_CLIENT:
     from Avatar import PlayerAvatar
     from ClientArena import ClientArena
 
-def bonusCapsManager(bonusCap):
+def bonusCapsManager(*bonusCaps):
 
     def predicate(spaceID):
         player = BigWorld.player()
-        return ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, bonusCap) if spaceID != ClientArena.DEFAULT_ARENA_WORLD_ID and isinstance(player, PlayerAvatar) else False
+        return ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, *bonusCaps) if spaceID != ClientArena.DEFAULT_ARENA_WORLD_ID and isinstance(player, PlayerAvatar) else False
 
     return autoregister(creationPredicate=predicate)

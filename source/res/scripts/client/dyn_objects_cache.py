@@ -257,6 +257,7 @@ class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
 
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+    _LOOT_TYPES = 'lootTypes'
 
     def __init__(self):
         super(_BattleRoyaleDynObjects, self).__init__()
@@ -289,7 +290,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
-            self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
+            self.__loots = _createLoots(dataSection, dataSection[self._LOOT_TYPES], prerequisites)
             BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
             super(_BattleRoyaleDynObjects, self).init(dataSection)
 
@@ -347,6 +348,10 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __onResourcesLoaded(self, resourceRefs):
         self.__resourcesCache = resourceRefs
+
+
+class _HalloweenDynObjects(_BattleRoyaleDynObjects):
+    _LOOT_TYPES = 'halloweenLootTypes'
 
 
 class _Comp7DynObjects(DynObjectsBase):
@@ -482,7 +487,7 @@ _CONF_STORAGES = {ARENA_GUI_TYPE.SORTIE_2: _StrongholdDynObjects,
  ARENA_GUI_TYPE.BATTLE_ROYALE: _BattleRoyaleDynObjects,
  ARENA_GUI_TYPE.EPIC_BATTLE: _EpicBattleDynObjects,
  ARENA_GUI_TYPE.EPIC_TRAINING: _EpicBattleDynObjects,
- ARENA_GUI_TYPE.EVENT_BATTLES: _EpicBattleDynObjects,
+ ARENA_GUI_TYPE.EVENT_BATTLES: _HalloweenDynObjects,
  ARENA_GUI_TYPE.COMP7: _Comp7DynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):

@@ -2648,7 +2648,7 @@
         <item>	104	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.05	  <name>	weight	</name>
+        <item>	5.07	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
@@ -3233,6 +3233,24 @@
         </item>
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	hw_2022	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	127	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.08	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>

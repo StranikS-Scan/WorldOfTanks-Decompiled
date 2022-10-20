@@ -58,7 +58,7 @@ class FunctionalState(object):
             return True
         if self.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             return True
-        if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
+        if self.isInUnit(PREBATTLE_TYPE.EVENT) and (queueType == QUEUE_TYPE.EVENT_BATTLES or queueType == QUEUE_TYPE.EVENT_BATTLES_2):
             return True
         if self.isInUnit(PREBATTLE_TYPE.MAPBOX) and queueType == QUEUE_TYPE.MAPBOX:
             return True
@@ -79,7 +79,7 @@ class FunctionalState(object):
             return True
         if self.isIntroMode:
             return prbType != self.entityTypeID
-        return True if self.isInLegacy() or self.isInUnit() else self.entityTypeID != self.__getQueueTypeByPrbType(prbType)
+        return True if self.isInLegacy() or self.isInUnit() else self.entityTypeID not in self.__getQueueTypeByPrbType(prbType)
 
     def isReadyActionSupported(self):
         return self.hasModalEntity and not self.isIntroMode and (self.isInLegacy() or self.isInUnit())
@@ -88,15 +88,15 @@ class FunctionalState(object):
         return self.hasLockedState
 
     def __getQueueTypeByPrbType(self, prbType):
-        prbToQueue = {PREBATTLE_TYPE.SQUAD: QUEUE_TYPE.RANDOMS,
-         PREBATTLE_TYPE.UNIT: QUEUE_TYPE.UNITS,
-         PREBATTLE_TYPE.EVENT: QUEUE_TYPE.EVENT_BATTLES,
-         PREBATTLE_TYPE.STRONGHOLD: QUEUE_TYPE.STRONGHOLD_UNITS,
-         PREBATTLE_TYPE.EPIC: QUEUE_TYPE.EPIC,
-         PREBATTLE_TYPE.MAPBOX: QUEUE_TYPE.MAPBOX,
-         PREBATTLE_TYPE.FUN_RANDOM: QUEUE_TYPE.FUN_RANDOM,
-         PREBATTLE_TYPE.COMP7: QUEUE_TYPE.COMP7}
-        return prbToQueue.get(prbType, QUEUE_TYPE.UNKNOWN)
+        prbToQueue = {PREBATTLE_TYPE.SQUAD: [QUEUE_TYPE.RANDOMS],
+         PREBATTLE_TYPE.UNIT: [QUEUE_TYPE.UNITS],
+         PREBATTLE_TYPE.EVENT: [QUEUE_TYPE.EVENT_BATTLES, QUEUE_TYPE.EVENT_BATTLES_2],
+         PREBATTLE_TYPE.STRONGHOLD: [QUEUE_TYPE.STRONGHOLD_UNITS],
+         PREBATTLE_TYPE.EPIC: [QUEUE_TYPE.EPIC],
+         PREBATTLE_TYPE.MAPBOX: [QUEUE_TYPE.MAPBOX],
+         PREBATTLE_TYPE.FUN_RANDOM: [QUEUE_TYPE.FUN_RANDOM],
+         PREBATTLE_TYPE.COMP7: [QUEUE_TYPE.COMP7]}
+        return prbToQueue.get(prbType, [QUEUE_TYPE.UNKNOWN])
 
 
 @ReprInjector.simple('isCreator', 'isReady')

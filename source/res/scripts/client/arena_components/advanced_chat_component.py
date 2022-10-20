@@ -345,7 +345,10 @@ class AdvancedChatComponent(ClientArenaComponent):
             return
         else:
             if self.__markerInFocus.isFocused(targetID, markerType):
-                listOfCommands = self._chatCommands[markerType][self.__markerInFocus.targetID]
+                markerCommands = self._chatCommands[markerType]
+                listOfCommands = markerCommands.get(self.__markerInFocus.targetID)
+                if not listOfCommands:
+                    return
                 for _, commandData in listOfCommands.iteritems():
                     if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
                         commands.sendClearChatCommandsFromTarget(targetID, markerType.name)

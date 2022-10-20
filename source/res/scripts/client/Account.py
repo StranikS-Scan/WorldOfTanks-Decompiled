@@ -756,13 +756,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_SANDBOX, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvID):
+    def enqueueEventBattles(self, vehInvID, eventQueueType=QUEUE_TYPE.EVENT_BATTLES):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.EVENT_BATTLES, vehInvID])
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [eventQueueType, vehInvID])
 
-    def dequeueEventBattles(self):
+    def dequeueEventBattles(self, eventQueueType=QUEUE_TYPE.EVENT_BATTLES):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.EVENT_BATTLES)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, eventQueueType)
 
     def enqueueRanked(self, vehInvID):
         if events.isPlayerEntityChanging:
@@ -822,9 +822,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)
             self._doCmdInt3(AccountCommands.CMD_REQ_MAPS_TRAINING_INITIAL_CONFIGURATION, accountID, 0, 0, proxy)
 
-    def createArenaFromQueue(self):
+    def createArenaFromQueue(self, queueType):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_QUEUE, 0, 0, 0)
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_QUEUE, queueType, 0, 0)
 
     def prb_createTraining(self, arenaTypeID, roundLength, isOpened, comment):
         if events.isPlayerEntityChanging:
@@ -1265,6 +1265,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self.__synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
             synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
+            events.onClientSynchronize(isFullSync, diff)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):

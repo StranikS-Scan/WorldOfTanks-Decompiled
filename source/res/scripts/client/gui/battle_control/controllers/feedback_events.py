@@ -287,6 +287,9 @@ class _CritsExtra(object):
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
 
+    def isSuperShell(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SUPER_SHELL) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SUPER_SHELL)
+
     def isSecondaryAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason
 

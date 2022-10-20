@@ -23,6 +23,7 @@ class INVITES(object):
     INVITES_PREBATTLE_ALREADYJOINED_UNIT = '#invites:invites/prebattle/alreadyJoined/UNIT'
     INVITES_PREBATTLE_ALREADYJOINED_SORTIE = '#invites:invites/prebattle/alreadyJoined/SORTIE'
     INVITES_PREBATTLE_ALREADYJOINED_MAPBOX = '#invites:invites/prebattle/alreadyJoined/MAPBOX'
+    INVITES_PREBATTLE_ALREADYJOINED_EVENT = '#invites:invites/prebattle/alreadyJoined/EVENT'
     INVITES_TEXT_CREATORNAME = '#invites:invites/text/creatorName'
     INVITES_TEXT_SQUAD = '#invites:invites/text/SQUAD'
     INVITES_TEXT_EVENT = '#invites:invites/text/EVENT'

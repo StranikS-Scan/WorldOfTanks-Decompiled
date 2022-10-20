@@ -54,7 +54,7 @@ from helpers.time_utils import ONE_MINUTE
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBootcampController, ICNLootBoxesController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBootcampController, ICNLootBoxesController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IEventBattlesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -87,6 +87,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     battlePassController = dependency.descriptor(IBattlePassController)
     battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     bootcampController = dependency.descriptor(IBootcampController)
+    eventBattlesController = dependency.descriptor(IEventBattlesController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
@@ -270,6 +271,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def _updateBattleRoyaleMode(self):
         self.as_toggleBattleRoyaleS(g_currentVehicle.isOnlyForBattleRoyaleBattles())
 
+    def __updateHW22Mode(self):
+        toggleEventMode = self.eventBattlesController.isEventPrbActive()
+        self.as_toggleEventModeS(toggleEventMode)
+
     def __updateDogTagsState(self):
         isDogTagsEnabled = self.lobbyContext.getServerSettings().isDogTagEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.DOGTAGS_ENABLED, isDogTagsEnabled)
@@ -299,6 +304,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 newCarouselAlias = HANGAR_ALIASES.ROYALE_TANK_CAROUSEL
             elif self.__mapboxCtrl.isMapboxMode():
                 newCarouselAlias = HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL
+            elif self.eventBattlesController.isEventPrbActive():
+                newCarouselAlias = HANGAR_ALIASES.HW22_TANK_CAROUSEL
             elif self.__funRandomController.isFunRandomPrbActive():
                 newCarouselAlias = HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL
             elif self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
@@ -546,6 +553,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self._updateCnSubscriptionMode()
         self._updateBattleRoyaleMode()
+        self.__updateHW22Mode()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -644,6 +652,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderEpicWidget()
         self.__switchCarousels()
         self.__updateBattleRoyaleComponents()
+        self.__updateHW22Mode()
 
     def __isSpecialMode(self):
         return self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInUnit() or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC)

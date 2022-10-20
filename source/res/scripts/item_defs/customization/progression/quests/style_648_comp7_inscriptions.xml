@@ -48,11 +48,13 @@
       <conditions>
         <preBattle>
           <battle>
-            <unit>
-              <isSquad>	true	</isSquad>
-              <unitSize>	2	</unitSize>
-            </unit>
-            <bonusTypes>	43	</bonusTypes>
+            <and>
+              <unit>
+                <isSquad>	true	</isSquad>
+                <unitSize>	2	</unitSize>
+              </unit>
+              <bonusTypes>	43	</bonusTypes>
+            </and>
           </battle>
         </preBattle>
         <common>
@@ -85,12 +87,14 @@
       <conditions>
         <preBattle>
           <battle>
-            <unit>
-              <isSquad>	true	</isSquad>
-              <unitSize>	7	</unitSize>
-              <clanMembership>	same	</clanMembership>
-            </unit>
-            <bonusTypes>	43	</bonusTypes>
+            <and>
+              <unit>
+                <isSquad>	true	</isSquad>
+                <unitSize>	7	</unitSize>
+                <clanMembership>	same	</clanMembership>
+              </unit>
+              <bonusTypes>	43	</bonusTypes>
+            </and>
           </battle>
         </preBattle>
         <common>
@@ -156,11 +160,13 @@
       <conditions>
         <preBattle>
           <battle>
-            <unit>
-              <isSquad>	true	</isSquad>
-              <unitSize>	7	</unitSize>
-            </unit>
-            <bonusTypes>	43	</bonusTypes>
+            <and>
+              <unit>
+                <isSquad>	true	</isSquad>
+                <unitSize>	7	</unitSize>
+              </unit>
+              <bonusTypes>	43	</bonusTypes>
+            </and>
           </battle>
         </preBattle>
         <common>

@@ -18,6 +18,7 @@ from gui.impl.lobby.mode_selector.items.battle_royale_mode_selector_item import 
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.comp7_mode_selector_item import Comp7ModeSelectorItem
+from gui.impl.lobby.mode_selector.items.event_battle_mode_selector_item import EventBattleModeSelectorItem
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -36,6 +37,7 @@ registerModSelectorItem(PREBATTLE_ACTION_NAME.MAPBOX, MapboxModeSelectorItem)
 registerModSelectorItem(PREBATTLE_ACTION_NAME.EPIC, EpicModeSelectorItem)
 registerModSelectorItem(PREBATTLE_ACTION_NAME.BATTLE_ROYALE, BattleRoyaleModeSelectorItem)
 registerModSelectorItem(PREBATTLE_ACTION_NAME.COMP7, Comp7ModeSelectorItem)
+registerModSelectorItem(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleModeSelectorItem)
 registerModSelectorItem(CustomModeName.BOOTCAMP, BootcampModeSelectorItem)
 
 class ModeSelectorDataProvider(IGlobalListener):
@@ -99,6 +101,11 @@ class ModeSelectorDataProvider(IGlobalListener):
     def _updateItemsForce(self):
         self._clearItems()
         self.__createItems(self.__getItems())
+        self.updateItems()
+
+    def fullUpdate(self):
+        self._clearItems()
+        self._initializeModeSelectorItems()
         self.updateItems()
 
     def _clearItems(self):

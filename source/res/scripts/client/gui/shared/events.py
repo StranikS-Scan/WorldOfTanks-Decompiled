@@ -47,7 +47,6 @@ class GameEvent(HasCtxEvent):
     GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
-    EVENT_STATS = 'game/eventStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
     FULL_STATS_PERSONAL_RESERVES = 'game/fullStats/personalReserves'
     HIDE_VEHICLE_UPGRADE = 'game/battleRoyale/hideVehicleUpgrade'
@@ -674,6 +673,11 @@ class AirDropEvent(HasCtxEvent):
     AIR_DROP_LANDED = 'onAirDropLanded'
     AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
     AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
+
+
+class LootEvent(HasCtxEvent):
+    LOOT_SPAWNED = 'onLootSpawned'
+    LOOT_PICKED_UP = 'onLootPickedUp'
 
 
 class ProfilePageEvent(HasCtxEvent):

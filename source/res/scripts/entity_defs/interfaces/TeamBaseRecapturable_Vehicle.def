@@ -1,0 +1,16 @@
+<TeamBaseRecapturable_Vehicle.def>
+  <TempProperties>
+    <_teamBase></_teamBase>
+  </TempProperties>
+  <CellMethods>
+    <teamBaseRecapturable_receivePoints>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </teamBaseRecapturable_receivePoints>
+    <teamBaseRecapturable_onCaptured>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </teamBaseRecapturable_onCaptured>
+  </CellMethods>
+</TeamBaseRecapturable_Vehicle.def>

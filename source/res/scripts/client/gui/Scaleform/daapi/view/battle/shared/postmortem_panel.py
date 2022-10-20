@@ -307,7 +307,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortem = False
-        self.__deathAlreadySet = False
+        self._deathAlreadySet = False
         self.resetDeathInfo()
 
     def _updateVehicleInfo(self):

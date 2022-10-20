@@ -7,7 +7,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -34,7 +34,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -61,7 +61,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -83,6 +83,24 @@
       <tags>	hiddenInUI	</tags>
     </paint>
     <paint>
+      <id>	253	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	54 54 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_drops	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	324	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_color_05.png	</texture>
+      <color>	19 38 29 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_june_2022	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
       <id>	308	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
       <color>	87 27 37 255	</color>
@@ -100,6 +118,15 @@
       <userString>	#vehicle_customization:repaint/twitch_september_2022	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
+    <paint>
+      <id>	357	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_36.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/twitch_october_2022	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -115,7 +142,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -125,42 +152,6 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/yandex	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
-    <name>	Streamline	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	253	</id>
-      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
-      <color>	54 54 74 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/twitch_drops	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	324	</id>
-      <texture>	gui/maps/vehicles/repaints/uk_color_05.png	</texture>
-      <color>	19 38 29 255	</color>
-      <gloss>	0.63	</gloss>
-      <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:repaint/twitch_june_2022	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

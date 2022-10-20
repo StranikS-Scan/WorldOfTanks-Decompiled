@@ -54,7 +54,10 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @wg_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
+        isEventHangar = self._eventBattlesController.isEventHangar()
         yield showIntro(selectedSection, self.getParentWindow())
+        if isEventHangar and not self._eventBattlesController.isEnabled():
+            return
         if self.viewStatus != ViewStatus.LOADED:
             return
         super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)

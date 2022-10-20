@@ -277,7 +277,9 @@ def vehicleAttributeFactors():
      'invisibilityAdditiveTerm': 0.0,
      'invisibilityMultFactor': 1.0,
      'engineReduceFineFactor': 1.0,
-     'ammoBayReduceFineFactor': 1.0}
+     'ammoBayReduceFineFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/canBeRammed': True}
 
 
 WHEEL_SIZE_COEF = 2.2

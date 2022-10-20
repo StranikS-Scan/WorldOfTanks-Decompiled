@@ -28,7 +28,7 @@ from items import getTypeOfCompactDescr
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
-from shared_utils import first
+from shared_utils import first, findFirst
 from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -319,13 +319,13 @@ class EventsCache(IEventsCache):
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
-    def getHiddenQuests(self, filterFunc=None):
+    def getHiddenQuests(self, filterFunc=None, noSkip=False):
         filterFunc = filterFunc or (lambda a: True)
 
         def hiddenFilterFunc(q):
             return q.isHidden() and filterFunc(q)
 
-        return self._getQuests(hiddenFilterFunc)
+        return self._getQuests(hiddenFilterFunc, noSkip=noSkip)
 
     def getRankedQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -335,8 +335,8 @@ class EventsCache(IEventsCache):
 
         return self._getQuests(rankedFilterFunc)
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
-        return self._getQuests(filterFunc, includePersonalMissions)
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
+        return self._getQuests(filterFunc, includePersonalMissions, noSkip=noSkip)
 
     def getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -447,8 +447,10 @@ class EventsCache(IEventsCache):
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))
 
-    def getBalancedSquadBounds(self):
-        return (self.__getUnitRestrictions().get('lowerBound', 0), self.__getUnitRestrictions().get('upperBound', 0))
+    def getBalancedSquadBounds(self, tags='default'):
+        restrictions = self.__getUnitRestrictions().get('restriction', [])
+        restriction = findFirst(lambda r: tags in r['tags'], restrictions, {})
+        return (restriction.get('lowerBound', 0), restriction.get('upperBound', 0))
 
     def isSquadXpFactorsEnabled(self):
         return bool(self.__getUnitXpFactors().get('enabled', False))
@@ -524,7 +526,7 @@ class EventsCache(IEventsCache):
             alias = first((m.getAlias() for m in action.getModifiers()))
         return (alias, counterValue)
 
-    def _getQuests(self, filterFunc=None, includePersonalMissions=False):
+    def _getQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -534,7 +536,8 @@ class EventsCache(IEventsCache):
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
-            if q.getFinishTimeLeft() <= 0:
+            noSkipResult = noSkip and q.noSkip()
+            if q.getFinishTimeLeft() <= 0 and not noSkipResult:
                 continue
             if not filterFunc(q):
                 continue

@@ -100,32 +100,37 @@ class ShowShooting(EntityExtra):
 
     def __doRecoil(self, vehicle, gunModel):
         appearance = vehicle.appearance
+        if not (appearance.isConstructed and appearance.isAlive):
+            return
         appearance.recoil()
 
     def _doGroundWaveEffect(self, vehicle, groundWaveEff, gunModel, gunNode=None):
         node = gunModel.node('HP_gunFire' if gunNode is None else gunNode)
-        gunMatr = Math.Matrix(node)
-        gunPos = gunMatr.translation
-        gunDir = gunMatr.applyVector((0, 0, 1))
-        upVec = Math.Matrix(vehicle.matrix).applyVector(Math.Vector3(0, 1, 0))
-        if upVec.y != 0:
-            centerToGun = gunPos - vehicle.position
-            centerToGunDist = centerToGun.length
-            centerToGun.normalise()
-            gunHeight = centerToGunDist * centerToGun.dot(upVec) / upVec.y
-            gunPos.y -= gunHeight
-        distanceToWater = BigWorld.wg_collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
-        if distanceToWater > -1:
-            position = gunPos - Math.Vector3(0, distanceToWater, 0)
-            matKind = material_kinds.getWaterMatKind()
+        if not node:
+            return
         else:
-            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
-            if testRes is None:
-                return
-            position = testRes.closestPoint
-            matKind = testRes.matKind
-        BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=matKind, start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
-        return
+            gunMatr = Math.Matrix(node)
+            gunPos = gunMatr.translation
+            gunDir = gunMatr.applyVector((0, 0, 1))
+            upVec = Math.Matrix(vehicle.matrix).applyVector(Math.Vector3(0, 1, 0))
+            if upVec.y != 0:
+                centerToGun = gunPos - vehicle.position
+                centerToGunDist = centerToGun.length
+                centerToGun.normalise()
+                gunHeight = centerToGunDist * centerToGun.dot(upVec) / upVec.y
+                gunPos.y -= gunHeight
+            distanceToWater = BigWorld.wg_collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
+            if distanceToWater > -1:
+                position = gunPos - Math.Vector3(0, distanceToWater, 0)
+                matKind = material_kinds.getWaterMatKind()
+            else:
+                testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
+                if testRes is None:
+                    return
+                position = testRes.closestPoint
+                matKind = testRes.matKind
+            BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=matKind, start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
+            return
 
 
 class ShowShootingMultiGun(ShowShooting):
@@ -201,6 +206,8 @@ class ShowShootingMultiGun(ShowShooting):
     def __doRecoil(self, data):
         vehicle = data['entity']
         appearance = vehicle.appearance
+        if not (appearance.isConstructed and appearance.isAlive):
+            return
         gunIndexes = data['_gunIndex']
         appearance.multiGunRecoil(gunIndexes)
 

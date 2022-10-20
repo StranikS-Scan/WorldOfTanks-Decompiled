@@ -61,6 +61,7 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+            app.containerManager.onViewLoadCanceled += self.__onViewLoadCanceled
         g_eventBus.addListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -71,6 +72,7 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+            app.containerManager.onViewLoadCanceled -= self.__onViewLoadCanceled
         g_eventBus.removeListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -445,6 +447,11 @@ class EventDispatcher(object):
             self.__loadingEvent = None
         if pyEntity.layer == WindowLayer.SUB_VIEW:
             self.updateUI(pyEntity.alias)
+        return
+
+    def __onViewLoadCanceled(self, key, item):
+        if key.alias == self.__loadingEvent:
+            self.__loadingEvent = None
         return
 
     def __getLoadedEvent(self):

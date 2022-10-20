@@ -35,7 +35,7 @@ from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, IEventBattlesController
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -217,6 +217,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventBattleCtrl = dependency.descriptor(IEventBattlesController)
     __resourceWell = dependency.descriptor(IResourceWellController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
@@ -333,6 +334,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _makeHeaderVO(self):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
+        if self.__eventBattleCtrl.isEventPrbActive():
+            return emptyHeaderVO
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
@@ -376,7 +379,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def isPersonalMissionEnabled(self):
-        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive()
+        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and not self.__eventBattleCtrl.isEventPrbActive()
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []

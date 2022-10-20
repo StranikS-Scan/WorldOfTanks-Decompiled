@@ -365,8 +365,20 @@ class _EventBattlesItem(_SelectorItem):
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
-        self._isVisible = self.__eventBattlesCtrl.isEnabled()
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES) or state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES_2)
+        self._isVisible = self._isEnabled()
+        self._isLocked = not self.__eventBattlesCtrl.isCurrentQueueEnabled()
+
+    @adisp_process
+    def _doSelect(self, dispatcher):
+        if self._isEnabled():
+            isSuccess = yield dispatcher.doSelectAction(PrbAction(self.getData()))
+            if isSuccess and self._isNew:
+                selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _isEnabled(self):
+        progressCtrl = self.__eventBattlesCtrl.getHWProgressCtrl()
+        return self.__eventBattlesCtrl.isAvailable() and progressCtrl and not progressCtrl.isPostPhase()
 
 
 class _BattleSelectorItems(object):
@@ -551,6 +563,11 @@ class _EventSquadItem(_SpecialSquadItem):
     @property
     def squadIcon(self):
         return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
+
+    def _update(self, state):
+        super(_EventSquadItem, self)._update(state)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES) or state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES_2)
+        self._isVisible = self.__eventBattlesCtrl.isEnabled()
 
 
 class _BattleRoyaleSquadItem(_SpecialSquadItem):
@@ -1028,7 +1045,7 @@ def _addEpicTrainingBattleType(items, lobbyContext=None):
 
 
 def _addEventBattlesType(items):
-    items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
+    items.append(_EventBattlesItem(backport.text(_R_BATTLE_TYPES.event()), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,

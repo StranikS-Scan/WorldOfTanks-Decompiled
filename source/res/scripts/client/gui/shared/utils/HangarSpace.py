@@ -173,6 +173,7 @@ class HangarSpace(IHangarSpace):
         self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
+        self.__isSelectionEnabled = False
         return
 
     @property
@@ -190,6 +191,10 @@ class HangarSpace(IHangarSpace):
     @property
     def spaceInited(self):
         return self.__spaceInited
+
+    @property
+    def isSelectionEnabled(self):
+        return self.__isSelectionEnabled
 
     @property
     def isCursorOver3DScene(self):
@@ -215,6 +220,9 @@ class HangarSpace(IHangarSpace):
 
     def updateAnchorsParams(self, *args):
         self.__space.updateAnchorsParams(*args)
+
+    def setSelectionEnabled(self, enabled):
+        self.__isSelectionEnabled = enabled
 
     def __onNotifyCursorOver3dScene(self, event):
         self.__isCursorOver3DScene = event.ctx.get('isOver3dScene', False)

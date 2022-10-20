@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_help.py
 import Keys
 from account_helpers.settings_core.settings_constants import CONTROLS
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.IngameDetailsHelpWindowMeta import IngameDetailsHelpWindowMeta
 from gui.Scaleform.daapi.view.meta.IngameHelpWindowMeta import IngameHelpWindowMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -96,7 +97,11 @@ class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
         if self.__ctx is None:
             return
         else:
-            self.__datailedList = detailed_help_pages.buildPagesData(self.__ctx)
+            arenaGuiType = self.__ctx.get('arenaGuiType')
+            if arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                self.__datailedList = detailed_help_pages.buildEventPagesData(self.__ctx)
+            else:
+                self.__datailedList = detailed_help_pages.buildPagesData(self.__ctx)
             if self.app is not None:
                 self.app.registerGuiKeyHandler(self)
                 if len(self.__datailedList) > 1:

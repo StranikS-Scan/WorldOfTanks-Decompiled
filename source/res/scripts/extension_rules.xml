@@ -25,6 +25,18 @@
       <type>	include	</type>
     </rule>
     <rule>
+      <pattern>	gui/html_templates\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	gui/messenger\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	gui/battle_hints\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
       <pattern>	.*/development/test_xml/.*/.*\.xml$	</pattern>
       <type>	include	</type>
     </rule>

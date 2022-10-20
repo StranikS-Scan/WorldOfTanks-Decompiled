@@ -800,11 +800,14 @@ class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
- 'cycleTimes'))):
+ 'cycleTimes',
+ 'levels',
+ 'queueSettings',
+ 'hangarSettings'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={})
+        defaults = dict(isEnabled=False, peripheryIDs=set(), primeTimes={}, seasons={}, cycleTimes=[], levels=[], queueSettings={}, hangarSettings={})
         defaults.update(kwargs)
         return super(_EventBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -1291,8 +1294,6 @@ class ServerSettings(object):
             self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
         if 'event_battles_config' in self.__serverSettings:
             self.__eventBattlesConfig = makeTupleByDict(_EventBattlesConfig, self.__serverSettings['event_battles_config'])
-        else:
-            self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
         if Configs.RESOURCE_WELL.value in self.__serverSettings:

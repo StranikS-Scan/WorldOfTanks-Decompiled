@@ -6,15 +6,16 @@ from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.badges import buildBadge
 
 class AvatarInfo(shared.ItemInfo):
-    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__badgesInfo', '__weakref__')
+    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__badgesInfo', '__weakref__', '__isPrematureLeave')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), **kwargs):
+    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, isPrematureLeave=False, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
         self.__avatarDamaged = avatarDamaged
         self.__avatarDamageDealt = avatarDamageDealt
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
+        self.__isPrematureLeave = isPrematureLeave
         self.__accRank = accRank
         self.__prevAccRank = prevAccRank
         if badges:
@@ -43,6 +44,10 @@ class AvatarInfo(shared.ItemInfo):
 
     def hasPenalties(self):
         return self.__fairplayViolations.hasPenalties()
+
+    @property
+    def isPrematureLeave(self):
+        return self.__isPrematureLeave
 
     @property
     def accRank(self):

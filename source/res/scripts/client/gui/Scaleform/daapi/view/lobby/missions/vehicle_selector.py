@@ -30,8 +30,8 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
     def getSuitableVehiclesCount(self):
         return self._carouselDP.getSuitableVehiclesCount()
 
-    def setCriteria(self, criteria, extraConditions):
-        self._carouselDP.setCriteria(criteria, extraConditions)
+    def setCriteria(self, criteria, extraConditions, isForEventBattle=False):
+        self._carouselDP.setCriteria(criteria, extraConditions, isForEventBattle)
         self.updateVehicles()
         self._carouselDP.applyFilter(forceApply=True)
 
@@ -58,11 +58,13 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
         super(MissionVehicleSelector, self).__init__()
         self._carousel = None
         self.__isQuestForBattleRoyale = False
+        self.__isQuestForEventBattle = False
         return
 
-    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False):
+    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False, isForEventBattle=False):
         self.__isQuestForBattleRoyale = isQuestForBattleRoyale
-        self._carousel.setCriteria(criteria, extraConditions)
+        self.__isQuestForEventBattle = isForEventBattle
+        self._carousel.setCriteria(criteria, extraConditions, isForEventBattle)
         self.__updateSelectedVehicle()
 
     def _populate(self):
@@ -99,7 +101,7 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
             title = ''
         else:
             if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
-                selectedVeh = getVehicleDataVO(vehicle)
+                selectedVeh = getVehicleDataVO(vehicle, canShowDailyXPFactor=not self.__isQuestForEventBattle)
                 status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
             elif suitableVehicles:
                 label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT
@@ -138,9 +140,11 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
         super(_MissionsCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__suitableVehiclesIDs = []
         self.__extraConditions = []
+        self.isForEventBattle = False
 
-    def setCriteria(self, criteria, extraConditions):
+    def setCriteria(self, criteria, extraConditions, isForEventBattle=False):
         self._baseCriteria = criteria
+        self.isForEventBattle = isForEventBattle
         self.__extraConditions = extraConditions
         self._filter.reset(exceptions=('inventory',))
 
@@ -162,9 +166,9 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
         super(_MissionsCarouselDataProvider, self)._buildVehicleItems()
 
     def _buildVehicle(self, vehicle):
-        vehicleVO = super(_MissionsCarouselDataProvider, self)._buildVehicle(vehicle)
+        vehicleVO = getVehicleDataVO(vehicle, canShowDailyXPFactor=not self.isForEventBattle)
         vehicleVO.update(isUseRightBtn=False)
-        xpFactor = self._itemsCache.items.shop.dailyXPFactor
+        xpFactor = self._itemsCache.items.shop.dailyXPFactor if not self.isForEventBattle else 1
         if vehicle.isInInventory and vehicle.activeInNationGroup:
             for condition in self.__extraConditions:
                 isOk, reason = condition.isAvailableReason(vehicle)

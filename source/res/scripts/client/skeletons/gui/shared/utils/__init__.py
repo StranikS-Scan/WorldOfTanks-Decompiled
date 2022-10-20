@@ -225,6 +225,10 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     @property
+    def isSelectionEnabled(self):
+        raise NotImplementedError
+
+    @property
     def isCursorOver3DScene(self):
         raise NotImplementedError
 
@@ -279,6 +283,9 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def getCentralPointForArea(self, areaID):
+        raise NotImplementedError
+
+    def setSelectionEnabled(self, enabled):
         raise NotImplementedError
 
     def getAnchorParams(self, slotId, areaId, regionId):

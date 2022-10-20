@@ -1,0 +1,23 @@
+<TeamBaseRecapturableUDO.def>
+  <Domain>	CELL	</Domain>
+  <NonChunk>	True	</NonChunk>
+  <SupportVSE>	True	</SupportVSE>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </team>
+    <baseID>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </baseID>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	50.0	</Default>
+      <Editable>	true	</Editable>
+    </radius>
+  </Properties>
+</TeamBaseRecapturableUDO.def>

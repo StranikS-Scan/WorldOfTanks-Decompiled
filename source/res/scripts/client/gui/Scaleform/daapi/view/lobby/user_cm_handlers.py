@@ -294,7 +294,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if not (self.__isSquadAlreadyCreated(PREBATTLE_TYPE.SQUAD) or self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EPIC)):
                 isEnabled = self.__epicCtrl.isCurrentCycleActive() if self.__epicCtrl.isEpicPrbActive() else True
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
-            if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
+            progressCtrl = self.__eventBattlesCtrl.getHWProgressCtrl()
+            if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT) and progressCtrl and not progressCtrl.isPostPhase():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
             if self.__battleRoyale.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):

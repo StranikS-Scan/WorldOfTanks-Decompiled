@@ -27,7 +27,8 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
         return
 
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
-        if self.__vehCheckAllowed:
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
+        if not isEventBattle and self.__vehCheckAllowed:
             allies = aliveAllies | deadAllies
             enemies = aliveEnemies | deadEnemies
             if allies and deadAllies == allies or enemies and deadEnemies == enemies:

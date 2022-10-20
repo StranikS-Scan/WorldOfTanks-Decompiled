@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/confirm_dialog.py
+from __future__ import absolute_import
 import logging
+from helpers import dependency
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
@@ -15,9 +17,11 @@ from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import Ammunit
 from gui.shared.money import ZERO_MONEY
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import AmmunitionBuyBottomContent
 from gui.shared.utils.requesters import REQ_CRITERIA
+from skeletons.gui.game_control import IEventBattlesController
 _logger = logging.getLogger(__name__)
 _SECTION_TO_FITTING_TYPE = {TankSetupConstants.BATTLE_BOOSTERS: FittingTypes.BOOSTER,
  TankSetupConstants.CONSUMABLES: FittingTypes.EQUIPMENT,
+ TankSetupConstants.HWCONSUMABLES: FittingTypes.EQUIPMENT,
  TankSetupConstants.OPT_DEVICES: FittingTypes.OPTIONAL_DEVICE,
  TankSetupConstants.BATTLE_ABILITIES: FittingTypes.BATTLE_ABILITY}
 
@@ -133,3 +137,26 @@ class TankSetupExitConfirmDialog(TankSetupConfirmDialog):
 
     def __isChangedInInventory(self):
         return any((cachedItem.isInInventory != self._itemsCache.items.getItemByCD(cachedItem.intCD).isInInventory for cachedItem in self.items))
+
+
+class HWTankSetupExitConfirmDialog(TankSetupExitConfirmDialog):
+    _eventBattlesController = dependency.descriptor(IEventBattlesController)
+
+    def _onLoading(self, *args, **kwargs):
+        super(HWTankSetupExitConfirmDialog, self)._onLoading(*args, **kwargs)
+        self._isEventHangar = self._eventBattlesController.isEventHangar()
+        self._eventBattlesController.onEventDisabled += self._onEventDisabled
+        self._eventBattlesController.onCompleteActivePhase += self._onCompleteActivePhase
+
+    def _finalize(self):
+        self._eventBattlesController.onEventDisabled -= self._onEventDisabled
+        self._eventBattlesController.onCompleteActivePhase -= self._onCompleteActivePhase
+        super(HWTankSetupExitConfirmDialog, self)._finalize()
+
+    def _onCompleteActivePhase(self):
+        progressCtrl = self._eventBattlesController.getHWProgressCtrl()
+        if not progressCtrl or progressCtrl.isPostPhase():
+            self._onCancelClicked()
+
+    def _onEventDisabled(self):
+        self._onCancelClicked()

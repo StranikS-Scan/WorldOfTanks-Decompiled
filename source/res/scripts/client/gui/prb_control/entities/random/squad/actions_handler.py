@@ -53,7 +53,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
                                 return
 
             self._setCreatorReady()
-        elif not fullData.playerInfo.isReady:
+        elif not fullData.playerInfo.isReady and self._checkVehicleAmmo():
             checkVehicleAmmoFull(g_currentVehicle.item, self._checkVehicleAmmoCallback)
         else:
             self._entity.togglePlayerReadyAction(True)

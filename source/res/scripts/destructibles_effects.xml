@@ -5656,6 +5656,61 @@
         </effects>
       </variant1>
     </hd_env_UNI_663_FactoryFurniture_09_01_hit>
+    <hd_env_UNI_668_PumpkinHalloween>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_uni_668_pumpkinhalloween.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	amb_map_witches_pumpkin_smash	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_668_PumpkinHalloween>
+    <hd_env_UNI_668_PumpkinHalloween_big>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_uni_668_pumpkinhalloween_big.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	amb_map_witches_pumpkin_smash	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_668_PumpkinHalloween_big>
+    <hd_env_AM_036_Scarecrow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_am_036_scarecrow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	amb_map_witches_scarecrow_destroy	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_036_Scarecrow>
     <hd_env_UNI_032_Loom_01>
       <variant1>
         <stages>
@@ -41061,6 +41116,24 @@
         </effects>
       </variant1>
     </inf_bld_112_04_TrocaderoFountain_03_01_hit>
+    <inf_envAM_035_Scarecrow_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_035_Scarecrow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_hay_stack	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_035_Scarecrow_01>
     <hd_bld_AF_004_VHouse_01>
       <variant1>
         <stages>

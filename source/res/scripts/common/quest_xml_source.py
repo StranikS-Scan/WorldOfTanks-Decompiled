@@ -112,7 +112,8 @@ class Source(object):
             eventType = EVENT_TYPE.NAME_TO_TYPE[typeName]
             mainNode = XMLNode('main')
             mainNode.info = info = self.__readHeader(eventType, questSection, curTime, gStartTime, gFinishTime)
-            if not info['announceTime'] <= curTime <= info['finishTime']:
+            noSkip = questSection.readBool('noSkip', False)
+            if not (noSkip or info['announceTime'] <= curTime <= info['finishTime']):
                 LOG_WARNING('Skipping outdated quest', info['id'], curTime, info['announceTime'], info['finishTime'])
                 continue
             if eventType == EVENT_TYPE.GROUP:
@@ -284,6 +285,7 @@ class Source(object):
          'startTime': startTime if not tOption else time.time() - 300,
          'finishTime': finishTime,
          'announceTime': announceTime,
+         'noSkip': questSection.readBool('noSkip', False),
          'disableGui': questSection.readBool('disableGui', False),
          'showCongrats': showCongrats,
          'requiredToken': requiredToken,
@@ -433,6 +435,8 @@ class Source(object):
              'consumables': self.__readBattleResultsConditionList,
              'equipment': self.__readCondition_consumables,
              'equipmentCount': self.__readBattleResultsConditionList,
+             'hwUsedConsumables': self.__readBattleResultsConditionList,
+             'hwEquipment': self.__readCondition_consumables,
              'goodies': self.__readBattleResultsConditionList,
              'goodiesCount': self.__readBattleResultsConditionList,
              'correspondedCamouflage': self.__readConditionComplex_true,
@@ -576,7 +580,7 @@ class Source(object):
     def __readCondition_consumables(self, _, section, node):
         modules = set()
         name = section.asString
-        if node.name == 'equipment':
+        if node.name == 'equipment' or node.name == 'hwEquipment':
             idx = vehicles.g_cache.equipmentIDs()[name]
             modules.add(vehicles.g_cache.equipments()[idx].compactDescr)
         else:

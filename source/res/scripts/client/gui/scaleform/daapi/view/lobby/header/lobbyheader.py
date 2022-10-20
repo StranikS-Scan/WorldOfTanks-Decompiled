@@ -203,6 +203,7 @@ class _LobbyHeaderVisibilityHelper(object):
 
 
 class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
+    __eventBattleCtrl = dependency.descriptor(IEventBattlesController)
     __PREM_WARNING_LIMIT = time_utils.ONE_DAY
 
     class BUTTONS(CONST_CONTAINER):
@@ -297,6 +298,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__visibility = HeaderMenuVisibilityState.ALL
         self.__menuVisibilityHelper = _LobbyHeaderVisibilityHelper()
         self._renewableSubInfo = BigWorld.player().renewableSubscription
+        self.__inEvent = None
         return
 
     @property
@@ -317,6 +319,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def onPrbEntitySwitched(self):
         self._updatePrebattleControls()
+        self.__updateVisibilityOnEntitySwitched()
 
     def onDequeued(self, *_):
         self._updatePrebattleControls()
@@ -1075,7 +1078,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isSquadEnabled = isInSquad or self.prbDispatcher.getEntity().getPermissions().canCreateSquad()
             self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, isEnabled=isSquadEnabled)
             isNavigationEnabled = not state.isNavigationDisabled()
-            isEvent = state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.EVENT)
+            isEvent = state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.EVENT) or state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES_2)
             isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED)
             isSandbox = state.isInPreQueue(constants.QUEUE_TYPE.SANDBOX)
             isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC) or state.isInUnit(constants.PREBATTLE_TYPE.EPIC)
@@ -1099,7 +1102,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INMAPBOXSQUAD
                         else:
                             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_MAPBOXSQUAD
-                    elif isInSquad or isEvent:
+                    elif isEvent:
+                        if isInSquad:
+                            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
+                        else:
+                            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_EVENTSQUAD
+                    elif isInSquad:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_INSQUAD
                     elif isRanked:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
@@ -1115,7 +1123,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltip = ''
                     if isComp7 and canDoMsg == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
                         tooltip = MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET
-                hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, BONUS_CAPS.SQUADS))
+                hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2, BONUS_CAPS.SQUADS))
                 isEventSquadEnable = isEvent and hasEventSquadCap
                 hasPopover = self.platoonCtrl.hasWelcomeWindow() or self.platoonCtrl.canSelectSquadSize()
                 self.as_updateSquadS(isInSquad=isInSquad, tooltip=tooltip, tooltipType=TOOLTIP_TYPES.COMPLEX, isEvent=isEventSquadEnable, icon=squadSelected.squadIcon if hasattr(squadSelected, 'squadIcon') else None, hasPopover=hasPopover, data=extendedSquadInfoVo._asdict())
@@ -1124,8 +1132,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             if self.__isFightBtnDisabled and not state.hasLockedState:
                 if isSandbox:
                     tooltipData = getSandboxTooltipData(result)
-                elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                    tooltipData = getEventTooltipData()
+                elif isEvent:
+                    tooltipData = getEventTooltipData(state, canDoMsg)
                 elif g_currentVehicle.isTooHeavy():
                     tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
                 elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1147,7 +1155,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 elif isMapsTraining:
                     tooltipData = getMapsTrainingTooltipData()
                 elif isRandom or isLegacyTraining:
-                    tooltipData = getRandomTooltipData(result)
+                    tooltipData = getRandomTooltipData(result, g_currentVehicle.isEvent)
                 elif isComp7:
                     tooltipData = getComp7FightBtnTooltipData(result)
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
@@ -1191,6 +1199,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']
+        self.__toggleVisibilityMenu(state)
+
+    def __toggleVisibilityMenu(self, state):
         self.__menuVisibilityHelper.updateStates(state)
         activeState = self.__menuVisibilityHelper.getActiveState()
         self.as_toggleVisibilityMenuS(activeState)
@@ -1641,6 +1652,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 AccountSettings.setSessionSettings(ACTIVE_TEST_PARTICIPATION_CONFIRMED, True)
             callback(result)
         callback(True)
+
+    def __updateVisibilityOnEntitySwitched(self):
+        isEvent = self.__eventBattleCtrl.isEventPrbActive()
+        if isEvent != self.__inEvent:
+            state = HeaderMenuVisibilityState.NOTHING if isEvent else HeaderMenuVisibilityState.ALL
+            self.__toggleVisibilityMenu(state)
+        self.__inEvent = isEvent
 
 
 class _BoosterInfoPresenter(object):

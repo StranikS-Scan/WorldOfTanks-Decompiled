@@ -15,7 +15,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.settings import VEHICLE_LEVELS, FUNCTIONAL_FLAG
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -62,11 +63,14 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         customParams = carousel.getCustomParams()
         customParams['isRanked'] = self._isRanked
         customParams['isComp7'] = self._isComp7
-        self.__mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',))), (carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',))), carousel.hasRoles(), **customParams)
+        dispatcher = g_prbLoader.getDispatcher()
+        isEventMode = dispatcher is not None and bool(dispatcher.getEntity().getModeFlags() & FUNCTIONAL_FLAG.EVENT)
+        self.__mapping = self._generateMapping((carousel.hasRentedVehicles() or not carousel.filter.isDefault(('rented',))), (isEventMode and carousel.hasEventVehicles() or not carousel.filter.isDefault(('event',))), carousel.hasRoles(), **customParams)
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
         self._carousel = carousel
         self._carousel.setPopoverCallback(self.__onCarouselSwitched)
         self._update(isInitial=True)
+        return
 
     def changeFilter(self, sectionId, itemId):
         if self._carousel is not None and self._carousel.filter is not None:

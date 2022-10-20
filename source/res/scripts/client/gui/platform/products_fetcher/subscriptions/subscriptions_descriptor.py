@@ -77,7 +77,7 @@ class PrimeGamingDescriptor(SubscriptionDescriptor):
     def getPrimeGamingQuest(self):
         if self.__primeGamingQuest:
             return self.__primeGamingQuest
-        quests = self.__eventsCache.getQuests(self.__twitchFilterFunc)
+        quests = self.__eventsCache.getAllQuests(self.__twitchFilterFunc)
         for quest in quests.values():
             conditionTokens = quest.accountReqs.getTokens()
             isPrimeGamingQuest = all((self.__PRIME_GAMING_FILTER_STR in token.getID() for token in conditionTokens))
@@ -89,7 +89,7 @@ class PrimeGamingDescriptor(SubscriptionDescriptor):
     def getOfferToken(self):
         if self._offerToken:
             return self._offerToken
-        quests = self.__eventsCache.getQuests(self.__twitchFilterFunc)
+        quests = self.__eventsCache.getAllQuests(self.__twitchFilterFunc)
         for quest in quests.values():
             bonuses = quest.getBonuses('tokens')
             for bonus in bonuses:

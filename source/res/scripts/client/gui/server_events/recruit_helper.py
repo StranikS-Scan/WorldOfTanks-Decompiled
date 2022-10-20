@@ -64,6 +64,7 @@ class RecruitSourceID(object):
     TWITCH_31 = 'twitch31'
     TWITCH_32 = 'twitch32'
     TWITCH_33 = 'twitch33'
+    TWITCH_34 = 'twitch34'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -103,7 +104,8 @@ class RecruitSourceID(object):
      TWITCH_30,
      TWITCH_31,
      TWITCH_32,
-     TWITCH_33)
+     TWITCH_33,
+     TWITCH_34)
 
 
 _NEW_SKILL = 'new_skill'
@@ -342,7 +344,9 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
             return Tankman.SabatonTankmanSkill
         if self.__hasTagInTankmenGroup(nationID, nationGroup, SPECIAL_CREW_TAG.OFFSPRING):
             return Tankman.OffspringTankmanSkill
-        return Tankman.YhaTankmanSkill if self.__hasTagInTankmenGroup(nationID, nationGroup, SPECIAL_CREW_TAG.YHA) else super(_TokenRecruitInfo, self)._getTankmanSkill()
+        if self.__hasTagInTankmenGroup(nationID, nationGroup, SPECIAL_CREW_TAG.YHA):
+            return Tankman.YhaTankmanSkill
+        return Tankman.WitchesTankmanSkill if self.__hasTagInTankmenGroup(nationID, nationGroup, SPECIAL_CREW_TAG.WITCHES_CREW) else super(_TokenRecruitInfo, self)._getTankmanSkill()
 
     def __parseTankmanData(self, nationID):
         empty = ([],

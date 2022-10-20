@@ -49,6 +49,7 @@ class ENTRY_SYMBOL_NAME(object):
     MARK_OBJECTIVE_REPLY_DEF = 'PositionDefendReplyEntry'
     MARK_OBJECTIVE_REPLY_ATK = 'PositionAttackReplyEntry'
     MARK_POSITION = 'PositionFlashEntry'
+    MARK_POSITION_HW = 'HWPositionFlashEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
     ARTY_HIT_DOT_MARKER = 'ArtyHitDotMarkerUI'
     LOCATION_MARKER = 'MarkGoingToPositionEntryUI'

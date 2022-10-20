@@ -12,7 +12,7 @@ from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
-from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted
+from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted
 from items.vehicles import VehicleDescr
 from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -29,7 +29,8 @@ _VoiceoverParams = namedtuple('_VoiceoverParams', ['languageMode', 'genderSwitch
 _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
  'female': CREW_GENDER_SWITCHES.FEMALE}
 _isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted,
- SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted}
+ SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted,
+ SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted}
 
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -84,8 +85,8 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
             isFemale = False
             crewGroups = vehiclePublicInfo.crewGroups
             if crewGroups:
-                groupID, isFemale, isPremium = tankmen.unpackCrewParams(crewGroups[0])
-                if self.__setSpecialVoiceByTankmen(nationID, groupID, isPremium, crewGroups):
+                _, isFemale, _ = tankmen.unpackCrewParams(crewGroups[0])
+                if self.__setSpecialVoiceByTankmen(vehicleType, crewGroups):
                     return
             else:
                 _logger.error('There is not information about vehicle commander to extract correct sound mode')
@@ -149,7 +150,8 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
                     if specialModesSection is not None:
                         self.__voiceoverSpecialModes[tag] = sModes = {}
                         for condition, sMode in specialModesSection.items():
-                            sModes[condition] = _VoiceoverParams(sMode.asString, gender, onlyInNational)
+                            sModeTag = sMode.readString(CURRENT_REALM) or sMode.asString
+                            sModes[condition] = _VoiceoverParams(sModeTag, gender, onlyInNational)
 
             arenaMusicSection = rootSection['arenaMusic']
             if arenaMusicSection is not None:
@@ -175,11 +177,13 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
                 return True
         return False
 
-    def __setSpecialVoiceByTankmen(self, nationID, groupID, isPremium, crewGroups):
+    def __setSpecialVoiceByTankmen(self, vehicleType, crewGroups):
         specialVoiceParams = None
+        groupID, _, isPremium = tankmen.unpackCrewParams(crewGroups[0])
+        nationID, _ = vehicleType.id
         for tag in self.__voiceoverSpecialModes:
             if tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
-                specialVoiceParams = self.__getSpecialModeForCrew(tag, nationID, isPremium, crewGroups)
+                specialVoiceParams = self.__getSpecialModeForCrew(tag, vehicleType, crewGroups)
                 if specialVoiceParams is not None:
                     break
         else:
@@ -213,9 +217,9 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         self.__currentMode = params
         SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
 
-    def __getSpecialModeForCrew(self, tag, nationID, isPremium, crewGroups):
+    def __getSpecialModeForCrew(self, tag, vehicleType, crewGroups):
         if tag not in self.__voiceoverSpecialModes:
             return None
         else:
             crewChecker = _isFullCrewCheckers.get(tag)
-            return self.__voiceoverSpecialModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(nationID, isPremium, crewGroups) else None
+            return self.__voiceoverSpecialModes[tag].get(_FULL_CREW_CONDITION) if crewChecker is not None and crewChecker(vehicleType, crewGroups) else None

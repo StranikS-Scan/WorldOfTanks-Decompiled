@@ -42,6 +42,10 @@ class FunRandomSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (8, 10)
 
 
+class HWSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (6, 8)
+
+
 class Comp7Slot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (10, 10)
 
@@ -64,10 +68,10 @@ class SpecRoster(BaseUnitRoster):
 
 
 class EventRoster(BaseUnitRoster):
-    MAX_SLOTS = 5
-    MAX_EMPTY_SLOTS = 4
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = HWSlot
+    DEFAULT_SLOT_PACK = HWSlot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 

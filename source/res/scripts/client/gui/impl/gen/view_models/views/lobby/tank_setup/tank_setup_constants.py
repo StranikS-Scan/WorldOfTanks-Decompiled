@@ -7,6 +7,7 @@ class TankSetupConstants(ViewModel):
     OPT_DEVICES = 'optDevices'
     SHELLS = 'shells'
     CONSUMABLES = 'consumables'
+    HWCONSUMABLES = 'HWConsumables'
     BATTLE_BOOSTERS = 'battleBoosters'
     BATTLE_ABILITIES = 'battleAbilities'
     TOGGLE_SHELLS = 'toggleShells'

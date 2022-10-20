@@ -21,6 +21,8 @@ NOTIFICATIONS_LISTENERS = 17
 NOTIFICATIONS_ACTIONS_HANDLERS = 18
 MOD_SELECTOR_ITEM = 19
 ENTRY_POINT_VALIDATOR = 20
+STATS_COMPOSER = 21
+CAN_SELECT_PRB_ENTITY = 22
 
 class _CollectEventsManager(object):
 
@@ -325,3 +327,27 @@ def registerEntryPointValidator(alias, validator):
 
 def collectEntryPointValidator(alias):
     return __collectEM.handleEvent((ENTRY_POINT_VALIDATOR, alias), ctx={}).get('validator')
+
+
+def registerStatsComposerByArenaBonusType(arenaBonusType, composerCls):
+
+    def onCollect(ctx):
+        ctx['composer'] = composerCls
+
+    __collectEM.addListener((STATS_COMPOSER, arenaBonusType), onCollect)
+
+
+def collectStatsComposerByArenaBonusType(arenaBonusType):
+    return __collectEM.handleEvent((STATS_COMPOSER, arenaBonusType), ctx={}).get('composer')
+
+
+def registerCanSelectPrbEntity(queueType, itemFun):
+
+    def onCollect(ctx):
+        ctx['itemFun'] = itemFun
+
+    __collectEM.addListener((CAN_SELECT_PRB_ENTITY, queueType), onCollect)
+
+
+def collectCanSelectPrbEntity(queueType):
+    return __collectEM.handleEvent((CAN_SELECT_PRB_ENTITY, queueType), ctx={}).get('itemFun', lambda *args, **kwargs: True)

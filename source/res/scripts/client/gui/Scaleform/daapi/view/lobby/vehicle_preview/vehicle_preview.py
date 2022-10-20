@@ -496,7 +496,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 self.onBackClick()
             elif event.ctx.get('close', False):
                 self.closeView()
-        self.destroy()
+        self.closeView()
         return
 
     def _processBackClick(self, ctx=None):

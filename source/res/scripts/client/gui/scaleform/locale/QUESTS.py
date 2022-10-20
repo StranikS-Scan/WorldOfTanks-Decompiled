@@ -660,6 +660,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_POSTBATTLE_DAILYRESET = '#quests:details/conditions/postBattle/dailyReset'
     DETAILS_CONDITIONS_CUMULATIVE_HEALTH = '#quests:details/conditions/cumulative/health'
     DETAILS_CONDITIONS_CUMULATIVE_XP = '#quests:details/conditions/cumulative/xp'
+    DETAILS_CONDITIONS_CUMULATIVE_HWXP = '#quests:details/conditions/cumulative/hwXP'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTHITS = '#quests:details/conditions/cumulative/directHits'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTENEMYHITS = '#quests:details/conditions/cumulative/directEnemyHits'
     DETAILS_CONDITIONS_CUMULATIVE_ENEMYHITS = '#quests:details/conditions/cumulative/enemyHits'

@@ -33,7 +33,7 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
         self._baseCriteria = REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.WOTPLUS_RENT ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT | REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.TELECOM
 
     def _addCriteria(self):
-        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE)
+        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
 
     def applyFilter(self, forceApply=False):
         pass

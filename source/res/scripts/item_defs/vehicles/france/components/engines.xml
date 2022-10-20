@@ -114,6 +114,9 @@
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
+    <Panhard_12H_6000_54_HW>	0	</Panhard_12H_6000_54_HW>
+    <Hotchkiss_V6_mle_50_HW>	14	</Hotchkiss_V6_mle_50_HW>
+    <Panhard_4E_HW>	35	</Panhard_4E_HW>
   </ids>
   <shared>
     <Somua_S-40>
@@ -2002,5 +2005,56 @@
       <rpm_max>	2149	</rpm_max>
       <notInShop>	True	</notInShop>
     </_6F11SRY_MapsTraining_Dummy_SPG_2>
+    <Panhard_12H_6000_54_HW>
+      <userString>	#france_vehicles:Panhard_12H_6000_54	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	525	</power>
+      <weight>	279	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_12H_6000_54_HW>
+    <Hotchkiss_V6_mle_50_HW>
+      <userString>	#france_vehicles:Hotchkiss_V6_mle_50	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	42000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	525	</power>
+      <weight>	800	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Hotchkiss_V6_mle_50_HW>
+    <Panhard_4E_HW>
+      <userString>	#france_vehicles:Panhard_4E	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	23500	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	315	</power>
+      <weight>	300	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Panhard_4E_HW>
   </shared>
 </engines.xml>

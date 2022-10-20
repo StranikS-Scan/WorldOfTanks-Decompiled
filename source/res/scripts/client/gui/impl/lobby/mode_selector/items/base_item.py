@@ -171,7 +171,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
     def hasExtendedCalendarTooltip(self):
         return False
 
-    def getExtendedCalendarTooltip(self, parentWindow):
+    def getExtendedCalendarTooltip(self, parentWindow, event=None):
         return []
 
     def _isNeedToHideCard(self):

@@ -88,6 +88,7 @@ class StorageCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.RENT
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     def _buildVehicle(self, item):
         return getStorageVehicleVo(item)

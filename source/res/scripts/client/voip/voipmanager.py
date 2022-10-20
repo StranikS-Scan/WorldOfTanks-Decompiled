@@ -637,7 +637,8 @@ class VOIPManager(VOIPHandler):
             return not (arena is not None and arena.guiType in (ARENA_GUI_TYPE.RANDOM,
              ARENA_GUI_TYPE.EPIC_RANDOM,
              ARENA_GUI_TYPE.EPIC_BATTLE,
-             ARENA_GUI_TYPE.COMP7))
+             ARENA_GUI_TYPE.COMP7,
+             ARENA_GUI_TYPE.EVENT_BATTLES))
         else:
             return True
 

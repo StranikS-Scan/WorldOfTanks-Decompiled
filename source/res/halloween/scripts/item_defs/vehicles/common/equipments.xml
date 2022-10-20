@@ -1,0 +1,261 @@
+<equipments.xml>
+  <damageShield>
+    <id>	20000	</id>
+    <userString>	#halloween.artefacts.extend:damageShield/name	</userString>
+    <description>	#halloween.artefacts.extend:damageShield/descr	</description>
+    <icon>	hw22_shield 0 0	</icon>
+    <soundNotification>	vo_hw_witch_gp_ability_magical_shield_ready	</soundNotification>
+    <soundNotificationActive>	vo_hw_witch_gp_ability_magical_shield_on	</soundNotificationActive>
+    <activationWWSoundFeedback>	ev_halloween_witches_ability_shield_on	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_witches_ability_shield_off	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	3	</durationSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	damageShield	</buffs>
+    </script>
+  </damageShield>
+  <hpRepairAndCrewHeal>
+    <id>	20001	</id>
+    <userString>	#halloween.artefacts.extend:hpRepairAndCrewHeal/name	</userString>
+    <description>	#halloween.artefacts.extend:hpRepairAndCrewHeal/descr	</description>
+    <icon>	hw22_hpRepair 0 0	</icon>
+    <soundNotification>	vo_hw_witch_gp_ability_healing_ready	</soundNotification>
+    <soundNotificationActive>	vo_hw_witch_gp_ability_healing_on	</soundNotificationActive>
+    <activationWWSoundFeedback>	ev_halloween_witches_ability_healing	</activationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale hpRepairAndCrewHeal halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HpRepairAndCrewHealEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	40	</cooldownSeconds>
+      <durationSeconds>	0.1	</durationSeconds>
+      <isInterruptable>	true	</isInterruptable>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	enlargeHealth	</buffs>
+    </script>
+  </hpRepairAndCrewHeal>
+  <halloweenNitro>
+    <id>	20003	</id>
+    <userString>	#halloween.artefacts.extend:halloweenNitro/name	</userString>
+    <description>	#halloween.artefacts.extend:halloweenNitro/descr	</description>
+    <icon>	hw22_nitro 0 0	</icon>
+    <soundNotification>	vo_hw_witch_gp_ability_booster_ready	</soundNotification>
+    <soundNotificationActive>	vo_hw_witch_gp_ability_booster_on	</soundNotificationActive>
+    <activationWWSoundFeedback>	ev_halloween_witches_ability_booster_on	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_witches_ability_booster_off	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	10	</durationSeconds>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	nitro_{class}_{lvl}	</buffs>
+    </script>
+  </halloweenNitro>
+  <multiplyGunReloadTime>
+    <id>	20004	</id>
+    <userString>	#halloween.artefacts.extend:multiplyGunReloadTime/name	</userString>
+    <description>	#halloween.artefacts.extend:multiplyGunReloadTime/descr	</description>
+    <icon>	hw22_instantReload 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownSeconds>	0	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	multiplyGunReloadTime	</buffs>
+    </script>
+  </multiplyGunReloadTime>
+  <superShellFireball>
+    <id>	20100	</id>
+    <userString>	#halloween.artefacts.extend:superShellFireball/name	</userString>
+    <description>	#halloween.artefacts.extend:superShellFireball/descr	</description>
+    <icon>	hw22_superShellFireball 0 0	</icon>
+    <soundNotification>	vo_hw_witch_gp_ability_fiery_shot_ready	</soundNotification>
+    <soundNotificationActive>	vo_hw_witch_gp_ability_fiery_shot_on	</soundNotificationActive>
+    <activationWWSoundFeedback>	ev_halloween_witches_ability_fire_shells_act	</activationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale superShell halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.SuperShell	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <buffs>	fireball	</buffs>
+      <durationSeconds>	1	</durationSeconds>
+      <shotsCount>	1	</shotsCount>
+    </script>
+  </superShellFireball>
+  <damageVehicleModules>
+    <id>	20006	</id>
+    <userString>	#halloween.artefacts.extend:damageVehicleModules/name	</userString>
+    <description>	#halloween.artefacts.extend:damageVehicleModules/descr	</description>
+    <icon>	hw22_damageVehicleModules 0 0	</icon>
+    <soundNotification>	vo_hw_witch_gp_ability_damage_shot_ready	</soundNotification>
+    <soundNotificationActive>	vo_hw_witch_gp_ability_damage_shot_on	</soundNotificationActive>
+    <activationWWSoundFeedback>	ev_halloween_witches_ability_breaking_shells_act	</activationWWSoundFeedback>
+    <deactivationWWSoundFeedback>	ev_halloween_witches_ability_breaking_shells_shot	</deactivationWWSoundFeedback>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale superShell halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.SuperShell	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <buffs>	damageModules	</buffs>
+      <durationSeconds>	1	</durationSeconds>
+      <shotsCount>	1	</shotsCount>
+      <ownerBuffs>	moduleDamageShellOwnerVisual	</ownerBuffs>
+      <ownerDurationSeconds>	0.5	</ownerDurationSeconds>
+    </script>
+  </damageVehicleModules>
+  <enlargeMaxHealth>
+    <id>	20005	</id>
+    <userString>	#halloween.artefacts.extend:enlargeMaxHealth/name	</userString>
+    <description>	#halloween.artefacts.extend:enlargeMaxHealth/descr	</description>
+    <icon>	hw22_enlargeMaxHealth 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	0	</durationSeconds>
+      <cooldownSeconds>	0	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	enlargeMaxHealth	</buffs>
+    </script>
+  </enlargeMaxHealth>
+  <halloweenRamBoost>
+    <id>	20007	</id>
+    <userString>	#halloween.artefacts.extend:halloweenRamBoost/name	</userString>
+    <description>	#halloween.artefacts.extend:halloweenRamBoost/descr	</description>
+    <icon>	hw22_ramBoost 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	0	</durationSeconds>
+      <cooldownSeconds>	0	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	boostRamming	</buffs>
+    </script>
+  </halloweenRamBoost>
+  <halloweenBullseye>
+    <id>	20008	</id>
+    <userString>	#halloween.artefacts.extend:halloweenBullseye/name	</userString>
+    <description>	#halloween.artefacts.extend:halloweenBullseye/descr	</description>
+    <icon>	hw22_bullseye 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	notForSale halloween_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	6	</minLevel>
+          <maxLevel>	8	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.BuffEquipment	  <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <durationSeconds>	0	</durationSeconds>
+      <cooldownSeconds>	0	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <buffs>	bullseye	</buffs>
+    </script>
+  </halloweenBullseye>
+  <halloweenEmptySlot0>
+    <id>	24040	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	halloween_equipment empty_slot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot0>
+  <halloweenEmptySlot1>
+    <id>	24041	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	halloween_equipment empty_slot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot1>
+  <halloweenEmptySlot2>
+    <id>	24042	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	halloween_equipment empty_slot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot2>
+</equipments.xml>

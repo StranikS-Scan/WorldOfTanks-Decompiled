@@ -38,6 +38,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IEventBattlesController
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 if typing.TYPE_CHECKING:
@@ -58,6 +59,7 @@ class ModeSelectorView(ViewImpl):
     __bootcamp = dependency.descriptor(IBootcampController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
+    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
     __tooltipByContentID = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
@@ -98,7 +100,7 @@ class ModeSelectorView(ViewImpl):
                 body = modeSelectorItem.disabledTooltipText
                 if tooltipId == ModeSelectorTooltipsConstants.CALENDAR_TOOLTIP:
                     if modeSelectorItem.hasExtendedCalendarTooltip:
-                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow())
+                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow(), event)
                     body = modeSelectorItem.calendarTooltipText
                 return self.__createSimpleTooltip(event, body=body)
             if tooltipId == ModeSelectorTooltipsConstants.RANDOM_BP_PAUSED_TOOLTIP:
@@ -154,6 +156,7 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
         self.viewModel.onInfoClicked += self.__infoClickHandler
         self.__dataProvider.onListChanged += self.__dataProviderListChangeHandler
+        self.__eventBattlesCtrl.onPrimeTimeStatusUpdated += self.__updateEventStatus
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -183,6 +186,7 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.onInfoClicked -= self.__infoClickHandler
         saveBattlePassStateForItems(self.__dataProvider.itemList)
         self.__dataProvider.onListChanged -= self.__dataProviderListChangeHandler
+        self.__eventBattlesCtrl.onPrimeTimeStatusUpdated -= self.__updateEventStatus
         self.__dataProvider.dispose()
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': False}))
@@ -212,6 +216,10 @@ class ModeSelectorView(ViewImpl):
     def __dataProviderListChangeHandler(self):
         with self.viewModel.transaction() as tx:
             self.__updateViewModel(tx)
+
+    def __updateEventStatus(self, status):
+        self.__dataProvider.fullUpdate()
+        self.__dataProviderListChangeHandler()
 
     def __updateViewModel(self, vm):
         vm.setIsMapSelectionVisible(self.__dataProvider.isDemonstrator)

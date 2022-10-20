@@ -415,7 +415,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__replayURL')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__replayURL', '__hwPhase', '__hwQuestProgress')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -440,9 +440,19 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__dogTags = {}
         self.__goldBankGain = 0
         self.__replayURL = ''
+        self.__hwPhase = 0
+        self.__hwQuestProgress = {}
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
+
+    @property
+    def hwPhase(self):
+        return self.__hwPhase
+
+    @property
+    def hwQuestProgress(self):
+        return self.__hwQuestProgress
 
     @property
     def avatar(self):
@@ -597,6 +607,8 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__dogTags.update(infoAvatar.get('dogTags', {}))
             self.__goldBankGain = infoAvatar.get('goldBankGain', 0)
             self.__replayURL = infoAvatar.get('replayURL', '')
+            self.__hwPhase = infoAvatar.get('hw_phase', 0)
+            self.__hwQuestProgress = infoAvatar.get('hw_quest_progress', {})
         for item in items:
             intCD = item.intCD
             data = info[intCD]

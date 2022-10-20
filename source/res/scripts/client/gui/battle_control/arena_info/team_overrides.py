@@ -108,6 +108,6 @@ def makeOverrides(isEnemy, team, personal, arenaVisitor, isReplayPlaying=False):
     if isEnemy:
         ctx = DefaultTeamOverrides(team, personal, isReplayPlaying=isReplayPlaying)
     else:
-        isVoipSupported = arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isInEpicRange()
+        isVoipSupported = arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isInEpicRange() or arenaVisitor.gui.isEventBattle()
         ctx = PlayerTeamOverrides(team, personal, isVoipSupported=isVoipSupported, isReplayPlaying=isReplayPlaying)
     return ctx

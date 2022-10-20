@@ -969,6 +969,8 @@ class TOOLTIPS(object):
     LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = '#tooltips:loby_messenger/new/channels_carousel_button_right/body'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER = '#tooltips:lobby/header/buyPremiumAccount/disabled/header'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY = '#tooltips:lobby/header/buyPremiumAccount/disabled/body'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_HEADER = '#tooltips:loby_messenger/btnReferralDisabled/header'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_BODY = '#tooltips:loby_messenger/btnReferralDisabled/body'
     TRAINING_CREATE_INVITES_CHECKBOX_HEADER = '#tooltips:training/create/invites_checkbox/header'
     TRAINING_CREATE_INVITES_CHECKBOX_BODY = '#tooltips:training/create/invites_checkbox/body'
     TRAINING_OBSERVER_BTN_HEADER = '#tooltips:training/observer/btn/header'
@@ -1677,6 +1679,7 @@ class TOOLTIPS(object):
     CONTACT_STATUS_INBATTLE_HISTORICAL = '#tooltips:Contact/status/inBattle/historical'
     CONTACT_STATUS_INBATTLE_FORTIFICATIONS = '#tooltips:Contact/status/inBattle/fortifications'
     CONTACT_STATUS_INBATTLE_SPECIAL = '#tooltips:Contact/status/inBattle/special'
+    CONTACT_STATUS_INBATTLE_EVENT = '#tooltips:Contact/status/inBattle/event'
     CONTACT_STATUS_ONLINE = '#tooltips:Contact/status/online'
     CONTACT_RESOURCE_WOWP = '#tooltips:Contact/resource/wowp'
     CONTACT_RESOURCE_WOWS = '#tooltips:Contact/resource/wows'
@@ -2041,6 +2044,8 @@ class TOOLTIPS(object):
     CUSTOMIZATION_FILTERPOPOVER_REFRESH_BODY = '#tooltips:customization/filterPopover/refresh/body'
     EVENT_SQUAD_DISABLE_HEADER = '#tooltips:event/squad/disable/header'
     EVENT_SQUAD_DISABLE_BODY = '#tooltips:event/squad/disable/body'
+    EVENT_FIGHTBTN_DISABLE_HEADER = '#tooltips:event/fightBtn/disable/header'
+    EVENT_FIGHTBTN_DISABLE_BODY = '#tooltips:event/fightBtn/disable/body'
     CUSTOMIZATION_BUYWINDOW_COPY_HEADER = '#tooltips:customization/buyWindow/copy/header'
     CUSTOMIZATION_BUYWINDOW_COPY_BODY = '#tooltips:customization/buyWindow/copy/body'
     CUSTOMIZATION_SLOTREVERT_HEADER = '#tooltips:customization/slotRevert/header'
@@ -3104,6 +3109,16 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_OOW21_TANKER_4_COMMANDER_EVENT = '#tooltips:notrecruitedtankman/oow21_tanker_4_commander/event'
     NOTRECRUITEDTANKMAN_OOW21_TANKER_4_COMMANDER_DESC = '#tooltips:notrecruitedtankman/oow21_tanker_4_commander/desc'
     NOTRECRUITEDTANKMAN_OOW21_TANKER_4_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/oow21_tanker_4_commander/label'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_KORDELIA_LABEL = '#tooltips:notrecruitedtankman/hw22_witch_kordelia/label'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_KORDELIA_DESC = '#tooltips:notrecruitedtankman/hw22_witch_kordelia/desc'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_SIBILLA_LABEL = '#tooltips:notrecruitedtankman/hw22_witch_sibilla/label'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_SIBILLA_DESC = '#tooltips:notrecruitedtankman/hw22_witch_sibilla/desc'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_AURELIA_LABEL = '#tooltips:notrecruitedtankman/hw22_witch_aurelia/label'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_AURELIA_DESC = '#tooltips:notrecruitedtankman/hw22_witch_aurelia/desc'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_DEIRDRA_LABEL = '#tooltips:notrecruitedtankman/hw22_witch_deirdra/label'
+    NOTRECRUITEDTANKMAN_HW22_WITCH_DEIRDRA_DESC = '#tooltips:notrecruitedtankman/hw22_witch_deirdra/desc'
+    NOTRECRUITEDTANKMAN_HW22_TAILRIUS_LABEL = '#tooltips:notrecruitedtankman/hw22_tailrius/label'
+    NOTRECRUITEDTANKMAN_HW22_TAILRIUS_DESC = '#tooltips:notrecruitedtankman/hw22_tailrius/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3600,7 +3615,8 @@ class TOOLTIPS(object):
      CONTACT_STATUS_INBATTLE_RANKED,
      CONTACT_STATUS_INBATTLE_HISTORICAL,
      CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
-     CONTACT_STATUS_INBATTLE_SPECIAL)
+     CONTACT_STATUS_INBATTLE_SPECIAL,
+     CONTACT_STATUS_INBATTLE_EVENT)
     TANK_PARAMS_DESC_ENUM = (TANK_PARAMS_DESC_MAXHEALTH,
      TANK_PARAMS_DESC_VEHICLEWEIGHT,
      TANK_PARAMS_DESC_ENGINEPOWER,
@@ -4158,6 +4174,11 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_OOW21_TANKER_2_COMMANDER_LABEL,
      NOTRECRUITEDTANKMAN_OOW21_TANKER_3_COMMANDER_LABEL,
      NOTRECRUITEDTANKMAN_OOW21_TANKER_4_COMMANDER_LABEL,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_KORDELIA_LABEL,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_SIBILLA_LABEL,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_AURELIA_LABEL,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_DEIRDRA_LABEL,
+     NOTRECRUITEDTANKMAN_HW22_TAILRIUS_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_LABEL,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_LABEL,
@@ -4294,6 +4315,11 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_OOW21_TANKER_2_COMMANDER_DESC,
      NOTRECRUITEDTANKMAN_OOW21_TANKER_3_COMMANDER_DESC,
      NOTRECRUITEDTANKMAN_OOW21_TANKER_4_COMMANDER_DESC,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_KORDELIA_DESC,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_SIBILLA_DESC,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_AURELIA_DESC,
+     NOTRECRUITEDTANKMAN_HW22_WITCH_DEIRDRA_DESC,
+     NOTRECRUITEDTANKMAN_HW22_TAILRIUS_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_YUSHA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU1_VSPISHKA_DESC,
      NOTRECRUITEDTANKMAN_BOB21_COMMANDER_RU2_AMWAY921_DESC,

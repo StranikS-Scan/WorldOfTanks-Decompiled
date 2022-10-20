@@ -4,6 +4,7 @@ import collections
 from itertools import chain
 import logging
 import typing
+import BigWorld
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 import constants
 from gui.impl.gen import R
@@ -42,7 +43,7 @@ from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from post_progression_common import ACTION_TYPES
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, IEventBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from items import perks, vehicles
@@ -134,11 +135,21 @@ def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
 
+def _idealCrewComparator(vehicle):
+    from gui.prb_control.dispatcher import g_prbLoader
+    from constants import QUEUE_TYPE, PREBATTLE_TYPE
+    prbDispatcher = g_prbLoader.getDispatcher()
+    isEvent = prbDispatcher is not None and (prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EVENT_BATTLES) or prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EVENT) or prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EVENT_BATTLES_2))
+    hwEqCtrl = BigWorld.player().components.get('HWAccountEquipmentController', None)
+    return params_helper.idealCrewComparator(vehicle) if not hwEqCtrl or not isEvent else hwEqCtrl.getVehicleIdealCrewParamsComparator(vehicle)
+
+
 _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __eventBattleController = dependency.descriptor(IEventBattlesController)
     _LEFT_PADDING = 20
     _RIGHT_PADDING = 20
 
@@ -314,7 +325,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         self.__createMainHeaderItems(headerItems, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding)
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
         self.__createTelecomItems(headerBlockItems, vehicle, valueWidth, leftPadding, rightPadding, leftRightPadding)
-        self.__createMainStatusItems(vehicle, headerBlockItems, statsConfig, valueWidth)
+        if not vehicle.isEvent:
+            self.__createMainStatusItems(vehicle, headerBlockItems, statsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-8)))
         self.__createBondsItems(items, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding)
         self.__createSimplifiedStatsItems(items, vehicle, paramsConfig, leftPadding, rightPadding, leftRightPadding)
@@ -834,6 +846,8 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         if self.vehicle.role != constants.ROLE_TYPE.NOT_DEFINED:
             roleLabel = self.vehicle.roleLabel
             headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
+        if self.vehicle.isEvent:
+            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.hw_lobby.common.tooltips.eventBattlesVehicle())), padding=formatters.packPadding(top=9, left=99, bottom=0)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
         return block
 
@@ -1030,7 +1044,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         paramsDict = params_helper.getParameters(self.vehicle)
         block = []
         highlightedParams = self.__getHighlightedParams()
-        comparator = params_helper.idealCrewComparator(self.vehicle)
+        comparator = _idealCrewComparator(self.vehicle)
         if self.configuration.params and not self.configuration.simplifiedOnly:
             for paramName in self.__getShownParameters(paramsDict):
                 paramInfo = comparator.getExtendedData(paramName)
@@ -1083,7 +1097,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
     def construct(self):
         block = []
         if self.configuration.params:
-            comparator = params_helper.idealCrewComparator(self.vehicle)
+            comparator = _idealCrewComparator(self.vehicle)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.vehicle.intCD))
             for paramName in RELATIVE_PARAMS:
                 paramInfo = comparator.getExtendedData(paramName)

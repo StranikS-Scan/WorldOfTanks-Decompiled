@@ -63,7 +63,6 @@ class BattleGameInputMgr(object):
             self.__keyHandlers.remove(handler)
 
     def handleKey(self, isDown, key, mods):
-        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
         if key == Keys.KEY_ESCAPE:
             if self.__keyHandlers:
                 for handler in self.__keyHandlers[:]:
@@ -72,10 +71,7 @@ class BattleGameInputMgr(object):
 
             if isDown and self.__ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
                 event_dispatcher.showIngameMenu()
-                if isEventBattle:
-                    event_dispatcher.toggleEventStats(False)
-                else:
-                    event_dispatcher.toggleFullStats(False)
+                event_dispatcher.toggleFullStats(False)
             return True
         if isDown and CommandMapping.g_instance.isFired(CommandMapping.CMD_UPGRADE_PANEL_SHOW, key):
             event_dispatcher.hideBattleVehicleConfigurator()
@@ -84,11 +80,8 @@ class BattleGameInputMgr(object):
                 avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)
             return True
         if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
-            if isEventBattle:
-                event_dispatcher.toggleEventStats(isDown)
-            else:
-                event_dispatcher.hideBattleVehicleConfigurator()
-                event_dispatcher.toggleFullStats(isDown)
+            event_dispatcher.hideBattleVehicleConfigurator()
+            event_dispatcher.toggleFullStats(isDown)
             return True
         if key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:
             if not self.__consumers:

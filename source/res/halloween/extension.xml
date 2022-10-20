@@ -1,0 +1,35 @@
+<extension.xml>
+  <FeatureName>	Halloween	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <HalloweenComponent></HalloweenComponent>
+      <HWAccountComponent></HWAccountComponent>
+      <HWAccountEquipmentController></HWAccountEquipmentController>
+    </StaticComponents>
+    <DynamicComponents>
+      <HWArenaBuffController></HWArenaBuffController>
+      <HWVehicleBuffContainer></HWVehicleBuffContainer>
+      <HWVehicleEquipmentController></HWVehicleEquipmentController>
+      <HWVehicleSuperShell></HWVehicleSuperShell>
+      <HWVehicleMaxHealthModifier></HWVehicleMaxHealthModifier>
+      <HWArenaInfoComponent></HWArenaInfoComponent>
+      <HWArenaInfoVehicleBuffsBroadcaster></HWArenaInfoVehicleBuffsBroadcaster>
+      <HWVehicleBeingAttackedComponent></HWVehicleBeingAttackedComponent>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	halloween_personality	</Personality>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities>
+      <HWWheelVehicleModeBattlesMgr></HWWheelVehicleModeBattlesMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.halloween.cgf_components.show_view	</module>
+      <module>	client.halloween.cgf_components.hangar_rules	</module>
+    </script>
+  </cgf>
+</extension.xml>

@@ -14,7 +14,7 @@ from gui.shared import g_eventBus
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Tankman import SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill, YhaTankmanSkill, BROTHERHOOD_SKILL_NAME
+from gui.shared.gui_items.Tankman import SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill, YhaTankmanSkill, BROTHERHOOD_SKILL_NAME, WitchesTankmanSkill
 from gui.shared.gui_items.Tankman import getFullUserName, getSmallIconPath, getBigIconPath
 from gui.shared.gui_items.Vehicle import sortCrew
 from helpers.i18n import makeString as _ms
@@ -47,6 +47,8 @@ def getTankmanSkill(skillName, tankman=None):
             return OffspringTankmanSkill(skillName)
         if special_crew.isYhaCrew(tankman):
             return YhaTankmanSkill(skillName)
+        if special_crew.isWitchesCrew(tankman):
+            return WitchesTankmanSkill(skillName)
     return TankmanSkill(skillName, proxy=(0,))
 
 
@@ -231,6 +233,8 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
                 skillName = 'offspring_brotherhood'
             elif _isYhaBrotherhood(firstSkill):
                 skillName = 'yha_brotherhood'
+            elif _isWitchesBrotherhood(firstSkill):
+                skillName = 'witches_brotherhood'
             elif not firstSkill.name == 'new':
                 skillName = firstSkill.name
             notEmptySkillsLen = len(notEmptySkills)
@@ -319,6 +323,10 @@ def _isOffspringBrotherhood(skill):
 
 def _isYhaBrotherhood(skill):
     return isinstance(skill, YhaTankmanSkill) and skill.name == BROTHERHOOD_SKILL_NAME
+
+
+def _isWitchesBrotherhood(skill):
+    return isinstance(skill, WitchesTankmanSkill) and skill.name == BROTHERHOOD_SKILL_NAME
 
 
 def getUniqueMembers(vehicle):

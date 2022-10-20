@@ -668,6 +668,26 @@ class YhaTankmanSkill(TankmanSkill):
         return icon
 
 
+class WitchesTankmanSkill(TankmanSkill):
+    __slots__ = ()
+
+    def __init__(self, skillName, tankman=None, proxy=None):
+        super(WitchesTankmanSkill, self).__init__(skillName, tankman, proxy)
+        if skillName == BROTHERHOOD_SKILL_NAME:
+            self._isPermanent = True
+
+    @property
+    def userName(self):
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_witches()) if self._name == BROTHERHOOD_SKILL_NAME else super(WitchesTankmanSkill, self).userName
+
+    @property
+    def icon(self):
+        icon = super(WitchesTankmanSkill, self).icon
+        if self._name == BROTHERHOOD_SKILL_NAME:
+            icon = 'witches_{}'.format(icon)
+        return icon
+
+
 def getTankmanSkill(skillName, tankman=None, proxy=None):
     if tankman is not None:
         if special_crew.isSabatonCrew(tankman.descriptor):
@@ -676,6 +696,8 @@ def getTankmanSkill(skillName, tankman=None, proxy=None):
             return OffspringTankmanSkill(skillName, tankman, proxy)
         if special_crew.isYhaCrew(tankman.descriptor):
             return YhaTankmanSkill(skillName, tankman, proxy)
+        if special_crew.isWitchesCrew(tankman.descriptor):
+            return WitchesTankmanSkill(skillName, tankman, proxy)
     return TankmanSkill(skillName, tankman, proxy)
 
 

@@ -87,7 +87,7 @@ class SquadActionsHandler(AbstractActionsHandler):
                 showPlatoonResourceDialog(R.strings.dialogs.squadHaveNotReadyPlayer, self._confirmCallback)
                 return
             self._setCreatorReady()
-        elif not fullData.playerInfo.isReady:
+        elif not fullData.playerInfo.isReady and self._checkVehicleAmmo():
             checkVehicleAmmoFull(g_currentVehicle.item, self._checkVehicleAmmoCallback)
         else:
             self._entity.togglePlayerReadyAction(True)
@@ -136,6 +136,9 @@ class SquadActionsHandler(AbstractActionsHandler):
         if self._entity is not None:
             self._entity.togglePlayerReadyAction(True)
         return
+
+    def _checkVehicleAmmo(self):
+        return True
 
     def _onKickedFromQueue(self, _):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

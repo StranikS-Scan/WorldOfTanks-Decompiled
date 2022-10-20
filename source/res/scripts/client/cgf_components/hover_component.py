@@ -40,22 +40,17 @@ class HoverManager(CGF.ComponentManager):
 
     @tickGroup(groupName='Simulation')
     def tick(self):
-        if not self.__enabled or not GUI.mcursor().inWindow or not GUI.mcursor().inFocus or not self._hangarSpace.isCursorOver3DScene:
-            return
-        else:
-            cursorPosition = GUI.mcursor().position
-            ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
-            collidedId = None
-            res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1000, 0, 0, -1, ColliderTypes.HANGAR_FLAG)
-            if res is not None:
-                collidedId = res[2]
-            gameObjects = CGF.Query(self.spaceID, CGF.GameObject)
-            for gameObject in gameObjects:
-                if gameObject.id == collidedId:
-                    self._updateHoverComponent(gameObject, True)
+        gameObjectID = None
+        if self.__enabled and GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled:
+            gameObjectID = self.__getGameObjectUnderCursor()
+        gameObjects = CGF.Query(self.spaceID, CGF.GameObject)
+        for gameObject in gameObjects:
+            if gameObject.id == gameObjectID:
+                self._updateHoverComponent(gameObject, True)
+            if gameObject.findComponentByType(IsHovered):
                 self._updateHoverComponent(gameObject, False)
 
-            return
+        return
 
     def _updateHoverComponent(self, go, isHovered):
         if isHovered:
@@ -64,3 +59,9 @@ class HoverManager(CGF.ComponentManager):
         else:
             go.removeComponentByType(IsHovered)
         return
+
+    def __getGameObjectUnderCursor(self):
+        cursorPosition = GUI.mcursor().position
+        ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
+        res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1000, 0, 0, -1, ColliderTypes.HANGAR_FLAG)
+        return res[2] if res is not None else None

@@ -30,7 +30,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, getTypeBigIconPath
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, getTypeBigIconPath, getIconShopPath
 from gui.shared.view_helpers import ClanEmblemsHelper
 from gui.shared.image_helper import getTextureLinkByID, ImagesFetchCoordinator
 from gui.sounds.ambients import BattleQueueEnv
@@ -41,11 +41,6 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from skeletons.gui.shared import IItemsCache
-TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
- ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
- ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
- ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
- ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 _RANKS = 'ranks'
@@ -99,6 +94,10 @@ class _QueueProvider(object):
     def additionalInfo(self):
         pass
 
+    @property
+    def timerPostfixStr(self):
+        pass
+
     def getTankInfoLabel(self):
         return makeString(MENU.PREBATTLE_TANKLABEL)
 
@@ -114,11 +113,16 @@ class _QueueProvider(object):
     def forceStart(self):
         currPlayer = BigWorld.player()
         if currPlayer is not None and hasattr(currPlayer, 'createArenaFromQueue'):
-            currPlayer.createArenaFromQueue()
+            currPlayer.createArenaFromQueue(self._queueType)
         return
 
 
 class _RandomQueueProvider(_QueueProvider):
+    TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
+     ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
+     ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
+     ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
+     ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 
     def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
         super(_RandomQueueProvider, self).__init__(proxy, qType)
@@ -136,7 +140,7 @@ class _RandomQueueProvider(_QueueProvider):
         self._createCommonPlayerString(sum(vClasses))
         if vClassesLen:
             vClassesData = []
-            for vClass, message in TYPES_ORDERED:
+            for vClass, message in self.TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
                 vClassesData.append({'type': message,
                  'icon': getTypeBigIconPath(vClass),
@@ -175,6 +179,26 @@ class _EpicQueueProvider(_RandomQueueProvider):
 
 class _EventQueueProvider(_RandomQueueProvider):
     pass
+
+
+class _EventWheeledVehiclesQueueProvider(_EventQueueProvider):
+    TYPES_ORDERED = (('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),)
+
+    def needAdditionalInfo(self):
+        return True
+
+    def additionalInfo(self):
+        return text_styles.gold(makeString(MENU.PREBATTLE_EVENTWHEELEDVEHICLESWARNING))
+
+    def getLayoutStr(self):
+        pass
+
+    @property
+    def timerPostfixStr(self):
+        pass
+
+    def getTankName(self, vehicle):
+        return '{}*'.format(vehicle.shortUserName)
 
 
 class _RankedQueueProvider(_RandomQueueProvider):
@@ -239,6 +263,7 @@ class _Comp7QueueProvider(_RandomQueueProvider):
 
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
+ constants.QUEUE_TYPE.EVENT_BATTLES_2: _EventWheeledVehiclesQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
  constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
  constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider,
@@ -324,6 +349,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             iconPath = self.__provider.getTankIcon(vehicle)
             layoutStr = self.__provider.getLayoutStr()
             self.as_setTypeInfoS({'iconLabel': iconlabel,
+             'wheelTankIcon': getIconShopPath(vehicle.name),
              'title': title,
              'description': description,
              'additional': additional,
@@ -357,7 +383,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
         timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
         if self.__provider is not None and self.__provider.needAdditionalInfo():
-            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
+            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, self.__provider.timerPostfixStr)
         self.as_setTimerS(textLabel, timeLabel)
         self.__createTime += 1
         return

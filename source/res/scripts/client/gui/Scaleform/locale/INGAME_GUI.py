@@ -850,10 +850,17 @@ class INGAME_GUI(object):
     REWARDWINDOW_TWITCH32_DESCTEXT = '#ingame_gui:rewardWindow/twitch32/descText'
     REWARDWINDOW_TWITCH32_BTNLABEL = '#ingame_gui:rewardWindow/twitch32/btnLabel'
     REWARDWINDOW_TWITCH33_HEADERTEXT = '#ingame_gui:rewardWindow/twitch33/headerText'
+    REWARDWINDOW_TWITCH33_DESCTEXT = '#ingame_gui:rewardWindow/twitch33/descText'
     REWARDWINDOW_TWITCH33_MAINREWARD_1 = '#ingame_gui:rewardWindow/twitch33/mainReward_1'
     REWARDWINDOW_TWITCH33_MAINREWARD_2 = '#ingame_gui:rewardWindow/twitch33/mainReward_2'
     REWARDWINDOW_TWITCH33_MAINREWARD_3 = '#ingame_gui:rewardWindow/twitch33/mainReward_3'
     REWARDWINDOW_TWITCH33_MAINREWARD_4 = '#ingame_gui:rewardWindow/twitch33/mainReward_4'
+    REWARDWINDOW_TWITCH34_HEADERTEXT = '#ingame_gui:rewardWindow/twitch34/headerText'
+    REWARDWINDOW_TWITCH34_DESCTEXT = '#ingame_gui:rewardWindow/twitch34/descText'
+    REWARDWINDOW_TWITCH34_MAINREWARD_1 = '#ingame_gui:rewardWindow/twitch34/mainReward_1'
+    REWARDWINDOW_TWITCH34_MAINREWARD_2 = '#ingame_gui:rewardWindow/twitch34/mainReward_2'
+    REWARDWINDOW_TWITCH34_MAINREWARD_3 = '#ingame_gui:rewardWindow/twitch34/mainReward_3'
+    REWARDWINDOW_TWITCH34_MAINREWARD_4 = '#ingame_gui:rewardWindow/twitch34/mainReward_4'
     REWARDWINDOW_LOOTBOX_WINHEADERTEXT = '#ingame_gui:rewardWindow/lootbox/winHeaderText'
     REWARDWINDOW_LOOTBOX_HEADERTEXT = '#ingame_gui:rewardWindow/lootbox/headerText'
     REWARDWINDOW_LOOTBOX_DESCTEXT = '#ingame_gui:rewardWindow/lootbox/descText'
@@ -1117,6 +1124,7 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH31_HEADERTEXT,
      REWARDWINDOW_TWITCH32_HEADERTEXT,
      REWARDWINDOW_TWITCH33_HEADERTEXT,
+     REWARDWINDOW_TWITCH34_HEADERTEXT,
      REWARDWINDOW_LOOTBOX_HEADERTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_HEADERTEXT,
      REWARDWINDOW_PIGGYBANK_HEADERTEXT,
@@ -1239,6 +1247,8 @@ class INGAME_GUI(object):
      REWARDWINDOW_TWITCH30_DESCTEXT,
      REWARDWINDOW_TWITCH31_DESCTEXT,
      REWARDWINDOW_TWITCH32_DESCTEXT,
+     REWARDWINDOW_TWITCH33_DESCTEXT,
+     REWARDWINDOW_TWITCH34_DESCTEXT,
      REWARDWINDOW_LOOTBOX_DESCTEXT,
      REWARDWINDOW_ANNIVERSARY_GA_DESCTEXT,
      REWARDWINDOW_PIGGYBANK_DESCTEXT,

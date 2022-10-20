@@ -680,7 +680,12 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def _getHint(self):
         serverSettings = self.lobbyContext.getServerSettings()
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
-            return self._makeHintData(R.strings.ingame_gui.helpScreen, HintPriority.HELP)
+            guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+            if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                resourceRoot = R.strings.hw_ingame_gui.helpScreen
+            else:
+                resourceRoot = R.strings.ingame_gui.helpScreen
+            return self._makeHintData(resourceRoot, HintPriority.HELP)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             return self._makeHintData(R.strings.ingame_gui.battleCommunication, HintPriority.BATTLE_COMMUNICATION)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
@@ -701,7 +706,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return HintData(key, keyName, pressText, hintText, 0, 0, priority, False)
 
     def _canDisplayCustomHelpHint(self):
-        return False
+        return self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.EVENT_BATTLES
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():

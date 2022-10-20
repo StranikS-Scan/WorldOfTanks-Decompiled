@@ -109,12 +109,14 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.recertificationReset.index(): _sc.RecertificationResetFormatter(),
  _SM_TYPE.recertificationAvailability.index(): _sc.RecertificationAvailabilityFormatter(),
  _SM_TYPE.recertificationFinancial.index(): _sc.RecertificationFinancialFormatter(),
+ _SM_TYPE.prbVehicleBadTypeKick.index(): _sc.PrbVehicleBadTypeKickFormatter(),
  _SM_TYPE.resourceWellOperation.index(): _sc.ResourceWellOperationFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
  _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
  _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
- _SM_TYPE.fairplay.index(): _sc.FairplayFormatter()}
+ _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
+ _SM_TYPE.hwDailyQuest.index(): _sc.HWDailyQuestFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
@@ -140,3 +142,10 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'),
  SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'),
  SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE: _sc.IntegratedAuctionLostRateFormatter()}
+
+def addServerFormatters(formatters):
+    SERVER_FORMATTERS.update(formatters)
+
+
+def addClientFormatters(formatters):
+    CLIENT_FORMATTERS.update(formatters)

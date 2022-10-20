@@ -24,7 +24,6 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
 _logger = logging.getLogger(__name__)
 BASE_EVENT_NAME = 'base'
-BACKGROUND_POSTFIX = '_background'
 MAIN_REWARD_PREFIX = 'mainReward_'
 
 class PlayerSubscriptionRewardWindowView(ViewImpl):
@@ -80,7 +79,9 @@ class PlayerSubscriptionRewardWindowView(ViewImpl):
         res = R.strings.ingame_gui.rewardWindow.dyn(self._eventName, None)
         if res:
             title = backport.text(res.dyn('headerText')())
+            desc = backport.text(res.dyn('descText')())
             self.viewModel.setSubscriptionTitle(title)
+            self.viewModel.setDescText(desc)
             offer = self.__getOffer()
             self.viewModel.setHasSelectiveRewards(offer is not None)
         return

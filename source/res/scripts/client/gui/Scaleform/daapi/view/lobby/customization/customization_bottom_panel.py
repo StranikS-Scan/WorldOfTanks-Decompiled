@@ -28,7 +28,6 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, EDITABLE_STYLE_STORAGE_DEPTH
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
@@ -366,7 +365,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             hasEmptyNumber = False
 
         hasLockedItems = self.__ctx.mode.isOutfitsHasLockedItems()
-        buyBtnEnabled = self.__ctx.isOutfitsModified()
+        outfitsModified = buyBtnEnabled = self.__ctx.isOutfitsModified()
         if buyBtnEnabled and cartInfo.totalPrice != ITEM_PRICE_EMPTY:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
         if hasEmptyNumber:
@@ -377,7 +376,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
         else:
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ALREADYAPPLIED
-        outfitsModified = self.__ctx.mode.isOutfitsModified()
         if outfitsModified:
             if fromStorageCount > 0 or toBuyCount > 0:
                 self.__showBill()
@@ -628,12 +626,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             if item.itemTypeID in itemTypes and item.season & self.__ctx.season:
                 self.__scrollToItem(item.intCD)
                 break
-        else:
-            intCD = first(self.carouselItems)
-            if intCD is not None:
-                self.__scrollToItem(intCD, immediately=True)
-
-        return
 
     def __scrollToItem(self, itemCD, immediately=False):
         self.as_scrollToSlotS(itemCD, immediately)

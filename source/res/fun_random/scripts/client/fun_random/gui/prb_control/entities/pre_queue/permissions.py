@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/pre_queue/permissions.py
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.prb_control.entities.base.pre_queue.permissions import PreQueuePermissions
-from helpers import dependency
-from skeletons.gui.game_control import IFunRandomController
 
-class FunRandomPermissions(PreQueuePermissions):
-    __funRandomController = dependency.descriptor(IFunRandomController)
+class FunRandomPermissions(PreQueuePermissions, FunSubModesWatcher):
 
+    @hasDesiredSubMode(defReturn=False)
     def canCreateSquad(self):
-        return super(FunRandomPermissions, self).canCreateSquad() if self.__funRandomController.isInPrimeTime() else False
+        return super(FunRandomPermissions, self).canCreateSquad()

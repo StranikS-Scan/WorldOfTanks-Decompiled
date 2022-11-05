@@ -3,9 +3,9 @@
 from typing import TYPE_CHECKING
 import struct
 from collections import namedtuple
+import Event
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
-import Event
 from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, LEADER_SLOT, UNDEFINED_ESTIMATED_TIME
 from shared_utils import makeTupleByDict
 if TYPE_CHECKING:
@@ -16,7 +16,10 @@ VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
 _ExternalPrebattleExtra = namedtuple('ExternalPrebattleExtra', ('rev',))
 _ExternalPrebattleExtra.__new__.__defaults__ = (0,)
-_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.STRONGHOLD: _ExternalPrebattleExtra}
+_FunRandomSquadExtra = namedtuple('FunRandomSquadExtra', ('funEventID',))
+_FunRandomSquadExtra.__new__.__defaults__ = (0,)
+_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.FUN_RANDOM: _FunRandomSquadExtra,
+ PREBATTLE_TYPE.STRONGHOLD: _ExternalPrebattleExtra}
 
 class ClientUnit(UnitBase):
 
@@ -203,7 +206,6 @@ class ClientUnit(UnitBase):
 
     def updateUnitExtras(self, updateStr):
         UnitBase.updateUnitExtras(self, updateStr)
-        self.onUnitExtraChanged(self._extras)
 
     def setModalTimestamp(self, serverTimestamp):
         self._setModalTimestamp(int(serverTimestamp))

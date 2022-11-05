@@ -143,7 +143,7 @@ def _isStunParamVisible(shellDict):
 
 
 def _timesToSecs(timesPerMinutes):
-    return round(time_utils.ONE_MINUTE / timesPerMinutes, 3)
+    return time_utils.ONE_MINUTE / timesPerMinutes
 
 
 def _getMaxSteeringLockAngle(axleSteeringLockAngles):

@@ -219,6 +219,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__comparisonBasket.onChange += self.__onCompareBasketChanged
         self.__comparisonBasket.onSwitchChange += self.__updateHeaderData
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
+        self.__hangarSpace.onSpaceRefresh += self.closeView
         self.__hangarSpace.setVehicleSelectable(True)
         if not g_currentPreviewVehicle.isPresent():
             event_dispatcher.showHangar()
@@ -244,6 +245,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.__comparisonBasket.onSwitchChange -= self.__updateHeaderData
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
+        self.__hangarSpace.onSpaceRefresh -= self.closeView
         self.__hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
         isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingPage()) is not None
@@ -496,7 +498,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 self.onBackClick()
             elif event.ctx.get('close', False):
                 self.closeView()
-        self.closeView()
+        self.destroy()
         return
 
     def _processBackClick(self, ctx=None):

@@ -12,6 +12,7 @@ from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
 from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
 from gui.shared.utils.functions import replaceHyphenToUnderscore
+from gui.shared.system_factory import registerBattleTipCriteria, registerBattleTipsCriteria, collectBattleTipsCriteria
 from helpers import dependency
 from realm import CURRENT_REALM
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -22,7 +23,6 @@ _RANDOM_TIPS_PATTERN = '^(tip\\d+)'
 _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
-_FUN_RANDOM_TIPS_PATTERN = '^(funRandom\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
 _COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 
@@ -31,19 +31,19 @@ class _BattleLoadingTipPriority(object):
     PRECEDING = 2
 
 
-class _TipData(namedtuple('_BattleLoadingTipData', 'status, body, icon')):
+class TipData(namedtuple('_BattleLoadingTipData', 'status, body, icon')):
 
     def isValid(self):
         return self.status != R.invalid() or self.body != R.invalid() or self.icon != R.invalid()
 
 
-class _TipsCriteria(object):
+class TipsCriteria(object):
     __slots__ = ('_ctx', '_tipsValidator')
 
-    def __init__(self):
-        super(_TipsCriteria, self).__init__()
+    def __init__(self, *_):
+        super(TipsCriteria, self).__init__()
         self._ctx = {'arenaType': self._getArenaGuiType()}
-        self._tipsValidator = _TipsValidator()
+        self._tipsValidator = self._getTipsValidator()
 
     def setContext(self, ctx):
         self._ctx.update(ctx)
@@ -55,7 +55,7 @@ class _TipsCriteria(object):
             foundTip.markWatched()
             return foundTip.getData()
         else:
-            return _TipData(R.invalid(), R.invalid(), R.invalid())
+            return TipData(R.invalid(), R.invalid(), R.invalid())
 
     def _findRandomTip(self):
         suitableTips = filter(self._suitableTipPredicate, self._getTargetList())
@@ -73,15 +73,18 @@ class _TipsCriteria(object):
     def _getArenaGuiType(self):
         return None
 
+    def _getTipsValidator(self):
+        return _TipsValidator()
+
     def _suitableTipPredicate(self, tip):
-        return False if tip is None else self._tipsValidator.validateRegularTip(tipFilter=tip.tipFilter, ctx=self._ctx)
+        return False if tip is None or self._tipsValidator is None else self._tipsValidator.validateRegularTip(tipFilter=tip.tipFilter, ctx=self._ctx)
 
     def _getTargetList(self):
         _logger.error('Method _getTargetList has to be overridden')
         return []
 
 
-class _RandomTipsCriteria(_TipsCriteria):
+class _RandomTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
         return _randomTips
@@ -90,11 +93,11 @@ class _RandomTipsCriteria(_TipsCriteria):
         return ARENA_GUI_TYPE.RANDOM
 
 
-class _EpicBattleTipsCriteria(_TipsCriteria):
+class _EpicBattleTipsCriteria(TipsCriteria):
 
     def find(self):
         tipData = super(_EpicBattleTipsCriteria, self).find()
-        return _TipData(tipData.status, tipData.body, R.invalid())
+        return TipData(tipData.status, tipData.body, R.invalid())
 
     def _getTargetList(self):
         return _epicBattleTips
@@ -103,7 +106,7 @@ class _EpicBattleTipsCriteria(_TipsCriteria):
         return ARENA_GUI_TYPE.EPIC_BATTLE
 
 
-class _SandboxTipsCriteria(_TipsCriteria):
+class _SandboxTipsCriteria(TipsCriteria):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def find(self):
@@ -126,34 +129,28 @@ class _SandboxTipsCriteria(_TipsCriteria):
             geometryIndex = 0
         positionIndex = 0 if playerBaseYPos < enemyBaseYPos else 1
         iconKey = 'sandbox{0}{1}'.format(str(geometryIndex), str(positionIndex))
-        return _TipData(R.strings.tips.howToPlay(), R.strings.tips.dyn('sandbox{}'.format(geometryIndex))(), R.images.gui.maps.icons.battleLoading.tips.dyn(iconKey)())
+        return TipData(R.strings.tips.howToPlay(), R.strings.tips.dyn('sandbox{}'.format(geometryIndex))(), R.images.gui.maps.icons.battleLoading.tips.dyn(iconKey)())
 
 
-class _EventTipsCriteria(_TipsCriteria):
+class _EventTipsCriteria(TipsCriteria):
 
     def find(self):
-        return _TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
+        return TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
 
 
-class _RankedTipsCriteria(_TipsCriteria):
+class _RankedTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
         return _rankedTips
 
 
-class _FunRandomTipsCriteria(_TipsCriteria):
-
-    def _getTargetList(self):
-        return _funRandomTips
-
-
-class _EpicRandomTipsCriteria(_TipsCriteria):
+class _EpicRandomTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
         return _epicRandomTips
 
 
-class _Comp7TipsCriteria(_TipsCriteria):
+class _Comp7TipsCriteria(TipsCriteria):
 
     def find(self):
         foundTip = self._findRandomTip()
@@ -161,7 +158,7 @@ class _Comp7TipsCriteria(_TipsCriteria):
             foundTip.markWatched()
             return foundTip.getData()
         else:
-            return _TipData(R.invalid(), R.invalid(), R.invalid())
+            return TipData(R.invalid(), R.invalid(), R.invalid())
 
     def _getTargetList(self):
         return _comp7Tips
@@ -170,7 +167,7 @@ class _Comp7TipsCriteria(_TipsCriteria):
         return ARENA_GUI_TYPE.COMP7
 
 
-class BattleRoyaleTipsCriteria(_TipsCriteria):
+class BattleRoyaleTipsCriteria(TipsCriteria):
 
     def __init__(self, arenaVisitor):
         super(BattleRoyaleTipsCriteria, self).__init__()
@@ -184,10 +181,10 @@ class BattleRoyaleTipsCriteria(_TipsCriteria):
             geometryName = replaceHyphenToUnderscore(self._arenaVisitor.getArenaType().geometryName)
             geomertyIconResId = _tryGetTipIconRes('_'.join((foundTip.getTipId(), geometryName)))
             if geomertyIconResId != R.invalid():
-                tipData = _TipData(tipData.status, tipData.body, geomertyIconResId)
+                tipData = TipData(tipData.status, tipData.body, geomertyIconResId)
             return tipData
         else:
-            return _TipData(R.invalid(), R.invalid(), R.invalid())
+            return TipData(R.invalid(), R.invalid(), R.invalid())
 
     def _getTargetList(self):
         return _battleRoyaleTips
@@ -196,25 +193,20 @@ class BattleRoyaleTipsCriteria(_TipsCriteria):
         return ARENA_GUI_TYPE.BATTLE_ROYALE
 
 
+registerBattleTipCriteria(ARENA_GUI_TYPE.EVENT_BATTLES, _EventTipsCriteria)
+registerBattleTipCriteria(ARENA_GUI_TYPE.RANKED, _RankedTipsCriteria)
+registerBattleTipCriteria(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleTipsCriteria)
+registerBattleTipCriteria(ARENA_GUI_TYPE.COMP7, _Comp7TipsCriteria)
+registerBattleTipsCriteria(ARENA_GUI_TYPE.SANDBOX_RANGE, _SandboxTipsCriteria)
+registerBattleTipsCriteria(ARENA_GUI_TYPE.EPIC_RANGE, _EpicBattleTipsCriteria)
+registerBattleTipsCriteria((ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING), _EpicRandomTipsCriteria)
+
 def getTipsCriteria(arenaVisitor):
-    if arenaVisitor.gui.isSandboxBattle():
-        return _SandboxTipsCriteria()
-    if arenaVisitor.gui.isEventBattle():
-        return _EventTipsCriteria()
-    if arenaVisitor.gui.isRankedBattle():
-        return _RankedTipsCriteria()
-    if arenaVisitor.gui.isEpicRandomBattle():
-        return _EpicRandomTipsCriteria()
-    if arenaVisitor.gui.isInEpicRange():
-        return _EpicBattleTipsCriteria()
-    if arenaVisitor.gui.isBattleRoyale():
-        return BattleRoyaleTipsCriteria(arenaVisitor)
-    if arenaVisitor.gui.isFunRandom():
-        return _FunRandomTipsCriteria()
-    return _Comp7TipsCriteria() if arenaVisitor.gui.isComp7Battle() else _RandomTipsCriteria()
+    criteriaCls = collectBattleTipsCriteria(arenaVisitor.gui.guiType)
+    return _RandomTipsCriteria() if criteriaCls is None else criteriaCls(arenaVisitor)
 
 
-def _readTips(pattern):
+def readTips(pattern):
     result = []
     tipsPattern = re.compile(pattern)
     for tipID, descriptionResId in R.strings.tips.items():
@@ -312,7 +304,7 @@ class _BattleLoadingTip(object):
         return self._tipId
 
     def getData(self):
-        return _TipData(self._statusResId, self._descriptionResId, self._iconResId)
+        return TipData(self._statusResId, self._descriptionResId, self._iconResId)
 
     def __repr__(self):
         return self._tipId
@@ -473,10 +465,9 @@ def _getWatchedCache():
 
 _watchedTipsCache = None
 _tipsConfig = getPreBattleTipsConfig()
-_randomTips = _readTips(_RANDOM_TIPS_PATTERN)
-_rankedTips = _readTips(_RANKED_BATTLES_TIPS_PATTERN)
-_funRandomTips = _readTips(_FUN_RANDOM_TIPS_PATTERN)
-_epicBattleTips = _readTips(_EPIC_BATTLE_TIPS_PATTERN)
-_epicRandomTips = _readTips(_EPIC_RANDOM_TIPS_PATTERN)
-_battleRoyaleTips = _readTips(_BATTLE_ROYALE_TIPS_PATTERN)
-_comp7Tips = _readTips(_COMP7_TIPS_PATTERN)
+_randomTips = readTips(_RANDOM_TIPS_PATTERN)
+_rankedTips = readTips(_RANKED_BATTLES_TIPS_PATTERN)
+_epicBattleTips = readTips(_EPIC_BATTLE_TIPS_PATTERN)
+_epicRandomTips = readTips(_EPIC_RANDOM_TIPS_PATTERN)
+_battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN)
+_comp7Tips = readTips(_COMP7_TIPS_PATTERN)

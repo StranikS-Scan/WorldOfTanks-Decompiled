@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/image_view/image_view.py
-import Event
 from gui.Scaleform.daapi.view.meta.ImageViewMeta import ImageViewMeta
 from gui.sounds.filters import switchHangarFilteredFilter
 _IMAGE_ROOT_PATH = '../maps/icons/imageView'
 
 class ImageView(ImageViewMeta):
-    onImageViewOpened = Event.Event()
-    onImageViewClosed = Event.Event()
 
     def __init__(self, ctx=None):
         super(ImageView, self).__init__(ctx)
@@ -17,10 +14,6 @@ class ImageView(ImageViewMeta):
         super(ImageView, self)._populate()
         self.setBgPath()
         switchHangarFilteredFilter(on=True)
-        ImageView.onImageViewOpened(self.__image)
-
-    def _dispose(self):
-        ImageView.onImageViewClosed(self.__image)
 
     def onClose(self):
         self.destroy()

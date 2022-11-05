@@ -98,6 +98,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self._defaultHangars = {}
         self._sceneSpaceParams = {}
         self._defaultHangarSpaceConfig = DefaultHangarSpaceConfig()
+        self.__isHangarOverridingLocked = False
 
     def init(self):
         self._readHangarSceneSpaceSettings()
@@ -126,6 +127,16 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
             return
         self.currentSceneName = sceneName
         self.hangarSpaceUpdated = True
+
+    def lockHangarOverride(self, sceneName):
+        for name in self._sceneSpaceParams.iterkeys():
+            self._sceneSpaceParams[name] = SceneSpaceConfig(sceneName)
+
+        for isPremium in (True, False):
+            self._defaultHangarSpaceConfig.setSpaceIdOverride(isPremium, sceneName)
+
+        self.__isHangarOverridingLocked = True
+        _logger.info('Hangar override was locked. sceneName=%s', sceneName)
 
     def onDisconnected(self):
         self._clear()
@@ -183,103 +194,112 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         return
 
     def _onEventNotificationsChanged(self, diff):
-        currentSceneChanged = False
-        currentSceneMaskChanged = False
-        for notification in diff['removed']:
-            if not notification['data']:
-                continue
-            if notification['type'] == SERVER_CMD_CHANGE_HANGAR_ALT:
-                data = json.loads(notification['data'])
-                name = data['name']
-                sceneConfig = self._sceneSpaceParams.get(name)
-                if sceneConfig is None:
-                    _logger.error('Cannot remove space settings for not existing scene %s', name)
-                    continue
-                if 'hangar' in data:
-                    sceneConfig.discardSpaceIdOverride()
-                    sceneConfig.discardVisibilityMaskOverride()
-                    if name == self.currentSceneName:
-                        currentSceneChanged = True
-                    continue
-                if 'visibilityMask' in data:
-                    sceneConfig.discardVisibilityMaskOverride()
-                    if name == self.currentSceneName:
-                        currentSceneMaskChanged = True
-            if notification['type'] in (SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM):
-                isPremium = notification['type'] == SERVER_CMD_CHANGE_HANGAR_PREM
-                data = json.loads(notification['data'])
-                if 'hangar' in data:
-                    self._defaultHangarSpaceConfig.discardSpaceIdOverride(isPremium)
-                    self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
-                    if DEFAULT_HANGAR_SCENE == self.currentSceneName:
-                        currentSceneChanged = True
-                    continue
-                if 'visibilityMask' in data:
-                    self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
-                    if DEFAULT_HANGAR_SCENE == self.currentSceneName:
-                        currentSceneMaskChanged = True
-
-        for notification in diff['added']:
-            if not notification['data']:
-                continue
-            if notification['type'] == SERVER_CMD_CHANGE_HANGAR_ALT:
-                data = json.loads(notification['data'])
-                name = data['name']
-                sceneConfig = self._sceneSpaceParams.get(name)
-                if sceneConfig is None:
-                    _logger.error('Cannot add space settings for not existing scene %s', name)
-                    continue
-                if 'hangar' in data:
-                    sceneConfig.setSpaceIdOverride(data['hangar'])
-                    if self.currentSceneName == name:
-                        currentSceneChanged = True
-                if 'visibilityMask' in data:
-                    sceneConfig.setVisibilityMask(int(data['visibilityMask'], 16))
-                    if self.currentSceneName == name:
-                        currentSceneMaskChanged = True
-            if notification['type'] in (SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM):
-                isPremium = notification['type'] == SERVER_CMD_CHANGE_HANGAR_PREM
-                try:
-                    data = json.loads(notification['data'])
-                    if 'hangar' in data:
-                        self._defaultHangarSpaceConfig.setSpaceIdOverride(isPremium, data['hangar'])
-                        if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                            currentSceneChanged = True
-                    if 'visibilityMask' in data:
-                        self._defaultHangarSpaceConfig.setVisibilityMask(isPremium, int(data['visibilityMask'], 16))
-                        if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                            currentSceneMaskChanged = True
-                except Exception:
-                    self._defaultHangarSpaceConfig.setSpaceIdOverride(isPremium, notification['data'])
-                    if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                        currentSceneChanged = True
-
-        if currentSceneChanged and self.hangarSpace.inited:
-            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
-                visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
-                success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask)
-            else:
-                currentSceneConfig = self._sceneSpaceParams[self.currentSceneName]
-                spaceId = currentSceneConfig.getHangarSpaceId()
-                visibilityMask = currentSceneConfig.getVisibilityMask()
-                success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
-            if success:
-                self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
-            elif err == ErrorFlags.HANGAR_NOT_READY:
-                if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
-                    spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
-                    visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
-                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
-                else:
-                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
-            elif err == ErrorFlags.DUPLICATE_REQUEST:
-                _logger.warning('Redundant hangar update via event_notifications')
-            else:
-                raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
+        if self.__isHangarOverridingLocked:
+            _logger.info('Hangar overriding is locked. Hangar notifications were skipped.')
             return
         else:
+            currentSceneChanged = False
+            currentSceneMaskChanged = False
+            for notification in diff['removed']:
+                if not notification['data']:
+                    continue
+                if notification['type'] == SERVER_CMD_CHANGE_HANGAR_ALT:
+                    data = json.loads(notification['data'])
+                    name = data['name']
+                    sceneConfig = self._sceneSpaceParams.get(name)
+                    if sceneConfig is None:
+                        _logger.error('Cannot remove space settings for not existing scene %s', name)
+                        continue
+                    if 'hangar' in data:
+                        sceneConfig.discardSpaceIdOverride()
+                        sceneConfig.discardVisibilityMaskOverride()
+                        if name == self.currentSceneName:
+                            currentSceneChanged = True
+                        continue
+                    if 'visibilityMask' in data:
+                        sceneConfig.discardVisibilityMaskOverride()
+                        if name == self.currentSceneName:
+                            currentSceneMaskChanged = True
+                if notification['type'] in (SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM):
+                    isPremium = notification['type'] == SERVER_CMD_CHANGE_HANGAR_PREM
+                    try:
+                        data = json.loads(notification['data'])
+                        if 'hangar' in data:
+                            self._defaultHangarSpaceConfig.discardSpaceIdOverride(isPremium)
+                            self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
+                            if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                                currentSceneChanged = True
+                            continue
+                        if 'visibilityMask' in data:
+                            self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
+                            if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                                currentSceneMaskChanged = True
+                    except Exception:
+                        self._defaultHangarSpaceConfig.discardSpaceIdOverride(isPremium)
+                        self._defaultHangarSpaceConfig.discardVisibilityMaskOverride(isPremium)
+                        if DEFAULT_HANGAR_SCENE == self.currentSceneName:
+                            currentSceneChanged = True
+
+            for notification in diff['added']:
+                if not notification['data']:
+                    continue
+                if notification['type'] == SERVER_CMD_CHANGE_HANGAR_ALT:
+                    data = json.loads(notification['data'])
+                    name = data['name']
+                    sceneConfig = self._sceneSpaceParams.get(name)
+                    if sceneConfig is None:
+                        _logger.error('Cannot add space settings for not existing scene %s', name)
+                        continue
+                    if 'hangar' in data:
+                        sceneConfig.setSpaceIdOverride(data['hangar'])
+                        if self.currentSceneName == name:
+                            currentSceneChanged = True
+                    if 'visibilityMask' in data:
+                        sceneConfig.setVisibilityMask(int(data['visibilityMask'], 16))
+                        if self.currentSceneName == name:
+                            currentSceneMaskChanged = True
+                if notification['type'] in (SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM):
+                    isPremium = notification['type'] == SERVER_CMD_CHANGE_HANGAR_PREM
+                    try:
+                        data = json.loads(notification['data'])
+                        if 'hangar' in data:
+                            self._defaultHangarSpaceConfig.setSpaceIdOverride(isPremium, data['hangar'])
+                            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                                currentSceneChanged = True
+                        if 'visibilityMask' in data:
+                            self._defaultHangarSpaceConfig.setVisibilityMask(isPremium, int(data['visibilityMask'], 16))
+                            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                                currentSceneMaskChanged = True
+                    except Exception:
+                        self._defaultHangarSpaceConfig.setSpaceIdOverride(isPremium, notification['data'])
+                        if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                            currentSceneChanged = True
+
+            if currentSceneChanged:
+                if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                    spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
+                    visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
+                    success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask)
+                else:
+                    currentSceneConfig = self._sceneSpaceParams[self.currentSceneName]
+                    spaceId = currentSceneConfig.getHangarSpaceId()
+                    visibilityMask = currentSceneConfig.getVisibilityMask()
+                    success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
+                if success:
+                    self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
+                elif err == ErrorFlags.HANGAR_NOT_READY:
+                    if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
+                        spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
+                        visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
+                    else:
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
+                elif err == ErrorFlags.DUPLICATE_REQUEST:
+                    _logger.warning('Redundant hangar update via event_notifications')
+                else:
+                    raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
+                return
             if currentSceneMaskChanged and self.hangarSpace.inited:
                 if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                     visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)

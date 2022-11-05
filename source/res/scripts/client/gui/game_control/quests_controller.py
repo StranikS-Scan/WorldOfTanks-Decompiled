@@ -8,7 +8,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import getTypeOfCompactDescr
-from skeletons.gui.game_control import IQuestsController, IBattleRoyaleController, IEventBattlesController
+from skeletons.gui.game_control import IQuestsController, IBattleRoyaleController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -20,7 +20,7 @@ if typing.TYPE_CHECKING:
 _MAX_LVL_FOR_TUTORIAL = 3
 
 def _isAvailableForMode(q):
-    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not isFunRandomQuest(q.getGroupID())
+    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not isFunRandomQuest(q.getID())
 
 
 class _QuestCache(object):
@@ -126,7 +126,6 @@ class QuestsController(IQuestsController):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __eventBattleCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
         super(QuestsController, self).__init__()
@@ -180,11 +179,6 @@ class QuestsController(IQuestsController):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return list(self.__battleRoyaleController.getQuests().values())
-        if self.__eventBattleCtrl.isEventPrbActive():
-            if notCompleted:
-                quests = [ q for q in self.getQuestForVehicle(vehicle) if q.shouldBeShown() and not q.isCompleted() ]
-                return quests
-            return [ q for q in self.getQuestForVehicle(vehicle) if q.shouldBeShown() ]
         if notCompleted:
             quests = [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and q.shouldBeShown() and not q.isCompleted() ]
             return quests

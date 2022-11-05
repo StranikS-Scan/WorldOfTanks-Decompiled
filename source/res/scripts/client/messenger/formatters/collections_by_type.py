@@ -2,16 +2,16 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
+from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
- auto_boxes_subformatters.CNLootBoxesFormatter(),
  auto_boxes_subformatters.NYPostEventBoxesFormatter(),
  auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
  auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter())
-_TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormatter(),
+registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
  token_quest_subformatters.RankedFinalTokenQuestFormatter(),
@@ -21,7 +21,7 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
  token_quest_subformatters.WotPlusDirectivesFormatter(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
- token_quest_subformatters.Comp7RewardsFormatter())
+ token_quest_subformatters.Comp7RewardsFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
@@ -46,7 +46,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverDowntimeCompensation.index(): _sc.ServerDowntimeCompensation(),
  _SM_TYPE.achievementReceived.index(): _sc.AchievementFormatter(),
  _SM_TYPE.converter.index(): _sc.ConverterFormatter(),
- _SM_TYPE.tokenQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_TOKEN_QUEST_SUB_FORMATTERS),
+ _SM_TYPE.tokenQuests.index(): _sc.TokenQuestsFormatter(),
  _SM_TYPE.notificationsCenter.index(): _sc.NCMessageFormatter(),
  _SM_TYPE.clanEvent.index(): _sc.ClanMessageFormatter(),
  _SM_TYPE.fortEvent.index(): _sc.StrongholdMessageFormatter(),
@@ -109,43 +109,34 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.recertificationReset.index(): _sc.RecertificationResetFormatter(),
  _SM_TYPE.recertificationAvailability.index(): _sc.RecertificationAvailabilityFormatter(),
  _SM_TYPE.recertificationFinancial.index(): _sc.RecertificationFinancialFormatter(),
- _SM_TYPE.prbVehicleBadTypeKick.index(): _sc.PrbVehicleBadTypeKickFormatter(),
  _SM_TYPE.resourceWellOperation.index(): _sc.ResourceWellOperationFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
  _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
  _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
- _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
- _SM_TYPE.hwDailyQuest.index(): _sc.HWDailyQuestFormatter()}
-CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
- SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
- SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
- SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE: _sc.ActionNotificationFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter(),
- SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter(),
- SCH_CLIENT_MSG_TYPE.TECH_TREE_ACTION_DISCOUNT: _sc.TechTreeActionDiscountFormatter(),
- SCH_CLIENT_MSG_TYPE.BLUEPRINTS_CONVERT_SALE: _sc.BlueprintsConvertSaleFormatter(),
- SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD: _sc.MapboxRewardReceivedFormatter(),
- SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED: _sc.MapboxEndedFormatter(),
- SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED: _sc.MapboxStartedFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_PAUSED: _sc.BattleMattersPausedFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_STARTED: _sc.BattleMattersStartedFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD: _sc.BattleMattersTokenAward(),
- SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD: token_quest_subformatters.BattleMattersClientAwardsFormatter(),
- SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE: _sc.MapboxSurveyAvailableFormatter(),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveEnabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED: _wotPlusFormatters.SimpleFormatter('GoldReserveDisabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED: _wotPlusFormatters.SimpleFormatter('PassiveXpEnabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED: _wotPlusFormatters.SimpleFormatter('PassiveXpDisabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_ENABLED: _wotPlusFormatters.SimpleFormatter('TankRentalEnabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_DISABLED: _wotPlusFormatters.SimpleFormatter('TankRentalDisabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'),
- SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED: _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'),
- SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE: _sc.IntegratedAuctionLostRateFormatter()}
-
-def addServerFormatters(formatters):
-    SERVER_FORMATTERS.update(formatters)
-
-
-def addClientFormatters(formatters):
-    CLIENT_FORMATTERS.update(formatters)
+ _SM_TYPE.fairplay.index(): _sc.FairplayFormatter()}
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, _sc.ClientSysMessageFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG, _sc.PremiumAccountExpiryFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE, _sc.AOGASNotifyFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE, _sc.ActionNotificationFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE, _sc.KoreaParentalControlFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.TECH_TREE_ACTION_DISCOUNT, _sc.TechTreeActionDiscountFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BLUEPRINTS_CONVERT_SALE, _sc.BlueprintsConvertSaleFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD, _sc.MapboxRewardReceivedFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED, _sc.MapboxEndedFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED, _sc.MapboxStartedFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_PAUSED, _sc.BattleMattersPausedFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_STARTED, _sc.BattleMattersStartedFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD, _sc.BattleMattersTokenAward())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE, _sc.MapboxSurveyAvailableFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE, _sc.BattleTutorialResultsFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD, token_quest_subformatters.BattleMattersClientAwardsFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED, _wotPlusFormatters.SimpleFormatter('GoldReserveEnabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED, _wotPlusFormatters.SimpleFormatter('GoldReserveDisabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED, _wotPlusFormatters.SimpleFormatter('PassiveXpEnabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED, _wotPlusFormatters.SimpleFormatter('PassiveXpDisabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_ENABLED, _wotPlusFormatters.SimpleFormatter('TankRentalEnabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_DISABLED, _wotPlusFormatters.SimpleFormatter('TankRentalDisabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE, _sc.IntegratedAuctionLostRateFormatter())
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED, _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'))
+registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED, _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'))

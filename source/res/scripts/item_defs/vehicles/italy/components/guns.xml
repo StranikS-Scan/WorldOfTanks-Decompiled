@@ -41,6 +41,7 @@
     <_120mm_Cannone_Da_120_60>	41	</_120mm_Cannone_Da_120_60>
     <_127mm_Cannone_Da_127_58>	42	</_127mm_Cannone_Da_127_58>
     <Cannone_da_75_34_semovente>	44	</Cannone_da_75_34_semovente>
+    <_47_mm_Cannone_Da_47_40_bis>	46	</_47_mm_Cannone_Da_47_40_bis>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -329,6 +330,64 @@
         </_47mm_c_g_47_32_EP>
       </shots>
     </Cannone_da_47_40>
+    <_47_mm_Cannone_Da_47_40_bis>
+      <userString>	#italy_vehicles:_47_mm_Cannone_Da_47_40_bis	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	4650	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.16	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	300	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	400	</weight>
+      <maxHealth>	76	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_47mm_c_p_47_32_mod_40>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	830	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 57	</piercingPower>
+        </_47mm_c_p_47_32_mod_40>
+        <_47mm_c_g_47_32_EPS_1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	650	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	95 95	</piercingPower>
+        </_47mm_c_g_47_32_EPS_1>
+        <_47mm_c_g_47_32_EP_1>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	400	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_47mm_c_g_47_32_EP_1>
+      </shots>
+    </_47_mm_Cannone_Da_47_40_bis>
     <_75mm_Cannone_da_75_18>
       <userString>	#italy_vehicles:_75mm_Cannone_da_75_18	</userString>
       <tags></tags>

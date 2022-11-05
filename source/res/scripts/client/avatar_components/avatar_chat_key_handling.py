@@ -398,7 +398,11 @@ class AvatarChatKeyHandling(object):
                         _logger.info('Voice was blocked for the receiver of a private message due to flood prevention system!')
             cmdSenderVehicleID = self.__getVehicleIDForCmdSender(cmd)
             sentByPlayer = True if cmdSenderVehicleID == self.playerVehicleID else False
-            self.__playSoundNotification(notificationName, commandNotificationData.matrixProvider.translation, enableVoice, sentByPlayer)
+            if commandNotificationData.matrixProvider is not None:
+                soundPos = commandNotificationData.matrixProvider.translation
+            else:
+                soundPos = None
+            self.__playSoundNotification(notificationName, soundPos, enableVoice, sentByPlayer)
         return
 
     def __resetDebugOutput(self):

@@ -819,59 +819,12 @@ def _migrateTo92(core, data, initialized):
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN] = False
 
 
-def _migrateTo93(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    data[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = {'ussr': False,
-     'germany': False,
-     'usa': False,
-     'china': False,
-     'france': False,
-     'uk': False,
-     'japan': False,
-     'czech': False,
-     'sweden': False,
-     'poland': False,
-     'italy': False,
-     'lightTank': False,
-     'mediumTank': False,
-     'heavyTank': False,
-     'SPG': False,
-     'AT-SPG': False,
-     'level_1': False,
-     'level_2': False,
-     'level_3': False,
-     'level_4': False,
-     'level_5': False,
-     'level_6': False,
-     'level_7': False,
-     'level_8': False,
-     'level_9': False,
-     'level_10': False}
-    data[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = {'premium': False,
-     'elite': False,
-     'igr': False,
-     'rented': True,
-     'event': True,
-     'gameMode': False,
-     'favorite': False,
-     'bonus': False,
-     'crystals': False,
-     'funRandom': True,
-     'role_HT_assault': False,
-     'role_HT_break': False,
-     'role_HT_support': False,
-     'role_HT_universal': False,
-     'role_MT_universal': False,
-     'role_MT_sniper': False,
-     'role_MT_assault': False,
-     'role_MT_support': False,
-     'role_ATSPG_assault': False,
-     'role_ATSPG_universal': False,
-     'role_ATSPG_sniper': False,
-     'role_ATSPG_support': False,
-     'role_LT_universal': False,
-     'role_LT_wheeled': False,
-     'role_SPG': False}
+def _migrateTo93(_, data, __):
+    from account_helpers import AccountSettings
+    from account_helpers.AccountSettings import FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
+    data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
+    data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
 
 
 def _migrateTo94(core, data, initialized):
@@ -944,6 +897,23 @@ def _migrateTo96(core, data, initialized):
 
 def _migrateTo97(core, data, initialized):
     pass
+
+
+def _migrateTo98(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 0)
+    settingOffset = 1073741824
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear['onceOnlyHints'] = clear.get('onceOnlyHints', 0) | settingOffset
+
+
+def _migrateTo99(_, data, __):
+    from account_helpers import AccountSettings
+    from account_helpers.AccountSettings import FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
+    data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
+    data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
 
 
 _versions = ((1,
@@ -1328,6 +1298,14 @@ _versions = ((1,
   False),
  (97,
   _migrateTo97,
+  False,
+  False),
+ (98,
+  _migrateTo98,
+  False,
+  False),
+ (99,
+  _migrateTo99,
   False,
   False))
 

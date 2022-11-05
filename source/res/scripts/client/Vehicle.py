@@ -6,7 +6,6 @@ import random
 import weakref
 from collections import namedtuple
 import typing
-import functools
 import BigWorld
 import Math
 import Health
@@ -22,8 +21,7 @@ from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from aih_constants import ShakeReason
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
-from constants import SPT_MATKIND
-from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON
+from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, ARENA_PERIOD, ARENA_GUI_TYPE, SPT_MATKIND
 from debug_utils import LOG_DEBUG_DEV
 from Event import Event
 from gui.battle_control import vehicle_getter, avatar_getter
@@ -43,6 +41,7 @@ from skeletons.vehicle_appearance_cache import IAppearanceCache
 from soft_exception import SoftException
 from vehicle_systems.components.shot_damage_components import ShotDamageComponent
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
+from vehicle_systems.components.vehicle_pickup_component import VehiclePickupComponent
 from vehicle_systems.model_assembler import collisionIdxToTrackPairIdx
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
 from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
@@ -224,8 +223,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         oldTypeDescriptor = self.typeDescriptor
         self.typeDescriptor = self.getDescr(None if isDelayedRespawn else self.respawnCompactDescr)
         forceReloading = self.respawnCompactDescr is not None
-        if forceReloading and oldTypeDescriptor is None:
-            oldTypeDescriptor = self.typeDescriptor
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
             if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
@@ -682,6 +679,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             ctrl.setDisabledSwitches(self.id, self.disabledSwitches)
         return
 
+    def onVehiclePickup(self):
+        self.entityGameObject.createComponent(VehiclePickupComponent, self.appearance, self.entityGameObject)
+
     def onExtraHitted(self, extraIndex, hitPoint):
         self.extrasHitPoint[extraIndex] = hitPoint
 
@@ -836,7 +836,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 if self.__activeGunIndex == activeGun:
                     return
                 self.__activeGunIndex = activeGun
-                swElapsedTime = (switchTimes[2] - switchTimes[1]) * constants.RECHARGE_TIME_MULTIPLIER
+                swElapsedTime = switchTimes[2] - switchTimes[1]
                 afterShotDelay = self.typeDescriptor.gun.dualGun.afterShotDelay
                 leftDelayTime = max(afterShotDelay - swElapsedTime, 0.0)
                 ctrl = self.guiSessionProvider.shared.feedback
@@ -948,7 +948,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
             if self.respawnCompactDescr:
                 _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
-                BigWorld.callback(0.0, functools.partial(Vehicle.respawnVehicle, self.id, self.respawnCompactDescr))
+                BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
             self.refreshNationalVoice()
             self.set_quickShellChangerFactor()
             return
@@ -968,7 +968,13 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if TriggersManager.g_manager:
             TriggersManager.g_manager.fireTriggerInstantly(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=False)
         self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
-        self.appearance.deactivate()
+        restoreFilter = True
+        avatar = BigWorld.player()
+        arena = avatar_getter.getArena(avatar)
+        if arena is not None:
+            if avatar.arenaGuiType == ARENA_GUI_TYPE.COMP7 and arena.period == ARENA_PERIOD.PREBATTLE:
+                restoreFilter = False
+        self.appearance.deactivate(restoreFilter=restoreFilter)
         self.guiSessionProvider.stopVehicleVisual(self.id, self.isPlayerVehicle)
         self.appearance = None
         self.isStarted = False

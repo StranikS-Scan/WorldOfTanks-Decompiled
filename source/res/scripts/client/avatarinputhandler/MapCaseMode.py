@@ -920,6 +920,10 @@ class MapCaseControlMode(MapCaseControlModeBase):
         return prevMode[self._PREFERED_POSITION]
 
 
+class EpicMapCaseControlMode(MapCaseControlMode):
+    MODE_NAME = CTRL_MODE_NAME.MAP_CASE_EPIC
+
+
 class ArcadeMapCaseControlMode(MapCaseControlModeBase):
     MODE_NAME = CTRL_MODE_NAME.MAP_CASE_ARCADE
 

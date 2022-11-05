@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_items_sec
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_shells_section import AmmunitionShellsSection
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.common.tabs_controller import TabsController, tabUpdateFunc
-from gui.impl.common.ammunition_panel.ammunition_panel_blocks import OptDeviceBlock, ShellsBlock, ConsumablesBlock, BattleBoostersBlock, BattleAbilitiesBlock, HWConsumablesBlock
+from gui.impl.common.ammunition_panel.ammunition_panel_blocks import OptDeviceBlock, ShellsBlock, ConsumablesBlock, BattleBoostersBlock, BattleAbilitiesBlock
 if typing.TYPE_CHECKING:
     from gui.impl.common.ammunition_panel.ammunition_groups_controller import GroupData
 
@@ -54,10 +54,6 @@ class AmmunitionBlocksController(BaseAmmunitionBlocksController):
     @tabUpdateFunc(TankSetupConstants.CONSUMABLES)
     def _updateConsumables(self, viewModel, isFirst=False):
         ConsumablesBlock(self._vehicle, self._currentSection).adapt(viewModel, isFirst)
-
-    @tabUpdateFunc(TankSetupConstants.HWCONSUMABLES)
-    def _updateHWConsumables(self, viewModel, isFirst=False):
-        HWConsumablesBlock(self._vehicle, self._currentSection).adapt(viewModel, isFirst)
 
     @tabUpdateFunc(TankSetupConstants.BATTLE_BOOSTERS)
     def _updateBattleBoosters(self, viewModel, isFirst=False):

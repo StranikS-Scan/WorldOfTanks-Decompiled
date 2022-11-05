@@ -95,6 +95,10 @@ class ISharedControllersLocator(object):
     def deathzones(self):
         raise NotImplementedError
 
+    @property
+    def ingameHelp(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -173,10 +177,6 @@ class IDynamicControllersLocator(object):
 
     @property
     def gameNotifications(self):
-        raise NotImplementedError
-
-    @property
-    def teamBaseRecapturable(self):
         raise NotImplementedError
 
     @property

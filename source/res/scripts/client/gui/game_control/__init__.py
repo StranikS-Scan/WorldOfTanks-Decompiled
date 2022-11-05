@@ -78,8 +78,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
-    from gui.game_control.cn_lootbox_controller import CNLootBoxesController
-    from gui.entitlements.entitlements_controller import EntitlementsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -154,6 +152,4 @@ def getGameControllersConfig(manager):
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
-    _config(_interface.ICNLootBoxesController, CNLootBoxesController())
-    _config(_interface.IEntitlementsController, EntitlementsController())
     collectGameControllers(_config)

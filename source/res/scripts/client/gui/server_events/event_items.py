@@ -24,6 +24,7 @@ from gui.server_events.modifiers import compareModifiers, getModifierObj
 from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from gui.shared.system_factory import registerQuestBuilders
 from gui.shared.utils import ValidationResult
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
 from helpers import dependency, getLocalizedData, i18n, time_utils
@@ -38,6 +39,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.server_events.bonuses import SimpleBonus
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Union
+    from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EventPostBattleInfo
     import potapov_quests
 
 class DEFAULTS_GROUPS(object):
@@ -134,9 +136,6 @@ class ServerEventAbstract(object):
     def getFinishTime(self):
         return time_utils.makeLocalServerTime(self._data['finishTime']) if 'finishTime' in self._data else time.time()
 
-    def noSkip(self):
-        return self._data.get('noSkip', False)
-
     def getUserName(self):
         return getLocalizedData(self._data, 'name')
 
@@ -206,6 +205,10 @@ class ServerEventAbstract(object):
 
         return ValidationResult(False, 'requirements') if not self._checkConditions() else ValidationResult(True, '')
 
+    def isRawAvailable(self, now=None):
+        now = now or time.time()
+        return self.getStartTimeRaw() <= now < self.getFinishTimeRaw()
+
     def isValidVehicleCondition(self, vehicle):
         return self._checkVehicleConditions(vehicle)
 
@@ -244,11 +247,8 @@ class Group(ServerEventAbstract):
         groupQuests = []
         for questID in self.getGroupEvents():
             quest = srvEvents.get(questID)
-            if quest is None:
-                continue
-            if self.isHalloweenQuest() and not quest.isAvailable().isValid:
-                continue
-            groupQuests.append(quest)
+            if quest is not None:
+                groupQuests.append(quest)
 
         return groupQuests
 
@@ -260,9 +260,6 @@ class Group(ServerEventAbstract):
 
     def isRegularQuest(self):
         return events_helpers.isRegularQuest(self.getID())
-
-    def isHalloweenQuest(self):
-        return events_helpers.isHalloweenQuest(self.getID())
 
     def getLinkedAction(self, actions):
         return getLinkedActionID(self.getID(), actions)
@@ -314,6 +311,14 @@ class Quest(ServerEventAbstract):
         self.postBattleCond = PostBattleConditions(conds['postBattle'], self.preBattleCond)
         self._groupID = DEFAULTS_GROUPS.UNGROUPED_QUESTS
         self.__linkedActions = []
+
+    @classmethod
+    def postBattleInfo(cls):
+        return None
+
+    @classmethod
+    def showMissionAction(cls):
+        return None
 
     def isCompensationPossible(self):
         return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
@@ -1304,31 +1309,144 @@ def getTileGrayOverIconPath(tileIconID):
     return _getTileIconPath(tileIconID, 'gray', 'over')
 
 
-def createQuest(questType, qID, data, progress=None, expiryTime=None):
-    if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
+class IQuestBuilder(object):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        raise NotImplementedError
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        raise NotImplementedError
+
+
+class PersonalQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.PERSONAL_QUEST
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
         return PersonalQuest(qID, data, progress, expiryTime)
-    if questType == constants.EVENT_TYPE.GROUP:
+
+
+class GroupQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.GROUP
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
         return Group(qID, data)
-    if questType == constants.EVENT_TYPE.MOTIVE_QUEST:
+
+
+class MotiveQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.MOTIVE_QUEST
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
         return MotiveQuest(qID, data, progress)
-    if questType == constants.EVENT_TYPE.RANKED_QUEST:
+
+
+class RankedQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.RANKED_QUEST
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
         return RankedQuest(qID, data, progress)
-    if questType == constants.EVENT_TYPE.TOKEN_QUEST:
-        if qID.startswith(BATTLE_MATTERS_QUEST_ID) or qID.startswith(BATTLE_MATTERS_INTERMEDIATE_QUEST_ID):
-            tokenClass = BattleMattersTokenQuest
-        elif isDailyQuest(qID):
-            tokenClass = DailyEpicTokenQuest
-        else:
-            tokenClass = TokenQuest
-        return tokenClass(qID, data, progress)
-    questClass = Quest
-    if qID.startswith(BATTLE_MATTERS_QUEST_ID):
-        questClass = BattleMattersQuest
-    elif isPremium(qID):
-        questClass = PremiumQuest
-    elif isDailyQuest(qID):
-        questClass = DailyQuest
-    return questClass(qID, data, progress)
+
+
+class BattleMattersTokenQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return False if questType != constants.EVENT_TYPE.TOKEN_QUEST else qID.startswith(BATTLE_MATTERS_QUEST_ID) or qID.startswith(BATTLE_MATTERS_INTERMEDIATE_QUEST_ID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return BattleMattersTokenQuest(qID, data, progress)
+
+
+class DailyTokenQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.TOKEN_QUEST and isDailyQuest(qID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return DailyEpicTokenQuest(qID, data, progress)
+
+
+class TokenQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return questType == constants.EVENT_TYPE.TOKEN_QUEST
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return TokenQuest(qID, data, progress)
+
+
+class BattleMattersQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return qID.startswith(BATTLE_MATTERS_QUEST_ID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return BattleMattersQuest(qID, data, progress)
+
+
+class PremiumQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return isPremium(qID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return PremiumQuest(qID, data, progress)
+
+
+class DailyQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return isDailyQuest(qID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return DailyQuest(qID, data, progress)
+
+
+registerQuestBuilders((PersonalQuestBuilder,
+ GroupQuestBuilder,
+ MotiveQuestBuilder,
+ RankedQuestBuilder,
+ BattleMattersTokenQuestBuilder,
+ DailyTokenQuestBuilder,
+ TokenQuestBuilder,
+ BattleMattersQuestBuilder,
+ PremiumQuestBuilder,
+ DailyQuestBuilder))
+
+def createQuest(builders, questType, qID, data, progress=None, expiryTime=None):
+    for builder in builders:
+        if builder.isSuitableQuest(questType, qID):
+            return builder.buildQuest(questType, qID, data, progress, expiryTime)
+
+    return Quest(qID, data, progress)
 
 
 def createAction(eventType, aID, data):

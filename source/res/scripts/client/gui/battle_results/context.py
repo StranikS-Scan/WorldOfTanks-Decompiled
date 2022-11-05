@@ -22,7 +22,7 @@ class RequestResultsContext(object):
         return self.__arenaBonusType
 
     def needToShowImmediately(self):
-        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.NOT_IMMEDIATE_BATTLE_RESULTS
+        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE and self.__arenaBonusType != ARENA_BONUS_TYPE.MAPS_TRAINING
 
     def needToShowIfPosted(self):
         return self.__showIfPosted

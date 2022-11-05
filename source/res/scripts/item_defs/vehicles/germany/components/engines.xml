@@ -146,6 +146,7 @@
     <Maybach_HL_210_TRM_P30L_1>	256	</Maybach_HL_210_TRM_P30L_1>
     <Renault_V4_german>	257	</Renault_V4_german>
     <SPA_19TB_mod_43_german>	258	</SPA_19TB_mod_43_german>
+    <V_2K_T>	260	</V_2K_T>
     <Maybach_HL_210_TRM_P30_SH>	324	</Maybach_HL_210_TRM_P30_SH>
     <Maybach_HL_230_TRM_P30_SH>	325	</Maybach_HL_230_TRM_P30_SH>
     <Maybach_HL_230_TRM_P35_SH>	326	</Maybach_HL_230_TRM_P35_SH>
@@ -2803,6 +2804,23 @@
       <rpm_min>	357	</rpm_min>
       <rpm_max>	2128	</rpm_max>
     </MB_837_K>
+    <V_2K_T>
+      <userString>	#germany_vehicles:V_2K_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	23050	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </V_2K_T>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>

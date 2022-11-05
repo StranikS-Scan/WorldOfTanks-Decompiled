@@ -307,7 +307,6 @@ class UNIT_NOTIFY_CMD:
     INCORRECT_EVENT_ENQUEUE_DATA = 17
     REMOVED_VEHICLE_MAX_SCOUT_EXCEED = 18
     CHANGE_SQUAD_SIZE = 19
-    REMOVED_VEHICLE_BAD_TYPE = 20
 
 
 class CLIENT_UNIT_CMD:
@@ -337,6 +336,7 @@ class CLIENT_UNIT_CMD:
     SET_ARENA_TYPE = 26
     SET_ONLY_10_MODE = 27
     SET_SQUAD_SIZE = 28
+    CHANGE_FUN_EVENT_ID = 29
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -1218,7 +1218,7 @@ class UnitBase(OpsUnpacker):
                 self._squadSize = newSquadSize
                 self.storeOp(UNIT_OP.SQUAD_SIZE, newSquadSize)
                 for accountDBID, _ in self._players.iteritems():
-                    self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.CHANGE_SQUAD_SIZE, [newSquadSize])
+                    self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.CHANGE_SQUAD_SIZE, [newSquadSize, bool(self._freeSlots)])
 
                 self._dirty = 1
             return OK

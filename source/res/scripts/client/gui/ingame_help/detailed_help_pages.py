@@ -1,177 +1,41 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ingame_help/detailed_help_pages.py
 import logging
+import typing
 import CommandMapping
+from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE
 from gui import makeHtmlString
+from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HelpHintContext
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.system_factory import registerIngameHelpPagesBuilders, collectIngameHelpPagesBuilders
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
+from shared_utils import findFirst
 from soft_exception import SoftException
 from items.vehicles import getRolesActions
 from constants import ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from gui.shared.formatters import text_styles
+if typing.TYPE_CHECKING:
+    from skeletons.gui.battle_session import IClientArenaVisitor
+    from Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
-def buildPagesData(ctx):
-    datailedList = []
-    defaultHeaderTitle = buildTitle(ctx)
-    if ctx.get('isFunRandom'):
-        datailedList.extend(buildFunRandomPages(backport.text(R.strings.ingame_help.detailsHelp.funRandom.title())))
-    if ctx.get('roleType'):
-        datailedList.extend(buildRoleTypePages(backport.text(R.strings.ingame_help.detailsHelp.role.title()), ctx.get('roleType')))
-    if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
-        datailedList.extend(buildSiegeModePages(defaultHeaderTitle))
-    if ctx.get('hasBurnout'):
-        datailedList.extend(buildBurnoutPages(defaultHeaderTitle))
-    if ctx.get('isWheeled'):
-        datailedList.extend(buildWheeledPages(defaultHeaderTitle))
-    if ctx.get('isDualGun'):
-        datailedList.extend(buildDualGunPages(defaultHeaderTitle))
-    if ctx.get('battleRoyale') and ctx.get('mapGeometryName'):
-        datailedList.extend(buildBattleRoyalePages(defaultHeaderTitle, ctx['mapGeometryName']))
-    if ctx.get('hasTurboshaftEngine'):
-        datailedList.extend(buildTurboshaftEnginePages(defaultHeaderTitle))
-    if ctx.get('hasRocketAcceleration'):
-        datailedList.extend(buildRocketAccelerationPages(defaultHeaderTitle))
-    if ctx.get('isTrackWithinTrack'):
-        datailedList.extend(buildTrackWithinTrackPages(defaultHeaderTitle))
-    if ctx.get('isComp7'):
-        comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
-        datailedList.extend(buildComp7Pages(comp7Header))
-    return datailedList
+class HelpPagePriority(object):
+    DEFAULT = 0
+    COMP7 = 1
+    TRACK_WITHIN_TRACK = 2
+    ROCKET_ACCELERATION = 3
+    TURBOSHAFT_ENGINE = 4
+    BATTLE_ROYALE = 5
+    DUAL_GUN = 6
+    WHEELED = 7
+    BURNOUT = 8
+    SIEGE_MODE = 9
+    ROLE_TYPE = 10
 
 
-def buildEventPagesData(ctx):
-    R_HELP_STRINGS = R.strings.hw_ingame_help.detailsHelp
-    R_HELP_IMAGES = R.images.halloween.gui.maps.icons.battleHelp
-    pages = []
-    headerTitle = backport.text(R.strings.hw_ingame_help.detailsHelp.title())
-    for page in ('pageTask', 'pageRespawn', 'pageAbility', 'pageLanterns'):
-        _addPage(pages, headerTitle, backport.text(R_HELP_STRINGS.dyn(page).title()), text_styles.mainBig(backport.text(R_HELP_STRINGS.dyn(page).desc())), [], [], backport.image(R_HELP_IMAGES.dyn(page)()))
-
-    return pages
-
-
-def buildTitle(ctx):
-    title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
-    vehName = ctx.get('vehName')
-    if vehName is not None:
-        title = vehName
-    return title
-
-
-def buildSiegeModePages(headerTitle):
-    pages = []
-    siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    keyName = siegeKeyName if siegeKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.twoModes.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.twoModes(), key1=keyName)), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_two_mode()))
-    return pages
-
-
-def buildBurnoutPages(headerTitle):
-    pages = []
-    breakeKeyName = getReadableKey(CommandMapping.CMD_BLOCK_TRACKS)
-    forwardKeyName = getReadableKey(CommandMapping.CMD_MOVE_FORWARD)
-    breakeKey = getVirtualKey(CommandMapping.CMD_BLOCK_TRACKS)
-    forwardKey = getVirtualKey(CommandMapping.CMD_MOVE_FORWARD)
-    keyName1 = breakeKeyName if breakeKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
-    keyName2 = forwardKeyName if forwardKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.burnout.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.burnout(), key1=keyName1, key2=keyName2)), [forwardKey, breakeKey], [forwardKeyName, breakeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_burnout()))
-    return pages
-
-
-def buildWheeledPages(headerTitle):
-    pages = []
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_chassis()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_details()))
-    return pages
-
-
-def buildTrackWithinTrackPages(headerTitle):
-    pages = []
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.trackWithinTrack.roll_away()))
-    return pages
-
-
-def buildComp7Pages(headerTitle):
-    pages = []
-    for pageName in ('poi', 'roleSkills', 'rules'):
-        _addPage(datailedList=pages, headerTitle=headerTitle, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
-
-    return pages
-
-
-def buildDualGunPages(headerTitle):
-    pages = []
-    shootKeyName = getReadableKey(CommandMapping.CMD_CM_SHOOT)
-    shootKey = getVirtualKey(CommandMapping.CMD_CM_SHOOT)
-    chargeKeyName = getReadableKey(CommandMapping.CMD_CM_CHARGE_SHOT)
-    chargeKey = getVirtualKey(CommandMapping.CMD_CM_CHARGE_SHOT)
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire())), [chargeKey], [chargeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.volley_fire()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire())), [shootKey], [shootKeyName], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.quick_fire()))
-    return pages
-
-
-def buildBattleRoyalePages(headerTitle, mapGeometryName):
-    pages = []
-    mapResourceName = 'c_' + replaceHyphenToUnderscore(mapGeometryName)
-    imagePath = R.images.gui.maps.icons.battleHelp.battleRoyale.dyn(mapResourceName)
-    if not imagePath.isValid():
-        raise SoftException('No icons found for map {}'.format(mapGeometryName))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description())), [], [], backport.image(imagePath.br_radar()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description())), [], [], backport.image(imagePath.br_zone()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description())), [], [], backport.image(imagePath.br_sector()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description())), [], [], backport.image(imagePath.br_airdrop()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description())), [], [], backport.image(imagePath.br_tree()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description())), [], [], backport.image(imagePath.br_unique_abilities()))
-    return pages
-
-
-def buildTurboshaftEnginePages(headerTitle):
-    pages = []
-    siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_1()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_2()))
-    return pages
-
-
-def buildRocketAccelerationPages(headerTitle):
-    pages = []
-    siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_1()))
-    _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_2()))
-    return pages
-
-
-def buildRoleTypePages(headerTitle, roleType):
-    roleActions = []
-    rolesToActions = getRolesActions()
-    for action in rolesToActions[roleType]:
-        actionLabel = ACTION_TYPE_TO_LABEL[action]
-        roleActions.append({'image': backport.image(R.images.gui.maps.icons.roleExp.actions.c_128x128.dyn(actionLabel)()),
-         'description': backport.text(R.strings.menu.roleExp.action.dyn(actionLabel)())})
-
-    roleTypeLabel = ROLE_TYPE_TO_LABEL[roleType]
-    pages = []
-    _addPage(pages, headerTitle, text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions)
-    return pages
-
-
-def buildFunRandomPages(headerTitle):
-    pages = []
-    numPages = R.images.gui.maps.icons.battleHelp.funRandom.length()
-    for i in xrange(numPages):
-        dynKey = 'mode%s' % (i + 1)
-        _addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.funRandom.dyn(dynKey).description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.funRandom.dyn(dynKey)()))
-
-    return pages
-
-
-def _addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None):
+def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
     data = {'headerTitle': headerTitle,
      'title': title,
      'descr': descr,
@@ -179,5 +43,312 @@ def _addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, rol
      'buttons': buttons,
      'image': image,
      'roleImage': roleImage,
-     'roleActions': roleActions}
+     'roleActions': roleActions,
+     'hintCtx': hintCtx}
     datailedList.append(data)
+
+
+def buildTitle(ctx):
+    title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
+    return ctx.get('vehName') or title
+
+
+def buildPagesData(ctx):
+    datailedList = []
+    builders = collectIngameHelpPagesBuilders()
+    for builder in sorted(builders, key=lambda item: item.priority(), reverse=True):
+        if builder.hasPagesForCtx(ctx):
+            datailedList.extend(builder.buildPages(ctx))
+
+    selectedIdx = 0
+    currentHintCtx = ctx.get('currentHintCtx')
+    hintContexts = [ pageData.pop('hintCtx') for pageData in datailedList ]
+    if currentHintCtx:
+        selected = findFirst(lambda p: p == currentHintCtx, hintContexts)
+        if selected is not None:
+            selectedIdx = hintContexts.index(selected)
+    return (datailedList, selectedIdx)
+
+
+class DetailedHelpPagesBuilder(object):
+    _SUITABLE_CTX_KEYS = ()
+
+    @classmethod
+    def hasPagesForCtx(cls, ctx):
+        return all((ctx.get(key, False) for key in cls._SUITABLE_CTX_KEYS))
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.DEFAULT
+
+    @classmethod
+    def buildPages(cls, ctx):
+        return []
+
+    @classmethod
+    def collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        cls._collectHelpCtx(ctx, arenaVisitor, vehicle)
+        return cls.hasPagesForCtx(ctx)
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        raise NotImplementedError
+
+
+class SiegeModePagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isWheeledVehicle', 'hasSiegeMode')
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.SIEGE_MODE
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        keyName = siegeKeyName if siegeKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.twoModes.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.twoModes(), key1=keyName)), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_two_mode()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasSiegeMode'] = vehicle is not None and vehicle.typeDescriptor.hasSiegeMode
+        ctx['isWheeledVehicle'] = vehicle is not None and vehicle.typeDescriptor.isWheeledVehicle
+        return
+
+
+class BurnOutPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasBurnout',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.BURNOUT
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        breakeKeyName = getReadableKey(CommandMapping.CMD_BLOCK_TRACKS)
+        forwardKeyName = getReadableKey(CommandMapping.CMD_MOVE_FORWARD)
+        breakeKey = getVirtualKey(CommandMapping.CMD_BLOCK_TRACKS)
+        forwardKey = getVirtualKey(CommandMapping.CMD_MOVE_FORWARD)
+        keyName1 = breakeKeyName if breakeKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
+        keyName2 = forwardKeyName if forwardKeyName else backport.text(R.strings.ingame_help.detailsHelp.noKey())
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.burnout.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.burnout(), key1=keyName1, key2=keyName2)), [forwardKey, breakeKey], [forwardKeyName, breakeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_burnout()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasBurnout'] = vehicle is not None and vehicle.typeDescriptor.hasBurnout
+        return
+
+
+class WheeledPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isWheeledVehicle',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.WHEELED
+
+    @classmethod
+    def buildPages(cls, ctx):
+        headerTitle = buildTitle(ctx)
+        pages = []
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_chassis()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_details()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isWheeledVehicle'] = isWheeledVehicle = vehicle is not None and vehicle.typeDescriptor.isWheeledVehicle
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isWheeledVehicle
+        return
+
+
+class TrackWithinTrackPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isTrackWithinTrack',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.TRACK_WITHIN_TRACK
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.trackWithinTrack.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.trackWithinTrack.roll_away()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isTrackWithinTrack'] = isTrack = vehicle is not None and vehicle.typeDescriptor.isTrackWithinTrack
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isTrack
+        return
+
+
+class DualGunPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isDualGun',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.DUAL_GUN
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        shootKeyName = getReadableKey(CommandMapping.CMD_CM_SHOOT)
+        shootKey = getVirtualKey(CommandMapping.CMD_CM_SHOOT)
+        chargeKeyName = getReadableKey(CommandMapping.CMD_CM_CHARGE_SHOT)
+        chargeKey = getVirtualKey(CommandMapping.CMD_CM_CHARGE_SHOT)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire())), [chargeKey], [chargeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.volley_fire()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire())), [shootKey], [shootKeyName], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.quick_fire()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isDualGun'] = isDualGun = vehicle is not None and vehicle.typeDescriptor.isDualgunVehicle
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isDualGun
+        return
+
+
+class BattleRoyalePagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isBattleRoyale', 'mapGeometryName')
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.BATTLE_ROYALE
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        mapGeometryName = ctx['mapGeometryName']
+        mapResourceName = 'c_' + replaceHyphenToUnderscore(mapGeometryName)
+        imagePath = R.images.gui.maps.icons.battleHelp.battleRoyale.dyn(mapResourceName)
+        if not imagePath.isValid():
+            raise SoftException('No icons found for map {}'.format(mapGeometryName))
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description())), [], [], backport.image(imagePath.br_radar()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description())), [], [], backport.image(imagePath.br_zone()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description())), [], [], backport.image(imagePath.br_sector()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description())), [], [], backport.image(imagePath.br_airdrop()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description())), [], [], backport.image(imagePath.br_tree()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description())), [], [], backport.image(imagePath.br_unique_abilities()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isBattleRoyale'] = isRoyale = arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isRoyale
+        ctx['mapGeometryName'] = arenaVisitor.type.getGeometryName()
+
+
+class TurboshaftEnginePagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasTurboshaftEngine',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.TURBOSHAFT_ENGINE
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_1()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.engineMode.engineModePage2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.turboshaftEngineHelp.engine_mode_page_2()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasTurboshaftEngine'] = hasTurboshaft = vehicle is not None and vehicle.typeDescriptor.hasTurboshaftEngine
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasTurboshaft
+        return
+
+
+class RocketAccelerationPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasRocketAcceleration',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.ROCKET_ACCELERATION
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_1()))
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_2()))
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        hasRocketAcceleration = vehicle is not None and vehicle.typeDescriptor.hasRocketAcceleration
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasRocketAcceleration
+        ctx['hasRocketAcceleration'] = hasRocketAcceleration
+        return
+
+
+class RoleTypePagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('roleType',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.ROLE_TYPE
+
+    @classmethod
+    def buildPages(cls, ctx):
+        roleType = ctx.get('roleType')
+        roleActions = []
+        rolesToActions = getRolesActions()
+        for action in rolesToActions[roleType]:
+            actionLabel = ACTION_TYPE_TO_LABEL[action]
+            roleActions.append({'image': backport.image(R.images.gui.maps.icons.roleExp.actions.c_128x128.dyn(actionLabel)()),
+             'description': backport.text(R.strings.menu.roleExp.action.dyn(actionLabel)())})
+
+        roleTypeLabel = ROLE_TYPE_TO_LABEL[roleType]
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.role.title()), text_styles.superPromoTitle(backport.text(R.strings.menu.roleExp.roleName.dyn(roleTypeLabel)(), groupName=makeHtmlString('html_templates:vehicleRoles', 'roleTitle', {'message': backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleTypeLabel)())}))), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.role.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rolesHelp.dyn(roleTypeLabel)()), roleImage=backport.image(R.images.gui.maps.icons.roleExp.roles.c_100x100.dyn(roleTypeLabel)()), roleActions=roleActions, hintCtx=HelpHintContext.ROLE_HELP)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        isRanked = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RANKED
+        hasRoleType = isRanked and vehicle is not None and vehicle.typeDescriptor.role != ROLE_TYPE.NOT_DEFINED
+        ctx['roleType'] = vehicle.typeDescriptor.role if hasRoleType else ROLE_TYPE.NOT_DEFINED
+        return
+
+
+class Comp7PagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isComp7',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.COMP7
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
+        for pageName in ('poi', 'roleSkills', 'rules'):
+            addPage(datailedList=pages, headerTitle=comp7Header, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
+
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isComp7'] = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.COMP7
+
+
+registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
+ BurnOutPagesBuilder,
+ WheeledPagesBuilder,
+ TrackWithinTrackPagesBuilder,
+ DualGunPagesBuilder,
+ BattleRoyalePagesBuilder,
+ TurboshaftEnginePagesBuilder,
+ RoleTypePagesBuilder,
+ RocketAccelerationPagesBuilder,
+ Comp7PagesBuilder))

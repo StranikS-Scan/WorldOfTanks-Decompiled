@@ -23,15 +23,12 @@ from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, getShortClientVersion, dependency
 from skeletons.gameplay import IGameplayLogic
-from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController, IEventBattlesController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.game_control import IPromoController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control.context import GLOBAL_FLAG
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.entities.base.ctx import PrbAction
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 
 def _getVersionMessage():
     return ('{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),)
@@ -46,7 +43,6 @@ class LobbyMenu(LobbyMenuMeta):
     manualController = dependency.descriptor(IManualController)
     gui = dependency.descriptor(IGuiLoader)
     demoAccController = dependency.descriptor(IDemoAccCompletionController)
-    eventBattlesController = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, *args, **kwargs):
         super(LobbyMenu, self).__init__(*args, **kwargs)
@@ -58,19 +54,9 @@ class LobbyMenu(LobbyMenuMeta):
     def prbEntity(self):
         pass
 
-    @adisp_process
     def postClick(self):
         self.destroy()
-        isEventPrbActive = self.eventBattlesController.isEventPrbActive()
-        if isEventPrbActive:
-            dispatcher = g_prbLoader.getDispatcher()
-            if dispatcher is None:
-                return
-            result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
-            if not result:
-                return
         self.promo.showFieldPost()
-        return
 
     def settingsClick(self):
         event_dispatcher.showSettingsWindow(redefinedKeyMode=False)
@@ -116,9 +102,10 @@ class LobbyMenu(LobbyMenuMeta):
     def manualClick(self):
         if self.manualController.isActivated():
             view = self.manualController.getView()
-            if view is None:
+            if view is not None:
+                self.destroy()
+            else:
                 self.manualController.show()
-            self.destroy()
         return
 
     def _populate(self):

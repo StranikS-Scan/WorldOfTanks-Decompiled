@@ -169,7 +169,7 @@ class BattlePassProgress(object):
         return BattlePassConsts.REWARD_BOTH if self.__hasBattlePass else BattlePassConsts.REWARD_FREE
 
 
-class _EventInfo(EventInfoModel):
+class EventPostBattleInfo(EventInfoModel):
 
     def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
         if noProgressInfo:
@@ -204,36 +204,17 @@ class _EventInfo(EventInfoModel):
          'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_TASK}
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
-        index = 0
         progresses = []
-        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         if not isProgressReset and not isCompleted:
-            for cond in self.event.bonusCond.getConditions().items:
-                if isinstance(cond, conditions._Cumulativable):
-                    for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                        if not isQuestDailyQuest:
-                            label = cond.getUserString()
-                        else:
-                            label = cond.getCustomDescription()
-                        if not diff or not label:
-                            continue
-                        index += 1
-                        progresses.append({'progrTooltip': None,
-                         'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
-                         'maxProgrVal': totalProg,
-                         'currentProgrVal': curProg,
-                         'description': '%d. %s' % (index, label),
-                         'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
-                         'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE})
-
+            progresses = self._getProgresses(pCur, pPrev)
             if not progresses:
-                return
+                return None
         alertMsg = ''
         if isProgressReset:
             alertMsg = i18n.makeString('#quests:postBattle/progressReset')
         _, awards = ('', None)
         if not isProgressReset and isCompleted:
-            awards = self._getBonuses(svrEvents)
+            awards = self._getBonuses(svrEvents, pCur=pCur)
         return {'title': self.event.getUserName(),
          'descr': self.event.getDescription(),
          'awards': awards,
@@ -261,11 +242,35 @@ class _EventInfo(EventInfoModel):
          formatters.PROGRESS_BAR_TYPE.NONE,
          None)
 
-    def _getBonuses(self, svrEvents, bonuses=None):
+    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
         return []
 
+    def _getProgresses(self, pCur, pPrev):
+        index = 0
+        progresses = []
+        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
+        for cond in self.event.bonusCond.getConditions().items:
+            if isinstance(cond, conditions._Cumulativable):
+                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    if not isQuestDailyQuest:
+                        label = cond.getUserString()
+                    else:
+                        label = cond.getCustomDescription()
+                    if not diff or not label:
+                        continue
+                    index += 1
+                    progresses.append({'progrTooltip': None,
+                     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                     'maxProgrVal': totalProg,
+                     'currentProgrVal': curProg,
+                     'description': '%d. %s' % (index, label),
+                     'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
+                     'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE})
 
-class _QuestInfo(_EventInfo, QuestInfoModel):
+        return progresses
+
+
+class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
     PROGRESS_TOOLTIP_MAX_ITEMS = 4
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -309,7 +314,7 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
                 msg = i18n.makeString(key, count=bonusLimit)
             return (MISSIONS_STATES.NONE, msg)
 
-    def _getBonuses(self, svrEvents, bonuses=None):
+    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
         bonuses = bonuses or self.event.getBonuses()
         result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(bonuses)
         if result:
@@ -387,10 +392,10 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
              tooltip)
 
 
-class _PersonalMissionInfo(_EventInfo):
+class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
-        info = super(_PersonalMissionInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        info = super(PersonalMissionPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
         condFormatter = PostBattleConditionsFormatter(self.event, progressData)
         if isCompleted.isMainComplete or isCompleted.isAddComplete:
             failedDescr = ''
@@ -423,21 +428,24 @@ class _PersonalMissionInfo(_EventInfo):
         return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS, msg)
 
 
-class _MotiveQuestInfo(_QuestInfo):
+class MotiveQuestPostBattleInfo(QuestPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         motiveQuests = [ q for q in svrEvents.values() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() ]
-        info = super(_MotiveQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        info = super(MotiveQuestPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
         info.update({'isLinkBtnVisible': len(motiveQuests) > 0})
         return info
 
 
 def _getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
-        return _PersonalMissionInfo(event)
+        return PersonalMissionPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
-        return _MotiveQuestInfo(event)
-    return _QuestInfo(event) if event.getType() in constants.EVENT_TYPE.QUEST_RANGE else _EventInfo(event)
+        return MotiveQuestPostBattleInfo(event)
+    if event.getType() in constants.EVENT_TYPE.QUEST_RANGE:
+        postBattleInfoCls = event.postBattleInfo() or QuestPostBattleInfo
+        return postBattleInfoCls(event)
+    return EventPostBattleInfo(event)
 
 
 def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False, progressData=None):

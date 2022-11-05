@@ -11,12 +11,15 @@ from helpers import dependency
 from skeletons.gui.game_control import IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.web import IWebController
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys, PersonalReservesLogTooltips
+from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
 if typing.TYPE_CHECKING:
     from gui.wgcg.web_controller import WebController
     from gui.goodies.goodies_cache import GoodiesCache
     from gui.game_control.BoostersController import BoostersController
 
 class PersonalReservesTooltipView(ViewImpl):
+    __slots__ = ('_uiLogger',)
     _webCtrl = dependency.descriptor(IWebController)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _boosters = dependency.descriptor(IBoostersController)
@@ -25,6 +28,7 @@ class PersonalReservesTooltipView(ViewImpl):
         settings = ViewSettings(layoutID=R.views.lobby.personal_reserves.PersonalReservesTooltip())
         settings.model = ReservesEntryPointModel()
         super(PersonalReservesTooltipView, self).__init__(settings)
+        self._uiLogger = PersonalReservesMetricsLogger(parent=PersonalReservesLogKeys.LOBBY_HEADER, item=PersonalReservesLogTooltips.RESERVES_WIDGET_TOOLTIP)
 
     @property
     def viewModel(self):
@@ -33,9 +37,11 @@ class PersonalReservesTooltipView(ViewImpl):
     def _initialize(self):
         super(PersonalReservesTooltipView, self)._initialize()
         self._boosters.onGameModeStatusChange += self._update
+        self._uiLogger.onViewInitialize()
 
     def _finalize(self):
         self._boosters.onGameModeStatusChange -= self._update
+        self._uiLogger.onViewFinalize()
         super(PersonalReservesTooltipView, self)._finalize()
 
     def _onLoading(self):

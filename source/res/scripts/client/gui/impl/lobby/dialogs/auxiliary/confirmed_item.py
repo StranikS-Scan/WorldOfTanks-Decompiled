@@ -112,7 +112,7 @@ class ConfirmedOptDevice(ConfirmedArtefact):
         return self._item.getRemovalPrice(self.__itemsCache.items)
 
     def canUseDemountKit(self):
-        return not self._item.isRemovable and not self._item.isDeluxe
+        return not self._item.isRemovable and not self._item.isDeluxe and self._item.canUseDemountKit
 
     @classmethod
     def createFromGUIItem(cls, item, ctx=None):

@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/vehicle_modifications.py
 import copy
-from battle_modifier_constants import USE_MODIFICATION_CACHE, MAX_MODIFICATION_LAYER_COUNT, ModifierDomain, BattleParams
-from battle_modifiers_common import battle_modifiers
+from battle_modifiers_common import battle_modifiers, ModifiersContext
+from battle_modifiers_common.battle_modifiers import BattleParams
+from battle_modifiers_ext.constants_ext import USE_MODIFICATION_CACHE, MAX_MODIFICATION_LAYER_COUNT, DEBUG_MODIFIERS, ModifierDomain
 from collections import deque
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH
-from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
+from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, Union
 from Math import Vector2
+from debug_utils import LOG_DEBUG
 if TYPE_CHECKING:
     from items.vehicles import VehicleType
-    from items.vehicle_items import Chassis, Turret, Gun, Radio, Shell
+    from items.vehicle_items import Chassis, Turret, Gun, Radio, Shell, Engine, Hull
     from items.components.gun_components import GunShot
     from items.components.shell_components import ShellType
     from battle_modifiers import BattleModifiers
@@ -21,10 +23,17 @@ class VehicleModifier(object):
 
     @classmethod
     def modifyVehicle(cls, vehType, modifiers):
-        return vehType if not modifiers.haveDomain(ModifierDomain.VEH_TYPE_COMPONENTS) else cls._modifyVehType(vehType, modifiers)
+        if not modifiers.haveDomain(ModifierDomain.VEH_TYPE_COMPONENTS):
+            return vehType
+        if not isinstance(modifiers, ModifiersContext):
+            modifiers = ModifiersContext(modifiers)
+        return cls._modifyVehType(vehType, modifiers)
 
     @classmethod
     def _modifyVehType(cls, vehType, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify vehicle '{}'".format(vehType.name))
+        modifiers.vehicle = vehType
         vehType = copy.copy(vehType)
         if modifiers.haveDomain(ModifierDomain.VEH_TYPE):
             invisibility = vehType.invisibility
@@ -40,17 +49,28 @@ class VehicleModifier(object):
             vehType.radios = tuple((cls.__modifyRadio(radio, modifiers) for radio in vehType.radios))
         if modifiers.haveDomain(ModifierDomain.PHYSICS):
             vehType.xphysics = cls.__modifyPhysics(vehType.xphysics, modifiers)
+        if modifiers.haveDomain(ModifierDomain.ENGINE):
+            vehType.engines = tuple((cls.__modifyEngine(engine, modifiers) for engine in vehType.engines))
+        if modifiers.haveDomain(ModifierDomain.HULL):
+            vehType.hulls = tuple((cls.__modifyHull(hull, modifiers) for hull in vehType.hulls))
         return vehType
 
     @classmethod
     def __modifyChassis(cls, chassis, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify chassis '{}'".format(chassis.name))
         chassis = copy.copy(chassis)
         dispFactors = chassis.shotDispersionFactors
         chassis.shotDispersionFactors = (modifiers(BattleParams.DISP_FACTOR_CHASSIS_MOVEMENT, dispFactors[0]), modifiers(BattleParams.DISP_FACTOR_CHASSIS_ROTATION, dispFactors[1]))
+        if IS_CLIENT:
+            textureSet = modifiers(BattleParams.CHASSIS_DECALS, chassis.traces.textureSet)
+            chassis.traces = chassis.traces._replace(textureSet=textureSet)
         return chassis
 
     @classmethod
     def __modifyTurret(cls, turret, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify turret '{}'".format(turret.name))
         turret = copy.copy(turret)
         if modifiers.haveDomain(ModifierDomain.TURRET):
             turret.rotationSpeed = modifiers(BattleParams.TURRET_ROTATION_SPEED, turret.rotationSpeed)
@@ -61,6 +81,9 @@ class VehicleModifier(object):
 
     @classmethod
     def __modifyGun(cls, gun, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify gun '{}'".format(gun.name))
+        modifiers.gun = gun
         gun = copy.copy(gun)
         if modifiers.haveDomain(ModifierDomain.GUN):
             gun.rotationSpeed = modifiers(BattleParams.GUN_ROTATION_SPEED, gun.rotationSpeed)
@@ -85,12 +108,20 @@ class VehicleModifier(object):
             if gun.dualGun != DEFAULT_GUN_DUALGUN:
                 reloadTimes = [ modifiers(BattleParams.RELOAD_TIME, reloadTime) for reloadTime in gun.dualGun.reloadTimes ]
                 gun.dualGun = gun.dualGun._replace(reloadTimes=tuple(reloadTimes))
+            if IS_CLIENT:
+                if gun.dualGun != DEFAULT_GUN_DUALGUN:
+                    gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
+                else:
+                    gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
         if modifiers.haveDomain(ModifierDomain.SHOT_COMPONENTS):
             gun.shots = tuple((cls.__modifyShot(shot, modifiers) for shot in gun.shots))
         return gun
 
     @classmethod
     def __modifyShot(cls, shot, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify shell '{}'".format(shot.shell.name))
+        modifiers.shell = shot.shell
         shot = copy.copy(shot)
         if modifiers.haveDomain(ModifierDomain.SHOT):
             from items import vehicles
@@ -116,6 +147,8 @@ class VehicleModifier(object):
             shell.piercingPowerRandomization = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION, shell.piercingPowerRandomization)
             damage = shell.damage
             shell.damage = (modifiers(BattleParams.ARMOR_DAMAGE, damage[0]), modifiers(BattleParams.DEVICE_DAMAGE, damage[1]))
+            effectsIndex = shell.effectsIndex
+            shell.effectsIndex = modifiers(BattleParams.SHOT_EFFECTS, effectsIndex)
         if modifiers.haveDomain(ModifierDomain.SHELL_TYPE):
             shell.type = cls.__modifyShellType(shell.type, modifiers)
         return shell
@@ -126,33 +159,58 @@ class VehicleModifier(object):
         isArmorPiercing = shellType.name.startswith('ARMOR_PIERCING')
         isHollowCharge = shellType.name == SHELL_TYPES.HOLLOW_CHARGE
         isHE = shellType.name == SHELL_TYPES.HIGH_EXPLOSIVE
+        isModernHE = isHE and shellType.mechanics == SHELL_MECHANICS_TYPE.MODERN
         if isArmorPiercing:
             shellType.normalizationAngle = modifiers(BattleParams.NORMALIZATION_ANGLE, shellType.normalizationAngle)
         if BattleParams.RICOCHET_ANGLE in modifiers and (isArmorPiercing or isHollowCharge):
             initAngle = acos(shellType.ricochetAngleCos)
             shellType.ricochetAngleCos = cos(modifiers(BattleParams.RICOCHET_ANGLE, initAngle))
-        updateDamage = BattleParams.ARMOR_DAMAGE in modifiers or BattleParams.DEVICE_DAMAGE in modifiers
-        if updateDamage and isHE and shellType.mechanics == SHELL_MECHANICS_TYPE.MODERN:
-            maxDamage = 0
-            for mechanics in [shellType.blastWave, shellType.shellFragments, shellType.armorSpalls]:
-                if not mechanics.isActive:
-                    continue
-                damages = mechanics.damages
-                modifiedDamages = (modifiers(BattleParams.ARMOR_DAMAGE, damages[0]), modifiers(BattleParams.DEVICE_DAMAGE, damages[1]))
-                mechanics.damages = modifiedDamages
-                maxDamage = max(maxDamage, modifiedDamages[0], modifiedDamages[1])
-
-            shellType.maxDamage = maxDamage
+        if isModernHE and shellType.armorSpalls.isActive:
+            armorSpalls = copy.copy(shellType.armorSpalls)
+            armorSpalls.radius = modifiers(BattleParams.ARMOR_SPALLS_IMPACT_RADIUS, armorSpalls.radius)
+            armorSpalls.damageAbsorptionType = modifiers(BattleParams.ARMOR_SPALLS_DAMAGE_ABSORPTION, armorSpalls.damageAbsorptionType)
+            damages = armorSpalls.damages
+            armorSpalls.damages = (modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE, damages[0]), modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE, damages[1]))
+            if BattleParams.ARMOR_SPALLS_CONE_ANGLE in modifiers:
+                initAngle = acos(armorSpalls.coneAngleCos)
+                armorSpalls.coneAngleCos = cos(modifiers(BattleParams.ARMOR_SPALLS_CONE_ANGLE, initAngle))
+            shellType.armorSpalls = armorSpalls
+            shellType.maxDamage = max(shellType.maxDamage, armorSpalls.damages[0], armorSpalls.damages[1])
         return shellType
 
     @classmethod
     def __modifyRadio(cls, radio, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify radio '{}'".format(radio.name))
         radio = copy.copy(radio)
         radio.distance = modifiers(BattleParams.RADIO_DISTANCE, radio.distance)
         return radio
 
     @classmethod
+    def __modifyEngine(cls, engine, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG("[BattleModifiers][Debug] Modify engine '{}'".format(engine.name))
+        engine = copy.copy(engine)
+        if IS_CLIENT:
+            engine.sounds = modifiers(BattleParams.ENGINE_SOUNDS, engine.sounds)
+        return engine
+
+    @classmethod
+    def __modifyHull(cls, hull, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG('[BattleModifiers][Debug] Modify hull')
+        hull = copy.copy(hull)
+        if IS_CLIENT:
+            for descr in hull.customEffects:
+                for tag, value in descr.descriptors.items():
+                    descr.descriptors[tag] = modifiers(BattleParams.EXHAUST_EFFECT, value)
+
+        return hull
+
+    @classmethod
     def __modifyPhysics(cls, physics, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG('[BattleModifiers][Debug] Modify physics')
         if IS_CELLAPP:
             return cls.__modifyPhysicsServer(physics, modifiers)
         return cls.__modifyPhysicsClient(physics, modifiers) if IS_CLIENT else physics
@@ -174,6 +232,11 @@ class VehicleModifier(object):
             speedOnMove = modifiers(BattleParams.ROTATION_SPEED_ON_MOVE, chassis['gimletGoalWOnMove'])
             chassis['gimletGoalWOnMove'] = speedOnMove
             chassis['wPushedDiag'] = speedOnMove
+            for ground in chassis['grounds'].itervalues():
+                ground['fwdFriction'] = modifiers(BattleParams.FWD_FRICTION, ground['fwdFriction'])
+                ground['sideFriction'] = modifiers(BattleParams.SIDE_FRICTION, ground['sideFriction'])
+                ground['dirtReleaseRate'] = modifiers(BattleParams.DIRT_RELEASE_RATE, ground['dirtReleaseRate'])
+                ground['maxDirt'] = modifiers(BattleParams.MAX_DIRT, ground['maxDirt'])
 
         return physics
 

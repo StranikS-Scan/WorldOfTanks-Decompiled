@@ -57,9 +57,11 @@ class UnitRequestProcessor(IUnitRequestProcessor):
 
     def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, errorCode, errorStr):
         self._onResponseReceived(requestID, False)
-        if errorCode != UNIT_ERROR.OK and self.__entity.getID() == unitMgrID:
+        if errorCode != UNIT_ERROR.OK and self.__entity is not None and self.__entity.getID() == unitMgrID:
             for listener in self.__entity.getListenersIterator():
                 listener.onUnitErrorReceived(errorCode)
+
+        return
 
     def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
         unitMgr = prb_getters.getClientUnitMgr()

@@ -72,7 +72,6 @@ class MapBoxIntro(ViewImpl, IGlobalListener):
                 model.setIsActive(self.__mapboxCtrl.isActive())
                 if not self.__mapboxCtrl.isActive() and nextSeason is not None:
                     model.setDate(time_utils.makeLocalServerTime(nextSeason.getStartDate()))
-                model.setSeasonNumber(actualSeason.getNumber())
             return
 
     def __onClose(self):

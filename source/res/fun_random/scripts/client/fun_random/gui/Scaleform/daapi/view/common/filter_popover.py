@@ -12,10 +12,13 @@ class FunRandomCarouselFilterPopover(BattlePassCarouselFilterPopover):
     @classmethod
     def _generateMapping(cls, hasRented, hasEvent, hasRoles, **kwargs):
         mapping = super(FunRandomCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
-        mapping[FILTER_SECTION.SPECIALS].append('funRandom')
+        filterSpecialsList = mapping[FILTER_SECTION.SPECIALS]
+        filterSpecialsList.append('funRandom')
+        if 'clanRented' in filterSpecialsList:
+            filterSpecialsList.remove('clanRented')
         config = cls.__lobbyContext.getServerSettings().getCrystalRewardConfig()
         if not config.isCrystalEarnPossible(ARENA_BONUS_TYPE.FUN_RANDOM):
-            mapping[FILTER_SECTION.SPECIALS].remove('crystals')
+            filterSpecialsList.remove('crystals')
         if not BONUS_CAPS.checkAny(ARENA_BONUS_TYPE.FUN_RANDOM, BONUS_CAPS.DAILY_MULTIPLIED_XP):
-            mapping[FILTER_SECTION.SPECIALS].remove('bonus')
+            filterSpecialsList.remove('bonus')
         return mapping

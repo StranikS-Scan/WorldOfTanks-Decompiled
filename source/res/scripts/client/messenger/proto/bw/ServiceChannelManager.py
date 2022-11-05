@@ -5,6 +5,7 @@ import BigWorld
 from chat_shared import CHAT_ACTIONS
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
+from gui.shared.system_factory import collectMessengerClientFormatter
 from ids_generators import SequenceIDGenerator
 from messenger.formatters import collections_by_type
 from messenger.m_constants import MESSENGER_SCOPE, SCH_MSGS_MAX_LENGTH
@@ -127,7 +128,7 @@ class ServiceChannelManager(ChatActionsListener):
         if auxData is None:
             auxData = []
         clientID = 0
-        formatter = collections_by_type.CLIENT_FORMATTERS.get(msgType)
+        formatter = collectMessengerClientFormatter(msgType)
         if formatter:
             try:
                 messagesListData = formatter.format(message, auxData)

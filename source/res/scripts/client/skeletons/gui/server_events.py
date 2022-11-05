@@ -30,6 +30,10 @@ class IEventsCache(object):
         raise NotImplementedError
 
     @property
+    def isStarted(self):
+        raise NotImplementedError
+
+    @property
     def waitForSync(self):
         raise NotImplementedError
 
@@ -75,13 +79,13 @@ class IEventsCache(object):
     def getGroups(self, filterFunc=None):
         raise NotImplementedError
 
-    def getHiddenQuests(self, filterFunc=None, noSkip=False):
+    def getHiddenQuests(self, filterFunc=None):
         raise NotImplementedError
 
     def getRankedQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
         raise NotImplementedError
 
     def getActions(self, filterFunc=None):
@@ -123,7 +127,7 @@ class IEventsCache(object):
     def isBalancedSquadEnabled(self):
         raise NotImplementedError
 
-    def getBalancedSquadBounds(self, tags='default'):
+    def getBalancedSquadBounds(self, tag='default'):
         raise NotImplementedError
 
     def isSquadXpFactorsEnabled(self):

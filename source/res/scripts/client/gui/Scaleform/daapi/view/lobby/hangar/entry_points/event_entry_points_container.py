@@ -18,7 +18,7 @@ from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIs
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from helpers.time_utils import getTimestampByStrDate
-from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IMapboxController, IEventBattlesController
+from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
@@ -91,7 +91,6 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
     __bootcamp = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
-    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
     __slots__ = ['__entries', '__serverSettings']
 
     def __init__(self):
@@ -107,7 +106,6 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.as_updateEntriesS([])
         self.stopGlobalListening()
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
-        self.__eventBattlesCtrl.onCompleteActivePhase -= self.__updateEntries
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.clearNotification()
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
@@ -124,7 +122,6 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onCacheResync
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
-        self.__eventBattlesCtrl.onCompleteActivePhase += self.__updateEntries
         self.startGlobalListening()
 
     def _isRandomBattleSelected(self):

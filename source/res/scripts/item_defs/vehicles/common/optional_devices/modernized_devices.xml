@@ -1,0 +1,707 @@
+<modernized_devices.xml>
+  <modernizedAimDrivesAimingStabilizer1>
+    <id>	150	</id>
+    <userString>	#artefacts:modernizedAimDrivesAimingStabilizer1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer1/long_special	</longDescriptionSpecial>
+    <icon>	modernizedAimDrivesAimingStabilizer	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
+    <price>	100	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	enhancedAimDrives firepower modernized_1	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.935	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.93	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedAimDrivesAimingStabilizer2	</upgradedDevice>
+        <price>	400	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.07	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.93	</value>
+      </mul>
+    </kpi>
+  </modernizedAimDrivesAimingStabilizer1>
+  <modernizedAimDrivesAimingStabilizer2>
+    <id>	151	</id>
+    <userString>	#artefacts:modernizedAimDrivesAimingStabilizer2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer2/long_special	</longDescriptionSpecial>
+    <icon>	modernizedAimDrivesAimingStabilizer	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
+    <price>	400	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	enhancedAimDrives firepower modernized_2	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.926	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.91	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedAimDrivesAimingStabilizer3	</upgradedDevice>
+        <price>	2000	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.91	</value>
+      </mul>
+    </kpi>
+  </modernizedAimDrivesAimingStabilizer2>
+  <modernizedAimDrivesAimingStabilizer3>
+    <id>	152	</id>
+    <userString>	#artefacts:modernizedAimDrivesAimingStabilizer3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedAimDrivesAimingStabilizer3/long_special	</longDescriptionSpecial>
+    <icon>	modernizedAimDrivesAimingStabilizer	</icon>
+    <groupName>	enhancedAimDrives	</groupName>
+    <price>	1600	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_class1_user aimingStabilizer_class2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	enhancedAimDrives firepower modernized_3	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.917	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.885	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.09	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.885	</value>
+      </mul>
+    </kpi>
+  </modernizedAimDrivesAimingStabilizer3>
+  <modernizedTurbochargerRotationMechanism1>
+    <id>	153	</id>
+    <userString>	#artefacts:modernizedTurbochargerRotationMechanism1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism1/long_special	</longDescriptionSpecial>
+    <icon>	modernizedTurbochargerRotationMechanism	</icon>
+    <groupName>	enhancedTurbocharger	</groupName>
+    <price>	100	  <equipCoin></equipCoin>
+    </price>
+    <tags>	turbocharger modernized_1	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
+      <trackRotateSpeedFactor>	1.05	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.05	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.05	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.05	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.05	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.05	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.95	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.07	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedTurbochargerRotationMechanism2	</upgradedDevice>
+        <price>	400	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.07	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.95	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </modernizedTurbochargerRotationMechanism1>
+  <modernizedTurbochargerRotationMechanism2>
+    <id>	154	</id>
+    <userString>	#artefacts:modernizedTurbochargerRotationMechanism2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/long_special	</longDescriptionSpecial>
+    <icon>	modernizedTurbochargerRotationMechanism	</icon>
+    <groupName>	enhancedTurbocharger	</groupName>
+    <price>	400	  <equipCoin></equipCoin>
+    </price>
+    <tags>	turbocharger modernized_2	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
+      <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.06	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.06	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.06	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.06	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.06	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.94	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	3	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedTurbochargerRotationMechanism3	</upgradedDevice>
+        <price>	2000	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.06	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.06	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.94	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	3	</value>
+      </add>
+    </kpi>
+  </modernizedTurbochargerRotationMechanism2>
+  <modernizedTurbochargerRotationMechanism3>
+    <id>	155	</id>
+    <userString>	#artefacts:modernizedTurbochargerRotationMechanism3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism3/long_special	</longDescriptionSpecial>
+    <icon>	modernizedTurbochargerRotationMechanism	</icon>
+    <groupName>	enhancedTurbocharger	</groupName>
+    <price>	1600	  <equipCoin></equipCoin>
+    </price>
+    <tags>	turbocharger modernized_3	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <tags>	wheeledVehicle	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradedRotationMechanisms	  <weight>	100	</weight>
+      <trackRotateSpeedFactor>	1.08	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.08	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.08	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.08	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.08	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.92	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	3	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.92	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	5	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	3	</value>
+      </add>
+    </kpi>
+  </modernizedTurbochargerRotationMechanism3>
+  <modernizedExtraHealthReserveAntifragmentationLining1>
+    <id>	156	</id>
+    <userString>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining1/long_special	</longDescriptionSpecial>
+    <icon>	modernizedExtraHealthReserveAntifragmentationLining	</icon>
+    <groupName>	enhancedExtraHealthReserve	</groupName>
+    <price>	100	  <equipCoin></equipCoin>
+    </price>
+    <tags>	healthReserve modernized_1	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.09	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.7	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.7	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedExtraHealthReserveAntifragmentationLining2	</upgradedDevice>
+        <price>	400	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.09	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	1.6	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.4	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.7	</value>
+      </mul>
+    </kpi>
+  </modernizedExtraHealthReserveAntifragmentationLining1>
+  <modernizedExtraHealthReserveAntifragmentationLining2>
+    <id>	157	</id>
+    <userString>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining2/long_special	</longDescriptionSpecial>
+    <icon>	modernizedExtraHealthReserveAntifragmentationLining	</icon>
+    <groupName>	enhancedExtraHealthReserve	</groupName>
+    <price>	400	  <equipCoin></equipCoin>
+    </price>
+    <tags>	healthReserve modernized_2	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.1	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.8	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.8	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.8	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.6	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.6	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedExtraHealthReserveAntifragmentationLining3	</upgradedDevice>
+        <price>	2000	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	1.8	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.6	</value>
+      </mul>
+    </kpi>
+  </modernizedExtraHealthReserveAntifragmentationLining2>
+  <modernizedExtraHealthReserveAntifragmentationLining3>
+    <id>	158	</id>
+    <userString>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/long_special	</longDescriptionSpecial>
+    <icon>	modernizedExtraHealthReserveAntifragmentationLining	</icon>
+    <groupName>	enhancedExtraHealthReserve	</groupName>
+    <price>	1600	  <equipCoin></equipCoin>
+    </price>
+    <tags>	healthReserve modernized_3	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradedExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.115	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.7	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.25	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	2.0	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/engineReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/ammoBayReduceFineFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.115	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAmmoBayEngineFuelStrength	</name>
+        <value>	2.0	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.7	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.5	</value>
+      </mul>
+    </kpi>
+  </modernizedExtraHealthReserveAntifragmentationLining3>
+</modernized_devices.xml>

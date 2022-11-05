@@ -9,7 +9,8 @@ from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.formatters import time_formatters
-from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.formatters.ranges import toRomanRangeString, toRangeString
+from gui.shared.utils import isRomanNumberForbidden
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import BattlePassState
@@ -53,7 +54,7 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
             currentTime = time_utils.getCurrentLocalServerTimestamp()
             vehicleLevels = self.__epicController.getValidVehicleLevels()
             localeFolder = R.strings.mode_selector.mode.epicBattle
-            vm.setConditions(backport.text(localeFolder.conditionSingleLevel() if len(vehicleLevels) == 1 else localeFolder.condition(), levels=toRomanRangeString(vehicleLevels)))
+            vm.setConditions(backport.text(localeFolder.conditionSingleLevel() if len(vehicleLevels) == 1 else localeFolder.condition(), levels=toRangeString(vehicleLevels) if isRomanNumberForbidden() else toRomanRangeString(vehicleLevels)))
             vm.setDescription(backport.text(R.strings.mode_selector.mode.epicBattle.description()))
             if season is None:
                 return

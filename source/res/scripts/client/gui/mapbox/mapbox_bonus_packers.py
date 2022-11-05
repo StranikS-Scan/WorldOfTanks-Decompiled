@@ -47,7 +47,7 @@ class MapboxGoodiesPacker(GoodiesBonusUIPacker):
         cls._packCommon(bonus, model)
         model.setValue(str(count))
         model.setIcon(booster.boosterGuiType)
-        model.setLabel(booster.fullUserName)
+        model.setLabel(booster.userName)
         model.setIsOpenable(False)
         return model
 

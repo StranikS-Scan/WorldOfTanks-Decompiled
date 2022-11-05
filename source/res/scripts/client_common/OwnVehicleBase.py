@@ -3,9 +3,8 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
-from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, RECHARGE_SIGNIFICANT_DIGITS, RECHARGE_TIME_MULTIPLIER
+from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
 from items import vehicles, ITEM_TYPES
-from math_common import roundToPower10
 from wotdecorators import noexcept
 Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
 _DO_LOG = False
@@ -128,7 +127,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             useEndTime = self.__isAttachingToVehicle
             for cd in dualGunState.cooldowns:
                 if cd.endTime > 0 and useEndTime:
-                    cooldowns.append(Cooldowns(cd.id, max(0.0, roundToPower10(cd.endTime * RECHARGE_TIME_MULTIPLIER - self._serverTime(), RECHARGE_SIGNIFICANT_DIGITS)), cd.baseTime))
+                    cooldowns.append(Cooldowns(cd.id, max(0.0, cd.endTime - self._serverTime()), cd.baseTime))
                 cooldowns.append(Cooldowns(cd.id, cd.leftTime, cd.baseTime))
 
             avatar.updateDualGunState(self.entity.id, dualGunState.activeGun, dualGunState.gunStates, cooldowns)
@@ -143,7 +142,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             return
         times = dualGunStatus.times
         timeLeft = self.__getTimeLeft(times)
-        avatar.updateDualGunStatus(self.entity.id, dualGunStatus.status, (roundToPower10(times.baseTime, -2), timeLeft))
+        avatar.updateDualGunStatus(self.entity.id, dualGunStatus.status, (times.baseTime, timeLeft))
 
     @noexcept
     def update_siegeStateStatus(self, siegeStateStatus):
@@ -301,11 +300,11 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         elif useEndTime and data.endTime > 0:
             timeLeft = max(0, data.endTime - self._serverTime())
         else:
-            timeLeft = roundToPower10(data.timeLeft, -2)
+            timeLeft = data.timeLeft
         return timeLeft
 
     def __getTimeLeftBaseTime(self, data, useEndTime=None):
-        return (self.__getTimeLeft(data, useEndTime), roundToPower10(data.baseTime, -2))
+        return (self.__getTimeLeft(data, useEndTime), data.baseTime)
 
     @property
     def shells(self):

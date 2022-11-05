@@ -607,7 +607,7 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         self.__rankedController.onUpdated += self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated += self._onEventsUpdate
-        self.__funRandomController.onGameModeStatusUpdated += self._onEventsUpdate
+        self.__funRandomController.subscription.addSubModesWatcher(self._onEventsUpdate)
         self.__spaceSwitchController.onSpaceUpdated += self._onEventsUpdate
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
@@ -619,7 +619,7 @@ class MissionView(MissionViewBase):
         self.__rankedController.onUpdated -= self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated -= self._onEventsUpdate
         self.__spaceSwitchController.onSpaceUpdated -= self._onEventsUpdate
-        self.__funRandomController.onGameModeStatusUpdated -= self._onEventsUpdate
+        self.__funRandomController.subscription.removeSubModesWatcher(self._onEventsUpdate)
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 

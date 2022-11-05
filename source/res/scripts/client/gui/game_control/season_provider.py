@@ -31,6 +31,10 @@ class SeasonProvider(ISeasonProvider):
         status, _, _ = self.getPrimeTimeStatus()
         return status == PrimeTimeStatus.FROZEN
 
+    def isNotSet(self, now=None, peripheryID=None):
+        status, _, _ = self.getPrimeTimeStatus(now, peripheryID)
+        return status == PrimeTimeStatus.NOT_SET
+
     def isWithinSeasonTime(self, seasonID):
         settings = self.__getSeasonSettings()
         return season_common.isWithinSeasonTime(settings.asDict(), seasonID, self.__getNow())
@@ -298,13 +302,12 @@ class SeasonProvider(ISeasonProvider):
             timeLeft = seasonsChangeTime - now
         return timeLeft + 1 if timeLeft > 0 else 0
 
-    def getLeftTimeToPrimeTimesEnd(self):
+    def getLeftTimeToPrimeTimesEnd(self, now=None):
         if self.isInPrimeTime():
             return 0
-        now = self.__getNow()
+        now = now or self.__getNow()
         primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus(now)
         if primeTimeStatus == PrimeTimeStatus.NOT_AVAILABLE or self.__connectionMgr.isStandalone():
-            _, timeLeft, _ = self.getPrimeTimeStatus(now)
             return timeLeft
         times = []
         for peripheryID in self._getAllPeripheryIDs():
@@ -312,7 +315,7 @@ class SeasonProvider(ISeasonProvider):
             if status == PrimeTimeStatus.NOT_AVAILABLE:
                 times.append(peripheryTime)
 
-        return min(times)
+        return min(times) if times else 0
 
     def _hasPrimeStatusServer(self, states, now=None):
         for peripheryID in self._getAllPeripheryIDs():

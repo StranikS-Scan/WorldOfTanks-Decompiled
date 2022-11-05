@@ -80,7 +80,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
                 tankmanLabel = ''
                 if tankman is not None:
-                    lastUserName = tankman.lastUserName
+                    lastUserName = tankman.lastUserName if tankman.lastUserName else tankman.firstUserName
                     if tankman.skinID != NO_CREW_SKIN_ID and self._lobbyContext.getServerSettings().isCrewSkinsEnabled():
                         skinItem = self._itemsCache.items.getCrewSkin(tankman.skinID)
                         lastUserName = i18n.makeString(skinItem.getLastName())

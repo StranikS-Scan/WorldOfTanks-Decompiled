@@ -24,6 +24,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -104,6 +105,9 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         priceBlock = PriceBlockConstructor(module, statsConfig, priceValueWidth, leftPadding, rightPadding).construct()
         if priceBlock:
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
+        inventoryBlock = InventoryBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
+        if inventoryBlock:
+            items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
         showModuleCompatibles = statsConfig.showCompatibles and itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         if showModuleCompatibles:
             if paramsConfig.vehicle is not None:
@@ -117,22 +121,12 @@ class ModuleBlockTooltipData(BlocksTooltipData):
 
             if compatibleBlocks:
                 items.append(formatters.packBuildUpBlockData(compatibleBlocks, padding=formatters.packPadding(left=leftPadding)))
-        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            canNotBuyBlock = None
-            if module.isTrophy:
-                canNotBuyBlock = self.__trophyDeviceBlocks(module, statusConfig)
-            elif module.isDeluxe and module.isHidden:
-                canNotBuyBlock = self.__hiddenDeluxeDeviceBlock(module, statusConfig)
-            if canNotBuyBlock is not None:
-                items.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, left=_DEFAULT_PADDING, right=_DEFAULT_PADDING), gap=4))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-        if statusBlock:
+        if statusBlock and itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
             statusTopPadding = -30 if showModuleCompatibles else blockTopPadding
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=statusTopPadding, bottom=-15)))
         if bonus_helper.isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
-        if itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle) and not module.mayInstall(statsConfig.vehicle, statusConfig.slotIdx)[0]:
-            items.append(formatters.packBuildUpBlockData(blocks=[formatters.packTitleDescBlock(title=text_styles.critical(backport.text(R.strings.tooltips.moduleFits.duplicated.header())), gap=0, desc=text_styles.standard(backport.text(R.strings.tooltips.moduleFits.duplicated.note())))], padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-13), stretchBg=False))
         if statsConfig.isStaticInfoOnly:
             lastItem = items[-1]
             lastPadding = lastItem.get('padding', None)
@@ -140,33 +134,6 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 lastItem['padding'] = {}
             lastItem['padding']['bottom'] = lastItem['padding'].get('bottom', 0) + 15
         return items
-
-    def __trophyDeviceBlocks(self, module, statusConfig):
-        trophyBlocks = []
-        state = ''
-        headerStyle = None
-        if module.isUpgradable:
-            headerStyle = text_styles.statusAttention
-            state = 'basic'
-        elif module.isUpgraded:
-            headerStyle = text_styles.statInfo
-            state = 'upgraded'
-        trophyBlocks.append(formatters.packItemTitleDescBlockData(title=headerStyle(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).description()))))
-        trophyBlocks.append(self.__getCannotBuyBlock(module, statusConfig))
-        return trophyBlocks
-
-    def __hiddenDeluxeDeviceBlock(self, module, statusConfig):
-        return [self.__getCannotBuyBlock(module, statusConfig)]
-
-    @staticmethod
-    def __getCannotBuyBlock(module, statusConfig):
-        deviceType = 'trophyEquipment' if module.isTrophy else 'deluxeEquipment'
-        statsVehicle = statusConfig.vehicle
-        if statsVehicle is None or module in statsVehicle.optDevices.installed or module.isInInventory:
-            cannotBuyHeaderStyle = text_styles.warning
-        else:
-            cannotBuyHeaderStyle = text_styles.critical
-        return formatters.packItemTitleDescBlockData(title=cannotBuyHeaderStyle(backport.text(R.strings.tooltips.moduleFits.dyn(deviceType).cannotBuy.header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.dyn(deviceType).cannotBuy.description())))
 
 
 class ModuleTooltipBlockConstructor(object):
@@ -302,6 +269,9 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             elif self.module.isUpgraded:
                 suffix = 'Upgraded'
             overlayPath = backport.image(R.images.gui.maps.shop.artefacts.c_180x135.dyn('equipmentTrophy{}_overlay'.format(suffix))())
+        elif self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isModernized:
+            levelStr = str(self.module.level)
+            overlayPath = backport.image(R.images.gui.maps.shop.artefacts.c_180x135.dyn('equipmentModernized_{}_overlay'.format(levelStr))())
         else:
             overlayPath = padding = None
             bottomOffset = 10
@@ -342,12 +312,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
-        self._inventoryPadding = formatters.packPadding(left=82)
         self._priceLeftPadding = 67
-        self._inInventoryBlockData = {'icon': backport.image(R.images.gui.maps.icons.library.storage_icon()),
-         'text': backport.text(R.strings.tooltips.vehicle.inventoryCount())}
-        self._onVehicleBlockData = {'icon': backport.image(R.images.gui.maps.icons.customization.installed_on_tank_icon()),
-         'text': backport.text(R.strings.tooltips.vehicle.vehicleCount())}
 
     def construct(self):
         block = []
@@ -356,8 +321,6 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
         sellPrice = self.configuration.sellPrice
         buyPrice = self.configuration.buyPrice
         unlockPrice = self.configuration.unlockPrice
-        inventoryCount = self.configuration.inventoryCount
-        vehiclesCount = self.configuration.vehiclesCount
         researchNode = self.configuration.node
         if buyPrice and sellPrice:
             _logger.error('You are not allowed to use buyPrice and sellPrice at the same time')
@@ -433,7 +396,12 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                         needValue = None
                 else:
                     needValue = None
-                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
+                forcedText = ''
+                if module.isModernized:
+                    nextLevel = module.level + 1
+                    levelText = backport.text(R.strings.tooltips.level.num(nextLevel)())
+                    forcedText = backport.text(R.strings.tooltips.moduleFits.upgradable.modernized.price(), level=levelText)
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
             isComplexDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable
             if isComplexDevice and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
@@ -444,22 +412,78 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 needValue = value - money.getSignValue(removalPriceCurrency)
                 if needValue <= 0 or self.configuration.isStaticInfoOnly:
                     needValue = None
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=117, gap=15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe))
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=117, gap=15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit))
+                isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
+                if isModernized:
+                    itemPrice = module.getDeconstructPrice(self.itemsCache.items)
+                    currency = itemPrice.getCurrency()
+                    value = itemPrice.price.getSignValue(currency)
+                    defValue = itemPrice.defPrice.getSignValue(currency)
+                    needValue = None
+                    forcedText = ''
+                    if module.isModernized:
+                        levelText = backport.text(R.strings.tooltips.level.num(module.level)())
+                        forcedText = ' '.join((backport.text(R.strings.tooltips.moduleFits.deconstruct.modernized.price(), level=levelText), text_styles.standard(backport.text(R.strings.tooltips.moduleFits.deconstruct.modernized.description()))))
+                    block.append(makePriceBlock(value, CURRENCY_SETTINGS.getDeconstracutSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
             if sellPrice and module.sellPrices:
                 block.append(makePriceBlock(module.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.sellPrices.itemPrice.defPrice.credits, percent=module.sellPrices.itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
+            return block
+
+
+class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
+    bootcamp = dependency.descriptor(IBootcampController)
+
+    def __init__(self, module, configuration, leftPadding, rightPadding):
+        super(InventoryBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
+        self._inventoryPadding = formatters.packPadding(left=84)
+        self._inInventoryBlockData = {'icon': backport.image(R.images.gui.maps.icons.library.storage_icon()),
+         'text': backport.text(R.strings.tooltips.vehicle.inventoryCount())}
+        self._onVehicleBlockData = {'icon': backport.image(R.images.gui.maps.icons.customization.installed_on_tank_icon()),
+         'text': ''}
+
+    def construct(self):
+        block = []
+        module = self.module
+        inventoryCount = self.configuration.inventoryCount
+        vehiclesCount = self.configuration.vehiclesCount
+        if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
+            return
+        else:
+            items = self.itemsCache.items
             if inventoryCount:
                 count = module.inventoryCount
                 if count > 0:
                     block.append(self._getInventoryBlock(count, self._inInventoryBlockData, self._inventoryPadding))
             if vehiclesCount:
-                count = len(module.getInstalledVehicles(items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()))
+                inventoryVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
+                installedVehicles = module.getInstalledVehicles(inventoryVehicles.itervalues())
+                count = len(installedVehicles)
                 if count > 0:
+                    totalInstalledVehicles = [ x.shortUserName for x in installedVehicles ]
+                    totalInstalledVehicles.sort()
+                    tooltipText = None
+                    visibleVehiclesCount = 0
+                    for installedVehicle in totalInstalledVehicles:
+                        if tooltipText is None:
+                            tooltipText = installedVehicle
+                            visibleVehiclesCount = 1
+                            continue
+                        if len(tooltipText) + len(installedVehicle) + 2 > 120:
+                            break
+                        tooltipText = ', '.join((tooltipText, installedVehicle))
+                        visibleVehiclesCount += 1
+
+                    if count > visibleVehiclesCount:
+                        hiddenVehicleCount = count - visibleVehiclesCount
+                        hiddenTxt = backport.text(R.strings.tooltips.moduleFits.already_installed.hiddenVehicleCount(), count=str(hiddenVehicleCount))
+                        tooltipText = '... '.join((tooltipText, text_styles.stats(hiddenTxt)))
+                    self._onVehicleBlockData['text'] = tooltipText
                     block.append(self._getInventoryBlock(count, self._onVehicleBlockData, self._inventoryPadding))
             return block
 
     @staticmethod
     def _getInventoryBlock(count, blockData, padding):
-        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(blockData['text']), value=text_styles.stats(count), icon=blockData['icon'], padding=padding, titlePadding=formatters.packPadding(left=17), iconPadding=formatters.packPadding(left=-2))
+        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(blockData['text']), value=text_styles.stats(count), icon=blockData['icon'], padding=padding, titleWidth=300, titlePadding=formatters.packPadding(left=15), iconPadding=formatters.packPadding(left=-2))
 
     def _getDemountCount(self):
         priceText, discountText = self._getDemountPriceText()
@@ -658,11 +682,9 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
         vehicle = self.configuration.vehicle
         categories = self.module.descriptor.categories
         slotIdx = self.configuration.slotIdx
-        isPanelTooltip = self.configuration.withSlots
         block = []
         isSpecMatch = False
-        slotCategories = set()
-        if vehicle is not None:
+        if vehicle is not None and vehicle.optDevices.slots:
             slotCategories = vehicle.optDevices.getSlot(slotIdx).item.categories
             isSpec = bool(slotCategories & categories)
             if categories and isSpec:
@@ -671,24 +693,8 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
         if additionalDescr:
             descr = backport.text(R.strings.tank_setup.effects.template(), icon=icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.tanksetup.cards.effect()), width=10, height=16), title=text_styles.neutral(backport.text(R.strings.tank_setup.effects.name())), descr=backport.text(additionalDescr()))
             block.append(formatters.packTextBlockData(text_styles.standard(descr)))
-        if categories and isPanelTooltip and slotCategories:
-            kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc(), match=self.__neutralFatTextStyle(backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.num(str(isSpecMatch))())))
-        else:
-            kpiTitle = backport.text(R.strings.tank_setup.tooltips.optDevice.bonusDesc.applied())
-        block.append(formatters.packTextBlockData(text_styles.middleTitle(kpiTitle), padding=formatters.packPadding(top=8 if additionalDescr else -1, bottom=5)))
         moduleKpi = module.getKpi(vehicle)
-        for kpi in moduleKpi:
-            descKpi = backport.text(kpi.getLongDescriptionR())
-            kpiList = []
-            if not isPanelTooltip and module.isRegular and kpi.specValue is not None:
-                kpiList.append(formatters.packAlignedTextBlockData(text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=60))
-            if (isSpecMatch or not isPanelTooltip) and kpi.specValue is not None:
-                specValue = kpi.specValue
-            else:
-                specValue = kpi.value
-            kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), text_styles.bonusAppliedText(getKpiValueString(kpi, specValue)), valueWidth=63, padding=formatters.packPadding(left=51), gap=14))
-            block.append(formatters.packBuildUpBlockData(kpiList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, gap=-51, padding=formatters.packPadding(bottom=-9)) if len(kpiList) > 1 else kpiList[0])
-
+        self.addKPITable(block, additionalDescr)
         if categories and any((kpi.specValue is not None for kpi in moduleKpi)):
             if not isSpecMatch:
                 howToIncrease = R.strings.tank_setup.tooltips.howToIncrease
@@ -707,6 +713,39 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
             block.append(formatters.packTextBlockData(text_styles.standard(additionalText), padding=formatters.packPadding(top=9)))
         return block
 
+    def addKPITable(self, block, hasEffectDescr=False):
+        module = self.module
+        moduleKpiIterator = self.__getIterator(module, self.configuration)
+        if moduleKpiIterator is None:
+            return
+        else:
+            currentModuleIndex = moduleKpiIterator.getCurrentIndex()
+            firstFormatter = first(moduleKpiIterator.getKPIs())
+            columnsCount = firstFormatter.getColumnsCount()
+            paddingLeft = -8 + 40 * (3 - columnsCount)
+            lastIndex = columnsCount - 1
+            if firstFormatter.isHeaderShown():
+                headerList = []
+                for index, value in enumerate(firstFormatter.getHeaderValues()):
+                    iconName = value.format(state='active' if index == currentModuleIndex else 'disabled')
+                    resID = R.images.gui.maps.icons.tooltip.equipment.dyn(iconName)()
+                    headerList.append(formatters.packImageBlockData(backport.image(resID), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT))
+
+                headerPadding = formatters.packPadding(top=6 if hasEffectDescr else 0, left=paddingLeft + 24, bottom=-6)
+                block.append(formatters.packBuildUpBlockData(headerList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=headerPadding, gap=24))
+            for kpiFormatter in moduleKpiIterator.getKPIs():
+                descKpi = kpiFormatter.getDescription()
+                kpiList = []
+                for index, value in enumerate(kpiFormatter.getValues()):
+                    textStyle = text_styles.bonusAppliedText if index == currentModuleIndex else text_styles.standard
+                    if index == lastIndex:
+                        kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), textStyle(value), blockWidth=320, valueWidth=40, gap=15))
+                    kpiList.append(formatters.packAlignedTextBlockData(textStyle(value), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=40))
+
+                block.append(formatters.packBuildUpBlockData(kpiList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(left=paddingLeft, bottom=-6)))
+
+            return
+
     def _bonusStyleTextStyle(self, text, useStyle=False):
 
         def _matchSpecTextStyle(message):
@@ -716,6 +755,20 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
 
     def __neutralFatTextStyle(self, text):
         return "<font face='$TitleFont' size='15' color='#FFDD99'>%s</font>" % text
+
+    def __getIterator(self, module, configuration):
+        if module.isRegular:
+            itCls = RegularKPIIterator
+        elif module.isTrophy:
+            itCls = TrophyKPIIterator
+        elif module.isDeluxe:
+            itCls = DeluxKPIIterator
+        elif module.isModernized:
+            itCls = ModernizedKPIIterator
+        else:
+            _logger.error('Add advance kpi iterator for module')
+            return None
+        return itCls(configuration, module)
 
 
 class StatusBlockConstructor(ModuleTooltipBlockConstructor):
@@ -762,8 +815,6 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             elif reason == 'too_heavy':
                 titleFormatter = text_styles.critical
                 showAllInstalled = False
-        elif installedVehicles:
-            tooltipHeader, tooltipText = self.__getInstalledVehiclesBlock(installedVehicles, module)
         if tooltipHeader is not None or tooltipText is not None:
             if showAllInstalled and len(totalInstalledVehicles) > self.MAX_INSTALLED_LIST_LEN:
                 hiddenVehicleCount = len(totalInstalledVehicles) - self.MAX_INSTALLED_LIST_LEN
@@ -894,7 +945,7 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 slotState = TOOLTIPS_CONSTANTS.OPTDEV_SLOT_STATE_EMPTY
             if categories:
                 hasSlotSpecs = True
-            slotsBlocks.append(formatters.packOptDeviceSlotBlockData(imagePath=backport.image(icon) if hasModuleInSlot else '', slotState=slotState, slotAlpha=1 if selectedSlot else 0.4, showUpArrow=False, showSlotHighlight=isSpecMatch, overlayPath=overlayPath, overlayPadding=overlayPadding, slotSpecs=slotSpecs, deviceSpecs=deviceSpecs))
+            slotsBlocks.append(formatters.packOptDeviceSlotBlockData(imagePath=backport.image(icon) if hasModuleInSlot else '', slotState=slotState, slotAlpha=1 if selectedSlot else 0.5, showUpArrow=False, showSlotHighlight=isSpecMatch, overlayPath=overlayPath, overlayPadding=overlayPadding, slotSpecs=slotSpecs, deviceSpecs=deviceSpecs))
 
         block.append(formatters.packBuildUpBlockData(blocks=slotsBlocks, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, gap=5, padding=formatters.packPadding(bottom=0 if hasSlotSpecs else 20)))
         return block
@@ -917,6 +968,8 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
             elif module.isUpgraded:
                 suffix = 'Upgraded'
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn('equipmentTrophy{}_overlay'.format(suffix))())
+        elif module.isModernized:
+            overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn('equipmentModernized_{}_overlay'.format(module.level))())
         else:
             overlayPath = None
         if overlayPath is not None:
@@ -1031,3 +1084,190 @@ def _packSpecsIconsBlockData(vehicle, categories, slotIdx, topOffset=0, leftOffs
     catsLen = len(categories)
     paddingLeft = leftOffset - (catsLen * iconSize + (catsLen - 1) * hGap) * 0.5
     return formatters.packImageListParameterBlockData(listIconSrc=specIcons, columnWidth=iconSize, rowHeight=iconSize, horizontalGap=hGap, padding=formatters.packPadding(left=paddingLeft, top=topOffset))
+
+
+class KpiFormatter(object):
+
+    def getValues(self):
+        pass
+
+    def getDescription(self):
+        pass
+
+    def getColumnsCount(self):
+        pass
+
+    def isHeaderShown(self):
+        return False
+
+
+class RegularKPIFormatter(KpiFormatter):
+
+    def __init__(self, kpi):
+        self.kpi = kpi
+
+    def getValues(self):
+        value = self.kpi.value
+        specValue = self.kpi.specValue if self.kpi.specValue is not None else self.kpi.value
+        return (getKpiValueString(self.kpi, value, False), getKpiValueString(self.kpi, specValue, False))
+
+    def getDescription(self):
+        ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(self.kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+        endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+        return ' '.join((backport.text(self.kpi.getLongDescriptionR()), text_styles.standard(endingText)))
+
+    def getColumnsCount(self):
+        pass
+
+
+class DeluxKPIFormatter(KpiFormatter):
+
+    def __init__(self, kpi):
+        self.kpi = kpi
+
+    def getValues(self):
+        return (getKpiValueString(self.kpi, self.kpi.value, False),)
+
+    def getDescription(self):
+        ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(self.kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+        endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+        return ' '.join((backport.text(self.kpi.getLongDescriptionR()), text_styles.standard(endingText)))
+
+
+class ComplexFormatter(KpiFormatter):
+    headerResTemplate = 'None{index}_{{state}}'
+
+    def __init__(self, *kpis):
+        self.kpis = kpis
+
+    def getValues(self):
+        return (getKpiValueString(kpi, kpi.value, False) for kpi in self.kpis)
+
+    def getDescription(self):
+        firstKpi = first(self.kpis)
+        if firstKpi is not None:
+            ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(firstKpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+            endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+            return ' '.join((backport.text(firstKpi.getLongDescriptionR()), text_styles.standard(endingText)))
+        else:
+            return
+
+    def getColumnsCount(self):
+        return len(self.kpis)
+
+    def isHeaderShown(self):
+        return True
+
+    def getHeaderValues(self):
+        return (self.headerResTemplate.format(index=index) for index in range(self.getColumnsCount()))
+
+
+class TrophyKPIComplexFormatter(ComplexFormatter):
+    headerResTemplate = 'trophy_{index}_{{state}}'
+
+
+class ModernizedKPIComplexFormatter(ComplexFormatter):
+    headerResTemplate = 'modernized_{index}_{{state}}'
+
+
+class KpiIterator(object):
+    formatter = KpiFormatter
+
+    def getKPIs(self):
+        raise NotImplementedError
+
+    def getCurrentIndex(self):
+        raise NotImplementedError
+
+
+class SimpleKPIIterator(KpiIterator):
+
+    def __init__(self, configuration, module):
+        self.configuration = configuration
+        self.module = module
+
+    def getKPIs(self):
+        vehicle = self.configuration.vehicle
+        return (self.formatter(kpi) for kpi in self.module.getKpi(vehicle))
+
+    def getCurrentIndex(self):
+        pass
+
+
+class ComplexKPIIterator(KpiIterator):
+
+    def __init__(self, configuration, curIndex, *modules):
+        self.configuration = configuration
+        self.curIndex = curIndex
+        self.modules = modules
+
+    def getKPIs(self):
+        vehicle = self.configuration.vehicle
+        return (self.formatter(*kpis) for kpis in zip(*(module.getKpi(vehicle) for module in self.modules)))
+
+    def getCurrentIndex(self):
+        return self.curIndex
+
+    def getColumsCount(self):
+        return len(self.modules)
+
+
+class DeluxKPIIterator(SimpleKPIIterator):
+    formatter = DeluxKPIFormatter
+
+
+class TrophyKPIIterator(ComplexKPIIterator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    formatter = TrophyKPIComplexFormatter
+
+    def __init__(self, configuration, module):
+        modules = [module]
+        curMod = module
+        while curMod and curMod.descriptor.downgradeInfo:
+            item = self.__itemsCache.items.getItemByCD(curMod.descriptor.downgradeInfo.downgradedCompDescr)
+            modules.insert(0, item)
+            curMod = item
+
+        curMod = module
+        while curMod and curMod.isUpgradable and curMod.descriptor.upgradeInfo:
+            item = self.__itemsCache.items.getItemByCD(curMod.descriptor.upgradeInfo.upgradedCompDescr)
+            modules.append(item)
+            curMod = item
+
+        super(TrophyKPIIterator, self).__init__(configuration, modules.index(module), *modules)
+
+
+class RegularKPIIterator(SimpleKPIIterator):
+    formatter = RegularKPIFormatter
+
+    def getCurrentIndex(self):
+        categories = self.module.descriptor.categories
+        vehicle = self.configuration.vehicle
+        slotIdx = self.configuration.slotIdx
+        if vehicle is not None:
+            slotCategories = vehicle.optDevices.getSlot(slotIdx).item.categories
+            isSpec = bool(slotCategories & categories)
+            if categories and isSpec:
+                return 1
+        return 0
+
+
+class ModernizedKPIIterator(ComplexKPIIterator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    formatter = ModernizedKPIComplexFormatter
+
+    def __init__(self, configuration, module):
+        modules = [module]
+        curMod = module
+        while curMod and curMod.descriptor.downgradeInfo:
+            item = self.__itemsCache.items.getItemByCD(curMod.descriptor.downgradeInfo.downgradedCompDescr)
+            modules.insert(0, item)
+            curMod = item
+
+        curMod = module
+        while curMod and curMod.isUpgradable and curMod.descriptor.upgradeInfo:
+            item = self.__itemsCache.items.getItemByCD(curMod.descriptor.upgradeInfo.upgradedCompDescr)
+            modules.append(item)
+            curMod = item
+
+        super(ModernizedKPIIterator, self).__init__(configuration, modules.index(module), *modules)

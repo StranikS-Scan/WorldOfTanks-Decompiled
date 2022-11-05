@@ -522,12 +522,10 @@ class _FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
         self.__waitingBattle = False
 
     def onPrbEntitySwitched(self):
+        self.__waitingBattle = self.prbEntity.getQueueType() == QUEUE_TYPE.RANDOMS or self.__isDevBattle()
         if self.prbEntity.getQueueType() == QUEUE_TYPE.RANDOMS or self.__isDevBattle():
             g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
-            self.__checkFightBtnHint()
-            self.__waitingBattle = True
-        else:
-            self.__waitingBattle = False
+        self.__checkFightBtnHint()
 
     def _onStart(self):
         self.__waitingBattle = False

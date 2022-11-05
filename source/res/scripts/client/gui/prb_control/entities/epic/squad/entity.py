@@ -148,7 +148,7 @@ class EpicSquadEntity(SquadEntity):
     def _onInventoryVehiclesUpdated(self, diff):
         self.invalidateVehicleStates()
 
-    def _onUnitMemberVehiclesChanged(self, accoundDbID):
+    def _onUnitMemberVehiclesChanged(self, accountDBID):
         self.invalidateVehicleStates()
-        if accoundDbID != account_helpers.getAccountDatabaseID():
+        if accountDBID != account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()

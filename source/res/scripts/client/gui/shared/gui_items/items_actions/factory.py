@@ -29,6 +29,8 @@ BUY_AND_INSTALL_CONSUMABLES = 'buyAndInstallConsumables'
 BUY_AND_INSTALL_SHELLS = 'buyAndInstallShells'
 BUY_AND_INSTALL_BATTLE_BOOSTERS = 'buyAndInstallBattleBoosters'
 UPGRADE_OPT_DEVICE = 'upgradeOptDevice'
+DECONSTRUCT_OPT_DEVICE = 'deconstructOptDevice'
+DECONSTRUCT_MULT_OPT_DEVICE = 'deconstructMultOptDevice'
 REMOVE_OPT_DEVICE = 'removeOptDevice'
 CHANGE_SETUP_EQUIPMENTS_INDEX = 'changeSetupEquipmentsIndex'
 SET_EQUIPMENT_SLOT_TYPE = 'setEquipmentSlotType'
@@ -60,6 +62,8 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_SHELLS: actions.BuyAndInstallShells,
  BUY_AND_INSTALL_BATTLE_BOOSTERS: actions.BuyAndInstallBattleBoosters,
  UPGRADE_OPT_DEVICE: actions.UpgradeOptDeviceAction,
+ DECONSTRUCT_OPT_DEVICE: actions.DeconstructOptDevice,
+ DECONSTRUCT_MULT_OPT_DEVICE: actions.DeconstructMultOptDevice,
  REMOVE_OPT_DEVICE: actions.RemoveOptionalDevice,
  CHANGE_SETUP_EQUIPMENTS_INDEX: actions.ChangeSetupEquipmentsIndex,
  DISCARD_POST_PROGRESSION_PAIRS: actions.DiscardPostProgressionPairs,

@@ -131,6 +131,9 @@ class Comp7BattlePage(Comp7BattlePageMeta):
 
     def _onBattleLoadingFinish(self):
         super(Comp7BattlePage, self)._onBattleLoadingFinish()
+        arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
+        if arenaPeriod == ARENA_PERIOD.BATTLE:
+            self.as_onBattleStartedS()
         self.__visibilityManager.setBattleLoaded(True)
         self.__updateComponentsVisibility()
 

@@ -291,7 +291,10 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         elif self._isInArcadeMode():
             matrix = matrix_factory.makeArcadeCameraMatrix()
         elif self._isInPostmortemMode():
-            matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID) or matrix_factory.makePostmortemCameraMatrix()
+            if self.__killerVehicleID:
+                matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
+            else:
+                matrix = matrix_factory.makePostmortemCameraMatrix()
         elif self._isInVideoMode():
             activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
             matrix = matrix_factory.makeDefaultCameraMatrix()
@@ -309,7 +312,10 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __updateViewPointEntry(self, vehicleID=0):
         isActive = self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
-        ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID) or matrix_factory.makeAttachedVehicleMatrix()
+        if self.__killerVehicleID:
+            ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
+        else:
+            ownMatrix = matrix_factory.makeAttachedVehicleMatrix()
         if self.__viewPointID:
             self._setActive(self.__viewPointID, active=isActive)
             self._setMatrix(self.__viewPointID, ownMatrix)

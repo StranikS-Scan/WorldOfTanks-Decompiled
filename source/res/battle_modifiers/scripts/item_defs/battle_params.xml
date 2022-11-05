@@ -2,6 +2,7 @@
   <vehicleHealth>
     <id>	1	</id>
     <dataType>	int	</dataType>
+    <domain>	vehicle	</domain>
     <client>
       <domain>	vitality	</domain>
       <physicalType>	hitPoints	</physicalType>
@@ -299,6 +300,7 @@
     <domain>	physics	</domain>
     <client>
       <domain>	mobility	</domain>
+      <physicalType>	horsepower	</physicalType>
       <useTypes>	mul	</useTypes>
     </client>
     <restrictions>
@@ -348,9 +350,6 @@
     <id>	28	</id>
     <dataType>	float	</dataType>
     <domain>	physics	</domain>
-    <client>
-      <domain>	mobility	</domain>
-    </client>
     <restrictions>
       <min>	0.0	</min>
     </restrictions>
@@ -358,7 +357,7 @@
   <armorDamage>
     <id>	29	</id>
     <dataType>	float	</dataType>
-    <domain>	shell shellType	</domain>
+    <domain>	shell	</domain>
     <client>
       <domain>	damageDealing	</domain>
       <physicalType>	hitPoints	</physicalType>
@@ -371,7 +370,7 @@
   <deviceDamage>
     <id>	30	</id>
     <dataType>	float	</dataType>
-    <domain>	shell shellType	</domain>
+    <domain>	shell	</domain>
     <client>
       <domain>	damageDealing	</domain>
       <physicalType>	hitPoints	</physicalType>
@@ -586,4 +585,107 @@
       <min>	1	</min>
     </restrictions>
   </equipmentCooldown>
+  <fwdFriction>
+    <id>	48	</id>
+    <dataType>	float	</dataType>
+    <domain>	physics	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </fwdFriction>
+  <sideFriction>
+    <id>	49	</id>
+    <dataType>	float	</dataType>
+    <domain>	physics	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </sideFriction>
+  <dirtReleaseRate>
+    <id>	50	</id>
+    <dataType>	float	</dataType>
+    <domain>	physics	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </dirtReleaseRate>
+  <maxDirt>
+    <id>	51	</id>
+    <dataType>	float	</dataType>
+    <domain>	physics	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </maxDirt>
+  <shotEffects>
+    <id>	52	</id>
+    <dataType>	string	</dataType>
+    <domain>	shell	</domain>
+  </shotEffects>
+  <gunEffects>
+    <id>	53	</id>
+    <dataType>	string	</dataType>
+    <domain>	gun	</domain>
+  </gunEffects>
+  <chassisDecals>
+    <id>	54	</id>
+    <dataType>	string	</dataType>
+    <domain>	chassis	</domain>
+  </chassisDecals>
+  <engineSounds>
+    <id>	55	</id>
+    <dataType>	string	</dataType>
+    <domain>	engine	</domain>
+  </engineSounds>
+  <exhaustEffect>
+    <id>	56	</id>
+    <dataType>	string	</dataType>
+    <domain>	hull	</domain>
+  </exhaustEffect>
+  <armorSpallsArmorDamage>
+    <id>	57	</id>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	1.0	</min>
+    </restrictions>
+  </armorSpallsArmorDamage>
+  <armorSpallsDeviceDamage>
+    <id>	58	</id>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	1.0	</min>
+    </restrictions>
+  </armorSpallsDeviceDamage>
+  <armorSpallsImpactRadius>
+    <id>	59	</id>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	0.01	</min>
+    </restrictions>
+  </armorSpallsImpactRadius>
+  <armorSpallsConeAngle>
+    <id>	60	</id>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+      <max>	180.0	</max>
+    </restrictions>
+  </armorSpallsConeAngle>
+  <armorSpallsDamageAbsorption>
+    <id>	61	</id>
+    <dataType>	string	</dataType>
+    <domain>	shellType	</domain>
+  </armorSpallsDamageAbsorption>
+  <modeCreditsFactor>
+    <id>	62	</id>
+    <dataType>	float	</dataType>
+    <domain>	vehicle	</domain>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </modeCreditsFactor>
 </battle_params.xml>

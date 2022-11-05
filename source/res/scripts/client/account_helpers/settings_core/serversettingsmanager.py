@@ -38,8 +38,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
-    HW22_CAROUSEL_FILTER_1 = 'HW22_CAROUSEL_FILTER_1'
-    HW22_CAROUSEL_FILTER_2 = 'HW22_CAROUSEL_FILTER_2'
     FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
     FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
     COMP7_CAROUSEL_FILTER_1 = 'COMP7_CAROUSEL_FILTER_1'
@@ -396,55 +394,6 @@ class ServerSettingsManager(object):
                                                  'role_LT_universal': 23,
                                                  'role_LT_wheeled': 24,
                                                  'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                                'germany': 1,
-                                                'usa': 2,
-                                                'china': 3,
-                                                'france': 4,
-                                                'uk': 5,
-                                                'japan': 6,
-                                                'czech': 7,
-                                                'sweden': 8,
-                                                'poland': 9,
-                                                'italy': 10,
-                                                'lightTank': 15,
-                                                'mediumTank': 16,
-                                                'heavyTank': 17,
-                                                'SPG': 18,
-                                                'AT-SPG': 19,
-                                                'level_1': 20,
-                                                'level_2': 21,
-                                                'level_3': 22,
-                                                'level_4': 23,
-                                                'level_5': 24,
-                                                'level_6': 25,
-                                                'level_7': 26,
-                                                'level_8': 27,
-                                                'level_9': 28,
-                                                'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                                'elite': 1,
-                                                'rented': 2,
-                                                'igr': 3,
-                                                'favorite': 5,
-                                                'bonus': 6,
-                                                'event': 7,
-                                                'crystals': 8,
-                                                'role_HT_assault': 11,
-                                                'role_HT_break': 12,
-                                                'role_HT_support': 13,
-                                                'role_HT_universal': 14,
-                                                'role_MT_universal': 15,
-                                                'role_MT_sniper': 16,
-                                                'role_MT_assault': 17,
-                                                'role_MT_support': 18,
-                                                'role_ATSPG_assault': 19,
-                                                'role_ATSPG_universal': 20,
-                                                'role_ATSPG_sniper': 21,
-                                                'role_ATSPG_support': 22,
-                                                'role_LT_universal': 23,
-                                                'role_LT_wheeled': 24,
-                                                'role_SPG': 25}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -453,7 +402,6 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
                                             GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
                                             GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: 28,
-                                            GuiSettingsBehavior.CREW_LAMP_WELCOME_SCREEN_SHOWN: 29,
                                             GuiSettingsBehavior.COMP7_INTRO_SHOWN: 30}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
@@ -501,10 +449,9 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: 26,
                                          OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT: 27,
                                          OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT: 28,
-                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29,
-                                         OnceOnlyHints.CRYSTAL_BTN_HINT: 30}, offsets={}),
+                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2: Section(masks={OnceOnlyHints.AMMUNITION_PANEL_HINT: 0,
-                                           OnceOnlyHints.AMMUNITION_FILTER_HINT: 1,
+                                           OnceOnlyHints.MODERNIZED_SETUP_TAB_HINT: 1,
                                            OnceOnlyHints.OPT_DEV_DRAG_AND_DROP_HINT: 2,
                                            OnceOnlyHints.DOGTAG_HANGAR_HINT: 3,
                                            OnceOnlyHints.DOGTAG_PROFILE_HINT: 4,
@@ -1114,8 +1061,6 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
-         SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1: {},
-         SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1177,6 +1122,14 @@ class ServerSettingsManager(object):
         clearRankedFilterCarousel2 = clear.get('rankedCarouselFilter2', 0)
         if rankedFilterCarousel2 or clearRankedFilterCarousel2:
             settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel2) ^ clearRankedFilterCarousel2
+        funRandomFilterCarousel1 = data.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, {})
+        clearFunRandomFilterCarousel1 = clear.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, 0)
+        if funRandomFilterCarousel1 or clearFunRandomFilterCarousel1:
+            settings[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = self._buildSectionSettings(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, funRandomFilterCarousel1) ^ clearFunRandomFilterCarousel1
+        funRandomFilterCarousel2 = data.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2, {})
+        clearFunRandomFilterCarousel2 = clear.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2, 0)
+        if funRandomFilterCarousel2 or clearFunRandomFilterCarousel2:
+            settings[SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2, funRandomFilterCarousel2) ^ clearFunRandomFilterCarousel2
         comp7FilterCarousel1 = data.get('comp7CarouselFilter1', {})
         clearComp7FilterCarousel1 = clear.get('comp7CarouselFilter1', 0)
         if comp7FilterCarousel1 or clearComp7FilterCarousel1:
@@ -1250,14 +1203,6 @@ class ServerSettingsManager(object):
         clearRoyaleFilterCarousel2 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, 0)
         if royaleFilterCarousel2 or clearRoyaleFilterCarousel2:
             settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, royaleFilterCarousel2) ^ clearRoyaleFilterCarousel2
-        HW22FilterCarousel1 = data.get(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1, {})
-        clearHW22FilterCarousel1 = clear.get(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1, 0)
-        if HW22FilterCarousel1 or clearHW22FilterCarousel1:
-            settings[SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1] = self._buildSectionSettings(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_1, HW22FilterCarousel1) ^ clearHW22FilterCarousel1
-        HW22FilterCarousel2 = data.get(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2, {})
-        clearHW22FilterCarousel2 = clear.get(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2, 0)
-        if HW22FilterCarousel2 or clearHW22FilterCarousel2:
-            settings[SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.HW22_CAROUSEL_FILTER_2, HW22FilterCarousel2) ^ clearHW22FilterCarousel2
         battleMatters = data.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {})
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:

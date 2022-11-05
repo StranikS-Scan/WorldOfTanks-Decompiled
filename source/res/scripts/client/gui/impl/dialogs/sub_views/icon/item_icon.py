@@ -23,7 +23,7 @@ class ItemIcon(IconSet):
             if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
                 iconRes = artefacts.dyn(item.descriptor.iconName)()
                 backgrounds.append(R.images.gui.maps.icons.demountKit.dyn(item.getHighlightType() + '_highlight')())
-                overlays.append(artefacts.dyn(item.getOverlayType() + '_overlay')())
+                overlays.append(artefacts.dyn(item.getOverlayIconName())())
         else:
             _logger.warning('wrong itemCD %s', itemCD)
         super(ItemIcon, self).__init__(iconRes, backgrounds, overlays)

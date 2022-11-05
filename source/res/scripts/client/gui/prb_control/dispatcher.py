@@ -481,6 +481,9 @@ class _PreBattleDispatcher(ListenersCollection):
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
+    def ctrl_onUnitCreationFailure(self, _):
+        self.__setDefault()
+
     def gs_onTillBanNotification(self, isPlayTimeBan, timeTillBlock):
         if prb_getters.isParentControlActivated():
             self.__entity.resetPlayerState()
@@ -541,6 +544,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.onUnitIntroModeJoined += self.ctrl_onUnitIntroModeJoined
         g_prbCtrlEvents.onUnitIntroModeLeft += self.ctrl_onUnitIntroModeLeft
         g_prbCtrlEvents.onUnitBrowserModeLeft += self.ctrl_onUnitBrowserModeLeft
+        g_prbCtrlEvents.onUnitCreationFailure += self.ctrl_onUnitCreationFailure
         g_prbCtrlEvents.onPreQueueJoined += self.ctrl_onPreQueueJoined
         g_prbCtrlEvents.onPreQueueJoinFailure += self.ctrl_onPreQueueJoinFailure
         g_prbCtrlEvents.onPreQueueLeft += self.ctrl_onPreQueueLeft

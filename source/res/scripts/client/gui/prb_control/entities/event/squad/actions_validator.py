@@ -1,46 +1,40 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/actions_validator.py
-from constants import QUEUE_TYPE
-from CurrentVehicle import g_currentVehicle
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
-from gui.prb_control.entities.base.squad.actions_validator import SquadVehiclesValidator
+from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 from gui.prb_control.entities.base.unit.actions_validator import CommanderValidator
-from gui.prb_control.entities.random.squad.actions_validator import RandomSquadActionsValidator, SPGForbiddenSquadVehiclesValidator, BalancedSquadActionsValidator
-from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.items import ValidationResult
+from gui.prb_control.settings import UNIT_RESTRICTION
 
 class _EventBattleVehiclesValidator(SquadVehiclesValidator):
 
     def _validate(self):
-        levelsRange = self._entity.getRosterSettings().getLevelsRange()
-        pInfo = self._entity.getPlayerInfo()
-        if not pInfo.isReady and g_currentVehicle.isPresent() and g_currentVehicle.item.level not in levelsRange:
-            return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL)
-        vInfos = self._getVehiclesInfo()
-        commanderQueueType = self._entity.getCommanderQueueType()
-        if commanderQueueType:
-            for vInfo in vInfos:
-                vehicle = vInfo.getVehicle()
-                if commanderQueueType == QUEUE_TYPE.EVENT_BATTLES and vehicle.isWheeledTech or commanderQueueType == QUEUE_TYPE.EVENT_BATTLES_2 and not vehicle.isWheeledTech:
-                    return ValidationResult(False, UNIT_RESTRICTION.UNSUITABLE_VEHICLE)
-
+        leaderEventEnqueueData = self._entity.getLeaderEventEnqueueData()
+        if leaderEventEnqueueData is not None:
+            result = True
+            if not result:
+                return ValidationResult(False, UNIT_RESTRICTION.UNIT_WRONG_DATA)
         return super(_EventBattleVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return super(_EventBattleVehiclesValidator, self)._isValidMode(vehicle) or vehicle.isEvent
+        return vehicle.isEvent and not vehicle.isOnlyForEpicBattles
 
 
 class EventSquadSlotsValidator(CommanderValidator):
-    pass
+
+    def _validate(self):
+        stats = self._entity.getStats()
+        roster = self._entity.getRoster()
+        pInfo = self._entity.getPlayerInfo()
+        hasEmptySlots = roster.MAX_SLOTS > stats.readyCount + roster.MAX_EMPTY_SLOTS
+        return ValidationResult(False, UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED) if hasEmptySlots or not pInfo.isReady else None
 
 
-class EventBattleSquadActionsValidator(RandomSquadActionsValidator):
+class EventBattleSquadActionsValidator(SquadActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[_EventBattleVehiclesValidator(entity), SPGForbiddenSquadVehiclesValidator(entity)])
+        return _EventBattleVehiclesValidator(entity)
 
-
-class EventBattleBalanceSquadActionsValidator(BalancedSquadActionsValidator):
-
-    def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[_EventBattleVehiclesValidator(entity), SPGForbiddenSquadVehiclesValidator(entity)])
+    def _createSlotsValidator(self, entity):
+        baseValidator = super(EventBattleSquadActionsValidator, self)._createSlotsValidator(entity)
+        return ActionsValidatorComposite(entity, validators=[baseValidator, EventSquadSlotsValidator(entity)])

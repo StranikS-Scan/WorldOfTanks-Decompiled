@@ -568,6 +568,10 @@ class _EpicArtilleryItem(_OrderItem):
     def getMarkerColor(self):
         return BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
+    def getAimingControlMode(self):
+        from AvatarInputHandler.MapCaseMode import EpicMapCaseControlMode
+        return EpicMapCaseControlMode
+
 
 class _ArcadeArtilleryItem(_ArtilleryItem):
 
@@ -586,6 +590,10 @@ class _BomberItem(_OrderItem):
 
     def getMarker(self):
         pass
+
+    def getAimingControlMode(self):
+        from AvatarInputHandler.MapCaseMode import EpicMapCaseControlMode
+        return EpicMapCaseControlMode
 
 
 class _BattleRoyaleBomber(_BomberItem):
@@ -907,6 +915,9 @@ class _VisualScriptItem(_TriggerItem):
 
 
 class _PoiEquipmentItemVS(_VisualScriptItem):
+
+    def canActivate(self, entityName=None, avatar=None):
+        return (False, self._getErrorMsg()) if not self._getComponent() else super(_PoiEquipmentItemVS, self).canActivate(entityName, avatar)
 
     def _getErrorMsg(self):
         return PoiUnavailableError(self._descriptor.userString) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiEquipmentItemVS, self)._getErrorMsg()

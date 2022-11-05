@@ -6,7 +6,7 @@ import sys
 from time import time
 from functools import wraps
 if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP:
-    from insights.common import incrTickOverspends
+    from insights.measurements import incrTickOverspends
 DEFAULT_TIME_LIMIT = 0.02
 DEFAULT_TICK_LENGTH = SERVER_TICK_LENGTH
 

@@ -194,6 +194,7 @@
     <_122-mm_D-25TA_S>	245	</_122-mm_D-25TA_S>
     <_76mm_ZiS_5_MZ>	246	</_76mm_ZiS_5_MZ>
     <_107mm_ZiS-24_KTT>	247	</_107mm_ZiS-24_KTT>
+    <_122mm_cannon_M-30_1938_dualgun>	250	</_122mm_cannon_M-30_1938_dualgun>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -9345,6 +9346,57 @@
         </_122mm_UOF-472-DG>
       </shots>
     </_122mm_M62-T2_dualgun>
+    <_122mm_cannon_M-30_1938_dualgun>
+      <userString>	#ussr_vehicles:_122mm_cannon_M-30_1938_dualgun	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	42500	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.62	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	12.5714285714286	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	3200	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.365714285714286	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_OF420S-DG>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	515	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	61 61	</piercingPower>
+        </_122mm_OF420S-DG>
+        <_122mm_BP450S-DG>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	412	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	140 140	</piercingPower>
+        </_122mm_BP450S-DG>
+      </shots>
+    </_122mm_cannon_M-30_1938_dualgun>
     <_122mm_M62-T2A>
       <userString>	#ussr_vehicles:_122mm_M62-T2A	</userString>
       <tags></tags>

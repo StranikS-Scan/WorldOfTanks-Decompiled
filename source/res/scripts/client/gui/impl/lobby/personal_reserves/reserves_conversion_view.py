@@ -16,11 +16,14 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
+from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional, List, Any
     from frameworks.wulf import Array
 
 class ReservesConversionView(ReservesViewMonitor):
+    __slots__ = ('_uiLogger',)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _itemsCache = dependency.descriptor(IItemsCache)
     _uiLoader = dependency.descriptor(IGuiLoader)
@@ -34,6 +37,7 @@ class ReservesConversionView(ReservesViewMonitor):
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = ReservesConversionViewModel()
         super(ReservesConversionView, self).__init__(settings)
+        self._uiLogger = PersonalReservesMetricsLogger(parent=PersonalReservesLogKeys.HANGAR, item=PersonalReservesLogKeys.RESERVES_CONVERSION_WINDOW)
 
     @property
     def _viewModel(self):
@@ -42,10 +46,12 @@ class ReservesConversionView(ReservesViewMonitor):
     def _initialize(self, *args, **kwargs):
         super(ReservesConversionView, self)._initialize(*args, **kwargs)
         self._viewModel.onClose += self._onClose
+        self._uiLogger.onViewInitialize()
 
     def _finalize(self):
         self._viewModel.onClose -= self._onClose
         self.__finalizeSounds()
+        self._uiLogger.onViewFinalize()
         super(ReservesConversionView, self)._finalize()
 
     def _getBoosterDescr(self, boosterID):

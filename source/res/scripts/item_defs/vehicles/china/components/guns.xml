@@ -66,6 +66,7 @@
     <_130mm_59_130M>	260	</_130mm_59_130M>
     <_160mm_56_160_BZS>	261	</_160mm_56_160_BZS>
     <_45mm_20K_a>	262	</_45mm_20K_a>
+    <_130mm_Type_62>	78	</_130mm_Type_62>
     <_105mm_Type_81-I>	80	</_105mm_Type_81-I>
     <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_FL>	502	</_100mm_60-100TA_FL>
@@ -3861,6 +3862,64 @@
         </_130mm_HE>
       </shots>
     </_130mm_59_130TA_QL>
+    <_130mm_Type_62>
+      <userString>	#china_vehicles:_130mm_Type_62	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15.4	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_Chuan_bei_492>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	266 241	</piercingPower>
+        </_130mm_Chuan_bei_492>
+        <_130mm_Chuan_bei_492F>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1350	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	325 310	</piercingPower>
+        </_130mm_Chuan_bei_492F>
+        <_130mm_Sha_bao_492G>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_Sha_bao_492G>
+      </shots>
+    </_130mm_Type_62>
     <_130mm_59_130JG_FT>
       <userString>	#china_vehicles:_130mm_59_130JG_FT	</userString>
       <tags></tags>

@@ -32,6 +32,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IBoostersController, IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
 
 class _FilterBit(CONST_CONTAINER):
     XP = 1
@@ -95,7 +96,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
 
     def onInfoClicked(self):
         callback = partial(showStorage, defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
-        showPersonalReservesIntro(callbackOnClose=callback)
+        showPersonalReservesIntro(callbackOnClose=callback, uiLoggingKey=PersonalReservesLogKeys.DEPOT)
 
     def activateReserve(self, boosterID):
         boosterActivationFlow(boosterID)

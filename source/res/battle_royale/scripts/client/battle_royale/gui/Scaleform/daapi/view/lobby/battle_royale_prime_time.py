@@ -11,7 +11,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 
 class BattleRoyaleServerPresenter(EpicBattleServerPresenter):
-    _periodsController = dependency.descriptor(IBattleRoyaleController)
 
     def _getEndOfCycleTooltipText(self):
         return backport.text(R.strings.battle_royale.primeTime.tooltip.endOfCycleOnThisServer(), server=self.getName())

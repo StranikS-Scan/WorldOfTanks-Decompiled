@@ -171,7 +171,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.__activated = True
             return
 
-    def deactivate(self, stopEffects=True):
+    def deactivate(self, stopEffects=True, restoreFilter=True):
         if not self.__activated:
             return
         else:
@@ -185,7 +185,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 BigWorld.removeCameraCollider(self.collisions.getColliderID())
             self.turretMatrix.target = None
             self.gunMatrix.target = None
-            self._vehicle.filter = self.__originalFilter
+            if restoreFilter:
+                self._vehicle.filter = self.__originalFilter
             self.filter.reset()
             self.__originalFilter = None
             self.__showCircleDelayed = None

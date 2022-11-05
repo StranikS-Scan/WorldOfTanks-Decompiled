@@ -1,0 +1,251 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/constants_ext.py
+import typing
+from collections import OrderedDict
+from constants import IS_DEVELOPMENT, SHELL_TYPES, SHELL_MECHANICS_TYPE
+if typing.TYPE_CHECKING:
+    from items.vehicle_items import Shell
+BATTLE_PARAMS_XML_PATH = 'scripts/item_defs/battle_params.xml'
+REMAPPING_XML_PATH = 'scripts/item_defs/remapping.xml'
+BATTLE_MODIFIERS_DIR = 'scripts/server_xml/battle_modifiers/'
+BATTLE_MODIFIERS_XML = 'battle_modifiers.xml'
+USE_MODIFICATION_CACHE = True
+MAX_MODIFICATION_LAYER_COUNT = 5
+FAKE_MODIFIER_NAME = 'fakeModifier'
+FAKE_PARAM_NAME = 'fakeParam'
+DEBUG_MODIFIERS = IS_DEVELOPMENT
+ERROR_TEMPLATE = "[BattleModifiers] {} for param '{}'"
+
+class DataType(object):
+    INT = 0
+    FLOAT = 1
+    STRING = 2
+    ID_TO_NAME = {INT: 'int',
+     FLOAT: 'float',
+     STRING: 'string'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+
+
+class UseType(object):
+    UNDEFINED = 0
+    VAL = 1
+    MUL = 2
+    ADD = 3
+    DIMENSIONAL_TYPES = {VAL, ADD}
+    ID_TO_NAME = {VAL: 'val',
+     MUL: 'mul',
+     ADD: 'add'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+    ALL_WITH_UNDEFINED = ALL | {UNDEFINED}
+    NON_DIMENSIONAL_TYPES = ALL_WITH_UNDEFINED - DIMENSIONAL_TYPES
+
+
+class PhysicalType(object):
+    UNDEFINED = 0
+    SECONDS = 1
+    MINUTES = 2
+    MILLIMETERS = 3
+    METERS = 4
+    METERS_PER_SECOND = 5
+    KILOMETERS_PER_HOUR = 6
+    METER_PER_SECOND_SQUARED = 7
+    DEGREES = 8
+    RADIANS = 9
+    DEGREES_PER_SECOND = 10
+    RADIANS_PER_SECOND = 11
+    HIT_POINTS = 12
+    HORSEPOWER = 13
+    PROBABILITY = 14
+    DEVIATION = 15
+    LOGIC = 16
+    ID_TO_NAME = {UNDEFINED: 'undefined',
+     SECONDS: 'seconds',
+     MINUTES: 'minutes',
+     MILLIMETERS: 'millimeters',
+     METERS: 'meters',
+     METERS_PER_SECOND: 'metersPerSecond',
+     KILOMETERS_PER_HOUR: 'km_per_hour',
+     METER_PER_SECOND_SQUARED: 'meter_per_second_squared',
+     DEGREES: 'degrees',
+     RADIANS: 'radians',
+     DEGREES_PER_SECOND: 'degrees_per_second',
+     RADIANS_PER_SECOND: 'radians_per_second',
+     HIT_POINTS: 'hitPoints',
+     HORSEPOWER: 'horsepower',
+     PROBABILITY: 'probability',
+     DEVIATION: 'deviation',
+     LOGIC: 'logic'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+
+
+class ModifierDomain(object):
+    COMMON = 1
+    VEH_TYPE = 2
+    CHASSIS = 4
+    TURRET = 8
+    GUN = 16
+    SHOT = 32
+    SHELL = 64
+    SHELL_TYPE = 128
+    RADIO = 256
+    PHYSICS = 512
+    ENGINE = 1024
+    HULL = 2048
+    VEHICLE = 4096
+    SHELL_COMPONENTS = SHELL | SHELL_TYPE
+    SHOT_COMPONENTS = SHOT | SHELL_COMPONENTS
+    GUN_COMPONENTS = GUN | SHOT_COMPONENTS
+    TURRET_COMPONENTS = TURRET | GUN_COMPONENTS
+    VEH_TYPE_COMPONENTS = VEH_TYPE | CHASSIS | TURRET_COMPONENTS | RADIO | PHYSICS | ENGINE | HULL
+    VEHICLE_COMPONENTS = VEHICLE | VEH_TYPE_COMPONENTS
+    DEFAULT = COMMON
+    ID_TO_NAME = {COMMON: 'common',
+     VEH_TYPE: 'vehType',
+     CHASSIS: 'chassis',
+     TURRET: 'turret',
+     GUN: 'gun',
+     SHOT: 'shot',
+     SHELL: 'shell',
+     SHELL_TYPE: 'shellType',
+     RADIO: 'radio',
+     PHYSICS: 'physics',
+     ENGINE: 'engine',
+     HULL: 'hull',
+     VEHICLE: 'vehicle'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+
+
+class ClientDomain(object):
+    UNDEFINED = 'undefined'
+    ACCURACY = 'accuracy'
+    ARMOR_PIERCING = 'armorPiercing'
+    BATTLE_PARAMS = 'battleParams'
+    CONCEALMENT = 'concealment'
+    DAMAGE_DEALING = 'damageDealing'
+    MOBILITY = 'mobility'
+    RANDOMIZATION = 'randomization'
+    SUSTAINING = 'sustaining'
+    VISIBILITY = 'visibility'
+    VITALITY = 'vitality'
+    ALL = None
+
+
+ClientDomain.ALL = set([ v for k, v in ClientDomain.__dict__.iteritems() if not k.startswith('_') and k not in ('UNDEFINED', 'ALL') ])
+
+class GameplayImpact(object):
+    UNDEFINED = 0
+    POSITIVE = 1
+    NEGATIVE = 2
+    HIDDEN = 3
+    ID_TO_NAME = {UNDEFINED: 'undefined',
+     POSITIVE: 'positive',
+     NEGATIVE: 'negative',
+     HIDDEN: 'hidden'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+
+
+class ModifierRestriction(object):
+    MIN = 0
+    MAX = 1
+    USE_TYPES = 2
+    LIMITS = (MIN, MAX)
+    ID_TO_NAME = {MIN: 'min',
+     MAX: 'max',
+     USE_TYPES: 'useTypes'}
+    NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
+    ALL = set(NAME_TO_ID.itervalues())
+    NAMES = set(ID_TO_NAME.itervalues())
+
+
+class NodeType(object):
+    ROOT = 'root'
+    SHELL = 'shell'
+    VEHICLE = 'vehicle'
+    SUPPORTED_DOMAINS = {ROOT: 0,
+     SHELL: ModifierDomain.SHOT_COMPONENTS,
+     VEHICLE: ModifierDomain.VEHICLE_COMPONENTS}
+
+
+class ShellCaliber(object):
+    AUTO = 'auto'
+    SMALL = 'small'
+    MEDIUM = 'medium'
+    MAIN = 'main'
+    LARGE = 'large'
+    HUGE = 'huge'
+    NAME_TO_CALIBER = OrderedDict(((HUGE, 155),
+     (LARGE, 108),
+     (MAIN, 85),
+     (MEDIUM, 50),
+     (SMALL, 20),
+     (AUTO, 7)))
+    CALIBERS_AND_NAMES = None
+
+    @classmethod
+    def get(cls, targetCaliber):
+        for name, caliber in cls.NAME_TO_CALIBER.iteritems():
+            if targetCaliber >= caliber:
+                return name
+
+        return cls.AUTO
+
+
+class ShellKind(object):
+    HOLLOW_CHARGE = 'HOLLOW_CHARGE'
+    ARMOR_PIERCING = 'ARMOR_PIERCING'
+    ARMOR_PIERCING_HE = 'ARMOR_PIERCING_HE'
+    ARMOR_PIERCING_CR = 'ARMOR_PIERCING_CR'
+    SMOKE = 'SMOKE'
+    HIGH_EXPLOSIVE_MODERN = 'HIGH_EXPLOSIVE_MODERN'
+    HIGH_EXPLOSIVE_LEGACY_STUN = 'HIGH_EXPLOSIVE_LEGACY_STUN'
+    HIGH_EXPLOSIVE_LEGACY_NO_STUN = 'HIGH_EXPLOSIVE_LEGACY_NO_STUN'
+    IMPROVED_POSTFIX = '_GOLD'
+    ALL_KEY = 'ALL'
+    ALL_REGULAR = {HOLLOW_CHARGE,
+     ARMOR_PIERCING,
+     ARMOR_PIERCING_HE,
+     ARMOR_PIERCING_CR,
+     SMOKE,
+     HIGH_EXPLOSIVE_MODERN,
+     HIGH_EXPLOSIVE_LEGACY_STUN,
+     HIGH_EXPLOSIVE_LEGACY_NO_STUN}
+    ALL_IMPROVED = set([ key + IMPROVED_POSTFIX for key in ALL_REGULAR ])
+
+    @classmethod
+    def get(cls, shellDescr, withGold=True):
+        if shellDescr.kind != SHELL_TYPES.HIGH_EXPLOSIVE:
+            kind = shellDescr.kind
+        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN:
+            kind = cls.HIGH_EXPLOSIVE_MODERN
+        elif shellDescr.hasStun:
+            kind = cls.HIGH_EXPLOSIVE_LEGACY_STUN
+        else:
+            kind = cls.HIGH_EXPLOSIVE_LEGACY_NO_STUN
+        return kind + cls.IMPROVED_POSTFIX if shellDescr.isGold and withGold else kind
+
+
+class ModifiersWithRemapping(object):
+    GUN_EFFECTS = 'gunEffects'
+    SHOT_EFFECTS = 'shotEffects'
+    ALL = {GUN_EFFECTS, SHOT_EFFECTS}
+
+
+class RemappingConditionNames(object):
+    CALIBER = 'caliber'
+    SHELL_KIND = 'shellKind'
+    ALL = {CALIBER, SHELL_KIND}
+
+
+class RemappingNames(object):
+    TEST = 'test'
+    ALL = set(() + ((TEST,) if IS_DEVELOPMENT else ()))

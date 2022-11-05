@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/items/readers/shared_readers.py
 import itertools
 import logging
-from collections import defaultdict
 import typing
+from collections import defaultdict
+from copy import deepcopy
 import ResMgr
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode
 from items import _xml, getTypeInfoByName
@@ -306,6 +307,11 @@ def _readRepairSpeedLimiter(xmlCtx, section):
          'repairMode': DeviceRepairMode.SLOWED if repairSpeedModifier > 0.0 else DeviceRepairMode.SUSPENDED}
 
 
+def _refDefaultCamouflageAttribute(defaultCamo, attr):
+    val = getattr(defaultCamo, attr)
+    return deepcopy(val) if IS_EDITOR else val
+
+
 def readCamouflage(xmlCtx, section, sectionName, default=None):
     tiling, mask, density, aoTextureSize = (None, None, None, None)
     tilingKey = sectionName + '/tiling'
@@ -315,23 +321,23 @@ def readCamouflage(xmlCtx, section, sectionName, default=None):
             tiling = readTiling
     if tiling is None:
         if default is not None:
-            tiling = default[0]
+            tiling = _refDefaultCamouflageAttribute(default, 'tiling')
         else:
             _xml.raiseWrongSection(xmlCtx, tilingKey)
     maskKey = sectionName + '/exclusionMask'
     mask = section.readString(maskKey)
     if not mask and default is not None:
-        mask = default[1]
+        mask = default.exclusionMask
     densityKey = sectionName + '/density'
     if section.has_key(densityKey):
         density = _xml.readTupleOfFloats(xmlCtx, section, densityKey, 2)
     if density is None and default is not None:
-        density = default[2]
+        density = _refDefaultCamouflageAttribute(default, 'density')
     aoTextureSizeKey = sectionName + '/aoTextureSize'
     if section.has_key(aoTextureSizeKey):
         aoTextureSize = _xml.readTupleOfFloats(xmlCtx, section, aoTextureSizeKey, 2)
     if aoTextureSize is None and default is not None:
-        aoTextureSize = default[2]
+        aoTextureSize = _refDefaultCamouflageAttribute(default, 'aoTextureSize')
     return shared_components.Camouflage(tiling, mask, density, aoTextureSize)
 
 

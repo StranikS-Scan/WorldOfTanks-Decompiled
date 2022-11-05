@@ -311,7 +311,7 @@ class AS3_AppFactory(IAppFactory):
         elif arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EPIC_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CLASSIC_BATTLE_PAGE))
+            event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_BATTLE_PAGE))
         elif arenaGuiType == ARENA_GUI_TYPE.MAPS_TRAINING:
             event = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MAPS_TRAINING_PAGE))
         elif arenaGuiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:

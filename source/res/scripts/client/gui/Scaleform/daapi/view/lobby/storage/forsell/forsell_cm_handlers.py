@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/forsell/forsell_cm_handlers.py
 from adisp import adisp_process
-from gui import DialogsInterface
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel, ContextMenu
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared import event_dispatcher as shared_events
 from ids_generators import SequenceIDGenerator
+from gui.shared.event_dispatcher import showConfirmInStorageDialog
 
 class ForSellCMHandler(ContextMenu, EventSystemEntity):
     __sqGen = SequenceIDGenerator()
@@ -19,7 +18,7 @@ class ForSellCMHandler(ContextMenu, EventSystemEntity):
     @option(__sqGen.next(), CMLabel.SELL)
     @adisp_process
     def sell(self):
-        yield DialogsInterface.showDialog(SellModuleMeta(self._id))
+        showConfirmInStorageDialog(self._id)
 
     @option(__sqGen.next(), CMLabel.SALE_OPTION)
     def switchSaleOption(self):

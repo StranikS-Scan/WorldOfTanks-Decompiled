@@ -206,8 +206,8 @@ def starYellow(vspace=-4):
     return _getIcon('starYellow', vspace=vspace)
 
 
-def webLink():
-    return _getIcon('webLink')
+def equipCoin():
+    return _getIcon('equipIcon')
 
 
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):

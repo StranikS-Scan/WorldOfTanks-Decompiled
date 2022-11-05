@@ -44,7 +44,6 @@ class ComplexTooltip(BlocksTooltipData):
 
 
 class BaseAdvancedTooltip(BlocksTooltipData):
-    _MOVIE_TEXT_RIGHT_PADDING = {}
 
     def __init__(self, context):
         super(BaseAdvancedTooltip, self).__init__(context, None)
@@ -88,7 +87,7 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         if movie is None:
             items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         else:
-            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20, right=self._MOVIE_TEXT_RIGHT_PADDING.get(movie, 0)))]
+            items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         return items
 
 
@@ -311,7 +310,18 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'recon': 'recon',
  'regenerationKit': 'resuply',
  'passive_engineering': 'sabotageSquad',
- 'smoke': 'smokeCloud'}
+ 'smoke': 'smokeCloud',
+ 'commandersView': 'equipmentCommandersVisionSystem',
+ 'modernizedAimDrivesAimingStabilizer': 'equipmentExperimentalAiming',
+ 'modernizedExtraHealthReserveAntifragmentationLining': 'equipmentExperimentalHardening',
+ 'modernizedTurbochargerRotationMechanism': 'equipmentExperimentalTurbocharger',
+ 'improvedSights': 'equipmentImprovedAiming',
+ 'extraHealthReserve': 'equipmentImprovedHardening',
+ 'improvedRadioCommunication': 'equipmentImprovedRadioSet',
+ 'improvedRotationMechanism': 'equipmentImprovedRotationMechanism',
+ 'additionalInvisibilityDevice': 'equipmentLowNoiseExhaustSystem',
+ 'improvedConfiguration': 'equipmentModifiedConfiguration',
+ 'turbocharger': 'equipmentTurbocharger'}
 _TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

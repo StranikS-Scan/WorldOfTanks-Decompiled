@@ -8,6 +8,10 @@ from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import Re
 from gui.shared.event_dispatcher import showPersonalReservesConversion, closeReservesIntroAndConversionView
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
+from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
+INTRO_UI_LOGGING_KEY = 'UILoggingParent'
+INTRO_CALLBACK_ON_CLOSE_KEY = 'callbackOnClose'
 
 class PersonalReservesIntro(ReservesViewMonitor):
     __slots__ = ('__callbackOnClose',)
@@ -17,8 +21,9 @@ class PersonalReservesIntro(ReservesViewMonitor):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = ReservesIntroViewModel()
-        self.__callbackOnClose = ctx['callbackOnClose']
+        self.__callbackOnClose = ctx[INTRO_CALLBACK_ON_CLOSE_KEY]
         super(PersonalReservesIntro, self).__init__(settings)
+        self._uiLogger = PersonalReservesMetricsLogger(parent=ctx.get(INTRO_UI_LOGGING_KEY) or PersonalReservesLogKeys.HANGAR, item=PersonalReservesLogKeys.INTRO_WINDOW)
 
     @property
     def viewModel(self):
@@ -28,6 +33,7 @@ class PersonalReservesIntro(ReservesViewMonitor):
         super(PersonalReservesIntro, self)._initialize()
         self.viewModel.onClose += self.close
         self.viewModel.onConversionInfoClicked += self.onConversionInfoClicked
+        self._uiLogger.onViewInitialize()
 
     def _onLoaded(self, *args, **kwargs):
         super(PersonalReservesIntro, self)._onLoaded(*args, **kwargs)
@@ -38,6 +44,7 @@ class PersonalReservesIntro(ReservesViewMonitor):
         self.viewModel.onConversionInfoClicked -= self.onConversionInfoClicked
         self.__finalizeSounds()
         super(PersonalReservesIntro, self)._finalize()
+        self._uiLogger.onViewFinalize()
 
     def onConversionInfoClicked(self):
         showPersonalReservesConversion()

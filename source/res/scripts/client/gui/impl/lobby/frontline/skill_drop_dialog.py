@@ -15,11 +15,11 @@ from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import
 from gui.impl.lobby.frontline.dialogs.blank_price_view import BlankPriceView
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared.gui_items.gui_item_economics import ItemPrice
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Money, Currency
 from gui.shop import showBuyGoldForCrew
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions
 from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
@@ -30,6 +30,7 @@ class SkillDropDialog(DialogTemplateView):
     __appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ('__tankman', '__isBlank', '__price', '__freeDropSave100', '__uiEpicBattleLogger')
     _itemsCache = dependency.descriptor(IItemsCache)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, tankman, price=None, isBlank=False, freeDropSave100=False, layoutID=None, uniqueID=None):
         super(SkillDropDialog, self).__init__(layoutID, uniqueID)
@@ -68,10 +69,10 @@ class SkillDropDialog(DialogTemplateView):
 
     def _initialize(self):
         super(SkillDropDialog, self)._initialize()
-        self._itemsCache.onSyncCompleted += self.__onSyncCompleted
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def _finalize(self):
-        self._itemsCache.onSyncCompleted -= self.__onSyncCompleted
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         super(SkillDropDialog, self)._finalize()
         self.__uiEpicBattleLogger.reset()
 
@@ -84,7 +85,6 @@ class SkillDropDialog(DialogTemplateView):
                 result = DialogButtons.CANCEL
         super(SkillDropDialog, self)._setResult(result)
 
-    def __onSyncCompleted(self, reason, _):
-        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
-            return
-        self.destroyWindow()
+    def __onServerSettingsChange(self, diff):
+        if 'recertificationFormState' in diff:
+            self.destroyWindow()

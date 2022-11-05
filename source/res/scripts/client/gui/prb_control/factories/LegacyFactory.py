@@ -38,6 +38,7 @@ class LegacyFactory(ControlFactory):
         result = collectLegacyEntryPoint(action.actionName)
         if result:
             result.setAccountsToInvite(action.accountsToInvite)
+            result.setExtData(action.extData)
         return result
 
     def createEntity(self, ctx):

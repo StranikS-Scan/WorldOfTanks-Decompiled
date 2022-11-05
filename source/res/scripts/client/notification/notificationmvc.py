@@ -3,12 +3,14 @@
 from notification.AlertController import AlertController
 from notification.NotificationsCounter import NotificationsCounter
 from notification.NotificationsModel import NotificationsModel
+from notification.NotificationsStorage import NotificationsStorage
 from notification.actions_handlers import NotificationsActionsHandlers
 
 class _NotificationMVC(object):
 
     def __init__(self):
         self.__model = None
+        self.__storage = NotificationsStorage()
         self.__alertsController = None
         self.__actionsHandlers = None
         self.__unreadMessagesCounter = NotificationsCounter()
@@ -16,12 +18,15 @@ class _NotificationMVC(object):
         return
 
     def initialize(self):
-        self.__model = NotificationsModel(self.__unreadMessagesCounter, self.__firstEntry)
+        self.__model = NotificationsModel(self.__storage, self.__unreadMessagesCounter, self.__firstEntry)
         self.__actionsHandlers = NotificationsActionsHandlers()
         self.__alertsController = AlertController(self.__model)
 
     def getModel(self):
         return self.__model
+
+    def getStorage(self):
+        return self.__storage
 
     def getAlertController(self):
         return self.__alertsController
@@ -37,6 +42,7 @@ class _NotificationMVC(object):
         self.__actionsHandlers = None
         self.__firstEntry = False
         if resetCounter:
+            self.__storage.clear()
             self.__unreadMessagesCounter.clear()
             self.__unreadMessagesCounter = NotificationsCounter()
             self.__firstEntry = True

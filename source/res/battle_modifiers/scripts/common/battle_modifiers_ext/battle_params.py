@@ -1,33 +1,65 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_params.py
-from extension_utils import ResMgr
+from battle_modifiers_common.battle_modifiers import BattleParams
+from battle_modifiers_ext.battle_modifier.modifier_appliers import registerParamAppliers
+from battle_modifiers_ext.battle_modifier.modifier_restrictions import readRestrictions
+from battle_modifiers_ext.battle_modifier.modifier_readers import registerParamReaders
+from battle_modifiers_ext.constants_ext import BATTLE_PARAMS_XML_PATH, FAKE_PARAM_NAME, DataType, UseType, PhysicalType, ModifierDomain, ClientDomain
 from constants import IS_CLIENT
-from typing import TYPE_CHECKING, Optional, Tuple, List, Set, Type
-from battle_modifier_constants import BATTLE_PARAMS_XML_PATH, DataType, UseType, PhysicalType, ModifierDomain, ClientDomain, ModifierRestriction
-from battle_modifier_restrictions import g_modifierValidators, MinLimiter, MaxLimiter, MinMaxLimiter
-from battle_modifier_readers import registerParamReaders
-from battle_modifier_appliers import registerParamAppliers
+from extension_utils import ResMgr
+from typing import Optional, Set, Tuple, Iterable, Union
+from ResMgr import DataSection
 from soft_exception import SoftException
-if TYPE_CHECKING:
-    from ResMgr import DataSection
-    from battle_modifier_restrictions import IModifierValidator, IValueLimiter
-    from battle_modifiers import BattleModifier
 _ERR_TEMPLATE = "[BattleParams] {} for param '{}'"
 g_cache = None
 
 class ClientParamData(object):
-    __slots__ = ('domain', 'physicalType', 'useTypes')
+    __slots__ = ('resName', 'domain', 'physicalType', 'useTypes')
 
-    def __init__(self, techName, clientConfig):
-        self.domain = self.__readDomain(techName, clientConfig)
-        self.physicalType = self.__readPhysicalType(techName, clientConfig)
-        self.useTypes = self.__readUseTypes(techName, self.physicalType, clientConfig)
+    def __init__(self, source, techName):
+        if isinstance(source, DataSection):
+            self._readConfig(techName, source)
+        else:
+            self._initFromDescr(source)
 
     def __repr__(self):
-        return 'ClientParamData(domain = {}, physicalTypeName={}, useTypesName={})'.format(self.domain, PhysicalType.ID_TO_NAME[self.physicalType], (UseType.ID_TO_NAME[useType] for useType in self.useTypes))
+        return 'ClientParamData(resName={}, domain = {}, physicalTypeName={}, useTypesName={})'.format(self.resName, self.domain, PhysicalType.ID_TO_NAME[self.physicalType], (UseType.ID_TO_NAME[useType] for useType in self.useTypes))
+
+    def descr(self):
+        raise SoftException('ClientParamData can not be serialized')
+
+    def _initFromDescr(self, descr):
+        raise SoftException('ClientParamData can be constructed only from DataSection')
+
+    def _readConfig(self, techName, clientConfig):
+        self.resName = self._readResName(techName, clientConfig)
+        self.physicalType = self.__readPhysicalType(techName, clientConfig)
+        self.useTypes = self._readUseTypes(techName, self.physicalType, clientConfig)
+        self.domain = self.__readDomain(techName, self.useTypes, clientConfig)
+
+    @classmethod
+    def _readResName(cls, techName, _):
+        return techName
 
     @staticmethod
-    def __readDomain(tName, dataSection):
+    def _readUseTypes(tName, physicalType, dataSection):
+        useTypes = set()
+        if not dataSection.has_key('useTypes'):
+            return useTypes
+        for useTypeName in dataSection['useTypes'].asString.split():
+            if useTypeName not in UseType.NAMES:
+                raise SoftException(_ERR_TEMPLATE.format("Unknown client use type '{}'".format(useTypeName), tName))
+            useTypes.add(UseType.NAME_TO_ID[useTypeName])
+
+        if physicalType == PhysicalType.UNDEFINED and useTypes & UseType.DIMENSIONAL_TYPES:
+            raise SoftException(_ERR_TEMPLATE.format("Client physical type should be defined in order to show dimensional use types '{}'".format(', '.join((UseType.ID_TO_NAME[useType] for useType in UseType.DIMENSIONAL_TYPES))), tName))
+        return useTypes
+
+    @staticmethod
+    def __readDomain(tName, useTypes, dataSection):
+        clientDomain = ClientDomain.UNDEFINED
+        if not useTypes:
+            return clientDomain
         if not dataSection.has_key('domain'):
             raise SoftException(_ERR_TEMPLATE.format('Missing client domain', tName))
         clientDomain = dataSection['domain'].asString
@@ -44,35 +76,76 @@ class ClientParamData(object):
             raise SoftException(_ERR_TEMPLATE.format("Unknown client phys. type '{}'".format(physTypeName), tName))
         return PhysicalType.NAME_TO_ID[physTypeName]
 
-    @staticmethod
-    def __readUseTypes(tName, physicalType, dataSection):
-        useTypes = set()
-        if not dataSection.has_key('useTypes'):
-            return useTypes
-        for useTypeName in dataSection['useTypes'].asString.split():
-            if useTypeName not in UseType.NAMES:
-                raise SoftException(_ERR_TEMPLATE.format("Unknown client use type '{}'".format(useTypeName), tName))
-            useTypes.add(UseType.NAME_TO_ID[useTypeName])
 
-        if physicalType == PhysicalType.UNDEFINED and useTypes & UseType.DIMENSIONAL_TYPES:
-            raise SoftException(_ERR_TEMPLATE.format("Client physical type should be defined in order to show dimensional use types '{}'".format(', '.join((UseType.ID_TO_NAME[useType] for useType in UseType.DIMENSIONAL_TYPES))), tName))
-        return useTypes
+class FakeClientParamData(ClientParamData):
+    __slots__ = ('__descr',)
+
+    def __init__(self, source, techName):
+        super(FakeClientParamData, self).__init__(source, techName)
+        self.__descr = None
+        return
+
+    def __repr__(self):
+        return 'FakeClientParamData(descr = {})'.format(self.descr())
+
+    def descr(self):
+        if self.__descr is None:
+            self.__descr = self.__makeDescr()
+        return self.__descr
+
+    @classmethod
+    def _readResName(cls, techName, config):
+        if not config.has_key('view'):
+            raise SoftException('Missing view for a FakeBattleModifier')
+        return config['view'].asString
+
+    @classmethod
+    def _readUseTypes(cls, tName, physicalType, dataSection):
+        return cls.__getUseTypes(physicalType)
+
+    def _initFromDescr(self, descr):
+        self.resName, self.domain, self.physicalType = descr
+        self.useTypes = self.__getUseTypes(self.physicalType)
+
+    @classmethod
+    def __getUseTypes(cls, physicalType):
+        return UseType.NON_DIMENSIONAL_TYPES if physicalType == PhysicalType.UNDEFINED else UseType.ALL_WITH_UNDEFINED
+
+    def __makeDescr(self):
+        return (self.resName, self.domain, self.physicalType)
 
 
-class BattleParam(object):
-    __slots__ = ('id', 'name', 'dataType', 'domain', 'clientData', 'valueLimiter', '__validators')
+class BaseBattleParam(object):
 
-    def __init__(self, config):
-        self.__readConfig(config)
+    def __init__(self, source):
+        if isinstance(source, DataSection):
+            self._readConfig(source)
+        else:
+            self._initFromDescr(source)
+
+    def descr(self):
+        raise NotImplementedError
+
+    def _initFromDescr(self, descr):
+        raise NotImplementedError
+
+    def _readConfig(self, config):
+        raise NotImplementedError
+
+
+class BattleParam(BaseBattleParam):
+    __slots__ = ('id', 'name', 'clientData', 'dataType', 'domain', 'validators', 'minValue', 'maxValue')
 
     def __repr__(self):
         return "BattleParam(id = {}, name = '{}', dataTypeName = {}, clientData={})".format(self.id, self.name, DataType.ID_TO_NAME[self.dataType], self.clientData)
 
-    def validate(self, battleModifier):
-        for validator in self.__validators:
-            validator(battleModifier)
+    def descr(self):
+        raise SoftException('BattleParam can not be serialized')
 
-    def __readConfig(self, config):
+    def _initFromDescr(self, descr):
+        raise SoftException('BattleParam can only be constructed from DataSection')
+
+    def _readConfig(self, config):
         paramId = self.__readId(config)
         dataType = self.__readDataType(config)
         registerParamReaders(paramId, dataType)
@@ -82,7 +155,7 @@ class BattleParam(object):
         self.dataType = dataType
         self.domain = self.__readDomain(config)
         self.clientData = self.__readClientData(config)
-        self.__validators, self.valueLimiter = self.__readRestrictions(config, paramId)
+        self.validators, self.minValue, self.maxValue = readRestrictions(config, self.id)
 
     @staticmethod
     def __readId(config):
@@ -116,41 +189,39 @@ class BattleParam(object):
         if not IS_CLIENT:
             return None
         else:
-            if not config.has_key('client'):
-                raise SoftException(_ERR_TEMPLATE.format('Missing client section', config.name))
-            return ClientParamData(config.name, config['client'])
+            clientSection = config['client'] if config.has_key('client') else config
+            return ClientParamData(clientSection, config.name)
 
-    @staticmethod
-    def __readRestrictions(config, paramId):
-        if not config.has_key('restrictions'):
-            return ([], None)
-        else:
-            validators = {}
-            valueLimiter = None
-            minValue = None
-            maxValue = None
-            for restrictionName, restrictionSection in config['restrictions'].items():
-                if restrictionName not in ModifierRestriction.NAMES:
-                    raise SoftException("[BattleParams] Unknown restriction '{}'".format(restrictionName))
-                restrictionId = ModifierRestriction.NAME_TO_ID[restrictionName]
-                if restrictionId in validators:
-                    raise SoftException(_ERR_TEMPLATE.format("Duplicate restriction '{}'".format(restrictionName), config.name))
-                validator = g_modifierValidators[restrictionId](restrictionSection, paramId)
-                if restrictionId == ModifierRestriction.MIN:
-                    minValue = validator.arg
-                if restrictionId == ModifierRestriction.MAX:
-                    maxValue = validator.arg
-                validators[restrictionId] = validator
 
-            if minValue is not None and maxValue is not None:
-                if minValue > maxValue:
-                    raise SoftException(_ERR_TEMPLATE.format('Incorrect limits', config.name))
-                valueLimiter = MinMaxLimiter(minValue, maxValue)
-            elif minValue is not None:
-                valueLimiter = MinLimiter(minValue)
-            elif maxValue is not None:
-                valueLimiter = MaxLimiter(maxValue)
-            return (validators.values(), valueLimiter)
+class FakeBattleParam(BaseBattleParam):
+    __slots__ = ('id', 'name', 'clientData', '__descr')
+
+    def __init__(self, source):
+        super(FakeBattleParam, self).__init__(source)
+        self.__descr = None
+        return
+
+    def __repr__(self):
+        return 'FakeBattleParam(descr = {})'.format(self.descr())
+
+    def descr(self):
+        if self.__descr is None:
+            self.__descr = self.__makeDescr()
+        return self.__descr
+
+    def _initFromDescr(self, descr):
+        self.__initialize(descr)
+
+    def _readConfig(self, config):
+        self.__initialize(config)
+
+    def __initialize(self, source):
+        self.name = FAKE_PARAM_NAME
+        self.id = BattleParams.FAKE_PARAM
+        self.clientData = FakeClientParamData(source, self.name)
+
+    def __makeDescr(self):
+        return self.clientData.descr()
 
 
 class BattleParamsCache(object):

@@ -35,16 +35,19 @@ class Comp7PrimeTimeView(Comp7PrimeTimeMeta):
     _serverPresenterClass = Comp7ServerPresenter
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
 
-    def _getController(self):
-        return self.__comp7Ctrl
-
-    def _getUpdateEvent(self):
-        return self.__comp7Ctrl.onStatusUpdated
-
     def _populate(self):
         super(Comp7PrimeTimeView, self)._populate()
         self.as_setHeaderTextS(backport.text(R.strings.comp7.primeTimeView.title()))
         self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.comp7.backgrounds.prime_time_back()))
+
+    def _getController(self):
+        return self.__comp7Ctrl
+
+    def _startControllerListening(self):
+        self._getController().onStatusUpdated += self._onControllerUpdated
+
+    def _stopControllerListening(self):
+        self._getController().onStatusUpdated -= self._onControllerUpdated
 
     def _prepareData(self, serverList, serverInfo):
         isSingleServer = len(serverList) == 1

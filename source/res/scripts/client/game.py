@@ -527,6 +527,6 @@ def checkBotNet():
     sys.path.append('test_libs')
     from path_manager import g_pathManager
     g_pathManager.setPathes()
-    from scenario_player import g_scenarioPlayer
+    from test_player import g_testPlayer
     rpycPort = int(sys.argv[sys.argv.index(botArg) + 1])
-    g_scenarioPlayer.delayedInitScenarioPlayer(rpycPort)
+    g_testPlayer.initTestPlayer(rpycPort)

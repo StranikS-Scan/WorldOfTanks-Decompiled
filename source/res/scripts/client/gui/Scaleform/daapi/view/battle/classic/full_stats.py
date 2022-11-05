@@ -6,7 +6,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
-from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.ClassicFullStatsMeta import ClassicFullStatsMeta
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -18,11 +17,16 @@ from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from uilogging.personal_reserves.loggers import PersonalReservesFullStatsLogger
 
 class FullStatsComponent(ClassicFullStatsMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(FullStatsComponent, self).__init__()
+        self.__pr20UILogger = PersonalReservesFullStatsLogger()
 
     def onSelectQuest(self, questID):
         qProgressCtrl = self.sessionProvider.shared.questProgress
@@ -33,8 +37,6 @@ class FullStatsComponent(ClassicFullStatsMeta):
         super(FullStatsComponent, self)._populate()
         qProgressCtrl = self.sessionProvider.shared.questProgress
         self.__settingsCore.onSettingsChanged += self.__onSettingsChange
-        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        self.as_isFDEventS(guiType == ARENA_GUI_TYPE.EVENT_BATTLES)
         if qProgressCtrl is not None:
             qProgressCtrl.onQuestProgressInited += self.__onQuestProgressInited
             if qProgressCtrl.isInited():
@@ -125,3 +127,9 @@ class FullStatsComponent(ClassicFullStatsMeta):
             self.as_questProgressPerformS({'hasQuestToPerform': False,
              'noQuestTitle': text_styles.promoSubTitle(INGAME_GUI.STATISTICS_TAB_QUESTS_NOTAVAILABLE_TITLE),
              'noQuestDescr': ''})
+
+    def onPersonalReservesTabViewed(self, visible):
+        if visible:
+            self.__pr20UILogger.onViewInitialize()
+        else:
+            self.__pr20UILogger.onViewFinalize()

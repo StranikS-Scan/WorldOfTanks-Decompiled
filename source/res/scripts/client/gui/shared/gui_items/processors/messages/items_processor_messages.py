@@ -6,7 +6,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import formatPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_ZERO
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_ZERO, ITEM_PRICE_EMPTY
 from gui.shared.gui_items.processors import makeSuccess, makeError
 from gui.shared.money import ZERO_MONEY
 from helpers import dependency
@@ -88,6 +88,60 @@ class ItemDestroyProcessorMessage(_ItemProcessorMessage):
     def _getMsgCtx(self):
         return {'name': self._item.userName,
          'kind': self._item.userType}
+
+    def _getOperation(self):
+        pass
+
+
+class ItemDeconstructionProcessorMessage(_ItemProcessorMessage):
+    __slots__ = ('_count',)
+
+    def __init__(self, item, count):
+        super(ItemDeconstructionProcessorMessage, self).__init__(item)
+        self._count = count
+
+    def _getMsgCtx(self):
+        return {'name': self._item.userName,
+         'count': backport.getIntegralFormat(int(self._count)),
+         'money': formatPrice(self._getOpPrice().price)}
+
+    def _getOpPrice(self):
+        return self._item.sellPrices.itemPrice * self._count
+
+    def _getSuccessMsgType(self):
+        return SM_TYPE.Deconstructing
+
+    def _getOperation(self):
+        pass
+
+
+class MultItemsDeconstructionProcessorMessage(ItemDeconstructionProcessorMessage):
+    __slots__ = ('__items',)
+
+    def __init__(self, items):
+        self.__items = items
+        firstItem, count = self.__items[0]
+        super(MultItemsDeconstructionProcessorMessage, self).__init__(firstItem, count)
+
+    def _getMsgCtx(self):
+        return {'names': self.getNames(),
+         'money': formatPrice(self._getOpPrice().price)}
+
+    def _getOpPrice(self):
+        price = ITEM_PRICE_EMPTY
+        for item, count in self.__items:
+            price = price + item.sellPrices.itemPrice * count
+
+        return price
+
+    def getNames(self):
+        templateKey = R.strings.messenger.serviceChannelMessages.sysMsg.deconstructingMult.itemsTemplate()
+        names = []
+        for item, count in self.__items:
+            itemStr = backport.text(templateKey, name=item.userName, count=count)
+            names.append(itemStr)
+
+        return ','.join(names)
 
     def _getOperation(self):
         pass

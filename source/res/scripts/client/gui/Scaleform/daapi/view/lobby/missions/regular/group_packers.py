@@ -33,8 +33,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
 from skeletons.gui.battle_matters import IBattleMattersController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -270,10 +270,12 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
             rankedPlatform = getRankedPlatformGroup()
             if rankedPlatform and RANKED_PLATFORM_GROUP_ID not in self._cache['groupedEvents']:
                 self._cache['groupedEvents'][RANKED_PLATFORM_GROUP_ID] = self._createGroupedEventsBlock(rankedPlatform)
-        if self.__funRandomController.isBattlesPossible():
+        if self.__funRandomController.subModesInfo.isAvailable():
             funRandomGroup = getFunRandomDailyGroup()
             if funRandomGroup and FUN_RANDOM_GROUP_ID not in self._cache['groupedEvents']:
                 self._cache['groupedEvents'][FUN_RANDOM_GROUP_ID] = self._createGroupedEventsBlock(funRandomGroup)
+        elif FUN_RANDOM_GROUP_ID in self._cache['groupedEvents']:
+            self._cache['groupedEvents'].pop(FUN_RANDOM_GROUP_ID)
         group = getPremiumGroup()
         if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()

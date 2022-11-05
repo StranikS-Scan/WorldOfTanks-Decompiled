@@ -1,48 +1,53 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/opt_devices_tab.py
+from collections import OrderedDict
 from enum import IntEnum
-from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_vehicle import FiltrableInventoryCategoryByVehicleTabView
+from PlayerEvents import g_playerEvents
+from gui.shared.event_dispatcher import showConfirmInStorageDialog
+from gui.Scaleform.daapi.view.meta.StorageDevicesTabViewMeta import StorageDevicesTabViewMeta
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import TABS_SORT_ORDER, IN_GROUP_COMPARATOR
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyOptionalDevicesUrl
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.money import Currency
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from items.components.supply_slot_categories import SlotCategories
 
-class _OptDeviceCategoriesFilterBit(IntEnum):
-    FIREPOWER = 1
-    SURVIVABILITY = 2
-    MOBILITY = 4
-    STEALTH = 8
+class _OptDeviceTypeFilter(IntEnum):
+    ALL = 0
+    SIMPLE = 1
+    DELUXE = 2
+    TROPHY = 4
+    MODERNIZED = 8
 
 
-_TYPE_FILTER_ITEMS = [{'filterValue': int(_OptDeviceCategoriesFilterBit.FIREPOWER),
-  'selected': False,
-  'tooltip': makeTooltip(header=backport.text(R.strings.tank_setup.categories.firepower()), body=backport.text(R.strings.tank_setup.categories.body.firepower())),
-  'icon': backport.image(R.images.gui.maps.icons.specialization.firepower_filter())},
- {'filterValue': int(_OptDeviceCategoriesFilterBit.SURVIVABILITY),
-  'selected': False,
-  'tooltip': makeTooltip(header=backport.text(R.strings.tank_setup.categories.survivability()), body=backport.text(R.strings.tank_setup.categories.body.survivability())),
-  'icon': backport.image(R.images.gui.maps.icons.specialization.survivability_filter())},
- {'filterValue': int(_OptDeviceCategoriesFilterBit.MOBILITY),
-  'selected': False,
-  'tooltip': makeTooltip(header=backport.text(R.strings.tank_setup.categories.mobility()), body=backport.text(R.strings.tank_setup.categories.body.mobility())),
-  'icon': backport.image(R.images.gui.maps.icons.specialization.mobility_filter())},
- {'filterValue': int(_OptDeviceCategoriesFilterBit.STEALTH),
-  'selected': False,
-  'tooltip': makeTooltip(header=backport.text(R.strings.tank_setup.categories.stealth()), body=backport.text(R.strings.tank_setup.categories.body.stealth())),
-  'icon': backport.image(R.images.gui.maps.icons.specialization.stealth_filter())}]
-_BIT_TO_CATEGORIES_MAP = {_OptDeviceCategoriesFilterBit.FIREPOWER: SlotCategories.FIREPOWER,
- _OptDeviceCategoriesFilterBit.SURVIVABILITY: SlotCategories.SURVIVABILITY,
- _OptDeviceCategoriesFilterBit.MOBILITY: SlotCategories.MOBILITY,
- _OptDeviceCategoriesFilterBit.STEALTH: SlotCategories.STEALTH}
+_TYPE_FILTER_ITEMS = [{'id': int(_OptDeviceTypeFilter.ALL),
+  'label': backport.text(R.strings.storage.devices.filters.all())},
+ {'id': int(_OptDeviceTypeFilter.SIMPLE),
+  'label': backport.text(R.strings.storage.devices.filters.simple())},
+ {'id': int(_OptDeviceTypeFilter.DELUXE),
+  'label': backport.text(R.strings.storage.devices.filters.deluxe())},
+ {'id': int(_OptDeviceTypeFilter.TROPHY),
+  'label': backport.text(R.strings.storage.devices.filters.trophy())},
+ {'id': int(_OptDeviceTypeFilter.MODERNIZED),
+  'label': backport.text(R.strings.storage.devices.filters.modernized())}]
+_BIT_TO_DEVICE_TYPE_MAP = OrderedDict(((_OptDeviceTypeFilter.SIMPLE, REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE),
+ (_OptDeviceTypeFilter.DELUXE, REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE),
+ (_OptDeviceTypeFilter.TROPHY, REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY),
+ (_OptDeviceTypeFilter.MODERNIZED, REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED)))
 
-class OptDevicesTabView(FiltrableInventoryCategoryByVehicleTabView):
-    filterItems = _TYPE_FILTER_ITEMS
+class OptDevicesTabView(StorageDevicesTabViewMeta):
+
+    def _populate(self):
+        super(OptDevicesTabView, self)._populate()
+        self.__updateBalance()
+        g_playerEvents.onClientUpdated += self.__onClientUpdate
+
+    def _dispose(self):
+        g_playerEvents.onClientUpdated -= self.__onClientUpdate
+        super(OptDevicesTabView, self)._dispose()
 
     def _getTypeFilters(self, items):
         return {'items': items,
@@ -57,6 +62,14 @@ class OptDevicesTabView(FiltrableInventoryCategoryByVehicleTabView):
         ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_OPT_DEVICE, optDevice, None, None, None)
         return
 
+    def _initFilter(self):
+        index = 0
+        if self._filterMask in _BIT_TO_DEVICE_TYPE_MAP:
+            index = _BIT_TO_DEVICE_TYPE_MAP.keys().index(self._filterMask) + 1
+        self.as_initModulesFilterS({'enabled': True,
+         'selectedIndex': index,
+         'data': _TYPE_FILTER_ITEMS})
+
     def _getClientSectionKey(self):
         pass
 
@@ -64,11 +77,7 @@ class OptDevicesTabView(FiltrableInventoryCategoryByVehicleTabView):
         return GUI_ITEM_TYPE.OPTIONALDEVICE
 
     def _getFilteredCriteria(self):
-        criteria = super(OptDevicesTabView, self)._getFilteredCriteria()
-        categories = [ _BIT_TO_CATEGORIES_MAP[bit] for bit in _BIT_TO_CATEGORIES_MAP.iterkeys() if self._filterMask & bit ]
-        if categories:
-            criteria |= REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE
-            criteria |= REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_CATEGORIES(*categories)
+        criteria = _BIT_TO_DEVICE_TYPE_MAP.get(self._filterMask, REQ_CRITERIA.EMPTY)
         if self._selectedVehicle:
             if not self._selectedVehicle.optDevices.layout.getCapacity():
                 criteria |= REQ_CRITERIA.NONE
@@ -89,3 +98,15 @@ class OptDevicesTabView(FiltrableInventoryCategoryByVehicleTabView):
     def _buildItems(self):
         super(OptDevicesTabView, self)._buildItems()
         self.as_showDummyScreenS(not self._dataProvider.collection)
+
+    def sellItem(self, itemId):
+        showConfirmInStorageDialog(int(itemId))
+
+    def __onClientUpdate(self, diff, _):
+        if Currency.EQUIP_COIN in diff.get('stats', {}):
+            self.__updateBalance()
+
+    def __updateBalance(self):
+        money = self._itemsCache.items.stats.money
+        balanceStr = backport.getIntegralFormat(money.get(Currency.EQUIP_COIN, 0))
+        self.as_setBalanceValueS(balanceStr)

@@ -4,10 +4,12 @@ from ResMgr import DataSection
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union
 if TYPE_CHECKING:
     from items.vehicles import VehicleType
+    from items.vehicle_items import Shell, Gun
     from battle_modifiers_ext.battle_modifiers import BattleModifier
 EXT_DATA_MODIFIERS_KEY = 'battleModifiers'
 
 class BattleParams(object):
+    FAKE_PARAM = 0
     VEHICLE_HEALTH = 1
     GRAVITY_FACTOR = 2
     DISP_FACTOR_CHASSIS_MOVEMENT = 3
@@ -55,17 +57,34 @@ class BattleParams(object):
     VISION_MIN_RADIUS = 45
     VISION_TIME = 46
     EQUIPMENT_COOLDOWN = 47
+    FWD_FRICTION = 48
+    SIDE_FRICTION = 49
+    DIRT_RELEASE_RATE = 50
+    MAX_DIRT = 51
+    SHOT_EFFECTS = 52
+    GUN_EFFECTS = 53
+    CHASSIS_DECALS = 54
+    ENGINE_SOUNDS = 55
+    EXHAUST_EFFECT = 56
+    ARMOR_SPALLS_ARMOR_DAMAGE = 57
+    ARMOR_SPALLS_DEVICE_DAMAGE = 58
+    ARMOR_SPALLS_IMPACT_RADIUS = 59
+    ARMOR_SPALLS_CONE_ANGLE = 60
+    ARMOR_SPALLS_DAMAGE_ABSORPTION = 61
+    MODE_CREDITS_FACTOR = 62
     ALL = None
+    MAX = None
 
 
-BattleParams.ALL = set((v for k, v in BattleParams.__dict__.iteritems() if not k.startswith('_') and k != 'ALL'))
+BattleParams.ALL = set((v for k, v in BattleParams.__dict__.iteritems() if not k.startswith('_') and k not in ('FAKE_PARAM', 'ALL', 'MAX')))
+BattleParams.MAX = max(BattleParams.ALL)
 
 class BattleModifiers(object):
 
     def __init__(self, source=None):
         pass
 
-    def __call__(self, paramId, value):
+    def __call__(self, paramId, value, ctx=None):
         return value
 
     def __iter__(self):
@@ -98,6 +117,13 @@ class BattleModifiers(object):
     def descr(self):
         pass
 
+    def battleDescr(self):
+        pass
+
+    @staticmethod
+    def retrieveBattleDescr(descr):
+        pass
+
     def domain(self):
         pass
 
@@ -106,6 +132,80 @@ class BattleModifiers(object):
 
     def id(self):
         pass
+
+
+class ModifiersContext(object):
+    __slots__ = ('__modifiers', '__vehType', '__shellDescr', '__gun')
+
+    def __init__(self, modifiers, vehType=None, shellDescr=None, gun=None):
+        self.__modifiers = modifiers
+        self.__vehType = vehType
+        self.__shellDescr = shellDescr
+        self.__gun = gun
+
+    def __getattr__(self, item):
+        return getattr(self.__modifiers, item)
+
+    def __deepcopy__(self, memo):
+        return ModifiersContext(self.__modifiers, self.__vehType, self.__shellDescr, self.__gun)
+
+    def __copy__(self):
+        return ModifiersContext(self.__modifiers, self.__vehType, self.__shellDescr, self.__gun)
+
+    def __call__(self, paramId, value):
+        return self.__modifiers(paramId, value, self)
+
+    def __iter__(self):
+        return iter(self.__modifiers)
+
+    def __getitem__(self, paramId):
+        return self.__modifiers[paramId]
+
+    def __len__(self):
+        return len(self.__modifiers)
+
+    def __contains__(self, paramId):
+        return paramId in self.__modifiers
+
+    def __nonzero__(self):
+        return bool(self.__modifiers)
+
+    def __hash__(self):
+        return hash(self.__modifiers)
+
+    def __eq__(self, other):
+        return self.modifiers == other.modifiers
+
+    def __repr__(self):
+        return 'ModifiersContext(vehicle = {}, shell = {}, modifiers = {})'.format(self.__vehType.name, self.__shellDescr, self.__modifiers)
+
+    @property
+    def modifiers(self):
+        return self.__modifiers
+
+    @property
+    def vehicle(self):
+        return self.__vehType
+
+    @vehicle.setter
+    def vehicle(self, vehType):
+        self.__vehType = vehType
+
+    @property
+    def shell(self):
+        return self.__shellDescr
+
+    @shell.setter
+    def shell(self, shellDescr):
+        self.__shellDescr = shellDescr
+
+    @property
+    def gun(self):
+        return self.__gun
+
+    @gun.setter
+    def gun(self, gun):
+        self.__gun = gun
 
 
 class VehicleModificationCache(object):

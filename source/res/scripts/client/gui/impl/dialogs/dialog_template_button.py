@@ -8,6 +8,7 @@ from gui.impl.dialogs.dialog_template_tooltip import DialogTemplateTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import DialogTemplateButtonViewModel
+from gui.impl.gen.view_models.views.dialogs.custom_sound_button_model import CustomSoundButtonModel
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared.money import Currency
 from helpers import dependency
@@ -18,25 +19,25 @@ if typing.TYPE_CHECKING:
     from gui.shared.money import Money
 
 class ButtonPresenter(object):
-    __slots__ = ('__tooltip', '__viewModel')
+    __slots__ = ('__tooltip', '_viewModel')
 
-    def __init__(self, label, buttonID, buttonType=ButtonType.PRIMARY, tooltipFactory=None, isBackportTooltip=False, isDisabled=False):
+    def __init__(self, label, buttonID, buttonType=ButtonType.PRIMARY, tooltipFactory=None, isBackportTooltip=False, isDisabled=False, *args, **kwargs):
         super(ButtonPresenter, self).__init__()
-        self.__viewModel = DialogTemplateButtonViewModel()
-        self.__viewModel.setLabel(label)
-        self.__viewModel.setButtonID(buttonID)
-        self.__viewModel.setType(buttonType)
-        self.__viewModel.setIsDisabled(isDisabled)
+        self._viewModel = self._getViewModel()
+        self._viewModel.setLabel(label)
+        self._viewModel.setButtonID(buttonID)
+        self._viewModel.setType(buttonType)
+        self._viewModel.setIsDisabled(isDisabled)
         self.__tooltip = DialogTemplateTooltip(tooltipFactory, isBackportTooltip)
-        self.__tooltip.initialize(self.__viewModel.tooltip)
+        self.__tooltip.initialize(self._viewModel.tooltip)
 
     @property
     def buttonID(self):
-        return self.__viewModel.getButtonID()
+        return self._viewModel.getButtonID()
 
     @property
     def label(self):
-        return self.__viewModel.getLabel()
+        return self._viewModel.getLabel()
 
     @label.setter
     def label(self, value):
@@ -44,7 +45,7 @@ class ButtonPresenter(object):
 
     @property
     def buttonType(self):
-        return self.__viewModel.getType()
+        return self._viewModel.getType()
 
     @buttonType.setter
     def buttonType(self, value):
@@ -68,7 +69,7 @@ class ButtonPresenter(object):
 
     @property
     def isDisabled(self):
-        return self.__viewModel.getIsDisabled()
+        return self._viewModel.getIsDisabled()
 
     @isDisabled.setter
     def isDisabled(self, value):
@@ -76,16 +77,19 @@ class ButtonPresenter(object):
 
     @property
     def viewModel(self):
-        return self.__viewModel
+        return self._viewModel
 
     def initialize(self):
         pass
 
     def dispose(self):
-        self.__viewModel = None
+        self._viewModel = None
         self.__tooltip.dispose()
         self.__tooltip = None
         return
+
+    def _getViewModel(self):
+        return DialogTemplateButtonViewModel()
 
 
 class CancelButton(ButtonPresenter):
@@ -100,6 +104,20 @@ class ConfirmButton(ButtonPresenter):
 
     def __init__(self, label=R.strings.dialogs.dialogTemplates.confirm(), buttonID=DialogButtons.SUBMIT, buttonType=ButtonType.PRIMARY, tooltipFactory=None, isBackportTooltip=False, isDisabled=False):
         super(ConfirmButton, self).__init__(label, buttonID, buttonType, tooltipFactory, isBackportTooltip, isDisabled)
+
+
+class CustomSoundButtonPresenter(ButtonPresenter):
+
+    def __init__(self, label, buttonID, buttonType, tooltipFactory, isBackportTooltip, isDisabled, soundClick):
+        super(CustomSoundButtonPresenter, self).__init__(label, buttonID, buttonType, tooltipFactory, isBackportTooltip, isDisabled)
+        self.viewModel.setSoundClick(soundClick)
+
+    @property
+    def viewModel(self):
+        return self._viewModel
+
+    def _getViewModel(self):
+        return CustomSoundButtonModel()
 
 
 class CheckMoneyButton(ButtonPresenter):
@@ -148,3 +166,7 @@ class CheckMoneyButton(ButtonPresenter):
     def __notEnoughMoneyTooltipFactory(self):
         currency = self.shortage.getCurrency()
         return createBackportTooltipContent(TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY, (self.shortage.get(currency), currency))
+
+
+def getConfirmButton(presenter=ButtonPresenter, label=R.strings.dialogs.dialogTemplates.confirm(), buttonID=DialogButtons.SUBMIT, buttonType=ButtonType.PRIMARY, tooltipFactory=None, isBackportTooltip=False, isDisabled=False, *args, **kwargs):
+    return presenter(label, buttonID, buttonType, tooltipFactory, isBackportTooltip, isDisabled, *args, **kwargs)

@@ -14,11 +14,10 @@ from ExtensionsManager import g_extensionsManager
 from items import ItemsPrices
 from items.components.supply_slot_categories import LevelsFactor
 from math_common import ceilTo
-from soft_exception import SoftException
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, VehicleDirection
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, VEHICLE_CLASSES
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -60,7 +59,7 @@ from collector_vehicle import CollectorVehicleConsts
 from material_kinds import IDS_BY_NAMES
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from extension_utils import ResMgr, importClass
-from battle_modifiers_common import BattleParams, BattleModifiers, getModificationCache
+from battle_modifiers_common import BattleParams, BattleModifiers, ModifiersContext, getModificationCache
 if IS_UE_EDITOR:
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
     from combined_data_section import CombinedDataSection
@@ -277,9 +276,7 @@ def vehicleAttributeFactors():
      'invisibilityAdditiveTerm': 0.0,
      'invisibilityMultFactor': 1.0,
      'engineReduceFineFactor': 1.0,
-     'ammoBayReduceFineFactor': 1.0,
-     'vehicle/canBeDamaged': True,
-     'vehicle/canBeRammed': True}
+     'ammoBayReduceFineFactor': 1.0}
 
 
 WHEEL_SIZE_COEF = 2.2
@@ -446,6 +443,7 @@ class VehicleDescriptor(object):
     boundingRadius = property(__get_boundingRadius)
 
     def __applyExternalData(self, extData):
+        self.battleModifiers = ModifiersContext(self.battleModifiers, vehType=self.type)
         self._customRoleSlotTypeId = 0
         self._modifications = []
         value = self.__getExtDataValue(extData, 'customRoleSlotTypeId') or 0
@@ -1800,6 +1798,7 @@ class VehicleType(object):
      'customRoleSlotOptions',
      'hasRocketAcceleration',
      'rocketAccelerationParams',
+     'classTag',
      '__weakref__')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
@@ -1828,6 +1827,7 @@ class VehicleType(object):
         self.isPremium = 'premium' in self.tags
         self.role = self.__getRoleFromTags() if self.level in ROLE_LEVELS else ROLE_TYPE.NOT_DEFINED
         self.actions = self.__getActionsFromRole(self.role)
+        self.classTag = self.__getClassFromTags()
         VehicleType.currentReadingVeh = self
         self.baseColorID = section.readInt('baseColorID', 0)
         self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
@@ -1980,7 +1980,7 @@ class VehicleType(object):
 
             if self.xphysics:
                 _validateBrokenTrackLosses(xmlCtx, self)
-        elif IS_CLIENT:
+        elif IS_CLIENT or IS_WEB:
             self.xphysics = _readXPhysicsClient(xmlCtx, section, 'physics', self.isWheeledVehicle)
         elif IS_UE_EDITOR:
             self.xphysics = _readXPhysicsEditor(xmlCtx, section, 'physics', self.isWheeledVehicle)
@@ -2113,6 +2113,12 @@ class VehicleType(object):
     def __getActionsFromRole(self, role):
         actionsByRoles = g_cache.roles()
         return actionsByRoles.get(role, None)
+
+    def __getClassFromTags(self):
+        classes = [ classTag for classTag in VEHICLE_CLASSES if classTag in self.tags ]
+        if len(classes) > 1:
+            raise SoftException("There are several classes for vehicle '%s': '%s'" % (self.name, classes))
+        return classes[0]
 
     def __convertAndValidateUnlocksDescrs(self, srcList):
         nationID = self.id[0]
@@ -2295,7 +2301,7 @@ class SupplySlotsStorage(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__shotEffectsNames', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression')
     NATION_COMPONENTS_SECTION = '/components/'
     NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
      ITEM_TYPES.vehicleEngine: 'engines.xml',
@@ -2330,6 +2336,7 @@ class Cache(object):
         self.__playerEmblems = None
         self.__shotEffects = None
         self.__shotEffectsIndexes = None
+        self.__shotEffectsNames = None
         self.__damageStickers = None
         self.__roles = None
         self.__supplySlots = None
@@ -2411,6 +2418,9 @@ class Cache(object):
     def shellIDs(self, nationID):
         return self.__getList(nationID, 'shellIDs')
 
+    def exhaustEffect(self, effectName):
+        return self.__customEffects['exhaust'].get(effectName) if 'exhaust' in self.__customEffects else None
+
     def customization20(self, createNew=True):
         if self.__customization20 is None and createNew:
             from items.components.c11n_components import CustomizationCache
@@ -2459,20 +2469,23 @@ class Cache(object):
             return descr
 
     def optionalDevices(self):
-        descr = self.__optionalDevices
-        if descr is None:
-            from items import artefacts
-            self.__optionalDevices, self.__optionalDeviceIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/optional_devices.xml')
-            descr = self.__optionalDevices
-        return descr
+        if self.__optionalDevices is None:
+            self.__loadOptionalDevices()
+        return self.__optionalDevices
 
     def optionalDeviceIDs(self):
-        descr = self.__optionalDeviceIDs
-        if descr is None:
-            from items import artefacts
-            self.__optionalDevices, self.__optionalDeviceIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/optional_devices.xml')
-            descr = self.__optionalDeviceIDs
-        return descr
+        if self.__optionalDeviceIDs is None:
+            self.__loadOptionalDevices()
+        return self.__optionalDeviceIDs
+
+    def getOptionalDeviceByName(self, name):
+        if self.__optionalDeviceIDs is None:
+            self.__loadOptionalDevices()
+        return self.__optionalDevices.get(self.__optionalDeviceIDs.get(name))
+
+    def __loadOptionalDevices(self):
+        from items import artefacts
+        self.__optionalDevices, self.__optionalDeviceIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/optional_devices.xml')
 
     def equipments(self):
         descr = self.__equipments
@@ -2524,6 +2537,12 @@ class Cache(object):
         return descr
 
     @property
+    def shotEffectsNames(self):
+        if self.__shotEffectsNames is None:
+            self.__shotEffectsNames = {name:idx for idx, name in self.shotEffectsIndexes.iteritems()}
+        return self.__shotEffectsNames
+
+    @property
     def damageStickers(self):
         descr = self.__damageStickers
         if descr is None:
@@ -2556,7 +2575,7 @@ class Cache(object):
         return self.__vehicleEffects
 
     @property
-    def _gunEffects(self):
+    def gunEffects(self):
         if self.__gunEffects is None:
             self.__gunEffects = _readEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/gun_effects.xml')
         return self.__gunEffects
@@ -4021,6 +4040,7 @@ def _xphysicsParseEngineClient(ctx, sec):
     res = {}
     res['smplEnginePower'] = sec.readFloat('smplEnginePower', float('nan'))
     res['smplFwMaxSpeed'] = sec.readFloat('smplFwMaxSpeed', float('nan'))
+    res['smplBkMaxSpeed'] = sec.readFloat('smplBkMaxSpeed', float('nan'))
     if isnan(res['smplEnginePower']):
         _xml.raiseWrongXml(ctx, '', "'smplEnginePower' is missing")
     return res
@@ -4256,7 +4276,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
             item.models = item.modelsSets['default']
         effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
-        eff = g_cache._gunEffects.get(effName)
+        eff = g_cache.gunEffects.get(effName)
         if eff is None:
             _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
         item.effects = eff
@@ -4482,14 +4502,14 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             hasOverride = True
             __markEditorPropertyAsOverride(sharedItem, 'effects')
             effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
-            effects = g_cache._gunEffects.get(effName)
+            effects = g_cache.gunEffects.get(effName)
             if effects is None:
                 _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
         if section.has_key('multiGunEffects'):
             multiGunEffects = _xml.readNonEmptyString(xmlCtx, section, 'multiGunEffects')
             effects = []
             for effName in multiGunEffects.split():
-                effect = g_cache._gunEffects.get(intern(effName))
+                effect = g_cache.gunEffects.get(intern(effName))
                 effects.append(effect)
 
         if not section.has_key('recoil'):
@@ -4834,7 +4854,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         shell.icon = icons.get(v)
         shell.iconName = os.path.splitext(os.path.basename(shell.icon[0]))[0]
     _readPriceForItem(xmlCtx, section, shell.compactDescr)
-    if IS_CELLAPP or IS_WEB:
+    if IS_CELLAPP or IS_WEB or IS_BASEAPP or IS_CLIENT:
         shell.isGold = 'gold' in _xml.readPrice(xmlCtx, section, 'price') or section.readBool('improved', False)
     kind = intern(_xml.readNonEmptyString(xmlCtx, section, 'kind'))
     shellType = shell_components.createShellType(kind)
@@ -5858,6 +5878,19 @@ def _readMaterials(xmlCtx, section, subsectionName, extrasDict):
     return (materials, autoDamageKindMaterials)
 
 
+g_artefacts_postload = []
+
+def addArtefactsPostloadCallback(callback):
+    g_artefacts_postload.append(callback)
+
+
+def processPostLoadArtefacts(objsByIDs, idsByNames):
+    for callback in g_artefacts_postload:
+        callback(objsByIDs, idsByNames)
+
+    del g_artefacts_postload[:]
+
+
 def _readArtefacts(xmlPath):
     section = ResMgr.openSection(xmlPath)
     if section is None:
@@ -5886,6 +5919,7 @@ def _readArtefacts(xmlPath):
         idsByNames[name] = id
 
     ResMgr.purge(xmlPath, True)
+    processPostLoadArtefacts(objsByIDs, idsByNames)
     return (objsByIDs, idsByNames)
 
 

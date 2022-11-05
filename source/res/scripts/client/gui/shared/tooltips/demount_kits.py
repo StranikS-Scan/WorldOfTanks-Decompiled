@@ -86,13 +86,14 @@ class DemountKitToolTipData(BlocksTooltipData):
 class NotEnoughMoneyTooltipData(ToolTipBaseData):
     RESOURCES_BY_CURRENCY = {Currency.CREDITS: (R.strings.tooltips.moduleFits.credits_error.header(), R.strings.tooltips.moduleFits.credits_error.text(), R.images.gui.maps.icons.library.CreditsIcon_2()),
      Currency.CRYSTAL: (R.strings.demount_kit.equipmentDemount.notEnoughBonds.text(), R.strings.demount_kit.equipmentDemount.notEnoughBonds.description(), R.images.gui.maps.icons.library.CrystalIcon_2()),
-     Currency.GOLD: (R.strings.tooltips.moduleFits.gold_error.header(), R.strings.tooltips.moduleFits.gold_error.text(), R.images.gui.maps.icons.library.GoldIcon_2())}
+     Currency.GOLD: (R.strings.tooltips.moduleFits.gold_error.header(), R.strings.tooltips.moduleFits.gold_error.text(), R.images.gui.maps.icons.library.GoldIcon_2()),
+     Currency.EQUIP_COIN: (R.strings.tooltips.moduleFits.equipcoin_error.header(), R.strings.tooltips.moduleFits.equipcoin_error.text(), R.images.gui.maps.icons.library.equipCoin_1())}
 
     def __init__(self, context):
         super(NotEnoughMoneyTooltipData, self).__init__(context, TOOLTIP_TYPE.DEMOUNT_KIT)
 
     def getDisplayableData(self, value, currencyType):
-        header, body, icon = self.RESOURCES_BY_CURRENCY.get(currencyType, ('', '', ''))
+        header, body, icon = self.RESOURCES_BY_CURRENCY.get(currencyType, ('', '', '', ''))
         formattedBody = makeHtmlString('html_templates:lobby/tooltips', 'not_enough_money_general', {'description': backport.text(body),
          'value': value,
          'icon': backport.image(icon)})

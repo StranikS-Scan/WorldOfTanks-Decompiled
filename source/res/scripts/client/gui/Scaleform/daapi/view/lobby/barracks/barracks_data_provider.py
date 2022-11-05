@@ -255,7 +255,7 @@ class BarracksDataProvider(DAAPIDataProvider):
         self.buildList(notRecruitedList)
 
     def showActiveTankmen(self, criteria):
-        allTankmen = self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
+        allTankmen = self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE)
         self.__totalCount = len(allTankmen)
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]

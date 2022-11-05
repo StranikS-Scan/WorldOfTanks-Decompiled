@@ -105,7 +105,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def onPrbEntitySwitched(self):
         self.updateAviability()
-        self.updateVehicles()
 
     def onEnqueued(self, queueType, *args):
         self.updateAviability()
@@ -280,7 +279,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
             filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
                 self._carouselDP.selectVehicle(filteredIndex)
-                self._carouselDP.refresh()
         return
 
     def __onVehicleBecomeElite(self, *vehicles):

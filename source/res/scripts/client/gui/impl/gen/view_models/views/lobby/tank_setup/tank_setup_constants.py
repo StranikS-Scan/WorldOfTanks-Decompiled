@@ -7,7 +7,6 @@ class TankSetupConstants(ViewModel):
     OPT_DEVICES = 'optDevices'
     SHELLS = 'shells'
     CONSUMABLES = 'consumables'
-    HWCONSUMABLES = 'HWConsumables'
     BATTLE_BOOSTERS = 'battleBoosters'
     BATTLE_ABILITIES = 'battleAbilities'
     TOGGLE_SHELLS = 'toggleShells'
@@ -17,6 +16,9 @@ class TankSetupConstants(ViewModel):
     APPLY_VEHICLE = 'applyVehicle'
     APPLY_TYPE = 'applyType'
     SPECIAL_SETUP_INFO_SLOT_TOOLTIP = 'specialSetupInfoSlotTooltip'
+    EQUIP_COIN_INFO_TOOLTIP = 'equipCoinInfo'
+    TAB_SIMPLE = 'simple'
+    TAB_MODERNIZED = 'modernized'
 
     def __init__(self, properties=0, commands=0):
         super(TankSetupConstants, self).__init__(properties=properties, commands=commands)

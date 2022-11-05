@@ -2,19 +2,17 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/hangar/carousel/tank_carousel.py
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import ARENA_BONUS_TYPE
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.carousel_data_provider import FunRandomCarouselDataProvider
 from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.carousel_filter import FunRandomCarouselFilter
 from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
-from helpers import dependency
-from skeletons.gui.game_control import IFunRandomController
 
 def _removeFilterByName(filters, filterName):
     return tuple((f for f in filters if f != filterName))
 
 
-class FunRandomTankCarousel(BattlePassTankCarousel):
-    __funRandomController = dependency.descriptor(IFunRandomController)
+class FunRandomTankCarousel(BattlePassTankCarousel, FunSubModesWatcher):
 
     def __init__(self):
         super(FunRandomTankCarousel, self).__init__()
@@ -27,10 +25,12 @@ class FunRandomTankCarousel(BattlePassTankCarousel):
     def _populate(self):
         super(FunRandomTankCarousel, self)._populate()
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        self.__funRandomController.onUpdated += self.updateVehicles
+        self.startSubSettingsListening(self.__updateVehicles, desiredOnly=True)
+        self.startSubSelectionListening(self.__updateVehicles)
 
     def _dispose(self):
-        self.__funRandomController.onUpdated -= self.updateVehicles
+        self.stopSubSelectionListening(self.__updateVehicles)
+        self.stopSubSettingsListening(self.__updateVehicles, desiredOnly=True)
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(FunRandomTankCarousel, self)._dispose()
 
@@ -48,3 +48,6 @@ class FunRandomTankCarousel(BattlePassTankCarousel):
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == FUNRANDOM_ALIASES.FUN_RANDOM_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)
+
+    def __updateVehicles(self, *_):
+        self.updateVehicles()

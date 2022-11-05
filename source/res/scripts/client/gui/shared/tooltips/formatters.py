@@ -62,7 +62,7 @@ def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_T
      'useHtml': True}, padding, blockWidth)
 
 
-def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None, highlight=False):
+def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None, highlight=False, blockWidth=0):
     data = {'name': name,
      'value': value}
     if valueWidth != -1:
@@ -71,7 +71,7 @@ def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP
         data['gap'] = gap
     if highlight:
         data['highlight'] = True
-    return packBlockDataItem(linkage, data, padding)
+    return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
 def packOptDeviceSlotBlockData(imagePath, slotState, showSlotHighlight=False, showUpArrow=False, slotAlpha=1, slotSpecs=None, deviceSpecs=None, specsGap=-26, slotSpecsOffset=-10, deviceSpecsOffset=-40, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None):
@@ -530,8 +530,8 @@ def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, st
     return packBlockDataItem(linkage, data, padding)
 
 
-def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWidth=84):
-    valueBlock = packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HEADER_BUTTONS_AVAILABLE), value=value, icon=icon, padding=packPadding(bottom=paddingBottom), valueWidth=valueWidth, iconYOffset=iconYoffset)
+def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWidth=84, gap=5):
+    valueBlock = packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HEADER_BUTTONS_AVAILABLE), value=value, icon=icon, padding=packPadding(bottom=paddingBottom), valueWidth=valueWidth, iconYOffset=iconYoffset, gap=gap)
     return valueBlock
 
 
@@ -551,6 +551,13 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         descVehicle = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.crystal.descriptionVehicle()))
         decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description0(), vehicle=descVehicle)), padding=padding))
         decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.crystal.description1())), padding=packPadding(bottom=20)))
+    elif btnType == CURRENCIES_CONSTANTS.EQUIP_COIN:
+        descLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_YELLOW_LIGHT_LINKAGE
+        padding = packPadding(bottom=8)
+        decsBlocks.append(packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.buttons.equipCoin.descriptionTitle())), padding=padding))
+        descEquipCoin = text_styles.vehicleStatusInfoText(backport.text(R.strings.tooltips.header.buttons.equipCoin.descriptionEquipCoin()))
+        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.equipCoin.description0(), equipCoin=descEquipCoin)), padding=padding))
+        decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.equipCoin.description1()))))
     elif btnType == CURRENCIES_CONSTANTS.BRCOIN:
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=-8)))
     else:

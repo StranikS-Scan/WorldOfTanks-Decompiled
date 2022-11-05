@@ -462,10 +462,8 @@ class _ItemUIDataPacker(_BaseUIDataPacker):
             model.setIcon(item.iconUrl)
         else:
             model.setIcon(item.iconUrl)
-        if item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
-            model.setShowUnsupportedAlert(not isRendererPipelineDeferred())
-        else:
-            model.setShowUnsupportedAlert(False)
+        canShow = item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION or item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL and item.isProgressive
+        model.setShowUnsupportedAlert(canShow and not isRendererPipelineDeferred())
         isSpecial = item.isVehicleBound and (item.buyCount > 0 or item.inventoryCount > 0) and not item.isProgressionAutoBound or item.isLimited and item.buyCount > 0
         model.setIsSpecial(isSpecial)
         return model

@@ -15,26 +15,29 @@ BrowserViewSettings = typing.NamedTuple('BrowserViewSettings', (('url', str),
  ('isClosable', bool),
  ('useSpecialKeys', bool),
  ('allowRightClick', bool),
+ ('viewFlags', int),
+ ('restoreBackground', bool),
  ('waitingMessageID', int),
  ('disabledKeys', typing.Iterable[typing.Tuple[str, bool, bool, bool, bool]]),
  ('soundSpaceSettings', typing.Optional[CommonSoundSpaceSettings]),
  ('returnClb', typing.Optional[typing.Callable])))
 
-def makeSettings(url, webHandlers=None, isClosable=False, useSpecialKeys=False, allowRightClick=False, waitingMessageID=R.invalid(), disabledKeys=(), soundSpaceSettings=None, returnClb=None):
-    return BrowserViewSettings(url, webHandlers, isClosable, useSpecialKeys, allowRightClick, waitingMessageID, disabledKeys, soundSpaceSettings, returnClb)
+def makeSettings(url, webHandlers=None, isClosable=False, useSpecialKeys=False, allowRightClick=False, viewFlags=ViewFlags.LOBBY_SUB_VIEW, restoreBackground=False, waitingMessageID=R.invalid(), disabledKeys=(), soundSpaceSettings=None, returnClb=None):
+    return BrowserViewSettings(url, webHandlers, isClosable, useSpecialKeys, allowRightClick, viewFlags, restoreBackground, waitingMessageID, disabledKeys, soundSpaceSettings, returnClb)
 
 
 class BrowserView(Browser[BrowserViewModel]):
-    __slots__ = ('__settings', '__closedByUser', '__forceClosed')
+    __slots__ = ('__settings', '__closedByUser', '__forceClosed', '__savedBackAlpha')
     __background_alpha__ = 1.0
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, layoutID, settings):
         BrowserView._COMMON_SOUND_SPACE = settings.soundSpaceSettings
-        super(BrowserView, self).__init__(url=settings.url, settings=BrowserSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BrowserViewModel()), webHandlersMap=settings.webHandlers, preload=True)
+        super(BrowserView, self).__init__(url=settings.url, settings=BrowserSettings(layoutID=layoutID, flags=settings.viewFlags, model=BrowserViewModel()), webHandlersMap=settings.webHandlers, preload=True)
         self.__settings = settings
         self.__closedByUser = False
         self.__forceClosed = False
+        self.__savedBackAlpha = None
         if self.browser is not None:
             self.__setupBrowser()
         else:
@@ -56,6 +59,8 @@ class BrowserView(Browser[BrowserViewModel]):
     def _initialize(self, *args, **kwargs):
         super(BrowserView, self)._initialize(*args, **kwargs)
         app = self.__appLoader.getApp()
+        if self.__settings.restoreBackground:
+            self.__savedBackAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(self.__background_alpha__)
 
     def _finalize(self):
@@ -64,6 +69,8 @@ class BrowserView(Browser[BrowserViewModel]):
         returnCallback = self.__settings.returnClb
         if returnCallback is not None:
             returnCallback(byUser=self.__closedByUser, url=self.browser.url if self.browser else '', forceClosed=self.__forceClosed)
+        if self.__settings.restoreBackground and self.__savedBackAlpha is not None:
+            self.__appLoader.getApp().setBackgroundAlpha(self.__savedBackAlpha)
         super(BrowserView, self)._finalize()
         return
 

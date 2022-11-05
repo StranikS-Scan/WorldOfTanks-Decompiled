@@ -7,8 +7,10 @@ from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.vehicle_compare_ammunition_setup_model import VehicleCompareAmmunitionSetupModel
 from gui.impl.lobby.tank_setup.main_tank_setup.base import MainTankSetupView
+from gui.impl.lobby.tank_setup.tooltips.warning_tooltip_view import WarningTooltipView
 from gui.impl.lobby.vehicle_compare.builder import CompareTankSetupBuilder
 from gui.impl.lobby.vehicle_compare.tooltips import getCmpSlotTooltipData
+from gui.impl.lobby.tank_setup.tooltips.setup_tab_tooltip_view import SetupTabTooltipView
 from gui.impl.pub import ViewImpl
 
 class CompareAmmunitionSelectorView(ViewImpl):
@@ -33,6 +35,16 @@ class CompareAmmunitionSelectorView(ViewImpl):
                 window.load()
                 return window
         return super(CompareAmmunitionSelectorView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.tanksetup.tooltips.SetupTabTooltipView():
+            return SetupTabTooltipView(event.getArgument('name', ''))
+        elif event.contentID == R.views.lobby.tanksetup.tooltips.WarningTooltipView():
+            reason = event.getArgument('reason')
+            isCritical = event.getArgument('isCritical')
+            return WarningTooltipView(reason, isCritical)
+        else:
+            return None
 
     def _onLoading(self, selectedSection='', selectedSlot=None):
         super(CompareAmmunitionSelectorView, self)._onLoading()

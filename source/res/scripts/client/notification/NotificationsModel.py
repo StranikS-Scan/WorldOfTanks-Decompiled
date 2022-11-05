@@ -7,12 +7,13 @@ from notification.settings import NOTIFICATION_STATE
 
 class NotificationsModel(object):
 
-    def __init__(self, counter, firstEntry=True):
+    def __init__(self, storage, counter, firstEntry=True):
         self.__currentDisplayState = None
         self.__collection = NotificationsCollection()
+        self.__storage = storage
         self.__listeners = NotificationsListeners()
         self.__counter = counter
-        self.__firstEnrty = firstEntry
+        self.__firstEntry = firstEntry
         self.onDisplayStateChanged = Event.Event()
         self.onNotificationReceived = Event.Event()
         self.onNotificationUpdated = Event.Event()
@@ -24,6 +25,10 @@ class NotificationsModel(object):
     @property
     def collection(self):
         return self.__collection
+
+    @property
+    def storage(self):
+        return self.__storage
 
     def setListDisplayState(self, data=None):
         self.__setDisplayState(NOTIFICATION_STATE.LIST, data)
@@ -40,12 +45,17 @@ class NotificationsModel(object):
     def getDisplayState(self):
         return self.__currentDisplayState
 
-    def addNotification(self, notification):
+    def addNotification(self, notification, saveInStorage=False, withAlert=True):
         if self.__collection.addItem(notification):
-            self.onNotificationReceived(notification)
+            if saveInStorage:
+                self.__storage.addItem(notification)
+            if withAlert:
+                self.onNotificationReceived(notification)
 
     def updateNotification(self, typeID, entityID, entity, isStateChanged):
         if self.__collection.updateItem(typeID, entityID, entity):
+            if self.hasNotificationInStorage(typeID, entityID):
+                self.__storage.updateItem(typeID, entityID, entity)
             self.onNotificationUpdated(self.__collection.getItem(typeID, entityID), isStateChanged)
 
     def removeNotification(self, typeID, entityID):
@@ -56,16 +66,25 @@ class NotificationsModel(object):
             groupID = notification.getGroup()
             if self.__collection.removeItem(typeID, entityID):
                 self.onNotificationRemoved(typeID, entityID, groupID)
+            if self.hasNotificationInStorage(typeID, entityID):
+                self.__storage.removeItem(typeID, entityID)
             return
 
     def removeNotificationsByType(self, typeID):
         self.__collection.removeItemsByType(typeID)
+        self.__storage.removeItemsByType(typeID)
 
     def hasNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID) is not None
 
+    def hasNotificationInStorage(self, typeID, entityID):
+        return self.__storage.getItem(typeID, entityID) is not None
+
     def getNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID)
+
+    def getNotificationsFromStorage(self, typesRange=None):
+        return [ item for item in self.__storage.getListIterator(typesRange) ]
 
     def incrementNotifiedMessagesCount(self, group, typeID, entityID):
         self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID))
@@ -80,7 +99,7 @@ class NotificationsModel(object):
         return self.__counter.count(group)
 
     def getFirstEntry(self):
-        return self.__firstEnrty
+        return self.__firstEntry
 
     def setup(self):
         self.__collection.default()

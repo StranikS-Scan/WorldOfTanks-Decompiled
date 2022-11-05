@@ -28,12 +28,18 @@ class BaseArrayProvider(object):
         self.updateItems()
         return
 
+    def hasUnfitItems(self):
+        return False
+
     def getItemsList(self):
         items = self._itemsCache.items.getItems(self._getItemTypeID(), self._getCriteria()).values()
         return items
 
     def updateItems(self):
         self.__items = self.getItemsList()
+
+    def getItems(self):
+        return self.__items
 
     def createArray(self, itemFilter=None):
         array = Array()
@@ -82,11 +88,15 @@ class BaseArrayProvider(object):
 
 
 class VehicleBaseArrayProvider(BaseArrayProvider):
-    __slots__ = ('_interactor',)
+    __slots__ = ('_interactor', '__hasUnfitItems')
 
     def __init__(self, interactor):
         self._interactor = interactor
+        self.__hasUnfitItems = False
         super(VehicleBaseArrayProvider, self).__init__()
+
+    def hasUnfitItems(self):
+        return self.__hasUnfitItems
 
     def createSlot(self, item, ctx):
         model = super(VehicleBaseArrayProvider, self).createSlot(item, ctx)
@@ -95,9 +105,17 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         model.setItemTypeID(item.itemTypeID)
         return model
 
+    def getItemsList(self):
+        items = self._itemsCache.items.getItems(self._getItemTypeID(), self._getItemCriteria()).values()
+        criteria = self._getCriteria()
+        suitableItems = filter(criteria, items)
+        self.__hasUnfitItems = len(items) != len(suitableItems)
+        return suitableItems
+
     def updateSlot(self, model, item, ctx):
         model.setIsDisabled(False)
         model.setIsLocked(False)
+        model.setLockReason('')
         model.setItemsInStorage(item.inventoryCount)
         model.setIsMounted(item in self._getInstalledLayout())
         model.setIsMountedInOtherSetup(self._getSetupLayout().isInOtherLayout(item))
@@ -129,6 +147,7 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         if not isFit and reason != 'already installed':
             model.setIsDisabled(True)
             model.setIsLocked(True)
+            model.setLockReason(reason.replace(' ', '_'))
 
     def _fillBuyPrice(self, model, item):
         if not item.isHidden:

@@ -29,15 +29,15 @@ class _PrbInvitePart(CONST_CONTAINER):
     STATE = 'inviteState'
 
 
-_PRB_INVITE_PART_KEYS = {_PrbInvitePart.TITLE_CREATOR_NAME: 'name',
- _PrbInvitePart.TITLE: 'sender',
- _PrbInvitePart.WARNING: 'warning',
- _PrbInvitePart.COMMENT: 'comment',
- _PrbInvitePart.NOTE: 'note',
- _PrbInvitePart.STATE: 'state'}
+_PRB_INVITE_PART_KEYS = {_PrbInvitePart.TITLE_CREATOR_NAME: ('name',),
+ _PrbInvitePart.TITLE: ('title', 'sender'),
+ _PrbInvitePart.WARNING: ('warning',),
+ _PrbInvitePart.COMMENT: ('comment',),
+ _PrbInvitePart.NOTE: ('note',),
+ _PrbInvitePart.STATE: ('state',)}
 
-def _formatInvite(inviteType, value, maySkipValue=False, **kwargs):
-    return makeHtmlString(path='html_templates:lobby/prebattle', key=inviteType, ctx={_PRB_INVITE_PART_KEYS[inviteType]: value}, **kwargs) if value or maySkipValue else ''
+def _formatInvite(inviteType, values, maySkipValue=False, **kwargs):
+    return makeHtmlString(path='html_templates:lobby/prebattle', key=inviteType, ctx={k:v for k, v in zip(_PRB_INVITE_PART_KEYS[inviteType], values)}, **kwargs) if all(values) or maySkipValue else ''
 
 
 def getPrbName(prbType, lowercase=False):
@@ -144,29 +144,28 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return '{0:>s}InviteIcon'.format(getPrbName(invite.type, True))
 
     def getTitle(self, invite):
-        name = invite.senderFullName
-        creatorName = _formatInvite(_PrbInvitePart.TITLE_CREATOR_NAME, name)
-        return _formatInvite(_PrbInvitePart.TITLE, creatorName, True, sourceKey=getPrbName(invite.type))
+        creatorName = _formatInvite(_PrbInvitePart.TITLE_CREATOR_NAME, (invite.senderFullName,))
+        return _formatInvite(_PrbInvitePart.TITLE, (self._getTitle(invite), creatorName), True)
 
     def getWarning(self, invite):
         warning = backport.text(_R_INVITES.warning.dyn(invite.warning)())
-        return _formatInvite(_PrbInvitePart.WARNING, warning)
+        return _formatInvite(_PrbInvitePart.WARNING, (warning,))
 
     def getComment(self, invite):
         comment = passCensor(invite.comment)
         comment = backport.text(_R_INVITES.comment(), comment=htmlEscape(comment)) if comment else ''
-        return _formatInvite(_PrbInvitePart.COMMENT, comment)
+        return _formatInvite(_PrbInvitePart.COMMENT, (comment,))
 
     def getNote(self, invite):
         if self.canAcceptInvite(invite):
             note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.type, invite.peripheryID) if self.prbDispatcher else ''
         else:
             note = getAcceptNotAllowedText(invite.type, invite.peripheryID, invite.isActive(), invite.alreadyJoined)
-        return _formatInvite(_PrbInvitePart.NOTE, note)
+        return _formatInvite(_PrbInvitePart.NOTE, (note,))
 
     def getState(self, invite):
         state = backport.text(_R_INVITES.state.dyn(getPrbInviteStateName(invite.getState()))())
-        return _formatInvite(_PrbInvitePart.STATE, state)
+        return _formatInvite(_PrbInvitePart.STATE, (state,))
 
     def getText(self, invite):
         result = []
@@ -190,12 +189,15 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
     def updateTooltips(self, invite, canAccept, message):
         return message
 
+    def _getTitle(self, invite):
+        return backport.text(R.strings.invites.invites.text.dyn(getPrbName(invite.type))())
+
 
 class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
     def getComment(self, invite):
         comment = passCensor(invite.comment)
-        return _formatInvite(_PrbInvitePart.COMMENT, htmlEscape(comment))
+        return _formatInvite(_PrbInvitePart.COMMENT, (htmlEscape(comment),))
 
 
 class PrbInviteTitleFormatter(InviteFormatter):

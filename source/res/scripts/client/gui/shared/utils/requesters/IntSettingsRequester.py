@@ -83,10 +83,8 @@ class IntSettingsRequester(object):
      FUN_RANDOM_CAROUSEL_FILTER_1: 107,
      FUN_RANDOM_CAROUSEL_FILTER_2: 108,
      'UI_STORAGE_2': constants.USER_SERVER_SETTINGS.UI_STORAGE_2,
-     COMP7_CAROUSEL_FILTER_1: 110,
-     COMP7_CAROUSEL_FILTER_2: 111,
-     'HW22_CAROUSEL_FILTER_1': 112,
-     'HW22_CAROUSEL_FILTER_2': 113}
+     COMP7_CAROUSEL_FILTER_1: 109,
+     COMP7_CAROUSEL_FILTER_2: 110}
 
     def __init__(self):
         self.__isSynced = False

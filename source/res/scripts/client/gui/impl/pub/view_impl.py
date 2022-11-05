@@ -38,8 +38,8 @@ class ViewImpl(View, EventsHandler, typing.Generic[TViewModel]):
         if event.contentID == R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent() or event.contentID == R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipHtmlContent():
             window = SimpleToolTipWindow(event, self.getParentWindow())
         elif event.contentID == R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedTooltipContent():
-            normalContent = event.getArgument('normalContent')
-            advancedContent = event.getArgument('advancedContent')
+            normalContent = int(event.getArgument('normalContent'))
+            advancedContent = int(event.getArgument('advancedContent'))
             window = AdvancedToolTipWindow(event, self.getParentWindow(), self.createToolTipContent(event, normalContent), self.createToolTipContent(event, advancedContent))
         else:
             content = self.createToolTipContent(event, event.contentID)

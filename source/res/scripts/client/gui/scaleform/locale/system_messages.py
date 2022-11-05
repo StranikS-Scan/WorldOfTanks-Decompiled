@@ -471,6 +471,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_sell/wallet_not_available'
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
+    VEHICLE_SELL_EQUIPCOIN_ERROR = '#system_messages:vehicle_sell/equipCoin_error'
     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/with_demount_kit'
     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success_dismantling/with_demount_kit'
     VEHICLE_SELL_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_sell/demount_kit_disabled'
@@ -604,6 +605,10 @@ class SYSTEM_MESSAGES(object):
     MODULE_SELL_SUCCESS = '#system_messages:module_sell/success'
     MODULE_SELL_INVALID_MODULE = '#system_messages:module_sell/invalid_module'
     MODULE_SELL_SERVER_ERROR = '#system_messages:module_sell/server_error'
+    ARTEFACT_DECONSTRUCTING_SUCCESS = '#system_messages:artefact_deconstructing/success'
+    ARTEFACT_DECONSTRUCTING_INVALID_MODULE = '#system_messages:artefact_deconstructing/invalid_module'
+    ARTEFACT_DECONSTRUCTING_SERVER_ERROR = '#system_messages:artefact_deconstructing/server_error'
+    ARTEFACT_DECONSTRUCTINGMULT_SUCCESS = '#system_messages:artefact_deconstructingMult/success'
     ARTEFACT_SELL_SUCCESS = '#system_messages:artefact_sell/success'
     ARTEFACT_SELL_INVALID_MODULE = '#system_messages:artefact_sell/invalid_module'
     ARTEFACT_SELL_SERVER_ERROR = '#system_messages:artefact_sell/server_error'
@@ -706,6 +711,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST = '#system_messages:prebattle/request/name/SET_VEHICLE_LIST'
     PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE = '#system_messages:prebattle/request/name/CHANGE_FALLOUT_QUEUE_TYPE'
     PREBATTLE_REQUEST_NAME_AUTO_SEARCH = '#system_messages:prebattle/request/name/AUTO_SEARCH'
+    PREBATTLE_REQUEST_NAME_CHANGE_FUN_SUB_MODE = '#system_messages:prebattle/request/name/CHANGE_FUN_SUB_MODE'
     FORTIFICATION_REQUEST_NAME_CREATE_FORT = '#system_messages:fortification/request/name/CREATE_FORT'
     FORTIFICATION_REQUEST_NAME_DELETE_FORT = '#system_messages:fortification/request/name/DELETE_FORT'
     FORTIFICATION_REQUEST_NAME_ADD_BUILDING = '#system_messages:fortification/request/name/ADD_BUILDING'
@@ -1437,7 +1443,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
      PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
      PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE,
-     PREBATTLE_REQUEST_NAME_AUTO_SEARCH)
+     PREBATTLE_REQUEST_NAME_AUTO_SEARCH,
+     PREBATTLE_REQUEST_NAME_CHANGE_FUN_SUB_MODE)
     RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM = (RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
      RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
@@ -1922,6 +1929,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_WALLET_NOT_AVAILABLE,
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
+     VEHICLE_SELL_EQUIPCOIN_ERROR,
      VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT,
      VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
      VEHICLE_SELL_DEMOUNT_KIT_DISABLED,
@@ -2055,6 +2063,10 @@ class SYSTEM_MESSAGES(object):
      MODULE_SELL_SUCCESS,
      MODULE_SELL_INVALID_MODULE,
      MODULE_SELL_SERVER_ERROR,
+     ARTEFACT_DECONSTRUCTING_SUCCESS,
+     ARTEFACT_DECONSTRUCTING_INVALID_MODULE,
+     ARTEFACT_DECONSTRUCTING_SERVER_ERROR,
+     ARTEFACT_DECONSTRUCTINGMULT_SUCCESS,
      ARTEFACT_SELL_SUCCESS,
      ARTEFACT_SELL_INVALID_MODULE,
      ARTEFACT_SELL_SERVER_ERROR,
@@ -2157,6 +2169,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
      PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE,
      PREBATTLE_REQUEST_NAME_AUTO_SEARCH,
+     PREBATTLE_REQUEST_NAME_CHANGE_FUN_SUB_MODE,
      FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_ADD_BUILDING,

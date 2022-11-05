@@ -6,7 +6,6 @@ import logging
 import types
 from collections import namedtuple
 import typing
-from shared_utils import makeTupleByDict, updateDict, first, findFirst
 import constants
 import post_progression_common
 from BonusCaps import BonusCapsConst
@@ -28,6 +27,7 @@ from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
+from shared_utils import makeTupleByDict, updateDict, findFirst
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 if typing.TYPE_CHECKING:
@@ -800,14 +800,11 @@ class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
- 'cycleTimes',
- 'levels',
- 'queueSettings',
- 'hangarSettings'))):
+ 'cycleTimes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs=set(), primeTimes={}, seasons={}, cycleTimes=[], levels=[], queueSettings={}, hangarSettings={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={})
         defaults.update(kwargs)
         return super(_EventBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -971,45 +968,6 @@ class _BattleMattersConfig(namedtuple('_BattleMattersConfig', ('isEnabled',
         return cls()
 
 
-class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled',
- 'events',
- 'eventID',
- 'peripheryIDs',
- 'seasons',
- 'primeTimes',
- 'cycleTimes',
- 'levels',
- 'forbiddenClassTags',
- 'forbiddenVehTypes',
- 'battleModifiersDescr',
- 'infoPageUrl'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, events={}, eventID='', peripheryIDs={}, seasons={}, primeTimes={}, cycleTimes=(), levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set(), battleModifiersDescr=(), infoPageUrl='')
-        defaults.update(kwargs)
-        cls.__repackEventConfigs(defaults, defaults.viewkeys())
-        return super(FunRandomConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls(False, {}, '', set(), {}, {}, (), (), set(), set(), (), '')
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = set(self._fields)
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        self.__repackEventConfigs(dataToUpdate, allowedFields)
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def __repackEventConfigs(cls, data, allowedFields):
-        eventData = first(data.get('events', {}).itervalues(), {})
-        data.update(((k, eventData[k]) for k in allowedFields & eventData.viewkeys()))
-
-
 class PeripheryRoutingConfig(namedtuple('_PeripheryRoutingConfig', ('isEnabled', 'peripheryRoutingGroups'))):
     __slots__ = ()
 
@@ -1123,35 +1081,6 @@ class PersonalReservesConfig(namedtuple('_PersonalReserves', ('isReservesInBattl
         return self._replace(**dataToUpdate)
 
 
-CN_LOOT_BOXES_EVENT_CONFIG = 'cn_loot_boxes_event_config'
-
-class _CNLootBoxesEventConfig(object):
-    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit', '__externalShopUrl')
-
-    def __init__(self, **kwargs):
-        super(_CNLootBoxesEventConfig, self).__init__()
-        self.__isEnabled = kwargs.get('enabled', False)
-        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
-        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
-        self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
-        self.__externalShopUrl = kwargs.get('externalShopUrl', '')
-
-    @property
-    def isEnabled(self):
-        return self.__isEnabled
-
-    @property
-    def lootBoxBuyDayLimit(self):
-        return self.__lootBoxBuyDayLimit
-
-    @property
-    def externalShopUrl(self):
-        return self.__externalShopUrl
-
-    def getEventActiveTime(self):
-        return (self.__startDateInUTC, self.__finishDateInUTC)
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1189,12 +1118,10 @@ class ServerSettings(object):
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
-        self.__funRandomConfig = FunRandomConfig()
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.__comp7Config = Comp7Config()
         self.__comp7RanksConfig = Comp7PrestigeRanksConfig()
         self.__personalReservesConfig = PersonalReservesConfig()
-        self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1274,7 +1201,6 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
-        self.__updateCNLootBoxesEventConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1294,14 +1220,14 @@ class ServerSettings(object):
             self.__vehiclePostProgressionConfig = makeTupleByDict(VehiclePostProgressionConfig, self.__serverSettings[post_progression_common.SERVER_SETTINGS_KEY])
         if 'event_battles_config' in self.__serverSettings:
             self.__eventBattlesConfig = makeTupleByDict(_EventBattlesConfig, self.__serverSettings['event_battles_config'])
+        else:
+            self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
         if Configs.RESOURCE_WELL.value in self.__serverSettings:
             self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
-        if Configs.FUN_RANDOM_CONFIG.value in self.__serverSettings:
-            self.__funRandomConfig = makeTupleByDict(FunRandomConfig, self.__serverSettings[Configs.FUN_RANDOM_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
             self.__peripheryRoutingConfig = makeTupleByDict(PeripheryRoutingConfig, self.__serverSettings[Configs.PERIPHERY_ROUTING_CONFIG.value])
         if Configs.COMP7_CONFIG.value in self.__serverSettings:
@@ -1402,8 +1328,6 @@ class ServerSettings(object):
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         if Configs.RESOURCE_WELL.value in serverSettingsDiff:
             self.__updateResourceWellConfig(serverSettingsDiff)
-        if Configs.FUN_RANDOM_CONFIG.value in serverSettingsDiff:
-            self.__updateFunRandomConfig(serverSettingsDiff)
         if Configs.PERIPHERY_ROUTING_CONFIG.value in serverSettingsDiff:
             self.__updatePeripheryRoutingConfig(serverSettingsDiff)
         self.__updateBlueprintsConvertSaleConfig(serverSettingsDiff)
@@ -1412,7 +1336,6 @@ class ServerSettings(object):
             key = Configs.CUSTOMIZATION_QUESTS.value
             self.__serverSettings[key] = serverSettingsDiff[key]
         self.__updatePersonalReserves(serverSettingsDiff)
-        self.__updateCNLootBoxesEventConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1544,10 +1467,6 @@ class ServerSettings(object):
     @property
     def battleMattersConfig(self):
         return self.__battleMattersConfig
-
-    @property
-    def funRandomConfig(self):
-        return self.__funRandomConfig
 
     @property
     def peripheryRoutingConfig(self):
@@ -1880,9 +1799,6 @@ class ServerSettings(object):
     def getTradeInConfig(self):
         return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
-    def getCNLootBoxesEventConfig(self):
-        return self.__cnLootBoxesEventConfig
-
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -1984,27 +1900,12 @@ class ServerSettings(object):
     def __updateBattleMatters(self, targetSettings):
         self.__battleMattersConfig = self.__battleMattersConfig.replace(targetSettings[Configs.BATTLE_MATTERS_CONFIG.value])
 
-    def __updateFunRandomConfig(self, serverSettingsDiff):
-        self.__funRandomConfig = self.__funRandomConfig.replace(serverSettingsDiff[Configs.FUN_RANDOM_CONFIG.value])
-
     def __updatePeripheryRoutingConfig(self, diff):
         self.__peripheryRoutingConfig = self.__peripheryRoutingConfig.replace(diff[Configs.PERIPHERY_ROUTING_CONFIG.value])
 
     def __updatePersonalReserves(self, serverSettingsDiff):
         if Configs.PERSONAL_RESERVES_CONFIG.value in serverSettingsDiff:
             self.__personalReservesConfig = self.__personalReservesConfig.replace(serverSettingsDiff[Configs.PERSONAL_RESERVES_CONFIG.value])
-
-    def __updateCNLootBoxesEventConfig(self, settings):
-        if CN_LOOT_BOXES_EVENT_CONFIG in settings:
-            config = settings[CN_LOOT_BOXES_EVENT_CONFIG]
-            if config is None:
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
-            elif isinstance(config, dict):
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig(**config)
-            else:
-                _logger.error('Unexpected format of subscriptions service config: %r', config)
-                self.__cnLootBoxesEventConfig = _CNLootBoxesEventConfig()
-        return
 
 
 def serverSettingsChangeListener(*configKeys):

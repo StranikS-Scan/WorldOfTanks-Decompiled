@@ -15,6 +15,7 @@ from ids_generators import SequenceIDGenerator
 from items import UNDEFINED_ITEM_CD
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.shared.event_dispatcher import showConfirmInStorageDialog
 _SOURCE = shop.Source.EXTERNAL
 _ORIGIN = shop.Origin.STORAGE
 
@@ -27,9 +28,8 @@ class ModulesShellsCMHandler(ContextMenu):
         shared_events.showStorageModuleInfo(self._id)
 
     @option(__sqGen.next(), CMLabel.SELL)
-    @adisp_process
     def sell(self):
-        yield DialogsInterface.showDialog(SellModuleMeta(self._id))
+        showConfirmInStorageDialog(self._id)
 
     def _getOptionCustomData(self, label):
         optionData = super(ModulesShellsCMHandler, self)._getOptionCustomData(label)
@@ -122,6 +122,27 @@ class OptionalDeviceCMHandler(_ArmingCMHandler):
 
     def _getHighlightedLabels(self):
         return (CMLabel.BUY_MORE, CMLabel.UPGRADE)
+
+
+class OptionalModernizedDeviceCMHandler(OptionalDeviceCMHandler):
+    _itemsCache = dependency.descriptor(IItemsCache)
+
+    @option(2, CMLabel.DECONSTRUCT)
+    def sell(self):
+        module = self._itemsCache.items.getItemByCD(self._id)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.DECONSTRUCT_OPT_DEVICE, module, None, None, None)
+        return
+
+    def _getOptionCustomData(self, label):
+        optionData = super(OptionalModernizedDeviceCMHandler, self)._getOptionCustomData(label)
+        if label == CMLabel.UPGRADE:
+            optionData.textColor = CM_BUY_COLOR
+            return optionData
+        module = self._itemsCache.items.getItemByCD(int(self._id))
+        if label == CMLabel.DECONSTRUCT and not module.isUpgradable:
+            optionData.textColor = CM_BUY_COLOR
+            return optionData
+        return optionData
 
 
 class BattleBoostersCMHandler(ContextMenu):

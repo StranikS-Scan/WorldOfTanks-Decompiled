@@ -3,7 +3,7 @@
 import Event
 
 class _PrbCtrlEvents(object):
-    __slots__ = ('__eManager', 'onLegacyIntroModeJoined', 'onLegacyIntroModeLeft', 'onUnitIntroModeLeft', 'onLegacyInited', 'onUnitIntroModeJoined', 'onUnitBrowserModeLeft', 'onPreQueueJoined', 'onPreQueueJoinFailure', 'onPreQueueLeft', 'onVehicleClientStateChanged')
+    __slots__ = ('__eManager', 'onLegacyIntroModeJoined', 'onLegacyIntroModeLeft', 'onUnitIntroModeLeft', 'onLegacyInited', 'onUnitIntroModeJoined', 'onUnitBrowserModeLeft', 'onUnitCreationFailure', 'onPreQueueJoined', 'onPreQueueJoinFailure', 'onPreQueueLeft', 'onVehicleClientStateChanged')
 
     def __init__(self):
         super(_PrbCtrlEvents, self).__init__()
@@ -16,6 +16,7 @@ class _PrbCtrlEvents(object):
         self.onUnitBrowserModeLeft = Event.Event(self.__eManager)
         self.onPreQueueJoined = Event.Event(self.__eManager)
         self.onPreQueueJoinFailure = Event.Event(self.__eManager)
+        self.onUnitCreationFailure = Event.Event(self.__eManager)
         self.onPreQueueLeft = Event.Event(self.__eManager)
         self.onVehicleClientStateChanged = Event.Event(self.__eManager)
 

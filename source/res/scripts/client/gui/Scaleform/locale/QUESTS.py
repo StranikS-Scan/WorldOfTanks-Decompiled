@@ -660,7 +660,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_POSTBATTLE_DAILYRESET = '#quests:details/conditions/postBattle/dailyReset'
     DETAILS_CONDITIONS_CUMULATIVE_HEALTH = '#quests:details/conditions/cumulative/health'
     DETAILS_CONDITIONS_CUMULATIVE_XP = '#quests:details/conditions/cumulative/xp'
-    DETAILS_CONDITIONS_CUMULATIVE_HWXP = '#quests:details/conditions/cumulative/hwXP'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTHITS = '#quests:details/conditions/cumulative/directHits'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTENEMYHITS = '#quests:details/conditions/cumulative/directEnemyHits'
     DETAILS_CONDITIONS_CUMULATIVE_ENEMYHITS = '#quests:details/conditions/cumulative/enemyHits'
@@ -950,6 +949,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
     DETAILS_DOSSIER_37_BATTLESCOUNT = '#quests:details/dossier/37/battlesCount'
     DETAILS_DOSSIER_39_BATTLESCOUNT = '#quests:details/dossier/39/battlesCount'
+    DETAILS_DOSSIER_42_BATTLESCOUNT = '#quests:details/dossier/42/battlesCount'
     DETAILS_DOSSIER_43_BATTLESCOUNT = '#quests:details/dossier/43/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
@@ -2176,6 +2176,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_27_BATTLESCOUNT,
      DETAILS_DOSSIER_37_BATTLESCOUNT,
      DETAILS_DOSSIER_39_BATTLESCOUNT,
+     DETAILS_DOSSIER_42_BATTLESCOUNT,
      DETAILS_DOSSIER_43_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,

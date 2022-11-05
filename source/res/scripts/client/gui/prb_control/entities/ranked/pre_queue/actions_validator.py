@@ -8,7 +8,10 @@ from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedPrimeTimeValidator(PrimeTimeValidator):
-    _controller = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def _getController(self):
+        return self.__rankedController
 
 
 class RankedVehicleValidator(BaseActionsValidator):

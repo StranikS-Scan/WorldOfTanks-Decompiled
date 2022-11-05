@@ -38,11 +38,6 @@ class SLOT_TYPE(object):
     E_VEHICLE_TANKMAN = 'EVehicleTankman'
     E_ARENA_PERIOD = 'EArenaPeriod'
     E_FINISH_REASON = 'EFinishReason'
-    pyTypesMapping = {'bool': BOOL,
-     'int': INT,
-     'float': FLOAT,
-     'str': STR,
-     'Vector3': VECTOR3}
 
 
 def arrayOf(slotType):

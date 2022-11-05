@@ -102,11 +102,13 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def _addArenaTypeData(self):
         self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())
 
+    def _getSettingsID(self, loadingInfo):
+        return self.settingsCore.options.getSetting(loadingInfo).getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle())
+
     def _makeVisualTipVO(self, arenaDP, tip=None):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
         if tip is not None and tip.isValid():
-            setting = self.settingsCore.options.getSetting(loadingInfo)
-            settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle())
+            settingID = self._getSettingsID(loadingInfo)
         else:
             settingID = BattleLoadingTipSetting.OPTIONS.TEXT
         tipIconPath = self.gui.resourceManager.getImagePath(tip.icon)

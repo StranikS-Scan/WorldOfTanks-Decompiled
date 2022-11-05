@@ -6,10 +6,14 @@ if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence
     from battle_pass_common import FinalReward
     from Event import Event
-    from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
+    from fun_random.gui.feature.models.common import FunSubModesStatus
+    from fun_random.gui.feature.models.notifications import FunNotification
+    from fun_random.gui.feature.models.progressions import FunProgression
+    from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
+    from fun_random.helpers.server_settings import FunRandomConfig, FunMetaProgressionConfig
+    from fun_random.gui.shared.events import FunEventScope, FunEventType
     from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
-    from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
     from gui.game_control.comp7_controller import _LeaderboardDataProvider
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
@@ -26,6 +30,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import BattleRankInfo, Division, PostBattleRankInfo, Rank
     from gui.server_events.bonuses import BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, SimpleBonus, TokensBonus
     from gui.server_events.event_items import RankedQuest
+    from gui.shared.event_bus import SharedEvent
     from gui.shared.gui_items import Tankman, Vehicle
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -36,7 +41,7 @@ if typing.TYPE_CHECKING:
     from items.vehicles import VehicleType
     from season_common import GameSeason
     from items.artefacts import Equipment
-    from gui.entitlements.entitlement_model import AgateEntitlement
+    from skeletons.gui.battle_session import IClientArenaVisitor
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -56,9 +61,6 @@ class IGameController(object):
     def onAvatarBecomePlayer(self):
         pass
 
-    def onAvatarBecomeNonPlayer(self):
-        pass
-
     def onAccountBecomePlayer(self):
         pass
 
@@ -75,9 +77,6 @@ class IGameController(object):
         pass
 
     def onLobbyStarted(self, ctx):
-        pass
-
-    def handlePostponedByHandler(self, handlerCls):
         pass
 
 
@@ -110,13 +109,16 @@ class ISeasonProvider(object):
     def isFrozen(self):
         raise NotImplementedError
 
+    def isNotSet(self, now=None, peripheryID=None):
+        raise NotImplementedError
+
     def isWithinSeasonTime(self, seasonID):
         raise NotImplementedError
 
     def hasAnySeason(self):
         raise NotImplementedError
 
-    def hasAvailablePrimeTimeServers(self):
+    def hasAvailablePrimeTimeServers(self, now=None):
         raise NotImplementedError
 
     def hasConfiguredPrimeTimeServers(self, now=None):
@@ -173,7 +175,7 @@ class ISeasonProvider(object):
     def getTimer(self, now=None, peripheryID=None):
         raise NotImplementedError
 
-    def getLeftTimeToPrimeTimesEnd(self):
+    def getLeftTimeToPrimeTimesEnd(self, now=None):
         raise NotImplementedError
 
 
@@ -199,7 +201,6 @@ class IAOGASController(IGameController):
 class IGameSessionController(IGameController):
     onClientNotify = None
     onTimeTillBan = None
-    onNewDayNotify = None
     onPremiumNotify = None
     onPremiumTypeChanged = None
     onParentControlNotify = None
@@ -431,7 +432,6 @@ class IPlatoonController(IGameController):
     onAvailableTiersForSearchChanged = None
     onAutoSearchCooldownChanged = None
     onPlatoonTankRemove = None
-    onLeavePlatoon = None
 
     def buildExtendedSquadInfoVo(self):
         raise NotImplementedError
@@ -505,7 +505,7 @@ class IPlatoonController(IGameController):
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         raise NotImplementedError
 
-    def togglePlayerReadyAction(self, checkAmmo, callback):
+    def togglePlayerReadyAction(self, callback):
         raise NotImplementedError
 
     def getChannelController(self):
@@ -1334,6 +1334,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def showCustomScreen(self, screen):
         raise NotImplementedError
 
+    def storeCycle(self):
+        raise NotImplementedError
+
 
 class IBattleRoyaleController(IGameController, ISeasonProvider):
     onUpdated = None
@@ -2149,114 +2152,6 @@ class IWotPlusNotificationController(IGameController):
         raise NotImplementedError
 
 
-class IEntitlementsConsumer(object):
-
-    @property
-    def isConsumesEntitlements(self):
-        raise NotImplementedError
-
-
-class IEntitlementsController(IGameController):
-    onCacheUpdated = None
-
-    def updateCache(self, codes):
-        raise NotImplementedError
-
-    def forceUpdateCache(self, codes):
-        raise NotImplementedError
-
-    def getBalanceEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def isCacheInited(self):
-        raise NotImplementedError
-
-    def getConsumedEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def getGrantedEntitlementFromCache(self, code):
-        raise NotImplementedError
-
-    def isCodesWasFailedInLastRequest(self, codes):
-        raise NotImplementedError
-
-
-class ICNLootBoxesController(IGameController, IEntitlementsConsumer):
-    onStatusChange = None
-    onAvailabilityChange = None
-    onBoxesCountChange = None
-    onIntroShownChanged = None
-    onBoxesUpdate = None
-    onBoxInfoUpdated = None
-
-    @property
-    def boxCountToGuaranteedBonus(self):
-        raise NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isActive(self):
-        raise NotImplementedError
-
-    def isLootBoxesAvailable(self):
-        raise NotImplementedError
-
-    def isBuyAvailable(self):
-        raise NotImplementedError
-
-    def isIntroWasShown(self):
-        raise NotImplementedError
-
-    def useExternalShop(self):
-        raise NotImplementedError
-
-    def setIntroWasShown(self, value):
-        raise NotImplementedError
-
-    def getDayLimit(self):
-        raise NotImplementedError
-
-    def getGuaranteedBonusLimit(self, boxType):
-        raise NotImplementedError
-
-    def getEventActiveTime(self):
-        raise NotImplementedError
-
-    def openShop(self):
-        raise NotImplementedError
-
-    def getDayInfoStatistics(self):
-        raise NotImplementedError
-
-    def getExpiresAtLootBoxBuyCounter(self):
-        raise NotImplementedError
-
-    def getTimeLeftToResetPurchase(self):
-        raise NotImplementedError
-
-    def getCommonBoxInfo(self):
-        raise NotImplementedError
-
-    def getPremiumBoxInfo(self):
-        raise NotImplementedError
-
-    def getBoxInfo(self, boxType):
-        raise NotImplementedError
-
-    def getStoreInfo(self):
-        raise NotImplementedError
-
-    def getBoxesIDs(self):
-        raise NotImplementedError
-
-    def getBoxesCount(self):
-        raise NotImplementedError
-
-    def getBoxesInfo(self):
-        raise NotImplementedError
-
-
 class ITelecomRentalsNotificationController(IGameController):
 
     def processSwitchNotifications(self):
@@ -2265,8 +2160,6 @@ class ITelecomRentalsNotificationController(IGameController):
 
 class IEventBattlesController(IGameController, ISeasonProvider):
     onPrimeTimeStatusUpdated = None
-    onEventDisabled = None
-    onCompleteActivePhase = None
 
     def isEnabled(self):
         raise NotImplementedError
@@ -2277,31 +2170,7 @@ class IEventBattlesController(IGameController, ISeasonProvider):
     def isFrozen(self):
         raise NotImplementedError
 
-    def isEventShutDown(self):
-        raise NotImplementedError
-
-    def isEventPrbActive(self):
-        raise NotImplementedError
-
     def getConfig(self):
-        raise NotImplementedError
-
-    def selectEventBattle(self):
-        raise NotImplementedError
-
-    def getCurrentQueueType(self):
-        raise NotImplementedError
-
-    def getHWProgressCtrl(self):
-        raise NotImplementedError
-
-    def isEventHangar(self):
-        raise NotImplementedError
-
-    def isCurrentQueueEnabled(self):
-        raise NotImplementedError
-
-    def isQueueEnabled(self, queueType):
         raise NotImplementedError
 
 
@@ -2417,10 +2286,159 @@ class IResourceWellController(IGameController):
         raise NotImplementedError
 
 
-class IFunRandomController(IGameController, ISeasonProvider):
-    onUpdated = None
-    onGameModeStatusTick = None
-    onGameModeStatusUpdated = None
+class IFunRandomController(IGameController):
+
+    class IFunSubSystem(object):
+
+        def fini(self):
+            pass
+
+        def clear(self):
+            pass
+
+    class IFunNotifications(IFunSubSystem):
+
+        def isNotificationsAllowed(self):
+            raise NotImplementedError
+
+        def isNotificationsEnabled(self):
+            raise NotImplementedError
+
+        def addToQueue(self, notification):
+            raise NotImplementedError
+
+        def markSeenAsFrozen(self, subModesIDs):
+            raise NotImplementedError
+
+        def pushNotification(self, notification):
+            raise NotImplementedError
+
+        def startNotificationPushing(self):
+            raise NotImplementedError
+
+        def stopNotificationPushing(self):
+            raise NotImplementedError
+
+        def updateSettings(self, settings):
+            raise NotImplementedError
+
+    class IFunProgressions(IFunSubSystem):
+
+        def isProgressionExecutor(self, questID):
+            raise NotImplementedError
+
+        def getActiveProgression(self):
+            raise NotImplementedError
+
+        def getProgressionTimer(self):
+            raise NotImplementedError
+
+        def getSettings(self):
+            raise NotImplementedError
+
+        def startProgressListening(self):
+            raise NotImplementedError
+
+        def stopProgressListening(self):
+            raise NotImplementedError
+
+        def updateSettings(self, progressionSettings):
+            raise NotImplementedError
+
+    class IFunSubscription(IFunSubSystem):
+
+        def addListener(self, eventType, handler, scope=None):
+            raise NotImplementedError
+
+        def removeListener(self, eventType, handler, scope=None):
+            raise NotImplementedError
+
+        def handleEvent(self, event, scope=None):
+            raise NotImplementedError
+
+        def addSubModesWatcher(self, method, desiredOnly=False, withTicks=False):
+            raise NotImplementedError
+
+        def removeSubModesWatcher(self, method, desiredOnly=False, withTicks=False):
+            raise NotImplementedError
+
+        def resume(self):
+            raise NotImplementedError
+
+        def suspend(self):
+            raise NotImplementedError
+
+    class IFunSubModesHolder(IFunSubSystem):
+
+        def getBattleSubMode(self, arenaVisitor=None):
+            raise NotImplementedError
+
+        def getBattleSubModeID(self, arenaVisitor=None):
+            raise NotImplementedError
+
+        def getDesiredSubMode(self):
+            raise NotImplementedError
+
+        def getDesiredSubModeID(self):
+            raise NotImplementedError
+
+        def getSubMode(self, subModeID):
+            raise NotImplementedError
+
+        def getSubModes(self, subModesIDs=None, isOrdered=False):
+            raise NotImplementedError
+
+        def getSubModesIDs(self):
+            raise NotImplementedError
+
+        def setDesiredSubModeID(self, subModeID, trustedSource=False):
+            raise NotImplementedError
+
+        def startNotification(self):
+            raise NotImplementedError
+
+        def stopNotification(self):
+            raise NotImplementedError
+
+        def updateSettings(self, prevSettings, newSettings):
+            raise NotImplementedError
+
+    class IFunSubModesInfo(IFunSubSystem):
+
+        def isAvailable(self):
+            raise NotImplementedError
+
+        def isEntryPointAvailable(self):
+            raise NotImplementedError
+
+        def getLeftTimeToPrimeTimesEnd(self, now=None, subModes=None):
+            raise NotImplementedError
+
+        def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+            raise NotImplementedError
+
+        def getSubModesStatus(self, subModesIDs=None):
+            raise NotImplementedError
+
+    @property
+    def notifications(self):
+        raise NotImplementedError
+
+    @property
+    def progressions(self):
+        raise NotImplementedError
+
+    @property
+    def subModesHolder(self):
+        raise NotImplementedError
+
+    @property
+    def subModesInfo(self):
+        raise NotImplementedError
+
+    @property
+    def subscription(self):
+        raise NotImplementedError
 
     def isEnabled(self):
         raise NotImplementedError
@@ -2428,25 +2446,10 @@ class IFunRandomController(IGameController, ISeasonProvider):
     def isFunRandomPrbActive(self):
         raise NotImplementedError
 
-    def isSuitableVehicle(self, vehicle, isSquad=False):
+    def getSettings(self):
         raise NotImplementedError
 
-    def isSuitableVehicleAvailable(self):
-        raise NotImplementedError
-
-    def hasSuitableVehicles(self):
-        raise NotImplementedError
-
-    def canGoToMode(self):
-        raise NotImplementedError
-
-    def getAlertBlock(self):
-        raise NotImplementedError
-
-    def getModifiersDataProvider(self):
-        raise NotImplementedError
-
-    def selectFunRandomBattle(self):
+    def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         raise NotImplementedError
 
 
@@ -2532,4 +2535,7 @@ class IHangarSpaceSwitchController(IGameController):
     onSpaceUpdated = None
 
     def hangarSpaceUpdate(self, sceneName):
+        raise NotImplementedError
+
+    def lockHangarOverride(self, sceneName):
         raise NotImplementedError

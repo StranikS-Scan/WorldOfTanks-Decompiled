@@ -1,21 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/squad/actions_validator.py
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, SPGForbiddenSquadVehiclesValidator, BalancedSquadSlotsValidator, ScoutForbiddenSquadVehiclesValidator
 from gui.periodic_battles.prb_control.actions_validator import SquadPrimeTimeValidator
-from helpers import dependency
-from skeletons.gui.game_control import IFunRandomController
 
-class _FunRandomSquadStateValidator(SquadPrimeTimeValidator):
-    _controller = dependency.descriptor(IFunRandomController)
+class _FunRandomSquadStateValidator(SquadPrimeTimeValidator, FunSubModesWatcher):
+
+    def _getController(self):
+        return self.getDesiredSubMode()
 
 
-class _FunRandomSquadVehicleValidator(SquadVehiclesValidator):
-    __funRandomController = dependency.descriptor(IFunRandomController)
+class _FunRandomSquadVehicleValidator(SquadVehiclesValidator, FunSubModesWatcher):
 
+    @hasDesiredSubMode()
     def _isVehicleSuitableForMode(self, vehicle):
-        validationResult = self.__funRandomController.isSuitableVehicle(vehicle, isSquad=True)
+        validationResult = self.getDesiredSubMode().isSuitableVehicle(vehicle, isSquad=True)
         return validationResult or super(_FunRandomSquadVehicleValidator, self)._isVehicleSuitableForMode(vehicle)
 
 

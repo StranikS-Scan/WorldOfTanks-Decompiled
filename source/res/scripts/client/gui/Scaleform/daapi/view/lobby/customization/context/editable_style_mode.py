@@ -39,6 +39,7 @@ class EditableStyleMode(CustomMode):
         super(EditableStyleMode, self).__init__(ctx)
         self.__style = None
         self.__baseOutfits = {}
+        self.__isCanceled = False
         return
 
     @property
@@ -208,6 +209,7 @@ class EditableStyleMode(CustomMode):
             return
         self._isInited = False
         self.__style = style
+        self.__isCanceled = False
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         availableRegionsMap = getCurrentVehicleAvailableRegionsMap()
         for season in SeasonType.COMMON_SEASONS:
@@ -231,14 +233,19 @@ class EditableStyleMode(CustomMode):
         super(EditableStyleMode, self)._onStart()
 
     def _onStop(self):
-        diffs = {}
-        for season in SeasonType.COMMON_SEASONS:
-            outfit = self._modifiedOutfits[season]
-            baseOutfit = self.__baseOutfits[season]
-            diffs[season] = getEditableStyleOutfitDiff(outfit, baseOutfit)
+        if not self.__isCanceled:
+            diffs = {}
+            for season in SeasonType.COMMON_SEASONS:
+                outfit = self._modifiedOutfits[season]
+                baseOutfit = self.__baseOutfits[season]
+                diffs[season] = getEditableStyleOutfitDiff(outfit, baseOutfit)
 
-        self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)
+            self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)
         super(EditableStyleMode, self)._onStop()
+
+    def _cancelChanges(self):
+        super(EditableStyleMode, self)._cancelChanges()
+        self.__isCanceled = True
 
     @adisp_async
     @adisp_process

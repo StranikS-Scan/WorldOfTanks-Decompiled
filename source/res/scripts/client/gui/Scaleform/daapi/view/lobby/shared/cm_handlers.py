@@ -30,6 +30,7 @@ class CMLabel(object):
     NATION_CHANGE = 'nationChange'
     UPGRADE = 'upgrade'
     GO_TO_COLLECTION = 'goToCollection'
+    DECONSTRUCT = 'deconstruct'
 
 
 def option(order, label):

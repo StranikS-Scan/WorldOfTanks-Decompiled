@@ -152,6 +152,8 @@ class VehicleGunRotator(object):
         return
 
     def forceGunParams(self, turretYaw, gunPitch, dispAngle):
+        if not self.__isStarted:
+            return
         self.__turretYaw = turretYaw
         self.__gunPitch = gunPitch
         self.__dispersionAngles = [dispAngle, dispAngle]
@@ -613,32 +615,38 @@ class VehicleGunRotator(object):
         return
 
     def __updateTurretMatrix(self, yaw, time):
-        replayYaw = yaw
-        staticTurretYaw = self.__getTurretStaticYaw()
-        if staticTurretYaw is not None:
-            yaw = staticTurretYaw
-        m = Math.Matrix()
-        m.setRotateY(yaw)
-        self.__turretMatrixAnimator.update(m, time)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isRecording:
-            replayCtrl.setTurretYaw(replayYaw)
-        return
+        if not self.__isStarted:
+            return
+        else:
+            replayYaw = yaw
+            staticTurretYaw = self.__getTurretStaticYaw()
+            if staticTurretYaw is not None:
+                yaw = staticTurretYaw
+            m = Math.Matrix()
+            m.setRotateY(yaw)
+            self.__turretMatrixAnimator.update(m, time)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isRecording:
+                replayCtrl.setTurretYaw(replayYaw)
+            return
 
     def __updateGunMatrix(self, pitch, time):
-        replayPitch = pitch
-        descr = self._avatar.getVehicleDescriptor()
-        pitch -= calcGunPitchCorrection(self.__turretYaw, descr.hull.turretPitches[0], descr.turret.gunJointPitch)
-        staticPitch = self.__getGunStaticPitch()
-        if staticPitch is not None:
-            pitch = staticPitch
-        m = Math.Matrix()
-        m.setRotateX(pitch)
-        self.__gunMatrixAnimator.update(m, time)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isRecording:
-            replayCtrl.setGunPitch(replayPitch)
-        return
+        if not self.__isStarted:
+            return
+        else:
+            replayPitch = pitch
+            descr = self._avatar.getVehicleDescriptor()
+            pitch -= calcGunPitchCorrection(self.__turretYaw, descr.hull.turretPitches[0], descr.turret.gunJointPitch)
+            staticPitch = self.__getGunStaticPitch()
+            if staticPitch is not None:
+                pitch = staticPitch
+            m = Math.Matrix()
+            m.setRotateX(pitch)
+            self.__gunMatrixAnimator.update(m, time)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isRecording:
+                replayCtrl.setGunPitch(replayPitch)
+            return
 
     def getAvatarOwnVehicleStabilisedMatrix(self):
         avatar = self._avatar

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/gen/view_models/views/lobby/feature/modifier_model.py
 from enum import Enum
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.limit_model import LimitModel
 
 class ModType(Enum):
+    FAKE_MODIFIER = 'fakeModifier'
     VEHICLE_HEALTH = 'vehicleHealth'
     GRAVITY_FACTOR = 'gravityFactor'
     DISP_FACTOR_CHASSIS_MOVEMENT = 'dispFactorChassisMovement'
@@ -56,18 +59,25 @@ class ModType(Enum):
 class ModPhysType(Enum):
     UNDEFINED = 'undefined'
     METERS_PER_SECOND = 'metersPerSecond'
+    KILOMETERS_PER_HOUR = 'km_per_hour'
     RADIANS = 'radians'
+    DEGREES = 'degrees'
+    DEGREES_PER_SECOND = 'degrees_per_second'
     HIT_POINTS = 'hitPoints'
     MILLIMETERS = 'millimeters'
-    SECONDS = 'seconds'
     METERS = 'meters'
+    SECONDS = 'seconds'
+    MINUTES = 'minutes'
     RADIANS_PER_SECOND = 'radians_per_second'
     METER_PER_SECOND_SQUARED = 'meter_per_second_squared'
     PROBABILITY = 'probability'
     DEVIATION = 'deviation'
+    LOGIC = 'logic'
+    HORSEPOWER = 'horsepower'
 
 
 class ModUseType(Enum):
+    UNDEFINED = 'undefined'
     VAL = 'val'
     MUL = 'mul'
     ADD = 'add'
@@ -82,7 +92,7 @@ class ModGameplayImpact(Enum):
 class ModifierModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(ModifierModel, self).__init__(properties=properties, commands=commands)
 
     def getModificationType(self):
@@ -91,34 +101,52 @@ class ModifierModel(ViewModel):
     def setModificationType(self, value):
         self._setString(0, value.value)
 
+    def getResName(self):
+        return self._getString(1)
+
+    def setResName(self, value):
+        self._setString(1, value)
+
     def getValue(self):
-        return self._getReal(1)
+        return self._getReal(2)
 
     def setValue(self, value):
-        self._setReal(1, value)
+        self._setReal(2, value)
 
     def getPhysicalType(self):
-        return ModPhysType(self._getString(2))
+        return ModPhysType(self._getString(3))
 
     def setPhysicalType(self, value):
-        self._setString(2, value.value)
-
-    def getUseType(self):
-        return ModUseType(self._getString(3))
-
-    def setUseType(self, value):
         self._setString(3, value.value)
 
+    def getUseType(self):
+        return ModUseType(self._getString(4))
+
+    def setUseType(self, value):
+        self._setString(4, value.value)
+
     def getGameplayImpact(self):
-        return ModGameplayImpact(self._getString(4))
+        return ModGameplayImpact(self._getString(5))
 
     def setGameplayImpact(self, value):
-        self._setString(4, value.value)
+        self._setString(5, value.value)
+
+    def getLimits(self):
+        return self._getArray(6)
+
+    def setLimits(self, value):
+        self._setArray(6, value)
+
+    @staticmethod
+    def getLimitsType():
+        return LimitModel
 
     def _initialize(self):
         super(ModifierModel, self)._initialize()
         self._addStringProperty('modificationType')
+        self._addStringProperty('resName', '')
         self._addRealProperty('value', 0.0)
         self._addStringProperty('physicalType')
         self._addStringProperty('useType')
         self._addStringProperty('gameplayImpact')
+        self._addArrayProperty('limits', Array())

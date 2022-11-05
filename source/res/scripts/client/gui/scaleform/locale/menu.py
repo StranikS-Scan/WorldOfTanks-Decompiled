@@ -293,7 +293,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
-    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -361,7 +360,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
-    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -403,6 +401,7 @@ class MENU(object):
     PRICE_EVENTCOIN = '#menu:price/eventCoin'
     PRICE_BPCOIN = '#menu:price/bpcoin'
     PRICE_BPBIT = '#menu:price/bpbit'
+    PRICE_EQUIPCOIN = '#menu:price/equipCoin'
     PRICE_SPENT = '#menu:price/spent'
     PRICE_RECEIVED = '#menu:price/received'
     AMMORELOAD_TITLE = '#menu:ammoReload/title'
@@ -436,7 +435,6 @@ class MENU(object):
     PREBATTLE_ALREADY_IN_AWAITING_BATTLE = '#menu:prebattle/already_in_awaiting_battle'
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
-    PREBATTLE_EVENTWHEELEDVEHICLESWARNING = '#menu:prebattle/eventWheeledVehiclesWarning'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
@@ -685,7 +683,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_STANDART = '#menu:headerButtons/battle/types/standart'
     HEADERBUTTONS_BATTLE_TYPES_STANDART_DESCR = '#menu:headerButtons/battle/types/standart/descr'
     HEADERBUTTONS_BATTLE_TYPES_STANDARTLEAVE_DESCR = '#menu:headerButtons/battle/types/standartLeave/descr'
-    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_RANKED = '#menu:headerButtons/battle/types/ranked'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_DESCR = '#menu:headerButtons/battle/types/ranked/descr'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON = '#menu:headerButtons/battle/types/ranked/availability/season'
@@ -757,7 +754,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/mapbox/availability/days'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/mapbox/availability/hours'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_LESSTHANHOUR = '#menu:headerButtons/battle/types/mapbox/availability/lessThanHour'
-    HEADERBUTTONS_BATTLE_TYPES_FUNRANDOMSQUAD = '#menu:headerButtons/battle/types/funRandomSquad'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -831,6 +827,8 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_NOVEHICLE_BODY = '#menu:headerButtons/fightBtn/tooltip/noVehicle/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_HEADER = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_HEADER = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/header'
@@ -1636,7 +1634,6 @@ class MENU(object):
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
-    CONTEXTMENU_CREATEFUNRANDOMSQUAD = '#menu:contextMenu/createFunRandomSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
@@ -2006,7 +2003,6 @@ class MENU(object):
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
     BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
-    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
@@ -2138,10 +2134,13 @@ class MENU(object):
     CST_ITEM_CTX_MENU_PUTONSECOND = '#menu:cst_item_ctx_menu/putOnSecond'
     CST_ITEM_CTX_MENU_PUTONTHIRD = '#menu:cst_item_ctx_menu/putOnThird'
     CST_ITEM_CTX_MENU_UNLOAD = '#menu:cst_item_ctx_menu/unload'
+    CST_ITEM_CTX_MENU_DECONSTRUCT = '#menu:cst_item_ctx_menu/deconstruct'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
+    VIEWHEADER_INFOBTN_LABEL = '#menu:viewHeader/infoBtn/label'
+    VIEWHEADER_ABOUTBTN_LABEL = '#menu:viewHeader/aboutBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_STORAGE = '#menu:viewHeader/backBtn/descrLabel/storage'
     VIEWHEADER_BACKBTN_DESCRLABEL_RESEARCH = '#menu:viewHeader/backBtn/descrLabel/research'
     VIEWHEADER_BACKBTN_DESCRLABEL_PREVIEW = '#menu:viewHeader/backBtn/descrLabel/preview'
@@ -2352,7 +2351,6 @@ class MENU(object):
      CONTEXTMENU_CREATEEVENTSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
-     CONTEXTMENU_CREATEFUNRANDOMSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
@@ -2436,7 +2434,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
-     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2853,7 +2850,8 @@ class MENU(object):
      CST_ITEM_CTX_MENU_PUTONFIRST,
      CST_ITEM_CTX_MENU_PUTONSECOND,
      CST_ITEM_CTX_MENU_PUTONTHIRD,
-     CST_ITEM_CTX_MENU_UNLOAD)
+     CST_ITEM_CTX_MENU_UNLOAD,
+     CST_ITEM_CTX_MENU_DECONSTRUCT)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
      INTERNET_PROVIDER_BELTELECOM_NAME,
      INTERNET_PROVIDER_KYIVSTAR_NAME,

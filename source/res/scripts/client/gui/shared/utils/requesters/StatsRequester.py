@@ -54,8 +54,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return max(self.actualBpcoin, 0)
 
     @property
+    def equipCoin(self):
+        return max(self.actualEquipCoin, 0)
+
+    @property
     def money(self):
-        return Money(credits=self.credits, gold=self.gold, crystal=self.crystal, eventCoin=self.eventCoin, bpcoin=self.bpcoin)
+        return Money(credits=self.credits, gold=self.gold, crystal=self.crystal, eventCoin=self.eventCoin, bpcoin=self.bpcoin, equipCoin=self.equipCoin)
 
     @property
     def actualCredits(self):
@@ -78,8 +82,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue(Currency.BPCOIN, 0)
 
     @property
+    def actualEquipCoin(self):
+        return self.getCacheValue(Currency.EQUIP_COIN, 0)
+
+    @property
     def actualMoney(self):
-        return Money(credits=self.actualCredits, gold=self.actualGold, crystal=self.actualCrystal, eventCoin=self.actualEventCoin, bpcoin=self.actualBpcoin)
+        return Money(credits=self.actualCredits, gold=self.actualGold, crystal=self.actualCrystal, eventCoin=self.actualEventCoin, bpcoin=self.actualBpcoin, equipCoin=self.actualEquipCoin)
 
     @property
     def freeXP(self):

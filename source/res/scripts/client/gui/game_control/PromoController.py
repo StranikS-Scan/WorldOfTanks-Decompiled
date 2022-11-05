@@ -169,7 +169,7 @@ class PromoController(IPromoController):
     def __onTeaserClosed(self, byUser=False):
         self.__isTeaserOpen = False
         self.onTeaserClosed()
-        if byUser:
+        if byUser and self.__settingsCore.isReady:
             self.__showBubbleTooltip()
 
     def __showBubbleTooltip(self):

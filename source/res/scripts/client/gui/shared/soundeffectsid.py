@@ -15,6 +15,7 @@ class SoundEffectsId(CONST_CONTAINER):
     EARN_GOLD = 'wwearn_gold'
     EARN_CRYSTAL = 'wwearn_crystal'
     EARN_EVENT_COIN = 'wwearn_event_coin'
+    EARN_EQUIP_COIN = 'wwearn_equip_coin'
     TRANSPORT_ENTER = 'wwtransport_enter'
     TRANSPORT_EXIT = 'wwtransport_exit'
     TRANSPORT_FIRST_STEP = 'wwtransport_first_step'

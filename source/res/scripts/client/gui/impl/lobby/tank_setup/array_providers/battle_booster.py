@@ -38,6 +38,7 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
     def _fillStatus(self, model, item, slotID):
         super(BaseBattleBoosterProvider, self)._fillStatus(model, item, slotID)
         if not item.isAffectsOnVehicle(self._getVehicle()):
+            model.setLockReason('useless_battle_booster')
             model.setIsLocked(True)
 
     def _fillDescription(self, model, item):

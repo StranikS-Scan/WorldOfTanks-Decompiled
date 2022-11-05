@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/py_object_wrappers.py
-from constants import IS_EDITOR
-if not IS_EDITOR:
+from constants import IS_EDITOR, IS_WEB
+if not (IS_EDITOR or IS_WEB):
     import _wulf as _py_objects
 else:
     import wulf_wrapper as _py_objects

@@ -57,7 +57,7 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
         super(TrophyDeviceUpgradeConfirmView, self)._finalize()
 
     def _getResultData(self):
-        return {'needCreditsExchange': not self.__trophyBasicModule.mayPurchaseUpgrade(self.__itemsCache.items) and self.__trophyBasicModule.mayPurchaseUpgradeWithExchange(self.__itemsCache.items)}
+        return {'needMoreCurrency': not self.__trophyBasicModule.mayPurchaseUpgrade(self.__itemsCache.items) and self.__trophyBasicModule.mayPurchaseUpgradeWithExchange(self.__itemsCache.items)}
 
     def __setUpgradeCost(self):
         upgradeCost = self.gui.systemLocale.getNumberFormat(self.__upgradePrice.credits)

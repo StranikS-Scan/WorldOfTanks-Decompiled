@@ -981,7 +981,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_assault mediumTank1 HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank role_MT_assault mediumTank1 HD special improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	9	</level>
   </R191_Object_283>
   <R195_T34M_54>
@@ -1007,7 +1007,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	heavyTank HD special improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	5	</level>
   </R197_KV_1S_MZ>
   <R99_T44_122_CN>
@@ -2095,6 +2095,19 @@
     <tags>	heavyTank HD heavyTank1 role_HT_break sinai improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </R188_Object_259A_CN>
+  <R202_SU_2_122>
+    <id>	115	</id>
+    <userString>	#ussr_vehicles:R202_SU_2_122	</userString>
+    <description>	#ussr_vehicles:R202_SU_2_122_descr	</description>
+    <shortUserString>	#ussr_vehicles:R202_SU_2_122_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R202_SU_2_122_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R202_SU_2_122_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG HD mediumAT-SPG siegeMode dualgun charger improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	5	</level>
+  </R202_SU_2_122>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>

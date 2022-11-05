@@ -97,6 +97,7 @@ class BaseSetupSubView(BaseSubModelView):
             self._viewModel.tabs.setSelectedTabName(tabName)
             if self._tabsController is not None:
                 self._provider = self._tabsController.getProvider(tabName)(self._interactor)
+                self.__updateTabVisitedState(tabName)
             self._currentTabName = tabName
         return
 
@@ -160,3 +161,13 @@ class BaseSetupSubView(BaseSubModelView):
         else:
             _logger.error('__slotActions doesnt exist action type : %s(viewName %s)', actionType, self.__class__.__name__)
         return
+
+    def __updateTabVisitedState(self, tabName):
+        if not self._tabsController.isVisited(tabName):
+            self._tabsController.setVisited(tabName)
+            for model in self._viewModel.tabs.getTabs():
+                if model.getName() == tabName:
+                    updateFunc = self._tabsController.tabs.get(tabName)
+                    if updateFunc:
+                        updateFunc(self._tabsController, model)
+                    return

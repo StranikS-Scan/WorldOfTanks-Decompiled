@@ -14,6 +14,7 @@ class ItemHighlightTypes(ViewModel):
     BUILT_IN_EQUIPMENT = 'builtInEquipment'
     BATTLE_ABILITY = 'battleAbility'
     INCOMPATIBLE_EQUIPMENT = 'incompatibleEquipment'
+    MODERNIZED = 'equipmentModernized'
     PROGRESSION_STYLE_UPGRADED = 'progressionStyleUpgraded_'
     POST_PROGRESSION_MODIFICATION = 'postProgressionModification'
     EMPTY = ''

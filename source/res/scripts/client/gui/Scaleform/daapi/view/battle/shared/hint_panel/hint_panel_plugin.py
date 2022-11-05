@@ -5,14 +5,6 @@ from datetime import datetime
 from helpers import time_utils
 from account_helpers.AccountSettings import HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
 from gui.shared.utils.plugins import IPlugin
-HintData = namedtuple('HintData', ['vKey',
- 'key',
- 'messageLeft',
- 'messageRight',
- 'offsetX',
- 'offsetY',
- 'priority',
- 'reducedPanning'])
 _HINT_DISPLAY_COUNT_AFTER_RESET = 1
 
 class HintPriority(object):
@@ -25,6 +17,25 @@ class HintPriority(object):
     RADAR = 6
     SIEGE = 7
 
+
+class HelpHintContext(object):
+    MECHANICS = 'mechanics'
+    ROLE_HELP = 'roleHelp'
+    MAPS_TRAINING = 'mapsTraining'
+    MAPBOX = 'mapbox'
+    BATTLE_ROYALE = 'battleRoyale'
+
+
+HintData = namedtuple('HintData', ('vKey', 'key', 'messageLeft', 'messageRight', 'offsetX', 'offsetY', 'priority', 'reducedPanning', 'hintCtx'))
+HintData.__new__.__defaults__ = ('',
+ '',
+ '',
+ '',
+ 0,
+ 0,
+ HintPriority.HELP,
+ False,
+ None)
 
 class HintPanelPlugin(IPlugin):
     __slots__ = ()

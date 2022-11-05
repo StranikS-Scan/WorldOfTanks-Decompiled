@@ -190,7 +190,6 @@ class Vehicle(FittingItem):
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
         RENTAL_IS_OVER = 'rentalIsOver'
-        RENTAL_IS_OVER_BATTLE = 'rentalBattleIsOver'
         IGR_RENTAL_IS_OVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         GROUP_IS_NOT_READY = 'group_is_not_ready'
@@ -1032,14 +1031,6 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, 'scout')
 
     @property
-    def isSquadRestricted(self):
-        return checkForTags(self.tags, 'squad_restricted')
-
-    @property
-    def isOnlyForRandomBattles(self):
-        return checkForTags(self.tags, 'random_only')
-
-    @property
     def isTrackWithinTrack(self):
         return self._descriptor.isTrackWithinTrack
 
@@ -1098,8 +1089,6 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.NOT_PRESENT
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
-        elif self.rentInfo.hasEventRule and self.rentalIsOver and self.rentInfo.getTimeLeft() > 0:
-            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE
         elif self.rentalIsOver:
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER
             if self.isPremiumIGR:
@@ -1172,7 +1161,6 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
-         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.TOO_HEAVY,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
@@ -2049,7 +2037,6 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
- Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,

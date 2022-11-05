@@ -276,7 +276,6 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
-        RANDOM_ONLY = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForRandomBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
@@ -294,6 +293,7 @@ class REQ_CRITERIA(object):
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
+        HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
     class TANKMAN(object):
@@ -342,9 +342,10 @@ class REQ_CRITERIA(object):
         DESCRIPTOR_NAME = staticmethod(lambda descriptorName: RequestCriteria(PredicateCondition(lambda item: item.name == descriptorName)))
 
     class OPTIONAL_DEVICE(object):
-        SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe and not item.isTrophy))
+        SIMPLE = RequestCriteria(PredicateCondition(lambda item: item.isRegular))
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe))
         TROPHY = RequestCriteria(PredicateCondition(lambda item: item.isTrophy))
+        MODERNIZED = RequestCriteria(PredicateCondition(lambda item: item.isModernized))
         HAS_ANY_FROM_CATEGORIES = staticmethod(lambda *categories: RequestCriteria(PredicateCondition(lambda item: not item.descriptor.categories.isdisjoint(categories))))
 
     class BADGE(object):
@@ -768,9 +769,6 @@ class ItemsRequester(IItemsRequester):
         vehicleSelectedAbilities = diff.get('epicMetaGame', {}).get('selectedAbilities', {}).keys()
         if vehicleSelectedAbilities:
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
-        hwInventory = diff.get('halloweenInventory', {}).get('eqs', {})
-        if hwInventory:
-            invalidate[GUI_ITEM_TYPE.VEHICLE].update(hwInventory)
         existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
         invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
         if invalidIDs:
@@ -829,7 +827,7 @@ class ItemsRequester(IItemsRequester):
         for typeID in itemTypeID:
             if typeID == GUI_ITEM_TYPE.VEHICLE and nationID is None and criteria.lookInInventory():
                 vehGetter = self.getVehicle
-                for vehInvID in (self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE) or {}).iterkeys():
+                for vehInvID in self.inventory.getInvIDsIterator():
                     item = vehGetter(vehInvID)
                     if criteria(item):
                         result[item.intCD] = item

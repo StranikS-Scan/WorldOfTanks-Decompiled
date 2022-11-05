@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/avatar_helpers/DualGun.py
-from constants import DUAL_GUN, RECHARGE_TIME_MULTIPLIER
+from constants import DUAL_GUN
 
 class DualGunHelper(object):
 
@@ -11,7 +11,7 @@ class DualGunHelper(object):
 
         def __callReloadTimeWrapper(leftTime, baseTime):
             avatar.updateVehicleGunReloadTime(vehicleID, -1, baseTime)
-            avatar.updateVehicleGunReloadTime(vehicleID, leftTime * RECHARGE_TIME_MULTIPLIER, baseTime * RECHARGE_TIME_MULTIPLIER)
+            avatar.updateVehicleGunReloadTime(vehicleID, leftTime, baseTime)
 
         if activeGun == DUAL_GUN.ACTIVE_GUN.LEFT:
             secondGun = DUAL_GUN.ACTIVE_GUN.RIGHT
@@ -24,7 +24,7 @@ class DualGunHelper(object):
             if gunStates[secondGun] == DUAL_GUN.GUN_STATE.RELOADING:
                 reloadingGun = secondGun
             if reloadingGun is not None:
-                ammoCtrl.triggerReloadEffect(cooldownTimes[reloadingGun].leftTime * RECHARGE_TIME_MULTIPLIER, cooldownTimes[reloadingGun].baseTime * RECHARGE_TIME_MULTIPLIER, directTrigger=True)
+                ammoCtrl.triggerReloadEffect(cooldownTimes[reloadingGun].leftTime, cooldownTimes[reloadingGun].baseTime, directTrigger=True)
         if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
             if not self.__debuffTrigger:
                 __callReloadTimeWrapper(cooldownTimes[activeGun].leftTime, cooldownTimes[activeGun].baseTime)
@@ -46,12 +46,12 @@ class DualGunHelper(object):
             if debuff.leftTime > 0 and error is not None and error != 'no_ammo':
                 self.__debuffTrigger = True
                 totalDebuffTime = cooldownTimes[activeGun].baseTime + debuff.leftTime
-                ammoCtrl.onDebuffStarted(debuff.leftTime * RECHARGE_TIME_MULTIPLIER)
+                ammoCtrl.onDebuffStarted(debuff.leftTime)
                 __callReloadTimeWrapper(totalDebuffTime, cooldownTimes[activeGun].baseTime + debuff.baseTime)
             else:
-                avatar.updateVehicleGunReloadTime(vehicleID, -1, cooldownTimes[activeGun].baseTime * RECHARGE_TIME_MULTIPLIER)
+                avatar.updateVehicleGunReloadTime(vehicleID, -1, cooldownTimes[activeGun].baseTime)
         if ammoCtrl is not None:
-            ammoCtrl.setDualGunShellChangeTime(cooldownTimes[activeGun].baseTime * RECHARGE_TIME_MULTIPLIER, cooldownTimes[activeGun].baseTime * RECHARGE_TIME_MULTIPLIER, activeGun)
+            ammoCtrl.setDualGunShellChangeTime(cooldownTimes[activeGun].baseTime, cooldownTimes[activeGun].baseTime, activeGun)
         return
 
     def reset(self):

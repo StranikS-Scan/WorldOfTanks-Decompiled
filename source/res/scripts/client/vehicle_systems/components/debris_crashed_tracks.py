@@ -185,7 +185,7 @@ class DebrisCrashedTracksManager(CGF.ComponentManager):
             soundObject.setRTPC(DebrisCrashedTracksManager.RTPC_OUTER_TRACK_STATE, rtpcValue)
             return
 
-    def __createDebris(self, track, debrisComponent):
+    def createDebris(self, track, debrisComponent):
         if not debrisComponent.shouldCreateDebris:
             return
         elif debrisComponent.trackPairDesc.tracksDebris is None or debrisComponent.debrisDesc.physicalParams is None or not debrisComponent.wheelsGameObject.isValid():
@@ -201,7 +201,7 @@ class DebrisCrashedTracksManager(CGF.ComponentManager):
 
     @onAddedQuery(Vehicular.CompositeTrack, TrackCrashWithDebrisComponent)
     def processCrash(self, track, debris):
-        self.__createDebris(track, debris)
+        self.createDebris(track, debris)
         amountOfBrokenTracks = self.__switchVehicleTrackVisibility(track, debris, False)
         self.__adjustTrackAudition(amountOfBrokenTracks, debris.wheelsGameObject)
         self.__generateDestructionEffect(debris)

@@ -64,8 +64,7 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
 
     def tryToSetPanelModeByMouse(self, mode):
         if mode != self._mode and PlayerPanelStateSetting.write(mode):
-            self._mode = mode
-            self.as_setPanelModeS(mode)
+            self.__setMode(mode)
 
     def switchToOtherPlayer(self, vehicleID):
         aih = avatar_getter.getInputHandler()
@@ -73,11 +72,10 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
             self.guiSessionProvider.shared.viewPoints.selectVehicle(int(vehicleID))
 
     def setInitialMode(self):
-        self._mode = PlayerPanelStateSetting.read()
-        self.as_setPanelModeS(self._mode)
+        self.__setMode(PlayerPanelStateSetting.read())
 
     def setLargeMode(self):
-        self.as_setPanelModeS(PLAYERS_PANEL_STATE.FULL)
+        self.__setMode(PLAYERS_PANEL_STATE.FULL)
 
     def _populate(self):
         super(PlayersPanel, self)._populate()
@@ -100,8 +98,11 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
     def _handleNextMode(self, _):
         mode = (self._mode + 1) % (PLAYERS_PANEL_STATE.FULL + 1)
         if PlayerPanelStateSetting.write(mode):
-            self._mode = mode
-            self.as_setPanelModeS(mode)
+            self.__setMode(mode)
+
+    def __setMode(self, mode):
+        self._mode = mode
+        self.as_setPanelModeS(self._mode)
 
     def __handleShowExtendedInfo(self, event):
         self.as_setOverrideExInfoS(event.ctx['isDown'])

@@ -106,6 +106,9 @@ class ModeSelectorItem(object):
             self._initialized = False
             return
 
+    def checkHeaderNavigation(self):
+        return True
+
     def handleInfoPageClick(self):
         url = self._urlProcessing(GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)))
         showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
@@ -171,7 +174,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
     def hasExtendedCalendarTooltip(self):
         return False
 
-    def getExtendedCalendarTooltip(self, parentWindow, event=None):
+    def getExtendedCalendarTooltip(self, parentWindow):
         return []
 
     def _isNeedToHideCard(self):
@@ -201,6 +204,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         rReward = R.strings.mode_selector.reward.dyn(rewardIDValue)
         item.setName(rReward.name())
         item.setDescription(backport.text(rReward.description(), **locParams))
+        item.setTooltipID(params.get('tooltipID', ''))
         if rewardID == ModeSelectorRewardID.VEHICLE:
             item.setVehicleLevel(params.get('level', ''))
             item.setVehicleType(params.get('type', ''))

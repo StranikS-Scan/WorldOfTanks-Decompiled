@@ -19,4 +19,4 @@ class PoiBaseComponent(DynamicScriptComponent):
     def __getPoiGameObject(self):
         name = self._POI_GO_NAME.format(id=self.pointID)
         poiCtrl = self.__sessionProvider.dynamic.pointsOfInterest
-        return poiCtrl.getVehicleCapturingPoiGO(name, self.entity.entityGameObject, self.spaceID)
+        return poiCtrl.getVehicleCapturingPoiGO(name, self.entity.entityGameObject, self.entity.id, self.spaceID)

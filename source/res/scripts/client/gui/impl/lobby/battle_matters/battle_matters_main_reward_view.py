@@ -74,8 +74,8 @@ class BattleMattersMainRewardView(ViewImpl):
     def onClose():
         showHangar()
 
-    def _onLoading(self, *args, **kwargs):
-        super(BattleMattersMainRewardView, self)._onLoading()
+    def _initialize(self, *args, **kwargs):
+        super(BattleMattersMainRewardView, self)._initialize(*args, **kwargs)
         self.__update()
 
     def _getEvents(self):

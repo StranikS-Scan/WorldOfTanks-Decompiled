@@ -12,7 +12,6 @@ class _PlayerEvents(object):
         self.onAccountBecomePlayer = Event.Event()
         self.onAccountBecomeNonPlayer = Event.Event()
         self.onAccountShowGUI = Event.Event()
-        self.onClientSynchronize = Event.Event()
         self.onClientUpdated = Event.Event()
         self.onEnqueued = Event.Event()
         self.onDequeued = Event.Event()

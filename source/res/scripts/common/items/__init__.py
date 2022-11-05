@@ -5,9 +5,11 @@ import nations
 from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
 from soft_exception import SoftException
-from extension_utils import ResMgr
 if IS_CLIENT:
+    import ResMgr
     from helpers import i18n
+else:
+    from realm_utils import ResMgr
 _g_itemTypes = None
 UNDEFINED_ITEM_CD = 0
 ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin', 'crewBook')
@@ -74,6 +76,8 @@ class ItemsPrices(object):
                 info['eventCoin'] = prices[3]
             if len(prices) > 4:
                 info['bpcoin'] = prices[4]
+            if len(prices) > 5:
+                info['equipCoin'] = prices[5]
             self._itemsPriceInfo[descriptor] = info
         elif isinstance(prices, dict):
             self._itemsPriceInfo[descriptor] = prices

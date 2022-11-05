@@ -39,7 +39,7 @@
         </token>
       </bonus>
     </tokenQuest>
-    <battleQuest>
+    <tokenQuest>
       <progressExpiryTime>	01.02.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
@@ -163,9 +163,6 @@
           <zh_cn>	驾驶任意等级的坦克参加一场标准模式战斗。	</zh_cn>
         </description>
         <preBattle>
-          <battle>
-            <bonusTypes>	1 24	</bonusTypes>
-          </battle>
           <account>
             <and>
               <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
@@ -173,6 +170,10 @@
                 <id>	battle_matters_1_unlock	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_enter_arena	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
               </token>
             </and>
           </account>
@@ -203,7 +204,7 @@
           <vehLevel>	8	</vehLevel>
         </freePremiumCrew>
       </bonus>
-    </battleQuest>
+    </tokenQuest>
     <tokenQuest>
       <progressExpiryTime>	01.02.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
@@ -1625,11 +1626,17 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <vehiclesUnlockedAndOwned>
-                <levels>	4	</levels>
-                <excludeTags>	collectorVehicle	</excludeTags>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </vehiclesUnlockedAndOwned>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	4	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_4	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
             </and>
           </account>
         </preBattle>
@@ -2302,11 +2309,17 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <vehiclesUnlockedAndOwned>
-                <levels>	5	</levels>
-                <excludeTags>	collectorVehicle	</excludeTags>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </vehiclesUnlockedAndOwned>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	5	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_5	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
             </and>
           </account>
         </preBattle>
@@ -3337,11 +3350,17 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <vehiclesUnlockedAndOwned>
-                <levels>	6	</levels>
-                <excludeTags>	collectorVehicle	</excludeTags>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </vehiclesUnlockedAndOwned>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	6	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_6	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
             </and>
           </account>
         </preBattle>
@@ -4699,11 +4718,17 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <vehiclesUnlockedAndOwned>
-                <levels>	7	</levels>
-                <excludeTags>	collectorVehicle	</excludeTags>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </vehiclesUnlockedAndOwned>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	7	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_7	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
             </and>
           </account>
         </preBattle>
@@ -5447,11 +5472,17 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <vehiclesUnlockedAndOwned>
-                <levels>	8	</levels>
-                <excludeTags>	collectorVehicle	</excludeTags>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </vehiclesUnlockedAndOwned>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	8	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_8	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
             </and>
           </account>
         </preBattle>

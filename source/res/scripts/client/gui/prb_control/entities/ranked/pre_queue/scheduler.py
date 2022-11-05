@@ -7,4 +7,7 @@ from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedScheduler(PeriodicScheduler):
     _RES_ROOT = R.strings.system_messages.ranked
-    _controller = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def _getController(self):
+        return self.__rankedController

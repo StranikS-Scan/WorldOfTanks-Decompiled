@@ -7,7 +7,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 
 def isDemountKitApplicableTo(optDevice):
-    if optDevice.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not optDevice.isRemovable and not optDevice.isDeluxe:
+    if optDevice.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not optDevice.isRemovable and optDevice.canUseDemountKit:
         demountKit, _ = getDemountKitForOptDevice(optDevice)
         return demountKit and demountKit.enabled
     return False

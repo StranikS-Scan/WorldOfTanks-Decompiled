@@ -6,7 +6,7 @@ import BigWorld
 from ReplayEvents import g_replayEvents
 from Vehicle import StunInfo
 from aih_constants import CTRL_MODE_NAME
-from constants import ARENA_PERIOD, RECHARGE_TIME_MULTIPLIER
+from constants import ARENA_PERIOD
 from constants import DUALGUN_CHARGER_STATUS
 from constants import DUAL_GUN
 from constants import VEHICLE_MISC_STATUS
@@ -31,9 +31,8 @@ class GunStatesUI(object):
 class DualGunConstants(object):
     LEFT_TIME = 'leftTime'
     BASE_TIME = 'baseTime'
-    TIME_MULTIPLIER = 1000 * RECHARGE_TIME_MULTIPLIER
+    TIME_MULTIPLIER = 1000
     CHARGE_TIME_MULTIPLIER = 1000
-    COOLDOWN_END_TIME_MULTIPLIER = 10
     CHANGE_GUN_TRANSITION_TIME = 0.4
 
 
@@ -137,7 +136,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         self.__soundManager = DualGunSounds()
         return
 
-    def updateVehicleParams(self, vehicle, factors, _):
+    def updateVehicleParams(self, vehicle, factors):
         leftTime = getFirstReloadTime(vehicle.descriptor, factors)
         rightTime = getFirstReloadTime(vehicle.descriptor, factors, ignoreRespawn=True)
         self.__currentTotalTimeTimer = (leftTime + rightTime) * DualGunConstants.CHARGE_TIME_MULTIPLIER
@@ -377,7 +376,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         if debuff.leftTime > 0:
             self.__debuffInProgress = True
             self.__bulletCollapsed = False
-            self.__soundManager.onCooldownEnd(debuff.leftTime / DualGunConstants.COOLDOWN_END_TIME_MULTIPLIER)
+            self.__soundManager.onCooldownEnd(debuff.leftTime)
             totalDebuffTime = debuff.leftTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.LEFT].baseTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.RIGHT].baseTime
             self.as_setCooldownS(totalDebuffTime * DualGunConstants.TIME_MULTIPLIER)
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)

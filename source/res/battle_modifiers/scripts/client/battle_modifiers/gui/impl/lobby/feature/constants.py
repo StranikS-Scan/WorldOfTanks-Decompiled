@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/lobby/feature/constants.py
-from battle_modifiers_ext.battle_modifier_constants import BattleParams, PhysicalType, UseType, GameplayImpact
+from battle_modifiers_common.battle_modifiers import BattleParams
+from battle_modifiers_ext.constants_ext import UseType, PhysicalType, GameplayImpact
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.modifier_model import ModType, ModPhysType, ModUseType, ModGameplayImpact
-MOD_TYPE_MAP = {BattleParams.VEHICLE_HEALTH: ModType.VEHICLE_HEALTH,
+MOD_TYPE_MAP = {BattleParams.FAKE_PARAM: ModType.FAKE_MODIFIER,
+ BattleParams.VEHICLE_HEALTH: ModType.VEHICLE_HEALTH,
  BattleParams.GRAVITY_FACTOR: ModType.GRAVITY_FACTOR,
  BattleParams.DISP_FACTOR_CHASSIS_MOVEMENT: ModType.DISP_FACTOR_CHASSIS_MOVEMENT,
  BattleParams.DISP_FACTOR_CHASSIS_ROTATION: ModType.DISP_FACTOR_CHASSIS_ROTATION,
@@ -50,17 +52,24 @@ MOD_TYPE_MAP = {BattleParams.VEHICLE_HEALTH: ModType.VEHICLE_HEALTH,
  BattleParams.VISION_TIME: ModType.VISION_TIME,
  BattleParams.EQUIPMENT_COOLDOWN: ModType.EQUIPMENT_COOLDOWN}
 PHYS_TYPE_MAP = {PhysicalType.UNDEFINED: ModPhysType.UNDEFINED,
- PhysicalType.METERS_PER_SECOND: ModPhysType.METERS_PER_SECOND,
- PhysicalType.RADIANS: ModPhysType.RADIANS,
- PhysicalType.HIT_POINTS: ModPhysType.HIT_POINTS,
- PhysicalType.MILLIMETERS: ModPhysType.MILLIMETERS,
  PhysicalType.SECONDS: ModPhysType.SECONDS,
+ PhysicalType.MINUTES: ModPhysType.MINUTES,
+ PhysicalType.MILLIMETERS: ModPhysType.MILLIMETERS,
  PhysicalType.METERS: ModPhysType.METERS,
- PhysicalType.RADIANS_PER_SECOND: ModPhysType.RADIANS_PER_SECOND,
+ PhysicalType.METERS_PER_SECOND: ModPhysType.METERS_PER_SECOND,
+ PhysicalType.KILOMETERS_PER_HOUR: ModPhysType.KILOMETERS_PER_HOUR,
  PhysicalType.METER_PER_SECOND_SQUARED: ModPhysType.METER_PER_SECOND_SQUARED,
+ PhysicalType.DEGREES: ModPhysType.DEGREES,
+ PhysicalType.RADIANS: ModPhysType.RADIANS,
+ PhysicalType.DEGREES_PER_SECOND: ModPhysType.DEGREES_PER_SECOND,
+ PhysicalType.RADIANS_PER_SECOND: ModPhysType.RADIANS_PER_SECOND,
+ PhysicalType.HIT_POINTS: ModPhysType.HIT_POINTS,
+ PhysicalType.HORSEPOWER: ModPhysType.HORSEPOWER,
  PhysicalType.PROBABILITY: ModPhysType.PROBABILITY,
- PhysicalType.DEVIATION: ModPhysType.DEVIATION}
-USE_TYPE_MAP = {UseType.VAL: ModUseType.VAL,
+ PhysicalType.DEVIATION: ModPhysType.DEVIATION,
+ PhysicalType.LOGIC: ModPhysType.LOGIC}
+USE_TYPE_MAP = {UseType.UNDEFINED: ModUseType.UNDEFINED,
+ UseType.VAL: ModUseType.VAL,
  UseType.MUL: ModUseType.MUL,
  UseType.ADD: ModUseType.ADD}
 GAMEPLAY_IMPACT_MAP = {GameplayImpact.UNDEFINED: ModGameplayImpact.UNDEFINED,

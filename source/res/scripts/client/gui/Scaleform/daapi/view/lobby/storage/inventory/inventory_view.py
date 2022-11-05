@@ -1,10 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_view.py
 import copy
-from adisp import adisp_process
-from gui import DialogsInterface
 from gui import GUI_NATIONS_ORDER_INDICES
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.lobby.storage.category_view import InventoryCategoryView
 from gui.Scaleform.daapi.view.meta.StorageCategoryStorageViewMeta import StorageCategoryStorageViewMeta
@@ -18,6 +15,7 @@ from helpers import dependency
 from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.lobby_context import ILobbyContext
 from constants import SwitchState
+from gui.shared.event_dispatcher import showConfirmInStorageDialog
 VERSION = 1
 _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
   'label': R.strings.storage.storage.tabs.all,
@@ -70,14 +68,17 @@ def _defaultInGroupComparator(a, b):
     return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
 
 
-_OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY, REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE, REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE)
+_OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED,
+ REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY,
+ REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE,
+ REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE)
 
 def _getDeviceCategoriesOrder(optDevice):
     categories = optDevice.descriptor.categories
     return min((storage_helpers.OPT_DEVICE_CATEGORIES_ORDER.get(category, storage_helpers.CATEGORIES_COUNT) for category in categories)) if categories else storage_helpers.CATEGORIES_COUNT
 
 
-def _trophyDeviceComparator(a, b):
+def _upgradableDeviceComparator(a, b):
     if a.isUpgradable != b.isUpgradable:
         if a.isUpgradable:
             return 1
@@ -85,16 +86,20 @@ def _trophyDeviceComparator(a, b):
 
 
 def _optionalDevicesComparator(a, b):
-    aIdx, bIdx = (-1, -1)
-    for idx, criteria in enumerate(_OPT_DEVICE_TYPE_ORDER):
-        if criteria(a):
-            aIdx = idx
-        if criteria(b):
-            bIdx = idx
 
-    if a.isTrophy:
-        return cmp(aIdx, bIdx) or _defaultInGroupComparator(a, b) or _trophyDeviceComparator(a, b)
-    return cmp(aIdx, bIdx) or _defaultInGroupComparator(a, b) if a.isDeluxe else cmp(aIdx, bIdx) or cmp(_getDeviceCategoriesOrder(a), _getDeviceCategoriesOrder(b)) or _defaultInGroupComparator(a, b)
+    def getKey(module):
+        moduleIdx = -1
+        for idx, criteria in enumerate(_OPT_DEVICE_TYPE_ORDER):
+            if criteria(module):
+                moduleIdx = idx
+
+        return (moduleIdx,
+         module.level,
+         module.isUpgradable,
+         _getDeviceCategoriesOrder(module),
+         storage_helpers.getStorageItemName(module))
+
+    return cmp(getKey(a), getKey(b))
 
 
 def _shellsComparator(a, b):
@@ -203,9 +208,8 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         super(RegularInventoryCategoryTabView, self)._dispose()
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
 
-    @adisp_process
     def _sellItems(self, itemId):
-        yield DialogsInterface.showDialog(SellModuleMeta(int(itemId)))
+        showConfirmInStorageDialog(int(itemId))
 
     def setTabId(self, tabId):
         self._currentTabId = tabId

@@ -119,8 +119,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
 
     def __playStartEffects(self):
         self.startEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
-        if self.__isAllyMine or self.__isEnemyMarkerEnabled:
-            self.__playIdleEffects()
+        self.__playIdleEffects()
         self.decalEffectPlayer.start(self.__position)
 
     def __playStopEffects(self):

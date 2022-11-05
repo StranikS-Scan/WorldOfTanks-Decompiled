@@ -6,3 +6,6 @@ class BattleMattersViewMeta(MissionsViewBaseMeta):
 
     def as_showViewS(self):
         return self.flashObject.as_showView() if self._isDAAPIInited() else None
+
+    def as_hideViewS(self):
+        return self.flashObject.as_hideView() if self._isDAAPIInited() else None

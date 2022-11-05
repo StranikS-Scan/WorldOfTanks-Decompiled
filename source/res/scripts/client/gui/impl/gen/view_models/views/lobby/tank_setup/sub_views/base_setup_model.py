@@ -21,6 +21,7 @@ class BaseSetupModel(ViewModel):
     UPGRADE_SLOT_ACTION = 'upgrade'
     ADD_ONE_SLOT_ACTION = 'add_one'
     DRAG_AND_DROP_SLOT_ACTION = 'drag_drop'
+    DECONSTRUCT_SLOT_ACTION = 'deconstruct'
 
     def __init__(self, properties=5, commands=7):
         super(BaseSetupModel, self).__init__(properties=properties, commands=commands)

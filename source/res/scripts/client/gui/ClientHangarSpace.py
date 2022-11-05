@@ -9,7 +9,6 @@ import MusicControllerWWISE
 import ResMgr
 import constants
 from PlayerEvents import g_playerEvents
-from CurrentVehicle import g_currentPreviewVehicle
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.hangar_config import HangarConfig
 from helpers import dependency
@@ -297,8 +296,6 @@ class ClientHangarSpace(object):
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
-        if g_currentPreviewVehicle.item is not None:
-            g_currentPreviewVehicle.selectNoVehicle()
         self._vsePlans.reset()
         MusicControllerWWISE.unloadCustomSounds()
         if self.__cameraManager:

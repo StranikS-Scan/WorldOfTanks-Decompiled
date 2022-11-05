@@ -447,7 +447,7 @@ class Research(ResearchMeta):
     def __getViewLayoutData(self):
         root = self.vehicle
         result = self.__getBackBtnData()
-        result['isPremiumLayout'] = root.isPremium and not root.isEvent
+        result['isPremiumLayout'] = root.isPremium
         if root.isPremium:
             benefitData = []
             for benefitGetter in _BENEFIT_GETTERS:
@@ -487,8 +487,6 @@ class Research(ResearchMeta):
 
     @staticmethod
     def __getRootStatusStr(root):
-        if root.isEvent:
-            return ''
         return text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.ClockIcon_1()), width=38, height=38, vSpace=-14), RentLeftFormatter(root.rentInfo).getRentLeftStr(strForSpecialTimeFormat=backport.text(R.strings.menu.research.status.rentLeft()))) if root.isRented and not root.rentalIsOver and not root.isTelecom and not root.isPremiumIGR else ''
 
     @staticmethod
@@ -530,5 +528,5 @@ class Research(ResearchMeta):
         isAvailable = self.vehicle.postProgressionAvailability(unlockOnly=True).result
         tutorialStorage = getTutorialGlobalStorage()
         if tutorialStorage is not None:
-            tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isAvailable)
+            tutorialStorage.setValue(GLOBAL_FLAG.RESEARCH_VEH_POST_PROGRESSION_PURCHASABLE, isAvailable)
         return

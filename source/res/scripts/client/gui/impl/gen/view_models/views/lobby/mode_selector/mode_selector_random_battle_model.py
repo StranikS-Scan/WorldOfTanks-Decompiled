@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_car
 class ModeSelectorRandomBattleModel(ModeSelectorNormalCardModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(ModeSelectorRandomBattleModel, self).__init__(properties=properties, commands=commands)
 
     def getIsSettingsActive(self):
-        return self._getBool(21)
+        return self._getBool(20)
 
     def setIsSettingsActive(self, value):
-        self._setBool(21, value)
+        self._setBool(20, value)
 
     def _initialize(self):
         super(ModeSelectorRandomBattleModel, self)._initialize()

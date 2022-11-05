@@ -33,9 +33,6 @@ class TmenXpPanel(TmenXpPanelMeta):
             self.as_setTankmenXpPanelS(False, False)
             LOG_DEBUG('Do not show TMenXPPanel: No current vehicle')
             return
-        elif vehicle.isEvent:
-            self.as_setTankmenXpPanelS(False, False)
-            return
         else:
             self.as_setTankmenXpPanelS(vehicle.isElite, vehicle.isXPToTman)
             return

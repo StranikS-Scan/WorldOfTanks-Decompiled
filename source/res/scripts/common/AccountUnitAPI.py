@@ -31,7 +31,7 @@ def getOriginalRequestID(serverRequestID):
 
 class AccountUnitAPI:
 
-    def create(self, requestID, prebattleType, eventQueueType):
+    def create(self, requestID, prebattleType, eventArg):
         pass
 
     def join(self, requestID, unitMgrID, slotIdx):
@@ -89,8 +89,8 @@ class UnitClientAPI(object):
     def createMapboxSquad(self):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 
-    def createFunRandomSquad(self):
-        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM)
+    def createFunRandomSquad(self, subModeID):
+        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM, subModeID)
 
     def createComp7Squad(self, squadSize):
         return self._doCreate(PREBATTLE_TYPE.COMP7, squadSize)

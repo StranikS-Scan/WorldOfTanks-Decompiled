@@ -10,3 +10,6 @@ class Comp7CalendarDayTooltip(PeriodicCalendarDayTooltip):
     _controller = dependency.descriptor(IComp7Controller)
     _TOOLTIP_TYPE = TOOLTIP_TYPE.COMP7_CALENDAR_DAY_INFO
     _RES_ROOT = R.strings.comp7.calendarDay
+
+    def _getController(self, *_):
+        return self._controller

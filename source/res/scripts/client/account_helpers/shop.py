@@ -15,6 +15,7 @@ from persistent_caches import SimpleCache
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
 from soft_exception import SoftException
+from gui.shared.money import Currency
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -125,6 +126,9 @@ class Shop(object):
         if crystalPrice:
             crystalExchangeRate = self.__cache['crystalExchangeRate']
             sellPrice = (sellPrice[0] + int(ceil(sellPriceFactor * crystalExchangeRate * crystalPrice)), sellPrice[1])
+        equipCoinPrice = buyPrice.get('equipCoin')
+        if equipCoinPrice:
+            sellPrice = tuple(((buyPrice.equipCoin if cur == 'equipCoin' else 0) for cur in Currency.ALL))
         return sellPrice
 
     def getPrice(self, typeCompDescr, callback):

@@ -3,15 +3,16 @@
 import logging
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import getKpiValueString
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips.module import PriceBlockConstructor
+from gui.shared.tooltips.module import PriceBlockConstructor, InventoryBlockConstructor
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 _TOOLTIP_WIDTH = 468
 _AUTOCANNON_SHOT_DISTANCE = 400
@@ -98,13 +99,10 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(effectsBlock, padding=formatters.packPadding(top=topPadding, left=leftPadding, right=rightPadding, bottom=bottomPadding), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         priceBlock = BattleBoosterPriceBlockConstructor(module, statsConfig, priceWidth, leftPadding, rightPadding).construct()
         if priceBlock:
-            items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=10, right=rightPadding, top=topPadding, bottom=-10), gap=textGap))
-        statusBlock = StatusBlockConstructor(module, statusConfig).construct()
-        if statusBlock:
-            items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=-15)))
-        boosterIsUseless = BoosterHasNoEffectBlockConstructor(module, statusConfig).construct()
-        if boosterIsUseless:
-            items.append(formatters.packBuildUpBlockData(boosterIsUseless, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=bottomPadding), stretchBg=False))
+            items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=10, right=rightPadding, top=topPadding, bottom=-8), gap=textGap))
+        inventoryBlock = BattleBoosterInventoryBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
+        if inventoryBlock:
+            items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=12, right=rightPadding, top=topPadding, bottom=-8), gap=textGap))
         return items
 
 
@@ -116,9 +114,15 @@ class BattleBoosterPriceBlockConstructor(PriceBlockConstructor):
 
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(BattleBoosterPriceBlockConstructor, self).__init__(module, configuration, valueWidth, leftPadding, rightPadding)
+        self._priceLeftPadding = 75
+
+
+class BattleBoosterInventoryBlockConstructor(InventoryBlockConstructor):
+
+    def __init__(self, module, configuration, leftPadding, rightPadding):
+        super(BattleBoosterInventoryBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._inInventoryBlockData['text'] = TOOLTIPS.BATTLEBOOSTER_INVENTORYCOUNT
         self._inventoryPadding = formatters.packPadding(left=90)
-        self._priceLeftPadding = 75
 
 
 class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
@@ -127,8 +131,6 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
         block = []
         module = self.module
         vehicle = self.configuration.vehicle
-        header = formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.tooltips.battleBooster.installationEffects())), padding=formatters.packPadding(bottom=5))
-        block.append(header)
         if module.isBuiltinPerkBooster():
             boostText = text_styles.bonusAppliedText(module.getBuiltinPerkBoosterAction())
             description = text_styles.standard(module.getBuiltinPerkBoosterDescription())
@@ -148,7 +150,15 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
             block.append(formatters.packImageTextBlockData(title=boostText, img=backport.image(R.images.gui.maps.icons.buttons.checkmark()) if skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
             block.append(formatters.packImageTextBlockData(title=skillLearntText % skillName, txtOffset=20))
         else:
-            block.append(formatters.packTextParameterBlockData(text_styles.main(module.shortDescription.replace('%s ', '', 1)), text_styles.bonusAppliedText(module.getOptDeviceBoosterGainValue(vehicle=vehicle)), valueWidth=110, gap=15))
+            kpi = first(module.getKpi(self.configuration.vehicle))
+            if kpi:
+                ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+                endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+                descriptor = ' '.join((text_styles.main(module.shortDescription.replace('%s ', '', 1)), text_styles.standard(endingText)))
+                value = text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value, False))
+                block.append(formatters.packTextParameterBlockData(descriptor, value, valueWidth=110, gap=15))
+            else:
+                _logger.warn('BattleBooster kpi missed %s', module.descriptor.iconName)
         return block
 
     @staticmethod
@@ -158,51 +168,3 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
                 return (text_styles.main(replaceText), text_styles.bonusAppliedText(boostText))
             return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
         return (text_styles.main(replaceText), text_styles.main(boostText))
-
-
-class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
-
-    def construct(self):
-        block = list()
-        if self.configuration.isAwardWindow:
-            return block
-        else:
-            module = self.module
-            inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
-            totalInstalledVehicles = [ x.shortUserName for x in module.getInstalledVehicles(inventoryVehicles) ]
-            installedVehicles = totalInstalledVehicles[:_MAX_INSTALLED_LIST_LEN]
-            if not module.isBuiltinPerkBooster():
-                canNotBuyBlock = None
-                if module.isHidden:
-                    canNotBuyBlock = [self.__getCannotBuyBlock(module, self.configuration)]
-                if canNotBuyBlock is not None:
-                    block.append(formatters.packBuildUpBlockData(canNotBuyBlock, padding=formatters.packPadding(top=-4, bottom=-5, right=_DEFAULT_PADDING), gap=4))
-            if installedVehicles:
-                tooltipText = ', '.join(installedVehicles)
-                if len(totalInstalledVehicles) > _MAX_INSTALLED_LIST_LEN:
-                    hiddenVehicleCount = len(totalInstalledVehicles) - _MAX_INSTALLED_LIST_LEN
-                    hiddenTxt = '%s %s' % (backport.text(R.strings.tooltips.suitableVehicle.hiddenVehicleCount()), text_styles.stats(hiddenVehicleCount))
-                    tooltipText = '%s %s' % (tooltipText, hiddenTxt)
-                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.deviceFits.already_installed.header())), desc=text_styles.standard(tooltipText)))
-            return block
-
-    @staticmethod
-    def __getCannotBuyBlock(module, statusConfig):
-        statsVehicle = statusConfig.vehicle
-        if statsVehicle is None or module in statsVehicle.battleBoosters.installed or module.isInInventory:
-            cannotBuyHeaderStyle = text_styles.warning
-        else:
-            cannotBuyHeaderStyle = text_styles.critical
-        return formatters.packItemTitleDescBlockData(title=cannotBuyHeaderStyle(backport.text(R.strings.tooltips.moduleFits.battleBooster.cannotBuy.header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.battleBooster.cannotBuy.description())))
-
-
-class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
-
-    def construct(self):
-        block = list()
-        module = self.module
-        vehicle = self.configuration.vehicle
-        if vehicle is not None and not module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):
-            block.append(formatters.packTextBlockData(text_styles.statusAlert(backport.text(R.strings.tooltips.battleBooster.useless.header()))))
-            block.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.battleBooster.useless.body())), padding=formatters.packPadding(top=8)))
-        return block

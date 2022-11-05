@@ -11,7 +11,6 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles, time_formatters
 
 class MapboxServerPresenter(ServerListItemPresenter):
-    _periodsController = dependency.descriptor(IMapboxController)
 
     def isEnabled(self):
         return self.isActive()

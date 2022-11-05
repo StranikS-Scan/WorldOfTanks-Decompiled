@@ -13,6 +13,7 @@ from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -33,7 +34,6 @@ from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from CurrentVehicle import g_currentVehicle
 MAX_PLAYER_COUNT_ALL = 0
 
 def getPlayerStatus(slotState, pInfo):
@@ -367,21 +367,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
             isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
             if isVisibleAdtMsg:
-                commanderVehiclesList = unit.getMemberVehicles(unit.getCommanderDBID())
-                commanderVehicle = None
-                if commanderVehiclesList:
-                    commanderVehicle = vehicleGetter(commanderVehiclesList[0].vehTypeCompDescr)
-                start, end = unit.getRoster().SLOT_TYPE.DEFAULT_LEVELS
-                rangeString = toRomanRangeString(xrange(start, end), 1)
-                additionMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
-                if commanderVehicle:
-                    rangeString = toRomanRangeString([commanderVehicle.level], 1)
-                    additionMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
-                    if g_currentVehicle.isPresent() and commanderVehicle.level == g_currentVehicle.item.level:
-                        if commanderVehicle.isWheeledTech and not g_currentVehicle.item.isWheeledTech:
-                            additionMsg = backport.text(R.strings.hw_platoon.members.card.selectWheeledVehicle())
-                        elif not commanderVehicle.isWheeledTech and g_currentVehicle.item.isWheeledTech:
-                            additionMsg = backport.text(R.strings.hw_platoon.members.card.selectNotWheeledVehicle())
+                additionMsg = i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName='')
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:

@@ -328,7 +328,7 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBoosterBonus(cls, bonus, booster, count):
-        return cls._packIconBonusModel(bonus, booster.getFullNameForResource(), count, booster.fullUserName)
+        return cls._packIconBonusModel(bonus, booster.getFullNameForResource(), count, booster.userName)
 
     @classmethod
     def _packSingleDemountKitBonus(cls, bonus, demountkit, count):

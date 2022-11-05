@@ -25,18 +25,25 @@ NO_WGM_TOOLTIP_DATA = {CurrencyType.GOLD: {'header': R.strings.tooltips.header.b
  CurrencyType.CRYSTAL: {'header': R.strings.tooltips.header.buttons.crystal.header(),
                         'body': R.strings.tooltips.wallet.not_available_crystal.body()},
  CurrencyType.FREEXP: {'header': R.strings.tooltips.header.buttons.freeXP.header(),
-                       'body': R.strings.tooltips.wallet.not_available_freexp.body()}}
+                       'body': R.strings.tooltips.wallet.not_available_freexp.body()},
+ CurrencyType.EQUIPCOIN: {'header': R.strings.tooltips.header.buttons.equipCoin.title(),
+                          'body': R.strings.tooltips.wallet.not_available_equipCoin.body()}}
 
 class MoneyBalance(ViewImpl):
-    __slots__ = ('_stats', '_tooltips')
+    __slots__ = ('_stats', '_tooltips', '_currenciesList')
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, layoutID=None, viewModel=None):
+    def __init__(self, layoutID=None, viewModel=None, currenciesList=None):
+        self._currenciesList = [CurrencyType.GOLD,
+         CurrencyType.CREDITS,
+         CurrencyType.CRYSTAL,
+         CurrencyType.FREEXP] if currenciesList is None else currenciesList
         settings = ViewSettings(layoutID or R.views.dialogs.sub_views.topRight.MoneyBalance())
         settings.model = viewModel or MoneyBalanceViewModel()
         super(MoneyBalance, self).__init__(settings)
         self._stats = self._itemsCache.items.stats
         self._tooltips = self._initTooltips()
+        return
 
     @property
     def viewModel(self):
@@ -55,11 +62,13 @@ class MoneyBalance(ViewImpl):
         return {CurrencyType.GOLD: DialogTemplateTooltip(viewModel=model.goldTooltip),
          CurrencyType.CREDITS: DialogTemplateTooltip(viewModel=model.creditsTooltip),
          CurrencyType.CRYSTAL: DialogTemplateTooltip(viewModel=model.crystalsTooltip),
-         CurrencyType.FREEXP: DialogTemplateTooltip(viewModel=model.freeExpTooltip)}
+         CurrencyType.FREEXP: DialogTemplateTooltip(viewModel=model.freeExpTooltip),
+         CurrencyType.EQUIPCOIN: DialogTemplateTooltip(viewModel=model.equipCoinTooltip)}
 
     def _onLoading(self, *args, **kwargs):
         super(MoneyBalance, self)._onLoading(*args, **kwargs)
         g_clientUpdateManager.addMoneyCallback(self._moneyChangeHandler)
+        g_clientUpdateManager.addCallback('stats.freeXP', self._moneyChangeHandler)
         self.__setStats(self.viewModel)
 
     def _finalize(self):
@@ -76,10 +85,16 @@ class MoneyBalance(ViewImpl):
     def _updateModel(self, model):
         isWGMAvailable = self._stats.mayConsumeWalletResources
         model.setIsWGMAvailable(isWGMAvailable)
-        model.setCredits(int(self._stats.money.getSignValue(Currency.CREDITS)))
-        model.setGold(int(self._stats.money.getSignValue(Currency.GOLD)))
-        model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
-        model.setFreeExp(self._stats.freeXP)
+        if CurrencyType.CREDITS in self._currenciesList:
+            model.setCredits(int(self._stats.money.getSignValue(Currency.CREDITS)))
+        if CurrencyType.GOLD in self._currenciesList:
+            model.setGold(int(self._stats.money.getSignValue(Currency.GOLD)))
+        if CurrencyType.CRYSTAL in self._currenciesList:
+            model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
+        if CurrencyType.FREEXP in self._currenciesList:
+            model.setFreeExp(self._stats.freeXP)
+        if CurrencyType.EQUIPCOIN in self._currenciesList:
+            model.setEquipCoin(self._stats.equipCoin)
 
     def __setStats(self, model):
         isWGMAvailable = self._stats.mayConsumeWalletResources

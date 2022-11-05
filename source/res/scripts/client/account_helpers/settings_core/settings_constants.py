@@ -320,7 +320,6 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
-    CREW_LAMP_WELCOME_SCREEN_SHOWN = 'crewLampWelcomeScreenShown'
     COMP7_INTRO_SHOWN = 'isComp7IntroShown'
 
 
@@ -353,14 +352,13 @@ class OnceOnlyHints(CONST_CONTAINER):
     ACCOUNT_BUTTON_HINT = 'AccountButtonHint'
     SESSION_STATS_OPEN_BTN_HINT = 'SessionStatsOpenBtnHint'
     SESSION_STATS_SETTINGS_BTN_HINT = 'SessionStatsSettingsBtnHint'
-    CRYSTAL_BTN_HINT = 'CrystalsBtnHint'
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
     VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
     AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
     PLATOON_BTN_HINT = 'PlatoonBtnHint'
-    AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
+    MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     HANGAR_MANUAL_HINT = 'HangarManualHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'

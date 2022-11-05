@@ -1,33 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_entry_point_view.py
+from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings
-from fun_random.gui.prb_control.prb_config import SelectorBattleTypes
-from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_entry_point_view_model import FunRandomEntryPointViewModel, State
-from gui.impl.pub import ViewImpl
+from fun_random.gui.feature.fun_constants import FunSubModesState
+from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_wrappers import hasAnySubMode, avoidSubModesStates
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_entry_point_view_model import FunRandomEntryPointViewModel
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_entry_point_view_model import State
 from gui.impl.gen import R
-from gui.periodic_battles.models import PeriodType
-from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from helpers import dependency, time_utils
+from gui.impl.pub import ViewImpl
+from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier
+from helpers import dependency
 from skeletons.gui.game_control import IFunRandomController
+_ENTRY_POINT_STATE_MAP = {FunSubModesState.BEFORE_SEASON: State.BEFORE,
+ FunSubModesState.BETWEEN_SEASONS: State.BEFORE,
+ FunSubModesState.NOT_AVAILABLE: State.NOTPRIMETIME,
+ FunSubModesState.AVAILABLE: State.ACTIVE}
 
 @dependency.replace_none_kwargs(funRandomCtrl=IFunRandomController)
 def isFunRandomEntryPointAvailable(funRandomCtrl=None):
-    return _isTimeSuitable() and funRandomCtrl.canGoToMode()
+    return funRandomCtrl.subModesInfo.isEntryPointAvailable()
 
 
-@dependency.replace_none_kwargs(funRandomCtrl=IFunRandomController)
-def _isTimeSuitable(funRandomCtrl=None):
-    periodInfo = funRandomCtrl.getPeriodInfo()
-    return funRandomCtrl.isAvailable() and periodInfo.periodType not in (PeriodType.ALL_NOT_AVAILABLE_END, PeriodType.STANDALONE_NOT_AVAILABLE_END)
-
-
-class FunRandomEntryPointView(ViewImpl):
-    __funRandomCtrl = dependency.descriptor(IFunRandomController)
+class FunRandomEntryPointView(ViewImpl, FunSubModesWatcher, Notifiable):
 
     def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.fun_random.lobby.feature.FunRandomEntryPointView())
-        settings.flags = flags
-        settings.model = FunRandomEntryPointViewModel()
+        settings = ViewSettings(layoutID=R.views.fun_random.lobby.feature.FunRandomEntryPointView(), flags=flags, model=FunRandomEntryPointViewModel())
         super(FunRandomEntryPointView, self).__init__(settings)
 
     @property
@@ -36,37 +34,45 @@ class FunRandomEntryPointView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(FunRandomEntryPointView, self)._initialize(*args, **kwargs)
-        self.__funRandomCtrl.onGameModeStatusTick += self.__update
-        self.__funRandomCtrl.onGameModeStatusUpdated += self.__updateState
-        self.viewModel.onActionClick += self.__onClick
+        self.addNotificator(TimerNotifier(self.__getTimer, self.__invalidateAll))
+        self.startSubStatusListening(self.__invalidateAll, tickMethod=self.__invalidateAll)
+        self.startSubSettingsListening(self.__invalidateAll)
 
     def _finalize(self):
-        self.viewModel.onActionClick -= self.__onClick
-        self.__funRandomCtrl.onGameModeStatusTick -= self.__update
-        self.__funRandomCtrl.onGameModeStatusUpdated -= self.__updateState
+        self.clearNotification()
+        self.stopSubStatusListening(self.__invalidateAll, tickMethod=self.__invalidateAll)
+        self.stopSubSettingsListening(self.__invalidateAll)
         super(FunRandomEntryPointView, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
         super(FunRandomEntryPointView, self)._onLoading(*args, **kwargs)
-        self.__update()
+        self.__invalidate(self.getSubModesStatus())
 
-    def __onClick(self):
-        self.__funRandomCtrl.selectFunRandomBattle()
-        selectorUtils.setBattleTypeAsKnown(SelectorBattleTypes.FUN_RANDOM)
+    def _getEvents(self):
+        return ((self.viewModel.onActionClick, self.__onSelectFunRandom),)
 
-    def __updateState(self, _):
-        self.__update()
+    @hasAnySubMode(defReturn=0)
+    def __getTimer(self):
+        if self.viewModel.getState() != State.NOTPRIMETIME:
+            return 0
+        notSetSubModes = [ sm for sm in self.getSubModes() if sm.isNotSet() ]
+        if not notSetSubModes:
+            return 0
+        notSetTimer = self._funRandomCtrl.subModesInfo.getLeftTimeToPrimeTimesEnd(subModes=notSetSubModes)
+        return notSetTimer + 1 if notSetTimer != 0 else notSetTimer
 
-    def __update(self):
-        if not _isTimeSuitable():
-            self.destroy()
-            return
+    @adisp_process
+    def __onSelectFunRandom(self):
+        yield self.selectFunRandomBattle()
+
+    @avoidSubModesStates(states=FunSubModesState.HIDDEN_ENTRY_STATES, abortAction='destroy')
+    def __invalidateAll(self, status, *_):
+        self.__invalidate(status)
+
+    def __invalidate(self, status):
         with self.viewModel.transaction() as model:
-            if not self.__funRandomCtrl.hasAvailablePrimeTimeServers():
-                state = State.NOTPRIMETIME
-                model.setLeftTime(self.__funRandomCtrl.getLeftTimeToPrimeTimesEnd() * time_utils.MS_IN_SECOND)
-            else:
-                state = State.ACTIVE
-                periodInfo = self.__funRandomCtrl.getPeriodInfo()
-                model.setEndTime(periodInfo.cycleBorderRight.timestamp)
-            model.setState(state)
+            model.setState(_ENTRY_POINT_STATE_MAP.get(status.state, State.AFTER))
+            model.setStartTime(status.rightBorder)
+            model.setLeftTime(status.primeDelta)
+            model.setEndTime(status.rightBorder)
+        self.startNotification()

@@ -13,14 +13,17 @@ from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 _TOOLTIP_MIN_WIDTH = 200
 
 class RankedCalendarDayExtendedTooltip(RankedCalendarDayTooltip):
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def _getController(self, *_):
+        return self.__rankedController
 
     def _packBlocks(self, selectedTime):
         items = []
         if self.__isSeasonEnded(selectedTime):
             return items
         blocks = []
-        currentSeason = self.rankedController.getCurrentSeason()
+        currentSeason = self.__rankedController.getCurrentSeason()
         if currentSeason:
             daysLeft = int((currentSeason.getEndDate() - time_utils.getServerUTCTime()) / time_utils.ONE_DAY)
             seasonName = currentSeason.getUserName() or currentSeason.getNumber()
@@ -37,10 +40,10 @@ class RankedCalendarDayExtendedTooltip(RankedCalendarDayTooltip):
         if selectedTime is None:
             selectedTime = time_utils.getCurrentLocalServerTimestamp()
         seasonEnd = None
-        if self.rankedController.getCurrentSeason():
-            seasonEnd = self.rankedController.getCurrentSeason().getEndDate()
+        if self.__rankedController.getCurrentSeason():
+            seasonEnd = self.__rankedController.getCurrentSeason().getEndDate()
             seasonEnd = datetime.fromtimestamp(seasonEnd).date()
         return datetime.fromtimestamp(selectedTime).date() > seasonEnd
 
     def __packCalendarBlock(self, selectedTime):
-        return packCalendarBlock(self.rankedController, selectedTime, SELECTOR_BATTLE_TYPES.RANKED)
+        return packCalendarBlock(self.__rankedController, selectedTime, SELECTOR_BATTLE_TYPES.RANKED)

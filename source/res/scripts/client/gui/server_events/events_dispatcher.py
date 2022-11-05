@@ -237,19 +237,21 @@ def showMission(eventID, eventType=None):
         return
     else:
         eventsCache = dependency.instance(IEventsCache)
-        quests = eventsCache.getQuests()
+        quests = eventsCache.getAllQuests()
         quest = quests.get(eventID)
         if eventID == BattlePassConsts.FAKE_QUEST_ID:
             hideWebBrowserOverlay()
             showMissionsBattlePass()
             return
-        if quest is None:
+        if quest is None or quest.isHidden():
             prefix = events_helpers.getMarathonPrefix(eventID)
             if prefix is not None:
                 return showMissionsMarathon(marathonPrefix=prefix)
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
-        elif quest is not None:
+        elif quest is not None and quest.showMissionAction() is not None:
+            quest.showMissionAction()()
+        elif quest is not None and not quest.isHidden():
             if events_helpers.isMarathon(quest.getGroupID()):
                 groups = eventsCache.getGroups()
                 group = groups.get(quest.getGroupID())

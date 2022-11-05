@@ -4,7 +4,7 @@ from collections import defaultdict
 import MusicControllerWWISE as _MC
 from Event import Event
 from constants import ARENA_PERIOD as _PERIOD
-from frameworks.wulf import WindowLayer, ViewStatus, WindowFlags
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import sf_lobby
@@ -19,7 +19,6 @@ from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.impl import IGuiLoader
 
 def _getViewSoundEnv(view):
     if hasattr(view, 'getDynamicSoundEnv'):
@@ -32,7 +31,7 @@ def _getViewSoundEnv(view):
 
 def _getGFViewSoundEnv(viewImplAdaptor):
     viewImpl = getattr(viewImplAdaptor, 'view', None)
-    return getattr(viewImpl, '__sound_env__', None) if viewImpl is not None else getattr(viewImplAdaptor, '__sound_env__', None)
+    return getattr(viewImpl, '__sound_env__', None) if viewImpl is not None else None
 
 
 class SoundEvent(Notifiable):
@@ -397,14 +396,12 @@ class GuiAmbientsCtrl(object):
      GuiGlobalSpaceID.BATTLE: BattleSpaceEnv}
     hangarSpace = dependency.descriptor(IHangarSpace)
     appLoader = dependency.descriptor(IAppLoader)
-    guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, soundsCtrl):
         self._spaceEnv = EmptySpaceEnv(soundsCtrl)
         self._filters = defaultdict(int)
         self._soundsCtrl = soundsCtrl
         self._customEnvs = defaultdict(dict)
-        self._gfCustomEnvs = {}
 
     def init(self):
         self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
@@ -420,19 +417,16 @@ class GuiAmbientsCtrl(object):
             self._clearSoundEnv(self._spaceEnv)
             self._spaceEnv = None
         self._soundsCtrl = None
-        self._gfCustomEnvs = {}
         return
 
     def start(self):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        self.guiLoader.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
         g_eventBus.addListener(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, self.__onEnvChangeRequested)
 
     def stop(self, isDisconnected=False):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
-        self.guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
         if isDisconnected:
             if self.appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN:
                 SOUND_DEBUG('Restart login space sound environment after banks reloading')
@@ -446,10 +440,6 @@ class GuiAmbientsCtrl(object):
                 env.stop()
 
         self._customEnvs.clear()
-        for env in self._gfCustomEnvs.values():
-            env.stop()
-
-        self._gfCustomEnvs.clear()
         for fID in self._filters.iterkeys():
             snd_filters.get(fID).stop()
 
@@ -478,7 +468,6 @@ class GuiAmbientsCtrl(object):
          WindowLayer.TOP_SUB_VIEW):
             result.extend(self._customEnvs[layer].values())
 
-        result.extend(self._gfCustomEnvs.values())
         result.append(self._spaceEnv)
         music, ambient = EmptySound(), EmptySound()
         while result and (music.isEmpty() or ambient.isEmpty()):
@@ -545,29 +534,14 @@ class GuiAmbientsCtrl(object):
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view is not None:
-            self.__registerScaleformSoundEnv(view)
+            self.__registerSoundEnv(view)
             self._restartSounds()
         return
-
-    def __onWindowStatusChanged(self, uniqueID, newStatus):
-        window = self.guiLoader.windowsManager.getWindow(uniqueID)
-        if window is None or not window.windowFlags & (WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW | WindowFlags.DIALOG):
-            return
-        else:
-            if newStatus == ViewStatus.LOADED:
-                self.__registerGFSoundEnv(window.proxy.content)
-                self._restartSounds()
-            elif newStatus == ViewStatus.DESTROYING:
-                view = window.proxy.content
-                if view and view.uniqueID in self._gfCustomEnvs:
-                    self.__removeGFSoundEnv(view)
-                    self._restartSounds()
-            return
 
     def __onViewDisposed(self, view):
         uniqueName = view.getUniqueName()
         if uniqueName in self._customEnvs[view.layer]:
-            self.__removeScaleformSoundEnv(view, uniqueName)
+            self.__removeSoundEnv(view, uniqueName)
             view.onDispose -= self.__onViewDisposed
             self._restartSounds()
 
@@ -575,36 +549,25 @@ class GuiAmbientsCtrl(object):
         view = event.ctx
         uniqueName = view.getUniqueName()
         if uniqueName in self._customEnvs[view.layer]:
-            self.__removeScaleformSoundEnv(view, uniqueName)
-        self.__registerScaleformSoundEnv(view)
+            self.__removeSoundEnv(view, uniqueName)
+        self.__registerSoundEnv(view)
         self._restartSounds()
 
-    def __registerScaleformSoundEnv(self, view):
+    def __registerSoundEnv(self, view):
         soundEnvClass = _getViewSoundEnv(view) or _getGFViewSoundEnv(view)
         if soundEnvClass is not None:
             alias = view.alias
             SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
             self._customEnvs[view.layer][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
             view.onDispose += self.__onViewDisposed
-        return
-
-    def __registerGFSoundEnv(self, view):
-        soundEnvClass = _getGFViewSoundEnv(view)
-        if soundEnvClass is not None:
-            SOUND_DEBUG('Custom sound environ has been detected', type(view), soundEnvClass)
-            self._gfCustomEnvs[view.uniqueID] = self._buildSoundEnv(soundEnvClass)
         else:
-            SOUND_DEBUG('Custom sound environ has not been detected', type(view))
+            SOUND_DEBUG('Custom sound environ has not been detected', view)
         return
 
-    def __removeScaleformSoundEnv(self, view, uniqueName):
+    def __removeSoundEnv(self, view, uniqueName):
         env = self._clearSoundEnv(self._customEnvs[view.layer][uniqueName], view)
         SOUND_DEBUG('Custom sound environ has been stopped', view.alias, env)
         del self._customEnvs[view.layer][uniqueName]
-
-    def __removeGFSoundEnv(self, view):
-        env = self._clearSoundEnv(self._gfCustomEnvs.pop(view.uniqueID), view)
-        SOUND_DEBUG('Custom sound environ has been stopped', type(view), env)
 
     def __onAmbientChanged(self, ambient):
         SOUND_DEBUG('Ambient has been changed', ambient)

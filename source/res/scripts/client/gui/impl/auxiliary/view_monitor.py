@@ -44,5 +44,5 @@ class ViewMonitor(object):
                 return
 
             if newView.layer == self._view.layer and newView.uniqueID != self._view.uniqueID:
-                self._view.destroy()
+                self._view.destroyWindow()
                 _logger.info('View %r has been destroyed by opening new view %r', self._view, newView)

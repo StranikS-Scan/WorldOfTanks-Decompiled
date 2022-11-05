@@ -92,7 +92,7 @@ class StrongholdDataReceiver(object):
         else:
             excludes = ('rageLevel6', 'rageLevel8') if IS_CHINA else ()
         return [ {'local': key,
-         'value': DUMMY_UNAVAILABLE_DATA if elo is None else elo,
+         'value': DUMMY_UNAVAILABLE_DATA if elo is None or not isStrongholdsEnabled() else elo,
          'timeExpired': True if elo is None else not actual,
          'tooltip': tooltip,
          'isHidden': False} for key, elo, actual, tooltip in rows if key not in excludes ]
@@ -173,11 +173,8 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         self.as_updateGeneralBlockS(self.__makeGeneralBlock(clanInfo, syncUserInfo=True))
         self.as_updateGlobalMapBlockS(self.__makeGlobalMapBlock(globalMapStats, ratings))
         self.__updateStatus()
-        if isStrongholdsEnabled():
-            self.__strongholdStatsVOReceiver = StrongholdDataReceiver(clanDossier, self.__updateStrongholdBlock)
-            self.__strongholdStatsVOReceiver.updateStrongholdStatistics()
-        else:
-            self._hideWaiting()
+        self.__strongholdStatsVOReceiver = StrongholdDataReceiver(clanDossier, self.__updateStrongholdBlock)
+        self.__strongholdStatsVOReceiver.updateStrongholdStatistics()
 
     def onAccountWebVitalInfoChanged(self, fieldName, value):
         self.__updateStatus()

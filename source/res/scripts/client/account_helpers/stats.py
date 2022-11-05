@@ -231,7 +231,7 @@ class Stats(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_SET_MAPS_BLACK_LIST, selectedMaps, None if callback is None else (lambda reqID, resID, errorStr, ext={}: callback(resID, errorStr, ext)))
             return
 
-    def setMoney(self, credit, gold=0, freeXP=0, crystal=0, eventCoin=0, bpcoin=0, callback=None):
+    def setMoney(self, credit, gold=0, freeXP=0, crystal=0, eventCoin=0, bpcoin=0, equipCoin=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -246,7 +246,8 @@ class Stats(object):
              freeXP,
              crystal,
              eventCoin,
-             bpcoin], proxy)
+             bpcoin,
+             equipCoin], proxy)
             return
 
     def setPremium(self, premType=constants.PREMIUM_TYPE.PLUS, seconds=time_utils.ONE_DAY, callback=None):

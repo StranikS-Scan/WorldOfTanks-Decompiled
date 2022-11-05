@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
-from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow, createAndLoadBackportTooltipWindow
+from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_model import ModeSelectorModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_window_states import ModeSelectorWindowStates
@@ -24,21 +24,21 @@ from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
-from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
+from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView, createSimpleTooltip
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import FullscreenModeSelectorEvent, LoadViewEvent
+from gui.shared.events import FullscreenModeSelectorEvent, ModeSelectorLoadedEvent, ModeSubSelectorEvent, LoadViewEvent
+from gui.shared.system_factory import registerModeSelectorTooltips, collectModeSelectorTooltips
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IEventBattlesController
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 if typing.TYPE_CHECKING:
@@ -49,26 +49,41 @@ if typing.TYPE_CHECKING:
 _BACKGROUND_ALPHA = 0.7
 _R_SIMPLE_TOOLTIP = R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent
 _R_BACKPORT_TOOLTIP = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent
+_SIMPLE_TOOLTIPS_KEY = 'simpleTooltipIds'
+_CONTENT_TOOLTIPS_KEY = 'contentTooltipsMap'
 _CLOSE_LAYERS = (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW)
+_SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TOOLTIP,
+ ModeSelectorTooltipsConstants.RANKED_STEP_TOOLTIP,
+ ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
+ ModeSelectorTooltipsConstants.RANKED_BATTLES_EFFICIENCY_TOOLTIP,
+ ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
+ ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
+ ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
+ ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+
+def _getTooltipByContentIdMap():
+    return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
+     R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
+     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
+     R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
+     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
+
+
+registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
 class ModeSelectorView(ViewImpl):
-    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored')
+    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __bootcamp = dependency.descriptor(IBootcampController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
-    __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
-    __tooltipByContentID = {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
-     R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
-    def __init__(self, layoutId, isEventEnabled=False, provider=None):
+    def __init__(self, layoutId, isEventEnabled=False, provider=None, subSelectorCallback=None):
         super(ModeSelectorView, self).__init__(ViewSettings(layoutId, ViewFlags.LOBBY_TOP_SUB_VIEW, ModeSelectorModel()))
         self.__dataProvider = provider if provider else ModeSelectorDataProvider()
         self.__blur = None
@@ -77,6 +92,9 @@ class ModeSelectorView(ViewImpl):
         self.__isEventEnabled = isEventEnabled
         self.__isClickProcessing = False
         self.__isGraphicsRestored = False
+        self.__subSelectorCallback = subSelectorCallback
+        self.__isContentVisible = subSelectorCallback is None
+        self.__tooltipConstants = collectModeSelectorTooltips()
         self.inputManager.addEscapeListener(self.__handleEscape)
         return
 
@@ -100,21 +118,12 @@ class ModeSelectorView(ViewImpl):
                 body = modeSelectorItem.disabledTooltipText
                 if tooltipId == ModeSelectorTooltipsConstants.CALENDAR_TOOLTIP:
                     if modeSelectorItem.hasExtendedCalendarTooltip:
-                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow(), event)
+                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow())
                     body = modeSelectorItem.calendarTooltipText
-                return self.__createSimpleTooltip(event, body=body)
+                return createSimpleTooltip(self.getParentWindow(), event, body=body)
             if tooltipId == ModeSelectorTooltipsConstants.RANDOM_BP_PAUSED_TOOLTIP:
-                return self.__createSimpleTooltip(event, header=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.header()), body=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.body()))
-            if tooltipId in [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TOOLTIP,
-             ModeSelectorTooltipsConstants.RANKED_STEP_TOOLTIP,
-             ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
-             ModeSelectorTooltipsConstants.RANKED_BATTLES_EFFICIENCY_TOOLTIP,
-             ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
-             ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
-             ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.FUN_RANDOM_CALENDAR_TOOLTIP,
-             ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]:
+                return createSimpleTooltip(self.getParentWindow(), event, header=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.header()), body=backport.text(R.strings.battle_pass.tooltips.entryPoint.disabled.body()))
+            if tooltipId in self.__tooltipConstants.get(_SIMPLE_TOOLTIPS_KEY, []):
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
             if tooltipId == ModeSelectorTooltipsConstants.RANKED_BATTLES_RANK_TOOLTIP:
                 rankID = int(event.getArgument('rankID'))
@@ -139,7 +148,7 @@ class ModeSelectorView(ViewImpl):
                 return
             return SimplyFormatTooltipView(header, body)
         else:
-            tooltipClass = self.__tooltipByContentID.get(contentID)
+            tooltipClass = self.__tooltipConstants.get(_CONTENT_TOOLTIPS_KEY, {}).get(contentID)
             return tooltipClass() if tooltipClass else None
 
     def createPopOverContent(self, event):
@@ -151,12 +160,12 @@ class ModeSelectorView(ViewImpl):
     def _onLoading(self):
         self.__gui.windowsManager.onWindowStatusChanged += self.__windowStatusChanged
         self.__lobbyContext.addHeaderNavigationConfirmator(self.__handleHeaderNavigation)
+        g_eventBus.addListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         self.viewModel.onItemClicked += self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
         self.viewModel.onInfoClicked += self.__infoClickHandler
         self.__dataProvider.onListChanged += self.__dataProviderListChangeHandler
-        self.__eventBattlesCtrl.onPrimeTimeStatusUpdated += self.__updateEventStatus
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -167,11 +176,16 @@ class ModeSelectorView(ViewImpl):
         self.__prevOptimizationEnabled = app.graphicsOptimizationManager.getEnable()
         if self.__prevOptimizationEnabled:
             app.graphicsOptimizationManager.switchOptimizationEnabled(False)
+        if self.__subSelectorCallback is not None:
+            self.__subSelectorCallback()
+            self.__subSelectorCallback = None
+        return
 
     def _initialize(self):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': True}))
 
     def _onLoaded(self):
+        g_eventBus.handleEvent(ModeSelectorLoadedEvent(ModeSelectorLoadedEvent.NAME))
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
 
@@ -179,6 +193,7 @@ class ModeSelectorView(ViewImpl):
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
+        g_eventBus.removeListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
@@ -186,12 +201,14 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.onInfoClicked -= self.__infoClickHandler
         saveBattlePassStateForItems(self.__dataProvider.itemList)
         self.__dataProvider.onListChanged -= self.__dataProviderListChangeHandler
-        self.__eventBattlesCtrl.onPrimeTimeStatusUpdated -= self.__updateEventStatus
         self.__dataProvider.dispose()
+        self.__tooltipConstants = None
+        self.__subSelectorCallback = None
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': False}))
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.__restoreGraphics()
+        return
 
     def __restoreGraphics(self):
         if self.__isGraphicsRestored:
@@ -207,21 +224,12 @@ class ModeSelectorView(ViewImpl):
             app.setBackgroundAlpha(self.__prevAppBackgroundAlpha)
             return
 
-    def __createSimpleTooltip(self, event, header='', body=''):
-        window = DecoratedTooltipWindow(content=SimpleTooltipContent(_R_SIMPLE_TOOLTIP(), body=body, header=header), parent=self.getParentWindow())
-        window.load()
-        window.move(event.mouse.positionX, event.mouse.positionY)
-        return window
-
     def __dataProviderListChangeHandler(self):
         with self.viewModel.transaction() as tx:
             self.__updateViewModel(tx)
 
-    def __updateEventStatus(self, status):
-        self.__dataProvider.fullUpdate()
-        self.__dataProviderListChangeHandler()
-
     def __updateViewModel(self, vm):
+        vm.setIsContentVisible(self.__isContentVisible)
         vm.setIsMapSelectionVisible(self.__dataProvider.isDemonstrator)
         vm.setIsMapSelectionEnabled(self.__dataProvider.isDemoButtonEnabled)
         vm.setAreWidgetsVisible(ModeSelectorView._areWidgetsVisible)
@@ -234,26 +242,34 @@ class ModeSelectorView(ViewImpl):
 
         cards.invalidate()
 
+    def __updateContentVisibility(self, event):
+        isSubSelectorVisible = event.ctx.get('visible', False) if event is not None else False
+        self.__isContentVisible = not isSubSelectorVisible
+        self.viewModel.setIsContentVisible(self.__isContentVisible)
+        return
+
     @adisp_process
     def __itemClickHandler(self, event):
         self.__isClickProcessing = True
-        navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if not navigationPossible:
+        index = int(event.get('index'))
+        modeSelectorItem = self.__dataProvider.getItemByIndex(index)
+        if modeSelectorItem is None:
             self.__isClickProcessing = False
             return
         else:
-            index = int(event.get('index'))
-            modeSelectorItem = self.__dataProvider.getItemByIndex(index)
-            if modeSelectorItem is None:
-                self.__isClickProcessing = False
-                return
+            if modeSelectorItem.checkHeaderNavigation():
+                navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
+                if not navigationPossible:
+                    self.__isClickProcessing = False
+                    return
             modeSelectorItem.handleClick()
             if modeSelectorItem.isSelectable:
                 specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
                 if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
                     specView.destroyWindow()
                 self.__dataProvider.select(modeSelectorItem.modeName)
-            self.close()
+                if self.__isContentVisible:
+                    self.close()
             return
 
     def __showMapSelectionClickHandler(self):
@@ -288,15 +304,18 @@ class ModeSelectorView(ViewImpl):
                 return
             if window.layer in _CLOSE_LAYERS:
                 self.__restoreGraphics()
-                if not self.__isClickProcessing:
+                if self.__canBeClosed():
                     self.close()
         return
 
     @adisp.adisp_async
     def __handleHeaderNavigation(self, callback):
-        if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING) and not self.__isClickProcessing:
+        if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING) and self.__canBeClosed():
             self.close()
         callback(True)
 
     def __handleEscape(self):
         self.close()
+
+    def __canBeClosed(self):
+        return not self.__isClickProcessing or not self.__isContentVisible

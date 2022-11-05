@@ -17,7 +17,6 @@ from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IEventBattlesController
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
 _AUTOCANNON_SHOT_DISTANCE = 400
@@ -114,7 +113,6 @@ class HeaderBlockConstructor(ShellTooltipBlockConstructor):
 
 
 class PriceBlockConstructor(ShellTooltipBlockConstructor):
-    _eventController = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, shell, configuration, valueWidth):
         super(PriceBlockConstructor, self).__init__(shell, configuration)
@@ -126,9 +124,7 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
         configuration = self.configuration
         buyPrice = configuration.buyPrice
         sellPrice = configuration.sellPrice
-        if self._eventController.isEventHangar():
-            return (None, False)
-        elif buyPrice and sellPrice:
+        if buyPrice and sellPrice:
             LOG_ERROR('You are not allowed to use buyPrice and sellPrice at the same time')
             return
         else:

@@ -6,6 +6,7 @@ class COMMON(object):
     COMMON_COLON = '#common:common/colon'
     COMMON_PERCENT = '#common:common/percent'
     COMMON_DASH = '#common:common/dash'
+    COMMON_DASHES = '#common:common/dashes'
     COMMON_SLASH = '#common:common/slash'
     COMMON_OPEN_QUOTES = '#common:common/open_quotes'
     COMMON_CLOSE_QUOTES = '#common:common/close_quotes'

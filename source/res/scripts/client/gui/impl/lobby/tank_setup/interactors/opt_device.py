@@ -75,6 +75,16 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
             callback(None)
         return
 
+    @adisp.adisp_process
+    def deconstructProcess(self, slotID, callback=None):
+        action = ActionsFactory.getAction(ActionsFactory.DECONSTRUCT_OPT_DEVICE, self.getInstalledLayout()[slotID], self.getItem(), slotID)
+        if action is not None:
+            result = yield action.doAction()
+            callback(result)
+        else:
+            callback(None)
+        return
+
     @wg_async
     def changeSlotItem(self, slotID, itemIntCD):
         item = self._itemsCache.items.getItemByCD(int(itemIntCD)) if itemIntCD is not None else None
@@ -113,7 +123,10 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         currentSlotID = self.getCurrentLayout().index(item)
         installedSlotID = self.getInstalledLayout().index(item)
         if currentSlotID is not None and installedSlotID is not None:
-            result = yield await_callback(self.demountProcess)(installedSlotID, isDestroy=isDestroy, everywhere=everywhere)
+            if item.isModernized and isDestroy:
+                result = yield await_callback(self.deconstructProcess)(installedSlotID)
+            else:
+                result = yield await_callback(self.demountProcess)(installedSlotID, isDestroy=isDestroy, everywhere=everywhere)
             if result:
                 self.setItemInCurrentLayout(currentSlotID, None)
                 actionType = BaseSetupModel.DESTROY_SLOT_ACTION if isDestroy else BaseSetupModel.DEMOUNT_SLOT_ACTION
@@ -144,7 +157,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         return
 
     @adisp.adisp_process
-    def upgradeModule(self, itemIntCD, callback):
+    def upgradeModule(self, itemIntCD, onDeconstructed, callback):
         optDevice = self._itemsCache.items.getItemByCD(int(itemIntCD))
         slotIdx = self.getInstalledLayout().index(optDevice)
         setupIdx = None
@@ -155,7 +168,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
                 break
 
         vehicle = None if setupIdx is None else self.getItem()
-        action = ActionsFactory.getAction(ActionsFactory.UPGRADE_OPT_DEVICE, vehicle=vehicle, module=optDevice, setupIdx=setupIdx, slotIdx=slotIdx)
+        action = ActionsFactory.getAction(ActionsFactory.UPGRADE_OPT_DEVICE, vehicle=vehicle, module=optDevice, setupIdx=setupIdx, slotIdx=slotIdx, onDeconstructed=onDeconstructed)
         result = yield action.doAction() if action is not None else None
         if result:
             upgradedIntCD = optDevice.descriptor.upgradeInfo.upgradedCompDescr

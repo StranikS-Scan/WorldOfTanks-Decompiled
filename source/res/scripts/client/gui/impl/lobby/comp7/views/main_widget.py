@@ -61,11 +61,12 @@ class Comp7MainWidget(ViewImpl):
 
     def __updateRating(self, *_, **__):
         rating = self.__comp7Controller.rating
+        activitiPoints = self.__comp7Controller.activityPoints
         viewData = self.__comp7Controller.getViewData(HANGAR_ALIASES.COMP7_WIDGET)
         prevRating = viewData.get('prevRating', rating)
-        if rating == prevRating:
-            return
-        self.__updateData()
+        prevActivityPoints = self.viewModel.getRankInactivityCount()
+        if rating != prevRating or activitiPoints != prevActivityPoints:
+            self.__updateData()
 
     def __updateData(self, *_, **__):
         division = comp7_shared.getPlayerDivision()

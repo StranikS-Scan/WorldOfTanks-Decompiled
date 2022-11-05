@@ -16,10 +16,11 @@ _vehicleFilterItemTypes = {'vehicle': 'vehicle',
 
 class ComponentFilter(object):
 
-    def __init__(self, minLevel, maxLevel, tags):
+    def __init__(self, minLevel, maxLevel, tags, mandatoryTags):
         self._minLevel = minLevel
         self._maxLevel = maxLevel
         self._tags = tags
+        self._mandatoryTags = mandatoryTags
 
     def __str__(self):
         return '{}:[minLevel={}, maxLevel = {}, tags = {}]'.format(self.__class__.__name__, self._minLevel, self._maxLevel, self._tags)
@@ -39,12 +40,14 @@ class ComponentFilter(object):
     def isItemCompatible(self, itemDescr):
         if not self._minLevel <= itemDescr.level <= self._maxLevel:
             return False
-        return False if self._tags and not itemDescr.tags.intersection(self._tags) else True
+        if self._tags and not itemDescr.tags.intersection(self._tags):
+            return False
+        return False if self._mandatoryTags and not self._mandatoryTags.issubset(itemDescr.tags) else True
 
     @staticmethod
     def readComponentFilter(ctx, section, itemTypeName):
-        minLevel, maxLevel, tags = ComponentFilter._readComponentFilterInfo(ctx, section, itemTypeName)
-        return ComponentFilter(minLevel, maxLevel, tags)
+        minLevel, maxLevel, tags, mandatoryTags = ComponentFilter._readComponentFilterInfo(ctx, section, itemTypeName)
+        return ComponentFilter(minLevel, maxLevel, tags, mandatoryTags)
 
     @staticmethod
     def _readComponentFilterInfo(ctx, section, itemTypeName):
@@ -57,7 +60,13 @@ class ComponentFilter(object):
         tags = set()
         if section.has_key('tags'):
             tags = _readTags(ctx, section, 'tags', itemTypeName)
-        return (minLevel, maxLevel, tags)
+        mandatoryTags = set()
+        if section.has_key('mandatoryTags'):
+            mandatoryTags = _readTags(ctx, section, 'mandatoryTags', itemTypeName)
+        return (minLevel,
+         maxLevel,
+         tags,
+         mandatoryTags)
 
 
 class SubFilter(object):
@@ -119,7 +128,7 @@ class SubFilter(object):
         if vehTypeFilterSection is not None:
             vehTypeFilter = ComponentFilter.readComponentFilter(xmlCtx, vehTypeFilterSection, ITEM_TYPE_NAMES[ITEM_TYPES.vehicle])
         else:
-            vehTypeFilter = ComponentFilter(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, set())
+            vehTypeFilter = ComponentFilter(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, set(), set())
         componentFiltersSection = filterSection['componentFilters']
         if componentFiltersSection is not None:
             for componentName, compFilterSection in componentFiltersSection.items():

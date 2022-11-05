@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_
 from soft_exception import SoftException
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS
 from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_PRB_TYPE, _ARENA_GUI_TYPE_BY_QUEUE_TYPE
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, SELECTOR_BATTLE_TYPES
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, SELECTOR_BATTLE_TYPES, REQUEST_TYPE, REQUEST_TYPE_NAMES
 from gui.shared.system_factory import registerQueueEntity
 from gui.shared.system_factory import registerEntryPoint
 _logger = logging.getLogger(__name__)
@@ -32,6 +32,14 @@ def addPrebattleActionName(attrName, value, personality):
     attrValidate(PREBATTLE_ACTION_NAME, attrName, int, value, personality)
     setattr(PREBATTLE_ACTION_NAME, attrName, value)
     msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=PREBATTLE_ACTION_NAME, value=value, personality=personality)
+    logging.debug(msg)
+
+
+def addPrebattleRequestType(attrName, value, personality):
+    attrValidate(REQUEST_TYPE, attrName, int, value, personality)
+    setattr(REQUEST_TYPE, attrName, value)
+    REQUEST_TYPE_NAMES.update({value: attrName})
+    msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=REQUEST_TYPE, value=value, personality=personality)
     logging.debug(msg)
 
 

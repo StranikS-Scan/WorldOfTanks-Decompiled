@@ -907,6 +907,59 @@
       </damage>
     </armorSpalls>
   </_75mm_Sprg.18>
+  <_75mm_Pzgr39_KW_Ir>
+    <id>	356	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr39_KW_Ir	</userString>
+    <icon>	ap	</icon>
+    <price>	70	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Pzgr39_KW_Ir>
+  <_75mm_Pzgr.40_KW_Ir>
+    <id>	357	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr.40_KW_Ir	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Pzgr.40_KW_Ir>
+  <_75mm_Sprg.18_KW_Ir>
+    <id>	358	</id>
+    <userString>	#germany_vehicles:_75mm_Sprg.18_KW_Ir	</userString>
+    <icon>	he_modern	</icon>
+    <price>	38	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Sprg.18_KW_Ir>
   <_75mm_43_M_Pancelgranat>
     <id>	148	</id>
     <userString>	#germany_vehicles:_75mm_43_M_Pancelgranat	</userString>

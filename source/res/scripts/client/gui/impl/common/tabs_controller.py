@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/tabs_controller.py
 import inspect
+from account_helpers.AccountSettings import AccountSettings, OPT_DEVICE_TAB_VISITED
 
 def tabUpdateFunc(tabName):
 
@@ -65,3 +66,16 @@ class TabsController(object):
 
     def _createViewModel(self, name):
         raise NotImplementedError
+
+    @property
+    def tabs(self):
+        return self._tabs
+
+    def isVisited(self, tabName):
+        visitedDict = AccountSettings.getSettings(OPT_DEVICE_TAB_VISITED)
+        return visitedDict.get(tabName, False)
+
+    def setVisited(self, tabName):
+        visitedDict = AccountSettings.getSettings(OPT_DEVICE_TAB_VISITED)
+        visitedDict[tabName] = True
+        AccountSettings.setSettings(OPT_DEVICE_TAB_VISITED, visitedDict)

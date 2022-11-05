@@ -16,6 +16,7 @@ from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.lobby.frontline.skill_drop_dialog import SkillDropDialog
 from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
+from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus
@@ -78,6 +79,12 @@ def trophyDeviceUpgradeConfirm(trophyBasicModule, parent=None):
     result = yield wg_await(show(dialog))
     raise AsyncReturn((result.result == DialogButtons.SUBMIT, result.data))
     return
+
+
+@wg_async
+def modernizedDeviceUpgradeConfirm(currentModule, vehicle=None, onDeconstructed=None, parent=None):
+    _, result = yield wg_await(showSingleDialogWithResultData(currentModule=currentModule, vehicle=vehicle, onDeconstructed=onDeconstructed, layoutID=UpgradableDeviceUpgradeConfirmView.LAYOUT_ID, wrappedViewClass=UpgradableDeviceUpgradeConfirmView, parent=parent))
+    raise AsyncReturn(result)
 
 
 @wg_async

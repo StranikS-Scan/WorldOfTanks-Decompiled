@@ -466,7 +466,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         return
 
     def _dispose(self):
-        self._cancelCallback()
+        self.__cancelCallback()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -487,10 +487,10 @@ class SixthSenseIndicator(SixthSenseMeta):
                     self.__detectionSoundEvent.play()
                 self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
             self.as_showS()
-            self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self._hide)
+            self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
             return
 
-    def _hide(self):
+    def __hide(self):
         self.__callbackID = None
         if not self.__enabled:
             return
@@ -498,7 +498,7 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.as_hideS()
             return
 
-    def _cancelCallback(self):
+    def __cancelCallback(self):
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
@@ -507,11 +507,11 @@ class SixthSenseIndicator(SixthSenseMeta):
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
             if value:
-                self._cancelCallback()
+                self.__cancelCallback()
                 self.__show()
             else:
-                self._cancelCallback()
-                self._hide()
+                self.__cancelCallback()
+                self.__hide()
 
     def __onSettingsChanged(self, diff):
         key = SOUND.DETECTION_ALERT_SOUND

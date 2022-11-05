@@ -8,7 +8,6 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.event_dispatcher import showVehicleCompare
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
@@ -77,12 +76,8 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
     def __updateButtonsState(self):
         count = self.comparisonBasket.getVehiclesCount()
         buttonsEnabled = count > 0
-        isEventMode = bool(g_prbLoader.getDispatcher().getEntity().getModeFlags() & FUNCTIONAL_FLAG.EVENT)
         if self.comparisonBasket.isFull():
             addBtnTT = VEH_COMPARE.CARTPOPOVER_FULLBASKETCMPBTN_TOOLTIP
-            addBtnIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
-        elif isEventMode:
-            addBtnTT = VEH_COMPARE.CARTPOPOVER_UNSUPPORTEDMODECMPBTN_TOOLTIP
             addBtnIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
         else:
             addBtnTT = VEH_COMPARE.CARTPOPOVER_OPENCMPBTN_TOOLTIP
@@ -90,7 +85,7 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled()
         self.as_updateToCmpBtnPropsS({'btnLabel': _ms(VEH_COMPARE.CARTPOPOVER_GOTOCOMPAREBTN_LABEL, value=count),
          'btnTooltip': addBtnTT,
-         'btnEnabled': buttonsEnabled and isNavigationEnabled and not isEventMode,
+         'btnEnabled': buttonsEnabled and isNavigationEnabled,
          'btnIcon': addBtnIcon})
         isBasketLocked = self.comparisonBasket.isLocked
         self.as_updateClearBtnPropsS({'btnLabel': VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_LABEL,

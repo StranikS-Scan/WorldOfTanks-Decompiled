@@ -133,7 +133,7 @@ class ResearchPanel(ResearchPanelMeta):
                 isHintEnabled = purchasableStep.stepID == vehicle.postProgression.getRawTree().rootStep
         tutorialStorage = getTutorialGlobalStorage()
         if tutorialStorage is not None:
-            tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)
+            tutorialStorage.setValue(GLOBAL_FLAG.HANGAR_VEH_POST_PROGRESSION_PURCHASABLE, isHintEnabled)
         return {'showCounter': needToShowCounter(vehicle),
          'btnEnabled': isAvailable,
          'btnVisible': vehicle.isPostProgressionExists}

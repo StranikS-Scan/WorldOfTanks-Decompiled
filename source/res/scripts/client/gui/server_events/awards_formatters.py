@@ -292,18 +292,8 @@ def getMarathonRewardScrenFormatterMap():
     return mapping
 
 
-def getHalloweenFormatterMap():
-    mapping = getDefaultFormattersMap()
-    mapping['items'] = HWItemsBonusFormatter()
-    return mapping
-
-
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
-
-
-def getHalloweenAwardFormatter():
-    return AwardsPacker(getHalloweenFormatterMap())
 
 
 def getEpicAwardFormatter():
@@ -1452,7 +1442,7 @@ class GoodiesBonusFormatter(SimpleBonusFormatter):
 
     @classmethod
     def _getUserName(cls, booster):
-        return booster.fullUserName
+        return booster.userName
 
 
 class GoodiesEpicBonusFormatter(GoodiesBonusFormatter):
@@ -1515,8 +1505,12 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
 
     @classmethod
     def _getOverlayType(cls, item):
-        return {AWARDS_SIZES.BIG: item.getBigOverlayType(),
-         AWARDS_SIZES.SMALL: item.getOverlayType()}
+
+        def formatOverlayType(overlayType):
+            return '{}_{}'.format(overlayType, item.level) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized else overlayType
+
+        return {AWARDS_SIZES.BIG: formatOverlayType(item.getBigOverlayType()),
+         AWARDS_SIZES.SMALL: formatOverlayType(item.getOverlayType())}
 
     @classmethod
     def _getHighlightIcon(cls, item):
@@ -1540,19 +1534,6 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                     result[size] = RES_ICONS.getBonusOverlay(size, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
             if item.getOverlayType():
                 result[size] = RES_ICONS.getBonusOverlay(size, item.getOverlayType())
-
-        return result
-
-
-class HWItemsBonusFormatter(ItemsBonusFormatter):
-    ORDERED_EQUIPMENT_LIST = ('hpRepairAndCrewHeal', 'superShellFireball', 'damageShield', 'halloweenNitro', 'damageVehicleModules')
-
-    def _format(self, bonus):
-        result = []
-        sortedBonuses = sorted(bonus.getItems().items(), key=lambda i: self.ORDERED_EQUIPMENT_LIST.index(i[0].name) if i[0].name in self.ORDERED_EQUIPMENT_LIST else -1, reverse=True)
-        for item, count in sortedBonuses:
-            if item is not None and count:
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=self.getTooltip(item), specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item)))
 
         return result
 

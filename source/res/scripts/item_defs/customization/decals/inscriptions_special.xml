@@ -3539,10 +3539,30 @@
     <type>	INSCRIPTION	</type>
     <decal>
       <id>	15949	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_632.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_632	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	922	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_634.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_634	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	923	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_633.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_633	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Well Deserved Award 2023	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_special.xml>

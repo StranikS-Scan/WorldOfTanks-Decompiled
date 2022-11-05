@@ -1,0 +1,63 @@
+<1005_ai_test_automation.xml>
+  <name>	#arenas:1005_ai_test_automation/name	</name>
+  <description>	#arenas:1005_ai_test_automation/description	</description>
+  <geometry>	spaces/1005_ai_test_automation	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/1005_ai_test_automation/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_fishingbay_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_fishingbay_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_fishingbay_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_fishingbay_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_fishingbay_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_fishingbay_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_36_fishing_bay_wind_autumn	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-84.874062 397.810791	</position1>
+        </team1>
+        <team2>
+          <position1>	-17.023262 -396.057983	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities>
+    <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
+      <preset>	fishing_bay_curve	</preset>
+      <position>	0.000000 20.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	100.000000 200.000000	</startTime>
+      <interval>	300.000000	</interval>
+    </warplane>
+    <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
+      <preset>	fishing_bay_curve1	</preset>
+      <position>	0.000000 20.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	300.000000 400.000000	</startTime>
+      <interval>	340.000000	</interval>
+    </warplane>
+  </mapActivities>
+</1005_ai_test_automation.xml>

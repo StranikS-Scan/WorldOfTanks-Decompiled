@@ -143,7 +143,6 @@ class ARENA_BONUS_TYPE_CAPS():
     LOG_ALL_VEHICLES = 'LOG_ALL_VEHICLES'
     SSR = 'SSR'
     SSR_FORCE_RECORD = 'SSR_FORCE_RECORD'
-    HALLOWEEN = 'HALLOWEEN'
     FORT_BATTLE = 'FORT_BATTLE'
     COMP7 = 'COMP7'
     POINTS_OF_INTEREST = 'POINTS_OF_INTEREST'
@@ -184,8 +183,10 @@ class ARENA_BONUS_TYPE_CAPS():
     @staticmethod
     def get(arenaBonusType, **kwargs):
         overrideCaps = kwargs.get('specificOverrides', ARENA_BONUS_TYPE_CAPS.OVERRIDE_BONUS_CAPS)
-        bonusCapsConfig = BonusCapsConfig(overrideCaps)
         bonusCaps = ARENA_BONUS_TYPE_CAPS._typeToCaps.get(arenaBonusType, frozenset())
+        if not overrideCaps:
+            return bonusCaps
+        bonusCapsConfig = BonusCapsConfig(overrideCaps)
         return bonusCapsConfig.getModifiedBonusCaps(arenaBonusType, bonusCaps)
 
     @staticmethod

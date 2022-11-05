@@ -21,11 +21,11 @@ if typing.TYPE_CHECKING:
 _RANKS_MAIN_REWARDS_COUNT = {Rank.FIRST: 1,
  Rank.SECOND: 3,
  Rank.THIRD: 2,
- Rank.FOURTH: 2,
+ Rank.FOURTH: 3,
  Rank.FIFTH: 2,
  Rank.SIXTH: 3,
  Rank.SEVENTH: 4}
-_WINS_MAIN_REWARDS_COUNT = (4, 3, 4, 4, 4, 4, 4, 4)
+_WINS_MAIN_REWARDS_COUNT = (4, 3, 4, 4, 4, 3, 4, 4)
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class _BaseRewardsView(ViewImpl):

@@ -55,10 +55,10 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
 
     def __init__(self, modeFlags, queueType):
         super(PreQueueEntryPoint, self).__init__(entityFlags=FUNCTIONAL_FLAG.PRE_QUEUE, modeFlags=modeFlags)
-        self.__queueType = queueType
+        self._queueType = queueType
 
     def makeDefCtx(self):
-        return JoinPreQueueModeCtx(self.__queueType, flags=self.getFunctionalFlags())
+        return JoinPreQueueModeCtx(self._queueType, flags=self.getFunctionalFlags())
 
     def create(self, ctx, callback=None):
         raise SoftException('QueueEntry is not create entity')
@@ -78,7 +78,7 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
         self.join(ctx, callback)
 
     def _goToEntity(self):
-        g_prbCtrlEvents.onPreQueueJoined(self.__queueType)
+        g_prbCtrlEvents.onPreQueueJoined(self._queueType)
 
 
 class PreQueueEntity(BasePreQueueEntity, ListenersCollection):

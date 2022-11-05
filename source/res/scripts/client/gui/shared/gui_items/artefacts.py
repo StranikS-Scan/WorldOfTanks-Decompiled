@@ -9,7 +9,7 @@ from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags, getKpiFormatDescription, KPI, collectKpi
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, getKpiFormatDescription, KPI, collectKpi
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
@@ -449,7 +449,7 @@ class RemovableDevice(VehicleArtefact):
 
 
 class OptionalDevice(RemovableDevice):
-    __slots__ = ('_GUIEmblemID',)
+    __slots__ = ('_GUIEmblemID', '__isUpgradeable', '__isUpgraded')
 
     def __init__(self, intCompactDescr, proxy=None):
         super(OptionalDevice, self).__init__(intCompactDescr, proxy)
@@ -480,32 +480,49 @@ class OptionalDevice(RemovableDevice):
             return super(OptionalDevice, self).__cmp__(other)
 
     @property
+    def level(self):
+        return self.descriptor.level if self.isUpgradable or self.isUpgraded else super(OptionalDevice, self).level
+
+    @property
     def shortDescription(self):
         description = super(OptionalDevice, self).shortDescription
         return description.format(colorTagOpen='', colorTagClose='')
 
     @property
     def isUpgradable(self):
-        return checkForTags(self.tags, TAG_OPT_DEVICE_TROPHY_BASIC)
+        return self._descriptor.isUpgradable
 
     @property
     def isUpgraded(self):
-        return checkForTags(self.tags, TAG_OPT_DEVICE_TROPHY_UPGRADED)
+        return self._descriptor.isUpgraded
 
     @property
     def isDeluxe(self):
-        return checkForTags(self.tags, TAG_OPT_DEVICE_DELUXE)
+        return self.descriptor.isDeluxe
 
     @property
     def isTrophy(self):
-        return checkForTags(self.tags, (TAG_OPT_DEVICE_TROPHY_BASIC, TAG_OPT_DEVICE_TROPHY_UPGRADED))
+        return self.descriptor.isTrophy
+
+    @property
+    def isModernized(self):
+        return self._descriptor.isModernized
+
+    @property
+    def canUseDemountKit(self):
+        return self._descriptor.canUseDemountKit
 
     @property
     def isRegular(self):
-        return not checkForTags(self.tags, (TAG_OPT_DEVICE_TROPHY_BASIC, TAG_OPT_DEVICE_TROPHY_UPGRADED, TAG_OPT_DEVICE_DELUXE))
+        return not (self.isDeluxe or self.isTrophy or self.isModernized)
 
     def getRemovalPrice(self, proxy=None):
         if not self.isRemovable and proxy is not None:
+            if self.isModernized:
+                level = self.descriptor.level
+                cost = proxy.shop.getPaidModernizedRemovalCost(level)
+                defaultCost = proxy.shop.defaults.getPaidModernizedRemovalCost(level)
+                return ItemPrice(price=cost, defPrice=defaultCost)
             if self.isDeluxe:
                 cost = proxy.shop.paidDeluxeRemovalCost
                 defaultCost = proxy.shop.defaults.paidDeluxeRemovalCost
@@ -580,11 +597,19 @@ class OptionalDevice(RemovableDevice):
     def getHighlightType(self, vehicle=None):
         if self.isDeluxe:
             return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        if self.isModernized:
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED
         return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY if self.isUpgradable or self.isUpgraded else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getOverlayIconName(self):
+        type = self.getOverlayType()
+        return '{}_overlay'.format('{}_{}'.format(type, self.level) if self.isModernized else type)
 
     def getOverlayType(self, vehicle=None):
         if self.isDeluxe:
             return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        if self.isModernized:
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED
         if self.isUpgradable:
             return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC
         return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED if self.isUpgraded else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
@@ -608,6 +633,16 @@ class OptionalDevice(RemovableDevice):
         money = money.exchange(Currency.GOLD, Currency.CREDITS, proxy.shop.exchangeRate, default=0)
         canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, money)
         return canBuy
+
+    def getDeconstructPrice(self, proxy=None):
+        if self.isModernized and proxy is not None:
+            defaultPrice = proxy.shop.defaults.getItemPrice(self.intCD)
+            if defaultPrice is None:
+                defaultPrice = MONEY_UNDEFINED
+            buyPrice, _ = proxy.shop.getItem(self.intCD)
+            return ItemPrice(price=buyPrice, defPrice=defaultPrice)
+        else:
+            return ITEM_PRICE_EMPTY
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         kpi = self.getKpi()

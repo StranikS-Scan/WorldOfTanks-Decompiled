@@ -7,16 +7,14 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.game_control import IEventBattlesController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View
     from typing import Optional
 
 class LobbyWindow(Window):
-    __slots__ = ('_isEventHangar',)
+    __slots__ = ()
     __appLoader = dependency.descriptor(IAppLoader)
     __gui = dependency.descriptor(IGuiLoader)
-    _eventBattlesController = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, wndFlags, decorator=None, content=None, parent=None, layer=WindowLayer.UNDEFINED):
         settings = WindowSettings()
@@ -25,27 +23,11 @@ class LobbyWindow(Window):
         settings.decorator = decorator
         settings.content = content
         settings.parent = self._getParent(parent)
-        self._isEventHangar = False
         super(LobbyWindow, self).__init__(settings)
 
     @classmethod
     def getInstances(cls):
         return cls.__gui.windowsManager.findWindows(cls.__loadedWindowPredicate)
-
-    def _initialize(self):
-        super(LobbyWindow, self)._initialize()
-        self._isEventHangar = self._eventBattlesController.isEventHangar()
-        if self._isEventHangar:
-            self._eventBattlesController.onEventDisabled += self._onEventDisabled
-
-    def _finalize(self):
-        if self._isEventHangar:
-            self._eventBattlesController.onEventDisabled -= self._onEventDisabled
-        super(LobbyWindow, self)._finalize()
-
-    def _onEventDisabled(self):
-        if self._isEventHangar:
-            self.destroy()
 
     def _getParent(self, parent):
         if parent:

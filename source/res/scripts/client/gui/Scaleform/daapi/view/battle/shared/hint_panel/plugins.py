@@ -5,12 +5,13 @@ import typing
 import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, FUN_RANDOM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HelpHintContext
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.impl.gen import R
@@ -626,7 +627,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
     @classmethod
     def isSuitable(cls):
         guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
-        return AccountSettings.getSettings(FUN_RANDOM_HINT_SECTION)[HINTS_LEFT] <= 0 if guiType == ARENA_GUI_TYPE.FUN_RANDOM else guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
+        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
@@ -680,12 +681,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def _getHint(self):
         serverSettings = self.lobbyContext.getServerSettings()
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
-            guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-            if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-                resourceRoot = R.strings.hw_ingame_gui.helpScreen
-            else:
-                resourceRoot = R.strings.ingame_gui.helpScreen
-            return self._makeHintData(resourceRoot, HintPriority.HELP)
+            return self._makeHintData(R.strings.ingame_gui.helpScreen, HintPriority.HELP, HelpHintContext.MECHANICS)
         if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             return self._makeHintData(R.strings.ingame_gui.battleCommunication, HintPriority.BATTLE_COMMUNICATION)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
@@ -694,7 +690,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         elif self.__hintInQueue is CommandMapping.CMD_SHOW_PERSONAL_RESERVES and serverSettings.personalReservesConfig.isReservesInBattleActivationEnabled:
             return self._makeHintData(R.strings.ingame_gui.personal_reserves, HintPriority.RESERVES)
 
-    def _makeHintData(self, resourceRoot, priority):
+    def _makeHintData(self, resourceRoot, priority, hintCtx=None):
         cmd = self.__hintInQueue
         keyName = getReadableKey(cmd)
         key = getVirtualKey(cmd)
@@ -703,10 +699,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
         if keyName:
             pressText = backport.text(resourceRoot.hint.press())
             hintText = backport.text(resourceRoot.hint.description())
-        return HintData(key, keyName, pressText, hintText, 0, 0, priority, False)
+        return HintData(key, keyName, pressText, hintText, 0, 0, priority, False, hintCtx=hintCtx)
 
     def _canDisplayCustomHelpHint(self):
-        return self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.EVENT_BATTLES
+        return False
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
@@ -895,7 +891,7 @@ class RoleHelpPlugin(HintPanelPlugin):
         key = getVirtualKey(CommandMapping.CMD_SHOW_HELP)
         pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
         hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
-        return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.HELP, False)
+        return HintData(key, keyName, pressText, hintText, 0, 0, HintPriority.HELP, False, HelpHintContext.ROLE_HELP)
 
     @classmethod
     def isAvailableInSettings(cls, vehCD):
@@ -1016,7 +1012,7 @@ class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
         return cls.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPS_TRAINING
 
     def _getHint(self):
-        return HintData(getVirtualKey(CommandMapping.CMD_SHOW_HELP), getReadableKey(CommandMapping.CMD_SHOW_HELP), backport.text(R.strings.maps_training.helpScreen.hint.press()), backport.text(R.strings.maps_training.helpScreen.hint.description()), 0, 0, HintPriority.HELP, False)
+        return HintData(getVirtualKey(CommandMapping.CMD_SHOW_HELP), getReadableKey(CommandMapping.CMD_SHOW_HELP), backport.text(R.strings.maps_training.helpScreen.hint.press()), backport.text(R.strings.maps_training.helpScreen.hint.description()), 0, 0, HintPriority.HELP, False, HelpHintContext.MAPS_TRAINING)
 
     def _canDisplayCustomHelpHint(self):
         return True

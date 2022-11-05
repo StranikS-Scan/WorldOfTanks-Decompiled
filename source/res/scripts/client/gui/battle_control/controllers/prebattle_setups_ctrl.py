@@ -62,7 +62,7 @@ class IPrebattleSetupsListener(object):
     def showSetupsView(self, vehicle, isArenaLoaded=False):
         pass
 
-    def updateVehicleParams(self, vehicle, factors, _):
+    def updateVehicleParams(self, vehicle, factors):
         pass
 
     def updateVehicleSetups(self, vehicle):
@@ -383,7 +383,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__updateAmmoCtrlParams(newFactors)
         self.__updateFeedbackParams(newFactors)
         for component in self._viewComponents:
-            component.updateVehicleParams(self.__vehicle, newFactors, self.__playerVehicleID)
+            component.updateVehicleParams(self.__vehicle, newFactors)
             component.updateVehicleSetups(self.__vehicle)
 
         if self.__sessionProvider.isReplayPlaying:
@@ -394,4 +394,4 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__updateAmmoCtrlParams(newFactors)
         self.__updateFeedbackParams(newFactors)
         for component in self._viewComponents:
-            component.updateVehicleParams(self.__vehicle, newFactors, self.__playerVehicleID)
+            component.updateVehicleParams(self.__vehicle, newFactors)

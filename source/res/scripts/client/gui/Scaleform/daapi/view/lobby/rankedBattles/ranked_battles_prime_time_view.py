@@ -12,7 +12,6 @@ from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedServerPresenter(ServerListItemPresenter):
     _RES_ROOT = R.strings.ranked_battles.primeTimes.serverTooltip
-    _periodsController = dependency.descriptor(IRankedBattlesController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __cmp__(self, other):

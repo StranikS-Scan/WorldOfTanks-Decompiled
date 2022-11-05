@@ -305,16 +305,13 @@ class LoaderManager(LoaderManagerMeta):
         key = loadParams.viewKey
         if key in self.__loadingItems:
             raise SoftException('This case in not implemented: {}'.format(loadParams))
-        manager = self.uiLoader.windowsManager
         layoutID = loadParams.viewKey.alias
         viewClass = loadParams.viewClass
         scope = loadParams.scope
         parent = loadParams.parent
-        if manager.getViewByLayoutID(layoutID) is not None:
-            raise SoftException('There is unexpected behavior,we have unbound view, but adaptor is not created: %r'.format(loadParams))
-        ubView = viewClass(layoutID, *args, **kwargs)
+        view = viewClass(layoutID, *args, **kwargs)
         adaptor = ViewImplAdaptor()
-        adaptor.setView(ubView, parent)
+        adaptor.setView(view, parent)
         adaptor.setCurrentScope(scope)
         if adaptor.isLoaded():
             raise SoftException('Synchronous loading does not supported: {}'.format(loadParams))

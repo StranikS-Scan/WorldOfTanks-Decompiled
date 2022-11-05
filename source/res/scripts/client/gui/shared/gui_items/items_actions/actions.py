@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
-import typing
 import logging
 from collections import namedtuple
 from functools import partial
+from itertools import chain
+import typing
 import wg_async as future_async
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
@@ -34,19 +35,22 @@ from gui.impl.lobby.personal_reserves import personal_reserves_dialogs
 from gui.impl.lobby.personal_reserves.personal_reserves_utils import canBuyBooster as utilsCanBuyBooster
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
+from gui.shared.event_dispatcher import showDeconstructionDeviceDialog, showConfirmOnSlotDialog
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
+from gui.shared.gui_items.processors import makeSuccess
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
-from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller
-from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
+from gui.shared.gui_items.processors.messages.items_processor_messages import ItemDeconstructionProcessorMessage, MultItemsDeconstructionProcessorMessage
+from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller, ModuleDeconstruct
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
+from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
@@ -62,11 +66,13 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogDialogs
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.goodies.goodie_items import Booster
 _logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
+ItemDeconstructSpec = namedtuple('ItemDeconstructSpec', ('typeIdx', 'intCD', 'vehicleCD'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -757,7 +763,7 @@ class ActivateBoosterAction(CachedItemAction):
         canActivate = False
         if self.isUpgrade(booster, currentBooster):
             dialog = personal_reserves_dialogs.getUpgradeBoosterDialog(booster=booster, previousBooster=currentBooster)
-            canActivate = yield personal_reserves_dialogs.showDialog(dialog)
+            canActivate = yield personal_reserves_dialogs.showDialogAndLogInteraction(dialog, dialogLogItem=PersonalReservesLogDialogs.BUY_AND_UPGRADE)
         callback(canActivate)
 
 
@@ -789,7 +795,7 @@ class BuyAndActivateBooster(ActivateBoosterAction):
             canDoAction = yield self.canReplace()
         elif mustBuy:
             dialog = personal_reserves_dialogs.getBuyAndActivateBoosterDialog(booster)
-            canDoAction = yield personal_reserves_dialogs.showDialog(dialog)
+            canDoAction = yield personal_reserves_dialogs.showDialogAndLogInteraction(dialog, dialogLogItem=PersonalReservesLogDialogs.BUY_AND_ACTIVATE)
         if canDoAction and mustBuy:
             action = BuyBoosterAction(booster, 1, self.currency)
             canActivate = yield action.doAction()
@@ -804,7 +810,7 @@ class BuyAndActivateBooster(ActivateBoosterAction):
     @adisp_process
     def handleGoldPurchase(self, booster, callback):
         dialog = personal_reserves_dialogs.getBuyGoldDialog(booster)
-        isConfirm = yield personal_reserves_dialogs.showDialog(dialog)
+        isConfirm = yield personal_reserves_dialogs.showDialogAndLogInteraction(dialog, dialogLogItem=PersonalReservesLogDialogs.BUY_GOLD)
         if isConfirm:
             showBuyGoldForPersonalReserves(booster.getBuyPrice().price.get(self.currency, 0))
         callback(False)
@@ -870,30 +876,159 @@ class UseCrewBookAction(IGUIItemAction):
 class UpgradeOptDeviceAction(AsyncGUIItemAction):
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, module, vehicle, setupIdx, slotIdx, parent=None):
+    def __init__(self, module, vehicle, setupIdx, slotIdx, onDeconstructed=None, parent=None):
         super(UpgradeOptDeviceAction, self).__init__()
         self.__parent = parent
-        self.__module = module
+        self.__device = module
         self.__vehicle = vehicle
         self.__setupIdx = setupIdx
         self.__slotIdx = slotIdx
+        self.__onDeconstructed = onDeconstructed
 
     @adisp_async
     @decorators.adisp_process('moduleUpgrade')
     def _action(self, callback):
-        result = yield ModuleUpgradeProcessor(self.__module, self.__vehicle, self.__setupIdx, self.__slotIdx).request()
+        result = yield ModuleUpgradeProcessor(self.__device, self.__vehicle, self.__setupIdx, self.__slotIdx).request()
         callback(result)
 
     @adisp_async
     @future_async.wg_async
     def _confirm(self, callback):
         from gui.impl.dialogs import dialogs
-        result, data = yield future_async.wg_await(dialogs.trophyDeviceUpgradeConfirm(self.__module, parent=self.__parent))
-        if result and data.get('needCreditsExchange', False):
-            exchangeResult = yield future_async.wg_await(dialogs.showExchangeToUpgradeDeviceDialog(self.__module, parent=self.__parent))
+        if self.__device.isModernized:
+            confirmDialog = partial(dialogs.modernizedDeviceUpgradeConfirm, vehicle=self.__vehicle, onDeconstructed=self.__onDeconstructed)
+        else:
+            confirmDialog = dialogs.trophyDeviceUpgradeConfirm
+        result, data = yield future_async.wg_await(confirmDialog(self.__device, parent=self.__parent))
+        if result and data and data.get('needMoreCurrency', False):
+            exchangeResult = yield future_async.wg_await(dialogs.showExchangeToUpgradeDeviceDialog(device=self.__device, parent=self.__parent))
             callback(not exchangeResult.busy and exchangeResult.result)
         else:
             callback(result)
+
+
+class DeconstructOptDevice(AsyncGUIItemAction):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, module, vehicle, slotIdx, parent=None):
+        super(DeconstructOptDevice, self).__init__()
+        self.__module = module
+        self.__parent = parent
+        self.__vehicle = vehicle
+        self.__slotIdx = slotIdx
+        self.__deconstructStorageProcessor = ModuleDeconstruct(module, min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION))
+        self.__deconstructOnVehicleProcessor = OptDeviceInstaller(vehicle, module, slotIdx, install=False, allSetups=True, financeOperation=False, skipConfirm=True, showWaiting=False)
+
+    @adisp_async
+    @decorators.adisp_process('storage/forDeconstruct')
+    def _action(self, callback):
+        if self.__vehicle is not None:
+            result = yield self.__deconstructOnVehicleProcessor.request()
+        else:
+            result = yield self.__deconstructStorageProcessor.request()
+        callback(result)
+        return
+
+    @adisp_async
+    @future_async.wg_async
+    def _confirm(self, callback):
+        isOk, count = yield showConfirmOnSlotDialog(self.__module.intCD, fromVehicle=self.__vehicle is not None)
+        self.__deconstructStorageProcessor.count = count
+        callback(isOk)
+        return
+
+    def _showResult(self, result):
+        if result.success:
+            count = 1 if self.__vehicle else self.__deconstructStorageProcessor.count
+            msgRes = ItemDeconstructionProcessorMessage(self.__module, count).makeSuccessMsg()
+            SystemMessages.pushMessagesFromResult(msgRes)
+        else:
+            SystemMessages.pushMessagesFromResult(result)
+
+
+class DeconstructMultOptDevice(AsyncGUIItemAction):
+    _itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, ctx):
+        super(DeconstructMultOptDevice, self).__init__()
+        self.ctx = ctx
+        self.__sellItems = ctx.cart.storage.values()
+        self.__vehItems = list(chain(*ctx.cart.onVehicle.values()))
+        self.__upgradeDevicePair = ctx.upgradedPair
+
+    @adisp_async
+    @decorators.adisp_process('storage/forDeconstruct')
+    def _action(self, callback):
+        if self.__sellItems:
+            if allEqual(self.__sellItems, lambda i: i.intCD):
+                itemToSell = first(self.__sellItems)
+                item = self._itemsCache.items.getItemByCD(itemToSell.intCD)
+                result = yield ModuleSeller(item, min(item.inventoryCount, MAX_ITEMS_FOR_OPERATION, itemToSell.count)).request()
+            else:
+                result = yield MultipleModulesSeller(self.__sellItems).request()
+            if not result.success:
+                callback(result)
+                return
+        if self.__vehItems:
+            for itemSpec in self.__vehItems:
+                _item = self._itemsCache.items.getItemByCD(itemSpec.intCD)
+                _vehicle = self._itemsCache.items.getItemByCD(itemSpec.vehicleCD)
+                _slotIdx = None
+                for layoutIdx, setup in _vehicle.optDevices.setupLayouts.setups.iteritems():
+                    if _item in setup:
+                        _slotIdx = setup.index(_item)
+                        break
+
+                processor = OptDeviceInstaller(_vehicle, _item, _slotIdx, install=False, allSetups=True, financeOperation=False, skipConfirm=True, showWaiting=False)
+                result = yield processor.request()
+                if not result.success:
+                    callback(result)
+                    return
+
+        modules = []
+        itemsDict = {}
+        for itemSpec in self.__sellItems + self.__vehItems:
+            itemsList = itemsDict.setdefault(itemSpec.intCD, [])
+            itemsList.append(itemSpec)
+
+        for intCD, itemSpecs in sorted(itemsDict.items(), key=self.__sortItemsKey):
+            item = self._itemsCache.items.getItemByCD(intCD)
+            count = sum(((itemSpec.count if isinstance(itemSpec, ItemSellSpec) else 1) for itemSpec in itemSpecs))
+            modules.append((item, count))
+
+        if modules:
+            decResult = MultItemsDeconstructionProcessorMessage(modules).makeSuccessMsg()
+            self._showResult(decResult)
+        if self.__upgradeDevicePair:
+            _item, vehicleCD = self.__upgradeDevicePair
+            _vehicle = None
+            _setupIdx = None
+            _slotIdx = None
+            if vehicleCD:
+                _vehicle = self._itemsCache.items.getItemByCD(vehicleCD)
+                _slotIdx = None
+                _setupIdx = None
+                for layoutIdx, setup in _vehicle.optDevices.setupLayouts.setups.iteritems():
+                    if _item in setup:
+                        _setupIdx = layoutIdx
+                        _slotIdx = setup.index(_item)
+                        break
+
+            result = yield ModuleUpgradeProcessor(_item, _vehicle, _setupIdx, _slotIdx, validateMoney=False).request()
+            callback(result)
+        callback(makeSuccess())
+        return
+
+    @adisp_async
+    @future_async.wg_async
+    def _confirm(self, callback):
+        isOk, _ = yield future_async.wg_await(showDeconstructionDeviceDialog)(self.ctx)
+        callback(isOk)
+
+    def __sortItemsKey(self, item):
+        itemCD, _ = item
+        item = self._itemsCache.items.getItemByCD(itemCD)
+        return (-item.level, item.userName)
 
 
 class InstallBattleAbilities(AsyncGUIItemAction):

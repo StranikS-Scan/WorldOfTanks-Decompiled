@@ -59,9 +59,10 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
@@ -151,14 +152,16 @@ class AwardController(IAwardController, IGlobalListener):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        self.__handlers = [ handler(self) for handler in AWARD_HANDLERS ]
         super(AwardController, self).__init__()
+        self.__handlers = []
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
         self.__postpone = False
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
 
     def init(self):
+        handlers = collectAwardControllerHandlers()
+        self.__handlers = [ handler(self) for handler in handlers ]
         for handler in self.__handlers:
             handler.init()
 
@@ -172,19 +175,6 @@ class AwardController(IAwardController, IGlobalListener):
         else:
             _logger.debug('Postponed award call: %s, %s', handler, ctx)
             self.__delayedHandlers.append((handler, ctx))
-
-    def handlePostponedByHandler(self, handlerCls):
-        removeIndexes = []
-        self.__delayedHandlers.sort(key=lambda handle: isinstance(handle, handlerCls), reverse=True)
-        for index, (handler, ctx) in enumerate(self.__delayedHandlers):
-            if not issubclass(handler.im_class, handlerCls):
-                continue
-            handler(ctx)
-            removeIndexes.append(index)
-
-        removeIndexes.reverse()
-        for index in removeIndexes:
-            self.__delayedHandlers.pop(index)
 
     def handlePostponed(self, *args):
         if self.canShow():
@@ -1763,7 +1753,7 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
         return winsCount
 
 
-AWARD_HANDLERS = [BattleQuestsAutoWindowHandler,
+registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  QuestBoosterAwardHandler,
  BoosterAfterBattleAwardHandler,
  PunishWindowHandler,
@@ -1807,4 +1797,4 @@ AWARD_HANDLERS = [BattleQuestsAutoWindowHandler,
  RenewableSubscriptionHandler,
  BattleMattersQuestsHandler,
  ResourceWellRewardHandler,
- Comp7RewardHandler]
+ Comp7RewardHandler))

@@ -42,7 +42,6 @@ class CONDITION_ICON:
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
     RANK_UP = 'rank_up'
-    HALLOWEEN_EXPERIENCE = 'halloween_experience'
 
 
 class PROGRESS_TEMPLATE:

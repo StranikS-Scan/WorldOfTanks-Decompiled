@@ -319,9 +319,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isStrongholdRange(self):
         return self._guiType in _GUI_TYPE.STRONGHOLD_RANGE
 
-    def isFunRandom(self):
-        return self._guiType == _GUI_TYPE.FUN_RANDOM
-
     def isComp7Battle(self):
         return self._guiType == _GUI_TYPE.COMP7
 
@@ -420,6 +417,9 @@ class _ArenaExtraDataVisitor(IArenaVisitor):
 
     def isLowLevelBattle(self):
         return 0 < self._extra.get('battleLevel', 0) < 4
+
+    def getValue(self, key, default=None):
+        return self._extra.get(key, default)
 
     def clear(self):
         self._extra = None

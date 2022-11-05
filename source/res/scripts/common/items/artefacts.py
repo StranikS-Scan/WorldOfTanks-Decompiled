@@ -202,7 +202,7 @@ class Artefact(BasicItem):
             self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'), shortFilterAlertKey=section.readString('shortFilterAlert'), longFilterAlertKey=section.readString('longFilterAlert'))
             self.icon = _xml.readIconWithDefaultParams(xmlCtx, section, 'icon')
             self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
-        if IS_CLIENT and section.has_key('kpi'):
+        if (IS_CLIENT or IS_WEB) and section.has_key('kpi'):
             self.kpi = readKpi(xmlCtx, section['kpi'])
         else:
             self.kpi = []
@@ -236,7 +236,7 @@ class Artefact(BasicItem):
 
 
 class OptionalDevice(Artefact):
-    __slots__ = ('categories', '_overridableFactors', '_tier', '_tierlessName')
+    __slots__ = ('categories', '_overridableFactors', '_tier', '_tierlessName', '_isModernized', '_isUpgradable', '_isUpgraded')
 
     def __init__(self):
         super(OptionalDevice, self).__init__(items.ITEM_TYPES.optionalDevice, 0, '', 0)
@@ -244,6 +244,9 @@ class OptionalDevice(Artefact):
         self._overridableFactors = {}
         self._tier = None
         self._tierlessName = None
+        self._isModernized = None
+        self._isUpgradable = isinstance(self, UpgradableItem)
+        self._isUpgraded = isinstance(self, UpgradedItem)
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -251,6 +254,7 @@ class OptionalDevice(Artefact):
         self._readCategories(xmlCtx, section)
         self._readTier(xmlCtx, section)
         self._readSpecFactorsFromConfig(xmlCtx, section['script'])
+        self._isModernized = any((l.startswith('modernized') for l in self.tags))
 
     def extraName(self):
         return None
@@ -274,8 +278,28 @@ class OptionalDevice(Artefact):
         pass
 
     @property
+    def canUseDemountKit(self):
+        return not self.isDeluxe and not ('modernized_2' in self.tags or 'modernized_3' in self.tags)
+
+    @property
     def isDeluxe(self):
         return 'deluxe' in self.tags
+
+    @property
+    def isTrophy(self):
+        return 'trophyBasic' in self.tags or 'trophyUpgraded' in self.tags
+
+    @property
+    def isModernized(self):
+        return self._isModernized
+
+    @property
+    def isUpgradable(self):
+        return self._isUpgradable
+
+    @property
+    def isUpgraded(self):
+        return self._isUpgraded
 
     def defineActiveLevel(self, vehicleDescr):
         supplySlot = vehicleDescr.getOptDevSupplySlot(self.compactDescr)
@@ -1820,35 +1844,81 @@ class AttackArtilleryFortEquipment(AreaOfEffectEquipment):
 
 
 UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
+DowngradeInfo = NamedTuple('DowngradeInfo', [('downgradedCompDescr', int)])
 
 class UpgradableItem(Artefact):
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(UpgradableItem, self).__init__(typeID, itemID, itemName, compactDescr)
-        self._upgradeInfo = None
+        self.__upgradeInfo = None
+        self._downgradeInfo = None
+        self._level = 1
         return
 
     @property
     def upgradeInfo(self):
-        return self._upgradeInfo
+        return self.__upgradeInfo
 
-    def initUpgradableItem(self):
-        self._upgradeInfo = None
-        return
+    @property
+    def downgradeInfo(self):
+        return self._downgradeInfo
+
+    @property
+    def level(self):
+        return self._level
 
     def _readConfig(self, xmlCtx, section):
         super(UpgradableItem, self)._readConfig(xmlCtx, section)
-        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
+        self._readUpgradableConfig(xmlCtx, section)
 
-    def _readUpgradableConfig(self, xmlCtx, scriptSection, itemCompDescr):
+    def _readUpgradableConfig(self, xmlCtx, scriptSection):
         upgradeInfoSection = scriptSection['upgradeInfo']
-        upgradedCD = _xml.readInt(xmlCtx, upgradeInfoSection, 'upgradedCompDescr')
-        self._upgradeInfo = UpgradeInfo(upgradedCD)
-        _readPriceForOperation(xmlCtx, upgradeInfoSection, ITEM_OPERATION.UPGRADE, (itemCompDescr, upgradedCD))
+        if upgradeInfoSection.has_key('upgradedDevice'):
+            deviceName = _xml.readString(xmlCtx, upgradeInfoSection, 'upgradedDevice')
+
+            def defferedInitUpgrade(objsByIDs, idsByNames):
+                device = objsByIDs.get(idsByNames.get(deviceName))
+                self._initUpgradeInfo(xmlCtx, upgradeInfoSection, device.compactDescr)
+                self._initDowngradeInfo(device)
+                device._level = self._level + 1
+
+            vehicles.addArtefactsPostloadCallback(defferedInitUpgrade)
+        else:
+            upgradedCD = _xml.readInt(xmlCtx, upgradeInfoSection, 'upgradedCompDescr')
+
+            def defferedInitUpgrade(objsByIDs, idsByNames):
+                _, __, itemID = items.parseIntCompactDescr(upgradedCD)
+                device = objsByIDs.get(itemID)
+                device._level = self._level + 1
+                self._initDowngradeInfo(device)
+
+            vehicles.addArtefactsPostloadCallback(defferedInitUpgrade)
+            self._initUpgradeInfo(xmlCtx, upgradeInfoSection, upgradedCD)
+
+    def _initUpgradeInfo(self, xmlCtx, upgradeInfoSection, upgradedCD):
+        self.__upgradeInfo = UpgradeInfo(upgradedCD)
+        _readPriceForOperation(xmlCtx, upgradeInfoSection, ITEM_OPERATION.UPGRADE, (self.compactDescr, upgradedCD))
+
+    def _initDowngradeInfo(self, device):
+        downgradedCD = self.compactDescr
+        device._downgradeInfo = DowngradeInfo(downgradedCD)
 
 
 class UpgradedItem(Artefact):
-    pass
+
+    def __init__(self, typeID, itemID, itemName, compactDescr):
+        super(UpgradedItem, self).__init__(typeID, itemID, itemName, compactDescr)
+        self._downgradeInfo = None
+        self._level = 1
+        return
+
+    @property
+    def downgradeInfo(self):
+        return self._downgradeInfo
+
+    @property
+    def level(self):
+        return self._level
 
 
 class UpgradableStaticDevice(StaticOptionalDevice, UpgradableItem):
@@ -1863,7 +1933,15 @@ class UpgradableImprovedConfiguration(ImprovedConfiguration, UpgradableItem):
     pass
 
 
+class UpgradableExtraHealthReserve(ExtraHealthReserve, UpgradableItem):
+    pass
+
+
 class UpgradedImprovedConfiguration(ImprovedConfiguration, UpgradedItem):
+    pass
+
+
+class UpgradedExtraHealthReserve(ExtraHealthReserve, UpgradedItem):
     pass
 
 
@@ -2658,7 +2736,15 @@ class OPT_DEV_TYPE_TAG(object):
     TROPHY_BASIC = 'trophyBasic'
     TROPHY_UPGRADED = 'trophyUpgraded'
     DELUXE = 'deluxe'
-    ALL = {TROPHY_BASIC, TROPHY_UPGRADED, DELUXE}
+    MODERNIZED1 = 'modernized_1'
+    MODERNIZED2 = 'modernized_2'
+    MODERNIZED3 = 'modernized_3'
+    ALL = {TROPHY_BASIC,
+     TROPHY_UPGRADED,
+     DELUXE,
+     MODERNIZED1,
+     MODERNIZED2,
+     MODERNIZED3}
 
     @staticmethod
     def checkTags(tags):

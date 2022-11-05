@@ -234,7 +234,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self.startPrbListening()
         self._addListeners()
         self.as_setObserverS(entity.getPlayerInfo().getVehicle().isObserver)
-        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.TRAINING_UI_READY, showSummaryNow=True)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.TRAINING_UI_READY)
 
     def _addListeners(self):
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived

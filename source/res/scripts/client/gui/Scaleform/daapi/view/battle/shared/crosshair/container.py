@@ -46,7 +46,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def __init__(self):
         super(CrosshairPanelContainer, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK))
         self.__plugins = PluginsCollection(self)
-        self.__plugins.addPlugins(self._getPlugins())
+        self.__plugins.addPlugins(plugins.createPlugins())
         self.__gunMarkers = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__zoomFactor = 0.0
@@ -182,9 +182,6 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
             self.__callbackDelayer.destroy()
         g_eventBus.removeListener(GameEvent.ROLE_HINT_TOGGLE, self.__handleRoleHintToggled, scope=EVENT_BUS_SCOPE.BATTLE)
         super(CrosshairPanelContainer, self)._dispose()
-
-    def _getPlugins(self):
-        return plugins.createPlugins()
 
     def __handleRoleHintToggled(self, event):
         self.__toggleFade(event.ctx.get('isShown', False))

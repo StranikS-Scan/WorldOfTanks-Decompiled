@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/awards_formatters.py
+import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -13,6 +14,12 @@ from helpers import i18n, dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _OPERATION_AWARDS_COUNT = 3
+
+def formatShortData(bonus, size):
+    return {'name': bonus.userName,
+     'label': bonus.getFormattedLabel(),
+     'imgSource': bonus.getImage('tooltip') or bonus.getImage(size)}
+
 
 class CurtailingAwardsComposer(QuestsBonusComposer):
 
@@ -495,15 +502,7 @@ class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):
 
     @classmethod
     def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
-        bonuses = []
-        for bonus in preformattedBonuses:
-            specialTooltipImg = bonus.getImage('tooltip')
-            shortData = {'name': bonus.userName,
-             'label': bonus.getFormattedLabel(),
-             'imgSource': specialTooltipImg if specialTooltipImg else bonus.getImage(size)}
-            bonuses.append(shortData)
-
-        return bonuses
+        return [ formatShortData(bonus, size) for bonus in preformattedBonuses ]
 
 
 class RoyaleCurtailingAwardsComposer(CurtailingAwardsComposer):

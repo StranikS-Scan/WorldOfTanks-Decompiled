@@ -171,7 +171,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
-        self._setContentMargin(top=10, left=19, bottom=20, right=0)
+        self._setContentMargin(top=10, left=19, bottom=20, right=20)
         self._setMargins(afterBlock=14)
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
         self._item = None

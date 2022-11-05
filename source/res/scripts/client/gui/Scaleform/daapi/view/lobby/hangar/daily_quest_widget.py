@@ -71,6 +71,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
     def __animateHide(self):
         if self._injectView is not None:
             self._injectView.setVisible(False)
+        self.as_setEnabledS(False)
         return
 
     def __hide(self):

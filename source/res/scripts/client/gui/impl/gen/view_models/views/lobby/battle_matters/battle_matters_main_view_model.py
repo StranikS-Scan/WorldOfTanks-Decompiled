@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.battle_matters.quest_progress_model im
 from gui.impl.gen.view_models.views.lobby.battle_matters.quest_view_model import QuestViewModel
 
 class BattleMattersMainViewModel(ViewModel):
-    __slots__ = ('onRunBootcamp', 'onShowManual', 'onShowManualForQuest', 'onShowAnimForQuest', 'onShowMainReward', 'onSelectDelayedReward', 'onClose')
+    __slots__ = ('onShowView', 'onRunBootcamp', 'onShowManual', 'onShowManualForQuest', 'onShowAnimForQuest', 'onShowMainReward', 'onSelectDelayedReward', 'onClose')
     ARG_QUEST_ID = 'questID'
     NAME_VEHICLE_REWARD = 'vehicle'
     NAME_TOKEN_REWARD = 'token'
 
-    def __init__(self, properties=4, commands=7):
+    def __init__(self, properties=4, commands=8):
         super(BattleMattersMainViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -50,6 +50,7 @@ class BattleMattersMainViewModel(ViewModel):
         self._addBoolProperty('bootcampIsAvailable', False)
         self._addBoolProperty('isBootcampCompleted', False)
         self._addArrayProperty('quests', Array())
+        self.onShowView = self._addCommand('onShowView')
         self.onRunBootcamp = self._addCommand('onRunBootcamp')
         self.onShowManual = self._addCommand('onShowManual')
         self.onShowManualForQuest = self._addCommand('onShowManualForQuest')

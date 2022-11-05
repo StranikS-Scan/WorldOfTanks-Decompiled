@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/ammunition_panel/ammunition_panel_blocks.py
 import typing
-import BigWorld
 from account_helpers.settings_core.options import KeyboardSetting
 from constants import PLAYER_RANK
 from frameworks.wulf import Array
@@ -20,7 +19,6 @@ from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IEventBattlesController
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 EMPTY_NAME = 'empty'
@@ -165,7 +163,11 @@ class OptDeviceBlock(BaseBlock):
     def _updateSpecializations(self, slotModel, slotItem, idx):
         optDeviceItem, isDynamic = self._getSlot(idx)
         slotModel.specializations.setIsDynamic(isDynamic)
-        itemCategories = set() if slotItem is None else slotItem.descriptor.categories
+        if slotItem is not None:
+            itemCategories = slotItem.descriptor.categories
+            slotModel.setLevel(slotItem.level)
+        else:
+            itemCategories = set()
         slotModel.setActiveSpecsMask(getCategoriesMask(itemCategories & optDeviceItem.categories))
         isSpecializationClickable = isDynamic and optDeviceItem.categories and self._isSpecializationClickable and self._vehicle.isRoleSlotActive
         specializations = slotModel.specializations.getSpecializations()
@@ -192,6 +194,8 @@ class OptDeviceBlock(BaseBlock):
     def _updateOverlayAspects(self, slotModel, slotItem):
         if slotItem.isDeluxe:
             slotModel.setOverlayType(ItemHighlightTypes.EQUIPMENT_PLUS)
+        elif slotItem.isModernized:
+            slotModel.setOverlayType(ItemHighlightTypes.MODERNIZED)
         elif slotItem.isUpgradable:
             slotModel.setOverlayType(ItemHighlightTypes.TROPHY_BASIC)
         elif slotItem.isUpgraded:
@@ -256,47 +260,6 @@ class ConsumablesBlock(BaseBlock):
 
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(ConsumablesBlock, self)._updateSlotWithItem(model, idx, slotItem)
-        model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
-        self._updateOverlayAspects(model, slotItem)
-
-    def _updateOverlayAspects(self, slotModel, slotItem):
-        if slotItem.isBuiltIn:
-            slotModel.setOverlayType(ItemHighlightTypes.BUILT_IN_EQUIPMENT)
-        else:
-            slotModel.setOverlayType(ItemHighlightTypes.EMPTY)
-
-
-class HWConsumablesBlock(BaseBlock):
-    _eventBattleController = dependency.descriptor(IEventBattlesController)
-
-    def __init__(self, vehicle, currentSection, ctx=None):
-        hwEqCtrl = BigWorld.player().HWAccountEquipmentController
-        super(HWConsumablesBlock, self).__init__(hwEqCtrl.makeVehicleHWAdapter(vehicle), currentSection, ctx)
-
-    def _createSlots(self):
-        return super(HWConsumablesBlock, self)._createSlots() if self._vehicle.level in self._eventBattleController.getConfig().levels else Array()
-
-    def createBlock(self, viewModel):
-        super(HWConsumablesBlock, self).createBlock(viewModel)
-        viewModel.setType(self._getSectionName())
-
-    def _getSectionName(self):
-        return TankSetupConstants.HWCONSUMABLES
-
-    def _getKeySettings(self):
-        pass
-
-    def _getInstalled(self):
-        return self._vehicle.hwConsumables.installed
-
-    def _getSetupLayout(self):
-        return self._vehicle.consumables.setupLayouts
-
-    def _getLayout(self):
-        return self._vehicle.hwConsumables.layout
-
-    def _updateSlotWithItem(self, model, idx, slotItem):
-        super(HWConsumablesBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
         self._updateOverlayAspects(model, slotItem)
 

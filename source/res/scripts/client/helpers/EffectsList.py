@@ -137,7 +137,6 @@ class EffectsListPlayer(object):
                 effect.stop()
 
             EffectsListPlayer.clearInProgress = False
-            EffectsListPlayer.activeEffects.clear()
             return
         else:
             warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
@@ -155,7 +154,6 @@ class EffectsListPlayer(object):
                     effect.stop()
 
             EffectsListPlayer.clearInProgress = False
-            EffectsListPlayer.activeEffects.clear()
             return
 
     def __init__(self, effectsList, keyPoints, **args):
@@ -631,7 +629,7 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
 
     def create(self, model, effects, args):
         vehicle = args.get('entity', None)
-        if vehicle is not None and vehicle.isAlive() and vehicle.isStarted and vehicle.appearance.engineAudition:
+        if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
             soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
             if soundObject is not None:
                 isPlayer, _ = self._isPlayer(args)

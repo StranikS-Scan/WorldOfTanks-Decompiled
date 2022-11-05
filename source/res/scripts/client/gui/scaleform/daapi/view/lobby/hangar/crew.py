@@ -95,7 +95,7 @@ class Crew(CrewMeta):
 
                 newFreeSkillsCount = tankman.newFreeSkillsCount
                 newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-                if (newSkillsCount > 0 or newFreeSkillsCount > 0) and not vehicle.isEvent:
+                if newSkillsCount > 0 or newFreeSkillsCount > 0:
                     skillsList.append({'buy': True,
                      'buyFreeCount': newFreeSkillsCount,
                      'buyCount': max(newSkillsCount - 1, 0),

@@ -26,13 +26,14 @@ _EVENT_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, EventMarkersManager)
 
 class EventBattlePage(ClassicPage):
 
-    def __init__(self, components=None, external=_EVENT_EXTERNAL_COMPONENTS, fullStatsAlias=BATTLE_VIEW_ALIASES.EVENT_STATS):
+    def __init__(self, components=None, external=_EVENT_EXTERNAL_COMPONENTS, fullStatsAlias=None):
         components = EVENT_CONFIG if not components else components + EVENT_CONFIG
         self.__isRadialMenuShown = False
         super(EventBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
 
     def _populate(self):
         super(EventBattlePage, self)._populate()
+        self.addListener(events.GameEvent.EVENT_STATS, self.__handleToggleEventStats, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.FADE_OUT_AND_IN, self.__handleFadeOutAndIn, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.RadialMenuEvent.RADIAL_MENU_ACTION, self.__handleRadialAction, scope=EVENT_BUS_SCOPE.BATTLE)
         LOG_DEBUG('Event battle page is created.')
@@ -40,6 +41,7 @@ class EventBattlePage(ClassicPage):
     def _dispose(self):
         super(EventBattlePage, self)._dispose()
         self.removeListener(events.RadialMenuEvent.RADIAL_MENU_ACTION, self.__handleRadialAction, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.EVENT_STATS, self.__handleToggleEventStats, scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.FADE_OUT_AND_IN, self.__handleFadeOutAndIn, scope=EVENT_BUS_SCOPE.BATTLE)
         LOG_DEBUG('Event battle page is destroyed.')
 
@@ -74,7 +76,7 @@ class EventBattlePage(ClassicPage):
             radialMenu = self.getComponent(BATTLE_VIEW_ALIASES.RADIAL_MENU)
             if radialMenu is None:
                 return
-            elif self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
+            elif self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.EVENT_STATS):
                 return
             self.__isRadialMenuShown = isShown
             if isShown:
@@ -83,6 +85,28 @@ class EventBattlePage(ClassicPage):
             else:
                 radialMenu.hide()
                 self.__exitRadialHUD()
+            return
+
+    def _toggleEventStats(self, isShown):
+        manager = self.app.containerManager
+        if not manager.isContainerShown(WindowLayer.VIEW):
+            return
+        else:
+            eventStats = self.getComponent(BATTLE_VIEW_ALIASES.EVENT_STATS)
+            if eventStats is None:
+                return
+            if manager.isModalViewsIsExists():
+                return
+            ctrl = self.sessionProvider.shared.calloutCtrl
+            if ctrl is not None and ctrl.isRadialMenuOpened():
+                return
+            if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.EVENT_STATS) != isShown:
+                if isShown:
+                    self._fsToggling.update(self.as_getComponentsVisibilityS())
+                    self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.EVENT_STATS}, hidden=self._fsToggling)
+                else:
+                    self._setComponentsVisibility(visible=self._fsToggling, hidden={BATTLE_VIEW_ALIASES.EVENT_STATS})
+                    self._fsToggling.clear()
             return
 
     def _onBattleLoadingStart(self):
@@ -94,6 +118,7 @@ class EventBattlePage(ClassicPage):
     def _onBattleLoadingFinish(self):
         self.fireEvent(events.DestroyViewEvent(VIEW_ALIAS.EVENT_LOADING), EVENT_BUS_SCOPE.BATTLE)
         super(EventBattlePage, self)._onBattleLoadingFinish()
+        self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.EVENT_STATS})
         if BigWorld.player().arena.period != ARENA_PERIOD.BATTLE:
             self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.PLAYERS_PANEL_EVENT})
 
@@ -107,6 +132,13 @@ class EventBattlePage(ClassicPage):
         self._fsToggling.clear()
         self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU)
 
+    def __handleToggleEventStats(self, event):
+        self._toggleEventStats(event.ctx['isDown'])
+
     def __handleRadialAction(self, _):
         if self.__isRadialMenuShown:
             self.__exitRadialHUD()
+
+    def _handleGUIToggled(self, event):
+        if not self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.EVENT_STATS):
+            self._toggleGuiVisible()

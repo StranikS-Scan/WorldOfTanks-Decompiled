@@ -16,7 +16,8 @@ _EARN_SINGLE_SOUNDS = {Currency.CREDITS: SoundEffectsId.EARN_CREDITS,
  Currency.GOLD: SoundEffectsId.EARN_CREDITS,
  Currency.CRYSTAL: SoundEffectsId.EARN_CRYSTAL,
  Currency.EVENT_COIN: SoundEffectsId.EARN_EVENT_COIN,
- Currency.BPCOIN: SoundEffectsId.EARN_DEFAULT_SOUND}
+ Currency.BPCOIN: SoundEffectsId.EARN_DEFAULT_SOUND,
+ Currency.EQUIP_COIN: SoundEffectsId.EARN_EQUIP_COIN}
 _SPEND_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.SPEND_CREDITS_GOLD}
 _EARN_MULTI_SOUNDS = {(Currency.CREDITS, Currency.GOLD): SoundEffectsId.EARN_CREDITS_GOLD}
 

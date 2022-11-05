@@ -401,7 +401,7 @@ class IPointsOfInterestController(IBattleController):
     def getPoiEntity(poiID):
         raise NotImplementedError
 
-    def getVehicleCapturingPoiGO(self, poiName, entityGameObject, spaceID):
+    def getVehicleCapturingPoiGO(self, poiName, entityGameObject, vehicleID, spaceID):
         raise NotImplementedError
 
 

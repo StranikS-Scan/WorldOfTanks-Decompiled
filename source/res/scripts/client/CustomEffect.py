@@ -439,6 +439,10 @@ class ExhaustEffectDescriptor(EffectDescriptorBase):
         self.__descriptors = customDescriptors
         self.nodes = [ intern(node) for node in _xml.readNonEmptyString(xmlCtx, dataSection, name).split() ]
 
+    @property
+    def descriptors(self):
+        return self.__descriptors
+
     def create(self, args):
         effectDescriptor = self.__descriptors['default']
         if len(self.__descriptors) > 1:

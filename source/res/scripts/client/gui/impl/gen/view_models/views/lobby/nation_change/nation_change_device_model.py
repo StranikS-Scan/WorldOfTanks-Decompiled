@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class NationChangeDeviceModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(NationChangeDeviceModel, self).__init__(properties=properties, commands=commands)
 
     def getImage(self):
@@ -33,11 +33,23 @@ class NationChangeDeviceModel(ViewModel):
     def setIsTrophyUpgraded(self, value):
         self._setBool(3, value)
 
+    def getIsModernized(self):
+        return self._getBool(4)
+
+    def setIsModernized(self, value):
+        self._setBool(4, value)
+
+    def getLevel(self):
+        return self._getNumber(5)
+
+    def setLevel(self, value):
+        self._setNumber(5, value)
+
     def getIntCD(self):
-        return self._getNumber(4)
+        return self._getNumber(6)
 
     def setIntCD(self, value):
-        self._setNumber(4, value)
+        self._setNumber(6, value)
 
     def _initialize(self):
         super(NationChangeDeviceModel, self)._initialize()
@@ -45,4 +57,6 @@ class NationChangeDeviceModel(ViewModel):
         self._addBoolProperty('isImproved', False)
         self._addBoolProperty('isTrophyBasic', False)
         self._addBoolProperty('isTrophyUpgraded', False)
+        self._addBoolProperty('isModernized', False)
+        self._addNumberProperty('level', 1)
         self._addNumberProperty('intCD', 0)

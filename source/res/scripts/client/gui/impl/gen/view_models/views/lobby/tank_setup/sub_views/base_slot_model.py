@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.price_model import PriceModel
 class BaseSlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(BaseSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -107,17 +107,23 @@ class BaseSlotModel(ViewModel):
     def setIsLocked(self, value):
         self._setBool(15, value)
 
-    def getOverlayType(self):
+    def getLockReason(self):
         return self._getString(16)
 
-    def setOverlayType(self, value):
+    def setLockReason(self, value):
         self._setString(16, value)
 
-    def getHighlightType(self):
+    def getOverlayType(self):
         return self._getString(17)
 
-    def setHighlightType(self, value):
+    def setOverlayType(self, value):
         self._setString(17, value)
+
+    def getHighlightType(self):
+        return self._getString(18)
+
+    def setHighlightType(self, value):
+        self._setString(18, value)
 
     def _initialize(self):
         super(BaseSlotModel, self)._initialize()
@@ -137,5 +143,6 @@ class BaseSlotModel(ViewModel):
         self._addNumberProperty('itemInstalledSetupIdx', -1)
         self._addNumberProperty('itemInstalledSetupSlotIdx', -1)
         self._addBoolProperty('isLocked', False)
+        self._addStringProperty('lockReason', '')
         self._addStringProperty('overlayType', '')
         self._addStringProperty('highlightType', '')

@@ -243,6 +243,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getIventoryVehiclesCDs(self):
         return self.__vehsCDsByID.values()
 
+    def getInvIDsIterator(self):
+        return self.__vehsCDsByID.iterkeys()
+
     def getVehPostProgression(self, vehIntCD):
         return self.__vehPostProgression.getVehicleState(vehIntCD)
 

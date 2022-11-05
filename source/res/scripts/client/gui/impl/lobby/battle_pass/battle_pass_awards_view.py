@@ -31,7 +31,7 @@ REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
  'None': 0}
 
 class BattlePassAwardsView(ViewImpl):
-    __slots__ = ('__tooltipItems', '__closeCallback')
+    __slots__ = ('__tooltipItems', '__closeCallback', '__needNotifyClosing')
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +41,7 @@ class BattlePassAwardsView(ViewImpl):
         settings.kwargs = kwargs
         self.__tooltipItems = {}
         self.__closeCallback = None
+        self.__needNotifyClosing = True
         super(BattlePassAwardsView, self).__init__(settings)
         return
 
@@ -63,7 +64,7 @@ class BattlePassAwardsView(ViewImpl):
     def _getEvents(self):
         return ((self.viewModel.onBuyClick, self.__onBuyClick),)
 
-    def _onLoading(self, bonuses, data, *args, **kwargs):
+    def _onLoading(self, bonuses, data, needNotifyClosing, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
         chapterID = data.get('chapter', 0)
         newLevel = data.get('newLevel', 0) or 0
@@ -91,6 +92,7 @@ class BattlePassAwardsView(ViewImpl):
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength() or isRewardSelected))
         switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.REWARD_SCREEN)
+        self.__needNotifyClosing = needNotifyClosing
         return
 
     def _onLoaded(self, data, *args, **kwargs):
@@ -104,7 +106,8 @@ class BattlePassAwardsView(ViewImpl):
         switchHangarOverlaySoundFilter(on=False)
         if callable(self.__closeCallback):
             self.__closeCallback()
-        g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.AWARD_VIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__needNotifyClosing:
+            g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.AWARD_VIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __setAwards(self, bonuses, isFinalReward):
@@ -149,8 +152,8 @@ class BattlePassAwardsView(ViewImpl):
 class BattlePassAwardWindow(LobbyNotificationWindow):
     __slots__ = ('__params',)
 
-    def __init__(self, bonuses, data):
-        self.__params = dict(bonuses=bonuses, data=data)
+    def __init__(self, bonuses, data, needNotifyClosing=True):
+        self.__params = dict(bonuses=bonuses, data=data, needNotifyClosing=needNotifyClosing)
         super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params))
 
     def isParamsEqual(self, *args, **kwargs):

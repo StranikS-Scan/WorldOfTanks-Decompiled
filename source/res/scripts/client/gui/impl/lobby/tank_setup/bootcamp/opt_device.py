@@ -22,6 +22,9 @@ class _BootcampOptDeviceTabsController(BaseTankSetupTabsController):
     def getDefaultTab(self):
         return OptDeviceTabs.SIMPLE
 
+    def getTabCurrency(self, _):
+        pass
+
     @tabUpdateFunc(OptDeviceTabs.SIMPLE)
     def _updateSimple(self, viewModel, isFirst=False):
         pass

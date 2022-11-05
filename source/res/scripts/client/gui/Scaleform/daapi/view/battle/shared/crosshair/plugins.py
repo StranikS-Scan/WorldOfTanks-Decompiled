@@ -484,9 +484,6 @@ class AmmoPlugin(CrosshairPlugin):
             BigWorld.cancelCallback(self.__autoReloadCallbackID)
         super(AmmoPlugin, self).fini()
 
-    def _setAmmoStock(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, clipState, clipReloaded)
-
     def __setup(self, ctrl, isReplayPlaying=False):
         self.__shellsInClip = ctrl.getCurrentShells()[1]
         if isReplayPlaying:
@@ -498,7 +495,7 @@ class AmmoPlugin(CrosshairPlugin):
         quantity, quantityInClip = ctrl.getCurrentShells()
         if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._setAmmoStock(quantity, quantityInClip, isLow, state, False)
+            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         reloadingState = ctrl.getGunReloadingState()
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
@@ -600,7 +597,7 @@ class AmmoPlugin(CrosshairPlugin):
             return
         self.__shellsInClip = quantityInClip
         isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-        self._setAmmoStock(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
         if quantity + quantityInClip == 0:
             self.__reloadAnimator.setClipAutoLoading(0, 0, isRedText=True)
 
@@ -609,11 +606,11 @@ class AmmoPlugin(CrosshairPlugin):
         if ctrl is not None:
             quantity, quantityInClip = ctrl.getCurrentShells()
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._setAmmoStock(quantity, quantityInClip, isLow, state, False)
+            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         return
 
     def __onCurrentShellReset(self):
-        self._setAmmoStock(0, 0, False, 'normal', False)
+        self._parentObj.as_setAmmoStockS(0, 0, False, 'normal', False)
 
     def __onQuickShellChangerUpdated(self, isActive, time):
         self._parentObj.as_setShellChangeTimeS(isActive, time)
@@ -1221,7 +1218,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             siegeMaxSpd = siegeEngineCfg['smplFwMaxSpeed']
         defaultVehicleCfg = defaultVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
         normalMaxSpd = defaultVehicleCfg['smplFwMaxSpeed']
-        return (normalMaxSpd, siegeMaxSpd)
+        return (round(normalMaxSpd), round(siegeMaxSpd))
 
     def __addSpedometer(self, vehicle):
         normalMaxSpd, siegeMaxSpd = self.__getMaxSpeeds(vehicle)

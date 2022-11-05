@@ -2,7 +2,7 @@
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/feature/modifiers_data_provider.py
 from typing import Tuple, Any, TYPE_CHECKING
 from battle_modifiers_ext.battle_modifiers import BattleModifiers
-from battle_modifiers_ext.battle_modifier_constants import GameplayImpact
+from battle_modifiers_ext.constants_ext import GameplayImpact
 if TYPE_CHECKING:
     from battle_modifiers_ext.battle_modifiers import BattleModifier
 

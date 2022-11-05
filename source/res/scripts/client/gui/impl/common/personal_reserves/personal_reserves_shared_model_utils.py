@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/common/personal_reserves/personal_reserves_shared_model_utils.py
 from time import time
 import typing
-from helpers.time_utils import ONE_YEAR
+from helpers.time_utils import ONE_YEAR, makeLocalServerTime
 from collections import namedtuple, defaultdict
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
 from gui.goodies.goodie_items import Booster, getFullNameForBoosterIcon, BoosterUICommon
@@ -112,7 +112,7 @@ def addBoosterModel(boosterArray, resourceType, category, booster=None, depotCou
     if booster:
         boosterID = booster.boosterID
         model.setBoosterID(boosterID)
-        model.setInactivationTime(booster.finishTime)
+        model.setInactivationTime(makeLocalServerTime(booster.finishTime) or 0)
         model.setState(BOOSTER_STATE_TO_BOOSTER_MODEL_STATE[booster.state])
         model.setTotalDuration(booster.effectTime)
         expiry = booster.expiryTime

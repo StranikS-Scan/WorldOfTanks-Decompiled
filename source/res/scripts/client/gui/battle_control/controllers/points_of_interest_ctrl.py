@@ -44,10 +44,10 @@ class PointsOfInterestController(IPointsOfInterestController):
     def getPoiEntity(poiID):
         return BigWorld.entities.get(poiID)
 
-    def getVehicleCapturingPoiGO(self, poiName, entityGameObject, spaceID):
-        if poiName in self._vehPoiRegistry:
-            return self._vehPoiRegistry[poiName]
-        self._vehPoiRegistry[poiName] = poiGameObject = CGF.GameObject(spaceID, poiName)
-        poiGameObject.createComponent(GenericComponents.HierarchyComponent, entityGameObject)
-        poiGameObject.activate()
+    def getVehicleCapturingPoiGO(self, poiName, entityGameObject, vehicleID, spaceID):
+        poiGameObject = self._vehPoiRegistry.get(vehicleID, {}).get(poiName)
+        if poiGameObject is None:
+            self._vehPoiRegistry.setdefault(vehicleID, {})[poiName] = poiGameObject = CGF.GameObject(spaceID, poiName)
+            poiGameObject.createComponent(GenericComponents.HierarchyComponent, entityGameObject)
+            poiGameObject.activate()
         return poiGameObject

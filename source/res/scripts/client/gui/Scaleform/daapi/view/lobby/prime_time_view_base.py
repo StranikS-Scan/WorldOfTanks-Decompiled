@@ -37,9 +37,8 @@ def _makeServerString(serverInfo, isServerNameShort=False):
 
 class ServerListItemPresenter(object):
     _RES_ROOT = None
-    _periodsController = None
 
-    def __init__(self, inListID, hostName, name, shortName, csisStatus, peripheryID):
+    def __init__(self, periodsController, inListID, hostName, name, shortName, csisStatus, peripheryID):
         self.orderID = inListID
         self.__hostName = hostName
         self.__name = name
@@ -52,6 +51,7 @@ class ServerListItemPresenter(object):
         self.__isAvailable = None
         self.__pingStatus = 0
         self.__pingValue = 0
+        self.__periodsController = periodsController
         self.__invalidatePrimeTimeStatus()
         self.invalidatePingData()
         return
@@ -109,7 +109,7 @@ class ServerListItemPresenter(object):
         self.__pingValue = min(pingValue, _PING_MAX_VALUE)
 
     def _buildTooltip(self, peripheryID):
-        periodInfo = self._periodsController.getPeriodInfo(peripheryID=peripheryID)
+        periodInfo = self.__periodsController.getPeriodInfo(peripheryID=peripheryID)
         params = periodInfo.getVO(withBNames=True, deltaFmt=self.deltaFormatter)
         params['serverName'] = self.getName()
         tooltip = backport.text(self._RES_ROOT.dyn(periodInfo.periodType.value, self._RES_ROOT.undefined)(), **params)
@@ -129,7 +129,7 @@ class ServerListItemPresenter(object):
     def __invalidatePrimeTimeStatus(self):
         currTime = int(time_utils.getCurrentLocalServerTimestamp())
         if self.__invalidationTime < currTime:
-            primeTimeData = self._periodsController.getPrimeTimeStatus(peripheryID=self.__peripheryID)
+            primeTimeData = self.__periodsController.getPrimeTimeStatus(peripheryID=self.__peripheryID)
             self.__primeTimeStatus, self.__timeLeft, self.__isAvailable = primeTimeData
             self.__invalidationTime = currTime
 
@@ -151,7 +151,9 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
 
     def __init__(self, *_):
         super(PrimeTimeViewBase, self).__init__()
+        self.__serversDP = None
         self._allServers = {}
+        return
 
     def closeView(self):
         self.__close()
@@ -170,13 +172,19 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
 
     def _populate(self):
         super(PrimeTimeViewBase, self)._populate()
+        self._initView()
+
+    def _dispose(self):
+        self._clearView()
+        super(PrimeTimeViewBase, self)._dispose()
+
+    def _initView(self):
         self.__serversDP = self.__buildDataProvider()
         self.__serversDP.setFlashObject(self.as_getServersDPS())
         self.__updateServersList()
         self.__updateSelectedServer()
         self.__updateSelectedServerData()
-        updateEvent = self._getUpdateEvent()
-        updateEvent += self.__onControllerUpdated
+        self._startControllerListening()
         if not constants.IS_CHINA:
             if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ALWAYS:
                 g_preDefinedHosts.startCSISUpdate()
@@ -186,10 +194,9 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         self.addNotificators(PeriodicNotifier(self.__getInfoUpdatePeriod, self.__onNotifierTriggered, periods=(time_utils.ONE_MINUTE,)))
         self.startNotification()
 
-    def _dispose(self):
+    def _clearView(self):
         self.clearNotification()
-        updateEvent = self._getUpdateEvent()
-        updateEvent -= self.__onControllerUpdated
+        self._stopControllerListening()
         if not constants.IS_CHINA:
             g_preDefinedHosts.stopCSISUpdate()
             g_preDefinedHosts.onCsisQueryStart -= self.__onServersUpdate
@@ -198,7 +205,6 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         self.__serversDP.fini()
         self.__serversDP = None
         self._allServers = {}
-        super(PrimeTimeViewBase, self)._dispose()
         return
 
     def _isAlertBGVisible(self):
@@ -265,31 +271,11 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer}
 
-    @adisp_process
-    def _getUpdateEvent(self):
-        return self._getController().onUpdate
+    def _startControllerListening(self):
+        self._getController().onUpdated += self._onControllerUpdated
 
-    @adisp_process
-    def __continue(self):
-        result = yield self.prbDispatcher.doSelectAction(PrbAction(self._getPrbForcedActionName()))
-        if result:
-            self.__close()
-
-    def __onServersUpdate(self, *_):
-        self.__invalidateServersPing()
-        self.__updateServersList()
-        self.__updateSelectedServerData()
-
-    def __onControllerUpdated(self, *_):
-        if not self.__tryGoToHangar():
-            self.__updateServersList()
-            self.__updateSelectedServerData()
-            self.startNotification()
-
-    def __onNotifierTriggered(self):
-        if not self.__tryGoToHangar():
-            self.__updateServersList()
-            self.__updateSelectedServerData()
+    def _stopControllerListening(self):
+        self._getController().onUpdated -= self._onControllerUpdated
 
     def __getExtraSteps(self):
 
@@ -308,6 +294,22 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
 
         return minimumTime
 
+    def __onServersUpdate(self, *_):
+        self.__invalidateServersPing()
+        self.__updateServersList()
+        self.__updateSelectedServerData()
+
+    def _onControllerUpdated(self, *_):
+        if not self.__tryGoToHangar():
+            self.__updateServersList()
+            self.__updateSelectedServerData()
+            self.startNotification()
+
+    def __onNotifierTriggered(self):
+        if not self.__tryGoToHangar():
+            self.__updateServersList()
+            self.__updateSelectedServerData()
+
     def __buildDataProvider(self):
         primeTimesForDay = self._getController().getPrimeTimesForDay(time.time(), groupIdentical=False)
         return PrimeTimesServersDataProvider(primeTimesForDay=primeTimesForDay)
@@ -321,11 +323,30 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
              HOST_AVAILABILITY.IGNORED,
              0))
         for idx, serverData in enumerate(hostsList):
-            serverPresenter = self._serverPresenterClass(idx, *serverData)
+            serverPresenter = self._serverPresenterClass(self._getController(), idx, *serverData)
             self._allServers[serverPresenter.getPeripheryID()] = serverPresenter
+
+    @adisp_process
+    def __continue(self):
+        result = yield self.prbDispatcher.doSelectAction(PrbAction(self._getPrbForcedActionName()))
+        if result:
+            self.__close()
 
     def __close(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __invalidateServersPing(self):
+        for server in self._allServers.values():
+            server.invalidatePingData()
+
+    def __tryGoToHangar(self):
+        if self._allServers[self._connectionMgr.peripheryID].isAvailable():
+            self.__continue()
+            return True
+        if not self._getActualServers():
+            event_dispatcher.showHangar()
+            return True
+        return False
 
     def __updateServersDP(self):
         actualServers = sorted(self._getActualServers())
@@ -362,16 +383,3 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
     def __updateSelectedServerData(self):
         serverPresenter = self._allServers.get(self.__serversDP.getSelectedID())
         self.as_setDataS(self._prepareData(self._getActualServers(), serverPresenter))
-
-    def __invalidateServersPing(self):
-        for server in self._allServers.values():
-            server.invalidatePingData()
-
-    def __tryGoToHangar(self):
-        if self._allServers[self._connectionMgr.peripheryID].isAvailable():
-            self.__continue()
-            return True
-        if not self._getActualServers():
-            event_dispatcher.showHangar()
-            return True
-        return False

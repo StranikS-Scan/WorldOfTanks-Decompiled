@@ -220,6 +220,8 @@ class NationChangeScreen(ViewImpl):
             deviceModel.setIsImproved(device.isDeluxe)
             deviceModel.setIsTrophyBasic(device.isUpgradable)
             deviceModel.setIsTrophyUpgraded(device.isUpgraded)
+            deviceModel.setIsModernized(device.isModernized)
+            deviceModel.setLevel(device.level)
             deviceModel.setIntCD(device.intCD)
             slotVM.addViewModel(deviceModel)
             hasDevices = True

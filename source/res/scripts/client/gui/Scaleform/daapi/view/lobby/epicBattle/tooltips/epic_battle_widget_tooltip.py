@@ -102,7 +102,7 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
             icon = icons.attention()
             titleStyle = text_styles.stats
             attention = attention.informativeLowPerformance
-        return formatters.packTitleDescBlock(title=text_styles.concatStylesWithSpace(icon, titleStyle(backport.text(attention.title()))), desc=text_styles.main(backport.text(attention.description())), padding=formatters.packPadding(left=20, right=20))
+        return formatters.packTitleDescBlock(title=text_styles.concatStylesWithSpace(icon, titleStyle(backport.text(attention.title()))), desc=text_styles.main(backport.text(attention.description())), padding=formatters.packPadding(left=20, right=40))
 
     def __packRewardsToChooseBlock(self, numRewards, style):
         iconSrc = backport.image(R.images.gui.maps.icons.epicBattles.rewards_to_choose())

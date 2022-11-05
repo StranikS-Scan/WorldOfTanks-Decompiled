@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_descrs.py
 import weakref
 import BattleReplay
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform import getNecessaryArenaFrameName
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
+from gui.shared.system_factory import registerArenaDescription, registerArenaDescriptions, collectArenaDescription
 from gui.shared.utils import toUpper, functions
 from helpers import i18n
 
@@ -295,22 +296,13 @@ class MapboxArenaDescription(ArenaWithLabelDescription):
         return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
 
 
-class EventBattleArenaDescription(ArenaWithLabelDescription):
-
-    def getWinString(self, isInBattle=True):
-        return backport.text(R.strings.hw_ingame_gui.loading.battleTypes.description())
-
-    def isInvitationEnabled(self):
-        replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
-
-
-class FunRandomArenaDescription(ArenaWithLabelDescription):
-
-    def isInvitationEnabled(self):
-        replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
-
+registerArenaDescription(ARENA_GUI_TYPE.TUTORIAL, TutorialBattleDescription)
+registerArenaDescription(ARENA_GUI_TYPE.BOOTCAMP, BootcampBattleDescription)
+registerArenaDescription(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleDescription)
+registerArenaDescription(ARENA_GUI_TYPE.MAPBOX, MapboxArenaDescription)
+registerArenaDescriptions(ARENA_GUI_TYPE.RANDOM_RANGE, ArenaWithBasesDescription)
+registerArenaDescriptions(ARENA_GUI_TYPE.EPIC_RANGE, EpicBattlesDescription)
+registerArenaDescriptions((ARENA_GUI_TYPE.TRAINING, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING), ArenaWithBasesDescription)
 
 class Comp7BattlesDescription(ArenaWithLabelDescription):
 
@@ -321,29 +313,17 @@ class Comp7BattlesDescription(ArenaWithLabelDescription):
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
-        description = ArenaWithBasesDescription(arenaVisitor)
-    elif guiVisitor.isTutorialBattle():
-        description = TutorialBattleDescription(arenaVisitor)
-    elif guiVisitor.isBootcampBattle():
-        description = BootcampBattleDescription(arenaVisitor)
-    elif guiVisitor.isInEpicRange():
-        description = EpicBattlesDescription(arenaVisitor)
-    elif guiVisitor.isBattleRoyale():
-        description = BattleRoyaleDescription(arenaVisitor)
-    elif guiVisitor.isMapbox():
-        description = MapboxArenaDescription(arenaVisitor)
-    elif guiVisitor.isEventBattle():
-        description = EventBattleArenaDescription(arenaVisitor)
-    elif guiVisitor.isFunRandom():
-        description = FunRandomArenaDescription(arenaVisitor)
-    elif guiVisitor.isComp7Battle():
-        description = Comp7BattlesDescription(arenaVisitor)
-    elif guiVisitor.hasLabel():
-        description = ArenaWithLabelDescription(arenaVisitor)
+    descriptionCls = collectArenaDescription(guiVisitor.guiType)
+    if descriptionCls is not None:
+        return descriptionCls(arenaVisitor)
     else:
-        description = DefaultArenaGuiDescription(arenaVisitor)
-    l10nDescription = getPrebattleFullDescription(arenaVisitor.getArenaExtraData() or {})
-    if l10nDescription:
-        description = ArenaWithL10nDescription(description, l10nDescription)
-    return description
+        if guiVisitor.isComp7Battle():
+            description = Comp7BattlesDescription(arenaVisitor)
+        elif guiVisitor.hasLabel():
+            description = ArenaWithLabelDescription(arenaVisitor)
+        else:
+            description = DefaultArenaGuiDescription(arenaVisitor)
+        l10nDescription = getPrebattleFullDescription(arenaVisitor.getArenaExtraData() or {})
+        if l10nDescription:
+            description = ArenaWithL10nDescription(description, l10nDescription)
+        return description

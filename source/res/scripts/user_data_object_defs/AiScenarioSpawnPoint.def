@@ -37,6 +37,16 @@
       </Type>
       <Editable>	True	</Editable>
     </assignment>
+    <maxSpawnOffsetUp>
+      <Type>	FLOAT32	</Type>
+      <Editable>	True	</Editable>
+      <Default>	5	</Default>
+    </maxSpawnOffsetUp>
+    <maxSpawnOffsetDown>
+      <Type>	FLOAT32	</Type>
+      <Editable>	True	</Editable>
+      <Default>	500	</Default>
+    </maxSpawnOffsetDown>
     <userData>
       <Type>	STRING	</Type>
       <Editable>	true	</Editable>

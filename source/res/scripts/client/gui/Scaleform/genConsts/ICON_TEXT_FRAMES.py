@@ -20,6 +20,8 @@ class ICON_TEXT_FRAMES(object):
     CRYSTAL = 'crystal'
     EVENT_COIN = 'eventCoin'
     BPCOIN = 'bpcoin'
+    EQUIP_COIN = 'equipCoin'
+    EQUIP_COIN_BIG = 'equipCoinBig'
     TANK_DAILYXPFACTOR = 'tank_dailyXPFactor'
     TANK_UNLOCK_PRICE = 'tank_unlock_price'
     DOUBLE_XP_FACTOR = 'doubleXPFactor'

@@ -40,6 +40,7 @@
     <Daimler_Benz_Typ_MB_838_P>	38	</Daimler_Benz_Typ_MB_838_P>
     <Maybach_HL_120_S>	39	</Maybach_HL_120_S>
     <MTU_870_P>	40	</MTU_870_P>
+    <SPA_Tipo_343>	42	</SPA_Tipo_343>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -124,6 +125,23 @@
       <rpm_min>	335	</rpm_min>
       <rpm_max>	2029	</rpm_max>
     </SPA_15T>
+    <SPA_Tipo_343>
+      <userString>	#italy_vehicles:SPA_Tipo_343	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	11200	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	230	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	297	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
+    </SPA_Tipo_343>
     <SPA_15TB>
       <userString>	#italy_vehicles:SPA_15TB	</userString>
       <tags>	gasoline	</tags>

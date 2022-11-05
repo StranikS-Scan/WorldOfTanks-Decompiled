@@ -43,14 +43,6 @@ class Tokens(object):
         self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
         return
 
-    def getInfoLootBox(self, boxIDs, callback):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
-        return
-
     def __onGetCacheResponse(self, callback, resultID):
         if resultID < 0:
             if callback is not None:

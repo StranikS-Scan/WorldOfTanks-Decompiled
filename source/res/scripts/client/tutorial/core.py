@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/core.py
 import weakref
+from functools import partial
 import BigWorld
 import Event
 from tutorial import doc_loader
@@ -38,6 +39,7 @@ class Tutorial(object):
         self._initialized = 0
         self._triggeredEffects = set()
         self._sceneChanging = False
+        self.__newStateImmediateTickCallbackID = None
         self.onStarted = Event.Event()
         self.onStopped = Event.Event()
         return
@@ -95,6 +97,7 @@ class Tutorial(object):
             if self.__callbackID is not None:
                 BigWorld.cancelCallback(self.__callbackID)
                 self.__callbackID = None
+            self.__clearNewStateImmediateTickCallback()
             if self._funcScene is not None:
                 self._funcScene.leave()
             if self._funcChapterCtx is not None:
@@ -180,7 +183,8 @@ class Tutorial(object):
                     self._currentState = None
                 LOG_DEBUG('Set new state', state.__name__)
                 self._currentState = state()
-                BigWorld.callback(0, self._currentState.tick)
+                self.__clearNewStateImmediateTickCallback()
+                self.__newStateImmediateTickCallbackID = BigWorld.callback(0, partial(self.__newStateImmediateTick, self._currentState.tick))
         else:
             LOG_ERROR('Can not sets current state', stateID)
         return
@@ -301,6 +305,17 @@ class Tutorial(object):
 
     def isAllowedToFight(self):
         return self._funcChapterCtx is None or self._funcChapterCtx.isAllowedToFight()
+
+    def __clearNewStateImmediateTickCallback(self):
+        if self.__newStateImmediateTickCallbackID is not None:
+            BigWorld.cancelCallback(self.__newStateImmediateTickCallbackID)
+            self.__newStateImmediateTickCallbackID = None
+        return
+
+    def __newStateImmediateTick(self, currentStateTick):
+        self.__newStateImmediateTickCallbackID = None
+        currentStateTick()
+        return
 
     def __timeLoop(self):
         self.__callbackID = None

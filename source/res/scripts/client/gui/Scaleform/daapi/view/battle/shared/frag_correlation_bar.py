@@ -20,16 +20,14 @@ class _FragBarViewState(BitmaskHelper):
     SHOW_TIER_GROUPING = 4
     SHOW_VEHICLES_COUNTER = 8
     SHOW_HP_BAR = 16
-    AUTO_SIZE = 32
 
 
-GuiTypeViewStateBehaviour = namedtuple('GuiTypeViewStateBehaviour', ('allowHPBar', 'allowHPVal', 'allowDiff', 'allowTierGrp', 'allowVehIcons', 'autoSize'))
-_DEFAULT_GUI_TYPE = GuiTypeViewStateBehaviour(True, True, True, True, True, False)
-_GUI_TYPE_VIEW_STATE_BEHAVIOUR = {ARENA_GUI_TYPE.TRAINING: GuiTypeViewStateBehaviour(True, True, True, IS_DEVELOPMENT, True, False),
- ARENA_GUI_TYPE.BOOTCAMP: GuiTypeViewStateBehaviour(True, True, True, False, True, False),
- ARENA_GUI_TYPE.EPIC_RANDOM: GuiTypeViewStateBehaviour(True, True, True, False, False, False),
- ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: GuiTypeViewStateBehaviour(True, True, True, False, False, False),
- ARENA_GUI_TYPE.EVENT_BATTLES: GuiTypeViewStateBehaviour(False, False, False, True, True, True)}
+GuiTypeViewStateBehaviour = namedtuple('GuiTypeViewStateBehaviour', ('allowHPBar', 'allowHPVal', 'allowDiff', 'allowTierGrp', 'allowVehIcons'))
+_DEFAULT_GUI_TYPE = GuiTypeViewStateBehaviour(True, True, True, True, True)
+_GUI_TYPE_VIEW_STATE_BEHAVIOUR = {ARENA_GUI_TYPE.TRAINING: GuiTypeViewStateBehaviour(True, True, True, IS_DEVELOPMENT, True),
+ ARENA_GUI_TYPE.BOOTCAMP: GuiTypeViewStateBehaviour(True, True, True, False, True),
+ ARENA_GUI_TYPE.EPIC_RANDOM: GuiTypeViewStateBehaviour(True, True, True, False, False),
+ ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: GuiTypeViewStateBehaviour(True, True, True, False, False)}
 
 class FragCorrelationBar(FragCorrelationBarMeta, IBattleFieldListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -84,7 +82,6 @@ class FragCorrelationBar(FragCorrelationBarMeta, IBattleFieldListener):
         mask = self.__changeSetting(mask, arenaType.allowDiff and showDiff and showBar, _FragBarViewState.SHOW_HP_DIFFERENCE)
         mask = self.__changeSetting(mask, arenaType.allowTierGrp and showTiers and showVeh, _FragBarViewState.SHOW_TIER_GROUPING)
         mask = self.__changeSetting(mask, arenaType.allowVehIcons and showVeh, _FragBarViewState.SHOW_VEHICLES_COUNTER)
-        mask = self.__changeSetting(mask, arenaType.autoSize, _FragBarViewState.AUTO_SIZE)
         self.__viewSettings = mask
         self.as_updateViewSettingS(self.__viewSettings)
 

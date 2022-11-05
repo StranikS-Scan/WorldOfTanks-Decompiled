@@ -292,10 +292,11 @@ class CustomizationContext(object):
     def isOutfitsModified(self):
         if self.isModeChanged:
             startMode = self.startMode
-            if not startMode.isOutfitsModified() and startMode.isOutfitsEmpty() and self.mode.isOutfitsEmpty():
+            startModeNotChanged = not startMode.isOutfitsModified()
+            if startModeNotChanged and startMode.isOutfitsEmpty() and self.mode.isOutfitsEmpty():
                 return False
             if startMode.modeId == CustomizationModes.STYLED and self.modeId == CustomizationModes.EDITABLE_STYLE:
-                if not startMode.isOutfitsModified() and not self.mode.isOutfitsModified():
+                if startModeNotChanged and not self.mode.isOutfitsModified():
                     return startMode.originalStyle != self.mode.style
             if startMode.modeId == CustomizationModes.CUSTOM and self.modeId == CustomizationModes.STYLED:
                 if self.mode.getStyleProgressionLevel() > 0:

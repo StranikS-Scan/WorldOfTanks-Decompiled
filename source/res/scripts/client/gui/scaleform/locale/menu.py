@@ -1828,6 +1828,8 @@ class MENU(object):
     DATETIME_ORDER = '#menu:dateTime/order'
     DATETIME_UNLIMITED = '#menu:dateTime/unlimited'
     DATETIME_TRADE_IN_UNDEFINED = '#menu:dateTime/trade_in/undefined'
+    DATETIME_ORDERWITHOUTYEAR = '#menu:dateTime/orderWithoutYear'
+    DATETIME_TIMEFORMAT = '#menu:dateTime/timeFormat'
     DATETIME_MONTHS_SHORT_1 = '#menu:dateTime/months/short/1'
     DATETIME_MONTHS_SHORT_2 = '#menu:dateTime/months/short/2'
     DATETIME_MONTHS_SHORT_3 = '#menu:dateTime/months/short/3'
@@ -2294,6 +2296,8 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     BADGE_NEW = '#menu:badge/new'
     BADGE_CONFIRM = '#menu:badge/confirm'
+    SHOPSALES_TIMERLABEL_ENDSIN = '#menu:shopSales/timerLabel/endsIn'
+    SHOPSALES_TIMERLABEL_STARTSIN = '#menu:shopSales/timerLabel/startsIn'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,

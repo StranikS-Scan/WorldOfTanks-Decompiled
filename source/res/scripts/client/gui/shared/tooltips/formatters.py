@@ -324,6 +324,11 @@ def packQuestProgressBlockData(progress=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_
     return packBlockDataItem(linkage, data, padding)
 
 
+def packVotesForDiscountBlockData(progress=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_VOTES_FOR_DISCOUNT_BLOCK_LINKAGE, padding=None):
+    data = {'progress': progress}
+    return packBlockDataItem(linkage, data, padding)
+
+
 def packQuestOrConditionBlockData(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_QUEST_OR_CONDITION_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {}, padding)
 

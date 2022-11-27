@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
-import enum
 import calendar
 import time
+from collections import namedtuple
+from itertools import chain, izip
 from math import cos, radians
 from time import time as timestamp
-from collections import namedtuple
-from itertools import izip, chain
 from Math import Vector3
+import enum
 from realm import CURRENT_REALM
 try:
     import BigWorld
@@ -905,6 +905,7 @@ ACTIVE_TEST_CONFIRMATION_CONFIG = 'active_test_confirmation_config'
 MISC_GUI_SETTINGS = 'misc_gui_settings'
 META_GAME_SETTINGS = 'meta_game_settings'
 MAPS_TRAINING_ENABLED_KEY = 'isMapsTrainingEnabled'
+SHOP_SALES_CONFIG = 'shop_sales_event_config'
 OFFERS_ENABLED_KEY = 'isOffersEnabled'
 
 class Configs(enum.Enum):
@@ -1772,6 +1773,7 @@ class REQUEST_COOLDOWN:
     RESOURCE_WELL_PUT = 1.0
     VEHICLE_IN_BATTLE_SWITCH = 2.0
     SET_VIVOX_PRESENCE = 1.0
+    BUNDLE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False

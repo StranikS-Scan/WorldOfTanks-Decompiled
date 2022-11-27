@@ -74,8 +74,11 @@ class EventBannerView(ViewImpl):
             model.setPhases(numberOfRegular)
             model.setPhaseTime(activePhase.getTimeLeftToFinish())
             lastRegularPhase = phases.getPhaseByIndex(numberOfRegular)
-            model.setEventEndDate(lastRegularPhase.getTimeLeftToFinish())
             postPhase = phases.getPhaseByIndex(phases.getCountPhases())
+            if activePhase.phaseType == PhaseType.POST:
+                model.setEventEndDate(postPhase.getFinishTime())
+            else:
+                model.setEventEndDate(lastRegularPhase.getTimeLeftToFinish())
             model.setEventPostStartDate(postPhase.getStartTime())
             currentPerformanceGroup = self._eventController.getPerformanceGroup()
             model.setPerformanceRisk(PERFORMANCE_MAP.get(currentPerformanceGroup, PerformanceRiskEnum.LOWRISK))

@@ -568,6 +568,10 @@ class _EpicArtilleryItem(_OrderItem):
     def getMarkerColor(self):
         return BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
+    def getAimingControlMode(self):
+        from AvatarInputHandler.MapCaseMode import EpicMapCaseControlMode
+        return EpicMapCaseControlMode
+
 
 class _ArcadeArtilleryItem(_ArtilleryItem):
 
@@ -586,6 +590,10 @@ class _BomberItem(_OrderItem):
 
     def getMarker(self):
         pass
+
+    def getAimingControlMode(self):
+        from AvatarInputHandler.MapCaseMode import EpicMapCaseControlMode
+        return EpicMapCaseControlMode
 
 
 class _BattleRoyaleBomber(_BomberItem):

@@ -1680,7 +1680,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     else:
                         item = vehicles_core.getItemByCompactDescr(itemCompactDescr)
                         userString = item.i18n.userString
-                    itemTypeNameString = backport.text(R.strings.item_types.halloween_equipment.name()) if item.typeID == I_T.equipment and u'halloween_equipment' in item.tags else getTypeInfoByName(item.itemTypeName)[u'userString']
+                    itemTypeNameString = backport.text(R.strings.item_types.halloween_equipment.name()) if u'halloween_equipment' in item.tags and item.typeID == I_T.equipment else getTypeInfoByName(item.itemTypeName)[u'userString']
                     itemString = u'{0:s} "{1:s}" - {2:d} {3:s}'.format(itemTypeNameString, userString, abs(count), backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.pieces()))
                     if count > 0:
                         accrued.append(itemString)

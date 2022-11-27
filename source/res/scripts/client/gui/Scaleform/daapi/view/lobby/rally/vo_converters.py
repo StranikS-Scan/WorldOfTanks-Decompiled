@@ -372,7 +372,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
                 if commanderVehiclesList:
                     commanderVehicle = vehicleGetter(commanderVehiclesList[0].vehTypeCompDescr)
                 start, end = unit.getRoster().SLOT_TYPE.DEFAULT_LEVELS
-                rangeString = toRomanRangeString(xrange(start, end), 1)
+                rangeString = toRomanRangeString(xrange(start, end + 1), 1)
                 additionMsg = i18n.makeString(PLATOON.MEMBERS_CARD_SELECTVEHICLE, level=rangeString)
                 if commanderVehicle:
                     rangeString = toRomanRangeString([commanderVehicle.level], 1)

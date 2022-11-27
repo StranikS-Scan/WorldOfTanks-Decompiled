@@ -262,6 +262,11 @@ class RenameWindowEvent(HasCtxEvent):
         super(RenameWindowEvent, self).__init__(eventType=eventType, ctx=ctx)
 
 
+class CarouselEvent(HasCtxEvent):
+    CAROUSEL_TYPE_WAS_CHANGED = 'carouselTypeWasChanged'
+    CAROUSEL_TYPE_ARG = 'carouselTypeArg'
+
+
 class HideWindowEvent(HasCtxEvent):
     HIDE_BATTLE_RESULT_WINDOW = 'hideBattleResultsWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'

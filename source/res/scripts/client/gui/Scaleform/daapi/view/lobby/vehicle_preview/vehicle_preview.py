@@ -75,7 +75,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
  VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW: None,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None,
- VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell'}
+ VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell',
+ VIEW_ALIAS.SHOP_SALES_MAIN_VIEW: 'event'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
@@ -177,7 +178,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          VIEW_ALIAS.RANKED_BATTLE_PAGE,
          VIEW_ALIAS.VEH_POST_PROGRESSION,
          VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
-         VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
+         VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW,
+         VIEW_ALIAS.SHOP_SALES_MAIN_VIEW)
         self._heroInteractive = not (self._itemsPack or self.__offers or ctx.get('offerID', 0) or self.__topPanelData or self._backAlias in notInteractive)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         self.__hangarVehicleCD = ctx.get('hangarVehicleCD')

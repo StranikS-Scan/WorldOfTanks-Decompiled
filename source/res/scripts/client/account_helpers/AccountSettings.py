@@ -192,6 +192,7 @@ RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED = 'rankedCurrentAwardsBubbleYearReached'
 RANKED_ENTITLEMENT_EVENTS_AMOUNT = 'rankedEntitlementEventsAmount'
 RANKED_YEAR_POSITION = 'rankedYearPosition'
+SHOP_SALES_EVENT_STATE = 'shopSalesEventState'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
@@ -1103,7 +1104,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOWN_PERSONAL_RESERVES_INTRO: False,
                 LOOT_BOXES_INTRO_WAS_SHOWN: False,
                 LOOT_BOXES_VIEWED_COUNT: 0,
-                LOOT_BOXES_OPEN_ANIMATION_STATE: True},
+                LOOT_BOXES_OPEN_ANIMATION_STATE: True,
+                SHOP_SALES_EVENT_STATE: {'enabled': True}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

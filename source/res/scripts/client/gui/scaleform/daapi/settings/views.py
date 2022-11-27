@@ -26,6 +26,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BATTLE_PASS_VIDEO_BROWSER_VIEW = 'battlePassVideoBrowserView'
     MANUAL_BROWSER_VIEW = 'ManualBrowserView'
     WEB_VIEW_TRANSPARENT = 'webViewTransparent'
+    SHOP_SALES_MAIN_VIEW = 'shopSalesMainView'
     BLUEPRINTS_EXCHANGE_VIEW = 'blueprintsExchangeView'
     RESOURCE_WELL_BROWSER_VIEW = 'resourceWellBrowserView'
     LOBBY_PROFILE = 'profile'

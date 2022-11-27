@@ -535,6 +535,10 @@
         <key>	gun/reloadTime	</key>
         <value>	-0.2	</value>
       </addFactor>
+      <setMaxFactor>
+        <key>	gun/reloadTime	</key>
+        <value>	0.1	</value>
+      </setMaxFactor>
     </server>
     <client>
       <ttcModifier>

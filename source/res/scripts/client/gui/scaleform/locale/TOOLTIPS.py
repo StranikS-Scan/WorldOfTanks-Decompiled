@@ -3084,6 +3084,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_COMMANDER_PATRICIA_DESC = '#tooltips:notrecruitedtankman/commander_patricia/desc'
     NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_LABEL = '#tooltips:notrecruitedtankman/commander_quickybaby/label'
     NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_DESC = '#tooltips:notrecruitedtankman/commander_quickybaby/desc'
+    NOTRECRUITEDTANKMAN_COMMANDER_FERENC_LABEL = '#tooltips:notrecruitedtankman/commander_ferenc/label'
+    NOTRECRUITEDTANKMAN_COMMANDER_FERENC_DESC = '#tooltips:notrecruitedtankman/commander_ferenc/desc'
     NOTRECRUITEDTANKMAN_YHA_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/yha_commander/label'
     NOTRECRUITEDTANKMAN_YHA_COMMANDER_DESC = '#tooltips:notrecruitedtankman/yha_commander/desc'
     NOTRECRUITEDTANKMAN_YHA_DRIVER_LABEL = '#tooltips:notrecruitedtankman/yha_driver/label'
@@ -3535,6 +3537,35 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_WT22_BOSS_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/wt22_boss_commander/label'
     NOTRECRUITEDTANKMAN_WT22_HUNTER_COMMANDER_DESC = '#tooltips:notrecruitedtankman/wt22_hunter_commander/desc'
     NOTRECRUITEDTANKMAN_WT22_HUNTER_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/wt22_hunter_commander/label'
+    SHOPSALES_HEADER = '#tooltips:shopSales/header'
+    SHOPSALES_DISABLED_SUBHEADER = '#tooltips:shopSales/disabled/subheader'
+    SHOPSALES_LOCKED_SUBHEADER = '#tooltips:shopSales/locked/subheader'
+    SHOPSALES_ACTIVE_SUBHEADER = '#tooltips:shopSales/active/subheader'
+    SHOPSALES_ENDED_SUBHEADER = '#tooltips:shopSales/ended/subheader'
+    SHOPSALES_DISABLED_DESC = '#tooltips:shopSales/disabled/desc'
+    SHOPSALES_LOCKED_DESC = '#tooltips:shopSales/locked/desc'
+    SHOPSALES_ACTIVE_DESC = '#tooltips:shopSales/active/desc'
+    SHOPSALES_ENDED_DESC = '#tooltips:shopSales/ended/desc'
+    SHOPSALES_ENABLED_DESC = '#tooltips:shopSales/enabled/desc'
+    SHOPSALES_DISABLED_FOOTER = '#tooltips:shopSales/disabled/footer'
+    SHOPSALES_ENDED_FOOTER_SAVED = '#tooltips:shopSales/ended/footer/saved'
+    SHOPSALES_ENDED_FOOTER_PURCHASED = '#tooltips:shopSales/ended/footer/purchased'
+    SHOPSALES_CURRENTDISCOUNT_HEADER = '#tooltips:shopSales/currentDiscount/header'
+    SHOPSALES_CURRENTDISCOUNT_HOWTOBLOCK_HEADER = '#tooltips:shopSales/currentDiscount/howToBlock/header'
+    SHOPSALES_CURRENTDISCOUNT_HOWTOBLOCK_BODY = '#tooltips:shopSales/currentDiscount/howToBlock/body'
+    SHOPSALES_CURRENTDISCOUNT_FOOTER = '#tooltips:shopSales/currentDiscount/footer'
+    SHOPSALES_FREESHUFFLE_HEADER = '#tooltips:shopSales/freeShuffle/header'
+    SHOPSALES_FREESHUFFLE_BODY = '#tooltips:shopSales/freeShuffle/body'
+    SHOPSALES_FREESHUFFLE_MAXIMUMFREE = '#tooltips:shopSales/freeShuffle/maximumFree'
+    SHOPSALES_FREESHUFFLE_PAIDSHUFFLECOST = '#tooltips:shopSales/freeShuffle/paidShuffleCost'
+    SHOPSALES_PAIDSHUFFLE_HEADER = '#tooltips:shopSales/paidShuffle/header'
+    SHOPSALES_PAIDSHUFFLE_STARTTIME = '#tooltips:shopSales/paidShuffle/startTime'
+    SHOPSALES_VOTEFORDISCOUNT_AVAILABLE_HEADER = '#tooltips:shopSales/voteForDiscount/available/header'
+    SHOPSALES_VOTEFORDISCOUNT_AVAILABLE_BODY = '#tooltips:shopSales/voteForDiscount/available/body'
+    SHOPSALES_VOTEFORDISCOUNT_AVAILABLE_MAXIMUMVOTES = '#tooltips:shopSales/voteForDiscount/available/maximumVotes'
+    SHOPSALES_VOTEFORDISCOUNT_UNAVAILABLE_HEADER = '#tooltips:shopSales/voteForDiscount/unavailable/header'
+    SHOPSALES_VOTEFORDISCOUNT_UNAVAILABLE_AVAILABILITYBLOCK = '#tooltips:shopSales/voteForDiscount/unavailable/availabilityBlock'
+    SHOPSALES_VOTEFORDISCOUNT_UNAVAILABLE_FOOTER = '#tooltips:shopSales/voteForDiscount/unavailable/footer'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4164,6 +4195,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_COVER_GIRL_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_PATRICIA_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_LABEL,
+     NOTRECRUITEDTANKMAN_COMMANDER_FERENC_LABEL,
      NOTRECRUITEDTANKMAN_YHA_COMMANDER_LABEL,
      NOTRECRUITEDTANKMAN_YHA_DRIVER_LABEL,
      NOTRECRUITEDTANKMAN_YHA_GUNNER_LABEL,
@@ -4305,6 +4337,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_COVER_GIRL_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_PATRICIA_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_DESC,
+     NOTRECRUITEDTANKMAN_COMMANDER_FERENC_DESC,
      NOTRECRUITEDTANKMAN_YHA_COMMANDER_DESC,
      NOTRECRUITEDTANKMAN_YHA_DRIVER_DESC,
      NOTRECRUITEDTANKMAN_YHA_GUNNER_DESC,

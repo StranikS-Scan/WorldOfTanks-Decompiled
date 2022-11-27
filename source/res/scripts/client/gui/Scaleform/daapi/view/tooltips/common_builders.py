@@ -7,6 +7,7 @@ from gui.shared.tooltips import advanced, common, contexts, stronghold
 from gui.shared.tooltips.builders import AdvancedDataBuilder, DataBuilder, DefaultFormatBuilder, TooltipWindowBuilder
 from gui.shared.tooltips.dog_tags import DogTagInfoTooltip
 from gui.shared.tooltips.filter import VehicleFilterTooltip
+from gui.shared.tooltips.shop_sales.entry_point_tooltip import ShopSalesEntryPointTooltipData
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
@@ -53,6 +54,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.WOT_PLUS, None, common.WotPlusTooltipContentWindowData(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.SHOP_SALES_ENTRY_POINT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, ShopSalesEntryPointTooltipData(contexts.DefaultContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.CN_LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, CNLootBoxVehicleBlueprintFragmentTooltipData(contexts.ToolTipContext(None))))
 

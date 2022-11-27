@@ -190,7 +190,13 @@ class ElementTooltip(BlocksTooltipData):
         if config.vehicleIntCD == 0:
             self.__vehicle = None
         elif config.vehicleIntCD == -1:
-            self.__vehicle = g_currentVehicle.item
+            if self._item.descriptor.filter and self._item.descriptor.filter.include:
+                for node in self._item.descriptor.filter.include:
+                    if node.vehicles:
+                        self.__vehicle = self.__itemsCache.items.getItemByCD(first(node.vehicles))
+
+            if self.__vehicle is None:
+                self.__vehicle = g_currentVehicle.item
         else:
             self.__vehicle = self.__itemsCache.items.getItemByCD(config.vehicleIntCD)
         showInventoryBlock = config.showInventoryBlock

@@ -337,7 +337,7 @@ class _VehicleStylePreviewSchema(W2CSchema):
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
-    back_btn_descr = Field(required=True, type=basestring)
+    back_btn_descr = Field(required=False, type=basestring)
     back_url = Field(required=False, type=basestring)
     marathon_prefix = Field(required=True, type=basestring)
 
@@ -346,7 +346,7 @@ class _VehicleListStylePreviewSchema(W2CSchema):
     style_id = Field(required=True, type=int)
     vehicle_min_level = Field(required=False, type=int, default=10)
     vehicle_list = Field(required=False, type=(list, NoneType), validator=lambda value, _: _validateVehiclesCDList(value), default=DEFAULT_STYLED_VEHICLES)
-    back_btn_descr = Field(required=True, type=basestring)
+    back_btn_descr = Field(required=False, type=basestring)
     back_url = Field(required=False, type=basestring)
     level = Field(required=False, type=int)
     price = Field(required=False, type=dict)
@@ -402,7 +402,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
         if cmd.hidden_blocks is not None:
-            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
+            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items or []))
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id

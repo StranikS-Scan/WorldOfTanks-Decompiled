@@ -54,7 +54,7 @@ from helpers.time_utils import ONE_MINUTE
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBootcampController, ICNLootBoxesController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IEventBattlesController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBootcampController, ICNLootBoxesController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IEventBattlesController, IShopSalesEventController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -100,6 +100,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
+    __shopSales = dependency.descriptor(IShopSalesEventController)
     __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     __funRandomController = dependency.descriptor(IFunRandomController)
     _bootcamp = dependency.descriptor(IBootcampController)
@@ -181,6 +182,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onStatusTick += self.__updateAlertMessage
         self.__comp7Controller.onBanUpdated += self.__updateAlertMessage
         self.__comp7Controller.onOfflineStatusUpdated += self.__updateAlertMessage
+        self.__shopSales.onStateChanged += self.__updateShopSalesEventEntryPoint
+        self.__shopSales.onPhaseChanged += self.__updateShopSalesEventEntryPoint
         self.hangarSpace.setVehicleSelectable(True)
         self.__cnLootBoxes.onStatusChange += self.__cnLBEventStatusChange
         self.__cnLootBoxes.onAvailabilityChange += self.__onLootBoxesAvailabilityChange
@@ -240,6 +243,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onStatusTick -= self.__updateAlertMessage
         self.__comp7Controller.onBanUpdated -= self.__updateAlertMessage
         self.__comp7Controller.onOfflineStatusUpdated -= self.__updateAlertMessage
+        self.__shopSales.onPhaseChanged -= self.__updateShopSalesEventEntryPoint
+        self.__shopSales.onStateChanged -= self.__updateShopSalesEventEntryPoint
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -488,6 +493,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def epicWidget(self):
         return self.getComponent(HANGAR_ALIASES.EPIC_WIDGET)
 
+    @property
+    def shopSalesWidget(self):
+        return self.getComponent(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT)
+
     def onCacheResync(self, reason, diff):
         if diff is not None and GUI_ITEM_TYPE.CREW_BOOKS in diff:
             self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
@@ -551,6 +560,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateCrew()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleComponents()
+        self.__updateShopSalesEventEntryPoint()
         self._updateCnSubscriptionMode()
         self._updateBattleRoyaleMode()
         self.__updateHW22Mode()
@@ -653,6 +663,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__switchCarousels()
         self.__updateBattleRoyaleComponents()
         self.__updateHW22Mode()
+        self.__updateShopSalesEventEntryPoint()
 
     def __isSpecialMode(self):
         return self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInUnit() or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) or self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC)
@@ -745,3 +756,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if self._bootcamp.isInBootcamp() or not self.hangarSpace.spaceInited or self.__cnLootBoxes.isIntroWasShown():
             return
         showCNLootBoxesWelcomeScreen()
+
+    def __updateShopSalesEventEntryPoint(self):
+        if self.shopSalesWidget is not None:
+            showInHangar = not self.bootcampController.isInBootcamp() and self.__isRandomBattleSelected()
+            visible = self.__shopSales.isInEvent
+            self.as_setShopSalesVisibleS(showInHangar and visible)
+        return
+
+    def __isRandomBattleSelected(self):
+        return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False

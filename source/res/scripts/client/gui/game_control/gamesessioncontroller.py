@@ -72,7 +72,7 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
 
     def init(self):
         self.__timeTillKickNotifier = AcyclicNotifier(self.__getClosestTimeTillKickNotification, self.__notifyTimeTillKick)
-        self.addNotificators(PeriodicNotifier(self.__getClosestPremiumNotification, self.__notifyPremiumTime), SimpleNotifier(self.__getClosestSessionTimeNotification, self.__notifyClient), PeriodicNotifier(self.__getClosestNewDayNotification, self.__notifyNewDay), self.__timeTillKickNotifier)
+        self.addNotificators(PeriodicNotifier(self.__getClosestPremiumNotification, self.__notifyPremiumTime), SimpleNotifier(self.__getClosestSessionTimeNotification, self.__notifyClient), SimpleNotifier(self.__getClosestNewDayNotification, self.__notifyNewDay), self.__timeTillKickNotifier)
         self.__sessionStartedAt = -1
         self.__banCallback = None
         self.__lastBanMsg = None

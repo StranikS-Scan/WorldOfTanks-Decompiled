@@ -80,6 +80,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANDOM_CREWBOOK = 'randomCrewbook'
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
+    SHOP_SALES_ENTRY_POINT = 'shopSalesEntryPoint'
     RANKED_SELECTABLE_REWARD = 'rankedSelectableReward'
     COMP7_SELECTOR_INFO = 'comp7SelectorInfo'
     COMP7_SELECTOR_UNAVAILABLE_INFO = 'comp7SelectorUnavailableInfo'

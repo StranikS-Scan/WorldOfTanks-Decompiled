@@ -8,6 +8,7 @@ if typing.TYPE_CHECKING:
     from Event import Event
     from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
     from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
+    from constants import EventPhase
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import EpicBattleScreens
     from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
@@ -2316,6 +2317,88 @@ class IGiftSystemController(IGameController):
         raise NotImplementedError
 
     def requestWebState(self, eventID):
+        raise NotImplementedError
+
+
+class IShopSalesEventController(IGameController):
+    onStateChanged = None
+    onPhaseChanged = None
+    onBundlePurchased = None
+    onCurrentBundleChanged = None
+    onFavoritesChanged = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isForbidden(self):
+        raise NotImplementedError
+
+    @property
+    def isInEvent(self):
+        raise NotImplementedError
+
+    @property
+    def currentEventPhase(self):
+        raise NotImplementedError
+
+    @property
+    def currentEventPhaseTimeRange(self):
+        raise NotImplementedError
+
+    @property
+    def reRollPrice(self):
+        raise NotImplementedError
+
+    @property
+    def periodicRenewalStartTime(self):
+        raise NotImplementedError
+
+    @property
+    def periodicRenewalPeriod(self):
+        raise NotImplementedError
+
+    @property
+    def activePhaseStartTime(self):
+        raise NotImplementedError
+
+    @property
+    def activePhaseFinishTime(self):
+        raise NotImplementedError
+
+    @property
+    def eventFinishTime(self):
+        raise NotImplementedError
+
+    @property
+    def currentBundleID(self):
+        raise NotImplementedError
+
+    @property
+    def currentBundleReRolls(self):
+        raise NotImplementedError
+
+    @property
+    def favoritesCount(self):
+        raise NotImplementedError
+
+    def reRollBundle(self, callback=None):
+        raise NotImplementedError
+
+    def getEventPhase(self, timestamp):
+        raise NotImplementedError
+
+    def getEventPhaseTimeRange(self, state):
+        raise NotImplementedError
+
+    def setFavoritesCount(self, value):
+        raise NotImplementedError
+
+    def openMainView(self, url=None, origin=None):
+        raise NotImplementedError
+
+    def closeMainView(self):
         raise NotImplementedError
 
 

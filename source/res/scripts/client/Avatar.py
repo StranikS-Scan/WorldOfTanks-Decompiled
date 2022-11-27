@@ -97,6 +97,7 @@ from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import getModificationCache
+from constants import ARENA_UPDATE
 import VOIP
 if TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -349,6 +350,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__vehicleToVehicleCollisions = {}
             self.__deviceStates = {}
             self.__maySeeOtherVehicleDamagedDevices = False
+            self.wasKilled = False
+            self.syncEpicQueueUpdates = []
             if self.intUserSettings is not None:
                 self.intUserSettings.onProxyBecomePlayer()
                 self.syncData.onAvatarBecomePlayer()
@@ -1481,6 +1484,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def redrawVehicleOnRespawn(self, vehicleID, newVehCompactDescr, newVehOutfitCompactDescr):
         if vehicleID == self.playerVehicleID and self.__firstHealthUpdate:
             self.__deadOnLoading = True
+        self.epicArenaUpdate()
+        self.wasKilled = False
         Vehicle.Vehicle.respawnVehicle(vehicleID, newVehCompactDescr, newVehOutfitCompactDescr)
 
     def updateGunMarker(self, vehicleID, shotPos, shotVec, dispersionAngle):
@@ -1782,8 +1787,29 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onBootcampEvent(self, details):
         g_bootcamp.onBattleAction(details[0], details[1:])
 
+    def epicArenaUpdate(self, updateType=None, argStr=None):
+        if updateType == ARENA_UPDATE.VEHICLE_UPDATED and self.wasKilled and argStr:
+            updatedVehId = cPickle.loads(zlib.decompress(argStr))
+            observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
+            if observedVehID != self.playerVehicleID and updatedVehId == observedVehID:
+                self.arena.update(updateType, argStr)
+            else:
+                self.syncEpicQueueUpdates.append((updateType, argStr))
+        elif updateType is None:
+            while self.syncEpicQueueUpdates:
+                update = self.syncEpicQueueUpdates.pop()
+                self.arena.update(update[0], update[1])
+
+        else:
+            self.arena.update(updateType, argStr)
+        return
+
     def updateArena(self, updateType, argStr):
-        if self.arena:
+        if not self.arena:
+            return
+        if self.arenaBonusType == constants.ARENA_BONUS_TYPE.EPIC_BATTLE:
+            self.epicArenaUpdate(updateType, argStr)
+        else:
             self.arena.update(updateType, argStr)
 
     def updatePositions(self, indices, positions):

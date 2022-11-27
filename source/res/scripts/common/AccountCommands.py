@@ -247,8 +247,14 @@ CMD_ACTIVATE_CLAN_BOOSTER = 10105
 CMD_DEACTIVATE_CLAN_BOOSTERS = 10106
 CMD_CONVERT_OBSOLETE_SKILLS = 10107
 CMD_ADD_EQUIPMENT = 10108
+CMD_BUNDLE_GET = 10109
+CMD_BUNDLE_REROLL = 10110
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
+if not KEYS_ARE_UNIQUE:
+    from collections import Counter
+    sorted_commands = Counter((key for key in globals() if key.startswith('CMD_')))
+    duplicates = set((key for key in globals() if key.startswith('CMD_'))) - set((v for v in PLAYER_CMD_NAMES.values()))
 
 class LOCK_REASON:
     NONE = 0

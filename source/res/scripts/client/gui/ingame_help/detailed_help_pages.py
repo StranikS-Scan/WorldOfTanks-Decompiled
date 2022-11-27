@@ -279,8 +279,8 @@ class RocketAccelerationPagesBuilder(DetailedHelpPagesBuilder):
         headerTitle = buildTitle(ctx)
         siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
         siegeKey = getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_1()))
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_2()))
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page1())), [siegeKey], [siegeKeyName], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_1()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.rocketAcceleration.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.rocketAcceleration.page_2()), hintCtx=HelpHintContext.MECHANICS)
         return pages
 
     @classmethod

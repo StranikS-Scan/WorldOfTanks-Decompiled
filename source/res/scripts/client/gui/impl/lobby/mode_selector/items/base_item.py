@@ -5,7 +5,6 @@ import typing
 import Event
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
-from gui.battle_pass.battle_pass_helpers import getFormattedTimeLeft
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
@@ -14,6 +13,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_mod
 from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_dispatcher import showBrowserOverlayView
+from gui.shared.formatters import time_formatters
 from helpers import dependency, i18n, time_utils
 from skeletons.gui.game_control import IBootcampController, IUISpamController
 from soft_exception import SoftException
@@ -24,6 +24,10 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen_utils import DynAccessor
 _rMode = R.strings.mode_selector.mode
 _INFO_PAGE_KEY_TEMPLATE = 'infoPage%s'
+
+def getFormattedTimeLeft(seconds):
+    return time_formatters.getTillTimeByResource(seconds, R.strings.mode_selector.status.timeLeft, removeLeadingZeros=True)
+
 
 def formatSeasonLeftTime(currentSeason):
     return getFormattedTimeLeft(max(0, currentSeason.getEndDate() - time_utils.getServerUTCTime())) if currentSeason else ''

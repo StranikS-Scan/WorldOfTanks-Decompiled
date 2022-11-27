@@ -13,7 +13,6 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_mo
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBattlePassBuyWindow
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -31,7 +30,7 @@ REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
  'None': 0}
 
 class BattlePassAwardsView(ViewImpl):
-    __slots__ = ('__tooltipItems', '__closeCallback', '__needNotifyClosing')
+    __slots__ = ('__tooltipItems', '__closeCallback', '__needNotifyClosing', '__showBuyCallback')
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +40,7 @@ class BattlePassAwardsView(ViewImpl):
         settings.kwargs = kwargs
         self.__tooltipItems = {}
         self.__closeCallback = None
+        self.__showBuyCallback = None
         self.__needNotifyClosing = True
         super(BattlePassAwardsView, self).__init__(settings)
         return
@@ -70,6 +70,7 @@ class BattlePassAwardsView(ViewImpl):
         newLevel = data.get('newLevel', 0) or 0
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
         self.__closeCallback = data.get('callback')
+        self.__showBuyCallback = data.get('showBuyCallback')
         isFinalReward = self.__battlePass.isFinalLevel(chapterID, newLevel) and reason not in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE, BattlePassRewardReason.SELECT_REWARD)
         isPurchase = reason in BattlePassRewardReason.PURCHASE_REASONS
         rewardReason = MAP_REWARD_REASON.get(reason, RewardReason.DEFAULT)
@@ -106,6 +107,8 @@ class BattlePassAwardsView(ViewImpl):
         switchHangarOverlaySoundFilter(on=False)
         if callable(self.__closeCallback):
             self.__closeCallback()
+            self.__closeCallback = None
+            self.__showBuyCallback = None
         if self.__needNotifyClosing:
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.AWARD_VIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
         return
@@ -141,11 +144,10 @@ class BattlePassAwardsView(ViewImpl):
         return REWARD_SIZES.get(BattlePassAwardsManager.getBigIcon(bonus), 0)
 
     def __onBuyClick(self):
-        if callable(self.__closeCallback):
-            self.__closeCallback()
+        if callable(self.__showBuyCallback):
+            self.__showBuyCallback()
+            self.__showBuyCallback = None
             self.__closeCallback = None
-        showBattlePassBuyWindow()
-        self.destroyWindow()
         return
 
 

@@ -31,4 +31,8 @@ class DogTagComponent(BigWorld.DynamicScriptComponent):
 
     @staticmethod
     def _isObserving():
-        return True if BattleReplay.isServerSideReplay() else not BigWorld.player().vehicle.isPlayerVehicle
+        if BattleReplay.isServerSideReplay():
+            return True
+        else:
+            player_vehicle = BigWorld.player().getVehicleAttached()
+            return not player_vehicle.isPlayerVehicle if player_vehicle is not None else False

@@ -2634,9 +2634,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     canMove = False
                     break
 
-            if canMove:
+            if canMove and deviceName in self.__deviceStates and self.__deviceStates[deviceName] == 'destroyed':
                 return 'functionalCanMove'
-            return 'functional'
 
     __damageInfoCriticals = ('DEVICE_CRITICAL',
      'DEVICE_REPAIRED_TO_CRITICAL',

@@ -1479,47 +1479,31 @@ class Views(DynAccessor):
     class _battle_royale(DynAccessor):
         __slots__ = ()
 
-        class _dialogs(DynAccessor):
-            __slots__ = ()
-
-            class _sub_views(DynAccessor):
-                __slots__ = ()
-
-                class _footer(DynAccessor):
-                    __slots__ = ()
-                    BRSinglePriceFooter = DynAccessor(409)
-
-                footer = _footer()
-
-            sub_views = _sub_views()
-
-        dialogs = _dialogs()
-
         class _lobby(DynAccessor):
             __slots__ = ()
 
             class _tooltips(DynAccessor):
                 __slots__ = ()
-                BrCoinTooltipView = DynAccessor(410)
+                BrCoinTooltipView = DynAccessor(409)
 
                 class _common(DynAccessor):
                     __slots__ = ()
-                    PriceBlock = DynAccessor(411)
-                    RentPrice = DynAccessor(412)
+                    PriceBlock = DynAccessor(410)
+                    RentPrice = DynAccessor(411)
 
                 common = _common()
-                RentIconTooltipView = DynAccessor(413)
-                RewardCurrencyTooltipView = DynAccessor(414)
-                TestDriveInfoTooltipView = DynAccessor(415)
-                VehicleTooltipView = DynAccessor(416)
+                RentIconTooltipView = DynAccessor(412)
+                RewardCurrencyTooltipView = DynAccessor(413)
+                TestDriveInfoTooltipView = DynAccessor(414)
+                VehicleTooltipView = DynAccessor(415)
 
             tooltips = _tooltips()
 
             class _views(DynAccessor):
                 __slots__ = ()
-                IntroView = DynAccessor(417)
-                PreBattleView = DynAccessor(418)
-                ProxyCurrencyView = DynAccessor(419)
+                IntroView = DynAccessor(416)
+                PreBattleView = DynAccessor(417)
+                ProxyCurrencyView = DynAccessor(418)
 
             views = _views()
 
@@ -1535,6 +1519,12 @@ class Views(DynAccessor):
 
             class _feature(DynAccessor):
                 __slots__ = ()
+
+                class _common(DynAccessor):
+                    __slots__ = ()
+                    ModifierDomainIcon = DynAccessor(419)
+
+                common = _common()
                 FunRandomEntryPointView = DynAccessor(420)
                 FunRandomHangarWidgetView = DynAccessor(421)
                 FunRandomModeSubSelector = DynAccessor(422)

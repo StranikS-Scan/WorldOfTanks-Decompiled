@@ -102,7 +102,7 @@ class SfLobbyProxy(GUIProxy):
         self.showWaiting('update-scene', isSingle=True)
 
     def release(self):
-        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL, showSummaryNow=True)
         self.hideWaiting('update-scene')
 
     def loadConfig(self, filePath):

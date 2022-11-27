@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/lobby_window.py
+import logging
 import typing
 from frameworks.wulf import Window, WindowSettings, WindowFlags, WindowLayer, WindowStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -7,6 +8,7 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
+_logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View
     from typing import Optional
@@ -22,20 +24,25 @@ class LobbyWindow(Window):
         settings.layer = layer
         settings.decorator = decorator
         settings.content = content
-        settings.parent = self._getParent(parent)
+        settings.parent = self._getParent(parent, content)
         super(LobbyWindow, self).__init__(settings)
 
     @classmethod
     def getInstances(cls):
         return cls.__gui.windowsManager.findWindows(cls.__loadedWindowPredicate)
 
-    def _getParent(self, parent):
+    def _getParent(self, parent, content):
         if parent:
             return parent
         else:
             app = self.__appLoader.getApp()
-            view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-            return view.getParentWindow() if view is not None else None
+            containerMgr = app.containerManager
+            if containerMgr is not None:
+                view = containerMgr.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+                if view is not None:
+                    return view.getParentWindow()
+            _logger.error('LobbyWindow. Lobby view is not found for %r!', content)
+            return
 
     @classmethod
     def __loadedWindowPredicate(cls, window):
@@ -59,6 +66,6 @@ class LobbyNotificationWindow(LobbyWindow):
         super(LobbyNotificationWindow, self).load()
         return
 
-    def _getParent(self, parent):
-        self.__initialParent = super(LobbyNotificationWindow, self)._getParent(parent)
+    def _getParent(self, parent, content):
+        self.__initialParent = super(LobbyNotificationWindow, self)._getParent(parent, content)
         return None

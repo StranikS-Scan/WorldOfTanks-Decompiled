@@ -6,6 +6,7 @@ from math import ceil
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, ATTACK_REASON_INDICES, ATTACK_REASON
 import BigWorld
+from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -222,7 +223,31 @@ class PersonalPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class KillerPlayerNameBlock(shared.PlayerNameBlock):
-    __slots__ = ()
+    __slots__ = ('killerID',)
+
+    def __init__(self, killerID, meta=None, field='', *path):
+        super(KillerPlayerNameBlock, self).__init__(meta, field, *path)
+        self.killerID = killerID
+
+    def setRecord(self, result, reusable):
+        if reusable is not None:
+            killerInfo = reusable.getPlayerInfoByVehicleID(self.killerID)
+            killerVehicleInfo = reusable.vehicles.getVehicleInfo(self.killerID)
+            if killerVehicleInfo.isTeamKiller:
+                self.setTeamKillerInfo()
+            self.__setKillerInfo(killerInfo, reusable)
+        else:
+            LOG_ERROR('Killer is not found. ID %s' % self.killerID)
+        return
+
+    def __setKillerInfo(self, killerInfo, reusable):
+        self.setPlayerInfo(killerInfo)
+        self.fakeNameLabel = self.__getFakeNameLabel(killerInfo, reusable)
+
+    def __getFakeNameLabel(self, killerInfo, reusable):
+        killerAccountID = killerInfo.dbID
+        ownAccountID = reusable.personal.avatar.accountDBID
+        return killerInfo.realName if killerAccountID == ownAccountID else killerInfo.fakeName
 
 
 class DetailsPlayerNameBlock(shared.PlayerNameBlock):
@@ -276,7 +301,7 @@ class PersonalVehicleBlock(base.StatsBlock):
             self.vehicleState = backport.text(R.strings.battle_results.common.vehicleState.prematureLeave())
         elif deathReason > DEATH_REASON_ALIVE:
             if self.isVehicleStatusDefined and killerID:
-                fillKillerInfoBlock(self, deathReason, killerID, reusable)
+                fillKillerInfoBlock(self, deathReason, killerID, reusable, result)
             elif self.isVehicleStatusDefined and deathReason in NO_OWNER_DEATH_REASON_IDS:
                 state = backport.text(R.strings.battle_results.common.vehicleState.dyn('dead{}'.format(deathReason), R.invalid)())
                 self.vehicleState = state
@@ -568,7 +593,6 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result)
         if info is None:
-            from debug_utils import LOG_ERROR
             LOG_ERROR('ERROR: TotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
             return
         else:
@@ -683,17 +707,15 @@ class PersonalAccountDBID(base.StatsItem):
         return reusable.personal.avatar.accountDBID
 
 
-def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
+def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable, result):
     reason = style.makeI18nDeathReason(deathReason)
     vehicleStateBlock.vehicleState = reason.i18nString
     vehicleStateBlock.vehicleStatePrefix = reason.prefix
     vehicleStateBlock.vehicleStateSuffix = reason.suffix
-    pi = reusable.getPlayerInfoByVehicleID(killerID)
-    playerKillerBlock = KillerPlayerNameBlock()
-    playerKillerBlock.setPlayerInfo(pi)
+    playerKillerBlock = KillerPlayerNameBlock(killerID)
+    playerKillerBlock.setRecord(result, reusable)
     vi = reusable.vehicles.getVehicleInfo(killerID)
     if vi.isTeamKiller:
-        playerKillerBlock.setTeamKillerInfo()
         vehicleStateBlock.isKilledByTeamKiller = True
     vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
 

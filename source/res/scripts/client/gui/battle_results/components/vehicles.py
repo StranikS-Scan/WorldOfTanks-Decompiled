@@ -135,7 +135,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self.vehicleStatePrefix = state
         elif self.deathReason > DEATH_REASON_ALIVE:
             if self.killerID:
-                fillKillerInfoBlock(self, self.deathReason, self.killerID, reusable)
+                fillKillerInfoBlock(self, self.deathReason, self.killerID, reusable, result)
             elif self.deathReason in NO_OWNER_DEATH_REASON_IDS:
                 state = backport.text(R.strings.battle_results.common.vehicleState.dyn('dead{}'.format(self.deathReason), R.invalid)())
                 self.vehicleState = state

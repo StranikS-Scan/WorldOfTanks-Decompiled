@@ -35,7 +35,7 @@ from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTR
 from constants import AIMING_MODE
 from constants import VEHICLE_SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency, uniprof
@@ -954,6 +954,14 @@ class StrategicControlMode(_TrajectoryControlMode):
     def enable(self, **args):
         super(StrategicControlMode, self).enable(**args)
         AccountSettings.setSettings(LAST_ARTY_CTRL_MODE, CTRL_MODE_NAME.STRATEGIC)
+        g_repeatKeyHandlers.add(self.__handleRepeatKeyEvent)
+
+    def disable(self):
+        super(StrategicControlMode, self).disable()
+        g_repeatKeyHandlers.discard(self.__handleRepeatKeyEvent)
+
+    def __handleRepeatKeyEvent(self, event):
+        return self.handleKeyEvent(event.isKeyDown(), event.key, 0)
 
 
 class ArtyControlMode(_TrajectoryControlMode):

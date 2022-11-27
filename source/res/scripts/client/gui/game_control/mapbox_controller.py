@@ -26,7 +26,7 @@ from gui.server_events import caches
 from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
 from helpers import dependency, server_settings, time_utils
 from season_provider import SeasonProvider
@@ -79,7 +79,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
 
     def init(self):
         super(MapboxController, self).init()
-        self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
+        self.addNotificator(TimerNotifier(self.getTimer, self.__timerUpdate))
         self.__progressionDataProvider.init()
 
     def fini(self):

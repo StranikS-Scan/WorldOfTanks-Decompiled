@@ -211,10 +211,11 @@ class RewardStyleState(State):
 
 
 class RewardAnyState(State):
-    __slots__ = ()
+    __slots__ = ('__needShowBuy',)
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
+        self.__needShowBuy = False
         super(RewardAnyState, self).__init__(stateID=BattlePassRewardStateID.REWARD_ANY)
 
     def _onEntered(self):
@@ -230,6 +231,7 @@ class RewardAnyState(State):
             if data is None:
                 data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
             data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('reason'))
+            data['showBuyCallback'] = self.__onShowBuy
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
                 _, level = getStyleInfoForChapter(chapter)
@@ -252,7 +254,7 @@ class RewardAnyState(State):
             currentLevel = self.__battlePass.getCurrentLevel()
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
-                if not self.__battlePass.isDisabled():
+                if not self.__battlePass.isDisabled() and not self.__needShowBuy:
                     showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             machine.clearManualFlow()
             return
@@ -263,4 +265,13 @@ class RewardAnyState(State):
             machine.post(StateEvent())
         if not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+        return
+
+    def __onShowBuy(self):
+        self.__needShowBuy = True
+        machine = self.getMachine()
+        if machine is not None:
+            machine.clearSelf()
+            machine.post(StateEvent())
+        showBattlePassBuyWindow()
         return

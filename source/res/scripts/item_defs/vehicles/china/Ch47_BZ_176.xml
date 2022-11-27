@@ -601,8 +601,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	29	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1559,14 +1559,14 @@
             <armor_24>	41	</armor_24>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	25	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	3.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.34 10 0.36 3 0.64 3 0.66 10 1 10	</maxPitch>
@@ -2293,7 +2293,7 @@
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
-        <value>	1.75	</value>
+        <value>	1.5	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/backward	</name>
@@ -2311,7 +2311,7 @@
       </mul>
       <mul>
         <name>	vehicleForwardMaxSpeed	</name>
-        <value>	1.75	</value>
+        <value>	1.5	</value>
       </mul>
       <mul>
         <name>	vehicleBackwardMaxSpeed	</name>

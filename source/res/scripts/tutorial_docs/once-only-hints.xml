@@ -631,6 +631,22 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	FilterHintZoneHint	  <item-id>	FilterTutorialHintZone	</item-id>
+      <text>	_(#tank_setup:hints/filters/specialization)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	ModernizedSetupTabHint	  <item-id>	ModernizedSetupTabHintZone	</item-id>
       <text>	_(#tank_setup:hints/tabs/equipment)	</text>
       <arrow>

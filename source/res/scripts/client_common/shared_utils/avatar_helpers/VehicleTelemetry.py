@@ -38,7 +38,7 @@ class VehicleTelemetry(object):
             return
 
     try:
-        DYNAMICS_LOG_DIR = ResMgr.appDirectory() + '../dynamics_log'
+        DYNAMICS_LOG_DIR = ResMgr.appDirectory() + 'dynamics_log'
     except AttributeError:
         DYNAMICS_LOG_DIR = 'dynamics_log'
 

@@ -253,8 +253,7 @@ class UtilWebApiMixin(object):
         return None
 
     @w2c(_ChatAvailabilitySchema, 'check_if_chat_available')
-    def checkIfChatAvailable(self, cmd, ctx):
-        callback = ctx.get('callback')
+    def checkIfChatAvailable(self, cmd):
         receiverId = cmd.receiver_id
 
         def isAvailable():
@@ -262,13 +261,14 @@ class UtilWebApiMixin(object):
             return receiver.hasValidName() and not receiver.isIgnored()
 
         def onNamesReceivedCallback():
-            callback(isAvailable())
+            self.__usersInfoHelper.onNamesReceived -= onNamesReceivedCallback
+            yield isAvailable()
 
         if not bool(self.__usersInfoHelper.getUserName(receiverId)):
             self.__usersInfoHelper.onNamesReceived += onNamesReceivedCallback
             self.__usersInfoHelper.syncUsersInfo()
         else:
-            return isAvailable()
+            yield isAvailable()
 
     @w2c(_VehicleCustomizationPreviewSchema, 'can_install_style')
     def canStyleBeInstalled(self, cmd):

@@ -69,7 +69,7 @@ class BCNationsWindow(BCNationsWindowMeta):
     def onNationShow(self, nationId):
         g_bootcamp.previewNation(NATIONS_INDICES[nationId])
 
-    @simpleLog(argsIndex=0, argMap=NATIONS_MAP)
+    @simpleLog(argsIndex=0)
     def onNationSelected(self, nationId):
         varID = self._content.get('resultVarID')
         if varID:

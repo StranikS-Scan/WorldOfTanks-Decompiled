@@ -59,16 +59,18 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
         pass
 
     def _addInjectContentListeners(self):
-        if getattr(self._injectView.viewModel, 'onShowView'):
+        if getattr(self._injectView.viewModel, 'onShowView', None):
             self._injectView.viewModel.onShowView += self._onViewReady
         else:
             self._injectView.onStatusChanged += self._onViewReady
+        return
 
     def _removeInjectContentListeners(self):
-        if getattr(self._injectView.viewModel, 'onShowView'):
+        if getattr(self._injectView.viewModel, 'onShowView', None):
             self._injectView.viewModel.onShowView -= self._onViewReady
         else:
             self._injectView.onStatusChanged -= self._onViewReady
+        return
 
     def _makeInjectView(self, openMainRewardView=False, openVehicleSelection=False, openMainView=False):
         if self.__battleMattersController.isPaused():

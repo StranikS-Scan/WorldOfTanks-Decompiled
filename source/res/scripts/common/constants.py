@@ -26,6 +26,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNUPDATER = False
+IS_LOAD_GLOSSARY = False
 IS_CGF_DUMP = BigWorld.component == 'client_cgf_dump'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
@@ -2086,6 +2087,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  84: 'feedback battle events',
  85: 'feedback border map',
  86: 'ui storage, used for preserving first entry flags etc',
+ 87: 'Frontline carousel filter 1',
+ 88: 'Frontline carousel filter 2',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.BATTLE_MATTERS_QUESTS: 'battle matters quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',

@@ -16,7 +16,7 @@ class FunProgressionCondition(object):
     def __init__(self, pConfig, counter, trigger):
         self.__counter = counter
         self.__conditionText = trigger.getDescription()
-        self.__resetTimestamp = trigger.getFinishTime()
+        self.__resetTimestamp = trigger.getFinishTimeRaw()
         self.__pConfig = pConfig
 
     @property

@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13319	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	920	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1871,7 +1871,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	65	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1885,7 +1885,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_SA_47_75>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_100mm_SA_47_75>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1902,11 +1902,11 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	45	</reloadTime>
+          <reloadTime>	42	</reloadTime>
           <aimingTime>	2.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	1.6	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
@@ -1921,7 +1921,7 @@
           </clip>
           <burst>
             <count>	3	</count>
-            <rate>	150	</rate>
+            <rate>	120	</rate>
           </burst>
           <customization>
             <customizableVehicleAreas>
@@ -2281,7 +2281,7 @@
     <detailed>
       <engines>
         <Astazou_XVI>
-          <smplEnginePower>	1000	</smplEnginePower>
+          <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Astazou_XVI>
       </engines>

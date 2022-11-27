@@ -706,7 +706,8 @@ class VehicleParams(_ParameterBase):
          CHASSIS_REPAIR_TIME,
          ROCKET_ACCELERATION_ENGINE_POWER,
          ROCKET_ACCELERATION_SPEED_LIMITS,
-         ROCKET_ACCELERATION_REUSE_AND_DURATION)
+         ROCKET_ACCELERATION_REUSE_AND_DURATION,
+         'chassisRotationSpeed')
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -828,7 +829,7 @@ class VehicleParams(_ParameterBase):
         return len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets)
 
     def __hasHydraulicSiegeMode(self):
-        return self._itemDescr.hasSiegeMode and (self._itemDescr.hasHydraulicChassis or self._itemDescr.hasAutoSiegeMode)
+        return self._itemDescr.hasHydraulicChassis and self._itemDescr.hasSiegeMode
 
     def __hasWheeledSwitchMode(self):
         return self._itemDescr.isWheeledVehicle and self._itemDescr.hasSiegeMode

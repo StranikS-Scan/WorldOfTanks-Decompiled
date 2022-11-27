@@ -358,6 +358,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
     AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
     PLATOON_BTN_HINT = 'PlatoonBtnHint'
+    AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     HANGAR_MANUAL_HINT = 'HangarManualHint'

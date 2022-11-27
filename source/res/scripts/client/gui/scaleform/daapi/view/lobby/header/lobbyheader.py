@@ -58,6 +58,7 @@ from gui.impl.lobby.comp7.views.no_vehicles_screen import NoVehiclesScreenWindow
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.wgnp.demo_account.controller import NICKNAME_CONTEXT
 from gui.prb_control import prb_getters
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import REQUEST_TYPE, PRE_QUEUE_RESTRICTION
@@ -612,6 +613,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if not self.bootcampController.isInBootcamp():
             self._addWGNPListeners()
         self.addListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -680,6 +682,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(FullscreenModeSelectorEvent.NAME, self.__onFullScreenModeSelector)
         self._removeWGNPListeners()
         self.removeListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
 
     def _addWGNPListeners(self):
         self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__onEmailConfirmed)
@@ -1055,6 +1058,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr and unitMgr.unit:
             unitMgr.unit.onSquadSizeChanged += self._updatePrebattleControls
+
+    def __onVehicleClientStateChanged(self, modifiedCDs):
+        if g_currentVehicle.item is not None and g_currentVehicle.item.intCD in modifiedCDs:
+            self._updatePrebattleControls()
+        return
 
     @property
     def isEventEnabled(self):

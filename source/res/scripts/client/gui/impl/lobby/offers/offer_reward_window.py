@@ -14,11 +14,13 @@ from gui.impl.gen.view_models.views.lobby.offers.offer_reward_model import Offer
 from gui.impl.pub import ViewImpl
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
+from sound_gui_manager import CommonSoundSpaceSettings
 _logger = logging.getLogger(__name__)
 
 class OfferRewardWindow(ViewImpl):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _offersProvider = dependency.descriptor(IOffersDataProvider)
+    _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name='offer_reward', entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='gui_hangar_award_screen', exitEvent='gui_hangar_award_screen_stop')
 
     def __init__(self, layoutID, offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):
         settings = ViewSettings(layoutID=layoutID, model=OfferRewardModel())

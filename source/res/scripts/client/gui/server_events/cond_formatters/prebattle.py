@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/prebattle.py
+import ArenaType
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -125,7 +126,10 @@ class _BattleMapFormatter(ConditionFormatter):
         result = []
         if not event.isGuiDisabled():
             mapsLabels = set()
-            for atID in condition.getMaps():
+            maps = condition.getMaps()
+            if event.hasBonusType(ARENA_BONUS_TYPE.MAPS_TRAINING):
+                maps = [ arenaTypeID for arenaTypeID in maps if arenaTypeID in ArenaType.g_cache and ArenaType.g_cache[arenaTypeID].gameplayName == 'maps_training' ]
+            for atID in maps:
                 iconData = formatters.packMissionkMapElement(atID)
                 if iconData is not None:
                     mapsLabels.add(iconData.iconLabel)

@@ -552,7 +552,7 @@ class AmmoPlugin(CrosshairPlugin):
     def __onGunAutoReloadTimeSet(self, state, stunned):
         if not self.__autoReloadCallbackID:
             timeLeft = min(state.getTimeLeft(), state.getActualValue())
-            baseValue = state.getBaseValue()
+            baseValue = round(state.getBaseValue(), 1)
             if self.__shellsInClip == 0:
                 baseValue = self.__reCalcFirstShellAutoReload(baseValue)
             self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
@@ -667,6 +667,7 @@ class VehicleStatePlugin(CrosshairPlugin):
             if self.__playerInfo is None:
                 raise SoftException('Player info must be defined at first, see vehicle_state_ctrl')
             if self.__isPlayerVehicle:
+                self._parentObj.setHasAmmo(hasAmmo=True)
                 ctx = {'type': self.__playerInfo.vehicleName}
                 template = 'personal'
             else:
@@ -1215,10 +1216,10 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             siegeVehicleDescr = typeDesc.siegeVehicleDescr
         if siegeVehicleDescr is not None:
             siegeEngineCfg = siegeVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
-            siegeMaxSpd = siegeEngineCfg['smplFwMaxSpeed']
+            siegeMaxSpd = round(siegeEngineCfg['smplFwMaxSpeed'])
         defaultVehicleCfg = defaultVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
         normalMaxSpd = defaultVehicleCfg['smplFwMaxSpeed']
-        return (round(normalMaxSpd), round(siegeMaxSpd))
+        return (round(normalMaxSpd), siegeMaxSpd)
 
     def __addSpedometer(self, vehicle):
         normalMaxSpd, siegeMaxSpd = self.__getMaxSpeeds(vehicle)

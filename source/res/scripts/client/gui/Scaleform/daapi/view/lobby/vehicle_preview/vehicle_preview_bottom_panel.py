@@ -527,10 +527,13 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         _, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, self._vehicleLevel)
         unlocks = self._itemsCache.items.stats.unlocks
         isNext2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=self._vehicleLevel)
-        isAvailableToUnlock = isXpEnough and isNext2Unlock
+        walletAvailable = self.__walletAvailableForCurrency('freeXP')
+        isAvailableToUnlock = isXpEnough and isNext2Unlock and walletAvailable
         if not isAvailableToUnlock:
             if not isXpEnough:
                 tooltip = _buildBuyButtonTooltip('notEnoughXp')
+            elif not walletAvailable:
+                tooltip = _buildBuyButtonTooltip('walletUnavailable')
             elif any((bool(cd in unlocks) for cd in g_techTreeDP.getTopLevel(nodeCD))):
                 tooltip = _buildBuyButtonTooltip('parentModuleIsLocked')
             else:

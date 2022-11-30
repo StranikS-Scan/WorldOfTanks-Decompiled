@@ -49,6 +49,10 @@ class WebExternalCache(IWebExternalCache):
         self.__eventsManager.clear()
         return
 
+    def setPause(self, value):
+        if self.__downloader:
+            self.__downloader.setPause(value)
+
     def __closeDownloader(self):
         if self.__downloader:
             self.__downloader.close()

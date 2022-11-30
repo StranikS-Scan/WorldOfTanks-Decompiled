@@ -220,6 +220,8 @@ def onShopResync():
 
 
 def onCenterIsLongDisconnected(isLongDisconnected):
+    if not BigWorld.player():
+        return
     isAvailable = not BigWorld.player().isLongDisconnectedFromCenter
     if isAvailable and not isLongDisconnected:
         SystemMessages.pushI18nMessage(MENU.CENTERISAVAILABLE, type=SystemMessages.SM_TYPE.Information)

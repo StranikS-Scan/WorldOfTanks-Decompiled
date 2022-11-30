@@ -28,13 +28,14 @@ from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel, E
 from gui.impl.gen.view_models.views.lobby.platoon.comp7_member_count_dropdown import Comp7DropdownItem
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7 import comp7_shared
-from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime, removeNationFromTechName
+from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
 from gui.impl.lobby.platoon.tooltip.platoon_wtr_tooltip import WTRTooltip
 from gui.impl.lobby.platoon.view.slot_label_html_handler import SlotLabelHtmlParser
 from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_filter_subview import SettingsPopover
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
+from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent, Comp7SquadBonusTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.prb_control import prb_getters, prbEntityProperty
@@ -43,7 +44,6 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
 from gui.shared.gui_items.badge import Badge
 from gui.shared.system_factory import registerPlatoonView, collectPlatoonView
-from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import PROTO_TYPE
@@ -358,12 +358,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         vehicle = slotData.get('selectedVehicle', {})
         if vehicle:
             vehicleItem = self._itemsCache.items.getItemByCD(vehicle.get('intCD', 0))
-            slotModel.player.vehicle.setIsPremium(self._getIsVehiclePremium(vehicleItem))
-            slotModel.player.vehicle.setName(vehicleItem.shortUserName)
-            slotModel.player.vehicle.setTechName(replaceHyphenToUnderscore(removeNationFromTechName(vehicleItem.name)))
-            slotModel.player.vehicle.setTier(vehicleItem.level if self._SHOW_VEHICLE_TIER else 0)
-            slotModel.player.vehicle.setType(vehicleItem.type)
-            slotModel.player.vehicle.setNation(vehicleItem.nationName)
+            fillVehicleModel(slotModel.player.vehicle, vehicleItem)
 
     def _setModeSlotSpecificData(self, slotData, slotModel):
         pass

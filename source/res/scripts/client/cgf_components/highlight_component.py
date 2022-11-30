@@ -14,7 +14,8 @@ class IsHighlighted(CGFComponent):
 class HighlightComponent(CGFComponent):
     editorTitle = 'Highlight'
     category = 'Common'
-    color = ComponentProperty(type=CGFMetaTypes.VECTOR4, editorName='Color', value=(0, 0, 0, 1))
+    color = ComponentProperty(type=CGFMetaTypes.VECTOR4, editorName='Color', value=(0, 0, 0, 1), annotations={'colorPicker': {'255Range': False,
+                     'useAlpha': True}})
     groupName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Group name')
 
 
@@ -38,6 +39,10 @@ class HighlightManager(CGF.ComponentManager):
     def onDynamicModelHighlightRemoved(self, _, highlightComponent, dynamicModelComponent):
         BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)
         self.__enableGroupDraw(False, highlightComponent.groupName)
+
+    @onRemovedQuery(HighlightComponent, DynamicModelComponent)
+    def onHighlightComponentRemoved(self, _, dynamicModelComponent):
+        BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)
 
     def __enableGroupDraw(self, enable, groupName):
         highlightQuery = CGF.Query(self.spaceID, (HighlightComponent, DynamicModelComponent))

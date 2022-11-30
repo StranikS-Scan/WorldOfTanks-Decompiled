@@ -73,6 +73,13 @@
       <undamaged>	vehicles/italy/It23_CC_3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It23_CC_3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It23_CC_3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It23_CC_3_MD22_III_3DSt>
+          <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Hull.model	</exploded>
+        </It23_CC_3_MD22_III_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -454,6 +461,45 @@
         <anchorShift>	0.02	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15027	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+        <position>	-0.310589 1.21916 3.22748	</position>
+        <rotation>	0.842026 -0.18006 -3.05796	</rotation>
+        <scale>	0.307199 0.191458 0.3072	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.3415	</clipAngle>
+        <anchorShift>	0.03	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15028	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.60159 0.794033 1.69353	</position>
+        <rotation>	1.56904 -1.56907 -3.12118	</rotation>
+        <scale>	0.34121 0.212655 0.341209	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37926	</clipAngle>
+        <anchorShift>	0.08	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15029	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+        <position>	1.6016 0.794001 1.69353	</position>
+        <rotation>	1.56942 1.56883 3.12131	</rotation>
+        <scale>	0.34121 0.212655 0.341209	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37926	</clipAngle>
+        <anchorShift>	0.08	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -496,6 +542,13 @@
         <undamaged>	vehicles/italy/It23_CC_3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It23_CC_3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It23_CC_3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It23_CC_3_MD22_III_3DSt>
+            <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Chassis.model	</exploded>
+          </It23_CC_3_MD22_III_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1567,6 +1620,13 @@
             <undamaged>	vehicles/italy/It23_CC_3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It23_CC_3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It23_CC_3/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <It23_CC_3_MD22_III_3DSt>
+                <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </It23_CC_3_MD22_III_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It23_CC_3/collision/Gun_01.model	</collisionModelServer>
@@ -1616,6 +1676,13 @@
         <undamaged>	vehicles/italy/It23_CC_3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It23_CC_3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It23_CC_3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It23_CC_3_MD22_III_3DSt>
+            <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </It23_CC_3_MD22_III_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It23_CC_3/collision/Turret_01.model	</collisionModelServer>
@@ -1641,18 +1708,18 @@
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.278963 0.530965 -0.382661	</rayStart>
-          <rayEnd>	1.185037 0.496763 -0.379809	</rayEnd>
-          <rayUp>	-0.343145 0.937404 -0.059372	</rayUp>
+          <rayStart>	1.284504 0.448543 -0.379443	</rayStart>
+          <rayEnd>	1.190578 0.414341 -0.376591	</rayEnd>
+          <rayUp>	-0.343147 0.937404 -0.059372	</rayUp>
           <size>	0.3	</size>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	-1.278972 0.530964 -0.38266	</rayStart>
-          <rayEnd>	-1.185046 0.496764 -0.37981	</rayEnd>
-          <rayUp>	0.342962 0.938412 -0.041954	</rayUp>
+          <rayStart>	-1.31233 0.440518 -0.377277	</rayStart>
+          <rayEnd>	-1.218405 0.406318 -0.374427	</rayEnd>
+          <rayUp>	0.342964 0.938411 -0.041954	</rayUp>
           <size>	0.3	</size>
           <isUVProportional>	true	</isUVProportional>
         </slot>
@@ -2199,6 +2266,71 @@
           <clipAngle>	0.854787	</clipAngle>
           <anchorShift>	0.546242	</anchorShift>
           <hiddenForUser>	true	</hiddenForUser>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.619944 1.92321 2.51966	</position>
+          <rotation>	0.968652 -0.379045 -2.9498	</rotation>
+          <scale>	0.484918 0.21046 0.484917	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.3415	</clipAngle>
+          <anchorShift>	0.01	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+          <position>	0.619974 1.92319 2.51966	</position>
+          <rotation>	0.968659 0.379072 2.94976	</rotation>
+          <scale>	0.484916 0.21046 0.484917	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.3415	</clipAngle>
+          <anchorShift>	0.01	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.604026 2.32106 0.729021	</position>
+          <rotation>	-0.000000 0.000000 3.14158	</rotation>
+          <scale>	0.424443 0.264529 0.424443	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.514799	</clipAngle>
+          <anchorShift>	0.11	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+          <position>	-1.29574 1.7431 1.27153	</position>
+          <rotation>	1.92298 1.48304 -0.0857737	</rotation>
+          <scale>	0.436283 0.271908 0.436282	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.37926	</clipAngle>
+          <anchorShift>	0.1	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It23_CC_3_MD22_III_3DSt	</compatibleModels>
+          <position>	1.29577 1.74307 1.27153	</position>
+          <rotation>	1.92297 -1.483 0.0856981	</rotation>
+          <scale>	0.436282 0.271907 0.436282	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.37926	</clipAngle>
+          <anchorShift>	0.1	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

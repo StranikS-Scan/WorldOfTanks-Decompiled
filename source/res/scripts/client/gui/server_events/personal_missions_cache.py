@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_missions_cache.py
+import typing
 import operator
 from collections import defaultdict
 import BigWorld
@@ -23,6 +24,8 @@ from skeletons.gui.shared import IItemsCache
 _SETTINGS_SYNCED = 1
 _EVENTS_CACHE_UPDATED = 2
 _ALL_SYNCED = _SETTINGS_SYNCED | _EVENTS_CACHE_UPDATED
+if typing.TYPE_CHECKING:
+    from skeletons.gui.server_events import IEventsCache
 
 def vehicleRequirementsCheck(quest, invVehicles, vehGetter):
     level = quest.getVehMinLevel()
@@ -37,9 +40,9 @@ def vehicleRequirementsCheck(quest, invVehicles, vehGetter):
     return False
 
 
-def processDisabledFlag(collection, disabledIdsSet):
+def processDisabledFlag(collection, disabledIds):
     for itemId, _ in collection.iteritems():
-        if itemId in disabledIdsSet:
+        if itemId in disabledIds:
             collection[itemId].setDisabledState(True)
         collection[itemId].setDisabledState(False)
 
@@ -246,7 +249,19 @@ class PersonalMissionsCache(object):
         processDisabledFlag(self.getAllOperations(), self.getDisabledPMOperations())
         processDisabledFlag(self.getAllQuests(), self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
+    def __isDiffSuitable(self, diff):
+        if not diff:
+            return True
+        if diff:
+            if 'potapovQuests' in diff or 'pm2_progress' in diff:
+                return True
+            if 'tokens' in diff and any([ t for t in PM_BRANCH_TO_FREE_TOKEN_NAME.values() if t in diff['tokens'] ]):
+                return True
+        return False
+
     def update(self, eventsCache, diff=None):
+        if not self.__isDiffSuitable(diff):
+            return
         for branch, questsData in self.__questsData.iteritems():
             qp = questsData.questsProgress
             quests = questsData.quests

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/Account.py
 import cPickle
 import copy
+import logging
 import weakref
 import zlib
 from collections import namedtuple
@@ -62,6 +63,7 @@ StreamData = namedtuple('StreamData', ['data',
  'origCrc32',
  'crc32'])
 StreamData.__new__.__defaults__ = (None,) * len(StreamData._fields)
+_logger = logging.getLogger(__name__)
 
 def _isInt(a):
     return isinstance(a, (int, long))
@@ -128,7 +130,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def __init__(self):
         global g_accountRepository
-        LOG_DEBUG('client Account.init')
+        _logger.info('client Account.init')
         propertyName, propertyValue = _CLIENT_SERVER_VERSION
         self.connectionMgr.checkClientServerVersions(propertyValue, getattr(self, propertyName, None))
         ClientChat.__init__(self)
@@ -233,7 +235,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onBecomePlayer(self):
         uniprof.enterToRegion('player.account.entering')
-        LOG_DEBUG('Account.onBecomePlayer()')
+        _logger.info('Account.onBecomePlayer()')
         self.databaseID = None
         self.inputHandler = AccountInputHandler()
         BigWorld.clearAllSpaces()
@@ -280,7 +282,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onBecomeNonPlayer(self):
         uniprof.enterToRegion('player.account.exiting')
-        LOG_DEBUG('Account.onBecomeNonPlayer()')
+        _logger.info('Account.onBecomeNonPlayer()')
         chatManager.switchPlayerProxy(None)
         self.syncData.onAccountBecomeNonPlayer()
         self.inventory.onAccountBecomeNonPlayer()
@@ -447,6 +449,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
         events.onEnqueued(QUEUE_TYPE.TUTORIAL)
 
+    @property
+    def selectedEntity(self):
+        return self.__selectedEntity
+
     def targetFocus(self, entity):
         if self.__objectsSelectionEnabled:
             self.hangarSpace.onMouseEnter(entity)
@@ -565,7 +571,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def showGUI(self, ctx):
         ctx = cPickle.loads(ctx)
-        LOG_DEBUG('showGUI', ctx)
+        _logger.info('showGUI %r', ctx)
         self.databaseID = ctx['databaseID']
         if 'prebattleID' in ctx:
             self.prebattle = ClientPrebattle.ClientPrebattle(ctx['prebattleID'])
@@ -1199,6 +1205,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
+
+    def _doCmdIntArrStr(self, cmd, arr, s, callback):
+        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

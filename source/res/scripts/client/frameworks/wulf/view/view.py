@@ -16,12 +16,12 @@ _logger = logging.getLogger(__name__)
 class ViewSettings(typing.Generic[TViewModel]):
     __slots__ = ('__proxy', 'args', 'kwargs')
 
-    def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None, args=()):
+    def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None, args=(), kwargs=None):
         super(ViewSettings, self).__init__()
         self.__proxy = PyObjectViewSettings(layoutID)
         self.__proxy.flags = flags
         self.args = args
-        self.kwargs = {}
+        self.kwargs = kwargs or {}
         if model is not None:
             self.__proxy.model = getProxy(model)
         return
@@ -56,6 +56,14 @@ class ViewSettings(typing.Generic[TViewModel]):
             raise SoftException('model should be ViewModel class or extends it')
         self.__proxy.model = getProxy(model)
         return
+
+    @property
+    def textureName(self):
+        return self.__proxy.textureName
+
+    @textureName.setter
+    def textureName(self, textureName):
+        self.__proxy.textureName = textureName
 
     def clear(self):
         self.__proxy = None
@@ -124,6 +132,16 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
     def getParentView(self):
         return self.proxy.getParent() if self.proxy is not None else None
 
+    def setHold(self, value):
+        if self.proxy is not None:
+            self.proxy.setHold(value)
+        return
+
+    def setHoldSwfs(self, value):
+        if self.proxy is not None:
+            self.proxy.setHoldSwfs(value)
+        return
+
     def getChildView(self, resourceID):
         return self.proxy.getChild(resourceID) if self.proxy is not None else None
 
@@ -169,6 +187,9 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
 
     def createContextMenu(self, event):
         return None
+
+    def canBeClosed(self):
+        return True
 
     def _onLoading(self, *args, **kwargs):
         pass

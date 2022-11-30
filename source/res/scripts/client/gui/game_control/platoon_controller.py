@@ -9,6 +9,7 @@ import Event
 import SoundGroups
 import VOIP
 from CurrentVehicle import g_currentVehicle
+import CGF
 from shared_utils import findFirst
 from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
 from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
@@ -21,7 +22,6 @@ from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
@@ -57,6 +57,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
+from cgf_components.hangar_camera_manager import HangarCameraManager
 if TYPE_CHECKING:
     from typing import Optional as TOptional, Tuple as TTuple
     from UnitBase import ProfileVehicle
@@ -213,6 +214,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onPlatoonTankUpdated = Event.Event()
         self.onAutoSearchCooldownChanged = Event.Event()
         self.onPlatoonTankRemove = Event.Event()
+        self.onVisibilityChanged = Event.Event()
         self.__prevPrbEntityInfo = _PrbEntityInfo(QUEUE_TYPE.UNKNOWN, PREBATTLE_TYPE.NONE)
         self.__waitingReadyAccept = False
         return
@@ -833,8 +835,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__currentlyDisplayedTanks = 0
         if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
             self.__updatePlatoonTankInfo()
-            cameraManager = self.__hangarSpace.space.getCameraManager()
-            cameraManager.setPlatoonStartingCameraPosition()
+            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            if cameraManager:
+                cameraManager.enablePlatoonMode(True)
 
     def __stopListening(self):
         _logger.debug('PlatoonController: stop listening')
@@ -921,20 +924,16 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def __platoonTankLoaded(self, event):
         self.__currentlyDisplayedTanks += 1
         if self.__currentlyDisplayedTanks == 1:
-            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
-             'setIdle': True,
-             'setParallax': False}), EVENT_BUS_SCOPE.LOBBY)
-            cameraManager = self.__hangarSpace.space.getCameraManager()
-            cameraManager.setPlatoonCameraDistance(enable=True)
+            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            if cameraManager:
+                cameraManager.enablePlatoonMode(True)
 
     def __platoonTankDestroyed(self, event):
         self.__currentlyDisplayedTanks = max(0, self.__currentlyDisplayedTanks - 1)
         if self.__currentlyDisplayedTanks <= 0:
-            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
-             'setIdle': True,
-             'setParallax': False}), EVENT_BUS_SCOPE.LOBBY)
-            cameraManager = self.__hangarSpace.space.getCameraManager()
-            cameraManager.setPlatoonCameraDistance(enable=False)
+            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            if cameraManager:
+                cameraManager.enablePlatoonMode(False)
 
     def __getNotReadyPlayersCount(self):
         players = self.prbEntity.getPlayers().values()
@@ -947,9 +946,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
         else:
             self.__isPlatoonVisualizationEnabled = displayPlatoonMembers
-            isInPlatoon = self.isInPlatoon()
-            self.onPlatoonTankVisualizationChanged(self.__isPlatoonVisualizationEnabled and isInPlatoon)
-            self.__updatePlatoonTankInfo()
+            state = self.getFunctionalState()
+            if state is not None:
+                self.onPlatoonTankVisualizationChanged(self.__isPlatoonVisualizationEnabled and self.isInPlatoon())
+                self.__updatePlatoonTankInfo()
             return
 
     def __onSettingsApplied(self, diff):

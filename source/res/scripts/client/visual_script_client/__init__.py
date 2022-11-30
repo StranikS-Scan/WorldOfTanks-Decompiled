@@ -31,6 +31,7 @@ def registerForGeneral():
     import battle_hud_block
     import cgf_blocks
     import bitmask_blocks
+    import new_year_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
@@ -46,6 +47,7 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(bitmask_blocks)
     g_blockRegistrar.regBlocksFromModule(hangar_blocks)
     g_blockRegistrar.regBlocksFromModule(hint_blocks)
+    g_blockRegistrar.regBlocksFromModule(new_year_blocks)
 
 
 g_blockRegistrar.regContext(AbilityContextClient)

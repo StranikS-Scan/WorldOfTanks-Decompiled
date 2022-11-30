@@ -248,4 +248,5 @@ class RemappingConditionNames(object):
 
 class RemappingNames(object):
     TEST = 'test'
-    ALL = set(() + ((TEST,) if IS_DEVELOPMENT else ()))
+    FEP_NEW_YEAR = 'fep_new_year'
+    ALL = set((FEP_NEW_YEAR,) + ((TEST,) if IS_DEVELOPMENT else ()))

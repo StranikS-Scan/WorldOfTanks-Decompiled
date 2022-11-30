@@ -3858,6 +3858,69 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	NY23	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	362	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_25.png	</texture>
+      <color>	9 30 40 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2023_bro	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	363	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_color_07.png	</texture>
+      <color>	176 141 141 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2023_cat	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	365	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_36.png	</texture>
+      <color>	17 24 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2023_a	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	366	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_37.png	</texture>
+      <color>	204 164 30 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2023_m	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	367	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	32 32 64 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ny_2023_m_challenge	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	theboys	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -4037,6 +4100,51 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/na_america_bd	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY23 RUBY	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	359	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	20 22 40 255	</color>
+      <gloss>	0.53	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ruby_ny_2023_clock	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	360	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	64 0 41 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/ruby_ny_2023_salad	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	361	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_19.png	</texture>
+      <color>	21 43 79 255	</color>
+      <gloss>	0.502	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/ruby_ny_2023_snowman	</userString>
+      <tags>	hiddenInUI	</tags>
     </paint>
     <usages>
       <item>

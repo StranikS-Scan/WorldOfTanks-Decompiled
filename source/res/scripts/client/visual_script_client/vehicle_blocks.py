@@ -3,6 +3,7 @@
 import weakref
 import random
 import BigWorld
+import GenericComponents
 from visual_script.block import Block, EDITOR_TYPE, InitParam, buildStrKeysValue
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
@@ -208,6 +209,31 @@ class GetAnyVehicle(Block, VehicleMeta):
         vehicle = random.choice(vehicles) if vehicles else None
         self._vehicle.setValue(weakref.proxy(vehicle) if vehicle else None)
         return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GameObjectToVehicle(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GameObjectToVehicle, self).__init__(*args, **kwargs)
+        self._go = self._makeDataInputSlot('gameObject', SLOT_TYPE.GAME_OBJECT)
+        self._vehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, self._exec)
+
+    def _exec(self):
+        go = self._go.getValue()
+        if go is None:
+            errorVScript(self, 'Please check input game object.')
+            return
+        else:
+            goSyncComponent = go.findComponentByType(GenericComponents.EntityGOSync)
+            if goSyncComponent is None:
+                errorVScript(self, "Can't find associated entity. Please check input game object")
+                return
+            self._vehicle.setValue(weakref.proxy(goSyncComponent.entity))
+            return
 
     @classmethod
     def blockAspects(cls):

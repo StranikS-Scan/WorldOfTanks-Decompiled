@@ -130,6 +130,9 @@ class Stats(object):
             spaDiff = cacheDiff.get('SPA', None)
             if spaDiff:
                 synchronizeDicts(spaDiff, cache.setdefault('SPA', dict()))
+            dynamicCurrenciesDiff = cacheDiff.get('dynamicCurrencies', None)
+            if dynamicCurrenciesDiff:
+                synchronizeDicts(dynamicCurrenciesDiff, cache.setdefault('dynamicCurrencies', dict()))
             entitlementsDiff = cacheDiff.get('entitlements', None)
             if entitlementsDiff is not None:
                 synchronizeDicts(entitlementsDiff, cache.setdefault('entitlements', {}))

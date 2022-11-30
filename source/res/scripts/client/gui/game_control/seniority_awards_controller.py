@@ -1,59 +1,87 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/seniority_awards_controller.py
+import typing
+import BigWorld
 import Event
-from account_helpers.AccountSettings import AccountSettings, SENIORITY_AWARDS_WINDOW_SHOWN
-from gui.shared.event_dispatcher import showSeniorityAwardsNotificationWindow
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import ISeniorityAwardsController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-_SA_TOKEN = 'SeniorityAwards2021'
-_SA_EVENT_POSTFIX = '_psa2021'
+from skeletons.gui.shared.utils import IHangarSpace
+from helpers.server_settings import SeniorityAwardsConfig
 SACOIN = 'sacoin'
-_NOTIFICATION_REMIND_BEFORE_END = time_utils.ONE_DAY * 30
-_NOTIFICATION_REMIND_LAST_CALL_BEFORE_END = time_utils.ONE_DAY * 14
 
 class SeniorityAwardsController(ISeniorityAwardsController):
-    __slots__ = ('__isEnabled', '__endTimestamp')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __eventsCache = dependency.descriptor(IEventsCache)
+    __hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(SeniorityAwardsController, self).__init__()
-        self.__isEnabled = False
-        self.__endTimestamp = None
         self.onUpdated = Event.Event()
-        return
 
     @property
     def isEnabled(self):
-        return self.__isEnabled
+        return self._config.enabled
 
     @property
-    def endTimestamp(self):
-        return self.__endTimestamp
+    def timeLeft(self):
+        return self._config.endTime - time_utils.getServerUTCTime() if self.isEnabled else -1
 
     @property
-    def showNotificationLastCallTimestamp(self):
-        return self.__endTimestamp - _NOTIFICATION_REMIND_LAST_CALL_BEFORE_END
+    def isRewardReceived(self):
+        return self.__itemsCache.items.tokens.isTokenAvailable(self._config.receivedRewardsToken)
 
     @property
-    def needShowNotification(self):
-        coins = self.getSACoin()
-        notificationShown = AccountSettings.getSessionSettings(SENIORITY_AWARDS_WINDOW_SHOWN)
-        return 0 < self.__endTimestamp - time_utils.getServerUTCTime() < _NOTIFICATION_REMIND_BEFORE_END and coins > 0 and not notificationShown and self.__isEnabled
+    def seniorityQuestPrefix(self):
+        return self._config.rewardQuestsPrefix
+
+    @property
+    def isEligibleToReward(self):
+        return self.isEnabled and self.__itemsCache.items.tokens.isTokenAvailable(self._config.rewardEligibilityToken)
+
+    @property
+    def isNeedToShowRewardNotification(self):
+        return self.isEnabled and self.__hangarSpace.spaceInited and self._config.showRewardNotification and self.isEligibleToReward
+
+    @property
+    def clockOnNotification(self):
+        return self._config.clockOnNotification
 
     def getSACoin(self):
         return self.__itemsCache.items.stats.dynamicCurrencies.get(SACOIN, 0)
 
+    @property
+    def pendingReminderTimestamp(self):
+        if not self.isEnabled:
+            return None
+        else:
+            timestamp = time_utils.getServerUTCTime()
+            reminders = self._config.reminders
+            pendingNotifications = [ reminderTS for reminderTS in reminders if reminderTS < timestamp ]
+            return max(pendingNotifications) if pendingNotifications else None
+
+    def claimReward(self):
+        Waiting.show('claimSeniorityAwards')
+        BigWorld.player().requestSingleToken(self._config.claimRewardToken)
+
+    def markRewardReceived(self):
+        Waiting.hide('claimSeniorityAwards')
+
     def onLobbyInited(self, event):
         super(SeniorityAwardsController, self).onLobbyInited(event)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
-        self.__update()
-        if self.needShowNotification:
-            showSeniorityAwardsNotificationWindow()
+        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+        if self.__hangarSpace.spaceInited:
+            self.__update()
+        else:
+            self.__hangarSpace.onSpaceCreate += self.__onHangarLoaded
+
+    def onAccountBecomeNonPlayer(self):
+        super(SeniorityAwardsController, self).onAccountBecomeNonPlayer()
+        self.__clear()
 
     def fini(self):
         self.onUpdated.clear()
@@ -68,25 +96,32 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         self.__removeListeners()
         super(SeniorityAwardsController, self).onAvatarBecomePlayer()
 
+    @property
+    def _config(self):
+        return self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig() if self.__lobbyContext else SeniorityAwardsConfig()
+
+    def __onHangarLoaded(self):
+        self.__update()
+
     def __clear(self):
         self.__removeListeners()
-        self.__isEnabled = False
         self.__endTimestamp = None
+        self.__clockOnNotification = None
         return
 
     def __removeListeners(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
+        self.__hangarSpace.onSpaceCreate -= self.__onHangarLoaded
+        g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def __onTokensUpdate(self, diff):
+        eligibilityToken = self._config.rewardEligibilityToken
+        if eligibilityToken and eligibilityToken in diff:
+            self.__update()
 
     def __onSettingsChanged(self, diff):
         if 'seniority_awards_config' in diff:
             self.__update()
 
     def __update(self):
-        saCfg = self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig()
-        self.__isEnabled = saCfg.isEnabled()
-        self.__endTimestamp = saCfg.endTimestamp()
         self.onUpdated()
-
-    @staticmethod
-    def __eventFilter():
-        return lambda q: _SA_EVENT_POSTFIX in q.getID()

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
+import logging
 import math
 import weakref
 import zlib
@@ -99,6 +100,7 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import getModificationCache
 import VOIP
+_logger = logging.getLogger(__name__)
 
 class _CRUISE_CONTROL_MODE(object):
     NONE = 0
@@ -193,7 +195,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     followTeamID = property(lambda self: self.observableTeamID if self.observableTeamID else self.team)
 
     def __init__(self):
-        LOG_DEBUG('client Avatar.init')
+        _logger.info('client Avatar.init')
         ClientChat.__init__(self)
         for comp in AVATAR_COMPONENTS:
             comp.__init__(self)
@@ -278,7 +280,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def onBecomePlayer(self):
         uniprof.enterToRegion('avatar.entering')
-        LOG_DEBUG('[INIT_STEPS] Avatar.onBecomePlayer')
+        _logger.info('[INIT_STEPS] Avatar.onBecomePlayer')
         self.__dynamicObjectsCache.load(self.arenaGuiType)
         BigWorld.cameraSpaceID(0)
         BigWorld.camera(BigWorld.CursorCamera())
@@ -397,7 +399,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onBecomeNonPlayer(self):
         uniprof.exitFromRegion('avatar.arena.battle')
         uniprof.enterToRegion('avatar.exiting')
-        LOG_DEBUG('[INIT_STEPS] Avatar.onBecomeNonPlayer')
+        _logger.info('[INIT_STEPS] Avatar.onBecomeNonPlayer')
         try:
             if self.gunRotator is not None:
                 self.gunRotator.destroy()
@@ -525,7 +527,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def onEnterWorld(self, prereqs):
-        LOG_DEBUG('[INIT_STEPS] Avatar.onEnterWorld')
+        _logger.info('[INIT_STEPS] Avatar.onEnterWorld')
         if self.__initProgress & _INIT_STEPS.ENTERED_WORLD > 0:
             return
         else:
@@ -549,12 +551,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def onLeaveWorld(self):
-        LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
+        _logger.info('[INIT_STEPS] Avatar.onLeaveWorld')
         self.__consistentMatrices.notifyLeaveWorld(self)
         self.__cancelWaitingForCharge()
 
     def onVehicleChanged(self):
-        LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)
+        _logger.info('Avatar vehicle has changed to %s', self.vehicle)
         AvatarObserver.onVehicleChanged(self)
         if self.vehicle is not None:
             self.__consistentMatrices.notifyVehicleChanged(self)
@@ -587,7 +589,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def onSpaceLoaded(self):
-        LOG_DEBUG('[INIT_STEPS] Avatar.onSpaceLoaded')
+        _logger.info('[INIT_STEPS] Avatar.onSpaceLoaded')
         self.__applyTimeAndWeatherSettings()
         self.__initProgress |= _INIT_STEPS.SPACE_LOADED
         self.__onInitStepCompleted()
@@ -2116,7 +2118,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.inputHandler.selectPlayer(vehicleID)
 
     def leaveArena(self):
-        LOG_DEBUG('Avatar.leaveArena')
+        _logger.info('Avatar.leaveArena')
         from helpers import statistics
         self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team)
         self.statsCollector.needCollectSessionData(True)

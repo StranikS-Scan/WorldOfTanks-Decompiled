@@ -17,7 +17,7 @@ from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.event_dispatcher import runSalesChain
 from gui.shared.view_helpers import UsersInfoHelper
-from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.functions import makeTooltip, mouseScreenPosition
 from helpers import time_utils
 from helpers import dependency
 from messenger.storage import storage_getter
@@ -35,6 +35,7 @@ from items.components.crew_books_constants import CrewBookCacheType
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
+NY_OVERLAY_PAGE_CHANGED_EVENT = 'nyOverlayPageChanged'
 
 def _itemTypeValidator(itemType, _=None):
     if not ItemPackType.hasValue(itemType):
@@ -126,6 +127,14 @@ class _ShowAdditionalRewardsTooltipSchema(W2CSchema):
     y = Field(required=True, type=int)
 
 
+class _ShowResourceTooltipSchema(W2CSchema):
+    args = Field(required=True, type=dict)
+
+
+class _NYOverlaySchema(W2CSchema):
+    is_main_page = Field(required=True, type=bool)
+
+
 class UtilWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
@@ -143,6 +152,10 @@ class UtilWebApiMixin(object):
             g_eventBus.handleEvent(HasCtxEvent(eventType=HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, ctx={'alias': alias,
              'value': cmd.value or ''}))
         return
+
+    @w2c(_NYOverlaySchema, 'set_ny_overlay_main_page')
+    def setNyOverlayMainPageIsDisplayed(self, cmd):
+        g_eventBus.handleEvent(HasCtxEvent(eventType=NY_OVERLAY_PAGE_CHANGED_EVENT, ctx={'isMainPage': cmd.is_main_page}))
 
     @w2c(_GetCountersSchema, 'get_counters')
     def getCountersInfo(self, cmd):
@@ -224,6 +237,29 @@ class UtilWebApiMixin(object):
             bonuses.extend(getNonQuestBonuses(key, value))
 
         self.__getTooltipMgr().onCreateWulfTooltip(TC.ADDITIONAL_REWARDS, [bonuses], cmd.x, cmd.y)
+
+    @w2c(_ShowResourceTooltipSchema, 'show_random_resource_tooltip')
+    def showRandomResourceTooltip(self, cmd):
+        mPosX, mPosY = mouseScreenPosition()
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.NY_RANDOM_RESOURCE, [cmd.args['resourceValue'], cmd.args['isShownFromStore']], int(mPosX), int(mPosY))
+
+    @w2c(_ShowResourceTooltipSchema, 'show_resource_tooltip')
+    def showResourceTooltip(self, cmd):
+        mPosX, mPosY = mouseScreenPosition()
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.NY_RESOURCE_FOR_SHOP, [cmd.args['type']], int(mPosX), int(mPosY))
+
+    @w2c(_ShowResourceTooltipSchema, 'show_restriction_tooltip')
+    def showRestrictionTooltip(self, cmd):
+        mPosX, mPosY = mouseScreenPosition()
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.NY_REWARD_KIT_RESTRICTION, [cmd.args['count'],
+         cmd.args['maxCount'],
+         cmd.args['isLastDay'],
+         cmd.args['countdownTimestamp']], int(mPosX), int(mPosY))
+
+    @w2c(W2CSchema, 'show_resource_list_tooltip')
+    def showResourceListTooltip(self, _):
+        mPosX, mPosY = mouseScreenPosition()
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.NY_RESOURCE_LIST, [], int(mPosX), int(mPosY))
 
     @w2c(W2CSchema, 'server_timestamp')
     def getCurrentLocalServerTimestamp(self, _):

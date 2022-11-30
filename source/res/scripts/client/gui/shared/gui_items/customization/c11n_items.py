@@ -99,6 +99,7 @@ class SpecialEvents(object):
     NY20 = 'NY2020_style'
     NY21 = 'NY2021_style'
     NY22 = 'NY2022_style'
+    NY23 = 'NY2023_style'
     FOOTBALL18 = 'football2018'
     WINTER_HUNT = 'winter_hunt'
     KURSK_BATTLE = 'Kursk_battle'
@@ -109,6 +110,7 @@ class SpecialEvents(object):
      NY20,
      NY21,
      NY22,
+     NY23,
      FOOTBALL18,
      WINTER_HUNT,
      KURSK_BATTLE,
@@ -119,6 +121,7 @@ class SpecialEvents(object):
      NY20: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      NY21: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      NY22: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
+     NY23: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      FOOTBALL18: backport.image(R.images.gui.maps.icons.customization.style_info.football()),
      WINTER_HUNT: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      KURSK_BATTLE: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
@@ -129,6 +132,7 @@ class SpecialEvents(object):
      NY20: backport.text(R.strings.vehicle_customization.styleInfo.event.ny20()),
      NY21: backport.text(R.strings.vehicle_customization.styleInfo.event.ny21()),
      NY22: backport.text(R.strings.vehicle_customization.styleInfo.event.ny22()),
+     NY23: backport.text(R.strings.vehicle_customization.styleInfo.event.ny23()),
      FOOTBALL18: backport.text(R.strings.vehicle_customization.styleInfo.event.football18()),
      WINTER_HUNT: backport.text(R.strings.vehicle_customization.styleInfo.event.winter_hunt()),
      KURSK_BATTLE: backport.text(R.strings.vehicle_customization.styleInfo.event.kursk_battle()),
@@ -958,6 +962,10 @@ class Attachment(Customization):
     @property
     def modelName(self):
         return self.descriptor.modelName
+
+    @property
+    def hangarModelName(self):
+        return self.descriptor.hangarModelName
 
     @property
     def sequenceId(self):

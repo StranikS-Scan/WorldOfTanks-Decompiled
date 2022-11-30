@@ -96,16 +96,21 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         self._platoonCtrl.onPlatoonTankUpdated += self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged += self.removeModelFromScene
         self._platoonCtrl.onPlatoonTankRemove += self.__onPlatoonTankRemove
+        self._platoonCtrl.onVisibilityChanged += self._onVisibilityChanged
         self._platoonCtrl.registerPlatoonTank(self)
-        self.setEnable(False)
+        super(PlatoonTank, self).setEnable(False)
 
     def onLeaveWorld(self):
         self._platoonCtrl.onPlatoonTankUpdated -= self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged -= self.removeModelFromScene
         self._platoonCtrl.onPlatoonTankRemove -= self.__onPlatoonTankRemove
+        self._platoonCtrl.onVisibilityChanged -= self._onVisibilityChanged
         super(PlatoonTank, self).onLeaveWorld()
 
     def onMouseClick(self):
+        pass
+
+    def setEnable(self, enabled):
         pass
 
     def removeModelFromScene(self, isEnabled):
@@ -160,6 +165,13 @@ class PlatoonTank(ClientSelectableCameraVehicle):
     def _onVehicleDestroy(self):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeVehicle()
+
+    def _onVisibilityChanged(self, visible):
+        if visible:
+            self.recreateVehicle()
+        else:
+            self.removeVehicle()
+            self._onVehicleDestroy()
 
     def __onPlatoonTankRemove(self, slotIndex):
         if self.slotIndex == slotIndex:

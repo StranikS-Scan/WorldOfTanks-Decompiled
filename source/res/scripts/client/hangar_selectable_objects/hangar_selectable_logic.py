@@ -4,10 +4,13 @@ import BigWorld
 import SoundGroups
 from gui.Scaleform.Waiting import Waiting
 from hangar_selectable_objects import ISelectableObject
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 from .base_selectable_logic import BaseSelectableLogic
 
 class HangarSelectableLogic(BaseSelectableLogic):
     __slots__ = ('__selected3DEntity', '__selected3DEntityUnderMouseDown')
+    __hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(HangarSelectableLogic, self).__init__()
@@ -15,7 +18,13 @@ class HangarSelectableLogic(BaseSelectableLogic):
         self.__selected3DEntityUnderMouseDown = None
         return
 
+    def init(self, callback=None):
+        super(HangarSelectableLogic, self).init()
+        self._hangarSpace.setSelectionEnabled(True)
+        self._onNotifyCursorOver3dScene(self.__hangarSpace.isCursorOver3DScene)
+
     def fini(self):
+        self._hangarSpace.setSelectionEnabled(False)
         self.__selected3DEntityUnderMouseDown = None
         if self.__selected3DEntity is not None:
             self.__fade3DEntity(self.__selected3DEntity)

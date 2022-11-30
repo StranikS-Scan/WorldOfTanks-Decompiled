@@ -1459,4 +1459,55 @@
     </projection_decal>
     <name>	Twitch November 2022	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 220g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	811	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_152_AM.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_152	</userString>
+      <tags>	styleOnly hiddenInUI formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_152_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	812	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_153.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_152	</userString>
+      <tags>	styleOnly hiddenInUI formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	814	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_154.dds	</texture>
+      <maxNumber>	6	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_154	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	815	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_155.dds	</texture>
+      <maxNumber>	6	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_152	</userString>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	816	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_156.dds	</texture>
+      <maxNumber>	6	</maxNumber>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_156	</userString>
+      <tags>	formfactor_square direction_right_to_left disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	NY23 RUBY	</name>
+  </itemGroup>
 </projection_decals_nonCN.xml>

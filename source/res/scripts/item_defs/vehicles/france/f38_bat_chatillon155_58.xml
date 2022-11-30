@@ -69,6 +69,13 @@
       <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F38_Bat_Chatillon155_58_MD22_III_3DSt>
+          <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Hull.model	</exploded>
+        </F38_Bat_Chatillon155_58_MD22_III_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -92,10 +99,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.703612 0.395586 2.21271	</rayStart>
-        <rayEnd>	0.703615 0.00583996 2.12273	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.32	</size>
+        <rayStart>	0.545213 0.361735 2.281678	</rayStart>
+        <rayEnd>	0.545352 -0.028017 2.191725	</rayEnd>
+        <rayUp>	-0.000002 0.224882 -0.974386	</rayUp>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -555,6 +562,45 @@
         <clipAngle>	0.641224	</clipAngle>
         <anchorShift>	0.449121	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15035	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+        <position>	0.000007 1.215 2.38596	</position>
+        <rotation>	0.2639 -0.000152876 3.14157	</rotation>
+        <scale>	0.544591 0.3 0.544607	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.15706	</clipAngle>
+        <anchorShift>	-0.013137	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15036	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.77681 0.979776 2.07898	</position>
+        <rotation>	1.509 -1.33226 -2.91562	</rotation>
+        <scale>	0.447601 0.447598 0.447593	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.820197	</clipAngle>
+        <anchorShift>	0.000000	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15037	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+        <position>	1.77772 0.964582 2.0792	</position>
+        <rotation>	1.50902 1.33217 2.91553	</rotation>
+        <scale>	0.4476 0.447598 0.447593	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.820197	</clipAngle>
+        <anchorShift>	0.000000	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -597,6 +643,13 @@
         <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F38_Bat_Chatillon155_58_MD22_III_3DSt>
+            <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Chassis.model	</exploded>
+          </F38_Bat_Chatillon155_58_MD22_III_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -674,6 +727,33 @@
                   <row3>	0.000000 1.150708 -3.067239	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.009088 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.211507 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.039190	</row2>
+                  <row3>	0.000000 0.999349 -0.040215	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.345397 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299921 -0.006873	</row1>
+                  <row2>	0.000000 0.139852 6.102788	</row2>
+                  <row3>	0.000000 1.308099 -0.317574	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.345400 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.188035 -0.233759	</row1>
+                  <row2>	0.000000 0.390646 0.314234	</row2>
+                  <row3>	0.000000 1.097172 -3.191020	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.819600 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.805436	</row2>
+                  <row3>	-1.799331 1.080492 -0.238898	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -739,6 +819,45 @@
                   <row3>	0.000000 1.150708 -3.067239	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.009088 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.211507 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.039190	</row2>
+                  <row3>	0.000000 0.999349 -0.040215	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.345397 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299921 -0.006873	</row1>
+                  <row2>	0.000000 0.139852 6.102788	</row2>
+                  <row3>	0.000000 1.308099 -0.317574	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.345400 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.188035 -0.233759	</row1>
+                  <row2>	0.000000 0.390646 0.314234	</row2>
+                  <row3>	0.000000 1.097172 -3.191020	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.819600 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.805436	</row2>
+                  <row3>	1.799000 1.080492 -0.238898	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.656289 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.582324 -0.529416	</row1>
+                  <row2>	0.000000 0.201808 0.221976	</row2>
+                  <row3>	1.305615 1.304494 2.997238	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.504817 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.543546	</row2>
+                  <row3>	1.800968 1.104072 2.894484	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
         </trackPair>
@@ -763,7 +882,7 @@
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
-          <radius>	0.286708	</radius>
+          <radius>	0.403708	</radius>
           <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
@@ -791,7 +910,7 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
-          <radius>	0.286708	</radius>
+          <radius>	0.403708	</radius>
           <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
@@ -1070,7 +1189,7 @@
             <segmentSyncPivotOffset>	-1.34513	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-766.16	</startAngle>
+              <startAngle>	-755.16	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
@@ -1387,7 +1506,7 @@
             <segmentSyncPivotOffset>	1.34487	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-760.362	</startAngle>
+              <startAngle>	-757.362	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
@@ -1654,6 +1773,13 @@
             <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F38_Bat_Chatillon155_58_MD22_III_3DSt>
+                <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </F38_Bat_Chatillon155_58_MD22_III_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Gun_01.model	</collisionModelServer>
@@ -1719,6 +1845,16 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000956 0.026654 5.77	</rayStart>
+              <rayEnd>	0.000956 0.026654 6.24	</rayEnd>
+              <rayUp>	0.147 0 0	</rayUp>
+              <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+              <size>	0.47	</size>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1737,6 +1873,13 @@
         <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F38_Bat_Chatillon155_58/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F38_Bat_Chatillon155_58_MD22_III_3DSt>
+            <undamaged>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F38_Bat_Chatillon155_58/_skins/F38_Bat_Chatillon155_58_MD22_III_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </F38_Bat_Chatillon155_58_MD22_III_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Turret_01.model	</collisionModelServer>
@@ -2472,6 +2615,71 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.22366	</clipAngle>
           <anchorShift>	0.080666	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35056	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.937872 2.58115 1.24249	</position>
+          <rotation>	1.3933 -0.846342 3.13813	</rotation>
+          <scale>	0.306359 0.306363 0.306359	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.15062	</clipAngle>
+          <anchorShift>	-0.026342	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35057	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+          <position>	1.85294 1.92419 -1.24352	</position>
+          <rotation>	1.52802 1.22893 2.76467	</rotation>
+          <scale>	0.338535 0.338533 0.338529	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.357826	</clipAngle>
+          <anchorShift>	0.053647	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35058	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.584073 2.86072 0.23362	</position>
+          <rotation>	0.000000 -0.000000 3.14157	</rotation>
+          <scale>	0.773342 0.432006 0.773339	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.23665	</clipAngle>
+          <anchorShift>	0.006219	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35059	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+          <position>	0.000016 1.88433 -2.33859	</position>
+          <rotation>	1.56856 0.657957 0.717305	</rotation>
+          <scale>	0.479801 0.342893 0.479793	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.74343	</clipAngle>
+          <anchorShift>	-0.052835	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35060	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.000031 2.83883 -0.846922	</position>
+          <rotation>	3.05637 -0.000224113 -0.000082	</rotation>
+          <scale>	0.632439 0.143494 0.632437	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.501868	</clipAngle>
+          <anchorShift>	0.060842	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

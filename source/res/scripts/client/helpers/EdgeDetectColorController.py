@@ -6,6 +6,7 @@ from PlayerEvents import g_playerEvents
 from Account import PlayerAccount
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IFestivityController
 _DEFAULT_OVERLAY_COLOR = Math.Vector4(1, 1, 1, 1)
 _OVERLAY_SOLID_KEYS = ('overlay', 'destructible')
 _OVERLAY_PATTERN_KEYS = ('overlayForeground', 'overlay', 'destructibleForeground', 'destructible')
@@ -15,6 +16,7 @@ g_instance = None
 
 class EdgeDetectColorController(object):
     settingsCore = dependency.descriptor(ISettingsCore)
+    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self, dataSec):
         self.__colors = {'common': dict(),
@@ -28,10 +30,12 @@ class EdgeDetectColorController(object):
     def create(self):
         self.settingsCore.onSettingsChanged += self.__changeColor
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
+        self._festivityController.onStateChanged += self.__updateFestivityState
 
     def destroy(self):
         self.settingsCore.onSettingsChanged -= self.__changeColor
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
+        self._festivityController.onStateChanged -= self.__updateFestivityState
 
     def __readColors(self, colors, cType, section):
         cName = '{}/'.format(cType)
@@ -59,16 +63,20 @@ class EdgeDetectColorController(object):
     def __onAccountShowGUI(self, ctx):
         self.updateColors()
 
+    def __updateFestivityState(self):
+        self.updateColors()
+
     def __changeColor(self, diff):
         if 'isColorBlind' not in diff:
             return
         isHangar = isinstance(BigWorld.player(), PlayerAccount)
         cType = 'colorBlind' if diff['isColorBlind'] else 'common'
+        isFestivityHangar = isHangar and self._festivityController.isEnabled()
         colors = self.__colors[cType]
         colorsSet = (colors['hangar'] if isHangar else colors['self'],
          colors['enemy'],
          colors['friend'],
-         colors['flag'])
+         self._festivityController.getHangarEdgeColor() if isFestivityHangar else colors['flag'])
         i = 0
         for c in colorsSet:
             BigWorld.wgSetEdgeDetectEdgeColor(i, c)

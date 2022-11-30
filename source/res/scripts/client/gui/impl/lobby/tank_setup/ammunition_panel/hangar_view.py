@@ -14,6 +14,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IUISpamController
+from skeletons.new_year import INewYearController
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN,
  OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT: UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN}
@@ -21,6 +22,7 @@ _AMMUNITION_PANEL_HINTS = {OnceOnlyHints.AMMUNITION_PANEL_HINT: UI_STORAGE_KEYS.
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _uiSpamController = dependency.descriptor(IUISpamController)
+    _nyController = dependency.descriptor(INewYearController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -36,11 +38,13 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
         super(HangarAmmunitionPanelView, self)._addListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex += self._onChangeSetupIndex
         self.viewModel.onEscKeyDown += self.__onEscKeyDown
+        self._nyController.onStateChanged += self.__onStateChanged
 
     def _removeListeners(self):
         super(HangarAmmunitionPanelView, self)._removeListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex -= self._onChangeSetupIndex
         self.viewModel.onEscKeyDown -= self.__onEscKeyDown
+        self._nyController.onStateChanged -= self.__onStateChanged
 
     def _onLoading(self, *args, **kwargs):
         super(HangarAmmunitionPanelView, self)._onLoading(*args, **kwargs)
@@ -70,3 +74,6 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
 
     def __onEscKeyDown(self):
         g_eventBus.handleEvent(AmmunitionPanelViewEvent(AmmunitionPanelViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
+
+    def __onStateChanged(self):
+        self.update(fullUpdate=True)

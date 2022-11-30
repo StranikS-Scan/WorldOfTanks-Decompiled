@@ -75,7 +75,7 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
 ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
-AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'initialVisibility', 'partNodeAlias'))
+AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName', 'hangarModelName', 'sequenceId', 'attachmentLogic', 'initialVisibility', 'partNodeAlias'))
 AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  '',
  '',
@@ -645,7 +645,7 @@ def getAttachments(outfit, vehicleDescr):
 
     def getAttachmentParams(slotParams, slotData, idx):
         item = getItemByCompactDescr(slotData.intCD)
-        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=item.modelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, initialVisibility=item.initialVisibility, partNodeAlias='attachment' + str(idx) if item.attachmentLogic != 'prefab' else None)
+        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=item.modelName, hangarModelName=item.hangarModelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, initialVisibility=item.initialVisibility, partNodeAlias='attachment' + str(idx) if item.attachmentLogic != 'prefab' else None)
 
     return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
 

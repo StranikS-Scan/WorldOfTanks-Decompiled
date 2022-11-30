@@ -337,6 +337,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_BATTLEPASSPOINTS = '#messenger:serviceChannelMessages/battleResults/quests/battlePassPoints'
     SERVICECHANNELMESSAGES_BATTLERESULTS_SENIORITYREWARDHEADER = '#messenger:serviceChannelMessages/battleResults/seniorityRewardHeader'
     SERVICECHANNELMESSAGES_BATTLERESULTS_SENIORITYREWARDBODY = '#messenger:serviceChannelMessages/battleResults/seniorityRewardBody'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_VARIADICDISCOUNT = '#messenger:serviceChannelMessages/battleResults/quests/variadicDiscount'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1 = '#messenger:serviceChannelMessages/battleResults/personalMissions/1'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2 = '#messenger:serviceChannelMessages/battleResults/personalMissions/2'
@@ -392,12 +393,14 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/received/gold'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL = '#messenger:serviceChannelMessages/currencyUpdate/received/crystal'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_EVENTCOIN = '#messenger:serviceChannelMessages/currencyUpdate/received/eventCoin'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_EQUIPCOIN = '#messenger:serviceChannelMessages/currencyUpdate/received/equipCoin'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_BPCOIN = '#messenger:serviceChannelMessages/currencyUpdate/received/bpcoin'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_FREEXP = '#messenger:serviceChannelMessages/currencyUpdate/received/freeXP'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/debited/credits'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/debited/gold'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL = '#messenger:serviceChannelMessages/currencyUpdate/debited/crystal'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_EVENTCOIN = '#messenger:serviceChannelMessages/currencyUpdate/debited/eventCoin'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_EQUIPCOIN = '#messenger:serviceChannelMessages/currencyUpdate/debited/equipCoin'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_BPCOIN = '#messenger:serviceChannelMessages/currencyUpdate/debited/bpcoin'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_FREEXP = '#messenger:serviceChannelMessages/currencyUpdate/debited/freeXP'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_GOLDACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/goldAccrued'
@@ -486,6 +489,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PURCHASE_RECEIVED_FROM = '#messenger:serviceChannelMessages/invoiceReceived/purchase/received_from'
     SERVICECHANNELMESSAGES_QUOTEDTEXTTEMPLATE = '#messenger:serviceChannelMessages/quotedTextTemplate'
     SERVICECHANNELMESSAGES_OFFERTOKENBONUS_TITLE = '#messenger:serviceChannelMessages/offerTokenBonus/title'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_NYTOYSACCRUEDINVOICERECEIVED = '#messenger:serviceChannelMessages/invoiceReceived/nyToysAccruedInvoiceReceived'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_NYTOYSDEBITEDINVOICERECEIVED = '#messenger:serviceChannelMessages/invoiceReceived/nyToysDebitedInvoiceReceived'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_TOYTYPEWRAPPER = '#messenger:serviceChannelMessages/invoiceReceived/toyTypeWrapper'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNTEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccountExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -660,8 +666,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_LOOTBOXES_FOOTER = '#messenger:serviceChannelMessages/lootBoxes/footer'
     SERVICECHANNELMESSAGES_LOOTBOXES_ITEM_NAME = '#messenger:serviceChannelMessages/lootBoxes/item/name'
     SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_HEADER = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/header'
-    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_TEXT = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/text'
-    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_COUNTER = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/counter'
+    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_BOXES = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/boxes'
+    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_COINS = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/coins'
+    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_BOXESANDCOINS = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/boxesAndCoins'
+    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_BOXESCOUNTER = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/boxesCounter'
+    SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_COINSCOUNTER = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/coinsCounter'
     SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_EVENT_HEADER = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/event/header'
     SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_EVENT_TEXT = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/event/text'
     SERVICECHANNELMESSAGES_LOOTBOXESAUTOOPEN_EVENT_BOXES = '#messenger:serviceChannelMessages/lootBoxesAutoOpen/event/boxes'
@@ -1065,9 +1074,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_OPT_DEV_BOOSTERS_SWITCH = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/opt_dev_boosters_switch'
     SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_ENABLED = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/enabled'
     SERVICECHANNELMESSAGES_VEHICLEPOSTPROGRESSION_PREBATTLESWITCHTOGGLED_DISABLED = '#messenger:serviceChannelMessages/vehiclePostProgression/prebattleSwitchToggled/disabled'
-    SERVICECHANNELMESSAGES_PAYERSENIORITY_COINS_HEADER = '#messenger:serviceChannelMessages/payerSeniority/coins/header'
-    SERVICECHANNELMESSAGES_PAYERSENIORITY_COINS_BODY = '#messenger:serviceChannelMessages/payerSeniority/coins/body'
-    SERVICECHANNELMESSAGES_PAYERSENIORITY_COINS_BUTTON = '#messenger:serviceChannelMessages/payerSeniority/coins/button'
     SERVICECHANNELMESSAGES_BATTLEMATTERS_STARTED = '#messenger:serviceChannelMessages/battleMatters/started'
     SERVICECHANNELMESSAGES_BATTLEMATTERS_PAUSED = '#messenger:serviceChannelMessages/battleMatters/paused'
     SERVICECHANNELMESSAGES_BATTLEMATTERS_TOKEN = '#messenger:serviceChannelMessages/battleMatters/token'
@@ -1092,6 +1098,14 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_DEBITED_BRCOIN = '#messenger:platformCurrencyMsg/debited/brcoin'
     PLATFORMCURRENCYMSG_RECEIVED_EQUIP_COIN = '#messenger:platformCurrencyMsg/received/equip_coin'
     PLATFORMCURRENCYMSG_DEBITED_EQUIP_COIN = '#messenger:platformCurrencyMsg/debited/equip_coin'
+    PLATFORMCURRENCYMSG_RECEIVED_NY_CRYSTAL = '#messenger:platformCurrencyMsg/received/ny_crystal'
+    PLATFORMCURRENCYMSG_DEBITED_NY_CRYSTAL = '#messenger:platformCurrencyMsg/debited/ny_crystal'
+    PLATFORMCURRENCYMSG_RECEIVED_NY_AMBER = '#messenger:platformCurrencyMsg/received/ny_amber'
+    PLATFORMCURRENCYMSG_DEBITED_NY_AMBER = '#messenger:platformCurrencyMsg/debited/ny_amber'
+    PLATFORMCURRENCYMSG_RECEIVED_NY_EMERALD = '#messenger:platformCurrencyMsg/received/ny_emerald'
+    PLATFORMCURRENCYMSG_DEBITED_NY_EMERALD = '#messenger:platformCurrencyMsg/debited/ny_emerald'
+    PLATFORMCURRENCYMSG_RECEIVED_NY_IRON = '#messenger:platformCurrencyMsg/received/ny_iron'
+    PLATFORMCURRENCYMSG_DEBITED_NY_IRON = '#messenger:platformCurrencyMsg/debited/ny_iron'
     PLATFORMCURRENCYMSG_RECEIVED_FREEXP = '#messenger:platformCurrencyMsg/received/freeXP'
     PLATFORMCURRENCYMSG_DEBITED_FREEXP = '#messenger:platformCurrencyMsg/debited/freeXP'
     SERVICECHANNELMESSAGES_RESOURCEWELL_PUT_TITLE = '#messenger:serviceChannelMessages/resourceWell/put/title'
@@ -1151,6 +1165,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INTEGRATEDAUCTION_LOSTRATE_TEXT = '#messenger:serviceChannelMessages/integratedAuction/lostRate/text'
     SERVICECHANNELMESSAGES_PERSONALRESERVESTITLE = '#messenger:serviceChannelMessages/personalReservesTitle'
     SERVICECHANNELMESSAGES_PERSONALRESERVESCONVERTED = '#messenger:serviceChannelMessages/personalReservesConverted'
+    SERVICECHANNELMESSAGES_NEWYEAR_COLLECTINGRESOURCES_BUTTON = '#messenger:serviceChannelMessages/newYear/collectingResources/button'
+    SERVICECHANNELMESSAGES_NEWYEAR_BUYTOY_HEADER = '#messenger:serviceChannelMessages/newYear/buyToy/header'
+    SERVICECHANNELMESSAGES_NEWYEAR_DOGREMINDER_HEADER = '#messenger:serviceChannelMessages/newYear/dogReminder/header'
+    SERVICECHANNELMESSAGES_NEWYEAR_DOGREMINDER_MESSAGE = '#messenger:serviceChannelMessages/newYear/dogReminder/message'
+    SERVICECHANNELMESSAGES_NEWYEAR_DOGREMINDER_BUTTON = '#messenger:serviceChannelMessages/newYear/dogReminder/button'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
@@ -1239,12 +1258,14 @@ class MESSENGER(object):
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_EVENTCOIN,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_EQUIPCOIN,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_BPCOIN,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_FREEXP,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_EVENTCOIN,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_EQUIPCOIN,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_BPCOIN,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_FREEXP)
 

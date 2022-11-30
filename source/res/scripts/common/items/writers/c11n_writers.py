@@ -871,6 +871,7 @@ class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteString(section, 'name', item, 'name', '')
             changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
             changed |= rewriteString(section, 'modelName', item, 'modelName', '')
+            changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '')
             changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
             changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
         changed |= self.writeBaseGroup(item, section)

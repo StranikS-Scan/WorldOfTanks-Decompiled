@@ -84,6 +84,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     tutorialMatKindsController = ComponentDescriptor()
     compoundHolder = ComponentDescriptor()
     partsGameObjects = ComponentDescriptor()
+    prefabLoaded = False
 
     def __init__(self):
         CallbackDelayer.__init__(self)

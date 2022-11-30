@@ -90,6 +90,11 @@
           <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Hull.model	</exploded>
         </S11_Strv_103B_3Dst>
+        <S11_Strv_103B_MD22_III_3DSt>
+          <undamaged>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Hull.model	</exploded>
+        </S11_Strv_103B_MD22_III_3DSt>
       </sets>
     </models>
     <swinging>
@@ -114,10 +119,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.29115 1.34651 1.66369	</rayStart>
-        <rayEnd>	1.29115 1.14651 1.66369	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.3	</size>
+        <rayStart>	1.29115 1.84651 2.385296	</rayStart>
+        <rayEnd>	1.29115 0.64651 2.385296	</rayEnd>
+        <rayUp>	-0 0 -1	</rayUp>
+        <size>	0.27	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -974,14 +979,13 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	15064	</slotId>
         <tags>	formfactor_square	</tags>
-        <compatibleModels>	S11_Strv_103B_3Dst	</compatibleModels>
-        <position>	-1.28071 1.79151 2.15889	</position>
-        <rotation>	-0.0380188 0.000455696 3.14154	</rotation>
-        <scale>	0.596953 0.596953 0.596952	</scale>
-        <doubleSided>	false	</doubleSided>
+        <compatibleModels>	S11_Strv_103B_3Dst S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.280706 1.906369 2.154521	</position>
+        <rotation>	-0.038019 0.000456 3.14154	</rotation>
+        <scale>	0.596953 1.136065 0.596952	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0.000000	</clipAngle>
-        <anchorShift>	-0.010142	</anchorShift>
+        <clipAngle>	0	</clipAngle>
+        <anchorShift>	-0.06014	</anchorShift>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1126,6 +1130,63 @@
         <clipAngle>	0.778323	</clipAngle>
         <anchorShift>	0.402217	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+        <position>	-0.001069 1.649743 -2.293973	</position>
+        <rotation>	2.99163 -0.000422 -0.002057	</rotation>
+        <scale>	0.423755 0.597952 0.423744	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0	</clipAngle>
+        <verticalMirror>	true	</verticalMirror>
+        <anchorShift>	0.31	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+        <position>	-0.651836 2.184473 -3.658294	</position>
+        <rotation>	2.9403 -0.000004 -0.002045	</rotation>
+        <scale>	0.396092 1.624332 0.396078	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.347394	</clipAngle>
+        <verticalMirror>	true	</verticalMirror>
+        <anchorShift>	-0.43	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.616897 1.159134 2.846457	</position>
+        <rotation>	1.568754 0.003029 -1.567592	</rotation>
+        <scale>	0.273189 0.080169 0.273186	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.778323	</clipAngle>
+        <anchorShift>	0.03207	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+        <position>	1.740825 1.184188 2.853173	</position>
+        <rotation>	1.568754 -0.006698 1.491786	</rotation>
+        <scale>	0.273189 0.212104 0.273186	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.778323	</clipAngle>
+        <anchorShift>	0.03207	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	S11_Strv_103B_MD22_III_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1174,6 +1235,11 @@
             <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Chassis.model	</exploded>
           </S11_Strv_103B_3Dst>
+          <S11_Strv_103B_MD22_III_3DSt>
+            <undamaged>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Chassis.model	</exploded>
+          </S11_Strv_103B_MD22_III_3DSt>
         </sets>
       </models>
       <traces>
@@ -1903,6 +1969,11 @@
                 <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Gun_01.model	</exploded>
               </S11_Strv_103B_3Dst>
+              <S11_Strv_103B_MD22_III_3DSt>
+                <undamaged>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </S11_Strv_103B_MD22_III_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1962,6 +2033,11 @@
             <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_3Dst/crash/lod0/Turret_01.model	</exploded>
           </S11_Strv_103B_3Dst>
+          <S11_Strv_103B_MD22_III_3DSt>
+            <undamaged>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S11_Strv_103B/_skins/S11_Strv_103B_MD22_III_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </S11_Strv_103B_MD22_III_3DSt>
         </sets>
       </models>
       <hitTester>

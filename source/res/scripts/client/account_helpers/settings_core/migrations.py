@@ -916,6 +916,14 @@ def _migrateTo99(_, data, __):
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
 
 
+def _migrateTo100(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, 0)
+    clear = data['clear']
+    if storedValue:
+        clear[SETTINGS_SECTIONS.NEW_YEAR] = clear.get(SETTINGS_SECTIONS.NEW_YEAR, 0) | storedValue
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1306,6 +1314,10 @@ _versions = ((1,
   False),
  (99,
   _migrateTo99,
+  False,
+  False),
+ (100,
+  _migrateTo100,
   False,
   False))
 

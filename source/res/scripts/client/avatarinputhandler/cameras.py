@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
 import math
+import typing
 import BigWorld
 import Math
+import GUI
+import Event
 import math_utils
 
 class ImpulseReason(object):
@@ -173,6 +176,31 @@ def isPointOnScreen(point):
     return posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and (True if -1 <= posInClip.y / posInClip.w <= 1 else False)
 
 
+def worldToScreenPos(worldPos, screenResolution=None, scale=None, clip=True):
+    if screenResolution is None:
+        screenWidth, screenHeight = GUI.screenResolution()
+    else:
+        screenWidth, screenHeight = screenResolution
+    if scale is not None:
+        screenWidth /= scale
+        screenHeight /= scale
+    viewProjMatrix = getViewProjectionMatrix()
+    clipPos = viewProjMatrix.applyV4Point(Math.Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0))
+    if clipPos.w <= 0.0:
+        return
+    else:
+        ndcPos = Math.Vector2()
+        ndcPos.x = clipPos.x / clipPos.w
+        ndcPos.y = clipPos.y / clipPos.w
+        if clip and (abs(ndcPos.x) > 1.0 or abs(ndcPos.y) > 1.0):
+            return
+        halfScreenWidth = screenWidth / 2.0
+        halfScreenHeight = screenHeight / 2.0
+        screenPosX = halfScreenWidth * (ndcPos.x + 1.0)
+        screenPosY = halfScreenHeight * (1.0 - ndcPos.y)
+        return Math.Vector2(screenPosX, screenPosY)
+
+
 def projectPoint(point):
     posInClip = Math.Vector4(point.x, point.y, point.z, 1)
     posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
@@ -283,6 +311,7 @@ class FovExtended(object):
         self.__horizontalFov = value
         self.__verticalFov = FovExtended.lookupVerticalFov(value)
         self.setFovByMultiplier(self.__multiplier)
+        self.onSetFovSettingEvent()
 
     horizontalFov = property(lambda self: self.__horizontalFov, __setHorizontalFov)
 
@@ -296,6 +325,7 @@ class FovExtended(object):
         self.__enabled = True
         BigWorld.addWatcher('Render/Fov(horizontal, deg)', lambda : self.__horizontalFov)
         BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
+        self.onSetFovSettingEvent = Event.Event()
         self.horizontalFov = 90
         self.defaultVerticalFov = FovExtended.lookupVerticalFov(self.horizontalFov)
         from gui import g_guiResetters
@@ -318,7 +348,7 @@ class FovExtended(object):
             return
 
     def setFovByAbsoluteValue(self, horizontalFov, rampTime=None):
-        multiplier = horizontalFov / self.horizontalFov
+        multiplier = horizontalFov / (self.horizontalFov * 1.0)
         self.setFovByMultiplier(multiplier, rampTime)
 
     def refreshFov(self):

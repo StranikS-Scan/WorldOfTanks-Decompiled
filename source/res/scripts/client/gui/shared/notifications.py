@@ -27,9 +27,9 @@ class NotificationGroup(object):
 
 
 class NotificationGuiSettings(object):
-    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', '__customEvent', 'groupID', 'messageType', 'messageSubtype', 'decorator')
+    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', '__customEvent', 'groupID', 'messageType', 'messageSubtype', 'decorator', 'onlyPopUp', 'onlyNCList')
 
-    def __init__(self, isNotify=False, priorityLevel=NotificationPriorityLevel.MEDIUM, isAlert=False, auxData=None, showAt=0, groupID=NotificationGroup.INFO, messageType=None, messageSubtype=None, decorator=None):
+    def __init__(self, isNotify=False, priorityLevel=NotificationPriorityLevel.MEDIUM, isAlert=False, auxData=None, showAt=0, groupID=NotificationGroup.INFO, messageType=None, messageSubtype=None, decorator=None, onlyPopUp=False, onlyNCList=False):
         super(NotificationGuiSettings, self).__init__()
         self.isNotify = isNotify
         self.priorityLevel = priorityLevel
@@ -40,6 +40,8 @@ class NotificationGuiSettings(object):
         self.messageType = messageType
         self.messageSubtype = messageSubtype
         self.decorator = decorator
+        self.onlyPopUp = onlyPopUp
+        self.onlyNCList = onlyNCList
         self.__customEvent = None
         return
 

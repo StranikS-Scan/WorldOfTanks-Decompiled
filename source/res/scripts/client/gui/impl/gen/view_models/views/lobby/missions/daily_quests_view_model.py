@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.missions.epic_quest_model import EpicQ
 from gui.impl.gen.view_models.views.lobby.missions.premium_missions_model import PremiumMissionsModel
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled')
+    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onNewYearIntroClosed')
 
-    def __init__(self, properties=8, commands=6):
+    def __init__(self, properties=10, commands=7):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -65,6 +65,18 @@ class DailyQuestsViewModel(ViewModel):
     def setIsBattlePassActive(self, value):
         self._setBool(7, value)
 
+    def getIsNewYearAvailable(self):
+        return self._getBool(8)
+
+    def setIsNewYearAvailable(self, value):
+        self._setBool(8, value)
+
+    def getIsNewYearIntroVisible(self):
+        return self._getBool(9)
+
+    def setIsNewYearIntroVisible(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
         self._addViewModelProperty('dailyQuests', DailyQuestsModel())
@@ -75,9 +87,12 @@ class DailyQuestsViewModel(ViewModel):
         self._addBoolProperty('infoVisible', False)
         self._addBoolProperty('premMissionsTabDiscovered', False)
         self._addBoolProperty('isBattlePassActive', False)
+        self._addBoolProperty('isNewYearAvailable', False)
+        self._addBoolProperty('isNewYearIntroVisible', False)
         self.onClose = self._addCommand('onClose')
         self.onReroll = self._addCommand('onReroll')
         self.onTabClick = self._addCommand('onTabClick')
         self.onInfoToggle = self._addCommand('onInfoToggle')
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')
+        self.onNewYearIntroClosed = self._addCommand('onNewYearIntroClosed')

@@ -870,7 +870,6 @@ class INGAME_GUI(object):
     REWARDWINDOW_LOOTBOX_WINHEADERTEXT = '#ingame_gui:rewardWindow/lootbox/winHeaderText'
     REWARDWINDOW_LOOTBOX_HEADERTEXT = '#ingame_gui:rewardWindow/lootbox/headerText'
     REWARDWINDOW_LOOTBOX_DESCTEXT = '#ingame_gui:rewardWindow/lootbox/descText'
-    REWARDWINDOW_LOOTBOX_ISFREEDESCTEXT = '#ingame_gui:rewardWindow/lootbox/isFreeDescText'
     REWARDWINDOW_LOOTBOX_BTNLABEL = '#ingame_gui:rewardWindow/lootbox/btnLabel'
     BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
     HELPSCREEN_HINT_PRESS = '#ingame_gui:helpScreen/hint/press'

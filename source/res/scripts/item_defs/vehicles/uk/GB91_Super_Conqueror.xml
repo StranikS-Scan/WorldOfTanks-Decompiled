@@ -76,6 +76,11 @@
           <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Hull.model	</exploded>
         </GB91_Super_Conqueror_3Dst>
+        <GB91_Super_Conqueror_MD22_III_3DSt>
+          <undamaged>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Hull.model	</exploded>
+        </GB91_Super_Conqueror_MD22_III_3DSt>
       </sets>
     </models>
     <swinging>
@@ -100,10 +105,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	2.0976 0.0411887 3.34244	</rayStart>
-        <rayEnd>	1.8976 0.0411589 3.34244	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.24	</size>
+        <rayStart>	-0.195614 0.446556 2.756685	</rayStart>
+        <rayEnd>	-0.195896 0.273589 2.656276	</rayEnd>
+        <rayUp>	-0.002424 0.502053 -0.864834	</rayUp>
+        <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -923,6 +928,61 @@
         <clipAngle>	1.31889	</clipAngle>
         <anchorShift>	-0.270658	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15066	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.532314 1.839157 1.988116	</position>
+        <rotation>	-0.026945 0.009124 -3.104523	</rotation>
+        <scale>	0.848663 0.752824 0.8487	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.144063	</clipAngle>
+        <anchorShift>	-0.120844	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+        <position>	1.532314 1.839157 1.988116	</position>
+        <rotation>	-0.026945 -0.009124 -3.104523	</rotation>
+        <scale>	0.848663 0.752824 0.8487	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.144063	</clipAngle>
+        <anchorShift>	-0.120844	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+        <position>	-1.90559 1.12697 -0.0544231	</position>
+        <rotation>	1.617981 1.491049 -0.077355	</rotation>
+        <scale>	0.603803 0.364342 0.603832	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.830381	</clipAngle>
+        <anchorShift>	0.147197	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+        <position>	1.92891 1.1112 -0.044176	</position>
+        <rotation>	1.569036 -1.695848 -0.108795	</rotation>
+        <scale>	0.603803 0.364342 0.603832	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.830381	</clipAngle>
+        <anchorShift>	0.13	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -971,6 +1031,11 @@
             <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Chassis.model	</exploded>
           </GB91_Super_Conqueror_3Dst>
+          <GB91_Super_Conqueror_MD22_III_3DSt>
+            <undamaged>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Chassis.model	</exploded>
+          </GB91_Super_Conqueror_MD22_III_3DSt>
         </sets>
       </models>
       <traces>
@@ -1070,6 +1135,39 @@
                   <row3>	-1.791854 0.830368 0.029000	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB91_Super_Conqueror_MD22_III_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.347240 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.347815 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.240170	</row2>
+                  <row3>	0.000000 1.193900 0.074935	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.504000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.363000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.928000	</row2>
+                  <row3>	0.000000 1.649000 -0.177000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.620154 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.564000	</row2>
+                  <row3>	-2.112000 1.460000 0.064664	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.601000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.328000	</row2>
+                  <row3>	-2.110005 0.871000 0.029000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.611000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.499543 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.798860	</row2>
+                  <row3>	-1.437000 0.897000 -0.021659	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1154,6 +1252,39 @@
                   <row1>	0.000000 0.382216 0.000000	</row1>
                   <row2>	0.000000 0.000000 5.750450	</row2>
                   <row3>	1.792000 0.830368 0.029000	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB91_Super_Conqueror_MD22_III_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.347240 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.347815 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.240170	</row2>
+                  <row3>	0.000000 1.193900 0.074935	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.504000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.363000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.928000	</row2>
+                  <row3>	0.000000 1.649000 -0.177000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.620154 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.564000	</row2>
+                  <row3>	2.112000 1.460000 0.064664	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.601000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.328000	</row2>
+                  <row3>	2.110000 0.871000 0.029000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.611000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.499543 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.798860	</row2>
+                  <row3>	1.437000 0.897000 -0.021659	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1274,6 +1405,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <GB91_Super_Conqueror_MD22_III_3DSt>
+            <segmentModelLeft>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/track/segment.model	</segmentModelRight>
+            <segment2ModelLeft></segment2ModelLeft>
+            <segment2ModelRight></segment2ModelRight>
+          </GB91_Super_Conqueror_MD22_III_3DSt>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0237	</trackThickness>
       <trackNodes>
@@ -1335,13 +1474,11 @@
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -1382,49 +1519,55 @@
       <physicalTracks>
         <left>
           <segmentsCount>	130	</segmentsCount>
-          <segmentsOuterThickness>	0.0645609	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00110616	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.064561	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.001106	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.51813	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
               <back>	0.127631	</back>
               <top>	0.110682	</top>
               <front>	0.110059	</front>
-              <bottom>	0.0806723	</bottom>
+              <bottom>	0.080672	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.119337	</back>
               <top>	0.122929	</top>
               <front>	0.124806	</front>
-              <bottom>	0.0806723	</bottom>
+              <bottom>	0.080672	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB91_Super_Conqueror/track/segment.model	</model>
             <length>	0.122363	</length>
           </mainSegment>
+          <modelSets>
+            <GB91_Super_Conqueror_MD22_III_3DSt>
+              <mainSegmentModel>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/track/segment.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </GB91_Super_Conqueror_MD22_III_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
                 <xStart>	-2.8767	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	1.09555 1.09555 1.09555 1.09555 1.09555 1.09555 1.09555	</ySamples>
               </part>
               <part>
                 <xStart>	-2.8167	</xStart>
-                <xStep>	0.0611815	</xStep>
+                <xStep>	0.061182	</xStep>
                 <ySamples>	1.16555 1.16555 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.02604 0.973574 0.957572 0.965999 1.00418 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.16555 1.16555 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.00542 0.966425 0.957506 0.972982 1.0243 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.16555 1.16555 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.03392 0.976204 0.957949 0.964328 0.999263 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.10767 1.16555 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 0.995461 0.963074 0.958394 0.978593 1.04142 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.16555 1.16555	</ySamples>
               </part>
               <part>
                 <xStart>	2.87318	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	1.16555 1.15555 1.14555 1.13555 1.12555 0.869673 0.794006	</ySamples>
               </part>
             </bottom>
             <top>
               <part>
                 <xStart>	-3.73442	</xStart>
-                <xStep>	0.0611815	</xStep>
+                <xStep>	0.061182	</xStep>
                 <ySamples>	1.22146 1.24966 1.30606 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.34326 1.29725 1.24536 1.19016 1.13304 1.10178	</ySamples>
               </part>
             </top>
@@ -1451,7 +1594,7 @@
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-3.30529 0.840946	</basePos>
-              <shiftVec>	-0.37472 0.0779762	</shiftVec>
+              <shiftVec>	-0.37472 0.077976	</shiftVec>
               <jointIdx>	76	</jointIdx>
             </topBack>
             <bottomBack>
@@ -1482,12 +1625,12 @@
             <segmentSyncPivotOffset>	-1.518	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	-228.549	</startAngle>
+              <startAngle>	-228.548996	</startAngle>
               <teethCount>	19	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-231.566	</startAngle>
+              <startAngle>	-231.565994	</startAngle>
               <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
@@ -1554,9 +1697,9 @@
                 <point>	-1.55358 1.48025 -0.247247	</point>
                 <point>	-1.55358 1.48025 -0.186065	</point>
                 <point>	-1.56358 1.48025 -0.124884	</point>
-                <point>	-1.57358 1.48025 -0.0637023	</point>
-                <point>	-1.55358 1.48025 -0.00252072	</point>
-                <point>	-1.55358 1.48025 0.0586608	</point>
+                <point>	-1.57358 1.48025 -0.063702	</point>
+                <point>	-1.55358 1.48025 -0.002521	</point>
+                <point>	-1.55358 1.48025 0.058661	</point>
                 <point>	-1.55358 1.48025 0.119842	</point>
                 <point>	-1.57358 1.48025 0.181023	</point>
                 <point>	-1.58359 1.48025 0.242205	</point>
@@ -1668,9 +1811,9 @@
                 <point>	-1.68358 1.01996 -0.247247	</point>
                 <point>	-1.67358 1.09437 -0.186066	</point>
                 <point>	-1.67358 1.09437 -0.124884	</point>
-                <point>	-1.68358 1.01993 -0.0637027	</point>
-                <point>	-1.68358 1.01993 -0.00252113	</point>
-                <point>	-1.68358 1.01993 0.0586604	</point>
+                <point>	-1.68358 1.01993 -0.063703	</point>
+                <point>	-1.68358 1.01993 -0.002521	</point>
+                <point>	-1.68358 1.01993 0.05866	</point>
                 <point>	-1.68358 1.01993 0.119841	</point>
                 <point>	-1.68358 1.01993 0.181023	</point>
                 <point>	-1.68358 1.01993 0.242205	</point>
@@ -1723,64 +1866,70 @@
         </left>
         <right>
           <segmentsCount>	130	</segmentsCount>
-          <segmentsOuterThickness>	0.0645738	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00110616	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.064574	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.001106	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.51813	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
               <back>	0.127631	</back>
               <top>	0.110682	</top>
               <front>	0.110059	</front>
-              <bottom>	0.0806723	</bottom>
+              <bottom>	0.080672	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.119337	</back>
               <top>	0.122929	</top>
               <front>	0.124806	</front>
-              <bottom>	0.0806723	</bottom>
+              <bottom>	0.080672	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/british/GB91_Super_Conqueror/track/segment.model	</model>
             <length>	0.120498	</length>
           </mainSegment>
+          <modelSets>
+            <GB91_Super_Conqueror_MD22_III_3DSt>
+              <mainSegmentModel>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/track/segment.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </GB91_Super_Conqueror_MD22_III_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
                 <xStart>	-2.87706	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	1.09555 1.09555 1.09555 1.09555 1.09555 1.09555 1.09555	</ySamples>
               </part>
               <part>
                 <xStart>	-2.81706	</xStart>
-                <xStep>	0.0602491	</xStep>
+                <xStep>	0.060249	</xStep>
                 <ySamples>	1.16555 1.16555 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.04012 0.978721 0.958533 0.962513 0.992956 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.09115 1.16555 1.16555 1.09114 1.09114 1.09114 1.09114 1.09114 1.09114 1.09115 1.04672 0.980767 0.959 0.961653 0.990244 1.08854 1.09115 1.09115 1.09115 1.09116 1.09116 1.09116 1.09116 1.16555 1.16555 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.02377 0.973248 0.957587 0.965594 1.00209 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.09111 1.16555 1.10767 1.0912 1.09121 1.09122 1.09123 1.09124 1.09125 1.09125 1.00865 0.967901 0.957338 0.970314 1.01545 1.0913 1.09131 1.09132 1.09133 1.09134 1.09135 1.09136 1.09136 1.0521 1.0521 1.0521	</ySamples>
               </part>
               <part>
                 <xStart>	2.90661	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	1.0521 1.0421 0.83005 0.779114 0.745864 0.719572 0.697357	</ySamples>
               </part>
               <part>
                 <xStart>	3.62985	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	0.538062 0.545874 0.554165 0.562973 0.572341 0.58232 0.592971	</ySamples>
               </part>
               <part>
                 <xStart>	3.68985	</xStart>
-                <xStep>	0.0602496	</xStep>
+                <xStep>	0.06025	</xStep>
                 <ySamples>	0.592971 0.677488	</ySamples>
               </part>
               <part>
                 <xStart>	3.7501	</xStart>
-                <xStep>	0.00999999	</xStep>
+                <xStep>	0.01	</xStep>
                 <ySamples>	0.677488 0.696856 0.718991 0.745161 0.778178 0.828289 1.28381	</ySamples>
               </part>
             </bottom>
             <top>
               <part>
                 <xStart>	-3.78104	</xStart>
-                <xStep>	0.0602491	</xStep>
+                <xStep>	0.060249	</xStep>
                 <ySamples>	1.21413 1.25244 1.30021 1.33819 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.35628 1.31592 1.25679 1.19972 1.14941 1.07939	</ySamples>
               </part>
             </top>
@@ -1807,19 +1956,19 @@
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-3.30529 0.840946	</basePos>
-              <shiftVec>	-0.374826 0.0781993	</shiftVec>
+              <shiftVec>	-0.374826 0.078199	</shiftVec>
               <jointIdx>	76	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R7	</wheelName>
               <basePos>	-2.50065 0.278357	</basePos>
-              <shiftVec>	0.0348959 -0.238407	</shiftVec>
+              <shiftVec>	0.034896 -0.238407	</shiftVec>
               <jointIdx>	89	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	2.50031 0.278354	</basePos>
-              <shiftVec>	0.0699368 -0.227918	</shiftVec>
+              <shiftVec>	0.069937 -0.227918	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -1838,7 +1987,7 @@
             <segmentSyncPivotOffset>	1.518	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R5	</name>
-              <startAngle>	-228.549	</startAngle>
+              <startAngle>	-228.548996	</startAngle>
               <teethCount>	19	</teethCount>
             </sync>
             <sync>
@@ -1912,9 +2061,9 @@
                 <point>	1.5536 1.48029 -0.226506	</point>
                 <point>	1.5536 1.48029 -0.166257	</point>
                 <point>	1.5536 1.48029 -0.106008	</point>
-                <point>	1.5536 1.48029 -0.0457587	</point>
-                <point>	1.5536 1.48029 0.0144901	</point>
-                <point>	1.5536 1.48029 0.0747395	</point>
+                <point>	1.5536 1.48029 -0.045759	</point>
+                <point>	1.5536 1.48029 0.01449	</point>
+                <point>	1.5536 1.48029 0.07474	</point>
                 <point>	1.5536 1.48029 0.134988	</point>
                 <point>	1.5536 1.48029 0.195238	</point>
                 <point>	1.5536 1.48029 0.255487	</point>
@@ -2027,9 +2176,9 @@
                 <point>	1.6836 1.02002 -0.226506	</point>
                 <point>	1.6836 1.0944 -0.166257	</point>
                 <point>	1.6836 1.0944 -0.106008	</point>
-                <point>	1.6836 1.01997 -0.0457586	</point>
-                <point>	1.6836 1.01997 0.0144903	</point>
-                <point>	1.6836 1.01997 0.0747396	</point>
+                <point>	1.6836 1.01997 -0.045759	</point>
+                <point>	1.6836 1.01997 0.01449	</point>
+                <point>	1.6836 1.01997 0.07474	</point>
                 <point>	1.6836 1.01997 0.134988	</point>
                 <point>	1.6836 1.01997 0.195238	</point>
                 <point>	1.6836 1.01997 0.255487	</point>
@@ -2193,6 +2342,11 @@
                 <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Gun_01.model	</exploded>
               </GB91_Super_Conqueror_3Dst>
+              <GB91_Super_Conqueror_MD22_III_3DSt>
+                <undamaged>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </GB91_Super_Conqueror_MD22_III_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2227,9 +2381,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.00119558 0.0115704 3.89846	</rayStart>
-              <rayEnd>	0.163085 -0.0242474 3.89274	</rayEnd>
-              <rayUp>	0.119 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.001196 0.01157 3.89846	</rayStart>
+              <rayEnd>	-0.001196 0.01157 4.60346	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.705	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -2260,6 +2414,11 @@
             <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_3Dst/crash/lod0/Turret_01.model	</exploded>
           </GB91_Super_Conqueror_3Dst>
+          <GB91_Super_Conqueror_MD22_III_3DSt>
+            <undamaged>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB91_Super_Conqueror/_skin/GB91_Super_Conqueror_MD22_III_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </GB91_Super_Conqueror_MD22_III_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2903,6 +3062,42 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.856571	</clipAngle>
           <anchorShift>	1.96343	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+          <position>	-1.004857 2.374527 1.455136	</position>
+          <rotation>	1.11774 -0.856341 -3.06244	</rotation>
+          <scale>	0.808168 0.392696 0.808199	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.123371	</clipAngle>
+          <anchorShift>	-0.067388	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+          <position>	0.883498 2.314592 1.38397	</position>
+          <rotation>	1.11774 0.856341 -3.06244	</rotation>
+          <scale>	0.808168 0.392696 0.808199	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.114393	</clipAngle>
+          <anchorShift>	0.14	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35049	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB91_Super_Conqueror_MD22_III_3DSt	</compatibleModels>
+          <position>	-0.000098 2.813699 0.631373	</position>
+          <rotation>	0.22414 -0.000193 3.14155	</rotation>
+          <scale>	0.885932 0.572288 0.885936	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.48638	</clipAngle>
+          <anchorShift>	-0.010181	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

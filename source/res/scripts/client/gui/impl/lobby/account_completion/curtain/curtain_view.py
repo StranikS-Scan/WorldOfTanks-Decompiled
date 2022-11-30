@@ -17,6 +17,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IOverlayController, IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearTutorialController
 if typing.TYPE_CHECKING:
     from typing import Optional, Type, Dict
 _DYN_ACCESSOR = R.views.lobby.account_completion.CurtainView
@@ -24,6 +25,7 @@ _DYN_ACCESSOR = R.views.lobby.account_completion.CurtainView
 class CurtainView(ViewImpl, IGlobalListener):
     __slots__ = ('_subViews', '_activeSubView')
     _overlay = dependency.descriptor(IOverlayController)
+    _nyTutorController = dependency.descriptor(INewYearTutorialController)
 
     def __init__(self):
         settings = ViewSettings(_DYN_ACCESSOR())
@@ -61,6 +63,7 @@ class CurtainView(ViewImpl, IGlobalListener):
             self._deactivateSubView(self._activeSubView)
             self._activeSubView = None
         self._overlay.setOverlayState(False)
+        self._nyTutorController.overlayStateChanged()
         super(CurtainView, self)._finalize()
         return
 

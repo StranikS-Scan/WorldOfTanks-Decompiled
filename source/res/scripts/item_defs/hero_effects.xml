@@ -1,0 +1,36 @@
+<hero_effects.xml>
+  <effects>
+    <on_purchased>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/NY19_prem_buy.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <lifetimeSound>
+          <startKey>	start	</startKey>
+          <wwsound>	ue_hangar_generic_hero_tank_buy	</wwsound>
+        </lifetimeSound>
+      </effects>
+    </on_purchased>
+    <on_switch>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/NY19_prem_change.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <lifetimeSound>
+          <startKey>	start	</startKey>
+          <wwsound>	ue_hangar_generic_hero_tank_appeared	</wwsound>
+        </lifetimeSound>
+      </effects>
+    </on_switch>
+  </effects>
+</hero_effects.xml>

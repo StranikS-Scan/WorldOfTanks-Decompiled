@@ -42,7 +42,7 @@ class PerksParametersController(BasePerksController):
         self.__destroyed = True
         return
 
-    def recalc(self, vehParams=None):
+    def recalc(self, vehParams=None, callRebuild=True):
         if vehParams:
             self.setVehParams(vehParams)
             self._recalcType = RecalcType.INITIAL
@@ -54,7 +54,7 @@ class PerksParametersController(BasePerksController):
         else:
             self.recalcFactors()
         if not self._scopedPerks or self._planHolder.allPerksDone():
-            self.rebuildParams()
+            self.rebuildParams(callRebuild)
 
     def setVehParams(self, vehParams):
         self._vehParams = vehParams
@@ -96,7 +96,7 @@ class PerksParametersController(BasePerksController):
     def isInitialized(self):
         return self._initialized
 
-    def rebuildParams(self):
+    def rebuildParams(self, callRebuild=True):
         self._isRunning = False
-        if self._recalcType == RecalcType.INITIAL and self._vehParams:
+        if self._recalcType == RecalcType.INITIAL and self._vehParams and callRebuild:
             self._vehParams.rebuildParams()

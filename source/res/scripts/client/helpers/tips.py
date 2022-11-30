@@ -25,6 +25,7 @@ _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
 _COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
+_NEW_YEAR_TIP_CHANCE = 0.25
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1

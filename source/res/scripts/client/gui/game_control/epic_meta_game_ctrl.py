@@ -166,7 +166,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def onLobbyInited(self, ctx):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged += self.__invalidateBattleAbilities
-        self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
          'inventory': self.__onInventoryUpdate,
          'tokens': self.__onTokensUpdate})
@@ -363,6 +363,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return BigWorld.player().epicMetaGame.getStoredDiscount()
 
     def getEventTimeLeft(self):
+        if not self.isEnabled():
+            return 0
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
@@ -475,6 +477,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return None
 
+    def __onSyncCompleted(self, _, invalidItems):
+        if not invalidItems or GUI_ITEM_TYPE.BATTLE_ABILITY in invalidItems:
+            self.__invalidateBattleAbilityItems()
+        self.__invalidateBattleAbilitiesForVehicle()
+
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
             return
@@ -513,7 +520,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.stopGlobalListening()
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged -= self.__invalidateBattleAbilities
-        self.__itemsCache.onSyncCompleted -= self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         g_clientUpdateManager.removeObjectCallbacks(self)
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.__lobbyContext.deleteFightButtonConfirmator(self.__confirmFightButtonPressEnabled)

@@ -73,6 +73,13 @@ def getGameControllersConfig(manager):
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
+    from skeletons import new_year as _NYInterface
+    from new_year.ny_jukebox_controller import JukeboxController as _JukeboxController
+    from new_year.celebrity.celebrity_scene_ctrl import CelebritySceneController as _CelebritySceneController
+    from new_year.celebrity.celebrity_controller import CelebrityController as _CelebrityController
+    from new_year.ny_tutorial_controller import NewYearTutorialController
+    from new_year.gift_machine_controller import GiftMachineController as _GiftMachineController
+    from new_year.friend_service_controller import FriendServiceController as _FriendServiceController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
@@ -88,6 +95,7 @@ def getGameControllersConfig(manager):
         method = manager.replaceInstance if replace else manager.addInstance
         method(interface, controller, finalizer='fini')
 
+    _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
@@ -149,7 +157,12 @@ def getGameControllersConfig(manager):
     _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
-    _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
+    _config(_NYInterface.IJukeboxController, _JukeboxController())
+    _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
+    _config(_NYInterface.ICelebrityController, _CelebrityController())
+    _config(_NYInterface.INewYearTutorialController, NewYearTutorialController())
+    _config(_NYInterface.IGiftMachineController, _GiftMachineController())
+    _config(_NYInterface.IFriendServiceController, _FriendServiceController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
     collectGameControllers(_config)

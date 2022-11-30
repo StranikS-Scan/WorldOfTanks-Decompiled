@@ -158,6 +158,7 @@ class GLOBAL_FLAG(object):
     WOTPLUS_ENABLED = '_WotPlusEnabled'
     BATTLE_MATTERS_ENTRY_POINT = '_BattleMattersEntryPoint'
     PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
+    NY_NAVIGATION_DISABLED = '_NY_navigation_disabled'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -172,7 +173,8 @@ class GLOBAL_FLAG(object):
      DOGTAGS_ENABLED,
      WOTPLUS_ENABLED,
      BATTLE_MATTERS_ENTRY_POINT,
-     PERSONAL_RESERVES_AVAILABLE)
+     PERSONAL_RESERVES_AVAILABLE,
+     NY_NAVIGATION_DISABLED)
 
 
 class GlobalStorage(object):

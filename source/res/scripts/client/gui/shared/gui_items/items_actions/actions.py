@@ -10,7 +10,6 @@ from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from adisp import adisp_process, adisp_async
-from debug_utils import LOG_ERROR
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -250,7 +249,7 @@ class VehicleBuyAction(BuyAction):
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__vehCD)
         if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
-            LOG_ERROR('Value of int-type descriptor is not refer to vehicle', self.__vehCD)
+            _logger.error('Value of int-type descriptor is not refer to vehicle %r', self.__vehCD)
             return
         else:
             if item.isInInventory and not item.isRented:

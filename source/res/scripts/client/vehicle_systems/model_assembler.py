@@ -13,9 +13,10 @@ import material_kinds
 import CGF
 import GenericComponents
 from constants import IS_DEVELOPMENT, IS_EDITOR
+from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 import math_utils
-from helpers import DecalMap
+from helpers import DecalMap, dependency
 from items.components import shared_components, component_constants
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames, TankSoundObjectsIndexes
@@ -50,7 +51,7 @@ def prepareCollisionAssembler(vehicleDesc, isTurretDetached, worldID):
     bspModels = []
     for partName, hitTester in hitTestersByPart.iteritems():
         partId = TankPartNames.getIdx(partName)
-        bspModel = (partId, hitTester.bspModelName, (0.0, 0.0, 0.0))
+        bspModel = (partId, hitTester.bspModelName)
         bspModels.append(bspModel)
 
     trackPairs = vehicleDesc.chassis.trackPairs[1:]
@@ -642,6 +643,8 @@ def assembleDrivetrain(appearance, isPlayerVehicle):
     PLAYER_UPDATE_PERIOD = 0.1
     NPC_UPDATE_PERIOD = 0.25
     engineState = appearance.createComponent(Vehicular.DetailedEngineState)
+    siegeState = appearance.createComponent(Vehicular.SiegeState)
+    appearance.siegeState = siegeState
     engineState.vehicleSpeedLink = DataLinks.createFloatLink(vehicleFilter, 'averageSpeed')
     engineState.rotationSpeedLink = DataLinks.createFloatLink(vehicleFilter, 'averageRotationSpeed')
     engineState.vehicleMatrixLink = appearance.compoundModel.root
@@ -905,4 +908,6 @@ def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
 
 
 def __assemblePrefabComponent(appearance, attachment, _, __):
-    loadAppearancePrefab(attachment.modelName, appearance)
+    hangar = dependency.instance(IHangarSpace)
+    modelName = attachment.hangarModelName if attachment.hangarModelName and hangar.inited else attachment.modelName
+    loadAppearancePrefab(modelName, appearance)

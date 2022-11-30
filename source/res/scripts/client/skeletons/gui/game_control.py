@@ -19,7 +19,6 @@ if typing.TYPE_CHECKING:
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
-    from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
     from gui.prb_control.items import ValidationResult
@@ -392,6 +391,9 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
+    onHeroTankChanged = None
+    onHeroTankBought = None
+    onVisibilityChanged = None
 
     def hasAdventHero(self):
         raise NotImplementedError
@@ -433,6 +435,7 @@ class IPlatoonController(IGameController):
     onAvailableTiersForSearchChanged = None
     onAutoSearchCooldownChanged = None
     onPlatoonTankRemove = None
+    onVisibilityChanged = None
 
     def buildExtendedSquadInfoVo(self):
         raise NotImplementedError
@@ -1554,6 +1557,9 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
+    def mustShow(self):
+        raise NotImplementedError
+
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1600,7 +1606,7 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
-    def getHangarQuestsFlagData(self):
+    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 
@@ -2011,6 +2017,7 @@ class IMapboxController(IGameController, ISeasonProvider):
 
 class IOverlayController(IGameController):
 
+    @property
     def isActive(self):
         raise NotImplementedError
 
@@ -2179,9 +2186,6 @@ class IGiftSystemController(IGameController):
     onEventHubsCreated = None
     onEventHubsDestroyed = None
 
-    def getEventHub(self, eventID):
-        raise NotImplementedError
-
     def getSettings(self):
         raise NotImplementedError
 
@@ -2197,15 +2201,33 @@ class ISeniorityAwardsController(IGameController):
         raise NotImplementedError
 
     @property
-    def endTimestamp(self):
+    def timeLeft(self):
         raise NotImplementedError
 
     @property
-    def showNotificationLastCallTimestamp(self):
+    def clockOnNotification(self):
         raise NotImplementedError
 
     @property
-    def needShowNotification(self):
+    def isRewardReceived(self):
+        raise NotImplementedError
+
+    @property
+    def seniorityQuestPrefix(self):
+        raise NotImplementedError
+
+    @property
+    def isNeedToShowRewardNotification(self):
+        raise NotImplementedError
+
+    @property
+    def pendingReminderTimestamp(self):
+        raise NotImplementedError
+
+    def claimReward(self):
+        raise NotImplementedError
+
+    def markRewardReceived(self):
         raise NotImplementedError
 
     def getSACoin(self):
@@ -2445,6 +2467,12 @@ class IFunRandomController(IGameController):
         raise NotImplementedError
 
     def isFunRandomPrbActive(self):
+        raise NotImplementedError
+
+    def hasDailyQuestsEntry(self):
+        raise NotImplementedError
+
+    def hasHangarHeaderEntry(self):
         raise NotImplementedError
 
     def getSettings(self):

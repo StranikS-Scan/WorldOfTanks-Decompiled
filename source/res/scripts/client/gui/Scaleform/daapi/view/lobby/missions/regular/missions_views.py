@@ -26,9 +26,12 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
+from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.new_year.navigation import NewYearNavigation
+from gui.impl.new_year.sounds import NewYearSoundsManager
 from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_dispatcher import hideMissionDetails
+from gui.server_events.events_dispatcher import hideMissionDetails, showDailyQuests
 from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
 from gui.shared import actions
@@ -38,12 +41,14 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from new_year.ny_constants import AnchorNames
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IFestivityController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from uilogging.ny.loggers import NyCelebrityButtonLogger
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -58,6 +63,12 @@ class _GroupedMissionsView(MissionsGroupedViewMeta):
                     blockData['isCollapsed'] = settings.isGroupMinimized(gID)
 
         return
+
+    def onDailyClick(self):
+        pass
+
+    def onNYChallengeClick(self):
+        pass
 
 
 class MissionsGroupedView(_GroupedMissionsView):
@@ -342,6 +353,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _festivityController = dependency.descriptor(IFestivityController)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -375,14 +387,24 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def onClickButtonDetails(self):
         showTankPremiumAboutPage()
 
+    def onDailyClick(self):
+        showDailyQuests(subTab=DailyTabs.QUESTS)
+
+    def onNYChallengeClick(self):
+        NewYearNavigation.switchByAnchorName(AnchorNames.CELEBRITY)
+        NewYearSoundsManager.setHangarPlaceGarage()
+        NyCelebrityButtonLogger().logClickInMissions()
+
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
         g_eventBus.addListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self._festivityController.onStateChanged += self.__festivityStateChanged
 
     def _dispose(self):
         g_eventBus.removeListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self._festivityController.onStateChanged -= self.__festivityStateChanged
         super(MissionsCategoriesView, self)._dispose()
 
     def _appendBlockDataToResult(self, result, data):
@@ -405,12 +427,18 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def _getViewQuestFilter(self):
         return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
 
+    def _appendNYBanner(self, quests):
+        return False
+
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:
             return
         diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)
         if 'enabled' in diffConfig:
             self._onEventsUpdate()
+
+    def __festivityStateChanged(self):
+        self._filterMissions()
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):

@@ -17,9 +17,11 @@ def getViewSettings():
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.tank_carousel import FunRandomTankCarousel
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_entry_point import FunRandomEntryPoint
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_widget import FunRandomHangarWidgetComponent
+    from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_ny_widget import FunRandomNYHangarWidgetComponent
     return (ComponentSettings(HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL, FunRandomTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT, FunRandomEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(FUNRANDOM_ALIASES.FUN_RANDOM_HANGAR_WIDGET, FunRandomHangarWidgetComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(FUNRANDOM_ALIASES.FUN_RANDOM_NY_HANGAR_WIDGET, FunRandomNYHangarWidgetComponent, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FUNRANDOM_ALIASES.FUN_RANDOM_PRIME_TIME, FunRandomPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, WindowLayer.SUB_VIEW, FUNRANDOM_ALIASES.FUN_RANDOM_PRIME_TIME, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      GroupedViewSettings(FUNRANDOM_ALIASES.FUN_RANDOM_CAROUSEL_FILTER_POPOVER, FunRandomCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.WINDOW, FUNRANDOM_ALIASES.FUN_RANDOM_CAROUSEL_FILTER_POPOVER, FUNRANDOM_ALIASES.FUN_RANDOM_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE))
 

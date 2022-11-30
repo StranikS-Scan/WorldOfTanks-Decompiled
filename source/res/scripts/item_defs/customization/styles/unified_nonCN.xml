@@ -2858,4 +2858,160 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	690	</id>
+      <texture>	gui/maps/vehicles/styles/ruby_ny_2023_clock.png	</texture>
+      <userString>	#vehicle_customization:special_style/ruby_ny_2023_clock	</userString>
+      <description>	#vehicle_customization:special_style/ruby_ny_2023_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ruby_ny_2023_clock_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY2023_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	476	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	24	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	359	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	691	</id>
+      <texture>	gui/maps/vehicles/styles/ruby_ny_2023_salad.png	</texture>
+      <userString>	#vehicle_customization:special_style/ruby_ny_2023_salad	</userString>
+      <description>	#vehicle_customization:special_style/ruby_ny_2023_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ruby_ny_2023_salad_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY2023_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	477	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	478	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	25	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	360	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	811	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+            <item>
+              <id>	812	</id>
+              <tags>	formfactor_square left safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	692	</id>
+      <texture>	gui/maps/vehicles/styles/ruby_ny_2023_snowman.png	</texture>
+      <userString>	#vehicle_customization:special_style/ruby_ny_2023_snowman	</userString>
+      <description>	#vehicle_customization:special_style/ruby_ny_2023_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/ruby_ny_2023_snowman_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY2023_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	479	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	26	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	361	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </unified_nonCN.xml>

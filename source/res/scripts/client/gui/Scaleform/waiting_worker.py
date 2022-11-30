@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/waiting_worker.py
 import logging
+import typing
 import BigWorld
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.waiting_transitions import WaitingTransition, TransitionMode
@@ -13,15 +14,16 @@ from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker
 _logger = logging.getLogger(__name__)
 
 class _WaitingTask(object):
-    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart')
+    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart', '__showBg')
 
-    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
+    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showBg=True):
         super(_WaitingTask, self).__init__()
         self.__messageID = messageID
         self.__isBlocking = isBlocking
         self.__isAlwaysOnTop = isAlwaysOnTop
         self.__backgroundImage = backgroundImage
         self.__softStart = softStart
+        self.__showBg = showBg
         if interruptCallback is not None:
             self.__interruptCallbacks = [interruptCallback]
         else:
@@ -29,7 +31,7 @@ class _WaitingTask(object):
         return
 
     def __repr__(self):
-        return '_WaitingTask({}): message={}, interruptCallbacks={}, isBlocking={}, isAlwaysOnTop={}, bkImg={}, softStart={}'.format(id(self), self.__messageID, self.__interruptCallbacks, self.__isBlocking, self.__isAlwaysOnTop, self.__backgroundImage, self.__softStart)
+        return '_WaitingTask({}): message={}, interruptCallbacks={}, isBlocking={}, isAlwaysOnTop={}, bkImg={}, softStart={}, showBg={}'.format(id(self), self.__messageID, self.__interruptCallbacks, self.__isBlocking, self.__isAlwaysOnTop, self.__backgroundImage, self.__softStart, self.__showBg)
 
     @property
     def messageID(self):
@@ -42,6 +44,10 @@ class _WaitingTask(object):
     @property
     def isSoftStart(self):
         return self.__softStart
+
+    @property
+    def showBg(self):
+        return self.__showBg
 
     @isBlocking.setter
     def isBlocking(self, flag):
@@ -136,7 +142,7 @@ class WaitingWorker(IWaitingWorker):
     def getSuspendedWaitingTask(self, messageID):
         return findFirst(lambda task: task.messageID == messageID, self.__suspendStack)
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showBg=True):
         BigWorld.Screener.setEnabled(False)
         hasAlwaysOnTopWaiting = self._hasAlwaysOnTopWaiting()
         if hasAlwaysOnTopWaiting and isAlwaysOnTop:
@@ -147,7 +153,7 @@ class WaitingWorker(IWaitingWorker):
             if task is not None and isSingle:
                 task.addInterruptCallback(interruptCallback)
             else:
-                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart)
+                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart, showBg)
             if not hasAlwaysOnTopWaiting:
                 self._showWaiting(task)
             return
@@ -201,7 +207,7 @@ class WaitingWorker(IWaitingWorker):
 
     def close(self):
         BigWorld.Screener.setEnabled(True)
-        self.__isShown = False
+        self.__updateShownStatus(False)
         for task in self.__waitingStack:
             task.clear()
             self._hideWaiting(task)
@@ -234,9 +240,9 @@ class WaitingWorker(IWaitingWorker):
         found = findFirst(lambda task: task.isAlwaysOnTop, reversed(self.__waitingStack))
         return found is not None
 
-    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False):
+    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False, showBg=True):
         isBlocking = isBlocking or self._hasBlockingWaiting()
-        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart)
+        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart, showBg)
         if insertBeforeTop:
             self.__waitingStack.insert(-1, newTask)
         else:
@@ -252,21 +258,28 @@ class WaitingWorker(IWaitingWorker):
         if view is not None:
             if task.backgroundImage:
                 view.setBackgroundImage(task.backgroundImage)
-            view.showWaiting(task.messageID, task.isSoftStart)
+            view.showWaiting(task.messageID, task.isSoftStart, task.showBg)
             appLoader = dependency.instance(IAppLoader)
             view.showAwards(appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN)
-            self.__isShown = True
+            self.__updateShownStatus(True)
             if task.isBlocking:
                 view.setCallback(task.interrupt)
-                g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.WAITING_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
+                g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.WAITING_SHOW), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def __updateShownStatus(self, toShow):
+        if self.__isShown == toShow:
+            return
+        self.__isShown = toShow
+        event = events.LobbySimpleEvent.WAITING_SHOWN if toShow else events.LobbySimpleEvent.WAITING_HIDDEN
+        g_eventBus.handleEvent(events.LobbySimpleEvent(event), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _hideWaiting(self, task):
         view = self.getWaitingView(task.isBlocking)
         if view:
             view.hideWaiting()
             if task.isBlocking:
-                g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.WAITING_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
+                g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.WAITING_HIDE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __closeTransitionInLobby(self, nonBlocking, blocking):
         if nonBlocking is not None and blocking is not None:

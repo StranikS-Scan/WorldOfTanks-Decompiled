@@ -182,6 +182,12 @@ class FunRandomController(IFunRandomController):
     def isFunRandomPrbActive(self):
         return False
 
+    def hasDailyQuestsEntry(self):
+        return False
+
+    def hasHangarHeaderEntry(self):
+        return False
+
     def getSettings(self):
         return _FUN_CONFIG_STUB
 

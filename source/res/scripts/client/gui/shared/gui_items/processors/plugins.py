@@ -5,6 +5,7 @@ from collections import namedtuple
 from functools import partial
 import typing
 import wg_async as future_async
+from constants import IS_EDITOR
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from adisp import adisp_async, adisp_process
@@ -38,6 +39,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if not IS_EDITOR:
+    from gui.impl.pub.dialog_window import DialogResult, DialogButtons
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from post_progression_common import ACTION_TYPES
@@ -953,6 +956,41 @@ class BattleBoosterValidator(SyncValidator):
 
     def _validate(self):
         return makeError('disabledService') if self.boosters and not self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() else makeSuccess()
+
+
+class AsyncDialogConfirmator(AsyncConfirmator):
+
+    def __init__(self, dialogMethod, *args, **kwargs):
+        super(AsyncDialogConfirmator, self).__init__()
+        self.__dialogMethod = dialogMethod
+        self.__dialogArgs = args
+        self.__dialogKwargs = kwargs
+        self.__dialogResult = None
+        return
+
+    def getResult(self):
+        return self.__dialogResult
+
+    @adisp_async
+    def _confirm(self, callback):
+        self._makeConfirm(callback)
+
+    @future_async.wg_async
+    def _makeConfirm(self, callback):
+        Waiting.suspend()
+        dialog = self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs)
+        self.__dialogResult = yield future_async.wg_await(dialog)
+        Waiting.resume()
+        if isinstance(self.__dialogResult, DialogResult):
+            result = self.__dialogResult.result in DialogButtons.ACCEPT_BUTTONS
+        elif isinstance(self.__dialogResult, tuple):
+            result, _ = self.__dialogResult
+        else:
+            result = self.__dialogResult
+        if result:
+            callback(makeSuccess())
+            return
+        callback(makeError())
 
 
 class DismountForDemountKitValidator(SyncValidator):

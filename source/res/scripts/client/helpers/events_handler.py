@@ -4,20 +4,20 @@ import typing
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import g_eventBus
 if typing.TYPE_CHECKING:
-    from typing import Callable, Optional, Sequence, Tuple
+    from typing import Callable, Optional, Tuple
     from Event import Event
 
 class EventsHandler(object):
     __slots__ = ()
 
     def _getCallbacks(self):
-        pass
+        return tuple()
 
     def _getListeners(self):
-        pass
+        return tuple()
 
     def _getEvents(self):
-        pass
+        return tuple()
 
     def _subscribe(self):
         g_clientUpdateManager.addCallbacks(dict(self._getCallbacks()))

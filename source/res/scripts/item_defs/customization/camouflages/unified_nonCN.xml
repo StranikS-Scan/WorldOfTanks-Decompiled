@@ -4557,17 +4557,6 @@
         <offset>	0.55 -0.1	</offset>
       </tilingSettings>
     </camouflage>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	camouflages 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
     <camouflage>
       <id>	471	</id>
       <texture>	vehicles/russian/Camouflage/twitch_october_2022.dds	</texture>
@@ -4596,6 +4585,121 @@
       </tilingSettings>
       <gloss>	0.581 0.509 0.509 0.509	</gloss>
       <metallic>	1 0.23 0.23 0.23	</metallic>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	476	</id>
+      <texture>	vehicles/russian/Camouflage/ruby_ny_2023_clock.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ruby_ny_2023_clock/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ruby_ny_2023_clock/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.610865	</HULL>
+        <TURRET>	-0.610865	</TURRET>
+        <GUN>	-0.610865	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	3 3	</factor>
+        <offset>	1.33 0.44	</offset>
+      </tilingSettings>
+      <gloss>	0.7 0.7 0.7 0.47	</gloss>
+      <metallic>	0.32 0.32 0.32 0.23	</metallic>
+      <tiling>
+        <china:Ch05_T34_295>	1.7 1.7 0.55 0.51	</china:Ch05_T34_295>
+        <china:Ch07_Vickers_MkE_Type_BT2649>	3.7 3.7 1.91 -1.08	</china:Ch07_Vickers_MkE_Type_BT2649>
+      </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	477	</id>
+      <texture>	vehicles/russian/Camouflage/ruby_ny_2023_salad_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ruby_ny_2023_salad/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ruby_ny_2023_salad/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0 -0.19	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	478	</id>
+      <texture>	vehicles/russian/Camouflage/ruby_ny_2023_salad_turret_gun.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ruby_ny_2023_salad/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ruby_ny_2023_salad/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0 -0.19	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	479	</id>
+      <texture>	vehicles/russian/Camouflage/ruby_ny_2023_snowman.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ruby_ny_2023_snowman/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ruby_ny_2023_snowman/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.436332	</HULL>
+        <TURRET>	0.436332	</TURRET>
+        <GUN>	0.436332	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.4 2.4	</factor>
+        <offset>	-0.27 0.0005	</offset>
+      </tilingSettings>
     </camouflage>
   </itemGroup>
 </unified_nonCN.xml>

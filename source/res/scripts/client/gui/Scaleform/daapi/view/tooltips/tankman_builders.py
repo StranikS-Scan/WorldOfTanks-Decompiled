@@ -51,8 +51,8 @@ class NotRecruitedTankmanTooltipBuilder(DataBuilder):
     def __init__(self, tooltipType, linkage):
         super(NotRecruitedTankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.NotRecruitedTooltipData(contexts.NotRecruitedTankmanContext()))
 
-    def _buildData(self, _advanced, invID, *args, **kwargs):
-        return super(NotRecruitedTankmanTooltipBuilder, self)._buildData(_advanced, invID)
+    def _buildData(self, _advanced, invID, isLocked=True, *args, **kwargs):
+        return super(NotRecruitedTankmanTooltipBuilder, self)._buildData(_advanced, invID, isLocked)
 
 
 class TankmanNewSkillTooltipBuilder(ConditionBuilder):

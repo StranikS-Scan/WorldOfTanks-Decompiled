@@ -850,4 +850,50 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S11_Strv_103B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	681	</id>
+      <texture>	gui/maps/vehicles/styles/S11_Strv_103B_MD22_III_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/S11_Strv_103B_MD22_III_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	S11_Strv_103B_MD22_III_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/S11_Strv_103B_MD22_III_3DSt	</userString>
+      <tags>	progression_required NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <id>	50	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </sweden.xml>

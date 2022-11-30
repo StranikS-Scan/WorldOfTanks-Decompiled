@@ -217,7 +217,9 @@ class _AdminChatCommandDecorator(_ChatCommand):
             msg = i18n.makeString(key, **self._protoData)
         else:
             msg = cmd.name
-        return unicode(msg, 'utf-8', errors='ignore')
+        if isinstance(msg, bytes):
+            msg = unicode(msg, 'utf-8', errors='ignore')
+        return msg
 
 
 def makeDecorator(result, clientID):

@@ -112,7 +112,7 @@ def getBlueprintsExchangeUrl():
 
 
 def getPlayerSeniorityAwardsUrl():
-    return _getUrl('psaProducts')
+    return _getUrl('seniorityAwardsProducts')
 
 
 def getSplitPageUrl(params):

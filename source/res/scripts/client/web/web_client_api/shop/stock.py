@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stock.py
 import itertools
+import typing
 from collections import namedtuple
 from functools import partial
 from WeakMethod import WeakMethodProxy
@@ -12,6 +13,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
 from gui.shared.utils.requesters.ItemsRequester import PredicateCondition, REQ_CRITERIA, RequestCriteria
 from helpers import dependency
+from items import getTypeOfCompactDescr
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -19,6 +21,9 @@ from web.web_client_api import Field, W2CSchema, w2c
 from web.web_client_api.common import ShopItemType
 from web.web_client_api.shop import formatters
 from web.web_client_api.shop.crew import ShopCrewCriteria, makeTankman
+if typing.TYPE_CHECKING:
+    from typing import Optional, Set
+    from gui.shared.gui_items.gui_item import GUIItem
 
 class _PremiumPack(object):
 
@@ -135,6 +140,17 @@ _SHOP_CUSTOMIZATION_TYPES = (ShopItemType.PAINT,
  ShopItemType.EMBLEM,
  ShopItemType.INSCRIPTION,
  ShopItemType.PROJECTION_DECAL)
+_SHOP_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.VEHICLE: ShopItemType.VEHICLE,
+ GUI_ITEM_TYPE.EQUIPMENT: ShopItemType.EQUIPMENT,
+ GUI_ITEM_TYPE.OPTIONALDEVICE: ShopItemType.DEVICE,
+ GUI_ITEM_TYPE.BATTLE_BOOSTER: ShopItemType.BATTLE_BOOSTER,
+ GUI_ITEM_TYPE.SHELL: ShopItemType.SHELL,
+ GUI_ITEM_TYPE.GUN: ShopItemType.MODULE,
+ GUI_ITEM_TYPE.TURRET: ShopItemType.MODULE,
+ GUI_ITEM_TYPE.ENGINE: ShopItemType.MODULE,
+ GUI_ITEM_TYPE.CHASSIS: ShopItemType.MODULE,
+ GUI_ITEM_TYPE.RADIO: ShopItemType.MODULE,
+ GUI_ITEM_TYPE.CREW_BOOKS: ShopItemType.CREW_BOOKS}
 
 def _parseCriteriaSpec(itemType, spec, idList=None):
     typeCriteria = _ITEMS_CRITERIA_MAP[itemType]
@@ -153,6 +169,16 @@ def _parseCriteriaSpec(itemType, spec, idList=None):
     return compoundCriteria
 
 
+class _GetItemsByCdSchema(W2CSchema):
+    cds = Field(required=True, type=list)
+    fields = Field(required=False, type=list)
+
+
+class _GetItemByCdSchema(W2CSchema):
+    cd = Field(required=True, type=int)
+    fields = Field(required=False, type=list)
+
+
 class _GetItemsSchema(W2CSchema):
     type = Field(required=True, type=basestring, validator=lambda value, data: ShopItemType.hasValue(value))
     criteria = Field(required=False, type=list, validator=lambda value, data: _parseCriteriaSpec(data['type'], value))
@@ -167,6 +193,16 @@ class ItemsWebApiMixin(object):
     def __init__(self):
         super(ItemsWebApiMixin, self).__init__()
         self.__formattersMap = {}
+
+    @w2c(_GetItemsByCdSchema, 'get_items_by_cd')
+    def getItemsByCD(self, cmd):
+        allowedFields = cmd.fields and set(cmd.fields)
+        return {cd:self.__getItemByCD(cd, allowedFields) for cd in cmd.cds}
+
+    @w2c(_GetItemByCdSchema, 'get_item_by_cd')
+    def getItemByCD(self, cmd):
+        allowedFields = cmd.fields and set(cmd.fields)
+        return self.__getItemByCD(cmd.cd, allowedFields)
 
     @w2c(_GetItemsSchema, 'get_items')
     def getItems(self, cmd):
@@ -220,6 +256,18 @@ class ItemsWebApiMixin(object):
             else:
                 entries.append('installed')
         return ','.join(entries)
+
+    def __getItemByCD(self, cd, allowedFields=None):
+        try:
+            itemType = getTypeOfCompactDescr(cd)
+            item = self.__itemsCache.items.getItemByCD(cd)
+            if itemType not in _SHOP_ITEM_TYPE_MAP:
+                return None
+            return self.__getFormatter(_SHOP_ITEM_TYPE_MAP[itemType], REQ_CRITERIA.EMPTY).format(item, allowedFields)
+        except (IndexError, KeyError, SoftException):
+            return None
+
+        return None
 
     def __collectItems(self, itemType, criteria):
         if itemType == ShopItemType.CREW:

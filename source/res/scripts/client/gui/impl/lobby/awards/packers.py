@@ -7,7 +7,7 @@ from constants import RentType, OFFER_TOKEN_PREFIX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
 from gui.impl import backport
-from gui.impl.backport import createTooltipData
+from gui.impl.backport import createTooltipData, TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.awards.reward_model import RewardModel, RentTypeEnum
 from gui.impl.lobby.awards import SupportedTokenTypes
@@ -22,7 +22,6 @@ from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import VehiclesBonus, TokensBonus
-    from gui.impl.backport import TooltipData
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
     from gui.shared.gui_items.Vehicle import Vehicle
 VEH_COMP_R_ID = R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent()
@@ -170,7 +169,7 @@ class _MultiAwardVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         gpRentType, rentValue = bonus.getRentInfo(vInfo)
         model.setVehicleRentType(_convertRentType(gpRentType))
         model.setVehicleRentValue(rentValue)
-        model.setName(cls._createUIName(bonus, isRent))
+        model.setName(cls._createUIName(bonus, isRent, vehicle.isPremium))
         model.setIsCompensation(bonus.isCompensation())
         model.setLabel(vehicle.userName)
         vehIconName = getIconResourceName(getNationLessName(vehicle.name))

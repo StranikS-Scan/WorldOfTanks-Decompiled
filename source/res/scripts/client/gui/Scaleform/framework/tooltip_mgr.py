@@ -100,7 +100,7 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
-    def onCreateWulfTooltip(self, tooltipType, args, x, y):
+    def onCreateWulfTooltip(self, tooltipType, args, x, y, parent=None):
         if not self._isAllowedTypedTooltip:
             return
         else:
@@ -110,7 +110,10 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            window = data.getDisplayableData(*args)
+            if parent is None:
+                window = data.getDisplayableData(*args)
+            else:
+                window = data.getDisplayableData(parent=parent, *args)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

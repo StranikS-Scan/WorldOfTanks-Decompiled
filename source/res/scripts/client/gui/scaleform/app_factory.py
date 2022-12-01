@@ -305,7 +305,7 @@ class AS3_AppFactory(IAppFactory):
 
     @classmethod
     def getMainWindow(cls):
-        windows = cls.__gui.windowsManager.findWindows(lambda w: bool(w.windowFlags & WindowFlags.MAIN_WINDOW))
+        windows = cls.__gui.windowsManager.findWindows(lambda w: w.typeFlag == WindowFlags.MAIN_WINDOW)
         if not windows:
             _logger.error('The mian window does not exist')
             return None

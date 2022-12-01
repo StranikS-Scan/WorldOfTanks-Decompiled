@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/new_year/challenge/ny_challenge_reward_view.py
-from frameworks.wulf import ViewSettings, WindowLayer
+import BigWorld
+import AnimationSequence
+from frameworks.wulf import ViewSettings, WindowLayer, WindowFlags
 from gui.Scaleform.framework.application import AppEntry
 from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.new_year_challenge_model import Celebrity
 from gui.impl.lobby.new_year.challenge.ny_challenge_reward_base_view import ChallengeRewardBaseView
@@ -41,6 +43,7 @@ class ChallengeRewardView(ChallengeRewardBaseView):
         self.__celebrity = None
         self.__blur = None
         self.__prevAppBackgroundAlpha = 0
+        self.__enableAnimationSequence = None
         self._tooltips = {}
         super(ChallengeRewardView, self).__init__(settings, *args, **kwargs)
         return
@@ -52,6 +55,9 @@ class ChallengeRewardView(ChallengeRewardBaseView):
         app = self.__appLoader.getApp()
         self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(0)
+        BigWorld.worldDrawEnabled(True)
+        self.__enableAnimationSequence = AnimationSequence.getEnableAnimationSequenceUpdate()
+        AnimationSequence.setEnableAnimationSequenceUpdate(True)
         self._changeLayersVisibility(True, _CHANGE_LAYERS_VISIBILITY)
         ctx = {'guestName': self.__celebrity.value,
          'isSaveCamera': not self.__instantly}
@@ -63,6 +69,8 @@ class ChallengeRewardView(ChallengeRewardBaseView):
 
     @uniprof.regionDecorator(label='ny_challenge_reward', scope='exit')
     def _finalize(self):
+        if self.__enableAnimationSequence is not None:
+            AnimationSequence.setEnableAnimationSequenceUpdate(self.__enableAnimationSequence)
         self.__nyController.onDataUpdated -= self.__onDataUpdated
         g_eventBus.handleEvent(NyGladeVisibilityEvent(eventType=NyGladeVisibilityEvent.START_FADE_OUT), scope=EVENT_BUS_SCOPE.DEFAULT)
         if self.__blur is not None:
@@ -130,4 +138,4 @@ class ChallengeRewardViewWindow(LobbyNotificationWindow):
 
     def __init__(self, questID, instantly, parent=None, *args, **kwargs):
         layout = R.views.lobby.new_year.ChallengeRewardView()
-        super(ChallengeRewardViewWindow, self).__init__(content=ChallengeRewardView(layout, questID, instantly, *args, **kwargs), parent=parent, layer=WindowLayer.FULLSCREEN_WINDOW)
+        super(ChallengeRewardViewWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=ChallengeRewardView(layout, questID, instantly, *args, **kwargs), parent=parent)

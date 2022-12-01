@@ -1460,23 +1460,20 @@ def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
     raise AsyncReturn(isOK)
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, nyController=INewYearController)
-def showCelebrityChallengeReward(questID, instantly=False, notificationMgr=None, nyController=None):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, nyController=INewYearController, appLoader=IAppLoader)
+def showCelebrityChallengeReward(questID, instantly=False, notificationMgr=None, nyController=None, appLoader=None):
     if not nyController.isEnabled():
         return
+    app = appLoader.getApp()
+    view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
+    if view:
+        view.onCloseWindow(force=True)
+    from gui.impl.lobby.new_year.challenge.ny_challenge_reward_view import ChallengeRewardViewWindow
+    window = ChallengeRewardViewWindow(questID, instantly)
+    if instantly:
+        window.load()
     else:
-        wndMgr = dependency.instance(IGuiLoader).windowsManager
-        mainView = wndMgr.getViewByLayoutID(R.views.lobby.new_year.MainView()) is not None
-        isLootBoxOpened = wndMgr.getViewByLayoutID(R.views.lobby.new_year.views.NyRewardKitMainView()) is not None
-        if not mainView and not isLootBoxOpened:
-            showHangar()
-        from gui.impl.lobby.new_year.challenge.ny_challenge_reward_view import ChallengeRewardViewWindow
-        window = ChallengeRewardViewWindow(questID, instantly)
-        if instantly:
-            window.load()
-        else:
-            notificationMgr.append(NyWindowNotificationCommand(window))
-        return
+        notificationMgr.append(NyWindowNotificationCommand(window))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, nyController=INewYearController)

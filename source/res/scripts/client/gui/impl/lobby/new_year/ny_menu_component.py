@@ -25,7 +25,7 @@ from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency
 from items.components.ny_constants import CelebrityQuestTokenParts, NyCurrency
 from new_year.ny_constants import AdditionalCameraObject, NyWidgetTopMenu, RESOURCES_ORDER
-from new_year.ny_resource_collecting_helper import getCollectingCooldownTime, isManualCollectingAvailable
+from new_year.ny_resource_collecting_helper import getCollectingCooldownTime
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWalletController
@@ -268,7 +268,7 @@ class NYMainMenu(NyHistoryPresenter):
     @replaceNoneKwargsModel
     def __updateCollecting(self, model=None):
         isAutoCollectingActivated, _, _ = self._itemsCache.items.festivity.getResourceCollecting()
-        isManualAvailable = isManualCollectingAvailable()
+        isManualAvailable = getCollectingCooldownTime(itemsCache=self._itemsCache) == 0
         if isAutoCollectingActivated:
             state = CollectState.AUTOCOLLECT
         elif isManualAvailable:

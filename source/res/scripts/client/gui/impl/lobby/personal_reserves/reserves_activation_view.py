@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPers
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.game_control import BoostersController
 from gui.goodies.goodie_items import ClanReservePresenter
-from gui.goodies.goodies_constants import BoosterCategory
+from goodies.goodie_constants import BoosterCategory
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PERSONAL_RESOURCE_ORDER, GOODIES_TYPE_TO_CLAN_BOOSTERS
 from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import getPersonalBoosterModelDataByResourceType, addPersonalBoostersGroup, addBoosterModel, addEventGroup
@@ -20,6 +20,7 @@ from gui.impl.gen.view_models.common.personal_reserves.reserves_group_model impo
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.personal_reserves import boosterActivationFlow
 from gui.impl.lobby.personal_reserves.personal_reserves_utils import boostersInClientUpdate
+from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showPersonalReservesIntro, showBoostersActivation, showHangar
@@ -31,8 +32,8 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
 from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
 _logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Dict, List, Optional
@@ -43,7 +44,8 @@ if TYPE_CHECKING:
     from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import BoosterModelData
 
 class ReservesActivationView(ReservesViewMonitor):
-    __slots__ = ('__destroyViewObject', '_uiLogger')
+    __slots__ = ('_uiLogger',)
+    _COMMON_SOUND_SPACE = PERSONAL_RESERVES_SOUND_SPACE
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _boosters = dependency.descriptor(IBoostersController)
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -52,7 +54,7 @@ class ReservesActivationView(ReservesViewMonitor):
     _uiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, layoutID=R.views.lobby.personal_reserves.ReservesActivationView()):
-        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=ReservesActivationViewModel())
+        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=ReservesActivationViewModel())
         super(ReservesActivationView, self).__init__(settings)
         self._uiLogger = PersonalReservesMetricsLogger(parent=PersonalReservesLogKeys.HANGAR, item=PersonalReservesLogKeys.ACTIVATION_WINDOW)
 
@@ -64,10 +66,6 @@ class ReservesActivationView(ReservesViewMonitor):
         super(ReservesActivationView, self)._initialize(*args, **kwargs)
         self._uiLogger.onViewInitialize()
         self.initListeners()
-
-    def _onLoaded(self, *args, **kwargs):
-        super(ReservesActivationView, self)._onLoaded(*args, **kwargs)
-        self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_personal_reserves')
 
     def initListeners(self):
         self.viewModel.onInformationClicked += self.onInformationClicked
@@ -93,7 +91,6 @@ class ReservesActivationView(ReservesViewMonitor):
         g_clientUpdateManager.removeObjectCallbacks(self)
         ReservesActivationView._boosters.onBoosterChangeNotify -= self.onBoosterChangeNotify
         g_playerEvents.onClientUpdated -= self.onItemsCacheChanged
-        self.__finalizeSounds()
         self._uiLogger.onViewFinalize()
         super(ReservesActivationView, self)._finalize()
 
@@ -192,14 +189,3 @@ class ReservesActivationView(ReservesViewMonitor):
     def __onEpicUpdate(self, diff, *_):
         if 'isEnabled' in diff:
             self.fillViewModel()
-
-    def __finalizeSounds(self):
-        otherViews = [R.views.lobby.personal_reserves.ReservesConversionView(), R.views.lobby.personal_reserves.ReservesIntroView()]
-        isOnlyOne = True
-        for viewIdToClose in otherViews:
-            introView = self._uiLoader.windowsManager.getViewByLayoutID(viewIdToClose)
-            if introView:
-                isOnlyOne = False
-
-        if isOnlyOne:
-            self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_garage')

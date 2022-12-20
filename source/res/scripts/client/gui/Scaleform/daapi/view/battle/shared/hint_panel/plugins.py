@@ -19,6 +19,7 @@ from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListen
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, ViewEventType, LoadViewEvent
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items import makeIntCompactDescrByID
@@ -763,7 +764,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def __canDisplayPersonalReservesActivationHint(self):
         battleBoostersCache = dependency.instance(IBoostersStateProvider)
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__reservesHintSettings) and not battleBoostersCache.getActiveResources() and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__reservesHintSettings) and not battleBoostersCache.getActiveResources() and battleBoostersCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT) and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled
 
     def __canDisplayQuestHint(self):
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled()

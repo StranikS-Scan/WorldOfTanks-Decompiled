@@ -57,7 +57,7 @@ class _CachedVehicle(object):
         self._clearChangeCallback()
         self._removeListeners()
 
-    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False, waitingSoftStart=False, showWaitingBg=True):
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         raise NotImplementedError
 
     def selectNoVehicle(self):
@@ -160,8 +160,6 @@ class _CurrentVehicle(_CachedVehicle):
             self.item.stopPerksController()
         self.__vehInvID = 0
         self.hangarSpace.removeVehicle()
-        if self.hangarSpace.spaceInited and not self.hangarSpace.space.getVehicleEntity():
-            self.hangarSpace.resetLastUpdatedVehicle()
         self.selectNoVehicle()
 
     def onIgrTypeChanged(self, *args):
@@ -325,7 +323,7 @@ class _CurrentVehicle(_CachedVehicle):
     def isEquipmentLocked(self):
         return not self.isPresent() or self.item.isEquipmentLocked
 
-    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False, waitingSoftStart=False, showWaitingBg=True):
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         vehicle = vehicle if self.__isVehicleSuitable(vehicle) else None
         if vehicle is None:
@@ -341,7 +339,7 @@ class _CurrentVehicle(_CachedVehicle):
                 vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
             else:
                 vehInvID = 0
-        self._selectVehicle(vehInvID, callback, waitingOverlapsUI, waitingSoftStart, showWaitingBg)
+        self._selectVehicle(vehInvID, callback, waitingOverlapsUI)
         return
 
     def selectNoVehicle(self):
@@ -382,12 +380,12 @@ class _CurrentVehicle(_CachedVehicle):
         self.rentals.onRentChangeNotify -= self.onRentChange
         self.battleRoyaleController.onUpdated -= self.__updateBattleRoyaleData
 
-    def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False, waitingSoftStart=False, showWaitingBg=True):
+    def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
             return
         if self.item:
             self.item.stopPerksController()
-        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI, softStart=waitingSoftStart, showBg=showWaitingBg)
+        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
         if self.isOnlyForBattleRoyaleBattles():
@@ -466,7 +464,7 @@ g_currentVehicle = _CurrentVehicle()
 
 class PreviewAppearance(object):
 
-    def refreshVehicle(self, item, outfit=None, waitingSoftStart=False, showWaitingBg=True):
+    def refreshVehicle(self, item, outfit=None):
         raise NotImplementedError
 
     @property
@@ -477,9 +475,9 @@ class PreviewAppearance(object):
 class _RegularPreviewAppearance(PreviewAppearance):
     hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def refreshVehicle(self, item, outfit=None, waitingSoftStart=False, showWaitingBg=True):
+    def refreshVehicle(self, item, outfit=None):
         if item is not None:
-            self.hangarSpace.updatePreviewVehicle(item, outfit, waitingSoftStart, showWaitingBg)
+            self.hangarSpace.updatePreviewVehicle(item, outfit)
         else:
             g_currentVehicle.refreshModel(outfit)
         return
@@ -492,7 +490,7 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def refreshVehicle(self, item, outfit=None, waitingSoftStart=False, showWaitingBg=True):
+    def refreshVehicle(self, item, outfit=None):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
             ClientSelectableCameraObject.switchCamera()
@@ -543,8 +541,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def updateVehicleDescriptorInModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None, waitingSoftStart=False, showWaitingBg=True):
-        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit, waitingSoftStart, showWaitingBg)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit)
         self.onSelected()
 
     def selectNoVehicle(self):
@@ -655,11 +653,11 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None, waitingSoftStart=False, showWaitingBg=True):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
         else:
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False, softStart=waitingSoftStart, showBg=showWaitingBg)
+            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
             self.onChangeStarted()
             self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
             if vehicleStrCD is not None:
@@ -669,7 +667,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             if style is not None and outfit is None:
                 outfit = self.__getPreviewOutfitByStyle(style)
             if self.__vehAppearance is not None:
-                self.__vehAppearance.refreshVehicle(self.__item, outfit, waitingSoftStart, showWaitingBg)
+                self.__vehAppearance.refreshVehicle(self.__item, outfit)
             self._setChangeCallback()
             return
 

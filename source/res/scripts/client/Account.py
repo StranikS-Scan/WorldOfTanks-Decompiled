@@ -449,10 +449,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
         events.onEnqueued(QUEUE_TYPE.TUTORIAL)
 
-    @property
-    def selectedEntity(self):
-        return self.__selectedEntity
-
     def targetFocus(self, entity):
         if self.__objectsSelectionEnabled:
             self.hangarSpace.onMouseEnter(entity)
@@ -1205,9 +1201,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
-
-    def _doCmdIntArrStr(self, cmd, arr, s, callback):
-        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

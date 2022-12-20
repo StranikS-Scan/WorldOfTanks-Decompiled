@@ -18,20 +18,41 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from helpers import dependency
 import nations
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.daapi.view.battle.epic.battle_carousel_filters import FLRentedCriteriesGroup, FL_RENT
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
 _logger = logging.getLogger(__name__)
+_DISABLED_FILTERS = [FILTER_KEYS.BONUS]
+_CAROUSEL_FILTERS = (FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM)
 
 class BattleCarouselFilter(CarouselFilter):
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    FILTER_KEY_SEASON = 'epicBattleSeason'
 
     def __init__(self):
         super(BattleCarouselFilter, self).__init__()
         self._serverSections = (EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2)
         self._clientSections = (EPICBATTLE_CAROUSEL_FILTER_CLIENT_1,)
+        self.__currentSeasonID = 0
 
     def save(self):
-        pass
+        self.__currentSeasonID = self.__epicController.getCurrentSeasonID()
+        self._filters[self.FILTER_KEY_SEASON] = self.__currentSeasonID
+        super(BattleCarouselFilter, self).save()
+
+    def load(self):
+        super(BattleCarouselFilter, self).load()
+        currentSeason = self.__epicController.getCurrentSeasonID()
+        lastSeason = self._filters.get(self.FILTER_KEY_SEASON, currentSeason)
+        if lastSeason != currentSeason:
+            self.reset(save=False)
+        self.__currentSeasonID = currentSeason
+
+    def _setCriteriaGroups(self):
+        self._criteriesGroups = (FLRentedCriteriesGroup(),)
 
 
 def getEpicVehicleDataVO(vehicle):
@@ -60,6 +81,9 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         self.__indexToScroll = -1
         self.__currentVehicle = None
         return
+
+    def hasRentedVehicles(self):
+        return bool(self._getFilteredVehicles(FL_RENT))
 
     @property
     def collection(self):
@@ -303,6 +327,9 @@ class BattleTankCarousel(BattleTankCarouselMeta):
             self.__isUnlockedVehiclesShown = True
             self.as_scrollToSlotS(indexToScroll)
 
+    def hasRentedVehicles(self):
+        return self._carouselDP.hasRentedVehicles()
+
     def _populate(self):
         super(BattleTankCarousel, self)._populate()
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
@@ -344,8 +371,8 @@ class BattleTankCarousel(BattleTankCarouselMeta):
         return filterVO
 
     def _getFilters(self):
-        pass
+        return _CAROUSEL_FILTERS
 
     def __onViewLoaded(self, view, *args):
-        if view.settings.alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER:
+        if view.settings.alias == BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)

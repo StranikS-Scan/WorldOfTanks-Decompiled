@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_view.py
-from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
+from helpers.time_utils import getCurrentTimestamp
+from account_helpers import AccountSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -18,11 +19,10 @@ from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from helpers.time_utils import getCurrentTimestamp
-from skeletons.gui.storage_novelty import IStorageNovelty
-from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.storage_novelty import IStorageNovelty
 
 class StorageView(LobbySubView, StorageViewMeta):
     __background_alpha__ = 1.0

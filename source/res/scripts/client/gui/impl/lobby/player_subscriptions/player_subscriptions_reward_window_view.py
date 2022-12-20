@@ -60,9 +60,11 @@ class PlayerSubscriptionRewardWindowView(ViewImpl):
                 window.load()
             return window
         elif event.contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
-            bonuses = self._getBonuses()
-            bonuses = bonuses[int(event.getArgument('showCount')):]
-            window = DecoratedTooltipWindow(AdditionalRewardsTooltip(bonuses), useDecorator=False)
+            showCount = event.getArgument('showCount')
+            if showCount is None:
+                return
+            packedBonuses = self.viewModel.getRewards()[int(showCount):]
+            window = DecoratedTooltipWindow(AdditionalRewardsTooltip(packedBonuses), useDecorator=False)
             window.load()
             window.move(event.mouse.positionX, event.mouse.positionY)
             return window

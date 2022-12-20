@@ -13,7 +13,12 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)
 def packEpicBattleInfoBlock(epicController=None):
     descLvl = text_styles.stats(backport.text(R.strings.epic_battle.selectorTooltip.epicBattle.bodyVehicleLevel(), level=toRomanRangeString(epicController.getValidVehicleLevels())))
-    return formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.epic_battle.tooltips.common.title())), desc=text_styles.main(backport.text(R.strings.epic_battle.selectorTooltip.epicBattle.body(), bodyVehicleLevel=descLvl)), padding=formatters.packPadding(top=20, left=20, right=20), descPadding=formatters.packPadding(right=30))
+    season = epicController.getCurrentSeason()
+    currentTime = time_utils.getCurrentLocalServerTimestamp()
+    descr = R.strings.epic_battle.selectorTooltip.epicBattle.ended.body()
+    if currentTime < season.getLastCycleInfo().endDate:
+        descr = R.strings.epic_battle.selectorTooltip.epicBattle.body()
+    return formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.epic_battle.tooltips.common.title())), desc=text_styles.main(backport.text(descr, bodyVehicleLevel=descLvl)), padding=formatters.packPadding(top=20, left=20, right=20), descPadding=formatters.packPadding(right=30))
 
 
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)

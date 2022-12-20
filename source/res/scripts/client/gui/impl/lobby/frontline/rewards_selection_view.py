@@ -14,17 +14,22 @@ from gui.impl.lobby.common.selectable_reward_base import SelectableRewardBase
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.selectable_reward.common import EpicSelectableRewardManager
 from gui.sounds.filters import switchHangarOverlaySoundFilter
+from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
+from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 
 class RewardsSelectionView(SelectableRewardBase):
-    __slots__ = ('__onRewardsReceivedCallback', '__onCloseCallback', '__onLoadedCallback', '__isViewLoaded')
+    __slots__ = ('__onRewardsReceivedCallback', '__onCloseCallback', '__onLoadedCallback', '__isViewLoaded', '__uiEpicBattleLogger', '__isAutoDestroyWindowsOnReceivedRewards')
     _helper = EpicSelectableRewardManager
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None):
+    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True):
         self.__onRewardsReceivedCallback = onRewardsReceivedCallback
         self.__onCloseCallback = onCloseCallback
         self.__onLoadedCallback = onLoadedCallback
         self.__isViewLoaded = False
+        self.__isAutoDestroyWindowsOnReceivedRewards = isAutoDestroyWindowsOnReceivedRewards
+        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
         super(RewardsSelectionView, self).__init__(R.views.lobby.frontline.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(), RewardsSelectionViewModel)
 
     def _getReceivedRewards(self, rewardName):
@@ -38,6 +43,7 @@ class RewardsSelectionView(SelectableRewardBase):
         super(RewardsSelectionView, self)._initialize(*args, **kwargs)
         self._epicController.onUpdated += self._onEpicUpdate
         switchHangarOverlaySoundFilter(on=True)
+        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value, skipAdditionalInfoTooltips=(TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP,))
 
     def _onLoading(self, *args, **kwargs):
         super(RewardsSelectionView, self)._onLoading(*args, **kwargs)
@@ -48,7 +54,16 @@ class RewardsSelectionView(SelectableRewardBase):
         switchHangarOverlaySoundFilter(on=False)
         self._epicController.onUpdated -= self._onEpicUpdate
         self.viewModel.onLoadedView -= self.__onViewLoaded
+        self.__uiEpicBattleLogger.reset()
         super(RewardsSelectionView, self)._finalize()
+
+    def _onOkClick(self):
+        super(RewardsSelectionView, self)._onOkClick()
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS_SELECTION_CONFIRM.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
+
+    def _onCloseClick(self):
+        super(RewardsSelectionView, self)._onCloseClick()
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS_SELECTION_CLOSE.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
 
     def _onEpicUpdate(self, diff, *args):
         if 'isEnabled' in diff and not diff['isEnabled']:
@@ -69,7 +84,8 @@ class RewardsSelectionView(SelectableRewardBase):
                 self.__safeCall(self.__onRewardsReceivedCallback, rewardsGenerator)
         else:
             SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error)
-        self.destroyWindow()
+        if self.__isAutoDestroyWindowsOnReceivedRewards:
+            self.destroyWindow()
 
     def __onViewLoaded(self):
         if not self.__isViewLoaded:
@@ -85,5 +101,5 @@ class RewardsSelectionView(SelectableRewardBase):
 class RewardsSelectionWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None):
-        super(RewardsSelectionWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RewardsSelectionView(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback))
+    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True):
+        super(RewardsSelectionWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RewardsSelectionView(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards))

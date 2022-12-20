@@ -28,7 +28,7 @@ class GfDropDownModel(ViewModel):
 
     @staticmethod
     def getSelectedType():
-        return str
+        return unicode
 
     def getMultiple(self):
         return self._getBool(2)

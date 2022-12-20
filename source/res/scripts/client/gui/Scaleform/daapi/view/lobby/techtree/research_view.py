@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_view.py
-from logging import getLogger
 import typing
+import nations
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
@@ -12,7 +12,7 @@ from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared import event_dispatcher as shared_events
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
-import nations
+from logging import getLogger
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -90,7 +90,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNext2UnlockS(next2Unlock)
         if prevUnlocked:
             _logger.info('previouslyUnlocked %s', prevUnlocked)
-            self.as_setNodesStatesS(NODE_STATE_FLAGS.LAST_2_BUY, prevUnlocked)
+            self._updatePrevUnlockedItems(prevUnlocked)
 
     def invalidateInventory(self, data):
         result = self._data.invalidateInventory(data)
@@ -146,6 +146,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
 
     def _updateUnlockedItems(self, unlocked):
         self.as_setNodesStatesS(NODE_STATE_FLAGS.UNLOCKED, unlocked)
+
+    def _updatePrevUnlockedItems(self, prevUnlocked):
+        pass
 
     def _createExitEvent(self):
         return None

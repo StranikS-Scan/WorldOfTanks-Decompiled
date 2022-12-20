@@ -59,7 +59,7 @@ from avatar_components.triggers_controller import TriggersController
 from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
 from avatar_components.vehicle_removal_controller import VehicleRemovalController
 from avatar_components.visual_script_controller import VisualScriptController
-from avatar_helpers import AvatarSyncData
+from avatar_helpers import AvatarSyncData, getBestShotResultSound
 from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
 from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
@@ -266,6 +266,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__isAimingEnded = False
         self.__vehiclesWaitedInfo = {}
         self.__isVehicleMoving = False
+        self.__deadOnLoading = False
         self.arena = None
         return
 
@@ -846,12 +847,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     self.moveVehicle(movementCommands, isDown, cmdMap.isActive(CommandMapping.CMD_BLOCK_TRACKS))
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_MOVE, moveCommands=movementCommands)
                     return True
+                isEpicBattle = self.arenaBonusType in [constants.ARENA_BONUS_TYPE.EPIC_BATTLE, constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING]
                 isBR = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
-                if cmdMap.isFired(CommandMapping.CMD_QUEST_PROGRESS_SHOW, key) and not isBR and (mods != 2 or not isDown) and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+                if cmdMap.isFired(CommandMapping.CMD_QUEST_PROGRESS_SHOW, key) and not isBR and not isEpicBattle and (mods != 2 or not isDown) and self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
                     gui_event_dispatcher.toggleFullStatsQuestProgress(isDown)
                     return True
                 supportsBoosters = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
-                if cmdMap.isFired(CommandMapping.CMD_SHOW_PERSONAL_RESERVES, key) and not BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and supportsBoosters and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled:
+                if cmdMap.isFired(CommandMapping.CMD_SHOW_PERSONAL_RESERVES, key) and not isEpicBattle and not BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and supportsBoosters and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled:
                     gui_event_dispatcher.toggleFullStatsPersonalReserves(isDown)
                     return True
                 if not isGuiEnabled and isDown and mods == 0:
@@ -1446,9 +1448,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.getOwnVehicleShotDispersionAngle(self.gunRotator.turretRotationSpeed)
 
     def redrawVehicleOnRespawn(self, vehicleID, newVehCompactDescr, newVehOutfitCompactDescr):
-        if vehicleID == self.playerVehicleID and self.__firstHealthUpdate:
+        ownVehicle = vehicleID == self.playerVehicleID
+        if ownVehicle and self.__firstHealthUpdate:
             self.__deadOnLoading = True
         Vehicle.Vehicle.respawnVehicle(vehicleID, newVehCompactDescr, newVehOutfitCompactDescr)
+        if ownVehicle:
+            self.__consistentMatrices.notifyVehicleChanged(self, updateStopped=True)
 
     def updateGunMarker(self, vehicleID, shotPos, shotVec, dispersionAngle):
         if self.gunRotator:
@@ -1591,7 +1596,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if len(enemies) == 1:
                         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
                 if sound is not None:
-                    bestSound = _getBestShotResultSound(bestSound, sound, enemyVehID)
+                    bestSound = getBestShotResultSound(bestSound, sound, enemyVehID)
 
             if bestSound is not None:
 
@@ -2146,7 +2151,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __reportClientStats(self):
         sessionData = self.statsCollector.getSessionData()
         if sessionData and self.lobbyContext.collectUiStats:
-            self.base.reportClientStats({key:sessionData[key] for key in ['lag', 'ping']})
+            report = {key:sessionData[key] for key in sessionData if key in ('ping_lt_50', 'ping_51_100', 'ping_101_150', 'ping_151_400', 'ping_gt_400', 'lag')}
+            self.cell.reportClientStats(report)
 
     def addBotToArena(self, vehicleTypeName, team, pos=DEFAULT_VECTOR_3, group=0):
         compactDescr = vehicles.VehicleDescr(typeName=vehicleTypeName).makeCompactDescr()
@@ -3071,29 +3077,6 @@ def preload(alist):
 def _boundingBoxAsVector4(bb):
     return Math.Vector4(bb[0][0], bb[0][1], bb[1][0], bb[1][1])
 
-
-def _getBestShotResultSound(currBest, newSoundName, otherData):
-    newSoundPriority = _shotResultSoundPriorities[newSoundName]
-    if currBest is None:
-        return (newSoundName, otherData, newSoundPriority)
-    else:
-        return (newSoundName, otherData, newSoundPriority) if newSoundPriority > currBest[2] else currBest
-
-
-_shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
- 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player': 11,
- 'enemy_hp_damaged_by_projectile_by_player': 10,
- 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player': 9,
- 'enemy_hp_damaged_by_near_explosion_by_player': 8,
- 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player': 7,
- 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player': 6,
- 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player': 5,
- 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player': 4,
- 'enemy_no_piercing_by_player': 3,
- 'enemy_no_hp_damage_at_attempt_by_player': 3,
- 'enemy_no_hp_damage_at_no_attempt_by_player': 2,
- 'enemy_no_hp_damage_by_near_explosion_by_player': 1,
- 'enemy_ricochet_by_player': 0}
 
 class FilterLagEmulator(object):
 

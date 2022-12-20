@@ -12,14 +12,17 @@
       <gui-items>
         <gui-item>	HangarOptionalDeviceSlots	  <on-scene-effects>
             <activate>	AmmunitionPanelOnScene	</activate>
+            <global-activate>	DisableSpecializationSlotHint	</global-activate>
           </on-scene-effects>
           <not-on-scene-effects>
             <inactivate>	AmmunitionPanelOnScene	</inactivate>
+            <global-inactivate>	DisableSpecializationSlotHint	</global-inactivate>
           </not-on-scene-effects>
         </gui-item>
       </gui-items>
     </scene>
     <scene>	DefaultScene	  <post-effects>
+        <global-inactivate>	DisableSpecializationSlotHint	</global-inactivate>
         <refuse-training></refuse-training>
       </post-effects>
       <runtime-effects></runtime-effects>
@@ -41,14 +44,17 @@
       </padding>
       <actions>
         <click>	HangarOptionalDeviceSlots	  <effects>
+            <global-inactivate>	DisableSpecializationSlotHint	</global-inactivate>
             <refuse-training></refuse-training>
           </effects>
         </click>
         <click-outside>	HangarOptionalDeviceSlots	  <effects>
+            <global-inactivate>	DisableSpecializationSlotHint	</global-inactivate>
             <refuse-training></refuse-training>
           </effects>
         </click-outside>
         <esc>	HangarOptionalDeviceSlots	  <effects>
+            <global-inactivate>	DisableSpecializationSlotHint	</global-inactivate>
             <refuse-training></refuse-training>
           </effects>
         </esc>

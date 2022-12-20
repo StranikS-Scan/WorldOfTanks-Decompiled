@@ -51,9 +51,12 @@ class DisposableEntity(object):
         else:
             LOG_DEBUG('Invalidate call is skipped because initialization of object {} is in progress.'.format(self))
 
+    def _needToBeDisposed(self):
+        return self.__lcState == EntityState.CREATED
+
     def destroy(self):
         if self.__lcState in (EntityState.UNDEFINED, EntityState.CREATED):
-            needToBeDisposed = self.__lcState == EntityState.CREATED
+            needToBeDisposed = self._needToBeDisposed()
             self.__changeStateTo(EntityState.DISPOSING)
             self.onDispose(self)
             if needToBeDisposed:

@@ -155,7 +155,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(promo.getPromoConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
     manager.addConfig(offers.getOffersConfig)
-    manager.addConfig(server_events.getLinkedSetController)
+    manager.addConfig(server_events.getBattleMattersController)
     manager.addConfig(wgnp.getWGNPRequestControllers)
     manager.addConfig(products_fetcher.getProductFetchControllers)
     manager.addConfig(catalog_service.getPurchaseCache)

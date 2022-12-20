@@ -1,16 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/view_impl_adaptor.py
-import logging
 import typing
 import BigWorld
 from frameworks.wulf import WindowStatus, WindowSettings, Window
 from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity, EntityState
+from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from soft_exception import SoftException
-_logger = logging.getLogger(__name__)
 
 class ViewImplAdaptor(DisposableEntity, ViewInterface):
     __slots__ = ('__window', '__loadID', '__scope', '__key', '__layer')
@@ -91,8 +89,6 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
         return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 
     def setView(self, view, parent=None):
-        if self.__window is not None:
-            _logger.exception('View has been already set! %r new value: %r', self, view)
         self.__layer = view.layer
         self.__key = ViewKey(view.layoutID, view.uniqueID)
         settings = WindowSettings()
@@ -101,7 +97,6 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
         settings.layer = self.__layer
         self.__window = Window(settings)
         self.__window.onStatusChanged += self.__onStatusChanged
-        return
 
     def loadView(self):
         if self.__loadID is not None:
@@ -127,8 +122,6 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
 
     def __onStatusChanged(self, state):
         if state == WindowStatus.LOADED:
-            if self.getState() == EntityState.CREATED:
-                _logger.exception('View already created: %r', self)
             self.create()
         elif state == WindowStatus.DESTROYED:
             if self.__window is not None:

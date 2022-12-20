@@ -17,16 +17,10 @@ class PageState(Enum):
     FAILED = 'failed'
 
 
-class TetxureState(Enum):
-    INITIALIZATION = 'initialization'
-    LOADED = 'loaded'
-    FAILED = 'failed'
-
-
 class BrowserModel(ViewModel):
-    __slots__ = ('createWebView', 'focus', 'unfocus', 'reload')
+    __slots__ = ('createWebView', 'focus', 'unfocus')
 
-    def __init__(self, properties=7, commands=4):
+    def __init__(self, properties=6, commands=3):
         super(BrowserModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -47,40 +41,32 @@ class BrowserModel(ViewModel):
     def setPageState(self, value):
         self._setString(2, value.value)
 
-    def getTexState(self):
-        return TetxureState(self._getString(3))
-
-    def setTexState(self, value):
-        self._setString(3, value.value)
-
     def getHttpStatusCode(self):
-        return self._getNumber(4)
+        return self._getNumber(3)
 
     def setHttpStatusCode(self, value):
-        self._setNumber(4, value)
+        self._setNumber(3, value)
 
     def getTitle(self):
-        return self._getString(5)
+        return self._getString(4)
 
     def setTitle(self, value):
-        self._setString(5, value)
+        self._setString(4, value)
 
     def getWaitingMessage(self):
-        return self._getString(6)
+        return self._getString(5)
 
     def setWaitingMessage(self, value):
-        self._setString(6, value)
+        self._setString(5, value)
 
     def _initialize(self):
         super(BrowserModel, self)._initialize()
         self._addNumberProperty('id', 0)
         self._addStringProperty('browserState')
         self._addStringProperty('pageState')
-        self._addStringProperty('texState')
         self._addNumberProperty('httpStatusCode', 0)
         self._addStringProperty('title', '')
         self._addStringProperty('waitingMessage', '')
         self.createWebView = self._addCommand('createWebView')
         self.focus = self._addCommand('focus')
         self.unfocus = self._addCommand('unfocus')
-        self.reload = self._addCommand('reload')

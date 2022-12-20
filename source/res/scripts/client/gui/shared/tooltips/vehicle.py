@@ -114,7 +114,8 @@ _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'turboshaftInvisibilityMovingFactor',
  'turboshaftInvisibilityStillFactor',
  'turretRotationSpeed',
- 'rocketAccelerationEnginePower'])
+ 'rocketAccelerationEnginePower',
+ 'vehicleEnemySpottingTime'])
 _BONUS_TYPES_ORDER = {constants.BonusTypes.SKILL: 1,
  constants.BonusTypes.ROLE: 1,
  constants.BonusTypes.PERK: 1,
@@ -932,6 +933,7 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
 class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
     PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
                                      'speedLimits',
+                                     TURBOSHAFT_SPEED_MODE_SPEED,
                                      WHEELED_SPEED_MODE_SPEED,
                                      'chassisRotationSpeed',
                                      MAX_STEERING_LOCK_ANGLE,

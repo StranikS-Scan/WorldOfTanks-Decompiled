@@ -1,15 +1,15 @@
 <china.xml>
-  <china:Ch19_1218>	ussr	</china:Ch19_1218>
-  <china:Ch19_1211>	germany	</china:Ch19_1211>
-  <china:Ch19_1217>	usa	</china:Ch19_1217>
+  <china:Ch19_1219>	ussr	</china:Ch19_1219>
+  <china:Ch19_1212>	germany	</china:Ch19_1212>
+  <china:Ch19_1218>	usa	</china:Ch19_1218>
   <xmlns:china>	china	</xmlns:china>
-  <china:Ch19_1210>	france	</china:Ch19_1210>
-  <china:Ch19_1216>	uk	</china:Ch19_1216>
-  <china:Ch19_1213>	japan	</china:Ch19_1213>
-  <xmlns:czech>	czech	</xmlns:czech>
-  <china:Ch19_1215>	sweden	</china:Ch19_1215>
-  <china:Ch19_1214>	poland	</china:Ch19_1214>
-  <china:Ch19_1212>	italy	</china:Ch19_1212>
+  <china:Ch19_1211>	france	</china:Ch19_1211>
+  <china:Ch19_1217>	uk	</china:Ch19_1217>
+  <china:Ch19_1214>	japan	</china:Ch19_1214>
+  <china:Ch19_1210>	czech	</china:Ch19_1210>
+  <china:Ch19_1216>	sweden	</china:Ch19_1216>
+  <china:Ch19_1215>	poland	</china:Ch19_1215>
+  <china:Ch19_1213>	italy	</china:Ch19_1213>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -3556,6 +3556,46 @@
       </rotation>
       <tiling>
         <china:Ch19_121>	2.8 2.8 0.1 4.0	</china:Ch19_121>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.000000  1.000000	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	491	</id>
+      <texture>	vehicles/russian/Camouflage/veteran_WZ_122_6.dds	</texture>
+      <description>	#vehicle_customization:camouflage/veteran_WZ_122_6/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/veteran_WZ_122_6/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	56 53 47 255	</c0>
+          <c1>	111 116 117 255	</c1>
+          <c2>	81 92 77 255	</c2>
+          <c3>	46 45 35 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.218515	</HULL>
+        <TURRET>	-0.94178	</TURRET>
+        <GUN>	2.704562	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch52_WZ_122_6_F3>	2.37 2.37 0 0	</china:Ch52_WZ_122_6_F3>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>

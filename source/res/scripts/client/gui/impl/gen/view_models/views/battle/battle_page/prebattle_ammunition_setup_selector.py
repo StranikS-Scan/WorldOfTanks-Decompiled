@@ -17,7 +17,7 @@ class PrebattleAmmunitionSetupSelector(AmmunitionSetupSelector):
 
     @staticmethod
     def getHotKeysType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(PrebattleAmmunitionSetupSelector, self)._initialize()

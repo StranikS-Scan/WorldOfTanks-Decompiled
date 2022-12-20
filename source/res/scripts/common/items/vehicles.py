@@ -2072,6 +2072,10 @@ class VehicleType(object):
         return 'lockOutfit' in self.tags
 
     @property
+    def isRestoredWithStyle(self):
+        return 'restoreWithStyle' in self.tags
+
+    @property
     def progressionDecalsOnly(self):
         return 'lockExceptProgression' in self.tags
 
@@ -3277,7 +3281,7 @@ def _readHull(xmlCtx, section):
         if section.has_key('hangarShadowTexture'):
             item.hangarShadowTexture = _xml.readString(xmlCtx, section, 'hangarShadowTexture')
         else:
-            item.hangarShadowTexture = None
+            item.hangarShadowTexture = ''
         item.burnoutAnimation = __readBurnoutAnimation(xmlCtx, section)
         item.prefabs = section.readStrings('prefab')
     if IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_CELLAPP:
@@ -3297,11 +3301,11 @@ def _writeHulls(hulls, section, materialData):
     shared_writers.writeModelsSets(item.modelsSets, section['models'])
     shared_writers.writeSwingingSettings(item.swinging, section['swinging'])
     __writeExhaustEffect(item.customEffects[0], section)
-    _xml.rewriteString(section, 'hangarShadowTexture', item.hangarShadowTexture)
+    _xml.rewriteString(section, 'hangarShadowTexture', item.hangarShadowTexture, defaultValue='')
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
     _writeCustomizableAreas(item.customizableVehicleAreas, section)
-    _writeHullVariants(hulls, section)
+    _writeHullVariants(hulls, section, materialData)
     return
 
 
@@ -3500,7 +3504,7 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
     return tuple(res)
 
 
-def _writeHullVariants(hulls, section):
+def _writeHullVariants(hulls, section, materialData):
     if len(hulls) < 2:
         return
     else:
@@ -3522,6 +3526,7 @@ def _writeHullVariants(hulls, section):
             defSlots = defHull.emblemSlots + defHull.slotsAnchors
             shared_writers.writeCustomizationSlots(slots if slots != defSlots else None, subsection, 'customizationSlots')
             _xml.rewriteFloat(subsection, 'weight', hull.weight, defHull.weight)
+            _writeArmor(hull.materials, None, subsection, 'armor', materialData=materialData.get(subsectionName, None))
 
         return
 
@@ -3653,6 +3658,7 @@ def _writeChassis(item, section, sharedSections, materialData, *args, **kwargs):
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
+    _writeCamouflageSettings(section, 'camouflage', item.camouflage)
     _writeArmor(item.materials, None, section, 'armor', optional=True, materialData=materialData.get(item.name, None))
     slots = item.emblemSlots + item.slotsAnchors
     shared_writers.writeCustomizationSlots(slots, section, 'customizationSlots')
@@ -5226,8 +5232,8 @@ def _readCrew(xmlCtx, section, subsectionName):
     return tuple(res)
 
 
-def _readPriceForItem(xmlCtx, section, compactDescr):
-    pricesDest = _g_prices
+def _readPriceForItem(xmlCtx, section, compactDescr, prices=None):
+    pricesDest = prices if prices is not None else _g_prices
     if pricesDest is not None:
         pricesDest['itemPrices'][compactDescr] = _xml.readPrice(xmlCtx, section, 'price')
         if section.readBool('notInShop', False):

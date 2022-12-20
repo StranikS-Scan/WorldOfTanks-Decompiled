@@ -10,6 +10,9 @@ class EpicBattlesAfterBattleViewMeta(View):
     def onRibbonStartsPlaying(self):
         self._printOverrideError('onRibbonStartsPlaying')
 
+    def onNextBtnClick(self):
+        self._printOverrideError('onNextBtnClick')
+
     def onCloseBtnClick(self):
         self._printOverrideError('onCloseBtnClick')
 

@@ -42,7 +42,7 @@ class BattleAbilitySlotModel(BaseSlotModel):
 
     @staticmethod
     def getRanksType():
-        return str
+        return unicode
 
     def getAbilitiesByRank(self):
         return self._getArray(24)

@@ -18,7 +18,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -62,11 +62,15 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-def getVehicleDataVO(vehicle):
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
+def getVehicleDataVO(vehicle, bootcampCtrl=None):
     rentInfoText = ''
     if not vehicle.isWotPlusRent and not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
+    if vState == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL and bootcampCtrl.isInBootcamp():
+        vState = Vehicle.VEHICLE_STATE.UNDAMAGED
+        vStateLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
     if vehicle.isRotationApplied():
         if vState in (Vehicle.VEHICLE_STATE.AMMO_NOT_FULL, Vehicle.VEHICLE_STATE.LOCKED):
             vState = Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED

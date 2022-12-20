@@ -67,7 +67,7 @@ class FunRandomSubSelectorCardModel(ViewModel):
 
     @staticmethod
     def getModifiersDomainsType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(FunRandomSubSelectorCardModel, self)._initialize()

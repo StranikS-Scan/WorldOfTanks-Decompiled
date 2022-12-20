@@ -26,7 +26,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.gui_items.dossier.stats import UNAVAILABLE_MARKS_OF_MASTERY
 from helpers import i18n, dependency
 from nations import NAMES
-from skeletons.gui.game_control import IVehicleComparisonBasket, IComp7Controller
+from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
@@ -37,7 +37,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
@@ -87,8 +86,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
-        if self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getSeasonPassed():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
+        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
         storedData = self._getStorageData()
         return {'dropDownProvider': dropDownProvider,
          'tableHeader': self.__getTableHeader(isFallout),

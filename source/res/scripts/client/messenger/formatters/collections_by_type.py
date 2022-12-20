@@ -21,14 +21,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
  token_quest_subformatters.WotPlusDirectivesFormatter(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
- token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.NewYearCollectionRewardFormatter(),
- token_quest_subformatters.NewYearCollectionMegaRewardFormatter(),
- token_quest_subformatters.NewYearLevelUpRewardFormatter(),
- token_quest_subformatters.NewYearOldCollectionRewardFormatter(),
- token_quest_subformatters.NewYearCelebrityQuestRewardFormatter(),
- token_quest_subformatters.NewYearCelebrityMarathonRewardFormatter(),
- token_quest_subformatters.NewYearPiggyBankRewardFormatter()))
+ token_quest_subformatters.Comp7RewardsFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
@@ -121,9 +114,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
  _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
  _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
- _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
- _SM_TYPE.autoCollectingNotification.index(): _sc.NyAutoCollectingFormatter(),
- _SM_TYPE.nyErrorNotification.index(): _sc.NyErrorNotificationFormatter()}
+ _SM_TYPE.fairplay.index(): _sc.FairplayFormatter()}
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, _sc.ClientSysMessageFormatter())
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG, _sc.PremiumAccountExpiryFormatter())
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE, _sc.AOGASNotifyFormatter())
@@ -149,14 +140,3 @@ registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_TANKRENTAL_DISABLED
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE, _sc.IntegratedAuctionLostRateFormatter())
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_ENABLED, _wotPlusFormatters.SimpleFormatter('FreeDirectivesEnabledMessage'))
 registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREEDIRECTIVES_DISABLED, _wotPlusFormatters.SimpleFormatter('FreeDirectivesDisabledMessage'))
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NEW_NY_LOOT_BOXES, _sc.NewNYLootBoxesFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE, _sc.NewNYEventFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_RESOURCES_CONVERTED_MESSAGE, _sc.NYResourcesConvertedFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_GUEST_QUEST_COMPLETED_MESSAGE, _sc.NYCelebrityGuestQuestRewardFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_MANUAL_COLLECTING_MESSAGE, _sc.NYManualCollectingFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_AUTO_COLLECTING_ACTIVATE_MESSAGE, _sc.NyAutoCollectingActivateFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_STROKE_DOG_MESSAGE, _sc.NYStrokeDogFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_CURRENCY_FINANCIAL_OPERATION_MESSAGE, _sc.NYCurrencyFinancialOperationFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_COLLECTION_REWARD_MESSAGE, _sc.NYCollectionRewardFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_RESOURCE_COLLECTING_AVAILABLE, _sc.NYResourceCollectingAvailableFormatter())
-registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_FRIEND_RESOURCE_COLLECTING_AVAILABLE, _sc.NYFriendResourceCollectingAvailableFormatter())

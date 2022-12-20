@@ -1,20 +1,18 @@
 <DogTagComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
   <Properties>
     <dogTag>
       <Type>	BATTLE_DOG_TAG	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </dogTag>
     <victimsDogTags>
       <Type>	ARRAY	  <of>	VEHICLE_DOG_TAG	</of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </victimsDogTags>
     <killerDogTag>
       <Type>	VEHICLE_DOG_TAG	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </killerDogTag>
   </Properties>
   <ofEntity>

@@ -33,7 +33,6 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -240,20 +239,13 @@ class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
 
 class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __battleMatters = dependency.descriptor(IBattleMattersController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __funRandomController = dependency.descriptor(IFunRandomController)
 
-    def __init__(self):
-        super(QuestsGroupsBuilder, self).__init__()
-        self.__wasLinkedSetShowed = False
-
     def invalidateBlocks(self):
         super(QuestsGroupsBuilder, self).invalidateBlocks()
-        if self.__battleMatters.isEnabled() and (self.__wasLinkedSetShowed or not self.__battleMatters.isFinished()):
-            self.__wasLinkedSetShowed = True
         group = getDailyEpicGroup()
         epicBattleQuestsAvailable = self.__epicController.isEnabled() and self.__epicController.isCurrentCycleActive()
         if group and epicBattleQuestsAvailable and EPIC_BATTLE_GROUPS_ID not in self._cache['groupedEvents']:
@@ -741,7 +733,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
 
     def __init__(self):
         group = getPremiumGroup()
-        super(_PremiumGroupedQuestsBlockInfo, self).__init__(group, headerLinkage=QUESTS_ALIASES.MISSIONS_LINKED_SET_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSIONS_PREMIUM_BODY_LINKAGE)
+        super(_PremiumGroupedQuestsBlockInfo, self).__init__(group, headerLinkage=QUESTS_ALIASES.MISSIONS_GOLD_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSIONS_PREMIUM_BODY_LINKAGE)
         self._filterEnable = False
 
     def findEvents(self, srvEvents):

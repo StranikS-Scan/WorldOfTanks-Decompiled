@@ -6,8 +6,9 @@ import Event
 import constants
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME, _MISSION_SECTOR_ID_MAPPING
+from avatar_helpers import getBestShotResultSound
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
-from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS
+from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS as VHF
 from debug_utils import LOG_DEBUG_DEV
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control import avatar_getter
@@ -53,50 +54,49 @@ class AvatarEpicData(object):
         if constants.IS_DEVELOPMENT:
             self.__devEvtManager.clear()
 
-    def showDestructibleShotResults(self, destructibleEntityID, hitFlags):
-        LOG_DEBUG_DEV('showDestructibleShotResults', destructibleEntityID, hitFlags)
+    def showDestructibleShotResults(self, destructibleEntityID, hitFlagsList):
+        LOG_DEBUG_DEV('showDestructibleShotResults', destructibleEntityID, hitFlagsList)
         if self.arena.componentSystem and hasattr(self.arena.componentSystem, 'destructibleEntityComponent'):
             destructibleComp = self.arena.componentSystem.destructibleEntityComponent
-        if not destructibleComp:
-            return
-        else:
+        if destructibleComp:
             destructibleObj = destructibleComp.getDestructibleEntity(destructibleEntityID)
-            if destructibleObj is None:
+            if destructibleObj is None or self.team == destructibleObj.team:
                 return
-            VHF = VEHICLE_HIT_FLAGS
-            if hitFlags & VHF.VEHICLE_KILLED:
-                return
-            if hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
-                return
-            if self.team == destructibleObj.team:
+        else:
+            return
+        bestSoundsSequence = None
+        for hitFlags in hitFlagsList:
+            if hitFlags & VHF.VEHICLE_KILLED or hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
                 return
             sound = None
-            if hitFlags is not None:
-                if hitFlags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
-                    if hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                        sound = 'enemy_hp_damaged_by_near_explosion_by_player'
-                    elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
-                elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
-                    if hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
-                    elif hitFlags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'
-                    else:
-                        sound = 'enemy_hp_damaged_by_projectile_by_player'
-                elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                    sound = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
-                elif hitFlags & VHF.RICOCHET and not hitFlags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
-                    sound = 'enemy_ricochet_by_player'
-                elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
-                    sound = 'enemy_no_hp_damage_at_attempt_by_player'
+            if hitFlags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
+                if hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
+                    sound = 'enemy_hp_damaged_by_near_explosion_by_player'
                 elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
-                    sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
+                    sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
+            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
+                if hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
+                    sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
+                elif hitFlags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
+                    sound = 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'
                 else:
-                    sound = 'enemy_no_piercing_by_player'
+                    sound = 'enemy_hp_damaged_by_projectile_by_player'
+            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
+                sound = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
+            elif hitFlags & VHF.RICOCHET and not hitFlags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
+                sound = 'enemy_ricochet_by_player'
+            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
+                sound = 'enemy_no_hp_damage_at_attempt_by_player'
+            elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
+                sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
+            else:
+                sound = 'enemy_no_piercing_by_player'
             if sound is not None:
-                self.soundNotifications.play(sound)
-            return
+                bestSoundsSequence = getBestShotResultSound(bestSoundsSequence, sound, None)
+
+        if bestSoundsSequence is not None:
+            self.soundNotifications.play(bestSoundsSequence[0])
+        return
 
     def onDestructibleDestroyed(self, destructibleEntityID, shooterID):
         self.guiSessionProvider.shared.messages.showDestructibleEntityDestroyedMessage(self, destructibleEntityID, shooterID)

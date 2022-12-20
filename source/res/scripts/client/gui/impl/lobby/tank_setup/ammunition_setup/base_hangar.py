@@ -298,7 +298,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._vehItem.getItem().optDevices.dynSlotType = g_currentVehicle.item.optDevices.dynSlotType
                 self._tankSetup.update(fullUpdate=True)
             self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
-            self._vehItem.getItem().setOutfits(g_currentVehicle.item)
             self._updateAmmunitionPanel()
             return
 

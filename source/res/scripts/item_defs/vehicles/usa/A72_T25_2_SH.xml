@@ -1203,10 +1203,10 @@
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	52	</rotationSpeed>
+      <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.1	</vehicleMovement>
-        <vehicleRotation>	0.1	</vehicleRotation>
+        <vehicleMovement>	0.08	</vehicleMovement>
+        <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -3137,7 +3137,7 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -3270,8 +3270,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8880	</weight>
-      <maxHealth>	700	</maxHealth>
-      <rotationSpeed>	55	</rotationSpeed>
+      <maxHealth>	800	</maxHealth>
+      <rotationSpeed>	58	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
@@ -3388,7 +3388,7 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -3460,8 +3460,8 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
+          <reloadTime>	4.4	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
@@ -3681,8 +3681,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11580	</weight>
-      <maxHealth>	700	</maxHealth>
-      <rotationSpeed>	50	</rotationSpeed>
+      <maxHealth>	800	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
@@ -3787,7 +3787,7 @@
             </armor_5>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -4075,7 +4075,7 @@
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Ford_GAN_SH>
         <Continental_AOSI-895-5_SH>
-          <smplEnginePower>	1150	</smplEnginePower>
+          <smplEnginePower>	1090	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Continental_AOSI-895-5_SH>
         <Ford_GAF_V8_SH>

@@ -3,11 +3,12 @@
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import BoosterModel
+from gui.impl.gen.view_models.views.lobby.personal_reserves.disabled_category import DisabledCategory
 
 class ReservesEntryPointModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(ReservesEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     def getReserves(self):
@@ -44,6 +45,16 @@ class ReservesEntryPointModel(ViewModel):
     def setIsClanMember(self, value):
         self._setBool(4, value)
 
+    def getDisabledCategories(self):
+        return self._getArray(5)
+
+    def setDisabledCategories(self, value):
+        self._setArray(5, value)
+
+    @staticmethod
+    def getDisabledCategoriesType():
+        return DisabledCategory
+
     def _initialize(self):
         super(ReservesEntryPointModel, self)._initialize()
         self._addArrayProperty('reserves', Array())
@@ -51,3 +62,4 @@ class ReservesEntryPointModel(ViewModel):
         self._addNumberProperty('totalLimitedReserves', 0)
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isClanMember', False)
+        self._addArrayProperty('disabledCategories', Array())

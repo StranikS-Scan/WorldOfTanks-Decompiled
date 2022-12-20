@@ -14,13 +14,13 @@ class State(Enum):
 class QuestViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(QuestViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getIdx(self):
+    def getNumber(self):
         return self._getNumber(0)
 
-    def setIdx(self, value):
+    def setNumber(self, value):
         self._setNumber(0, value)
 
     def getTitle(self):
@@ -75,15 +75,21 @@ class QuestViewModel(ViewModel):
     def setCurrentProgress(self, value):
         self._setNumber(8, value)
 
-    def getMaxProgress(self):
+    def getLastSeenProgress(self):
         return self._getNumber(9)
 
-    def setMaxProgress(self, value):
+    def setLastSeenProgress(self, value):
         self._setNumber(9, value)
+
+    def getMaxProgress(self):
+        return self._getNumber(10)
+
+    def setMaxProgress(self, value):
+        self._setNumber(10, value)
 
     def _initialize(self):
         super(QuestViewModel, self)._initialize()
-        self._addNumberProperty('idx', 0)
+        self._addNumberProperty('number', 0)
         self._addStringProperty('title', '')
         self._addStringProperty('description', '')
         self._addStringProperty('condition', '')
@@ -92,4 +98,5 @@ class QuestViewModel(ViewModel):
         self._addStringProperty('state')
         self._addArrayProperty('rewards', Array())
         self._addNumberProperty('currentProgress', -1)
+        self._addNumberProperty('lastSeenProgress', 0)
         self._addNumberProperty('maxProgress', -1)

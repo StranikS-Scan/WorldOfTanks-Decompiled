@@ -2,9 +2,12 @@
 # Embedded file name: scripts/client/skeletons/gui/shared/gui_items.py
 import typing
 if typing.TYPE_CHECKING:
+    from typing import Optional
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
     from post_progression_common import VehicleState
+    from gui.shared.gui_items.dossier import AccountDossier
+    from dossiers2.common.DossierDescr import DossierDescr
 
 class IGuiItemsFactory(object):
 

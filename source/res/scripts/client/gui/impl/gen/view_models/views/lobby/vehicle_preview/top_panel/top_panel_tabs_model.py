@@ -36,7 +36,7 @@ class TopPanelTabsModel(ViewModel):
 
     @staticmethod
     def getTabCustomNamesType():
-        return str
+        return unicode
 
     def getCurrentTabID(self):
         return TabID(self._getNumber(2))

@@ -17,7 +17,7 @@ class SoldModuleInfoTooltipModel(ViewModel):
 
     @staticmethod
     def getCompatibleTanksType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(SoldModuleInfoTooltipModel, self)._initialize()

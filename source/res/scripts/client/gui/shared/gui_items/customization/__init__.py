@@ -17,12 +17,11 @@ def isNeedToMirrorProjectionDecal(item, slot):
     return False if itemDirection == ProjectionDecalDirectionTags.ANY or slotDirection == ProjectionDecalDirectionTags.ANY else itemDirection != slotDirection
 
 
-CustomizationTooltipContext = namedtuple('CustomizationTooltipContext', ('itemCD', 'vehicleIntCD', 'showInventoryBlock', 'level', 'showOnlyProgressBlock', 'context'))
+CustomizationTooltipContext = namedtuple('CustomizationTooltipContext', ('itemCD', 'vehicleIntCD', 'showInventoryBlock', 'level', 'showOnlyProgressBlock'))
 CustomizationTooltipContext.__new__.__defaults__ = (-1,
  -1,
  False,
  -1,
- False,
- None)
+ False)
 C11nStyleProgressData = namedtuple('C11nStyleProgressData', ('styleID', 'branch', 'level'))
 C11nStyleProgressData.__new__.__defaults__ = (-1, -1, -1)

@@ -285,7 +285,7 @@ class Goodies(object):
             LOG_WARNING("Couldn't find goodie by id={}", goodieID)
             return
         elif goodie.isActive():
-            LOG_WARNING("Couldn't activate goodie(id={}) because it is already activated!", goodieID)
+            LOG_WARNING("Couldn't activate goodie(id={}) because it is already activated!".format(goodieID))
             return
         else:
             defined = self.definedGoodies[goodieID]

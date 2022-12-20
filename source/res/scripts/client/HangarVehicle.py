@@ -50,6 +50,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
     def __onSpaceCreated(self):
         self.setEnable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
+        self.cameraPivot = self.hangarSpace.space.camera.pivotPosition
 
     def _setStartValues(self):
         pass

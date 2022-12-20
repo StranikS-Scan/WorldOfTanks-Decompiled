@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
 import typing
 import logging
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NY_DAILY_QUESTS_VISITED
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
@@ -31,8 +29,7 @@ from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IFestivityController
-from skeletons.new_year import INewYearController
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List
@@ -61,16 +58,13 @@ class DailyQuestsView(ViewImpl):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     battlePassController = dependency.descriptor(IBattlePassController)
-    __festivityController = dependency.descriptor(IFestivityController)
-    __nyController = dependency.descriptor(INewYearController)
-    __slots__ = ('__tooltipData', '__proxyMissionsPage', '__hasNYResourcesReward')
+    __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
         viewSettings = ViewSettings(layoutID, ViewFlags.COMPONENT, DailyQuestsViewModel())
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
-        self.__hasNYResourcesReward = False
         return
 
     @property
@@ -96,7 +90,7 @@ class DailyQuestsView(ViewImpl):
             _logger.debug('CreateTooltip: %s, %s', missionId, tooltipId)
             tooltipsData = self.__tooltipData.get(missionId, {})
             tooltipData = tooltipsData.get(int(tooltipId))
-            window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event) if tooltipData is not None else None
+            window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
             if window is not None:
                 window.load()
             return window
@@ -140,7 +134,6 @@ class DailyQuestsView(ViewImpl):
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
             tx.setIsBattlePassActive(self.battlePassController.isActive())
-            tx.setIsNewYearAvailable(self.__nyController.isEnabled())
 
     def _onLoaded(self, *args, **kwargs):
         showBattlePassDailyQuestsIntro()
@@ -165,16 +158,9 @@ class DailyQuestsView(ViewImpl):
         isEnabled = isDailyQuestsEnable()
         quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
         newBonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
-        self.__hasNYResourcesReward = any([ bonus.getName() == 'nyRandomResource' for quest in quests for bonus in quest.getBonuses() ])
         self._updateRerollEnabledFlag(model)
         with model.dailyQuests.transaction() as tx:
             tx.setIsEnabled(isEnabled)
-            if self.__festivityController.isEnabled():
-                if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
-                    if isEnabled:
-                        tx.setPlayNYQuestLootboxAnimation(True)
-                    model.setIsNewYearIntroVisible(self.__nyController.isEnabled() and self.__hasNYResourcesReward)
-                    AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
             if not isEnabled:
                 return
             if not fullUpdate and not needToUpdateQuestsInModel(quests + newBonusQuests, tx.getQuests()):
@@ -384,9 +370,6 @@ class DailyQuestsView(ViewImpl):
     def __onRerollEnabled(self):
         self.viewModel.dailyQuests.setRerollCountDown(0)
 
-    def __onNewYearIntroClosed(self):
-        self.viewModel.setIsNewYearIntroVisible(False)
-
     def __addListeners(self):
         self.viewModel.onBuyPremiumBtnClick += self.__onBuyPremiumBtn
         self.viewModel.onTabClick += self.__onTabClick
@@ -394,11 +377,9 @@ class DailyQuestsView(ViewImpl):
         self.viewModel.onClose += self.__onCloseView
         self.viewModel.onReroll += self.__onReRoll
         self.viewModel.onRerollEnabled += self.__onRerollEnabled
-        self.viewModel.onNewYearIntroClosed += self.__onNewYearIntroClosed
         self.eventsCache.onSyncCompleted += self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged += self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChanged
-        self.__nyController.onStateChanged += self.__onNYStateChanged
 
     def __removeListeners(self):
         self.viewModel.onBuyPremiumBtnClick -= self.__onBuyPremiumBtn
@@ -407,11 +388,9 @@ class DailyQuestsView(ViewImpl):
         self.viewModel.onClose -= self.__onCloseView
         self.viewModel.onReroll -= self.__onReRoll
         self.viewModel.onRerollEnabled -= self.__onRerollEnabled
-        self.viewModel.onNewYearIntroClosed -= self.__onNewYearIntroClosed
         self.eventsCache.onSyncCompleted -= self._onSyncCompleted
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChanged
-        self.__nyController.onStateChanged -= self.__onNYStateChanged
 
     def __updateQuestsInModel(self, questsInModelToUpdate, sortedNewQuests):
         _logger.debug('DailyQuestsView::__updateQuestsInModel')
@@ -437,8 +416,3 @@ class DailyQuestsView(ViewImpl):
             missionVisitedArray.addBool(missionCompletedVisited)
 
         missionVisitedArray.invalidate()
-
-    def __onNYStateChanged(self, *args):
-        with self.viewModel.transaction() as model:
-            model.setIsNewYearAvailable(self.__nyController.isEnabled())
-            model.setIsNewYearIntroVisible(self.__nyController.isEnabled() and self.__hasNYResourcesReward)

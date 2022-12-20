@@ -9,6 +9,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_list_item import ConvertedBoosterListItem
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_conversion_view_model import ReservesConversionViewModel
+from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
 from gui.shared.event_dispatcher import closeReservesIntroAndConversionView
 from helpers import dependency
@@ -16,14 +17,15 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
 from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
+from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional, List, Any
     from frameworks.wulf import Array
 
 class ReservesConversionView(ReservesViewMonitor):
     __slots__ = ('_uiLogger',)
+    _COMMON_SOUND_SPACE = PERSONAL_RESERVES_SOUND_SPACE
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _itemsCache = dependency.descriptor(IItemsCache)
     _uiLoader = dependency.descriptor(IGuiLoader)
@@ -50,7 +52,6 @@ class ReservesConversionView(ReservesViewMonitor):
 
     def _finalize(self):
         self._viewModel.onClose -= self._onClose
-        self.__finalizeSounds()
         self._uiLogger.onViewFinalize()
         super(ReservesConversionView, self)._finalize()
 
@@ -63,10 +64,6 @@ class ReservesConversionView(ReservesViewMonitor):
     def _onLoading(self, *args, **kwargs):
         super(ReservesConversionView, self)._onLoading(*args, **kwargs)
         self._fillViewModel()
-
-    def _onLoaded(self, *args, **kwargs):
-        super(ReservesConversionView, self)._onLoaded(*args, **kwargs)
-        self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_personal_reserves')
 
     def _fillViewModel(self):
         with self._viewModel.transaction() as model:
@@ -153,14 +150,3 @@ class ReservesConversionView(ReservesViewMonitor):
 
     def _onClose(self):
         closeReservesIntroAndConversionView()
-
-    def __finalizeSounds(self):
-        otherViews = [R.views.lobby.personal_reserves.ReservesIntroView(), R.views.lobby.personal_reserves.ReservesActivationView()]
-        isOnlyOne = True
-        for viewIdToClose in otherViews:
-            introView = self._uiLoader.windowsManager.getViewByLayoutID(viewIdToClose)
-            if introView:
-                isOnlyOne = False
-
-        if isOnlyOne:
-            self.soundManager.setState('STATE_hangar_place', 'STATE_hangar_place_garage')

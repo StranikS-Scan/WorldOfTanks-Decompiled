@@ -10,7 +10,7 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim
+from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
@@ -742,18 +742,22 @@ class _DistancePlugin(CrosshairPlugin):
 
 
 class TargetDistancePlugin(_DistancePlugin):
-    __slots__ = ('__trackID',)
+    __slots__ = ('__trackID', '__isEnabled', '__currentEntityInFocus')
 
     def __init__(self, parentObj):
         super(TargetDistancePlugin, self).__init__(parentObj)
         self.__trackID = 0
+        self.__currentEntityInFocus = 0
+        self.__isEnabled = False
 
     def start(self):
         super(TargetDistancePlugin, self).start()
+        self.__setEnabled()
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is None:
             raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def stop(self):
@@ -761,6 +765,7 @@ class TargetDistancePlugin(_DistancePlugin):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         return
 
     def _update(self):
@@ -776,9 +781,9 @@ class TargetDistancePlugin(_DistancePlugin):
             self.__stopTrack(immediate=True)
 
     def __startTrack(self, vehicleID):
-        self._interval.stop()
+        self.__stopTrack(immediate=True)
         target = BigWorld.entity(vehicleID)
-        if target is not None:
+        if target is not None and self.__shouldTrackVehicle(target):
             self.__trackID = vehicleID
             self.__updateDistance(target)
             self._interval.start()
@@ -792,6 +797,24 @@ class TargetDistancePlugin(_DistancePlugin):
     def __updateDistance(self, target):
         self._parentObj.setDistance(int(avatar_getter.getDistanceToTarget(target)))
 
+    def __onSettingsChanged(self, diff):
+        settingsToUpdateTracking = {MARKERS.ENEMY, MARKERS.ALLY}
+        if settingsToUpdateTracking & set(diff):
+            self.__setEnabled()
+
+    def __setEnabled(self):
+        getter = self.settingsCore.getSetting
+        markerSettings = getter(MARKERS.ENEMY)
+        self.__isEnabled = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
+        if self.__isEnabled:
+            markerSettings = getter(MARKERS.ALLY)
+            self.__isEnabled = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
+        if self.__currentEntityInFocus:
+            self.__startTrack(self.__currentEntityInFocus)
+
+    def __shouldTrackVehicle(self, target):
+        return self.__isEnabled
+
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.ENTITY_IN_FOCUS:
             if self._parentObj.getViewID() not in (CROSSHAIR_VIEW_ID.ARCADE, CROSSHAIR_VIEW_ID.SNIPER):
@@ -800,8 +823,10 @@ class TargetDistancePlugin(_DistancePlugin):
             if entityType == ENTITY_IN_FOCUS_TYPE.VEHICLE:
                 if isInFocus:
                     self.__startTrack(vehicleID)
+                    self.__currentEntityInFocus = vehicleID
                 else:
-                    self.__stopTrack()
+                    self.__stopTrack(not self._interval.isStarted())
+                    self.__currentEntityInFocus = 0
 
 
 class GunMarkerDistancePlugin(_DistancePlugin):

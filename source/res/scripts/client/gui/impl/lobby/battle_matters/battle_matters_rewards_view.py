@@ -20,6 +20,7 @@ from helpers import dependency
 from sound_gui_manager import CommonSoundSpaceSettings
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
+from gui.server_events.bonuses import VehiclesBonus, TankmenBonus
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
     from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_model import BattleMattersVehicleModel
@@ -51,7 +52,7 @@ def _customSort(rewardType):
     return _CUSTOM_SORT.get(rewardType, lambda _, __: 0)
 
 
-_CUSTOM_SORT = {'vehicles': _vehiclesCmp,
+_CUSTOM_SORT = {VehiclesBonus.VEHICLES_BONUS: _vehiclesCmp,
  'customizations': _customizationsCmp,
  'items': _itemsCmp}
 _CLIENT_REWARD_IDX = -1
@@ -76,8 +77,6 @@ class BattleMattersRewardsView(ViewImpl):
         self.__isPairQuest = questData.get('isInPair', False)
         self.__isWithDelayed = questData.get('isWithDelayedBonus', False)
         self.__delayedReward = ctx.get(_CLIENT_REWARD_IDX, {})
-        if 'slots' in self.__delayedReward:
-            self.__delayedReward.pop('slots')
         questData = questData.get('quests', {})
         questIDs = questData.keys()
         for qID in questIDs:
@@ -131,6 +130,7 @@ class BattleMattersRewardsView(ViewImpl):
         intermediateBonuses = sorted(self.__getBonuses(self.__intermediateRewards), cmp=bonusesSort) if self.__intermediateQuestID else []
         self.__processBlueprints(regularBonuses)
         self.__processBlueprints(intermediateBonuses)
+        self.__processDelayedBonuses(regularBonuses)
         packer = getBattleMattersBonusPacker()
         with self.viewModel.transaction() as tx:
             tx.setState(self.__getState())
@@ -174,19 +174,29 @@ class BattleMattersRewardsView(ViewImpl):
         regularModel.invalidate()
 
     def __processVehicles(self):
-        vehicles = [{'vehicles': self.__regularRewards.pop('vehicles', {})}, {'vehicles': self.__intermediateRewards.pop('vehicles', {})}]
+        vehicles = [{VehiclesBonus.VEHICLES_BONUS: self.__regularRewards.pop(VehiclesBonus.VEHICLES_BONUS, {})}, {VehiclesBonus.VEHICLES_BONUS: self.__intermediateRewards.pop(VehiclesBonus.VEHICLES_BONUS, {})}]
         if self.__delayedReward:
-            vehicles.append(self.__delayedReward)
+            vehicles.append({VehiclesBonus.VEHICLES_BONUS: self.__delayedReward[VehiclesBonus.VEHICLES_BONUS]})
         vehicles = getMergedBonusesFromDicts(vehicles)
-        for v in vehicles.get('vehicles', []):
+        for v in vehicles.get(VehiclesBonus.VEHICLES_BONUS, []):
             exclude = [ vehCD for vehCD in v if v[vehCD].get('compensatedNumber', 0) > 0 ]
             for vehCD in exclude:
                 v.pop(vehCD)
 
-        for v in vehicles.get('vehicles', []):
+        for v in vehicles.get(VehiclesBonus.VEHICLES_BONUS, []):
             self.__cds.extend(v.keys())
 
         return self.__getBonuses(vehicles) if vehicles else []
+
+    def __processDelayedBonuses(self, bonuses):
+        if self.__delayedReward:
+            vehInfo = first(self.__delayedReward.get(VehiclesBonus.VEHICLES_BONUS))
+            for vehCD, vehicle in vehInfo.iteritems():
+                if vehicle:
+                    bonuses.append(TankmenBonus('tankmen', [TankmenBonus.getTankmenDataForCrew(vehCD, vehicle.get('crewLvl', 0))]))
+
+            if 'slots' in self.__delayedReward:
+                bonuses.extend(getNonQuestBonuses('slots', self.__delayedReward['slots']))
 
     def __getState(self):
         if self.__questOrder == self.__battleMattersController.getFinalQuest().getOrder():

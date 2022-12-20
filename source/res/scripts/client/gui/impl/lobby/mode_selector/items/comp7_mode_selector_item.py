@@ -35,10 +35,22 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
 
     def _onInitializing(self):
         super(Comp7ModeSelectorItem, self)._onInitializing()
+        self.__updateComp7Data()
+        setBattlePassState(self.viewModel)
+        self.__comp7Controller.onStatusTick += self.__onTimerTick
+
+    def _onDisposing(self):
+        self.__comp7Controller.onStatusTick -= self.__onTimerTick
+        super(Comp7ModeSelectorItem, self)._onDisposing()
+
+    def __onTimerTick(self):
+        self.__updateComp7Data()
+        self.onCardChange()
+
+    def __updateComp7Data(self):
         self.__currentSeason = self.__comp7Controller.getCurrentSeason()
         self.__fillViewModel()
         self.__fillWidgetData()
-        setBattlePassState(self.viewModel)
 
     def __fillViewModel(self):
         isStarted = self.__comp7Controller.isAvailable()

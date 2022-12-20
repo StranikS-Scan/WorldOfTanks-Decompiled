@@ -14,7 +14,7 @@ from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'other')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -59,7 +59,6 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     BADGE = GUI_ITEM_TYPE_INDICES['badge']
     LOOT_BOX = GUI_ITEM_TYPE_INDICES['lootBox']
     VEH_POST_PROGRESSION = GUI_ITEM_TYPE_INDICES['vehPostProgression']
-    OTHER = GUI_ITEM_TYPE_INDICES['other']
     GUI = (ACCOUNT_DOSSIER,
      VEHICLE_DOSSIER,
      TANKMAN_DOSSIER,

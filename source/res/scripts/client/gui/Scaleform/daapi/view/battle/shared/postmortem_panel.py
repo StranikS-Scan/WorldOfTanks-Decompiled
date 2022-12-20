@@ -128,7 +128,7 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
                 pass
             elif equipment is not None:
-                if not self.sessionProvider.arenaVisitor.gui.isComp7Battle():
+                if not self.sessionProvider.arenaVisitor.gui.isComp7Battle() and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
                     entityID = 0
                 name = equipment.code if equipment.code else equipment.name
                 code = '_'.join((code, name.split('_')[0].upper()))

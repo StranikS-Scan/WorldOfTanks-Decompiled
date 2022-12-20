@@ -3,8 +3,7 @@
 import typing
 from backports.functools_lru_cache import lru_cache
 from constants import FORT_ORDER_TYPE
-from goodies.goodie_constants import PR2BoosterIDs, GOODIE_RESOURCE_TYPE, MAX_ACTIVE_PERSONAL_BOOSTERS, MAX_ACTIVE_EVENT_BOOSTERS, GOODIE_STATE
-from gui.goodies.goodies_constants import BoosterCategory
+from goodies.goodie_constants import PR2BoosterIDs, GOODIE_RESOURCE_TYPE, MAX_ACTIVE_PERSONAL_BOOSTERS, MAX_ACTIVE_EVENT_BOOSTERS, GOODIE_STATE, BoosterCategory
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import ReserveType, ReserveState
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency

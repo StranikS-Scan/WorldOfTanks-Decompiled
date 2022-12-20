@@ -5,44 +5,24 @@ import BigWorld
 from gui import SystemMessages
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.processors import Processor, makeI18nError
-from gui.shared.notifications import NotificationPriorityLevel
-from helpers import dependency
-from messenger.formatters.service_channel import QuestAchievesFormatter, InvoiceReceivedFormatter
-from skeletons.gui.system_messages import ISystemMessages
-from skeletons.new_year import INewYearController
-from items.components.ny_constants import CurrentNYConstants
+from messenger.formatters.service_channel import QuestAchievesFormatter
 _logger = logging.getLogger(__name__)
 
 class LootBoxOpenProcessor(Processor):
-    __systemMessages = dependency.descriptor(ISystemMessages)
-    __nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, lootBoxItem, count=1):
         super(LootBoxOpenProcessor, self).__init__()
         self.__lootBox = lootBoxItem
         self.__count = count
-        self.__prevCollectedToys = self.__nyController.getAllCollectedToysId()
 
     def _errorHandler(self, code, errStr='', ctx=None):
         defaultKey = 'lootboxes/open/server_error'
         return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
 
     def _successHandler(self, code, ctx=None):
-        bonuses = getMergedBonusesFromDicts(ctx['bonus'])
-        fmt = QuestAchievesFormatter.formatQuestAchieves(bonuses, False, processCompensations=False)
+        fmt = QuestAchievesFormatter.formatQuestAchieves(getMergedBonusesFromDicts(ctx['bonus']), False)
         if fmt is not None:
-            SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards, priority=NotificationPriorityLevel.LOW)
-        compensationStr = InvoiceReceivedFormatter.getVehiclesCompensationString(bonuses.get('vehicles', []), htmlTplPostfix='QuestsReceived')
-        if compensationStr:
-            SystemMessages.pushMessage(compensationStr, SystemMessages.SM_TYPE.LootBoxCompensation, priority=NotificationPriorityLevel.HIGH)
-        for bonuses in ctx['bonus']:
-            nyToys = bonuses.get(CurrentNYConstants.TOYS)
-            if nyToys is None:
-                continue
-            for toyId, toyData in nyToys.iteritems():
-                toyData['newCount'] = 0 if toyId in self.__prevCollectedToys else 1
-                self.__prevCollectedToys.add(toyId)
-
+            SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards)
         return super(LootBoxOpenProcessor, self)._successHandler(code, ctx)
 
     def _request(self, callback):

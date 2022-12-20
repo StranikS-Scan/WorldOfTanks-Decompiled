@@ -364,7 +364,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __modeEntered(self):
         if self.isBattleRoyaleMode() and not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
             SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
-            self.showIntroWindow()
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()

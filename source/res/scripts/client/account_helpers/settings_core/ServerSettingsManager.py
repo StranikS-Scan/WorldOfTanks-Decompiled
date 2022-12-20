@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NYLootBoxesStorageKeys, NewYearStorageKeys
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -26,7 +26,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     AIM_2 = 'AIM_2'
     AIM_3 = 'AIM_3'
     AIM_4 = 'AIM_4'
-    MARKERS = 'MARKERS'
+    MARKERS_1 = 'MARKERS_1'
+    MARKERS_2 = 'MARKERS_2'
     CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
@@ -63,12 +64,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
     DOG_TAGS = 'DOG_TAGS'
-    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
-    LOOT_BOX_ORIENTAL = 'LOOT_BOX_ORIENTAL'
-    LOOT_BOX_NEW_YEAR = 'LOOT_BOX_NEW_YEAR'
-    LOOT_BOX_FAIRYTALE = 'LOOT_BOX_FAIRYTALE'
-    LOOT_BOX_CHRISTMAS = 'LOOT_BOX_CHRISTMAS'
-    NEW_YEAR = 'NEW_YEAR'
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
@@ -93,6 +88,11 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
+
+
+class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
+    QUESTS_SHOWN = 'shown'
+    QUEST_PROGRESS = 'questProgress'
 
 
 class ServerSettingsManager(object):
@@ -183,21 +183,23 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 3 << 4)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 3 << 1),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 3 << 3)}),
-     SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
-                                 'markerBaseLevel': 1,
-                                 'markerBaseHpIndicator': 2,
-                                 'markerBaseDamage': 3,
-                                 'markerBaseVehicleName': 4,
-                                 'markerBasePlayerName': 5,
-                                 'markerBaseAimMarker2D': 6,
-                                 'markerAltIcon': 16,
-                                 'markerAltLevel': 17,
-                                 'markerAltHpIndicator': 18,
-                                 'markerAltDamage': 19,
-                                 'markerAltVehicleName': 20,
-                                 'markerAltPlayerName': 21,
-                                 'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
-                                 'markerAltHp': Offset(24, 4278190080L)}),
+     SETTINGS_SECTIONS.MARKERS_1: Section(masks={'markerBaseIcon': 0,
+                                   'markerBaseLevel': 1,
+                                   'markerBaseHpIndicator': 2,
+                                   'markerBaseDamage': 3,
+                                   'markerBaseVehicleName': 4,
+                                   'markerBasePlayerName': 5,
+                                   'markerBaseAimMarker2D': 6,
+                                   'markerAltIcon': 16,
+                                   'markerAltLevel': 17,
+                                   'markerAltHpIndicator': 18,
+                                   'markerAltDamage': 19,
+                                   'markerAltVehicleName': 20,
+                                   'markerAltPlayerName': 21,
+                                   'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
+                                   'markerAltHp': Offset(24, 4278190080L)}),
+     SETTINGS_SECTIONS.MARKERS_2: Section(masks={'markerBaseVehicleDist': 0,
+                                   'markerAltVehicleDist': 1}, offsets={}),
      SETTINGS_SECTIONS.CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                            'germany': 1,
                                            'usa': 2,
@@ -232,7 +234,6 @@ class ServerSettingsManager(object):
                                            'bonus': 6,
                                            'event': 7,
                                            'crystals': 8,
-                                           'newYear': 10,
                                            'role_HT_assault': 11,
                                            'role_HT_break': 12,
                                            'role_HT_support': 13,
@@ -334,7 +335,6 @@ class ServerSettingsManager(object):
                                                       'bonus': 6,
                                                       'event': 7,
                                                       'crystals': 8,
-                                                      'newYear': 10,
                                                       'role_HT_assault': 11,
                                                       'role_HT_break': 12,
                                                       'role_HT_support': 13,
@@ -543,7 +543,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
      SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: 0}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14)}),
-     SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 255)}),
+     SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
+                                               BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
                                          QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.SESSION_STATS: Section(masks={SESSION_STATS.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY: 0,
@@ -654,7 +655,6 @@ class ServerSettingsManager(object):
                                                   'bonus': 6,
                                                   'event': 7,
                                                   'crystals': 8,
-                                                  'newYear': 10,
                                                   'role_HT_assault': 11,
                                                   'role_HT_break': 12,
                                                   'role_HT_support': 13,
@@ -721,25 +721,7 @@ class ServerSettingsManager(object):
                                                       'role_ATSPG_support': 22,
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
-                                                      'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_ORIENTAL: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_NEW_YEAR: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_FAIRYTALE: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.LOOT_BOX_CHRISTMAS: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
-                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
-     SETTINGS_SECTIONS.NEW_YEAR: Section(masks={NewYearStorageKeys.NY_VEHICLES_PROGRESS_ENTRY: 1,
-                                  NewYearStorageKeys.NY_STATISTICS_HINT_SHOWN: 7,
-                                  NewYearStorageKeys.CELEBRITY_SCREEN_VISITED: 10,
-                                  NewYearStorageKeys.CELEBRITY_WELCOME_VIEWED: 11,
-                                  NewYearStorageKeys.DECORATIONS_POPOVER_VIEWED: 12,
-                                  NewYearStorageKeys.DECORATIONS_POPOVER_BROKEN: 13,
-                                  NewYearStorageKeys.LOOT_BOX_VIDEO_OFF: 14,
-                                  NewYearStorageKeys.INTRO_SCENE_VIEWED: 15}, offsets={NewYearStorageKeys.TUTORIAL_STATE: Offset(19, 3670016),
-                                  NewYearStorageKeys.NY_VEHICLES_LEVEL_UP_ENTRY: Offset(3, 15 << 3)})}
+                                                      'role_SPG': 25}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -753,6 +735,24 @@ class ServerSettingsManager(object):
      'gunTagType': 3,
      'reloaderTimer': 3,
      'zoomIndicator': 4}
+    MARKERS_MAPPING = {'markerBaseIcon': 1,
+     'markerBaseLevel': 1,
+     'markerBaseHpIndicator': 1,
+     'markerBaseDamage': 1,
+     'markerBaseVehicleName': 1,
+     'markerBasePlayerName': 1,
+     'markerBaseAimMarker2D': 1,
+     'markerAltIcon': 1,
+     'markerAltLevel': 1,
+     'markerAltHpIndicator': 1,
+     'markerAltDamage': 1,
+     'markerAltVehicleName': 1,
+     'markerAltPlayerName': 1,
+     'markerAltAimMarker2D': 1,
+     'markerBaseHp': 1,
+     'markerAltHp': 1,
+     'markerBaseVehicleDist': 2,
+     'markerAltVehicleDist': 2}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
@@ -847,12 +847,6 @@ class ServerSettingsManager(object):
         if self.settingsCache.isSynced():
             self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
-    def getNewYearStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.NEW_YEAR, defaults) if self.settingsCache.isSynced() else {}
-
-    def saveInNewYearStorage(self, settings):
-        return self.setSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, settings)
-
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
 
@@ -881,10 +875,16 @@ class ServerSettingsManager(object):
         return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
 
     def getBattleMattersQuestWasShowed(self):
-        return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 'shown', 0)
+        return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, BATTLE_MATTERS_KEYS.QUESTS_SHOWN, 0)
 
     def setBattleMattersQuestWasShowed(self, count):
-        return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {'shown': count})
+        return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {BATTLE_MATTERS_KEYS.QUESTS_SHOWN: count})
+
+    def getBattleMattersQuestProgress(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, BATTLE_MATTERS_KEYS.QUEST_PROGRESS, 0)
+
+    def setBattleMattersQuestProgress(self, lastSeenProgress):
+        self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {BATTLE_MATTERS_KEYS.QUEST_PROGRESS: lastSeenProgress})
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
@@ -919,23 +919,32 @@ class ServerSettingsManager(object):
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
-        storageKey = 'MARKERS_{section}'.format(section=section.upper())
+        number = self.MARKERS_MAPPING[key]
+        storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
+        settingsKey = 'MARKERS_{number}'.format(number=number)
         storedValue = self.settingsCache.getSectionSettings(storageKey, None)
-        masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
-        offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
+        masks = self.SECTIONS[settingsKey].masks
+        offsets = self.SECTIONS[settingsKey].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
-            storageKey = 'MARKERS_{section}'.format(section=section.upper())
-            storingValue = storedValue = self.settingsCache.getSetting(storageKey)
-            masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
-            offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
-            storingValue = self._mapValues(options, storingValue, masks, offsets)
-            if storedValue == storingValue:
-                continue
-            settingToServer[storageKey] = storingValue
+            mapping = {}
+            for key, value in options.iteritems():
+                number = self.MARKERS_MAPPING[key]
+                mapping.setdefault(number, {})[key] = value
+
+            for number, value in mapping.iteritems():
+                settingsKey = 'MARKERS_{number}'.format(number=number)
+                storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
+                storingValue = storedValue = self.settingsCache.getSetting(storageKey)
+                masks = self.SECTIONS[settingsKey].masks
+                offsets = self.SECTIONS[settingsKey].offsets
+                storingValue = self._mapValues(value, storingValue, masks, offsets)
+                if storedValue == storingValue:
+                    continue
+                settingToServer[storageKey] = storingValue
 
         return settingToServer
 
@@ -1095,7 +1104,6 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
-         'nyStorage': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -1238,7 +1246,6 @@ class ServerSettingsManager(object):
         clearRoyaleFilterCarousel2 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, 0)
         if royaleFilterCarousel2 or clearRoyaleFilterCarousel2:
             settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, royaleFilterCarousel2) ^ clearRoyaleFilterCarousel2
-        settings[SETTINGS_SECTIONS.NEW_YEAR] = self._buildSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, data.get('nyStorage', {}))
         battleMatters = data.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {})
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:

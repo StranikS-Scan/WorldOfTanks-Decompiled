@@ -245,7 +245,6 @@ class REQ_CRITERIA(object):
         ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
-        SPECIAL = RequestCriteria(PredicateCondition(lambda item: item.isSpecial))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
         OBSERVER = RequestCriteria(PredicateCondition(lambda item: item.isObserver))
         EARN_CRYSTALS = RequestCriteria(PredicateCondition(lambda item: item.isEarnCrystals))
@@ -289,12 +288,11 @@ class REQ_CRITERIA(object):
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
-        IS_IN_UNIT = RequestCriteria(PredicateCondition(lambda item: item.isInUnit))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not item.tags.isdisjoint(tags))))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
@@ -373,7 +371,7 @@ class REQ_CRITERIA(object):
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
         DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle.intCD) or not item.isHidden)))
         IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.installedCount(vehicle.intCD) > 0)))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not item.tags.isdisjoint(tags))))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         FULL_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount() > 0))
         ON_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.fullCount() > 0))
 
@@ -656,137 +654,129 @@ class ItemsRequester(IItemsRequester):
                 if statName in ('oldVehInvIDs',):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
-            for cacheType, data in diff.get('cache', {}).iteritems():
-                if cacheType == 'vehsLock':
-                    for itemID in data.keys():
+        for cacheType, data in diff.get('cache', {}).iteritems():
+            if cacheType == 'vehsLock':
+                for itemID in data.keys():
+                    vehData = self.__inventory.getVehicleData(getDiffID(itemID))
+                    if vehData is not None:
+                        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
+
+        for cacheType, data in diff.get('groupLocks', {}).iteritems():
+            if cacheType in ('isGroupLocked', 'groupBattles'):
+                getter = vehicles.getVehicleTypeCompactDescr
+                inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+
+        for itemTypeID, itemsDiff in diff.get('inventory', {}).iteritems():
+            if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+                if 'compDescr' in itemsDiff:
+                    for strCD in itemsDiff['compDescr'].itervalues():
+                        if strCD is not None:
+                            invalidate[itemTypeID].add(vehicles.getVehicleTypeCompactDescr(strCD))
+
+                for data in itemsDiff.itervalues():
+                    for itemID in data.iterkeys():
                         vehData = self.__inventory.getVehicleData(getDiffID(itemID))
                         if vehData is not None:
-                            invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
+                            invalidate[itemTypeID].add(vehData.descriptor.type.compactDescr)
+                            invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
 
-            for cacheType, data in diff.get('groupLocks', {}).iteritems():
-                if cacheType in ('isGroupLocked', 'groupBattles'):
-                    getter = vehicles.getVehicleTypeCompactDescr
-                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+            if itemTypeID == GUI_ITEM_TYPE.TANKMAN:
+                for data in itemsDiff.itervalues():
+                    invalidate[itemTypeID].update(data.keys())
+                    for itemID in data.keys():
+                        tmanInvID = getDiffID(itemID)
+                        tmanData = self.__inventory.getTankmanData(tmanInvID)
+                        if tmanData is not None and tmanData.vehicle != -1:
+                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
+                            invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
 
-            for itemTypeID, itemsDiff in diff.get('inventory', {}).iteritems():
-                if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                    if 'compDescr' in itemsDiff:
-                        for strCD in itemsDiff['compDescr'].itervalues():
-                            if strCD is not None:
-                                invalidate[itemTypeID].add(vehicles.getVehicleTypeCompactDescr(strCD))
+            if itemTypeID == GUI_ITEM_TYPE.CREW_SKINS:
+                for data in itemsDiff.itervalues():
+                    invalidate[GUI_ITEM_TYPE.TANKMAN].update(data.keys())
 
-                    for data in itemsDiff.itervalues():
-                        for itemID in data.iterkeys():
-                            vehData = self.__inventory.getVehicleData(getDiffID(itemID))
-                            if vehData is not None:
-                                invalidate[itemTypeID].add(vehData.descriptor.type.compactDescr)
-                                invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
+                if SkinInvData.ITEMS in itemsDiff:
+                    skinsDiff = itemsDiff[SkinInvData.ITEMS]
+                    skinCDs = [ makeIntCompactDescrByID('crewSkin', CrewSkinType.CREW_SKIN, v) for v in skinsDiff.keys() ]
+                    invalidate[itemTypeID].update(skinCDs)
+                if SkinInvData.OUTFITS in itemsDiff:
+                    outfitDiff = itemsDiff[SkinInvData.OUTFITS]
+                    for tmanInvID in outfitDiff.keys():
+                        tmanData = self.__inventory.getTankmanData(tmanInvID)
+                        if tmanData is not None and tmanData.vehicle != constants.VEHICLE_NO_INV_ID:
+                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
+                            invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
 
-                if itemTypeID == GUI_ITEM_TYPE.TANKMAN:
-                    for data in itemsDiff.itervalues():
-                        invalidate[itemTypeID].update(data.keys())
-                        for itemID in data.keys():
-                            tmanInvID = getDiffID(itemID)
-                            tmanData = self.__inventory.getTankmanData(tmanInvID)
-                            if tmanData is not None and tmanData.vehicle != -1:
-                                invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
-                                invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
-
-                if itemTypeID == GUI_ITEM_TYPE.CREW_SKINS:
-                    for data in itemsDiff.itervalues():
-                        invalidate[GUI_ITEM_TYPE.TANKMAN].update(data.keys())
-
-                    if SkinInvData.ITEMS in itemsDiff:
-                        skinsDiff = itemsDiff[SkinInvData.ITEMS]
-                        skinCDs = [ makeIntCompactDescrByID('crewSkin', CrewSkinType.CREW_SKIN, v) for v in skinsDiff.keys() ]
-                        invalidate[itemTypeID].update(skinCDs)
-                    if SkinInvData.OUTFITS in itemsDiff:
-                        outfitDiff = itemsDiff[SkinInvData.OUTFITS]
-                        for tmanInvID in outfitDiff.keys():
-                            tmanData = self.__inventory.getTankmanData(tmanInvID)
-                            if tmanData is not None and tmanData.vehicle != constants.VEHICLE_NO_INV_ID:
-                                invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
-                                invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
-
-                if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
-                    invalidate[itemTypeID].update(itemsDiff.keys())
-                if itemTypeID == GUI_ITEM_TYPE.SHELL:
-                    invalidate[itemTypeID].update(itemsDiff.keys())
-                    vehicleItems = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
-                    if vehicleItems:
-                        for shellIntCD in itemsDiff.iterkeys():
-                            for vehicle in vehicleItems.itervalues():
-                                shells = vehicle['shells']
-                                for intCD, _, _ in LayoutIterator(shells):
-                                    if shellIntCD == intCD:
-                                        vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
-                                        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                                        vehicleData = self.__inventory.getItemData(vehicleIntCD)
-                                        if vehicleData is not None:
-                                            gunIntCD = vehicleData.descriptor.gun.compactDescr
-                                            invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
-
-                if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
-                    for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
-                        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                        for season in outfitsData or SeasonType.RANGE:
-                            invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
-
-                    storageKeys = (CustomizationInvData.ITEMS,
-                     CustomizationInvData.NOVELTY_DATA,
-                     CustomizationInvData.DRESSED,
-                     CustomizationInvData.PROGRESSION,
-                     CustomizationInvData.SERIAL_NUMBERS)
-                    for storageKey in storageKeys:
-                        for cType, items in itemsDiff.get(storageKey, {}).iteritems():
-                            for idx in items.iterkeys():
-                                intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, getDiffID(idx))
-                                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
-
-                    for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS_POOL, {}).iteritems():
-                        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-
+            if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
                 invalidate[itemTypeID].update(itemsDiff.keys())
+            if itemTypeID == GUI_ITEM_TYPE.SHELL:
+                invalidate[itemTypeID].update(itemsDiff.keys())
+                vehicleItems = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                if vehicleItems:
+                    for shellIntCD in itemsDiff.iterkeys():
+                        for vehicle in vehicleItems.itervalues():
+                            shells = vehicle['shells']
+                            for intCD, _, _ in LayoutIterator(shells):
+                                if shellIntCD == intCD:
+                                    vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
+                                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                                    vehicleData = self.__inventory.getItemData(vehicleIntCD)
+                                    if vehicleData is not None:
+                                        gunIntCD = vehicleData.descriptor.gun.compactDescr
+                                        invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
-            for itemType, itemsDiff in diff.get('recycleBin', {}).iteritems():
-                deletedItems = itemsDiff.get('buffer', {})
-                for itemID in deletedItems.iterkeys():
-                    if itemType == 'tankmen':
-                        invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
+            if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
+                for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                    for season in outfitsData or SeasonType.RANGE:
+                        invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
 
-            if (BATTLE_PASS_PDATA_KEY, '_r') in diff or BATTLE_PASS_PDATA_KEY in diff:
-                if (BATTLE_PASS_PDATA_KEY, '_r') in diff:
-                    invalidate[BATTLE_PASS_PDATA_KEY] = diff[BATTLE_PASS_PDATA_KEY, '_r']
-                if BATTLE_PASS_PDATA_KEY in diff:
-                    synchronizeDicts(diff[BATTLE_PASS_PDATA_KEY], invalidate.setdefault(BATTLE_PASS_PDATA_KEY, {}))
-            if 'goodies' in diff:
-                vehicleDiscounts = self.__shop.getVehicleDiscountDescriptions()
-                for goodieID in diff['goodies'].iterkeys():
-                    if goodieID in vehicleDiscounts:
-                        vehicleDiscount = vehicleDiscounts[goodieID]
-                        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleDiscount.target.targetValue)
+                storageKeys = (CustomizationInvData.ITEMS,
+                 CustomizationInvData.NOVELTY_DATA,
+                 CustomizationInvData.DRESSED,
+                 CustomizationInvData.PROGRESSION,
+                 CustomizationInvData.SERIAL_NUMBERS)
+                for storageKey in storageKeys:
+                    for cType, items in itemsDiff.get(storageKey, {}).iteritems():
+                        for idx in items.iterkeys():
+                            intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, getDiffID(idx))
+                            invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
 
-            vehicleSelectedAbilities = diff.get('epicMetaGame', {}).get('selectedAbilities', {}).keys()
-            if vehicleSelectedAbilities:
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
-            updatedAbilities = diff.get('epicMetaGame', {}).get('abilities', {}).keys()
-            if updatedAbilities:
-                invalidate[GUI_ITEM_TYPE.BATTLE_ABILITY].update(updatedAbilities)
-            abilityPts = diff.get('epicMetaGame', {}).get('abilityPts')
-            if abilityPts is not None:
-                invalidate[GUI_ITEM_TYPE.BATTLE_ABILITY].add('abilityPts')
-            existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
-            invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
-            if invalidIDs:
-                invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)
-            for itemTypeID, uniqueIDs in invalidate.iteritems():
-                self._invalidateItems(itemTypeID, uniqueIDs)
+                for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS_POOL, {}).iteritems():
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
 
-            if not invalidate:
-                invalidate[GUI_ITEM_TYPE.OTHER] = set()
+            invalidate[itemTypeID].update(itemsDiff.keys())
+
+        for itemType, itemsDiff in diff.get('recycleBin', {}).iteritems():
+            deletedItems = itemsDiff.get('buffer', {})
+            for itemID in deletedItems.iterkeys():
+                if itemType == 'tankmen':
+                    invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
+                invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
+
+        if (BATTLE_PASS_PDATA_KEY, '_r') in diff or BATTLE_PASS_PDATA_KEY in diff:
+            if (BATTLE_PASS_PDATA_KEY, '_r') in diff:
+                invalidate[BATTLE_PASS_PDATA_KEY] = diff[BATTLE_PASS_PDATA_KEY, '_r']
+            if BATTLE_PASS_PDATA_KEY in diff:
+                synchronizeDicts(diff[BATTLE_PASS_PDATA_KEY], invalidate.setdefault(BATTLE_PASS_PDATA_KEY, {}))
+        if 'goodies' in diff:
+            vehicleDiscounts = self.__shop.getVehicleDiscountDescriptions()
+            for goodieID in diff['goodies'].iterkeys():
+                if goodieID in vehicleDiscounts:
+                    vehicleDiscount = vehicleDiscounts[goodieID]
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleDiscount.target.targetValue)
+
+        vehicleSelectedAbilities = diff.get('epicMetaGame', {}).get('selectedAbilities', {}).keys()
+        if vehicleSelectedAbilities:
+            invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
+        existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
+        invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
+        if invalidIDs:
+            invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
+            invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)
+        for itemTypeID, uniqueIDs in invalidate.iteritems():
+            self._invalidateItems(itemTypeID, uniqueIDs)
+
         return invalidate
 
     def getVehicle(self, vehInvID):

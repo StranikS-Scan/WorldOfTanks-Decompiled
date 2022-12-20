@@ -69,7 +69,10 @@ class EntryPoint(ViewImpl):
         super(EntryPoint, self)._finalize()
 
     def _getEvents(self):
-        return ((self.viewModel.showProgression, self.__showProgressionWindow), (g_playerEvents.onClientUpdated, self.__onClientUpdated), (self.__resourceWell.onSettingsChanged, self.__onSettingsChanged))
+        return ((self.viewModel.showProgression, self.__showProgressionWindow),
+         (g_playerEvents.onClientUpdated, self.__onClientUpdated),
+         (self.__resourceWell.onSettingsChanged, self.__onSettingsChanged),
+         (self.__resourceWell.onEventStateChanged, self.__onEventStateChanged))
 
     def __updateModel(self, *_):
         with self.viewModel.transaction() as model:
@@ -87,7 +90,9 @@ class EntryPoint(ViewImpl):
             return EventState.FORBIDDEN
         if self.__resourceWell.isPaused():
             return EventState.PAUSED
-        return EventState.COMPLETED if self.__resourceWell.isCompleted() else EventState.ACTIVE
+        if self.__resourceWell.isCompleted():
+            return EventState.COMPLETED
+        return EventState.NOTSTARTED if self.__resourceWell.isNotStarted() else EventState.ACTIVE
 
     def __getProgress(self):
         maxPoints = self.__resourceWell.getMaxPoints()
@@ -107,5 +112,9 @@ class EntryPoint(ViewImpl):
         if getForbiddenAccountToken(resourceWell=self.__resourceWell) in tokens:
             self.__updateModel()
 
+    @nextTick
     def __onSettingsChanged(self):
+        self.__updateModel()
+
+    def __onEventStateChanged(self):
         self.__updateModel()

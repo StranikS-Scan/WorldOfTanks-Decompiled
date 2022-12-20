@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
 import logging
-from enum import unique, Enum
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import time_formatters, text_styles
@@ -63,15 +62,6 @@ _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
                   'overridableFactors/invisibility': 'InvisibilityAdditiveTerm',
                   'increaseFactors/demaskMovingFactor': 'DemaskMovingFactor',
                   'increaseFactors/demaskFoliageFactor': 'DemaskFoliageFactor'}}
-
-@unique
-class EpicBattleScreens(Enum):
-    RESERVES = 'reserves/'
-
-    @classmethod
-    def hasValue(cls, value):
-        return value in cls.__members__.values()
-
 
 def _getAttrName(param):
     return param.split('-')[0]

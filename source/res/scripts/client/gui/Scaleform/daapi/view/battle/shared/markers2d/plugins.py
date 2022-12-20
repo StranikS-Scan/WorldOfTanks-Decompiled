@@ -475,14 +475,17 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
             self._hideAllMarkers()
 
     def __onSettingsChanged(self, diff):
-        if MARKERS.ENEMY in diff:
-            isMarkerEnabled = diff[MARKERS.ENEMY].get(self.__markerBaseAimMarker2D)
-            if isMarkerEnabled:
+        if MARKERS.ENEMY not in diff:
+            return
+        if self.__markerBaseAimMarker2D in diff[MARKERS.ENEMY]:
+            isBaseMarkerEnabled = diff[MARKERS.ENEMY][self.__markerBaseAimMarker2D]
+            if isBaseMarkerEnabled and self._vehicleID in self._markers:
                 self._addMarker(self._vehicleID)
-            elif isMarkerEnabled is False:
+            else:
                 self._hideAllMarkers(clearVehicleID=False)
-            self.__baseMarker = diff[MARKERS.ENEMY].get(self.__markerBaseAimMarker2D)
-            self.__altMarker = diff[MARKERS.ENEMY].get(self.__markerAltAimMarker2D)
+            self.__baseMarker = isBaseMarkerEnabled
+        if self.__markerAltAimMarker2D in diff[MARKERS.ENEMY]:
+            self.__altMarker = diff[MARKERS.ENEMY][self.__markerAltAimMarker2D]
 
     def __showExtendedInfo(self, event):
         isDown = event.ctx['isDown']

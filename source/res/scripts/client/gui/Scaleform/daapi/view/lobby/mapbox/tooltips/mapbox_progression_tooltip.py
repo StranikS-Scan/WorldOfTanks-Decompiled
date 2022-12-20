@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/mapbox/tooltips/mapbox_progression_tooltip.py
 import string
+from gui.Scaleform.genConsts.PROGRESSCOLOR_CONSTANTS import PROGRESSCOLOR_CONSTANTS
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
@@ -73,9 +74,10 @@ class MapboxProgressionTooltip(BlocksTooltipData):
         progressionCounter.append(formatters.packTextBlockData(text_styles.stats(backport.text(R.strings.mapbox.questFlag.progressTitle())), blockWidth=250, padding=formatters.packPadding(left=18)))
         progressionCounter.append(formatters.packAlignedTextBlockData(backport.text(R.strings.mapbox.questFlag.counter(), progress=progressStyle(min(progress, total)), total=text_styles.main(total)), blockWidth=85, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT))
         items.append(formatters.packBuildUpBlockData(progressionCounter, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
+        progressColor = PROGRESSCOLOR_CONSTANTS.GREEN if progress >= total else PROGRESSCOLOR_CONSTANTS.ORANGE
         items.append(formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_EPIC_PROGRESS_BLOCK_LINKAGE, data={'value': min(progress, total),
          'maxValue': total,
-         'isGreen': progress >= total}, blockWidth=330, padding=formatters.packPadding(top=-11, bottom=8, left=20)))
+         'progressColor': progressColor}, blockWidth=330, padding=formatters.packPadding(top=-11, bottom=8, left=20)))
         if progress < total:
             items.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.mapbox.questFlag.incomplete(), count=text_styles.stats(min([ battles for battles in progressionData.rewards.keys() if battles > progress ]) - progress))), padding=formatters.packPadding(left=18)))
         else:

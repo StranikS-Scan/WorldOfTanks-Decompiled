@@ -955,8 +955,6 @@ class TOOLTIPS(object):
     TANKCARUSEL_LOCK_CLAN = '#tooltips:tankCarusel/lock/CLAN'
     TANKCARUSEL_LOCK_TOURNAMENT = '#tooltips:tankCarusel/lock/TOURNAMENT'
     TANKCARUSEL_LOCK_ROTATION = '#tooltips:tankCarusel/lock/rotation'
-    TANKCARUSEL_NEWYEARSLOT_HEADER = '#tooltips:tankCarusel/newYearSlot/header'
-    TANKCARUSEL_NEWYEARSLOT_BODY = '#tooltips:tankCarusel/newYearSlot/body'
     TANKCARUSEL_LOCK_ROAMING = '#tooltips:tankCarusel/lock/ROAMING'
     MULTISELECTION_ALERT_HEADER = '#tooltips:multiselection/alert/header'
     MULTISELECTION_ALERT_BODY = '#tooltips:multiselection/alert/body'
@@ -1988,6 +1986,8 @@ class TOOLTIPS(object):
     AWARDITEM_RANKEDBONUSBATTLES_BODY = '#tooltips:awardItem/rankedBonusBattles/body'
     AWARDITEM_BRCOIN_HEADER = '#tooltips:awardItem/brcoin/header'
     AWARDITEM_BRCOIN_BODY = '#tooltips:awardItem/brcoin/body'
+    AWARDITEM_ABILITYTOKEN_HEADER = '#tooltips:awardItem/abilityToken/header'
+    AWARDITEM_ABILITYTOKEN_BODY = '#tooltips:awardItem/abilityToken/body'
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
@@ -2092,6 +2092,8 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_PITCHLIMITS = '#tooltips:tank_params/desc/pitchLimits'
     TANK_PARAMS_DESC_GUNYAWLIMITS = '#tooltips:tank_params/desc/gunYawLimits'
     TANK_PARAMS_DESC_CLIPFIRERATE = '#tooltips:tank_params/desc/clipFireRate'
+    TANK_PARAMS_DESC_BURSTFIRERATE = '#tooltips:tank_params/desc/burstFireRate'
+    TANK_PARAMS_DESC_TURBOSHAFTBURSTFIRERATE = '#tooltips:tank_params/desc/turboshaftBurstFireRate'
     TANK_PARAMS_DESC_RELATIVEPOWER = '#tooltips:tank_params/desc/relativePower'
     TANK_PARAMS_DESC_RELATIVEARMOR = '#tooltips:tank_params/desc/relativeArmor'
     TANK_PARAMS_DESC_RELATIVEMOBILITY = '#tooltips:tank_params/desc/relativeMobility'
@@ -3679,6 +3681,8 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_PITCHLIMITS,
      TANK_PARAMS_DESC_GUNYAWLIMITS,
      TANK_PARAMS_DESC_CLIPFIRERATE,
+     TANK_PARAMS_DESC_BURSTFIRERATE,
+     TANK_PARAMS_DESC_TURBOSHAFTBURSTFIRERATE,
      TANK_PARAMS_DESC_RELATIVEPOWER,
      TANK_PARAMS_DESC_RELATIVEARMOR,
      TANK_PARAMS_DESC_RELATIVEMOBILITY,
@@ -3781,7 +3785,8 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_202203_ACCESS_HEADER,
      AWARDITEM_RANKEDDAILYBATTLES_HEADER,
      AWARDITEM_RANKEDBONUSBATTLES_HEADER,
-     AWARDITEM_BRCOIN_HEADER)
+     AWARDITEM_BRCOIN_HEADER,
+     AWARDITEM_ABILITYTOKEN_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
      AWARDITEM_CREDITS_BODY,
      AWARDITEM_CRYSTAL_BODY,
@@ -3849,7 +3854,8 @@ class TOOLTIPS(object):
      AWARDITEM_RANKED_202203_ACCESS_BODY,
      AWARDITEM_RANKEDDAILYBATTLES_BODY,
      AWARDITEM_RANKEDBONUSBATTLES_BODY,
-     AWARDITEM_BRCOIN_BODY)
+     AWARDITEM_BRCOIN_BODY,
+     AWARDITEM_ABILITYTOKEN_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_ENUM = (VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,

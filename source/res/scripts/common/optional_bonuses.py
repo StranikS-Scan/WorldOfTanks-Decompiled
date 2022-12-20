@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import copy
 import random
+import copy
 import time
 from typing import Optional, Dict
 from account_shared import getCustomizationItem
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
+from items import tankmen
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
 
 def _packTrack(track):
@@ -201,14 +202,6 @@ def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
     total[key] = value
 
 
-def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, {})
-    for slotID, toysData in value.iteritems():
-        slotData = result.setdefault(slotID, {})
-        for toyID, toyCount in toysData.iteritems():
-            slotData[toyID] = slotData.get(toyID, 0) + count * toyCount
-
-
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -248,13 +241,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
  'freePremiumCrew': __mergeFreePremiumCrew,
- 'meta': __mergeMeta,
- CurrentNYConstants.TOYS: __mergeNYToys}
-BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
-ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
+ 'meta': __mergeMeta}
+ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key),
- CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
+ 'tokens': lambda account, key: account._quests.hasToken(key)}
 
 class BonusItemsCache(object):
 
@@ -306,10 +296,6 @@ class BonusItemsCache(object):
         return False
 
 
-DEEP_CHECKERS = {'groups': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: all((nodeAcceptor.depthCheck(subBonusNode, checkInventory, depthLevel) for subBonusNode in bonusNode)),
- 'allof': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: all((nodeAcceptor.isAcceptable(subBonusNode[-1], False, depthLevel - 1) for subBonusNode in bonusNode)),
- 'oneof': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: any((nodeAcceptor.isAcceptable(subBonusNode[-1], checkInventory, depthLevel - 1) for subBonusNode in bonusNode[-1]))}
-
 class BonusNodeAcceptor(object):
 
     def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
@@ -360,10 +346,10 @@ class BonusNodeAcceptor(object):
     def getBonusCache(self):
         return self.__bonusCache
 
-    def isAcceptable(self, bonusNode, checkInventory=True, depthLevel=None):
+    def isAcceptable(self, bonusNode, checkInventory=True):
         if self.isLimitReached(bonusNode):
             return False
-        return False if checkInventory and self.isBonusExists(bonusNode) else self.depthCheck(bonusNode, checkInventory, depthLevel)
+        return False if checkInventory and self.isBonusExists(bonusNode) else True
 
     def getNodesForVisit(self, ids):
         return self.__shouldVisitNodes.intersection(ids) if ids and self.__shouldVisitNodes else None
@@ -381,7 +367,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -393,7 +379,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', CurrentNYConstants.TOYS):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):
@@ -406,10 +392,6 @@ class BonusNodeAcceptor(object):
                     return True
 
         return False
-
-    def depthCheck(self, bonusNode, checkInventory, depthLevel=None):
-        currentDepthLevel = bonusNode.get('properties', {}).get('depthLevel', 0) if depthLevel is None else depthLevel
-        return True if currentDepthLevel <= 0 else all((DEEP_CHECKERS[bonusNodeName](self, bonusNodeValue, checkInventory, currentDepthLevel) for bonusNodeName, bonusNodeValue in bonusNode.iteritems() if bonusNodeName in DEEP_CHECKERS))
 
     def getProbabilityStages(self):
         return self.__probabilitiesStage

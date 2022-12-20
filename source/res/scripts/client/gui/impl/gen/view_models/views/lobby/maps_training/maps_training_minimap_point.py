@@ -33,7 +33,7 @@ class MapsTrainingMinimapPoint(ViewModel):
 
     @staticmethod
     def getTextKeysType():
-        return str
+        return unicode
 
     def getType(self):
         return self._getString(3)

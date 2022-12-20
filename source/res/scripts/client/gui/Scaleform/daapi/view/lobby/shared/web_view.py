@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/web_view.py
-import logging
 import typing
 import BigWorld
+import logging
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
+from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.sounds.ambients import HangarOverlayEnv
@@ -153,9 +154,13 @@ class WebViewTransparent(WebView):
     def onEscapePress(self):
         self.destroy()
 
+    def _needToBeDisposed(self):
+        return self.getState() == EntityState.UNDEFINED or super(WebViewTransparent, self)._needToBeDisposed()
+
     def _dispose(self):
         if self.__blur is not None:
             self.__blur.fini()
+            self.__blur = None
         if self.__hiddenLayers:
             containerManager = self.app.containerManager
             containerManager.showContainers(self.__hiddenLayers, 0)

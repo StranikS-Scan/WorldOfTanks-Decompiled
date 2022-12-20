@@ -21,16 +21,11 @@ class DialogButtons(CONST_CONTAINER):
     CANCEL = DialogButtonModel.BTN_CANCEL
     PURCHASE = DialogButtonModel.BTN_PURCHASE
     RESEARCH = DialogButtonModel.BTN_RESEARCH
-    INSTALL = DialogButtonModel.BTN_INSTALL
     ALL = (SUBMIT,
      CANCEL,
      PURCHASE,
-     RESEARCH,
-     INSTALL)
-    ACCEPT_BUTTONS = (SUBMIT,
-     PURCHASE,
-     RESEARCH,
-     INSTALL)
+     RESEARCH)
+    ACCEPT_BUTTONS = (SUBMIT, PURCHASE, RESEARCH)
 
 
 class DialogFlags(CONST_CONTAINER):
@@ -80,7 +75,7 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW, layer=None):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
@@ -88,8 +83,6 @@ class DialogWindow(Window):
         settings.decorator = DialogDecorator(balanceContent, bottomContent)
         settings.content = content
         settings.parent = parent
-        if layer:
-            settings.layer = layer
         super(DialogWindow, self).__init__(settings)
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
@@ -123,14 +116,6 @@ class DialogWindow(Window):
                 return view.getViewModel()
         return
 
-    @property
-    def balanceContentViewModel(self):
-        if self.decorator is not None:
-            view = self.decorator.balanceContent
-            if view is not None:
-                return view.getViewModel()
-        return
-
     def _initialize(self):
         super(DialogWindow, self)._initialize()
         self.viewModel.onClosed += self._onClosed
@@ -146,10 +131,8 @@ class DialogWindow(Window):
     def _onClosed(self, _=None):
         self.destroy()
 
-    def _removeAllButtons(self, invalidateAll=False):
+    def _removeAllButtons(self):
         self.viewModel.buttons.getItems().clear()
-        if invalidateAll:
-            self.viewModel.buttons.invalidate()
 
     def _addButton(self, name, label=R.invalid(), isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None, rawLabel='', tooltipHeader=R.invalid(), tooltipBody=R.invalid()):
         button = DialogButtonModel()

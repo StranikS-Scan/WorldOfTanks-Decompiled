@@ -1374,6 +1374,59 @@
       </damage>
     </armorSpalls>
   </_127mm_Common_Type_0_HE>
+  <_127mm_Capped_Common_Type_0>
+    <id>	91	</id>
+    <userString>	#japan_vehicles:_127mm_Capped_Common_Type_0	</userString>
+    <icon>	ap	</icon>
+    <price>	1220	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	500	</armor>
+      <devices>	178	</devices>
+    </damage>
+  </_127mm_Capped_Common_Type_0>
+  <_127mm_Capped_Common_Type_1>
+    <id>	92	</id>
+    <userString>	#japan_vehicles:_127mm_Capped_Common_Type_1	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	570	</armor>
+      <devices>	178	</devices>
+    </damage>
+  </_127mm_Capped_Common_Type_1>
+  <_127mm_Common_Type_1_HE>
+    <id>	93	</id>
+    <userString>	#japan_vehicles:_127mm_Common_Type_1_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	700	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	127	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	630	</armor>
+      <devices>	178	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	305	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_127mm_Common_Type_1_HE>
   <_140mm_Capped_Common_Semi_AP>
     <id>	49	</id>
     <userString>	#japan_vehicles:_140mm_Capped_Common_Semi_AP	</userString>

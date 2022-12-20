@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
 import logging
 from typing import TYPE_CHECKING
-from constants import EQUIPMENT_STAGES
+from constants import EQUIPMENT_STAGES, ARENA_GUI_TYPE
 from battle_royale.gui.constants import BR_EQUIPMENTS_WITH_MESSAGES
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
@@ -81,14 +81,17 @@ class PlayerMessages(fading_messages.FadingMessages):
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=self.__getPostfixFromEquipment(itemDescriptor))
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
-        battleCxt = self.sessionProvider.getCtx()
-        if not battleCxt.isCurrentPlayer(shooterID):
-            equipment = vehicles.g_cache.equipments().get(eqID)
-            getFullName = battleCxt.getPlayerFullName
-            if equipment is None:
-                return
-            self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=self.__getPostfixFromEquipment(equipment))
-        return
+        if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE:
+            return
+        else:
+            battleCxt = self.sessionProvider.getCtx()
+            if not battleCxt.isCurrentPlayer(shooterID):
+                equipment = vehicles.g_cache.equipments().get(eqID)
+                getFullName = battleCxt.getPlayerFullName
+                if equipment is None:
+                    return
+                self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=self.__getPostfixFromEquipment(equipment))
+            return
 
     @staticmethod
     def __getPostfixFromEquipment(equipment):

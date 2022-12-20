@@ -32,6 +32,7 @@
     <_Type98_V12_x2_1200_Kai>	30	</_Type98_V12_x2_1200_Kai>
     <Nameless_Engine>	31	</Nameless_Engine>
     <Edelweiss_Engine>	32	</Edelweiss_Engine>
+    <_HA_9_V>	33	</_HA_9_V>
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
     <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
@@ -598,6 +599,23 @@
       <rpm_min>	306	</rpm_min>
       <rpm_max>	2280	</rpm_max>
     </Edelweiss_Engine>
+    <_HA_9_V>
+      <userString>	#japan_vehicles:_HA_9_V	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	850	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+    </_HA_9_V>
     <_Mitsubishi_12HM20WT_IGR>
       <userString>	#igr_vehicles:_Mitsubishi_12HM20WT_IGR	</userString>
       <tags>	diesel	</tags>

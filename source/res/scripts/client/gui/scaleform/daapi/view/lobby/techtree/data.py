@@ -490,7 +490,15 @@ class ResearchItemsData(_ItemsData):
                 mapping.pop(nodeCD)
 
         next2Unlock = self._findNext2UnlockItems(mapping.values())
-        return (next2Unlock, unlocked, [])
+        prevUnlocks = []
+        for nodeCD, node in mapping.iteritems():
+            if getTypeOfCD(nodeCD) == GUI_ITEM_TYPE.VEHICLE:
+                continue
+            state = node.getState()
+            if NODE_STATE.isAvailable2Buy(state) and unlocks & node.getUnlockProps().required:
+                prevUnlocks.append((nodeCD, state))
+
+        return (next2Unlock, unlocked, prevUnlocks)
 
     def invalidateHovered(self, nodeCD):
         result = []

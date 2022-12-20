@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/account_helpers/settings_core.py
-
+import typing
+if typing.TYPE_CHECKING:
+    from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
 
 class ISettingsCache(object):
     onSyncStarted = None

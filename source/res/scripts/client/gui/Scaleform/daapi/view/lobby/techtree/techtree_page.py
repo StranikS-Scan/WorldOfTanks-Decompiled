@@ -194,6 +194,9 @@ class TechTree(TechTreeMeta):
     def invalidateVehicleCollectorState(self):
         self.__setVehicleCollectorState()
 
+    def _updatePrevUnlockedItems(self, prevUnlocked):
+        self.as_setNodesStatesS(NODE_STATE_FLAGS.LAST_2_BUY, prevUnlocked)
+
     def _resolveLoadCtx(self, ctx=None):
         nation = ctx[BackButtonContextKeys.NATION] if ctx is not None and BackButtonContextKeys.NATION in ctx else None
         if nation is not None and nation in nations.INDICES:

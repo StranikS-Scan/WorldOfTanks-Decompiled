@@ -146,6 +146,7 @@
     <Maybach_HL_210_TRM_P30L_1>	256	</Maybach_HL_210_TRM_P30L_1>
     <Renault_V4_german>	257	</Renault_V4_german>
     <SPA_19TB_mod_43_german>	258	</SPA_19TB_mod_43_german>
+    <MB_881_P>	259	</MB_881_P>
     <V_2K_T>	260	</V_2K_T>
     <Maybach_HL_210_TRM_P30_SH>	324	</Maybach_HL_210_TRM_P30_SH>
     <Maybach_HL_230_TRM_P30_SH>	325	</Maybach_HL_230_TRM_P30_SH>
@@ -2635,6 +2636,23 @@
       <rpm_min>	226	</rpm_min>
       <rpm_max>	2520	</rpm_max>
     </MB_881>
+    <MB_881_P>
+      <userString>	#germany_vehicles:MB_881_P	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	940	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </MB_881_P>
     <Chrysler_361B>
       <userString>	#germany_vehicles:Chrysler_361B	</userString>
       <tags>	gasoline	</tags>
@@ -2969,7 +2987,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1975	</power>
+      <power>	2000	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
@@ -2986,14 +3004,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1480	</power>
+      <power>	1340	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	325	</rpm_min>
-      <rpm_max>	2557	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2431	</rpm_max>
     </Maybach_HL_230_TRM_P30_SH>
     <G00_Bomber_SH_Engine>
       <userString>	#germany_vehicles:G00_Bomber_SH_Engine	</userString>

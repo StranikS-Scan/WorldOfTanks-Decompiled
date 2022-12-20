@@ -17,7 +17,7 @@ class AmmunitionBuyContent(MultipleItemsContentModel):
 
     @staticmethod
     def getLacksItemType():
-        return str
+        return unicode
 
     def getDemountPairModification(self):
         return self._getBool(3)

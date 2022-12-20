@@ -365,6 +365,9 @@ class Research(ResearchMeta):
         super(Research, self)._updateUnlockedItems(unlocked)
         self._vehPostProgressionEntryPoint.invalidateUnlocks(unlocked)
 
+    def _updatePrevUnlockedItems(self, prevUnlocked):
+        self.as_setNodesStatesS(NODE_STATE_FLAGS.UNLOCKED, prevUnlocked, isRequiredInvalidation=True)
+
     def _getExperienceInfoLinkage(self):
         return RESEARCH_ALIASES.EXPERIENCE_INFO
 

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/awards/reward_model.py
 from enum import IntEnum
-from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 
 class RentTypeEnum(IntEnum):
     NONE = 0
@@ -10,83 +10,83 @@ class RentTypeEnum(IntEnum):
     WINS = 3
 
 
-class RewardModel(BonusModel):
+class RewardModel(ItemBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(RewardModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
-        return self._getString(7)
-
-    def setItem(self, value):
-        self._setString(7, value)
-
-    def getIcon(self):
-        return self._getString(8)
-
-    def setIcon(self, value):
-        self._setString(8, value)
-
-    def getIconSmall(self):
         return self._getString(9)
 
-    def setIconSmall(self, value):
+    def setItem(self, value):
         self._setString(9, value)
 
-    def getIconBig(self):
+    def getIcon(self):
         return self._getString(10)
 
-    def setIconBig(self, value):
+    def setIcon(self, value):
         self._setString(10, value)
 
-    def getUserName(self):
+    def getIconSmall(self):
         return self._getString(11)
 
-    def setUserName(self, value):
+    def setIconSmall(self, value):
         self._setString(11, value)
 
-    def getVehicleType(self):
+    def getIconBig(self):
         return self._getString(12)
 
-    def setVehicleType(self, value):
+    def setIconBig(self, value):
         self._setString(12, value)
 
+    def getUserName(self):
+        return self._getString(13)
+
+    def setUserName(self, value):
+        self._setString(13, value)
+
+    def getVehicleType(self):
+        return self._getString(14)
+
+    def setVehicleType(self, value):
+        self._setString(14, value)
+
     def getVehicleLevel(self):
-        return self._getNumber(13)
-
-    def setVehicleLevel(self, value):
-        self._setNumber(13, value)
-
-    def getVehicleRentType(self):
-        return RentTypeEnum(self._getNumber(14))
-
-    def setVehicleRentType(self, value):
-        self._setNumber(14, value.value)
-
-    def getVehicleRentValue(self):
         return self._getNumber(15)
 
-    def setVehicleRentValue(self, value):
+    def setVehicleLevel(self, value):
         self._setNumber(15, value)
 
+    def getVehicleRentType(self):
+        return RentTypeEnum(self._getNumber(16))
+
+    def setVehicleRentType(self, value):
+        self._setNumber(16, value.value)
+
+    def getVehicleRentValue(self):
+        return self._getNumber(17)
+
+    def setVehicleRentValue(self, value):
+        self._setNumber(17, value)
+
     def getIsFromStorage(self):
-        return self._getBool(16)
+        return self._getBool(18)
 
     def setIsFromStorage(self, value):
-        self._setBool(16, value)
+        self._setBool(18, value)
 
     def getIsVehicleOnChoice(self):
-        return self._getBool(17)
+        return self._getBool(19)
 
     def setIsVehicleOnChoice(self, value):
-        self._setBool(17, value)
+        self._setBool(19, value)
 
     def getItemID(self):
-        return self._getNumber(18)
+        return self._getNumber(20)
 
     def setItemID(self, value):
-        self._setNumber(18, value)
+        self._setNumber(20, value)
 
     def _initialize(self):
         super(RewardModel, self)._initialize()

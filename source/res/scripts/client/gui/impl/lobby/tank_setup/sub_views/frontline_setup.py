@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/frontline_setup.py
-from gui.game_control.epic_meta_game_ctrl import EpicBattleScreens
 from gui.impl.lobby.tank_setup.configurations.epic_battle_ability import EpicBattleTabsController, EpicBattleDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
+from gui.shared.event_dispatcher import showFrontlineContainerWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -88,7 +88,8 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.CHECKBOX.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
 
     def __showBattleAbilitiesSetup(self, *_):
-        self.__epicController.showCustomScreen(EpicBattleScreens.RESERVES)
+        from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import TabType
+        showFrontlineContainerWindow(TabType.SKILLS)
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.RESERVES.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
 
     def __hasBattleAbilities(self):

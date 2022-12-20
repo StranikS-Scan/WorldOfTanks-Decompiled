@@ -89,7 +89,7 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
             return
         else:
             settings = self.__postProgressionSettings
-            if settings is None or not self.isExistsFor(vehType, settings):
+            if not self.isExistsFor(vehType, settings):
                 extData.clear()
                 return
             if extData[EXT_DATA_SLOT_KEY] and not settings.isRoleSlotEnabled:

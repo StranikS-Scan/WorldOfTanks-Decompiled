@@ -35,7 +35,7 @@ class FunRandomProgressionCondition(ViewModel):
 
     @staticmethod
     def getConditionsType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(FunRandomProgressionCondition, self)._initialize()

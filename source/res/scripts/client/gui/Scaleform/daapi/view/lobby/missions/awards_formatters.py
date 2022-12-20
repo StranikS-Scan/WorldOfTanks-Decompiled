@@ -7,13 +7,12 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, getBattlePassAwardsPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS, PostProcessTags
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, getBattlePassAwardsPacker, formatCountLabel, LABEL_ALIGN, PACK_RENT_VEHICLES_BONUS, PostProcessTags
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MERGED_BONUS_NAME = 'mergedBonus'
 _OPERATION_AWARDS_COUNT = 3
 DISPLAY_ALL_AWARDS = -1
 
@@ -26,7 +25,7 @@ def formatShortData(bonus, size):
 class CurtailingAwardsComposer(QuestsBonusComposer):
 
     def __init__(self, displayedAwardsCount, awardsFormatter=None):
-        self._displayedRewardsCount = int(displayedAwardsCount)
+        self._displayedRewardsCount = displayedAwardsCount
         super(CurtailingAwardsComposer, self).__init__(awardsFormatter)
 
     def getShortBonusesData(self, bonuses):
@@ -56,15 +55,20 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         compensationReason = None
         if bonus.compensationReason is not None:
             compensationReason = self._packBonus(bonus.compensationReason, size)
-        packBonus = super(CurtailingAwardsComposer, self)._packBonus(bonus, size)
-        packBonus['hasCompensation'] = bonus.isCompensation
-        packBonus['compensationReason'] = compensationReason
-        packBonus['highlightType'] = bonus.getHighlightType(size)
-        packBonus['overlayType'] = bonus.getOverlayType(size)
-        packBonus['highlightIcon'] = bonus.getHighlightIcon(size)
-        packBonus['overlayIcon'] = bonus.getOverlayIcon(size)
-        packBonus['hasAnimation'] = False
-        return packBonus
+        return {'label': bonus.getFormattedLabel(),
+         'imgSource': bonus.getImage(size),
+         'tooltip': bonus.tooltip,
+         'isSpecial': bonus.isSpecial,
+         'specialAlias': bonus.specialAlias,
+         'specialArgs': bonus.specialArgs,
+         'hasCompensation': bonus.isCompensation,
+         'hasAnimation': False,
+         'compensationReason': compensationReason,
+         'align': bonus.align,
+         'highlightType': bonus.getHighlightType(size),
+         'overlayType': bonus.getOverlayType(size),
+         'highlightIcon': bonus.getHighlightIcon(size),
+         'overlayIcon': bonus.getOverlayIcon(size)}
 
     def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
         mergedBonusCount = len(mergedBonuses)
@@ -182,15 +186,6 @@ class AwardsWindowComposer(CurtailingAwardsComposer):
         return bonuses
 
 
-class LinkedSetAwardsComposer(CurtailingAwardsComposer):
-
-    def __init__(self, displayedAwardsCount, awardsFormatter=None):
-        if awardsFormatter is None:
-            awardsFormatter = getLinkedSetAwardPacker()
-        super(LinkedSetAwardsComposer, self).__init__(displayedAwardsCount, awardsFormatter)
-        return
-
-
 class DetailedCardAwardComposer(CurtailingAwardsComposer):
 
     def getFormattedBonuses(self, bonuses, bigAwardsCount=6):
@@ -237,22 +232,6 @@ class BonusNameQuestsBonusComposer(PackRentVehiclesAwardComposer):
         packBonus['bonusName'] = bonus.bonusName
         return packBonus
 
-    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
-        mergedBonus = super(BonusNameQuestsBonusComposer, self)._packMergedBonuses(mergedBonuses, size)
-        mergedBonus['bonusName'] = MERGED_BONUS_NAME
-        return mergedBonus
-
-
-class SortedBonusNameQuestsBonusComposer(BonusNameQuestsBonusComposer):
-
-    def __init__(self, displayedAwardsCount, sortFunction, awardsFormatter=None):
-        super(SortedBonusNameQuestsBonusComposer, self).__init__(displayedAwardsCount, awardsFormatter)
-        self.__sortFunction = sortFunction
-
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
-        preformattedBonuses = sorted(self.getPreformattedBonuses(bonuses), key=self.__sortFunction)
-        return self._packBonuses(preformattedBonuses, size)
-
 
 class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
 
@@ -272,11 +251,6 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
         if sortKey is not None:
             preformattedBonuses = sorted(preformattedBonuses, key=sortKey)
         return self._packBonuses(preformattedBonuses, size)
-
-    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
-        packBonus = super(LootBoxBonusComposer, self)._packBonus(bonus, size)
-        packBonus['newCount'] = bonus.newCount
-        return packBonus
 
 
 class NewStyleBonusComposer(LootBoxBonusComposer):

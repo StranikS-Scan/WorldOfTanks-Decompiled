@@ -4,11 +4,16 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Callable, List, Optional, Union
     from gui.server_events.event_items import Quest, BattleMattersQuest, BattleMattersTokenQuest
+    from Event import Event
 
 class IBattleMattersController(object):
-    onStateChanged = None
-    onFinish = None
-    __slots__ = ()
+    __slots__ = ('onStateChanged', 'onFinish')
+
+    def __init__(self):
+        super(IBattleMattersController, self).__init__()
+        self.onStateChanged = None
+        self.onFinish = None
+        return
 
     @staticmethod
     def isBattleMattersQuest(quest):
@@ -98,6 +103,9 @@ class IBattleMattersController(object):
         raise NotImplementedError
 
     def getSelectedVehicle(self):
+        raise NotImplementedError
+
+    def hasAccessToken(self):
         raise NotImplementedError
 
     def getDelayedRewardCurrencyToken(self):

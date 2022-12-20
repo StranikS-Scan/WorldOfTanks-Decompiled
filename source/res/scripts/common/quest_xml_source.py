@@ -4,7 +4,6 @@ import time
 import ArenaType
 import ResMgr
 import nations
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_BONUSES
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
@@ -527,9 +526,7 @@ class Source(object):
          'battlePassPoints',
          'currency',
          'freePremiumCrew',
-         'entitlementList',
-         CurrentNYConstants.TOY_BONUS}
-        bonusTypes.update(PREV_NY_TOYS_BONUSES)
+         'entitlementList'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

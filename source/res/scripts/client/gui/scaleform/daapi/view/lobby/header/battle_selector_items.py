@@ -848,17 +848,14 @@ class EpicBattleItem(SelectorItem):
     @adisp_process
     def _doSelect(self, dispatcher):
         currentSeason = self.__epicController.getCurrentSeason()
-        isEventActive = False
+        isActiveCycle = False
         if currentSeason is not None:
             isActiveCycle = self.__epicController.getCurrentCycleInfo()[1]
             nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
             if isActiveCycle or nextCycle:
-                isEventActive = True
                 yield dispatcher.doSelectAction(PrbAction(self._data))
-        if self._isNew or not isEventActive:
-            self.__epicController.openURL()
-            if self._isNew:
-                selectorUtils.setBattleTypeAsKnown(self._selectorType)
+        if self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
         return
 
     def _update(self, state):
@@ -920,11 +917,6 @@ class _Comp7Item(_SelectorItem):
         comp7_prb_helpers.selectComp7()
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.COMP7)
-        self._isVisible = self.__comp7Controller.isEnabled() and not self.__bootcampController.isInBootcamp()
-        self._isDisabled = state.hasLockedState or self.__comp7Controller.isFrozen()
-
     def getFormattedLabel(self):
         battleTypeName = super(_Comp7Item, self).getFormattedLabel()
         scheduleStr = self.__getScheduleStr()
@@ -933,6 +925,11 @@ class _Comp7Item(_SelectorItem):
 
     def getSpecialBGIcon(self):
         return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.__comp7Controller.isAvailable() else ''
+
+    def _update(self, state):
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.COMP7)
+        self._isVisible = self.__comp7Controller.isEnabled() and not self.__bootcampController.isInBootcamp()
+        self._isDisabled = state.hasLockedState or self.__comp7Controller.isFrozen()
 
     @classmethod
     def __getScheduleStr(cls):

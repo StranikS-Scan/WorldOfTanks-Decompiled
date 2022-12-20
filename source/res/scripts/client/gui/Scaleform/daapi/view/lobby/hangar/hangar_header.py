@@ -28,7 +28,6 @@ from gui.server_events.events_dispatcher import showPersonalMission, showMission
 from gui.server_events.events_helpers import isRankedDaily, isDailyEpic
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from items.components.ny_constants import NEW_YEAR_QUEST_GROUP_ID
 from gui.shared.formatters import icons
 from gui.shared.personality import ServicesLocator
 from gui.shared.utils.functions import makeTooltip
@@ -233,10 +232,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def onQuestBtnClick(self, questType, questID):
         if questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON:
             missions_page.setHideDoneFilter()
-            if self._festivityController.isEnabled():
-                showMissionsCategories(groupID=NEW_YEAR_QUEST_GROUP_ID)
-            else:
-                showMissionsCategories(missionID=questID)
+            showMissionsCategories(missionID=questID)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_GROUP_RANKED_DAILY:
             showMissionsCategories(groupID=RANKED_DAILY_GROUP_ID)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_PASS:
@@ -337,10 +333,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        if self._festivityController.isEnabled():
-            return {'isVisible': True,
-             'isNYWidgetVisible': True,
-             'quests': []}
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -408,7 +400,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __updateBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
-        isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp() and not self._festivityController.isEnabled()
+        isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp()
         if isVisible:
             self.as_createBattlePassS()
         else:
@@ -422,7 +414,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.as_removeRankedBattlesS()
 
     def __updateFunRandomWidget(self):
-        if self.__funRandomCtrl.hasHangarHeaderEntry():
+        if self.__funRandomCtrl.isFunRandomPrbActive():
             self.as_createFunRandomWidgetS()
         else:
             self.as_removeFunRandomWidgetS()
@@ -578,21 +570,22 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             quests = [ quest for quest in quests if quest.hasBonusType(constants.ARENA_BONUS_TYPE.COMP7) ]
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
+        festivityFlagData = self._festivityController.getHangarQuestsFlagData()
         if totalCount > 0:
             if completedQuests != totalCount:
                 label = _getActiveQuestLabel(totalCount, completedQuests)
             else:
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-            commonQuestsIcon = backport.image(R.images.gui.maps.icons.library.outline.quests_available())
+            commonQuestsIcon = festivityFlagData.icon or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
-            commonQuestsIcon = backport.image(R.images.gui.maps.icons.library.outline.quests_disabled())
+            commonQuestsIcon = festivityFlagData.iconDisabled or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
         if self.__battleRoyaleController.isBattleRoyaleMode() and totalCount > 0:
             questType = HANGAR_HEADER_QUESTS.QUEST_TYPE_BATTLE_ROYALE
             label = self.__getBattleRoyaleLableForQuestsTooltip(totalCount, completedQuests)
         else:
             questType = HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, questType, flag=None, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getBattleRoyaleLableForQuestsTooltip(self, totalCount, completedQuests):
@@ -791,9 +784,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__isShowPersonalMission = isVisible
 
     def __updateResourceWellEntryPoint(self):
-        isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR
-        isResourceWellVisible = not self.__bootcampController.isInBootcamp() and isRandom and (self.__resourceWell.isActive() or self.__resourceWell.isPaused())
-        self.as_setResourceWellEntryPointS(isResourceWellVisible)
+        isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR and not self.__bootcampController.isInBootcamp()
+        isResourceWellVisible = self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted()
+        self.as_setResourceWellEntryPointS(isRandom and isResourceWellVisible)
 
     def __updateBattleMattersEntryPoint(self):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR

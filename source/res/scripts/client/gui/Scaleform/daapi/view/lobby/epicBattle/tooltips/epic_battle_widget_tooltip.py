@@ -4,6 +4,7 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers 
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getTimeToEndStr
 from gui.Scaleform.daapi.view.lobby.epicBattle.tooltips.common_blocks import packEpicBattleInfoBlock, packEpicBattleSeasonBlock
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.genConsts.PROGRESSCOLOR_CONSTANTS import PROGRESSCOLOR_CONSTANTS
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
 from gui.impl.gen import R
@@ -28,15 +29,29 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
         if season is None:
             return blocks
         else:
+            isPerformanceWarningBlockVisible = True
             if self.__epicController.isCurrentCycleActive():
-                blocks.extend([self.__getCycleStatusTooltipPack(season), self.__packPerformanceWarningBlock()])
+                blocks.append(self.__getCycleStatusTooltipPack(season))
             else:
-                blocks.append(packEpicBattleInfoBlock())
-                seasonBlock = packEpicBattleSeasonBlock()
-                if seasonBlock is not None:
-                    blocks.append(seasonBlock)
-                if season.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp()) is not None:
-                    blocks.append(self.__packPerformanceWarningBlock())
+                currentTime = time_utils.getCurrentLocalServerTimestamp()
+                cycle = season.getNextByTimeCycle(currentTime) if season else None
+                if cycle is not None:
+                    blocks.append(packEpicBattleInfoBlock())
+                    seasonBlock = packEpicBattleSeasonBlock()
+                    if seasonBlock is not None:
+                        blocks.append(seasonBlock)
+                else:
+                    currentLevel, levelProgress = self.__epicController.getPlayerLevelInfo()
+                    if currentLevel > 1 or levelProgress > 0:
+                        blocks.append(self.__getCycleStatusTooltipPack(season))
+                    else:
+                        blocks.append(packEpicBattleInfoBlock())
+                        seasonBlock = packEpicBattleSeasonBlock()
+                        if seasonBlock is not None:
+                            blocks.append(seasonBlock)
+                        isPerformanceWarningBlockVisible = False
+            if isPerformanceWarningBlockVisible:
+                blocks.append(self.__packPerformanceWarningBlock())
             numRewards = self.__epicController.getNotChosenRewardCount()
             if numRewards:
                 blocks.append(self.__packRewardsToChooseBlock(numRewards, text_styles.counter))
@@ -49,14 +64,15 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
         items.append(formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.epic_battle.tooltips.common.title())), padding=formatters.packPadding(left=20, right=20)))
         currentCycle = season.getCycleInfo()
         tDiff = currentCycle.endDate - time_utils.getCurrentLocalServerTimestamp() if currentCycle is not None else 0
-        timeLeft = text_styles.main(getTimeToEndStr(tDiff))
-        items.append(formatters.packTextBlockData(text=timeLeft, padding=formatters.packPadding(left=20, right=20)))
+        timeLeft = backport.text(R.strings.epic_battle.tooltips.end()) if tDiff == 0 else text_styles.middleTitle(getTimeToEndStr(tDiff))
+        items.append(formatters.packTextBlockData(text=text_styles.main(timeLeft), padding=formatters.packPadding(left=20, right=20)))
         items.append(formatters.packBuildUpBlockData(blocks=[formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_EPIC_BATTLE_META_LEVEL_BLOCK_LINKAGE, data=getProgressionIconVODict(cycleNumber=cycleNumber, playerLevel=currentLevel), padding=formatters.packPadding(left=-20))], layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
         items.append(self.__packLevelBlock(currentLevel))
         if currentLevel < self.__epicController.getMaxPlayerLevel():
             famePtsToProgress = self.__epicController.getPointsProgressForLevel(currentLevel)
             items.append(self.__getCurrentMaxProgressBlock(levelProgress, famePtsToProgress))
-            items.append(self.__getPlayerProgressToLevelBlock(levelProgress, famePtsToProgress))
+            color = PROGRESSCOLOR_CONSTANTS.ORANGE if currentCycle is not None else PROGRESSCOLOR_CONSTANTS.GRAY
+            items.append(self.__getPlayerProgressToLevelBlock(levelProgress, famePtsToProgress, color))
         else:
             unlockedStr = backport.text(R.strings.epic_battle.tooltips.widget.reachedMaxLevel())
             items.append(formatters.packTextBlockData(text=text_styles.main(unlockedStr), padding=formatters.packPadding(left=20, right=20, top=-7)))
@@ -70,9 +86,10 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(items)
 
     @staticmethod
-    def __getPlayerProgressToLevelBlock(playerFamePts, famePtsToProgress):
+    def __getPlayerProgressToLevelBlock(playerFamePts, famePtsToProgress, progressColor='orange'):
         res = formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_META_LEVEL_PROGRESS_BLOCK_LINKAGE, data={'progressBarData': {'value': playerFamePts,
-                             'maxValue': famePtsToProgress}}, padding=formatters.packPadding(left=20), blockWidth=280)
+                             'maxValue': famePtsToProgress,
+                             'progressColor': progressColor}}, padding=formatters.packPadding(left=20), blockWidth=280)
         return res
 
     @staticmethod

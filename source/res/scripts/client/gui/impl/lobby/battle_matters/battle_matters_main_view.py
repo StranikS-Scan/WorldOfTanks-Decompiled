@@ -5,10 +5,11 @@ import typing
 from account_helpers.AccountSettings import BATTLEMATTERS_SEEN
 import BigWorld
 import resource_helper
-from account_helpers import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, BattleMatters
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from battle_matters_constants import QuestCardSections, CARDS_CONFIG_XML_PATH
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
+from frameworks.wulf.gui_constants import WindowStatus
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -24,6 +25,7 @@ from gui.impl.lobby.battle_matters.battle_matters_main_reward_view import Battle
 from gui.impl.lobby.battle_matters.battle_matters_vehicle_selection_view import BattleMattersVehicleSelectionView
 from gui.impl.lobby.battle_matters.battle_matters_paused_view import BattleMattersPausedView
 from gui.impl.lobby.battle_matters.tooltips.battle_matters_token_tooltip_view import BattleMattersTokenTooltipView
+from gui.impl.lobby.battle_matters.battle_matters_rewards_view import BattleMattersRewardsViewWindow
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showBattleMatters, showBattleMattersMainReward
 from gui.shared.event_dispatcher import showDelayedReward, showHangar
@@ -51,9 +53,11 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
 
     @nextTick
     def updateState(self, openMainRewardView=False, openVehicleSelection=False, openMainView=False, **_):
-        self.as_hideViewS()
-        self._destroyInjected()
-        self._createInjectView(openMainRewardView, openVehicleSelection, openMainView)
+        componentClass = self._getComponentClass(openMainRewardView, openVehicleSelection, openMainView)
+        if not isinstance(self._injectView, componentClass):
+            self.as_hideViewS()
+            self._destroyInjected()
+            self._createInjectView(componentClass)
 
     def markVisited(self):
         pass
@@ -72,14 +76,8 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
             self._injectView.onStatusChanged -= self._onViewReady
         return
 
-    def _makeInjectView(self, openMainRewardView=False, openVehicleSelection=False, openMainView=False):
-        if self.__battleMattersController.isPaused():
-            return BattleMattersPausedView()
-        if openMainView:
-            return BattleMattersMainView()
-        if openVehicleSelection or self.__battleMattersController.isFinished() and self.__battleMattersController.hasDelayedRewards():
-            return BattleMattersVehicleSelectionView()
-        return BattleMattersMainRewardView() if not AccountSettings.getCounters(BATTLEMATTERS_SEEN) or openMainRewardView else BattleMattersMainView()
+    def _makeInjectView(self, componentClass):
+        return componentClass()
 
     def _onPopulate(self):
         self.__battleMattersController.onStateChanged += self.__onStateChanged
@@ -92,6 +90,15 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
     def _onViewReady(self, *args):
         if not args or args[0] == ViewStatus.LOADED:
             self.as_showViewS()
+
+    def _getComponentClass(self, openMainRewardView=False, openVehicleSelection=False, openMainView=False):
+        if self.__battleMattersController.isPaused():
+            return BattleMattersPausedView
+        if openMainView:
+            return BattleMattersMainView
+        if openVehicleSelection or self.__battleMattersController.isFinished() and self.__battleMattersController.hasDelayedRewards():
+            return BattleMattersVehicleSelectionView
+        return BattleMattersMainRewardView if not AccountSettings.getCounters(BATTLEMATTERS_SEEN) or openMainRewardView else BattleMattersMainView
 
     def __onStateChanged(self):
         controller = self.__battleMattersController
@@ -108,7 +115,7 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
 
 
 class BattleMattersMainView(ViewImpl):
-    __slots__ = ('__tooltips', '__questCardsDescriptions')
+    __slots__ = ('__tooltips', '__questCardsDescriptions', '__currentQuestIdx')
     __appLoader = dependency.descriptor(IAppLoader)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __bootcampController = dependency.descriptor(IBootcampController)
@@ -122,6 +129,7 @@ class BattleMattersMainView(ViewImpl):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersMainView(), flags=ViewFlags.COMPONENT, model=BattleMattersMainViewModel())
         self.__tooltips = {}
         self.__questCardsDescriptions = {}
+        self.__currentQuestIdx = 0
         super(BattleMattersMainView, self).__init__(settings)
 
     @property
@@ -152,8 +160,11 @@ class BattleMattersMainView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(BattleMattersMainView, self)._initialize(*args, **kwargs)
+        self.__currentQuestIdx = self.__getCurrentQuestIdx()
         self.__readXML()
         self.__update()
+        self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: True})
+        AccountSettings.setBattleMattersSetting(BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS, 0)
 
     def _getEvents(self):
         return ((self.viewModel.onShowManual, self.__onShowManual),
@@ -163,11 +174,16 @@ class BattleMattersMainView(ViewImpl):
          (self.viewModel.onShowAnimForQuest, self.__onAnimForQuest),
          (self.viewModel.onSelectDelayedReward, self.__onSelectDelayedReward),
          (self.viewModel.onClose, showHangar),
-         (self.__eventsCache.onSyncCompleted, self.__onSyncCompleted))
+         (self.__eventsCache.onSyncCompleted, self.__onSyncCompleted),
+         (self.gui.windowsManager.onWindowStatusChanged, self.__onWindowStatusChanged))
 
     @classmethod
     def __getMissionPage(cls):
         return cls.__appLoader.getApp().containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_MISSIONS))
+
+    def __getCurrentQuestIdx(self):
+        currentQuest = self.__battleMattersController.getCurrentQuest()
+        return currentQuest.getOrder() if currentQuest else len(self.__battleMattersController.getCompletedBattleMattersQuests())
 
     @staticmethod
     def __onSelectDelayedReward():
@@ -177,9 +193,18 @@ class BattleMattersMainView(ViewImpl):
     def __onShowMainReward():
         showBattleMattersMainReward()
 
+    def __onWindowStatusChanged(self, uniqueID, newStatus):
+        window = self.gui.windowsManager.getWindow(uniqueID)
+        isBMRewardView = isinstance(window, BattleMattersRewardsViewWindow)
+        if isBMRewardView:
+            if newStatus == WindowStatus.LOADING:
+                self.viewModel.setIsRewardsViewOpen(True)
+            elif newStatus == WindowStatus.DESTROYING:
+                self.viewModel.setIsRewardsViewOpen(False)
+
     def __readXML(self):
         ctx, root = resource_helper.getRoot(CARDS_CONFIG_XML_PATH)
-        for ctx, subSection in resource_helper.getIterator(ctx, root):
+        for _, subSection in resource_helper.getIterator(ctx, root):
             cardConfig = {}
             lessonId = subSection.readInt(QuestCardSections.LESSON_ID.value, -1)
             if lessonId >= 0:
@@ -209,6 +234,9 @@ class BattleMattersMainView(ViewImpl):
 
     def __update(self):
         with self.viewModel.transaction() as model:
+            currentQuestIdx = self.__getCurrentQuestIdx()
+            model.setIsRewardsViewOpen(self.__currentQuestIdx != currentQuestIdx)
+            self.__currentQuestIdx = currentQuestIdx
             regularQuests = self.__battleMattersController.getRegularBattleMattersQuests()
             self.__updateQuests(model, regularQuests)
             self.__updateQuestProgress(model.questProgress, regularQuests)
@@ -242,28 +270,44 @@ class BattleMattersMainView(ViewImpl):
         questsModel = model.getQuests()
         questsModel.clear()
         currentQuest = self.__battleMattersController.getCurrentQuest()
+        serverSettings = self.__settingsCore.serverSettings
+        lastSeenQuestInProgressIdx = serverSettings.getBattleMattersQuestWasShowed()
         for quest in quests:
-            questsModel.addViewModel(self.__createQuestModel(quest, currentQuest))
+            questsModel.addViewModel(self.__createQuestModel(quest, currentQuest, lastSeenQuestInProgressIdx))
 
+        self.__updateLastSeenProgressForQuest(questsModel, lastSeenQuestInProgressIdx)
+        self.__saveLastSeenProgress(currentQuest)
         questsModel.invalidate()
 
-    def __createQuestModel(self, quest, currentQuest):
+    def __updateLastSeenProgressForQuest(self, questsModel, lastSeenQuestInProgressIdx):
+        serverSettings = self.__settingsCore.serverSettings
+        if lastSeenQuestInProgressIdx < len(questsModel):
+            questsModel[lastSeenQuestInProgressIdx].setLastSeenProgress(serverSettings.getBattleMattersQuestProgress())
+
+    def __saveLastSeenProgress(self, currentQuest):
+        currentProgress, _ = self.__battleMattersController.getQuestProgress(currentQuest)
+        self.__settingsCore.serverSettings.setBattleMattersQuestProgress(currentProgress)
+
+    def __createQuestModel(self, quest, currentQuest, lastSeenQuestInProgressIdx):
         questModel = QuestViewModel()
         idx = quest.getOrder()
-        questModel.setIdx(idx)
+        questModel.setNumber(idx)
         questModel.setTitle(quest.getUserName())
         questModel.setDescription(quest.getDescription())
         questModel.setCondition(quest.getConditionLbl())
         questState = State.UNAVAILABLE
+        currentQuestIdx = currentQuest.getOrder() if currentQuest else len(self.__battleMattersController.getCompletedBattleMattersQuests())
         if quest.isCompleted():
             questState = State.DONE
-        elif quest.isAvailable().isValid and quest.getOrder() == currentQuest.getOrder():
+        elif quest.isAvailable().isValid and idx == currentQuestIdx:
             questState = State.INPROGRESS
         questModel.setState(questState)
         cardConfig = self.__questCardsDescriptions.get(idx, {})
         questModel.setHasManualPage(cardConfig.get(QuestCardSections.LESSON_ID) is not None)
         questModel.setHasAnimation(cardConfig.get(QuestCardSections.SWF_PATH) is not None)
         currentProgress, maxProgress = self.__battleMattersController.getQuestProgress(quest)
+        if idx <= lastSeenQuestInProgressIdx and quest.isCompleted():
+            questModel.setLastSeenProgress(maxProgress)
         questModel.setCurrentProgress(currentProgress)
         questModel.setMaxProgress(maxProgress)
         bonuses = sorted(quest.getBonuses(), cmp=bonusesSort)

@@ -955,9 +955,6 @@
       <componentsData>
         <Type>	PYTHON	</Type>
       </componentsData>
-      <accountsAdditionalInfo>
-        <Type>	PYTHON	</Type>
-      </accountsAdditionalInfo>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1042,13 +1039,25 @@
       </attacker>
     </Properties>
   </DESTRUCTIBLE_ATTACK_INFO>
-  <CLIENT_STATUS_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <CLIENT_STATUS_STATISTICS>	FIXED_DICT	  <AlowNone>	true	</AlowNone>
     <Properties>
-      <ping>
-        <Type>	INT16	</Type>
-      </ping>
+      <ping_lt_50>
+        <Type>	FLOAT	</Type>
+      </ping_lt_50>
+      <ping_51_100>
+        <Type>	FLOAT	</Type>
+      </ping_51_100>
+      <ping_101_150>
+        <Type>	FLOAT	</Type>
+      </ping_101_150>
+      <ping_151_400>
+        <Type>	FLOAT	</Type>
+      </ping_151_400>
+      <ping_gt_400>
+        <Type>	FLOAT	</Type>
+      </ping_gt_400>
       <lag>
-        <Type>	UINT8	</Type>
+        <Type>	FLOAT	</Type>
       </lag>
     </Properties>
   </CLIENT_STATUS_STATISTICS>
@@ -1892,18 +1901,6 @@
       </isRespawnActive>
     </Properties>
   </VEHICLE_HEALTH_INFO>
-  <CAMERA_FLIGHT_POINT>	FIXED_DICT	  <Properties>
-      <point>
-        <Type>	VECTOR3	</Type>
-      </point>
-      <anchorName>
-        <Type>	STRING	</Type>
-      </anchorName>
-      <flightSpeed>
-        <Type>	FLOAT	</Type>
-      </flightSpeed>
-    </Properties>
-  </CAMERA_FLIGHT_POINT>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <gunPosition>
@@ -2367,4 +2364,25 @@
       </number>
     </Properties>
   </SPAWN_POINT_INFO>
+  <SPAWN_KEY_POINT>	FIXED_DICT	  <Properties>
+      <guid>
+        <Type>	STRING	</Type>
+      </guid>
+      <position>
+        <Type>	VECTOR2	</Type>
+      </position>
+    </Properties>
+  </SPAWN_KEY_POINT>
+  <TEAM_SPAWN_KEY_POINT>	FIXED_DICT	  <Properties>
+      <vehID>
+        <Type>	OBJECT_ID	</Type>
+      </vehID>
+      <guid>
+        <Type>	STRING	</Type>
+      </guid>
+      <placed>
+        <Type>	BOOL	</Type>
+      </placed>
+    </Properties>
+  </TEAM_SPAWN_KEY_POINT>
 </alias.xml>

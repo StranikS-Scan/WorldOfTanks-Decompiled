@@ -752,7 +752,7 @@ def _addEmptyItem(itemCls, storage, itemSectionName):
     storage[EMPTY_ITEM_ID] = item
 
 
-def _readPriceGroups(cache, xmlCtx, section, sectionName):
+def _readPriceGroups(cache, xmlCtx, section, sectionName, prices=None):
     if IS_EDITOR and section is None:
         return
     else:
@@ -768,7 +768,7 @@ def _readPriceGroups(cache, xmlCtx, section, sectionName):
             if priceGroup.name in cache.priceGroupNames:
                 ix.raiseWrongXml(iCtx, 'id', 'duplicate price group name "%s"' % priceGroup.name)
             priceGroup.notInShop = iSection.readBool('notInShop', False)
-            iv._readPriceForItem(iCtx, iSection, priceGroup.compactDescr)
+            iv._readPriceForItem(iCtx, iSection, priceGroup.compactDescr, prices)
             if iSection.has_key('tags'):
                 tags = iSection.readString('tags').split()
                 priceGroup.tags = frozenset(map(intern, tags))

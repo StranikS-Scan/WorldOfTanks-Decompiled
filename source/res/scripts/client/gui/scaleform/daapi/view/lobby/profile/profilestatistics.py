@@ -13,7 +13,7 @@ from gui.impl.gen import R
 from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
 from gui.shared.formatters import text_styles
 from helpers import dependency
-from skeletons.gui.game_control import IRankedBattlesController, IComp7Controller
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ProfileStatisticEvent
@@ -47,7 +47,6 @@ def _parseProviderType(value):
 class ProfileStatistics(ProfileStatisticsMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     rankedController = dependency.descriptor(IRankedBattlesController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args):
         try:
@@ -104,8 +103,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS))
-        if self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getSeasonPassed():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
+        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
         self.as_setInitDataS({'dropDownProvider': dropDownProvider})
         return
 

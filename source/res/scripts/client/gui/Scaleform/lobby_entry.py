@@ -29,12 +29,10 @@ from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
-from gui.Scaleform.managers.fade_manager import FadeManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency, uniprof
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
@@ -48,43 +46,26 @@ LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.COMP7_TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
-_EXTENDED_RENDER_PIPELINE = 0
 
 class LobbyEntry(AppEntry):
     bootcampCtrl = dependency.descriptor(IBootcampController)
-    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, appNS, ctrlModeFlags):
         super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
-        self.__fadeManager = None
-        return
 
     @property
     def waitingManager(self):
         return self.__getWaitingFromContainer()
 
-    @property
-    def fadeManager(self):
-        return self.__fadeManager
-
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
-        self.__fadeManager.setup()
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.close()
         super(LobbyEntry, self).beforeDelete()
-        if self.__fadeManager:
-            self.__fadeManager.destroy()
-            self.__fadeManager = None
-        return
-
-    def _createManagers(self):
-        super(LobbyEntry, self)._createManagers()
-        self.__fadeManager = FadeManager()
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)
@@ -157,13 +138,7 @@ class LobbyEntry(AppEntry):
         self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.WAITING))
 
     def _getRequiredLibraries(self):
-        swfs = ['windows.swf',
-         'animations.swf',
-         'guiControlsLogin.swf',
-         'guiControlsLoginBattleDynamic.swf',
-         'ub_components.swf',
-         'serviceMessageComponents.swf']
-        return swfs
+        pass
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(WindowLayer.WAITING) if self._containerMgr is not None else None

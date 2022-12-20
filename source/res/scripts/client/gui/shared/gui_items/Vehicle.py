@@ -53,7 +53,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
-from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
@@ -244,7 +243,6 @@ class Vehicle(FittingItem):
     __customizationService = dependency.descriptor(ICustomizationService)
     __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
-    nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
@@ -285,7 +283,7 @@ class Vehicle(FittingItem):
         invData = invData or dict()
         postProgressionFeatures = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
-            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
+            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             self._xp = proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
@@ -558,10 +556,10 @@ class Vehicle(FittingItem):
         return
 
     def _getOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        if style is not None and season != SeasonType.EVENT:
+        if style is not None:
             return self.__getStyledOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season)
         else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled and season != SeasonType.EVENT else self.__getCustomOutfitComponent(proxy, season)
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -602,10 +600,6 @@ class Vehicle(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
         return RES_SHOP_EXT.getVehicleIcon(size, name)
-
-    def getSnapshotIcon(self):
-        name = getIconResourceName(getNationLessName(self.name))
-        return RES_ICONS.getSnapshotIcon(name)
 
     @property
     def invID(self):
@@ -2046,7 +2040,8 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
- Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight())}
+ Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight()),
+ Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_AMMONOTFULL}
 _VEHICLE_STATE_TO_ADD_ICON = {Vehicle.VEHICLE_STATE.RENTABLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENT_ICO_BIG,
  Vehicle.VEHICLE_STATE.RENTABLE_AGAIN: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTAGAIN_ICO_BIG}
 

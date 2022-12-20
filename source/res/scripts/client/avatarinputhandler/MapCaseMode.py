@@ -621,6 +621,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     aimingMode = property(lambda self: self.__aimingMode)
     equipmentID = property(lambda self: self.__equipmentID)
     acceptsArcadeState = property(lambda self: self._acceptsArcadeState)
+    curVehicleID = property(lambda self: self.__curVehicleID)
     prevCtlMode = None
     deactivateCallback = None
     MODE_NAME = ''
@@ -640,6 +641,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         self.__updateInterval = 0.1
         self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
         self.__equipmentID = None
+        self.__curVehicleID = None
         self.__aimingMode = 0
         self.__aimingModeUserDisabled = False
         self.__class__.prevCtlMode = [Vector3(0, 0, 0),
@@ -661,6 +663,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             self.__activeSelector = None
         self.__cam.destroy()
         self.__aih = None
+        self.__curVehicleID = None
         return
 
     def enable(self, **args):
@@ -691,6 +694,9 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         if BigWorld.player().gunRotator is not None:
             BigWorld.player().gunRotator.ignoreAimingMode = True
             BigWorld.player().gunRotator.stopTrackingOnServer()
+        self.__curVehicleID = args.get('curVehicleID')
+        if self.__curVehicleID is None:
+            self.__curVehicleID = BigWorld.player().playerVehicleID
         return
 
     def disable(self):

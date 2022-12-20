@@ -354,32 +354,26 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
                 tooltip['tooltip'] = TOOLTIPS.PERSONALMISSIONS_OPERATIONTITLE_COMPLETESTATE
         elif chainState.questInProgress:
             if self.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
-                vehData = '  '
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_INPROGRESS_PM2
             else:
-                vehData = ''
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_INPROGRESS_REGULAR
-            vehData += getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
+            vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
             label = text_styles.stats(_ms(template, vehData=vehData))
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
         elif not chainState.hasVehicle:
             if self.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
-                vehData = '  '
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_NOVEHICLE_PM2
             else:
-                vehData = ''
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_NOVEHICLE_REGULAR
-            vehData += getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
+            vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
             label = text_styles.stats(_ms(template, vehData=vehData))
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_NO_VEHICLE_STATE
         else:
             if self.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
-                vehData = '  '
                 template = text_styles.stats(PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_UNLOCKED_PM2)
             else:
-                vehData = ''
                 template = text_styles.stats(PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_UNLOCKED_REGULAR)
-            vehData += getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
+            vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
             label = text_styles.stats(_ms(template, vehData=vehData))
         return {'title': text_styles.promoTitle(_ms(PERSONAL_MISSIONS.OPERATIONTITLE_TITLE, title=_ms('#personal_missions:operations/title%d' % currentOperation.getID()))),
          'label': label,

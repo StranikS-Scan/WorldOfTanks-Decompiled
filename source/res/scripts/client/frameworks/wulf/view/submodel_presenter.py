@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/submodel_presenter.py
 import typing
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_eventBus
 if typing.TYPE_CHECKING:
     from Event import Event
     from frameworks.wulf import View, ViewEvent, Window
@@ -22,9 +20,6 @@ class SubModelPresenter(object):
     @property
     def parentView(self):
         return self.__parentView
-
-    def getParentWindow(self):
-        return self.parentView.getParentWindow()
 
     def getViewModel(self):
         return self.__viewModel
@@ -62,25 +57,10 @@ class SubModelPresenter(object):
     def _getEvents(self):
         pass
 
-    def _getListeners(self):
-        return tuple()
-
-    def _getCallbacks(self):
-        return tuple()
-
     def __subscribe(self):
-        g_clientUpdateManager.addCallbacks(dict(self._getCallbacks()))
-        for eventBusArgs in self._getListeners():
-            g_eventBus.addListener(*eventBusArgs)
-
         for event, handler in self._getEvents():
             event += handler
 
     def __unsubscribe(self):
         for event, handler in self._getEvents():
             event -= handler
-
-        for eventBusArgs in reversed(self._getListeners()):
-            g_eventBus.removeListener(*eventBusArgs[:3])
-
-        g_clientUpdateManager.removeObjectCallbacks(self)

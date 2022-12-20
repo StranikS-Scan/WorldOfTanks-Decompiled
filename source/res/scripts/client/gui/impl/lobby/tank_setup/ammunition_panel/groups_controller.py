@@ -17,8 +17,5 @@ class HangarAmmunitionGroupsController(AmmunitionGroupsController):
     def _getGroups(self):
         if self._vehicle is None:
             return []
-        elif self.prbDispatcher is not None and (self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC)) and self._vehicle.level in self.__epicMetaGameCtrl.getValidVehicleLevels():
-            return FRONTLINE_GROUPS
         else:
-            groups = RANDOM_GROUPS
-            return groups
+            return FRONTLINE_GROUPS if self.prbDispatcher is not None and (self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC)) and self._vehicle.level in self.__epicMetaGameCtrl.getValidVehicleLevels() else RANDOM_GROUPS

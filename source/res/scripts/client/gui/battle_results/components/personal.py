@@ -673,6 +673,19 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
             self.addComponent(self.getNextComponentIndex(), block)
 
 
+def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable, result):
+    reason = style.makeI18nDeathReason(deathReason)
+    vehicleStateBlock.vehicleState = reason.i18nString
+    vehicleStateBlock.vehicleStatePrefix = reason.prefix
+    vehicleStateBlock.vehicleStateSuffix = reason.suffix
+    playerKillerBlock = KillerPlayerNameBlock(killerID)
+    playerKillerBlock.setRecord(result, reusable)
+    vi = reusable.vehicles.getVehicleInfo(killerID)
+    if vi.isTeamKiller:
+        vehicleStateBlock.isKilledByTeamKiller = True
+    vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
+
+
 class TotalPersonalAchievementsBlock(shared.BiDiStatsBlock):
     __slots__ = ()
 
@@ -705,19 +718,6 @@ class PersonalAccountDBID(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.personal.avatar.accountDBID
-
-
-def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable, result):
-    reason = style.makeI18nDeathReason(deathReason)
-    vehicleStateBlock.vehicleState = reason.i18nString
-    vehicleStateBlock.vehicleStatePrefix = reason.prefix
-    vehicleStateBlock.vehicleStateSuffix = reason.suffix
-    playerKillerBlock = KillerPlayerNameBlock(killerID)
-    playerKillerBlock.setRecord(result, reusable)
-    vi = reusable.vehicles.getVehicleInfo(killerID)
-    if vi.isTeamKiller:
-        vehicleStateBlock.isKilledByTeamKiller = True
-    vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
 
 
 class ReplayURL(base.StatsItem):

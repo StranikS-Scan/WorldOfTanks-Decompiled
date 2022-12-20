@@ -1,20 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
-from collections import namedtuple
+import functools
 from battle_pass_common import BattlePassState
+from debug_utils import LOG_ERROR_DEV
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.utils.functions import getRelativeUrl
-from helpers import dependency, time_utils
+from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
 from web.web_client_api.common import ItemPackType
-from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow, showFrontlineAwards
-EpicSeasonAchievements = namedtuple('EpicSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'average_xp', 'lvl', 'battle_bp_points', 'season_bp_points'))
+
+def frontlineDeprecated(func):
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        LOG_ERROR_DEV('FrontLineWebApi deprecated due WOTK-36049, move logic to your local api')
+        return func(*args, **kwargs)
+
+    return wrapper
+
 
 class _RewardsSchema(W2CSchema):
     category = Field(type=basestring)
@@ -32,6 +41,7 @@ class FrontLineWebApi(W2CSchema):
     __itemsCache = dependency.descriptor(IItemsCache)
     _NOT_SUPPORTED_BONUSES = ('battleToken',)
 
+    @frontlineDeprecated
     @w2c(_RewardsSchema, name='get_rewards_data')
     def handleGetRewardsData(self, cmd):
         if hasattr(cmd, 'category') and cmd.category:
@@ -45,36 +55,44 @@ class FrontLineWebApi(W2CSchema):
                 return rewardsData
         return None
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_all_skills')
     def handleSkillsInfo(self, _):
         return getFrontLineSkills()
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_player_skills_status')
     def handleSkillStatus(self, _):
         return {skillID:int(skill.isActivated) for skillID, skill in self.__epicController.getAllSkillsInformation().iteritems()}
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_player_skill_points')
     def handleGetSkillPoints(self, _):
         return self.__epicController.getSkillPoints()
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='is_nine_vehicles_level_disabled')
     def handleIsNineVehiclesLevelDisabled(self, _):
         return not self.__epicController.isUnlockVehiclesInBattleEnabled()
 
+    @frontlineDeprecated
     @w2c(_SkillSchema, name='increase_player_skill')
     def handleIncreaseSkillLevel(self, cmd):
         if hasattr(cmd, 'skill_id') and cmd.skill_id:
             self.__epicController.increaseSkillLevel(cmd.skill_id)
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
         return self.__epicController.getStoredEpicDiscount()
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_is_battle_pass_completed')
     def handleGetIsBattlePassBought(self, _):
         state = self.__battlePassController.getState()
         return state == BattlePassState.COMPLETED
 
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_metascreen_data')
     def handleGetMetaScreenData(self, _):
         currentLevel, levelProgress = self.__epicController.getPlayerLevelInfo()
@@ -88,21 +106,7 @@ class FrontLineWebApi(W2CSchema):
          'rewards_count': self.__epicController.getNotChosenRewardCount()}
         return data
 
-    @w2c(W2CSchema, name='select_reward')
-    def handleSelectReward(self, _):
-        rewards = []
-
-        def _setRewardsAndUpdate(rs):
-            rewards.extend(rs)
-            self.__browserUpdate(rs)
-
-        def _showAwards():
-            if rewards:
-                showFrontlineAwards(rewards)
-
-        showEpicRewardsSelectionWindow(onRewardsReceivedCallback=_setRewardsAndUpdate, onCloseCallback=_showAwards)
-        return self.__getAllLevelAwards()
-
+    @frontlineDeprecated
     @w2c(W2CSchema, name='get_calendar_info')
     def handleGetCalendarInfo(self, _):
         calendarData = dict()
@@ -153,6 +157,3 @@ class FrontLineWebApi(W2CSchema):
             result.extend(bonusList)
 
         return result
-
-    def __browserUpdate(self, _):
-        self.__epicController.openURL()

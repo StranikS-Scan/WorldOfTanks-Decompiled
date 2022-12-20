@@ -27,6 +27,7 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         self.onEventUpdated = Event(self.__eventsManager)
         self.onSettingsChanged = Event(self.__eventsManager)
         self.onNumberRequesterUpdated = Event(self.__eventsManager)
+        self.onEventStateChanged = Event(self.__eventsManager)
         self.__notifier = SimpleNotifier(self.__getTimeLeft, self.__onEventStateChange)
         self.__serialNumberRequester = ResourceWellNumberRequester(isSerial=True)
         self.__regularNumberRequester = ResourceWellNumberRequester(isSerial=False)
@@ -54,10 +55,13 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         return self.isEnabled() and self.isStarted() and not self.isFinished()
 
     def isStarted(self):
-        return self.__getStartTime() <= time_utils.getServerUTCTime()
+        return self.getStartTime() <= time_utils.getServerUTCTime()
 
     def isFinished(self):
         return self.getFinishTime() <= time_utils.getServerUTCTime()
+
+    def isNotStarted(self):
+        return self.isEnabled() and not self.isStarted()
 
     def isPaused(self):
         return not self.isEnabled() and self.isStarted() and not self.isFinished()
@@ -70,6 +74,9 @@ class ResourceWellController(IResourceWellController, EventsHandler):
 
     def getFinishTime(self):
         return self.__getConfig().finishTime
+
+    def getStartTime(self):
+        return self.__getConfig().startTime
 
     def getCurrentPoints(self):
         return self.__itemsCache.items.resourceWell.getCurrentPoints()
@@ -130,14 +137,12 @@ class ResourceWellController(IResourceWellController, EventsHandler):
 
     def __getTimeLeft(self):
         if not self.isStarted():
-            return max(0, self.__getStartTime() - time_utils.getServerUTCTime())
+            return max(0, self.getStartTime() - time_utils.getServerUTCTime())
         return max(0, self.getFinishTime() - time_utils.getServerUTCTime()) if not self.isFinished() else 0
-
-    def __getStartTime(self):
-        return self.__getConfig().startTime
 
     def __onEventStateChange(self):
         self.onEventUpdated()
+        self.onEventStateChanged()
 
     def __getRegularRewardLeftCount(self):
         return self.__regularNumberRequester.getRemainingValues() or 0

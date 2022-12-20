@@ -1,0 +1,28 @@
+<SpawnKeyPointTeamInfo.def>
+  <Properties>
+    <availableSpawnKeyPoints>
+      <Type>	ARRAY	  <of>	SPAWN_KEY_POINT	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </availableSpawnKeyPoints>
+    <teamSpawnKeyPoints>
+      <Type>	ARRAY	  <of>	TEAM_SPAWN_KEY_POINT	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teamSpawnKeyPoints>
+    <spawnKeyPointsCloseTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </spawnKeyPointsCloseTime>
+  </Properties>
+  <CellMethods>
+    <chooseSpawnKeyPoint>
+      <Exposed></Exposed>
+      <Arg>	STRING	</Arg>
+    </chooseSpawnKeyPoint>
+    <placeVehicle>
+      <Exposed></Exposed>
+    </placeVehicle>
+  </CellMethods>
+  <DefaultKeyName>	spawnKeyPointTeamInfo	</DefaultKeyName>
+</SpawnKeyPointTeamInfo.def>

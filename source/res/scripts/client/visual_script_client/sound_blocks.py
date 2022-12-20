@@ -265,17 +265,3 @@ class PlayGlobalSound(Block, SoundMeta):
     def _execute(self):
         SoundGroups.g_instance.playSound2D(self._sound.getValue())
         self._out.call()
-
-
-class SetGlobalSoundSwitch(Block, SoundMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(SetGlobalSoundSwitch, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._setValue)
-        self._out = self._makeEventOutputSlot('out')
-        self._switchName = self._makeDataInputSlot('switchName', SLOT_TYPE.STR)
-        self._switchValue = self._makeDataInputSlot('switchValue', SLOT_TYPE.STR)
-
-    def _setValue(self):
-        SoundGroups.g_instance.setState(self._switchName.getValue(), self._switchValue.getValue())
-        self._out.call()

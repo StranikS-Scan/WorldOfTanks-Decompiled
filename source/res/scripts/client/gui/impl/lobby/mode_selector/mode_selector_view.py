@@ -161,6 +161,7 @@ class ModeSelectorView(ViewImpl):
         self.__gui.windowsManager.onWindowStatusChanged += self.__windowStatusChanged
         self.__lobbyContext.addHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         g_eventBus.addListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
+        g_eventBus.addListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
         self.viewModel.onItemClicked += self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
@@ -169,8 +170,7 @@ class ModeSelectorView(ViewImpl):
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING,
-         'alias': self.layoutID}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
         app = self.__appLoader.getApp()
         self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(_BACKGROUND_ALPHA)
@@ -194,6 +194,7 @@ class ModeSelectorView(ViewImpl):
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
+        g_eventBus.removeListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
         g_eventBus.removeListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.viewModel.onItemClicked -= self.__itemClickHandler
@@ -249,6 +250,10 @@ class ModeSelectorView(ViewImpl):
         self.viewModel.setIsContentVisible(self.__isContentVisible)
         return
 
+    def __updateClickProcessing(self, event):
+        self.__isClickProcessing = event.ctx.get('isClickProcessing', False) if event is not None else False
+        return
+
     @adisp_process
     def __itemClickHandler(self, event):
         self.__isClickProcessing = True
@@ -269,8 +274,9 @@ class ModeSelectorView(ViewImpl):
                 if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
                     specView.destroyWindow()
                 self.__dataProvider.select(modeSelectorItem.modeName)
-                if self.__isContentVisible:
-                    self.close()
+            self.__isClickProcessing = False
+            if self.__isContentVisible:
+                self.close()
             return
 
     def __showMapSelectionClickHandler(self):
@@ -305,18 +311,15 @@ class ModeSelectorView(ViewImpl):
                 return
             if window.layer in _CLOSE_LAYERS:
                 self.__restoreGraphics()
-                if self.__canBeClosed():
+                if not self.__isClickProcessing:
                     self.close()
         return
 
     @adisp.adisp_async
     def __handleHeaderNavigation(self, callback):
-        if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING) and self.__canBeClosed():
+        if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING) and not self.__isClickProcessing:
             self.close()
         callback(True)
 
     def __handleEscape(self):
         self.close()
-
-    def __canBeClosed(self):
-        return not self.__isClickProcessing or not self.__isContentVisible

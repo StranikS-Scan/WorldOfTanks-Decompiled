@@ -5,9 +5,9 @@ from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.frontline.reward_item_model import RewardItemModel
 
 class AwardsViewModel(ViewModel):
-    __slots__ = ('onCloseClick',)
+    __slots__ = ('onCloseClick', 'onAnimationEnded')
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=2, commands=2):
         super(AwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -31,3 +31,4 @@ class AwardsViewModel(ViewModel):
         self._addViewModelProperty('mainRewards', UserListModel())
         self._addViewModelProperty('additionalRewards', UserListModel())
         self.onCloseClick = self._addCommand('onCloseClick')
+        self.onAnimationEnded = self._addCommand('onAnimationEnded')

@@ -12,7 +12,6 @@ class EventTypes(ViewModel):
     DAILY_QUEST = 'dailyQuest'
     RANKED_BATTLES = 'rankedBattles'
     BATTLE_PASS = 'battlePass'
-    BRIEF_QUEST = 'briefQuest'
 
     def __init__(self, properties=0, commands=0):
         super(EventTypes, self).__init__(properties=properties, commands=commands)

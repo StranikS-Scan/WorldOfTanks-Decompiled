@@ -74,10 +74,11 @@ class IntroScreen(ViewImpl, IGlobalListener):
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.stopGlobalListening()
 
-    def __onStatusUpdated(self, _):
-        if not self.__comp7Controller.isAvailable():
+    def __onStatusUpdated(self, status):
+        if comp7_model_helpers.isModeForcedDisabled(status):
             self.destroyWindow()
-        self.__updateData()
+        else:
+            self.__updateData()
 
     def __updateData(self):
         with self.viewModel.transaction() as vm:

@@ -23,7 +23,7 @@ class BattleAbilityByRankModel(ViewModel):
 
     @staticmethod
     def getRankValuesType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(BattleAbilityByRankModel, self)._initialize()

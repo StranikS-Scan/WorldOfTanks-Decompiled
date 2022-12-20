@@ -6,7 +6,7 @@ from InterfaceScaleManager import InterfaceScaleManager
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
-from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR, NewYearStorageKeys
+from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR
 from adisp import adisp_process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.SETTINGS import SETTINGS
@@ -81,7 +81,6 @@ class SettingsCore(ISettingsCore):
         BATTLE_HUD_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_HUD)
         SPG_AIM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SPG_AIM)
         CONTOUR_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.CONTOUR)
-        NEW_YEAR_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.NEW_YEAR)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -108,8 +107,7 @@ class SettingsCore(ISettingsCore):
          'battleHud': BATTLE_HUD_SETTINGS_STORAGE,
          'dogTags': DOG_TAGS_SETTINGS_STORAGE,
          'spgAim': SPG_AIM_SETTINGS_STORAGE,
-         'contour': CONTOUR_SETTINGS_STORAGE,
-         'newYear': NEW_YEAR_SETTINGS_STORAGE}
+         'contour': CONTOUR_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName, settingName == GRAPHICS.COLOR_GRADING_TECHNIQUE)) for settingName in BigWorld.generateGfxSettings()))
@@ -321,8 +319,7 @@ class SettingsCore(ISettingsCore):
          (SCORE_PANEL.SHOW_HP_VALUES, options.SettingFalseByDefault(SCORE_PANEL.SHOW_HP_VALUES, storage=BATTLE_HUD_SETTINGS_STORAGE)),
          (SCORE_PANEL.SHOW_HP_DIFFERENCE, options.SettingFalseByDefault(SCORE_PANEL.SHOW_HP_DIFFERENCE, storage=BATTLE_HUD_SETTINGS_STORAGE)),
          (SCORE_PANEL.ENABLE_TIER_GROUPING, options.SettingFalseByDefault(SCORE_PANEL.ENABLE_TIER_GROUPING, storage=BATTLE_HUD_SETTINGS_STORAGE)),
-         (SCORE_PANEL.SHOW_HP_BAR, options.SettingTrueByDefault(SCORE_PANEL.SHOW_HP_BAR, storage=BATTLE_HUD_SETTINGS_STORAGE)),
-         (NewYearStorageKeys.LOOT_BOX_VIDEO_OFF, options.SettingFalseByDefault(NewYearStorageKeys.LOOT_BOX_VIDEO_OFF, storage=NEW_YEAR_SETTINGS_STORAGE))))
+         (SCORE_PANEL.SHOW_HP_BAR, options.SettingTrueByDefault(SCORE_PANEL.SHOW_HP_BAR, storage=BATTLE_HUD_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         g_playerEvents.onDisconnected += self.revertSettings
@@ -387,8 +384,6 @@ class SettingsCore(ISettingsCore):
             from account_helpers.settings_core import settings_constants
             if key in settings_constants.GRAPHICS.ALL():
                 LOG_DEBUG('Apply graphic settings: ', {key: value})
-                self.onSettingsChanged({key: value})
-            if key in NewYearStorageKeys.LOOT_BOX_VIDEO_OFF:
                 self.onSettingsChanged({key: value})
             return result
         else:

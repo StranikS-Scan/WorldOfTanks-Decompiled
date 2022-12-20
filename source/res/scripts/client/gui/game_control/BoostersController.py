@@ -6,10 +6,12 @@ from operator import itemgetter
 import BigWorld
 import Event
 from adisp import adisp_process
-from constants import Configs, IS_DEVELOPMENT
+from constants import Configs, QUEUE_TYPE
+from goodies.goodie_constants import BoosterCategory
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.prb_control.prb_getters import isDevTraining, getQueueTypeFromEntityType
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -27,8 +29,10 @@ if TYPE_CHECKING:
     from gui.lobby_context import LobbyContext
     from gui.shared.items_cache import ItemsCache
     from gui.goodies.goodies_cache import GoodiesCache
-    from gui.prb_control.entities.base.entity import BasePrbEntryPoint
-    PrbEntityType = TypeVar(bound=BasePrbEntryPoint)
+    from gui.prb_control.entities.base.entity import BasePrbEntity
+    from gui.prb_control.entities.base.legacy.entity import LegacyEntity
+    PrbEntityType = TypeVar('PrbEntityType', bound=BasePrbEntity)
+    LegacyEntityType = TypeVar('LegacyEntityType', bound=LegacyEntity)
 _logger = logging.getLogger(__name__)
 
 class BoostersController(IBoostersController, IGlobalListener):
@@ -42,16 +46,16 @@ class BoostersController(IBoostersController, IGlobalListener):
         self.onBoosterChangeNotify = Event.Event(self.__eventManager)
         self.onReserveTimerTick = Event.Event(self.__eventManager)
         self.onGameModeStatusChange = Event.Event(self.__eventManager)
-        self.__gameModeSupported = None
+        self.__enabledCategories = set()
         self.__boosterNotifyTimeCallback = None
         self.__boostersForUpdate = []
         self.__notificatorManager = Notifiable()
         self.__serverSettings = None
-        self.__supportedQueueTypes = None
+        self.__supportedQueueTypes = {}
         return
 
-    def isGameModeSupported(self):
-        return self.__gameModeSupported or False
+    def isGameModeSupported(self, category):
+        return category in self.__enabledCategories
 
     def fini(self):
         self._stop()
@@ -62,11 +66,19 @@ class BoostersController(IBoostersController, IGlobalListener):
 
     def updateGameModeStatus(self):
         if self.prbDispatcher is not None:
-            prbEntity = self.prbDispatcher.getEntity()
-            enabled = prbEntity.getQueueType() in self.__supportedQueueTypes or self._isDevTrainingPrb(prbEntity)
-            if self.__gameModeSupported != enabled:
-                self.__gameModeSupported = enabled
-                self.toggleHangarHint(enabled)
+            enabledCategories = set()
+            active = set()
+            queueType = self.__getQueueType(self.prbDispatcher.getEntity())
+            isDevTrainingBattle = isDevTraining()
+            for category in BoosterCategory:
+                if queueType in self.__supportedQueueTypes[category.name] or isDevTrainingBattle:
+                    enabledCategories.add(category)
+
+            isChanged = enabledCategories != self.__enabledCategories
+            self.__enabledCategories = enabledCategories
+            enabledHint = enabledCategories and not active or active.issubset(enabledCategories)
+            self.toggleHangarHint(enabledHint)
+            if isChanged:
                 self.onGameModeStatusChange()
         return
 
@@ -169,5 +181,5 @@ class BoostersController(IBoostersController, IGlobalListener):
         clanReserves = self.goodiesCache.getClanReserves().values()
         return min((reserve.getUsageLeftTime() for reserve in clanReserves)) + 1 if clanReserves else 0
 
-    def _isDevTrainingPrb(self, prbEntity):
-        return IS_DEVELOPMENT and prbEntity.getModeFlags() == FUNCTIONAL_FLAG.TRAINING
+    def __getQueueType(self, prbEntity):
+        return prbEntity.getQueueType() if prbEntity.getQueueType() > QUEUE_TYPE.UNKNOWN else getQueueTypeFromEntityType(prbEntity.getEntityType())

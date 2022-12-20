@@ -6,11 +6,11 @@ import Event
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.goodies.goodies_constants import BoosterCategory
+from goodies.goodie_constants import BoosterCategory
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import BoosterModel
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_entry_point_model import ReservesEntryPointModel
-from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, addToReserveArrayByCategory, getTotalReadyReserves, getTotalLimitedReserves, boostersInClientUpdate
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, addToReserveArrayByCategory, getTotalReadyReserves, getTotalLimitedReserves, boostersInClientUpdate, addDisabledCategories
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IBoostersController
@@ -82,7 +82,7 @@ class PersonalReservesWidget(ViewImpl):
                 addToReserveArrayByCategory(reservesArray, activeBoosters, category, self._goodiesCache)
 
         reservesArray.invalidate()
-        model.setIsDisabled(not self._boosters.isGameModeSupported())
+        addDisabledCategories(model.getDisabledCategories(), self._boosters)
         model.setTotalReserves(getTotalReadyReserves(cache=self._goodiesCache))
         model.setTotalLimitedReserves(getTotalLimitedReserves(cache=self._goodiesCache))
 

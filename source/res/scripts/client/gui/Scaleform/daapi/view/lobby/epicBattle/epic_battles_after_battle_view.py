@@ -20,6 +20,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
+from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
@@ -41,6 +43,12 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         self.__ctx = ctx
         self.__maxLvlReached = False
         self.__isProgressBarAnimating = False
+        self.__isViewWatchedLogStopped = False
+        self.__rewardsSelectionWindow = None
+        self.__awardsWindow = None
+        self.__rewardSelectionLogged = False
+        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
+        return
 
     def onIntroStartsPlaying(self):
         SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_ACHIEVED_RANK)
@@ -51,20 +59,43 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         else:
             SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_LEVEL_REACHED_MAX)
 
+    def onNextBtnClick(self):
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.NEXT.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
+        self.destroy()
+
     def onEscapePress(self):
+        self.__logCloseAction()
         self.destroy()
 
     def onCloseBtnClick(self):
+        self.__logCloseAction()
         self.destroy()
 
     def onRewardsBtnClick(self):
         rewards = []
+        currentScreen = EpicBattleLogKeys.AFTER_BATTLE_VIEW.value
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS.value, EpicBattleLogKeys.AFTER_BATTLE_VIEW.value)
 
-        def _showAwards():
+        def _onAwardsClosed():
+            self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED.value, EpicBattleLogKeys.AWARDS_VIEW.value, currentScreen)
+
+        def _onAwardsAnimationEnded():
+            if self.__rewardsSelectionWindow:
+                self.__rewardsSelectionWindow.destroy()
+
+        def _logRewardSelectionClosed():
+            self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value, currentScreen)
+
+        def _onRewardReceived(rs):
+            rewards.extend(rs)
             if rewards:
-                showFrontlineAwards(rewards)
+                _logRewardSelectionClosed()
+                self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
+                showFrontlineAwards(rewards, _onAwardsClosed, _onAwardsAnimationEnded)
 
-        showEpicRewardsSelectionWindow(onRewardsReceivedCallback=rewards.extend, onCloseCallback=_showAwards, onLoadedCallback=self.destroy)
+        self.__stopViewWatchedLog()
+        self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
+        self.__rewardsSelectionWindow = showEpicRewardsSelectionWindow(onRewardsReceivedCallback=_onRewardReceived, onCloseCallback=_logRewardSelectionClosed, onLoadedCallback=self.destroy, isAutoDestroyWindowsOnReceivedRewards=False)
 
     def onWindowClose(self):
         self.destroy()
@@ -83,10 +114,12 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         self.onProgressBarCompleteAnim()
         super(EpicBattlesAfterBattleView, self).destroy()
         self.__removeListeners()
+        self.__stopViewWatchedLog()
 
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
         self.__addListeners()
+        self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
         levelUpInfo = self.__ctx['levelUpInfo']
         pMetaLevel, pFamePts = levelUpInfo.get('metaLevel', (None, None))
         prevPMetaLevel, prevPFamePts = levelUpInfo.get('prevMetaLevel', (None, None))
@@ -103,7 +136,14 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
         bonuses = sorted(mergeBonuses(self.__getBonuses(prevPMetaLevel, pMetaLevel)), key=lambda item: self._BONUS_ORDER_PRIORITY.get(item.getName(), self._MIDDLE_PRIORITY))
+        tooltipToBonusNameMapping = {}
         awardsVO = self.__markAnimationBonuses(self._awardsFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG))
+        for idx, bonus in enumerate(bonuses):
+            awardTooltip = awardsVO[idx].get('tooltip')
+            if awardTooltip is not None:
+                tooltipToBonusNameMapping[str(awardTooltip)] = bonus.getName()
+
+        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, skipAdditionalInfoTooltips=(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP), overrideTooltipsId=tooltipToBonusNameMapping)
         fameBarVisible = True
         dailyQuestAvailable = False
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:
@@ -130,6 +170,15 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
          'isRewardsButtonShown': self.__epicController.hasAnyOfferGiftToken() and self.__hasSelectBonus(bonuses)}
         self.as_setDataS(data)
         return
+
+    def __stopViewWatchedLog(self):
+        if not self.__isViewWatchedLogStopped:
+            self.__isViewWatchedLogStopped = True
+            self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED.value, EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, EpicBattleLogKeys.HANGAR.value)
+            self.__uiEpicBattleLogger.reset()
+
+    def __logCloseAction(self):
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE.value, EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
 
     def __getBonuses(self, prevLevel, level):
         awardsData = []

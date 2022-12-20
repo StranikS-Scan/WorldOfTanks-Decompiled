@@ -48,6 +48,14 @@ class SelectRespawnComponent(InjectComponentAdaptor, ISpawnListener):
         if self.__view:
             self.__view.updatePoint(vehicleId, pointId, prevPointId)
 
+    def showSpawnPoints(self):
+        if self.__view:
+            self.__view.setKeyHandlerState(isActive=True)
+
+    def closeSpawnPoints(self):
+        if self.__view:
+            self.__view.setKeyHandlerState(isActive=False)
+
 
 class BRPrebattleTimer(IAbstractPeriodView):
 
@@ -90,6 +98,7 @@ class SelectRespawnView(ViewImpl):
         self.__closeTime = 0
         self.__points = []
         self.__pointsById = {}
+        self.__isActive = False
         self.__timer = BRPrebattleTimer(weakref.proxy(self))
 
     @property
@@ -139,8 +148,7 @@ class SelectRespawnView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(SelectRespawnView, self)._initialize()
-        self.viewModel.onCompleteBtnClick += self.__onCompleteBtnClick
-        self.viewModel.onSelectPoint += self.__onSelectPoint
+        self.setKeyHandlerState(isActive=True)
         with self.viewModel.transaction() as vm:
             vm.setMapSize(abs(self.__mapSize))
             vm.setMinimapBG(self.__mapTexture)
@@ -152,6 +160,22 @@ class SelectRespawnView(ViewImpl):
 
     def _finalize(self):
         super(SelectRespawnView, self)._finalize()
+        self.setKeyHandlerState(isActive=False)
+
+    def setKeyHandlerState(self, isActive=True):
+        if self.__isActive == isActive:
+            return
+        self.__isActive = isActive
+        if isActive:
+            self.__addListeners()
+        else:
+            self.__removeListeners()
+
+    def __addListeners(self):
+        self.viewModel.onCompleteBtnClick += self.__onCompleteBtnClick
+        self.viewModel.onSelectPoint += self.__onSelectPoint
+
+    def __removeListeners(self):
         self.viewModel.onCompleteBtnClick -= self.__onCompleteBtnClick
         self.viewModel.onSelectPoint -= self.__onSelectPoint
 

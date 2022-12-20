@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/blur_manager.py
+import typing
+import GUI
 import logging
 import weakref
-import typing
 from collections import deque
-import GUI
 from gui.app_loader import sf_lobby, sf_battle
 from helpers import dependency
 from ids_generators import Int32IDGenerator
@@ -12,6 +12,8 @@ from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from Math import Vector4
+    from typing import Deque
+    from _weakref import ReferenceType
 _DEFAULT_BLUR_ANIM_REPEAT_COUNT = 10
 _logger = logging.getLogger(__name__)
 _idsGenerator = Int32IDGenerator()
@@ -105,7 +107,7 @@ class CachedBlur(object):
 
 class _BlurManager(object):
     settingsCore = dependency.descriptor(ISettingsCore)
-    __slots__ = ('_cache', '_blur', '_layerBlurCount')
+    __slots__ = ('_cache',)
     _cache = deque()
     _globalBlur = GUI.WGUIBackgroundBlur()
 
@@ -138,7 +140,6 @@ class _BlurManager(object):
     def switchEnabled(self, blur, enabled):
         if self._isBlurInCache(blur) and blur is self._activeBlur():
             self._globalBlur.enable = enabled
-            self._globalBlur.fadeTime = blur.fadeTime
             self._handleLayersBlur(blur)
 
     def getBlurRadius(self):
@@ -161,7 +162,7 @@ class _BlurManager(object):
             for rectId, rect in activeBlur.rectangles.iteritems():
                 self._globalBlur.addRect(rectId, rect)
 
-            self._globalBlur.fadeTime = 0
+            self._globalBlur.fadeTime = activeBlur.fadeTime
             self._globalBlur.enable = activeBlur.enabled
             self._handleLayersBlur(activeBlur)
         else:
@@ -211,7 +212,7 @@ class _BlurManager(object):
         for item in toDelete:
             self._cache.remove(item)
 
-        return
+        return len(toDelete) > 0
 
     def _hasEnabledLayerBlur(self):
         for itemRef in self._cache:

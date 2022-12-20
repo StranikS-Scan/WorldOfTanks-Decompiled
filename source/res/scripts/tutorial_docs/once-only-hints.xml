@@ -76,9 +76,7 @@
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
         <global-active>	_HaveNewBadge	</global-active>
-        <global-active>	_NY_navigation_disabled	</global-active>
       </condition>
-      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	HangarHaveNewSuffixBadgeHint	  <item-id>	AccountButton	</item-id>
       <text>	_(#menu:header/account/popover/tutorial/newSuffixBadge)	</text>
@@ -334,13 +332,11 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
-        <global-active>	_NY_navigation_disabled	</global-active>
         <global-active>	_Personal_reserves_available	</global-active>
         <class-condition>	UISpamCondition	  <path>	gui.ui_spam.tutorial_conditions	</path>
           <arguments>	PersonalReservesHangarHint	</arguments>
         </class-condition>
       </condition>
-      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	PersonalReservesActivationHint	  <item-id>	PersonalReservesGroup	</item-id>
       <text>	_(#personal_reserves:activation/onlyOnceHint)	</text>
@@ -365,7 +361,6 @@
       </arrow>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
-        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagHangarHint	</hint-id>
@@ -380,7 +375,6 @@
         </simple-state>
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
       <text></text>
@@ -503,10 +497,6 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_NY_navigation_disabled	</global-active>
-      </condition>
-      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	CustomizationCarouselHint	  <item-id>	CustomizationCarousel	</item-id>
       <text>	_(#tutorial:customization/decal)	</text>
@@ -624,6 +614,9 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-inactive>	DisableSpecializationSlotHint	</global-inactive>
+      </condition>
     </hint>
     <hint>	AmmunitionPanelBattleAbilitiesHint	  <item-id>	AmmunitionPanelBattleAbilities	</item-id>
       <text>	_(#tank_setup:hints/ammunitionPanel/reserves/changed)	</text>
@@ -901,18 +894,6 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	BattleMattersEntryPointHint	  <item-id>	BattleMattersEntryPoint	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <hide-immediately>	True	</hide-immediately>
-      <text>	_(#battle_matters:entryPoint/hint)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <condition>
-        <global-active>	_BattleMattersEntryPoint	</global-active>
-      </condition>
     </hint>
   </hints>
 </once-only-hints.xml>

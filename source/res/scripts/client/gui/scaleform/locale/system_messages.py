@@ -812,6 +812,7 @@ class SYSTEM_MESSAGES(object):
     WALLET_NOT_AVAILABLE = '#system_messages:wallet/not_available'
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
+    SENIORITY_AWARDS_CLAIM_REWARD_FAILED = '#system_messages:seniority_awards/claim_reward_failed'
     PERSONALMISSIONS_SELECT_SUCCESS = '#system_messages:personalMissions/select/success'
     PERSONALMISSIONS_SELECT_SERVER_ERROR = '#system_messages:personalMissions/select/server_error'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/select/server_error/WRONG_ARGS_TYPE'
@@ -1338,98 +1339,6 @@ class SYSTEM_MESSAGES(object):
     PARENTCONTROL_LINKTEXT = '#system_messages:parentControl/linkText'
     RESOURCEWELL_RESOURCESLOADINGERROR = '#system_messages:resourceWell/resourcesLoadingError'
     RESOURCEWELL_RESOURCESRETURNERROR = '#system_messages:resourceWell/resourcesReturnError'
-    NEWYEAR_CRAFTTOY_SERVER_ERROR = '#system_messages:newYear/craftToy/server_error'
-    NEWYEAR_BUYTOY_SERVER_ERROR = '#system_messages:newYear/buyToy/server_error'
-    NEWYEAR_BUYTOY_GOLD = '#system_messages:newYear/buyToy/gold'
-    NEWYEAR_BUYTOY_CREDITS = '#system_messages:newYear/buyToy/credits'
-    NEWYEAR_BUYTOY_TEXT = '#system_messages:newYear/buyToy/text'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS = '#system_messages:newYear/applyVehicleDiscount/success'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR = '#system_messages:newYear/applyVehicleDiscount/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscounts'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyActive'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyBought'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscountForVehicle'
-    NEWYEAR_HANGTOY_SERVER_ERROR = '#system_messages:newYear/hangToy/server_error'
-    NEWYEAR_BREAKTOYS_SERVER_ERROR = '#system_messages:newYear/breakToys/server_error'
-    NEWYEAR_BUYCOLLECTION_SERVER_ERROR = '#system_messages:newYear/buyCollection/server_error'
-    NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR_HEADER = '#system_messages:newYear/resetLootboxStatistics/server_error/header'
-    NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR = '#system_messages:newYear/resetLootboxStatistics/server_error'
-    NEWYEAR_REROLLCELEBRITYQUEST_GUEST_A_TYPE_1 = '#system_messages:newYear/rerollCelebrityQuest/guest_A/type_1'
-    NEWYEAR_REROLLCELEBRITYQUEST_GUEST_A_TYPE_2 = '#system_messages:newYear/rerollCelebrityQuest/guest_A/type_2'
-    NEWYEAR_REROLLCELEBRITYQUEST_GUEST_M_TYPE_1 = '#system_messages:newYear/rerollCelebrityQuest/guest_M/type_1'
-    NEWYEAR_REROLLCELEBRITYQUEST_GUEST_M_TYPE_2 = '#system_messages:newYear/rerollCelebrityQuest/guest_M/type_2'
-    NEWYEAR_REROLLCELEBRITYQUEST_SERVER_ERROR = '#system_messages:newYear/rerollCelebrityQuest/server_error'
-    NEWYEAR_REROLLCELEBRITYQUEST_SERVER_ERROR_NOREROLLS = '#system_messages:newYear/rerollCelebrityQuest/server_error/noRerolls'
-    NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD_TITLE = '#system_messages:newYear/celebrityChallenge/progressReward/title'
-    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_GUEST_A_TITLE = '#system_messages:newYear/celebrityChallenge/questReward/guest_A/title'
-    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_GUEST_M_TITLE = '#system_messages:newYear/celebrityChallenge/questReward/guest_M/title'
-    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_NY23COIN = '#system_messages:newYear/celebrityChallenge/questReward/ny23Coin'
-    NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_NY23COINS = '#system_messages:newYear/celebrityChallenge/questReward/ny23Coins'
-    NEWYEAR_BUYING_ERRORS_SERVER_ERROR_CENTERDOWN = '#system_messages:newYear/buying/errors/server_error_centerDown'
-    NEWYEAR_BUYING_ERRORS_NOT_ENOUGH_RESOURCE = '#system_messages:newYear/buying/errors/not_enough_resource'
-    NEWYEAR_BUYING_ERRORS_SERVER_ERROR = '#system_messages:newYear/buying/errors/server_error'
-    NEWYEAR_CONVERTINGRESOURCES_DECREASE_TITLE = '#system_messages:newYear/convertingResources/decrease/title'
-    NEWYEAR_CONVERTINGRESOURCES_DECREASE_MESSAGE = '#system_messages:newYear/convertingResources/decrease/message'
-    NEWYEAR_CONVERTINGRESOURCES_INCREASE_TITLE = '#system_messages:newYear/convertingResources/increase/title'
-    NEWYEAR_CONVERTINGRESOURCES_INCREASE_MESSAGE = '#system_messages:newYear/convertingResources/increase/message'
-    NEWYEAR_CONVERTINGRESOURCES_ERROR = '#system_messages:newYear/convertingResources/error'
-    NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_SIMPLESUCCESS = '#system_messages:newYear/setAutoCollecting/activated/simpleSuccess'
-    NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_HEADER = '#system_messages:newYear/setAutoCollecting/activated/header'
-    NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_MESSAGE = '#system_messages:newYear/setAutoCollecting/activated/message'
-    NEWYEAR_SETAUTOCOLLECTING_DEACTIVATED_SUCCESS = '#system_messages:newYear/setAutoCollecting/deactivated/success'
-    NEWYEAR_COLLECTINGRESOURCES_SERVER_ERROR_COMMON = '#system_messages:newYear/collectingResources/server_error/common'
-    NEWYEAR_COLLECTINGRESOURCES_HEADER = '#system_messages:newYear/collectingResources/header'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_COUNT = '#system_messages:newYear/collectingResources/auto/count'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_SPENTMONEY = '#system_messages:newYear/collectingResources/auto/spentMoney'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_COLLECTED = '#system_messages:newYear/collectingResources/auto/collected'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_DEACTIVATED = '#system_messages:newYear/collectingResources/auto/deactivated'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_CANCELED = '#system_messages:newYear/collectingResources/auto/canceled'
-    NEWYEAR_COLLECTINGRESOURCES_AUTO_FINISHED = '#system_messages:newYear/collectingResources/auto/finished'
-    NEWYEAR_COLLECTINGRESOURCES_BUTTON = '#system_messages:newYear/collectingResources/button'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_HEADER = '#system_messages:newYear/collectingResourcesAvailable/header'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_MESSAGE = '#system_messages:newYear/collectingResourcesAvailable/message'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_BUTTON = '#system_messages:newYear/collectingResourcesAvailable/button'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_HEADER = '#system_messages:newYear/collectingResourcesAvailable/friend/header'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_ONEFRIENDMESSAGE = '#system_messages:newYear/collectingResourcesAvailable/friend/oneFriendMessage'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_TWOFRIENDSMESSAGE = '#system_messages:newYear/collectingResourcesAvailable/friend/twoFriendsMessage'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_BUTTON = '#system_messages:newYear/collectingResourcesAvailable/friend/button'
-    NEWYEAR_COLLECTINGRESOURCESAVAILABLE_COUNTVALUE = '#system_messages:newYear/collectingResourcesAvailable/countValue'
-    NEWYEAR_STROKEDOG_HEADER = '#system_messages:newYear/strokeDog/header'
-    NEWYEAR_STROKEDOG_SERVER_ERROR = '#system_messages:newYear/strokeDog/server_error'
-    NEWYEAR_RESOURCES_NY_CRYSTAL = '#system_messages:newYear/resources/ny_crystal'
-    NEWYEAR_RESOURCES_NY_EMERALD = '#system_messages:newYear/resources/ny_emerald'
-    NEWYEAR_RESOURCES_NY_AMBER = '#system_messages:newYear/resources/ny_amber'
-    NEWYEAR_RESOURCES_NY_IRON = '#system_messages:newYear/resources/ny_iron'
-    NEWYEAR_OBJECTLEVELUP_HEADER = '#system_messages:newYear/objectLevelUp/header'
-    NEWYEAR_OBJECTLEVELUP_ERROR = '#system_messages:newYear/objectLevelUp/error'
-    NEWYEAR_OBJECTLEVELUP_FIR = '#system_messages:newYear/objectLevelUp/Fir'
-    NEWYEAR_OBJECTLEVELUP_INSTALLATION = '#system_messages:newYear/objectLevelUp/Installation'
-    NEWYEAR_OBJECTLEVELUP_FAIR = '#system_messages:newYear/objectLevelUp/Fair'
-    NEWYEAR_OBJECTMAXLEVEL_FIR = '#system_messages:newYear/objectMaxLevel/Fir'
-    NEWYEAR_OBJECTMAXLEVEL_INSTALLATION = '#system_messages:newYear/objectMaxLevel/Installation'
-    NEWYEAR_OBJECTMAXLEVEL_FAIR = '#system_messages:newYear/objectMaxLevel/Fair'
-    NEWYEAR_ALLOBJECTSCOLLECTED_HEADER = '#system_messages:newYear/allObjectsCollected/header'
-    NEWYEAR_ALLOBJECTSCOLLECTED_BODY = '#system_messages:newYear/allObjectsCollected/body'
-    NEWYEAR_COIN23_APPLY_SERVER_ERROR = '#system_messages:newYear/coin23/apply/server_error'
-    NEWYEAR_COIN23_APPLY_SERVER_ERROR_DISABLED = '#system_messages:newYear/coin23/apply/server_error/DISABLED'
-    NEWYEAR_COIN23_APPLY_SERVER_ERROR_EXCEPTION = '#system_messages:newYear/coin23/apply/server_error/EXCEPTION'
-    NEWYEAR_COIN23_APPLY_SERVER_ERROR_COOLDOWN = '#system_messages:newYear/coin23/apply/server_error/COOLDOWN'
-    NEWYEAR_COIN23_BUYING_ERRORS_SERVER_ERROR_CENTERDOWN = '#system_messages:newYear/coin23/buying/errors/server_error_centerDown'
-    NEWYEAR_COIN23_BUYING_ERRORS_NOT_ENOUGH_RESOURCE = '#system_messages:newYear/coin23/buying/errors/not_enough_resource'
-    NEWYEAR_COIN23_BUYING_ERRORS_INVALID_RESOURCE_TYPE = '#system_messages:newYear/coin23/buying/errors/invalid_resource_type'
-    NEWYEAR_COIN23_BUYING_ERRORS_INVALID_COINS_COUNT = '#system_messages:newYear/coin23/buying/errors/invalid_coins_count'
-    NEWYEAR_COIN23_BUYING_ERRORS_SERVER_ERROR = '#system_messages:newYear/coin23/buying/errors/server_error'
-    NEWYEAR_PIGGYBANK_SERVER_ERROR = '#system_messages:newYear/piggyBank/server_error'
-    NEWYEAR_PIGGYBANK_REWARD_TITLE = '#system_messages:newYear/piggyBank/reward/title'
-    NEWYEAR_PIGGYBANK_REWARDS_TITLE = '#system_messages:newYear/piggyBank/rewards/title'
-    NEWYEAR_PIGGYBANK_REWARDS_TEXT = '#system_messages:newYear/piggyBank/rewards/text'
-    NEWYEAR_ERRORTYPES_LEVELUPREWARDSERROR = '#system_messages:newYear/errorTypes/levelUpRewardsError'
-    NEWYEAR_GIFTMACHINE_TOKENBOUGHT = '#system_messages:newYear/giftMachine/tokenBought'
-    NEWYEAR_MARKETPLACE_COLLECTIONBOUGHT = '#system_messages:newYear/marketplace/collectionBought'
-    NEWYEAR_MARKETPLACE_ERRORS_SERVER_ERROR = '#system_messages:newYear/marketplace/errors/server_error'
-    NEWYEAR_MARKETPLACE_ERRORS_COLLECTION_ALREADY_BOUGHT = '#system_messages:newYear/marketplace/errors/collection_already_bought'
-    NEWYEAR_MARKETPLACE_REWARDS_HEADER = '#system_messages:newYear/marketplace/rewards/header'
-    NEWYEAR_FINANCIALOPERATION_SPENT = '#system_messages:newYear/financialOperation/spent'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2362,6 +2271,7 @@ class SYSTEM_MESSAGES(object):
      WALLET_NOT_AVAILABLE,
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
+     SENIORITY_AWARDS_CLAIM_REWARD_FAILED,
      PERSONALMISSIONS_SELECT_SUCCESS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,
@@ -2887,99 +2797,7 @@ class SYSTEM_MESSAGES(object):
      PARENTCONTROL_MAINTEXT,
      PARENTCONTROL_LINKTEXT,
      RESOURCEWELL_RESOURCESLOADINGERROR,
-     RESOURCEWELL_RESOURCESRETURNERROR,
-     NEWYEAR_CRAFTTOY_SERVER_ERROR,
-     NEWYEAR_BUYTOY_SERVER_ERROR,
-     NEWYEAR_BUYTOY_GOLD,
-     NEWYEAR_BUYTOY_CREDITS,
-     NEWYEAR_BUYTOY_TEXT,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE,
-     NEWYEAR_HANGTOY_SERVER_ERROR,
-     NEWYEAR_BREAKTOYS_SERVER_ERROR,
-     NEWYEAR_BUYCOLLECTION_SERVER_ERROR,
-     NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR_HEADER,
-     NEWYEAR_RESETLOOTBOXSTATISTICS_SERVER_ERROR,
-     NEWYEAR_REROLLCELEBRITYQUEST_GUEST_A_TYPE_1,
-     NEWYEAR_REROLLCELEBRITYQUEST_GUEST_A_TYPE_2,
-     NEWYEAR_REROLLCELEBRITYQUEST_GUEST_M_TYPE_1,
-     NEWYEAR_REROLLCELEBRITYQUEST_GUEST_M_TYPE_2,
-     NEWYEAR_REROLLCELEBRITYQUEST_SERVER_ERROR,
-     NEWYEAR_REROLLCELEBRITYQUEST_SERVER_ERROR_NOREROLLS,
-     NEWYEAR_CELEBRITYCHALLENGE_PROGRESSREWARD_TITLE,
-     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_GUEST_A_TITLE,
-     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_GUEST_M_TITLE,
-     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_NY23COIN,
-     NEWYEAR_CELEBRITYCHALLENGE_QUESTREWARD_NY23COINS,
-     NEWYEAR_BUYING_ERRORS_SERVER_ERROR_CENTERDOWN,
-     NEWYEAR_BUYING_ERRORS_NOT_ENOUGH_RESOURCE,
-     NEWYEAR_BUYING_ERRORS_SERVER_ERROR,
-     NEWYEAR_CONVERTINGRESOURCES_DECREASE_TITLE,
-     NEWYEAR_CONVERTINGRESOURCES_DECREASE_MESSAGE,
-     NEWYEAR_CONVERTINGRESOURCES_INCREASE_TITLE,
-     NEWYEAR_CONVERTINGRESOURCES_INCREASE_MESSAGE,
-     NEWYEAR_CONVERTINGRESOURCES_ERROR,
-     NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_SIMPLESUCCESS,
-     NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_HEADER,
-     NEWYEAR_SETAUTOCOLLECTING_ACTIVATED_MESSAGE,
-     NEWYEAR_SETAUTOCOLLECTING_DEACTIVATED_SUCCESS,
-     NEWYEAR_COLLECTINGRESOURCES_SERVER_ERROR_COMMON,
-     NEWYEAR_COLLECTINGRESOURCES_HEADER,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_COUNT,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_SPENTMONEY,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_COLLECTED,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_DEACTIVATED,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_CANCELED,
-     NEWYEAR_COLLECTINGRESOURCES_AUTO_FINISHED,
-     NEWYEAR_COLLECTINGRESOURCES_BUTTON,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_HEADER,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_MESSAGE,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_BUTTON,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_HEADER,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_ONEFRIENDMESSAGE,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_TWOFRIENDSMESSAGE,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_FRIEND_BUTTON,
-     NEWYEAR_COLLECTINGRESOURCESAVAILABLE_COUNTVALUE,
-     NEWYEAR_STROKEDOG_HEADER,
-     NEWYEAR_STROKEDOG_SERVER_ERROR,
-     NEWYEAR_RESOURCES_NY_CRYSTAL,
-     NEWYEAR_RESOURCES_NY_EMERALD,
-     NEWYEAR_RESOURCES_NY_AMBER,
-     NEWYEAR_RESOURCES_NY_IRON,
-     NEWYEAR_OBJECTLEVELUP_HEADER,
-     NEWYEAR_OBJECTLEVELUP_ERROR,
-     NEWYEAR_OBJECTLEVELUP_FIR,
-     NEWYEAR_OBJECTLEVELUP_INSTALLATION,
-     NEWYEAR_OBJECTLEVELUP_FAIR,
-     NEWYEAR_OBJECTMAXLEVEL_FIR,
-     NEWYEAR_OBJECTMAXLEVEL_INSTALLATION,
-     NEWYEAR_OBJECTMAXLEVEL_FAIR,
-     NEWYEAR_ALLOBJECTSCOLLECTED_HEADER,
-     NEWYEAR_ALLOBJECTSCOLLECTED_BODY,
-     NEWYEAR_COIN23_APPLY_SERVER_ERROR,
-     NEWYEAR_COIN23_APPLY_SERVER_ERROR_DISABLED,
-     NEWYEAR_COIN23_APPLY_SERVER_ERROR_EXCEPTION,
-     NEWYEAR_COIN23_APPLY_SERVER_ERROR_COOLDOWN,
-     NEWYEAR_COIN23_BUYING_ERRORS_SERVER_ERROR_CENTERDOWN,
-     NEWYEAR_COIN23_BUYING_ERRORS_NOT_ENOUGH_RESOURCE,
-     NEWYEAR_COIN23_BUYING_ERRORS_INVALID_RESOURCE_TYPE,
-     NEWYEAR_COIN23_BUYING_ERRORS_INVALID_COINS_COUNT,
-     NEWYEAR_COIN23_BUYING_ERRORS_SERVER_ERROR,
-     NEWYEAR_PIGGYBANK_SERVER_ERROR,
-     NEWYEAR_PIGGYBANK_REWARD_TITLE,
-     NEWYEAR_PIGGYBANK_REWARDS_TITLE,
-     NEWYEAR_PIGGYBANK_REWARDS_TEXT,
-     NEWYEAR_ERRORTYPES_LEVELUPREWARDSERROR,
-     NEWYEAR_GIFTMACHINE_TOKENBOUGHT,
-     NEWYEAR_MARKETPLACE_COLLECTIONBOUGHT,
-     NEWYEAR_MARKETPLACE_ERRORS_SERVER_ERROR,
-     NEWYEAR_MARKETPLACE_ERRORS_COLLECTION_ALREADY_BOUGHT,
-     NEWYEAR_MARKETPLACE_REWARDS_HEADER,
-     NEWYEAR_FINANCIALOPERATION_SPENT)
+     RESOURCEWELL_RESOURCESRETURNERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -16,6 +16,9 @@ class Int32IDGenerator(object):
         self.__currID = ((currTime & 32767) << 16) + self.__nextID
         return self.__currID
 
+    def __next__(self):
+        return self.next()
+
     currSequenceID = property(lambda self: self.__currID)
 
 

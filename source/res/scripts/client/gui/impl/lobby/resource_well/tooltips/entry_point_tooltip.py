@@ -41,6 +41,7 @@ class EntryPointTooltip(ViewImpl):
     @replaceNoneKwargsModel
     def __fillEventTime(self, model=None):
         model.setEndDate(round(time_utils.makeLocalServerTime(self.__resourceWell.getFinishTime()), -1))
+        model.setStartDate(round(time_utils.makeLocalServerTime(self.__resourceWell.getStartTime()), -1))
         isEventEnding = isEventEndingsSoon(resourceWell=self.__resourceWell)
         model.setIsEventEndingSoon(isEventEnding)
         if isEventEnding:
@@ -56,6 +57,8 @@ class EntryPointTooltip(ViewImpl):
             state = EventState.FORBIDDEN
         elif self.__resourceWell.isPaused():
             state = EventState.PAUSED
+        elif self.__resourceWell.isNotStarted():
+            state = EventState.NOTSTARTED
         else:
             state, count = self.__getRewardCountState()
         model.setRewardCount(count)

@@ -52,6 +52,14 @@
     <NORINCO_12150L_59>	52	</NORINCO_12150L_59>
     <Detroit_Diesel_8V71T>	53	</Detroit_Diesel_8V71T>
     <NORINCO_12150LP>	57	</NORINCO_12150LP>
+    <HS_110F>	58	</HS_110F>
+    <V_2_54SCM>	59	</V_2_54SCM>
+    <_12150LTM>	60	</_12150LTM>
+    <V_2_54SCG_2>	61	</V_2_54SCG_2>
+    <NORINCO_12150LM>	62	</NORINCO_12150LM>
+    <_8V135_M>	63	</_8V135_M>
+    <_MT_50_T>	66	</_MT_50_T>
+    <V_2_54SCH>	67	</V_2_54SCH>
     <V_2_54SC_QL>	252	</V_2_54SC_QL>
     <V_2_54SC_113>	253	</V_2_54SC_113>
     <_Type_102S_T>	254	</_Type_102S_T>
@@ -63,6 +71,7 @@
     <T_26_a>	261	</T_26_a>
     <Type_165>	262	</Type_165>
     <_12150LZM>	263	</_12150LZM>
+    <V_2_54SCR>	266	</V_2_54SCR>
     <_12150LT_FL>	501	</_12150LT_FL>
     <_8V135_FL>	502	</_8V135_FL>
     <_V-2-54SC_7x7>	503	</_V-2-54SC_7x7>
@@ -211,8 +220,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	338	</rpm_min>
-      <rpm_max>	2184	</rpm_max>
+      <rpm_min>	354	</rpm_min>
+      <rpm_max>	2136	</rpm_max>
     </_12150LZM>
     <_12150L>
       <userString>	#china_vehicles:_12150L	</userString>
@@ -636,6 +645,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2360	</rpm_max>
     </Continental_W670_9A>
+    <_MT_50_T>
+      <userString>	#china_vehicles:_MT_50_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </_MT_50_T>
     <Twin_Cadillac_42series>
       <userString>	#china_vehicles:Twin_Cadillac_42series	</userString>
       <tags>	gasoline	</tags>
@@ -1185,6 +1211,135 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </V_2_54SC>
+    <HS_110F>
+      <userString>	#china_vehicles:HS_110F	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </HS_110F>
+    <V_2_54SCM>
+      <userString>	#china_vehicles:V_2_54SCM	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	94000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	770	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	314	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
+    </V_2_54SCM>
+    <V_2_54SCH>
+      <userString>	#china_vehicles:V_2_54SCH	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	115000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	770	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	314	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
+    </V_2_54SCH>
+    <_12150LTM>
+      <userString>	#china_vehicles:_12150LTM	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </_12150LTM>
+    <V_2_54SCG_2>
+      <userString>	#china_vehicles:V_2_54SCG_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	44000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	1045	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </V_2_54SCG_2>
+    <V_2_54SCR>
+      <userString>	#china_vehicles:V_2_54SCR	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	52000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1045	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </V_2_54SCR>
+    <NORINCO_12150LM>
+      <userString>	#china_vehicles:NORINCO_12150LM	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	30000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </NORINCO_12150LM>
+    <_8V135_M>
+      <userString>	#china_vehicles:_8V135_M	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	58000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	740	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </_8V135_M>
     <_8V135_IGR>
       <userString>	#igr_vehicles:_8V135_IGR	</userString>
       <tags>	diesel	</tags>
@@ -1278,14 +1433,14 @@
       <price>	0	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	950	</power>
+      <power>	890	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	266	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	282	</rpm_min>
+      <rpm_max>	2352	</rpm_max>
     </_12150L-3_V-12_SH>
     <_12150L1_SH>
       <userString>	#china_vehicles:_12150L1_SH	</userString>

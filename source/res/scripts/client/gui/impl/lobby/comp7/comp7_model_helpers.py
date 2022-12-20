@@ -3,6 +3,7 @@
 import typing
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.lobby.comp7 import comp7_shared
+from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime
 from skeletons.gui.game_control import IComp7Controller
@@ -49,6 +50,11 @@ def setRanksInfo(model, comp7Controller=None):
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def setElitePercentage(model, comp7Controller=None):
     model.setTopPercentage(comp7Controller.leaderboard.getEliteRankPercent())
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
+def isModeForcedDisabled(status, comp7Controller=None):
+    return not comp7Controller.isAvailable() and status == PrimeTimeStatus.AVAILABLE
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)

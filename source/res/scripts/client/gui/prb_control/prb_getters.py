@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_getters.py
+from typing import TYPE_CHECKING
 import BigWorld
-from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR
+from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR, PREBATTLE_ROLE, IS_DEVELOPMENT
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
@@ -9,6 +10,11 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 from PlayerEvents import g_playerEvents
+if TYPE_CHECKING:
+    from typing import Optional, TypeVar
+    from prebattle_shared import PrebattleSettings
+    from gui.prb_control.entities.base.entity import BasePrbEntity
+    PrbEntityType = TypeVar('PrbEntityType', bound=BasePrbEntity)
 
 def getQueueType():
     return getattr(BigWorld.player(), 'battleQueueType', QUEUE_TYPE.UNKNOWN)
@@ -176,6 +182,24 @@ def getPrebattleLocalizedData(extraData=None):
     return led
 
 
+_PRB_TO_QUEUE = {PREBATTLE_TYPE.SQUAD: QUEUE_TYPE.RANDOMS,
+ PREBATTLE_TYPE.UNIT: QUEUE_TYPE.UNITS,
+ PREBATTLE_TYPE.EVENT: QUEUE_TYPE.EVENT_BATTLES,
+ PREBATTLE_TYPE.STRONGHOLD: QUEUE_TYPE.STRONGHOLD_UNITS,
+ PREBATTLE_TYPE.EPIC: QUEUE_TYPE.EPIC,
+ PREBATTLE_TYPE.MAPBOX: QUEUE_TYPE.MAPBOX,
+ PREBATTLE_TYPE.FUN_RANDOM: QUEUE_TYPE.FUN_RANDOM,
+ PREBATTLE_TYPE.COMP7: QUEUE_TYPE.COMP7,
+ PREBATTLE_TYPE.TOURNAMENT: QUEUE_TYPE.TOURNAMENT_UNITS,
+ PREBATTLE_TYPE.CLAN: QUEUE_TYPE.SPEC_BATTLE,
+ PREBATTLE_TYPE.MAPS_TRAINING: QUEUE_TYPE.MAPS_TRAINING,
+ PREBATTLE_TYPE.BATTLE_ROYALE: QUEUE_TYPE.BATTLE_ROYALE,
+ PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT: QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT}
+
+def getQueueTypeFromEntityType(prebattleType=None):
+    return _PRB_TO_QUEUE.get(prebattleType or getPrebattleType(), QUEUE_TYPE.UNKNOWN)
+
+
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getCreatorFullName(lobbyContext=None):
     settings = getPrebattleSettings()
@@ -200,6 +224,20 @@ def areSpecBattlesHidden():
 
 def isTraining(settings=None):
     return getPrebattleType(settings=settings) == PREBATTLE_TYPE.TRAINING
+
+
+def isEpicTraining(settings=None):
+    return getPrebattleType(settings=settings) == PREBATTLE_TYPE.EPIC_TRAINING
+
+
+def hasOpenTeamRoles(settings):
+    teamRoles = settings['teamRoles']
+    return all((role == PREBATTLE_ROLE.TRAINING_CREATOR for role in teamRoles.itervalues()))
+
+
+def isDevTraining():
+    settings = getPrebattleSettings()
+    return IS_DEVELOPMENT and hasOpenTeamRoles(settings) and (isTraining(settings) or isEpicTraining(settings))
 
 
 def isBattleSession(settings=None):

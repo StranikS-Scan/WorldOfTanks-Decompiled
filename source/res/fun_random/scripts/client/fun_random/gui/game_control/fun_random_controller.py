@@ -102,14 +102,6 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def isFunRandomPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FunctionalFlag.FUN_RANDOM)
 
-    def hasDailyQuestsEntry(self):
-        desiredSubMode = self.subModesHolder.getDesiredSubMode()
-        return self.isFunRandomPrbActive() and desiredSubMode and desiredSubMode.hasDailyQuestsEntry()
-
-    def hasHangarHeaderEntry(self):
-        desiredSubMode = self.subModesHolder.getDesiredSubMode()
-        return self.isFunRandomPrbActive() and desiredSubMode and desiredSubMode.hasHangarHeaderEntry()
-
     def getSettings(self):
         return self.__funRandomSettings
 

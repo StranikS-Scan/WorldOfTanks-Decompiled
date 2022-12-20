@@ -38,6 +38,7 @@
     <_150mm_45_41st_Year_Type>	37	</_150mm_45_41st_Year_Type>
     <_88mm_Nameless_Gun>	38	</_88mm_Nameless_Gun>
     <_88mm_Edelweiss_Gun>	39	</_88mm_Edelweiss_Gun>
+    <_127mm_Gun_Type_89>	40	</_127mm_Gun_Type_89>
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
@@ -2154,6 +2155,64 @@
         </_127mm_Common_Type_0_HE>
       </shots>
     </_127mm_50_3rd_Year_Type>
+    <_127mm_Gun_Type_89>
+      <userString>	#japan_vehicles:_127mm_Gun_Type_89	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	230000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.65	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	10.0	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	4245	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_127mm_Capped_Common_Type_0>
+          <defaultPortion>	0.75	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 238	</piercingPower>
+        </_127mm_Capped_Common_Type_0>
+        <_127mm_Capped_Common_Type_1>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 204	</piercingPower>
+        </_127mm_Capped_Common_Type_1>
+        <_127mm_Common_Type_1_HE>
+          <defaultPortion>	0.25	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_127mm_Common_Type_1_HE>
+      </shots>
+    </_127mm_Gun_Type_89>
     <_140mm_50_3rd_Year_Type>
       <userString>	#japan_vehicles:_140mm_50_3rd_Year_Type	</userString>
       <tags></tags>

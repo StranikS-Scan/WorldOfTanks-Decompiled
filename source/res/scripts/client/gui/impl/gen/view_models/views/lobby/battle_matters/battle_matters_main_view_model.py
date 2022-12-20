@@ -11,7 +11,7 @@ class BattleMattersMainViewModel(ViewModel):
     NAME_VEHICLE_REWARD = 'vehicle'
     NAME_TOKEN_REWARD = 'token'
 
-    def __init__(self, properties=4, commands=8):
+    def __init__(self, properties=5, commands=8):
         super(BattleMattersMainViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -22,23 +22,29 @@ class BattleMattersMainViewModel(ViewModel):
     def getQuestProgressType():
         return QuestProgressModel
 
-    def getBootcampIsAvailable(self):
+    def getIsRewardsViewOpen(self):
         return self._getBool(1)
 
-    def setBootcampIsAvailable(self, value):
+    def setIsRewardsViewOpen(self, value):
         self._setBool(1, value)
 
-    def getIsBootcampCompleted(self):
+    def getBootcampIsAvailable(self):
         return self._getBool(2)
 
-    def setIsBootcampCompleted(self, value):
+    def setBootcampIsAvailable(self, value):
         self._setBool(2, value)
 
+    def getIsBootcampCompleted(self):
+        return self._getBool(3)
+
+    def setIsBootcampCompleted(self, value):
+        self._setBool(3, value)
+
     def getQuests(self):
-        return self._getArray(3)
+        return self._getArray(4)
 
     def setQuests(self, value):
-        self._setArray(3, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getQuestsType():
@@ -47,6 +53,7 @@ class BattleMattersMainViewModel(ViewModel):
     def _initialize(self):
         super(BattleMattersMainViewModel, self)._initialize()
         self._addViewModelProperty('questProgress', QuestProgressModel())
+        self._addBoolProperty('isRewardsViewOpen', False)
         self._addBoolProperty('bootcampIsAvailable', False)
         self._addBoolProperty('isBootcampCompleted', False)
         self._addArrayProperty('quests', Array())

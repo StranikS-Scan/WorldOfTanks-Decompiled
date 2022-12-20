@@ -23,7 +23,7 @@ class TriggersModel(ViewModel):
 
     @staticmethod
     def getTriggersType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(TriggersModel, self)._initialize()

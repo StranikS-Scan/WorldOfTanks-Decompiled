@@ -5,11 +5,9 @@ from skeletons.gui.shared.utils import requesters
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import ItemsCollection
     from gui.shared.gui_items.Tankman import Tankman
-    from Event import Event
-    from gui.shared.utils.requesters import battle_pass_requester
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
-    from new_year import ny_requester
+    from gui.shared.gui_items.dossier import AccountDossier
 
 class IItemsRequester(requesters.IRequester):
 
@@ -87,10 +85,6 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def resourceWell(self):
-        raise NotImplementedError
-
-    @property
-    def festivity(self):
         raise NotImplementedError
 
     def requestUserDossier(self, databaseID, callback):
@@ -216,10 +210,6 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     @property
-    def spaceID(self):
-        raise NotImplementedError
-
-    @property
     def inited(self):
         raise NotImplementedError
 
@@ -237,10 +227,6 @@ class IHangarSpace(object):
 
     @property
     def isCursorOver3DScene(self):
-        raise NotImplementedError
-
-    @property
-    def isSelectionEnabled(self):
         raise NotImplementedError
 
     @property
@@ -272,10 +258,10 @@ class IHangarSpace(object):
     def updateVehicleDescriptor(self, descr):
         raise NotImplementedError
 
-    def updatePreviewVehicle(self, vehicle, outfit=None, waitingSoftStart=False, showWaitingBg=True):
+    def updatePreviewVehicle(self, vehicle, outfit=None):
         raise NotImplementedError
 
-    def removeVehicle(self, waitingSoftStart=False, showWaitingBg=True):
+    def removeVehicle(self):
         raise NotImplementedError
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
@@ -300,12 +286,6 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def updateAnchorsParams(self, *args):
-        raise NotImplementedError
-
-    def resetLastUpdatedVehicle(self):
-        raise NotImplementedError
-
-    def setSelectionEnabled(self, enabled):
         raise NotImplementedError
 
 

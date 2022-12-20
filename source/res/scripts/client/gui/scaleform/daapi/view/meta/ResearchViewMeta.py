@@ -25,8 +25,8 @@ class ResearchViewMeta(View):
     def goToVehicleCollection(self, nation):
         self._printOverrideError('goToVehicleCollection')
 
-    def as_setNodesStatesS(self, primary, data):
-        return self.flashObject.as_setNodesStates(primary, data) if self._isDAAPIInited() else None
+    def as_setNodesStatesS(self, primary, data, isRequiredInvalidation=False):
+        return self.flashObject.as_setNodesStates(primary, data, isRequiredInvalidation) if self._isDAAPIInited() else None
 
     def as_setNext2UnlockS(self, data):
         return self.flashObject.as_setNext2Unlock(data) if self._isDAAPIInited() else None

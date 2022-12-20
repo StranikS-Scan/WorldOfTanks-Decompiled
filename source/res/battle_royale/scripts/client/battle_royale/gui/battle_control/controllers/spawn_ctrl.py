@@ -5,6 +5,7 @@ import BigWorld
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_battle
+from gui.battle_control import avatar_getter
 from gui.battle_control.view_components import ViewComponentsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, COUNTDOWN_STATE
 from gui.battle_control.arena_info.interfaces import ISpawnController
@@ -106,10 +107,10 @@ class SpawnController(ViewComponentsController, ISpawnController):
         for viewComponent in self._viewComponents:
             viewComponent.onSelectPoint(pointId)
 
-        BigWorld.player().cell.spawnKeyPointAvatar.chooseSpawnKeyPoint(pointId)
+        avatar_getter.getArena().teamInfo.spawnKeyPointTeamInfo.cell.chooseSpawnKeyPoint(pointId)
 
     def placeVehicle(self):
-        BigWorld.player().cell.spawnKeyPointAvatar.placeVehicle()
+        avatar_getter.getArena().teamInfo.spawnKeyPointTeamInfo.cell.placeVehicle()
         self.__closeSpawnPoints()
 
     def addRuntimeView(self, view):

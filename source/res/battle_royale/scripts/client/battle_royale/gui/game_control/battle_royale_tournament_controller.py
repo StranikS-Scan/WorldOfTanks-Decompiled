@@ -207,14 +207,18 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
         if resultID == AccountCommands.RES_FAILURE:
             _logger.error('joining to battle royale tournament failed with error = %r', errorStr)
             self.__pushErrorSystemMessage(errorStr)
+            self.__clearInternalData()
+            self.__selectRandom()
 
     def __leaveResult(self, requestID, resultID, errorStr):
         if resultID == AccountCommands.RES_FAILURE:
             _logger.error('leave from current tournament failed with error = %r', errorStr)
             self.__pushErrorSystemMessage(errorStr)
-        elif resultID == AccountCommands.RES_SUCCESS:
-            if self.__isReJoin:
-                self.join(str(self.__currentToken.data))
+            self.__clearInternalData()
+            self.__selectRandom()
+            return
+        if self.__isReJoin:
+            self.join(str(self.__currentToken.data))
         self.__isChangingInternalState = False
         self.__isReJoin = False
 

@@ -235,6 +235,11 @@ class MARKERS(CONST_CONTAINER):
     DEAD = 'dead'
 
 
+class MARKER_SETTINGS(CONST_CONTAINER):
+    MARKER_BASE_VEHICLE_DIST = 'markerBaseVehicleDist'
+    MARKER_ALT_VEHICLE_DIST = 'markerAltVehicleDist'
+
+
 class FEEDBACK(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     DAMAGE_LOG = 'feedbackDamageLog'
@@ -495,29 +500,3 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     SHOW_HP_VALUES = 'showHPValues'
     SHOW_HP_DIFFERENCE = 'showHPDifference'
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
-
-
-class NYLootBoxesStorageKeys(CONST_CONTAINER):
-    NEW_COUNT = 'newCount'
-    DELIVERED_COUNT = 'deliveredCount'
-
-
-class NewYearStorageKeys(CONST_CONTAINER):
-    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
-    NY_VEHICLES_LEVEL_UP_ENTRY = 'nyVehiclesLevelUpEntry'
-    NY_STATISTICS_HINT_SHOWN = 'nyLootboxStatisticsHintShown'
-    TUTORIAL_STATE = 'tutorialState'
-    DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
-    DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
-    CELEBRITY_SCREEN_VISITED = 'celebrityScreenVisited'
-    CELEBRITY_WELCOME_VIEWED = 'celebrityChallengeWelcomeViewed'
-    INTRO_SCENE_VIEWED = 'introSceneViewed'
-    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
-    BOOL_FLAGS = (NY_VEHICLES_PROGRESS_ENTRY,
-     NY_STATISTICS_HINT_SHOWN,
-     DECORATIONS_POPOVER_VIEWED,
-     DECORATIONS_POPOVER_BROKEN,
-     CELEBRITY_SCREEN_VISITED,
-     CELEBRITY_WELCOME_VIEWED,
-     INTRO_SCENE_VIEWED,
-     LOOT_BOX_VIDEO_OFF)

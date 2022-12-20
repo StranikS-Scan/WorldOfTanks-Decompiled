@@ -284,7 +284,3 @@ def timeit(method):
         return result
 
     return timed
-
-
-def inPercents(fraction, digitsToRound=1):
-    return round(fraction * 100, digitsToRound)

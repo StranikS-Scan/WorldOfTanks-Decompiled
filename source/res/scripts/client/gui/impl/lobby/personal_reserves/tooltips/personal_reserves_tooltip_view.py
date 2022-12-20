@@ -4,9 +4,9 @@ import typing
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_entry_point_model import ReservesEntryPointModel
-from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, addToReserveArrayByCategory, getTotalReadyReserves, getTotalLimitedReserves
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, addToReserveArrayByCategory, getTotalReadyReserves, getTotalLimitedReserves, addDisabledCategories
 from gui.impl.pub import ViewImpl
-from gui.goodies.goodies_constants import BoosterCategory
+from goodies.goodie_constants import BoosterCategory
 from helpers import dependency
 from skeletons.gui.game_control import IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
@@ -57,7 +57,7 @@ class PersonalReservesTooltipView(ViewImpl):
                 addToReserveArrayByCategory(reservesArray, boosters, category, self._goodiesCache, canAddEmpty)
 
             reservesArray.invalidate()
-            model.setIsDisabled(not self._boosters.isGameModeSupported())
+            addDisabledCategories(model.getDisabledCategories(), self._boosters)
             model.setTotalReserves(getTotalReadyReserves(cache=self._goodiesCache))
             model.setTotalLimitedReserves(getTotalLimitedReserves(cache=self._goodiesCache))
             model.setIsClanMember(self._isInClan())

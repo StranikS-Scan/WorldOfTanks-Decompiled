@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	7.142858	</repairCost>
+  <repairCost>	7.692308	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -164,7 +164,7 @@
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <weight>	36300	</weight>
-        <maxHealth>	2200	</maxHealth>
+        <maxHealth>	2000	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
@@ -239,7 +239,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18800	</weight>
-    <maxHealth>	900	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
@@ -3093,11 +3093,11 @@
             </armor_9>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.8	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3356,11 +3356,11 @@
             </armor_10>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.8	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3658,7 +3658,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_19 armor_13	</primaryArmor>
       <weight>	21780	</weight>
-      <maxHealth>	1100	</maxHealth>
+      <maxHealth>	1000	</maxHealth>
       <rotationSpeed>	31	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
@@ -3791,11 +3791,11 @@
             </armor_12>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.8	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3930,7 +3930,7 @@
           </camouflage>
         </_128mm_KwK44_L55_SH>
         <_150mm_KwK44_L38_SH>	shared	  <maxAmmo>	40	</maxAmmo>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.353005 9 0.416667 7 0.583333 7 0.646995 7 1 9	</maxPitch>
@@ -3962,11 +3962,11 @@
             </armor_12>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	13	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4104,11 +4104,11 @@
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Maybach_HL_210_TRM_P30_SH>
         <Maybach_HL_230_TRM_P35_SH>
-          <smplEnginePower>	1975	</smplEnginePower>
+          <smplEnginePower>	2000	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_230_TRM_P35_SH>
         <Maybach_HL_230_TRM_P30_SH>
-          <smplEnginePower>	1480	</smplEnginePower>
+          <smplEnginePower>	1340	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_230_TRM_P30_SH>
       </engines>

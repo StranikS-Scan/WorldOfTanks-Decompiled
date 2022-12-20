@@ -67,14 +67,6 @@ class ShopView(LobbySubView, ShopBase):
 
 class ShopOverlay(_ShopOverlayBase):
 
-    def __init__(self, *args):
-        super(ShopOverlay, self).__init__(*args)
-        self.__uniqueBrowserName = VIEW_ALIAS.OVERLAY_WEB_STORE
-
-    @property
-    def uniqueBrowserName(self):
-        return self.__uniqueBrowserName
-
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):
             self.destroy()

@@ -13,6 +13,8 @@ class SalesControlsFactory(ControlsFactory):
     def __init__(self):
         effects = {EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
          EFFECT_TYPE.DEACTIVATE: core_func.FunctionalDeactivateEffect,
+         EFFECT_TYPE.GLOBAL_ACTIVATE: core_func.FunctionalGlobalActivateEffect,
+         EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect,
          EFFECT_TYPE.LOAD_VIEW: functional.LoadViewEffect,
          EFFECT_TYPE.CLEAR_SCENE: core_func.FunctionalClearScene,
          EFFECT_TYPE.REFUSE_TRAINING: core_func.FunctionalRefuseTrainingEffect,

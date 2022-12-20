@@ -137,7 +137,7 @@ class MarathonEntryPointModel(ViewModel):
 
     @staticmethod
     def getUserTokensType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(MarathonEntryPointModel, self)._initialize()

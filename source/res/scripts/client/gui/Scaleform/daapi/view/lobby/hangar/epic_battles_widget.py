@@ -4,11 +4,15 @@ from collections import namedtuple
 import SoundGroups
 from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidgetMeta
+from gui.shared.event_dispatcher import showFrontlineContainerWindow
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.ClientUpdateManager import g_clientUpdateManager
 from epic_constants import EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from uilogging.epic_battle.constants import EpicBattleLogKeys
+from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('epicMetaLevelIconData', 'points', 'counterValue'))
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
@@ -17,10 +21,11 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     def __init__(self):
         super(EpicBattlesWidget, self).__init__()
         self.__periodicNotifier = None
+        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
         return
 
     def onWidgetClick(self):
-        self.__epicController.openURL()
+        showFrontlineContainerWindow()
 
     def onSoundTrigger(self, triggerName):
         SoundGroups.g_instance.playSound2D(triggerName)
@@ -43,6 +48,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                 self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.update)
             self.__periodicNotifier.startNotification()
             g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+            self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.HANGAR.value, (TOOLTIPS_CONSTANTS.EPIC_BATTLE_WIDGET_INFO,))
             return
 
     def _dispose(self):
@@ -53,6 +59,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             self.__periodicNotifier = None
         super(EpicBattlesWidget, self)._dispose()
         self.__periodicNotifier = None
+        self.__uiEpicBattleLogger.reset()
         return
 
     def __buildVO(self):
@@ -61,7 +68,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         cycleNumber = 1
         if season is not None:
             cycleNumber = self.__epicController.getCurrentOrNextActiveCycleNumber(season)
-        level = currentLevel if self.__epicController.isCurrentCycleActive() else None
+        level = currentLevel if self.__epicController.isCurrentCycleActive() or currentLevel > 1 else None
         return EpicBattlesWidgetVO(epicMetaLevelIconData=getProgressionIconVODict(cycleNumber, level), points=str(self.__getSkillPoints()), counterValue=self.__epicController.getNotChosenRewardCount())
 
     def __getSkillPoints(self):

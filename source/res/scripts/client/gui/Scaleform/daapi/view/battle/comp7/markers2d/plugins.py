@@ -163,14 +163,6 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
         except ValueError:
             return -1
 
-    def _setupHealth(self, marker, vInfo):
-        validHealth = self.__validatePrebattleHealth(vInfo.vehicleID, marker.getHealth())
-        self._invokeMarker(marker.getMarkerID(), 'setHealth', validHealth)
-
-    def _updateVehicleHealth(self, vehicleID, handle, newHealth, aInfo, attackReasonID):
-        validHealth = self.__validatePrebattleHealth(vehicleID, newHealth)
-        super(Comp7VehicleMarkerPlugin, self)._updateVehicleHealth(vehicleID, handle, validHealth, aInfo, attackReasonID)
-
     def __setModeSpecificData(self, marker, vInfo):
         self.__setRole(marker, vInfo)
         self.__setRoleSkillLevel(marker, vInfo)
@@ -265,17 +257,6 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
             duration = max(endTime - BigWorld.serverTime(), 0) if show and endTime != INVALID_TIMESTAMP else 0
             self._updateMarkerTimer(vehicleID, handle=handle, duration=duration, statusID=stateID, showCountdown=showCountdown, isSourceVehicle=isSourceVehicle)
             return
-
-    def __validatePrebattleHealth(self, vehicleID, newHealth):
-        arena = avatar_getter.getArena()
-        if arena.period >= ARENA_PERIOD.BATTLE:
-            return newHealth
-        else:
-            arenaDP = self.sessionProvider.getArenaDP()
-            if arenaDP is None:
-                return newHealth
-            vehSwitchComponent = avatar_getter.getArena().teamInfo.TeamInfoInBattleVehicleSwitch
-            return newHealth if vehSwitchComponent is None or vehSwitchComponent.checkVehicleConfirmation(vehicleID) else arenaDP.getVehicleInfo(vehicleID).vehicleType.maxHealth
 
     def __onTeammateSelectionStatuses(self, statuses):
         for vehicleID, status in statuses.iteritems():

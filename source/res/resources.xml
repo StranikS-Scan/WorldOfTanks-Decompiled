@@ -169,19 +169,17 @@
       <module>	client.cgf_components.attack_artillery_fort_components	</module>
       <module>	client.cgf_components.marker_component	</module>
       <module>	client.cgf_components.serial_number_component	</module>
+      <module>	client.cgf_components.collision_component	</module>
       <module>	client.cgf_components.trigger_vse_component	</module>
       <module>	client.cgf_components.highlight_component	</module>
       <module>	client.cgf_components.hover_component	</module>
       <module>	client.cgf_components.on_click_components	</module>
-      <module>	client.cgf_components.hangar_camera_manager	</module>
       <module>	client.cgf_components.hangar_rules	</module>
       <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
       <module>	client.cgf_components.rocket_acceleration_component	</module>
-      <module>	client.new_year.newyear_cgf_components.lobby_customization_components	</module>
-      <module>	client.new_year.newyear_cgf_components.lobby_components	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -205,181 +203,6 @@
       <path>	content/CGFPrefabs/steel_hunter/death_zones_rules.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/kamikaze_activated.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
-      <path>	content/HangarPrefabs/HangarManagers.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY19_Ball_05_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY19_Ball_05_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY19_Ball_05_10.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/Ball_04_17_blue.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/Ball_04_14.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/Ball_05_56_yellow.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY19_Ball_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY21_Ball_05_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Ball/NY22_Ball_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY21_Top_05_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY22_Top_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY20_Top_05_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY21_Top_05_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY22_Top_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY21_Top_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY22_Top_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY21_Top_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY22_Top_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Top/NY19_Top_04_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_09.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_11.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_10.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY21_Garland_05_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY19_Garland_05_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY22_Garland_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/NY23_Garland_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Garland/Garland_04_12.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY22_Floor_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY22_Floor_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY22_Floor_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY21_Floor_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY20_Floor_05_00.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY21_Floor_05_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY22_Floor_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY20_Floor_05_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY22_Floor_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/ChristmasTree/Floor/NY23_Floor_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY21_Tent_05_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_12.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY21_Tent_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY22_Tent_09.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY21_Tent_05_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Table/NY21_Tent_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY21_Kitchen_05_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY21_Kitchen_05_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY21_Kitchen_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY23_Kitchen_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Kitchen/NY22_Kitchen_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_12.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_11.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Attraction/NY22_Attraction_09.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_01_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_05_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_02_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_09_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_03_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_13_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_10_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_17_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_12_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Garland/NY22_Gates_16_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_09.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/FieldKitchen/Exposition/NY23_Exposition_10.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY22_Sculpture_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY19_Sculpture_05_20.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY22_Sculpture_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY21_Sculpture_05_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY22_Sculpture_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY21_Sculpture_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY19_Sculpture_05_23.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY22_Sculpture_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY22_Sculpture_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Sculpture/NY21_Sculpture_05_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_09.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_12.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY23_Kiosk_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Kiosk/NY22_Kiosk_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY23_Pyro_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY21_Pyro_05_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY22_Pyro_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY21_Pyro_05_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY21_Pyro_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY21_Pyro_05_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY22_Pyro_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY20_Pyro_05_22.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY23_Pyro_04.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Pyro/NY20_Pyro_05_19.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY19_Decoration_05_20.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY19_Decoration_05_21.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY19_Decoration_05_22.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_05.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY19_Decoration_05_23.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_07.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_06.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/SculptureLight/NY21_Decoration_05_08.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_01_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_05_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_02_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_09_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_03_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_13_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_10_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_17_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_12_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/SnowSculpture/Garland/NY22_Gates_16_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Plate_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Plate_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Plate_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Toy_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Toy_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Toy_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Collar_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Collar_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Collar_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Bed_01.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Bed_02.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Celebrities/Dog/Bed_03.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY21_Garland_00_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY21_Garland_00_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY22_Attraction_Base.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY19_Kitchen_00.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY21_Tent_Base.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY22_Gates_Base_left.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY19_Sculpture_00.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY22_Kiosk_Base.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY22_Pyro_Base.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY22_Gates_Base_right.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY23_Exposition_00.prefab	</path>
-      <path>	content/HangarPrefabs/NewYearToys/Default/NY23_Dog_Collar_Base_01.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

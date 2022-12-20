@@ -11,7 +11,63 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from .hangar_camera_settings_listener import HangarCameraSettingsListener
 
-class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaMeter):
+class HangarCameraIdleController(HangarCameraSettingsListener):
+
+    def __init__(self):
+        super(HangarCameraIdleController, self).__init__()
+        self.registerSettingHandler(GAME.HANGAR_CAM_PERIOD, self._onHangarCamPeriodChanged)
+        self.__camPeriod = 0
+        self.__isForcedDisabled = False
+        self.__disabledCount = 0
+
+    def destroy(self):
+        self.__camPeriod = None
+        self.__isForcedDisabled = None
+        self.__disabledCount = 0
+        self.unregisterSettingsHandler(GAME.HANGAR_CAM_PERIOD)
+        super(HangarCameraIdleController, self).destroy()
+        return
+
+    def _onSpaceCreated(self):
+        super(HangarCameraIdleController, self)._onSpaceCreated()
+        g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
+        self.__camPeriod = self.__getHangarCamPeriodSetting()
+        self._setStartDelay(self.__camPeriod)
+
+    def _onSpaceDestroy(self, inited):
+        super(HangarCameraIdleController, self)._onSpaceDestroy(inited)
+        self.__isForcedDisabled = False
+        if inited:
+            g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
+
+    def _setStartDelay(self, delay):
+        pass
+
+    def __getHangarCamPeriodSetting(self):
+        return settings.convertSettingToFeatures(self.settingsCore.getSetting(GAME.HANGAR_CAM_PERIOD))
+
+    def _onHangarCamPeriodChanged(self):
+        self.__camPeriod = self.__getHangarCamPeriodSetting()
+        if self.__isForcedDisabled:
+            return
+        self._setStartDelay(self.__camPeriod)
+
+    def __onCameraForceDisable(self, event):
+        if not event.ctx['setIdle']:
+            return
+        isDisabled = event.ctx['isDisable']
+        if isDisabled:
+            self.__disabledCount += 1
+        elif self.__disabledCount > 0:
+            self.__disabledCount -= 1
+        self.__isForcedDisabled = self.__disabledCount != 0
+        if self.__isForcedDisabled:
+            self._setStartDelay(0.0)
+        else:
+            self._setStartDelay(self.__camPeriod)
+
+
+class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMeter):
     TIME_OUT = 0.8
     MAX_DT = 0.05
 
@@ -25,43 +81,40 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
             self.startValue = 0.0
             self.speed = 0.0
 
-    def __init__(self, camera, easingInTime, pitchParams, distParams, yawPeriod):
-        HangarCameraSettingsListener.__init__(self)
+    def __init__(self, camera):
+        HangarCameraIdleController.__init__(self)
         CallbackDelayer.__init__(self)
         TimeDeltaMeter.__init__(self)
         self.__camera = camera
-        self.__easingInTime = easingInTime
-        self.__pitchParams = pitchParams
-        self.__distParams = distParams
-        self.__yawPeriod = yawPeriod
+        self.__pitchParams = self.IdleParams()
+        self.__distParams = self.IdleParams()
+        self.__yawPeriod = 1.0
         self.__yawSpeed = 0.0
+        from gui.ClientHangarSpace import hangarCFG
+        cfg = hangarCFG()
+        self.__easingInTime = cfg['cam_idle_easing_in_time']
+        self.__pitchParams.minValue = cfg['cam_idle_pitch_constr'][0]
+        self.__pitchParams.maxValue = cfg['cam_idle_pitch_constr'][1]
+        self.__pitchParams.period = cfg['cam_idle_pitch_period']
+        self.__distParams.minValue = cfg['cam_idle_dist_constr'][0]
+        self.__distParams.maxValue = cfg['cam_idle_dist_constr'][1]
+        self.__distParams.period = cfg['cam_idle_dist_period']
+        self.__yawPeriod = cfg['cam_idle_yaw_period']
         self.__currentIdleTime = 0.0
-        self.__camPeriod = 0
-        self.__isForcedDisabled = False
-        self.__disabledCount = 0
-        self.registerSettingHandler(GAME.HANGAR_CAM_PERIOD, self._onHangarCamPeriodChanged)
-        g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
-        self._activate()
-        self.__camPeriod = self.__getHangarCamPeriodSetting()
-        self.setStartDelay(self.__camPeriod)
 
     def destroy(self):
-        self._deactivate(True)
         self.stopCallback(self.__updateIdleMovement)
         self.stopCallback(self.__updateEasingOut)
         BigWorld.removeAllIdleCallbacks()
-        self.__isForcedDisabled = False
         self.__pitchParams = None
         self.__distParams = None
         self.__camera = None
-        self.__camPeriod = None
-        self.__isForcedDisabled = None
-        self.__disabledCount = 0
-        g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
-        self.unregisterSettingsHandler(GAME.HANGAR_CAM_PERIOD)
         CallbackDelayer.destroy(self)
-        HangarCameraSettingsListener.destroy(self)
+        HangarCameraIdleController.destroy(self)
         return
+
+    def _setStartDelay(self, delay):
+        self.setStartDelay(delay)
 
     def setStartDelay(self, delay):
         BigWorld.removeAllIdleCallbacks()
@@ -69,29 +122,6 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
             BigWorld.addIdleCallbackForDelay(delay, self.__startCameraIdle, self.__stopCameraIdle)
         else:
             self.stopCallback(self.__updateIdleMovement)
-
-    def _onHangarCamPeriodChanged(self):
-        self.__camPeriod = self.__getHangarCamPeriodSetting()
-        if self.__isForcedDisabled:
-            return
-        self.setStartDelay(self.__camPeriod)
-
-    def __onCameraForceDisable(self, event):
-        if not event.ctx['setIdle']:
-            return
-        isDisabled = event.ctx['isDisable']
-        if isDisabled:
-            self.__disabledCount += 1
-        elif self.__disabledCount > 0:
-            self.__disabledCount -= 1
-        self.__isForcedDisabled = self.__disabledCount != 0
-        if self.__isForcedDisabled:
-            self.setStartDelay(0.0)
-        else:
-            self.setStartDelay(self.__camPeriod)
-
-    def __getHangarCamPeriodSetting(self):
-        return settings.convertSettingToFeatures(self.settingsCore.getSetting(GAME.HANGAR_CAM_PERIOD))
 
     def __startCameraIdle(self):
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': True}), scope=EVENT_BUS_SCOPE.DEFAULT)

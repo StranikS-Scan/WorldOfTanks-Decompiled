@@ -1,0 +1,16 @@
+<extension.xml>
+  <FeatureName>	survey	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	SurveyPersonality	</Personality>
+  <Entities>
+    <ServerOnlyEntities>
+      <SurveyMgr></SurveyMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <ArenaSurveyComponent></ArenaSurveyComponent>
+      <AccountSurveyComponent></AccountSurveyComponent>
+    </StaticComponents>
+  </Components>
+</extension.xml>

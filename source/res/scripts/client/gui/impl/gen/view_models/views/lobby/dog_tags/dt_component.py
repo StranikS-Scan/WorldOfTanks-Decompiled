@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class DtComponent(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=14, commands=0):
         super(DtComponent, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -80,11 +80,17 @@ class DtComponent(ViewModel):
     def setIsDeprecated(self, value):
         self._setBool(11, value)
 
-    def getIsDemoted(self):
+    def getIsExternalUnlockOnly(self):
         return self._getBool(12)
 
-    def setIsDemoted(self, value):
+    def setIsExternalUnlockOnly(self, value):
         self._setBool(12, value)
+
+    def getIsDemoted(self):
+        return self._getBool(13)
+
+    def setIsDemoted(self, value):
+        self._setBool(13, value)
 
     def _initialize(self):
         super(DtComponent, self)._initialize()
@@ -100,4 +106,5 @@ class DtComponent(ViewModel):
         self._addBoolProperty('isNew', False)
         self._addStringProperty('displayableProgress', '')
         self._addBoolProperty('isDeprecated', False)
+        self._addBoolProperty('isExternalUnlockOnly', False)
         self._addBoolProperty('isDemoted', False)

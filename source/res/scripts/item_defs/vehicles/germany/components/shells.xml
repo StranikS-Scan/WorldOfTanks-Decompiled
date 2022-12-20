@@ -2557,6 +2557,76 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_M68M2>
+  <_105mm_HEAT-T_T384E4>
+    <id>	108	</id>
+    <userString>	#usa_vehicles:_105mm_HEAT-T_T384E4	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT-T_T384E4>
+  <_105mm_DM13A2>
+    <id>	367	</id>
+    <userString>	#germany_vehicles:_105mm_DM13A2	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_DM13A2>
+  <_105mm_M430>
+    <id>	368	</id>
+    <userString>	#germany_vehicles:_105mm_M430	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_M430>
+  <_105mm_DM503>
+    <id>	369	</id>
+    <userString>	#germany_vehicles:_105mm_DM503	</userString>
+    <icon>	he_modern	</icon>
+    <price>	880	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_DM503>
   <_105mm_AP_DM13>
     <id>	138	</id>
     <userString>	#germany_vehicles:_105mm_AP_DM13	</userString>
@@ -2610,22 +2680,6 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_DM11>
-  <_105mm_HEAT-T_T384E4>
-    <id>	108	</id>
-    <userString>	#usa_vehicles:_105mm_HEAT-T_T384E4	</userString>
-    <icon>	hc_premium	</icon>
-    <price>	4800	</price>
-    <improved>	true	</improved>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	105	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHollowCharge	</effects>
-    <damage>
-      <armor>	390	</armor>
-      <devices>	150	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_105mm_HEAT-T_T384E4>
   <_105mm_Exp_APDS>
     <id>	163	</id>
     <userString>	#germany_vehicles:_105mm_Exp_APDS	</userString>

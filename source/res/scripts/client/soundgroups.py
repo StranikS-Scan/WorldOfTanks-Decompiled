@@ -638,6 +638,3 @@ class SoundGroups(object):
 
     def setSwitch(self, group, switch):
         WWISE.WW_setSwitch(group, switch)
-
-    def setState(self, stateName, stateValue):
-        WWISE.WW_setState(stateName, stateValue)

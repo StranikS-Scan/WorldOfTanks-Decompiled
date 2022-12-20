@@ -51,6 +51,7 @@ class VehicleParameters(VehicleParametersMeta):
         super(VehicleParameters, self)._populate()
         self._vehParamsDP = self._createDataProvider()
         self._vehParamsDP.setFlashObject(self.as_getDPS())
+        self.update()
 
     def _dispose(self):
         self._vehParamsDP.fini()
@@ -75,7 +76,7 @@ class VehicleParameters(VehicleParametersMeta):
         if not perksController:
             self.rebuildParams()
         elif not perksController.isEnabled():
-            perksController.recalc(self, callRebuild=False)
+            perksController.recalc(self)
             self.rebuildParams()
 
     def _getVehicleCache(self):
@@ -89,7 +90,6 @@ class VehiclePreviewParameters(VehicleParameters):
 
     def _populate(self):
         super(VehiclePreviewParameters, self)._populate()
-        self.update()
         g_currentPreviewVehicle.onComponentInstalled += self.update
         g_currentPreviewVehicle.onChanged += self.update
         g_currentPreviewVehicle.onPostProgressionChanged += self.update

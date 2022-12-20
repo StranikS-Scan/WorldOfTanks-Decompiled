@@ -47,7 +47,7 @@ _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
 _ENEMY_KILLED_SOUND = 'enemy_killed_by_ally'
 
 class BattleMessagesController(IBattleController):
-    __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__', '__specEntityStringByCode')
+    __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__', '__specEntityStringByCode', '_attackReasonCodes')
 
     def __init__(self, setup):
         self._battleCtx = weakref.proxy(setup.battleCtx)
@@ -60,6 +60,7 @@ class BattleMessagesController(IBattleController):
         self.onShowPlayerMessageByCode = Event.Event(self._eManager)
         self.onShowPlayerMessageByKey = Event.Event(self._eManager)
         self.onShowDestructibleEntityMessageByCode = Event.Event(self._eManager)
+        self._attackReasonCodes = _ATTACK_REASON_CODE
         self._buffer = []
         self._isUIPopulated = False
         self.__specEntityStringByCode = {}
@@ -134,6 +135,9 @@ class BattleMessagesController(IBattleController):
     def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
+    def _getAttackReasonCodes(self, reason):
+        return self._attackReasonCodes.get(reason)
+
     def __getEntityString(self, avatar, entityID, code):
         func = self.__specEntityStringByCode.get(code)
         res = func(avatar, entityID, code) if func is not None else None
@@ -172,7 +176,7 @@ class BattleMessagesController(IBattleController):
         target = _ENTITY_TYPE.SUICIDE
         if targetID != attackerID:
             target = self.__getEntityString(avatar, targetID, reason)
-        code = _ATTACK_REASON_CODE.get(reason)
+        code = self._getAttackReasonCodes(reason)
         sound = None
         soundExt = None
         if attackerID == BigWorld.player().playerVehicleID:
@@ -272,6 +276,10 @@ class EpicBattleMessagesPlayer(BattleMessagesPlayer):
 
 
 class EpicBattleMessagesController(BattleMessagesController):
+
+    def __init__(self, setup):
+        super(EpicBattleMessagesController, self).__init__(setup)
+        self._attackReasonCodes[_AR_INDICES['minefield_eq']] = 'DEATH_FROM_MINE_EXPLOSION'
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if not self._messageIsAllowedInEpicBattle(targetID, attackerID):

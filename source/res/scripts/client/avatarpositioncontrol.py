@@ -62,8 +62,8 @@ class ConsistentMatrices(object):
         self.__setTarget(bindMatrix, useStatic)
         return
 
-    def notifyVehicleChanged(self, avatar):
-        if avatar.vehicle is None or not avatar.vehicle.isStarted:
+    def notifyVehicleChanged(self, avatar, updateStopped=False):
+        if avatar.vehicle is None or not updateStopped and not avatar.vehicle.isStarted:
             self.__attachedVehicleMatrix.target = None
             self.onVehicleMatrixBindingChanged(True)
             return

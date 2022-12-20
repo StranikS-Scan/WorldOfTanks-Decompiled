@@ -67,7 +67,7 @@ _SUBTITLE_TO_LOCALES_MAP = {_SubtitlesLanguages.CS: {'cs'},
 _LOCALE_TO_SUBTITLE_MAP = {loc:subID for subID, locales in _SUBTITLE_TO_LOCALES_MAP.iteritems() for loc in locales}
 
 class VideoView(ViewImpl):
-    __slots__ = ('__isAutoClose', '__soundControl', '__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle')
+    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl')
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.video.video_view.VideoView())

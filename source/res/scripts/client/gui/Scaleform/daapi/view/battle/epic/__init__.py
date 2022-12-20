@@ -52,7 +52,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL, battle_carousel.BattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BattleTankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
+     GroupedViewSettings(BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, BattleTankCarouselFilterPopover, 'epicCarouselFilterPopover.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, reinforcement_panel.EpicReinforcementPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL, score_panel.EpicScorePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, missions_panel.EpicMissionsPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -84,7 +84,7 @@ class EpicBattlePageBusinessHandler(PackageBusinessHandler):
     __slots__ = ()
 
     def __init__(self):
-        super(EpicBattlePageBusinessHandler, self).__init__(((BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),), APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+        super(EpicBattlePageBusinessHandler, self).__init__(((BATTLE_VIEW_ALIASES.EPIC_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),), APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
 
 def getBusinessHandlers():

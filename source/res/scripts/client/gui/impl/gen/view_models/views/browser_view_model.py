@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.common.browser_model import BrowserModel
 class BrowserViewModel(BrowserModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=8, commands=5):
+    def __init__(self, properties=7, commands=4):
         super(BrowserViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsClosable(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setIsClosable(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def _initialize(self):
         super(BrowserViewModel, self)._initialize()

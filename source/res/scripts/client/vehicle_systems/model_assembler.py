@@ -51,7 +51,7 @@ def prepareCollisionAssembler(vehicleDesc, isTurretDetached, worldID):
     bspModels = []
     for partName, hitTester in hitTestersByPart.iteritems():
         partId = TankPartNames.getIdx(partName)
-        bspModel = (partId, hitTester.bspModelName)
+        bspModel = (partId, hitTester.bspModelName, (0.0, 0.0, 0.0))
         bspModels.append(bspModel)
 
     trackPairs = vehicleDesc.chassis.trackPairs[1:]

@@ -131,11 +131,10 @@ class PromoController(IPromoController):
 
     @adisp_process
     def showLastTeaserPromo(self):
-        if self.__promoData:
-            rowUrl = self.__promoData.get('url', '')
-            loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
-            url = yield self.__addAuthParams(rowUrl)
-            self.__showBrowserView(url, loadingCallback)
+        rowUrl = self.__promoData.get('url', '')
+        loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
+        url = yield self.__addAuthParams(rowUrl)
+        self.__showBrowserView(url, loadingCallback)
 
     def setUnreadPromoCount(self, count):
         self.__updatePromoCount(count)

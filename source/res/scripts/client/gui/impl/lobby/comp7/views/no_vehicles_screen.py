@@ -63,11 +63,11 @@ class NoVehiclesScreen(ViewImpl):
     def __onComp7ConfigChanged(self):
         self.__updateData()
 
-    def __onStatusUpdated(self, _):
-        if self.__comp7Controller.isAvailable():
-            self.__onPollServerTime()
-        else:
+    def __onStatusUpdated(self, status):
+        if comp7_model_helpers.isModeForcedDisabled(status):
             self.destroyWindow()
+        else:
+            self.__onPollServerTime()
 
     def __updateData(self):
         with self.viewModel.transaction() as model:

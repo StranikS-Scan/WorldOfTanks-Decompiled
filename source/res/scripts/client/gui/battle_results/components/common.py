@@ -76,7 +76,7 @@ class ArenaDurationItem(base.StatsItem):
         if record:
             converted = backport.text(R.strings.battle_results.details.time.value(), min=int(record / ONE_MINUTE), sec=int(record % ONE_MINUTE))
         else:
-            converted = None
+            converted = '0'
         return converted
 
 

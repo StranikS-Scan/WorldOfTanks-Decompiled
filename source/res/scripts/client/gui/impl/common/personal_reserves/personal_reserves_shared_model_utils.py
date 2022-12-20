@@ -4,9 +4,8 @@ from time import time
 import typing
 from helpers.time_utils import ONE_YEAR, makeLocalServerTime
 from collections import namedtuple, defaultdict
-from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
+from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, BoosterCategory
 from gui.goodies.goodie_items import Booster, getFullNameForBoosterIcon, BoosterUICommon
-from gui.goodies.goodies_constants import BoosterCategory
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import BOOST_CATEGORY_TO_RESERVE_TYPE_LOOKUP, BOOSTER_STATE_TO_BOOSTER_MODEL_STATE, PREMIUM_BOOSTER_IDS, EVENT_BOOSTER_IDS, PERSONAL_RESOURCE_ORDER, getAllBoosterIds
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import BoosterModel
 from gui.impl.gen.view_models.common.personal_reserves.reserves_group_model import GroupCategory, ReservesGroupModel

@@ -142,6 +142,7 @@
     <_105mm_StuH42_L28Pz_1>	266	</_105mm_StuH42_L28Pz_1>
     <_45mm_20K_german>	268	</_45mm_20K_german>
     <_37mm_KwK_38t_L47_b>	269	</_37mm_KwK_38t_L47_b>
+    <_105mm_RH_Gun>	270	</_105mm_RH_Gun>
     <_75mm_KwK_40_L48_KW_Ir>	271	</_75mm_KwK_40_L48_KW_Ir>
     <_105mm_StuH42_L28Pz_SH>	338	</_105mm_StuH42_L28Pz_SH>
     <_105mm_KwK45_L52_SH>	339	</_105mm_KwK45_L52_SH>
@@ -6592,6 +6593,64 @@
         </_105mm_HE_M68M2>
       </shots>
     </_105mm_BK_L7>
+    <_105mm_RH_Gun>
+      <userString>	#germany_vehicles:_105mm_RH_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_DM13A2>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1480	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	268 258	</piercingPower>
+        </_105mm_DM13A2>
+        <_105mm_M430>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_105mm_M430>
+        <_105mm_DM503>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 120	</piercingPower>
+        </_105mm_DM503>
+      </shots>
+    </_105mm_RH_Gun>
     <_105mm_Rheinmetall_V1>
       <userString>	#germany_vehicles:_105mm_Rheinmetall_V1	</userString>
       <tags></tags>

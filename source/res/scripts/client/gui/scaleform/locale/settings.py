@@ -518,6 +518,8 @@ class SETTINGS(object):
     MARKER_AIMMARKER2D = '#settings:marker/aimMarker2D'
     MARKER_DAMAGE = '#settings:marker/damage'
     MARKER_DEAD = '#settings:marker/dead'
+    MARKER_DISTANCE = '#settings:marker/distance'
+    MARKER_DISTANCELABEL = '#settings:marker/distanceLabel'
     KEYBOARD_KEYBOARD = '#settings:keyboard/keyboard'
     KEYBOARD_MOUSE = '#settings:keyboard/mouse'
     KEYBOARD_KEYSBLOCKS_GROUP_MOVEMENT = '#settings:keyboard/keysBlocks/group/movement'

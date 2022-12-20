@@ -23,7 +23,7 @@ class MapBoxAnswersModel(ViewModel):
 
     @staticmethod
     def getVariantsType():
-        return str
+        return unicode
 
     def getSelectedVariants(self):
         return self._getArray(2)
@@ -33,7 +33,7 @@ class MapBoxAnswersModel(ViewModel):
 
     @staticmethod
     def getSelectedVariantsType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(MapBoxAnswersModel, self)._initialize()

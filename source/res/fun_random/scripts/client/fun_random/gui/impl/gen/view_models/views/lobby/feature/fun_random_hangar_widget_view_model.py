@@ -41,7 +41,7 @@ class FunRandomHangarWidgetViewModel(ViewModel):
 
     @staticmethod
     def getModifiersDomainsType():
-        return str
+        return unicode
 
     def _initialize(self):
         super(FunRandomHangarWidgetViewModel, self)._initialize()

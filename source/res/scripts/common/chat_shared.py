@@ -1286,10 +1286,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'personalReservesHaveBeenConverted',
  'changeSquadSize',
  'fairplay',
- 'autoCollectingNotification',
- 'nyErrorNotification'])
+ 'showSurvey'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
-NY_ERROR_TYPE = Enumeration('nyErrorType', ['levelUpRewardsError'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2
 SM_REQUEST_INTERNAL_SYS_MESSAGES_FLAG = 4

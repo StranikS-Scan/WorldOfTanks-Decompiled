@@ -23,6 +23,8 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  AUTO_RELOAD_PROP_NAME,
  'reloadTimeSecs',
  'clipFireRate',
+ 'burstFireRate',
+ 'turboshaftBurstFireRate',
  DUAL_GUN_CHARGE_TIME,
  'turretRotationSpeed',
  'turretYawLimits',
@@ -283,7 +285,7 @@ def getGroupBonuses(groupName, comparator):
 
 def hasGroupPenalties(groupName, comparator):
     for paramName in PARAMS_GROUPS[groupName]:
-        if comparator.getPenalties(paramName):
+        if comparator.getExtendedData(paramName).penalties:
             return True
 
     return False

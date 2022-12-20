@@ -172,8 +172,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
 
 
 def _onDialogConfirm(result, bonus, giftID):
-    isOk, _ = result
-    if isOk:
+    if result:
         BattleMattersSelectableRewardManager.chooseReward(bonus, giftID=giftID, callback=_showAwardView)
 
 

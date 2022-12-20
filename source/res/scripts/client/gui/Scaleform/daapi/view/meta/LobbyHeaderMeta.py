@@ -145,9 +145,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_hideMenuS(self, value):
         return self.flashObject.as_hideMenu(value) if self._isDAAPIInited() else None
 
-    def as_hideHeaderS(self, value):
-        return self.flashObject.as_hideHeader(value) if self._isDAAPIInited() else None
-
     def as_toggleVisibilityMenuS(self, state):
         return self.flashObject.as_toggleVisibilityMenu(state) if self._isDAAPIInited() else None
 
@@ -156,6 +153,3 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setIsFullscreenBattleSelectorShowingS(self, visible):
         return self.flashObject.as_setIsFullscreenBattleSelectorShowing(visible) if self._isDAAPIInited() else None
-
-    def as_updateNYVisibilityS(self, isShowBattleBtnGlow):
-        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow) if self._isDAAPIInited() else None

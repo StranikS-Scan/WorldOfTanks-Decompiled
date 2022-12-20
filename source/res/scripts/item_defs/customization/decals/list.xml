@@ -4103,6 +4103,12 @@
       <userString>	#vehicle_customization:emblem/special/sticker_703_south	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	921	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_703.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_703_west	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	Global Map	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
@@ -6631,6 +6637,25 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	941	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_741.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_741	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran for WZ_122_6_F3	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -7092,6 +7117,20 @@
       <mirror>	true	</mirror>
     </decal>
     <name>	EU Tankfest 2021	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	932	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_740.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_740	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Steam Publisher Weekend	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -12283,6 +12322,32 @@
     <historical>	1	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
+      <id>	925	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_635.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_635	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	926	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_636.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_636	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	927	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_637.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_637	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	2D CN Lantern Festival	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
       <id>	934	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_642.dds	</texture>
       <maxNumber>	6	</maxNumber>
@@ -12311,6 +12376,25 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	NY23	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	942	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_649.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_649	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran for WZ_122_6_F3	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
@@ -12934,6 +13018,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	NY23 RUBY	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	931	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_641.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_641	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	933	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_641.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_641	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Steam Publisher Weekend	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

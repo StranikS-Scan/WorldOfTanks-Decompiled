@@ -59,6 +59,7 @@ class BATTLE_VIEW_ALIASES(object):
     SUPER_PLATOON_PANEL = 'superPlatoonPanel'
     BATTLE_TANK_CAROUSEL = 'battleTankCarousel'
     BATTLE_TANK_CAROUSEL_FILTER_POPOVER = 'battleTankCarouselFilterPopover'
+    EPIC_CAROUSEL_FILTER_POPOVER = 'epicCarouselFilterPopoverView'
     QUEST_PROGRESS_TOP_VIEW = 'questProgressTopView'
     HINT_PANEL = 'battleHintPanel'
     HELP_DETAILED = 'helpDetailed'

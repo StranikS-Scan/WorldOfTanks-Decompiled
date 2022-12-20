@@ -13,6 +13,21 @@ from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAM
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 
+class FILTER_KEYS(object):
+    ELITE = 'elite'
+    PREMIUM = 'premium'
+    IGR = 'igr'
+    RENTED = 'rented'
+    CLAN_RENTED = 'clanRented'
+    BONUS = 'bonus'
+    FAVORITE = 'favorite'
+    CRYSTALS = 'crystals'
+    SEARCH_NAME_VEHICLE = 'searchNameVehicle'
+    EVENT = 'event'
+    BATTLE_ROYALE = 'battleRoyale'
+    RANKED = 'ranked'
+
+
 def _filterDict(dictionary, keys):
     return {key:value for key, value in dictionary.iteritems() if key in keys}
 
@@ -266,40 +281,40 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.LEVELS(selectedLevels)
 
     def _setEliteAndPremiumCriteria(self, filters):
-        if filters['elite'] and not filters['premium']:
+        if filters[FILTER_KEYS.ELITE] and not filters[FILTER_KEYS.PREMIUM]:
             self._criteria |= REQ_CRITERIA.VEHICLE.ELITE | ~REQ_CRITERIA.VEHICLE.PREMIUM
-        elif filters['elite'] and filters['premium']:
+        elif filters[FILTER_KEYS.ELITE] and filters[FILTER_KEYS.PREMIUM]:
             self._criteria |= REQ_CRITERIA.VEHICLE.ELITE
-        elif filters['premium']:
+        elif filters[FILTER_KEYS.PREMIUM]:
             self._criteria |= REQ_CRITERIA.VEHICLE.PREMIUM
 
     def _setRentedCriteria(self, filters):
-        if filters['rented'] and filters['clanRented']:
+        if filters[FILTER_KEYS.RENTED] and filters[FILTER_KEYS.CLAN_RENTED]:
             self._criteria |= REQ_CRITERIA.VEHICLE.RENT
-        elif filters['clanRented']:
+        elif filters[FILTER_KEYS.CLAN_RENTED]:
             self._criteria |= REQ_CRITERIA.VEHICLE.CLAN_WARS
-        elif not filters['rented']:
+        elif not filters[FILTER_KEYS.RENTED]:
             self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS
 
     def _setIGRCriteria(self, filters):
-        if filters['igr'] and constants.IS_KOREA:
+        if filters[FILTER_KEYS.IGR] and constants.IS_KOREA:
             self._criteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
 
     def _setXPBonusCriteria(self, filters):
-        if filters['bonus']:
+        if filters[FILTER_KEYS.BONUS]:
             self._criteria |= REQ_CRITERIA.VEHICLE.HAS_XP_FACTOR
 
     def _setFavoriteVehicleCriteria(self, filters):
-        if filters['favorite']:
+        if filters[FILTER_KEYS.FAVORITE]:
             self._criteria |= REQ_CRITERIA.VEHICLE.FAVORITE
 
     def _setEarnCrystalsCriteria(self, filters):
-        if filters['crystals']:
+        if filters[FILTER_KEYS.CRYSTALS]:
             self._criteria |= REQ_CRITERIA.VEHICLE.EARN_CRYSTALS
 
     def _setVehicleNameCriteria(self, filters):
-        if filters['searchNameVehicle']:
-            self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
+        if filters[FILTER_KEYS.SEARCH_NAME_VEHICLE]:
+            self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters[FILTER_KEYS.SEARCH_NAME_VEHICLE]))
 
 
 class RoleCriteriesGroup(BasicCriteriesGroup):
@@ -318,7 +333,7 @@ class EventCriteriesGroup(CriteriesGroup):
 
     def update(self, filters):
         super(EventCriteriesGroup, self).update(filters)
-        if not filters['event']:
+        if not filters[FILTER_KEYS.EVENT]:
             self._criteria |= ~REQ_CRITERIA.VEHICLE.EVENT
 
     @staticmethod

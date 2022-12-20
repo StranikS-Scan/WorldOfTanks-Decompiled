@@ -3,9 +3,7 @@
 
 
 def getEmptyClientPB20UXStats():
-    return {'linkedsetQuestsCompleted': 0,
-     'linkedsetQuestsInProgress': 0,
-     'premiumQuestsCompleted': 0,
+    return {'premiumQuestsCompleted': 0,
      'premiumQuestsInProgress': 0,
      'otherQuestsCompleted': 0,
      'otherQuestsInProgress': 0,

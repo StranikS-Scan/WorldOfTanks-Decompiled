@@ -8,6 +8,7 @@ class EventState(IntEnum):
     FORBIDDEN = 1
     PAUSED = 2
     COMPLETED = 3
+    NOTSTARTED = 4
 
 
 class EntryPointModel(ViewModel):

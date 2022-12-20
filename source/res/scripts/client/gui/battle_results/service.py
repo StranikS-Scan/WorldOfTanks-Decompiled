@@ -205,7 +205,6 @@ class BattleResultsService(IBattleResultsService):
             personalMissions = {}
             questsProgress = reusableInfo.personal.getQuestsProgress()
             if questsProgress:
-                linkedsetQuests = self.battleMatters.getRegularBattleMattersQuests()
                 premiumQuests = self.eventsCache.getPremiumQuests()
                 allCommonQuests = self.eventsCache.getQuests()
                 allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
@@ -213,9 +212,7 @@ class BattleResultsService(IBattleResultsService):
                     _, pPrev, pCur = qProgress
                     isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
                     if qID in allCommonQuests:
-                        if qID in linkedsetQuests:
-                            questType = 'linkedset'
-                        elif qID in premiumQuests:
+                        if qID in premiumQuests:
                             questType = 'premium'
                         else:
                             questType = 'other'

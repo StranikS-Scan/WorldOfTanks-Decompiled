@@ -5,7 +5,7 @@ import sys
 import typing
 from constants import BonusTypes
 from gui.shared.items_parameters import params_cache
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, CHASSIS_REPAIR_TIME
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME
 from shared_utils import first
 if typing.TYPE_CHECKING:
     from gui.shared.items_parameters.params import _PenaltyInfo
@@ -33,6 +33,7 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'vehicleChassisFallDamage',
  'vehPenaltyForDamageEngineAndCombat',
  'demaskFoliageFactor',
+ TURBOSHAFT_SWITCH_TIME,
  'demaskMovingFactor',
  'vehicleRamOrExplosionDamageResistance',
  'vehicleFireChance',
@@ -42,12 +43,16 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'vehicleGunShotDispersionChassisMovement',
  'vehicleGunShotDispersionChassisRotation',
  'vehicleGunShotDispersionTurretRotation',
+ 'turboshaftBurstFireRate',
  'vehicleGunShotDispersionWhileGunDamaged',
  'vehicleRamDamageResistance',
- 'vehicleGunReloadTime'])
+ 'vehicleGunReloadTime',
+ 'burstFireRate'])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
+ 'burstFireRate': (True, False),
+ 'turboshaftBurstFireRate': (True, False),
  'pitchLimits': (True, False)}
 
 class PARAM_STATE(object):

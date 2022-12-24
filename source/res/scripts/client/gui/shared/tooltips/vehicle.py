@@ -932,6 +932,7 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
 class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
     PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
                                      'speedLimits',
+                                     TURBOSHAFT_SPEED_MODE_SPEED,
                                      WHEELED_SPEED_MODE_SPEED,
                                      'chassisRotationSpeed',
                                      MAX_STEERING_LOCK_ANGLE,

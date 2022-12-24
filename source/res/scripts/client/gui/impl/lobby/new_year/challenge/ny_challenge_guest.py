@@ -1,36 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/new_year/challenge/ny_challenge_guest.py
 import typing
+from account_helpers.AccountSettings import AccountSettings, NY_CAT_PAGE_VISITED, NY_GUEST_ACTIVITY_SHOWN
+from gui import SystemMessages
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.economic_bonus_model import EconomicBonusModel
+from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.new_year_quest_card_model import NewYearQuestCardModel, CardState
 from gui.impl.lobby.new_year.dialogs.challenge.guest_quest_purchase_confirm import GuestQuestPurchaseDialogView
+from gui.impl.lobby.new_year.ny_history_presenter import NyHistoryPresenter
+from gui.impl.lobby.new_year.tooltips.ny_economic_bonus_tooltip import NyEconomicBonusTooltip
 from gui.impl.lobby.new_year.tooltips.ny_gift_machine_token_tooltip import NyGiftMachineTokenTooltip
 from gui.impl.new_year.navigation import NewYearNavigation, ViewAliases
 from gui.impl.new_year.new_year_bonus_packer import getNYCelebrityGuestRewardBonuses, guestQuestBonusSortOrder
 from gui.impl.new_year.new_year_helper import backportTooltipDecorator
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showStylePreview
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
-from gui.impl.gen import R
+from helpers import dependency, server_settings, uniprof
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from new_year.ny_bonuses import getXpBonusNameByID, EconomicBonusHelper, toPrettyCumulativeBonusValue, CREDITS_BONUS
+from new_year.celebrity.celebrity_quests_helpers import GuestsQuestsConfigHelper
+from new_year.ny_bonuses import EconomicBonusHelper, toPrettyCumulativeBonusValue, CREDITS_BONUS
+from new_year.ny_constants import NyTabBarChallengeView, AdditionalCameraObject, GuestsQuestsTokens, CHALLENGE_TAB_TO_CAMERA_OBJ
 from new_year.ny_preview import getVehiclePreviewID
 from new_year.ny_processor import BuyCelebrityQuestProcessor
-from gui import SystemMessages
-from gui.shared.notifications import NotificationPriorityLevel
-from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.new_year_quest_card_model import NewYearQuestCardModel, CardState
-from gui.impl.lobby.new_year.ny_history_presenter import NyHistoryPresenter
-from gui.impl.lobby.new_year.tooltips.ny_economic_bonus_tooltip import NyEconomicBonusTooltip
-from helpers import dependency, server_settings, uniprof
-from new_year.celebrity.celebrity_quests_helpers import GuestsQuestsConfigHelper
-from new_year.ny_constants import NyTabBarChallengeView, AdditionalCameraObject, GuestsQuestsTokens, CHALLENGE_TAB_TO_CAMERA_OBJ
 from ny_common.settings import NY_CONFIG_NAME
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.system_messages import ISystemMessages
 from skeletons.new_year import ICelebrityController
-from account_helpers.AccountSettings import AccountSettings, NY_CAT_PAGE_VISITED, NY_GUEST_ACTIVITY_SHOWN
 if typing.TYPE_CHECKING:
     from ny_common.GuestsQuestsConfig import GuestQuest
     from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.new_year_challenge_model import NewYearChallengeModel
@@ -241,12 +241,11 @@ class NewYearChallengeGuest(NyHistoryPresenter):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=NotificationPriorityLevel.MEDIUM)
 
     def __updateBonus(self, model):
-        selectedBonusID = self._itemsCache.items.festivity.getChosenXPBonus()
-        bName = getXpBonusNameByID(selectedBonusID)
         bonusesData = EconomicBonusHelper.getBonusesDataInventory()
         bonusesDataMax = EconomicBonusHelper.getMaxBonuses()
         bonuses = {k:(v, bonusesDataMax[k]) for k, v in bonusesData.iteritems() if k != CREDITS_BONUS}
-        selectedValue, selectedMaxValue = bonuses.get(bName, (1.0, 1.0))
+        selectedValue = bonusesData[CREDITS_BONUS]
+        selectedMaxValue = bonusesDataMax[CREDITS_BONUS]
         model.setCurrentActiveBonus(toPrettyCumulativeBonusValue(selectedValue))
         model.setMaxActiveBonus(toPrettyCumulativeBonusValue(selectedMaxValue))
         eBonuses = model.getEconomicBonuses()

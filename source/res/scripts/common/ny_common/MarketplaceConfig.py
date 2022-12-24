@@ -65,7 +65,7 @@ class CategoryItem(object):
     @staticmethod
     def calculateDiscountForBuyReward(actionData, inventoryChecker):
         discount = 0
-        for discountValue, rewardsData in actionData:
+        for discountValue, _, rewardsData in actionData:
             if inventoryChecker(rewardsData):
                 discount += discountValue
 

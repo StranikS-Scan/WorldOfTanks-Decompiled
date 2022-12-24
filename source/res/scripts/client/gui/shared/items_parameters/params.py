@@ -443,11 +443,19 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turretRotationSpeed(self):
-        return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2)
+        rotSpeedVal = round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2)
+        if self.__hasUnsupportedSwitchMode():
+            rotSpeedSiegeVal = items_utils.getTurretRotationSpeed(self._itemDescr.siegeVehicleDescr, self.__factors)
+            return (rotSpeedVal, round(math.degrees(rotSpeedSiegeVal), 2))
+        return (rotSpeedVal,)
 
     @property
     def circularVisionRadius(self):
-        return round(items_utils.getCircularVisionRadius(self._itemDescr, self.__factors))
+        visRadiusVal = round(items_utils.getCircularVisionRadius(self._itemDescr, self.__factors))
+        if self.__hasUnsupportedSwitchMode():
+            visRadiusSiegeVal = items_utils.getCircularVisionRadius(self._itemDescr.siegeVehicleDescr, self.__factors)
+            return (visRadiusVal, round(visRadiusSiegeVal))
+        return (visRadiusVal,)
 
     @property
     def radioDistance(self):
@@ -487,7 +495,7 @@ class VehicleParams(_ParameterBase):
     def relativePower(self):
         coeffs = self.__coefficients['power']
         penetration = self._itemDescr.shot.piercingPower[0]
-        rotationSpeed = self.turretRotationSpeed
+        rotationSpeed = self.turretRotationSpeed[0]
         turretCoefficient = 1 if self.__hasTurret() else coeffs['turretCoefficient']
         heCorrection = 1.0
         if 'SPG' in self._itemDescr.type.tags:
@@ -522,7 +530,7 @@ class VehicleParams(_ParameterBase):
     @property
     def relativeVisibility(self):
         coeffs = self.__coefficients['visibility']
-        value = round((self.circularVisionRadius - MIN_VISION_RADIUS) / (MAX_VISION_RADIUS - MIN_VISION_RADIUS) * coeffs['normalization'] * self.__adjustmentCoefficient('visibility'))
+        value = round((self.circularVisionRadius[0] - MIN_VISION_RADIUS) / (MAX_VISION_RADIUS - MIN_VISION_RADIUS) * coeffs['normalization'] * self.__adjustmentCoefficient('visibility'))
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -597,6 +605,22 @@ class VehicleParams(_ParameterBase):
             return None
 
     @property
+    def burstFireRate(self):
+        if self.__hasUnsupportedSwitchMode():
+            burstCountLeft, burstInterval = self._itemDescr.gun.burst
+            return (burstInterval, burstCountLeft)
+        else:
+            return None
+
+    @property
+    def turboshaftBurstFireRate(self):
+        if self.__hasUnsupportedSwitchMode():
+            burstCountLeft, burstInterval = self._itemDescr.siegeVehicleDescr.gun.burst
+            return (burstInterval, burstCountLeft)
+        else:
+            return None
+
+    @property
     def switchOnTime(self):
         return self.__getSwitchOnTime() if self.__hasHydraulicSiegeMode() else None
 
@@ -631,7 +655,8 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turboshaftSwitchTime(self):
-        return self.turboshaftSwitchOnTime or self.turboshaftSwitchOffTime
+        onTime, offTime = self.turboshaftSwitchOnTime, self.turboshaftSwitchOffTime
+        return (onTime, offTime) if onTime or offTime else None
 
     @property
     def stunMaxDuration(self):
@@ -679,6 +704,7 @@ class VehicleParams(_ParameterBase):
     def getParamsDict(self, preload=False):
         conditionalParams = ('aimingTime',
          'clipFireRate',
+         'burstFireRate',
          'turretYawLimits',
          'gunYawLimits',
          'turretRotationSpeed',
@@ -707,7 +733,8 @@ class VehicleParams(_ParameterBase):
          ROCKET_ACCELERATION_ENGINE_POWER,
          ROCKET_ACCELERATION_SPEED_LIMITS,
          ROCKET_ACCELERATION_REUSE_AND_DURATION,
-         'chassisRotationSpeed')
+         'chassisRotationSpeed',
+         'turboshaftBurstFireRate')
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -836,6 +863,9 @@ class VehicleParams(_ParameterBase):
 
     def __hasTurboshaftSwitchMode(self):
         return self._itemDescr.hasTurboshaftEngine and self._itemDescr.hasSiegeMode
+
+    def __hasUnsupportedSwitchMode(self):
+        return self._itemDescr.type.compactDescr == 32321
 
     def __getRealSpeedLimit(self):
         enginePower = self.__getEnginePhysics()['smplEnginePower']

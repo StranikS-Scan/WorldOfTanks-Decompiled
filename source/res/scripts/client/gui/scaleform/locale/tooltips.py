@@ -2092,6 +2092,8 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_PITCHLIMITS = '#tooltips:tank_params/desc/pitchLimits'
     TANK_PARAMS_DESC_GUNYAWLIMITS = '#tooltips:tank_params/desc/gunYawLimits'
     TANK_PARAMS_DESC_CLIPFIRERATE = '#tooltips:tank_params/desc/clipFireRate'
+    TANK_PARAMS_DESC_BURSTFIRERATE = '#tooltips:tank_params/desc/burstFireRate'
+    TANK_PARAMS_DESC_TURBOSHAFTBURSTFIRERATE = '#tooltips:tank_params/desc/turboshaftBurstFireRate'
     TANK_PARAMS_DESC_RELATIVEPOWER = '#tooltips:tank_params/desc/relativePower'
     TANK_PARAMS_DESC_RELATIVEARMOR = '#tooltips:tank_params/desc/relativeArmor'
     TANK_PARAMS_DESC_RELATIVEMOBILITY = '#tooltips:tank_params/desc/relativeMobility'
@@ -3679,6 +3681,8 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_PITCHLIMITS,
      TANK_PARAMS_DESC_GUNYAWLIMITS,
      TANK_PARAMS_DESC_CLIPFIRERATE,
+     TANK_PARAMS_DESC_BURSTFIRERATE,
+     TANK_PARAMS_DESC_TURBOSHAFTBURSTFIRERATE,
      TANK_PARAMS_DESC_RELATIVEPOWER,
      TANK_PARAMS_DESC_RELATIVEARMOR,
      TANK_PARAMS_DESC_RELATIVEMOBILITY,

@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.new_year.views.challenge.new_year_chal
 class NewYearTournamentCelebrityModel(ViewModel):
     __slots__ = ('onStylePreviewShow', 'onUpdateTimeTill', 'onCloseAdditionalCard', 'onVisited', 'onReplace')
 
-    def __init__(self, properties=12, commands=5):
+    def __init__(self, properties=14, commands=5):
         super(NewYearTournamentCelebrityModel, self).__init__(properties=properties, commands=commands)
 
     def getCompletedQuestsQuantity(self):
@@ -23,73 +23,85 @@ class NewYearTournamentCelebrityModel(ViewModel):
     def setMaxQuestsQuantity(self, value):
         self._setNumber(1, value)
 
-    def getRerollingQuests(self):
+    def getMaxAdditionalQuestsQuantity(self):
         return self._getNumber(2)
 
-    def setRerollingQuests(self, value):
+    def setMaxAdditionalQuestsQuantity(self, value):
         self._setNumber(2, value)
 
-    def getCompletedAdditionalQuestsQuantity(self):
+    def getRerollingQuests(self):
         return self._getNumber(3)
 
-    def setCompletedAdditionalQuestsQuantity(self, value):
+    def setRerollingQuests(self, value):
         self._setNumber(3, value)
 
+    def getIsRerollChargingAvailable(self):
+        return self._getBool(4)
+
+    def setIsRerollChargingAvailable(self, value):
+        self._setBool(4, value)
+
+    def getCompletedAdditionalQuestsQuantity(self):
+        return self._getNumber(5)
+
+    def setCompletedAdditionalQuestsQuantity(self, value):
+        self._setNumber(5, value)
+
     def getReplacementsQuantity(self):
-        return self._getNumber(4)
+        return self._getNumber(6)
 
     def setReplacementsQuantity(self, value):
-        self._setNumber(4, value)
+        self._setNumber(6, value)
 
     def getIsVehicleInBattle(self):
-        return self._getBool(5)
+        return self._getBool(7)
 
     def setIsVehicleInBattle(self, value):
-        self._setBool(5, value)
+        self._setBool(7, value)
 
     def getIsReplaceLocked(self):
-        return self._getBool(6)
-
-    def setIsReplaceLocked(self, value):
-        self._setBool(6, value)
-
-    def getTimeTill(self):
-        return self._getNumber(7)
-
-    def setTimeTill(self, value):
-        self._setNumber(7, value)
-
-    def getHasTemporaryAdditionalCard(self):
         return self._getBool(8)
 
-    def setHasTemporaryAdditionalCard(self, value):
+    def setIsReplaceLocked(self, value):
         self._setBool(8, value)
 
+    def getTimeTill(self):
+        return self._getNumber(9)
+
+    def setTimeTill(self, value):
+        self._setNumber(9, value)
+
+    def getHasTemporaryAdditionalCard(self):
+        return self._getBool(10)
+
+    def setHasTemporaryAdditionalCard(self, value):
+        self._setBool(10, value)
+
     def getChallengeCards(self):
-        return self._getArray(9)
+        return self._getArray(11)
 
     def setChallengeCards(self, value):
-        self._setArray(9, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getChallengeCardsType():
         return NewYearChallengeCardModel
 
     def getAdditionalChallengeCards(self):
-        return self._getArray(10)
+        return self._getArray(12)
 
     def setAdditionalChallengeCards(self, value):
-        self._setArray(10, value)
+        self._setArray(12, value)
 
     @staticmethod
     def getAdditionalChallengeCardsType():
         return NewYearChallengeCardModel
 
     def getProgressRewards(self):
-        return self._getArray(11)
+        return self._getArray(13)
 
     def setProgressRewards(self, value):
-        self._setArray(11, value)
+        self._setArray(13, value)
 
     @staticmethod
     def getProgressRewardsType():
@@ -99,7 +111,9 @@ class NewYearTournamentCelebrityModel(ViewModel):
         super(NewYearTournamentCelebrityModel, self)._initialize()
         self._addNumberProperty('completedQuestsQuantity', 0)
         self._addNumberProperty('maxQuestsQuantity', 0)
+        self._addNumberProperty('maxAdditionalQuestsQuantity', 0)
         self._addNumberProperty('rerollingQuests', 0)
+        self._addBoolProperty('isRerollChargingAvailable', False)
         self._addNumberProperty('completedAdditionalQuestsQuantity', 0)
         self._addNumberProperty('replacementsQuantity', 0)
         self._addBoolProperty('isVehicleInBattle', False)

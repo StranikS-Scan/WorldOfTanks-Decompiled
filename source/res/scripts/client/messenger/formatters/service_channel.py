@@ -24,7 +24,7 @@ from collections import defaultdict, deque, OrderedDict
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, OFFER_TOKEN_PREFIX, RESTRICTION_TYPE, ARENA_BONUS_TYPE, FAIRPLAY_VIOLATIONS, SwitchState
 from gui.server_events.events_helpers import isCelebrityQuest
 from gui.shared.gui_items.loot_box import NewYearCategories
-from items.components.ny_constants import TOKEN_VARIADIC_DISCOUNT_PREFIX, Ny23CoinToken, CelebrityQuestTokenParts, NyCurrency
+from items.components.ny_constants import TOKEN_VARIADIC_DISCOUNT_PREFIX, Ny23CoinToken, CelebrityQuestTokenParts, NyCurrency, NY_STATE
 from new_year.celebrity.celebrity_quests_helpers import GuestsQuestsConfigHelper, marathonTokenCountExtractor, marathonQuestsFilter
 from new_year.ny_bonuses import EconomicBonusHelper, toPrettySingleBonusValue
 from new_year.ny_constants import TOY_COLLECTIONS, GuestsQuestsTokens, NyResourceCollectingStats, GuestQuestTokenActionType
@@ -4766,11 +4766,12 @@ class NyAutoCollectingFormatter(ServiceChannelFormatter):
         if not message:
             return [MessageData(None, None)]
         else:
-            stats, isAutoCollectingActive = message.data
+            stats, isAutoCollectingActive, currentNYState = message.data
+            isFinished = currentNYState == NY_STATE.FINISHED
             currency, value = first(stats.get(NyResourceCollectingStats.SPENT_MONEY, {}).iteritems(), (Currency.CREDITS, 0))
             result = []
             template = self.__TEMPLATE
-            if self.__nyController.isFinished():
+            if isFinished:
                 template = self.__FINAL_TEMPLATE
                 header = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.financialTransaction())
                 result.append(backport.text(R.strings.system_messages.newYear.collectingResources.auto.finished()))
@@ -4784,7 +4785,7 @@ class NyAutoCollectingFormatter(ServiceChannelFormatter):
             if value > 0:
                 result.append(backport.text(R.strings.system_messages.newYear.collectingResources.auto.spentMoney(), money=u' '.join([applyAll(currency, value), makeHtmlString(u'html_templates:lobby/iconText', currency)])))
             res = stats.get(NyResourceCollectingStats.RESOURCES, {})
-            if not self.__nyController.isFinished() and res:
+            if not isFinished and res:
                 result.append(backport.text(R.strings.system_messages.newYear.collectingResources.auto.collected()))
                 for resource in _RESOURCES_ORDER:
                     result.append(backport.text(R.strings.system_messages.newYear.resources.dyn(resource)(), count=res[resource]))

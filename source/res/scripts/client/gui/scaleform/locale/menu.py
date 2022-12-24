@@ -577,6 +577,8 @@ class MENU(object):
     TANK_PARAMS_PITCHLIMITS = '#menu:tank_params/pitchLimits'
     TANK_PARAMS_GUNYAWLIMITS = '#menu:tank_params/gunYawLimits'
     TANK_PARAMS_CLIPFIRERATE = '#menu:tank_params/clipFireRate'
+    TANK_PARAMS_BURSTFIRERATE = '#menu:tank_params/burstFireRate'
+    TANK_PARAMS_TURBOSHAFTBURSTFIRERATE = '#menu:tank_params/turboshaftBurstFireRate'
     TANK_PARAMS_RELATIVEPOWER = '#menu:tank_params/relativePower'
     TANK_PARAMS_RELATIVEARMOR = '#menu:tank_params/relativeArmor'
     TANK_PARAMS_RELATIVEMOBILITY = '#menu:tank_params/relativeMobility'
@@ -628,6 +630,7 @@ class MENU(object):
     TANK_PARAMS_KG = '#menu:tank_params/kg'
     TANK_PARAMS_MPS = '#menu:tank_params/mps'
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
+    TANK_PARAMS_BURSTSEC = '#menu:tank_params/burstSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
     TANK_PARAMS_STUNDURATIONLIST = '#menu:tank_params/stunDurationList'
@@ -1233,6 +1236,8 @@ class MENU(object):
     VEHICLEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:vehicleInfo/params/avgDamagePerMinute'
     VEHICLEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:vehicleInfo/params/enginePowerPerTon'
     VEHICLEINFO_PARAMS_CLIPFIRERATE = '#menu:vehicleInfo/params/clipFireRate'
+    VEHICLEINFO_PARAMS_BURSTFIRERATE = '#menu:vehicleInfo/params/burstFireRate'
+    VEHICLEINFO_PARAMS_TURBOSHAFTBURSTFIRERATE = '#menu:vehicleInfo/params/turboshaftBurstFireRate'
     VEHICLEINFO_PARAMS_TURRETYAWLIMITS = '#menu:vehicleInfo/params/turretYawLimits'
     VEHICLEINFO_PARAMS_INVISIBILITY = '#menu:vehicleInfo/params/invisibility'
     VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:vehicleInfo/params/invisibilityStillFactor'
@@ -2672,6 +2677,8 @@ class MENU(object):
      TANK_PARAMS_PITCHLIMITS,
      TANK_PARAMS_GUNYAWLIMITS,
      TANK_PARAMS_CLIPFIRERATE,
+     TANK_PARAMS_BURSTFIRERATE,
+     TANK_PARAMS_TURBOSHAFTBURSTFIRERATE,
      TANK_PARAMS_RELATIVEPOWER,
      TANK_PARAMS_RELATIVEARMOR,
      TANK_PARAMS_RELATIVEMOBILITY,
@@ -2723,6 +2730,7 @@ class MENU(object):
      TANK_PARAMS_KG,
      TANK_PARAMS_MPS,
      TANK_PARAMS_CLIPSEC,
+     TANK_PARAMS_BURSTSEC,
      TANK_PARAMS_STUNMAXDURATION,
      TANK_PARAMS_STUNMINDURATION,
      TANK_PARAMS_STUNDURATIONLIST,

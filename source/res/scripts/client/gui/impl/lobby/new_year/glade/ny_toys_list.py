@@ -47,7 +47,7 @@ _UNHANG_SOUNDS_MAP = {ToyTypes.TOP: NewYearSoundEvents.REMOVE_TOY_EFFECT_SMALL,
  ToyTypes.KIOSK: NewYearSoundEvents.REMOVE_TOY_EFFECT_EXPL}
 
 class NyToysList(object):
-    __slots__ = ('__viewModel', '__slotType', '__slotID', '__installedToyID')
+    __slots__ = ('__viewModel', '__slotType', '__slotID', '__installedToyID', '__isOpening')
     __nyController = dependency.descriptor(INewYearController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -58,28 +58,33 @@ class NyToysList(object):
         self.__slotID = None
         self.__installedToyID = None
         self.__viewModel = None
+        self.__isOpening = False
         return
 
     def initialize(self, viewModel):
         self.__viewModel = viewModel
 
     def clear(self):
-        self.__sendSeenToys()
-        self.__viewModel.toysList.onApplySelection -= self.__onApplySelection
-        self.__viewModel.toysList.onListClose -= self.__onListClose
-        self.__viewModel.toysList.onAllToysSeen -= self.__onAllToysSeen
-        with self.__viewModel.transaction() as model:
-            model.setSelectedSlot(-1)
-            toys = model.toysList.getToys()
-            toys.clear()
-            toys.invalidate()
-        self.__slotType = None
-        self.__slotID = None
-        self.__installedToyID = None
-        return
+        if self.__isOpening:
+            return
+        else:
+            self.__sendSeenToys()
+            self.__viewModel.toysList.onApplySelection -= self.__onApplySelection
+            self.__viewModel.toysList.onListClose -= self.__onListClose
+            self.__viewModel.toysList.onAllToysSeen -= self.__onAllToysSeen
+            with self.__viewModel.transaction() as model:
+                model.setSelectedSlot(-1)
+                toys = model.toysList.getToys()
+                toys.clear()
+                toys.invalidate()
+            self.__slotType = None
+            self.__slotID = None
+            self.__installedToyID = None
+            return
 
     def open(self, slotID):
         if slotID > -1:
+            self.__isOpening = True
             self.__slotID = slotID
             self.__slotType = self.__nyController.getSlotDescrs()[slotID].type
             self.__installedToyID = self.__getNewYearRequester().getSlotsData()[slotID]
@@ -87,6 +92,7 @@ class NyToysList(object):
             self.__viewModel.toysList.onApplySelection += self.__onApplySelection
             self.__viewModel.toysList.onListClose += self.__onListClose
             self.__viewModel.toysList.onAllToysSeen += self.__onAllToysSeen
+            self.__isOpening = False
 
     def finalize(self):
         self.clear()

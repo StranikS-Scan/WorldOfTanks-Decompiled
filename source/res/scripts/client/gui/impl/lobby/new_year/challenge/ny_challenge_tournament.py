@@ -32,6 +32,7 @@ from helpers import dependency, time_utils, uniprof
 from items.components.ny_constants import CelebrityQuestTokenParts
 from new_year.celebrity.celebrity_quests_helpers import getCelebrityMarathonQuests, getCelebrityQuestBonusesByFullQuestID, getCelebrityQuestByFullID, getRerollsCount, iterCelebrityActiveQuestsIDs, marathonTokenCountExtractor, getCelebrityAdditionalQuestsConfig, getRerollTokens
 from new_year.ny_constants import AdditionalCameraObject
+from new_year.ny_level_helper import getNYGeneralConfig
 from new_year.ny_preview import getVehiclePreviewID
 from new_year.ny_processor import isCelebrityQuestsRerollLockedByVehicle
 from shared_utils import findFirst, first
@@ -124,7 +125,9 @@ class NewYearChallengeTournament(NyHistoryPresenter):
         model.setMaxQuestsQuantity(self.__celebritySceneController.questsCount)
         model.setRerollingQuests(len(getRerollTokens()))
         model.setCompletedQuestsQuantity(self.__celebritySceneController.completedQuestsCount)
+        model.setCompletedAdditionalQuestsQuantity(self.__celebritySceneController.completedAddQuestsCount)
         model.setTimeTill(time_utils.getDayTimeLeft())
+        model.setIsRerollChargingAvailable(getNYGeneralConfig().getEventEndTime() - time_utils.getServerUTCTime() > time_utils.getDayTimeLeft())
         self.__setQuestsInfo()
         self.__fillProgression(model)
 
@@ -144,13 +147,16 @@ class NewYearChallengeTournament(NyHistoryPresenter):
                 cardsModel = dailyCardsModel if qType == CelebrityQuestTokenParts.DAY else additionalCardsModel
                 self.__makeAndFillChallengeCardModel(cardsModel, token, (qType, qNum))
 
+            completedAddQuestsCount = 0
             if not additionalCardsModel:
                 for rewardType, additionalQuestInfo in getCelebrityAdditionalQuestsConfig().iteritems():
                     receivedRewardsTokens = additionalQuestInfo.getDependencies().getTokensDependencies()
                     if all((self._itemsCache.items.tokens.getTokenCount(token) for token in receivedRewardsTokens)):
+                        completedAddQuestsCount += 1
                         continue
                     self.__makeAndFillBlockedAdditionalChallengeCardModel(additionalCardsModel, rewardType)
 
+            tx.setMaxAdditionalQuestsQuantity(max(len(getCelebrityAdditionalQuestsConfig()) - completedAddQuestsCount, len(additionalCardsModel)))
             dailyCardsModel.invalidate()
             additionalCardsModel.invalidate()
 

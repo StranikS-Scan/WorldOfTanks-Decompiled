@@ -44,6 +44,8 @@ class MarketplaceConsts(object):
     FILL_COLLECTION_YEAR = 'year'
     FILL_COLLECTION_SETTING = 'setting'
     BUY_REWARDS = 'buyRewards'
+    REWARD_DISCOUNT = 'discount'
+    REWARD_SKIP_DUPLICATE = 'skipDuplicate'
     ACTIONS = (FILL_COLLECTION, BUY_REWARDS)
 
 

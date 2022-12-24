@@ -33,7 +33,7 @@ def getMarketItemBonusesFromItem(item, eventsCache=None):
     rewards = actions.get(MarketplaceConsts.BUY_REWARDS)
     if rewards:
         bonuses = []
-        for _, bonusData in rewards:
+        for _, _, bonusData in rewards:
             bonuses.extend(createBonuses(bonusData))
 
         return bonuses

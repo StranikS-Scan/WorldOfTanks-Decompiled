@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	13	</backward>
   </speedLimits>
   <invisibility>
@@ -2781,7 +2781,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11900	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2837,8 +2837,8 @@
             </armor_19>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	13.8	</reloadTime>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	16	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -3584,7 +3584,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11500	</weight>
-      <maxHealth>	350	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3653,8 +3653,8 @@
             </armor_25>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	13.5	</reloadTime>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	15.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -4359,11 +4359,11 @@
       <engines>
         <V_2_54SCR>
           <smplEnginePower>	550	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </V_2_54SCR>
         <V_2_54SCM>
           <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </V_2_54SCM>
       </engines>
       <chassis>

@@ -1186,6 +1186,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if not wasAlive and isAlive:
                 self.__disableRespawnMode = True
                 self.guiSessionProvider.movingToRespawnBase()
+                if self.vehicle:
+                    self.vehicle.ownVehicle.initialUpdate(force=True)
             if not isAlive and wasAlive:
                 if self.gunRotator:
                     self.gunRotator.stop()

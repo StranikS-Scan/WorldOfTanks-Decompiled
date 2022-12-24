@@ -47,7 +47,7 @@ class ModeSelectorDataProvider(IGlobalListener):
         self.onListChanged = SafeEvent()
         self._items = OrderedDict()
         self._initializeModeSelectorItems()
-        self.__updateItems()
+        self._updateItems()
         self.startGlobalListening()
 
     @property
@@ -86,7 +86,7 @@ class ModeSelectorDataProvider(IGlobalListener):
             if nameItem not in items:
                 self._clearItem(self._items.pop(nameItem))
 
-        self.__updateItems()
+        self._updateItems()
 
     def _onCardChangeHandler(self, *args, **kwargs):
         self._updateItemsForce()
@@ -94,7 +94,7 @@ class ModeSelectorDataProvider(IGlobalListener):
     def _updateItemsForce(self):
         self._clearItems()
         self.__createItems(self.__getItems())
-        self.__updateItems()
+        self._updateItems()
 
     def _clearItems(self):
         for key in self._items:
@@ -110,6 +110,11 @@ class ModeSelectorDataProvider(IGlobalListener):
     @staticmethod
     def _getModeSelectorLegacyItem(modeName, selectorItem):
         return None if selectorItem is not None and not selectorItem.isVisible() else (collectModeSelectorItem(modeName) or ModeSelectorLegacyItem)(selectorItem)
+
+    def _updateItems(self):
+        self._updateItemsPosition()
+        self._updateSelection()
+        self.onListChanged()
 
     def _updateSelection(self):
         prbDispatcher = g_prbLoader.getDispatcher()
@@ -156,11 +161,6 @@ class ModeSelectorDataProvider(IGlobalListener):
                     self.__initializeItem(item)
 
         return
-
-    def __updateItems(self):
-        self._updateItemsPosition()
-        self._updateSelection()
-        self.onListChanged()
 
     def __initializeItem(self, item):
         item.initialize()

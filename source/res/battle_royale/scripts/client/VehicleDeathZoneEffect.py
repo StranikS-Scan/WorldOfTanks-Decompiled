@@ -16,7 +16,8 @@ class VehicleDeathZoneEffect(DynamicScriptComponent):
         self.set_state()
 
     def set_state(self, _=None):
-        value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, False, self.timeLeft(), BrTimerViewState.fromZone(self.state), 0)
+        timeLeft = self.timeLeft()
+        value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, False, timeLeft, BrTimerViewState.fromZone(self.state), timeLeft + BigWorld.serverTime())
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE_TIMER, value)
 
     def timeLeft(self):

@@ -269,6 +269,17 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('showOwnVehicleHitDirection {}'.format(data))
         avatar.showOwnVehicleHitDirection(data.hitDirYaw, data.attackerID, data.damage, data.crits, data.isBlocked, data.isShellHE, data.damagedID, data.attackReasonID)
 
+    def redrawVehicleOnRespawn(self, vehicleID, newVehCompactDescr, newVehOutfitCompactDescr):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.redrawVehicleOnRespawn(vehicleID, newVehCompactDescr, newVehOutfitCompactDescr)
+
+    def beforeRespawn(self, vehicleID, health):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle:
+            vehicle.onHealthChanged(health, health, 0, 0)
+
     def getReloadTime(self):
         return self.__getTimeLeftBaseTime(self.vehicleGunReloadTime, True) if self.vehicleGunReloadTime else (0, 0)
 

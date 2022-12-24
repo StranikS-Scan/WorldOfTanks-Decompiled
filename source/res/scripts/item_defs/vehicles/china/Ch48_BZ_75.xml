@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -2007,14 +2007,14 @@
             <maxPitch>	0 8 0.361 8 0.389 0 0.611 0 0.639 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
-          <reloadTime>	17	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <reloadTime>	18	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.15	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2709,7 +2709,7 @@
       <engines>
         <HS_110F>
           <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </HS_110F>
       </engines>
       <chassis>

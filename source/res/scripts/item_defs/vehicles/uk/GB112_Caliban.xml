@@ -72,6 +72,13 @@
       <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB112_Caliban_WAC_3DSt>
+          <undamaged>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Hull.model	</exploded>
+        </GB112_Caliban_WAC_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -104,62 +111,30 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <compatibleModels>	default	</compatibleModels>
-        <position>	0.000004 0.701729 2.627530	</position>
-        <rotation>	0.838045 3.139860 0.000020	</rotation>
-        <scale>	0.729663 0.269462 0.729662	</scale>
-        <showOn>	16	</showOn>
-        <verticalMirror>	false	</verticalMirror>
-        <anchorPosition>	-0.000027 -0.236813 2.645120	</anchorPosition>
-        <anchorDirection>	-0.001306 -0.668917 0.743336	</anchorDirection>
         <rayStart>	-0.668986 0.535731 2.16461	</rayStart>
         <rayEnd>	-0.640639 0.356664 2.06136	</rayEnd>
-        <rayUp>	0.0440551 0.00640249 -0.999009	</rayUp>
+        <rayUp>	0.044055 0.006402 -0.999009	</rayUp>
         <size>	0.28	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
-        <compatibleModels>	default	</compatibleModels>
-        <position>	0.000004 0.701729 2.627530	</position>
-        <rotation>	0.838044 3.139860 0.000020	</rotation>
-        <scale>	0.729663 0.269462 0.729662	</scale>
-        <showOn>	16	</showOn>
         <anchorPosition>	0.000004 0.812884 -1.88729	</anchorPosition>
-        <anchorDirection>	0.000000 0.198628 -0.980075	</anchorDirection>
-        <doubleSided>	false	</doubleSided>
-        <clipAngle>	0.000000	</clipAngle>
+        <anchorDirection>	0 0.198628 -0.980075	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	12000	</slotId>
-        <compatibleModels>	default	</compatibleModels>
-        <position>	0.000004 0.701729 2.627530	</position>
-        <rotation>	0.838044 3.139860 0.000020	</rotation>
-        <scale>	0.729663 0.269462 0.729662	</scale>
-        <showOn>	16	</showOn>
         <anchorPosition>	0.000004 0.839643 -1.89367	</anchorPosition>
-        <anchorDirection>	0.000000 0.198628 -0.980075	</anchorDirection>
-        <doubleSided>	false	</doubleSided>
-        <clipAngle>	0.000000	</clipAngle>
+        <anchorDirection>	0 0.198628 -0.980075	</anchorDirection>
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
         <slotId>	14000	</slotId>
-        <compatibleModels>	default	</compatibleModels>
-        <position>	0.000004 0.701729 2.627530	</position>
-        <rotation>	0.838044 3.139860 0.000020	</rotation>
-        <scale>	0.729663 0.269462 0.729662	</scale>
-        <showOn>	16	</showOn>
-        <anchorPosition>	-0.000027 -0.236814 2.645120	</anchorPosition>
-        <anchorDirection>	-0.001307 -0.668918 0.743335	</anchorDirection>
-        <doubleSided>	false	</doubleSided>
-        <clipAngle>	0.000000	</clipAngle>
         <rayStart>	-1.59275 -0.124871 0.487065	</rayStart>
         <rayEnd>	-1.34381 -0.124871 0.488024	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayUp>	0 1 0	</rayUp>
         <size>	0.8575	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -167,18 +142,9 @@
       <slot>
         <slotType>	inscription	</slotType>
         <slotId>	14001	</slotId>
-        <compatibleModels>	default	</compatibleModels>
-        <position>	0.000004 0.701729 2.627530	</position>
-        <rotation>	0.838044 3.139860 0.000020	</rotation>
-        <scale>	1.333980 0.200000 1.333980	</scale>
-        <showOn>	16	</showOn>
-        <anchorPosition>	-0.000027 -0.236814 2.645110	</anchorPosition>
-        <anchorDirection>	-0.001307 -0.668918 0.743335	</anchorDirection>
-        <doubleSided>	false	</doubleSided>
-        <clipAngle>	0.000000	</clipAngle>
         <rayStart>	1.66051 -0.130594 0.451062	</rayStart>
         <rayEnd>	1.26054 -0.130594 0.485146	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayUp>	0 1 0	</rayUp>
         <size>	0.8575	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1480,6 +1446,56 @@
         <anchorShift>	0.161105	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15099	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+        <position>	-0.032824 1.674896 1.58326	</position>
+        <rotation>	0.05359 -0.001743 3.141573	</rotation>
+        <scale>	0.47485 0.175361 0.47485	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.075123	</clipAngle>
+        <anchorShift>	0.09	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15100	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+        <position>	-1.54745 0.82996 2.17509	</position>
+        <rotation>	1.56864 -1.56788 3.13963	</rotation>
+        <scale>	0.551583 0.203698 0.551582	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.58246	</clipAngle>
+        <anchorShift>	-0.01634	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15101	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+        <position>	1.54746 0.829917 2.17509	</position>
+        <rotation>	1.56843 1.56752 3.13983	</rotation>
+        <scale>	0.551582 0.203697 0.551581	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.58246	</clipAngle>
+        <anchorShift>	-0.01634	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15102	</slotId>
+        <tags>	formfactor_square safe front	</tags>
+        <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+        <position>	-0.05700 1.42000 2.25000	</position>
+        <rotation>	0.50632 -0.00192 3.14124	</rotation>
+        <scale>	1.34699 0.49800 1.34700	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.153663	</anchorShift>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	3 3 0.000000 0.000000	</tiling>
@@ -1516,6 +1532,13 @@
         <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB112_Caliban_WAC_3DSt>
+            <undamaged>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Chassis.model	</exploded>
+          </GB112_Caliban_WAC_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1569,6 +1592,39 @@
                   <groupOuterOffset>	-0.222501	</groupOuterOffset>
                 </wheelGroup>
               </wheelGroups>
+              <hullCollider>
+                <modelsSet>	GB112_Caliban_WAC_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.856000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.358520 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.800724	</row2>
+                  <row3>	0.000000 1.111228 -0.046738	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.872000	</row2>
+                  <row3>	0.000000 1.244543 -0.211000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.165276 0.250367	</row1>
+                  <row2>	0.000000 -0.412493 0.272301	</row2>
+                  <row3>	0.000000 1.136000 2.953000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.102652 0.281891	</row1>
+                  <row2>	0.000000 -0.464429 -0.169125	</row2>
+                  <row3>	0.000001 1.025000 -3.007000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.862282 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.838280	</row2>
+                  <row3>	-1.602783 0.920942 -0.002292	</row3>
+                </boxCollider>
+              </hullCollider>
               <hullCollider>
                 <boxCollider>
                   <row0>	1.817192 0.000000 0.000000	</row0>
@@ -1642,6 +1698,39 @@
                   <groupOuterOffset>	0.222501	</groupOuterOffset>
                 </wheelGroup>
               </wheelGroups>
+              <hullCollider>
+                <modelsSet>	GB112_Caliban_WAC_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.856000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.358520 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.800720	</row2>
+                  <row3>	0.000000 1.111230 -0.046738	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.872000	</row2>
+                  <row3>	0.000000 1.244540 -0.211000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.165276 0.250367	</row1>
+                  <row2>	0.000000 -0.412493 0.272301	</row2>
+                  <row3>	0.000000 1.136000 2.953000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.970480 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.102652 0.281891	</row1>
+                  <row2>	0.000000 -0.464429 -0.169125	</row2>
+                  <row3>	0.000001 1.025000 -3.007000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.862282 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.838280	</row2>
+                  <row3>	1.602783 0.920942 -0.002292	</row3>
+                </boxCollider>
+              </hullCollider>
               <hullCollider>
                 <boxCollider>
                   <row0>	1.817192 0.000000 0.000000	</row0>
@@ -2546,6 +2635,13 @@
             <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB112_Caliban_WAC_3DSt>
+                <undamaged>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </GB112_Caliban_WAC_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB112_Caliban/collision/Gun_01.model	</collisionModelServer>
@@ -2565,50 +2661,22 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-              <compatibleModels>	default	</compatibleModels>
-              <position>	-1.09233 2.07613 0.012429	</position>
-              <rotation>	1.56875 1.56598 -0.00296194	</rotation>
-              <scale>	0.318313 0.264664 0.318312	</scale>
-              <doubleSided>	false	</doubleSided>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.000903739 0.104657 2.52773	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	0.000904 0.104657 2.52773	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <compatibleModels>	default	</compatibleModels>
-              <position>	-1.09233 2.07613 0.012429	</position>
-              <rotation>	1.56875 1.56596 -0.00297115	</rotation>
-              <scale>	0.318313 0.264664 0.318312	</scale>
-              <doubleSided>	false	</doubleSided>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.000900984 0.239568 0.471953	</anchorPosition>
+              <anchorPosition>	0.000901 0.239568 0.471953	</anchorPosition>
               <anchorDirection>	0.000002 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <compatibleModels>	default	</compatibleModels>
-              <position>	-1.09233 2.07613 0.012429	</position>
-              <rotation>	1.56875 1.56596 -0.00297115	</rotation>
-              <scale>	0.318313 0.264664 0.318312	</scale>
-              <doubleSided>	false	</doubleSided>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.000903964 0.124989 2.52155	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	0.000904 0.124989 2.52155	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
@@ -2640,13 +2708,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45002	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_square	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	-0.000119 2.28558 0.998851	</position>
@@ -2714,13 +2775,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45007	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	-0.010651 2.30987 -0.049881	</position>
@@ -2776,13 +2830,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45011	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	-1.09188 2.07613 -0.23596	</position>
@@ -2850,13 +2897,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45016	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_rect1x4	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	0.000138 2.08093 -0.644341	</position>
@@ -2871,13 +2911,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45017	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_rect1x4	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	0.000182 2.05976 -0.925979	</position>
@@ -2891,13 +2924,6 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45018	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_rect1x6	</tags>
               <compatibleModels>	default	</compatibleModels>
               <position>	0.000182 2.05976 -0.925979	</position>
@@ -2911,40 +2937,37 @@
             <slot>
               <slotType>	projectionDecal	</slotType>
               <slotId>	45019	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-              <position>	-0.0108003 2.11885 0.623697	</position>
-              <rotation>	0.171874 -0.000302123 3.13983	</rotation>
+              <tags>	formfactor_rect1x3	</tags>
+              <position>	-0.0108 2.11885 0.623697	</position>
+              <rotation>	0.171874 -0.000302 3.13983	</rotation>
               <scale>	2.00795 0.40755 2.00795	</scale>
               <doubleSided>	false	</doubleSided>
               <showOn>	4352	</showOn>
               <clipAngle>	0.55874	</clipAngle>
-              <tags>	formfactor_rect1x3	</tags>
               <anchorShift>	0.271793	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45020	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+              <position>	0.000114 2.28798 -0.506511	</position>
+              <rotation>	3.11065 -0.000154 -0.000014	</rotation>
+              <scale>	0.660959 0.24409 0.660958	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0	</clipAngle>
+              <verticalMirror>	true	</verticalMirror>
+              <anchorShift>	0.013663	</anchorShift>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000000 0.00133 2.52504	</rayStart>
-              <rayEnd>	0.000000 0.000000 1.39602	</rayEnd>
-              <rayUp>	0.194409 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <rayStart>	0 0.00133 2.52504	</rayStart>
+              <rayEnd>	0 0.00133 2.98504	</rayEnd>
+              <rayUp>	0.194409 0 0	</rayUp>
               <size>	0.46	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
-              <position>	-0.0108003 2.11885 0.623697	</position>
-              <rotation>	0.171874 -0.000302123 3.13983	</rotation>
-              <scale>	2.00795 0.40755 2.00795	</scale>
-              <doubleSided>	false	</doubleSided>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.55874	</clipAngle>
-              <anchorPosition>	-0.0103341 0.356851 0.0898368	</anchorPosition>
-              <anchorDirection>	0.0017154 0.985265 0.171029	</anchorDirection>
             </slot>
           </customizationSlots>
           <edgeByVisualModel>	false	</edgeByVisualModel>
@@ -2959,6 +2982,13 @@
         <undamaged>	vehicles/british/GB112_Caliban/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB112_Caliban/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB112_Caliban/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB112_Caliban_WAC_3DSt>
+            <undamaged>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB112_Caliban/_skins/GB112_Caliban_WAC_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </GB112_Caliban_WAC_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB112_Caliban/collision/Turret_01.model	</collisionModelServer>
@@ -2978,65 +3008,33 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
-          <rayStart>	-1.47221 0.188325 0.0596419	</rayStart>
-          <rayEnd>	-0.473779 0.188325 0.0035713	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.25	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
-          <anchorPosition>	0.000000 0.608424 0.000000	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	-0 0.608424 0	</anchorPosition>
+          <anchorDirection>	-0 1 0	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
-          <rayStart>	-1.47221 0.188325 0.0596419	</rayStart>
-          <rayEnd>	-0.473779 0.188325 0.0035713	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.25	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
           <anchorPosition>	0.000015 0.705205 0.057572	</anchorPosition>
-          <anchorDirection>	0.000003 1 0.000000	</anchorDirection>
+          <anchorDirection>	0.000003 1 0	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <compatibleModels>	default	</compatibleModels>
-          <position>	-0.858597 1.68412 0.875504	</position>
-          <rotation>	1.59816 1.5087 -0.559865	</rotation>
-          <scale>	0.449936 0.16616 0.449936	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	272	</showOn>
-          <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.888162 0.244929 0.521798	</anchorPosition>
-          <anchorDirection>	-0.878332 0.0231836 0.477488	</anchorDirection>
-          <rayStart>	-1.47221 0.188325 0.0596419	</rayStart>
-          <rayEnd>	-0.473779 0.188325 0.0035713	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayStart>	-1.47221 0.188325 0.059642	</rayStart>
+          <rayEnd>	-0.473779 0.188325 0.003571	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
           <size>	0.25	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <compatibleModels>	default	</compatibleModels>
-          <position>	-0.858597 1.68412 0.875504	</position>
-          <rotation>	1.59816 1.5087 -0.559865	</rotation>
-          <scale>	0.449935 0.16616 0.449936	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	272	</showOn>
-          <clipAngle>	0.000000	</clipAngle>
-          <anchorPosition>	-0.888162 0.244929 0.521798	</anchorPosition>
-          <anchorDirection>	-0.878332 0.0231836 0.477488	</anchorDirection>
-          <rayStart>	1.48095 0.184194 0.0782215	</rayStart>
-          <rayEnd>	0.463014 0.184194 0.0210555	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
           <isMirrored>	true	</isMirrored>
+          <rayStart>	1.48095 0.184194 0.078221	</rayStart>
+          <rayEnd>	0.463014 0.184194 0.021055	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.28	</size>
+          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -3167,6 +3165,30 @@
           <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	0.03366	</anchorShift>
           <hiddenForUser>	true	</hiddenForUser>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35010	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+          <position>	-0.858597 1.68412 0.875504	</position>
+          <rotation>	1.59816 1.5087 -0.559866	</rotation>
+          <scale>	0.449935 0.16616 0.449936	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0	</clipAngle>
+          <anchorShift>	0.04366	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35011	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	GB112_Caliban_WAC_3DSt	</compatibleModels>
+          <position>	0.858629 1.6841 0.875504	</position>
+          <rotation>	1.59813 -1.50862 0.559937	</rotation>
+          <scale>	0.449935 0.16616 0.449936	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0	</clipAngle>
+          <anchorShift>	0.03366	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

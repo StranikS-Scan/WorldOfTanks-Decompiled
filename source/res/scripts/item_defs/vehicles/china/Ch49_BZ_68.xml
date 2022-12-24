@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	29300	</weight>
-    <maxHealth>	1560	</maxHealth>
+    <maxHealth>	1500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -2794,7 +2794,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	290	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -2829,13 +2829,13 @@
             <gun>	55	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	15.5	</reloadTime>
+          <reloadTime>	16	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.1	</aimingTime>
+          <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
@@ -3497,7 +3497,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	390	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -3559,13 +3559,13 @@
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	15	</reloadTime>
+          <reloadTime>	15.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
@@ -4292,7 +4292,6 @@
           <doubleSided>	false	</doubleSided>
         </slot>
       </customizationSlots>
-      <gunPosition>	0.000011 0.318104 1.2936	</gunPosition>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>
@@ -4336,11 +4335,11 @@
       <engines>
         <_12150LTM>
           <smplEnginePower>	600	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_12150LTM>
         <V_2_54SCH>
           <smplEnginePower>	770	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </V_2_54SCH>
       </engines>
       <chassis>

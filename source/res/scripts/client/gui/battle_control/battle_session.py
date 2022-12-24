@@ -259,13 +259,17 @@ class BattleSessionProvider(IBattleSessionProvider):
             ammoCtrl.updateVehicleQuickShellChanger(isActive)
         return
 
-    def movingToRespawnBase(self):
+    def movingToRespawnBase(self, vehicle=None):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
+            if vehicle:
+                ctrl.setGunSettings(vehicle.typeDescriptor.gun)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
+            if vehicle:
+                ctrl.notifyPlayerVehicleSet(vehicle.id)
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)

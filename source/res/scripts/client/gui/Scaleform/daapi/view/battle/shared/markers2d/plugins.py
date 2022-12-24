@@ -558,7 +558,7 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
             marker = item.getEnemyMarker()
             markerColor = item.getEnemyMarkerColor()
         self._invokeMarker(markerID, 'init', marker, _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, markerColor)
-        self.__setCallback(markerID, round(BigWorld.serverTime() + delay))
+        self.__setCallback(markerID, BigWorld.serverTime() + delay)
         return
 
     def __setCallback(self, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):
@@ -572,12 +572,12 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
 
     def __handleCallback(self, markerID, finishTime):
         self.__callbackIDs[markerID] = None
-        delay = round(finishTime - BigWorld.serverTime())
+        delay = finishTime - BigWorld.serverTime()
         if delay <= 0:
             self._destroyMarker(markerID)
         else:
-            self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(abs(delay)))
-            self.__setCallback(markerID, finishTime)
+            self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(abs(round(delay))))
+            self.__setCallback(markerID, finishTime, min(delay, _EQUIPMENT_DEFAULT_INTERVAL))
         return
 
 

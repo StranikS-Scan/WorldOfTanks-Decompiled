@@ -299,6 +299,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__prevHealth = self.maxHealth
         self.resetProperties()
         self.onAppearanceReady()
+        if hasattr(self, 'rocketAccelerationController'):
+            self.rocketAccelerationController.init()
 
     def __onVehicleInfoAdded(self, vehID):
         if self.id != vehID:
@@ -1139,6 +1141,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         super(Vehicle, self).addModel(model)
         highlighter = self.appearance.highlighter
         if highlighter.isOn:
+            highlighter.highlight(False)
             highlighter.highlight(True)
 
     def delModel(self, model):

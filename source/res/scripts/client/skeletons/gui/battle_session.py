@@ -698,7 +698,7 @@ class IBattleSessionProvider(object):
     def updateVehicleQuickShellChanger(self, isActive):
         raise NotImplementedError
 
-    def movingToRespawnBase(self):
+    def movingToRespawnBase(self, vehicle=None):
         raise NotImplementedError
 
     def invalidateVehicleState(self, state, value, vehicleID=0):

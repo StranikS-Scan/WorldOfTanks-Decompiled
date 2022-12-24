@@ -14,21 +14,27 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent):
     def __init__(self):
         super(RocketAccelerationController, self).__init__()
         self.__readyCallback = None
-        try:
-            appearance = self.entity.appearance
-            self.__prefabRoot = None
-            self.__effectsPrefab = self.entity.typeDescriptor.type.rocketAccelerationParams.effectsPrefab
-            self.__duration = self.entity.typeDescriptor.type.rocketAccelerationParams.duration
-            self.__reloadTime = self.entity.typeDescriptor.type.rocketAccelerationParams.reloadTime
-            self.__deployTme = self.entity.typeDescriptor.type.rocketAccelerationParams.deployTime
-            self.__onStateChanged = Event()
-            self.__onTryActivate = Event()
-            loadAppearancePrefab(self.__effectsPrefab, appearance, self.__onLoaded)
-        except Exception as ex:
-            _logger.exception(ex)
-            self.cleanup()
-
+        self.__prefabRoot = None
+        self.__onStateChanged = Event()
+        self.__onTryActivate = Event()
+        self.__effectsPrefab = ''
+        self.__duration = 0
+        self.__reloadTime = 0.0
+        self.__deployTme = 0.0
+        self.__inited = False
         return
+
+    @noexcept
+    def init(self):
+        if self.__inited:
+            return
+        self.__effectsPrefab = self.entity.typeDescriptor.type.rocketAccelerationParams.effectsPrefab
+        self.__duration = self.entity.typeDescriptor.type.rocketAccelerationParams.duration
+        self.__reloadTime = self.entity.typeDescriptor.type.rocketAccelerationParams.reloadTime
+        self.__deployTme = self.entity.typeDescriptor.type.rocketAccelerationParams.deployTime
+        appearance = self.entity.appearance
+        loadAppearancePrefab(self.__effectsPrefab, appearance, self.__onLoaded)
+        self.__inited = True
 
     @property
     def prefabPath(self):

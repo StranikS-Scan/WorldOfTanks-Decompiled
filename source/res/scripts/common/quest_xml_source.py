@@ -356,6 +356,7 @@ class Source(object):
          'GR': self.__readBattleResultsConditionList,
          'igrType': self.__readCondition_IGRType,
          'premium': self.__readCondition_bool,
+         'special': self.__readCondition_bool,
          'premiumPlus': self.__readCondition_bool,
          'premiumVip': self.__readCondition_bool,
          'isPremiumQuestsEnabled': self.__readCondition_bool,

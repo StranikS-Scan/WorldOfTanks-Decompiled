@@ -855,12 +855,9 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         if not self.__aimingModeUserDisabled:
             self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
         arcadeState = None
-        if self.acceptsArcadeState:
-            pos = prevMode[self._PREFERED_POSITION]
-            if prevMode[self._DISTANCE] is not None:
-                arcadeState = self.__aih.ctrl.camera.cloneState(distance=prevMode[self._DISTANCE], state=prevMode[self._ZOOMSWICHER_STATE])
-        else:
-            pos = self._getPreferedPositionOnQuit()
+        pos = self._getPreferedPositionOnQuit()
+        if self.acceptsArcadeState and prevMode[self._DISTANCE] is not None:
+            arcadeState = self.__aih.ctrl.camera.cloneState(distance=prevMode[self._DISTANCE], state=prevMode[self._ZOOMSWICHER_STATE])
         if not arcadeState and prevMode[self._DISTANCE] and prevMode[self._ZOOMSWICHER_STATE]:
             arcadeState = ArcadeCameraState(prevMode[self._DISTANCE], prevMode[self._ZOOMSWICHER_STATE])
         self.__aih.onControlModeChanged(prevMode[self._MODE_NAME], preferredPos=pos, aimingMode=self.__aimingMode, saveDist=False, saveZoom=True, arcadeState=arcadeState)

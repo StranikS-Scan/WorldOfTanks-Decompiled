@@ -58,6 +58,12 @@ class AppearanceCache(IAppearanceCache):
 
     def removeAppearance(self, vId, strCD=None):
         _logger.debug('removeAppearance(%d)', vId)
+        if strCD is None:
+            for vehicleID, compactDescr in self.__appearanceCache.iterkeys():
+                if vehicleID == vId:
+                    strCD = compactDescr
+                    break
+
         key = self.__makeUniqueKey(vId, strCD)
         self.__validateAppearanceCache(key)
         appearance = self.__appearanceCache.pop(key, None)

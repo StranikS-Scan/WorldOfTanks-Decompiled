@@ -285,6 +285,22 @@ class Stats(object):
         self.__account._doCmdIntStr(AccountCommands.CMD_SET_DOSSIER_FIELD, value, path, proxy)
         return
 
+    def addTokens(self, token, tokenCount=1, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+        else:
+            proxy = None
+        self.__account._doCmdIntStr(AccountCommands.CMD_ADD_TOKENS, tokenCount, token, proxy)
+        return
+
+    def drawTokens(self, token, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+        else:
+            proxy = None
+        self.__account._doCmdStr(AccountCommands.CMD_DRAW_TOKENS, token, proxy)
+        return
+
     def unlockAll(self, callback=None):
         if self.__ignore:
             if callback is not None:

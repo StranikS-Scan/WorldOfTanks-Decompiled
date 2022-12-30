@@ -135,7 +135,7 @@
       <ExposedForReplay>	true	</ExposedForReplay>
     </playerVehicleID>
     <playerVehicleTypeCompDescr>
-      <Type>	UINT16	</Type>
+      <Type>	VEH_TYPE_CD	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </playerVehicleTypeCompDescr>
     <isObserverBothTeams>
@@ -240,6 +240,7 @@
     <goodiesSnapshot>
       <Type>	BATTLE_GOODIES_LIST	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <ExposedForReplay>	true	</ExposedForReplay>
     </goodiesSnapshot>
   </Properties>
   <TempProperties>

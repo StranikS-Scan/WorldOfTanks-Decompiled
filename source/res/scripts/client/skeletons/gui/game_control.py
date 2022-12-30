@@ -2335,6 +2335,70 @@ class IResourceWellController(IGameController):
         raise NotImplementedError
 
 
+class ICollectiveGoalEntryPointController(IGameController):
+    onSettingsChanged = None
+    onEventUpdated = None
+    onDataUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isCompleted(self):
+        raise NotImplementedError
+
+    def isStarted(self):
+        raise NotImplementedError
+
+    def isFinished(self):
+        raise NotImplementedError
+
+    def isForbidden(self):
+        raise NotImplementedError
+
+    def getEventStartTime(self):
+        raise NotImplementedError
+
+    def getActivePhaseStartTime(self):
+        raise NotImplementedError
+
+    def getActivePhaseFinishTime(self):
+        raise NotImplementedError
+
+    def getEventFinishTime(self):
+        raise NotImplementedError
+
+    def getCurrentPoints(self):
+        raise NotImplementedError
+
+    def getStagePoints(self):
+        raise NotImplementedError
+
+    def getDiscounts(self):
+        raise NotImplementedError
+
+    def getCurrentDiscount(self):
+        raise NotImplementedError
+
+    def getMarathonPrefix(self):
+        raise NotImplementedError
+
+    def getMarathonName(self):
+        raise NotImplementedError
+
+    def getGoalType(self):
+        raise NotImplementedError
+
+    def getGoalDescription(self):
+        raise NotImplementedError
+
+    def getRulesCaption(self):
+        raise NotImplementedError
+
+
+class ICollectiveGoalMarathonsController(IGameController):
+    onMarathonUpdated = None
+
+
 class IFunRandomController(IGameController):
 
     class IFunSubSystem(object):

@@ -350,6 +350,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         self.__arenaDP = self.sessionProvider.getArenaDP()
         if ctrl is not None:
             ctrl.onVehicleMarkerRemoved += self.onVehicleMarkerRemoved
+            ctrl.onVehicleMarkerAdded += self.onVehicleMarkerAdded
             ctrl.onVehicleFeedbackReceived += self.onVehicleFeedbackReceived
         add = g_eventBus.addListener
         add(GameEvent.ON_TARGET_VEHICLE_CHANGED, self._handleAutoAimMarker, scope=settings.SCOPE)
@@ -370,6 +371,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleMarkerRemoved -= self.onVehicleMarkerRemoved
+            ctrl.onVehicleMarkerAdded -= self.onVehicleMarkerAdded
             ctrl.onVehicleFeedbackReceived -= self.onVehicleFeedbackReceived
         remove = g_eventBus.removeListener
         remove(GameEvent.ON_TARGET_VEHICLE_CHANGED, self._handleAutoAimMarker, scope=settings.SCOPE)
@@ -388,7 +390,11 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
             self._destroyVehicleMarker(vehicleID)
 
     def onVehicleMarkerRemoved(self, vehicleID):
-        self._hideVehicleMarker(vehicleID)
+        self._hideVehicleMarker(vehicleID, clearVehicleID=False)
+
+    def onVehicleMarkerAdded(self, _, vInfo, __):
+        if self._vehicleID and self._vehicleID == vInfo.vehicleID:
+            self._addMarker(self._vehicleID)
 
     def _destroyVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:

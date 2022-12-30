@@ -65,14 +65,12 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
         else:
             if self.__isSwitching:
                 self.__pushToPostponeCall(self._updateTimer, (data,))
-            elif self._canUpdateTimer(data):
+            elif self._canUpdateTimer():
                 self._guiSessionProvider.invalidateVehicleState(self._timerViewID, data)
                 self._updateMarker(self._getMarkerData(isShow=False), isHide=True)
             return
 
-    def _canUpdateTimer(self, data):
-        if data['duration'] == 0.0:
-            return True
+    def _canUpdateTimer(self):
         modeName = self._avatar.inputHandler.ctrlModeName
         return True if self.entity.id == self._avatar.inputHandler.ctrl.curVehicleID and modeName != 'video' else False
 

@@ -3407,7 +3407,7 @@
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.935	</valueByLevel>
+          <valueByLevel>	0.943	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
@@ -3424,7 +3424,7 @@
     <kpi>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
-        <value>	1.07	</value>
+        <value>	1.06	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
@@ -3578,7 +3578,7 @@
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.07	</valueByLevel>
+          <valueByLevel>	1.06	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
@@ -3600,7 +3600,7 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	1.07	</value>
+        <value>	1.06	</value>
       </mul>
       <mul>
         <name>	vehicleTurretOrCuttingRotationSpeed	</name>
@@ -3671,7 +3671,7 @@
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.08	</valueByLevel>
+          <valueByLevel>	1.075	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
@@ -3693,7 +3693,7 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	1.08	</value>
+        <value>	1.075	</value>
       </mul>
       <mul>
         <name>	vehicleTurretOrCuttingRotationSpeed	</name>
@@ -3745,26 +3745,26 @@
       </exclude>
     </vehicleFilter>
     <script>	UpgradedRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.08	</trackRotateSpeedFactor>
-      <wheelRotateSpeedFactor>	1.08	</wheelRotateSpeedFactor>
-      <wheelCenterRotationFwdSpeed>	1.08	</wheelCenterRotationFwdSpeed>
-      <trackMoveSpeedFactor>	1.08	</trackMoveSpeedFactor>
-      <wheelMoveSpeedFactor>	1.08	</wheelMoveSpeedFactor>
+      <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.07	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.07	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.07	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.07	</wheelMoveSpeedFactor>
       <factors>
         <factor>
           <attribute>	miscAttrs/turretRotationSpeed	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.08	</valueByLevel>
+          <valueByLevel>	1.07	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.92	</valueByLevel>
+          <valueByLevel>	0.93	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.1	</valueByLevel>
+          <valueByLevel>	1.09	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
@@ -3781,19 +3781,19 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	1.1	</value>
+        <value>	1.09	</value>
       </mul>
       <mul>
         <name>	vehicleTurretOrCuttingRotationSpeed	</name>
-        <value>	1.08	</value>
+        <value>	1.07	</value>
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	1.08	</value>
+        <value>	1.07	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
-        <value>	0.92	</value>
+        <value>	0.93	</value>
       </mul>
       <add>
         <name>	vehicleForwardMaxSpeed	</name>
@@ -3833,12 +3833,12 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.09	</valueByLevel>
+          <valueByLevel>	1.08	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.4	</valueByLevel>
+          <valueByLevel>	1.3	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
@@ -3848,17 +3848,17 @@
         <factor>
           <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.6	</valueByLevel>
+          <valueByLevel>	1.5	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.6	</valueByLevel>
+          <valueByLevel>	1.5	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/engineHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.6	</valueByLevel>
+          <valueByLevel>	1.5	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/engineReduceFineFactor	</attribute>
@@ -3880,15 +3880,15 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.09	</value>
+        <value>	1.08	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
-        <value>	1.6	</value>
+        <value>	1.5	</value>
       </mul>
       <mul>
         <name>	vehicleChassisStrength	</name>
-        <value>	1.4	</value>
+        <value>	1.3	</value>
       </mul>
       <mul>
         <name>	vehicleChassisRepairSpeed	</name>
@@ -3928,12 +3928,12 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.1	</valueByLevel>
+          <valueByLevel>	1.09	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.5	</valueByLevel>
+          <valueByLevel>	1.4	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
@@ -3943,17 +3943,17 @@
         <factor>
           <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.8	</valueByLevel>
+          <valueByLevel>	1.7	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/fuelTankHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.8	</valueByLevel>
+          <valueByLevel>	1.7	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/engineHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.8	</valueByLevel>
+          <valueByLevel>	1.7	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/engineReduceFineFactor	</attribute>
@@ -3975,15 +3975,15 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.1	</value>
+        <value>	1.09	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
-        <value>	1.8	</value>
+        <value>	1.7	</value>
       </mul>
       <mul>
         <name>	vehicleChassisStrength	</name>
-        <value>	1.5	</value>
+        <value>	1.4	</value>
       </mul>
       <mul>
         <name>	vehicleChassisRepairSpeed	</name>
@@ -4023,12 +4023,12 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.115	</valueByLevel>
+          <valueByLevel>	1.11	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.7	</valueByLevel>
+          <valueByLevel>	1.5	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
@@ -4065,7 +4065,7 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.115	</value>
+        <value>	1.11	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
@@ -4073,7 +4073,7 @@
       </mul>
       <mul>
         <name>	vehicleChassisStrength	</name>
-        <value>	1.7	</value>
+        <value>	1.5	</value>
       </mul>
       <mul>
         <name>	vehicleChassisRepairSpeed	</name>

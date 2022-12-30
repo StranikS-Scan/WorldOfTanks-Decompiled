@@ -35,7 +35,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.awards.event_dispatcher import showCrewSkinAward, showDynamicAward
+from gui.awards.event_dispatcher import showDynamicAward
 from gui.battle_pass.battle_pass_constants import MIN_LEVEL
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken
@@ -93,7 +93,6 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
-    CREW_SKINS = 'awardcrewskin'
     CREW_BOOKS = 'awardcrewbook'
 
 
@@ -632,24 +631,6 @@ class MarkByQuestHandler(MultiTypeServiceChannelHandler):
                 totalCounts += tokenData.get('count', 0)
 
         return totalCounts
-
-
-class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(CrewSkinsQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        res = super(CrewSkinsQuestHandler, self)._needToShowAward(ctx)
-        if res:
-            questIDs = message.data.get('completedQuestIDs', set())
-            res = res and 'crewSkins' in message.data
-            res = res and next(ifilter(lambda x: x.endswith(QUEST_AWARD_POSTFIX.CREW_SKINS), questIDs), None) is not None
-        return res
-
-    def _showAward(self, ctx):
-        showCrewSkinAward()
 
 
 class CrewBooksQuestHandler(MultiTypeServiceChannelHandler):
@@ -1787,7 +1768,6 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  TelecomHandler,
  MarkByInvoiceHandler,
  MarkByQuestHandler,
- CrewSkinsQuestHandler,
  CrewBooksQuestHandler,
  RecruitHandler,
  SoundDeviceHandler,

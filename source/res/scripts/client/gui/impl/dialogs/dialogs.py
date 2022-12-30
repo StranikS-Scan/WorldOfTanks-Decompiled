@@ -144,6 +144,6 @@ def showDropSkillDialog(tankman, price=None, isBlank=False, freeDropSave100=Fals
 
 
 @wg_async
-def showFreeSkillConfirmationDialog(skillName, isAlreadyEarned=False):
-    result = yield wg_await(showSingleDialogWithResultData(skillName=skillName, isAlreadyEarned=isAlreadyEarned, layoutID=FreeSkillConfirmationDialog.LAYOUT_ID, wrappedViewClass=FreeSkillConfirmationDialog))
+def showFreeSkillConfirmationDialog(skill):
+    result = yield wg_await(showSingleDialogWithResultData(skill=skill, layoutID=FreeSkillConfirmationDialog.LAYOUT_ID, wrappedViewClass=FreeSkillConfirmationDialog))
     raise AsyncReturn(result)

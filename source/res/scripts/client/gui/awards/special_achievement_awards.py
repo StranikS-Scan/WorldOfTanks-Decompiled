@@ -1,17 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 from collector_vehicle import CollectorVehicleConsts
-from gui.Scaleform.genConsts.PERSONALCASECONST import PERSONALCASECONST
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.referral_program import REFERRAL_PROGRAM_SOUNDS
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
-from gui.shared import event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import sortCrew
 from gui.impl.gen import R
 from gui.impl import backport
 from helpers import dependency, i18n, int2roman
@@ -136,45 +134,6 @@ class BattleAward(ExplosionBackAward):
 
     def getDescription(self):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=backport.getIntegralFormat(self.battlesCount)))
-
-
-class CrewSkinAward(ExplosionBackAward):
-
-    def __init__(self):
-        super(CrewSkinAward, self).__init__(False)
-
-    def getWindowTitle(self):
-        return backport.text(R.strings.crew_skins.feature.poster.posterHeader())
-
-    def getBackgroundImage(self):
-        return backport.image(R.images.gui.maps.icons.windows.rewardWindow.crewSkins_presentation())
-
-    def getHeader(self):
-        return text_styles.highTitle(backport.text(R.strings.crew_skins.feature.poster.giftName()))
-
-    def getOkButtonText(self):
-        return backport.text(R.strings.crew_skins.feature.poster.confirm()) if self._getFirstEnableTankman() is not None else backport.text(R.strings.menu.awardWindow.okButton())
-
-    def getDescription(self):
-        return text_styles.main(backport.text(R.strings.crew_skins.feature.poster.featureDescr()))
-
-    @staticmethod
-    def _getFirstEnableTankman():
-        vehicleGuiItem = g_currentVehicle.item
-        if vehicleGuiItem is not None and not vehicleGuiItem.isLocked:
-            roles = g_currentVehicle.item.descriptor.type.crewRoles
-            crew = sortCrew(vehicleGuiItem.crew, roles)
-            for _, tankman in crew:
-                if tankman is not None and not tankman.descriptor.getRestrictions().isPassportReplacementForbidden():
-                    return tankman
-
-        return
-
-    def handleOkButton(self):
-        tankman = self._getFirstEnableTankman()
-        if tankman is not None:
-            shared_events.showPersonalCase(tankman.invID, PERSONALCASECONST.CREW_SKINS_TAB_ID, EVENT_BUS_SCOPE.LOBBY)
-        return
 
 
 class PvEBattleAward(BattleAward):

@@ -917,6 +917,8 @@ class Configs(enum.Enum):
     CUSTOMIZATION_QUESTS = 'customizationQuests'
     UI_LOGGING = 'ui_logging_config'
     BATTLE_MATTERS_CONFIG = 'battle_matters_config'
+    COLLECTIVE_GOAL_ENTRY_POINT_CONFIG = 'collective_goal_entry_point_config'
+    COLLECTIVE_GOAL_MARATHONS_CONFIG = 'collective_goal_marathons_config'
     PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
     COMP7_CONFIG = 'comp7_config'
     COMP7_PRESTIGE_RANKS_CONFIG = 'comp7_prestige_ranks_config'

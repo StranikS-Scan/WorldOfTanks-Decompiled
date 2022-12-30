@@ -35,3 +35,4 @@ TMAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['warrior',
  'mainGun']
 _tankmanAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', TMAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, [])
 tmanDossierLayout = (_tmanTotalBlockBuilder, _tankmanAchievementsBlockBuilder)
+TANKMAN_DOSSIER_BLOCKS = {b.name:b for b in tmanDossierLayout}

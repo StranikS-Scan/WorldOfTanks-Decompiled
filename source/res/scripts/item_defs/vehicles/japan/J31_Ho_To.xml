@@ -1962,13 +1962,14 @@
         <armor_2>	30	</armor_2>
         <armor_3>	30	</armor_3>
         <armor_4>	0	</armor_4>
+        <armor_8>	0	</armor_8>
       </armor>
       <guns>
         <_127mm_Gun_Type_89>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	152	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -1976,6 +1977,8 @@
             </armor_4>
             <armor_5>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	215	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	45	</gun>
           </armor>
           <turretYawLimits>	-12 12	</turretYawLimits>
@@ -2071,7 +2074,7 @@
           <anchorDirection>	0 1 -0	</anchorDirection>
         </slot>
       </customizationSlots>
-      <gunPosition>	0 0 0	</gunPosition>
+      <gunPosition>	0 0 0.097573	</gunPosition>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>

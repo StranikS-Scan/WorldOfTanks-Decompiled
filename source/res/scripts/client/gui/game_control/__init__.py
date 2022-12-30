@@ -76,6 +76,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
+    from gui.game_control.collective_goal_entry_point_controller import CollectiveGoalEntryPointController
+    from gui.game_control.collective_goal_marathons_controller import CollectiveGoalMarathonsController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     tracker = GameStateTracker()
@@ -152,4 +154,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
+    _config(_interface.ICollectiveGoalEntryPointController, CollectiveGoalEntryPointController())
+    _config(_interface.ICollectiveGoalMarathonsController, CollectiveGoalMarathonsController())
     collectGameControllers(_config)

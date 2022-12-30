@@ -28,7 +28,7 @@ from gui.shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath, Tankman
+from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath, Tankman, getTankmanSkill
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
@@ -239,7 +239,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     @decorators.adisp_process('studying')
     def addTankmanSkill(self, inventoryID, skillName):
         tankman = self.__getTankmanByInvID(int(inventoryID))
-        processor = TankmanAddSkill(tankman, skillName)
+        skill = getTankmanSkill(skillName, tankman)
+        processor = TankmanAddSkill(tankman, skill.name)
         result = yield processor.request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -247,7 +248,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     @wg_async
     def addTankmanFreeSkill(self, inventoryID, skillName):
         tankman = self.__getTankmanByInvID(int(inventoryID))
-        result = yield wg_await(showFreeSkillConfirmationDialog(skillName, skillName in tankman.descriptor.earnedSkills))
+        skill = getTankmanSkill(skillName, tankman)
+        result = yield wg_await(showFreeSkillConfirmationDialog(skill=skill))
         if not result.busy:
             isOk, _ = result.result
             if isOk:
@@ -279,6 +281,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def _populate(self):
         super(PersonalCase, self)._populate()
         g_clientUpdateManager.addCallbacks({'': self.__onClientChanged})
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__hideTabsOnUpdate
         self.itemsCache.onSyncCompleted += self.__refreshData
         self._renewableSubscription.onRenewableSubscriptionDataChanged += self.onWotPlusChanged
         self.startGlobalListening()
@@ -293,6 +296,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     def _dispose(self):
         self.stopGlobalListening()
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__hideTabsOnUpdate
         self.itemsCache.onSyncCompleted -= self.__refreshData
         self._renewableSubscription.onRenewableSubscriptionDataChanged -= self.onWotPlusChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -418,10 +422,16 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.__setRetrainingData()
         self.__setDocumentsData()
 
+    def __hideTabsOnUpdate(self, _):
+        if not self.lobbyContext.getServerSettings().isCrewSkinsEnabled() and self.tabID == PERSONALCASECONST.CREW_SKINS_TAB_ID:
+            self.__setTabID()
+            self.as_openTabS(self.tabID)
+        self.__setCommonData()
+
     def __getTankmanByInvID(self, inventoryID):
         return self._tankman if inventoryID == self.tmanInvID else self.itemsCache.items.getTankman(inventoryID)
 
-    def __setTabID(self, tabID):
+    def __setTabID(self, tabID=None):
         self.tabID = tabID
         if self.tabID is None:
             self.tabID = PERSONALCASECONST.STATS_TAB_ID

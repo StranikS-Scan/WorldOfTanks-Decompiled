@@ -4,10 +4,6 @@
 
 class CREW_SKINS(object):
     FEATURE_HEADER = '#crew_skins:feature/Header'
-    FEATURE_POSTER_POSTERHEADER = '#crew_skins:feature/poster/posterHeader'
-    FEATURE_POSTER_GIFTNAME = '#crew_skins:feature/poster/giftName'
-    FEATURE_POSTER_FEATUREDESCR = '#crew_skins:feature/poster/featureDescr'
-    FEATURE_POSTER_CONFIRM = '#crew_skins:feature/poster/confirm'
     FEATURE_INUSE = '#crew_skins:feature/inUse'
     FEATURE_INSTORAGE = '#crew_skins:feature/inStorage'
     FEATURE_SKINSTABHEADER = '#crew_skins:feature/skinsTabHeader'

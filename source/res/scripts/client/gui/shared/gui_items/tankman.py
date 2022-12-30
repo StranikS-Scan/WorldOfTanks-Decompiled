@@ -464,6 +464,7 @@ class Tankman(GUIItem):
 
     def __packSkill(self, skillItem):
         return {'id': skillItem.name,
+         'iconName': skillItem.extensionLessIconName,
          'name': skillItem.userName,
          'desc': skillItem.shortDescription,
          'enabled': True,
@@ -477,7 +478,8 @@ class Tankman(GUIItem):
 
 
 class TankmanSkill(GUIItem):
-    __slots__ = ('_name', '_isPerk', '_level', '_type', '_roleType', '_isActive', '_isEnable', '_isFemale', '_isPermanent')
+    __slots__ = ('_name', '_isPerk', '_level', '_type', '_roleType', '_isActive', '_isEnable', '_isFemale', '_isPermanent', '_customName', '_isAlreadyEarned')
+    _CUSTOM_NAME_EXT = ''
 
     def __init__(self, skillName, tankman=None, proxy=None):
         super(TankmanSkill, self).__init__(proxy)
@@ -505,6 +507,13 @@ class TankmanSkill(GUIItem):
             self._roleType = None
             self._isActive = False
             self._isEnable = False
+        self._customName = ''
+        if self._CUSTOM_NAME_EXT:
+            customName = '_'.join((self._CUSTOM_NAME_EXT, BROTHERHOOD_SKILL_NAME))
+            if skillName in (BROTHERHOOD_SKILL_NAME, customName):
+                self._customName = customName
+                self._name = BROTHERHOOD_SKILL_NAME
+        self._isAlreadyEarned = self.name in tankman.descriptor.earnedSkills if tankman is not None else False
         return
 
     def __getEnabledSkill(self, tankman):
@@ -577,7 +586,14 @@ class TankmanSkill(GUIItem):
 
     @property
     def userName(self):
+        if self._customName:
+            resStr = '_'.join((self._name, self._CUSTOM_NAME_EXT))
+            return backport.text(R.strings.item_types.tankman.skills.dyn(resStr)())
         return getSkillUserName(self.name)
+
+    @property
+    def isAlreadyEarned(self):
+        return self._isAlreadyEarned
 
     @property
     def description(self):
@@ -592,7 +608,13 @@ class TankmanSkill(GUIItem):
 
     @property
     def icon(self):
-        return '{}.png'.format(self.name) if self._name == SKILLS_CONSTANTS.TYPE_NEW_SKILL else getSkillIconName(self.name)
+        if self._name == SKILLS_CONSTANTS.TYPE_NEW_SKILL:
+            iconName = '{}.png'.format(self.name)
+        else:
+            iconName = getSkillIconName(self.name)
+        if self._customName:
+            iconName = '{}_{}'.format(self._CUSTOM_NAME_EXT, iconName)
+        return iconName
 
     @property
     def extensionLessIconName(self):
@@ -612,80 +634,22 @@ class TankmanSkill(GUIItem):
 
 class SabatonTankmanSkill(TankmanSkill):
     __slots__ = ()
-
-    def __init__(self, skillName, tankman=None, proxy=None):
-        super(SabatonTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == BROTHERHOOD_SKILL_NAME:
-            self._isPermanent = True
-
-    @property
-    def userName(self):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_sabaton()) if self._name == BROTHERHOOD_SKILL_NAME else super(SabatonTankmanSkill, self).userName
-
-    @property
-    def icon(self):
-        icon = super(SabatonTankmanSkill, self).icon
-        if self._name == BROTHERHOOD_SKILL_NAME:
-            icon = 'sabaton_{}'.format(icon)
-        return icon
+    _CUSTOM_NAME_EXT = 'sabaton'
 
 
 class OffspringTankmanSkill(TankmanSkill):
-
-    def __init__(self, skillName, tankman=None, proxy=None):
-        super(OffspringTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == BROTHERHOOD_SKILL_NAME:
-            self._isPermanent = True
-
-    @property
-    def userName(self):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_offspring()) if self._name == BROTHERHOOD_SKILL_NAME else super(OffspringTankmanSkill, self).userName
-
-    @property
-    def icon(self):
-        icon = super(OffspringTankmanSkill, self).icon
-        if self._name == BROTHERHOOD_SKILL_NAME:
-            icon = 'offspring_{}'.format(icon)
-        return icon
+    __slots__ = ()
+    _CUSTOM_NAME_EXT = 'offspring'
 
 
 class YhaTankmanSkill(TankmanSkill):
-
-    def __init__(self, skillName, tankman=None, proxy=None):
-        super(YhaTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == BROTHERHOOD_SKILL_NAME:
-            self._isPermanent = True
-
-    @property
-    def userName(self):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_yha()) if self._name == BROTHERHOOD_SKILL_NAME else super(YhaTankmanSkill, self).userName
-
-    @property
-    def icon(self):
-        icon = super(YhaTankmanSkill, self).icon
-        if self._name == BROTHERHOOD_SKILL_NAME:
-            icon = 'yha_{}'.format(icon)
-        return icon
+    __slots__ = ()
+    _CUSTOM_NAME_EXT = 'yha'
 
 
 class WitchesTankmanSkill(TankmanSkill):
     __slots__ = ()
-
-    def __init__(self, skillName, tankman=None, proxy=None):
-        super(WitchesTankmanSkill, self).__init__(skillName, tankman, proxy)
-        if skillName == BROTHERHOOD_SKILL_NAME:
-            self._isPermanent = True
-
-    @property
-    def userName(self):
-        return backport.text(R.strings.item_types.tankman.skills.brotherhood_witches()) if self._name == BROTHERHOOD_SKILL_NAME else super(WitchesTankmanSkill, self).userName
-
-    @property
-    def icon(self):
-        icon = super(WitchesTankmanSkill, self).icon
-        if self._name == BROTHERHOOD_SKILL_NAME:
-            icon = 'witches_{}'.format(icon)
-        return icon
+    _CUSTOM_NAME_EXT = 'witches'
 
 
 def getTankmanSkill(skillName, tankman=None, proxy=None):

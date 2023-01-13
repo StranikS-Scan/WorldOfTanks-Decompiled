@@ -6427,25 +6427,6 @@
     <name>	2D CN Lantern Festival	</name>
   </itemGroup>
   <itemGroup>
-    <name>	Rebranding Event	</name>
-    <userString>	#vehicle_customization:projection_decals/special	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	31001	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/lst_cross_event_decal.dds	</texture>
-      <mirror>	true	</mirror>
-      <userString>	#vehicle_customization:projection_decals/special/lst_cross_event	</userString>
-      <tags>	formfactor_square direction_right_to_left	</tags>
-    </projection_decal>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/holiday	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -6573,32 +6554,6 @@
     <name>	WE 2023	</name>
   </itemGroup>
   <itemGroup>
-    <name>	23 February 2023	</name>
-    <userString>	#vehicle_customization:projection_decals/special	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	31002	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/23february2023_decal_01.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/23_February_2023_projection_decal_1	</userString>
-      <tags>	onlyVerticalMirror formfactor_square	</tags>
-    </projection_decal>
-    <projection_decal>
-      <id>	31003	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/23february2023_decal_02.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/23_February_2023_projection_decal_2	</userString>
-      <tags>	formfactor_rect1x6 direction_right_to_left	</tags>
-      <priceGroup>	projection_decals 220g notInShop	</priceGroup>
-      <mirror>	true	</mirror>
-    </projection_decal>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/cool	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -6616,5 +6571,61 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	GB112_Caliban_WAC_3DSt	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	projection_decals 110g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	817	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_480.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_480	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	818	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_481.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_481	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	819	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_482.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_482	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	828	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_164_AM.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp_holiday_2	</userString>
+      <tags>	styleOnly hiddenInUI formfactor_rect1x2	</tags>
+      <mirror>	false	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_164_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	829	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_165_AM.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp_holiday_2	</userString>
+      <tags>	styleOnly formfactor_square hiddenInUI disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_165_GMM.dds	</glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	830	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_166.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp_holiday_3	</userString>
+      <tags>	styleOnly formfactor_square hiddenInUI disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Battle Pass 2023 fiction	</name>
   </itemGroup>
 </projection_decals.xml>

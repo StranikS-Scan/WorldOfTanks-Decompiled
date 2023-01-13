@@ -1259,6 +1259,8 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCHCHAPTER_SUCCESS = '#system_messages:battlePass/switchChapter/success'
     BATTLEPASS_SWITCHCHAPTER_REMINDER = '#system_messages:battlePass/switchChapter/reminder'
     BATTLEPASS_ACTIVATECHAPTER_SUCCESS = '#system_messages:battlePass/activateChapter/success'
+    HBP_SEASONSTART_TITLE = '#system_messages:hbp/seasonStart/title'
+    HBP_SEASONSTART_BODY = '#system_messages:hbp/seasonStart/body'
     COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
     COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
     COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
@@ -2718,6 +2720,8 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCHCHAPTER_SUCCESS,
      BATTLEPASS_SWITCHCHAPTER_REMINDER,
      BATTLEPASS_ACTIVATECHAPTER_SUCCESS,
+     HBP_SEASONSTART_TITLE,
+     HBP_SEASONSTART_BODY,
      COLLECTORVEHICLE_SWITCH_OFF_TITLE,
      COLLECTORVEHICLE_SWITCH_OFF_BODY,
      COLLECTORVEHICLE_SWITCH_ON_TITLE,

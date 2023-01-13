@@ -123,16 +123,14 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         if recruitInfo is None:
             return
         else:
-            if recruitInfo.isFemale():
-                bonusImageName = 'tankwoman'
-            else:
-                bonusImageName = 'tankman'
+            recruitGroupName = recruitInfo.getGroupName()
+            bonusImageName = 'tankman'
             model = RewardItemModel()
             cls._packCommon(bonus, model)
-            model.setIcon(bonusImageName)
+            model.setIcon('_'.join([bonusImageName, recruitGroupName]))
             model.setUserName(recruitInfo.getFullUserName())
-            model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
-            cls._injectAwardID(model, recruitInfo.getGroupName())
+            model.setBigIcon('_'.join([bonusImageName, recruitGroupName]))
+            cls._injectAwardID(model, recruitGroupName)
             return model
 
     @classmethod
@@ -471,6 +469,7 @@ class BattlePassVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setVehicleLvl(vehicle.level)
         model.setVehicleName(vehicle.userName)
         model.setVehicleType(vehicle.type)
+        model.setVehicleNation(vehicle.nationName)
 
 
 class BattlePassFreeXPPacker(SimpleBonusUIPacker):

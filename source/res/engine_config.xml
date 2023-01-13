@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -425,7 +425,7 @@
           <name>	researches.bnk	</name>
         </bank>
         <bank>
-          <name>	tasks.bnk	</name>
+          <name>	tasks_holiday.bnk	</name>
         </bank>
         <bank>
           <name>	cons_hangar.bnk	</name>

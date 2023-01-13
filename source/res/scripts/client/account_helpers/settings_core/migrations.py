@@ -923,11 +923,6 @@ def _migrateTo100(core, data, initialized):
      BATTLE_MATTERS_KEYS.QUEST_PROGRESS: 0}
 
 
-def _migrateTo101(core, data, initialized):
-    data['markersData'].setdefault('ally', {})['markerAltVehicleDist'] = True
-    data['markersData'].setdefault('enemy', {})['markerAltVehicleDist'] = True
-
-
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1322,10 +1317,6 @@ _versions = ((1,
   False),
  (100,
   _migrateTo100,
-  False,
-  False),
- (101,
-  _migrateTo101,
   False,
   False))
 

@@ -421,7 +421,7 @@ def __readBonus_item(bonus, _name, section, eventType, checkLimit):
         if descr.itemTypeName not in items.SIMPLE_ITEM_TYPE_NAMES:
             raise SoftException('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:
-        raise SoftException('Wrong compact descriptor (%d)' % compDescr)
+        raise SoftException('Wrong compact descriptor (%d) for section %s' % (compDescr, section))
 
     count = 1
     if section.has_key('count'):

@@ -4,7 +4,6 @@
   <SHOT_ID>	INT32	</SHOT_ID>
   <DB_ID>	INT64	</DB_ID>
   <EXTRA_ID>	UINT8	</EXTRA_ID>
-  <VEH_TYPE_CD>	UINT32	</VEH_TYPE_CD>
   <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
       <clusterCCU>
         <Type>	UINT32	</Type>
@@ -339,7 +338,7 @@
         <Type>	UINT8	</Type>
       </vehicleProgressTankmen>
       <vehTypeCompDescr>
-        <Type>	VEH_TYPE_CD	</Type>
+        <Type>	UINT16	</Type>
       </vehTypeCompDescr>
       <premiumType>
         <Type>	UINT8	</Type>
@@ -416,7 +415,7 @@
         <Type>	UINT8	</Type>
       </marksOnGun>
       <crewGroups>
-        <Type>	ARRAY	  <of>	UINT32	</of>
+        <Type>	ARRAY	  <of>	UINT16	</of>
         </Type>
       </crewGroups>
       <commanderSkinID>
@@ -438,7 +437,7 @@
         <Type>	UINT8	</Type>
       </targetTeam>
       <targetTypeCompDescr>
-        <Type>	VEH_TYPE_CD	</Type>
+        <Type>	UINT16	</Type>
       </targetTypeCompDescr>
       <targetIsTeamKiller>
         <Type>	BOOL	</Type>
@@ -1002,7 +1001,7 @@
         <Type>	BOOL	</Type>
       </attackerWasInvisible>
       <attackerTypeCompactDescr>
-        <Type>	VEH_TYPE_CD	</Type>
+        <Type>	UINT16	</Type>
       </attackerTypeCompactDescr>
       <attackerVehicleIndex>
         <Type>	UINT8	</Type>
@@ -1400,7 +1399,7 @@
   <RESPAWN_COOLDOWN_ITEM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <vehTypeCompDescr>
-        <Type>	VEH_TYPE_CD	</Type>
+        <Type>	UINT16	</Type>
       </vehTypeCompDescr>
       <endOfCooldownPiT>
         <Type>	FLOAT32	</Type>
@@ -1451,7 +1450,7 @@
         <Type>	UINT8	</Type>
       </group>
       <vehTypeCompDescrs>
-        <Type>	ARRAY	  <of>	VEH_TYPE_CD	</of>
+        <Type>	ARRAY	  <of>	UINT16	</of>
         </Type>
       </vehTypeCompDescrs>
     </Properties>

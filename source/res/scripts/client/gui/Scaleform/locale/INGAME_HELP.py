@@ -58,7 +58,6 @@ class INGAME_HELP(object):
     CROSSHAIRCONTROLS_EXAMPLE_HP = '#ingame_help:crosshairControls/example/hp'
     CROSSHAIRCONTROLS_EXAMPLE_DAMAGE = '#ingame_help:crosshairControls/example/damage'
     CROSSHAIRCONTROLS_EXAMPLE_NAME = '#ingame_help:crosshairControls/example/name'
-    CROSSHAIRCONTROLS_EXAMPLE_DISTANCE = '#ingame_help:crosshairControls/example/distance'
     MARKERMARKS_TITLE = '#ingame_help:markerMarks/title'
     MARKERMARKS_FOLLOW = '#ingame_help:markerMarks/follow'
     MARKERMARKS_HELP = '#ingame_help:markerMarks/help'

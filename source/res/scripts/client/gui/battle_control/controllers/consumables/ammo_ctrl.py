@@ -4,7 +4,7 @@ import logging
 import typing
 import weakref
 from collections import namedtuple
-from math import fabs
+from math import fabs, ceil
 import BigWorld
 import CommandMapping
 import Event
@@ -61,6 +61,9 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
 
     def isCassetteClip(self):
         return self.clip.size > 1 or self.burst.size > 1
+
+    def isBurstAndClip(self):
+        return self.clip.size > 1 and self.burst.size > 1
 
     def hasAutoReload(self):
         return self.autoReload is not None
@@ -548,7 +551,12 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.triggerReloadEffect(timeLeft, baseTime)
         if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
-            if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
+            if self.__gunSettings.isBurstAndClip():
+                quantityClip = ceil(shellsInClip / float(self.__gunSettings.burst.size))
+                if not (quantityClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or quantityClip <= 1 and timeLeft != 0):
+                    if interval <= baseTime:
+                        baseTime = interval
+            elif not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
                 if interval <= baseTime:
                     baseTime = interval
         elif baseTime == 0.0:

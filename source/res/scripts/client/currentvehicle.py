@@ -698,7 +698,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             return
 
     def __getPreviewOutfitByStyle(self, style):
-        return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()) if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item) else None
+        isOutfitUnlocked = not self.item.isOutfitLocked or self.item.isRestoredWithStyle
+        return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()) if self.isPresent() and isOutfitUnlocked and style.mayInstall(self.item) else None
 
     def __makePreviewVehicleFromStrCD(self, vehicleCD, vehicleStrCD):
         items = self.itemsCache.items

@@ -286,7 +286,7 @@ class BattlePassProgressBlock(base.StatsBlock):
         for lvl in xrange(bpp.prevLevel, bpp.currLevel):
             self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, lvl)))
 
-        if bpp.pointsAux or bpp.pointsNew and bpp.pointsMax != bpp.pointsNew:
+        if bpp.pointsNew and bpp.pointsMax != bpp.pointsNew:
             self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, bpp.currLevel)))
 
     @classmethod

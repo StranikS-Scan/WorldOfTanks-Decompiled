@@ -11,7 +11,6 @@ from collections import defaultdict
 import WWISE
 from PlayerEvents import g_playerEvents
 from constants import ARENA_BONUS_TYPE, MAPS_TRAINING_ENABLED_KEY, SwitchState, PLAYER_SUBSCRIPTIONS_CONFIG
-from battle_pass_common import FinalReward
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, IS_BATTLE_PASS_EXTRA_STARTED, RESOURCE_WELL_START_SHOWN, RESOURCE_WELL_END_SHOWN, INTEGRATED_AUCTION_NOTIFICATIONS, RESOURCE_WELL_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP
 from adisp import adisp_process
@@ -25,7 +24,6 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.SystemMessages import SM_TYPE
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
@@ -54,7 +52,6 @@ from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, SCH_CLIENT_MSG_TYP
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator, MissingEventsDecorator, RecruitReminderMessageDecorator, EmailConfirmationReminderMessageDecorator, LockButtonMessageDecorator, BattlePassSwitchChapterReminderDecorator, BattlePassLockButtonDecorator, MapboxButtonDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, C2DProgressionStyleDecorator, IntegratedAuctionStageStartDecorator, IntegratedAuctionStageFinishDecorator, PersonalReservesConversionMessageDecorator, SeniorityAwardsDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, NotificationData
@@ -1163,28 +1160,16 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __pushFinished(self):
-        styles = []
-        for chapterID in self.__battlePassController.getChapterIDs():
-            if self.__battlePassController.getRewardType(chapterID) == FinalReward.STYLE:
-                styleCD, styleLevel = getStyleInfoForChapter(chapterID)
-                style = self.__itemsCache.items.getItemByCD(styleCD)
-                if style.fullInventoryCount() and styleLevel != style.getMaxProgressionLevel():
-                    styles.append(backport.text(R.strings.system_messages.battlePass.switch_disable.incompleteStyle(), styleName=style.userName))
-
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_disable.title(), seasonNum=self.__battlePassController.getSeasonNum()),
-         'additionalText': '\n'.join(styles)})
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassSeasonChange, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_disable.title()),
+         'additionalText': ''})
 
     def __pushStarted(self):
-        rewardTypes = set((self.__battlePassController.getRewardType(chapterID) for chapterID in self.__battlePassController.getChapterIDs()))
-        for rewardType in rewardTypes:
-            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).title(), seasonNum=self.__battlePassController.getSeasonNum()),
-             'additionalText': ''})
-
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.hbp.seasonStart.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassSeasonChange, messageData={'header': backport.text(R.strings.system_messages.hbp.seasonStart.title()),
+         'additionalText': ''})
         self.__initArenaBonusTypeEnabledStates()
 
     def __pushEnabled(self):
-        expiryTime = self.__battlePassController.getSeasonFinishTime()
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_enabled.body(), expiryTime=text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime))), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.Warning)
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_enabled.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.Warning)
 
     @staticmethod
     def __pushBattleRoyaleEnableChange(isEnabled):

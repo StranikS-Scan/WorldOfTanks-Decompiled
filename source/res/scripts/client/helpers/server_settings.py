@@ -971,53 +971,6 @@ class _BattleMattersConfig(namedtuple('_BattleMattersConfig', ('isEnabled',
         return cls()
 
 
-class _CollectiveGoalEntryPointConfig(namedtuple('_CollectiveGoalConfig', ('isEnabled',
- 'startTime',
- 'finishTime',
- 'marathonPrefix',
- 'hermodChannelName',
- 'marathonName',
- 'goalType',
- 'goalDescription',
- 'rulesCaption'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, startTime=None, finishTime=None, marathonPrefix=None, hermodChannelName=None, marathonName=None, goalType=None, goalDescription=None, rulesCaption=None)
-        defaults.update(kwargs)
-        return super(_CollectiveGoalEntryPointConfig, cls).__new__(cls, **defaults)
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class _CollectiveGoalMarathonsConfig(namedtuple('_CollectiveGoalMarathonsConfig', ('isEnabled',
- 'startTime',
- 'finishTime',
- 'url'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, startTime=None, finishTime=None, url=None)
-        defaults.update(kwargs)
-        return super(_CollectiveGoalMarathonsConfig, cls).__new__(cls, **defaults)
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class PeripheryRoutingConfig(namedtuple('_PeripheryRoutingConfig', ('isEnabled', 'peripheryRoutingGroups'))):
     __slots__ = ()
 
@@ -1168,8 +1121,6 @@ class ServerSettings(object):
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
-        self.__collectiveGoalEntryPointConfig = _CollectiveGoalEntryPointConfig()
-        self.__collectiveGoalMarathonsConfig = _CollectiveGoalMarathonsConfig()
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.__comp7Config = Comp7Config()
         self.__comp7RanksConfig = Comp7PrestigeRanksConfig()
@@ -1280,10 +1231,6 @@ class ServerSettings(object):
             self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
-        if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in self.__serverSettings:
-            self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-        if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in self.__serverSettings:
-            self.__collectiveGoalMarathonsConfig = makeTupleByDict(_CollectiveGoalMarathonsConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
             self.__peripheryRoutingConfig = makeTupleByDict(PeripheryRoutingConfig, self.__serverSettings[Configs.PERIPHERY_ROUTING_CONFIG.value])
         if Configs.COMP7_CONFIG.value in self.__serverSettings:
@@ -1392,10 +1339,6 @@ class ServerSettings(object):
             key = Configs.CUSTOMIZATION_QUESTS.value
             self.__serverSettings[key] = serverSettingsDiff[key]
         self.__updatePersonalReserves(serverSettingsDiff)
-        if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in serverSettingsDiff:
-            self.__updateCollectiveGoalEntryPointConfig(serverSettingsDiff)
-        if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in serverSettingsDiff:
-            self.__updateCollectiveGoalMarathonsConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1527,14 +1470,6 @@ class ServerSettings(object):
     @property
     def battleMattersConfig(self):
         return self.__battleMattersConfig
-
-    @property
-    def collectiveGoalEntryPointConfig(self):
-        return self.__collectiveGoalEntryPointConfig
-
-    @property
-    def collectiveGoalMarathonsConfig(self):
-        return self.__collectiveGoalMarathonsConfig
 
     @property
     def peripheryRoutingConfig(self):
@@ -1967,12 +1902,6 @@ class ServerSettings(object):
 
     def __updateBattleMatters(self, targetSettings):
         self.__battleMattersConfig = self.__battleMattersConfig.replace(targetSettings[Configs.BATTLE_MATTERS_CONFIG.value])
-
-    def __updateCollectiveGoalEntryPointConfig(self, diff):
-        self.__collectiveGoalEntryPointConfig = self.__collectiveGoalEntryPointConfig.replace(diff[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-
-    def __updateCollectiveGoalMarathonsConfig(self, diff):
-        self.__collectiveGoalMarathonsConfig = self.__collectiveGoalMarathonsConfig.replace(diff[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
 
     def __updatePeripheryRoutingConfig(self, diff):
         self.__peripheryRoutingConfig = self.__peripheryRoutingConfig.replace(diff[Configs.PERIPHERY_ROUTING_CONFIG.value])

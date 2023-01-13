@@ -11,18 +11,15 @@ class GuiDirReader(object):
     def getAvailableIntroVideoFiles():
         ds = ResMgr.openSection(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH)
         movieFiles = []
-        if ds is None:
-            return movieFiles
-        else:
-            for filename in ds.keys():
-                try:
-                    _, extension = filename.split('.')
-                except ValueError:
-                    continue
-
+        for filename in ds.keys():
+            try:
                 _, extension = filename.split('.')
-                if extension == GuiDirReader.VIDEO_EXTENSION:
-                    movieFiles.append(GuiDirReader.SCALEFORM_STARTUP_VIDEO_MASK % filename)
+            except ValueError:
+                continue
 
-            ResMgr.purge(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, True)
-            return movieFiles
+            _, extension = filename.split('.')
+            if extension == GuiDirReader.VIDEO_EXTENSION:
+                movieFiles.append(GuiDirReader.SCALEFORM_STARTUP_VIDEO_MASK % filename)
+
+        ResMgr.purge(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, True)
+        return movieFiles

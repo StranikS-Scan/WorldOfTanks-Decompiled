@@ -1226,14 +1226,17 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if timeLeft == baseTime:
             self.__gunReloadCommandWaitEndTime = 0.0
         self.__prevGunReloadTimeLeft = timeLeft
-        shellsLeft = self.guiSessionProvider.shared.ammo.getShellsQuantityLeft()
-        if shellsLeft <= 1 and timeLeft <= 0.0:
-            shellsLayout = self.guiSessionProvider.shared.ammo.getOrderedShellsLayout()
+        ammoCtrl = self.guiSessionProvider.shared.ammo
+        gunSettings = ammoCtrl.getGunSettings()
+        shellsLeft = ammoCtrl.getShellsQuantityLeft()
+        burstSize = gunSettings.burst.size if gunSettings.isBurstAndClip() else 0
+        if (shellsLeft <= 1 or burstSize > 0 and shellsLeft == burstSize) and timeLeft <= 0.0:
+            shellsLayout = ammoCtrl.getOrderedShellsLayout()
             allShells = 0
             for layout in shellsLayout:
                 allShells += layout[2]
 
-            if allShells == 1:
+            if allShells == 1 or burstSize > 0 and allShells == burstSize:
                 baseTime = -1
         if timeLeft < 0.0:
             timeLeft = -1

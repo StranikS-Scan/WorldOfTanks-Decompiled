@@ -3910,20 +3910,13 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         priorityLevel = None
         additionalText = u''
         chapterID = ctx.get(u'chapter')
-        savedData = None
-        if not self.__battlePass.isCompleted():
-            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
-            if not self.__battlePass.isFinalLevel(chapterID, newLevel):
-                description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.newLevel.text(), newLevel=text_styles.credits(newLevel), chapter=text_styles.credits(chapterName))
-            else:
-                description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
-            template = self.__PROGRESSION_BUTTON_TEMPLATE
-            savedData = {u'chapterID': chapterID}
+        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+        if not self.__battlePass.isFinalLevel(chapterID, newLevel):
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.newLevel.text(), newLevel=text_styles.credits(newLevel), chapter=text_styles.credits(chapterName))
         else:
-            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
-            priorityLevel = NotificationPriorityLevel.LOW
-            template = self.__SHOP_BUTTON_TEMPLATE
-            additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.additionalText())
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
+        template = self.__PROGRESSION_BUTTON_TEMPLATE
+        savedData = {u'chapterID': chapterID}
         return (description,
          template,
          priorityLevel,
@@ -3938,10 +3931,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyProgress())
         levelCount = currentLevel - prevLevel
         if self.__battlePass.isFinalLevel(chapterID, currentLevel):
-            if self.__battlePass.isRegularProgressionCompleted():
-                description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
-            else:
-                description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=chapter)
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=chapter)
         else:
             level = currentLevel + 1
             description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyProgress.text(), levelCount=text_styles.credits(levelCount), currentLevel=text_styles.credits(level), chapter=chapter)
@@ -3954,17 +3944,13 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
          additionalText)
 
     def __makeAfterBattlePassPurchase(self, ctx):
-        chapterID = ctx.get(u'chapter')
         header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP())
         description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.text())
-        price = self.__battlePass.getBattlePassCost(chapterID).get(Currency.GOLD, 0)
-        additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.additionalText(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())))
-        additionalText += u'<br/>' + self.__makeGoldString(price)
         priorityLevel = NotificationPriorityLevel.LOW
         return (header,
          description,
          priorityLevel,
-         additionalText)
+         u'')
 
     def __makeGoldString(self, gold):
         if not gold:
@@ -3976,18 +3962,8 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
 class BattlePassBoughtFormatter(WaitItemsSyncFormatter):
 
     @adisp_async
-    @adisp_process
     def format(self, message, callback=None):
-        isSynced = yield self._waitForSyncItems()
-        resultMessage = MessageData(None, None)
-        if message.data and isSynced and message.data.get(u'chapter') == 0:
-            template = u'BattlePassBuyMultipleMessage'
-            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyMultiple.text())
-            formatted = g_settings.msgTemplates.format(template, ctx={u'header': header})
-            settings = self._getGuiSettings(message, template)
-            settings.showAt = BigWorld.time()
-            resultMessage = MessageData(formatted, settings)
-        callback([resultMessage])
+        callback([None])
         return
 
 

@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/states.py
 from functools import partial
 import typing
-from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
+from battle_pass_common import BattlePassRewardReason
 from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, showVideo, getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import showVideo
 from gui.battle_pass.state_machine import lockNotificationManager
-from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose
+from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, processRewardsToChoose
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_buy_view import WINDOW_IS_NOT_OPENED, g_BPBuyViewStates
 from gui.server_events.events_dispatcher import showMissionsBattlePass
@@ -19,6 +19,7 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.impl import INotificationWindowController
 if typing.TYPE_CHECKING:
     from gui.battle_pass.state_machine.machine import BattlePassStateMachine
+_BATTLE_PASS_FINAL_VIDEO = 'final_video'
 
 class BattlePassRewardStateID(CONST_CONTAINER):
     LOBBY = 'lobby'
@@ -31,7 +32,6 @@ class BattlePassRewardStateID(CONST_CONTAINER):
     CHOICE_STYLE = 'choice.style'
     CHOICE_PREVIEW = 'choice.preview'
     REWARD = 'reward'
-    REWARD_STYLE = 'reward.style'
     REWARD_ANY = 'reward.any'
 
 
@@ -113,7 +113,11 @@ class ChoiceItemState(State):
 
                     machine.post(StateEvent())
 
-                showBattlePassRewardsSelectionWindow(chapterID=data.get('chapter', 0), level=data.get('level', 0), onRewardsReceivedCallback=machine.extendRewards, onCloseCallback=onCloseCallback)
+                def onRewardsReceivedCallback(rewards, chapter):
+                    machine.extendRewards(rewards)
+                    machine.setChapter(chapter)
+
+                showBattlePassRewardsSelectionWindow(chapterID=data.get('chapter', 0), level=data.get('level', 0), onRewardsReceivedCallback=onRewardsReceivedCallback, onCloseCallback=onCloseCallback)
             else:
                 machine.post(StateEvent())
         return
@@ -138,7 +142,7 @@ class PreviewState(State):
 
 
 class VideoState(State):
-    __slots__ = ()
+    __slots__ = ('__data',)
 
     def __init__(self):
         super(VideoState, self).__init__(stateID=BattlePassRewardStateID.VIDEO)
@@ -146,10 +150,9 @@ class VideoState(State):
     def _onEntered(self):
         machine = self.getMachine()
         if machine is not None:
-            chapter = machine.getChosenStyleChapter()
-            intCD, level = getStyleInfoForChapter(chapter)
-            videoSource = R.videos.battle_pass.dyn('c_{}_{}'.format(intCD, level))
-            if not videoSource.exists():
+            _, self.__data = machine.getRewardsData()
+            videoSource = R.videos.battle_pass.dyn(_BATTLE_PASS_FINAL_VIDEO)
+            if not videoSource.exists() or self.__data.get('reason') == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
                 machine.post(StateEvent())
                 return
             showVideo(videoSource, isAutoClose=True, onVideoClosed=partial(machine.post, StateEvent()))
@@ -163,51 +166,12 @@ class RewardState(State):
         super(RewardState, self).__init__(stateID=BattlePassRewardStateID.REWARD, flags=StateFlags.SINGULAR)
 
     @property
-    def rewardStyle(self):
+    def rewardAny(self):
         return self.getChildByIndex(0)
 
-    @property
-    def rewardAny(self):
-        return self.getChildByIndex(1)
-
     def configure(self):
-        rewardStyle = RewardStyleState()
         rewardAny = RewardAnyState()
-        rewardStyle.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardAny)
-        self.addChildState(rewardStyle)
         self.addChildState(rewardAny)
-
-
-class RewardStyleState(State):
-    __slots__ = ()
-    __battlePass = dependency.descriptor(IBattlePassController)
-
-    def __init__(self):
-        super(RewardStyleState, self).__init__(stateID=BattlePassRewardStateID.REWARD_STYLE, flags=StateFlags.INITIAL)
-
-    def _onEntered(self):
-        machine = self.getMachine()
-        if machine is None:
-            return
-        else:
-            chapterID = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapterID)
-            style = getStyleForChapter(chapterID)
-            additionalRewards, _ = machine.getRewardsData()
-            needNotifyClosing = not additionalRewards
-            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel():
-                machine.post(StateEvent())
-                return
-            prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
-            data = {'reason': BattlePassRewardReason.STYLE_UPGRADE,
-             'chapter': chapterID,
-             'prevLevel': prevLevel,
-             'callback': partial(machine.post, StateEvent())}
-            styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapterID, level)
-            rewards = packToken(styleToken)
-            machine.clearChapterStyle()
-            showBattlePassAwardsWindow([rewards], data, needNotifyClosing=needNotifyClosing)
-            return
 
 
 class RewardAnyState(State):
@@ -216,7 +180,7 @@ class RewardAnyState(State):
 
     def __init__(self):
         self.__needShowBuy = False
-        super(RewardAnyState, self).__init__(stateID=BattlePassRewardStateID.REWARD_ANY)
+        super(RewardAnyState, self).__init__(stateID=BattlePassRewardStateID.REWARD_ANY, flags=StateFlags.INITIAL)
 
     def _onEntered(self):
         machine = self.getMachine()
@@ -232,12 +196,6 @@ class RewardAnyState(State):
                 data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
             data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('reason'))
             data['showBuyCallback'] = self.__onShowBuy
-            chapter = machine.getChosenStyleChapter()
-            if chapter is not None:
-                _, level = getStyleInfoForChapter(chapter)
-                styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
-                rewards.append(packToken(styleToken))
-                machine.clearChapterStyle()
             if not rewards:
                 machine.clearSelf()
                 machine.post(StateEvent())
@@ -255,7 +213,8 @@ class RewardAnyState(State):
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
                 if not self.__battlePass.isDisabled() and not self.__needShowBuy:
-                    showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+                    showMissionsBattlePass(R.views.lobby.battle_pass.PostProgressionView())
+                self.__needShowBuy = False
             machine.clearManualFlow()
             return
 
@@ -263,7 +222,8 @@ class RewardAnyState(State):
         machine = self.getMachine()
         if machine is not None:
             machine.post(StateEvent())
-        if not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+        showProgression = not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS and not self.__battlePass.isCompleted()
+        if showProgression:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
         return
 
@@ -273,5 +233,8 @@ class RewardAnyState(State):
         if machine is not None:
             machine.clearSelf()
             machine.post(StateEvent())
-        showBattlePassBuyWindow()
+        callBack = None
+        if self.__battlePass.isCompleted():
+            callBack = partial(showMissionsBattlePass, R.views.lobby.battle_pass.PostProgressionView())
+        showBattlePassBuyWindow({'backCallback': callBack})
         return

@@ -47,7 +47,6 @@ class HANGAR_ALIASES(object):
     SECONDARY_ENTRY_POINT = 'secondaryEntryPoint'
     RESOURCE_WELL_ENTRY_POINT = 'resourceWellEntryPoint'
     BATTLE_MATTERS_ENTRY_POINT = 'battleMattersEntryPoint'
-    COLLECTIVE_GOAL_ENTRY_POINT = 'collectiveGoalEntryPoint'
     COMP7_WIDGET = 'comp7Widget'
     AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS = 'ammunitionSetupViewVehicleParams'
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'

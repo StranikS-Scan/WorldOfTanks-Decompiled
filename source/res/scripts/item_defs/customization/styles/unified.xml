@@ -15543,48 +15543,6 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <style>
-      <id>	31001	</id>
-      <texture>	gui/maps/vehicles/styles/lst_cross_event.png	</texture>
-      <description>	#vehicle_customization:special_style/rebranding_event_desc	</description>
-      <userString>	#vehicle_customization:special_style/rebranding_event	</userString>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/rebranding_event_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
-      <outfits>
-        <outfit>
-          <season>	all	</season>
-          <camouflages>
-            <item>
-              <id>	31001	</id>
-              <patternSize>	1	</patternSize>
-              <appliedTo>	4368	</appliedTo>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <modifications>
-            <item>	4	</item>
-          </modifications>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -15856,56 +15814,145 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <historical>	2	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	31002	</id>
+      <id>	702	</id>
+      <texture>	gui/maps/vehicles/styles/bp_holiday_1.png	</texture>
+      <description>	#vehicle_customization:special_style/bp_holiday_desc	</description>
+      <userString>	#vehicle_customization:special_style/bp_holiday_1	</userString>
       <tags>	progression_required	</tags>
-      <texture>	gui/maps/vehicles/styles/23February2023.png	</texture>
-      <description>	#vehicle_customization:styles/23_February_2023_style/description	</description>
-      <userString>	#vehicle_customization:styles/23_February_2023_style	</userString>
-      <longDescriptionSpecial>	#vehicle_customization:styles/23_February_2023_style/description/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
-          <season>	event	</season>
-        </outfit>
-        <outfit>
-          <season>	winter	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	31003	</id>
-              <patternSize>	1	</patternSize>
+              <id>	487	</id>
               <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	368	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
         </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	703	</id>
+      <texture>	gui/maps/vehicles/styles/bp_holiday_2.png	</texture>
+      <description>	#vehicle_customization:special_style/bp_holiday_desc	</description>
+      <userString>	#vehicle_customization:special_style/bp_holiday_2	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
         <outfit>
-          <season>	summer	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	31002	</id>
+              <id>	488	</id>
+              <appliedTo>	16	</appliedTo>
               <patternSize>	1	</patternSize>
-              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	489	</id>
+              <appliedTo>	256	</appliedTo>
+              <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <insignias>
+            <item>
+              <id>	34	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	369	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	828	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+            <item>
+              <id>	829	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
         </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	704	</id>
+      <texture>	gui/maps/vehicles/styles/bp_holiday_3.png	</texture>
+      <description>	#vehicle_customization:special_style/bp_holiday_desc	</description>
+      <userString>	#vehicle_customization:special_style/bp_holiday_3	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
         <outfit>
-          <season>	desert	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	31004	</id>
-              <patternSize>	1	</patternSize>
+              <id>	490	</id>
               <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	370	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	830	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	830	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	right safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
         </outfit>
       </outfits>
       <itemFilters>

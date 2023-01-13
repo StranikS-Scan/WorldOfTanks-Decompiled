@@ -26,8 +26,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     AIM_2 = 'AIM_2'
     AIM_3 = 'AIM_3'
     AIM_4 = 'AIM_4'
-    MARKERS_1 = 'MARKERS_1'
-    MARKERS_2 = 'MARKERS_2'
+    MARKERS = 'MARKERS'
     CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
@@ -183,23 +182,21 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 3 << 4)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 3 << 1),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 3 << 3)}),
-     SETTINGS_SECTIONS.MARKERS_1: Section(masks={'markerBaseIcon': 0,
-                                   'markerBaseLevel': 1,
-                                   'markerBaseHpIndicator': 2,
-                                   'markerBaseDamage': 3,
-                                   'markerBaseVehicleName': 4,
-                                   'markerBasePlayerName': 5,
-                                   'markerBaseAimMarker2D': 6,
-                                   'markerAltIcon': 16,
-                                   'markerAltLevel': 17,
-                                   'markerAltHpIndicator': 18,
-                                   'markerAltDamage': 19,
-                                   'markerAltVehicleName': 20,
-                                   'markerAltPlayerName': 21,
-                                   'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
-                                   'markerAltHp': Offset(24, 4278190080L)}),
-     SETTINGS_SECTIONS.MARKERS_2: Section(masks={'markerBaseVehicleDist': 0,
-                                   'markerAltVehicleDist': 1}, offsets={}),
+     SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
+                                 'markerBaseLevel': 1,
+                                 'markerBaseHpIndicator': 2,
+                                 'markerBaseDamage': 3,
+                                 'markerBaseVehicleName': 4,
+                                 'markerBasePlayerName': 5,
+                                 'markerBaseAimMarker2D': 6,
+                                 'markerAltIcon': 16,
+                                 'markerAltLevel': 17,
+                                 'markerAltHpIndicator': 18,
+                                 'markerAltDamage': 19,
+                                 'markerAltVehicleName': 20,
+                                 'markerAltPlayerName': 21,
+                                 'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
+                                 'markerAltHp': Offset(24, 4278190080L)}),
      SETTINGS_SECTIONS.CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                            'germany': 1,
                                            'usa': 2,
@@ -735,24 +732,6 @@ class ServerSettingsManager(object):
      'gunTagType': 3,
      'reloaderTimer': 3,
      'zoomIndicator': 4}
-    MARKERS_MAPPING = {'markerBaseIcon': 1,
-     'markerBaseLevel': 1,
-     'markerBaseHpIndicator': 1,
-     'markerBaseDamage': 1,
-     'markerBaseVehicleName': 1,
-     'markerBasePlayerName': 1,
-     'markerBaseAimMarker2D': 1,
-     'markerAltIcon': 1,
-     'markerAltLevel': 1,
-     'markerAltHpIndicator': 1,
-     'markerAltDamage': 1,
-     'markerAltVehicleName': 1,
-     'markerAltPlayerName': 1,
-     'markerAltAimMarker2D': 1,
-     'markerBaseHp': 1,
-     'markerAltHp': 1,
-     'markerBaseVehicleDist': 2,
-     'markerAltVehicleDist': 2}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
@@ -919,32 +898,23 @@ class ServerSettingsManager(object):
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
-        number = self.MARKERS_MAPPING[key]
-        storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
-        settingsKey = 'MARKERS_{number}'.format(number=number)
+        storageKey = 'MARKERS_{section}'.format(section=section.upper())
         storedValue = self.settingsCache.getSectionSettings(storageKey, None)
-        masks = self.SECTIONS[settingsKey].masks
-        offsets = self.SECTIONS[settingsKey].offsets
+        masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
+        offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
-            mapping = {}
-            for key, value in options.iteritems():
-                number = self.MARKERS_MAPPING[key]
-                mapping.setdefault(number, {})[key] = value
-
-            for number, value in mapping.iteritems():
-                settingsKey = 'MARKERS_{number}'.format(number=number)
-                storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
-                storingValue = storedValue = self.settingsCache.getSetting(storageKey)
-                masks = self.SECTIONS[settingsKey].masks
-                offsets = self.SECTIONS[settingsKey].offsets
-                storingValue = self._mapValues(value, storingValue, masks, offsets)
-                if storedValue == storingValue:
-                    continue
-                settingToServer[storageKey] = storingValue
+            storageKey = 'MARKERS_{section}'.format(section=section.upper())
+            storingValue = storedValue = self.settingsCache.getSetting(storageKey)
+            masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
+            offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
+            storingValue = self._mapValues(options, storingValue, masks, offsets)
+            if storedValue == storingValue:
+                continue
+            settingToServer[storageKey] = storingValue
 
         return settingToServer
 

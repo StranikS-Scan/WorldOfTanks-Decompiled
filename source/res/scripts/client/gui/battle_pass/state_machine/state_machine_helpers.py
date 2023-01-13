@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/state_machine_helpers.py
 import logging
 import typing
-from battle_pass_common import BattlePassState, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, BattlePassConsts
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, getOfferTokenByGift
+from battle_pass_common import BattlePassState, BATTLE_PASS_OFFER_TOKEN_PREFIX, BattlePassRewardReason, BattlePassConsts
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.impl.pub.notification_commands import NotificationEvent, EventNotificationCommand
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -25,7 +25,6 @@ def isProgressionComplete(_, battlePass=None):
 def separateRewards(rewards, battlePass=None, offers=None):
     rewardsToChoose = []
     styleTokens = []
-    chosenStyle = None
     defaultRewards = rewards[:]
     blocksToRemove = []
     hasRareRewardToChoose = False
@@ -43,12 +42,6 @@ def separateRewards(rewards, battlePass=None, offers=None):
             for tokenID in rewardBlock['tokens'].iterkeys():
                 if hasRareRewardToChoose and _isRewardChoiceToken(tokenID, offers=offers):
                     rewardsToChoose.append(tokenID)
-                if tokenID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
-                    styleTokens.append(tokenID)
-                    chapter = int(tokenID.split(':')[3])
-                    intCD, _ = getStyleInfoForChapter(chapter)
-                    if intCD is not None:
-                        chosenStyle = chapter
 
         for tokenID in rewardsToChoose:
             rewardBlock.get('tokens', {}).pop(tokenID, None)
@@ -66,7 +59,7 @@ def separateRewards(rewards, battlePass=None, offers=None):
         defaultRewards.pop(index)
 
     rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
-    return (rewardsToChoose, defaultRewards, chosenStyle)
+    return (rewardsToChoose, defaultRewards, battlePass.isCompleted())
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)

@@ -5,6 +5,7 @@ from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.shared.event_dispatcher import showBattlePassTankmenVoiceover
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from web.common import formatBattlePassInfo
@@ -13,7 +14,6 @@ _logger = logging.getLogger(__name__)
 _R_VIEWS = R.views.lobby.battle_pass
 _VIEWS_IDS = {'intro': _R_VIEWS.BattlePassIntroView(),
  'intro_extra': _R_VIEWS.ExtraIntroView(),
- 'chapter_choice': _R_VIEWS.ChapterChoiceView(),
  'progression': _R_VIEWS.BattlePassProgressionsView()}
 
 def _isValidViewID(_, data):
@@ -47,6 +47,10 @@ class BattlePassWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_info')
     def handleGetInfo(self, _):
         return formatBattlePassInfo()
+
+    @w2c(W2CSchema, name='show_tankmen_voiceover')
+    def handleShowTankmenVoiceover(self, _):
+        showBattlePassTankmenVoiceover()
 
     @w2c(W2CSchema, name='show_progressions_view')
     def handleShowProgressionsView(self, _):

@@ -3,14 +3,14 @@
 import logging
 import SoundGroups
 from PlayerEvents import g_playerEvents
+from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyBattlePassUrl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_package import generatePackages
-from gui.battle_pass.sounds import BattlePassSounds
+from gui.battle_pass.sounds import BattlePassSounds, ACTIVATE_CHAPTER_SOUND_SPACE
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, PackageItem, PackageType
@@ -19,12 +19,12 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.event_dispatcher import showHangar, showShop
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.events import BattlePassEvent
-from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IWalletController
 from skeletons.gui.shared import IItemsCache
+from skeletons.account_helpers.settings_core import ISettingsCore
 WINDOW_IS_NOT_OPENED = -1
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
@@ -53,6 +53,8 @@ class BattlePassBuyView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    _COMMON_SOUND_SPACE = ACTIVATE_CHAPTER_SOUND_SPACE
 
     def __init__(self, ctx=None):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassBuyView())
@@ -88,14 +90,13 @@ class BattlePassBuyView(ViewImpl):
         self.__packages = generatePackages(battlePass=self.__battlePass)
         self.__setGeneralFields()
         self.__setPackages()
-        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
-            self.__choosePackage({'packageID': g_BPBuyViewStates.getPackageID()})
+        self.__selectedPackage = self.__packages[self.__battlePass.getChapterIDs()[0]]
+        self.__setConfirmModel()
+        self.__showConfirm()
         g_BPBuyViewStates.reset()
-        switchHangarOverlaySoundFilter(on=True)
 
     def _finalize(self):
         g_eventBus.removeListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
-        switchHangarOverlaySoundFilter(on=False)
         self.__selectedPackage = None
         self.__tooltipItems = None
         self.__packages = None
@@ -104,11 +105,9 @@ class BattlePassBuyView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.choosePackage, self.__choosePackage),
-         (self.viewModel.showConfirm, self.__showConfirm),
+        return ((self.viewModel.showConfirm, self.__showConfirm),
          (self.viewModel.showRewards, self.__showRewards),
          (self.viewModel.onBackClick, self.__onBackClick),
-         (self.viewModel.onShopOfferClick, self.__onShopOfferClick),
          (self.viewModel.confirm.onShowRewardsClick, self.__showRewards),
          (self.viewModel.confirm.onBuyClick, self.__onBuyBattlePassClick),
          (self.__battlePass.onLevelUp, self.__onLevelUp),
@@ -123,7 +122,6 @@ class BattlePassBuyView(ViewImpl):
     def __setGeneralFields(self):
         with self.viewModel.transaction() as tx:
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
-            tx.setIsShopOfferAvailable(self.__isShopOfferAvailable())
 
     def __clearTooltips(self):
         self.__tooltipItems.clear()
@@ -133,10 +131,9 @@ class BattlePassBuyView(ViewImpl):
         return
 
     def __onBackClick(self):
-        if self.viewModel.getState() == self.viewModel.CONFIRM_STATE:
-            self.__showBuy()
-        elif self.__backCallback is not None:
+        if self.__backCallback is not None:
             self.__backCallback()
+            self.destroyWindow()
         else:
             self.destroyWindow()
         return
@@ -148,12 +145,6 @@ class BattlePassBuyView(ViewImpl):
 
     def __showRewards(self):
         self.viewModel.setState(self.viewModel.REWARDS_STATE)
-
-    def __showBuy(self):
-        self.__selectedPackage = None
-        self.__clearTooltips()
-        self.viewModel.setState(self.viewModel.BUY_STATE)
-        return
 
     def __onBuying(self, _):
         self.__battlePass.onLevelUp += self.__onLevelUp
@@ -170,17 +161,10 @@ class BattlePassBuyView(ViewImpl):
     def __updateState(self):
         if self.viewModel.getState() == self.viewModel.CONFIRM_STATE:
             self.__setConfirmModel()
-        elif self.viewModel.getState() == self.viewModel.BUY_STATE:
-            self.__setPackages()
         elif self.viewModel.getState() == self.viewModel.REWARDS_STATE:
             self.__updateDetailRewards()
         else:
             self.__setPackages()
-
-    def __choosePackage(self, args):
-        self.__packageID = int(args.get('packageID'))
-        self.__selectedPackage = self.__packages[self.__packageID]
-        self.__showConfirm()
 
     def __setConfirmModel(self):
         if self.__selectedPackage is None:
@@ -222,14 +206,8 @@ class BattlePassBuyView(ViewImpl):
         else:
             self.__setPackages()
             self.__setGeneralFields()
+            self.__markVisitedIntro()
             g_eventBus.addListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
-
-    def __isShopOfferAvailable(self):
-        return not any((package.isBought() and not package.isExtra() for package in self.__packages.itervalues()))
-
-    def __onShopOfferClick(self):
-        showShop(getBuyBattlePassUrl())
-        self.destroyWindow()
 
     @replaceNoneKwargsModel
     def __setPackages(self, model=None):
@@ -273,10 +251,16 @@ class BattlePassBuyView(ViewImpl):
         isValidState = not self.__packageID or ctrl.isChapterExists(self.__packageID) and (not ctrl.isExtraChapter(self.__packageID) or ctrl.getChapterRemainingTime(self.__packageID) > 0)
         allBought = all((ctrl.isBought(chID) for chID in ctrl.getChapterIDs()))
         if not isValidState or allBought:
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass()
             self.destroyWindow()
             return
         self.__updateState()
+
+    def __markVisitedIntro(self):
+        if not self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN):
+            self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
+        if not self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_VIDEO_SHOWN):
+            self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_VIDEO_SHOWN: True})
 
 
 class BattlePassBuyWindow(LobbyWindow):

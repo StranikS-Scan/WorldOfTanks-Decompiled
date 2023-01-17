@@ -35,7 +35,7 @@ class EntryPointTooltip(ViewImpl):
         model.setDescription(self.__collectiveGoalEntryPointController.getGoalDescription())
         model.setCaption(self.__collectiveGoalEntryPointController.getRulesCaption())
         currentPoints, totalPoints = self.__collectiveGoalEntryPointController.getStagePoints()
-        model.setCurrentPoints(currentPoints)
+        model.setCurrentPoints(min(currentPoints, totalPoints))
         model.setTotalPoints(totalPoints)
         model.setEndDate(self.__collectiveGoalEntryPointController.getEventFinishTime())
         model.setIsFinished(self.__collectiveGoalEntryPointController.isFinished())

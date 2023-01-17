@@ -204,13 +204,13 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def __onExtraChapterExpired(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass()
             self.destroyWindow()
 
     def __onBattlePassSettingsChange(self, *_):
         ctrl = self.__battlePass
         if not (ctrl.isEnabled() and ctrl.isVisible() and ctrl.isChapterExists(self.__chapterID)):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass()
             self.destroyWindow()
 
 

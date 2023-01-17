@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class VideoViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onVideoStarted', 'onVideoStopped')
 
-    def __init__(self, properties=5, commands=3):
+    def __init__(self, properties=6, commands=3):
         super(VideoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVideoSource(self):
@@ -39,6 +39,12 @@ class VideoViewModel(ViewModel):
     def setIsVignetteVisible(self, value):
         self._setBool(4, value)
 
+    def getVideoSoundVolume(self):
+        return self._getReal(5)
+
+    def setVideoSoundVolume(self, value):
+        self._setReal(5, value)
+
     def _initialize(self):
         super(VideoViewModel, self)._initialize()
         self._addResourceProperty('videoSource', R.invalid())
@@ -46,6 +52,7 @@ class VideoViewModel(ViewModel):
         self._addBoolProperty('isWindowAccessible', True)
         self._addBoolProperty('isUIVisible', False)
         self._addBoolProperty('isVignetteVisible', True)
+        self._addRealProperty('videoSoundVolume', 1.0)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onVideoStarted = self._addCommand('onVideoStarted')
         self.onVideoStopped = self._addCommand('onVideoStopped')

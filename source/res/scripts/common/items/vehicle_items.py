@@ -77,7 +77,7 @@ class VehicleItem(BasicItem):
 
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
-    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTesterManager', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots', 'slotsAnchors')
+    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTesterManager', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'soundsSets', 'emblemSlots', 'slotsAnchors')
     __metaclass__ = ReflectionMetaclass
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -92,6 +92,7 @@ class InstallableItem(VehicleItem):
         self.models = None
         self.camouflage = shared_components.Camouflage(None, None, None, None) if IS_EDITOR else shared_components.DEFAULT_CAMOUFLAGE
         self.sounds = None
+        self.soundsSets = None
         self.emblemSlots = component_constants.EMPTY_TUPLE
         self.slotsAnchors = component_constants.EMPTY_TUPLE
         return
@@ -283,7 +284,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -308,6 +309,7 @@ class Gun(InstallableItem):
         self.drivenJoints = None
         self.effects = None
         self.reloadEffect = None
+        self.reloadEffectSets = None
         self.impulse = component_constants.ZERO_FLOAT
         self.recoil = None
         self.animateEmblemSlots = True

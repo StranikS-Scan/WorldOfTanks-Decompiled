@@ -10,12 +10,16 @@ from shared_utils import CONST_CONTAINER
 from sound_gui_manager import CommonSoundSpaceSettings
 
 class SOUNDS(CONST_CONTAINER):
-    ACTIVATE_CHAPTER_STATE = 'STATE_overlay_hangar_general'
-    ACTIVATE_CHAPTER_STATE_ON = 'STATE_overlay_hangar_general_on'
-    ACTIVATE_CHAPTER_STATE_OFF = 'STATE_overlay_hangar_general_off'
+    BATTLE_PASS_STATE = 'STATE_overlay_hangar_general'
+    BATTLE_PASS_STATE_ON = 'STATE_overlay_hangar_general_on'
+    BATTLE_PASS_STATE_OFF = 'STATE_overlay_hangar_general_off'
+    ACTIVATE_CHAPTER_STATE = 'STATE_overlay_hangar_tasks'
+    ACTIVATE_CHAPTER_STATE_ON = 'STATE_overlay_hangar_tasks_on'
+    ACTIVATE_CHAPTER_STATE_OFF = 'STATE_overlay_hangar_tasks_off'
 
 
 ACTIVATE_CHAPTER_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+BATTLE_PASS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.BATTLE_PASS_STATE, entranceStates={SOUNDS.BATTLE_PASS_STATE: SOUNDS.BATTLE_PASS_STATE_ON}, exitStates={SOUNDS.BATTLE_PASS_STATE: SOUNDS.BATTLE_PASS_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
 
 class BattlePassSounds(CONST_CONTAINER):
     _OVERLAY = 'bp_overlay'
@@ -34,6 +38,7 @@ class BattlePassSounds(CONST_CONTAINER):
     VIDEO_PAUSE = 'bp_video_pause'
     VIDEO_RESUME = 'bp_video_resume'
     VIDEO_STOP = 'bp_video_stop'
+    HOLIDAY_VOICEOVERS_STOP = 'bp_fairyWorld_voiceovers_stop'
 
     @classmethod
     def getOverlay(cls, count):

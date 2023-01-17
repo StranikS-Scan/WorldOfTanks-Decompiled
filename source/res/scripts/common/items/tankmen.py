@@ -588,14 +588,13 @@ class TankmanDescr(object):
     @property
     def gid(self):
         if self.__gid is None:
-            if IS_CLIENT:
-                self.__gid, _ = findGroupsByIDs(getNationGroups(self.nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID)[0]
+            g = getNationConfig(self.nationID).getGroupByLastName(self.lastNameID)
+            if g and self.firstNameID in g.firstNames and self.iconID in g.icons:
+                self.__gid = g.groupID
+            elif g and self.iconID not in g.icons and self.nationID == 5 and self.iconID in (3001, 3002, 3003, 3004):
+                self.__gid = g.groupID
             else:
-                g = getNationConfig(self.nationID).getGroupByLastName(self.lastNameID)
-                if g and self.firstNameID in g.firstNames and self.iconID in g.icons:
-                    self.__gid = g.groupID
-                else:
-                    self.__gid = -1
+                self.__gid, _ = findGroupsByIDs(getNationGroups(self.nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID)[0]
         return self.__gid
 
     def makeCompactDescr(self):

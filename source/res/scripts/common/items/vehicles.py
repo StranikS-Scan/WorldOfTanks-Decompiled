@@ -3647,6 +3647,15 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVeh
         if sounds.isEmpty():
             raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
         item.sounds = sounds
+        if section.has_key('soundsSets'):
+            soundsSets = {}
+            for k, v in section['soundsSets'].items():
+                sound = sound_readers.readWWTripleSoundConfig(v)
+                if sound.isEmpty():
+                    raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
+                soundsSets[k] = sound
+
+            item.soundsSets = soundsSets
         item.physicalTracks = physicalTracksDict = {}
         physicalTracksSection = section['physicalTracks']
         if physicalTracksSection is not None:
@@ -3680,6 +3689,7 @@ def _writeChassis(item, section, sharedSections, materialData, *args, **kwargs):
     shared_writers.writeLodDist(item.effects['lodDist'], section, 'effects/lodDist', g_cache)
     chassis_writers.writeMudEffect(item.customEffects[0], g_cache, section, 'effects/mud')
     sound_writers.writeWWTripleSoundConfig(item.sounds, section)
+    sound_writers.writeSoundsSets(item.soundsSets, section)
     _writeAODecals(item.AODecals, section, 'AODecals')
     if IS_UE_EDITOR:
         editorData = item.editorData
@@ -4298,6 +4308,15 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             if reloadEff is None:
                 _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
             item.reloadEffect = reloadEff
+        if section.has_key('reloadEffectSets'):
+            reloadEffectSets = {}
+            for k, v in section['reloadEffectSets'].items():
+                effect = g_cache._gunReloadEffects.get(v.asString, None)
+                if effect is None:
+                    _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
+                reloadEffectSets[k] = effect
+
+            item.reloadEffectSets = reloadEffectSets
         item.impulse = _xml.readNonNegativeFloat(xmlCtx, section, 'impulse')
         item.recoil = gun_readers.readRecoilEffect(xmlCtx, section, g_cache)
         if section.has_key('camouflage'):
@@ -4538,6 +4557,16 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
                 reloadEffect = g_cache._gunReloadEffects.get(effName, None)
                 if reloadEffect is None:
                     _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
+        reloadEffectSets = sharedItem.reloadEffectSets
+        if section.has_key('reloadEffectSets'):
+            hasOverride = True
+            reloadEffectSets = reloadEffectSets or {}
+            for k, v in section['reloadEffectSets'].items():
+                effect = g_cache._gunReloadEffects.get(v.asString, None)
+                if effect is None:
+                    _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % v.asString)
+                reloadEffectSets[k] = effect
+
         sharedCam = sharedItem.camouflage
         cam = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=sharedCam)
         if cam != sharedCam:
@@ -4650,6 +4679,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.edgeByVisualModel = edgeByVisualModel
             item.emblemSlots = emblemSlots
             item.reloadEffect = reloadEffect
+            item.reloadEffectSets = reloadEffectSets
             item.drivenJoints = drivenJoints
         if IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_BASEAPP:
             item.slotsAnchors = slotsAnchors

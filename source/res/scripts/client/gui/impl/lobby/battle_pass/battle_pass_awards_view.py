@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
+import logging
 import SoundGroups
 from battle_pass_common import BattlePassRewardReason, FinalReward
 from frameworks.wulf import ViewSettings, WindowFlags
@@ -7,7 +8,7 @@ from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
-from gui.battle_pass.sounds import BattlePassSounds
+from gui.battle_pass.sounds import BattlePassSounds, BATTLE_PASS_SOUND_SPACE
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel, RewardReason
 from gui.impl.pub import ViewImpl
@@ -15,7 +16,9 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
+from shared_utils import first, findFirst
 from skeletons.gui.game_control import IBattlePassController
+_logger = logging.getLogger(__name__)
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS: RewardReason.BUY_BATTLE_PASS_LEVELS,
  BattlePassRewardReason.STYLE_UPGRADE: RewardReason.STYLE_UPGRADE,
@@ -32,6 +35,7 @@ REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
 class BattlePassAwardsView(ViewImpl):
     __slots__ = ('__tooltipItems', '__closeCallback', '__needNotifyClosing', '__showBuyCallback')
     __battlePass = dependency.descriptor(IBattlePassController)
+    _COMMON_SOUND_SPACE = BATTLE_PASS_SOUND_SPACE
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassAwardsView())
@@ -89,8 +93,7 @@ class BattlePassAwardsView(ViewImpl):
             tx.setIsBaseStyleLevel(styleLevel == 1)
             tx.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
         self.__setAwards(bonuses, isFinalReward)
-        isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
-        self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength() or isRewardSelected))
+        self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or self.viewModel.additionalRewards.getItemsLength()))
         switchHangarOverlaySoundFilter(on=True)
         SoundGroups.g_instance.playSound2D(BattlePassSounds.REWARD_SCREEN)
         self.__needNotifyClosing = needNotifyClosing
@@ -135,6 +138,15 @@ class BattlePassAwardsView(ViewImpl):
             if limit <= 0:
                 break
 
+        if isFinalReward and len(mainRewards) == FINAL_REWARDS_LIMIT:
+            chapterID = first(self.__battlePass.getChapterIDs())
+            _, maxLevel = self.__battlePass.getChapterLevelInterval(chapterID)
+            freeFinalRewards = self.__battlePass.getSingleAward(chapterId=chapterID, level=maxLevel)
+            tmanBonus = findFirst(lambda b: b.getName() == 'tmanToken', freeFinalRewards)
+            if tmanBonus is not None:
+                tmanToken = first(tmanBonus.getValue().iterkeys())
+                if first(mainRewards[1].getValue().iterkeys()) != tmanToken:
+                    mainRewards[1], mainRewards[2] = mainRewards[2], mainRewards[1]
         with useBigAwardInjection():
             packBonusModelAndTooltipData(mainRewards, self.viewModel.mainRewards, self.__tooltipItems)
         return mainRewards

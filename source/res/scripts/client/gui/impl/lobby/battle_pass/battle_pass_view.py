@@ -11,9 +11,9 @@ from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroV
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsView
-from gui.impl.lobby.battle_pass.chapter_choice_view import ChapterChoiceView
 from gui.impl.lobby.battle_pass.extra_intro_view import ExtraIntroView
 from gui.impl.lobby.battle_pass.intro_view import IntroView
+from gui.impl.lobby.battle_pass.post_progression_view import PostProgressionView
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
@@ -26,8 +26,8 @@ from skeletons.gui.impl import IGuiLoader
 _R_VIEWS = R.views.lobby.battle_pass
 _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
  _R_VIEWS.ExtraIntroView(): ExtraIntroView,
- _R_VIEWS.ChapterChoiceView(): ChapterChoiceView,
- _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView}
+ _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView,
+ _R_VIEWS.PostProgressionView(): PostProgressionView}
 _INTRO_VIDEO_SHOWN = BattlePassStorageKeys.INTRO_VIDEO_SHOWN
 _EXTRA_VIDEO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN
 _INTRO_SHOWN = BattlePassStorageKeys.INTRO_SHOWN
@@ -72,7 +72,7 @@ class _IntroVideoManager(object):
             _showOverlayVideo(getExtraIntroVideoURL())
             _setTrueToBPStorage(_EXTRA_VIDEO_SHOWN)
             if not self.__isIntroVideoShown:
-                showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+                showMissionsBattlePass()
         g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -93,6 +93,11 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         self.__setDummyVisible(self.__battlePass.isPaused())
         layoutID = kwargs.get('layoutID', R.invalid())
         chapterID = kwargs.get('chapterID', 0)
+        if self.__battlePass.isCompleted() and (not _hasTrueInBPStorage(_INTRO_SHOWN) or not _hasTrueInBPStorage(_INTRO_VIDEO_SHOWN)):
+            _setTrueToBPStorage(_INTRO_SHOWN)
+            _setTrueToBPStorage(_INTRO_VIDEO_SHOWN)
+        if not _hasTrueInBPStorage(_INTRO_SHOWN):
+            layoutID = _R_VIEWS.BattlePassIntroView()
         if self.__needTakeDefault(layoutID, chapterID):
             layoutID = self.__getActualViewImplLayoutID(chapterID)
         if not self.__needReload(layoutID):
@@ -138,7 +143,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         return layoutID not in _VIEWS or layoutID == _R_VIEWS.BattlePassProgressionsView() and chapterID and not self.__battlePass.isChapterExists(chapterID)
 
     def __needReload(self, layoutID):
-        return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID in (_R_VIEWS.BattlePassProgressionsView(), _R_VIEWS.ChapterChoiceView())
+        return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID == _R_VIEWS.BattlePassProgressionsView()
 
     def __onViewLoaded(self, state):
         if state == ViewStatus.LOADED:
@@ -155,9 +160,9 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         def isExtraActiveFirstTime():
             return ctrl.hasExtra() and not self.__introVideoManager.isExtraVideoShown
 
-        if not _hasTrueInBPStorage(_INTRO_SHOWN):
-            return _R_VIEWS.BattlePassIntroView()
-        return _R_VIEWS.BattlePassProgressionsView() if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)) else _R_VIEWS.ChapterChoiceView()
+        if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)):
+            return _R_VIEWS.BattlePassProgressionsView()
+        return _R_VIEWS.PostProgressionView() if ctrl.isCompleted() else _R_VIEWS.PostProgressionView()
 
     def __setDummyVisible(self, isVisible):
         self.__isDummyVisible = isVisible
@@ -174,6 +179,12 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         else:
             self.as_setBackgroundS('')
             self.as_hideDummyS()
+
+    def __safeCallOnInjected(self, methodName, *args, **kwargs):
+        call = getattr(self._injectView, methodName, None)
+        if callable(call):
+            call(*args, **kwargs)
+        return
 
 
 def _showOverlayVideo(url):

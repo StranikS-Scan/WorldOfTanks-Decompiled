@@ -164,6 +164,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     T34_DISCLAIMER = 't34_disclaimer'
     CLAN_WARS_BATTLES = 'clanWarsBattles'
     COMP7_BATTLES = 'comp7'
+    IS_RESTORED_WITH_STYLE = 'restoreWithStyle'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -1231,6 +1232,10 @@ class Vehicle(FittingItem):
     @property
     def isProgressionDecalsOnly(self):
         return checkForTags(self.tags, VEHICLE_TAGS.PROGRESSION_DECALS_ONLY)
+
+    @property
+    def isRestoredWithStyle(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.IS_RESTORED_WITH_STYLE)
 
     @property
     def isDisabledInPremIGR(self):

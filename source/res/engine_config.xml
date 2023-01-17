@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -425,9 +425,6 @@
           <name>	researches.bnk	</name>
         </bank>
         <bank>
-          <name>	tasks.bnk	</name>
-        </bank>
-        <bank>
           <name>	cons_hangar.bnk	</name>
         </bank>
         <bank>
@@ -468,6 +465,9 @@
         </bank>
         <bank>
           <name>	ev_fep_hangar.pck	</name>
+        </bank>
+        <bank>
+          <name>	tasks_bp_fw.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -556,6 +556,9 @@
         </bank>
         <bank>
           <name>	rocket_accelerator.pck	</name>
+        </bank>
+        <bank>
+          <name>	style_monster.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

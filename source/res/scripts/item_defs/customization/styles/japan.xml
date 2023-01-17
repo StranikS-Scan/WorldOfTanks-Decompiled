@@ -499,4 +499,61 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J27_O_I_120_BP	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31003	</id>
+      <texture>	gui/maps/vehicles/styles/J27_O_I_120_KB_MT_3dst.png	</texture>
+      <modelsSet>	J27_O_I_120_KB_MT_3dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst	</userString>
+      <description>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <insignias>
+            <item>
+              <id>	31004	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31001	</id>
+              <slotId>	38000	</slotId>
+            </item>
+            <item>
+              <id>	31002	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </japan.xml>

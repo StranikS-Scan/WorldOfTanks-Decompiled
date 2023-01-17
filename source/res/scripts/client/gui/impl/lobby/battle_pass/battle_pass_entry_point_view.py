@@ -9,8 +9,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import AnimationState, BPState, BattlePassEntryPointViewModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.pub import ViewImpl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
@@ -30,7 +28,7 @@ class _LastEntryState(object):
     def __init__(self):
         self.isFirstShow = True
         self.isBought = False
-        self.hasExtra = False
+        self.hasExtra = True
         self.chapterID = 0
         self.level = 0
         self.progress = 0
@@ -38,7 +36,7 @@ class _LastEntryState(object):
         self.rewardsCount = 0
         return
 
-    def update(self, isFirstShow=True, isBought=False, hasExtra=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
+    def update(self, isFirstShow=True, isBought=False, hasExtra=True, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
         self.isFirstShow = isFirstShow
         self.isBought = isBought
         self.hasExtra = hasExtra
@@ -95,7 +93,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     @property
     def isChapterChosen(self):
-        return self.__battlePass.hasActiveChapter()
+        return True
 
     @property
     def isBought(self):
@@ -116,7 +114,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     @property
     def hasExtra(self):
-        return self.__battlePass.hasExtra()
+        return True
 
     @property
     def battlePassState(self):
@@ -177,9 +175,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def _getTooltip(self):
         if self.isPaused:
             return R.invalid()
-        if self.isCompleted:
-            return R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView()
-        return R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView() if not self.chapterID else R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
+        return R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView() if self.isCompleted else R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
 
     def _getNotChosenRewardCount(self):
         return self.__battlePass.getNotChosenRewardCount()
@@ -217,10 +213,6 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         return super(BattlePassEntryPointView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView():
-            return BattlePassNotStartedTooltipView()
-        if contentID == R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView():
-            return BattlePassNoChapterTooltipView()
         return BattlePassCompletedTooltipView() if contentID == R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView() else BattlePassInProgressTooltipView()
 
     def setIsSmall(self, value):
@@ -300,10 +292,6 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         lastState = _g_entryLastState
         if self.battlePassState == BattlePassState.COMPLETED and lastState.state != BattlePassState.COMPLETED:
             animState = AnimationState.PROGRESSION_COMPLETED
-        elif self.chapterID and self.chapterID != lastState.chapterID:
-            animState = AnimationState.NEW_CHAPTER
-        elif not self.chapterID:
-            animState = AnimationState.CHAPTER_NOT_CHOSEN
         elif self.level and self.level != lastState.level:
             animState = AnimationState.NEW_LEVEL
         elif self.isBought and not lastState.isBought:

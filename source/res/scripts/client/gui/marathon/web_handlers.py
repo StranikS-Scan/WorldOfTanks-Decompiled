@@ -5,6 +5,7 @@ from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import showStorage
 from web.web_client_api import webApiCollection, w2capi
 from web.web_client_api.quests import QuestsWebApi
+from web.web_client_api.reactive_comm import ReactiveCommunicationWebApi
 from web.web_client_api.request.access_token import AccessTokenWebApiMixin
 from web.web_client_api.request.spa_id import SpaIdWebApiMixin
 from web.web_client_api.request.wgni_token import WgniTokenWebApiMixin
@@ -49,3 +50,7 @@ class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, ShopWebApiMixi
 
 def createDefaultMarathonWebHandlers():
     return webApiCollection(_OpenTabWebApi, _RequestWebApi, *_DEFAULT_MARATHON_WEB_API_COLLECTION)
+
+
+def createCollectiveGoalMarathonWebHandlers():
+    return webApiCollection(_OpenTabWebApi, _RequestWebApi, ReactiveCommunicationWebApi, *_DEFAULT_MARATHON_WEB_API_COLLECTION)

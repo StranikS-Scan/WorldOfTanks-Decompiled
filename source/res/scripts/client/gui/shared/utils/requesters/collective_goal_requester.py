@@ -8,7 +8,6 @@ from gui.game_control.reactive_comm import Subscription
 from helpers import dependency
 from skeletons.gui.game_control import IReactiveCommunicationService
 _logger = logging.getLogger(__name__)
-_logger.setLevel(logging.DEBUG)
 
 class CollectiveGoalRequester(object):
     __slots__ = ('onUpdated', '__subscription', '__message')

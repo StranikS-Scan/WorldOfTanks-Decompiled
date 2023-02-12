@@ -34216,6 +34216,101 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It21_Lion	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	687	</id>
+      <texture>	gui/maps/vehicles/styles/It21_Lion_KL_3DSt.png	</texture>
+      <modelsSet>	It21_Lion_KL_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/It21_Lion_KL_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/It21_Lion_KL_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required styleSerialNumber	</tags>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	472	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	34	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	35	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	473	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	34	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	35	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	474	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	34	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	36	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>

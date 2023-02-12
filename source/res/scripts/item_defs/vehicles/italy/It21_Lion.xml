@@ -72,6 +72,13 @@
       <undamaged>	vehicles/italy/It21_Lion/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It21_Lion/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It21_Lion/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It21_Lion_KL_3DSt>
+          <undamaged>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Hull.model	</exploded>
+        </It21_Lion_KL_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -104,9 +111,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.918199 0.429064 2.6899	</rayStart>
-        <rayEnd>	-0.918199 0.256055 2.58958	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-1.142332 0.439925 2.671169	</rayStart>
+        <rayEnd>	-1.142332 0.266916 2.570849	</rayEnd>
+        <rayUp>	0 0.501623 -0.865086	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -114,13 +121,13 @@
       <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
-        <anchorPosition>	-0.000000 0.70285 -2.65829	</anchorPosition>
+        <anchorPosition>	0.000000 0.70285 -2.65829	</anchorPosition>
         <anchorDirection>	0.000000 0.255615 -0.966779	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	12000	</slotId>
-        <anchorPosition>	-0.000000 0.70285 -2.65829	</anchorPosition>
+        <anchorPosition>	0.000000 0.70285 -2.65829	</anchorPosition>
         <anchorDirection>	0.000000 0.255615 -0.966779	</anchorDirection>
       </slot>
       <slot>
@@ -1069,6 +1076,85 @@
         <anchorShift>	0.000000	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+        <position>	-1.34788 1.11739 3.13133	</position>
+        <rotation>	0.468216 -0.000006 3.14158	</rotation>
+        <scale>	0.38166 0.241433 0.381663	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.186	</clipAngle>
+        <anchorShift>	0.05	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+        <position>	0.721974 1.55249 2.02484	</position>
+        <rotation>	0.0991323 -0.000001 3.14158	</rotation>
+        <scale>	0.368456 0.168387 0.368461	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.801212	</clipAngle>
+        <anchorShift>	0.04	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+        <position>	0.553901 1.468 -3.59573	</position>
+        <rotation>	1.35789 0.000048 0.000051	</rotation>
+        <scale>	0.329 0.089558 0.329001	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.801212	</clipAngle>
+        <anchorShift>	0.06	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+        <position>	-1.72154 0.956297 1.86363	</position>
+        <rotation>	1.55136 -1.31127 -2.85837	</rotation>
+        <scale>	0.462963 0.211578 0.462965	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.801212	</clipAngle>
+        <anchorShift>	0.01	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+        <position>	1.72155 0.95626 1.86362	</position>
+        <rotation>	1.55137 1.31096 2.85802	</rotation>
+        <scale>	0.462962 0.211577 0.462965	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.801212	</clipAngle>
+        <anchorShift>	0.01	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	112.878 124.195	</density>
@@ -1104,6 +1190,13 @@
         <undamaged>	vehicles/italy/It21_Lion/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It21_Lion/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It21_Lion/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It21_Lion_KL_3DSt>
+            <undamaged>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Chassis.model	</exploded>
+          </It21_Lion_KL_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2161,6 +2254,13 @@
             <undamaged>	vehicles/italy/It21_Lion/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It21_Lion/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It21_Lion/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <It21_Lion_KL_3DSt>
+                <undamaged>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </It21_Lion_KL_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It21_Lion/collision/Gun_01.model	</collisionModelServer>
@@ -2207,6 +2307,16 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 3.63	</rayStart>
+              <rayEnd>	0 0 4.143125	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
+              <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+              <size>	0.513125	</size>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <effects>	shot_large	</effects>
           <camouflage>
@@ -2219,6 +2329,13 @@
         <undamaged>	vehicles/italy/It21_Lion/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It21_Lion/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It21_Lion/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It21_Lion_KL_3DSt>
+            <undamaged>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It21_Lion/_skins/It21_Lion_KL_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </It21_Lion_KL_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It21_Lion/collision/Turret_01.model	</collisionModelServer>
@@ -2716,6 +2833,20 @@
           <clipAngle>	1.44956	</clipAngle>
           <anchorShift>	0.403356	</anchorShift>
           <hiddenForUser>	true	</hiddenForUser>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	It21_Lion_KL_3DSt	</compatibleModels>
+          <position>	0.557727 2.53661 -0.138616	</position>
+          <rotation>	-0.000000 0.000000 3.14115	</rotation>
+          <scale>	0.405014 0.104597 0.405012	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.801212	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.03	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

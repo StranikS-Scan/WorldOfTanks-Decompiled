@@ -1138,9 +1138,6 @@ class IBattlePassRequester(IRequester):
     def getPointsForVehicle(self, vehicleID, default=0):
         raise NotImplementedError
 
-    def getPackedStats(self):
-        raise NotImplementedError
-
     def getChapterStats(self):
         raise NotImplementedError
 

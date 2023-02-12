@@ -9,7 +9,8 @@ from visual_script.misc import errorVScript
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
-vehicles, helpers, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('items.vehicles', 'helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
+import items.vehicles as vehicles
+helpers, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
 
 class PlayerMeta(Meta):
 

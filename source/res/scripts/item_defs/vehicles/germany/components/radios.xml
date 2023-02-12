@@ -31,8 +31,6 @@
     <AN_GRC_8>	32	</AN_GRC_8>
     <FuG7A_CN>	33	</FuG7A_CN>
     <_10WSc_WT>	34	</_10WSc_WT>
-    <FuG2_bot>	248	</FuG2_bot>
-    <Die_Signalfahnen_bot>	249	</Die_Signalfahnen_bot>
     <FuG5_T>	252	</FuG5_T>
     <Radio_PzIV>	254	</Radio_PzIV>
     <Radio_VK4502P>	255	</Radio_VK4502P>
@@ -48,9 +46,6 @@
     <FuG7_IGR>	60003	</FuG7_IGR>
     <_10WSc_IGR>	60004	</_10WSc_IGR>
     <FuG2_bootcamp>	64001	</FuG2_bootcamp>
-    <FuG5_bootcamp>	64002	</FuG5_bootcamp>
-    <FuG37_bootcamp>	64003	</FuG37_bootcamp>
-    <R_5a_bootcamp>	64004	</R_5a_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
     <FuG12_MapsTraining_Dummy_HT_1>	18	</FuG12_MapsTraining_Dummy_HT_1>
     <FuG11_MapsTraining_Dummy_ATSPG_1>	19	</FuG11_MapsTraining_Dummy_ATSPG_1>
@@ -58,18 +53,6 @@
     <FuG8_MapsTraining_Dummy_ATSPG_2>	35	</FuG8_MapsTraining_Dummy_ATSPG_2>
   </ids>
   <shared>
-    <Die_Signalfahnen_bot>
-      <userString>	#germany_vehicles:Die_Signalfahnen_bot	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Die_Signalfahnen_bot>
     <FuG2>
       <userString>	#germany_vehicles:FuG2	</userString>
       <tags></tags>
@@ -81,18 +64,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </FuG2>
-    <FuG2_bot>
-      <userString>	#germany_vehicles:FuG2_bot	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	265	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </FuG2_bot>
     <FuG2_bootcamp>
       <userString>	#germany_vehicles:FuG2_bootcamp	</userString>
       <tags></tags>
@@ -128,18 +99,6 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </FuG5A>
-    <FuG5_bootcamp>
-      <userString>	#germany_vehicles:FuG5	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	630	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	310	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </FuG5_bootcamp>
     <FuG5_T>
       <userString>	#germany_vehicles:FuG5A	</userString>
       <tags></tags>
@@ -188,18 +147,6 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </R_5a>
-    <R_5a_bootcamp>
-      <userString>	#germany_vehicles:R_5a	</userString>
-      <tags></tags>
-      <level>	5	</level>
-      <price>	4000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	26	</weight>
-      <distance>	400	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </R_5a_bootcamp>
     <FuG6>
       <userString>	#germany_vehicles:FuG6	</userString>
       <tags></tags>
@@ -384,18 +331,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </FuG37>
-    <FuG37_bootcamp>
-      <userString>	#germany_vehicles:FuG37	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	290	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </FuG37_bootcamp>
     <_10WSc>
       <userString>	#germany_vehicles:_10WSc	</userString>
       <tags></tags>

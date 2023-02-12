@@ -9,9 +9,9 @@ from gui.Scaleform import getNecessaryArenaFrameName
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
-from gui.shared.system_factory import registerArenaDescription, registerArenaDescriptions, collectArenaDescription
 from gui.shared.utils import toUpper, functions
 from helpers import i18n
+from gui.shared.system_factory import registerArenaDescrs, collectArenaDescrs
 
 def _getDefaultTeamName(isAlly):
     return i18n.makeString(MENU.LOADING_TEAMS_ALLIES) if isAlly else i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
@@ -109,7 +109,8 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
         return name
 
     def getDescriptionString(self, isInBattle=True):
-        return i18n.makeString('#menu:loading/battleTypes/{}'.format(self._visitor.getArenaGuiType()))
+        descriptionRes = R.strings.menu.loading.battleTypes.num(self._visitor.getArenaGuiType())
+        return backport.text(descriptionRes()) if descriptionRes.exists() else ''
 
     def getWinString(self, isInBattle=True):
         return functions.getBattleSubTypeWinText(self._visitor.type.getID(), 1 if self.isBaseExists() else 2)
@@ -168,7 +169,7 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
     def isInvitationEnabled(self):
         guiVisitor = self._visitor.gui
         replayCtrl = BattleReplay.g_replayCtrl
-        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isMapbox() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
+        return not replayCtrl.isPlaying and (guiVisitor.isRandomBattle() or guiVisitor.isMapbox() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
 
     def isQuestEnabled(self):
         guiVisitor = self._visitor.gui
@@ -183,13 +184,6 @@ class ArenaWithLabelDescription(DefaultArenaGuiDescription):
 
     def getLegacyFrameLabel(self):
         return self.getFrameLabel()
-
-
-class TutorialBattleDescription(ArenaWithLabelDescription):
-    __slots__ = ()
-
-    def getWinString(self, isInBattle=True):
-        pass
 
 
 class ArenaWithL10nDescription(IArenaGuiDescription):
@@ -281,7 +275,7 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+        return not replayCtrl.isPlaying
 
     def getTeamName(self, team):
         from epic_constants import EPIC_BATTLE_TEAM_ID
@@ -293,37 +287,38 @@ class MapboxArenaDescription(ArenaWithLabelDescription):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+        return not replayCtrl.isPlaying
 
-
-registerArenaDescription(ARENA_GUI_TYPE.TUTORIAL, TutorialBattleDescription)
-registerArenaDescription(ARENA_GUI_TYPE.BOOTCAMP, BootcampBattleDescription)
-registerArenaDescription(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleDescription)
-registerArenaDescription(ARENA_GUI_TYPE.MAPBOX, MapboxArenaDescription)
-registerArenaDescriptions(ARENA_GUI_TYPE.RANDOM_RANGE, ArenaWithBasesDescription)
-registerArenaDescriptions(ARENA_GUI_TYPE.EPIC_RANGE, EpicBattlesDescription)
-registerArenaDescriptions((ARENA_GUI_TYPE.TRAINING, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING), ArenaWithBasesDescription)
 
 class Comp7BattlesDescription(ArenaWithLabelDescription):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+        return not replayCtrl.isPlaying
 
+
+registerArenaDescrs(ARENA_GUI_TYPE.RANDOM, ArenaWithBasesDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM, ArenaWithBasesDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.TRAINING, ArenaWithBasesDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING, ArenaWithBasesDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.BOOTCAMP, BootcampBattleDescription)
+for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
+    registerArenaDescrs(guiType, EpicBattlesDescription)
+
+registerArenaDescrs(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.MAPBOX, MapboxArenaDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.COMP7, Comp7BattlesDescription)
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
-    descriptionCls = collectArenaDescription(guiVisitor.guiType)
-    if descriptionCls is not None:
-        return descriptionCls(arenaVisitor)
+    arenaDescr = collectArenaDescrs(guiVisitor.guiType)
+    if arenaDescr is not None:
+        description = arenaDescr(arenaVisitor)
+    elif guiVisitor.hasLabel():
+        description = ArenaWithLabelDescription(arenaVisitor)
     else:
-        if guiVisitor.isComp7Battle():
-            description = Comp7BattlesDescription(arenaVisitor)
-        elif guiVisitor.hasLabel():
-            description = ArenaWithLabelDescription(arenaVisitor)
-        else:
-            description = DefaultArenaGuiDescription(arenaVisitor)
-        l10nDescription = getPrebattleFullDescription(arenaVisitor.getArenaExtraData() or {})
-        if l10nDescription:
-            description = ArenaWithL10nDescription(description, l10nDescription)
-        return description
+        description = DefaultArenaGuiDescription(arenaVisitor)
+    l10nDescription = getPrebattleFullDescription(arenaVisitor.getArenaExtraData() or {})
+    if l10nDescription:
+        description = ArenaWithL10nDescription(description, l10nDescription)
+    return description

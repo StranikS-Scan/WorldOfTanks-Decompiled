@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/__init__.py
 from collections import namedtuple
-from UnitBase import ROSTER_TYPE
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.prb_control.items.prb_items import PlayerPrbInfo
 from gui.prb_control.items.unit_items import PlayerUnitInfo
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG, PREBATTLE_RESTRICTION
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG, PREBATTLE_RESTRICTION, QUEUE_TYPE_TO_PREBATTLE_TYPE, PREBATTLE_TYPE_TO_QUEUE_TYPE
 from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.simple('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode')
@@ -50,21 +49,11 @@ class FunctionalState(object):
     def isQueueSelected(self, queueType):
         if self.isInPreQueue(queueType):
             return True
-        if self.isInUnit(PREBATTLE_TYPE.SQUAD) and queueType == QUEUE_TYPE.RANDOMS:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.EPIC) and queueType == QUEUE_TYPE.EPIC:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE) and queueType == QUEUE_TYPE.BATTLE_ROYALE:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and queueType == QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.MAPBOX) and queueType == QUEUE_TYPE.MAPBOX:
-            return True
-        if self.isInUnit(PREBATTLE_TYPE.FUN_RANDOM) and queueType == QUEUE_TYPE.FUN_RANDOM:
-            return True
-        return True if self.isInUnit(PREBATTLE_TYPE.COMP7) and queueType == QUEUE_TYPE.COMP7 else False
+        for qType, prbType in QUEUE_TYPE_TO_PREBATTLE_TYPE.iteritems():
+            if queueType == qType and self.isInUnit(prbType):
+                return True
+
+        return False
 
     def doLeaveToAcceptInvite(self, prbType=0):
         if not self.hasModalEntity:
@@ -88,15 +77,7 @@ class FunctionalState(object):
         return self.hasLockedState
 
     def __getQueueTypeByPrbType(self, prbType):
-        prbToQueue = {PREBATTLE_TYPE.SQUAD: QUEUE_TYPE.RANDOMS,
-         PREBATTLE_TYPE.UNIT: QUEUE_TYPE.UNITS,
-         PREBATTLE_TYPE.EVENT: QUEUE_TYPE.EVENT_BATTLES,
-         PREBATTLE_TYPE.STRONGHOLD: QUEUE_TYPE.STRONGHOLD_UNITS,
-         PREBATTLE_TYPE.EPIC: QUEUE_TYPE.EPIC,
-         PREBATTLE_TYPE.MAPBOX: QUEUE_TYPE.MAPBOX,
-         PREBATTLE_TYPE.FUN_RANDOM: QUEUE_TYPE.FUN_RANDOM,
-         PREBATTLE_TYPE.COMP7: QUEUE_TYPE.COMP7}
-        return prbToQueue.get(prbType, QUEUE_TYPE.UNKNOWN)
+        return PREBATTLE_TYPE_TO_QUEUE_TYPE.get(prbType, QUEUE_TYPE.UNKNOWN)
 
 
 @ReprInjector.simple('isCreator', 'isReady')

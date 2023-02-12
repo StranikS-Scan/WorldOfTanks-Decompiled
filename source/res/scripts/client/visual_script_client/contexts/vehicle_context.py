@@ -12,6 +12,7 @@ class VehicleContext(VScriptContext):
         self._vehicle = vehicle
 
     def destroy(self):
+        super(VehicleContext, self).destroy()
         self._vehicle = None
         return
 

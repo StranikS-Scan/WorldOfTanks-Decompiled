@@ -1,18 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/bootcamp/bootcamp_progress_view.py
 from frameworks.wulf import ViewSettings, WindowFlags
-from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from bootcamp.Bootcamp import g_bootcamp, ICON_SIZE
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_progress_model import BootcampProgressModel
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from gui.impl.lobby.bootcamp.bootcamp_progress_base_view import BootcampProgressBaseView
 
-class BootcampProgressView(ViewImpl):
-    __slots__ = ('__blur', '__tooltipData')
+class BootcampProgressView(BootcampProgressBaseView):
+    __slots__ = ('__blur',)
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_CURRENT_PROGRESS_WIDGET)
 
     def __init__(self, layoutID, *args, **kwargs):
@@ -20,34 +18,14 @@ class BootcampProgressView(ViewImpl):
         settings.model = BootcampProgressModel()
         settings.args = args
         settings.kwargs = kwargs
-        self.__blur = None
-        self.__tooltipData = {}
         super(BootcampProgressView, self).__init__(settings)
+        self.__blur = None
         return
-
-    @property
-    def viewModel(self):
-        return super(BootcampProgressView, self).getViewModel()
-
-    def createToolTip(self, event):
-        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipId = event.getArgument('tooltipId')
-            if tooltipId:
-                tooltipData = self.__tooltipData[int(tooltipId)]
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow())
-                if window:
-                    window.load()
-                return window
 
     def _initialize(self):
         super(BootcampProgressView, self)._initialize()
         window = self.getParentWindow()
         self.__blur = CachedBlur(enabled=True, ownLayer=window.layer - 1)
-
-    def _onLoading(self, *args, **kwargs):
-        super(BootcampProgressView, self)._onLoading(*args, **kwargs)
-        with self.viewModel.transaction() as model:
-            g_bootcamp.fillProgressBar(model, self.__tooltipData, ICON_SIZE.BIG)
 
     def _finalize(self):
         self.uiBootcampLogger.log(BC_LOG_ACTIONS.CLOSE)

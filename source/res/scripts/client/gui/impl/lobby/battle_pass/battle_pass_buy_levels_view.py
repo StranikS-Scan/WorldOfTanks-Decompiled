@@ -12,8 +12,8 @@ from gui.battle_pass.battle_pass_package import PackageAnyLevels
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import PackageType
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_level_view_model import BattlePassBuyLevelViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageType
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showMissionsBattlePass
@@ -33,9 +33,9 @@ class BattlePassBuyLevelView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx):
-        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassBuyView())
+        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassBuyLevelView())
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
-        settings.model = BattlePassBuyViewModel()
+        settings.model = BattlePassBuyLevelViewModel()
         self.__backCallback = ctx.get('backCallback')
         self.__tooltipItems = {}
         self.__tooltipWindow = None
@@ -204,13 +204,13 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def __onExtraChapterExpired(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            showMissionsBattlePass()
+            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
 
     def __onBattlePassSettingsChange(self, *_):
         ctrl = self.__battlePass
         if not (ctrl.isEnabled() and ctrl.isVisible() and ctrl.isChapterExists(self.__chapterID)):
-            showMissionsBattlePass()
+            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
 
 

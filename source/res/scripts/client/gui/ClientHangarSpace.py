@@ -296,6 +296,7 @@ class ClientHangarSpace(object):
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
+        BigWorld.hangarDestroyed()
         self._vsePlans.reset()
         MusicControllerWWISE.unloadCustomSounds()
         if self.__cameraManager:

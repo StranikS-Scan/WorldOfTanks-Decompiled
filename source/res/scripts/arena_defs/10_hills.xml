@@ -78,34 +78,6 @@
         </team1>
       </teamBasePositions>
     </assault2>
-    <sandbox>
-      <artilleryPreparationChance>	0.0	</artilleryPreparationChance>
-      <battleScenarios>
-        <level>
-          <id>	1	</id>
-          <scenario>	spaces/10_hills/bot_scenarios_1_lv1.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_2_lv1.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_1_lv1.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_2_lv1.xml	</scenario>
-        </level>
-        <level>
-          <id>	2	</id>
-          <scenario>	spaces/10_hills/bot_scenarios_1_lv2.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_2_lv2.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_1_lv2.xml	</scenario>
-          <scenario>	spaces/10_hills/bot_scenarios_2_lv2.xml	</scenario>
-        </level>
-      </battleScenarios>
-      <wwmusic>	bc_music_mission_05	</wwmusic>
-      <teamBasePositions>
-        <team1>
-          <position1>	175.783722 -305.848389	</position1>
-        </team1>
-        <team2>
-          <position1>	-236.649124 329.674500	</position1>
-        </team2>
-      </teamBasePositions>
-    </sandbox>
     <bootcamp>
       <wwmusicSetup>
         <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
@@ -147,6 +119,5 @@
       </teamBasePositions>
     </maps_training>
   </gameplayTypes>
-  <waypoints>	spaces/10_hills/paths.xml	</waypoints>
   <roadMap></roadMap>
 </10_hills.xml>

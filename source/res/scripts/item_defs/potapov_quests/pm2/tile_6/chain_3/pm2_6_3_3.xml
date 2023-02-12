@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunNum	</key>
-              <greaterOrEqual>	10	</greaterOrEqual>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	90	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -56,8 +56,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunNum	</key>
-              <greaterOrEqual>	10	</greaterOrEqual>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	90	</greaterOrEqual>
             </results>
             <vehicleDamage>
               <attackReason>	0	</attackReason>
@@ -95,8 +95,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunNum	</key>
-              <greaterOrEqual>	10	</greaterOrEqual>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	90	</greaterOrEqual>
             </results>
             <vehicleDamage>
               <attackReason>	0	</attackReason>

@@ -63,18 +63,7 @@ class Enumeration(object):
         self.__doc__ = name
         self.__lookup = {}
         self.__idxLookup = {}
-        uniqueNames = set()
-        if isinstance(enumList, dict):
-            for idx, enumItem in enumList.items():
-                self.__appendEnumItem(idx, enumItem, instance, uniqueNames)
-
-        else:
-            i = 0
-            for e in enumList:
-                self.__appendEnumItem(i, e, instance, uniqueNames)
-                i += 1
-
-        uniqueNames.clear()
+        self.__appendEnumItems(enumList, instance)
 
     def __getattr__(self, attr):
         if attr not in self.__lookup:
@@ -98,6 +87,23 @@ class Enumeration(object):
 
     def lookup(self, name):
         return self.__lookup.get(name, None)
+
+    def inject(self, enumList, instance=EnumItem):
+        self.__appendEnumItems(enumList, instance)
+
+    def __appendEnumItems(self, enumList, instance):
+        uniqueNames = set(self.__lookup.iterkeys())
+        if isinstance(enumList, dict):
+            for idx, enumItem in enumList.iteritems():
+                self.__appendEnumItem(idx, enumItem, instance, uniqueNames)
+
+        else:
+            i = max(self.__idxLookup.iterkeys()) + 1 if self.__idxLookup else 0
+            for e in enumList:
+                self.__appendEnumItem(i, e, instance, uniqueNames)
+                i += 1
+
+        uniqueNames.clear()
 
     def __appendEnumItem(self, idx, enumItem, instance, uniqueNames):
         if isinstance(enumItem, types.TupleType):

@@ -698,31 +698,7 @@ class TotalPersonalAchievementsBlock(shared.BiDiStatsBlock):
         self.right.setRecord(right, reusable)
 
 
-class SandboxNoIncomeAlert(base.StatsBlock):
-    __slots__ = ('icon', 'text')
-
-    def __init__(self, meta=None, field='', *path):
-        super(SandboxNoIncomeAlert, self).__init__(meta, field, *path)
-        self.icon = ''
-        self.text = ''
-
-    def setRecord(self, result, _):
-        self.icon = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
-        builder = text_styles.builder(delimiter='\n')
-        builder.addStyledText(text_styles.middleTitle, BATTLE_RESULTS.COMMON_NOINCOME_ALERT_TITLE)
-        builder.addStyledText(text_styles.standard, BATTLE_RESULTS.COMMON_NOINCOME_ALERT_TEXT)
-        self.text = builder.render()
-
-
 class PersonalAccountDBID(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.personal.avatar.accountDBID
-
-
-class ReplayURL(base.StatsItem):
-    __itemsCache = dependency.descriptor(IItemsCache)
-
-    def _convert(self, value, reusable):
-        hasFlag = self.__itemsCache.items.stats.isSsrPlayEnabled
-        return reusable.personal.getReplayURL() if hasFlag else ''

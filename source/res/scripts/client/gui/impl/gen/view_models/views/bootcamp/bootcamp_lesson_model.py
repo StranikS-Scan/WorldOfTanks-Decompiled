@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.bootcamp.bootcamp_reward_item_model import B
 class BootcampLessonModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(BootcampLessonModel, self).__init__(properties=properties, commands=commands)
 
     def getLessonNumber(self):
@@ -34,17 +34,11 @@ class BootcampLessonModel(ViewModel):
     def setTooltipId(self, value):
         self._setNumber(3, value)
 
-    def getRewardsTaken(self):
-        return self._getBool(4)
-
-    def setRewardsTaken(self, value):
-        self._setBool(4, value)
-
     def getRewards(self):
-        return self._getArray(5)
+        return self._getArray(4)
 
     def setRewards(self, value):
-        self._setArray(5, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getRewardsType():
@@ -56,5 +50,4 @@ class BootcampLessonModel(ViewModel):
         self._addBoolProperty('completed', False)
         self._addBoolProperty('current', False)
         self._addNumberProperty('tooltipId', 0)
-        self._addBoolProperty('rewardsTaken', False)
         self._addArrayProperty('rewards', Array())

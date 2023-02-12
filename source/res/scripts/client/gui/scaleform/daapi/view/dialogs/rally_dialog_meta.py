@@ -83,8 +83,6 @@ class RallyScopeConfirmDialogMeta(_RallyScopeDialogMeta):
 
 _ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnother'),
  (_C_TYPE.PREQUEUE, _Q_TYPE.UNKNOWN): ('', 'goToAnother'),
- (_C_TYPE.PREQUEUE, _Q_TYPE.SANDBOX): ('', 'goToAnother'),
- (_C_TYPE.PREQUEUE, _Q_TYPE.TUTORIAL): ('', 'goToBattleTutorial'),
  (_C_TYPE.LEGACY, _P_TYPE.TRAINING): ('goToIntro', 'goToAnother'),
  (_C_TYPE.LEGACY, _P_TYPE.CLAN): ('', 'goToAnother'),
  (_C_TYPE.LEGACY, _P_TYPE.TOURNAMENT): ('', 'goToAnother'),

@@ -8,6 +8,7 @@ class SOUNDS(CONST_CONTAINER):
     STATE_PLACE = 'STATE_hangar_place'
     STATE_PLACE_PERSONAL_RESERVES = 'STATE_hangar_place_personal_reserves'
     STATE_PLACE_HANGAR = 'STATE_hangar_place_garage'
+    ENTER_EVENT = 'personal_reserves'
 
 
-PERSONAL_RESERVES_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_PERSONAL_RESERVES}, exitStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_HANGAR}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+PERSONAL_RESERVES_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_PERSONAL_RESERVES}, exitStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_HANGAR}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.ENTER_EVENT, exitEvent='')

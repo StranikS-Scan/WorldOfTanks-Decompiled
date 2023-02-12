@@ -45,7 +45,6 @@ class ServiceLocator(object):
 
 
 g_replayCtrl = None
-g_onBeforeSendEvent = None
 
 def autoFlushPythonLog():
     BigWorld.flushPythonLog()
@@ -54,19 +53,18 @@ def autoFlushPythonLog():
 
 def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
     global g_replayCtrl
-    global g_onBeforeSendEvent
     try:
         log.config.setupFromXML()
         import extension_rules
         extension_rules.init()
+        import python_macroses
+        python_macroses.init()
         import arena_bonus_type_caps
         arena_bonus_type_caps.init()
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
             from development_features import initDevBonusTypes
             initDevBonusTypes()
-        import Event
-        g_onBeforeSendEvent = Event.Event()
         BigWorld.wg_initCustomSettings()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
@@ -203,7 +201,6 @@ def abort():
 
 def fini():
     global g_replayCtrl
-    global g_onBeforeSendEvent
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
         dependency.clear()
@@ -250,7 +247,6 @@ def fini():
             voipRespHandler.destroy()
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
-        g_onBeforeSendEvent = None
         WebBrowser.destroyExternalCache()
         if constants.HAS_DEV_RESOURCES:
             import development
@@ -263,9 +259,7 @@ def onChangeEnvironments(inside):
 
 
 def onBeforeSend():
-    if g_onBeforeSendEvent is not None:
-        g_onBeforeSendEvent()
-    return
+    g_systemEvents.onBeforeSend()
 
 
 def onRecreateDevice():
@@ -432,48 +426,13 @@ def addChatMsg(*msg):
     print 'Message:', msg
 
 
-_PYTHON_MACROS = {'p': 'BigWorld.player()',
- 't': 'BigWorld.target()',
- 'B': 'BigWorld',
- 'v': 'BigWorld.entities[BigWorld.player().playerVehicleID]',
- 'b': 'BigWorld.player().addBotToArena',
- 'w': 'import Weather; Weather.weather().summon',
- 'cam_pos': 'BigWorld.player().inputHandler._AvatarInputHandler__curCtrl.setCameraPosition',
- 'gc': 'import gc; gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS);gc.collect(2)',
- 'gcd': 'import gc; gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS);from debug_utils import dump_garbage; dump_garbage()',
- 'gcd2': 'from debug_utils import dump_garbage_2; dump_garbage_2',
- 'connect': 'ls=game.LanServers();ls.searchAndConnect',
- 'create': 'BigWorld.player().createArena',
- 'list': 'alr = game.ArenaListRequester',
- 'start': 'BigWorld.player().startArena',
- 'join': 'BigWorld.player().joinArena',
- 'leave': 'BigWorld.player().leaveArena',
- 'cv': 'import vehicles_check;vehicles_check.check',
- 'cls': "print '\\n' * 100",
- 'unlockAll': 'BigWorld.player().stats.unlockAll()',
- 'unlockVPPTrees': 'from items import vehicles; BigWorld.player().inventory.getItems(1, lambda x, y: BigWorld.player().stats.unlockVPPTree([vehicles.getVehicleTypeCompactDescr(vehCD) for vehCD in y["compDescr"].itervalues()]))',
- 'obtainAll': 'BigWorld.player().inventory.obtainAll()',
- 'obtainVehicle': 'BigWorld.player().inventory.obtainVehicle',
- 'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
- 'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
- 'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
- 'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
- 'camera': 'BigWorld.player().inputHandler.ctrl',
- 'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
- 'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
- 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()',
- 'plugins': 'from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import Ping3DPositionPlugin',
- 'setPlatoonTanks': 'from gui.development.dev_platoon_tank_models import debugSetPlatoonTanks; debugSetPlatoonTanks',
- 'epicSelectRewards': 'from gui.development import showFrontlineRewardSelection; showFrontlineRewardSelection()',
- 'epicNewLevel': 'from gui.shared.event_dispatcher import showNewLevelWindow; showNewLevelWindow()',
- 'reloadCGF': 'import CGF; CGF.hotReload(BigWorld.player().hangarSpace.spaceID)'}
-
 def expandMacros(line):
     import re
-    patt = '\\$(' + functools.reduce(lambda x, y: x + '|' + y, _PYTHON_MACROS.iterkeys()) + ')(\\W|\\Z)'
+    from python_macroses import g_macroses
+    patt = '\\$(' + functools.reduce(lambda x, y: x + '|' + y, g_macroses.iterkeys()) + ')(\\W|\\Z)'
 
     def repl(match):
-        return _PYTHON_MACROS[match.group(1)] + match.group(2)
+        return g_macroses[match.group(1)] + match.group(2)
 
     return re.sub(patt, repl, line)
 

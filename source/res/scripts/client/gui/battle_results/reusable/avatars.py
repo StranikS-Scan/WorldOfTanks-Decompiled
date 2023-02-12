@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/avatars.py
 import typing
-from gui.battle_results.reusable import shared
+from gui.battle_results.reusable import shared, ReusableInfoFactory
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.badges import buildBadge
 
 class AvatarInfo(shared.ItemInfo):
     __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__badgesInfo', '__weakref__')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), **kwargs):
+    def __init__(self, bonusType, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
         self.__avatarDamaged = avatarDamaged
         self.__avatarDamageDealt = avatarDamageDealt
-        self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
+        fairplayViolationsCls = ReusableInfoFactory.fairplayViolationForBonusType(bonusType)
+        self.__fairplayViolations = fairplayViolationsCls(*(fairplayViolations or ()))
         self.__accRank = accRank
         self.__prevAccRank = prevAccRank
         if badges:
@@ -69,22 +70,26 @@ class AvatarInfo(shared.ItemInfo):
 
 
 class AvatarsInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatars',)
+    __slots__ = ('__bonusType', '__avatars')
 
-    def __init__(self, avatars):
+    def __init__(self, bonusType, avatars):
         super(AvatarsInfo, self).__init__()
         self.__avatars = {}
+        self.__bonusType = bonusType
         for dbID, data in avatars.iteritems():
             if data is None:
                 self._addUnpackedItemID(dbID)
                 data = {}
-            self.__avatars[dbID] = AvatarInfo(**data)
+            avatarsInfoCls = ReusableInfoFactory.avatarInfoForBonusType(bonusType)
+            self.__avatars[dbID] = avatarsInfoCls(bonusType, **data)
 
         return
 
     def getAvatarInfo(self, dbID):
+        bonusType = self.__bonusType
         if dbID in self.__avatars:
             info = self.__avatars[dbID]
         else:
-            self.__avatars[dbID] = info = AvatarInfo(wasInBattle=False)
+            avatarsInfoCls = ReusableInfoFactory.avatarInfoForBonusType(bonusType)
+            self.__avatars[dbID] = info = avatarsInfoCls(bonusType, wasInBattle=False)
         return info

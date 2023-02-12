@@ -6,6 +6,10 @@ import gui.Scaleform.framework.ScopeTemplates
 from gui.Scaleform.framework.factories import EntitiesFactories, DAAPIModuleFactory, ViewFactory
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 
+def getSwfExtensionUrl(extension, swf):
+    return extension + '|' + swf
+
+
 class COMMON_VIEW_ALIAS(object):
     LOGIN = 'login'
     INTRO_VIDEO = 'introVideo'

@@ -126,6 +126,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 self.soundManager.playSound(soundEvents[1])
                 break
 
+        if self.__currentTabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.currentTab is not None:
+            self.currentTab.stop()
         self.__currentTabAlias = alias
         self.__marathonPrefix = prefix
         caches.getNavInfo().setMissionsTab(alias)
@@ -141,11 +143,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__onPageUpdate()
         self.__fireTabChangedEvent()
         self.__showFilter()
+        if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.currentTab is not None:
+            self.currentTab.start()
         if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.currentTab.setMarathon(prefix)
         if self.currentTab:
             self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, ctx=self))
             self.currentTab.setActive(True)
+        return
 
     def getCurrentTabAlias(self):
         return self.__currentTabAlias

@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/optional_bonuses.py
-import random
 import copy
+import random
 import time
-from typing import Optional, Dict
+import typing
 from account_shared import getCustomizationItem
-from soft_exception import SoftException
-from items import tankmen
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from battle_pass_common import NON_VEH_CD
+from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Dict, Optional
 
 def _packTrack(track):
     result = []
@@ -666,16 +666,18 @@ class StripVisitor(NodeVisitor):
         def copyMerger(storage, name, value, isLeaf):
             storage[name] = value
 
-    def __init__(self):
+    def __init__(self, needProbabilitiesInfo=False):
+        self.__needProbabilitiesInfo = needProbabilitiesInfo
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([-1],
+            strippedValues.append(([probability if needProbabilitiesInfo else -1],
              -1,
              None,
              stippedValue))
@@ -685,10 +687,11 @@ class StripVisitor(NodeVisitor):
 
     def onAllOf(self, storage, values):
         strippedValues = []
+        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([-1],
+            strippedValues.append(([probability if needProbabilitiesInfo else -1],
              -1,
              None,
              stippedValue))

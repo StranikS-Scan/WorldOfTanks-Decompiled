@@ -301,7 +301,8 @@ class BlinkingLaserSight(EntityExtra):
         return data
 
     def _start(self, data, args):
-        data['bindNodeRef'] = data['entity'].model.node(self._bindNode)
+        vehicle = data['entity']
+        data['bindNodeRef'] = vehicle.model.node(self._bindNode)
         if data['bindNodeRef'] is not None:
             data['beamMP'] = LaserSightMatrixProvider()
             data['beamMP'].beamMatrix = data['bindNodeRef']

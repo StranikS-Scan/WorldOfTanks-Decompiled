@@ -266,8 +266,8 @@ class DebugView(object):
 
     def __createMainWindow(self, parentGUI):
         self.__window = GUI.Window()
-        self.__window.horizontalAnchor = 'LEFT'
-        self.__window.verticalAnchor = 'TOP'
+        self.__window.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self.__window.verticalAnchor = GUI.Simple.eVAnchor.TOP
         if parentGUI is None:
             GUI.addRoot(self.__window)
         else:
@@ -295,7 +295,7 @@ class DebugViewItem(object):
         self.__createGUI()
         self.setFont(('default_smaller.font', 'default_smaller.font'))
         self.setColour(((255.0, 255.0, 255.0, 255.0), (255.0, 255.0, 255.0, 255.0)))
-        self.setMaterialFX(('ADD', 'ADD'))
+        self.setMaterialFX((GUI.Simple.eMaterialFX.ADD, GUI.Simple.eMaterialFX.ADD))
 
     def destroy(self):
         self.__destroyGUI()
@@ -360,20 +360,14 @@ class DebugViewItem(object):
         return self._guiValue.colour
 
     def setMaterialFX(self, materialFX2):
-        self._guiName.materialFX = str(materialFX2[0])
-        self._guiValue.materialFX = str(materialFX2[1])
-
-    def setMaterialFXName(self, materialFX):
-        self._guiName.materialFX = str(materialFX)
+        self._guiName.materialFX = materialFX2[0]
+        self._guiValue.materialFX = materialFX2[1]
 
     def setMaterialFXValue(self, materialFX):
-        self._guiValue.materialFX = str(materialFX)
+        self._guiValue.materialFX = materialFX
 
     def getMaterialFX(self):
         return (self._guiName.materialFX, self._guiValue.materialFX)
-
-    def getMaterialFXName(self):
-        return self._guiName.materialFX
 
     def getMaterialFXValue(self):
         return self._guiValue.materialFX
@@ -407,11 +401,11 @@ class DebugViewItem(object):
 
     def __createGUI(self):
         self._guiName = GUI.Text(self.__name + self.__divider)
-        self._guiName.horizontalAnchor = 'LEFT'
-        self._guiName.verticalAnchor = 'TOP'
+        self._guiName.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self._guiName.verticalAnchor = GUI.Simple.eVAnchor.TOP
         self._guiValue = GUI.Text(self.__value)
-        self._guiValue.horizontalAnchor = 'LEFT'
-        self._guiValue.verticalAnchor = 'TOP'
+        self._guiValue.horizontalAnchor = GUI.Simple.eHAnchor.LEFT
+        self._guiValue.verticalAnchor = GUI.Simple.eVAnchor.TOP
 
     def __destroyGUI(self):
         self._guiName = None

@@ -94,8 +94,6 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_FORT_BATTLE = '#invites:invites/note/change_and_leave/PREBATTLE_FORT_BATTLE'
     INVITES_NOTE_LEAVE_PREBATTLE_STRONGHOLD = '#invites:invites/note/leave/PREBATTLE_STRONGHOLD'
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_STRONGHOLD = '#invites:invites/note/change_and_leave/PREBATTLE_STRONGHOLD'
-    INVITES_NOTE_LEAVE_QUEUE_SANDBOX = '#invites:invites/note/leave/QUEUE_SANDBOX'
-    INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_SANDBOX = '#invites:invites/note/change_and_leave/QUEUE_SANDBOX'
     INVITES_NOTE_LEAVE_PREBATTLE_EPIC = '#invites:invites/note/leave/PREBATTLE_EPIC'
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_EPIC = '#invites:invites/note/change_and_leave/PREBATTLE_EPIC'
     INVITES_NOTE_LEAVE_QUEUE_EPIC = '#invites:invites/note/leave/QUEUE_EPIC'

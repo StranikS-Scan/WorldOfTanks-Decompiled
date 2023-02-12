@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/settings.py
+from enum import IntEnum
 from Math import Vector3
 from gui.shared import EVENT_BUS_SCOPE
 SCOPE = EVENT_BUS_SCOPE.BATTLE
 MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
-MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
 MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
@@ -31,3 +31,14 @@ class DAMAGE_TYPE(object):
     FROM_ENEMY = 2
     FROM_SQUAD = 3
     FROM_PLAYER = 4
+
+
+class CommonMarkerType(IntEnum):
+    NORMAL = 0
+    BASE = 1
+    FRONTLINE_BASE = 2
+    FRONTLINE_WAYPOINT = 3
+    FRONTLINE_HEADQUARTER = 4
+    FRONTLINE_WARNING = 5
+    LOCATION = 6
+    VEHICLE = 7

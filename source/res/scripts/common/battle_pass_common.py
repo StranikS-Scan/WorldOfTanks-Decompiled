@@ -50,10 +50,6 @@ BATTLE_PASS_CONFIG_NAME = 'battlePass_config'
 BATTLE_PASS_SELECT_BONUS_NAME = 'battlePassSelectToken'
 BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME = 'styleProgressToken'
 BATTLE_PASS_Q_CHAIN_BONUS_NAME = 'battlePassQuestChainToken'
-BATTLE_PASS_BADGE_ID = 90
-USE_BATTLE_PASS_BADGE = False
-MAX_BADGE_LEVEL = 100
-DEFAULT_REWARD_LEVEL = 0
 NON_VEH_CD = 0
 MAX_NON_CHAPTER_POINTS = 1000000
 
@@ -209,14 +205,6 @@ def getSeasonAndChapterFromBattlePassToken(tokenID):
 
 def isBattlePassPassToken(token):
     return token.startswith(BATTLE_PASS_TOKEN_PASS)
-
-
-def extendBaseAvatarResultsForBattlePass(results):
-    results.update({'bpChapter': 0,
-     'basePointsDiff': 0,
-     'bpNonChapterPointsDiff': 0,
-     'sumPoints': 0,
-     'capBonus': 0})
 
 
 def getLevel(curPoints, levelPoints, prevLevel=0):

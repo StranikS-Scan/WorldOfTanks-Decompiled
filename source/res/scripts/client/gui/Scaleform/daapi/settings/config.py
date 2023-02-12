@@ -79,7 +79,6 @@ elif IS_DEVELOPMENT_BUILD:
     _LOBBY_PACKAGES += _LOBBY_DEVELOPMENT_BUILD_PACKAGES
 BATTLE_PACKAGES_BY_DEFAULT = BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.classic',)
 registerScaleformLobbyPackages(_LOBBY_PACKAGES)
-registerScaleformBattlePackages(ARENA_GUI_TYPE.TUTORIAL, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.tutorial',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.EVENT_BATTLES, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.event',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.RANKED, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.ranked',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.EPIC_RANDOM, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.epic_random',))

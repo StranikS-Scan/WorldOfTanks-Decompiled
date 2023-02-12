@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/arena_bonus_type_caps.py
-from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, IS_EDITOR
+from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from soft_exception import SoftException
 from BonusCaps import BonusCapsConfig
@@ -151,6 +151,10 @@ class ARENA_BONUS_TYPE_CAPS():
     RTS_COMPONENT = 'RTS_COMPONENT'
     DISABLE_DEFAULT_SIXTH_SENSE = 'DISABLE_DEFAULT_SIXTH_SENSE'
     ANONYMIZER_ENEMY_TEAM = 'ANONYMIZER_ENEMY_TEAM'
+    STACK_STUN = 'STACK_STUN'
+    DONT_SHOW_BATTLE_RESULTS_IMMEDIATELY = 'DONT_SHOW_BATTLE_RESULTS_IMMEDIATELY'
+    LIFT_OVER = 'LIFT_OVER'
+    AI_ONLY_VICTORY = 'AI_ONLY_VICTORY'
     DOSSIER_ACHIEVEMENTS = frozenset((DOSSIER_ACHIEVEMENTS_15X15,
      DOSSIER_ACHIEVEMENTS_RANKED15X15,
      DOSSIER_ACHIEVEMENTS_7X7,
@@ -230,5 +234,3 @@ def init():
 
 
 ALLOWED_ARENA_BONUS_TYPE_CAPS = frozenset([ v for k, v in ARENA_BONUS_TYPE_CAPS.__dict__.iteritems() if not k.startswith('__') and isinstance(v, str) ])
-if IS_EDITOR:
-    init()

@@ -712,6 +712,19 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	9	</level>
   </A156_T54_2022>
+  <A150_MBT_B>
+    <id>	132	</id>
+    <userString>	#usa_vehicles:A150_MBT_B	</userString>
+    <description>	#usa_vehicles:A150_MBT_B_descr	</description>
+    <shortUserString>	#usa_vehicles:A150_MBT_B_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A150_MBT_B_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A150_MBT_B_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD secret testTank improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
+    <level>	10	</level>
+  </A150_MBT_B>
   <A149_AMBT>
     <id>	133	</id>
     <userString>	#usa_vehicles:A149_AMBT	</userString>
@@ -735,7 +748,7 @@
     <price>	12750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_support improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <tags>	AT-SPG HD mediumAT-SPG role_ATSPG_universal improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	9	</level>
   </A146_TL_7_120>
   <A148_Convertible_Medium_Tank_T3>
@@ -865,55 +878,6 @@
     <tags>	mediumTank role_MT_universal private HD secret premiumIGR patton improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </A120_M48A5_IGR>
-  <A01_T1_Cunningham_bot>
-    <id>	160	</id>
-    <userString>	#usa_vehicles:T1_Cunningham_bot	</userString>
-    <description>	#usa_vehicles:T1_Cunningham_bot_descr	</description>
-    <shortUserString>	#usa_vehicles:T1_Cunningham_bot_short	</shortUserString>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret unrecoverable	</tags>
-    <level>	1	</level>
-  </A01_T1_Cunningham_bot>
-  <A24_T2_med_bot>
-    <id>	161	</id>
-    <userString>	#usa_vehicles:T2_med_bot	</userString>
-    <description>	#usa_vehicles:T2_med_bot_descr	</description>
-    <shortUserString>	#usa_vehicles:T2_med_bot_short	</shortUserString>
-    <price>	3500	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </A24_T2_med_bot>
-  <A03_M3_Stuart_bootcamp>
-    <id>	162	</id>
-    <userString>	#usa_vehicles:M3_Stuart	</userString>
-    <description>	#usa_vehicles:M3_Stuart_descr	</description>
-    <price>	37500	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </A03_M3_Stuart_bootcamp>
-  <A22_M5_Stuart_bootcamp>
-    <id>	163	</id>
-    <userString>	#usa_vehicles:M5_Stuart	</userString>
-    <description>	#usa_vehicles:M5_Stuart_descr	</description>
-    <shortUserString>	#usa_vehicles:M5_Stuart_short	</shortUserString>
-    <price>	143000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </A22_M5_Stuart_bootcamp>
-  <A25_M2_med_bootcamp>
-    <id>	164	</id>
-    <userString>	#usa_vehicles:M2_med	</userString>
-    <description>	#usa_vehicles:M2_med_descr	</description>
-    <shortUserString>	#usa_vehicles:M2_med_short	</shortUserString>
-    <price>	31000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </A25_M2_med_bootcamp>
   <A36_Sherman_Jumbo_bootcamp>
     <id>	165	</id>
     <userString>	#usa_vehicles:Sherman_Jumbo	</userString>
@@ -1109,16 +1073,6 @@
     <tags>	mediumTank role_MT_universal HD special improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A81_T95_E2>
-  <A06_M4A3E8_Sherman_training>
-    <id>	212	</id>
-    <userString>	#usa_vehicles:M4A3E8_Sherman	</userString>
-    <description>	#usa_vehicles:M4A3E8_Sherman_descr	</description>
-    <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
-    <price>	930500	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable	</tags>
-    <level>	1	</level>
-  </A06_M4A3E8_Sherman_training>
   <A93_T7_Combat_Car>
     <id>	215	</id>
     <userString>	#usa_vehicles:T7_Combat_Car	</userString>

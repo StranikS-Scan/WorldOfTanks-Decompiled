@@ -166,7 +166,7 @@ class ProductsFetchController(IProductFetchController):
     def _createDescriptors(self, productsData):
         for data in productsData:
             productCode = data.get('product_code', '')
-            descriptor = self.productIDToDescriptor.get(productCode, self.defaultProductDescriptor)
+            descriptor = next((v for k, v in self.productIDToDescriptor.items() if productCode.startswith(k)), self.defaultProductDescriptor)
             self.__fetchResult.products.append(descriptor(data))
 
     def _onDisconnect(self):

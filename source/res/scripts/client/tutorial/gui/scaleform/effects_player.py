@@ -7,9 +7,11 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from skeletons.gui.impl import IGuiLoader
 from skeletons.tutorial import ITutorialLoader
 from tutorial.data.events import GuiEventType
 from shared_utils import first
+from tutorial.gui.Scaleform.pop_ups import TutorialWulfWindow
 _logger = logging.getLogger(__name__)
 
 class GUIEffectScope(object):
@@ -92,16 +94,20 @@ class ComponentEffect(GUIEffect):
 
 
 class ShowDialogEffect(ApplicationEffect):
-    __slots__ = ('_aliasMap', '_dialogID')
+    __slots__ = ('_aliasMap', '_gameFaceMap', '_dialogID', '_layoutID')
+    uiLoader = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, aliasMap):
+    def __init__(self, aliasMap, gameFaceMap):
         super(ShowDialogEffect, self).__init__()
         self._aliasMap = aliasMap
+        self._gameFaceMap = gameFaceMap
         self._dialogID = None
+        self._layoutID = None
         return
 
     def clear(self):
         self._dialogID = None
+        self._layoutID = None
         super(ShowDialogEffect, self).clear()
         return
 
@@ -117,7 +123,15 @@ class ShowDialogEffect(ApplicationEffect):
             if dialogType in self._aliasMap:
                 alias = self._aliasMap[dialogType]
                 self._dialogID = dialogID
+                self._layoutID = None
                 self._app.loadView(SFViewLoadParams(alias, dialogID), effectData)
+                result = True
+            elif dialogType in self._gameFaceMap:
+                self._dialogID = dialogID
+                viewClass = self._gameFaceMap[dialogType]
+                window = TutorialWulfWindow(viewClass(), effectData)
+                window.load()
+                self._layoutID = window.getLayoutID()
                 result = True
             else:
                 _logger.error('Alias of dialog not found. effectData: %r, aliasMap: %r', effectData, self._aliasMap)
@@ -132,7 +146,14 @@ class ShowDialogEffect(ApplicationEffect):
             return
         else:
             effectID = self._dialogID
+            layoutID = self._layoutID
             self._dialogID = None
+            self._layoutID = None
+            if layoutID is not None:
+                view = self.uiLoader.windowsManager.getViewByLayoutID(layoutID)
+                if view is not None:
+                    view.destroyWindow()
+                return
             container = self._getContainer(WindowLayer.TOP_WINDOW)
             if container is not None:
                 dialog = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})

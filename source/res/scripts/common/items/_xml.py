@@ -235,11 +235,14 @@ def readNonNegativeFloat(xmlCtx, section, subsectionName, defaultValue=None):
 
 
 @cacheFloat
-def readFraction(xmlCtx, section, subsectionName):
-    v = section.readFloat(subsectionName, -1000000.0)
-    if not 0.0 <= v <= 1.0:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return v
+def readFraction(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is not None and not section.has_key(subsectionName):
+        return defaultValue
+    else:
+        v = section.readFloat(subsectionName, -1000000.0)
+        if not 0.0 <= v <= 1.0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return v
 
 
 def readVector2(xmlCtx, section, subsectionName):

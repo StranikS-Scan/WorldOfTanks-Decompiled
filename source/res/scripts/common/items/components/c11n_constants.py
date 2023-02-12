@@ -107,6 +107,7 @@ class ItemTags(object):
     ONLY_VERTICAL_MIRROR = 'onlyVerticalMirror'
     HIDE_IF_INCOMPATIBLE = 'hideIfIncompatible'
     STYLE_SERIAL_NUMBER = 'styleSerialNumber'
+    LOCKED_ON_VEHICLE = 'lockedOnVehicle'
 
 
 class ProjectionDecalType(object):

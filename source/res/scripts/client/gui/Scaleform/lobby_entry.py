@@ -26,6 +26,7 @@ from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GameInputMgr import GameInputMgr
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
+from gui.Scaleform.required_libraries_config import LOBBY_REQUIRED_LIBRARIES
 from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
@@ -138,7 +139,7 @@ class LobbyEntry(AppEntry):
         self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.WAITING))
 
     def _getRequiredLibraries(self):
-        pass
+        return LOBBY_REQUIRED_LIBRARIES
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(WindowLayer.WAITING) if self._containerMgr is not None else None

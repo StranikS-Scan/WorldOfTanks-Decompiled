@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/AccountUnitAPI.py
+import cPickle
 from typing import Optional as TOptional
 import constants
 from constants import PREBATTLE_TYPE
@@ -65,8 +66,8 @@ class UnitClientAPI(object):
         unitMgrID = self.getUnitMgrID()
         return self._callAPI(methodName, unitMgrID, *args)
 
-    def _doCreate(self, prebattleType, int32Arg=0):
-        return self._callAPI('create', prebattleType, int32Arg)
+    def _doCreate(self, prebattleType, queueType=0, unitExtrasInitStr='', modeExtrasStr=''):
+        return self._callAPI('create', prebattleType, queueType, unitExtrasInitStr, modeExtrasStr)
 
     def _doUnitCmd(self, cmd, uint64Arg=0, int32Arg=0, strArg=''):
         self._callUnitAPI('doCmd', cmd, uint64Arg, int32Arg, strArg)
@@ -90,10 +91,17 @@ class UnitClientAPI(object):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 
     def createFunRandomSquad(self, subModeID):
-        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM, subModeID)
+        unitExtrasInitStr = cPickle.dumps({'funEventID': subModeID}, -1)
+        return self._doCreate(PREBATTLE_TYPE.FUN_RANDOM, unitExtrasInitStr=unitExtrasInitStr)
 
     def createComp7Squad(self, squadSize):
-        return self._doCreate(PREBATTLE_TYPE.COMP7, squadSize)
+        return self._doCreate(PREBATTLE_TYPE.COMP7, modeExtrasStr=cPickle.dumps({'squadSize': squadSize}, -1))
+
+    def createSquadByPrbType(self, prbType):
+        return self._doCreate(prbType)
+
+    def createSquadByQueueType(self, queueType, unitExtrasInitStr='', modeExtrasStr=''):
+        return self._doCreate(0, queueType=queueType, unitExtrasInitStr=unitExtrasInitStr, modeExtrasStr=modeExtrasStr)
 
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
@@ -158,17 +166,17 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if constants.IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=None, stopAutoSearch=False):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=None, stopAutoSearch=False, startBattleUnitCmd=CLIENT_UNIT_CMD.START_UNIT_BATTLE, extraModeData=''):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
         if isOnly10ModeEnabled is not None:
             self.setOnly10Mode(isOnly10ModeEnabled)
-        return self._doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, vehInvID, int(stopAutoSearch))
+        return self._doUnitCmd(startBattleUnitCmd, vehInvID, int(stopAutoSearch), extraModeData)
 
-    def stopBattle(self):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.STOP_UNIT_BATTLE)
+    def stopBattle(self, stopBattleUnitCmd=CLIENT_UNIT_CMD.STOP_UNIT_BATTLE):
+        return self._doUnitCmd(stopBattleUnitCmd)
 
     def startAutoSearch(self, userFilterFlags):
         return self._doUnitCmd(CLIENT_UNIT_CMD.START_AUTO_SEARCH, userFilterFlags)
@@ -196,3 +204,6 @@ class UnitClientAPI(object):
 
     def setVehicleList(self, vehicleList):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_VEHICLE_LIST, 0, 0, ','.join(map(str, vehicleList)))
+
+    def doUnitCmd(self, clientUnitCmdID, argInt64, argInt32, argStr):
+        return self._doUnitCmd(clientUnitCmdID, argInt64, argInt32, argStr)

@@ -634,10 +634,7 @@ class VOIPManager(VOIPHandler):
     def __isAutoJoinChannel():
         if hasattr(BigWorld.player(), 'arena'):
             arena = BigWorld.player().arena
-            return not (arena is not None and arena.guiType in (ARENA_GUI_TYPE.RANDOM,
-             ARENA_GUI_TYPE.EPIC_RANDOM,
-             ARENA_GUI_TYPE.EPIC_BATTLE,
-             ARENA_GUI_TYPE.COMP7))
+            return not (arena is not None and arena.guiType in ARENA_GUI_TYPE.VOIP_SUPPORTED)
         else:
             return True
 

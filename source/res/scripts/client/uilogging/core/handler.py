@@ -11,6 +11,7 @@ from Event import SafeEvent
 from helpers import isPlayerAccount
 from helpers.log.adapters import getWithContext
 from PlayerEvents import g_playerEvents as playerEvents
+from bootcamp.BootCampEvents import g_bootcampEvents as bootcampPlayerEvents
 from shared_utils import safeCancelCallback
 from uilogging.constants import DEFAULT_LOGGER_NAME, LogLevels
 from uilogging.core.core_constants import LOGS_SEND_PERIOD, LOGS_FORCE_SEND_PERIOD, LOGS_MAX_QUEUE_SIZE, HTTP_DEFAULT_TIMEOUT, HTTP_OK_STATUS, HTTP_SESSION_EXPIRED, DEFAULT_COMPRESSION_LEVEL, FINAL_FLUSH_TIMEOUT, HttpHeaders
@@ -138,6 +139,7 @@ class LogHandler(object):
         self._sender = None
         self._logsBatchWaitingTime = 0
         playerEvents.onAccountShowGUI += self._startSender
+        bootcampPlayerEvents.onAccountShowGUI += self._startSender
         self.onDestroy = SafeEvent()
         self._logger = getWithContext(DEFAULT_LOGGER_NAME, self)
         return
@@ -164,8 +166,19 @@ class LogHandler(object):
     def isFeatureEnabled(self, feature):
         return self._features.verifyFeature(feature)
 
+    @_ifDestroyed(None)
+    def getSessionLifetime(self):
+        if not self._isPlayer:
+            return None
+        else:
+            session = self._getSession()
+            if session:
+                return session.lifetime
+            return None if self._destroyed else 0
+
     def destroy(self, flush=False):
         playerEvents.onAccountShowGUI -= self._startSender
+        bootcampPlayerEvents.onAccountShowGUI -= self._startSender
         self._stopSender()
         self._logsBatchWaitingTime = 0
         session = self._session.get()

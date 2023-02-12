@@ -152,12 +152,13 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
     def _fillBuyPrice(self, model, item):
         if not item.isHidden:
             BuyPriceModelBuilder.clearPriceModel(model.price)
-            BuyPriceModelBuilder.fillPriceModelByItemPrice(model.price, item.getBuyPrice())
+            BuyPriceModelBuilder.fillPriceModelByItemPrice(model.price, item.getBuyPrice(), checkBalanceAvailability=True)
 
     def _fillBuyStatus(self, model, item, isInstalledOrMounted):
         if not item.isInInventory:
-            money, exchangeRate = self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate
-            isEnough = item.mayPurchaseWithExchange(money, exchangeRate)
+            stats = self._itemsCache.items.stats
+            money, exchangeRate = stats.money, self._itemsCache.items.shop.exchangeRate
+            isEnough = item.mayPurchaseWithExchange(money, exchangeRate) and stats.mayConsumeWalletResources
             if not (isInstalledOrMounted or isEnough or self._isInstallAllowed(item)):
                 model.setIsDisabled(True)
 

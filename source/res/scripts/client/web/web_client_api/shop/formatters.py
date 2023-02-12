@@ -14,6 +14,7 @@ from gui.shared.gui_items import CREW_SKILL_TO_KPI_NAME_MAP, GUI_ITEM_TYPE, KPI
 from gui.shared.gui_items.Vehicle import Vehicle, getShortUserName, getUserName
 from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from helpers import dependency, i18n, time_utils
+from helpers.func_utils import replaceImgPrefix
 from items.components.skills_constants import PERKS
 from items.components.supply_slot_categories import SlotCategories
 from items import vehicles
@@ -75,9 +76,9 @@ def _formatTechName(value):
 
 
 def _formatImagePaths(item):
-    return {'small': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL),
-     'medium': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_MEDIUM),
-     'large': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE)}
+    return {'small': replaceImgPrefix(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL)),
+     'medium': replaceImgPrefix(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_MEDIUM)),
+     'large': replaceImgPrefix(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE))}
 
 
 def _formatVehicleRestore(item):
@@ -497,9 +498,9 @@ def makeInstalledEnhancementsFormatter():
 
 def makeCrewBooksFormatter():
     fields = [idField,
-     Field('images', lambda item: {'small': item.getShopIcon(size='small'),
-      'medium': item.getShopIcon(size='big'),
-      'large': item.getShopIcon(size='large')}),
+     Field('images', lambda item: {'small': replaceImgPrefix(item.getShopIcon(size='small')),
+      'medium': replaceImgPrefix(item.getShopIcon(size='big')),
+      'large': replaceImgPrefix(item.getShopIcon(size='large'))}),
      Field('type', lambda book: book.getBookType()),
      Field('nation', lambda book: book.getNation())]
     return Formatter(fields)

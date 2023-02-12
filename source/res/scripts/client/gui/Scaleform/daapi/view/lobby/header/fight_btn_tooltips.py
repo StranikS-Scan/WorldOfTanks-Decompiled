@@ -7,7 +7,6 @@ from gui.impl.gen import R
 from gui.prb_control.formatters.tooltips import getAbsenceCrewList
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, PREBATTLE_RESTRICTION
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -133,11 +132,6 @@ def getComp7BattlesOnlyVehicleTooltipData(result):
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.body())
         return makeTooltip(header, body)
-
-
-def getSandboxTooltipData(result):
-    state = result.restriction
-    return makeTooltip(i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_HEADER), i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_LEVEL_BODY, levels=toRomanRangeString(result.ctx['levels'], 1))) if state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL else ''
 
 
 def getEventTooltipData():

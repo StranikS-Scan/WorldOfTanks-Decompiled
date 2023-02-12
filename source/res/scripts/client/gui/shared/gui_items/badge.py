@@ -3,7 +3,6 @@
 import re
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
-from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.settings import getBadgeIconPath, getAwardBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
@@ -11,8 +10,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n, dependency
-from shared_utils import CONST_CONTAINER, first
-from skeletons.gui.game_control import IBattlePassController, IRTSBattlesController
+from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IRTSBattlesController
 CUSTOM_LOGIC_KEY = 'customLogicImpl'
 
 class BadgeTypes(CONST_CONTAINER):
@@ -192,45 +191,3 @@ class RTSBadge(Badge):
 
     def isVisibleAsAchievable(self):
         return self.isAchievable and self._rtsController.isVisible()
-
-
-class BattlePassBadge(Badge):
-    __slots__ = ('__level',)
-    __battlePassController = dependency.descriptor(IBattlePassController)
-
-    def __init__(self, data, proxy=None, extraData=None):
-        super(BattlePassBadge, self).__init__(data, proxy)
-        self.__level = first(extraData) if extraData else None
-        return
-
-    def isVisibleAsAchievable(self):
-        return self.isAchievable and self.__battlePassController.isVisible()
-
-    def hasDynamicContent(self):
-        return True
-
-    def getDynamicContent(self):
-        if self.__getState() == BattlePassState.BASE:
-            level = 0
-        else:
-            level = self.__getLevel()
-        if level >= MAX_BADGE_LEVEL:
-            return ''
-        if level == 0:
-            level = 1
-        return str(level)
-
-    def getIconPostfix(self):
-        namePostfix = super(BattlePassBadge, self).getIconPostfix()
-        if self.__getLevel() >= MAX_BADGE_LEVEL and self.__getState() == BattlePassState.COMPLETED:
-            namePostfix += '_gold'
-        return namePostfix
-
-    def __getLevel(self):
-        return self.__level or self.__battlePassController.getCurrentLevel()
-
-    def __getState(self):
-        if self.__level is None:
-            return self.__battlePassController.getState()
-        else:
-            return BattlePassState.COMPLETED if self.__level >= MAX_BADGE_LEVEL else BattlePassState.POST

@@ -195,9 +195,16 @@ class GuiSettings(object):
             settings = self.__applyMacros(self.__settings[name])
         return settings
 
+    def checkAndReplaceWebShopMacros(self, url):
+        return self.__checkAndReplaceMacros('webShopRootURL', url)
+
     def checkAndReplaceWebBridgeMacros(self, url):
-        webBridgeUrl = self.baseUrls.get('webBridgeRootURL')
-        return url.replace('{webBridgeRootURL}', webBridgeUrl) if webBridgeUrl and url.find('{webBridgeRootURL}') > -1 else url
+        return self.__checkAndReplaceMacros('webBridgeRootURL', url)
+
+    def __checkAndReplaceMacros(self, rootUrlName, url):
+        rootUrl = self.baseUrls.get(rootUrlName)
+        macros = '{_}'.replace('_', rootUrlName)
+        return url.replace(macros, rootUrl) if rootUrl is not None else url
 
     def __applyMacros(self, value):
         if isinstance(value, _MacrosValue):

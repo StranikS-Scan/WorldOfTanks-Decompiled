@@ -3,6 +3,7 @@
 import typing
 from CurrentVehicle import g_currentVehicle
 from constants import SEASON_NAME_BY_TYPE
+from gui.impl.gen import R
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
@@ -91,7 +92,11 @@ def getVehicleDataVO(vehicle, bootcampCtrl=None):
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
-    label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
+    if bootcampCtrl.isInBootcamp():
+        userName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=vehicle.shortUserName)
+    else:
+        userName = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
+    label = userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()

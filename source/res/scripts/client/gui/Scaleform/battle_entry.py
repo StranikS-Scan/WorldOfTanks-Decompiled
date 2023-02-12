@@ -22,6 +22,7 @@ from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
+from gui.Scaleform.required_libraries_config import BATTLE_REQUIRED_LIBRARIES
 from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
@@ -170,7 +171,7 @@ class BattleEntry(AppEntry):
         pass
 
     def _getRequiredLibraries(self):
-        pass
+        return BATTLE_REQUIRED_LIBRARIES
 
     def __getCursorFromContainer(self):
         return self._containerMgr.getView(WindowLayer.CURSOR) if self._containerMgr is not None else None

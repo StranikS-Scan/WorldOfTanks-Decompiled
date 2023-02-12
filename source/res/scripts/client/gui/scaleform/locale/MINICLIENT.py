@@ -34,7 +34,6 @@ class MINICLIENT(object):
     INVITATION_NOTE_SORTIE = '#miniclient:invitation/note/SORTIE'
     INVITATION_NOTE_FORT_BATTLE = '#miniclient:invitation/note/FORT_BATTLE'
     INVITATION_NOTE_STRONGHOLD = '#miniclient:invitation/note/STRONGHOLD'
-    TUTORIAL_VIDEO_TITLE = '#miniclient:tutorial/video/title'
     ACCOUNTPOPOVER_WARNING = '#miniclient:accountPopover/warning'
     PROFILE_WARNING = '#miniclient:profile/warning'
     COMMUNICATIONCENTER_WARNING = '#miniclient:communicationCenter/warning'

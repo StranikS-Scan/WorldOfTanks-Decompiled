@@ -24,7 +24,7 @@ class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
     __background_alpha__ = 0.8
     _bootcamp = dependency.descriptor(IBootcampController)
     _LINES_IN_DESCR = 3
-    _TANK_LEVEL = 3
+    _TANK_LEVEL = 7
     _COMMA = ', '
     _OBTAINED_IMAGE_OFFSET = 6
     _MISSIONS_DONE = 0

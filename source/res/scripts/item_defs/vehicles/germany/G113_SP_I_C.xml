@@ -2698,7 +2698,12 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <aimingTime>	2.5	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_01.model	</undamaged>
@@ -3511,7 +3516,12 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	9.5	</reloadTime>
+          <reloadTime>	8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <aimingTime>	2.5	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_02.model	</undamaged>
@@ -3778,7 +3788,12 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_03.model	</undamaged>

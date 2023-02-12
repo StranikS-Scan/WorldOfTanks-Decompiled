@@ -375,12 +375,12 @@
             <bottom_renderer>	rewards	</bottom_renderer>
             <bottom>
               <data>
-                <icon>	../maps/icons/quests/bonuses/big/extraHealthReserve.png	</icon>
-                <labelTooltip>	#artefacts:extraHealthReserve/name	</labelTooltip>
-                <description>	#artefacts:extraHealthReserve/short_special	</description>
-                <iconTooltip>	../maps/shop/artefacts/180x135/extraHealthReserve.png	</iconTooltip>
+                <icon>	../maps/icons/bootcamp/rewards/bcImprovedVentilation.png	</icon>
+                <labelTooltip>	#artefacts:improvedVentilation/name	</labelTooltip>
+                <description>	#artefacts:improvedVentilation/long_special	</description>
+                <iconTooltip>	../maps/shop/artefacts/180x135/improvedVentilation.png	</iconTooltip>
                 <label>	#bootcamp:message/missionBonusCount	</label>
-                <label_format>	getExtraHealthReserve	</label_format>
+                <label_format>	getOptionalDeviceLabel	</label_format>
               </data>
             </bottom>
           </data>

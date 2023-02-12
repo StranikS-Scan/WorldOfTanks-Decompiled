@@ -103,7 +103,7 @@ def _displayGUI(text):
     _clearGUI()
     g_gui = GUI.Text(text)
     g_gui.multiline = True
-    g_gui.horizontalAnchor = 'CENTER'
+    g_gui.horizontalAnchor = GUI.Simple.eHAnchor.CENTER
     GUI.addRoot(g_gui)
 
 

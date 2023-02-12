@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/team_overrides.py
 import VOIP
+from constants import ARENA_GUI_TYPE
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info import settings
@@ -108,6 +109,5 @@ def makeOverrides(isEnemy, team, personal, arenaVisitor, isReplayPlaying=False):
     if isEnemy:
         ctx = DefaultTeamOverrides(team, personal, isReplayPlaying=isReplayPlaying)
     else:
-        isVoipSupported = arenaVisitor.gui.isRandomBattle() or arenaVisitor.gui.isInEpicRange()
-        ctx = PlayerTeamOverrides(team, personal, isVoipSupported=isVoipSupported, isReplayPlaying=isReplayPlaying)
+        ctx = PlayerTeamOverrides(team, personal, isVoipSupported=arenaVisitor.gui.guiType in ARENA_GUI_TYPE.VOIP_SUPPORTED, isReplayPlaying=isReplayPlaying)
     return ctx

@@ -777,11 +777,11 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def isTeamKiller(self):
-        return any(self.__getAtrributeGenerator('isTeamKiller'))
+        return any(self._getAtrributeGenerator('isTeamKiller'))
 
     @property
     def isKilledByTeamKiller(self):
-        return any(self.__getAtrributeGenerator('isKilledByTeamKiller'))
+        return any(self._getAtrributeGenerator('isKilledByTeamKiller'))
 
     @property
     def vehicles(self):
@@ -789,95 +789,95 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def killerID(self):
-        return self.__findFirstNoZero('killerID')
+        return self._findFirstNoZero('killerID')
 
     @property
     def deathReason(self):
-        return self.__findMaxInt('deathReason', start=DEATH_REASON_ALIVE)
+        return self._findMaxInt('deathReason', start=DEATH_REASON_ALIVE)
 
     @property
     def achievementsIDs(self):
-        return self.__collectToSet('achievementsIDs')
+        return self._collectToSet('achievementsIDs')
 
     @property
     def spotted(self):
-        return self.__accumulate('spotted')
+        return self._accumulate('spotted')
 
     @property
     def piercings(self):
-        return self.__accumulate('piercings')
+        return self._accumulate('piercings')
 
     @property
     def piercingEnemyHits(self):
-        return self.__accumulate('piercingEnemyHits')
+        return self._accumulate('piercingEnemyHits')
 
     @property
     def piercingsReceived(self):
-        return self.__accumulate('piercingsReceived')
+        return self._accumulate('piercingsReceived')
 
     @property
     def damageDealt(self):
-        value = self.__accumulate('damageDealt')
+        value = self._accumulate('damageDealt')
         if self.__avatar is not None:
             value += self.__avatar.avatarDamageDealt
         return value
 
     @property
     def tdamageDealt(self):
-        return self.__accumulate('tdamageDealt')
+        return self._accumulate('tdamageDealt')
 
     @property
     def sniperDamageDealt(self):
-        return self.__accumulate('sniperDamageDealt')
+        return self._accumulate('sniperDamageDealt')
 
     @property
     def artilleryFortEquipDamageDealt(self):
-        return self.__accumulate('artilleryFortEquipDamageDealt')
+        return self._accumulate('artilleryFortEquipDamageDealt')
 
     @property
     def targetKills(self):
-        return self.__accumulate('targetKills')
+        return self._accumulate('targetKills')
 
     @property
     def noDamageDirectHitsReceived(self):
-        return self.__accumulate('noDamageDirectHitsReceived')
+        return self._accumulate('noDamageDirectHitsReceived')
 
     @property
     def damageBlockedByArmor(self):
-        return self.__accumulate('damageBlockedByArmor')
+        return self._accumulate('damageBlockedByArmor')
 
     @property
     def rickochetsReceived(self):
-        return self.__accumulate('rickochetsReceived')
+        return self._accumulate('rickochetsReceived')
 
     @property
     def damageAssistedTrack(self):
-        return self.__accumulate('damageAssistedTrack')
+        return self._accumulate('damageAssistedTrack')
 
     @property
     def damageAssistedRadio(self):
-        return self.__accumulate('damageAssistedRadio')
+        return self._accumulate('damageAssistedRadio')
 
     @property
     def damageAssisted(self):
-        return self.__accumulate('damageAssisted')
+        return self._accumulate('damageAssisted')
 
     @property
     def damageAssistedStun(self):
-        return self.__accumulate('damageAssistedStun')
+        return self._accumulate('damageAssistedStun')
 
     @property
     def stunNum(self):
-        return self.__accumulate('stunNum')
+        return self._accumulate('stunNum')
 
     @property
     def stunDuration(self):
-        return self.__accumulate('stunDuration')
+        return self._accumulate('stunDuration')
 
     @property
     def critsInfo(self):
         result = {'critsCount': 0}
-        for value in self.__getAtrributeGenerator('critsInfo'):
+        for value in self._getAtrributeGenerator('critsInfo'):
             unionCritsInfo(result, value)
 
         return result
@@ -888,134 +888,134 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def shots(self):
-        return self.__accumulate('shots')
+        return self._accumulate('shots')
 
     @property
     def explosionHits(self):
-        return self.__accumulate('explosionHits')
+        return self._accumulate('explosionHits')
 
     @property
     def directHits(self):
-        return self.__accumulate('directHits')
+        return self._accumulate('directHits')
 
     @property
     def directEnemyHits(self):
-        return self.__accumulate('directEnemyHits')
+        return self._accumulate('directEnemyHits')
 
     @property
     def directHitsReceived(self):
-        return self.__accumulate('directHitsReceived')
+        return self._accumulate('directHitsReceived')
 
     @property
     def explosionHitsReceived(self):
-        return self.__accumulate('explosionHitsReceived')
+        return self._accumulate('explosionHitsReceived')
 
     @property
     def kills(self):
-        value = self.__accumulate('kills')
+        value = self._accumulate('kills')
         if self.__avatar is not None:
             value += self.__avatar.avatarKills
         return value
 
     @property
     def tkills(self):
-        return self.__accumulate('tkills')
+        return self._accumulate('tkills')
 
     @property
     def damaged(self):
-        return self.__accumulate('damaged')
+        return self._accumulate('damaged')
 
     @property
     def mileage(self):
-        return self.__accumulate('mileage')
+        return self._accumulate('mileage')
 
     @property
     def capturePoints(self):
-        return self.__accumulate('capturePoints')
+        return self._accumulate('capturePoints')
 
     @property
     def droppedCapturePoints(self):
-        return self.__accumulate('droppedCapturePoints')
+        return self._accumulate('droppedCapturePoints')
 
     @property
     def xp(self):
-        return self.__accumulate('xp')
+        return self._accumulate('xp')
 
     @property
     def xpForAttack(self):
-        return self.__accumulate('xpForAttack')
+        return self._accumulate('xpForAttack')
 
     @property
     def xpForAssist(self):
-        return self.__accumulate('xpForAssist')
+        return self._accumulate('xpForAssist')
 
     @property
     def xpOther(self):
-        return self.__accumulate('xpOther')
+        return self._accumulate('xpOther')
 
     @property
     def xpPenalty(self):
-        return self.__accumulate('xpPenalty')
+        return self._accumulate('xpPenalty')
 
     @property
     def deathCount(self):
-        return self.__accumulate('deathCount')
+        return self._accumulate('deathCount')
 
     @property
     def rollouts(self):
-        return self.__accumulate('rollouts')
+        return self._accumulate('rollouts')
 
     @property
     def respawns(self):
-        return self.__accumulate('rollouts') - 1
+        return self._accumulate('rollouts') - 1
 
     @property
     def numDefended(self):
-        return self.__accumulate('numDefended')
+        return self._accumulate('numDefended')
 
     @property
     def numRecovered(self):
-        return self.__accumulate('numRecovered')
+        return self._accumulate('numRecovered')
 
     @property
     def numCaptured(self):
-        return self.__accumulate('numCaptured')
+        return self._accumulate('numCaptured')
 
     @property
     def numDestroyed(self):
-        return self.__accumulate('numDestroyed')
+        return self._accumulate('numDestroyed')
 
     @property
     def destructiblesDamageDealt(self):
-        return self.__accumulate('destructiblesDamageDealt')
+        return self._accumulate('destructiblesDamageDealt')
 
     @property
     def equipmentDamageDealt(self):
-        return self.__accumulate('equipmentDamageDealt')
+        return self._accumulate('equipmentDamageDealt')
 
     @property
     def equipmentDamageAssisted(self):
-        return self.__accumulate('equipmentDamageAssisted')
+        return self._accumulate('equipmentDamageAssisted')
 
     @property
     def prestigePoints(self):
-        return self.__accumulate('prestigePoints')
+        return self._accumulate('prestigePoints')
 
     @property
     def roleSkillUsed(self):
-        return self.__accumulate('roleSkillUsed')
+        return self._accumulate('roleSkillUsed')
 
     @property
     def healthRepair(self):
-        return self.__accumulate('healthRepair')
+        return self._accumulate('healthRepair')
 
     @property
     def alliedHealthRepair(self):
-        return self.__accumulate('alliedHealthRepair')
+        return self._accumulate('alliedHealthRepair')
 
     @property
     def entityCaptured(self):
-        return self.__collectToDict('entityCaptured')
+        return self._collectToDict('entityCaptured')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)
@@ -1040,37 +1040,37 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
         return sorted(result, key=sort_keys.AchievementSortKey)
 
-    def __getAtrributeGenerator(self, attr):
+    def _getAtrributeGenerator(self, attr):
         getter = operator.attrgetter(attr)
         for vehicle in self.__vehicles:
             yield getter(vehicle)
 
-    def __findFirstNoZero(self, attr):
-        return findFirst(lambda value: value > 0, self.__getAtrributeGenerator(attr), default=0)
+    def _findFirstNoZero(self, attr):
+        return findFirst(lambda value: value > 0, self._getAtrributeGenerator(attr), default=0)
 
-    def __findMaxInt(self, attr, start=0):
+    def _findMaxInt(self, attr, start=0):
         result = start
-        for value in self.__getAtrributeGenerator(attr):
+        for value in self._getAtrributeGenerator(attr):
             result = max(result, value)
 
         return result
 
-    def __collectToSet(self, attr):
+    def _collectToSet(self, attr):
         result = set()
-        for value in self.__getAtrributeGenerator(attr):
+        for value in self._getAtrributeGenerator(attr):
             result |= value
 
         return result
 
-    def __collectToDict(self, attr):
+    def _collectToDict(self, attr):
         result = {}
-        for value in self.__getAtrributeGenerator(attr):
+        for value in self._getAtrributeGenerator(attr):
             result.update(value)
 
         return result
 
-    def __accumulate(self, attr):
-        return sum(self.__getAtrributeGenerator(attr))
+    def _accumulate(self, attr):
+        return sum(self._getAtrributeGenerator(attr))
 
 
 class FairplayViolationsInfo(object):

@@ -18,7 +18,7 @@ class LogRecord(object):
         _time = time_utils.getServerUTCTime()
         properties = {'client_version': getClientBuildVersion(),
          'key': convertEnum(group),
-         'loglevel': convertEnum(level),
+         'loglevel': int(convertEnum(level)),
          'time_spent': params.pop('timeSpent', 0),
          'action': convertEnum(action),
          'realm': constants.CURRENT_REALM,

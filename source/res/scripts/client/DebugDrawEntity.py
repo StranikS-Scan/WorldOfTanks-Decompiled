@@ -159,8 +159,8 @@ class DebugDrawEntity(BigWorld.Entity):
             component.visible = True
             component.multiline = True
             component.explicitSize = True
-            component.filterType = 'LINEAR'
-            component.verticalAnchor = 'BOTTOM'
+            component.filterType = GUI.Simple.eFilterType.LINEAR
+            component.verticalAnchor = GUI.Simple.eVAnchor.BOTTOM
         component.text = text
         component.size = (0, textSize)
         component.colour = color

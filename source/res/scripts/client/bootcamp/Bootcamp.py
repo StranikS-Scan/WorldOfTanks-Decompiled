@@ -9,24 +9,19 @@ import TriggersManager
 import WWISE
 import MusicControllerWWISE as MC
 from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS, BootcampVersion
-from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE
+from realm import CURRENT_REALM
+from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core import ISettingsCore
 from account_helpers.counter_settings import dropCounters as dropNewSettingsCounters
 from adisp import adisp_process, adisp_async
-from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl import backport
-from gui.impl.backport import createTooltipData
-from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
@@ -35,17 +30,16 @@ from gui.prb_control import prbEntityProperty
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.event_dispatcher import showInterludeVideoWindow
 from gui.battle_control.arena_info import player_format
-from gui.shared.tooltips.bootcamp import BootcampStatuses
 from helpers import dependency, aop, i18n
+from items import vehicles, ITEM_TYPE_NAMES
+from items.customizations import getBootcampOutfit
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.shared import IItemsCache
-from gui.impl.gen.view_models.views.bootcamp.bootcamp_lesson_model import BootcampLessonModel
-from gui.impl.gen.view_models.views.bootcamp.bootcamp_reward_item_model import BootcampRewardItemModel
-from frameworks.wulf import Array
 from skeletons.tutorial import ITutorialLoader
+from vehicle_outfit.outfit import Outfit
 from .BootcampGUI import BootcampGUI
 from .BootcampReplayController import BootcampReplayController
 from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
@@ -60,11 +54,6 @@ from .states.StateResultScreen import StateResultScreen
 from .aop.common import weave
 from . import GAME_SETTINGS_NEWBIE, GAME_SETTINGS_COMMON
 DISABLED_TANK_LEVELS = (1,)
-
-class ICON_SIZE(object):
-    SMALL = 0
-    BIG = 1
-
 
 class _BCNameFormatter(player_format.PlayerFullNameFormatter):
 
@@ -127,7 +116,9 @@ class Bootcamp(EventSystemEntity):
         self.__showingWaitingActionWindow = False
         self.__nation = 0
         self.__nationsData = {}
-        self.__promoteNationsData = {}
+        self.__nationsOrder = {'realm': {},
+         'country': {}}
+        self.__customizationData = {}
         self.__checkpoint = ''
         self.__replayController = None
         self.__minimapSize = 0.0
@@ -200,54 +191,8 @@ class Bootcamp(EventSystemEntity):
     def getVersion(self):
         return self.__version
 
-    def __getLessonStatus(self, lesson):
-        return [BootcampStatuses.RECEIVED if g_bootcamp.getLessonNum() >= lesson or not self.bootcampController.needAwarding() and self.isLastLesson(lesson) else BootcampStatuses.WAIT, lesson]
-
     def isLastLesson(self, lesson):
         return self.getContextIntParameter('lastLessonNum') == lesson
-
-    def fillProgressBar(self, viewModel, tooltipData, iconSize=ICON_SIZE.SMALL):
-        progressBarItems = self.__getProgressBarItems(iconSize)
-        currentLesson = g_bootcamp.getLessonNum()
-        viewModel.setCurrentLesson(currentLesson)
-        viewModel.setTotalLessons(g_bootcamp.getContextIntParameter('lastLessonNum'))
-        lessons = Array()
-        tooltipIndex = 1
-        for index, lessonRaw in enumerate(progressBarItems):
-            lessonModel = BootcampLessonModel()
-            lessonNumber = index + 1
-            lessonModel.setLessonNumber(lessonNumber)
-            lessonModel.setCompleted(lessonNumber <= currentLesson)
-            lessonModel.setCurrent(lessonNumber == currentLesson + 1)
-            lessonModel.setTooltipId(tooltipIndex)
-            if self.isLastLesson(lessonNumber):
-                lessonModel.setRewardsTaken(not self.bootcampController.needAwarding())
-            status = BootcampStatuses.IN_PROGRESS if lessonNumber == currentLesson else (BootcampStatuses.COMPLETED if lessonNumber < currentLesson else None)
-            tooltipData[tooltipIndex] = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOTCAMP_LESSON_PROGRESS, specialArgs=lessonRaw['tooltipArgs'] + [status])
-            tooltipIndex += 1
-            items = Array()
-            for itemRaw in lessonRaw['rewards']:
-                itemModel = BootcampRewardItemModel()
-                itemModel.setIcon(backport.image(itemRaw['icon']))
-                itemModel.setTooltipId(tooltipIndex)
-                tooltipData[tooltipIndex] = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOTCAMP_REWARD_PROGRESS, specialArgs=itemRaw['tooltipArgs'])
-                tooltipIndex += 1
-                items.addViewModel(itemModel)
-
-            lessonModel.setRewards(items)
-            lessons.addViewModel(lessonModel)
-
-        lessons.invalidate()
-        viewModel.setLevels(lessons)
-        return
-
-    def _getProgressBarIcon(self, icon, tooltipArgs, lesson):
-        return {'icon': icon,
-         'tooltipArgs': tooltipArgs + self.__getLessonStatus(lesson)}
-
-    def _getProgressBarItem(self, rewards, tooltipArgs):
-        return {'rewards': rewards,
-         'tooltipArgs': tooltipArgs}
 
     def saveCheckpoint(self, checkpoint):
         self.__checkpoint = checkpoint
@@ -343,9 +288,10 @@ class Bootcamp(EventSystemEntity):
             self.__bonuses['battle'][lastBattleLesson]['showRewards'] = showRewards
         self.__nation = ctx['nation']
         self.__nationsData = ctx['nationsData']
-        self.__promoteNationsData = ctx['promoteNationsData']
+        self.__nationsOrder = ctx.get('nations_order')
         self.__p['completed'] = ctx['completed']
         self.__p['needAwarding'] = ctx['needAwarding']
+        self.__customizationData = ctx.get('customization', {})
         weave(self.__weaver)
         if AccountSettings.isCleanPC():
             dropNewSettingsCounters()
@@ -422,6 +368,9 @@ class Bootcamp(EventSystemEntity):
 
     def getGUI(self):
         return self.__gui
+
+    def getBootcampOutfit(self, vehDescr):
+        return Outfit(vehicleCD=vehDescr.makeCompactDescr(), component=getBootcampOutfit(vehDescr, self.__customizationData)) if vehDescr.name in self.__customizationData and self.isRunning() else None
 
     @property
     def replayCtrl(self):
@@ -535,7 +484,7 @@ class Bootcamp(EventSystemEntity):
 
     def onRequestBootcampFinish(self):
         LOG_DEBUG_DEV_BOOTCAMP('onRequestBootcampFinish')
-        self.__account.base.requestBootcampQuit(AccountSettings.getFavorites(BOOTCAMP_VEHICLE))
+        self.__account.base.requestBootcampQuit()
 
     def finishBootcamp(self):
         LOG_DEBUG_DEV_BOOTCAMP('finishBootcamp', self.__currentState.id())
@@ -578,7 +527,9 @@ class Bootcamp(EventSystemEntity):
                 return [ {'image': video['messages']['icon']} for video in extraData['videos'] ]
         return []
 
-    def getIntroPageData(self, isChoice=False):
+    def getIntroPageData(self, isChoice=False, isInProgress=False):
+        if isChoice:
+            self.__lessonId = 1 if isInProgress else 0
         parameters = self.getParameters()
         autoStart = parameters.get('introAutoStart', False)
         if BattleReplay.isPlaying():
@@ -614,10 +565,34 @@ class Bootcamp(EventSystemEntity):
         return
 
     def previewNation(self, nationIndex):
-        nationData = self.__nationsData[nationIndex] if nationIndex in self.__nationsData else self.__promoteNationsData[nationIndex]
-        vehicleFirstID = nationData['vehicle_first']
-        vehicle = self.itemsCache.items.getVehicles()[vehicleFirstID]
-        g_clientHangarSpaceOverride.hangarSpace.startToUpdateVehicle(vehicle)
+        if nationIndex in self.__nationsData:
+            nationData = self.__nationsData[nationIndex]
+            vehicleFirstID = nationData['vehicle_first']
+            vehicle = self.itemsCache.items.getVehicles()[vehicleFirstID]
+            self.installModules(nationData, 'vehicle_first', vehicle.descriptor)
+            outfit = self.getBootcampOutfit(vehicle.descriptor)
+            g_clientHangarSpaceOverride.hangarSpace.startToUpdateVehicle(vehicle, outfit=outfit)
+        else:
+            LOG_ERROR_BOOTCAMP('Wrong nation index: {}'.format(nationIndex))
+
+    @staticmethod
+    def installModules(nationData, sectionName, vehicleDescr):
+        if 'equip' in nationData and sectionName in nationData['equip']:
+            equipIds = nationData['equip'][sectionName].split(':')
+            for equipId in equipIds:
+                intEquipId = int(equipId)
+                if vehicleDescr.mayInstallComponent(intEquipId):
+                    itemTypeIdx, _, compID = vehicles.parseIntCompactDescr(intEquipId)
+                    if ITEM_TYPE_NAMES[itemTypeIdx] == 'vehicleTurret':
+                        vehicleDescr.installTurret(intEquipId, 0)
+                    else:
+                        if ITEM_TYPE_NAMES[itemTypeIdx] == 'vehicleGun':
+                            turretDescr, _ = vehicleDescr.turrets[0]
+                            if not [ True for gun in turretDescr.guns if gun.id[1] == compID ]:
+                                LOG_ERROR_BOOTCAMP('Can not install gun {} for turret {}'.format(intEquipId, turretDescr.compactDescr))
+                                continue
+                        vehicleDescr.installComponent(intEquipId)
+                LOG_ERROR_BOOTCAMP('Can not install module', intEquipId)
 
     def changeNation(self, nationIndex):
         self.__nation = nationIndex
@@ -648,8 +623,18 @@ class Bootcamp(EventSystemEntity):
     def nation(self):
         return self.__nation
 
-    def getNationData(self):
-        return self.__nationsData.get(self.__nation, {})
+    def getNationsOrder(self, *fields):
+        userCountry = BigWorld.player().spaFlags.getFlag(SPA_ATTRS.USER_COUNTRY)
+        realm = CURRENT_REALM if CURRENT_REALM in self.__nationsOrder else 'DEFAULT'
+        realmConfig = self.__nationsOrder.get(realm, {})
+        if userCountry in realmConfig:
+            nationOrder = realmConfig.get(userCountry, {})
+        else:
+            nationOrder = realmConfig.get('DEFAULT', {})
+        return [ nationOrder.get(field, []) for field in fields ]
+
+    def getNationData(self, nation=None):
+        return self.__nationsData.get(self.__nation if nation is None else nation, {})
 
     def isReferralEnabled(self):
         return isReferralProgramEnabled() and self.__isRecruit
@@ -714,18 +699,6 @@ class Bootcamp(EventSystemEntity):
         self.settingsCore.applySettings(settings)
         self.settingsCore.confirmChanges(self.settingsCore.applyStorages(restartApproved=False))
         self.settingsCore.clearStorages()
-
-    def __getProgressBarItems(self, iconSize):
-        bootcampIcons = R.images.gui.maps.icons.bootcamp.rewards
-        firstVehicleIcon = self._getProgressBarIcon(bootcampIcons.bcTank2_48() if iconSize == ICON_SIZE.SMALL else bootcampIcons.bcTank2_80(), [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_VEHICLE_SECOND_LEVEL, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_VEHICLE, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCAWARDOPTIONS], 1)
-        secondVehicleIcon = self._getProgressBarIcon(bootcampIcons.bcTank3_48() if iconSize == ICON_SIZE.SMALL else bootcampIcons.bcTank3_80(), [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_VEHICLE_THIRD_LEVEL, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_VEHICLE, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCAWARDOPTIONS], 3)
-        finalLesson = self.getContextIntParameter('lastLessonNum')
-        finalBonusIcons = [self._getProgressBarIcon(bootcampIcons.bcGold_48() if iconSize == ICON_SIZE.SMALL else bootcampIcons.bcGold_80(), [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_GOLD, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_GOLD, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCGOLD], finalLesson), self._getProgressBarIcon(bootcampIcons.bcPremium_universal_48() if iconSize == ICON_SIZE.SMALL else bootcampIcons.bcPremium_universal_80(), [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_PREMIUM, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_PREMIUM, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCPREMIUMPLUS], finalLesson), self._getProgressBarIcon(bootcampIcons.bcBootcampMedal_48() if iconSize == ICON_SIZE.SMALL else bootcampIcons.bcBootcampMedal_80(), [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_AWARD, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_AWARD, RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCACHIEVEMENT], finalLesson)]
-        return [self._getProgressBarItem([firstVehicleIcon], [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_1, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_1]), self._getProgressBarItem(finalBonusIcons, [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_2, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_2_SHORT])] if self.getVersion() == BootcampVersion.SHORT else [self._getProgressBarItem([firstVehicleIcon], [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_1, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_1]),
-         self._getProgressBarItem([], [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_2, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_2]),
-         self._getProgressBarItem([secondVehicleIcon], [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_3, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_3]),
-         self._getProgressBarItem([], [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_4, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_4]),
-         self._getProgressBarItem(finalBonusIcons, [BOOTCAMP.TOOLTIP_PROGRESSION_LABEL_LESSON_5, BOOTCAMP.TOOLTIP_PROGRESSION_DESCRIPTION_LESSON_5])]
 
 
 g_bootcamp = Bootcamp()

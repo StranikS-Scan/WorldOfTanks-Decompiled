@@ -12,14 +12,15 @@ from helpers.bots import preprocessBotName
 _logger = logging.getLogger(__name__)
 
 class CommonInfo(shared.UnpackedInfo):
-    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__numDefended')
+    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__finishAllPlayersLeft', '__arenaVisitor', '__bots', '__numDefended')
 
-    def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, **kwargs):
+    def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, finishAllPlayersLeft=False, **kwargs):
         super(CommonInfo, self).__init__()
         self.__arenaTypeID = arenaTypeID
         self.__winnerTeam = winnerTeam
         self.__finishReason = finishReason
         self.__bots = defaultdict()
+        self.__finishAllPlayersLeft = finishAllPlayersLeft
         self.__numDefended = kwargs.get('commonNumDefended', 0)
         if bots is not None:
             allActiveVehicles = kwargs.get('vehicles', {})
@@ -71,6 +72,10 @@ class CommonInfo(shared.UnpackedInfo):
     @property
     def finishReason(self):
         return self.__finishReason
+
+    @property
+    def finishAllPlayersLeft(self):
+        return self.__finishAllPlayersLeft
 
     @property
     def isMultiTeamMode(self):

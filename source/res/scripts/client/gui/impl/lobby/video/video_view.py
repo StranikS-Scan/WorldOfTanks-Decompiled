@@ -3,7 +3,6 @@
 import logging
 import Windowing
 import BigWorld
-import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
@@ -101,7 +100,6 @@ class VideoView(ViewImpl):
             _logger.error('__videoSource is not specified!')
         else:
             self.viewModel.setVideoSource(videoSource)
-            self.viewModel.setVideoSoundVolume(SoundGroups.g_instance.getMasterVolume())
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())

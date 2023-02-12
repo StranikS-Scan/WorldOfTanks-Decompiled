@@ -2,28 +2,28 @@
 # Embedded file name: scripts/client/notification/decorators.py
 import typing
 import BigWorld
-from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
+from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.locale.INVITES import INVITES
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
-from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
+from gui.Scaleform.locale.INVITES import INVITES
+from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
+from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
+from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
-from helpers import dependency
-from helpers import time_utils
+from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
 from messenger import g_settings
@@ -31,9 +31,8 @@ from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from notification.settings import makePathToIcon
-from skeletons.gui.game_control import IBattlePassController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
+from skeletons.gui.game_control import IBattlePassController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
@@ -1084,21 +1083,6 @@ class IntegratedAuctionStageFinishDecorator(IntegratedAuctionDecorator):
          'text': text})
 
 
-class PersonalReservesConversionMessageDecorator(MessageDecorator):
-    ENTITY_ID = 0
-
-    def __init__(self):
-        entity = g_settings.msgTemplates.format('PersonalReservesHaveBeenConvertedOffer')
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-        super(PersonalReservesConversionMessageDecorator, self).__init__(self.ENTITY_ID, entity, settings)
-
-    def isShouldCountOnlyOnce(self):
-        return True
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-
 class SeniorityAwardsDecorator(MessageDecorator):
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
 
@@ -1149,3 +1133,47 @@ class SeniorityAwardsDecorator(MessageDecorator):
         if self.__seniorityAwardCtrl.timeLeft > 0:
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
         return state
+
+
+class EventLootBoxesDecorator(MessageDecorator):
+    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
+
+    def __init__(self, entityID, message, model):
+        super(EventLootBoxesDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
+        self.__eventLootBoxes.onStatusChange += self.__update
+        self.__eventLootBoxes.onAvailabilityChange += self.__update
+
+    def clear(self):
+        self.__eventLootBoxes.onStatusChange -= self.__update
+        self.__eventLootBoxes.onAvailabilityChange -= self.__update
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateEntityButtons()
+        super(EventLootBoxesDecorator, self)._make(formatted, settings)
+
+    def __makeEntity(self, message):
+        return g_settings.msgTemplates.format('EventLootBoxStartSysMessage', ctx=message)
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+
+    def __updateEntityButtons(self):
+        if self._entity is None or not self._entity.get('buttonsLayout'):
+            return
+        else:
+            labelText = backport.text(R.strings.lootboxes.notification.eventStart.button())
+            if self.__eventLootBoxes.useExternalShop():
+                labelText = text_styles.concatStylesWithSpace(labelText, icons.webLink())
+            self._entity['buttonsLayout'][0]['label'] = labelText
+            if self.__eventLootBoxes.isActive() and self.__eventLootBoxes.isLootBoxesAvailable():
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            else:
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            self._entity['buttonsStates'] = {'submit': state}
+            return
+
+    def __update(self, *_):
+        self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return

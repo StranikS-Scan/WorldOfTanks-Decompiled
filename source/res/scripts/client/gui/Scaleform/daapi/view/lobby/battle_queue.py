@@ -52,15 +52,15 @@ _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 _RANKS = 'ranks'
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _needShowLongWaitingWarning(lobbyContext=None):
+def needShowLongWaitingWarning(lobbyContext=None):
     vehicle = g_currentVehicle.item
     return lobbyContext is not None and vehicle is not None and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
 
 
-class _QueueProvider(object):
+class QueueProvider(object):
 
     def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
-        super(_QueueProvider, self).__init__()
+        super(QueueProvider, self).__init__()
         self._proxy = weakref.proxy(proxy)
         self._queueType = qType
         self._queueCallback = None
@@ -100,7 +100,8 @@ class _QueueProvider(object):
         pass
 
     def getTitle(self, guiType):
-        return MENU.loading_battletypes(guiType)
+        titleRes = R.strings.menu.loading.battleTypes.num(guiType)
+        return backport.text(titleRes()) if titleRes.exists() else ''
 
     def getTankInfoLabel(self):
         return makeString(MENU.PREBATTLE_TANKLABEL)
@@ -129,7 +130,7 @@ class _QueueProvider(object):
         return (self._queueType,)
 
 
-class RandomQueueProvider(_QueueProvider):
+class RandomQueueProvider(QueueProvider):
 
     def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
         super(RandomQueueProvider, self).__init__(proxy, qType)
@@ -158,7 +159,7 @@ class RandomQueueProvider(_QueueProvider):
 
     def needAdditionalInfo(self):
         if self._needAdditionalInfo is None:
-            self._needAdditionalInfo = _needShowLongWaitingWarning()
+            self._needAdditionalInfo = needShowLongWaitingWarning()
         return self._needAdditionalInfo
 
     def additionalInfo(self):
@@ -257,8 +258,8 @@ registerBattleQueueProvider(constants.QUEUE_TYPE.MAPBOX, _MapboxQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.COMP7, _Comp7QueueProvider)
 
 def _providerFactory(proxy, qType):
-    queueProvider = collectBattleQueueProvider(qType)
-    return (queueProvider or _QueueProvider)(proxy, qType)
+    provider = collectBattleQueueProvider(qType) or QueueProvider
+    return provider(proxy, qType)
 
 
 class BattleQueue(BattleQueueMeta, LobbySubView):
@@ -320,7 +321,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 self.as_showExitS(False)
             guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
             title = self.__provider.getTitle(guiType)
-            description = MENU.loading_battletypes_desc(guiType)
+            descriptionRes = R.strings.menu.loading.battleTypes.desc.num(guiType)
+            description = backport.text(descriptionRes()) if descriptionRes.exists() else ''
             if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
                 iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
             else:

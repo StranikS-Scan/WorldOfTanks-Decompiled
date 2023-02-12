@@ -217,6 +217,8 @@ def getTypeOfCompactDescr(compactDescr):
         itemTypeID = ord(compactDescr[0]) & 15
         if itemTypeID == 0:
             itemTypeID = ord(compactDescr[1])
+        elif itemTypeID in SIMPLE_ITEM_TYPE_INDICES:
+            itemTypeID = itemTypeID - 2
     if itemTypeID >= len(ITEM_TYPE_NAMES):
         raise SoftException("value is not a 'compact descriptor'")
     return itemTypeID

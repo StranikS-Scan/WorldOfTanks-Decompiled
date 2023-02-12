@@ -7,7 +7,6 @@ import weakref
 import zlib
 from functools import partial
 import BigWorld
-import BWReplay
 import Keys
 import Math
 import ResMgr
@@ -174,7 +173,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
     isWaitingForShot = property(lambda self: self.__isWaitingForShot)
-    isInTutorial = property(lambda self: self.arena is not None and self.arena.guiType == constants.ARENA_GUI_TYPE.TUTORIAL)
     autoAimVehicle = property(lambda self: BigWorld.entities.get(self.__autoAimVehID, None))
     deviceStates = property(lambda self: self.__deviceStates)
     vehicles = property(lambda self: self.__vehicles)
@@ -249,7 +247,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__flockMangager = FlockManager.getManager()
         self.gunRotator = None
         self.inputHandler = None
-        self.vehicleAttrs = dict()
         self.__vehicles = set()
         self.__consistentMatrices = AvatarPositionControl.ConsistentMatrices()
         self.__ownVehicleMProv = self.__consistentMatrices.ownVehicleMatrix
@@ -562,7 +559,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.vehicle is not None:
             self.__consistentMatrices.notifyVehicleChanged(self)
             ctrl = self.guiSessionProvider.shared.vehicleState
-            if self.vehicle.stunInfo > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
+            if self.vehicle.stunInfo.stunFinishTime > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
             if self.__dualGunHelper is not None:
                 self.__dualGunHelper.reset()
@@ -581,12 +578,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if ctrl is not None:
                 ctrl.updateAttachedVehicle(self.vehicle.id)
             self.__aimingBooster = None
-            if BattleReplay.isServerSideReplay() and self.vehicle.id in self.vehicleAttrs:
-                attrs = self.vehicleAttrs[self.vehicle.id]
-                if self.guiSessionProvider.shared.prebattleSetups.isSelectionStarted():
-                    self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(self.vehicle.id, attrs)
-                else:
-                    self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.vehicle.id, attrs)
         return
 
     def onSpaceLoaded(self):
@@ -595,25 +586,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__initProgress |= _INIT_STEPS.SPACE_LOADED
         self.__onInitStepCompleted()
         self.__flockMangager.onSpaceLoaded()
-
-    def bindToVehicleForServerSideReplay(self, vehicleID):
-        LOG_DEBUG_DEV('Avatar.bindToVehicleForServerSideReplay: vehicleID=%s' % vehicleID)
-        BWReplay.wg_withholdEntity(vehicleID, False)
-        BWReplay.wg_injectNonVolatileUpdate(self.id, vehicleID, self.position, (self.yaw, self.pitch, self.roll))
-        self.onSwitchViewpoint(vehicleID, Math.Vector3(0, 0, 0))
-
-    def startServerSideReplay(self):
-        otherVehicles = [ x for x in BigWorld.entities.values() if isinstance(x, Vehicle.Vehicle) and x.id != self.playerVehicleID ]
-        LOG_DEBUG_DEV('Avatar.startServerSideReplay: playerVehicleID=%s, vehicles=%s' % (self.playerVehicleID, repr(otherVehicles)))
-        self.bindToVehicleForServerSideReplay(self.playerVehicleID)
-        self.updateVehicleHealth(self.playerVehicleID, 0, 0, 1, 0)
-        if otherVehicles:
-            lastObsVehID = BattleReplay.g_replayCtrl.getLastObservedVehicleID()
-            if lastObsVehID is None:
-                self.bindToVehicleForServerSideReplay(otherVehicles[0].id)
-            else:
-                self.bindToVehicleForServerSideReplay(lastObsVehID)
-        return
 
     def onStreamComplete(self, streamID, desc, data):
         isCorrupted, origPacketLen, packetLen, origCrc32, crc32 = desc
@@ -983,7 +955,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         isVehicle = entity.__class__.__name__ == 'Vehicle'
         entityInFocusType = ENTITY_IN_FOCUS_TYPE.VEHICLE if isVehicle else ENTITY_IN_FOCUS_TYPE.DESTRUCTIBLE_ENTITY
         self.guiSessionProvider.shared.feedback.setTargetInFocus(entity.id, True, entityInFocusType)
-        if (self.inputHandler.isGuiVisible or self.isInTutorial) and entity.isAlive():
+        if self.inputHandler.isGuiVisible and entity.isAlive():
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.AIM_AT_VEHICLE, vehicleId=entity.id)
             entity.drawEdge()
             if isVehicle and self.__maySeeOtherVehicleDamagedDevices:
@@ -1669,16 +1641,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     LOG_DEBUG('showDevelopmentInfo', code, params)
             return
 
-    def syncVehicleAttrs(self, attrs, targetID):
-        LOG_DEBUG('syncVehicleAttrs', attrs, targetID)
-        self.vehicleAttrs[targetID] = attrs
-        if BattleReplay.isServerSideReplay() and self.vehicle and self.vehicle.id != targetID:
-            return
-        targetID = self.playerVehicleID
+    def syncVehicleAttrs(self, _, attrs):
+        LOG_DEBUG('syncVehicleAttrs', attrs)
         if self.guiSessionProvider.shared.prebattleSetups.isSelectionStarted():
-            self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(targetID, attrs)
+            self.guiSessionProvider.shared.prebattleSetups.setVehicleAttrs(self.playerVehicleID, attrs)
         else:
-            self.guiSessionProvider.shared.feedback.setVehicleAttrs(targetID, attrs)
+            self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, attrs)
 
     def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist, gunIndex):
         if not self.userSeesWorld() or self.__projectileMover is None:

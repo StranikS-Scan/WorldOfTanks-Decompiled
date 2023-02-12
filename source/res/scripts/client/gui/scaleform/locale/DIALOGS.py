@@ -162,10 +162,6 @@ class DIALOGS(object):
     LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAlternativeAmmoAutoLoad/message'
     LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
     LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
-    SANDBOX_TITLE = '#dialogs:sandBox/title'
-    SANDBOX_MESSAGE = '#dialogs:sandBox/message'
-    SANDBOX_SUBMIT = '#dialogs:sandBox/submit'
-    SANDBOX_CANCEL = '#dialogs:sandBox/cancel'
     CREWRETRAINING_TITLE = '#dialogs:crewRetraining/title'
     RETRAININGWINDOW_SUBMIT = '#dialogs:retrainingWindow/submit'
     BUYSLOTCONFIRMATION_TITLE = '#dialogs:buySlotConfirmation/title'
@@ -553,11 +549,6 @@ class DIALOGS(object):
     VEHICLESELLDIALOG_CTRLQUESTION_ERRORMESSAGE = '#dialogs:vehicleSellDialog/CtrlQuestion/errorMessage'
     VEHICLESELLDIALOG_PRICE_SIGN_ADD = '#dialogs:vehicleSellDialog/price/sign/add'
     VEHICLESELLDIALOG_POSTPROGRESSIONINFO = '#dialogs:vehicleSellDialog/postProgressionInfo'
-    TECHNICALMAINTENANCECONFIRM_MSG_REPAIR = '#dialogs:technicalMaintenanceConfirm/msg_repair'
-    TECHNICALMAINTENANCECONFIRM_TITLE = '#dialogs:technicalMaintenanceConfirm/title'
-    TECHNICALMAINTENANCECONFIRM_MESSAGE = '#dialogs:technicalMaintenanceConfirm/message'
-    TECHNICALMAINTENANCECONFIRM_SUBMIT = '#dialogs:technicalMaintenanceConfirm/submit'
-    TECHNICALMAINTENANCECONFIRM_CANCEL = '#dialogs:technicalMaintenanceConfirm/cancel'
     VEHICLESELL_UNIQUE_TITLE = '#dialogs:vehicleSell/unique/title'
     VEHICLESELL_UNIQUE_MESSAGE = '#dialogs:vehicleSell/unique/message'
     VEHICLESELL_UNIQUE_SUBMIT = '#dialogs:vehicleSell/unique/submit'
@@ -689,30 +680,10 @@ class DIALOGS(object):
     SQUAD_GOTOSQUAD_MESSAGE = '#dialogs:squad/goToSquad/message'
     SQUAD_GOTOSQUAD_SUBMIT = '#dialogs:squad/goToSquad/submit'
     SQUAD_GOTOSQUAD_CANCEL = '#dialogs:squad/goToSquad/cancel'
-    SANDBOX_GOTOANOTHER_TITLE = '#dialogs:sandBox/goToAnother/title'
-    SANDBOX_GOTOANOTHER_MESSAGE = '#dialogs:sandBox/goToAnother/message'
-    SANDBOX_GOTOANOTHER_SUBMIT = '#dialogs:sandBox/goToAnother/submit'
-    SANDBOX_GOTOANOTHER_CANCEL = '#dialogs:sandBox/goToAnother/cancel'
-    SANDBOX_GOTOSQUAD_TITLE = '#dialogs:sandBox/goToSquad/title'
-    SANDBOX_GOTOSQUAD_MESSAGE = '#dialogs:sandBox/goToSquad/message'
-    SANDBOX_GOTOSQUAD_SUBMIT = '#dialogs:sandBox/goToSquad/submit'
-    SANDBOX_GOTOSQUAD_CANCEL = '#dialogs:sandBox/goToSquad/cancel'
-    RALLY_GOTOBATTLETUTORIAL_TITLE = '#dialogs:rally/goToBattleTutorial/title'
-    RALLY_GOTOBATTLETUTORIAL_MESSAGE = '#dialogs:rally/goToBattleTutorial/message'
-    RALLY_GOTOBATTLETUTORIAL_SUBMIT = '#dialogs:rally/goToBattleTutorial/submit'
-    RALLY_GOTOBATTLETUTORIAL_CANCEL = '#dialogs:rally/goToBattleTutorial/cancel'
-    SANDBOX_GOTOBATTLETUTORIAL_TITLE = '#dialogs:sandBox/goToBattleTutorial/title'
-    SANDBOX_GOTOBATTLETUTORIAL_MESSAGE = '#dialogs:sandBox/goToBattleTutorial/message'
-    SANDBOX_GOTOBATTLETUTORIAL_SUBMIT = '#dialogs:sandBox/goToBattleTutorial/submit'
-    SANDBOX_GOTOBATTLETUTORIAL_CANCEL = '#dialogs:sandBox/goToBattleTutorial/cancel'
     SQUAD_GOTOANOTHER_TITLE = '#dialogs:squad/goToAnother/title'
     SQUAD_GOTOANOTHER_MESSAGE = '#dialogs:squad/goToAnother/message'
     SQUAD_GOTOANOTHER_SUBMIT = '#dialogs:squad/goToAnother/submit'
     SQUAD_GOTOANOTHER_CANCEL = '#dialogs:squad/goToAnother/cancel'
-    SQUAD_GOTOBATTLETUTORIAL_TITLE = '#dialogs:squad/goToBattleTutorial/title'
-    SQUAD_GOTOBATTLETUTORIAL_MESSAGE = '#dialogs:squad/goToBattleTutorial/message'
-    SQUAD_GOTOBATTLETUTORIAL_SUBMIT = '#dialogs:squad/goToBattleTutorial/submit'
-    SQUAD_GOTOBATTLETUTORIAL_CANCEL = '#dialogs:squad/goToBattleTutorial/cancel'
     RALLY_LEAVE_TITLE = '#dialogs:rally/leave/title'
     RALLY_LEAVE_MESSAGE = '#dialogs:rally/leave/message'
     RALLY_LEAVE_SUBMIT = '#dialogs:rally/leave/submit'
@@ -1311,10 +1282,6 @@ class DIALOGS(object):
      LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE,
      LOWAMMOAUTOLOAD_SUBMIT,
      LOWAMMOAUTOLOAD_CANCEL,
-     SANDBOX_TITLE,
-     SANDBOX_MESSAGE,
-     SANDBOX_SUBMIT,
-     SANDBOX_CANCEL,
      CREWRETRAINING_TITLE,
      RETRAININGWINDOW_SUBMIT,
      BUYSLOTCONFIRMATION_TITLE,
@@ -1702,11 +1669,6 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_CTRLQUESTION_ERRORMESSAGE,
      VEHICLESELLDIALOG_PRICE_SIGN_ADD,
      VEHICLESELLDIALOG_POSTPROGRESSIONINFO,
-     TECHNICALMAINTENANCECONFIRM_MSG_REPAIR,
-     TECHNICALMAINTENANCECONFIRM_TITLE,
-     TECHNICALMAINTENANCECONFIRM_MESSAGE,
-     TECHNICALMAINTENANCECONFIRM_SUBMIT,
-     TECHNICALMAINTENANCECONFIRM_CANCEL,
      VEHICLESELL_UNIQUE_TITLE,
      VEHICLESELL_UNIQUE_MESSAGE,
      VEHICLESELL_UNIQUE_SUBMIT,
@@ -1838,30 +1800,10 @@ class DIALOGS(object):
      SQUAD_GOTOSQUAD_MESSAGE,
      SQUAD_GOTOSQUAD_SUBMIT,
      SQUAD_GOTOSQUAD_CANCEL,
-     SANDBOX_GOTOANOTHER_TITLE,
-     SANDBOX_GOTOANOTHER_MESSAGE,
-     SANDBOX_GOTOANOTHER_SUBMIT,
-     SANDBOX_GOTOANOTHER_CANCEL,
-     SANDBOX_GOTOSQUAD_TITLE,
-     SANDBOX_GOTOSQUAD_MESSAGE,
-     SANDBOX_GOTOSQUAD_SUBMIT,
-     SANDBOX_GOTOSQUAD_CANCEL,
-     RALLY_GOTOBATTLETUTORIAL_TITLE,
-     RALLY_GOTOBATTLETUTORIAL_MESSAGE,
-     RALLY_GOTOBATTLETUTORIAL_SUBMIT,
-     RALLY_GOTOBATTLETUTORIAL_CANCEL,
-     SANDBOX_GOTOBATTLETUTORIAL_TITLE,
-     SANDBOX_GOTOBATTLETUTORIAL_MESSAGE,
-     SANDBOX_GOTOBATTLETUTORIAL_SUBMIT,
-     SANDBOX_GOTOBATTLETUTORIAL_CANCEL,
      SQUAD_GOTOANOTHER_TITLE,
      SQUAD_GOTOANOTHER_MESSAGE,
      SQUAD_GOTOANOTHER_SUBMIT,
      SQUAD_GOTOANOTHER_CANCEL,
-     SQUAD_GOTOBATTLETUTORIAL_TITLE,
-     SQUAD_GOTOBATTLETUTORIAL_MESSAGE,
-     SQUAD_GOTOBATTLETUTORIAL_SUBMIT,
-     SQUAD_GOTOBATTLETUTORIAL_CANCEL,
      RALLY_LEAVE_TITLE,
      RALLY_LEAVE_MESSAGE,
      RALLY_LEAVE_SUBMIT,

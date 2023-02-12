@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/unit/actions_handler.py
+import typing
 import weakref
 from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_TYPE
@@ -10,6 +11,8 @@ from gui.prb_control.entities.base import checkVehicleAmmoFull
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearchUnitCtx
 from gui.prb_control.settings import FUNCTIONAL_FLAG
+if typing.TYPE_CHECKING:
+    from gui.prb_control.entities.base.unit.entity import BaseUnitEntity
 
 class AbstractActionsHandler(object):
 

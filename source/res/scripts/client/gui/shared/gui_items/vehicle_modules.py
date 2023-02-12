@@ -5,11 +5,11 @@ from constants import SHELL_TYPES, SHELL_MECHANICS_TYPE
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from items import vehicles as veh_core
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
 from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
@@ -46,7 +46,8 @@ class VehicleModule(FittingItem):
         return self.itemTypeName
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getModuleIcon(size, self.itemTypeName)
+        resID = R.images.gui.maps.shop.modules.num(size).dyn(replaceHyphenToUnderscore(self.itemTypeName))()
+        return backport.image(resID) if resID != -1 else ''
 
 
 class VehicleChassis(VehicleModule):
@@ -100,7 +101,12 @@ class VehicleChassis(VehicleModule):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getModuleIcon(size, FITTING_TYPES.VEHICLE_WHEELED_CHASSIS) if self.isWheeledChassis() else super(VehicleChassis, self).getShopIcon(size)
+        if self.isWheeledChassis():
+            resID = R.images.gui.maps.shop.modules.num(size).dyn(FITTING_TYPES.VEHICLE_WHEELED_CHASSIS)()
+            if resID != -1:
+                return backport.image(resID)
+            return ''
+        return super(VehicleChassis, self).getShopIcon(size)
 
     def _getShortInfoKey(self):
         return '#menu:descriptions/{}'.format(FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else self.itemTypeName)
@@ -384,7 +390,8 @@ class Shell(FittingItem):
         return backport.image(sizeFldr.dyn(self.descriptor.iconName)())
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getShellIcon(size, self.descriptor.iconName)
+        resID = R.images.gui.maps.shop.shells.num(size).dyn(replaceHyphenToUnderscore(self.descriptor.iconName))()
+        return backport.image(resID) if resID != -1 else ''
 
     def getGUIEmblemID(self):
         return self.descriptor.iconName

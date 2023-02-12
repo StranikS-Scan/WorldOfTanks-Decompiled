@@ -20,7 +20,6 @@ from gui import makeHtmlString
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
@@ -37,7 +36,8 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment, SUPPORT_EXT_DATA_FEATURES
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import makeSearchableString
-from helpers import i18n, time_utils, dependency, func_utils
+from gui.shared.utils.functions import replaceHyphenToUnderscore
+from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, filterIntCDsByItemType
 from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags, EMPTY_ITEM_ID
 from items.customizations import createNationalEmblemComponents
@@ -164,7 +164,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     T34_DISCLAIMER = 't34_disclaimer'
     CLAN_WARS_BATTLES = 'clanWarsBattles'
     COMP7_BATTLES = 'comp7'
-    IS_RESTORED_WITH_STYLE = 'restoreWithStyle'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -600,7 +599,7 @@ class Vehicle(FittingItem):
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
-        return RES_SHOP_EXT.getVehicleIcon(size, name)
+        return getShopVehicleIconPath(size, name)
 
     @property
     def invID(self):
@@ -1232,10 +1231,6 @@ class Vehicle(FittingItem):
     @property
     def isProgressionDecalsOnly(self):
         return checkForTags(self.tags, VEHICLE_TAGS.PROGRESSION_DECALS_ONLY)
-
-    @property
-    def isRestoredWithStyle(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.IS_RESTORED_WITH_STYLE)
 
     @property
     def isDisabledInPremIGR(self):
@@ -1909,7 +1904,7 @@ def getLevelIconPath(vehLevel):
 def getIconPath(vehicleName):
     unicName = getIconResourceName(vehicleName)
     resID = R.images.gui.maps.icons.vehicle.dyn(unicName)()
-    return backport.image(resID) if resID != -1 else None
+    return backport.image(resID) if resID != -1 else ''
 
 
 def getNationLessName(vehicleName):
@@ -1918,8 +1913,9 @@ def getNationLessName(vehicleName):
 
 def getIconShopPath(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     name = getNationLessName(vehicleName)
-    path = RES_SHOP_EXT.getVehicleIcon(size, name)
-    return func_utils.makeFlashPath(path) if path is not None else '../maps/shop/vehicles/%s/empty_tank.png' % size
+    unicName = getIconResourceName(name)
+    path = getShopVehicleIconPath(size, unicName)
+    return path or backport.image(R.images.gui.maps.shop.vehicles.num(size).empty_tank())
 
 
 def getIconResource(vehicleName):
@@ -1964,8 +1960,13 @@ def getTypeVPanelIconPath(vehicleType):
     return RES_ICONS.getVehicleTypeVPanelIconPath(vehicleType)
 
 
+def getShopVehicleIconPath(size, name):
+    resID = R.images.gui.maps.shop.vehicles.num(size).dyn(replaceHyphenToUnderscore(name))()
+    return backport.image(resID) if resID != -1 else ''
+
+
 def getTypeBigIconResource(vehicleType, isElite=False):
-    return R.images.gui.maps.icons.vehicleTypes.big.dyn((vehicleType + '_elite' if isElite else vehicleType).replace('-', '_'))
+    return R.images.gui.maps.icons.vehicleTypes.big.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
 
 
 def getUserName(vehicleType, textPrefix=False):

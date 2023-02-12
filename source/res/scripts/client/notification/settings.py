@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/settings.py
 from collections import namedtuple
+from gui.impl import backport
+from gui.impl.gen import R
 from shared_utils import ScalarTypes
 LIST_SCROLL_STEP_FACTOR = 10
-DEF_ICON_PATH = '../maps/icons/library/{0:>s}-1.png'
+DEF_ICON_NAME = '{0:>s}_1'
 NotificationData = namedtuple('NotificationData', ('entityID', 'savedData', 'priorityLevel', 'entity'))
 
 class NOTIFICATION_STATE(object):
@@ -66,7 +68,7 @@ class NOTIFICATION_BUTTON_STATE(object):
 
 
 def makePathToIcon(iconName):
-    result = ''
-    if iconName:
-        result = DEF_ICON_PATH.format(iconName)
-    return result
+    if not iconName:
+        return ''
+    iconRes = R.images.gui.maps.icons.library.dyn(DEF_ICON_NAME.format(iconName))
+    return backport.image(iconRes()) if iconRes.exists() else ''

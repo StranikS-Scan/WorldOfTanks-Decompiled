@@ -136,21 +136,6 @@ class BattleAward(ExplosionBackAward):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=backport.getIntegralFormat(self.battlesCount)))
 
 
-class PvEBattleAward(BattleAward):
-
-    def getWindowTitle(self):
-        return i18n.makeString('#menu:awardWindow/title/info')
-
-    def getDescription(self):
-        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/pveBattle/description', battlesCount=self.battlesCount))
-
-    def handleOkButton(self):
-        shared_events.runTutorialChain('PvE_Chain')
-
-    def handleCloseButton(self):
-        shared_events.runTutorialChain('PvE_Chain')
-
-
 class BoosterAward(ExplosionBackAward):
 
     def __init__(self, booster):

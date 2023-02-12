@@ -15,4 +15,9 @@ class BootcampLogRecord(LogRecord):
             self._properties.setdefault('skipped', None)
             self._properties.setdefault('page', None)
             self._properties.setdefault('tooltip', None)
+            intProperties = ('lesson_id', 'item_id', 'page')
+            for propertyName in intProperties:
+                if propertyName in self._properties and self._properties[propertyName] is not None:
+                    self._properties[propertyName] = int(self._properties[propertyName])
+
         return

@@ -116,6 +116,7 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYSORTIE = '#cyberSport:window/unit/message/inactivePeripherySortie'
     WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYBATTLE = '#cyberSport:window/unit/message/inactivePeripheryBattle'
     WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING = '#cyberSport:window/unit/message/in_players_matching'
+    WINDOW_UNIT_MESSAGE_PLAY_LIMITS_IS_ACTIVE = '#cyberSport:window/unit/message/play_limits_is_active'
     WINDOW_UNIT_READY = '#cyberSport:window/unit/ready'
     WINDOW_UNIT_NOTREADY = '#cyberSport:window/unit/notReady'
     WINDOW_UNIT_FIGHT = '#cyberSport:window/unit/fight'

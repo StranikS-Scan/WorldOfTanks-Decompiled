@@ -17,7 +17,6 @@ from gui.shared.money import Currency
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.app_loader import IAppLoader
@@ -125,7 +124,7 @@ class UpgradableDeviceUpgradeConfirmView(DialogTemplateView):
 def _fillDeviceInfo(modules, currentModule, viewModel):
     with viewModel.transaction() as model:
         model.setDeviceName(currentModule.name)
-        model.setDeviceImg(currentModule.getShopIcon(store=RES_SHOP, size=STORE_CONSTANTS.ICON_SIZE_SMALL))
+        model.setDeviceImg(currentModule.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL))
         model.setOverlayType(ItemHighlightTypes.MODERNIZED)
         kpiArray = model.getKpiItems()
         for i, _ in enumerate(modules):

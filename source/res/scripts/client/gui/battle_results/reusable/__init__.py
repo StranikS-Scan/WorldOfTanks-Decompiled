@@ -8,16 +8,17 @@ from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePassProgress
 from gui.battle_control.arena_info import squad_finder
 from gui.battle_results.reusable import sort_keys
-from gui.battle_results.reusable.avatars import AvatarsInfo
-from gui.battle_results.reusable.common import CommonInfo
-from gui.battle_results.reusable.personal import PersonalInfo
-from gui.battle_results.reusable.players import PlayersInfo
-from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo
-from gui.battle_results.reusable.vehicles import VehiclesInfo
+from gui.battle_results.reusable.extension_utils import ReusableInfoFactory
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PLAYER_TEAM_RESULT as _TEAM_RESULT, PREMIUM_STATE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.battle_results.reusable.avatars import AvatarsInfo, AvatarInfo
+from gui.battle_results.reusable.common import CommonInfo
+from gui.battle_results.reusable.personal import PersonalInfo, SquadBonusInfo
+from gui.battle_results.reusable.players import PlayersInfo, PlayerInfo
+from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo, FairplayViolationsInfo
+from gui.battle_results.reusable.vehicles import VehiclesInfo
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, Optional, Tuple
 
@@ -47,33 +48,34 @@ def createReusableInfo(results):
         return info
 
     record = _fetchRecord(results, _RECORD.COMMON)
-    if record is not None:
-        commonInfo = _checkInfo(CommonInfo(vehicles=results[_RECORD.VEHICLES], **record), _RECORD.COMMON)
-    else:
+    if record is None:
         return
-    record = _fetchRecord(results, _RECORD.PERSONAL)
-    if record is not None:
-        personalInfo = _checkInfo(PersonalInfo(record), _RECORD.PERSONAL)
     else:
-        return
-    record = _fetchRecord(results, _RECORD.PLAYERS)
-    if record is not None:
-        playersInfo = _checkInfo(PlayersInfo(record), _RECORD.PLAYERS)
-    else:
-        return
-    record = _fetchRecord(results, _RECORD.VEHICLES)
-    if record is not None:
-        vehiclesInfo = _checkInfo(VehiclesInfo(record), _RECORD.VEHICLES)
-    else:
-        return
-    record = _fetchRecord(results, _RECORD.AVATARS)
-    if record is not None:
-        avatarsInfo = _checkInfo(AvatarsInfo(record), _RECORD.AVATARS)
-    else:
-        return
-    if not unpackedRecords:
-        return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
-    else:
+        bonusType = record['bonusType']
+        commonInfoCls = ReusableInfoFactory.commonInfoForBonusType(bonusType)
+        commonInfo = _checkInfo(commonInfoCls(vehicles=results[_RECORD.VEHICLES], **record), _RECORD.COMMON)
+        record = _fetchRecord(results, _RECORD.PERSONAL)
+        if record is None:
+            return
+        personalInfoCls = ReusableInfoFactory.personalInfoForBonusType(bonusType)
+        personalInfo = _checkInfo(personalInfoCls(bonusType, record), _RECORD.PERSONAL)
+        record = _fetchRecord(results, _RECORD.PLAYERS)
+        if record is None:
+            return
+        playersInfoCls = ReusableInfoFactory.playersInfoForBonusType(bonusType)
+        playersInfo = _checkInfo(playersInfoCls(record), _RECORD.PLAYERS)
+        record = _fetchRecord(results, _RECORD.VEHICLES)
+        if record is None:
+            return
+        vehiclesInfoCls = ReusableInfoFactory.vehiclesInfoForBonusType(bonusType)
+        vehiclesInfo = _checkInfo(vehiclesInfoCls(bonusType, record), _RECORD.VEHICLES)
+        record = _fetchRecord(results, _RECORD.AVATARS)
+        if record is None:
+            return
+        avatarsInfoCls = ReusableInfoFactory.avatarsInfoForBonusType(bonusType)
+        avatarsInfo = _checkInfo(avatarsInfoCls(bonusType, record), _RECORD.AVATARS)
+        if not unpackedRecords:
+            return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
@@ -199,6 +201,10 @@ class _ReusableInfo(object):
     def battlePassProgress(self):
         return self.__battlePassProgress
 
+    @property
+    def bonusType(self):
+        return self.__common.arenaBonusType
+
     def getAvatarInfo(self, dbID=0):
         if not dbID:
             dbID = self.__personal.avatar.accountDBID
@@ -271,15 +277,18 @@ class _ReusableInfo(object):
                     botName = botInfo.realName if botInfo else ''
                     playerInfo = makePlayerInfo(realName=botName, fakeName=botName)
                 vehicle = getItemByCD(intCD) if intCD else None
-                sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, vehicle, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
+                vehicleDetailedInfoCls = ReusableInfoFactory.vehicleDetailedInfoForBonusType(self.bonusType)
+                sortable = vehicleDetailedInfoCls.makeForEnemy(vehicleID, vehicle, playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
                 if not sortable.haveInteractionDetails():
                     continue
                 if (vehicleID, intCD) not in totalSortable:
-                    totalSortable[vehicleID, intCD] = VehicleSummarizeInfo(vehicleID, playerInfo)
+                    vehicleSummarizeInfoCls = ReusableInfoFactory.vehicleSummarizeInfoForBonusType(self.bonusType)
+                    totalSortable[vehicleID, intCD] = vehicleSummarizeInfoCls(vehicleID, playerInfo)
                 totalSortable[vehicleID, intCD].addVehicleInfo(sortable)
                 enemies.append(sortable)
 
-            bases = TeamBasesInfo(vData.get('capturePoints', 0), vData.get('droppedCapturePoints', 0))
+            teamBasesInfoCls = ReusableInfoFactory.teamBasesInfoForBonusType(self.bonusType)
+            bases = teamBasesInfoCls(vData.get('capturePoints', 0), vData.get('droppedCapturePoints', 0))
             totalBases.append(bases)
             yield ((bases,), sorted(enemies, key=sort_keys.VehicleInfoSortKey))
 
@@ -288,7 +297,8 @@ class _ReusableInfo(object):
 
     def getPersonalVehiclesInfo(self, result):
         player = weakref.proxy(self.getPlayerInfo())
-        info = VehicleSummarizeInfo(0, player)
+        vehicleSummarizeInfoCls = ReusableInfoFactory.vehicleSummarizeInfoForBonusType(self.bonusType)
+        info = vehicleSummarizeInfoCls(0, player)
         getItemByCD = self.itemsCache.items.getItemByCD
         for intCD, records in self.__personal.getVehicleCDsIterator(result):
             critsRecords = []
@@ -302,7 +312,8 @@ class _ReusableInfo(object):
                     if vehicleInfo.accountDBID != playerDBID and vehicleInfo.team != playerTeam:
                         critsRecords.append(data['crits'])
 
-            info.addVehicleInfo(VehicleDetailedInfo.makeForVehicle(0, getItemByCD(intCD), player, records, critsRecords=critsRecords))
+            vehicleDetailedInfoCls = ReusableInfoFactory.vehicleDetailedInfoForBonusType(self.bonusType)
+            info.addVehicleInfo(vehicleDetailedInfoCls.makeForVehicle(0, getItemByCD(intCD), player, records, critsRecords=critsRecords))
 
         info.addAvatarInfo(weakref.proxy(self.getAvatarInfo()))
         return info
@@ -379,3 +390,17 @@ class _ReusableInfo(object):
         setter = self.__players.setSquadIndex
         for vehicleID, squadIndex in self.__squadFinder.findSquads():
             setter(getAccountID(vehicleID), squadIndex)
+
+
+ReusableInfoFactory.setDefaults({ReusableInfoFactory.Keys.COMMON: CommonInfo,
+ ReusableInfoFactory.Keys.AVATARS: AvatarsInfo,
+ ReusableInfoFactory.Keys.AVATAR: AvatarInfo,
+ ReusableInfoFactory.Keys.PERSONAL: PersonalInfo,
+ ReusableInfoFactory.Keys.PLAYERS: PlayersInfo,
+ ReusableInfoFactory.Keys.PLAYER: PlayerInfo,
+ ReusableInfoFactory.Keys.TEAM_BASES: TeamBasesInfo,
+ ReusableInfoFactory.Keys.VEHICLE_DETAILED: VehicleDetailedInfo,
+ ReusableInfoFactory.Keys.VEHICLE_SUMMARIZED: VehicleSummarizeInfo,
+ ReusableInfoFactory.Keys.VEHICLES: VehiclesInfo,
+ ReusableInfoFactory.Keys.FAIRPLAY_VIOLATIONS: FairplayViolationsInfo,
+ ReusableInfoFactory.Keys.SQUAD_BONUS: SquadBonusInfo})

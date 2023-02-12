@@ -5,15 +5,16 @@ import BigWorld
 from chat_shared import CHAT_ACTIONS
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
-from gui.shared.system_factory import collectMessengerClientFormatter
+from gui.shared.system_factory import collectMessengerClientFormatter, collectMessengerServerFormatter
 from ids_generators import SequenceIDGenerator
-from messenger.formatters import collections_by_type
 from messenger.m_constants import MESSENGER_SCOPE, SCH_MSGS_MAX_LENGTH
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+from messenger.formatters.collections_by_type import initRegistrationFormatters
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from messenger.proto.events import g_messengerEvents
 from adisp import adisp_process
+initRegistrationFormatters()
 
 class ServiceChannelManager(ChatActionsListener):
 
@@ -93,7 +94,7 @@ class ServiceChannelManager(ChatActionsListener):
     @adisp_process
     def __addServerMessage(self, message):
         yield lambda callback: callback(True)
-        formatter = collections_by_type.SERVER_FORMATTERS.get(message.type)
+        formatter = collectMessengerServerFormatter(message.type)
         serviceChannel = g_messengerEvents.serviceChannel
         serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
         LOG_DEBUG('Server message received', message, formatter)

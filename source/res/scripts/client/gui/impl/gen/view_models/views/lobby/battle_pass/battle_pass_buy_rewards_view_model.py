@@ -14,7 +14,7 @@ class PackageType(IntEnum):
 class BattlePassBuyRewardsViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(BattlePassBuyRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -33,34 +33,43 @@ class BattlePassBuyRewardsViewModel(ViewModel):
     def getFutureRewardsType():
         return RewardItemModel
 
+    @property
+    def topPriorityRewards(self):
+        return self._getViewModel(2)
+
+    @staticmethod
+    def getTopPriorityRewardsType():
+        return RewardItemModel
+
     def getFromLevel(self):
-        return self._getNumber(2)
-
-    def setFromLevel(self, value):
-        self._setNumber(2, value)
-
-    def getToLevel(self):
         return self._getNumber(3)
 
-    def setToLevel(self, value):
+    def setFromLevel(self, value):
         self._setNumber(3, value)
 
+    def getToLevel(self):
+        return self._getNumber(4)
+
+    def setToLevel(self, value):
+        self._setNumber(4, value)
+
     def getPackageState(self):
-        return PackageType(self._getNumber(4))
+        return PackageType(self._getNumber(5))
 
     def setPackageState(self, value):
-        self._setNumber(4, value.value)
+        self._setNumber(5, value.value)
 
     def getChapterID(self):
-        return self._getNumber(5)
+        return self._getNumber(6)
 
     def setChapterID(self, value):
-        self._setNumber(5, value)
+        self._setNumber(6, value)
 
     def _initialize(self):
         super(BattlePassBuyRewardsViewModel, self)._initialize()
         self._addViewModelProperty('nowRewards', UserListModel())
         self._addViewModelProperty('futureRewards', UserListModel())
+        self._addViewModelProperty('topPriorityRewards', UserListModel())
         self._addNumberProperty('fromLevel', 0)
         self._addNumberProperty('toLevel', 0)
         self._addNumberProperty('packageState')

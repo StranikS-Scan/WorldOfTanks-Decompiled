@@ -102,21 +102,23 @@ class TiersLimitSubview(ViewImpl):
             self.update()
 
     def __updateViewModel(self):
+        from gui.impl.lobby.platoon.platoon_config import EPlatoonLayout
         platoonCtrl = self.__platoonCtrl
         layoutID = self.getParentView().layoutID
+        currentPlatoonLayouts = platoonCtrl.currentPlatoonLayouts
         isInSearch = platoonCtrl.isInSearch()
         isInQueue = platoonCtrl.isInQueue()
         hasTierPreferences = platoonCtrl.isTankLevelPreferenceEnabled()
         tiersString = self.__tiersString if platoonCtrl.canStartSearch() else ''
         with self.viewModel.transaction() as model:
-            hasResetSettingsButton = bool(tiersString) and layoutID != R.views.lobby.platoon.SearchingDropdown() and platoonCtrl.canStartSearch() and not isInSearch
-            hasLookingForCaption = hasTierPreferences and layoutID == R.views.lobby.platoon.SearchingDropdown() and bool(tiersString)
-            hasTiersString = hasTierPreferences and layoutID != R.views.lobby.platoon.MembersWindow() and bool(tiersString) and platoonCtrl.canStartSearch()
+            hasResetSettingsButton = bool(tiersString) and layoutID != currentPlatoonLayouts.get(EPlatoonLayout.SEARCH).layoutID and platoonCtrl.canStartSearch() and not isInSearch
+            hasLookingForCaption = hasTierPreferences and layoutID == currentPlatoonLayouts.get(EPlatoonLayout.SEARCH).layoutID and bool(tiersString)
+            hasTiersString = hasTierPreferences and layoutID != currentPlatoonLayouts.get(EPlatoonLayout.MEMBER).layoutID and bool(tiersString) and platoonCtrl.canStartSearch()
             hasFilterOptions = hasTierPreferences or platoonCtrl.isVOIPEnabled()
-            hasSettingsButton = layoutID != R.views.lobby.platoon.SearchingDropdown() and platoonCtrl.canStartSearch() and hasFilterOptions
-            isSettingsButtonEnabled = not isInQueue and not isInSearch and platoonCtrl.hasFreeSlot() or layoutID == R.views.lobby.platoon.PlatoonDropdown()
-            usePopover = layoutID == R.views.lobby.platoon.MembersWindow()
-            useLight = layoutID == R.views.lobby.platoon.SearchingDropdown()
+            hasSettingsButton = layoutID != currentPlatoonLayouts.get(EPlatoonLayout.SEARCH).layoutID and platoonCtrl.canStartSearch() and hasFilterOptions
+            isSettingsButtonEnabled = not isInQueue and not isInSearch and platoonCtrl.hasFreeSlot() or layoutID == currentPlatoonLayouts.get(EPlatoonLayout.WELCOME).layoutID
+            usePopover = layoutID == currentPlatoonLayouts.get(EPlatoonLayout.MEMBER).layoutID
+            useLight = layoutID == currentPlatoonLayouts.get(EPlatoonLayout.SEARCH).layoutID
             model.setHasResetButton(hasResetSettingsButton)
             model.setHasLookingForCaption(hasLookingForCaption)
             model.setHasTiersCaption(hasTiersString)

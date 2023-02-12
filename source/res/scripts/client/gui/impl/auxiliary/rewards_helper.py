@@ -47,7 +47,6 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
 from helpers import dependency, int2roman
-from helpers.func_utils import makeFlashPath
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 STYLES_TAGS = []
@@ -400,7 +399,7 @@ class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
     def _formatVehicle(self, vehicle, model, showCongrats):
         with model.congratsViewModel.transaction() as tx:
             vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
-            image = makeFlashPath(vehicle.getShopIcon())
+            image = vehicle.getShopIcon()
             tx.setVehicleIsElite(vehicle.isElite)
             tx.setVehicleType(vehicleType)
             tx.setVehicleLvl(int2roman(vehicle.level))
@@ -839,7 +838,7 @@ def _fillVehicleBlueprintCongratsModel(vehicle, model, itemsCache, congratsType,
         filledCount, totalCount, canConvert = blueprintData
         with model.congratsViewModel.transaction() as tx:
             vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
-            image = makeFlashPath(vehicle.getShopIcon())
+            image = vehicle.getShopIcon()
             tx.setShowCongrats(showCongrats)
             tx.setVehicleIsElite(vehicle.isElite)
             tx.setVehicleType(vehicleType)

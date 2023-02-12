@@ -7,9 +7,8 @@ import json
 import copy
 import cPickle as pickle
 import logging
-import httplib
+import zlib
 from collections import defaultdict
-from functools import partial
 import Math
 import BigWorld
 import ArenaType
@@ -24,14 +23,12 @@ import TriggersManager
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
-from gui.SystemMessages import pushI18nMessage, SM_TYPE
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, Configs
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
 from helpers import dependency
 from gui.app_loader import settings
-from post_progression_common import SERVER_SETTINGS_KEY
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
@@ -39,7 +36,6 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 _logger = logging.getLogger(__name__)
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
@@ -48,9 +44,7 @@ FIXED_REPLAY_FILENAME = 'replay_last_battle'
 REPLAY_TIME_MARK_CLIENT_READY = 2147483648L
 REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
-REPLAY_DOWNLOAD_TIMEOUT = 2.0
 FAST_FORWARD_STEP = 20.0
-_BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
 _POSTMORTEM_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.DEATH_FREE_CAM, CTRL_MODE_NAME.RESPAWN_DEATH)
 _FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM,
  CTRL_MODE_NAME.VIDEO,
@@ -201,7 +195,6 @@ class BattleReplay(object):
         self.__updateGunOnTimeWarp = False
 
     isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
-    isBattleSimulation = property(lambda self: self.__isBattleSimulation)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -218,6 +211,7 @@ class BattleReplay(object):
         self.__replayCtrl = BigWorld.WGReplayController()
         self.__replayCtrl.replayFinishedCallback = self.onReplayFinished
         self.__replayCtrl.replayTerminatedCallback = self.onReplayTerminated
+        self.__replayCtrl.replayMetaDataCallback = self.onReplayMetaData
         self.__replayCtrl.controlModeChangedCallback = self.onControlModeChanged
         self.__replayCtrl.ammoButtonPressedCallback = self.__onAmmoButtonPressed
         self.__replayCtrl.playerVehicleIDChangedCallback = self.onPlayerVehicleIDChanged
@@ -236,13 +230,9 @@ class BattleReplay(object):
         self.__isFinished = False
         self.__isMenuShowed = False
         self.__updateGunOnTimeWarp = False
-        self.__isBattleSimulation = False
-        self.__lastObservedVehicleID = None
+        self.__lastObservedVehicleID = NULL_ENTITY_ID
         self.__aoi = SimulatedAoI()
         self.__isVehicleChanging = False
-        battleSimulationSection = userPrefs[_BATTLE_SIMULATION_KEY_PATH]
-        if battleSimulationSection is not None:
-            self.__isBattleSimulation = battleSimulationSection.asBool
         self.__playerDatabaseID = 0
         self.__serverSettings = dict()
         if isPlayerAccount():
@@ -280,7 +270,6 @@ class BattleReplay(object):
                 pass
 
         self.__originalPickleLoads = None
-        self.__demandedToWatchFileName = None
         return
 
     def subscribe(self):
@@ -308,6 +297,7 @@ class BattleReplay(object):
         self.enableAutoRecordingBattles(False)
         self.__replayCtrl.replayTerminatedCallback = None
         self.__replayCtrl.replayFinishedCallback = None
+        self.__replayCtrl.replayMetaDataCallback = None
         self.__replayCtrl.controlModeChangedCallback = None
         self.__replayCtrl.clientVersionDiffersCallback = None
         self.__replayCtrl.playerVehicleIDChangedCallback = None
@@ -323,15 +313,6 @@ class BattleReplay(object):
         self.__arenaPeriod = -1
         return
 
-    def testOrCreateReplayDir(self):
-        try:
-            if not os.path.isdir(self.__replayDir):
-                os.makedirs(self.__replayDir)
-            return True
-        except Exception:
-            LOG_ERROR('Failed to create directory for replay files')
-            return False
-
     def record(self, fileName=None):
         if self.isPlaying:
             return False
@@ -342,8 +323,13 @@ class BattleReplay(object):
         useAutoFilename = False
         if fileName is None:
             useAutoFilename = True
-        if not self.testOrCreateReplayDir():
+        try:
+            if not os.path.isdir(self.__replayDir):
+                os.makedirs(self.__replayDir)
+        except Exception:
+            LOG_ERROR('Failed to create directory for replay files')
             return False
+
         success = False
         for i in xrange(100):
             try:
@@ -414,7 +400,7 @@ class BattleReplay(object):
             wasServerReplay = self.isServerSideReplay
             isOffline = self.__replayCtrl.isOfflinePlaybackMode
             self.__aoi.reset()
-            self.__lastObservedVehicleID = None
+            self.__lastObservedVehicleID = NULL_ENTITY_ID
             self.__replayCtrl.stop(delete)
             self.__fileName = None
             self.__isVehicleChanging = False
@@ -436,63 +422,22 @@ class BattleReplay(object):
                     self.__goToNextReplay()
             return True
 
-    def getDemandedToWatchFileName(self):
-        return self.__demandedToWatchFileName
-
     def onReplayTerminated(self, reason):
-        _logger.debug('BattleReplay.onReplayTerminated: reason=%r', reason)
-        g_replayEvents.onReplayTerminated()
+        _logger.info('BattleReplay.onReplayTerminated: reason=%r', reason)
+        g_replayEvents.onReplayTerminated(reason)
         self.__isFinished = False
         if self.__originalPickleLoads is not None:
             pickle.loads = self.__originalPickleLoads
             self.__originalPickleLoads = None
         return
 
+    def onReplayMetaData(self, metaData):
+        if 'serverSettings' in metaData:
+            self.__serverSettings = pickle.loads(zlib.decompress(base64.b64decode(metaData['serverSettings'])))
+
     def onEntityAoIChangedCallback(self, witnessID, entityID, hasEnteredAoI):
         _logger.debug('BattleReplay: onEntityAoIChangedCallback: witnessID=%s, entityID=%s, hasEnteredAoI=%s', witnessID, entityID, hasEnteredAoI)
         self.__aoi.handleAoIEvent(witnessID, entityID, hasEnteredAoI)
-
-    def downloadReplay(self, url, timeout=REPLAY_DOWNLOAD_TIMEOUT, callback=None):
-        if not self.testOrCreateReplayDir():
-            return
-        else:
-            LOG_DEBUG('Starting replay download %s into, timeout %ds' % (url, timeout))
-            BigWorld.fetchURL(url, partial(self.onReplayDownloaded, url=url, callback=callback), None, timeout, 'GET')
-            return
-
-    def onReplayDownloaded(self, response, url='', callback=None):
-        filename = os.path.join(self.__replayDir, url.split('/')[-1])
-        isSuccess = False
-        if response.responseCode != httplib.OK:
-            LOG_ERROR('Replay download error : %d' % response.responseCode)
-        else:
-            try:
-                open(filename, 'wb').write(response.body)
-                LOG_DEBUG('Replay downloaded to file %s' % filename)
-                isSuccess = True
-            except EnvironmentError as error:
-                LOG_ERROR('Replay write to file error : %s' % error)
-
-        if not isSuccess:
-            pushI18nMessage('#system_messages:ssr/unavailable', type=SM_TYPE.Error)
-        if callback is not None:
-            callback(isSuccess, filename)
-        return
-
-    def downloadAndPlayServerSideReplay(self, url):
-        self.downloadReplay(url, REPLAY_DOWNLOAD_TIMEOUT, lambda isSuccess, filename: self.startWatchingServerSideReplay(filename) if isSuccess else None)
-
-    def startWatchingServerSideReplay(self, filename, callback=None):
-        if not filename or not os.path.isfile(filename):
-            LOG_ERROR('Replay file %s is not accessible' % str(filename))
-            return
-        if isPlayerAccount():
-            self.__demandedToWatchFileName = filename
-            if self.isRecording:
-                self.stop(delete=True)
-            BigWorld.player().startWatchingReplay(callback)
-        else:
-            LOG_ERROR('Player is not Account, cannot start watching')
 
     def getAutoStartFileName(self):
         return self.__replayCtrl.getAutoStartFileName()
@@ -512,8 +457,6 @@ class BattleReplay(object):
 
     def handleKeyEvent(self, isDown, key, mods, isRepeat, event):
         if not self.isPlaying:
-            return False
-        if self.isBattleSimulation:
             return False
         if self.isTimeWarpInProgress:
             return True
@@ -548,7 +491,9 @@ class BattleReplay(object):
         if key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key):
             if isDown and not isCursorVisible:
                 if self.isServerSideReplay:
-                    return self.ssrSwitchViewPoint()
+                    if self.__arenaPeriod == ARENA_PERIOD.BATTLE:
+                        player.switchObserverFPV()
+                    return True
                 if self.isControllingCamera:
                     self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
                     controlMode = self.getControlMode()
@@ -636,30 +581,6 @@ class BattleReplay(object):
             if dz != 0:
                 return True
         return False
-
-    def ssrSwitchViewPoint(self):
-        if not self.isServerSideReplay:
-            _logger.error('BattleReplay.ssrSwitchViewPoint called but isServerSideReplay==False')
-            return False
-        return self.ssrSwitchToVideoControlMode() if self.getControlMode() == CTRL_MODE_NAME.POSTMORTEM else self.ssrSwitchToPostmortemControlMode()
-
-    def ssrSwitchToVideoControlMode(self):
-        _logger.debug('BattleReplay.ssrSwitchToVideoControlMode')
-        if self.getControlMode() == CTRL_MODE_NAME.VIDEO:
-            return False
-        self.setControlMode(CTRL_MODE_NAME.VIDEO)
-        self.onControlModeChanged(CTRL_MODE_NAME.VIDEO)
-        self.__showInfoMessage('replayFreeCameraActivated')
-        return True
-
-    def ssrSwitchToPostmortemControlMode(self):
-        _logger.debug('BattleReplay.ssrSwitchToPostmortemControlMode')
-        if self.getControlMode() == CTRL_MODE_NAME.POSTMORTEM:
-            return False
-        self.setControlMode(CTRL_MODE_NAME.POSTMORTEM)
-        self.onControlModeChanged(CTRL_MODE_NAME.POSTMORTEM)
-        self.__showInfoMessage('replaySavedCameraActivated')
-        return True
 
     def setGunRotatorTargetPoint(self, value):
         self.__replayCtrl.gunRotatorTargetPoint = value
@@ -793,76 +714,89 @@ class BattleReplay(object):
         return self.__replayCtrl.controlMode
 
     def onClientReady(self):
+        player = BigWorld.player()
         if not (self.isPlaying or self.isRecording):
             return
-        elif self.isRecording and BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.TUTORIAL:
-            self.stop(None, True)
-            return
+        self.__replayCtrl.playerVehicleID = player.playerVehicleID
+        self.__replayCtrl.onClientReady()
+        if self.isPlaying:
+            if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
+                self.__logSVNInfo()
+            AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
+            if isPlayerAvatar():
+                player.onVehicleEnterWorld += self.__onVehicleEnterWorld
+                player.onObserverVehicleChanged += self.__onObserverVehicleChanged
+                if isServerSideReplay():
+                    otherVehicles = [ x for x in BigWorld.entities.valuesOfType('Vehicle') if x.id != player.playerVehicleID ]
+                    self.bindToVehicleForServerSideReplay(player.playerVehicleID)
+                    player.updateVehicleHealth(player.playerVehicleID, 0, 0, 1, 0)
+                    if otherVehicles:
+                        if self.__lastObservedVehicleID not in BigWorld.entities.keys():
+                            self.bindToVehicleForServerSideReplay(otherVehicles[-1].id)
+                        else:
+                            self.bindToVehicleForServerSideReplay(self.__lastObservedVehicleID)
+            if not self.isServerSideReplay:
+                self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
+        if self.isRecording:
+            player = BigWorld.player()
+            arena = player.arena
+            arenaName = arena.arenaType.geometry
+            i = arenaName.find('/')
+            if i != -1:
+                arenaName = arenaName[i + 1:]
+            now = datetime.datetime.now()
+            now = '%02d.%02d.%04d %02d:%02d:%02d' % (now.day,
+             now.month,
+             now.year,
+             now.hour,
+             now.minute,
+             now.second)
+            vehicleName = BigWorld.entities[player.playerVehicleID].typeDescriptor.name
+            vehicleName = vehicleName.replace(':', '-')
+            vehicles = self.__getArenaVehiclesInfo()
+            gameplayID = player.arenaTypeID >> 16
+            clientVersionFromXml = getFullClientVersion()
+            clientVersionFromExe = BigWorld.wg_getProductVersion()
+            arenaInfo = {'dateTime': now,
+             'playerName': player.name,
+             'playerID': self.__playerDatabaseID,
+             'playerVehicle': vehicleName,
+             'mapName': arenaName,
+             'mapDisplayName': arena.arenaType.name,
+             'gameplayID': ArenaType.getGameplayName(gameplayID) or gameplayID,
+             'vehicles': vehicles,
+             'battleType': arena.bonusType,
+             'clientVersionFromExe': clientVersionFromExe,
+             'clientVersionFromXml': clientVersionFromXml,
+             'serverName': self.connectionMgr.serverUserName,
+             'regionCode': constants.AUTH_REALM,
+             'serverSettings': self.__serverSettings,
+             'hasMods': self.__replayCtrl.hasMods}
+            if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
+                arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
+            if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
+                from bootcamp.Bootcamp import g_bootcamp
+                arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
+                arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
+            self.__replayCtrl.recMapName = arenaName
+            self.__replayCtrl.recPlayerVehicleName = vehicleName
+            self.__replayCtrl.recBattleModeTag = _ARENA_GUI_TYPE_TO_MODE_TAG.get(arena.guiType, '')
+            self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
         else:
-            self.__replayCtrl.playerVehicleID = BigWorld.player().playerVehicleID
-            self.__replayCtrl.onClientReady()
-            if self.isPlaying:
-                if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
-                    self.__logSVNInfo()
-                AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
-                if isPlayerAvatar():
-                    BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
-                    BigWorld.player().onObserverVehicleChanged += self.__onObserverVehicleChanged
-                    if isServerSideReplay():
-                        BigWorld.player().startServerSideReplay()
-                if not self.isServerSideReplay:
-                    self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
-            if self.isRecording:
-                player = BigWorld.player()
-                arena = player.arena
-                arenaName = arena.arenaType.geometry
-                i = arenaName.find('/')
-                if i != -1:
-                    arenaName = arenaName[i + 1:]
-                now = datetime.datetime.now()
-                now = '%02d.%02d.%04d %02d:%02d:%02d' % (now.day,
-                 now.month,
-                 now.year,
-                 now.hour,
-                 now.minute,
-                 now.second)
-                vehicleName = BigWorld.entities[player.playerVehicleID].typeDescriptor.name
-                vehicleName = vehicleName.replace(':', '-')
-                vehicles = self.__getArenaVehiclesInfo()
-                gameplayID = player.arenaTypeID >> 16
-                clientVersionFromXml = getFullClientVersion()
-                clientVersionFromExe = BigWorld.wg_getProductVersion()
-                arenaInfo = {'dateTime': now,
-                 'playerName': player.name,
-                 'playerID': self.__playerDatabaseID,
-                 'playerVehicle': vehicleName,
-                 'mapName': arenaName,
-                 'mapDisplayName': arena.arenaType.name,
-                 'gameplayID': ArenaType.getGameplayName(gameplayID) or gameplayID,
-                 'vehicles': vehicles,
-                 'battleType': arena.bonusType,
-                 'clientVersionFromExe': clientVersionFromExe,
-                 'clientVersionFromXml': clientVersionFromXml,
-                 'serverName': self.connectionMgr.serverUserName,
-                 'regionCode': constants.AUTH_REALM,
-                 'serverSettings': self.__serverSettings,
-                 'hasMods': self.__replayCtrl.hasMods}
-                if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
-                    arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
-                if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
-                    from bootcamp.Bootcamp import g_bootcamp
-                    arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
-                    arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
-                self.__replayCtrl.recMapName = arenaName
-                self.__replayCtrl.recPlayerVehicleName = vehicleName
-                self.__replayCtrl.recBattleModeTag = _ARENA_GUI_TYPE_TO_MODE_TAG.get(arena.guiType, '')
-                self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
-            else:
-                self.__showInfoMessages()
-                if self.replayTimeout > 0:
-                    LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
-                    BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
-            return
+            self.__showInfoMessages()
+            if self.replayTimeout > 0:
+                LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
+                BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
+
+    def bindToVehicleForServerSideReplay(self, vehicleID):
+        LOG_DEBUG('Avatar.bindToVehicleForServerSideReplay: vehicleID=%s' % vehicleID)
+        player = BigWorld.player()
+        player.isObserverFPV, isObserverFPV = False, player.isObserverFPV
+        if player.isObserverFPV != isObserverFPV:
+            player.set_isObserverFPV(isObserverFPV)
+        BWReplay.wg_withholdEntity(vehicleID, False)
+        BWReplay.wg_injectNonVolatileUpdate(player.id, vehicleID, player.position, (player.yaw, player.pitch, player.roll))
+        player.onSwitchViewpoint(vehicleID, Math.Vector3(0, 0, 0))
 
     @property
     def isNormalSpeed(self):
@@ -921,7 +855,6 @@ class BattleReplay(object):
     def loadServerSettings(self):
         if self.isPlaying:
             if not self.isServerSideReplay:
-                self.__serverSettings = dict()
                 try:
                     self.__serverSettings = self.arenaInfo.get('serverSettings')
                 except Exception:
@@ -991,9 +924,6 @@ class BattleReplay(object):
                 self.__lastObservedVehicleID = vehID
             self.__aoi.changeVehicle(vehID)
         self.__isVehicleChanging = False
-
-    def getLastObservedVehicleID(self):
-        return self.__lastObservedVehicleID
 
     def isVehicleChanging(self):
         return self.__isVehicleChanging
@@ -1120,7 +1050,7 @@ class BattleReplay(object):
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'flXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'bpcoinReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'flXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'bpcoinReplay', 'freeXPReplay', 'avatarDamageEventList', 'equipCoinReplay'):
                         personal[field] = None
 
                     for currency in personal.get('currencies', {}).itervalues():
@@ -1144,17 +1074,9 @@ class BattleReplay(object):
         else:
             player = BigWorld.player()
             serverSettings = player.serverSettings
-            self.__serverSettings['roaming'] = serverSettings['roaming']
-            self.__serverSettings['isPotapovQuestEnabled'] = serverSettings.get('isPotapovQuestEnabled', False)
-            self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
-            self.__serverSettings['battle_royale_config'] = serverSettings['battle_royale_config']
-            self.__serverSettings['epic_config'] = serverSettings['epic_config']
-            self.__serverSettings[SERVER_SETTINGS_KEY] = serverSettings[SERVER_SETTINGS_KEY]
-            self.__serverSettings[Configs.COMP7_CONFIG.value] = serverSettings.get(Configs.COMP7_CONFIG.value)
-            if Configs.FUN_RANDOM_CONFIG.value in serverSettings:
-                self.__serverSettings[Configs.FUN_RANDOM_CONFIG.value] = serverSettings[Configs.FUN_RANDOM_CONFIG.value]
-            if 'spgRedesignFeatures' in serverSettings:
-                self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
+            for cfgName in INBATTLE_CONFIGS:
+                self.__serverSettings[cfgName] = serverSettings[cfgName]
+
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
@@ -1335,11 +1257,3 @@ def isFinished():
 
 def getSpaceID():
     return g_replayCtrl.getSpaceID() if g_replayCtrl is not None else BigWorld.player().spaceID
-
-
-def getDemandedToWatchFileName():
-    return g_replayCtrl.getDemandedToWatchFileName() if g_replayCtrl is not None else None
-
-
-def customCallback(result, filename):
-    LOG_DEBUG('Replay Downloaded Custom Callback : result = %d, filename = %s' % (result, filename))

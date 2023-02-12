@@ -25,11 +25,12 @@ _logger = logging.getLogger(__name__)
 
 class SearchView(ViewImpl, CallbackDelayer):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
+    _layoutID = R.views.lobby.platoon.SearchingDropdown()
     QUEUE_INFO_UPDATE_TIME = 5
     searchTimestamp = 0
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.lobby.platoon.SearchingDropdown(), model=SearchingDropdownModel())
+        settings = ViewSettings(layoutID=self._layoutID, model=SearchingDropdownModel())
         self.__tiersLimitSubview = TiersLimitSubview()
         self.__prbEntityType = self.__platoonCtrl.getPrbEntityType()
         super(SearchView, self).__init__(settings)

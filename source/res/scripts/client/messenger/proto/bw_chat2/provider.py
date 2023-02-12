@@ -6,7 +6,7 @@ import BattleReplay
 import BigWorld
 import Event
 from BattleReplay import CallbackDataNames
-from chat_commands_consts import CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS, BATTLE_CHAT_COMMAND_NAMES
+from chat_commands_consts import CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils import transport
@@ -78,10 +78,6 @@ class BWChatProvider(object):
 
     def onActionReceived(self, actionID, reqID, args):
         self.__replayHelper.onActionReceived(actionID, reqID, args)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isServerSideReplay:
-            if self.__skipReplayChat(actionID, reqID, args):
-                return
         handlers = self.__handlers[actionID]
         for handler in handlers:
             try:
@@ -216,20 +212,6 @@ class BWChatProvider(object):
             targetID = args['int32Arg1']
             sndrBlockReason = areSenderCooldownsActive(currTime, self.__battleCmdCooldowns, actionID, targetID)
             return sndrBlockReason.cooldownType != CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN if sndrBlockReason is not None else False
-
-    def __skipReplayChat(self, actionID, reqID, args):
-        replayCtrl = BattleReplay.g_replayCtrl
-        reqVehID = args['int64Arg1']
-        if actionID == _ACTIONS.ON_BATTLE_MESSAGE_BROADCAST and not replayCtrl.isAllyToObservedVehicle(reqVehID):
-            return True
-        else:
-            if _ACTIONS.battleChatCommandFromActionID(actionID) is not None:
-                if _ACTIONS.battleChatCommandFromActionID(actionID).name in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG, BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY):
-                    if replayCtrl.isAllyToObservedVehicle(reqVehID):
-                        return True
-                elif not replayCtrl.isAllyToObservedVehicle(reqVehID):
-                    return True
-            return False
 
 
 class ActionsHandler(object):

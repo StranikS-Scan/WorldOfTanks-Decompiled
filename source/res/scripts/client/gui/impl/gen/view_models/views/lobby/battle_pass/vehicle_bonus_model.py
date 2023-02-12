@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import R
 class VehicleBonusModel(RewardItemModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=17, commands=0):
         super(VehicleBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getIsElite(self):
@@ -32,16 +32,9 @@ class VehicleBonusModel(RewardItemModel):
     def setVehicleLvl(self, value):
         self._setNumber(16, value)
 
-    def getVehicleNation(self):
-        return self._getString(17)
-
-    def setVehicleNation(self, value):
-        self._setString(17, value)
-
     def _initialize(self):
         super(VehicleBonusModel, self)._initialize()
         self._addBoolProperty('isElite', True)
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('vehicleType', '')
         self._addNumberProperty('vehicleLvl', 0)
-        self._addStringProperty('vehicleNation', '')

@@ -2,9 +2,8 @@
 # Embedded file name: scripts/common/visual_script/vehicle_blocks.py
 from block import Block, Meta
 from slot_types import SLOT_TYPE
-from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript
-vehicles = dependencyImporter('items.vehicles')
+import items.vehicles as vehicles
 
 class VehicleMeta(Meta):
 

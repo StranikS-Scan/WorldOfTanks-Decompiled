@@ -6,15 +6,13 @@ import typing
 from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
-from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
-from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
-from wg_async import wg_async, wg_await
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
 from gui import DialogsInterface, GUI_SETTINGS, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialogMeta, I18nInfoDialogMeta
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getRentVehicleUrl, getShopURL, getTelecomRentVehicleUrl
@@ -32,7 +30,6 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
@@ -54,7 +51,7 @@ from gui.shared import events, g_eventBus
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import getUserName, getNationLessName
+from gui.shared.gui_items.Vehicle import getNationLessName, getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -71,8 +68,11 @@ from skeletons.gui.game_control import IBrowserController, IClanNotificationCont
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
@@ -556,8 +556,7 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
      'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
      'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
      'itemsPack': kwargs.get('itemsPack'),
-     'backBtnLabel': kwargs.get('backBtnLabel'),
-     'isHeroInteractive': kwargs.get('isHeroInteractive')}), EVENT_BUS_SCOPE.LOBBY)
+     'backBtnLabel': kwargs.get('backBtnLabel')}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showDelayedReward():
@@ -734,10 +733,6 @@ def stopTutorial():
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.STOP_TRAINING), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
-def runTutorialChain(chapterID):
-    g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='TRIGGERS_CHAINS', initialChapter=chapterID, restoreIfRun=True))
-
-
 def runSalesChain(chapterID, restoreIfRun=True, reloadIfRun=False, isStopForced=False):
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='SALES_TRIGGERS', initialChapter=chapterID, restoreIfRun=restoreIfRun, reloadIfRun=reloadIfRun, isStopForced=isStopForced))
 
@@ -871,9 +866,9 @@ def showSeniorityRewardAwardWindow(completedQuests, data, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True):
+def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True, packageRewards=None):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
-    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, needNotifyClosing)
+    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, packageRewards, needNotifyClosing)
 
 
 def showBattlePassHowToEarnPointsView(parent=None, chapterID=0):
@@ -1973,9 +1968,3 @@ def showComp7WinsRewardsScreen(quest, notificationMgr=None):
     from gui.impl.lobby.comp7.views.rewards_screen import WinsRewardsScreenWindow
     window = WinsRewardsScreenWindow(quest=quest)
     notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showBattlePassTankmenVoiceover():
-    from gui.impl.lobby.battle_pass.tankmen_voiceover_view import TankmenVoiceoverWindow
-    window = TankmenVoiceoverWindow()
-    window.load()

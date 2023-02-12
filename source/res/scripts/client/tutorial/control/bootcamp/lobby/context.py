@@ -6,13 +6,13 @@ from skeletons.gui.game_control import IBootcampController
 
 class BootcampLobbyStartReqs(context.StartReqs):
 
+    def isEnabled(self):
+        return self.bootcampController.isInBootcamp()
+
     def prepare(self, ctx):
         pass
 
     def process(self, descriptor, ctx):
-        return True
-
-    def _isBootcamp(self):
         return True
 
 

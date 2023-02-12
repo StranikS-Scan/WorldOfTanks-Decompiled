@@ -360,7 +360,7 @@ def getDistanceToGunMarker(avatar=None):
 
 def isVehicleStunned():
     attachedVehicle = BigWorld.player().getVehicleAttached()
-    return attachedVehicle.stunInfo > 0.0 if attachedVehicle is not None else False
+    return attachedVehicle.stunInfo.stunFinishTime > 0.0 if attachedVehicle is not None else False
 
 
 def getHealthPercentage(avatar=None):

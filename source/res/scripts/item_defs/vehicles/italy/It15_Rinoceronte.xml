@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	12	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.063	</moving>
@@ -79,6 +79,11 @@
           <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Hull.model	</exploded>
         </It15_Rinoceronte_3DSt_MD_21_XXII>
+        <It15_Rinoceronte__BXI_3DSt>
+          <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Hull.model	</exploded>
+        </It15_Rinoceronte__BXI_3DSt>
       </sets>
     </models>
     <swinging>
@@ -1196,6 +1201,52 @@
         <clipAngle>	0.409437	</clipAngle>
         <anchorShift>	0.087381	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <position>	1.61055 0.950026 2.81981	</position>
+        <rotation>	1.55567 1.49949 3.06524	</rotation>
+        <compatibleModels>	It15_Rinoceronte__BXI_3DSt	</compatibleModels>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <scale>	0.339439 0.0523597 0.33944	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.043448	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15088	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	It15_Rinoceronte__BXI_3DSt	</compatibleModels>
+        <position>	-1.61054 0.950063 2.81981	</position>
+        <rotation>	1.55565 -1.49966 -3.06534	</rotation>
+        <scale>	0.339438 0.15236 0.339439	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.043448	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15089	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	It15_Rinoceronte__BXI_3DSt	</compatibleModels>
+        <position>	-0.000002 1.39476 2.64862	</position>
+        <rotation>	0.494239 -0.000038 3.14139	</rotation>
+        <scale>	0.329975 0.087387 0.329975	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.409437	</clipAngle>
+        <anchorShift>	0.043884	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	It15_Rinoceronte__BXI_3DSt	</compatibleModels>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	96.7538 103.152	</density>
@@ -1238,6 +1289,11 @@
             <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Chassis.model	</exploded>
           </It15_Rinoceronte_3DSt_MD_21_XXII>
+          <It15_Rinoceronte__BXI_3DSt>
+            <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Chassis.model	</exploded>
+          </It15_Rinoceronte__BXI_3DSt>
         </sets>
       </models>
       <traces>
@@ -2308,7 +2364,7 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	190	</armor_1>
+        <armor_1>	210	</armor_1>
         <armor_2>	300	</armor_2>
         <armor_3>	120	</armor_3>
         <armor_4>	120	</armor_4>
@@ -2400,6 +2456,11 @@
                 <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Gun_01.model	</exploded>
               </It15_Rinoceronte_3DSt_MD_21_XXII>
+              <It15_Rinoceronte__BXI_3DSt>
+                <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </It15_Rinoceronte__BXI_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2630,7 +2691,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
               <tags>	formfactor_square	</tags>
-              <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+              <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII It15_Rinoceronte__BXI_3DSt	</compatibleModels>
               <position>	0.000208489 2.29065 0.696106	</position>
               <rotation>	-0.00153222 -0.00233189 3.14101	</rotation>
               <scale>	0.471619 0.205149 0.471622	</scale>
@@ -2648,6 +2709,16 @@
               <applyToFabric>	true	</applyToFabric>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0.045 2.155	</rayStart>
+              <rayEnd>	0 0.045 2.595	</rayEnd>
+              <rayUp>	0.185 0 0	</rayUp>
+              <compatibleModels>	It15_Rinoceronte__BXI_3DSt	</compatibleModels>
+              <size>	0.44	</size>
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -2668,6 +2739,11 @@
             <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte_3DSt_MD_21_XXII/crash/lod0/Turret_01.model	</exploded>
           </It15_Rinoceronte_3DSt_MD_21_XXII>
+          <It15_Rinoceronte__BXI_3DSt>
+            <undamaged>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It15_Rinoceronte/_skins/It15_Rinoceronte__BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </It15_Rinoceronte__BXI_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -3155,7 +3231,7 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35034	</slotId>
           <tags>	formfactor_square direction_right_to_left	</tags>
-          <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII	</compatibleModels>
+          <compatibleModels>	It15_Rinoceronte_3DSt_MD_21_XXII  It15_Rinoceronte__BXI_3DSt	</compatibleModels>
           <position>	0.727616 2.24951 -0.753314	</position>
           <rotation>	0.00368375 0.000046 3.14141	</rotation>
           <scale>	0.70337 0.305961 0.703375	</scale>

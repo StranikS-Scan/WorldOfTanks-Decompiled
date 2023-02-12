@@ -3,8 +3,8 @@
 from collections import defaultdict, namedtuple
 from constants import ARENA_GUI_TYPE
 from gui.battle_control.arena_info import settings
-from gui.shared.system_factory import registerArenaSquadFinders, collectArenaSquadFinder
 from soft_exception import SoftException
+from gui.shared.system_factory import registerSquadFinder, collectSquadFinder
 
 class ISquadFinder(object):
     __slots__ = ()
@@ -175,22 +175,18 @@ class ContinuousNumberingFinder(_SquadFinder):
         raise SoftException('Deprecated class method called - code should not be reached')
 
 
-registerArenaSquadFinders(ARENA_GUI_TYPE.RANDOM_RANGE, TeamScopeNumberingFinder)
-registerArenaSquadFinders([ARENA_GUI_TYPE.EVENT_BATTLES,
- ARENA_GUI_TYPE.EPIC_BATTLE,
- ARENA_GUI_TYPE.BATTLE_ROYALE,
- ARENA_GUI_TYPE.MAPBOX], TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.RANDOM, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.EPIC_RANDOM, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.EVENT_BATTLES, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.EPIC_BATTLE, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.BATTLE_ROYALE, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.MAPBOX, TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.FALLOUT_MULTITEAM, ContinuousNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.COMP7, Comp7TeamScopeNumberingFinder)
 
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()
-    finderCls = collectArenaSquadFinder(arenaVisitor.gui.guiType)
     guiVisitor = arenaVisitor.gui
-    if finderCls is not None:
-        finder = finderCls(teams)
-    elif guiVisitor.isComp7Battle():
-        finder = Comp7TeamScopeNumberingFinder(teams)
-    elif guiVisitor.isMultiTeam():
-        finder = ContinuousNumberingFinder(teams)
-    else:
-        finder = EmptySquadFinder()
+    squadFinderClass = collectSquadFinder(guiVisitor.guiType)
+    finder = squadFinderClass(teams) if squadFinderClass else EmptySquadFinder()
     return finder

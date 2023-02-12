@@ -17,21 +17,25 @@ UNIT_ENTITY_BY_TYPE = 13
 UNIT_ENTRY_POINT_BY_TYPE = 14
 PBR_STORAGE = 15
 PRB_INVITE_HTML_FORMATTER = 16
-PLATOON_VIEW = 17
-NOTIFICATIONS_LISTENERS = 18
-NOTIFICATIONS_ACTIONS_HANDLERS = 19
-MESSENGER_CLIENT_FORMATTERS = 20
-TOKEN_QUEST_SUBFORMATTERS = 21
-MODE_SELECTOR_ITEM = 22
-MODE_SELECTOR_TOOLTIP = 23
-ENTRY_POINT_VALIDATOR = 24
-BATTLE_QUEUE_PROVIDER = 25
-BATTLE_TIPS_CRITERIA = 26
-ARENA_DESCRIPTION = 27
-ARENA_SQUAD_FINDER = 28
-INGAME_HELP_PAGES_BUILDERS = 29
-QUEST_BUILDERS = 30
-AWARD_CONTROLLER_HANDLERS = 31
+NOTIFICATIONS_LISTENERS = 17
+NOTIFICATIONS_ACTIONS_HANDLERS = 18
+MESSENGER_CLIENT_FORMATTERS = 19
+TOKEN_QUEST_SUBFORMATTERS = 20
+MODE_SELECTOR_ITEM = 21
+MODE_SELECTOR_TOOLTIP = 22
+BANNER_ENTRY_POINT_VALIDATOR = 23
+BATTLE_QUEUE_PROVIDER = 24
+BATTLE_TIPS_CRITERIA = 25
+ARENA_DESCRIPTION = 26
+ARENA_SQUAD_FINDER = 27
+INGAME_HELP_PAGES_BUILDERS = 28
+QUEST_BUILDERS = 29
+AWARD_CONTROLLER_HANDLERS = 30
+CAN_SELECT_PRB_ENTITY = 31
+BATTLE_RESULTS_COMPOSER = 32
+SEASON_PROVIDER_HANDLER = 33
+MESSENGER_SERVER_FORMATTERS = 34
+CAROUSEL_EVENTS_ENTRIES = 35
 
 class _CollectEventsManager(object):
 
@@ -265,6 +269,30 @@ def collectAllStorages():
     return storages
 
 
+def registerArenaDescrs(guiType, arenaDescrClass):
+
+    def onCollect(ctx):
+        ctx['arena_descr_class'] = arenaDescrClass
+
+    __collectEM.addListener((ARENA_DESCRIPTION, guiType), onCollect)
+
+
+def collectArenaDescrs(guiType):
+    return __collectEM.handleEvent((ARENA_DESCRIPTION, guiType), ctx={}).get('arena_descr_class')
+
+
+def registerSquadFinder(guiType, squadFinderClass):
+
+    def onCollect(ctx):
+        ctx['squad_finder_class'] = squadFinderClass
+
+    __collectEM.addListener((ARENA_SQUAD_FINDER, guiType), onCollect)
+
+
+def collectSquadFinder(guiType):
+    return __collectEM.handleEvent((ARENA_SQUAD_FINDER, guiType), ctx={}).get('squad_finder_class')
+
+
 def registerNotificationsListeners(listenerClasses):
 
     def onCollect(ctx):
@@ -309,6 +337,18 @@ def collectMessengerClientFormatter(msgType):
     return __collectEM.handleEvent((MESSENGER_CLIENT_FORMATTERS, msgType), ctx={}).get('formatter')
 
 
+def registerMessengerServerFormatter(msgType, formatter):
+
+    def onCollect(ctx):
+        ctx['formatter'] = formatter
+
+    __collectEM.addListener((MESSENGER_SERVER_FORMATTERS, msgType), onCollect)
+
+
+def collectMessengerServerFormatter(msgType):
+    return __collectEM.handleEvent((MESSENGER_SERVER_FORMATTERS, msgType), ctx={}).get('formatter')
+
+
 def registerTokenQuestsSubFormatter(formatter):
 
     def onCollect(ctx):
@@ -346,18 +386,6 @@ def collectPrbInviteHtmlFormatter(prbType):
     return __collectEM.handleEvent((PRB_INVITE_HTML_FORMATTER, prbType), ctx={}).get('formatter')
 
 
-def registerPlatoonView(prbType, platoonViewCls):
-
-    def onCollect(ctx):
-        ctx['platoonViewCls'] = platoonViewCls
-
-    __collectEM.addListener((PLATOON_VIEW, prbType), onCollect)
-
-
-def collectPlatoonView(prbType):
-    return __collectEM.handleEvent((PLATOON_VIEW, prbType), ctx={}).get('platoonViewCls')
-
-
 def registerModeSelectorItem(prbActionName, itemCls):
 
     def onCollect(ctx):
@@ -384,16 +412,28 @@ def collectModeSelectorTooltips():
                               'contentTooltipsMap': {}}}).get('modeSelectorTooltips')
 
 
-def registerEntryPointValidator(alias, validator):
+def registerBannerEntryPointValidator(alias, validator):
 
     def onCollect(ctx):
         ctx['validator'] = validator
 
-    __collectEM.addListener((ENTRY_POINT_VALIDATOR, alias), onCollect)
+    __collectEM.addListener((BANNER_ENTRY_POINT_VALIDATOR, alias), onCollect)
 
 
-def collectEntryPointValidator(alias):
-    return __collectEM.handleEvent((ENTRY_POINT_VALIDATOR, alias), ctx={}).get('validator')
+def collectBannerEntryPointValidator(alias):
+    return __collectEM.handleEvent((BANNER_ENTRY_POINT_VALIDATOR, alias), ctx={}).get('validator')
+
+
+def registerCarouselEventEntryPoint(viewID, viewClass):
+
+    def onCollect(ctx):
+        ctx['carouselEventEntries'][viewID] = viewClass
+
+    __collectEM.addListener(CAROUSEL_EVENTS_ENTRIES, onCollect)
+
+
+def collectCarouselEventEntryPoints():
+    return __collectEM.handleEvent(CAROUSEL_EVENTS_ENTRIES, {'carouselEventEntries': {}})['carouselEventEntries']
 
 
 def registerBattleQueueProvider(queueType, providerCls):
@@ -423,40 +463,6 @@ def registerBattleTipsCriteria(guiTypes, criteriaCls):
 
 def collectBattleTipsCriteria(guiType):
     return __collectEM.handleEvent((BATTLE_TIPS_CRITERIA, guiType), ctx={}).get('criteriaCls')
-
-
-def registerArenaDescription(guiType, descriptionCls):
-
-    def onCollect(ctx):
-        ctx['descriptionCls'] = descriptionCls
-
-    __collectEM.addListener((ARENA_DESCRIPTION, guiType), onCollect)
-
-
-def registerArenaDescriptions(guiTypes, descriptionCls):
-    for guiType in guiTypes:
-        registerArenaDescription(guiType, descriptionCls)
-
-
-def collectArenaDescription(guiType):
-    return __collectEM.handleEvent((ARENA_DESCRIPTION, guiType), ctx={}).get('descriptionCls')
-
-
-def registerArenaSquadFinder(guiType, finderCls):
-
-    def onCollect(ctx):
-        ctx['finderCls'] = finderCls
-
-    __collectEM.addListener((ARENA_SQUAD_FINDER, guiType), onCollect)
-
-
-def registerArenaSquadFinders(guiTypes, finderCls):
-    for guiType in guiTypes:
-        registerArenaSquadFinder(guiType, finderCls)
-
-
-def collectArenaSquadFinder(guiType):
-    return __collectEM.handleEvent((ARENA_SQUAD_FINDER, guiType), ctx={}).get('finderCls')
 
 
 def registerIngameHelpPagesBuilder(builder):
@@ -517,3 +523,39 @@ def registerAwardControllerHandlers(handlers):
 
 def collectAwardControllerHandlers():
     return __collectEM.handleEvent(AWARD_CONTROLLER_HANDLERS, {'handlers': []})['handlers']
+
+
+def registerCanSelectPrbEntity(queueType, itemFun):
+
+    def onCollect(ctx):
+        ctx['itemFun'] = itemFun
+
+    __collectEM.addListener((CAN_SELECT_PRB_ENTITY, queueType), onCollect)
+
+
+def collectCanSelectPrbEntity(queueType):
+    return __collectEM.handleEvent((CAN_SELECT_PRB_ENTITY, queueType), ctx={}).get('itemFun', lambda *args, **kwargs: False)
+
+
+def registerBattleResultsComposer(bonusType, itemCls):
+
+    def onCollect(ctx):
+        ctx['item'] = itemCls
+
+    __collectEM.addListener((BATTLE_RESULTS_COMPOSER, bonusType), onCollect)
+
+
+def collectBattleResultsComposer(bonusType):
+    return __collectEM.handleEvent((BATTLE_RESULTS_COMPOSER, bonusType), ctx={}).get('item', None)
+
+
+def registerSeasonProviderHandler(seasonType, seasonControllerHandler):
+
+    def onCollect(ctx):
+        ctx[seasonType] = seasonControllerHandler
+
+    __collectEM.addListener((SEASON_PROVIDER_HANDLER, seasonType), onCollect)
+
+
+def collectSeasonProviderHandler(seasonType):
+    return __collectEM.handleEvent((SEASON_PROVIDER_HANDLER, seasonType), ctx={}).get(seasonType, None)

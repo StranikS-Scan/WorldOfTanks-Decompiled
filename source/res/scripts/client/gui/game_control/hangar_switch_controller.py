@@ -275,7 +275,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                         if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                             currentSceneChanged = True
 
-            if currentSceneChanged:
+            if currentSceneChanged and self.hangarSpace.inited:
                 if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                     spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
                     visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)

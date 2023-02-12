@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/messages.py
 from CurrentVehicle import g_currentVehicle
-from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
+from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -218,8 +218,6 @@ def makeEntityI18nKey(ctrlType, entityType, prefix):
             name = 'squad'
         else:
             name = 'rally'
-    elif ctrlType == CTRL_ENTITY_TYPE.PREQUEUE and entityType == QUEUE_TYPE.SANDBOX:
-        name = 'sandBox'
     else:
         name = 'rally'
     return '{0}/{1}'.format(name, prefix)

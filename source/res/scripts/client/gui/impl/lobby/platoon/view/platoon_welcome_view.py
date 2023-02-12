@@ -25,9 +25,10 @@ class WelcomeView(ViewImpl):
     _squadType = Type.RANDOM
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    _layoutID = R.views.lobby.platoon.PlatoonDropdown()
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.lobby.platoon.PlatoonDropdown(), model=PlatoonDropdownModel())
+        settings = ViewSettings(layoutID=self._layoutID, model=PlatoonDropdownModel())
         self.__tiersLimitSubview = TiersLimitSubview()
         self.__tiersLimitSubview.setShowCallback(self.__showSettingsCallback)
         self.__tiersFilterSubview = TiersFilterSubview()

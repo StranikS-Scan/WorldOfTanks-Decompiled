@@ -30,7 +30,7 @@ class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
         return self.__showAwardIcon
 
     def getAwardingText(self):
-        return backport.text(R.strings.battle_tutorial.labels.bonuses_already_received(), **self._messageCtx)
+        return backport.text(R.strings.bootcamp.message.restart.reward(), **self._messageCtx)
 
     def getLabel(self):
         I18N_LABEL_KEY = '{0:>s}/label'

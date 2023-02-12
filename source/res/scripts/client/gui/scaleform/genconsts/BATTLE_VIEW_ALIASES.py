@@ -17,7 +17,6 @@ class BATTLE_VIEW_ALIASES(object):
     SIXTH_SENSE = 'sixthSense'
     DAMAGE_INFO_PANEL = 'damageInfoPanel'
     BATTLE_MESSENGER = 'battleMessenger'
-    BATTLE_TUTORIAL = 'battleTutorial'
     CONSUMABLES_PANEL = 'consumablesPanel'
     DAMAGE_INDICATOR = 'damageIndicator'
     PREDICTION_INDICATOR = 'predictionIndicator'

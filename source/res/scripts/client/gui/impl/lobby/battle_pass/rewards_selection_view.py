@@ -57,8 +57,7 @@ class RewardsSelectionView(SelectableRewardBase):
             successRewards = result.auxData.get(RES_SUCCESS, {})
             if successRewards:
                 rewardsGenerator = ({group: rewards} for group, rewards in successRewards.iteritems())
-                chapter = self.__battlePassController.getChapterIDs()[0]
-                self.__safeCall(self.__onRewardsReceivedCallback, rewards=rewardsGenerator, chapter=chapter)
+                self.__safeCall(self.__onRewardsReceivedCallback, rewardsGenerator)
         else:
             SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error)
         self.destroyWindow()

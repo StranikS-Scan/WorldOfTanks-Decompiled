@@ -136,11 +136,10 @@ class Tutorial(object):
             ctx.cache.setRefused(False)
         self.run(dispatcher, ctx)
 
-    def reload(self, afterBattle=False):
+    def reload(self):
         if not self._stopped:
             self._funcScene.reload()
             self._sound.stop()
-            self._cache.setAfterBattle(afterBattle).write()
             self._gui.reloadConfig(self._descriptor.getGuiFilePath())
             self._gui.clear()
             doc_loader.clearChapterData(self._data)
@@ -149,13 +148,12 @@ class Tutorial(object):
             LOG_ERROR('Tutorial is not running.')
 
     def loadCurrentChapter(self, initial=False):
-        afterBattle = self._cache.isAfterBattle()
-        LOG_DEBUG('Chapter is loading', self._currentChapter, afterBattle)
+        LOG_DEBUG('Chapter is loading', self._currentChapter)
         self._gui.showWaiting('chapter-loading', isSingle=True)
         if self._data is not None:
             self._data.clear()
         chapter_ = self._descriptor.getChapter(self._currentChapter)
-        self._data = doc_loader.loadChapterData(chapter_, self._settings.chapterParser, afterBattle=afterBattle, initial=initial)
+        self._data = doc_loader.loadChapterData(chapter_, self._settings.chapterParser, initial=initial)
         if self._data is None:
             LOG_ERROR('Chapter documentation is not valid. Tutorial is stopping', self._currentChapter)
             self._gui.hideWaiting('chapter-loading')

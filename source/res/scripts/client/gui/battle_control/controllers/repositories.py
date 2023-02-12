@@ -31,7 +31,7 @@ class BattleSessionSetup(object):
 
     @property
     def isReplayPlaying(self):
-        return self.replayCtrl.isPlaying and not self.replayCtrl.isBattleSimulation if self.replayCtrl is not None else False
+        return self.replayCtrl.isPlaying if self.replayCtrl is not None else False
 
     @property
     def isReplayRecording(self):
@@ -523,4 +523,3 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
-registerBattleControllerRepo(ARENA_GUI_TYPE.TUTORIAL, None)

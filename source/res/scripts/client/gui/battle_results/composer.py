@@ -4,6 +4,7 @@ from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
 from gui.shared import event_dispatcher
+from gui.shared.system_factory import collectBattleResultsComposer, registerBattleResultsComposer
 from helpers import dependency
 from skeletons.gui.game_control import IMapsTrainingController
 
@@ -110,22 +111,6 @@ class CyberSportStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(CyberSportStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-
-
-class RatedSandboxStatsComposer(RegularStatsComposer):
-
-    def __init__(self, reusable):
-        super(RatedSandboxStatsComposer, self).__init__(reusable)
-        self._block.addNextComponent(templates.SANDBOX_TEAM_ITEM_STATS_ENABLE.clone())
-        self._block.addNextComponent(templates.SANDBOX_PERSONAL_ACCOUNT_DB_ID.clone())
-
-
-class SandboxStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(SandboxStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.SANDBOX_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.SANDBOX_TEAM_ITEM_STATS_ENABLE.clone())
-        self._block.addNextComponent(templates.SANDBOX_PERSONAL_ACCOUNT_DB_ID.clone())
 
 
 class StrongholdBattleStatsComposer(StatsComposer):
@@ -268,28 +253,20 @@ class Comp7StatsComposer(StatsComposer):
 
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
-    if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
-        composer = CyberSportStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.RATED_SANDBOX:
-        composer = RatedSandboxStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.SANDBOX:
-        composer = SandboxStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.FORT_BATTLE_2:
-        composer = StrongholdBattleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.SORTIE_2:
-        composer = StrongholdSortieBattleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.RANKED:
-        composer = RankedBattlesStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.BOOTCAMP:
-        composer = BootcampStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
-        composer = EpicStatsComposer(reusable)
-    elif bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-        composer = BattleRoyaleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.MAPS_TRAINING:
-        composer = MapsTrainingStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.COMP7:
-        composer = Comp7StatsComposer(reusable)
-    else:
-        composer = RegularStatsComposer(reusable)
-    return composer
+    composer = collectBattleResultsComposer(bonusType)
+    if composer is None:
+        composer = RegularStatsComposer
+    return composer(reusable)
+
+
+registerBattleResultsComposer(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.CYBERSPORT, CyberSportStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
+for bt in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+    registerBattleResultsComposer(bt, BattleRoyaleStatsComposer)
+
+registerBattleResultsComposer(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)

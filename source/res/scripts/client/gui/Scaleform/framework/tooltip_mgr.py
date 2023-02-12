@@ -3,7 +3,9 @@
 import inspect
 import itertools
 import logging
+import BigWorld
 import Keys
+from collections import namedtuple
 from Event import SafeEvent, EventManager
 from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
@@ -11,11 +13,15 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared import events
 from gui.shared.tooltips import builders
 from helpers import dependency, uniprof
+from ids_generators import SequenceIDGenerator
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
+ToolTipInfo = namedtuple('ToolTipInfo', ('id', 'region', 'name'))
 _logger = logging.getLogger(__name__)
-UNIPROF_REGION_COLOR = 9611473
+_id_generator = SequenceIDGenerator()
+LIVE_REGION_COLOR = 9611473
+LOADING_REGION_COLOR = 12757201
 
 class ToolTip(ToolTipMgrMeta):
     appLoader = dependency.descriptor(IAppLoader)
@@ -36,7 +42,7 @@ class ToolTip(ToolTipMgrMeta):
         self.__tooltipID = None
         self.__args = None
         self.__stateType = None
-        self.__tooltipRegion = None
+        self.__tooltipInfos = []
         self.__tooltipWindowId = 0
         self.__em = EventManager()
         self.onShow = SafeEvent(self.__em)
@@ -83,12 +89,21 @@ class ToolTip(ToolTipMgrMeta):
         elif not self._isAllowedTypedTooltip:
             return
         else:
-            if self.__tooltipRegion is None:
-                self.__tooltipRegion = 'Typed tooltip "{}"'.format(tooltipType)
-                uniprof.enterToRegion(self.__tooltipRegion, UNIPROF_REGION_COLOR)
+            id = _id_generator.next()
+            region = 'Typed tooltip {} {}'.format(tooltipType, id)
+            name = 'tooltip {}'.format(tooltipType)
+            info = ToolTipInfo(id, region, name)
+            self.__tooltipInfos.append(info)
+            uniprof.enterToRegion(region, LIVE_REGION_COLOR)
+            BigWorld.notify(BigWorld.EventType.VIEW_CREATED, name, id, name)
             builder = self._builders.getBuilder(tooltipType)
             if builder is not None:
+                region = 'Loading {} {}'.format(tooltipType, id)
+                uniprof.enterToRegion(region, LOADING_REGION_COLOR)
+                BigWorld.notify(BigWorld.EventType.LOADING_VIEW, name, id, name)
                 data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                BigWorld.notify(BigWorld.EventType.VIEW_LOADED, name, id, name)
+                uniprof.exitFromRegion(region)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
@@ -121,9 +136,11 @@ class ToolTip(ToolTipMgrMeta):
         if self._areTooltipsDisabled:
             return
         else:
-            if self.__tooltipRegion is None:
-                self.__tooltipRegion = 'Complex tooltip "{}"'.format(tooltipID)
-                uniprof.enterToRegion(self.__tooltipRegion, UNIPROF_REGION_COLOR)
+            id = _id_generator.next()
+            region = 'Complex tooltip {} {}'.format(tooltipID, id)
+            info = ToolTipInfo(id, region, None)
+            self.__tooltipInfos.append(info)
+            uniprof.enterToRegion(region, LIVE_REGION_COLOR)
             self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
             self.__cacheTooltipData(True, tooltipID, tuple(), stateType)
             self.onShow(tooltipID, None, self.__isAdvancedKeyPressed)
@@ -136,9 +153,11 @@ class ToolTip(ToolTipMgrMeta):
         self.__tooltipID = None
         self.__fastRedraw = False
         self.__destroyTooltipWindow()
-        if self.__tooltipRegion is not None:
-            uniprof.exitFromRegion(self.__tooltipRegion)
-            self.__tooltipRegion = None
+        if self.__tooltipInfos:
+            info = self.__tooltipInfos.pop(0)
+            if info.name is not None:
+                BigWorld.notify(BigWorld.EventType.VIEW_DESTROYED, info.name, info.id, info.name)
+            uniprof.exitFromRegion(info.region)
         self.onHide(hideTooltipId)
         return
 

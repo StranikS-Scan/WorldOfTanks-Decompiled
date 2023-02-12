@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/DogTagComponent.py
 import logging
 import BigWorld
-import BattleReplay
 _logger = logging.getLogger(__name__)
 
 class DogTagComponent(BigWorld.DynamicScriptComponent):
@@ -31,8 +30,5 @@ class DogTagComponent(BigWorld.DynamicScriptComponent):
 
     @staticmethod
     def _isObserving():
-        if BattleReplay.isServerSideReplay():
-            return True
-        else:
-            player_vehicle = BigWorld.player().getVehicleAttached()
-            return not player_vehicle.isPlayerVehicle if player_vehicle is not None else False
+        player_vehicle = BigWorld.player().getVehicleAttached()
+        return not player_vehicle.isPlayerVehicle if player_vehicle is not None else False

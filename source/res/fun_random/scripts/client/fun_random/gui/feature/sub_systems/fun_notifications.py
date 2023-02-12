@@ -9,7 +9,7 @@ from fun_random.gui.feature.util.fun_wrappers import ifNotificationsAllowed, ifN
 from gui.impl.gen import R
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import dependency, time_utils
-from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+from fun_random.gui.fun_gui_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.gui.game_control import IFunRandomController, IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.system_messages import ISystemMessages

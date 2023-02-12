@@ -1,68 +1,68 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 import logging
-import typing
 from functools import partial
+import typing
 import BigWorld
-from gui.marathon.marathon_event import MarathonEvent
-from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
-from shared_utils import nextTick
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
+from PlayerEvents import g_playerEvents
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs, DOG_TAGS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG
+from battle_pass_common import BATTLE_PASS_CONFIG_NAME
+from constants import Configs, DOG_TAGS_CONFIG, PREBATTLE_TYPE, QUEUE_TYPE, RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.epicBattle import epic_helpers
+from gui.Scaleform.daapi.view.lobby.hangar.carousel_event_entry_widget import isAnyEntryVisible
 from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
-from sound_gui_manager import CommonSoundSpaceSettings
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.DAILY_QUESTS_WIDGET_CONSTANTS import DAILY_QUESTS_WIDGET_CONSTANTS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.genConsts.DAILY_QUESTS_WIDGET_CONSTANTS import DAILY_QUESTS_WIDGET_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
+from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from gui.impl.gen import R
+from gui.marathon.marathon_event import MarathonEvent
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.promo.hangar_teaser_widget import TeaserViewer
-from gui.shared import event_dispatcher as shared_events
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.events import LobbySimpleEvent, AmmunitionPanelViewEvent
+from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
+from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
+from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
 from gui.sounds.filters import States, StatesGroup
-from battle_pass_common import BATTLE_PASS_CONFIG_NAME
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from helpers.CallbackDelayer import CallbackDelayer
+from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from helpers.time_utils import ONE_MINUTE
+from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IIGRController, IFunRandomController, IBattlePassController, IBattleRoyaleController, IBootcampController, IMapboxController, IMarathonEventsController, IComp7Controller
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IEventLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from sound_gui_manager import CommonSoundSpaceSettings
 from tutorial.control.context import GLOBAL_FLAG
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from gui.impl.gen import R
-from gui.impl import backport
-from gui.periodic_battles.models import PrimeTimeStatus
-from PlayerEvents import g_playerEvents
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
@@ -101,6 +101,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
+    _bootcamp = dependency.descriptor(IBootcampController)
+    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -117,6 +119,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__wotPlusInfo = BigWorld.player().renewableSubscription
         self.__updateDogTagsState()
         self.__updateWotPlusState()
+        self.__isEventLootBoxesActive = False
+        self.__isLootBoxesAvailable = False
         return
 
     def onEscape(self):
@@ -153,6 +157,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__banTimer = CallbackDelayer()
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
         self.__isVehicleReadyForC11n = self.hangarSpace.isModelLoaded
+        self.__isEventLootBoxesActive = self.__eventLootBoxes.isActive()
+        self.__isLootBoxesAvailable = self.__eventLootBoxes.isLootBoxesAvailable()
         self.__checkVehicleCameraState()
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted += self.__onVehicleLoading
@@ -175,6 +181,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onBanUpdated += self.__updateAlertMessage
         self.__comp7Controller.onOfflineStatusUpdated += self.__updateAlertMessage
         self.hangarSpace.setVehicleSelectable(True)
+        self.__eventLootBoxes.onStatusChange += self.__onLootBoxesEventStatusChange
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
         unitMgr = prb_getters.getClientUnitMgr()
@@ -196,6 +203,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self._offersBannerController.showBanners()
+        self.__updateCarouselEventEntryState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
@@ -209,6 +217,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
+        self.__eventLootBoxes.onStatusChange -= self.__onLootBoxesEventStatusChange
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
@@ -499,6 +508,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def onPrbEntitySwitched(self):
         self.__onEntityChanged()
+        self.__updateCarouselEventEntryState()
 
     def onEnqueued(self, queueType, *args):
         self.__onEntityChanged()
@@ -683,7 +693,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onOptDeviceClick(self, event):
         ctx = event.ctx
         if self.hangarSpace.spaceLoading():
-            _logger.warning('Optional Device click was not handled (ctx=%s). HangarSpace is currently  loading.', ctx)
+            _logger.warning('Optional Device click was not handled (ctx=%s). HangarSpace is currently loading.', ctx)
         elif not self.__isUnitJoiningInProgress:
             self.as_showSwitchToAmmunitionS()
             shared_events.showAmmunitionSetupView(**ctx)
@@ -693,11 +703,19 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onUnitJoined(self, _, __):
         self.__isUnitJoiningInProgress = False
-        self.__timer.stopCallback(self.__onResetUnitJoiningProgress)
+        if self.__timer:
+            self.__timer.stopCallback(self.__onResetUnitJoiningProgress)
 
     def __onPrebattleInvitationAccepted(self, _, __):
         self.__isUnitJoiningInProgress = True
-        self.__timer.delayCallback(15, self.__onResetUnitJoiningProgress)
+        if self.__timer:
+            self.__timer.delayCallback(15, self.__onResetUnitJoiningProgress)
 
     def __onResetUnitJoiningProgress(self):
         self.__isUnitJoiningInProgress = False
+
+    def __onLootBoxesEventStatusChange(self):
+        self.__updateCarouselEventEntryState()
+
+    def __updateCarouselEventEntryState(self):
+        self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())

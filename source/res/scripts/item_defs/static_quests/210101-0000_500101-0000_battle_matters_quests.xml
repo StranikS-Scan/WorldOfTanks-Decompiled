@@ -10,10 +10,17 @@
           <account>
             <or>
               <and>
-                <token>
-                  <id>	linkedset_unfinished	</id>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </token>
+                <or>
+                  <token>
+                    <id>	linkedset_unfinished	</id>
+                    <greaterOrEqual>	1	</greaterOrEqual>
+                  </token>
+                  <lastLogout>
+                    <relativeToUTC>
+                      <lessOrEqual>	11.06.2018 00:01	</lessOrEqual>
+                    </relativeToUTC>
+                  </lastLogout>
+                </or>
                 <totalBattles>
                   <lessOrEqual>	200	</lessOrEqual>
                 </totalBattles>
@@ -3029,30 +3036,8 @@
       <bonus>
         <credits>	25000	</credits>
         <token>
-          <id>	1806AnyTank2018	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	6	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	6	</count>
-        </token>
-        <token>
-          <id>	AnyVehiclex5Win	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	6	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	6	</count>
-        </token>
-        <token>
           <id>	battle_bonus_x5	</id>
-          <expires>
-            <after>	1	</after>
-          </expires>
+          <expires>	01.01.2050 00:00	</expires>
           <count>	6	</count>
         </token>
         <item>	28411	  <count>	15	</count>
@@ -4404,30 +4389,8 @@
       </conditions>
       <bonus>
         <token>
-          <id>	1806AnyTank2018	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	15	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	15	</count>
-        </token>
-        <token>
-          <id>	AnyVehiclex5Win	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	15	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	15	</count>
-        </token>
-        <token>
           <id>	battle_bonus_x5	</id>
-          <expires>
-            <after>	1	</after>
-          </expires>
+          <expires>	01.01.2050 00:00	</expires>
           <count>	15	</count>
         </token>
         <token>
@@ -5130,30 +5093,8 @@
       </conditions>
       <bonus>
         <token>
-          <id>	1806AnyTank2018	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	20	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	20	</count>
-        </token>
-        <token>
-          <id>	AnyVehiclex5Win	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	20	</count>
-        </token>
-        <token>
-          <id>	AnyVehicle2018x5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	20	</count>
-        </token>
-        <token>
           <id>	battle_bonus_x5	</id>
-          <expires>
-            <after>	1	</after>
-          </expires>
+          <expires>	01.01.2050 00:00	</expires>
           <count>	20	</count>
         </token>
         <token>

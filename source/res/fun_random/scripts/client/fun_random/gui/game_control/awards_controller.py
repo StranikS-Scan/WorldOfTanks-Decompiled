@@ -4,7 +4,7 @@ from chat_shared import SYS_MESSAGE_TYPE
 from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher
 from gui.game_control.AwardController import ServiceChannelHandler
 from helpers import dependency
-from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+from fun_random.gui.fun_gui_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.gui.system_messages import ISystemMessages
 
 def _getMessage(ctx):

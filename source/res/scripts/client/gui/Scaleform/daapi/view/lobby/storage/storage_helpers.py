@@ -24,14 +24,14 @@ from gui.impl.gen import R
 from gui.shared.event_dispatcher import showStorage, showStylePreview, showStyleProgressionPreview
 from gui.shared.formatters import getItemPricesVO, getMoneyVO, icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, getKpiValueString
-from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName, getVehicleStateIcon
+from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName, getVehicleStateIcon, getShopVehicleIconPath
 from gui.shared.gui_items.customization.c11n_items import Customization
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.items_parameters import params_helper
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency, func_utils, i18n, int2roman, time_utils
+from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getCurrentTimestamp
 from items import vehicles
@@ -123,11 +123,11 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
 def getStorageVehicleVo(vehicle):
     name = getVehicleName(vehicle)
     description = _getVehicleDescription(vehicle)
-    imageSmall = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
+    imageSmall = vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
     stateIcon, stateText = _getVehicleInfo(vehicle)
     if not imageSmall and not stateText:
         stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
-    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=vehicle.getHighlightType(), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=vehicle.getHighlightType(), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
     vo.update({'infoImgSrc': stateIcon,
      'infoText': stateText})
     if vehicle.canTradeOff:
@@ -211,10 +211,8 @@ def _generateDescr(item, label, moreLabel, paramsNames, maxItemsCount):
 
 
 def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-    if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
-        icon = func_utils.makeFlashPath(item.getShopIcon(size))
-    elif item.itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
-        icon = item.getOldStyleIcon()
+    if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS + (GUI_ITEM_TYPE.CREW_BOOKS,):
+        icon = item.getShopIcon(size)
     else:
         icon = item.icon
     return icon

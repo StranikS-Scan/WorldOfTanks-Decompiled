@@ -72,10 +72,8 @@
     <Gun_FV4202>	79	</Gun_FV4202>
     <_105mm_Gun_L7_HEAT>	81	</_105mm_Gun_L7_HEAT>
     <_75mm_Gun_Mk_VA>	78	</_75mm_Gun_Mk_VA>
-    <_3pdr_gun_Hotchkiss_bot>	80	</_3pdr_gun_Hotchkiss_bot>
     <_120mm_Gun_L11A1>	82	</_120mm_Gun_L11A1>
     <_90mm_Gun_T208_rifled>	83	</_90mm_Gun_T208_rifled>
-    <_3pdr_gun_Hotchkiss_1_bot>	84	</_3pdr_gun_Hotchkiss_1_bot>
     <_32_pounder_Gun_OQF>	85	</_32_pounder_Gun_OQF>
     <_32_pounder_AT_Gun_OQF_Mk_II>	86	</_32_pounder_AT_Gun_OQF_Mk_II>
     <_5_5inch_AT_Gun>	87	</_5_5inch_AT_Gun>
@@ -729,94 +727,6 @@
         </_47mm_3pdrHE>
       </shots>
     </_3pdr_gun_Hotchkiss>
-    <_3pdr_gun_Hotchkiss_bot>
-      <userString>	#gb_vehicles:_3pdr_gun_Hotchkiss_bot	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.08	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.2	</amplitude>
-        <recoilEffect>	small	</recoilEffect>
-      </recoil>
-      <effects>	shot_small	</effects>
-      <reloadEffect>	reload20_45	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	43.75	</rotationSpeed>
-      <reloadTime>	2.51428571428571	</reloadTime>
-      <maxAmmo>	100	</maxAmmo>
-      <aimingTime>	0.16	</aimingTime>
-      <weight>	240	</weight>
-      <maxHealth>	64	</maxHealth>
-      <maxRegenHealth>	32	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.48	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_47mm_3pdrAP_bot>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	574	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 28	</piercingPower>
-        </_47mm_3pdrAP_bot>
-      </shots>
-    </_3pdr_gun_Hotchkiss_bot>
-    <_3pdr_gun_Hotchkiss_1_bot>
-      <userString>	#gb_vehicles:_3pdr_gun_Hotchkiss_bot	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.08	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.2	</amplitude>
-        <recoilEffect>	small	</recoilEffect>
-      </recoil>
-      <effects>	shot_small	</effects>
-      <reloadEffect>	reload20_45	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	43.75	</rotationSpeed>
-      <reloadTime>	2.51428571428571	</reloadTime>
-      <maxAmmo>	100	</maxAmmo>
-      <aimingTime>	0.16	</aimingTime>
-      <weight>	240	</weight>
-      <maxHealth>	64	</maxHealth>
-      <maxRegenHealth>	32	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.48	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_47mm_3pdrAP_1_bot>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	574	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 28	</piercingPower>
-        </_47mm_3pdrAP_1_bot>
-      </shots>
-    </_3pdr_gun_Hotchkiss_1_bot>
     <OQF_3pdr_Gun>
       <userString>	#gb_vehicles:OQF_3pdr_Gun	</userString>
       <tags></tags>

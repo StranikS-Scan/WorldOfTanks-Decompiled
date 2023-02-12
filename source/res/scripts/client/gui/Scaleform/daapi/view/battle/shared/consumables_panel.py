@@ -157,6 +157,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         super(ConsumablesPanel, self)._populate()
         if self.sessionProvider.isReplayPlaying:
             self.as_handleAsReplayS()
+        if BigWorld.player().isObserver():
+            self.as_handleAsObserverS()
         self.__addListeners()
 
     def _dispose(self):
@@ -529,7 +531,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
             body = text_styles.concatStylesToMultiLine(*params)
             fmt = TOOLTIP_FORMAT
         else:

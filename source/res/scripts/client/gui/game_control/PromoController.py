@@ -169,7 +169,7 @@ class PromoController(IPromoController):
     def __onTeaserClosed(self, byUser=False):
         self.__isTeaserOpen = False
         self.onTeaserClosed()
-        if byUser and self.__settingsCore.isReady:
+        if byUser and not self.__bootcamp.isInBootcamp() and self.__isInHangar:
             self.__showBubbleTooltip()
 
     def __showBubbleTooltip(self):

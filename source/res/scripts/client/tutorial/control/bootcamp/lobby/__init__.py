@@ -30,7 +30,7 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.SET_ALLOWED_TO_FIGHT: core_func.FunctionalSetAllowedToFightEffect,
          EFFECT_TYPE.RESTORE_CHECKPOINT: functional.FunctionalRestoreCheckpointEffect,
          EFFECT_TYPE.SAVE_CHECKPOINT: functional.FunctionalSaveCheckpointEffect,
-         EFFECT_TYPE.SAVE_ACCOUNT_SETTING: functional.FunctionalSetNationEffect,
+         EFFECT_TYPE.SET_BOOTCAMP_NATION: functional.FunctionalSetNationEffect,
          EFFECT_TYPE.SELECT_VEHICLE_IN_HANGAR: core_func.FunctionalSelectVehicleByCDEffect,
          EFFECT_TYPE.PLAY_VIDEO: functional.FunctionalPlayFinalVideoEffect,
          EFFECT_TYPE.PLAY_SOUND: core_func.FunctionalPlaySoundEffect,
@@ -41,8 +41,7 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_DEMO_ACCOUNT_RENAMING: functional.FunctionalShowDemoAccRenameOverlay}
         queries_ = {'bootcampVideo': queries.VideoDialogContentQuery,
          'bootcampSubtitle': queries.SubtitleDialogContentQuery,
-         'bootcampMessage': queries.MessageDialogContentQuery,
-         'bootcampSelectNation': queries.SubtitleDialogContentQuery}
+         'bootcampMessage': queries.MessageDialogContentQuery}
         customConditions = {BOOTCAMP_CONDITION_TYPE.CHECKPOINT_REACHED: functional.FunctionalCheckpointReachedCondition}
         ControlsFactory.__init__(self, effects, queries_, customConditions)
 

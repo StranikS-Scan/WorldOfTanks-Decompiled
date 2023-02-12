@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/tutorial/control/sales/__init__.py
 from tutorial.control import ControlsFactory
 from tutorial.control import context as core_ctx
-from tutorial.control.chains import functional as chains_func
-from tutorial.control.lobby import functional as lobby_func
 from tutorial.control.sales import functional
 from tutorial.data.effects import EFFECT_TYPE
 from tutorial.control import functional as core_func
@@ -11,7 +9,8 @@ from tutorial.control import functional as core_func
 class SalesControlsFactory(ControlsFactory):
 
     def __init__(self):
-        effects = {EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
+        effects = {EFFECT_TYPE.EFFECTS_GROUP: core_func.FunctionalEffectsGroup,
+         EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
          EFFECT_TYPE.DEACTIVATE: core_func.FunctionalDeactivateEffect,
          EFFECT_TYPE.GLOBAL_ACTIVATE: core_func.FunctionalGlobalActivateEffect,
          EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect,
@@ -19,8 +18,8 @@ class SalesControlsFactory(ControlsFactory):
          EFFECT_TYPE.CLEAR_SCENE: core_func.FunctionalClearScene,
          EFFECT_TYPE.REFUSE_TRAINING: core_func.FunctionalRefuseTrainingEffect,
          EFFECT_TYPE.GO_SCENE: core_func.GoToSceneEffect,
-         EFFECT_TYPE.SHOW_HINT: chains_func.FunctionalShowHint,
-         EFFECT_TYPE.CLOSE_HINT: chains_func.FunctionalCloseHint,
+         EFFECT_TYPE.SHOW_HINT: functional.FunctionalShowHint,
+         EFFECT_TYPE.CLOSE_HINT: functional.FunctionalCloseHint,
          EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
          EFFECT_TYPE.SET_GUI_ITEM_CRITERIA: core_func.FunctionalSetGuiItemCriteria}
@@ -34,7 +33,10 @@ class SalesControlsFactory(ControlsFactory):
         return core_func.FunctionalScene(sceneModel)
 
     def createFuncChapterCtx(self):
-        return lobby_func.FunctionalLobbyChapterContext()
+        return core_func.FunctionalChapterContext()
+
+    def createBonuses(self, completed):
+        pass
 
 
 class SalesBonusesRequester(core_ctx.BonusesRequester):

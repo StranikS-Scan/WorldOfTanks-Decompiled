@@ -6,6 +6,9 @@ from types import FunctionType
 from typing import Tuple
 from soft_exception import SoftException
 from misc import ASPECT
+from constants import IS_DEVELOPMENT
+if IS_DEVELOPMENT:
+    from debug_plan_loader import debugPlanLoader
 
 class UnsupportedMemberException(SoftException):
 
@@ -149,6 +152,8 @@ class VScriptContext(object):
         self.__active_vse_aspect = aspect
         cls = self.__class__
         self._vse_dispatchers = DispatchersHolder()
+        if IS_DEVELOPMENT:
+            debugPlanLoader.regContext(self)
         import VSE
         for name, member in getmembers(cls):
             if ismethod(member) and hasattr(member, 'vse_meta') and aspect in member.vse_meta.aspects:
@@ -158,8 +163,13 @@ class VScriptContext(object):
                 elif member.vse_meta.abstract:
                     raise RuntimeError('%s: required to override "%s" for aspect = %s' % (cls.__name__, name, aspect))
 
+    def __del__(self):
+        if IS_DEVELOPMENT:
+            debugPlanLoader.unregContext(self)
+
     def destroy(self):
-        pass
+        if IS_DEVELOPMENT:
+            debugPlanLoader.unregContext(self)
 
     @property
     def _vse_aspect(self):

@@ -29,9 +29,8 @@ def getClientServicesConfig(manager):
     manager.addConfig(gui.getGuiServicesConfig)
     manager.addConfig(uilogging.getUILoggingConfig)
     manager.addConfig(helpers.getHelperServicesConfig)
-    import constants
     from gui import GUI_SETTINGS
-    if constants.IS_TUTORIAL_ENABLED and GUI_SETTINGS.isGuiEnabled():
+    if GUI_SETTINGS.isGuiEnabled():
         try:
             import tutorial
         except ImportError:

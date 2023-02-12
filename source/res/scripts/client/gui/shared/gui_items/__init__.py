@@ -319,7 +319,7 @@ class KPI(object):
         CREW_LEVEL = 'crewLevel'
         CREW_HIT_CHANCE = 'crewHitChance'
         CREW_STUN_DURATION = 'crewStunDuration'
-        CREW_REPEATED_STUN_DURATION = 'crewRepeatedStunDuration'
+        CREW_STUN_RESISTANCE = 'crewStunResistance'
         CREW_SKILL_REPAIR = 'crewSkillRepair'
         CREW_SKILL_FIRE_FIGHTING = 'crewSkillFireFighting'
         CREW_SKILL_CAMOUFLAGE = 'crewSkillCamouflage'
@@ -341,6 +341,7 @@ class KPI(object):
         GAME_CREW_XP = 'gameCrewXp'
         GAME_CREDITS = 'gameCredits'
         GAME_FL_XP = 'gameFlXp'
+        GAME_FREE_XP_AND_CREW_XP = 'gameFreeXpAndCrewXp'
 
     class Type(CONST_CONTAINER):
         MUL = 'mul'

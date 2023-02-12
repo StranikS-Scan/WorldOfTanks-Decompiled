@@ -16,7 +16,7 @@ from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils import vehicle_collector_helper
-from helpers import dependency, func_utils, int2roman
+from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getTillTimeString
 from items_kit_helper import collapseItemsPack
@@ -31,7 +31,7 @@ def _createVehicleVO(rawItem, itemsCache):
     intCD = int(rawItem.id)
     vehicle = itemsCache.items.getItemByCD(intCD)
     if vehicle is not None:
-        icon = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
+        icon = vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
         cd = vehicle.intCD
         label = vehicle.shortUserName
         nation = vehicle.nationID

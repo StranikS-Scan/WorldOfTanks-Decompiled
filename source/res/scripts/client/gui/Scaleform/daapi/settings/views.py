@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/views.py
+import logging
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.framework import COMMON_VIEW_ALIAS
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
+from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
 class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     GOLD_FISH_WINDOW = 'goldFishWindow'
@@ -84,7 +89,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BATTLE_STRONGHOLDS_QUEUE = 'battleStrongholdsQueue'
     BATTLE_LOADING = 'battleLoading'
     LEGAL_INFO_WINDOW = 'legalInfoWindow'
-    TUTORIAL_LOADING = 'tutorialLoading'
     VEHICLE_INFO_WINDOW = 'vehicleInfoWindow'
     MODULE_INFO_WINDOW = 'moduleInfoWindow'
     BOOSTER_INFO_WINDOW = 'boosterInfoWindow'
@@ -92,7 +96,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_SELL_DIALOG = 'vehicleSellDialog'
     SETTINGS_WINDOW = 'settingsWindow'
     BATTLE_RESULTS = 'battleResults'
-    EVENTS_WINDOW = 'EventsWindow'
     TANKMAN_SKILLS_DROP_WINDOW = 'tankmanSkillsDropWindow'
     BROWSER_WINDOW = 'browserWindow'
     BROWSER_WINDOW_MODAL = 'browserWindowModal'
@@ -115,6 +118,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_STRONGHOLD = 'StrongholdView'
     STRONGHOLD_ADS = 'StrongholdAdsView'
+    LOBBY_TOURNAMENTS = 'TournamentsView'
     BROWSER_VIEW = 'BrowserView'
     SIMPLE_DIALOG = 'simpleDialog'
     BUTTON_DIALOG = 'buttonDialog'
@@ -170,7 +174,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MINI_CLIENT_LINKED = 'linkedMiniClientComponent'
     SWITCH_PERIPHERY_WINDOW = 'switchPeripheryWindow'
     SWITCH_PERIPHERY_WINDOW_MODAL = 'switchPeripheryWindowModal'
-    SANDBOX_QUEUE_DIALOG = 'sandboxQueueDialog'
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
     CUSTOMIZATION_ANCHOR_POPOVER = 'CustomizationAnchorPopover'
     CUSTOMIZATION_ITEMS_POPOVER = 'CustomizationItemsPopover'
@@ -186,7 +189,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     STORAGE_BLUEPRINTS_FILTER_POPOVER = 'StorageBlueprintsFilterPopover'
     STORAGE_VEHICLE_SELECTOR_POPOVER = 'StorageVehicleSelectorPopoverUI'
     CLASSIC_BATTLE_PAGE = 'classicBattlePage'
-    TUTORIAL_BATTLE_PAGE = 'tutorialBattlePage'
     DEV_BATTLE_PAGE = 'devBattlePage'
     BADGES_PAGE = 'badgesPage'
     REFERRAL_PROGRAM_WINDOW = 'referralProgramWindow'
@@ -194,7 +196,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
     STRONGHOLD_BATTLE_PAGE = 'strongholdBattlePage'
-    EVENT_BATTLE_PAGE = 'classicBattlePage'
+    EVENT_BATTLE_PAGE = 'eventBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     BATTLE_ROYALE_PAGE = 'battleRoyalePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
@@ -218,7 +220,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOTCAMP_VEHICLE_BUY_VIEW = 'bootcampVehicleBuyView'
     BOOTCAMP_LOBBY_HIGHLIGHTS = 'bootcampLobbyHighlights'
     BOOTCAMP_BATTLE_HIGHLIGHTS = 'bootcampBattleHighlights'
-    BOOTCAMP_NATIONS_WINDOW = 'bootcampNationsWindow'
     BOOTCAMP_QUESTS_VIEW = 'bootcampQuestsView'
     BOOTCAMP_SECONDARY_HINT = 'bootcampSecondaryHint'
     BOOTCAMP_PREBATTLE_HITNS = 'bootcampPrebattleHints'
@@ -241,12 +242,32 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
-    LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
-     TUTORIAL_BATTLE_PAGE,
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
      EPIC_BATTLE_PAGE,
      BATTLE_ROYALE_PAGE)
+
+
+VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE = {ARENA_GUI_TYPE.EPIC_RANDOM: VIEW_ALIAS.EPIC_RANDOM_PAGE,
+ ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: VIEW_ALIAS.EPIC_RANDOM_PAGE,
+ ARENA_GUI_TYPE.RANKED: VIEW_ALIAS.RANKED_BATTLE_PAGE,
+ ARENA_GUI_TYPE.BATTLE_ROYALE: VIEW_ALIAS.BATTLE_ROYALE_PAGE,
+ ARENA_GUI_TYPE.BOOTCAMP: VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE,
+ ARENA_GUI_TYPE.EPIC_BATTLE: VIEW_ALIAS.EPIC_BATTLE_PAGE,
+ ARENA_GUI_TYPE.EPIC_TRAINING: VIEW_ALIAS.EPIC_BATTLE_PAGE,
+ ARENA_GUI_TYPE.EVENT_BATTLES: VIEW_ALIAS.EVENT_BATTLE_PAGE,
+ ARENA_GUI_TYPE.MAPS_TRAINING: VIEW_ALIAS.MAPS_TRAINING_PAGE,
+ ARENA_GUI_TYPE.SORTIE_2: VIEW_ALIAS.STRONGHOLD_BATTLE_PAGE,
+ ARENA_GUI_TYPE.FORT_BATTLE_2: VIEW_ALIAS.STRONGHOLD_BATTLE_PAGE,
+ ARENA_GUI_TYPE.COMP7: VIEW_ALIAS.COMP7_BATTLE_PAGE}
+
+def addViewBattlePageAliasByArenaGUIType(arenaGuiType, viewAlias, personality):
+    if arenaGuiType in VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE:
+        raise SoftException('VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE already has arenaGuiType:{guiType}. Personality: {p}'.format(guiType=arenaGuiType, p=personality))
+    VIEW_ALIAS.BATTLE_PAGES += (viewAlias,)
+    VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE.update({arenaGuiType: viewAlias})
+    msg = 'arenaGuiType:{arenaGuiType} was added to VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE. Personality: {p}'.format(arenaGuiType=arenaGuiType, p=personality)
+    logging.debug(msg)

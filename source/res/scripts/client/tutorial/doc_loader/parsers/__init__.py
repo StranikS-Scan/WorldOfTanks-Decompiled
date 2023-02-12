@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/parsers/__init__.py
 import ResMgr
-from helpers.html import translation
 from items import _xml
 from tutorial.data.chapter import Chapter, Scene
 from tutorial.data.descriptor import DescriptorData
 from tutorial.data.hints import HintsData
 from tutorial.doc_loader import sub_parsers
-from tutorial.settings import GLOBAL_REFS_FILE_PATH, BONUSES_REFS_FILE_PATH
+from tutorial.settings import BONUSES_REFS_FILE_PATH
 
 class DescriptorParser(object):
 
@@ -33,17 +32,10 @@ class DescriptorParser(object):
 
     def _getCommonChapterValues(self, bonuses, subSection, xmlCtx):
         chapterID = _xml.readString(xmlCtx, subSection, 'chapter-id')
-        title = translation(_xml.readString(xmlCtx, subSection, 'title'))
-        descSec = _xml.getSubsection(xmlCtx, subSection, 'description')
-        defDesc = translation(descSec.asString)
-        abDesc = translation(descSec.readString('after-battle', defDesc))
-        descriptions = (defDesc, abDesc)
         bonus = self._parseBonus(xmlCtx, subSection, bonuses)
         forcedLoading = subSection.readInt('forced-loading', -1)
         pathSec = _xml.getSubsection(xmlCtx, subSection, 'file-path')
-        defFilePath = pathSec.asString
-        afterBattleFilePath = pathSec.readString('after-battle', defFilePath)
-        filePaths = (defFilePath, afterBattleFilePath)
+        filePath = pathSec.asString
         sharedScene = subSection.readString('shared-scene')
         predefinedVars = []
         varsSection = subSection['vars'] or {}
@@ -53,11 +45,9 @@ class DescriptorParser(object):
             _xml.raiseWrongXml(xmlCtx, name, 'Unknown tag')
 
         return (chapterID,
-         title,
-         descriptions,
          bonus,
          forcedLoading,
-         filePaths,
+         filePath,
          sharedScene,
          predefinedVars)
 
@@ -77,7 +67,7 @@ class DescriptorParser(object):
 
 class ChapterParser(object):
 
-    def _parseScene(self, xmlCtx, section, scene, flags, itemFlags, afterBattle=False, frontEffects=False):
+    def _parseScene(self, xmlCtx, section, scene, flags, itemFlags, frontEffects=False):
         for _, subSec in _xml.getChildren(xmlCtx, section, 'gui-items'):
             item = sub_parsers._parseGuiItem(xmlCtx, subSec, flags, itemFlags)
             if item is not None:
@@ -85,7 +75,7 @@ class ChapterParser(object):
 
         front = -1
         for _, subSec in _xml.getChildren(xmlCtx, section, 'post-effects'):
-            effect = sub_parsers._parseEffect(xmlCtx, subSec, flags, afterBattle=afterBattle)
+            effect = sub_parsers._parseEffect(xmlCtx, subSec, flags)
             if effect is not None:
                 if frontEffects:
                     front += 1
@@ -93,7 +83,7 @@ class ChapterParser(object):
 
         front = -1
         for _, subSec in _xml.getChildren(xmlCtx, section, 'runtime-effects'):
-            effect = sub_parsers._parseEffect(xmlCtx, subSec, flags, afterBattle=afterBattle)
+            effect = sub_parsers._parseEffect(xmlCtx, subSec, flags)
             if effect is not None:
                 if frontEffects:
                     front += 1
@@ -101,7 +91,7 @@ class ChapterParser(object):
 
         return
 
-    def _parseSharedScene(self, chapter, scene, flags, itemFlags, afterBattle=False):
+    def _parseSharedScene(self, chapter, scene, flags, itemFlags):
         filePath = chapter.getSharedScenePath()
         if not filePath:
             return
@@ -110,11 +100,11 @@ class ChapterParser(object):
             if section is None:
                 _xml.raiseWrongXml(None, filePath, 'can not open or read')
             xmlCtx = (None, filePath)
-            self._parseScene(xmlCtx, section, scene, flags, itemFlags, afterBattle=afterBattle, frontEffects=True)
+            self._parseScene(xmlCtx, section, scene, flags, itemFlags, frontEffects=True)
             return
 
-    def parse(self, chapter, afterBattle=False, initial=False):
-        filePath = chapter.getFilePath(afterBattle=afterBattle)
+    def parse(self, chapter, initial=False):
+        filePath = chapter.getFilePath()
         section = ResMgr.openSection(filePath)
         if section is None:
             _xml.raiseWrongXml(None, filePath, 'can not open or read')
@@ -129,7 +119,7 @@ class ChapterParser(object):
         self._parseEntities(xmlCtx, section, flags, chapter)
         self._parseTriggers(xmlCtx, section, flags, chapter)
         self._parseVars(xmlCtx, section, flags, chapter)
-        self._parseScenes(xmlCtx, section, chapter, flags, itemFlags, afterBattle, initial)
+        self._parseScenes(xmlCtx, section, chapter, flags, itemFlags, initial)
         self._parseGlobalRuntimeEffects(xmlCtx, section, flags, chapter)
         flags = [ flag for flag in flags if flag not in itemFlags ]
         chapter.setFlags(flags)
@@ -146,14 +136,11 @@ class ChapterParser(object):
                 gVarIDs.append(sub_parsers.parseID(xmlCtx, subSec, 'Specify a var ID'))
             _xml.raiseWrongXml(xmlCtx, name, 'Unknown tag')
 
-        if gVarIDs:
-            GlobalRefParser().parse(chapter, varIDs=gVarIDs, flags=flags)
-
-    def _parseScenes(self, xmlCtx, section, chapter, flags, itemFlags, afterBattle, initial):
+    def _parseScenes(self, xmlCtx, section, chapter, flags, itemFlags, initial):
         for _, sceneSec in _xml.getChildren(xmlCtx, section, 'scenes'):
             sceneID = sub_parsers.parseID(xmlCtx, sceneSec, 'Specify a unique name for the scene')
             scene = Scene(entityID=sceneID)
-            self._parseScene(xmlCtx, sceneSec, scene, flags, itemFlags, afterBattle=afterBattle)
+            self._parseScene(xmlCtx, sceneSec, scene, flags, itemFlags)
             chapter.addScene(scene)
 
         if initial:
@@ -186,27 +173,6 @@ class ChapterParser(object):
                     if effect is not None:
                         chapter.addGlobalEffect(effect, isPostScene)
 
-        return
-
-
-class GlobalRefParser(object):
-
-    def parse(self, chapter, varIDs=None, flags=None):
-        if varIDs is None:
-            varIDs = []
-        if flags is None:
-            flags = []
-        section = ResMgr.openSection(GLOBAL_REFS_FILE_PATH)
-        if section is None:
-            _xml.raiseWrongXml(None, GLOBAL_REFS_FILE_PATH, 'can not open or read')
-        xmlCtx = (None, GLOBAL_REFS_FILE_PATH)
-        if varIDs:
-            for _, subSec in _xml.getChildren(xmlCtx, section, 'vars'):
-                varID = sub_parsers.parseID(xmlCtx, subSec, 'Specify a var ID')
-                if varID in varIDs:
-                    chapter.addVarSet(sub_parsers.parseVarSet(xmlCtx, subSec, flags))
-
-        _xml.clearCaches()
         return
 
 

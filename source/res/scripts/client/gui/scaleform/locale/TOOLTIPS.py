@@ -58,6 +58,7 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_BROWSER = '#tooltips:header/buttons/browser'
     HEADER_BUTTONS_MANUAL = '#tooltips:header/buttons/manual'
     HEADER_BUTTONS_MISSIONS = '#tooltips:header/buttons/missions'
+    HEADER_BUTTONS_TOURNAMENTS = '#tooltips:header/buttons/tournaments'
     HEADER_PREMIUM_BUY = '#tooltips:header/premium_buy'
     HEADER_PREMIUM_EXTEND = '#tooltips:header/premium_extend'
     HEADER_PREMIUM_UPGRADE = '#tooltips:header/premium_upgrade'
@@ -70,7 +71,6 @@ class TOOLTIPS(object):
     BATTLETYPES_SPEC = '#tooltips:battleTypes/spec'
     BATTLETYPES_UNIT = '#tooltips:battleTypes/unit'
     BATTLETYPES_FALLOUT = '#tooltips:battleTypes/fallout'
-    BATTLETYPES_BATTLETUTORIAL = '#tooltips:battleTypes/battleTutorial'
     BATTLETYPES_RANKED = '#tooltips:battleTypes/ranked'
     LOBY_MESSENGER_CONTACTS_BUTTON = '#tooltips:loby_messenger/contacts_button'
     LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON = '#tooltips:loby_messenger/vehicle_compare_button'
@@ -512,12 +512,8 @@ class TOOLTIPS(object):
     BATTLETYPES_HISTORICAL_BODY = '#tooltips:battleTypes/historical/body'
     BATTLETYPES_LEAVEHISTORICAL_HEADER = '#tooltips:battleTypes/leaveHistorical/header'
     BATTLETYPES_LEAVEHISTORICAL_BODY = '#tooltips:battleTypes/leaveHistorical/body'
-    BATTLETYPES_BATTLETUTORIAL_HEADER = '#tooltips:battleTypes/battleTutorial/header'
-    BATTLETYPES_BATTLETUTORIAL_BODY = '#tooltips:battleTypes/battleTutorial/body'
     BATTLETYPES_AVAILABLETIME = '#tooltips:battleTypes/availableTime'
     BATTLETYPES_AVAILABLETIME_SINCE = '#tooltips:battleTypes/availableTime/since'
-    BATTLETYPES_BATTLETEACHING_HEADER = '#tooltips:battleTypes/battleTeaching/header'
-    BATTLETYPES_BATTLETEACHING_BODY = '#tooltips:battleTypes/battleTeaching/body'
     BATTLETYPES_AVAILABLETIME_UNTIL = '#tooltips:battleTypes/availableTime/until'
     BATTLETYPES_AVAILABLETIME_SERVERS = '#tooltips:battleTypes/availableTime/servers'
     BATTLETYPES_RANKED_HEADER = '#tooltips:battleTypes/ranked/header'
@@ -1033,6 +1029,8 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_FORTS_BODY = '#tooltips:header/buttons/forts/body'
     HEADER_BUTTONS_CLANS_HEADER = '#tooltips:header/buttons/clans/header'
     HEADER_BUTTONS_CLANS_BODY = '#tooltips:header/buttons/clans/body'
+    HEADER_BUTTONS_TOURNAMENTS_HEADER = '#tooltips:header/buttons/tournaments/header'
+    HEADER_BUTTONS_TOURNAMENTS_BODY = '#tooltips:header/buttons/tournaments/body'
     HEADER_BUTTONS_BROWSER_HEADER = '#tooltips:header/buttons/browser/header'
     HEADER_BUTTONS_BROWSER_BODY = '#tooltips:header/buttons/browser/body'
     HEADER_BUTTONS_MANUAL_HEADER = '#tooltips:header/buttons/manual/header'
@@ -1681,7 +1679,6 @@ class TOOLTIPS(object):
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
     CONTACT_STATUS_INBATTLE_TRAINING = '#tooltips:Contact/status/inBattle/training'
     CONTACT_STATUS_INBATTLE_TEAM = '#tooltips:Contact/status/inBattle/team'
-    CONTACT_STATUS_INBATTLE_TUTORIAL = '#tooltips:Contact/status/inBattle/tutorial'
     CONTACT_STATUS_INBATTLE_BOOTCAMP = '#tooltips:Contact/status/inBattle/bootcamp'
     CONTACT_STATUS_INBATTLE_TEAM7X7 = '#tooltips:Contact/status/inBattle/team7x7'
     CONTACT_STATUS_INBATTLE_RANKED = '#tooltips:Contact/status/inBattle/ranked'
@@ -2119,7 +2116,6 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_ROCKETACCELERATIONENGINEPOWER = '#tooltips:tank_params/desc/rocketAccelerationEnginePower'
     TANK_PARAMS_DESC_ROCKETACCELERATIONSPEEDLIMITS = '#tooltips:tank_params/desc/rocketAccelerationSpeedLimits'
     TANK_PARAMS_DESC_ROCKETACCELERATIONREUSEANDDURATION = '#tooltips:tank_params/desc/rocketAccelerationReuseAndDuration'
-    TANK_PARAMS_DESC_STUNMINDURATION = '#tooltips:tank_params/desc/stunMinDuration'
     TANK_PARAMS_DESC_STUNMAXDURATION = '#tooltips:tank_params/desc/stunMaxDuration'
     TANK_PARAMS_DESC_CHARGETIME = '#tooltips:tank_params/desc/chargeTime'
     VEHICLEPARAMS_TITLE_VALUETEMPLATE = '#tooltips:vehicleParams/title/valueTemplate'
@@ -2310,7 +2306,6 @@ class TOOLTIPS(object):
     MISSIONS_TOKENPOPOVER_BUYBTN_BODY = '#tooltips:missions/tokenPopover/buyBtn/body'
     MISSIONS_TOKENPOPOVER_QUEST_HEADER = '#tooltips:missions/tokenPopover/quest/header'
     MISSIONS_TOKENPOPOVER_QUEST_BODY = '#tooltips:missions/tokenPopover/quest/body'
-    MISSIONS_TOKEN_HEADER = '#tooltips:missions/token/header'
     MISSIONS_TOKEN_QUESTS_SINGLE = '#tooltips:missions/token/quests/single'
     MISSIONS_TOKEN_QUESTS_MULTIPLE = '#tooltips:missions/token/quests/multiple'
     MISSIONS_TOKEN_QUEST = '#tooltips:missions/token/quest'
@@ -2392,7 +2387,6 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENT_PATTERN = '#tooltips:quests/condition/achievement/pattern'
     MISSIONS_CONDITION_ACHIEVEMENT_PATTERN = '#tooltips:missions/condition/achievement/pattern'
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
-    QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
     QUESTS_BONUSES_TOKEN_BATTLE_ROYALE_BODY = '#tooltips:quests/bonuses/token/battle_royale/body'
     QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_HEADER = '#tooltips:quests/bonuses/token/resource/clan_promoresource/header'
@@ -2496,7 +2490,6 @@ class TOOLTIPS(object):
     ADVANCED_GAMEMODESPECIAL = '#tooltips:advanced/gamemodeSpecial'
     ADVANCED_GAMEMODETRAINING = '#tooltips:advanced/gamemodeTraining'
     ADVANCED_RANKED = '#tooltips:advanced/ranked'
-    ADVANCED_BATTLETEACHING = '#tooltips:advanced/battleTeaching'
     ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE = '#tooltips:advanced/header/shellType/HOLLOW_CHARGE'
     ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE = '#tooltips:advanced/header/shellType/HIGH_EXPLOSIVE'
     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING = '#tooltips:advanced/header/shellType/ARMOR_PIERCING'
@@ -2599,8 +2592,8 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_HEADER = '#tooltips:personalMissions/status/sheetRecoveryInProgress/header'
     PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_BODY = '#tooltips:personalMissions/status/sheetRecoveryInProgress/body'
     PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER = '#tooltips:personalMissions/status/lockedByVehicle/header'
-    PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY = '#tooltips:personalMissions/status/lockedByVehicleType/body'
-    PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY = '#tooltips:personalMissions/status/lockedByVehicleAlliance/body'
+    PERSONALMISSION_STATUS_LOCKEDBYVEHICLETYPE_BODY_REGULAR = '#tooltips:personalMission/status/lockedByVehicleType/body/regular'
+    PERSONALMISSION_STATUS_LOCKEDBYVEHICLETYPE_BODY_PM2 = '#tooltips:personalMission/status/lockedByVehicleType/body/pm2'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_HEADER = '#tooltips:personalMissions/status/lockedByPrevMissions/header'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_BODY = '#tooltips:personalMissions/status/lockedByPrevMissions/body'
     PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_HEADER = '#tooltips:personalMissions/status/lockedByPrevOperation/header'
@@ -2956,6 +2949,9 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMAN_LABEL = '#tooltips:notrecruitedtankman/tankman/label'
     NOTRECRUITEDTANKMAN_TANKMAN_DESC = '#tooltips:notrecruitedtankman/tankman/desc'
     NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankman/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_LABEL = '#tooltips:notrecruitedtankman/tankmen/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_DESC = '#tooltips:notrecruitedtankman/tankmen/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen/howToGetInfo'
     NOTRECRUITEDTANKMAN_TWITCH1_LABEL = '#tooltips:notrecruitedtankman/twitch1/label'
     NOTRECRUITEDTANKMAN_TWITCH1_DESC = '#tooltips:notrecruitedtankman/twitch1/desc'
     NOTRECRUITEDTANKMAN_TWITCH3_LABEL = '#tooltips:notrecruitedtankman/twitch3/label'
@@ -3103,6 +3099,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_COMMANDER_FERENC_DESC = '#tooltips:notrecruitedtankman/commander_ferenc/desc'
     NOTRECRUITEDTANKMAN_COMMANDER_NANSEN_LABEL = '#tooltips:notrecruitedtankman/commander_nansen/label'
     NOTRECRUITEDTANKMAN_COMMANDER_NANSEN_DESC = '#tooltips:notrecruitedtankman/commander_nansen/desc'
+    NOTRECRUITEDTANKMAN_COMMANDER_HOB_LABEL = '#tooltips:notrecruitedtankman/commander_hob/label'
+    NOTRECRUITEDTANKMAN_COMMANDER_HOB_DESC = '#tooltips:notrecruitedtankman/commander_hob/desc'
     NOTRECRUITEDTANKMAN_YHA_COMMANDER_LABEL = '#tooltips:notrecruitedtankman/yha_commander/label'
     NOTRECRUITEDTANKMAN_YHA_COMMANDER_DESC = '#tooltips:notrecruitedtankman/yha_commander/desc'
     NOTRECRUITEDTANKMAN_YHA_DRIVER_LABEL = '#tooltips:notrecruitedtankman/yha_driver/label'
@@ -3385,6 +3383,15 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp9_3/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_DESC = '#tooltips:notrecruitedtankman/tankmen_bp9_3/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp9_3/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp10_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_DESC = '#tooltips:notrecruitedtankman/tankmen_bp10_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp10_1/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp10_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_DESC = '#tooltips:notrecruitedtankman/tankmen_bp10_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp10_2/howToGetInfo'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp10_3/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_DESC = '#tooltips:notrecruitedtankman/tankmen_bp10_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp10_3/howToGetInfo'
     NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_bph_1/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_DESC = '#tooltips:notrecruitedtankman/tankmen_bph_1/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bph_1/howToGetInfo'
@@ -3665,7 +3672,6 @@ class TOOLTIPS(object):
      CONTACT_STATUS_INBATTLE_RANDOM,
      CONTACT_STATUS_INBATTLE_TRAINING,
      CONTACT_STATUS_INBATTLE_TEAM,
-     CONTACT_STATUS_INBATTLE_TUTORIAL,
      CONTACT_STATUS_INBATTLE_BOOTCAMP,
      CONTACT_STATUS_INBATTLE_TEAM7X7,
      CONTACT_STATUS_INBATTLE_RANKED,
@@ -3730,7 +3736,6 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_ROCKETACCELERATIONENGINEPOWER,
      TANK_PARAMS_DESC_ROCKETACCELERATIONSPEEDLIMITS,
      TANK_PARAMS_DESC_ROCKETACCELERATIONREUSEANDDURATION,
-     TANK_PARAMS_DESC_STUNMINDURATION,
      TANK_PARAMS_DESC_STUNMAXDURATION,
      TANK_PARAMS_DESC_CHARGETIME)
     BATTLERESULTS_EFFICIENCYHEADER_ENUM = (BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,
@@ -4107,7 +4112,6 @@ class TOOLTIPS(object):
      ADVANCED_GAMEMODESPECIAL,
      ADVANCED_GAMEMODETRAINING,
      ADVANCED_RANKED,
-     ADVANCED_BATTLETEACHING,
      ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
      ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
@@ -4176,6 +4180,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL,
      NOTRECRUITEDTANKMAN_CZECH_WOMAN_LABEL,
      NOTRECRUITEDTANKMAN_TANKMAN_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH1_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH3_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH4_LABEL,
@@ -4238,6 +4243,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_FERENC_LABEL,
      NOTRECRUITEDTANKMAN_COMMANDER_NANSEN_LABEL,
+     NOTRECRUITEDTANKMAN_COMMANDER_HOB_LABEL,
      NOTRECRUITEDTANKMAN_YHA_COMMANDER_LABEL,
      NOTRECRUITEDTANKMAN_YHA_DRIVER_LABEL,
      NOTRECRUITEDTANKMAN_YHA_GUNNER_LABEL,
@@ -4295,6 +4301,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_3_LABEL,
@@ -4329,6 +4338,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
      NOTRECRUITEDTANKMAN_CZECH_WOMAN_DESC,
      NOTRECRUITEDTANKMAN_TANKMAN_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_DESC,
      NOTRECRUITEDTANKMAN_TWITCH1_DESC,
      NOTRECRUITEDTANKMAN_TWITCH3_DESC,
      NOTRECRUITEDTANKMAN_TWITCH4_DESC,
@@ -4395,6 +4405,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_QUICKYBABY_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_FERENC_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_NANSEN_DESC,
+     NOTRECRUITEDTANKMAN_COMMANDER_HOB_DESC,
      NOTRECRUITEDTANKMAN_YHA_COMMANDER_DESC,
      NOTRECRUITEDTANKMAN_YHA_DRIVER_DESC,
      NOTRECRUITEDTANKMAN_YHA_GUNNER_DESC,
@@ -4452,6 +4463,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_3_DESC,
@@ -4482,6 +4496,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_BP_KASHCHEI_DESC,
      NOTRECRUITEDTANKMAN_COMMANDER_BP_BABAYAGA_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO,
@@ -4522,6 +4537,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_3_HOWTOGETINFO,
@@ -4532,6 +4550,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY23DEFAULTGIRL_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO,
@@ -4572,6 +4591,9 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP9_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP10_3_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_2_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BPH_3_HOWTOGETINFO,

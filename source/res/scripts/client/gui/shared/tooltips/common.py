@@ -21,7 +21,6 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -42,7 +41,6 @@ from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
-from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import formatActionPrices
@@ -1325,7 +1323,7 @@ class MissionsToken(BlocksTooltipData):
         return items
 
     def __packTitleBlock(self, token):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(token.getUserName()), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
          'left': 11,
          'right': 5})
 
@@ -1413,19 +1411,6 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
         content.append(formatters.packBuildUpBlockData(blocks))
         return content
-
-
-class BattleTraining(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(BattleTraining, self).__init__(context, None)
-        self._setWidth(540)
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(BattleTraining, self)._packBlocks(*args, **kwargs)
-        items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER), desc=text_styles.main(i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))))
-        return items
 
 
 class SquadBonusTooltipWindowData(ToolTipBaseData):

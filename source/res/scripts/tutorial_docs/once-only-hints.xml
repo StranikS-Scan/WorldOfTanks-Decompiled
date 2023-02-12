@@ -1,13 +1,6 @@
 <once-only-hints.xml>
   <gui>	gui/tutorial-lobby-gui.xml	</gui>
   <hints>
-    <hint>	FalloutQuestsTab	  <item-id>	FalloutQuestsTabButton	</item-id>
-      <text>	_(#tutorial:onceOnlyHints/falloutQuestsTab)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-    </hint>
     <hint>	CustomizationSlotsHint	  <item-id>	CustomizationSlots	</item-id>
       <text>	_(#tutorial:customization/slots)	</text>
       <arrow>

@@ -1,0 +1,49 @@
+<121_lost_paradise_v.xml>
+  <name>	#arenas:121_lost_paradise_v/name	</name>
+  <description>	#arenas:121_lost_paradise_v/description	</description>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <geometry>	spaces/121_lost_paradise_v	</geometry>
+  <boundingBox>
+    <bottomLeft>	-600.000000 -600.000000	</bottomLeft>
+    <upperRight>	700.000000 700.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/121_lost_paradise_v/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_lost_paradise_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_lost_paradise_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_lost_paradise_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_lost_paradise_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_lost_paradise_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_lost_paradise_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_desert_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-309.239655 -296.055847	</position1>
+        </team1>
+        <team2>
+          <position1>	370.677979 431.026764	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</121_lost_paradise_v.xml>

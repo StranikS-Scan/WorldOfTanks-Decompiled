@@ -110,6 +110,10 @@ class AllowVScriptStruct(type):
 
     def __new__(cls, name, bases, members):
         fieldData = {}
+        for base in bases:
+            if hasattr(base, 'vs_fields'):
+                fieldData.update(base.vs_fields)
+
         for key, value in members.iteritems():
             if isinstance(value, VScriptStructField):
                 fieldData[value.name[1:]] = value.type

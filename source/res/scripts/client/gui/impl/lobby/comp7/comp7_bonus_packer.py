@@ -153,9 +153,11 @@ class Comp7CustomizationBonusUIPacker(CustomizationBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus, item, label):
         model = super(Comp7CustomizationBonusUIPacker, cls)._packSingleBonus(bonus, item, label)
-        styleID = bonus.getC11nItem(item).id
+        item = bonus.getC11nItem(item)
+        styleID = item.id
         model.setStyleID(styleID)
         model.setIcon(cls._ICON_NAME)
+        model.setLabel(item.userName)
         return model
 
     @classmethod

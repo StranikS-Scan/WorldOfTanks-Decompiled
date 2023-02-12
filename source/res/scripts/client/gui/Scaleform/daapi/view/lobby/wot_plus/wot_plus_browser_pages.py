@@ -11,10 +11,10 @@ class WotPlusInfoView(WebView):
 
     def _populate(self):
         super(WotPlusInfoView, self)._populate()
-        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_cn_wotplus_infopage_enter()))
+        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_wotplus_infopage_enter()))
 
     def _dispose(self):
-        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_cn_wotplus_infopage_exit()))
+        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_wotplus_infopage_exit()))
         super(WotPlusInfoView, self)._dispose()
 
 
@@ -28,8 +28,8 @@ class VehicleRentalView(WebView):
 
     def _populate(self):
         super(VehicleRentalView, self)._populate()
-        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_cn_wotplus_tank_rental_enter()))
+        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_wotplus_tank_rental_enter()))
 
     def _dispose(self):
-        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_cn_wotplus_tank_rental_exit()))
+        WWISE.WW_eventGlobal(backport.sound(R.sounds.ev_wotplus_tank_rental_exit()))
         super(VehicleRentalView, self)._dispose()

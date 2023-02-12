@@ -261,7 +261,10 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     def __getComplexToolTip(cls, complexToken):
         webCache = cls._eventsCache.prefetcher
         userName = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
-        tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+        description = webCache.getTokenDetailedInfo(complexToken.styleID)
+        if description is None:
+            description = backport.text(R.strings.tooltips.quests.bonuses.token.body())
+        tooltip = makeTooltip(userName, description if description else None)
         return tooltip
 
     @classmethod

@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/actions_validator.py
+from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.squad.actions_validator import UnitActionsValidator
-from gui.prb_control.entities.base.unit.actions_validator import UnitVehiclesValidator, CommanderValidator, UnitStateValidator
+from gui.prb_control.entities.base.unit.actions_validator import UnitVehiclesValidator, CommanderValidator, UnitStateValidator, UnitPlayerValidator
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 
@@ -38,6 +39,14 @@ class StrongholdUnitStateValidator(UnitStateValidator):
         return ValidationResult(False, UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING) if self._entity.inPlayersMatchingMode() else super(StrongholdUnitStateValidator, self)._validate()
 
 
+class StrongholdUnitPlayerValidator(UnitPlayerValidator):
+
+    def _validate(self):
+        if self._entity.inPlayersMatchingMode():
+            return ValidationResult(False, UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING)
+        return ValidationResult(False, UNIT_RESTRICTION.PLAY_LIMITS_IS_ACTIVE) if prb_getters.isParentControlActivated() else super(StrongholdUnitPlayerValidator, self)._validate()
+
+
 class StrongholdActionsValidator(UnitActionsValidator):
 
     def _createVehiclesValidator(self, entity):
@@ -48,3 +57,6 @@ class StrongholdActionsValidator(UnitActionsValidator):
 
     def _createStateValidator(self, entity):
         return StrongholdUnitStateValidator(entity)
+
+    def _createPlayerValidator(self, entity):
+        return StrongholdUnitPlayerValidator(entity)

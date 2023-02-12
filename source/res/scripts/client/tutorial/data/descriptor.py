@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/descriptor.py
-from tutorial.data.chapter import ChapterProgress
+
 
 class DescriptorData(object):
 
@@ -33,12 +33,6 @@ class DescriptorData(object):
             result = self.__contents[self.__idMapping[chapterID]]
         return result
 
-    def getChapterIdx(self, chapterID):
-        return self.__idMapping[chapterID] if chapterID in self.__idMapping.keys() else -1
-
-    def getNumberOfChapters(self):
-        return len(self.__contents)
-
     def isChapterInitial(self, chapter, completed):
         result = False
         if chapter is not None:
@@ -70,55 +64,3 @@ class DescriptorData(object):
                 break
 
         return result
-
-    def getAllBonuses(self):
-        result = 0
-        for chapter in self.__contents:
-            if chapter.hasBonus():
-                result |= 1 << chapter.getBonusID()
-
-        return result
-
-    def areAllBonusesReceived(self, completed):
-        result = True
-        for chapter in self.__contents:
-            if chapter.hasBonus() and not chapter.isBonusReceived(completed):
-                result = False
-                break
-
-        return result
-
-    def hasReceivedBonuses(self, completed, minimum=1):
-        if not completed:
-            return False
-        result = False
-        counter = 0
-        for chapter in self.__contents:
-            if chapter.hasBonus() and chapter.isBonusReceived(completed):
-                counter += 1
-                if counter is minimum:
-                    result = True
-                    break
-
-        return result
-
-    def getProgress(self, completed, failed=-1):
-        result = 0
-        offset = 0
-        for chapter in self.__contents:
-            if chapter.hasBonus():
-                if chapter.isBonusReceived(completed):
-                    bit = ChapterProgress.PROGRESS_FLAG_COMPLETED
-                elif failed != -1 and chapter.isBonusReceived(failed):
-                    bit = ChapterProgress.PROGRESS_FLAG_FAILED
-                else:
-                    bit = ChapterProgress.PROGRESS_FLAG_UNDEFINED
-            else:
-                bit = ChapterProgress.PROGRESS_FLAG_UNDEFINED
-            result |= bit << offset
-            offset += 2
-
-        return result
-
-    def getChapterByIdx(self, idx):
-        return self.__contents[idx] if idx < len(self.__contents) else None

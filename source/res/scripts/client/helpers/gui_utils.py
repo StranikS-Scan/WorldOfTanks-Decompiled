@@ -9,10 +9,10 @@ def setAnchor(component, hor, vert):
 
 
 def setPixMode(component):
-    component.heightMode = 'PIXEL'
-    component.widthMode = 'PIXEL'
-    component.verticalPositionMode = 'PIXEL'
-    component.horizontalPositionMode = 'PIXEL'
+    component.heightMode = GUI.Simple.eSizeMode.PIXEL
+    component.widthMode = GUI.Simple.eSizeMode.PIXEL
+    component.verticalPositionMode = GUI.Simple.ePositionMode.PIXEL
+    component.horizontalPositionMode = GUI.Simple.ePositionMode.PIXEL
 
 
 def pixToClipVector2(pixVector):

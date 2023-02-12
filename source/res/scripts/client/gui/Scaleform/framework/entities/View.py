@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
 import logging
 import typing
+import BigWorld
 from collections import namedtuple
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
@@ -16,7 +17,6 @@ from sound_gui_manager import ViewSoundExtension
 from helpers import dependency, uniprof
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
-_UNIPROF_REGION_COLOR = 3368601
 _logger = logging.getLogger(__name__)
 _view_id_generator = SequenceIDGenerator()
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
@@ -51,7 +51,6 @@ class View(AbstractViewMeta, ViewInterface):
         from gui.Scaleform.framework import ViewSettings
         self.__settings = ViewSettings()
         self.__uid = _view_id_generator.next()
-        self.__viewLiveRegionName = None
         self.__key = ViewKey(None, None)
         self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
         self.__soundExtension.initSoundManager()
@@ -131,8 +130,6 @@ class View(AbstractViewMeta, ViewInterface):
             if self.__settings.scope != ScopeTemplates.DYNAMIC_SCOPE:
                 self.__scope = self.__settings.scope
             self.__key = ViewKey(self.__settings.alias, self.uniqueName)
-            self.__viewLiveRegionName = 'Scaleform view: {} {}'.format(self.__key.name, self.__uid)
-            uniprof.enterToRegion(self.__viewLiveRegionName, _UNIPROF_REGION_COLOR)
         else:
             _logger.error('settings can`t be None!')
         return
@@ -162,6 +159,7 @@ class View(AbstractViewMeta, ViewInterface):
 
     def setParentWindow(self, window):
         self.__window = window
+        self.__uid = window.uniqueID
 
     def isVisible(self):
         return self.getState() == EntityState.CREATED
@@ -176,9 +174,8 @@ class View(AbstractViewMeta, ViewInterface):
     def _destroy(self):
         self.__window = None
         self.__soundExtension.destroySoundManager()
-        if self.__viewLiveRegionName:
-            uniprof.exitFromRegion(self.__viewLiveRegionName)
-        else:
-            _logger.error('__viewLiveRegionName was not defined for ' + self.__class__.__name__)
+        if self.__key.name and self.__key.alias:
+            uniprof.exitFromRegion('Scaleform {} {}'.format(self.__key.name, self.__uid))
+            BigWorld.notify(BigWorld.EventType.VIEW_DESTROYED, self.__key.alias, self.__uid, self.__key.name)
         super(View, self)._destroy()
         return

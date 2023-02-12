@@ -12,7 +12,7 @@ from fun_random.gui.feature.sub_systems.fun_sub_modes_holder import FunSubModesH
 from fun_random.gui.feature.sub_systems.fun_subscription import FunSubscription
 from fun_random.gui.feature.sub_systems.fun_sub_modes_info import FunSubModesInfo
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
-from fun_random.gui.fun_gui_constants import FunctionalFlag, PrebattleActionName, SelectorBattleTypes
+from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
 from fun_random.helpers.server_settings import FunRandomConfig
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
@@ -100,7 +100,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         return self.__funRandomSettings.isEnabled
 
     def isFunRandomPrbActive(self):
-        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FunctionalFlag.FUN_RANDOM)
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.FUN_RANDOM)
 
     def getSettings(self):
         return self.__funRandomSettings
@@ -109,7 +109,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     @adisp_process
     def selectFunRandomBattle(self, desiredSubModeID, callback=None):
         extData = {FUN_EVENT_ID_KEY: desiredSubModeID}
-        result = yield self.__doSelectPrbAction(PrebattleActionName.FUN_RANDOM, extData=extData)
+        result = yield self.__doSelectPrbAction(PREBATTLE_ACTION_NAME.FUN_RANDOM, extData=extData)
         notifyCaller(callback, result)
 
     def __getSubSystems(self):
@@ -168,4 +168,4 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         lastPreset = AccountSettings.getSettings(FUN_RANDOM_LAST_PRESET)
         if currPreset != DEFAULT_SETTINGS_KEY and lastPreset != currPreset:
             AccountSettings.setSettings(FUN_RANDOM_LAST_PRESET, currPreset)
-            setBattleTypeAsUnknown(SelectorBattleTypes.FUN_RANDOM)
+            setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)

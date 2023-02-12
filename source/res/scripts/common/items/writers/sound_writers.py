@@ -31,30 +31,3 @@ def writeHullAimingSound(hullAimingSound, section, cache):
 
         changed |= soundsDS.flush()
         return changed
-
-
-def writeSoundsSets(item, section):
-    if not item:
-        section.deleteSection('soundsSets')
-        return
-    else:
-        setsSection = section['soundsSets']
-        if setsSection is None:
-            setsSection = section.createSection('soundsSets')
-        itemKeys = item.keys()
-        sectionKeys = setsSection.keys()
-        addedKeys = itemKeys.difference(sectionKeys)
-        modifiedKeys = itemKeys.intersection(sectionKeys)
-        deletedKeys = sectionKeys.difference(itemKeys)
-        for key in addedKeys:
-            setSection = setsSection.createSection(key)
-            writeWWTripleSoundConfig(item[key], setSection)
-
-        for key in modifiedKeys:
-            setSection = setsSection[key]
-            writeWWTripleSoundConfig(item[key], setSection)
-
-        for key in deletedKeys:
-            setsSection.deleteSection(key)
-
-        return

@@ -1590,4 +1590,23 @@
     </projection_decal>
     <name>	Twitch 2023	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	866	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_167.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_167	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Easter West	</name>
+  </itemGroup>
 </projection_decals_nonCN.xml>

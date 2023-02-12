@@ -17,7 +17,6 @@ class _PlayerEvents(object):
         self.onDequeued = Event.Event()
         self.onEnqueueFailure = Event.Event()
         self.onKickedFromQueue = Event.Event()
-        self.onTutorialEnqueued = Event.Event()
         self.onPrbDispatcherCreated = Event.Event()
         self.onPrebattleJoined = Event.Event()
         self.onPrebattleLeft = Event.Event()

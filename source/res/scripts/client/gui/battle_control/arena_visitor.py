@@ -277,23 +277,11 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
 
-    def isSandboxBattle(self):
-        return self._guiType in _GUI_TYPE.SANDBOX_RANGE
-
-    def isNotRatedSandboxBattle(self):
-        return self._guiType == _GUI_TYPE.SANDBOX
-
-    def isRatedSandboxBattle(self):
-        return self._guiType == _GUI_TYPE.RATED_SANDBOX
-
     def isTrainingBattle(self):
         return self._guiType in (_GUI_TYPE.TRAINING, _GUI_TYPE.EPIC_RANDOM_TRAINING)
 
     def isEpicRandomBattle(self):
         return self._guiType in (_GUI_TYPE.EPIC_RANDOM, _GUI_TYPE.EPIC_RANDOM_TRAINING)
-
-    def isTutorialBattle(self):
-        return self._guiType == _GUI_TYPE.TUTORIAL
 
     def isRankedBattle(self):
         return self._guiType == _GUI_TYPE.RANKED
@@ -548,14 +536,11 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def modifiers(self):
         return self._modifiers
 
-    def isArenaNotStarted(self):
-        return self.getArenaPeriod() in (_PERIOD.IDLE, _PERIOD.WAITING, _PERIOD.PREBATTLE)
-
     def isArenaInWaiting(self):
         return self.getArenaPeriod() == _PERIOD.WAITING
 
     def isBattleEndWarningEnabled(self):
-        return GUI_SETTINGS.battleEndWarningEnabled and not self._gui.isTutorialBattle()
+        return GUI_SETTINGS.battleEndWarningEnabled
 
     def isSoloTeam(self, team):
         return False

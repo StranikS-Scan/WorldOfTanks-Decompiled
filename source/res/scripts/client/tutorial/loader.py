@@ -14,7 +14,7 @@ from helpers import dependency
 from tutorial import core
 from tutorial import settings as _settings
 from tutorial import cache as _cache
-from tutorial.control.context import GLOBAL_FLAG, GlobalStorage
+from tutorial.control.context import GlobalStorage
 from tutorial.control.listener import AppLoaderListener
 from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
@@ -51,7 +51,6 @@ class RunCtx(object):
         self.newbieBattlesCount = kwargs.get('newbieBattlesCount', 0)
         self.initialChapter = kwargs.get('initialChapter', None)
         self.globalFlags = kwargs.get('globalFlags', {})
-        self.globalFlags[GLOBAL_FLAG.IN_QUEUE] = kwargs.get('isInTutorialQueue', False)
         self.canResolveChapterOnStart = kwargs.get('canResolveChapterOnStart', True)
         self.byRequest = kwargs.get('byRequest', False)
         return
@@ -182,7 +181,7 @@ class TutorialLoader(ITutorialLoader):
         state = {'isFirstStart': isFirstStart,
          'isAfterBattle': self.__afterBattle}
         self.__setDispatcher(_LOBBY_DISPATCHER)
-        self.__restoreID = _SETTINGS.QUESTS.id
+        self.__restoreID = None
         bootcampController = dependency.instance(IBootcampController)
         isInBootcampAccount = bootcampController.isInBootcampAccount()
         if isInBootcampAccount and not self.demoAccController.isInDemoAccRegistration:
@@ -190,7 +189,7 @@ class TutorialLoader(ITutorialLoader):
                 lobbySetting = _SETTINGS.SHORT_BOOTCAMP_LOBBY
             else:
                 lobbySetting = _SETTINGS.BOOTCAMP_LOBBY
-            selectedSettings = self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS, lobbySetting), state)
+            selectedSettings = self.__doAutoRun((lobbySetting,), state)
         else:
             selectedSettings = None
         if selectedSettings is None or selectedSettings.hintsEnabled:
@@ -202,9 +201,7 @@ class TutorialLoader(ITutorialLoader):
         self.stop(restore=False)
 
     def goToBattleLoading(self):
-        self.__afterBattle = True
         self.__doClear()
-        self.__doAutoRun((_SETTINGS.BATTLE_V2, _SETTINGS.BATTLE_QUESTS), {'canResolveChapterOnStart': False})
 
     def goToBattle(self):
         if self.__tutorial is not None:

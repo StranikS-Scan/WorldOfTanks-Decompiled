@@ -5,7 +5,7 @@ import sys
 from block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
 from slot_types import SLOT_TYPE, arrayOf
 from type import VScriptStruct, VScriptStructField
-from visual_script.misc import errorVScript
+from visual_script.misc import errorVScript, ASPECT
 import ResMgr
 import constants
 import nations
@@ -80,6 +80,10 @@ class EquipmentMeta(Meta):
     @classmethod
     def blockIcon(cls):
         pass
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.SERVER, ASPECT.CLIENT, ASPECT.HANGAR]
 
 
 class ConfigParamStruct(VScriptStruct):

@@ -8,20 +8,7 @@ import Math
 from Event import Event
 import constants
 import BattleReplay
-from debug_utils import LOG_DEBUG
 from helpers.CallbackDelayer import CallbackDelayer
-
-def logFunc(func):
-
-    def wrapped(*args, **kwargs):
-        import traceback
-        traceback.print_stack()
-        LOG_DEBUG('|||||||||||||||||| %s(%s, %s) |||||||||||' % (func.func_name, args, kwargs))
-        func(*args, **kwargs)
-
-    return wrapped
-
-
 _logger = logging.getLogger(__name__)
 
 class ConsistentMatrices(object):
@@ -136,7 +123,7 @@ class AvatarPositionControl(CallbackDelayer):
             _logger.warning('switchViewpoint happened during switching cooldown! isSwitching check missed!')
         self.__isSwitching = True
         if BattleReplay.isServerSideReplay():
-            self.__avatar.bindToVehicleForServerSideReplay(vehOrPointId)
+            BattleReplay.g_replayCtrl.bindToVehicleForServerSideReplay(vehOrPointId)
             self.__resetSwitching()
         else:
             self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
@@ -164,7 +151,7 @@ class AvatarPositionControl(CallbackDelayer):
 
     def __doBind(self, vehicleID):
         if BattleReplay.isServerSideReplay():
-            self.__avatar.bindToVehicleForServerSideReplay(vehicleID)
+            BattleReplay.g_replayCtrl.bindToVehicleForServerSideReplay(vehicleID)
         else:
             self.__avatar.cell.bindToVehicle(vehicleID)
 
@@ -172,7 +159,7 @@ class AvatarPositionControl(CallbackDelayer):
         if vehicleID is None:
             vehicleID = 0
         if BattleReplay.isServerSideReplay():
-            self.__avatar.bindToVehicleForServerSideReplay(vehicleID)
+            BattleReplay.g_replayCtrl.bindToVehicleForServerSideReplay(vehicleID)
         else:
             self.__avatar.cell.bindToVehicle(vehicleID)
         replayCtrl = BattleReplay.g_replayCtrl

@@ -82,7 +82,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__commandReceivedData = None
         self.__lastPersonalMsgTimestamp = -_PERSONAL_MESSAGE_MUTE_DURATION
         self.__lastCalloutTimestamp = -_CALLOUT_MESSAGES_BLOCK_DURATION
-        self.resetRadialMenuData()
+        self.resetRadialMenuData(onStop=True)
         return
 
     def setViewComponents(self, component):
@@ -98,8 +98,8 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     def isRadialMenuOpened(self):
         return self.__radialMenuIsOpen
 
-    def resetRadialMenuData(self):
-        isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
+    def resetRadialMenuData(self, onStop=False):
+        isPlayerObserver = None if onStop else self.sessionProvider.getCtx().isPlayerObserver()
         if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
             self.__radialMenuIsOpen = False
             self.__radialKeyDown = None

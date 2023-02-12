@@ -35,27 +35,6 @@ def makePlanPath(planName):
     return 'vscript/plans/{}.xml'.format(planName)
 
 
-def preloadPlanXml(func):
-
-    def wrapper(self, planName, *args, **kwargs):
-        if not IS_CLIENT and not IS_BOT:
-
-            def onCallback(future):
-                try:
-                    future.get()
-                except BigWorld.FutureNotReady:
-                    LOG_ERROR("[VScript] Plan xml '%s' not pre-loaded." % planName)
-
-                func(self, planName, *args, **kwargs)
-
-            future = BigWorld.resMgr.fetchDataSection(makePlanPath(planName))
-            future.then(onCallback)
-        else:
-            func(self, planName, *args, **kwargs)
-
-    return wrapper
-
-
 def errorVScript(owner, msg):
     LOG_ERROR('[VScript]', owner.__class__.__name__, msg)
     owner._writeLog('%s : %s' % (owner.__class__.__name__, msg))

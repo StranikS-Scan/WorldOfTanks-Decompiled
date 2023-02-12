@@ -783,8 +783,6 @@ class UnitEntity(_UnitEntity):
         self._requestsProcessor.doRequest(ctx, 'kick', ctx.getPlayerID(), callback=callback)
 
     def setVehicle(self, ctx, callback=None):
-        if self.isParentControlActivated(callback=callback):
-            return
         pPermissions = self.getPermissions()
         if not pPermissions.canSetVehicle():
             LOG_ERROR('Player can not set vehicle', pPermissions)
@@ -1025,7 +1023,7 @@ class UnitEntity(_UnitEntity):
                 if callback:
                     callback(False)
                 return
-            self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled())
+            self._doStartBattleRequest(ctx, flags, callback)
         else:
             if not pPermissions.canStopBattleQueue():
                 LOG_ERROR('Player can not stop battle queue', pPermissions)
@@ -1037,7 +1035,7 @@ class UnitEntity(_UnitEntity):
                 if callback:
                     callback(True)
             else:
-                self._requestsProcessor.doRequest(ctx, 'stopBattle', callback=callback)
+                self._doStopBattleRequest(ctx, callback)
 
     def giveLeadership(self, ctx, callback=None):
         pPermissions = self.getPermissions()
@@ -1486,3 +1484,9 @@ class UnitEntity(_UnitEntity):
             return
         self._requestsProcessor.doRequest(ctx, 'setReady', ctx.isReady(), ctx.resetVehicle, callback=callback)
         self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
+
+    def _doStartBattleRequest(self, ctx, flags, callback):
+        self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled())
+
+    def _doStopBattleRequest(self, ctx, callback):
+        self._requestsProcessor.doRequest(ctx, 'stopBattle', callback=callback)

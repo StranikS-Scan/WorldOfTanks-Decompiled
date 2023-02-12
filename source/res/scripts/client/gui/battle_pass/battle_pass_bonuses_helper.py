@@ -5,13 +5,12 @@ import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.formatters import text_styles
-from helpers import i18n
 from gui import makeHtmlString
 from gui.server_events.bonuses import IntelligenceBlueprintBonus, NationalBlueprintBonus, DossierBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence, getVehicleCDForNational
 from gui.battle_pass.battle_pass_constants import BonusesLayoutConsts
+from helpers import i18n, int2roman
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 if typing.TYPE_CHECKING:
@@ -78,11 +77,19 @@ class _ItemsSubTypeGetter(_BaseSubTypeGetter):
         items = bonus.getItems().keys()
         item = first(items)
         if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            subType = _HelperConsts.TROPHY_DEVICE_TYPE if item.isTrophy else _HelperConsts.OPTIONAL_DEVICE_TYPE
+            if item.isTrophy:
+                subType = _HelperConsts.TROPHY_DEVICE_TYPE
+            elif item.isModernized:
+                subType = _HelperConsts.MODERNIZED_DEVICE_TYPE
+            else:
+                subType = _HelperConsts.OPTIONAL_DEVICE_TYPE
         elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-            subType = _HelperConsts.EQUIPMENT_TYPE
+            subType = _HelperConsts.CONSUMABLE_TYPE
         elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
-            subType = _HelperConsts.EQUIPMENT_TYPE
+            if item.isCrewBooster():
+                subType = _HelperConsts.CREW_BATTLE_BOOSTER_TYPE
+            else:
+                subType = _HelperConsts.DEVICE_BATTLE_BOOSTER_TYPE
         return subType
 
 
@@ -291,7 +298,7 @@ class _SelectTokenTextGetter(_BaseTextGetter):
     @classmethod
     def getText(cls, item):
         nameRes = R.strings.battle_pass.chosenBonuses.bonus.dyn(item.getType())
-        return text_styles.main(backport.text(nameRes())) if nameRes.exists() else ''
+        return backport.text(nameRes()) if nameRes.exists() else ''
 
 
 class _StyleProgressTokenTextGetter(_BaseTextGetter):
@@ -300,7 +307,7 @@ class _StyleProgressTokenTextGetter(_BaseTextGetter):
     def getText(cls, item):
         from gui.battle_pass.battle_pass_helpers import getStyleForChapter
         chapter = item.getChapter()
-        level = item.getLevel()
+        level = int2roman(item.getLevel())
         style = getStyleForChapter(chapter)
         text = backport.text(R.strings.battle_pass.styleProgressBonus(), styleName=style.userName, level=level)
         return text
@@ -314,7 +321,7 @@ class _TankmanTokenTextGetter(_BaseTextGetter):
             if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
                 recruitInfo = getRecruitInfo(tokenID)
                 if recruitInfo is not None:
-                    return text_styles.main(backport.text(R.strings.battle_pass.universalTankmanBonus(), name=recruitInfo.getFullUserName()))
+                    return backport.text(R.strings.battle_pass.universalTankmanBonus(), name=recruitInfo.getFullUserName())
 
         return ''
 
@@ -337,4 +344,7 @@ class _HelperConsts(object):
     BADGE_TYPE = 'badge'
     OPTIONAL_DEVICE_TYPE = 'optionalDevice'
     TROPHY_DEVICE_TYPE = 'trophyDevice'
-    EQUIPMENT_TYPE = 'equipment'
+    MODERNIZED_DEVICE_TYPE = 'modernizedDevice'
+    CONSUMABLE_TYPE = 'consumable'
+    CREW_BATTLE_BOOSTER_TYPE = 'crewBattleBooster'
+    DEVICE_BATTLE_BOOSTER_TYPE = 'deviceBattleBooster'

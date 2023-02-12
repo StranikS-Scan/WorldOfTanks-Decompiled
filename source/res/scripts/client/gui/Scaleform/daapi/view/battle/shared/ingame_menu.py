@@ -7,7 +7,6 @@ import BattleReplay
 from adisp import adisp_process
 from gui.battle_control.event_dispatcher import showIngameMenu
 from wg_async import wg_async, wg_await
-from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
 from account_helpers.counter_settings import getCountNewSettings
@@ -167,20 +166,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def __showLeaverAliveWindow(isPlayerIGR):
         return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
 
-    @wg_async
     def __doLeaveBootcamp(self):
-        if g_bootcamp.getLessonNum() == g_bootcamp.getContextIntParameter('lastLessonNum') - 1 and g_bootcamp.getVersion() != constants.BootcampVersion.SHORT:
-            self.as_setVisibilityS(False)
-            exitResult = self.sessionProvider.getExitResult()
-            if exitResult.isDeserter:
-                isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
-                result = yield wg_await(showLeaverAliveWindow(isPlayerIGR))
-            else:
-                result = yield wg_await(showExitWindow())
-            if result:
-                self.__showBootcampExitWindow()
-        else:
-            self.__showBootcampExitWindow()
+        self.__showBootcampExitWindow()
         self.destroy()
 
     @staticmethod

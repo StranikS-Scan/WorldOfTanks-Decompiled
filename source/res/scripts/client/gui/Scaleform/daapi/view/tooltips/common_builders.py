@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/common_builders.py
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced, stronghold
-from gui.shared.tooltips import common
-from gui.shared.tooltips import contexts
-from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder, TooltipWindowBuilder
+from gui.shared.tooltips import advanced, common, contexts, stronghold
+from gui.shared.tooltips.builders import AdvancedDataBuilder, DataBuilder, DefaultFormatBuilder, TooltipWindowBuilder
 from gui.shared.tooltips.dog_tags import DogTagInfoTooltip
 from gui.shared.tooltips.filter import VehicleFilterTooltip
 __all__ = ('getTooltipBuilders',)
@@ -44,7 +42,6 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_FILTER, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, VehicleFilterTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ELITE_BONUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleEliteBonusTooltipData(contexts.VehicleEliteBonusContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_HISTORICAL_REFERENCE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleHistoricalReferenceTooltipData(contexts.VehicleHistoricalReferenceContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.BATTLE_TRAINING, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.BattleTraining(contexts.ToolTipContext(None)), advanced.BattleTraining(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.SQUAD_BONUS, None, common.SquadBonusTooltipWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS, None, common.VehiclePointsTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED, None, common.BattlePassNotStartedTooltipWindowData(contexts.ToolTipContext(None))),

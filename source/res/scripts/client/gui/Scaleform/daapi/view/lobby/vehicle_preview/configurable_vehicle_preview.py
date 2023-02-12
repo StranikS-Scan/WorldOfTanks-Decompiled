@@ -15,9 +15,6 @@ class ConfigurableVehiclePreview(VehiclePreview):
         super(ConfigurableVehiclePreview, self).__init__(ctx)
         self.__hiddenBlocks = ctx.get('hiddenBlocks')
         self.__showCloseBtn = OptionalBlocks.CLOSE_BUTTON not in self.__hiddenBlocks
-        isHeroInteractive = ctx.get('isHeroInteractive')
-        if isHeroInteractive is False:
-            self._heroInteractive = isHeroInteractive
 
     def setBottomPanel(self):
         if OptionalBlocks.BUYING_PANEL in self.__hiddenBlocks:

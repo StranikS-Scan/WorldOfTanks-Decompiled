@@ -80,6 +80,7 @@ class OnlineState(State):
         avatar.addTransition(StringEventTransition(PlayerEventID.ACCOUNT_BECOME_PLAYER), target=account)
         avatar.addTransition(StringEventTransition(ReplayEventID.REPLAY_REWIND), target=rewindReplay)
         rewindReplay.addTransition(StringEventTransition(PlayerEventID.AVATAR_BECOME_PLAYER), target=avatar)
+        rewindReplay.addTransition(StringEventTransition(ReplayEventID.SERVER_REPLAY_EXITING), target=exitingReplay)
         finishReplay.addTransition(StringEventTransition(ReplayEventID.REPLAY_REWIND), target=rewindReplay)
         finishReplay.addTransition(StringEventTransition(ReplayEventID.SERVER_REPLAY_EXITING), target=exitingReplay)
         self.addTransition(StringEventTransition(PlayerEventID.NON_PLAYER_BECOME_PLAYER), target=offline.login)

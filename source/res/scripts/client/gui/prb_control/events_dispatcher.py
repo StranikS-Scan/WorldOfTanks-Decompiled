@@ -130,20 +130,11 @@ class EventDispatcher(object):
         self.__addSquadToCarousel(prbType, isTeamReady)
         self.__showSquadWindow(prbType, ctx and ctx.get('showInvitesWindow', False), toggleUI=False)
 
-    def loadSandboxQueue(self):
-        self.__fireShowEvent(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG)
-
     def loadRanked(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)
 
     def loadRankedUnreachable(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)
-
-    def startOffbattleTutorial(self):
-        self.__fireEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='OFFBATTLE', reloadIfRun=True, restoreIfRun=True, isStopForced=True), scope=EVENT_BUS_SCOPE.GLOBAL)
-
-    def unloadSandboxQueue(self):
-        self.__fireHideEvent(events.HideWindowEvent.HIDE_SANDBOX_QUEUE_DIALOG)
 
     def loadBootcampQueue(self):
         self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)))

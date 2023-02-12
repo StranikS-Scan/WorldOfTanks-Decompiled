@@ -3,7 +3,9 @@
 import typing
 import BigWorld
 from AvatarInputHandler import AvatarInputHandler
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import VEHICLE_MISC_STATUS
+from constants import StunTypes
 from gui.Scaleform.daapi.view.battle.shared.status_notifications.components import StatusNotificationItem
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES
 from gui.battle_control import avatar_getter
@@ -273,7 +275,8 @@ class _OverturnedBaseSN(LocalizationProvider, DestroyMiscTimerSN):
         return VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED
 
     def _getDescription(self, value=None):
-        pass
+        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
+        return backport.text(R.strings.ingame_gui.destroyTimer.liftOver()) if liftOverEnabled else ''
 
 
 class OverturnedSN(_OverturnedBaseSN):
@@ -355,7 +358,7 @@ class StunSN(TimerSN):
         return BATTLE_NOTIFICATIONS_TIMER_TYPES.STUN
 
     def _update(self, value):
-        if value.duration > 0.0:
+        if value.duration > 0.0 and value.stunType == self._getStunType():
             self._updateTimeParams(value.totalTime, value.endTime)
             self._isVisible = True
             self._sendUpdate()
@@ -364,6 +367,25 @@ class StunSN(TimerSN):
 
     def _getTitle(self, value):
         return backport.text(R.strings.ingame_gui.stun.indicator())
+
+    def _getStunType(self):
+        return StunTypes.DEFAULT.value
+
+
+class StunFlameSN(StunSN):
+
+    def __init__(self, updateCallback):
+        super(StunFlameSN, self).__init__(updateCallback)
+        self._vo['title'] = backport.text(R.strings.ingame_gui.stunFlame.indicator())
+
+    def getViewTypeID(self):
+        return BATTLE_NOTIFICATIONS_TIMER_TYPES.STUN_FLAME
+
+    def _getTitle(self, value):
+        return backport.text(R.strings.ingame_gui.stunFlame.indicator())
+
+    def _getStunType(self):
+        return StunTypes.FLAME.value
 
 
 class _SmokeBase(LocalizationProvider, TimerSN):

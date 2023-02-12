@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitBase.py
+import cPickle
 import copy
 import struct
 import weakref
 from collections import namedtuple
 from typing import TYPE_CHECKING
-from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
+from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from items import vehicles
 from items.badges_common import BadgesCommon
@@ -184,6 +185,8 @@ class UNIT_ERROR:
     ACCOUNT_BANNED = 111
     MODE_OFFLINE = 112
     NO_ARENA_VEHICLES = 113
+    EXPIRED_PLAY_LIMITS = 114
+    EXPIRED_PLAY_LIMITS_TO_COMMANDER = 115
 
 
 OK = UNIT_ERROR.OK
@@ -307,6 +310,7 @@ class UNIT_NOTIFY_CMD:
     INCORRECT_EVENT_ENQUEUE_DATA = 17
     REMOVED_VEHICLE_MAX_SCOUT_EXCEED = 18
     CHANGE_SQUAD_SIZE = 19
+    PLAYER_LIMITS_EXPIRED = 20
 
 
 class CLIENT_UNIT_CMD:
@@ -433,88 +437,81 @@ class BitfieldHelper:
         return self.value & value
 
 
-def _prebattleTypeFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.EVENT:
-        return PREBATTLE_TYPE.EVENT
-    elif flags & UNIT_MGR_FLAGS.EPIC:
-        return PREBATTLE_TYPE.EPIC
-    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
-        return PREBATTLE_TYPE.BATTLE_ROYALE
-    elif flags & UNIT_MGR_FLAGS.MAPBOX:
-        return PREBATTLE_TYPE.MAPBOX
-    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
-        return PREBATTLE_TYPE.FUN_RANDOM
-    elif flags & UNIT_MGR_FLAGS.COMP7:
-        return PREBATTLE_TYPE.COMP7
-    elif flags & UNIT_MGR_FLAGS.SQUAD:
-        return PREBATTLE_TYPE.SQUAD
-    elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
-        return PREBATTLE_TYPE.CLAN
-    elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
-        return PREBATTLE_TYPE.STRONGHOLD
-    elif flags & UNIT_MGR_FLAGS.TOURNAMENT:
-        return PREBATTLE_TYPE.TOURNAMENT
-    else:
-        return PREBATTLE_TYPE.UNIT
+VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS = {UNIT_MGR_FLAGS.EVENT: (('event_battles',), tuple()),
+ UNIT_MGR_FLAGS.EPIC: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}),
+ UNIT_MGR_FLAGS.BATTLE_ROYALE: (('battle_royale',), tuple()),
+ UNIT_MGR_FLAGS.STRONGHOLD: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}),
+ UNIT_MGR_FLAGS.COMP7: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'comp7'})}
+UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE = {UNIT_MGR_FLAGS.EVENT: PREBATTLE_TYPE.EVENT,
+ UNIT_MGR_FLAGS.EPIC: PREBATTLE_TYPE.EPIC,
+ UNIT_MGR_FLAGS.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
+ UNIT_MGR_FLAGS.MAPBOX: PREBATTLE_TYPE.MAPBOX,
+ UNIT_MGR_FLAGS.SQUAD: PREBATTLE_TYPE.SQUAD,
+ UNIT_MGR_FLAGS.SPEC_BATTLE: PREBATTLE_TYPE.CLAN,
+ UNIT_MGR_FLAGS.STRONGHOLD: PREBATTLE_TYPE.STRONGHOLD,
+ UNIT_MGR_FLAGS.TOURNAMENT: PREBATTLE_TYPE.TOURNAMENT,
+ UNIT_MGR_FLAGS.COMP7: PREBATTLE_TYPE.COMP7}
 
+def _prebattleTypeFromFlags(flags):
+    flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
+    for unitMgrFlag, prbType in UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE.iteritems():
+        if flag & unitMgrFlag:
+            return prbType
+
+    return PREBATTLE_TYPE.UNIT
+
+
+UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME = {UNIT_MGR_FLAGS.EVENT: 'EventUnitMgr',
+ UNIT_MGR_FLAGS.MAPBOX: 'MapBoxUnitMgr',
+ UNIT_MGR_FLAGS.SQUAD: 'SquadUnitMgr',
+ UNIT_MGR_FLAGS.EPIC: 'SquadUnitMgr',
+ UNIT_MGR_FLAGS.BATTLE_ROYALE: 'SquadUnitMgr',
+ UNIT_MGR_FLAGS.SPEC_BATTLE: 'SpecUnitMgr',
+ UNIT_MGR_FLAGS.STRONGHOLD: 'StrongholdUnitMgr',
+ UNIT_MGR_FLAGS.COMP7: 'Comp7UnitMgr'}
 
 def _entityNameFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
-        return 'SpecUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.EVENT:
-        return 'EventUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.MAPBOX:
-        return 'MapBoxUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
-        return 'FunRandomUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.COMP7:
-        return 'Comp7UnitMgr'
-    elif flags & UNIT_MGR_FLAGS.SQUAD:
-        return 'SquadUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
-        return 'StrongholdUnitMgr'
-    else:
-        return 'UnitMgr'
+    flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
+    for unitMgrFlag, unitMgrName in UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME.iteritems():
+        if flag & unitMgrFlag:
+            return unitMgrName
 
+
+UNIT_MGR_FLAGS_TO_INVITATION_TYPE = {UNIT_MGR_FLAGS.EVENT: INVITATION_TYPE.EVENT,
+ UNIT_MGR_FLAGS.EPIC: INVITATION_TYPE.EPIC,
+ UNIT_MGR_FLAGS.BATTLE_ROYALE: INVITATION_TYPE.BATTLE_ROYALE,
+ UNIT_MGR_FLAGS.MAPBOX: INVITATION_TYPE.MAPBOX,
+ UNIT_MGR_FLAGS.SQUAD: INVITATION_TYPE.SQUAD,
+ UNIT_MGR_FLAGS.DEFAULT: INVITATION_TYPE.SQUAD,
+ UNIT_MGR_FLAGS.COMP7: INVITATION_TYPE.COMP7}
 
 def _invitationTypeFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.EPIC:
-        return INVITATION_TYPE.EPIC
-    elif flags & UNIT_MGR_FLAGS.EVENT:
-        return INVITATION_TYPE.EVENT
-    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
-        return INVITATION_TYPE.BATTLE_ROYALE
-    elif flags & UNIT_MGR_FLAGS.MAPBOX:
-        return INVITATION_TYPE.MAPBOX
-    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
-        return INVITATION_TYPE.FUN_RANDOM
-    elif flags & UNIT_MGR_FLAGS.COMP7:
-        return INVITATION_TYPE.COMP7
-    elif flags & UNIT_MGR_FLAGS.SQUAD:
-        return INVITATION_TYPE.SQUAD
-    else:
-        return INVITATION_TYPE.SQUAD if flags == UNIT_MGR_FLAGS.DEFAULT else None
+    flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
+    for unitMgrFlag, invitationType in UNIT_MGR_FLAGS_TO_INVITATION_TYPE.iteritems():
+        if flag & unitMgrFlag:
+            return invitationType
+
+    return None
 
 
 def _unitAssemblerTypeFromFlags(flags):
     return PREBATTLE_TYPE_TO_UNIT_ASSEMBLER.get(_prebattleTypeFromFlags(flags), None)
 
 
+UNIT_MGR_FLAGS_TO_QUEUE_TYPE = {UNIT_MGR_FLAGS.EVENT: QUEUE_TYPE.EVENT_BATTLES,
+ UNIT_MGR_FLAGS.EPIC: QUEUE_TYPE.EPIC,
+ UNIT_MGR_FLAGS.BATTLE_ROYALE: QUEUE_TYPE.BATTLE_ROYALE,
+ UNIT_MGR_FLAGS.MAPBOX: QUEUE_TYPE.MAPBOX,
+ UNIT_MGR_FLAGS.SQUAD: QUEUE_TYPE.RANDOMS,
+ UNIT_MGR_FLAGS.COMP7: QUEUE_TYPE.COMP7}
+
 def _queueTypeFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.EPIC:
-        return QUEUE_TYPE.EPIC
-    elif flags & UNIT_MGR_FLAGS.EVENT:
-        return QUEUE_TYPE.EVENT_BATTLES
-    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
-        return QUEUE_TYPE.BATTLE_ROYALE
-    elif flags & UNIT_MGR_FLAGS.MAPBOX:
-        return QUEUE_TYPE.MAPBOX
-    elif flags & UNIT_MGR_FLAGS.FUN_RANDOM:
-        return QUEUE_TYPE.FUN_RANDOM
-    elif flags & UNIT_MGR_FLAGS.COMP7:
-        return QUEUE_TYPE.COMP7
-    else:
-        return QUEUE_TYPE.RANDOMS if flags & UNIT_MGR_FLAGS.SQUAD else None
+    flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
+    for unitMgrFlag, queueType in UNIT_MGR_FLAGS_TO_QUEUE_TYPE.iteritems():
+        if flag & unitMgrFlag:
+            return queueType
+
+    return None
 
 
 def extendTiersFilter(filterFlags):
@@ -571,6 +568,19 @@ class UnitPlayerDataKey(object):
     EXTRA_DATA = 'extraData'
 
 
+PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER = {PREBATTLE_TYPE.UNIT: UNIT_MGR_FLAGS.DEFAULT,
+ PREBATTLE_TYPE.EVENT: ROSTER_TYPE.EVENT_ROSTER,
+ PREBATTLE_TYPE.EPIC: ROSTER_TYPE.EPIC_ROSTER,
+ PREBATTLE_TYPE.BATTLE_ROYALE: ROSTER_TYPE.BATTLE_ROYALE_ROSTER,
+ PREBATTLE_TYPE.MAPBOX: ROSTER_TYPE.MAPBOX_ROSTER,
+ PREBATTLE_TYPE.COMP7: ROSTER_TYPE.COMP7_ROSTER}
+PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT = {PREBATTLE_TYPE.SQUAD: ROSTER_TYPE.SQUAD_ROSTER,
+ PREBATTLE_TYPE.EVENT: ROSTER_TYPE.EVENT_ROSTER,
+ PREBATTLE_TYPE.EPIC: ROSTER_TYPE.EPIC_ROSTER,
+ PREBATTLE_TYPE.BATTLE_ROYALE: ROSTER_TYPE.BATTLE_ROYALE_ROSTER,
+ PREBATTLE_TYPE.MAPBOX: ROSTER_TYPE.MAPBOX_ROSTER,
+ PREBATTLE_TYPE.COMP7: ROSTER_TYPE.COMP7_ROSTER}
+QUEUE_TYPE_BY_UNIT_MGR_ROSTER = {QUEUE_TYPE.EVENT_BATTLES: ROSTER_TYPE.EVENT_ROSTER}
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SQUAD_ROSTER: SquadRoster,
  ROSTER_TYPE.SPEC_ROSTER: SpecRoster,
@@ -580,7 +590,6 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
  ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
  ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster,
- ROSTER_TYPE.FUN_RANDOM_ROSTER: FunRandomRoster,
  ROSTER_TYPE.COMP7_ROSTER: Comp7Roster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
@@ -588,7 +597,7 @@ EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.EXTERNAL: ExternalExtrasHandler}
 
 class UnitBase(OpsUnpacker):
-    _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
+    _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qIi', '_setVehicle'),
      UNIT_OP.SET_MEMBER: ('qB', '_setMember'),
      UNIT_OP.DEL_MEMBER: ('B', '_delMemberBySlot'),
      UNIT_OP.ADD_PLAYER: ('', '_unpackPlayer'),
@@ -616,7 +625,7 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.SET_VEHICLE_LIST: ('q',
                                 '_setVehicleList',
                                 'N',
-                                [('H', 'iH')]),
+                                [('H', 'iI')]),
      UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
@@ -837,11 +846,11 @@ class UnitBase(OpsUnpacker):
     _HEADER = '<HHHHHHHHBiiii?i'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
-    _PLAYER_VEHICLE_TUPLE = '<iH'
+    _PLAYER_VEHICLE_TUPLE = '<iI'
     _SLOT_PLAYERS = '<Bq'
     _IDS = '<IBB'
     _VEHICLE_DICT_HEADER = '<Hq'
-    _VEHICLE_DICT_ITEM = '<Hi'
+    _VEHICLE_DICT_ITEM = '<Ii'
     _VEHICLE_PROFILE_HEADER = '<qBB'
     _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)
@@ -1517,58 +1526,18 @@ class UnitBase(OpsUnpacker):
          extraData)
 
     @staticmethod
-    def __packPlayerExtraData(extraData):
-        packed = struct.pack('<B', len(extraData))
-        for k in extraData:
-            packed += packPascalString(k)
-            kData = extraData.get(k, {})
-            packed += UnitBase.__packEnqueueContainerData(kData)
-
-        return packed
+    def __packPlayerExtraData(packedData):
+        LOG_DEBUG_DEV('pack: extra data = ', packedData)
+        strDict = cPickle.dumps(packedData, -1)
+        return packPascalString(strDict)
 
     @staticmethod
-    def __unpackPlayerExtraData(packedData, offset):
-        extraDataLen = struct.unpack_from('<B', packedData, offset)[0]
-        startingOffset = offset
-        offset += struct.calcsize('<B')
-        extraData = dict()
-        for _ in xrange(extraDataLen):
-            key, sz = unpackPascalString(packedData, offset)
-            offset += sz
-            keyData, sz = UnitBase.__unpackEnqueueContainerData(packedData, offset)
-            offset += sz
-            extraData.setdefault(key, keyData)
-
-        return (extraData, offset - startingOffset)
-
-    @staticmethod
-    def __packEnqueueContainerData(packedData):
-        LOG_DEBUG_DEV('enqueueData = ', packedData)
-        packed = struct.pack('<B', len(packedData))
-        for key, value in packedData.iteritems():
-            packed += packPascalString(key)
-            packed += struct.pack('<I', value)
-
-        return packed
-
-    @staticmethod
-    def __unpackEnqueueContainerData(packedData, offset):
-        return UnitBase.__unpackContainerDataWithFormat(packedData, offset, '<I')
-
-    @staticmethod
-    def __unpackContainerDataWithFormat(packedData, initialOffset, formatData):
+    def __unpackPlayerExtraData(packedData, initialOffset):
+        LOG_DEBUG_DEV('unpack: extra data = ', packedData)
         offset = initialOffset
-        containerLength = struct.unpack_from('<B', packedData, offset)[0]
-        offset += struct.calcsize('<B')
-        container = dict()
-        for i in xrange(containerLength):
-            key, lenKeyBytes = unpackPascalString(packedData, offset)
-            offset += lenKeyBytes
-            value = struct.unpack_from(formatData, packedData, offset)[0]
-            offset += struct.calcsize(formatData)
-            container[key] = value
-
-        return (container, offset - initialOffset)
+        strDict, lenKeyBytes = unpackPascalString(packedData, offset)
+        offset += lenKeyBytes
+        return (cPickle.loads(strDict), offset - initialOffset)
 
     def __packProfileVehicle(self, accountDBID, profileVehicle):
         packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun)

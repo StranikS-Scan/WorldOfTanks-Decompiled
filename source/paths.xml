@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.19.1.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.19.1.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.20.0.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.20.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -43,6 +43,8 @@
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
+      <Package type="hd">./res/packages/121_lost_paradise_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/127_japort.pkg</Package>
       <Package type="hd">./res/packages/127_japort_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
@@ -113,8 +115,6 @@
       <Package type="hd">./res/packages/95_lost_city_ctf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h24_23feb.pkg</Package>
-      <Package type="hd">./res/packages/h24_23feb_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
@@ -128,6 +128,7 @@
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/common_ext.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/event_lootboxes.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/frontline.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/fun_random.pkg</Package>
@@ -155,8 +156,8 @@
       <Package type="hd">./res/packages/vehicles_level_05_hd-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_06-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_06-part2.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_06_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_06_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_06_hd-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_07-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_07-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_07_hd-part1.pkg</Package>

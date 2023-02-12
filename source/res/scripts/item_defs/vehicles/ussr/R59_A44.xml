@@ -3270,9 +3270,14 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_04.model	</undamaged>
@@ -4233,9 +4238,14 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_08.model	</undamaged>

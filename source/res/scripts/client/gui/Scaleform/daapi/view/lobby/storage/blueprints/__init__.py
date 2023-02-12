@@ -21,6 +21,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import events
 from gui.shared.formatters import text_styles, icons
+from gui.shared.gui_items.Vehicle import getShopVehicleIconPath
 from gui.shared.utils.requesters.ItemsRequester import RequestCriteria, PredicateCondition, REQ_CRITERIA
 from helpers import dependency, func_utils
 from helpers.i18n import makeString
@@ -121,12 +122,12 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
         intelligenceCostText, fragmentsCost = self.__formatFragmentsCost(intelligenceCost=intelligenceCost, intelligenceIcon=intelligenceIcon, nationalsCost=nationalsCost)
         discount = bpRequester.getBlueprintDiscount(item.intCD, item.level)
         fragmentsProgress = self.__formatFragmentProgress(current, total, discount)
-        image = func_utils.makeFlashPath(item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
+        image = item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
         return {'id': item.intCD,
          'title': name,
          'description': description,
          'image': image,
-         'imageAlt': RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'),
+         'imageAlt': getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'),
          'fragmentsCost': fragmentsCost,
          'intelligenceCostText': intelligenceCostText,
          'fragmentsProgress': fragmentsProgress,

@@ -1,27 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/bootcamp/bootcamp_exit_view.py
 from frameworks.wulf import ViewSettings, WindowFlags
-from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.bootcamp.bootcamp_exit_model import BootcampExitModel
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from bootcamp.Bootcamp import g_bootcamp
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from gui.impl.lobby.bootcamp.bootcamp_progress_base_view import BootcampProgressBaseView
 
-class BootcampExitView(ViewImpl):
-    __slots__ = ('__blur', '__tooltipData', '__onQuit', '__onCancel', '__isInBattle')
+class BootcampExitView(BootcampProgressBaseView):
+    __slots__ = ('__blur', '__onQuit', '__onCancel', '__isInBattle')
     __appLoader = dependency.descriptor(IAppLoader)
-    __bootcampController = dependency.descriptor(IBootcampController)
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.BC_EXIT_VIEW)
 
     def __init__(self, onQuit, isInBattle, onCancel=None, *args, **kwargs):
@@ -29,28 +25,11 @@ class BootcampExitView(ViewImpl):
         settings.model = BootcampExitModel()
         settings.args = args
         settings.kwargs = kwargs
+        super(BootcampExitView, self).__init__(settings)
         self.__blur = None
-        self.__tooltipData = {}
         self.__onQuit = onQuit
         self.__onCancel = onCancel
         self.__isInBattle = isInBattle
-        super(BootcampExitView, self).__init__(settings)
-        return
-
-    @property
-    def viewModel(self):
-        return super(BootcampExitView, self).getViewModel()
-
-    def createToolTip(self, event):
-        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipId = event.getArgument('tooltipId')
-            if tooltipId:
-                tooltipData = self.__tooltipData[int(tooltipId)]
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow())
-                if window is None:
-                    return
-                window.load()
-                return window
         return
 
     def _initialize(self):
@@ -62,15 +41,15 @@ class BootcampExitView(ViewImpl):
         else:
             self.__blur = CachedBlur(enabled=True, ownLayer=window.layer - 1)
 
+    def _setupModel(self, model):
+        super(BootcampExitView, self)._setupModel(model)
+        model.onLeaveBootcamp += self.__onLeave
+        model.setIsInBattle(self.__isInBattle)
+        model.setIsReferral(self.bootcampController.isReferralEnabled())
+
     def _onLoading(self, *args, **kwargs):
-        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SHOW)
         super(BootcampExitView, self)._onLoading(*args, **kwargs)
-        with self.viewModel.transaction() as model:
-            model.onLeaveBootcamp += self.__onLeave
-            model.setIsInBattle(self.__isInBattle)
-            model.setIsNeedAwarding(self.__bootcampController.needAwarding())
-            model.setIsReferral(self.__bootcampController.isReferralEnabled())
-            g_bootcamp.fillProgressBar(model, self.__tooltipData)
+        self.uiBootcampLogger.log(BC_LOG_ACTIONS.SHOW)
 
     def _finalize(self):
         self.uiBootcampLogger.log(BC_LOG_ACTIONS.CLOSE)
@@ -78,7 +57,7 @@ class BootcampExitView(ViewImpl):
         if self.__isInBattle:
             app = self.__appLoader.getApp()
             app.leaveGuiControlMode(self.uniqueID)
-        if self.__bootcampController.isInBootcamp():
+        if self.bootcampController.isInBootcamp():
             g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__blur:
             self.__blur.fini()

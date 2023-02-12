@@ -7,8 +7,8 @@ import GUI
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, INVALID_MARKER_ID
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
+from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
-from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
@@ -27,12 +27,13 @@ _logger = logging.getLogger(__name__)
 _STICKY_MARKER_RADIUS_SCALE = 0.7
 
 class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager):
+    MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
     settingsCore = dependency.descriptor(ISettingsCore)
     setablePluginsDict = {'area': plugins.AreaStaticMarkerPlugin,
      'teamAndControlPoints': plugins.TeamsOrControlsPointsPlugin}
 
     def __init__(self):
-        super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, settings.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
+        super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, self.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
         self.__plugins = None
         self.__canvas = None
         self.__ids = set()
@@ -70,10 +71,10 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             self.as_setShowExInfoFlagS(flag)
         return
 
-    def createMarker(self, symbol, matrixProvider=None, active=True):
+    def createMarker(self, symbol, matrixProvider=None, active=True, markerType=CommonMarkerType.NORMAL):
         if active and matrixProvider is None:
             raise SoftException('Active marker {} must has matrixProvider'.format(symbol))
-        markerID = self.__canvas.addMarker(matrixProvider, symbol, active)
+        markerID = self.__canvas.addMarker(matrixProvider, symbol, active, markerType)
         self.__ids.add(markerID)
         return markerID
 

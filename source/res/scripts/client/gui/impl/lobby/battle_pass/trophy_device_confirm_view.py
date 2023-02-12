@@ -16,7 +16,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.app_loader import IAppLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.framework.entities.View import ViewKey
 _logger = logging.getLogger(__name__)
@@ -99,7 +98,7 @@ class TrophyDeviceUpgradeConfirmDialogContent(DialogContent):
         super(TrophyDeviceUpgradeConfirmDialogContent, self)._initialize()
         with self.getViewModel().transaction() as model:
             model.setTrophyBasicName(self.__trophyBasicModule.name)
-            model.setTrophyBasicImg(self.__trophyBasicModule.getShopIcon(store=RES_SHOP, size=STORE_CONSTANTS.ICON_SIZE_SMALL))
+            model.setTrophyBasicImg(self.__trophyBasicModule.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL))
             for baseKpi, upgradedKpi in zip(self.__trophyBasicModule.getKpi(), self.__trophyUpgadedModule.getKpi()):
                 if baseKpi.name != upgradedKpi.name:
                     _logger.error('KPI in basic and upgraded module doesnt has same order')

@@ -316,7 +316,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __getBattlePassPointsTotal(self):
         questsBonuses = self.__data[BRSections.PERSONAL][BRSections.REWARDS].get(BRSections.BONUSES)
         questPoints = sum([ bonus.getCount() for bonuses in questsBonuses for bonus in bonuses if bonus.getName() == 'battlePassPoints' ]) if questsBonuses else 0
-        return self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]['basePointsDiff'] + questPoints
+        return self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]['bpTopPoints'] + questPoints
 
     def __setFinishResult(self, personalResultsModel):
         finishReason = self.__getFinishReason()

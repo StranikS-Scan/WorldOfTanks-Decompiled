@@ -15,8 +15,8 @@ class BootcampLobbyDescriptorParser(DescriptorParser):
 
 class BootcampLobbyChapterParser(ChapterParser):
 
-    def parse(self, chapter, afterBattle=False, initial=False):
-        chapter = super(BootcampLobbyChapterParser, self).parse(chapter, afterBattle, initial)
+    def parse(self, chapter, initial=False):
+        chapter = super(BootcampLobbyChapterParser, self).parse(chapter, initial)
         self.__parseSharedTriggers(chapter)
         self.__parseSharedVars(chapter)
         return chapter

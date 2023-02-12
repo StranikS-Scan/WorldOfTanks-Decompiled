@@ -1,20 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
 from typing import TYPE_CHECKING, Sequence
-from helpers import i18n
-from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
+from constants import SkinInvData
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT, makeHtmlString
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
-from gui.shared.utils.functions import getShortDescr
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
-from gui.impl.gen import R
-from gui.impl import backport
+from gui.shared.utils.functions import getShortDescr
 from helpers import dependency
+from helpers import i18n
+from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from items.components import skills_constants
-from constants import SkinInvData
-from items.vehicles import VEHICLE_CLASS_TAGS
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.vehicles import VEHICLE_CLASS_TAGS
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -263,6 +263,14 @@ class Tankman(GUIItem):
     @property
     def extensionLessIcon(self):
         return getExtensionLessIconName(self.nationID, self.descriptor.iconID)
+
+    @property
+    def barracksIconPath(self):
+        return getBarracksIconPath(self.nationID, self.descriptor.iconID)
+
+    @property
+    def smallIconPath(self):
+        return getSmallIconPath(self.nationID, self.descriptor.iconID)
 
     @property
     def iconRank(self):
@@ -722,16 +730,26 @@ def getIconName(nationID, iconID):
     return tankmen.getNationConfig(nationID).getIcon(iconID)
 
 
+def getDynIconName(iconName):
+    return iconName.replace('-', '_').rsplit('.', 1)[0]
+
+
 def getBarracksIconPath(nationID, iconID):
-    return '../maps/icons/tankmen/icons/barracks/%s' % getIconName(nationID, iconID)
+    iconName = getDynIconName(getExtensionLessIconName(nationID, iconID))
+    dynAccessor = R.images.gui.maps.icons.tankmen.icons.barracks.dyn(iconName)
+    return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.barracks.tankman())
 
 
 def getBigIconPath(nationID, iconID):
-    return '../maps/icons/tankmen/icons/big/%s' % getIconName(nationID, iconID)
+    iconName = getDynIconName(getExtensionLessIconName(nationID, iconID))
+    dynAccessor = R.images.gui.maps.icons.tankmen.icons.big.dyn(iconName)
+    return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.big.tankman())
 
 
 def getSmallIconPath(nationID, iconID):
-    return '../maps/icons/tankmen/icons/small/%s' % getIconName(nationID, iconID)
+    iconName = getDynIconName(getExtensionLessIconName(nationID, iconID))
+    dynAccessor = R.images.gui.maps.icons.tankmen.icons.small.dyn(iconName)
+    return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.small.tankman())
 
 
 def getRankIconName(nationID, rankID):

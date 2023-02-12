@@ -11,9 +11,9 @@ from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroV
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsView
+from gui.impl.lobby.battle_pass.chapter_choice_view import ChapterChoiceView
 from gui.impl.lobby.battle_pass.extra_intro_view import ExtraIntroView
 from gui.impl.lobby.battle_pass.intro_view import IntroView
-from gui.impl.lobby.battle_pass.post_progression_view import PostProgressionView
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
@@ -26,8 +26,8 @@ from skeletons.gui.impl import IGuiLoader
 _R_VIEWS = R.views.lobby.battle_pass
 _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
  _R_VIEWS.ExtraIntroView(): ExtraIntroView,
- _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView,
- _R_VIEWS.PostProgressionView(): PostProgressionView}
+ _R_VIEWS.ChapterChoiceView(): ChapterChoiceView,
+ _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView}
 _INTRO_VIDEO_SHOWN = BattlePassStorageKeys.INTRO_VIDEO_SHOWN
 _EXTRA_VIDEO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN
 _INTRO_SHOWN = BattlePassStorageKeys.INTRO_SHOWN
@@ -39,16 +39,19 @@ class _IntroVideoManager(object):
     def __init__(self):
         self.__isIntroVideoShown = False
 
-    def init(self):
-        g_eventBus.addListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
+    @property
+    def isIntroVideoShown(self):
+        return _hasTrueInBPStorage(_INTRO_VIDEO_SHOWN)
 
     @property
     def isExtraVideoShown(self):
         return _hasTrueInBPStorage(_EXTRA_VIDEO_SHOWN)
 
-    @property
-    def isIntroVideoShown(self):
-        return _hasTrueInBPStorage(_INTRO_VIDEO_SHOWN)
+    def init(self):
+        g_eventBus.addListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
+
+    def fini(self):
+        g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
 
     def showIntroVideoIfNeeded(self, *_):
         if not self.isIntroVideoShown:
@@ -63,16 +66,13 @@ class _IntroVideoManager(object):
             if not self.__guiLoader.windowsManager.findWindows(isVideoView):
                 self.__showExtraVideoIfNeeded()
 
-    def fini(self):
-        g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
-
     @nextTick
     def __showExtraVideoIfNeeded(self):
         if not self.isExtraVideoShown and self.__battlePass.hasExtra():
             _showOverlayVideo(getExtraIntroVideoURL())
             _setTrueToBPStorage(_EXTRA_VIDEO_SHOWN)
             if not self.__isIntroVideoShown:
-                showMissionsBattlePass()
+                showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
         g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -93,19 +93,20 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         self.__setDummyVisible(self.__battlePass.isPaused())
         layoutID = kwargs.get('layoutID', R.invalid())
         chapterID = kwargs.get('chapterID', 0)
-        if self.__battlePass.isCompleted() and (not _hasTrueInBPStorage(_INTRO_SHOWN) or not _hasTrueInBPStorage(_INTRO_VIDEO_SHOWN)):
-            _setTrueToBPStorage(_INTRO_SHOWN)
-            _setTrueToBPStorage(_INTRO_VIDEO_SHOWN)
-        if not _hasTrueInBPStorage(_INTRO_SHOWN):
-            layoutID = _R_VIEWS.BattlePassIntroView()
         if self.__needTakeDefault(layoutID, chapterID):
             layoutID = self.__getActualViewImplLayoutID(chapterID)
-        if not self.__needReload(layoutID):
+        if not self.__needReload(layoutID) or not self.__battlePass.isActive():
             return
-        if self.__battlePass.isActive():
-            self.__introVideoManager.showIntroVideoIfNeeded()
-        self._destroyInjected()
-        self._createInjectView(layoutID, chapterID)
+        else:
+            if self.__battlePass.isActive():
+                self.__introVideoManager.showIntroVideoIfNeeded()
+            isProgressionView = self._injectView is not None and self._injectView.layoutID == layoutID and layoutID == _R_VIEWS.BattlePassProgressionsView()
+            if isProgressionView:
+                self._injectView.setChapter(chapterID)
+            else:
+                self._destroyInjected()
+                self._createInjectView(layoutID, chapterID)
+            return
 
     def dummyClicked(self, eventType):
         if eventType == 'OpenHangar':
@@ -113,6 +114,17 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
 
     def markVisited(self):
         pass
+
+    def start(self):
+        if self._injectView is not None:
+            self._injectView.updateData()
+            self._injectView.startListeners()
+        return
+
+    def stop(self):
+        if self._injectView is not None:
+            self._injectView.stopListeners()
+        return
 
     def _onPopulate(self):
         pass
@@ -126,6 +138,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         if self.__introVideoManager is not None:
             self.__introVideoManager.fini()
         self.__battlePass.onBattlePassSettingsChange -= self.__onSettingsChanged
+        self.stop()
         super(BattlePassViewsHolderComponent, self)._dispose()
         return
 
@@ -151,8 +164,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
             self.as_setWaitingVisibleS(False)
 
     def __onSettingsChanged(self, *_):
-        if self.__isDummyVisible:
+        isPaused = self.__battlePass.isPaused()
+        if self.__isDummyVisible and not isPaused:
             self.updateState()
+        self.__setDummyVisible(isPaused)
 
     def __getActualViewImplLayoutID(self, chapterID):
         ctrl = self.__battlePass
@@ -160,9 +175,9 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         def isExtraActiveFirstTime():
             return ctrl.hasExtra() and not self.__introVideoManager.isExtraVideoShown
 
-        if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)):
-            return _R_VIEWS.BattlePassProgressionsView()
-        return _R_VIEWS.PostProgressionView() if ctrl.isCompleted() else _R_VIEWS.PostProgressionView()
+        if not _hasTrueInBPStorage(_INTRO_SHOWN):
+            return _R_VIEWS.BattlePassIntroView()
+        return _R_VIEWS.BattlePassProgressionsView() if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)) else _R_VIEWS.ChapterChoiceView()
 
     def __setDummyVisible(self, isVisible):
         self.__isDummyVisible = isVisible
@@ -176,15 +191,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
              'btnTooltip': '',
              'btnEvent': 'OpenHangar',
              'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK})
+            self._destroyInjected()
         else:
             self.as_setBackgroundS('')
             self.as_hideDummyS()
-
-    def __safeCallOnInjected(self, methodName, *args, **kwargs):
-        call = getattr(self._injectView, methodName, None)
-        if callable(call):
-            call(*args, **kwargs)
-        return
 
 
 def _showOverlayVideo(url):

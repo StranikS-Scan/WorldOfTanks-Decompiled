@@ -47,7 +47,6 @@ class IntSettingsRequester(object):
      'CONTACTS': 58,
      'GAME_EXTENDED': constants.USER_SERVER_SETTINGS.GAME_EXTENDED,
      'FALLOUT': 60,
-     'TUTORIAL': 61,
      'AIM_ARCADE_4': 63,
      'AIM_SNIPER_4': 64,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN,

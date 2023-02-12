@@ -6,7 +6,6 @@ import AccountCommands
 import BigWorld
 from constants import QUEUE_TYPE, BOOTCAMP
 from wg_async import wg_async, wg_await
-from account_helpers.AccountSettings import AccountSettings, BOOTCAMP_VEHICLE
 from account_helpers import isLongDisconnectedFromCenter
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -77,6 +76,9 @@ class BootcampController(IBootcampController):
     @property
     def version(self):
         return g_bootcamp.getVersion()
+
+    def getBootcampOutfit(self, vehDescr):
+        return g_bootcamp.getBootcampOutfit(vehDescr)
 
     def startBootcamp(self, inBattle):
         if g_playerEvents.isPlayerEntityChanging:
@@ -202,7 +204,7 @@ class BootcampController(IBootcampController):
         BigWorld.player().startBootcampCmd()
 
     def __doStopBootcamp(self):
-        BigWorld.player().base.requestBootcampQuit(AccountSettings.getFavorites(BOOTCAMP_VEHICLE))
+        BigWorld.player().base.requestBootcampQuit()
 
     def __onBootcampBecomePlayer(self):
         self.__inBootcampAccount = True
@@ -211,8 +213,8 @@ class BootcampController(IBootcampController):
     def __onBootcampBecomeNonPlayer(self):
         self.__inBootcampAccount = False
 
-    def __onBootcampStartChoice(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTRO), ctx=g_bootcamp.getIntroPageData(True)), EVENT_BUS_SCOPE.LOBBY)
+    def __onBootcampStartChoice(self, isInProgress):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_INTRO), ctx=g_bootcamp.getIntroPageData(True, isInProgress)), EVENT_BUS_SCOPE.LOBBY)
 
     def __onGameplayChoice(self, gameplayType, gameplayChoice):
         BigWorld.player().base.doCmdIntStr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_GAMEPLAY_CHOICE, gameplayChoice, gameplayType)
@@ -242,19 +244,15 @@ class BootcampController(IBootcampController):
             self.__skipBootcamp()
         else:
             needAwarding = self.needAwarding()
+            icon = R.images.gui.maps.icons.bootcamp.dialog
             startAcc = R.strings.bootcamp.message.start if needAwarding else R.strings.bootcamp.message.restart
-            iconAcc = R.images.gui.maps.icons.bootcamp.dialog
-            icon = iconAcc.bc_enter_small() if needAwarding else iconAcc.bc_enter_1_small()
+            iconAcc = icon.bc_enter_small() if needAwarding else icon.bc_enter_1_small()
             if needAwarding:
-                messageStartAcc = R.strings.bootcamp.message.start.message
-                premiumStr = self.__format(messageStartAcc.premium(), _YELLOW)
-                goldStr = self.__format(messageStartAcc.gold(), _YELLOW)
-                crewStr = self.__format(messageStartAcc.crew(), _YELLOW)
-                message = self.__format(startAcc.message(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
+                rewardStr = self.__format(startAcc.message.reward(), _YELLOW)
             else:
                 rewardStr = _REWARD.format(self.__format(startAcc.reward(), _GREEN))
-                message = self.__format(startAcc.message(), _GRAY, reward=rewardStr)
-            result = yield wg_await(showResSimpleDialog(startAcc, icon, message))
+            message = self.__format(startAcc.message(), _GRAY, reward=rewardStr)
+            result = yield wg_await(showResSimpleDialog(startAcc, iconAcc, message))
             if result:
                 self.__goBootcamp()
             elif isFromLobbyMenu:

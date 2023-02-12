@@ -40,7 +40,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
-_STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALID, {LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD: INVALID_FIELDS.PWD_INVALID,
+_STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALID, {LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_ILLEGAL_CHARACTERS: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_SERVER_NOT_READY: INVALID_FIELDS.SERVER_INVALID,
  LOGIN_STATUS.SESSION_END: INVALID_FIELDS.PWD_INVALID})
@@ -420,7 +420,7 @@ class LoginView(LoginPageMeta):
     def __getServerText(self, key, serverName):
         return makeHtmlString('html_templates:login/server-state', key, {'message': backport.text(R.strings.waiting.message.server.dyn(key)(), server=serverName)})
 
-    def __onBootcampStartChoice(self):
+    def __onBootcampStartChoice(self, _):
         WWISE.WW_eventGlobal('loginscreen_mute')
 
     def __clearPeripheryRouting(self):

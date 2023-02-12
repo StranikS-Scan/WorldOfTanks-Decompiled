@@ -3,7 +3,7 @@
 import math
 import sys
 from math import ceil
-from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME
+from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
 RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
@@ -64,7 +64,6 @@ def calcGunParams(gunDescr, descriptors):
      DAMAGE_PROP_NAME: [],
      SHELLS_PROP_NAME: [],
      STUN_DURATION_PROP_NAME: [],
-     GUARANTEED_STUN_DURATION_PROP_NAME: [],
      AUTO_RELOAD_PROP_NAME: [],
      DUAL_GUN_RATE_TIME: (sys.maxint, -1),
      DUAL_GUN_CHARGE_TIME: []}
@@ -105,15 +104,12 @@ def calcGunParams(gunDescr, descriptors):
         result[SHELLS_PROP_NAME].append(i18n.makeString('#item_types:shell/kinds/' + shell.kind))
         if shell.hasStun:
             stun = shell.stun
-            stunDuration = stun.stunDuration
             result[STUN_DURATION_PROP_NAME].append(stun.stunDuration)
-            result[GUARANTEED_STUN_DURATION_PROP_NAME].append(stun.guaranteedStunDuration * stunDuration)
 
     for key in (PIERCING_POWER_PROP_NAME,
      DAMAGE_PROP_NAME,
      SHELLS_PROP_NAME,
-     STUN_DURATION_PROP_NAME,
-     GUARANTEED_STUN_DURATION_PROP_NAME):
+     STUN_DURATION_PROP_NAME):
         result[key] = tuple(result[key])
 
     if AUTO_RELOAD_PROP_NAME in result:

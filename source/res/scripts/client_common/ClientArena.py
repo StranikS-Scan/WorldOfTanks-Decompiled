@@ -9,6 +9,7 @@ import CGF
 import Event
 import Math
 import arena_component_system.client_arena_component_assembler as assembler
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_modifiers_common import BattleModifiers, EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, ARENA_UPDATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
@@ -120,7 +121,7 @@ class ClientArena(object):
     viewPoints = property(lambda self: self.__viewPoints)
     isFogOfWarEnabled = property(lambda self: self.__isFogOfWarEnabled)
     hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
-    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)))
+    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)) or ARENA_BONUS_TYPE_CAPS.checkAny(self.bonusType, ARENA_BONUS_TYPE_CAPS.SSR))
     teamBasesData = property(lambda self: self.__teamBasesData)
     arenaInfo = property(lambda self: self.__arenaInfo)
     teamInfo = property(lambda self: self.__teamInfo)

@@ -18,20 +18,23 @@ class SPECIAL_CLIENT_WINDOWS(CONST_CONTAINER):
 
 _idGen = SequenceIDGenerator()
 _PRB_CLIENT_IDS = {}
-_PRB_CLIENT_COMBINED_IDS = {PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT,
+PRB_CLIENT_COMBINED_IDS = {PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.EVENT: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.EPIC: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.BATTLE_ROYALE: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.E_SPORT_COMMON: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.MAPBOX: PREBATTLE_TYPE.UNIT,
- PREBATTLE_TYPE.FUN_RANDOM: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.COMP7: PREBATTLE_TYPE.UNIT}
-for _idx, _prbType in enumerate(PREBATTLE_TYPE.RANGE):
-    index = _idx
-    if _prbType in _PRB_CLIENT_COMBINED_IDS:
-        index = PREBATTLE_TYPE.RANGE.index(_PRB_CLIENT_COMBINED_IDS[_prbType])
-    _PRB_CLIENT_IDS[_prbType] = -(index + 1)
 
+def initPrbTypeToClientID():
+    for _idx, _prbType in enumerate(PREBATTLE_TYPE.RANGE):
+        index = _idx
+        if _prbType in PRB_CLIENT_COMBINED_IDS:
+            index = PREBATTLE_TYPE.RANGE.index(PRB_CLIENT_COMBINED_IDS[_prbType])
+        _PRB_CLIENT_IDS[_prbType] = -(index + 1)
+
+
+initPrbTypeToClientID()
 _LAZY_CLIENT_IDS = dict(((name, -(idx + 1 + 32)) for idx, name in enumerate(LAZY_CHANNEL.ALL)))
 _QUEUE_CLIENT_IDS = dict(((name, -(idx + 1 + 64)) for idx, name in enumerate(QUEUE_TYPE.ALL)))
 _BATTLE_CLIENT_IDS = dict(((item.name, -(idx + 1 + 128)) for idx, item in enumerate(BATTLE_CHANNEL.REQUIRED)))

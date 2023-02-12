@@ -9,10 +9,10 @@
           <and>
             <results>
               <plus>
-                <key>	damagedVehicleCntAssistedStun	</key>
-                <key>	damagedVehicleCntAssistedTrack	</key>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
               </plus>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	1000	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -70,10 +70,10 @@
           <and>
             <results>
               <plus>
-                <key>	damagedVehicleCntAssistedStun	</key>
-                <key>	damagedVehicleCntAssistedTrack	</key>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
               </plus>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	1000	</greaterOrEqual>
             </results>
             <win></win>
           </and>
@@ -108,10 +108,10 @@
           <and>
             <results>
               <plus>
-                <key>	damagedVehicleCntAssistedStun	</key>
-                <key>	damagedVehicleCntAssistedTrack	</key>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
               </plus>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	1000	</greaterOrEqual>
             </results>
             <win></win>
           </and>

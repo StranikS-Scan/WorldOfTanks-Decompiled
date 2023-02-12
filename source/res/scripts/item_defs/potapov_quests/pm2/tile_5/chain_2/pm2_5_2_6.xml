@@ -81,9 +81,8 @@ filters = globals().get('filters')
 
 
 KILLS = 'kills'
-STUN_NUMBER_IN_BATTLE = 'stunNumberInBattle'
-STUN_NUMBER_IN_BATTLE_SERIES = 'stunNumberInBattleSeries'
-
+PROGRESS_ID_ADD = "stunTimeInBattle"
+PROGRESS_SERIES = 'stunTimeSeries' 
 
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
@@ -92,17 +91,16 @@ def onFinishBattle(eventType, eventData, quest, processor):
     stunLog = avatarResults['stunEventList']
     damageLog = avatarResults['damageEventList']
 
-    stunCount = sum(len(events) for events in (eventsList for _, eventsList in stunLog.iteritems()))
-
-    if questProgress.increaseUntilComplete(STUN_NUMBER_IN_BATTLE, stunCount):
-        questProgress.increaseUntilComplete(STUN_NUMBER_IN_BATTLE_SERIES, 1)
+    addCondition = eventData['avatarResults']['stunDuration']
+    questProgress.increaseUntilComplete(PROGRESS_ID_ADD, addCondition)
+    if questProgress.isCompleted(PROGRESS_ID_ADD):
+        questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
 
     kills = sum(1 for _, eventsList in damageLog.iteritems() if filters.isTargetKilled(eventsList))
 
     questProgress.increaseUntilComplete(KILLS, kills)
 
-    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=STUN_NUMBER_IN_BATTLE_SERIES))
-
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_SERIES))
     processor.setQuestProgress(quest.progressID, questProgress.save())
 
 

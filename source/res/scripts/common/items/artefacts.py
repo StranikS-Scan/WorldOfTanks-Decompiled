@@ -506,6 +506,7 @@ class Equipment(Artefact):
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
         self.soundNotification = None
+        self.clientSelector = None
         self.playerMessagesKey = None
         self.clientSelector = None
         self.code = None
@@ -897,8 +898,7 @@ class CooldownConsumableConfigReader(object):
         self.deployTime = component_constants.ZERO_FLOAT
         self.cooldownTime = component_constants.ZERO_FLOAT
 
-    def readConsumableWithDeployTimeConfig(self, xmlCtx, section):
-        self.deployTime = _xml.readNonNegativeFloat(xmlCtx, section, 'deployTime')
+    def readConsumableWithTimeConfig(self, xmlCtx, section):
         self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTime')
 
 
@@ -2207,7 +2207,7 @@ class FLAvatarStealthRadar(Equipment, SharedCooldownConsumableConfigReader, Cool
     def _readConfig(self, xmlCtx, section):
         self.readTooltipInformation(xmlCtx, section)
         self.readSharedCooldownConsumableConfig(xmlCtx, section)
-        self.readConsumableWithDeployTimeConfig(xmlCtx, section)
+        self.readConsumableWithTimeConfig(xmlCtx, section)
         self.readInspireConfig(xmlCtx, section)
         self.passiveCircularVisionRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'passiveCircularVisionRadius', 0.0)
         self.detectionTime = _xml.readNonNegativeFloat(xmlCtx, section, 'minesDetectionTime', 0.0)
@@ -2336,7 +2336,7 @@ class FrontLineMinefield(Equipment, TooltipConfigReader, SharedCooldownConsumabl
         self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
         self.areaMarker = _xml.readStringOrNone(xmlCtx, section, 'areaMarker')
         self.bombsNumber = _xml.readIntOrNone(xmlCtx, section, 'bombsNumber')
-        self.readConsumableWithDeployTimeConfig(xmlCtx, section)
+        self.readConsumableWithTimeConfig(xmlCtx, section)
         self.readTooltipInformation(xmlCtx, section)
         self.readSharedCooldownConsumableConfig(xmlCtx, section)
         self.readArcadeInformation(xmlCtx, section)

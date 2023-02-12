@@ -4,12 +4,9 @@ from gui.Scaleform.Waiting import Waiting
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import TutorialEvent
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
-from tutorial.control.context import GLOBAL_FLAG, GLOBAL_VAR, GlobalStorage
-from tutorial.settings import TUTORIAL_SETTINGS
 from tutorial.gui import GUIDispatcher
 
 class SfLobbyDispatcher(GUIDispatcher):
-    _lastHistoryID = GlobalStorage(GLOBAL_VAR.LAST_HISTORY_ID, 0)
 
     def __init__(self):
         super(SfLobbyDispatcher, self).__init__()
@@ -25,7 +22,6 @@ class SfLobbyDispatcher(GUIDispatcher):
         addListener = g_eventBus.addListener
         addListener(TutorialEvent.START_TRAINING, self.__handleStartTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(TutorialEvent.STOP_TRAINING, self.__handleStopTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
-        addListener(TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleShowHistory, scope=EVENT_BUS_SCOPE.DEFAULT)
         return True
 
     def stop(self):
@@ -34,7 +30,6 @@ class SfLobbyDispatcher(GUIDispatcher):
         removeListener = g_eventBus.removeListener
         removeListener(TutorialEvent.START_TRAINING, self.__handleStartTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(TutorialEvent.STOP_TRAINING, self.__handleStopTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
-        removeListener(TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleShowHistory, scope=EVENT_BUS_SCOPE.DEFAULT)
         self.clearGUI()
         return True
 
@@ -48,18 +43,3 @@ class SfLobbyDispatcher(GUIDispatcher):
 
     def __handleStopTraining(self, _):
         self.stopTraining()
-
-    def __handleShowHistory(self, event):
-        if not event.targetID:
-            LOG_ERROR('Required parameters is not defined to show history', event.targetID)
-            return
-        isNotAvailable = self._lastHistoryID != event.targetID
-        state = {'reloadIfRun': True,
-         'restoreIfRun': True,
-         'isAfterBattle': True,
-         'globalFlags': {GLOBAL_FLAG.SHOW_HISTORY: True,
-                         GLOBAL_FLAG.IS_FLAGS_RESET: True,
-                         GLOBAL_FLAG.HISTORY_NOT_AVAILABLE: isNotAvailable}}
-        Waiting.show('tutorial-chapter-loading', isSingle=True)
-        self.startTraining(TUTORIAL_SETTINGS.OFFBATTLE.id, state)
-        Waiting.hide('tutorial-chapter-loading')

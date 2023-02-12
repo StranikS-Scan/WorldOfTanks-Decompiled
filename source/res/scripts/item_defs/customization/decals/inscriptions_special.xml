@@ -3630,25 +3630,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
-    <historical>	0	</historical>
-    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
-      </include>
-    </vehicleFilter>
-    <decal>
-      <id>	942	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_649.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_649	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Veteran for WZ_122_6_F3	</name>
-    <type>	INSCRIPTION	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:inscription/special	</userString>
-    <season>	ALL	</season>
     <historical>	2	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
@@ -3670,6 +3651,52 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Battle Pass Holiday	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	942	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_649.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_649	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran for WZ_122_6_F3	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <decal>
+      <id>	948	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_654.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_654	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	949	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_655.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_655	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	950	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_656.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_656	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Battle Pass 2023	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

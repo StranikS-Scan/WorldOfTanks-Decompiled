@@ -27,7 +27,7 @@ from gui.shared.event_dispatcher import showShop, showPersonalReservesIntro, sho
 from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency, func_utils
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IBoostersController, IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
@@ -161,7 +161,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                     additionalInfo = text_styles.alert(backport.text(limitResource()))
                 else:
                     additionalInfo = ''
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=None, additionalInfo=additionalInfo)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=None, additionalInfo=additionalInfo)
                 if booster.expiryTime:
                     timeLeft = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(booster.expiryTime)))
                     timeKey, timeLeft = getTimeLeftInfoEx(timeLeft)

@@ -553,10 +553,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
         else:
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
-            if self.__ctx.season == SeasonType.WINTER:
-                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
-            elif self.__ctx.season == SeasonType.SUMMER:
-                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
+        if self.__ctx.season == SeasonType.WINTER:
+            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
+        elif self.__ctx.season == SeasonType.SUMMER:
+            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
+        elif self.__ctx.season == SeasonType.DESERT:
+            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
         if self.__ctx.modeId == CustomizationModes.STYLED:
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
         else:

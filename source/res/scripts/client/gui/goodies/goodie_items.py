@@ -12,7 +12,6 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
@@ -23,6 +22,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -64,7 +64,8 @@ GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
  GOODIE_RESOURCE_TYPE.FREE_XP: KPI.Name.GAME_FREE_XP,
  GOODIE_RESOURCE_TYPE.CREW_XP: KPI.Name.GAME_CREW_XP,
  GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS,
- GOODIE_RESOURCE_TYPE.FL_XP: KPI.Name.GAME_FL_XP}
+ GOODIE_RESOURCE_TYPE.FL_XP: KPI.Name.GAME_FL_XP,
+ GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: KPI.Name.GAME_FREE_XP_AND_CREW_XP}
 DEMOUNT_KIT_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'common'}
 _CLAN_RESERVE_TO_GUI_TYPE = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: GOODIE_RESOURCE_TYPE.CREDITS,
  FORT_ORDER_TYPE.COMBAT_PAYMENTS_2_0: GOODIE_RESOURCE_TYPE.CREDITS,
@@ -409,7 +410,8 @@ class Booster(BoosterUICommon):
         return RES_ICONS.boosterQualitySourcePath(self.quality)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getBoosterIcon(size, self.getFullNameForResource())
+        resID = R.images.gui.maps.shop.boosters.num(size).dyn(replaceHyphenToUnderscore(self.getFullNameForResource()))()
+        return backport.image(resID) if resID != -1 else ''
 
     def getExpiryDate(self):
         return backport.getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''

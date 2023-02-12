@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCTechTree.py
+from CurrentVehicle import g_currentVehicle
 from bootcamp.Bootcamp import g_bootcamp
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
@@ -52,6 +53,7 @@ class BCTechTree(TechTree):
                         node['state'] |= NODE_STATE_FLAGS.NOT_CLICKABLE
 
             data['nodes'] = dataNodes
+        data['scrollIndex'] = next(iter([ i for i, item in enumerate(dataNodes) if item['id'] == g_currentVehicle.item.intCD ]), -1)
         return data
 
     def setupContextHints(self, hintID, hintsArgs=None):

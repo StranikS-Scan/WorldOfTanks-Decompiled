@@ -719,7 +719,7 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Cz17_Vz_55_OCN_3DSt	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/Cz17_Vz_55_OCN_3DSt_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required lockedOnVehicle	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -740,6 +740,37 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz08_T_25 czech:Cz19_Vz_44_1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	715	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <tags>	addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	500	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
 </czech.xml>

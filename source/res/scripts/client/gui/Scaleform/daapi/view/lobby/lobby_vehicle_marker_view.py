@@ -12,7 +12,6 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from helpers import dependency
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared.utils import IHangarSpace
 from frameworks.wulf.gui_constants import WindowLayer
@@ -26,8 +25,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
      WindowLayer.SUB_VIEW,
      WindowLayer.TOP_SUB_VIEW}
     hangarSpace = dependency.descriptor(IHangarSpace)
-    __platoonCtrl = dependency.descriptor(IPlatoonController)
-    __guiLoader = dependency.descriptor(IGuiLoader)
+    guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, ctx=None):
         super(LobbyVehicleMarkerView, self).__init__(ctx)
@@ -37,23 +35,23 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def _populate(self):
         super(LobbyVehicleMarkerView, self)._populate()
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
-        self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
-        self.__guiLoader.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
+        self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.guiLoader.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
 
     def _dispose(self):
         super(LobbyVehicleMarkerView, self)._dispose()
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.__markersCache = None
-        self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
-        self.__guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
+        self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
         return
 
     def __onSpaceDestroy(self, _):
@@ -63,13 +61,13 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         vehicle = event.ctx['entity']
         self.__beginCreateVehicleMarker(vehicle)
 
-    def __onPlatoonTankLoaded(self, event):
+    def _onPlatoonTankLoaded(self, event):
         vehicle = event.ctx['entity']
         playerName = event.ctx['playerName']
         self.__destroyMarker(vehicle.id)
         self.__createPlatoonMarker(vehicle, playerName)
 
-    def __onHeroPlatoonTankDestroy(self, event):
+    def _onHeroPlatoonTankDestroy(self, event):
         vehicle = event.ctx['entity']
         self.__destroyMarker(vehicle.id)
 
@@ -105,8 +103,8 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
             if vehicleMarker:
                 vehicleMarker.markerSetActive(not self.__isMarkerDisabled)
 
-    def __canShowMarkers(self):
-        windowsManager = self.__guiLoader.windowsManager
+    def _canShowMarkers(self):
+        windowsManager = self.guiLoader.windowsManager
         windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS)
         hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LOBBY_HANGAR)) > 0
         return len(windows) == 1 and hangarIsExist
@@ -124,7 +122,8 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         mat = Math.Matrix()
         guiNode = vehicle.model.node('HP_gui')
         localPosition = Math.Vector3(guiNode.localMatrix.translation)
-        localPosition.y *= vehicle.markerHeightFactor
+        if hasattr(vehicle, 'markerHeightFactor'):
+            localPosition.y *= vehicle.markerHeightFactor
         vehicleMatrix = vehicle.model.matrix
         worldPosition = vehicleMatrix.applyPoint(localPosition)
         mat.setTranslate(worldPosition)
@@ -162,5 +161,5 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __onWindowStatusChanged(self, uniqueID, newStatus):
         if newStatus in (WindowStatus.LOADING, WindowStatus.DESTROYED):
-            self.__isMarkerDisabled = not self.__canShowMarkers()
+            self.__isMarkerDisabled = not self._canShowMarkers()
             self.__updateAllMarkersVisibility()

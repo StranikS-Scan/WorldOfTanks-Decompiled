@@ -1,13 +1,13 @@
 <czech.xml>
-  <czech:Cz13_T_272>	ussr	</czech:Cz13_T_272>
+  <czech:Cz08_T_253>	ussr	</czech:Cz08_T_253>
   <xmlns:germany>	germany	</xmlns:germany>
-  <czech:Cz13_T_271>	usa	</czech:Cz13_T_271>
+  <czech:Cz08_T_252>	usa	</czech:Cz08_T_252>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
-  <czech:Cz13_T_270>	uk	</czech:Cz13_T_270>
+  <czech:Cz08_T_251>	uk	</czech:Cz08_T_251>
   <xmlns:japan>	japan	</xmlns:japan>
   <xmlns:czech>	czech	</xmlns:czech>
-  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <czech:Cz08_T_250>	sweden	</czech:Cz08_T_250>
   <xmlns:poland>	poland	</xmlns:poland>
   <xmlns:italy>	italy	</xmlns:italy>
   <itemGroup>
@@ -1392,6 +1392,42 @@
       <tilingSettings>
         <type>	relative	</type>
         <factor>	2.479767  2.478984	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages czech 50g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz08_T_25 czech:Cz19_Vz_44_1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	500	</id>
+      <texture>	vehicles/czech/Camouflage/Cz_summer.dds	</texture>
+      <description>	#vehicle_customization:camouflage/czech/Cz_summer/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/czech/Cz_summer/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	125 109 77 255	</c0>
+          <c1>	66 60 45 255	</c1>
+          <c2>	74 77 52 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <czech:Cz08_T_25>	2.6 2.6 0.08 0.000000	</czech:Cz08_T_25>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.804498  2.803613	</factor>
         <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>

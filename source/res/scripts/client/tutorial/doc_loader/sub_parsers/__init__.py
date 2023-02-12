@@ -177,19 +177,6 @@ def _readEffectNotTriggeredCondition(xmlCtx, section, _):
     return _parseEffectTriggeredCondition(xmlCtx, section, ~_COND_STATE.ACTIVE)
 
 
-def _parseBonusReceivedCondition(xmlCtx, section, state):
-    entityID = parseID(xmlCtx, section, 'Specify a entity ID')
-    return tut_conditions.BonusReceivedCondition(entityID, state)
-
-
-def _readBonusReceivedCondition(xmlCtx, section, _):
-    return _parseBonusReceivedCondition(xmlCtx, section, _COND_STATE.ACTIVE)
-
-
-def _readBonusNotReceivedCondition(xmlCtx, section, _):
-    return _parseBonusReceivedCondition(xmlCtx, section, ~_COND_STATE.ACTIVE)
-
-
 def _readServiceCondition(xmlCtx, section, _):
     entityID = parseID(xmlCtx, section, 'Specify a entity ID')
     serviceClass = _getClass(entityID, xmlCtx, section)
@@ -232,8 +219,6 @@ _BASE_CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondit
  'var': _readVarCondition,
  'effect-triggered': _readEffectTriggeredCondition,
  'effect-not-triggered': _readEffectNotTriggeredCondition,
- 'bonus-received': _readBonusReceivedCondition,
- 'bonus-not-received': _readBonusNotReceivedCondition,
  'service': _readServiceCondition,
  'class-condition': _readClassCondition,
  'component-on-scene': lambda xmlCtx, section, flags: _readComponentOnSceneCondition(xmlCtx, section, _COND_STATE.ACTIVE),
@@ -342,19 +327,9 @@ def _readGlobalDeactivateEffectSection(xmlCtx, section, _, conditions):
     return effects.HasTargetEffect(flagID, _EFFECT_TYPE.GLOBAL_DEACTIVATE, conditions=conditions)
 
 
-def _readNextChapterEffectSection(xmlCtx, section, _, conditions):
-    targetID = section.asString
-    return effects.HasTargetEffect(targetID, _EFFECT_TYPE.NEXT_CHAPTER, conditions=conditions)
-
-
 def _readRunTriggerEffectSection(xmlCtx, section, _, conditions):
     triggerID = parseID(xmlCtx, section, 'Specify a trigger ID')
     return effects.HasTargetEffect(triggerID, _EFFECT_TYPE.RUN_TRIGGER, conditions=conditions)
-
-
-def _readRequestBonusEffectSection(xmlCtx, section, _, conditions):
-    chapterID = section.asString
-    return effects.HasTargetEffect(chapterID, _EFFECT_TYPE.REQUEST_BONUS, conditions=conditions)
 
 
 def _readShowHintSection(xmlCtx, section, _, conditions):
@@ -375,21 +350,6 @@ def _readShowDialogSection(xmlCtx, section, _, conditions):
 def _readShowWindowSection(xmlCtx, section, _, conditions):
     windowID = parseID(xmlCtx, section, 'Specify a window ID')
     return effects.HasTargetEffect(windowID, _EFFECT_TYPE.SHOW_WINDOW, conditions=conditions)
-
-
-def _readShowAwardWindowSection(xmlCtx, section, _, conditions):
-    windowID = parseID(xmlCtx, section, 'Specify a window ID')
-    return effects.HasTargetEffect(windowID, _EFFECT_TYPE.SHOW_AWARD_WINDOW, conditions=conditions)
-
-
-def _readShowMessageSection(xmlCtx, section, _, conditions):
-    messageID = parseID(xmlCtx, section, 'Specify a message ID')
-    return effects.HasTargetEffect(messageID, _EFFECT_TYPE.SHOW_MESSAGE, conditions=conditions)
-
-
-def _readPlayMusicSection(xmlCtx, section, _, conditions):
-    messageID = parseID(xmlCtx, section, 'Specify a music ID')
-    return effects.HasTargetEffect(messageID, _EFFECT_TYPE.PLAY_MUSIC, conditions=conditions)
 
 
 def _readSetGuiItemCriteria(xmlCtx, section, _, conditions):
@@ -453,11 +413,6 @@ def _readInvokeGuiCmdSection(xmlCtx, section, _, conditions):
     return effects.InvokeGuiCommand(commandID, argOverrides, conditions=conditions)
 
 
-def _readInvokePlayerCmdSection(xmlCtx, section, _, conditions):
-    commandID = parseID(xmlCtx, section, 'Specify a command ID')
-    return effects.HasTargetEffect(commandID, _EFFECT_TYPE.INVOKE_PLAYER_CMD, conditions=conditions)
-
-
 def _readGoSceneSection(xmlCtx, section, _, conditions):
     sceneID = parseID(xmlCtx, section, 'Specify a setting ID')
     return effects.HasTargetEffect(sceneID, _EFFECT_TYPE.GO_SCENE, conditions=conditions)
@@ -496,9 +451,7 @@ _BASE_EFFECT_TAGS = {'effects-group': _readEffectsGroupSection,
  'global-activate': _readGlobalActivateEffectSection,
  'global-inactivate': _readGlobalDeactivateEffectSection,
  'refuse-training': makeSimpleEffectReader(_EFFECT_TYPE.REFUSE_TRAINING),
- 'next-chapter': _readNextChapterEffectSection,
  'run-trigger': _readRunTriggerEffectSection,
- 'request-bonus': _readRequestBonusEffectSection,
  'set-gui-item-props': _readGuiItemPropertiesEffectSection,
  'set-visible': partial(_readGuiItemPropertiesEffectSection, fixedProp=('visible', 'asBool')),
  'set-button-enabled': partial(_readGuiItemPropertiesEffectSection, fixedProp=('enabled', 'asBool')),
@@ -507,14 +460,10 @@ _BASE_EFFECT_TAGS = {'effects-group': _readEffectsGroupSection,
  'finish-training': makeSimpleEffectReader(_EFFECT_TYPE.FINISH_TRAINING),
  'go-scene': _readGoSceneSection,
  'invoke-gui-cmd': _readInvokeGuiCmdSection,
- 'invoke-player-cmd': _readInvokePlayerCmdSection,
  'show-hint': _readShowHintSection,
  'close-hint': _readCloseHintSection,
  'show-dialog': _readShowDialogSection,
  'show-window': _readShowWindowSection,
- 'show-award-window': _readShowAwardWindowSection,
- 'show-message': _readShowMessageSection,
- 'play-music': _readPlayMusicSection,
  'set-gui-item-criteria': _readSetGuiItemCriteria,
  'set-gui-item-view-criteria': _setReadGuiItemViewCriteria,
  'set-action': _readSetActionSection,
@@ -535,17 +484,14 @@ def setEffectsParsers(parsers):
     _EFFECT_TAGS.update(parsers)
 
 
-def _parseEffect(xmlCtx, section, flags, afterBattle=False):
+def _parseEffect(xmlCtx, section, flags):
     function = _EFFECT_TAGS.get(section.name)
     result = None
-    if 'after-battle-filter' in section.keys() and not afterBattle:
-        return result
+    if function is not None:
+        result = function(xmlCtx, section, flags, _parseConditions(xmlCtx, section, flags))
     else:
-        if function is not None:
-            result = function(xmlCtx, section, flags, _parseConditions(xmlCtx, section, flags))
-        else:
-            LOG_ERROR('Effect is not supported:', section.name)
-        return result
+        LOG_ERROR('Effect is not supported:', section.name)
+    return result
 
 
 _TRIGGER_SUB_PARSERS = {}
@@ -774,46 +720,11 @@ def _parseWindow(xmlCtx, section, flags):
     return window
 
 
-def _parseSimpleWindow(xmlCtx, section, flags):
-    windowID = parseID(xmlCtx, section, 'Specify a window ID')
-    windowType = _xml.readString(xmlCtx, section, 'type')
-    content = {}
-    parser = _WINDOW_SUB_PARERS.get(windowType)
-    if parser is not None:
-        window = parser(xmlCtx, section, flags, windowID, windowType, content)
-    else:
-        window = None
-        LOG_ERROR('Type of window is not supported: ', windowType)
-    return window
-
-
 def _parseMessage(xmlCtx, section, _):
     messageID = parseID(xmlCtx, section, 'Specify a message ID')
     guiType = _xml.readString(xmlCtx, section, 'type')
     text = translation(_xml.readString(xmlCtx, section, 'text'))
     return tutorial_chapter.Message(messageID, guiType, text)
-
-
-def _readPlayerCommand(xmlCtx, section, _):
-    cmdID = parseID(xmlCtx, section, 'Specify a player command ID')
-    name = _xml.readString(xmlCtx, section, 'name')
-    argsSec = _xml.getChildren(xmlCtx, section, 'args')
-    kwargsSec = _xml.getChildren(xmlCtx, section, 'kwargs')
-    cmdArgs = []
-    for name, argSec in argsSec:
-        cmdArgs.append(readVarValue(name, argSec))
-
-    cmdKwargs = {}
-    for name, kwargSec in kwargsSec:
-        argType, subSec = kwargSec.items()[0]
-        cmdKwargs[name] = readVarValue(argType, subSec)
-
-    return tutorial_chapter.PlayerCommand(cmdID, name, cmdArgs=tuple(cmdArgs), cmdKwargs=cmdKwargs)
-
-
-def _readQuery(xmlCtx, section, _):
-    queryID = parseID(xmlCtx, section, 'Specify a query ID')
-    return tutorial_chapter.Query(queryID, _xml.readString(xmlCtx, section, 'type'), _xml.readString(xmlCtx, section, 'var-ref'), extra=section.readString('extra'))
 
 
 def _readGuiItemCriteria(xmlCtx, section, _):
@@ -892,10 +803,7 @@ def _readGameAttribute(xmlCtx, section, _):
 
 _BASE_ENTITY_PARSERS = {'dialog': _parseDialog,
  'window': _parseWindow,
- 'simple-window': _parseSimpleWindow,
  'message': _parseMessage,
- 'player-cmd': _readPlayerCommand,
- 'query': _readQuery,
  'gui-item-criteria': _readGuiItemCriteria,
  'gui-item-view-criteria': _readGuiItemViewCriteria,
  'click-action': _readClickAction,
@@ -933,16 +841,6 @@ def readValues(section):
             result[name] = readVarValue(valueType, valueSec)
 
     return result
-
-
-def readQuestAwardWindowSection(xmlCtx, section, _, windowID, windowType, content):
-    content['description'] = translation(section.readString('description'))
-    content['header'] = translation(section.readString('header'))
-    content['bgImage'] = section.readString('image')
-    varRef = None
-    if 'var-ref' in section.keys():
-        varRef = _xml.readString(xmlCtx, section, 'var-ref')
-    return tutorial_chapter.PopUp(windowID, windowType, content, varRef, forcedQuery=True)
 
 
 _AVAILABLE_DIRECTIONS = ('L', 'T', 'R', 'B')

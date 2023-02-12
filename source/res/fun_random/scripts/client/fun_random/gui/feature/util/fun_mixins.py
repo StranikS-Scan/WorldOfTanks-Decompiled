@@ -4,7 +4,7 @@ import logging
 import typing
 from adisp import adisp_async, adisp_process
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
-from fun_random.gui.fun_gui_constants import SelectorBattleTypes
+from fun_random.gui.fun_gui_constants import SELECTOR_BATTLE_TYPES
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasAnySubMode, hasSingleSubMode, hasSpecifiedSubMode
 from fun_random.gui.shared.events import FunEventType, FunEventScope
@@ -97,7 +97,7 @@ class FunSubModesWatcher(object):
     @adisp_async
     @adisp_process
     def selectFunRandomBattle(self, subModeID=UNKNOWN_EVENT_ID, callback=None):
-        selectorUtils.setBattleTypeAsKnown(SelectorBattleTypes.FUN_RANDOM)
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         allSubModesIDs = self._funRandomCtrl.subModesHolder.getSubModesIDs()
         if not allSubModesIDs:
             _logger.error('Trying to get into fun random without any sub mode configured')
@@ -121,17 +121,17 @@ class FunSubModesWatcher(object):
 
     @hasAnySubMode()
     def showCommonInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SelectorBattleTypes.FUN_RANDOM)
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         showFunRandomInfoPage(self._funRandomCtrl.getSettings().infoPageUrl)
 
     @hasSpecifiedSubMode()
     def showSubModeInfoPage(self, subModeID):
-        selectorUtils.setBattleTypeAsKnown(SelectorBattleTypes.FUN_RANDOM)
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         showFunRandomInfoPage(self.getSubMode(subModeID).getSettings().client.infoPageUrl)
 
     @hasSingleSubMode(abortAction='showCommonInfoPage')
     def showSubModesInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SelectorBattleTypes.FUN_RANDOM)
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         showFunRandomInfoPage(first(self.getSubModes()).getSettings().client.infoPageUrl)
 
 

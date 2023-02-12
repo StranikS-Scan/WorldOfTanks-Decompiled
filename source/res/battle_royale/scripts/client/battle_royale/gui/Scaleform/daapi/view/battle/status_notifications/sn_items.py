@@ -37,7 +37,9 @@ class BRDeathZoneDangerSN(_BRLocalizationProvider, sn_items.DeathZoneDangerSN):
 
 
 class BRDeathZoneWarningSN(_BRLocalizationProvider, sn_items.DeathZoneWarningSN):
-    pass
+
+    def _getDescription(self, value):
+        return backport.text(self._stringResource.deathZoneWarning())
 
 
 class LootPickUpSN(_BRLocalizationProvider, sn_items.TimerSN):

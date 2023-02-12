@@ -14,6 +14,8 @@ import NetworkFilters
 import material_kinds
 from constants import IS_EDITOR, VEHICLE_SIEGE_STATE
 from CustomEffectManager import CustomEffectManager, EffectSettings
+from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from VehicleStickers import VehicleStickers
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
@@ -58,6 +60,7 @@ class VehicleAppearanceComponent(object):
 
 
 class CommonTankAppearance(ScriptGameObject):
+    bootcampController = dependency.descriptor(IBootcampController)
     compoundModel = property(lambda self: self._compoundModel)
     boundEffects = property(lambda self: self.__boundEffects)
     fashions = property(lambda self: self.__fashions)
@@ -196,7 +199,8 @@ class CommonTankAppearance(ScriptGameObject):
         self.__vID = vID
         self._isTurretDetached = isTurretDetached
         self.__updateModelStatus()
-        self.__outfit = self._prepareOutfit(outfitCD)
+        bootcampOutfit = self.bootcampController.getBootcampOutfit(typeDescriptor)
+        self.__outfit = bootcampOutfit if bootcampOutfit else self._prepareOutfit(outfitCD)
         if self.damageState.isCurrentModelUndamaged:
             self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
         self.__renderMode = renderMode

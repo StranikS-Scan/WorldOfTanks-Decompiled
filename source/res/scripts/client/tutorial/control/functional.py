@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/functional.py
 import re
-import BigWorld
 import Event
 from helpers import dependency
 from tutorial.control import TutorialProxyHolder, game_vars
@@ -167,21 +166,6 @@ class FunctionalGameItemRelateStateCondition(FunctionalCondition):
         return False
 
 
-class FunctionalBonusReceivedCondition(FunctionalCondition):
-
-    def isConditionOk(self, condition):
-        chapterItem = self._descriptor.getChapter(condition.getID())
-        if chapterItem is None:
-            chapterID = self._tutorial.getVars().get(condition.getID())
-            chapterItem = self._descriptor.getChapter(chapterID)
-        if chapterItem is None:
-            LOG_ERROR('Chapter is not found', condition.getID())
-            return False
-        else:
-            result = chapterItem.isBonusReceived(self._bonuses.getCompleted())
-            return result if condition.isPositiveState() else not result
-
-
 class FunctionalServiceCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
@@ -222,7 +206,6 @@ _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.EFFECT_TRIGGERED: FunctionalEffectTriggeredCondition,
  CONDITION_TYPE.GAME_ITEM_SIMPLE_STATE: FunctionalGameItemSimpleStateCondition,
  CONDITION_TYPE.GAME_ITEM_RELATE_STATE: FunctionalGameItemRelateStateCondition,
- CONDITION_TYPE.BONUS_RECEIVED: FunctionalBonusReceivedCondition,
  CONDITION_TYPE.SERVICE: FunctionalServiceCondition,
  CONDITION_TYPE.CLASS_CONDITION: FunctionalClassCondition,
  CONDITION_TYPE.COMPONENT_ON_SCENE: FunctionalComponentOnSceneCondition,
@@ -408,19 +391,6 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
         return False
 
 
-class FunctionalNextChapterEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        nextChapter = self._effect.getTargetID()
-        if not nextChapter:
-            nextChapter = self._descriptor.getInitialChapterID(completed=self._bonuses.getCompleted())
-        if self._tutorial._currentChapter != nextChapter:
-            self._gui.showWaiting('chapter-loading', isSingle=True)
-            self._gui.clear()
-            self._tutorial.goToNextChapter(nextChapter)
-        return True
-
-
 class FunctionalRunTriggerEffect(FunctionalEffect):
 
     def isInstantaneous(self):
@@ -443,38 +413,12 @@ class FunctionalRunTriggerEffect(FunctionalEffect):
         return self._data.getTrigger(self._effect.getTargetID())
 
 
-class FunctionalRequestBonusEffect(FunctionalEffect):
-
-    def isInstantaneous(self):
-        return False
-
-    def isStillRunning(self):
-        return self._bonuses.isStillRunning()
-
-    def triggerEffect(self):
-        self._bonuses.request(chapterID=self._effect.getTargetID())
-        return True
-
-
 class FunctionalSetGuiItemPropertiesEffect(FunctionalEffect):
 
     def triggerEffect(self):
         itemID = self._effect.getTargetID()
         props = self._effect.getProps()
         return self._gui.playEffect(GUI_EFFECT_NAME.SET_ITEM_PROPS, (itemID, props))
-
-
-class FunctionalFinishTrainingEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        self._tutorial.stop(finished=True)
-        return True
-
-    def isStillRunning(self):
-        return True
-
-    def isInstantaneous(self):
-        return False
 
 
 class FunctionalGuiCommandEffect(FunctionalEffect):
@@ -496,27 +440,6 @@ class FunctionalGuiCommandEffect(FunctionalEffect):
         else:
             LOG_ERROR('Command not found', targetID)
             return False
-
-
-class FunctionalPlayerCommandEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        command = self.getTarget()
-        if command is not None:
-            player = BigWorld.player()
-            attr = getattr(player, command.getName(), None)
-            if attr is not None and callable(attr):
-                try:
-                    attr(*command.args(), **command.kwargs())
-                    return True
-                except TypeError:
-                    LOG_ERROR('Number of arguments mismatch', command.getName(), command.args(), command.kwargs())
-
-            else:
-                LOG_ERROR('Player has not method', command.getName())
-        else:
-            LOG_ERROR('Command not found', self._effect.getTargetID())
-        return False
 
 
 class FunctionalShowDialogEffect(FunctionalEffect):
@@ -575,18 +498,6 @@ class FunctionalShowWindowEffect(FunctionalEffect):
 
     def _setActions(self, window):
         self._tutorial.getFunctionalScene().setActions(window.getActions())
-
-
-class FunctionalShowMessageEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        message = self.getTarget()
-        if message is not None:
-            self._gui.showMessage(message.getText(), lookupType=message.getGuiType())
-            return True
-        else:
-            LOG_ERROR('Message not found', self._effect.getTargetID())
-            return False
 
 
 _var_search = re.compile('(\\$.*?(.+?)\\$)')

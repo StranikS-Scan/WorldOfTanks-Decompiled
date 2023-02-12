@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/battle_session_view.py
+import typing
 from adisp import adisp_process
+from constants import TOURNAMENT_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import g_entitiesFactories
@@ -11,8 +13,10 @@ from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.view_helpers.emblems import getClanEmblemURL, EmblemSize
+from gui.tournament.tournament_helpers import isTournamentEnabled, showTournaments
 from helpers import dependency
 from skeletons.gui.game_control import IExternalLinksController
+from skeletons.gui.lobby_context import ILobbyContext
 _TOURNAMENTS_URL = 'tournamentsURL'
 _GLOBAL_MAP_URL = 'globalMapURL'
 
@@ -20,31 +24,40 @@ class BattleSessionView(ViewImpl):
     __slots__ = ()
     layoutID = R.views.lobby.mode_selector.BattleSessionView()
     __externalLinks = dependency.descriptor(IExternalLinksController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, layoutID):
         super(BattleSessionView, self).__init__(ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, BattleSessionModel()))
 
-    def _onLoading(self):
-        viewModel = self.getViewModel()
-        isInClan = g_clanCache.isInClan
-        if isInClan:
-            viewModel.setClanName(g_clanCache.clanName)
-            viewModel.setClanIcon(getClanEmblemURL(g_clanCache.clanDBID, EmblemSize.SIZE_32))
-        viewModel.setIsInClan(isInClan)
-        viewModel.onClanClicked += self.__clanClickedHandler
-        viewModel.onTournamentsClicked += self.__tournamentsClickedHandler
-        viewModel.onGlobalMapClicked += self.__globalMapClickedHandler
-        viewModel.onCloseClicked += self.__closeClickedHandler
+    @property
+    def viewModel(self):
+        return super(BattleSessionView, self).getViewModel()
 
-    def _finalize(self):
-        viewModel = self.getViewModel()
-        viewModel.onClanClicked -= self.__clanClickedHandler
-        viewModel.onTournamentsClicked -= self.__tournamentsClickedHandler
-        viewModel.onGlobalMapClicked -= self.__globalMapClickedHandler
-        viewModel.onCloseClicked -= self.__closeClickedHandler
+    def _getEvents(self):
+        return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
+         (self.viewModel.onClanClicked, self.__clanClickedHandler),
+         (self.viewModel.onTournamentsClicked, self.__tournamentsClickedHandler),
+         (self.viewModel.onGlobalMapClicked, self.__globalMapClickedHandler),
+         (self.viewModel.onCloseClicked, self.__closeClickedHandler))
+
+    def _onLoading(self):
+        self.__updateModel()
+        super(BattleSessionView, self)._onLoading()
+
+    def __updateModel(self):
+        with self.viewModel.transaction() as tx:
+            isInClan = g_clanCache.isInClan
+            if isInClan:
+                tx.setClanName(g_clanCache.clanName)
+                tx.setClanIcon(getClanEmblemURL(g_clanCache.clanDBID, EmblemSize.SIZE_32))
+            tx.setIsInClan(isInClan)
+            tx.setIsTournamentLinkIGB(isTournamentEnabled())
 
     def __tournamentsClickedHandler(self):
-        self.__openUrl(_TOURNAMENTS_URL)
+        if isTournamentEnabled():
+            showTournaments()
+        else:
+            self.__openUrl(_TOURNAMENTS_URL)
 
     def __globalMapClickedHandler(self):
         self.__openUrl(_GLOBAL_MAP_URL)
@@ -61,3 +74,7 @@ class BattleSessionView(ViewImpl):
     def __openUrl(self, name):
         url = yield self.__externalLinks.getURL(name)
         self.__externalLinks.open(url)
+
+    def __onServerSettingsChanged(self, diff):
+        if TOURNAMENT_CONFIG in diff:
+            self.__updateModel()

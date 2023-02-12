@@ -4,6 +4,8 @@ from enum import IntEnum
 import Math
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import ComponentBitMask as FLAG
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NAME, ENTRY_SYMBOL_NAME
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
 
 class MarkerItem(IntEnum):
     DEFAULT = 0
@@ -21,8 +23,11 @@ class MarkerParamsFactory(object):
                                             'min-distance': 0.0,
                                             'max-distance': 0.0,
                                             'distance': 0.0,
-                                            'distanceFieldColor': 'white'}],
-                          FLAG.DIRECTION_INDICATOR: [{'dIndicatorShapes': ('green', 'green')}],
+                                            'distanceFieldColor': 'white',
+                                            'symbol': settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER}],
+                          FLAG.DIRECTION_INDICATOR: [{'dIndicatorShapes': ('green', 'green'),
+                                                      'swf': _DIRECT_INDICATOR_SWF,
+                                                      'mcName': _DIRECT_INDICATOR_MC_NAME}],
                           FLAG.MINIMAP_MARKER: [{'symbol': ENTRY_SYMBOL_NAME.ARTY_MARKER,
                                                  'container': CONTAINER_NAME.PERSONAL,
                                                  'onlyTranslation': False}, {'symbol': ENTRY_SYMBOL_NAME.BOMBER_ENTRY,

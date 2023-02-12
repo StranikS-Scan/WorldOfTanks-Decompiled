@@ -64,7 +64,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
 from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 if TYPE_CHECKING:
     from typing import Tuple as TTuple
 _logger = logging.getLogger(__name__)
@@ -472,12 +471,6 @@ class SettingTrueByDefault(StorageDumpSetting):
 
     def getDefaultValue(self):
         return True
-
-
-class TutorialSetting(StorageDumpSetting):
-
-    def getDefaultValue(self):
-        return False
 
 
 class UserPrefsSetting(SettingAbstract):
@@ -1438,13 +1431,7 @@ class ContourSetting(_BaseAimContourSetting):
     _OPTIONS_NUMBER = 2
 
     def setSystemValue(self, value):
-        if self.forceStandatContour():
-            value = False
         BigWorld.enableEdgeDrawerVisual(not value)
-
-    @staticmethod
-    def forceStandatContour():
-        return BONUS_CAPS.checkAny(getattr(BigWorld.player(), 'arenaBonusType', 0), BONUS_CAPS.BATTLEROYALE)
 
     def getExtraData(self):
         return [ {'tooltip': makeTooltip(body=backport.text(self._RES_ROOT.dyn('type{}'.format(value)).tooltip()))} for value in xrange(self._OPTIONS_NUMBER) ]

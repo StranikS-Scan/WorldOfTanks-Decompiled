@@ -101,16 +101,6 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
-  <xmlns:czech0>	ussr	</xmlns:czech0>
-  <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
-  <xmlns:china>	china	</xmlns:china>
-  <xmlns:france>	france	</xmlns:france>
-  <xmlns:uk>	uk	</xmlns:uk>
-  <xmlns:japan>	japan	</xmlns:japan>
-  <xmlns:czech>	czech	</xmlns:czech>
-  <xmlns:sweden>	sweden	</xmlns:sweden>
-  <xmlns:poland>	poland	</xmlns:poland>
   <xmlns:italy>	italy	</xmlns:italy>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
@@ -6656,6 +6646,21 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	943	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_742.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_742	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	st_patricks_day_2023	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -6729,6 +6734,12 @@
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	15858	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/clan_content/sticker_08.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group7/clan_content_08	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <decal>
       <id>	15859	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/clan_content/sticker_10.dds	</texture>
@@ -7131,20 +7142,6 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Steam Publisher Weekend	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:emblem/clan_content	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	emblems 50g notInShop	</priceGroup>
-    <decal>
-      <id>	15858	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/clan_content/sticker_08.dds	</texture>
-      <userString>	#vehicle_customization:emblem/group7/clan_content_08	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Clan Content nonCN nonNA	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -12381,25 +12378,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
-    <historical>	0	</historical>
-    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
-      </include>
-    </vehicleFilter>
-    <decal>
-      <id>	942	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_649.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_649	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Veteran for WZ_122_6_F3	</name>
-    <type>	INSCRIPTION	</type>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:inscription/special	</userString>
-    <season>	ALL	</season>
     <historical>	2	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
@@ -12421,6 +12399,52 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Battle Pass Holiday	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	942	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_649.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_649	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Veteran for WZ_122_6_F3	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <decal>
+      <id>	948	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_654.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_654	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	949	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_655.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_655	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	950	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_656.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_656	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Battle Pass 2023	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

@@ -9,7 +9,7 @@ from gui.shared.events import LoadViewEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.crew_skin import localizedFullName
-from gui.shared.gui_items.Tankman import Tankman, getCrewSkinIconSmallWithoutPath, getRoleBigIconPath
+from gui.shared.gui_items.Tankman import Tankman, getCrewSkinIconSmall, getRoleBigIconPath
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.utils import decorators
@@ -108,7 +108,7 @@ class Crew(CrewMeta):
                  'specializationLevel': tankman.realRoleLevel[0],
                  'role': tankman.roleUserName,
                  'vehicleType': tankmanVehicle.shortUserName,
-                 'iconFile': tankman.icon,
+                 'iconFile': tankman.smallIconPath,
                  'rankIconFile': tankman.iconRank,
                  'contourIconFile': tankmanVehicle.iconContour,
                  'tankmanID': tankman.invID,
@@ -144,7 +144,7 @@ class Crew(CrewMeta):
     def __updateTankmanDataByCrewSkin(self, tankman, tankmanData):
         if tankman.skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             skinItem = self.itemsCache.items.getCrewSkin(tankman.skinID)
-            tankmanData['iconFile'] = getCrewSkinIconSmallWithoutPath(skinItem.getIconID())
+            tankmanData['iconFile'] = getCrewSkinIconSmall(skinItem.getIconID())
             tankmanData['fullName'] = localizedFullName(skinItem)
             tankmanData['lastName'] = makeString(skinItem.getLastName())
 

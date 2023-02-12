@@ -3,6 +3,7 @@
 import typing
 import BigWorld
 import GUI
+import SCALEFORM
 import SoundGroups
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
@@ -34,20 +35,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
-_PREDICTION_INDICATOR_SWF = 'battlePredictionIndicatorApp.swf'
-_PREDICTION_INDICATOR_COMPONENT = 'WGPredictionIndicatorFlash'
-_PREDICTION_INDICATOR_MC_NAME = '_root.predictionIndicator.hit_{0}'
-_PREDICTION_INDICATOR_SWF_SIZE = (680, 680)
-_PREDICTION_INDICATOR_MAX_DUR = 20
-_DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
-_DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
-_DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
-_DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
-_DAMAGE_INDICATOR_TOTAL_FRAMES = 160
-_BEGIN_ANIMATION_FRAMES = 11
-_DAMAGE_INDICATOR_FRAME_RATE = 24
-_BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
-_DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
@@ -173,7 +160,7 @@ class _MarkerVOBuilder(object):
          'bgStr': self._getBackground(markerData)}
 
     def _getIndicatorFrameRate(self):
-        return _DAMAGE_INDICATOR_FRAME_RATE
+        return _DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
 
     def _getBackground(self, markerData):
         pass
@@ -335,12 +322,21 @@ class DamageIndicatorMeta(Flash):
 
 
 class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+    _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
+    _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
+    _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
+    _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
+    _DAMAGE_INDICATOR_TOTAL_FRAMES = 160
+    _BEGIN_ANIMATION_FRAMES = 11
+    _DAMAGE_INDICATOR_FRAME_RATE = 24
+    _BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
+    _DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hitsCount):
-        names = tuple((_DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,))
+        names = tuple((self._DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
+        super(_DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
         self.__voBuilderFactory = None
         self.__updateMethod = None
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
@@ -348,9 +344,9 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.movie.backgroundAlpha = 0.0
         self.component.focus = False
         self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
-        self.movie.scaleMode = 'NoScale'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
         self.component.useInvertCameraView = False
         self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
         self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
@@ -384,10 +380,10 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         return
 
     def getDuration(self):
-        return _DAMAGE_INDICATOR_ANIMATION_DURATION
+        return self._DAMAGE_INDICATOR_ANIMATION_DURATION
 
     def getBeginAnimationDuration(self):
-        return _BEGIN_ANIMATION_DURATION
+        return self._BEGIN_ANIMATION_DURATION
 
     def invalidateSettings(self, diff=None):
         getter = self.settingsCore.getSetting
@@ -789,20 +785,20 @@ class IDirectionIndicator(object):
 
 class _DirectionIndicator(Flash, IDirectionIndicator):
 
-    def __init__(self, swf):
-        super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_INDICATOR_MC_NAME,))
+    def __init__(self, swf, mcName):
+        super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (mcName,))
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
-        self.movie.scaleMode = 'NoScale'
+        self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
         self.component.focus = False
         self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         self.flashSize = _DIRECT_INDICATOR_SWF_SIZE
         self.__isVisible = True
         self.component.relativeRadius = 0.5
-        self._dObject = getattr(self.movie, _DIRECT_INDICATOR_MC_NAME, None)
+        self._dObject = getattr(self.movie, mcName, None)
         return
 
     def __del__(self):
@@ -843,8 +839,8 @@ class _DirectionIndicatorMessage(_DirectionIndicator):
             self._dObject.setMessage(message)
 
 
-def createDirectIndicator():
-    return _DirectionIndicator(_DIRECT_INDICATOR_SWF)
+def createDirectIndicator(swf=_DIRECT_INDICATOR_SWF, mcName=_DIRECT_INDICATOR_MC_NAME):
+    return _DirectionIndicator(swf, mcName)
 
 
 def createDamageIndicator():
@@ -862,11 +858,11 @@ class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
-        self.movie.scaleMode = 'NoScale'
+        self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
         self.component.focus = False
         self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         self.flashSize = _DIRECT_INDICATOR_SWF_SIZE
         self.__isVisible = True
         self.component.relativeRadius = 0.5
@@ -936,20 +932,25 @@ class PredictionIndicatorMeta(Flash):
 
 
 class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
+    _PREDICTION_INDICATOR_SWF = 'battlePredictionIndicatorApp.swf'
+    _PREDICTION_INDICATOR_COMPONENT = 'WGPredictionIndicatorFlash'
+    _PREDICTION_INDICATOR_MC_NAME = '_root.predictionIndicator.hit_{0}'
+    _PREDICTION_INDICATOR_SWF_SIZE = (680, 680)
+    _PREDICTION_INDICATOR_MAX_DUR = 20
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hitsCount):
-        names = tuple((_PREDICTION_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(_PredictionIndicator, self).__init__(_PREDICTION_INDICATOR_SWF, _PREDICTION_INDICATOR_COMPONENT, (names,))
+        names = tuple((self._PREDICTION_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
+        super(_PredictionIndicator, self).__init__(self._PREDICTION_INDICATOR_SWF, self._PREDICTION_INDICATOR_COMPONENT, (names,))
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.component.focus = False
         self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
-        self.movie.scaleMode = 'NoScale'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
+        self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
         self.component.useInvertCameraView = False
         self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
@@ -979,7 +980,7 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
         return
 
     def getDuration(self):
-        return _PREDICTION_INDICATOR_MAX_DUR
+        return self._PREDICTION_INDICATOR_MAX_DUR
 
     def getBeginAnimationDuration(self):
         pass

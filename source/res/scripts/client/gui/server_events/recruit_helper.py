@@ -1,25 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/recruit_helper.py
 import typing
+from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
+from helpers.i18n import makeString as _ms
 from constants import ENDLESS_TOKEN_TIME
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
+from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.gui_items import Tankman
+from helpers import dependency
+from items import tankmen, vehicles
+from items.components import skills_constants
+from items.components.component_constants import EMPTY_STRING
 from items.components.tankmen_components import SPECIAL_CREW_TAG
 from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL
 from nations import NONE_INDEX, INDICES, NAMES as NationNames
-from items import tankmen, vehicles
-from items.components.component_constants import EMPTY_STRING
-from items.components import skills_constants
-from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
-from gui.shared.gui_items import Tankman
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
-from gui.Scaleform.locale.QUESTS import QUESTS
-from helpers.i18n import makeString as _ms
-from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
-from soft_exception import SoftException
 from shared_utils import first, findFirst
+from skeletons.gui.server_events import IEventsCache
+from soft_exception import SoftException
 from .events_helpers import getTankmanRewardQuests
 if typing.TYPE_CHECKING:
     from typing import List, Union
@@ -207,8 +207,16 @@ class _BaseRecruitInfo(object):
     def getSmallIcon(self):
         return self._icon
 
+    def getDynIconName(self):
+        return self._icon.replace('-', '_').rsplit('.', 1)[0]
+
     def getBigIcon(self):
-        return '../maps/icons/tankmen/icons/big/{}'.format(self._icon)
+        dynAccessor = R.images.gui.maps.icons.tankmen.icons.big.dyn(self.getDynIconName())
+        return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.big.tankman())
+
+    def getSmallIconPath(self):
+        dynAccessor = R.images.gui.maps.icons.tankmen.icons.small.dyn(self.getDynIconName())
+        return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.small.tankman())
 
     def getBarracksIcon(self):
         return self._icon
@@ -231,8 +239,8 @@ class _BaseRecruitInfo(object):
         return self._sourceID
 
     def getSpecialIcon(self):
-        icon = '../maps/icons/tankmen/icons/special/{}'.format(self._icon)
-        return RES_ICONS.getSpecialIcon(self._icon) if icon in RES_ICONS.MAPS_ICONS_TANKMEN_ICONS_SPECIAL_ENUM else None
+        dynAccessor = R.images.gui.maps.icons.tankmen.icons.special.dyn(self.getDynIconName())
+        return backport.image(dynAccessor()) if dynAccessor.isValid() else None
 
     def isFemale(self):
         return self._isFemale
@@ -311,20 +319,20 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, skills, freeSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, group, sourceID, isPremium, isFemale, hasNewSkill)
 
     def getEventName(self):
-        eventName = TOOLTIPS.getNotRecruitedTankmanEventName(self._sourceID)
-        return eventName if eventName is not None else TOOLTIPS.getNotRecruitedTankmanEventName(_BASE_NAME)
+        dynAccessor = R.strings.tooltips.notrecruitedtankman.dyn(self._sourceID)
+        return backport.text(dynAccessor.event()) if dynAccessor.isValid() and dynAccessor.dyn('event').isValid() else backport.text(R.strings.tooltips.notrecruitedtankman.base.event())
 
     def getLabel(self):
-        label = TOOLTIPS.getNotRecruitedTankmanEventLabel(self._sourceID)
-        return label if label is not None else TOOLTIPS.getNotRecruitedTankmanEventLabel(_TANKMAN_NAME)
+        dynAccessor = R.strings.tooltips.notrecruitedtankman.dyn(self._sourceID)
+        return backport.text(dynAccessor.label()) if dynAccessor.isValid() and dynAccessor.dyn('label').isValid() else backport.text(R.strings.tooltips.notrecruitedtankman.tankman.label())
 
     def getDescription(self):
-        description = TOOLTIPS.getNotRecruitedTankmanEventDesc(self._sourceID)
-        return description if description is not None else TOOLTIPS.getNotRecruitedTankmanEventDesc(_TANKMAN_NAME)
+        dynAccessor = R.strings.tooltips.notrecruitedtankman.dyn(self._sourceID)
+        return backport.text(dynAccessor.desc()) if dynAccessor.isValid() and dynAccessor.dyn('desc').isValid() else backport.text(R.strings.tooltips.notrecruitedtankman.tankman.desc())
 
     def getHowToGetInfo(self):
-        sourceID = self._sourceID if TOOLTIPS.hasNotRecruitedTankmanEventGetInfo(self._sourceID) else _TANKMAN_NAME
-        return TOOLTIPS.getNotRecruitedTankmanEventGetInfo(sourceID)
+        dynAccessor = R.strings.tooltips.notrecruitedtankman.dyn(self._sourceID)
+        return backport.text(dynAccessor.howToGetInfo()) if dynAccessor.isValid() and dynAccessor.dyn('howToGetInfo').isValid() else backport.text(R.strings.tooltips.notrecruitedtankman.tankman.howToGetInfo())
 
     def getFullUserNameByNation(self, nationID=None):
         if nationID is None:

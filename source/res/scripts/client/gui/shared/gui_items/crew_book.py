@@ -1,15 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_book.py
 import nations
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from items import tankmen, parseIntCompactDescr
-from gui.shared.gui_items.Vehicle import getIconResourceName
-from gui.shared.utils.functions import stripExpAmountTags
+from gui.shared.utils.functions import stripExpAmountTags, replaceHyphenToUnderscore
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem
-from helpers import func_utils, dependency
+from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY, CREW_BOOK_SPREAD
 from skeletons.gui.lobby_context import ILobbyContext
 
@@ -93,14 +91,14 @@ class CrewBook(FittingItem):
         return iconName
 
     def getShopIcon(self, size='large'):
-        return RES_ICONS.getCrewBookIcon(size, self.getBonusIconName())
+        sizeID = R.images.gui.maps.icons.crewBooks.books.dyn(size)
+        if not sizeID.exists():
+            sizeID = R.images.gui.maps.icons.crewBooks.books.dyn('s' + size)
+        resID = sizeID.dyn(replaceHyphenToUnderscore(self.getBonusIconName()))()
+        return backport.image(resID) if resID != -1 else ''
 
     def getGUIEmblemID(self):
         return '{}_{}'.format(self.itemTypeName, self.getBookType())
-
-    def getOldStyleIcon(self, size='large'):
-        resId = R.images.gui.maps.icons.crewBooks.books.dyn(size).dyn(getIconResourceName(self.icon))()
-        return func_utils.makeFlashPath(backport.image(resId)[6:])
 
     def formattedShortDescription(self, formatter):
         description = self.shortDescription

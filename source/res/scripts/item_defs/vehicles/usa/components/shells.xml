@@ -56,37 +56,6 @@
       <devices>	27	</devices>
     </damage>
   </_20mm_APCR>
-  <_20mm_AP_bootcamp>
-    <id>	144	</id>
-    <userString>	#usa_vehicles:_20mm_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	3	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	20	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoArmorPiercing	</effects>
-    <damage>
-      <armor>	12	</armor>
-      <devices>	27	</devices>
-    </damage>
-  </_20mm_AP_bootcamp>
-  <_20mm_APCR_bootcamp>
-    <id>	137	</id>
-    <userString>	#usa_vehicles:_20mm_APCR	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	400	</price>
-    <improved>	true	</improved>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	20	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoAPCR	</effects>
-    <damage>
-      <armor>	12	</armor>
-      <devices>	27	</devices>
-    </damage>
-  </_20mm_APCR_bootcamp>
   <_37mm_AP_M74>
     <id>	3	</id>
     <userString>	#usa_vehicles:_37mm_AP_M74	</userString>
@@ -140,62 +109,6 @@
       </damage>
     </armorSpalls>
   </_37mm_HE_M63>
-  <_37mm_AP_M74_bootcamp>
-    <id>	138	</id>
-    <userString>	#usa_vehicles:_37mm_AP_M74	</userString>
-    <icon>	ap	</icon>
-    <price>	18	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	40	</armor>
-      <devices>	50	</devices>
-    </damage>
-  </_37mm_AP_M74_bootcamp>
-  <_37mm_APC_M51_bootcamp>
-    <id>	139	</id>
-    <userString>	#usa_vehicles:_37mm_APC_M51	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	800	</price>
-    <improved>	true	</improved>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallAPCR	</effects>
-    <damage>
-      <armor>	40	</armor>
-      <devices>	50	</devices>
-    </damage>
-  </_37mm_APC_M51_bootcamp>
-  <_37mm_HE_M63_bootcamp>
-    <id>	140	</id>
-    <userString>	#usa_vehicles:_37mm_HE_M63	</userString>
-    <icon>	he_modern	</icon>
-    <price>	10	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	37	</caliber>
-    <explosionRadius>	0.31	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	smallHighExplosive	</effects>
-    <damage>
-      <armor>	50	</armor>
-      <devices>	50	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	0.31	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	25	</armor>
-        <devices>	25	</devices>
-      </damage>
-    </armorSpalls>
-  </_37mm_HE_M63_bootcamp>
   <_37mm_AP1937>
     <id>	6	</id>
     <userString>	#usa_vehicles:_37mm_AP1937	</userString>
@@ -249,36 +162,6 @@
       </damage>
     </armorSpalls>
   </_37mm_HE1916>
-  <_37mm_AP1937_bot>
-    <id>	118	</id>
-    <userString>	#usa_vehicles:_37mm_AP1937_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	15	</armor>
-      <devices>	15	</devices>
-    </damage>
-  </_37mm_AP1937_bot>
-  <_37mm_AP1937_1_bot>
-    <id>	119	</id>
-    <userString>	#usa_vehicles:_37mm_AP1937_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	6	</armor>
-      <devices>	3	</devices>
-    </damage>
-  </_37mm_AP1937_1_bot>
   <_37mm_APC_M59A1>
     <id>	9	</id>
     <userString>	#usa_vehicles:_37mm_APC_M59A1	</userString>
@@ -980,21 +863,6 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_76mm_HEAT_M496A1>
-  <_76mm_AP_M79training>
-    <id>	96	</id>
-    <userString>	#usa_vehicles:_76mm_AP_M79	</userString>
-    <icon>	ap	</icon>
-    <price>	88	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	76	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	115	</armor>
-      <devices>	105	</devices>
-    </damage>
-  </_76mm_AP_M79training>
   <_88mm_Pzgr_39_43>
     <id>	153	</id>
     <userString>	#usa_vehicles:_88mm_Pzgr_39_43	</userString>
@@ -2132,6 +2000,60 @@
       </damage>
     </armorSpalls>
   </_110mm_SDRN1>
+  <_120mm_M820>
+    <id>	176	</id>
+    <userString>	#usa_vehicles:_120mm_M820	</userString>
+    <icon>	ap	</icon>
+    <price>	1115	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_M820>
+  <_120mm_M820_HEAT>
+    <id>	177	</id>
+    <userString>	#usa_vehicles:_120mm_M820_HEAT	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_M820_HEAT>
+  <_120mm_SDRN1>
+    <id>	178	</id>
+    <userString>	#usa_vehicles:_120mm_SDRN1	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1290	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_SDRN1>
   <_120mm_APBC_M358>
     <id>	163	</id>
     <userString>	#usa_vehicles:_120mm_APBC_M358	</userString>
@@ -2647,9 +2569,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	19	</stunDuration>
-    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <stunDuration>	13.3	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2693,9 +2613,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	10.4	</stunDuration>
-    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.40	</damageDurationCoeff>
+    <stunDuration>	7.3	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2774,9 +2692,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	23	</stunDuration>
-    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.50	</damageDurationCoeff>
+    <stunDuration>	16.1	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2825,9 +2741,7 @@
     <caliber>	203	</caliber>
     <explosionRadius>	10.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	28	</stunDuration>
-    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.55	</damageDurationCoeff>
+    <stunDuration>	19.6	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2876,9 +2790,7 @@
     <caliber>	240	</caliber>
     <explosionRadius>	12.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	35	</stunDuration>
-    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.60	</damageDurationCoeff>
+    <stunDuration>	24.5	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>

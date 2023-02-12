@@ -14,9 +14,10 @@ from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
+from tutorial.control.game_vars import getVehicleByIntCD
 _IMAGES = R.images.gui.maps.icons.battlePass.intro
 _TEXTS = R.strings.battle_pass.intro
-_BG = R.images.gui.maps.icons.battlePass.progression.background
+_BG = R.images.gui.maps.icons.battlePass.backgrounds
 
 class IntroView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -31,6 +32,16 @@ class IntroView(ViewImpl):
     @property
     def viewModel(self):
         return super(IntroView, self).getViewModel()
+
+    def startListeners(self):
+        self._subscribe()
+
+    def stopListeners(self):
+        self._unsubscribe()
+
+    def updateData(self):
+        self.__updateBattlePassState()
+        self.__updateViewModel()
 
     def _onLoading(self, *args, **kwargs):
         super(IntroView, self)._onLoading(*args, **kwargs)
@@ -50,10 +61,10 @@ class IntroView(ViewImpl):
             for slideName in getIntroSlidesNames():
                 slides.addViewModel(self.__createSlideModel(slideName, **placeholders))
 
-            tx.setTitle(_TEXTS.holidayTitle())
+            tx.setTitle(_TEXTS.title())
             tx.setAbout(_TEXTS.aboutButton())
             tx.setButtonLabel(_TEXTS.button())
-            tx.setBackground(_BG.chapter_common())
+            tx.setBackground(_BG.common())
 
     @staticmethod
     def __createSlideModel(slideName, **kwargs):
@@ -69,10 +80,17 @@ class IntroView(ViewImpl):
 
     @staticmethod
     def __showVideo():
-        showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER_VIEW)
+        showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
 
     def __genResCommPlaceholders(self):
-        return {}
+        commonResArgs = {}
+        vehIntCDs = self.__battlePass.getSpecialVehicles()
+        commonResArgs['points'] = self.__battlePass.getSpecialVehicleCapBonus()
+        for idx, vehIntCD in enumerate(vehIntCDs, 1):
+            vehicle = getVehicleByIntCD(vehIntCD)
+            commonResArgs['tankName{}'.format(idx)] = vehicle.userName if vehicle else ''
+
+        return commonResArgs
 
     def __updateBattlePassState(self, *_):
         if self.__battlePass.isPaused():

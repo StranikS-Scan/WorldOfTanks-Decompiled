@@ -9,7 +9,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Tankman import Tankman, getCrewSkinIconSmallWithoutPath
+from gui.shared.gui_items.Tankman import Tankman, getCrewSkinIconSmall
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.money import Currency
@@ -69,7 +69,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
      'specializationLevel': tankman.realRoleLevel[0],
      'role': tankman.roleUserName,
      'vehicleType': tankmanVehicle.shortUserName,
-     'iconFile': tankman.icon,
+     'iconFile': tankman.smallIconPath,
      'rankIconFile': tankman.iconRank,
      'contourIconFile': tankmanVehicle.iconContour,
      'tankmanID': tankman.invID,
@@ -93,7 +93,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
      'roles': tankman.roles()}
     if tankman.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
         skinItem = itemsCache.items.getCrewSkin(tankman.skinID)
-        iconFile = getCrewSkinIconSmallWithoutPath(skinItem.getIconID())
+        iconFile = getCrewSkinIconSmall(skinItem.getIconID())
         data['iconFile'] = iconFile
         data['fullName'] = localizedFullName(skinItem)
     return data
@@ -108,7 +108,7 @@ def _packNotRecruitedTankman(recruitInfo):
      'specializationLevel': recruitInfo.getRoleLevel(),
      'role': text_styles.counter(recruitInfo.getLabel()),
      'vehicleType': '',
-     'iconFile': recruitInfo.getBarracksIcon(),
+     'iconFile': recruitInfo.getSmallIconPath(),
      'rankIconFile': '',
      'contourIconFile': '',
      'tankmanID': -1,

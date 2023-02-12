@@ -6,7 +6,7 @@ import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
-from fun_random.gui.fun_gui_constants import FunctionalFlag, PrebattleActionName, RequestType
+from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, REQUEST_TYPE
 from fun_random.gui.prb_control.entities.pre_queue.vehicles_watcher import FunRandomVehiclesWatcher
 from fun_random.gui.prb_control.entities.squad.actions_validator import FunRandomActionsValidator
 from fun_random.gui.prb_control.entities.squad.ctx import FunSquadSettingsCtx, FunSquadChangeSubModeCtx
@@ -31,7 +31,7 @@ class FunRandomSquadEntryPoint(SquadEntryPoint):
     __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self, accountsToInvite=None):
-        super(FunRandomSquadEntryPoint, self).__init__(FunctionalFlag.FUN_RANDOM, accountsToInvite)
+        super(FunRandomSquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.FUN_RANDOM, accountsToInvite)
         self.__desiredSubModeID = UNKNOWN_EVENT_ID
 
     def setExtData(self, extData):
@@ -78,7 +78,7 @@ class FunRandomSquadEntity(SquadEntity):
         self.__watcher = None
         self.__restrictedSPGDataProvider = RestrictedSPGDataProvider()
         self.__restrictedScoutDataProvider = RestrictedScoutDataProvider()
-        super(FunRandomSquadEntity, self).__init__(FunctionalFlag.FUN_RANDOM, PREBATTLE_TYPE.FUN_RANDOM)
+        super(FunRandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.FUN_RANDOM, PREBATTLE_TYPE.FUN_RANDOM)
         return
 
     def init(self, ctx=None):
@@ -149,16 +149,16 @@ class FunRandomSquadEntity(SquadEntity):
         pass
 
     def changeFunSubMode(self, ctx, callback=None):
-        if not self._isInCoolDown(RequestType.CHANGE_FUN_SUB_MODE, coolDown=ctx.getCooldown()):
+        if not self._isInCoolDown(REQUEST_TYPE.CHANGE_FUN_SUB_MODE, coolDown=ctx.getCooldown()):
             self._requestsProcessor.doRequest(ctx, 'doCustomUnitCmd', CLIENT_UNIT_CMD.CHANGE_FUN_EVENT_ID, uint64Arg=ctx.getDesiredSubModeID(), callback=callback)
-            self._cooldown.process(RequestType.CHANGE_FUN_SUB_MODE, coolDown=ctx.getCooldown())
+            self._cooldown.process(REQUEST_TYPE.CHANGE_FUN_SUB_MODE, coolDown=ctx.getCooldown())
         else:
             notifyCaller(callback, False)
 
     def doSelectAction(self, action):
-        if action.actionName == PrebattleActionName.FUN_RANDOM:
+        if action.actionName == PREBATTLE_ACTION_NAME.FUN_RANDOM:
             return self.__doSubModeSelectAction(action)
-        elif action.actionName == PrebattleActionName.SQUAD:
+        elif action.actionName in (PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD, PREBATTLE_ACTION_NAME.SQUAD):
             g_eventDispatcher.showUnitWindow(self._prbType)
             self._actionsHandler.processInvites(action.accountsToInvite)
             return SelectResult(True, None)
@@ -166,7 +166,7 @@ class FunRandomSquadEntity(SquadEntity):
             return super(FunRandomSquadEntity, self).doSelectAction(action)
 
     def leave(self, ctx, callback=None):
-        if ctx.hasFlags(FunctionalFlag.SWITCH):
+        if ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
             self.__funRandomController.subModesHolder.setDesiredSubModeID(UNKNOWN_EVENT_ID)
         super(FunRandomSquadEntity, self).leave(ctx, callback)
 
@@ -196,7 +196,7 @@ class FunRandomSquadEntity(SquadEntity):
 
     def _getRequestHandlers(self):
         handlers = super(FunRandomSquadEntity, self)._getRequestHandlers()
-        handlers[RequestType.CHANGE_FUN_SUB_MODE] = self.changeFunSubMode
+        handlers[REQUEST_TYPE.CHANGE_FUN_SUB_MODE] = self.changeFunSubMode
         return handlers
 
     def _createActionsHandler(self):

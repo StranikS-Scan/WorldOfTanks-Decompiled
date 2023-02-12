@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -48,7 +48,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     MARKS_ON_GUN = 'MARKS_ON_GUN'
     CONTACTS = 'CONTACTS'
     FALLOUT = 'FALLOUT'
-    TUTORIAL = 'TUTORIAL'
     ONCE_ONLY_HINTS = 'ONCE_ONLY_HINTS'
     ONCE_ONLY_HINTS_2 = 'ONCE_ONLY_HINTS_2'
     FEEDBACK = 'FEEDBACK'
@@ -419,15 +418,6 @@ class ServerSettingsManager(object):
                                  'isAutomatch': 4,
                                  'hasVehicleLvl8': 5,
                                  'hasVehicleLvl10': 6}, offsets={'falloutBattleType': Offset(8, 65280)}),
-     SETTINGS_SECTIONS.TUTORIAL: Section(masks={TUTORIAL.CUSTOMIZATION: 0,
-                                  TUTORIAL.TECHNICAL_MAINTENANCE: 1,
-                                  TUTORIAL.PERSONAL_CASE: 2,
-                                  TUTORIAL.RESEARCH: 3,
-                                  TUTORIAL.RESEARCH_TREE: 4,
-                                  TUTORIAL.MEDKIT_USED: 6,
-                                  TUTORIAL.REPAIRKIT_USED: 8,
-                                  TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
-                                  TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={OnceOnlyHints.FALLOUT_QUESTS_TAB: 0,
                                          OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: 1,
                                          OnceOnlyHints.SHOP_TRADE_IN_HINT: 2,

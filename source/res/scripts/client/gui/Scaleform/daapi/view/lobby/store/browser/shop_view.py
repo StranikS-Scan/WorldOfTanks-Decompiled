@@ -29,6 +29,10 @@ class _ShopOverlayBase(WebView):
         super(_ShopOverlayBase, self)._dispose()
         self.fireEvent(events.ShopEvent(events.ShopEvent.SHOP_DEACTIVATED), scope=EVENT_BUS_SCOPE.DEFAULT)
 
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import createShopWebHandlers
+        return createShopWebHandlers()
+
 
 class ShopBase(_ShopOverlayBase):
     _COMMON_SOUND_SPACE = SHOP_SOUND_SPACE
@@ -37,10 +41,6 @@ class ShopBase(_ShopOverlayBase):
         if 'url' not in ctx:
             ctx['url'] = getShopURL()
         super(ShopBase, self).__init__(ctx)
-
-    def webHandlers(self):
-        from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import createShopWebHandlers
-        return createShopWebHandlers()
 
 
 class ShopView(LobbySubView, ShopBase):

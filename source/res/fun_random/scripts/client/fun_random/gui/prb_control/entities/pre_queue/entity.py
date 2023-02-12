@@ -7,7 +7,7 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
-from fun_random.gui.fun_gui_constants import FunctionalFlag, PrebattleActionName
+from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from fun_random.gui.prb_control.entities.pre_queue.actions_validator import FunRandomActionsValidator
 from fun_random.gui.prb_control.entities.pre_queue.ctx import FunRandomQueueCtx, JoinFunPreQueueModeCtx
 from fun_random.gui.prb_control.entities.pre_queue.permissions import FunRandomPermissions
@@ -28,7 +28,7 @@ class FunRandomEntryPoint(PreQueueEntryPoint):
     __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
-        super(FunRandomEntryPoint, self).__init__(FunctionalFlag.FUN_RANDOM, QUEUE_TYPE.FUN_RANDOM)
+        super(FunRandomEntryPoint, self).__init__(FUNCTIONAL_FLAG.FUN_RANDOM, QUEUE_TYPE.FUN_RANDOM)
         self.__desiredSubModeID = UNKNOWN_EVENT_ID
 
     def setExtData(self, extData):
@@ -65,7 +65,7 @@ class FunRandomEntity(PreQueueEntity):
     __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
-        super(FunRandomEntity, self).__init__(FunctionalFlag.FUN_RANDOM, QUEUE_TYPE.FUN_RANDOM, PreQueueSubscriber())
+        super(FunRandomEntity, self).__init__(FUNCTIONAL_FLAG.FUN_RANDOM, QUEUE_TYPE.FUN_RANDOM, PreQueueSubscriber())
         self.__watcher = None
         return
 
@@ -78,7 +78,7 @@ class FunRandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents and not self.canSwitch(ctx) and (ctx is None or not ctx.hasFlags(FunctionalFlag.LOAD_PAGE)):
+        if not woEvents and not self.canSwitch(ctx) and (ctx is None or not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)):
             g_eventDispatcher.loadHangar()
         return super(FunRandomEntity, self).fini(ctx, woEvents)
 
@@ -86,11 +86,11 @@ class FunRandomEntity(PreQueueEntity):
         return FunRandomPermissions(self.isInQueue())
 
     def doSelectAction(self, action):
-        if action.actionName == PrebattleActionName.SQUAD:
+        if action.actionName in (PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD, PREBATTLE_ACTION_NAME.SQUAD):
             squadEntryPoint = FunRandomSquadEntryPoint(action.accountsToInvite)
             squadEntryPoint.setExtData({FUN_EVENT_ID_KEY: self.__funRandomController.subModesHolder.getDesiredSubModeID()})
             return SelectResult(True, squadEntryPoint)
-        elif action.actionName == PrebattleActionName.FUN_RANDOM:
+        elif action.actionName == PREBATTLE_ACTION_NAME.FUN_RANDOM:
             desiredSubModeID = action.extData.get(FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID)
             self.__funRandomController.subModesHolder.setDesiredSubModeID(desiredSubModeID)
             g_eventDispatcher.loadHangar()
@@ -122,7 +122,7 @@ class FunRandomEntity(PreQueueEntity):
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()
-        return FunctionalFlag.LOAD_PAGE
+        return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()

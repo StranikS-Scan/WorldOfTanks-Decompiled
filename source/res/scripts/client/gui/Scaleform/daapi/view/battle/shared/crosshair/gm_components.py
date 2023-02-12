@@ -150,8 +150,8 @@ class DefaultGunMarkerComponent(GunMarkerComponent):
         view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
-        view.heightMode = 'PIXEL'
-        view.widthMode = 'PIXEL'
+        view.heightMode = GUI.Simple.eSizeMode.PIXEL
+        view.widthMode = GUI.Simple.eSizeMode.PIXEL
         return view
 
 
@@ -168,8 +168,8 @@ class SPGGunMarkerComponent(GunMarkerComponent):
         view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
-        view.heightMode = 'PIXEL'
-        view.widthMode = 'PIXEL'
+        view.heightMode = GUI.Simple.eSizeMode.PIXEL
+        view.widthMode = GUI.Simple.eSizeMode.PIXEL
         view.setPointsBaseScale(self._scale)
         return view
 

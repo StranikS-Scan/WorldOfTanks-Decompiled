@@ -10,10 +10,9 @@ from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils impo
 from gui.impl.gen import R
 from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles as _ts
-from gui.shared.tooltips import TOOLTIP_TYPE
-from gui.shared.tooltips import formatters
-from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from gui.shared.tooltips.contexts import BoosterStatsConfiguration, BoosterInfoContext
+from gui.shared.tooltips import TOOLTIP_TYPE, formatters
+from gui.shared.tooltips.common import BlocksTooltipData, CURRENCY_SETTINGS, makePriceBlock
+from gui.shared.tooltips.contexts import BoosterInfoContext, BoosterStatsConfiguration
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache

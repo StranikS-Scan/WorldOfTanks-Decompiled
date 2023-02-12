@@ -68,7 +68,6 @@
       <effects>
         <set-var>	FirstVehicleSetter	</set-var>
         <set-var>	ModuleSetter	</set-var>
-        <set-var>	EquipmentItemSetter	</set-var>
         <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
             <arg>	EnabledHangarMenuButtons_Initial	  <name>	buttonsListVarID	</name>
             </arg>
@@ -204,6 +203,7 @@
         <show-dialog>	OutroVideo	</show-dialog>
         <show-dialog>	GoldReceivedDialog	</show-dialog>
         <show-dialog>	PremiumAccountReceivedDialog	</show-dialog>
+        <show-dialog>	FinalRewardDialog	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	AfterVideoCheckpoint	  <condition></condition>
@@ -484,6 +484,11 @@
           </data>
         </message>
       </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	FinalRewardDialog	  <type>	bootcampFinalReward	</type>
+      <sequence></sequence>
       <buttons></buttons>
       <actions></actions>
     </dialog>

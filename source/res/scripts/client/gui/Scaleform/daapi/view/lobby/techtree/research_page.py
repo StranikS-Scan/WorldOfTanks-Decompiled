@@ -18,7 +18,6 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
@@ -31,7 +30,7 @@ from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons, getRoleTextWithIcon
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getTypeBigIconPath, Vehicle
+from gui.shared.gui_items.Vehicle import getTypeBigIconPath, Vehicle, getShopVehicleIconPath
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
@@ -383,16 +382,21 @@ class Research(ResearchMeta):
         tankHasNationGroup = (root.isInInventory or root.isRented) and root.hasNationGroup
         isNationChangeAvailable = root.isNationChangeAvailable
         isShownNationChangeTooltip = tankHasNationGroup and not isNationChangeAvailable
+        tankName = root.userName
+        if self.__bootcamp.isInBootcamp():
+            awardVehicles = self.__bootcamp.getAwardVehicles()
+            if root.intCD in awardVehicles:
+                tankName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=tankName)
         result = {'vehicleTitle': {'intCD': self._data.getRootCD(),
                           'tankTierStr': text_styles.grandTitle(tankTier),
-                          'tankNameStr': text_styles.grandTitle(root.userName),
+                          'tankNameStr': text_styles.grandTitle(tankName),
                           'tankTierStrSmall': text_styles.promoTitle(tankTier),
-                          'tankNameStrSmall': text_styles.promoTitle(root.userName),
+                          'tankNameStrSmall': text_styles.promoTitle(tankName),
                           'typeIconPath': getTypeBigIconPath(root.type, root.isElite),
                           'isElite': root.isElite,
                           'statusStr': self.__getRootStatusStr(root),
                           'roleText': getRoleTextWithIcon(root.role, root.roleLabel)},
-         'vehicleButton': {'shopIconPath': RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
+         'vehicleButton': {'shopIconPath': getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
                            'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
                            'compareBtnEnabled': comparisonState,
                            'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),

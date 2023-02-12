@@ -245,9 +245,6 @@ class IClientArenaVisitor(object):
     def getComponentSystem(self):
         raise NotImplementedError
 
-    def isArenaNotStarted(self):
-        raise NotImplementedError
-
     def isArenaInWaiting(self):
         raise NotImplementedError
 
@@ -582,7 +579,7 @@ class IBattleContext(object):
     def getArenaWinString(self, isInBattle=True):
         raise NotImplementedError
 
-    def getArenaFrameLabel(self, isLegacy=False):
+    def getArenaFrameLabel(self):
         raise NotImplementedError
 
     def getGuiEventType(self):

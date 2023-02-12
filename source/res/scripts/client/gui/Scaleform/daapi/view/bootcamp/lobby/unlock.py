@@ -25,11 +25,13 @@ class BCUnlockItemConfirmator(UnlockItemConfirmator):
         return dataStr
 
     def __getVehicleData(self, bcNationData, item):
-        return {'label': backport.text(R.strings.bootcamp.message.unlock.vehicle.title()).format(item.userName),
-         'labelExecute': backport.text(R.strings.bootcamp.message.unlock.vehicle.buttonLabel()),
-         'icon': bcNationData['vehicle_second_icon'],
-         'costValue': self._costCtx['xpCost'],
-         'isBuy': False} if item.intCD == bcNationData['vehicle_second'] else None
+        if item.intCD == bcNationData['vehicle_second']:
+            userName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=item.userName)
+            return {'label': backport.text(R.strings.bootcamp.message.unlock.vehicle.title()).format(userName),
+             'labelExecute': backport.text(R.strings.bootcamp.message.unlock.vehicle.buttonLabel()),
+             'icon': bcNationData['vehicle_second_icon'],
+             'costValue': self._costCtx['xpCost'],
+             'isBuy': False}
 
     def __getVehicleComponentData(self, item):
         return {'label': backport.text(R.strings.bootcamp.message.unlock.module.title()).format(item.longUserName),

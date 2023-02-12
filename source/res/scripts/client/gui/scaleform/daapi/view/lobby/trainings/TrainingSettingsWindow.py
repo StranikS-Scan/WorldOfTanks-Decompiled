@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
 import ArenaType
 from account_helpers import gameplay_ctx
-from constants import PREBATTLE_TYPE, IS_CHINA
+from constants import PREBATTLE_TYPE, IS_CHINA, Configs
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
@@ -13,6 +13,7 @@ from helpers import dependency
 from helpers import i18n
 from gui.impl import backport
 from gui.impl.gen import R
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class ArenasCache(object):
@@ -53,6 +54,7 @@ class ArenasCache(object):
 
 class TrainingSettingsWindow(TrainingWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(TrainingSettingsWindow, self).__init__()
@@ -71,7 +73,12 @@ class TrainingSettingsWindow(TrainingWindowMeta):
 
     def _populate(self):
         super(TrainingSettingsWindow, self)._populate()
-        self.as_setDataS(self.getInfo(), self.getMapsData())
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.__updateVO()
+
+    def _dispose(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(TrainingSettingsWindow, self)._dispose()
 
     def getMapsData(self):
         return self.__arenasCache.cache
@@ -88,6 +95,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
             rTitle = R.strings.menu.epic_training.create.title() if self.__isCreateRequest else R.strings.menu.epic_training.info.settings.title()
         else:
             rTitle = R.strings.menu.training.create.title() if self.__isCreateRequest else R.strings.menu.training.info.settings.title()
+        canChangeComment = isShowComment = self.__isDescriptionEnabled()
         info = {'description': self.__settings.getComment(),
          'timeout': self.__settings.getRoundLen() / 60,
          'arena': self.__settings.getArenaTypeID(),
@@ -95,8 +103,8 @@ class TrainingSettingsWindow(TrainingWindowMeta):
          'create': self.__isCreateRequest,
          'wndTitle': backport.text(rTitle),
          'canMakeOpenedClosed': True,
-         'canChangeComment': not IS_CHINA,
-         'isShowComment': not IS_CHINA,
+         'canChangeComment': canChangeComment,
+         'isShowComment': isShowComment,
          'canChangeArenaTime': not self.__isEpic,
          'canChangeArena': True,
          'maxBattleTime': maxBound / 60}
@@ -117,3 +125,13 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         else:
             eventType = events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS
         self.fireEvent(events.TrainingSettingsEvent(eventType, ctx={'settings': self.__settings}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __updateVO(self):
+        self.as_setDataS(self.getInfo(), self.getMapsData())
+
+    def __onServerSettingsChange(self, diff):
+        if Configs.PRE_MODERATION_CONFIG.value in diff:
+            self.__updateVO()
+
+    def __isDescriptionEnabled(self):
+        return self.__lobbyContext.getServerSettings().preModerationConfig.prebattleDescriptionEnabled

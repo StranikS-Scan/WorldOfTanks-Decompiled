@@ -33,7 +33,6 @@ def getViewSettings():
     from gui.impl.lobby.battle_pass.battle_pass_video_browser_view import BattlePassVideoBrowserView
     from gui.impl.lobby.blueprints.blueprints_exchange_view import BlueprintsExchangeView
     from gui.impl.lobby.resource_well.resource_well_browser_view import ResourceWellBrowserView
-    from gui.Scaleform.daapi.view.lobby.SandboxQueueDialog import SandboxQueueDialog
     from gui.Scaleform.daapi.view.battle_results_window import BattleResultsWindow
     from gui.Scaleform.daapi.view.dialogs.CheckBoxDialog import CheckBoxDialog
     from gui.Scaleform.daapi.view.dialogs.ConfirmModuleDialog import ConfirmModuleDialog
@@ -84,6 +83,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCVehicleBuyWindow import BCVehicleBuyWindow
     from gui.Scaleform.daapi.view.bootcamp.BCPersonalCase import BCPersonalCase
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
+    from gui.Scaleform.daapi.view.bootcamp.BCLobbyVehicleMarkerView import BCLobbyVehicleMarkerView
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_preview import VehicleStylePreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_progression_preview import VehicleStyleProgressionPreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_buying_preview import VehicleStyleBuyingPreview
@@ -92,7 +92,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.telecom_rentals.telecom_rentals_browser_pages import VehicleTelecomRentalView
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.resource_well_preview import ResourceWellVehiclePreview
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(WindowLayer.SUB_VIEW, containers.DefaultContainer), ContainerSettings(WindowLayer.TOP_SUB_VIEW, containers.PopUpContainer))),
-     ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', WindowLayer.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, BootcampComponentOverride(LobbyVehicleMarkerView, BCLobbyVehicleMarkerView), 'lobbyVehicleMarkerView.swf', WindowLayer.MARKER, None, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -154,7 +154,6 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, VehicleRestoreWindow, 'vehicleBuyWindow.swf', WindowLayer.TOP_WINDOW, 'vehicleRestoreWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_INFO_WINDOW, VehicleInfoWindow, 'vehicleInfo.swf', WindowLayer.WINDOW, 'vehicleInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isCentered=False),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_SELL_DIALOG, VehicleSellDialog, 'vehicleSellDialog.swf', WindowLayer.TOP_WINDOW, 'vehicleSellWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG, SandboxQueueDialog, 'PvESandboxQueueWindow.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False),
      GroupedViewSettings(VIEW_ALIAS.MISSION_AWARD_WINDOW, MissionAwardWindow, 'missionAwardWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.TRADEIN_POPOVER, TradeInPopup, 'TradeInPopover.swf', WindowLayer.TOP_WINDOW, 'TradeInPopover', VIEW_ALIAS.TRADEIN_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -225,7 +224,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_INFO_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.SANDBOX_QUEUE_DIALOG, self.loadViewBySharedEvent),
          (VIEW_ALIAS.MISSION_AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),

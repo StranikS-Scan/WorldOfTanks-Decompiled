@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/cache.py
 from helpers.local_cache import FileLocalCache
-from tutorial.settings import TUTORIAL_VERSION, PLAYER_XP_LEVEL
+from tutorial.settings import TUTORIAL_VERSION
 import constants
 
 class TutorialCache(FileLocalCache):
@@ -26,12 +26,9 @@ class TutorialCache(FileLocalCache):
         self._ioEnabled = ioEnabled
         defaultValues = {'finished': False,
          'refused': False,
-         'afterBattle': False,
          'flags': {},
          'currentChapter': None,
-         'localCtx': None,
-         'playerXPLevel': PLAYER_XP_LEVEL.NEWBIE,
-         'startOnNextLogin': True}
+         'localCtx': None}
         if self._ioEnabled:
             self.__cache.setdefault(space, defaultValues)
         else:
@@ -70,13 +67,6 @@ class TutorialCache(FileLocalCache):
     def isRefused(self):
         return self.__current()['refused']
 
-    def setAfterBattle(self, flag):
-        self.__current()['afterBattle'] = flag
-        return self
-
-    def isAfterBattle(self):
-        return self.__current()['afterBattle']
-
     def currentChapter(self):
         return self.__current()['currentChapter']
 
@@ -91,31 +81,15 @@ class TutorialCache(FileLocalCache):
         if flush:
             self.write()
 
-    def setPlayerXPLevel(self, level):
-        self.__current()['playerXPLevel'] = level
-        return self
-
-    def getPlayerXPLevel(self):
-        return self.__current()['playerXPLevel']
-
-    def setStartOnNextLogin(self, value):
-        self.__current()['startOnNextLogin'] = value
-        return self
-
-    def doStartOnNextLogin(self):
-        return self.__current()['startOnNextLogin']
-
     def clearChapterData(self):
         cache = self.__current()
         cache['flags'] = {}
-        cache['afterBattle'] = False
         return self
 
     def clear(self):
         cache = self.__current()
         cache['currentChapter'] = None
         cache['flags'] = {}
-        cache['afterBattle'] = False
         self.write()
         super(TutorialCache, self).clear()
         return

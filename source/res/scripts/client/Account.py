@@ -10,7 +10,6 @@ import AccountCommands
 import BigWorld
 import ClientPrebattle
 import Event
-import BattleReplay
 from ChatManager import chatManager
 from ClientChat import ClientChat
 from ClientGlobalMap import ClientGlobalMap
@@ -40,7 +39,7 @@ from account_helpers.trade_in import TradeIn
 from account_shared import NotificationItem, readClientServerVersion
 from adisp import adisp_process
 from bootcamp.Bootcamp import g_bootcamp
-from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA
+from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
@@ -443,12 +442,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleQueueType = QUEUE_TYPE.UNKNOWN
         events.onDequeued(queueType)
 
-    def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
-        LOG_DEBUG('onTutorialEnqueued', number, queueLen, avgWaitingTime)
-        self.battleQueueType = QUEUE_TYPE.TUTORIAL
-        events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
-        events.onEnqueued(QUEUE_TYPE.TUTORIAL)
-
     def targetFocus(self, entity):
         if self.__objectsSelectionEnabled:
             self.hangarSpace.onMouseEnter(entity)
@@ -705,15 +698,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANDOMS)
 
-    def enqueueTutorial(self):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_TUTORIAL, 0, 0, 0)
-
-    def dequeueTutorial(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_TUTORIAL, 0, 0, 0)
-
     def onEntityCheckOutEnqueued(self, queueNumber):
         Waiting.hide('login')
         events.onEntityCheckOutEnqueued(self.base.cancelEntityCheckOut)
@@ -725,8 +709,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         yield settingsCore.serverSettings.settingsCache.update()
         settingsCore.serverSettings.applySettings()
 
-    def chooseBootcampStart(self):
-        events.onBootcampStartChoice()
+    def chooseBootcampStart(self, isInProgress):
+        events.onBootcampStartChoice(isInProgress)
 
     def startBootcampCmd(self):
         if events.isPlayerEntityChanging:
@@ -748,15 +732,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueBootcamp(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOOTCAMP, 0, 0, 0)
-
-    def enqueueSandbox(self, vehInvID):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_SANDBOX, vehInvID, 0, 0)
-
-    def dequeueSandbox(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_SANDBOX, 0, 0, 0)
 
     def enqueueEventBattles(self, vehInvID):
         if not events.isPlayerEntityChanging:
@@ -833,10 +808,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
         self.base.accountPrebattle_createTraining(arenaTypeID, roundLength, isOpened, comment)
 
-    def prb_createDev(self, arenaTypeID, roundLength, comment, bonusType=ARENA_BONUS_TYPE.REGULAR):
+    def prb_createDev(self, arenaTypeID, roundLength, comment, bonusType=ARENA_BONUS_TYPE.REGULAR, arenaGuiType=ARENA_GUI_TYPE.TRAINING):
         if events.isPlayerEntityChanging:
             return
-        self.base.accountPrebattle_createDevPrebattle(bonusType, arenaTypeID, roundLength, comment)
+        self.base.accountPrebattle_createDevPrebattle(bonusType, arenaGuiType, arenaTypeID, roundLength, comment)
 
     def prb_createEpicTrainingBattle(self, arenaTypeID, roundLength, isOpened, comment, bonusType=ARENA_BONUS_TYPE.EPIC_BATTLE):
         if events.isPlayerEntityChanging:
@@ -1042,9 +1017,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
         else:
             proxy = None
-        strArr = [ key.encode('utf8') for key in data.iterkeys() ]
-        intArr = data.values()
-        self._doCmdIntArrStrArr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, intArr, strArr, proxy)
+        argStr = cPickle.dumps(data, -1)
+        self._doCmdStr(AccountCommands.CMD_CHANGE_EVENT_ENQUEUE_DATA, argStr, proxy)
         return
 
     def logClientSystem(self, stats):
@@ -1069,10 +1043,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def logXMPPEvents(self, intArr, strArr):
         self._doCmdIntArrStrArr(AccountCommands.CMD_LOG_CLIENT_XMPP_EVENTS, intArr, strArr, None)
         return
-
-    def completeTutorial(self, tutorialID, callback):
-        from CurrentVehicle import g_currentVehicle
-        self._doCmdInt3(AccountCommands.CMD_COMPLETE_TUTORIAL, tutorialID, g_currentVehicle.invID, 0, lambda requestID, resultID, errorStr: callback(resultID))
 
     def verifyFinPassword(self, finPassword, callback):
         if callback is not None:
@@ -1138,21 +1108,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_DISMOUNT_ENHANCEMENT, vehicleInvID, slot, proxy)
         return
 
-    def startWatchingReplay(self, callback=None):
-        if self.prebattle:
-            LOG_ERROR('Account.startWatchingReplay: Watching replay in prebattle is forbidden')
-            return
-        elif not BattleReplay.getDemandedToWatchFileName():
-            LOG_ERROR('Account.startWatchingReplay: no replay to watch')
-            return
+    def startWatchingReplay(self, filename, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-            else:
-                proxy = None
-            LOG_DEBUG('Account.startWatchingReplay: ')
-            self._doCmdInt(AccountCommands.CMD_WATCH_REPLAY, 0, proxy)
-            return
+            proxy = None
+        self._doCmdStr(AccountCommands.CMD_WATCH_REPLAY, filename, proxy)
+        return
 
     def exchangeBlueprintsSale(self, offerID, count=1, callback=None):
         if callback is not None:
@@ -1244,17 +1206,17 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.giftSystem.synchronize(isFullSync, diff)
             self.gameRestrictions.synchronize(isFullSync, diff)
             self.resourceWell.synchronize(isFullSync, diff)
-            self.__synchronizeServerSettings(diff)
-            self.__synchronizeDisabledPersonalMissions(diff)
-            self.__synchronizeEventNotifications(diff)
-            self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
-            self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
-            self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
-            self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
-            self.__synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
-            self.__synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
-            self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
-            self.__synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
+            self._synchronizeServerSettings(diff)
+            self._synchronizeDisabledPersonalMissions(diff)
+            self._synchronizeEventNotifications(diff)
+            self._synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
+            self._synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
+            self._synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
+            self._synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
+            self._synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
+            self._synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
+            self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
+            self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
             synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
@@ -1270,6 +1232,48 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
             return True
 
+    def _synchronizeCacheDict(self, repDict, diffDict, key, syncMode, event):
+        if syncMode not in ('update', 'replace'):
+            raise SoftException('Mode {} is not supported on the client'.format(syncMode))
+        if diffDict is None:
+            return
+        else:
+            repl = diffDict.get((key, '_r'), None)
+            if repl is not None:
+                repDict.clear()
+                repDict.update(repl)
+            diff = diffDict.get(key, None)
+            if diff is not None:
+                if isinstance(diff, dict):
+                    for k, v in diff.iteritems():
+                        if v is None:
+                            repDict.pop(k, None)
+                            continue
+                        if syncMode == 'replace':
+                            repDict[k] = v
+                        repDict.setdefault(k, {})
+                        repDict[k].update(v)
+
+                else:
+                    LOG_WARNING('_synchronizeCacheDict: bad diff=%r for key=%r' % (diff, key))
+            if repl is not None or diff is not None:
+                event()
+            return
+
+    def _synchronizeCacheSimpleValue(self, accountPropName, diffDict, key, event):
+        if diffDict is None:
+            return
+        else:
+            for k in (key, (key, '_r')):
+                if k in diffDict:
+                    value = diffDict[k]
+                    prevValue = getattr(self, accountPropName, None)
+                    if value != prevValue:
+                        setattr(self, accountPropName, diffDict[k])
+                        return event(value)
+
+            return
+
     def _subscribeForStream(self, requestID, callback):
         self.__onStreamComplete[requestID] = callback
 
@@ -1277,6 +1281,81 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if 'serverUTC' in ctx:
             import helpers.time_utils as tm
             tm.setTimeCorrection(ctx['serverUTC'])
+
+    def _synchronizeEventNotifications(self, diff):
+        diffDict = {'added': [],
+         'removed': []}
+        if diff is None:
+            return
+        else:
+            initialEventsData = diff.get(('eventsData', '_r'), {})
+            initial = initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
+            initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
+            if initial is not None:
+                initial = cPickle.loads(zlib.decompress(initial))
+                self.eventNotifications = g_accountRepository.eventNotifications = initial
+                diffDict['added'].extend(initial)
+            updatedEventsData = diff.get('eventsData', {})
+            updated = updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
+            updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
+            if updated is not None:
+                updated = cPickle.loads(zlib.decompress(updated))
+                eventNotifications = self.eventNotifications
+                self.eventNotifications = g_accountRepository.eventNotifications = updated
+                new = set([ NotificationItem(n) for n in updated ])
+                prev = set([ NotificationItem(n) for n in eventNotifications ])
+                added = new - prev
+                removed = prev - new
+                diffDict['added'].extend([ n.item for n in added ])
+                diffDict['removed'].extend([ n.item for n in removed ])
+            if initial is not None or updated is not None:
+                events.onEventNotificationsChanged(diffDict)
+                LOG_DEBUG_DEV('Account.__synchronizeEventNotifications, diff=%s' % (diffDict,))
+            return
+
+    def _synchronizeServerSettings(self, diffDict):
+        if diffDict is None:
+            return
+        else:
+            serverSettings = self.serverSettings
+            fullServerSettings = diffDict.get(('serverSettings', '_r'), None)
+            if fullServerSettings is not None:
+                serverSettings.clear()
+                serverSettings.update(fullServerSettings)
+            serverSettingsDiff = diffDict.get('serverSettings', None)
+            if serverSettingsDiff is not None:
+                if isinstance(serverSettingsDiff, dict):
+                    for key, value in serverSettingsDiff.iteritems():
+                        if value is None:
+                            serverSettings.pop(key, None)
+                            continue
+                        if isinstance(value, dict):
+                            serverSettings.setdefault(key, {})
+                            serverSettings[key].update(value)
+                        serverSettings[key] = value
+
+                else:
+                    LOG_WARNING('_synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, key))
+            return
+
+    def _synchronizeDisabledPersonalMissions(self, diffDict):
+        if diffDict is None:
+            return
+        else:
+            serverSettings = self.serverSettings
+            disabledSectionKeys = ('disabledPersonalMissions', 'disabledPMOperations')
+            serverSettingsDiff = diffDict.get('serverSettings', None)
+            if serverSettingsDiff is not None:
+                if isinstance(serverSettingsDiff, dict):
+                    for sectionKey in disabledSectionKeys:
+                        if sectionKey in serverSettingsDiff:
+                            if isinstance(serverSettingsDiff[sectionKey], dict):
+                                serverSettings.setdefault(sectionKey, {})
+                                serverSettings[sectionKey] = serverSettingsDiff[sectionKey]
+                            else:
+                                LOG_WARNING('_synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, sectionKey))
+
+            return
 
     def __getRequestID(self):
         if g_accountRepository is None:
@@ -1318,123 +1397,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
         self.__onStreamComplete.clear()
         return
-
-    def __synchronizeCacheDict(self, repDict, diffDict, key, syncMode, event):
-        if syncMode not in ('update', 'replace'):
-            raise SoftException('Mode {} is not supported on the client'.format(syncMode))
-        if diffDict is None:
-            return
-        else:
-            repl = diffDict.get((key, '_r'), None)
-            if repl is not None:
-                repDict.clear()
-                repDict.update(repl)
-            diff = diffDict.get(key, None)
-            if diff is not None:
-                if isinstance(diff, dict):
-                    for k, v in diff.iteritems():
-                        if v is None:
-                            repDict.pop(k, None)
-                            continue
-                        if syncMode == 'replace':
-                            repDict[k] = v
-                        repDict.setdefault(k, {})
-                        repDict[k].update(v)
-
-                else:
-                    LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (diff, key))
-            if repl is not None or diff is not None:
-                event()
-            return
-
-    def __synchronizeCacheSimpleValue(self, accountPropName, diffDict, key, event):
-        if diffDict is None:
-            return
-        else:
-            for k in (key, (key, '_r')):
-                if k in diffDict:
-                    value = diffDict[k]
-                    prevValue = getattr(self, accountPropName, None)
-                    if value != prevValue:
-                        setattr(self, accountPropName, diffDict[k])
-                        return event(value)
-
-            return
-
-    def __synchronizeEventNotifications(self, diff):
-        diffDict = {'added': [],
-         'removed': []}
-        if diff is None:
-            return
-        else:
-            initialEventsData = diff.get(('eventsData', '_r'), {})
-            initial = initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
-            initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
-            if initial is not None:
-                initial = cPickle.loads(zlib.decompress(initial))
-                self.eventNotifications = g_accountRepository.eventNotifications = initial
-                diffDict['added'].extend(initial)
-            updatedEventsData = diff.get('eventsData', {})
-            updated = updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
-            updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
-            if updated is not None:
-                updated = cPickle.loads(zlib.decompress(updated))
-                eventNotifications = self.eventNotifications
-                self.eventNotifications = g_accountRepository.eventNotifications = updated
-                new = set([ NotificationItem(n) for n in updated ])
-                prev = set([ NotificationItem(n) for n in eventNotifications ])
-                added = new - prev
-                removed = prev - new
-                diffDict['added'].extend([ n.item for n in added ])
-                diffDict['removed'].extend([ n.item for n in removed ])
-            if initial is not None or updated is not None:
-                events.onEventNotificationsChanged(diffDict)
-                LOG_DEBUG_DEV('Account.__synchronizeEventNotifications, diff=%s' % (diffDict,))
-            return
-
-    def __synchronizeServerSettings(self, diffDict):
-        if diffDict is None:
-            return
-        else:
-            serverSettings = self.serverSettings
-            fullServerSettings = diffDict.get(('serverSettings', '_r'), None)
-            if fullServerSettings is not None:
-                serverSettings.clear()
-                serverSettings.update(fullServerSettings)
-            serverSettingsDiff = diffDict.get('serverSettings', None)
-            if serverSettingsDiff is not None:
-                if isinstance(serverSettingsDiff, dict):
-                    for key, value in serverSettingsDiff.iteritems():
-                        if value is None:
-                            serverSettings.pop(key, None)
-                            continue
-                        if isinstance(value, dict):
-                            serverSettings.setdefault(key, {})
-                            serverSettings[key].update(value)
-                        serverSettings[key] = value
-
-                else:
-                    LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, key))
-            return
-
-    def __synchronizeDisabledPersonalMissions(self, diffDict):
-        if diffDict is None:
-            return
-        else:
-            serverSettings = self.serverSettings
-            disabledSectionKeys = ('disabledPersonalMissions', 'disabledPMOperations')
-            serverSettingsDiff = diffDict.get('serverSettings', None)
-            if serverSettingsDiff is not None:
-                if isinstance(serverSettingsDiff, dict):
-                    for sectionKey in disabledSectionKeys:
-                        if sectionKey in serverSettingsDiff:
-                            if isinstance(serverSettingsDiff[sectionKey], dict):
-                                serverSettings.setdefault(sectionKey, {})
-                                serverSettings[sectionKey] = serverSettingsDiff[sectionKey]
-                            else:
-                                LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, sectionKey))
-
-            return
 
 
 Account = PlayerAccount

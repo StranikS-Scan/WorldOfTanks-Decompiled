@@ -1607,4 +1607,41 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl10_40TP_Habicha poland:Pl11_45TP_Habicha	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	503	</id>
+      <texture>	vehicles/poland/Camouflage/Poland_Victim_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/poland_gold/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/poland_gold/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	69 65 33 255	</c0>
+          <c1>	119 116 49 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <poland:Pl10_40TP_Habicha>	1.3 1.3 0.000000 0.000000	</poland:Pl10_40TP_Habicha>
+        <poland:Pl11_45TP_Habicha>	1.3 1.3 0.000000 0.000000	</poland:Pl11_45TP_Habicha>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.415986  2.416809	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </poland.xml>

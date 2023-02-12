@@ -96,7 +96,7 @@ def _readMessageDialogData(xmlCtx, section, isNation):
 
 def _readBootcampSelectNationDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content['resultVarID'] = _xml.readString(xmlCtx, section, 'result-var')
-    return _readBootcampMessageDialogSection(xmlCtx, section, _, dialogID, dialogType, content)
+    return chapter.PopUp(dialogID, dialogType, content, varRef=None, forcedQuery=False)
 
 
 def _readCheckpointSection(xmlCtx, section, flags):
@@ -139,7 +139,7 @@ def _readStartPlanSection(xmlCtx, section, _, conditions):
 
 def _readSetBootcampNationEffectSection(xmlCtx, section, _, conditions):
     varID = sub_parsers.parseID(xmlCtx, section, 'missing selected nation variable ID')
-    return effects.HasTargetEffect(varID, _EFFECT_TYPE.SAVE_ACCOUNT_SETTING, conditions=conditions)
+    return effects.HasTargetEffect(varID, _EFFECT_TYPE.SET_BOOTCAMP_NATION, conditions=conditions)
 
 
 def init():

@@ -20,7 +20,6 @@
     <ER_26_ter>	26	</ER_26_ter>
     <ER_27>	27	</ER_27>
     <SCR_619_fallout>	28	</SCR_619_fallout>
-    <Fanions_de_signaux_bot>	30	</Fanions_de_signaux_bot>
     <SCR_508_1>	31	</SCR_508_1>
     <SCR_528L>	33	</SCR_528L>
     <SCR_528_Fr>	34	</SCR_528_Fr>
@@ -38,12 +37,12 @@
     <FuG8f_IGR>	60002	</FuG8f_IGR>
     <ER_56_IGR>	60003	</ER_56_IGR>
     <SCR_508_IGR>	60004	</SCR_508_IGR>
-    <ER_51_bootcamp>	64001	</ER_51_bootcamp>
     <Development_Radio>	65000	</Development_Radio>
     <SCR_528_F_SH>	43	</SCR_528_F_SH>
     <TRVP_13_SH>	44	</TRVP_13_SH>
     <SCR_508_SH>	45	</SCR_508_SH>
     <SCR_528_MapsTraining_Dummy_SPG_2>	6	</SCR_528_MapsTraining_Dummy_SPG_2>
+    <SCR_508_bootcamp>	1002	</SCR_508_bootcamp>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -58,18 +57,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </FuG_Spr.D>
-    <Fanions_de_signaux_bot>
-      <userString>	#france_vehicles:Fanions_de_signaux_bot	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Fanions_de_signaux_bot>
     <SCR_528>
       <userString>	#france_vehicles:SCR_528	</userString>
       <tags></tags>
@@ -207,18 +194,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </ER_51>
-    <ER_51_bootcamp>
-      <userString>	#france_vehicles:ER_51	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	290	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </ER_51_bootcamp>
     <ER_55>
       <userString>	#france_vehicles:ER_55	</userString>
       <tags></tags>
@@ -564,5 +539,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_MapsTraining_Dummy_SPG_2>
+    <SCR_508_bootcamp>
+      <userString>	#france_vehicles:SCR_508	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <weight>	100	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_508_bootcamp>
   </shared>
 </radios.xml>

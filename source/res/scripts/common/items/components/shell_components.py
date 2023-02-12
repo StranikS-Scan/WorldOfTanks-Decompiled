@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
-from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE
+from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE, StunTypes
 from items.components import component_constants
 from typing import Set, Optional, Tuple, Union
 
@@ -93,20 +93,16 @@ class SmokeType(ShellType):
 
 
 class Stun(object):
-    __slots__ = ('stunRadius', 'stunDuration', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
+    __slots__ = ('stunRadius', 'stunDuration', 'stunType')
 
     def __init__(self):
         super(Stun, self).__init__()
         self.stunRadius = component_constants.ZERO_FLOAT
         self.stunDuration = component_constants.ZERO_FLOAT
-        self.stunFactor = component_constants.ZERO_FLOAT
-        self.guaranteedStunDuration = component_constants.ZERO_FLOAT
-        self.damageDurationCoeff = component_constants.ZERO_FLOAT
-        self.guaranteedStunEffect = component_constants.ZERO_FLOAT
-        self.damageEffectCoeff = component_constants.ZERO_FLOAT
+        self.stunType = StunTypes.DEFAULT
 
     def __repr__(self):
-        return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff)
+        return 'Stun(radius={}, duration={}, stunType={})'.format(self.stunRadius, self.stunDuration, self.stunType)
 
 
 def createShellType(typeName):

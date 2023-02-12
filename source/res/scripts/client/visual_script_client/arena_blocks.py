@@ -297,6 +297,10 @@ class OnBattleRoundFinished(Block, ArenaMeta):
         self._reason.setValue(reason)
         self._out.call()
 
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
 
 class GetUDOByName(GetUDOByNameBase):
     _UDOTypes = [SLOT_TYPE.MARKER_POINT, SLOT_TYPE.AREA_TRIGGER]

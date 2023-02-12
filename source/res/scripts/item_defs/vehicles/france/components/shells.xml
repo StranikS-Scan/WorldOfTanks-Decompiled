@@ -128,21 +128,6 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_Odr_mle._1935>
-  <_37mm_Odr_mle._1935_bot>
-    <id>	101	</id>
-    <userString>	#france_vehicles:_37mm_Odr_mle._1935_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	5	</armor>
-      <devices>	3	</devices>
-    </damage>
-  </_37mm_Odr_mle._1935_bot>
   <_37mm_FrtPrf1935>
     <id>	13	</id>
     <userString>	#france_vehicles:_37mm_FrtPrf1935	</userString>
@@ -235,21 +220,6 @@
       <devices>	64	</devices>
     </damage>
   </_47mm_Odr_mle._1892>
-  <_47mm_Odr_mle._1892_bootcamp>
-    <id>	118	</id>
-    <userString>	#france_vehicles:_47mm_Odr_mle._1892	</userString>
-    <icon>	ap	</icon>
-    <price>	10	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	47	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	50	</armor>
-      <devices>	64	</devices>
-    </damage>
-  </_47mm_Odr_mle._1892_bootcamp>
   <_47mm_Odr_mle._1935>
     <id>	7	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle._1935	</userString>
@@ -341,22 +311,6 @@
       <devices>	64	</devices>
     </damage>
   </_47mm_Odr_mle._1936>
-  <_47mm_Odr_mle_1935_b_bootcamp>
-    <id>	119	</id>
-    <userString>	#france_vehicles:_47mm_Odr_mle_1935_b	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	800	</price>
-    <improved>	true	</improved>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	47	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallAPCR	</effects>
-    <damage>
-      <armor>	50	</armor>
-      <devices>	64	</devices>
-    </damage>
-  </_47mm_Odr_mle_1935_b_bootcamp>
   <_47mm_Odr_mle_1935_b>
     <id>	65	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle_1935_b	</userString>
@@ -396,31 +350,6 @@
       </damage>
     </armorSpalls>
   </_47mm_Oe_type_D>
-  <_47mm_Oe_type_D_bootcamp>
-    <id>	120	</id>
-    <userString>	#france_vehicles:_47mm_Oe_type_D	</userString>
-    <icon>	he_modern	</icon>
-    <price>	13	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	47	</caliber>
-    <explosionRadius>	0.47	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	smallHighExplosive	</effects>
-    <damage>
-      <armor>	62	</armor>
-      <devices>	64	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	0.47	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	30	</armor>
-        <devices>	30	</devices>
-      </damage>
-    </armorSpalls>
-  </_47mm_Oe_type_D_bootcamp>
   <_6pdr_AP_MK_8T>
     <id>	55	</id>
     <userString>	#france_vehicles:_6pdr_AP_MK_8T	</userString>
@@ -2326,9 +2255,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	10.5	</stunDuration>
-    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.40	</damageDurationCoeff>
+    <stunDuration>	7.3	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2393,9 +2320,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	27	</stunDuration>
-    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.55	</damageDurationCoeff>
+    <stunDuration>	19	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2444,9 +2369,7 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	22	</stunDuration>
-    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.50	</damageDurationCoeff>
+    <stunDuration>	15.4	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2755,4 +2678,60 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_155_OE_mle_1956_MapsTraining_Dummy_SPG_2>
+  <_90mm_Prf1941_bootcamp>
+    <id>	71	</id>
+    <userString>	#france_vehicles:_90mm_Prf1941	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_Prf1941_bootcamp>
+  <_90mm_FrtPrf1944_bootcamp>
+    <id>	72	</id>
+    <userString>	#france_vehicles:_90mm_FrtPrf1944	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_FrtPrf1944_bootcamp>
+  <_90mm_OE_mle_1924_bootcamp>
+    <id>	73	</id>
+    <userString>	#france_vehicles:_90mm_OE_mle_1924	</userString>
+    <icon>	he_modern	</icon>
+    <price>	255	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+    <notInShop>	True	</notInShop>
+  </_90mm_OE_mle_1924_bootcamp>
 </shells.xml>

@@ -11,7 +11,7 @@ class DebugPanel(DebugPanelMeta, IDebugPanel):
         self._ping = 0
         self._isLaggingNow = False
 
-    def updateDebugInfo(self, ping, fps, isLaggingNow, fpsReplay=-1):
+    def updateDebugInfo(self, ping, fps, isLaggingNow, fpsReplay):
         if fpsReplay > 0:
             fps = '{0}({1})'.format(fpsReplay, fps)
         else:

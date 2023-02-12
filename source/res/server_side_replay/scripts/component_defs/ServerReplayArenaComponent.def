@@ -1,35 +1,19 @@
 <ServerReplayArenaComponent.def>
-  <Properties>
-    <initialRecordingData>
-      <Type>	PYTHON	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </initialRecordingData>
-    <recordingOnlyEntityMappings>
-      <Type>	PYTHON	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </recordingOnlyEntityMappings>
-  </Properties>
-  <TempProperties>
-    <replayFileName></replayFileName>
-    <spaceID></spaceID>
-    <replayServerAddress></replayServerAddress>
-  </TempProperties>
+  <Properties></Properties>
   <BaseMethods>
-    <startSpaceRecording></startSpaceRecording>
-    <onCellRecordingStarted></onCellRecordingStarted>
     <onRecorderCellReady></onRecorderCellReady>
-    <tearDownRecording></tearDownRecording>
+    <onCellRecordingStarted></onCellRecordingStarted>
+    <onCellRecordingStopped></onCellRecordingStopped>
+    <onRecordingFinalized></onRecordingFinalized>
   </BaseMethods>
   <CellMethods>
     <storeInitialRecordingData>
       <Arg>	PYTHON	</Arg>
     </storeInitialRecordingData>
-    <recordRecordingOnlyEntityMethodFromIndex>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	STRING	</Arg>
+    <recordReplayAvatarMethod>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
-    </recordRecordingOnlyEntityMethodFromIndex>
+    </recordReplayAvatarMethod>
   </CellMethods>
   <ofEntity>
     <Arena></Arena>

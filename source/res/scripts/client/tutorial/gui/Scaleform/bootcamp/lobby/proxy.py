@@ -9,7 +9,7 @@ class SfBootcampLobbyProxy(SfLobbyProxy):
 
     def __init__(self):
         effects = {GUI_EFFECT_NAME.SHOW_WINDOW: shared_effects.ShowWindowEffect(settings.WINDOW_ALIAS_MAP),
-         GUI_EFFECT_NAME.SHOW_DIALOG: shared_effects.ShowDialogEffect(settings.DIALOG_ALIAS_MAP),
+         GUI_EFFECT_NAME.SHOW_DIALOG: shared_effects.ShowDialogEffect(settings.DIALOG_ALIAS_MAP, settings.GAMEFACE_ALIAS_MAP),
          GUI_EFFECT_NAME.SET_CRITERIA: shared_effects.SetCriteriaEffect(),
          GUI_EFFECT_NAME.SET_VIEW_CRITERIA: shared_effects.SetViewCriteriaEffect(),
          GUI_EFFECT_NAME.SET_TRIGGER: shared_effects.SetTriggerEffect(),

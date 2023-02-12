@@ -211,6 +211,7 @@ class StatisticsCollector(IStatisticsCollector):
                 reportHeader += ' (With Tutorial stage) '
             self.__hangarLoadingTime = self.__loadingStates[state] - self.__loadingStates[self.__loadingInitialState]
             LOG_NOTE(reportHeader + ' TOTAL = ' + str(self.__hangarLoadingTime))
+            BigWorld.hangarLoaded(self.__hangarLoadingTime)
 
     def __getSessionData(self, stat):
         stat['graphicsPreset'] = self.settingsCore.getSetting(GRAPHICS.PRESETS)

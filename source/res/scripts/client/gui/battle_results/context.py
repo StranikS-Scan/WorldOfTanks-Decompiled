@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/context.py
 from constants import ARENA_BONUS_TYPE
 from gui.shared.utils.decorators import ReprInjector
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 
 @ReprInjector.simple(('getArenaUniqueID', 'arenaUniqueID'), ('needToShowImmediately', 'showImmediately'), ('needToShowIfPosted', 'showIfPosted'), ('resetCache', 'resetCache'))
 class RequestResultsContext(object):
@@ -22,7 +23,7 @@ class RequestResultsContext(object):
         return self.__arenaBonusType
 
     def needToShowImmediately(self):
-        return self.__showImmediately and self.__arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE and self.__arenaBonusType != ARENA_BONUS_TYPE.MAPS_TRAINING
+        return self.__showImmediately and not _CAPS.checkAny(self.__arenaBonusType, _CAPS.DONT_SHOW_BATTLE_RESULTS_IMMEDIATELY)
 
     def needToShowIfPosted(self):
         return self.__showIfPosted

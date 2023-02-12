@@ -59,7 +59,6 @@
     <Berliet_Ricardo>	71	</Berliet_Ricardo>
     <Maybach_HL_295_F_fallout>	72	</Maybach_HL_295_F_fallout>
     <Cummins_VT8-460>	73	</Cummins_VT8-460>
-    <Renault_bot>	75	</Renault_bot>
     <Moteur_moderne_3M_27_1_01>	76	</Moteur_moderne_3M_27_1_01>
     <Maybach_HL_230_F>	79	</Maybach_HL_230_F>
     <Maybach_HL_295_003_Somua>	80	</Maybach_HL_295_003_Somua>
@@ -108,12 +107,12 @@
     <Somua_S-40Bis_IGR>	60004	</Somua_S-40Bis_IGR>
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
-    <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
+    <Maybach_HL_230_bootcamp>	1002	</Maybach_HL_230_bootcamp>
   </ids>
   <shared>
     <Somua_S-40>
@@ -526,23 +525,6 @@
       <rpm_min>	273	</rpm_min>
       <rpm_max>	2723	</rpm_max>
     </Renault_S6Bis>
-    <Renault_S6Bis_bootcamp>
-      <userString>	#france_vehicles:Renault_S6Bis	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	3500	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	180	</power>
-      <weight>	540	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	273	</rpm_min>
-      <rpm_max>	2723	</rpm_max>
-    </Renault_S6Bis_bootcamp>
     <Renault_Naeder-FIEUX>
       <userString>	#france_vehicles:Renault_Naeder-FIEUX	</userString>
       <shortUserString>	#france_vehicles:Renault_Naeder-FIEUX_short	</shortUserString>
@@ -576,23 +558,6 @@
       <rpm_min>	451	</rpm_min>
       <rpm_max>	2156	</rpm_max>
     </Renault>
-    <Renault_bot>
-      <userString>	#france_vehicles:Renault_bot	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	39	</power>
-      <weight>	266	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	451	</rpm_min>
-      <rpm_max>	2156	</rpm_max>
-    </Renault_bot>
     <Renault_M26_27>
       <userString>	#france_vehicles:Renault_M26_27	</userString>
       <tags>	gasoline	</tags>
@@ -2002,5 +1967,22 @@
       <rpm_max>	2149	</rpm_max>
       <notInShop>	True	</notInShop>
     </_6F11SRY_MapsTraining_Dummy_SPG_2>
+    <Maybach_HL_230_bootcamp>
+      <userString>	#france_vehicles:Maybach_HL_230	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	575	</power>
+      <weight>	700	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	265	</rpm_min>
+      <rpm_max>	2951	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_bootcamp>
   </shared>
 </engines.xml>

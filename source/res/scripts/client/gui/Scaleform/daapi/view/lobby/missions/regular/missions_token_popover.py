@@ -77,7 +77,7 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
             descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR, name=text_styles.neutral(ms(self._token.getUserName())))
         if not GUI_SETTINGS.tokenShopURL:
             buyBtnVisible = False
-        self.as_setStaticDataS({'headerText': text_styles.highTitle(ms(QUESTS.MISSIONS_TOKENPOPOVER_HEADER, name=ms(self._token.getUserName()))),
+        self.as_setStaticDataS({'headerText': text_styles.highTitle(ms(self._token.getUserName())),
          'descrText': text_styles.main(descrText),
          'imageSrc': self._token.getImage(TOKEN_SIZES.MEDIUM),
          'buyBtnLabel': QUESTS.MISSIONS_TOKENPOPOVER_BUYBTN_LABEL,

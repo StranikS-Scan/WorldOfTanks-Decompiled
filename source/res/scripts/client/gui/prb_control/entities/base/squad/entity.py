@@ -91,12 +91,20 @@ class SquadEntity(UnitEntity):
             return SelectResult(True)
         return super(SquadEntity, self).doSelectAction(action)
 
+    def loadHangar(self):
+        g_eventDispatcher.loadHangar()
+
     @property
     def _showUnitActionNames(self):
         pass
 
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
         return SquadPermissions(roles, flags, isCurrentPlayer, isPlayerReady)
+
+    def setVehicle(self, ctx, callback=None):
+        if self.isParentControlActivated(callback=callback):
+            return
+        super(SquadEntity, self).setVehicle(ctx, callback)
 
     def _createActionsHandler(self):
         return SquadActionsHandler(self)

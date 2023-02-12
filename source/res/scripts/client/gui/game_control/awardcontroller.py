@@ -38,7 +38,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.awards.event_dispatcher import showDynamicAward
 from gui.battle_pass.battle_pass_constants import MIN_LEVEL
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
-from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken
+from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken, defaultEventMethod, multipleBattlePassPurchasedEventMethod
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
@@ -49,7 +49,6 @@ from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7Quest, getComp7QuestType, parseComp7RanksQuestID, parseComp7WinsQuestID
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
@@ -59,7 +58,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showResourceWellAwardWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -1113,28 +1112,6 @@ class BattlesCountHandler(SpecialAchievement):
         return BattlesCountHandler.BATTLE_AMOUNT
 
 
-class PveBattlesCountHandler(BattlesCountHandler):
-
-    def __init__(self, awardCtrl):
-        super(PveBattlesCountHandler, self).__init__(awardCtrl, 'pveBattlesCountAward')
-
-    def getAchievementCount(self):
-        return self.itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
-
-    def showAwardWindow(self, achievementCount, messageNumber):
-        return award_events.showPveBattleAward(achievementCount, messageNumber)
-
-    def _getAwardCountToMessage(self):
-        return {BATTLES_TO_SELECT_RANDOM_MIN_LIMIT: 1}
-
-    def _getAchievementToShow(self):
-        achievementCount = self.getAchievementCount()
-        if achievementCount != 0 and self.isChanged(achievementCount):
-            if achievementCount in self._awardCntToMsg:
-                return achievementCount
-        return None
-
-
 class GoldFishHandler(AwardHandler):
 
     def start(self):
@@ -1376,7 +1353,7 @@ class VehicleCollectorAchievementHandler(ServiceChannelHandler):
 
 
 class BattlePassRewardHandler(ServiceChannelHandler):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __notificationMgr = dependency.descriptor(INotificationWindowController)
 
     def __init__(self, awardCtrl):
@@ -1386,18 +1363,23 @@ class BattlePassRewardHandler(ServiceChannelHandler):
         _, message = ctx
         rewards = message.data.get('reward', {})
         data = message.data.get('ctx', {})
+        packageRewards = message.data.get('packageReward')
+        eventMethod = defaultEventMethod
         if 'reason' not in data:
             _logger.error('Invalid Battle Pass Reward data received! "reward" key missing!')
             return
-        elif data.get('reason') == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
-            return
         else:
+            if data.get('reason') == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
+                if not rewards:
+                    return
+                eventMethod = multipleBattlePassPurchasedEventMethod
             for key in ('newLevel', 'prevLevel', 'chapter'):
                 if key not in data:
                     _logger.error('Invalid Battle Pass Reward data received! "%s" key missing!', key)
                     return
 
-            event = packStartEvent(rewards, data, battlePass=self.__battlePassController)
+            packageRewards = packageRewards or {}
+            event = packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=self.__battlePass)
             if event is not None:
                 self.__notificationMgr.append(event)
             return
@@ -1438,7 +1420,7 @@ class BattlePassStyleRecievedHandler(ServiceChannelHandler):
 
 
 class BattlePassBuyEmptyHandler(ServiceChannelHandler):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
     __MULTIPLE_CHAPTER = 0
 
     def __init__(self, awardCtrl):
@@ -1452,15 +1434,18 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
             if chapterID is None:
                 return False
             if chapterID:
-                minLevel, _ = self.__battlePassController.getChapterLevelInterval(chapterID)
+                minLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
+                chapterIDs = (chapterID,)
             else:
                 minLevel = MIN_LEVEL
-            return self.__battlePassController.getLevelInChapter(chapterID) < minLevel
+                chapterIDs = self.__battlePass.getChapterIDs()
+            return all((self.__battlePass.getLevelInChapter(chapterID) < minLevel for chapterID in chapterIDs))
         else:
             return False
 
     def _showAward(self, ctx):
         _, message = ctx
+        packageRewards = message.data.get('packageReward')
         chapterID = message.data.get('chapter')
         if chapterID is None:
             _logger.error('chapter can not be None!')
@@ -1470,17 +1455,17 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
                 reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS
             else:
                 reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE
-            prevLevel, _ = self.__battlePassController.getChapterLevelInterval(chapterID)
+            prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
             callback = partial(self.__onAwardShown, chapterID)
             data = {'prevLevel': prevLevel,
              'chapter': chapterID,
              'reason': reason,
              'callback': callback}
-            showBattlePassAwardsWindow([], data, useQueue=True)
+            showBattlePassAwardsWindow([], data, useQueue=True, packageRewards=packageRewards)
             return
 
     def __onAwardShown(self, chapterID):
-        if self.__battlePassController.isDisabled() or chapterID is None:
+        if self.__battlePass.isDisabled() or chapterID is None:
             return
         else:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
@@ -1757,7 +1742,6 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  VehiclesResearchHandler,
  VictoryHandler,
  BattlesCountHandler,
- PveBattlesCountHandler,
  PersonalMissionBonusHandler,
  PersonalMissionWindowAfterBattleHandler,
  PersonalMissionAutoWindowHandler,

@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/random_utils.py
-import typing
-import random
 import itertools
+import random
+from bisect import bisect
 from copy import deepcopy
+import typing
 
 class wchoices(object):
 
@@ -39,3 +40,17 @@ class wchoices(object):
 
 def getValueWithDeviationInPercent(value, deviation):
     return value + value * (random.randint(-deviation, deviation) / 100.0)
+
+
+def weighted_choice(seq, weights):
+    total = 0
+    cum_weights = []
+    for w in weights:
+        total += w
+        cum_weights.append(total)
+
+    x = random.random() * total
+    i = bisect(cum_weights, x)
+    if i >= len(seq):
+        i = len(seq) - 1
+    return seq[i]

@@ -442,11 +442,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
         cfg['botPoints'] = __readBotPoints(section)
         cfg['pointsOfInterest'] = __readPointsOfInterest(section)
-    if not IS_CLIENT:
-        if raiseIfMissing or __hasKey('battleScenarios', section, defaultXml):
-            cfg['battleScenarios'] = __readBattleScenarios(section, defaultXml)
-        if raiseIfMissing or __hasKey('waypoints', section, defaultXml):
-            cfg['waypoints'] = _readString('waypoints', section, defaultXml)
     return cfg
 
 
@@ -800,26 +795,6 @@ def __readWeatherPresets(section):
             prev_upper_limit = rnd_range[1]
 
         return presets
-
-
-def __readBattleScenarios(section, defaultSection):
-    section = section['battleScenarios']
-    if section is None:
-        section = defaultSection['battleScenarios']
-    res = {}
-    if section.has_key('scenario'):
-        res['default'] = section.readStrings('scenario')
-    for name, subsection in section.items():
-        if name == 'level':
-            level = subsection.readInt('id')
-            if level in res:
-                raise SoftException('duplicate level %d' % level)
-            if subsection.has_key('scenario'):
-                res[level] = subsection.readStrings('scenario')
-            else:
-                raise SoftException('missing scenarios for level %d' % level)
-
-    return res
 
 
 def __readVehicleCamouflageKind(section):

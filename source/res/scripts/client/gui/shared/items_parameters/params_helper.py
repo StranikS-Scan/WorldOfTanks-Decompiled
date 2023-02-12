@@ -17,7 +17,6 @@ from shared_utils import findFirst, first
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 RELATIVE_POWER_PARAMS = ('avgDamage',
  'avgPiercingPower',
- 'stunMinDuration',
  'stunMaxDuration',
  'reloadTime',
  AUTO_RELOAD_PROP_NAME,
@@ -63,7 +62,7 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
  'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
 EXTRA_POWER_PARAMS = ('vehicleGunShotDispersion', 'vehicleGunShotDispersionChassisMovement', 'vehicleGunShotDispersionChassisRotation', 'vehicleGunShotDispersionTurretRotation', 'vehicleGunShotDispersionWhileGunDamaged', 'vehicleGunShotDispersionAfterShot', 'vehicleReloadTimeAfterShellChange')
-EXTRA_ARMOR_PARAMS = ('vehicleRepairSpeed', 'vehicleRamOrExplosionDamageResistance', 'crewHitChance', 'crewRepeatedStunDuration', 'crewStunDuration', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance', 'vehicleRamDamageResistance', 'damageEnemiesByRamming')
+EXTRA_ARMOR_PARAMS = ('vehicleRepairSpeed', 'vehicleRamOrExplosionDamageResistance', 'crewHitChance', 'crewStunDuration', 'crewStunResistance', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance', 'vehicleRamDamageResistance', 'damageEnemiesByRamming')
 EXTRA_MOBILITY_PARAMS = ('vehicleSpeedGain',)
 EXTRA_CAMOUFLAGE_PARAMS = ('vehicleOwnSpottingTime',)
 EXTRA_VISIBILITY_PARAMS = ('vehicleEnemySpottingTime', 'demaskFoliageFactor', 'demaskMovingFactor')

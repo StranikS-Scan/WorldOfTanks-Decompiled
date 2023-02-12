@@ -369,6 +369,8 @@ class Source(object):
          'isBattleMattersEnabled': self.__readCondition_bool,
          'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
+         'lastLogout': self.__readBattleResultsConditionList,
+         'relativeToUTC': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts,
          'accountAttributes': self.__readListAccountAttributes,

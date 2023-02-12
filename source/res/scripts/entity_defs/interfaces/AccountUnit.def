@@ -46,7 +46,13 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </accountUnit_onUnitJoin>
-    <accountUnit_onClearEventMetaGame></accountUnit_onClearEventMetaGame>
+    <accountUnit_onClearEventMetaGame>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+    </accountUnit_onClearEventMetaGame>
+    <accountUnit_onSetEventMetaGame>
+      <Arg>	PYTHON	</Arg>
+    </accountUnit_onSetEventMetaGame>
     <accountUnit_onUnitLeave>
       <Arg>	INT64	</Arg>
       <Arg>	INT32	</Arg>

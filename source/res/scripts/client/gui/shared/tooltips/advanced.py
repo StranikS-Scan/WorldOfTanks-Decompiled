@@ -222,12 +222,6 @@ class RankedAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks('gamemodeRanked', i18n.makeString(TOOLTIPS.BATTLETYPES_RANKED + '/header'), PREBATTLE_ACTION_NAME.RANKED)
 
 
-class BattleTraining(BaseAdvancedTooltip):
-
-    def _getBlocksList(self, *args, **kwargs):
-        return self._packAdvancedBlocks('gamemodeProving', TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, PREBATTLE_ACTION_NAME.SANDBOX)
-
-
 class DemountKitTooltipAdvanced(BaseAdvancedTooltip):
 
     def _packBlocks(self, *args, **kwargs):

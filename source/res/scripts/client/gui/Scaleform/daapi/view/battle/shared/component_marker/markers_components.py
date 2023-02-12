@@ -11,13 +11,15 @@ from helpers import dependency
 from shared_utils import BitmaskHelper
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from gui.Scaleform.daapi.view.battle.shared import indicators
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION
 import CombatSelectedArea
 
-def _getDirectionIndicator():
+def _getDirectionIndicator(swf, mcName):
     indicator = None
     try:
-        indicator = indicators.createDirectIndicator()
+        indicator = indicators.createDirectIndicator(swf, mcName)
     except Exception:
         LOG_CURRENT_EXCEPTION()
 
@@ -164,7 +166,8 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         self._isVisible = False
 
     def __createMarkerAndSetup(self, gui, objectID):
-        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible):
+        symbol = self.__marker2DData.get('symbol', settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER)
+        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible, symbol=symbol):
             return False
         gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('distanceFieldColor', 'yellow'))
         return True
@@ -247,6 +250,8 @@ class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
         self.__shapes = dIndicatorData.get('dIndicatorShapes', ('green', 'green'))
         self.__indicator = None
         self.__prevPosition = self.positionWithOffset
+        self.__swf = dIndicatorData.get('swf', _DIRECT_INDICATOR_SWF)
+        self.__mcName = dIndicatorData.get('mcName', _DIRECT_INDICATOR_MC_NAME)
         return
 
     @property
@@ -255,7 +260,7 @@ class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
 
     def attachGUI(self, _):
         if self.__indicator is None:
-            self.__indicator = _getDirectionIndicator()
+            self.__indicator = _getDirectionIndicator(self.__swf, self.__mcName)
             self.__indicator.setShape(self.__currentShape)
             self.__indicator.track(self.positionWithOffset)
         if not self.__indicator:

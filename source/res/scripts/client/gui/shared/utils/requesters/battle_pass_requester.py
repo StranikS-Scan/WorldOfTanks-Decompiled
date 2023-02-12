@@ -20,9 +20,6 @@ class BattlePassRequester(AbstractSyncDataRequester, IBattlePassRequester):
     def getPointsForVehicle(self, vehicleID, default=0):
         return self.getCacheValue('vehiclePoints', {}).get(vehicleID, default)
 
-    def getPackedStats(self):
-        pass
-
     def getChapterStats(self):
         return self.getCacheValue('seasonStats', {}).get('chaptersStats', {})
 

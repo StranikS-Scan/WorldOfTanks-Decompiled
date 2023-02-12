@@ -4,30 +4,15 @@ from constants import GameSeasonType
 from soft_exception import SoftException
 from helpers import dependency
 from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IBattleRoyaleController, IMapboxController, IEventBattlesController, IComp7Controller
-from skeletons.gui.game_control import ISeasonProvider
+from gui.shared.system_factory import registerSeasonProviderHandler, collectSeasonProviderHandler
+registerSeasonProviderHandler(GameSeasonType.RANKED, lambda *args, **kwargs: dependency.instance(IRankedBattlesController))
+registerSeasonProviderHandler(GameSeasonType.EPIC, lambda *args, **kwargs: dependency.instance(IEpicBattleMetaGameController))
+registerSeasonProviderHandler(GameSeasonType.BATTLE_ROYALE, lambda *args, **kwargs: dependency.instance(IBattleRoyaleController))
+registerSeasonProviderHandler(GameSeasonType.MAPBOX, lambda *args, **kwargs: dependency.instance(IMapboxController))
+registerSeasonProviderHandler(GameSeasonType.EVENT_BATTLES, lambda *args, **kwargs: dependency.instance(IEventBattlesController))
+registerSeasonProviderHandler(GameSeasonType.COMP7, lambda *args, **kwargs: dependency.instance(IComp7Controller))
 
 class SeasonsController(ISeasonsController):
-    __rankedController = dependency.descriptor(IRankedBattlesController)
-    __epicMetaController = dependency.descriptor(IEpicBattleMetaGameController)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __mapboxController = dependency.descriptor(IMapboxController)
-    __eventBattlesController = dependency.descriptor(IEventBattlesController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    def __init__(self):
-        super(SeasonsController, self).__init__()
-        self.__seasonProvidersByType = {}
-
-    @property
-    def _seasonProvidersByType(self):
-        if not self.__seasonProvidersByType:
-            self.__seasonProvidersByType = {GameSeasonType.RANKED: self.__rankedController,
-             GameSeasonType.EPIC: self.__epicMetaController,
-             GameSeasonType.BATTLE_ROYALE: self.__battleRoyaleController,
-             GameSeasonType.MAPBOX: self.__mapboxController,
-             GameSeasonType.EVENT_BATTLES: self.__eventBattlesController,
-             GameSeasonType.COMP7: self.__comp7Controller}
-        return self.__seasonProvidersByType
 
     def hasAnySeason(self, seasonType):
         return self.__getSeasonProviderChecked(seasonType).hasAnySeason()
@@ -52,7 +37,7 @@ class SeasonsController(ISeasonsController):
         return self.getCurrentCycleID(seasonType) == cycleID
 
     def __getSeasonProviderChecked(self, seasonType):
-        controllerToUse = self._seasonProvidersByType.get(seasonType, None)
-        if controllerToUse is None:
+        handler = collectSeasonProviderHandler(seasonType)
+        if handler is None:
             raise SoftException('Invalid seasonType [{}]! No suitable season provider found.'.format(seasonType))
-        return controllerToUse
+        return handler()

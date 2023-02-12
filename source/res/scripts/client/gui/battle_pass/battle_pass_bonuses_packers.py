@@ -10,41 +10,49 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
+from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN
+from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap
+from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap, GoodiesBonusUIPacker, TokenBonusUIPacker
 from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus
+    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
 def getBattlePassBonusPacker():
     mapping = getDefaultBonusPackersMap()
-    mapping.update({'tmanToken': TmanTemplateBonusPacker(),
-     'customizations': BattlePassCustomizationsBonusPacker(),
-     'premium_plus': BattlePassPremiumDaysPacker(),
-     'dossier': BattlePassDossierBonusPacker(),
-     'items': ExtendedItemBonusUIPacker(),
-     'crewBooks': ExtendedCrewBookBonusUIPacker(),
+    currencyBonusUIPacker = ExtendedCurrencyBonusUIPacker()
+    mapping.update({'berths': BattlePassBerthsBonusPacker(),
      'blueprints': BattlePassBlueprintsBonusPacker(),
-     'slots': BattlePassSlotsBonusPacker(),
-     'vehicles': BattlePassVehiclesBonusUIPacker(),
+     'crewBooks': ExtendedCrewBookBonusUIPacker(),
+     'customizations': BattlePassCustomizationsBonusPacker(),
+     'dossier': BattlePassDossierBonusPacker(),
      'freeXP': BattlePassFreeXPPacker(),
-     Currency.CREDITS: ExtendedCreditsBonusUIPacker(),
-     BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
-     BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
+     'goodies': BattlePassGoodiesBonusPacker(),
+     'items': ExtendedItemBonusUIPacker(),
+     'premium_plus': BattlePassPremiumDaysPacker(),
+     'slots': BattlePassSlotsBonusPacker(),
+     'tmanToken': TmanTemplateBonusPacker(),
+     'token': BattlePassTokenBonusPacker(),
+     'vehicles': BattlePassVehiclesBonusUIPacker(),
      BATTLE_PASS_Q_CHAIN_BONUS_NAME: QuestChainBonusPacker(),
-     Currency.BPCOIN: CoinBonusPacker()})
+     BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
+     BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
+     Currency.BPCOIN: CoinBonusPacker(),
+     Currency.CREDITS: currencyBonusUIPacker,
+     Currency.CRYSTAL: currencyBonusUIPacker})
     return BonusUIPacker(mapping)
 
 
@@ -123,14 +131,18 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         if recruitInfo is None:
             return
         else:
-            recruitGroupName = recruitInfo.getGroupName()
-            bonusImageName = 'tankman'
+            if recruitInfo.isFemale():
+                bonusImageName = 'tankwoman'
+            else:
+                bonusImageName = 'tankman'
             model = RewardItemModel()
             cls._packCommon(bonus, model)
-            model.setIcon('_'.join([bonusImageName, recruitGroupName]))
-            model.setUserName(recruitInfo.getFullUserName())
-            model.setBigIcon('_'.join([bonusImageName, recruitGroupName]))
-            cls._injectAwardID(model, recruitGroupName)
+            model.setIcon(bonusImageName)
+            tankManFullName = recruitInfo.getFullUserName()
+            model.setUserName(tankManFullName)
+            model.setLabel(tankManFullName)
+            model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
+            cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
 
     @classmethod
@@ -277,10 +289,12 @@ class SelectBonusPacker(BaseBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus):
         model = RewardItemModel()
+        bonusType = bonus.getType()
         model.setName(bonus.getName())
         model.setValue(str(cls.getValue(bonus)))
-        model.setIcon(bonus.getType())
-        model.setBigIcon(bonus.getType())
+        model.setIcon(bonusType)
+        model.setBigIcon(bonusType)
+        model.setUserName(backport.text(R.strings.battle_pass.selectBonus.dyn(bonusType)()))
         return model
 
     @classmethod
@@ -360,9 +374,10 @@ class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus, item, count):
         model = super(ExtendedItemBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
-        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            model.setUserName(item.userName)
-        model.setBigIcon(item.getGUIEmblemID())
+        model.setUserName(item.userName)
+        model.setBigIcon(item.name if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER else item.getGUIEmblemID())
+        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized:
+            model.setOverlayType('{}_{}'.format(ItemHighlightTypes.MODERNIZED, item.level))
         return model
 
     @classmethod
@@ -384,7 +399,7 @@ class ExtendedCrewBookBonusUIPacker(CrewBookBonusUIPacker):
         return model
 
 
-class ExtendedCreditsBonusUIPacker(BaseBonusUIPacker):
+class ExtendedCurrencyBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
@@ -407,6 +422,7 @@ class CoinBonusPacker(SimpleBonusUIPacker):
     def _packSingleBonus(cls, bonus, label):
         model = super(CoinBonusPacker, cls)._packSingleBonus(bonus, label)
         model.setBigIcon(bonus.getName())
+        model.setUserName(backport.text(R.strings.battle_pass.tooltips.battlePassCoins.title()))
         return model
 
     @classmethod
@@ -429,6 +445,7 @@ class QuestChainBonusPacker(SimpleBonusUIPacker):
         model = RewardItemModel()
         model.setName(bonus.getName())
         model.setBigIcon(bonus.getName())
+        model.setUserName(backport.text(R.strings.battle_pass.questChainBonus()))
         return model
 
     @classmethod
@@ -446,6 +463,7 @@ class BattlePassSlotsBonusPacker(SimpleBonusUIPacker):
     def _packSingleBonus(cls, bonus, label):
         model = super(BattlePassSlotsBonusPacker, cls)._packSingleBonus(bonus, label)
         model.setBigIcon(bonus.getName())
+        model.setUserName(backport.text(R.strings.tooltips.awardItem.slots.header()))
         return model
 
     @classmethod
@@ -469,7 +487,6 @@ class BattlePassVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setVehicleLvl(vehicle.level)
         model.setVehicleName(vehicle.userName)
         model.setVehicleType(vehicle.type)
-        model.setVehicleNation(vehicle.nationName)
 
 
 class BattlePassFreeXPPacker(SimpleBonusUIPacker):
@@ -478,6 +495,7 @@ class BattlePassFreeXPPacker(SimpleBonusUIPacker):
     def _packSingleBonus(cls, bonus, label):
         model = super(BattlePassFreeXPPacker, cls)._packSingleBonus(bonus, label)
         model.setBigIcon(bonus.getName())
+        model.setUserName(str(bonus.getValue()))
         return model
 
     @classmethod
@@ -486,6 +504,8 @@ class BattlePassFreeXPPacker(SimpleBonusUIPacker):
 
 
 class BattlePassBlueprintsBonusPacker(BlueprintBonusUIPacker):
+    __INTELLIGENCE_BLUEPRINT = 'intelligence'
+    __ICON_NAME_PREFIX = 'blueprint_{}'
 
     @classmethod
     def _getBonusModel(cls):
@@ -494,10 +514,73 @@ class BattlePassBlueprintsBonusPacker(BlueprintBonusUIPacker):
     @classmethod
     def _pack(cls, bonus):
         models = super(BattlePassBlueprintsBonusPacker, cls)._pack(bonus)
+        imageCategory = bonus.getImageCategory()
+        userName = ''
+        blueprintName = bonus.getBlueprintName()
+        if blueprintName == BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT:
+            userName = backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.intelFragment())
+        elif blueprintName == BlueprintsBonusSubtypes.NATION_FRAGMENT:
+            userName = backport.text(R.strings.blueprints.nations.dyn(imageCategory)())
         for model in models:
-            model.setBigIcon('blueprint_' + bonus.getImageCategory())
+            model.setBigIcon(cls.__ICON_NAME_PREFIX.format(imageCategory))
+            model.setUserName(userName)
 
         return models
+
+
+class BattlePassGoodiesBonusPacker(GoodiesBonusUIPacker):
+
+    @classmethod
+    def _packIconBonusModel(cls, bonus, icon, count, label):
+        model = RewardItemModel()
+        cls._packCommon(bonus, model)
+        model.setValue(str(count))
+        model.setIcon(icon)
+        model.setUserName(label)
+        model.setBigIcon(icon)
+        return model
+
+    @classmethod
+    def _packSingleBoosterBonus(cls, bonus, booster, count):
+        userName = backport.text(R.strings.tooltips.boostersWindow.booster.activateInfo.title.dyn(booster.boosterGuiType)())
+        return cls._packIconBonusModel(bonus, booster.getFullNameForResource(), count, userName)
+
+
+class BattlePassTokenBonusPacker(TokenBonusUIPacker):
+
+    @classmethod
+    def _packToken(cls, bonusPacker, bonus, *args):
+        model = RewardItemModel() if bonus.getName() == BATTLE_BONUS_X5_TOKEN else TokenBonusModel()
+        cls._packCommon(bonus, model)
+        return bonusPacker(model, bonus, *args)
+
+    @classmethod
+    def _getTokenBonusPackers(cls):
+        tokenBonusPackers = super(BattlePassTokenBonusPacker, cls)._getTokenBonusPackers()
+        tokenBonusPackers.update({BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token})
+        return tokenBonusPackers
+
+    @classmethod
+    def __packBattleBonusX5Token(cls, model, bonus, *args):
+        model.setName(BATTLE_BONUS_X5_TOKEN)
+        model.setValue(str(bonus.getCount()))
+        model.setLabel(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.header())
+        model.setBigIcon(BATTLE_BONUS_X5_TOKEN)
+        return model
+
+
+class BattlePassBerthsBonusPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = super(BattlePassBerthsBonusPacker, cls)._packSingleBonus(bonus, label)
+        model.setBigIcon(bonus.getName())
+        model.setUserName(backport.text(R.strings.tooltips.awardItem.berths.header()))
+        return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
 
 
 @contextmanager

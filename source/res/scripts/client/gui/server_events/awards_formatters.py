@@ -740,7 +740,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         tokenBase = R.strings.tooltips.quests.bonuses.token
         eventTokenBase = tokenBase.dyn(complexToken.styleID)
         bodyResID = eventTokenBase.body() if eventTokenBase() != INVALID_RES_ID else tokenBase.body()
-        tooltip = makeTooltip(backport.text(tokenBase.header(), userName=userName), backport.text(bodyResID))
+        description = self.eventsCache.prefetcher.getTokenDetailedInfo(complexToken.styleID)
+        if description is None:
+            description = backport.text(bodyResID)
+        tooltip = makeTooltip(userName, description if description else None)
         return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
     def _formatResource(self, token, bonus):

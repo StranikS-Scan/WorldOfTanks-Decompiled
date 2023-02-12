@@ -1286,9 +1286,20 @@
       <zoom>
         <Type>	UINT8	</Type>
       </zoom>
+      <mode>
+        <Type>	UINT8	</Type>
+      </mode>
     </Properties>
   </REMOTE_CAMERA_DATA>
-  <STUN_INFO>	FLOAT64	</STUN_INFO>
+  <STUN_INFO>	FIXED_DICT	  <Properties>
+      <stunFinishTime>
+        <Type>	FLOAT64	</Type>
+      </stunFinishTime>
+      <stunType>
+        <Type>	UINT8	</Type>
+      </stunType>
+    </Properties>
+  </STUN_INFO>
   <BOUNDS2>	TUPLE	  <of>	VECTOR2	</of>
     <size>	2	</size>
   </BOUNDS2>

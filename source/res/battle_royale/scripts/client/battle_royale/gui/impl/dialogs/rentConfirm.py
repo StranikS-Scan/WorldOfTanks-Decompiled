@@ -78,9 +78,10 @@ class RentConfirm(DialogTemplateView):
             buttonConfirmMsg = resID.rent.Button()
             titleMsg = backport.text(resID.rent.Title(), vehicle=vehicleName, days=rentTime)
             descriptionMsg = backport.text(resID.rent.Description())
-            timeLeft = (self._battleRoyaleController.getEndTime() - time()) / 86400
-            if timeLeft <= rentTime:
-                warningMsg = backport.text(resID.eventEndsSoon(), days=int(timeLeft))
+            if self._battleRoyaleController.isActive():
+                timeLeft = (self._battleRoyaleController.getEndTime() - time()) / 86400
+                if timeLeft <= rentTime:
+                    warningMsg = backport.text(resID.eventEndsSoon(), days=int(timeLeft))
             price = self.__rentVehiclesController.getRentPrice(self.__vehicleCD)
             currency = price.getCurrency()
             res = {currency: price.get(currency)}

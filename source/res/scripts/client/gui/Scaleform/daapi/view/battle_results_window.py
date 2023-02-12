@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
 import logging
 import BigWorld
-import BattleReplay
 import constants
 from adisp import adisp_process
 from constants import PremiumConfigs
@@ -98,9 +97,6 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def onResultsSharingBtnPress(self):
         raise NotImplementedError('This feature is not longer supported')
-
-    def onReplay(self, url):
-        BattleReplay.g_replayCtrl.downloadAndPlayServerSideReplay(url)
 
     def showUnlockWindow(self, itemID, unlockType):
         if not self.__canNavigate():

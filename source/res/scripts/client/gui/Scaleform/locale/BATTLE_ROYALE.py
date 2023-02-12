@@ -285,6 +285,7 @@ class BATTLE_ROYALE(object):
     INTRO_SLIDE4_TEXT = '#battle_royale:intro/slide4/text'
     STATUSNOTIFICATIONTIMERS_HALFOVERTURNED = '#battle_royale:statusNotificationTimers/halfOverturned'
     STATUSNOTIFICATIONTIMERS_DEATHZONE = '#battle_royale:statusNotificationTimers/deathZone'
+    STATUSNOTIFICATIONTIMERS_DEATHZONEWARNING = '#battle_royale:statusNotificationTimers/deathZoneWarning'
     STATUSNOTIFICATIONTIMERS_SMOKE_ALLY = '#battle_royale:statusNotificationTimers/smoke/ally'
     STATUSNOTIFICATIONTIMERS_SMOKE_DAMAGING = '#battle_royale:statusNotificationTimers/smoke/damaging'
     STATUSNOTIFICATIONTIMERS_HEALPOINT_HEALING = '#battle_royale:statusNotificationTimers/healPoint/healing'

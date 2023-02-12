@@ -180,12 +180,14 @@ class _CrosshairShotResults(object):
         shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
         if not shellExtraData.mayRicochet:
             return False
+        armor = matInfo.armor
+        if armor == 0:
+            return False
         if hitAngleCos <= cls.__sessionProvider.arenaVisitor.modifiers.getShellRicochetCos(shell.kind):
             if not matInfo.checkCaliberForRichet:
                 return True
             if not shellExtraData.checkCaliberForRicochet:
                 return True
-            armor = matInfo.armor
             if armor * 3 >= shell.caliber:
                 return True
         return False

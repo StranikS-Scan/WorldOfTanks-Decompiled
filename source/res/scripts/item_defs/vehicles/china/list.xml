@@ -393,7 +393,7 @@
     <price>	9900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user rocketAcceleration	</tags>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user rocketAcceleration HT_Ch47_BZ_176	</tags>
     <level>	8	</level>
   </Ch47_BZ_176>
   <Ch45_WZ_114>
@@ -547,15 +547,6 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	8	</level>
   </Ch14_T34_3>
-  <Ch04_T34_1_training>
-    <id>	251	</id>
-    <userString>	#china_vehicles:Ch04_T34_1	</userString>
-    <description>	#china_vehicles:Ch04_T34_1_descr	</description>
-    <price>	1355000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank private HD secret unrecoverable t34_disclaimer	</tags>
-    <level>	1	</level>
-  </Ch04_T34_1_training>
   <Ch23_112>
     <id>	252	</id>
     <userString>	#china_vehicles:Ch23_112	</userString>
@@ -644,6 +635,17 @@
     <tags>	heavyTank role_HT_break private HD secret cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user comp7 earn_crystals special	</tags>
     <level>	10	</level>
   </Ch41_WZ_111_5A_7x7>
+  <Ch41_WZ_111_MT>
+    <id>	31003	</id>
+    <userString>	#china_vehicles:Ch41_WZ_111_MT	</userString>
+    <description>	#china_vehicles:Ch41_WZ_111_5A_descr	</description>
+    <shortUserString>	#china_vehicles:Ch41_WZ_111_MT_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	10	</level>
+  </Ch41_WZ_111_MT>
   <Ch43_WZ_122_2>
     <id>	255	</id>
     <userString>	#china_vehicles:Ch43_WZ_122_2	</userString>
@@ -680,36 +682,6 @@
     <tags>	mediumTank role_MT_universal private HD secret premiumIGR improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </Ch19_121_IGR>
-  <Ch06_Renault_NC31_bot>
-    <id>	160	</id>
-    <userString>	#china_vehicles:Ch06_Renault_NC31_bot	</userString>
-    <description>	#china_vehicles:Ch06_Renault_NC31_bot_descr	</description>
-    <shortUserString>	#china_vehicles:Ch06_Renault_NC31_bot_short	</shortUserString>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret unrecoverable	</tags>
-    <level>	1	</level>
-  </Ch06_Renault_NC31_bot>
-  <Ch08_Type97_Chi_Ha_bootcamp>
-    <id>	161	</id>
-    <userString>	#china_vehicles:Ch08_Type97_Chi_Ha	</userString>
-    <description>	#china_vehicles:Ch08_Type97_Chi_Ha_descr	</description>
-    <shortUserString>	#china_vehicles:Ch08_Type97_Chi_Ha_short	</shortUserString>
-    <price>	42000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank private HD secret extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </Ch08_Type97_Chi_Ha_bootcamp>
-  <Ch20_Type58_bootcamp>
-    <id>	10	</id>
-    <userString>	#china_vehicles:Ch20_Type58	</userString>
-    <description>	#china_vehicles:Ch20_Type58_descr	</description>
-    <price>	920000	</price>
-    <tags>	mediumTank private HD extraHealthReserve_class3_user secret	</tags>
-    <level>	2	</level>
-    <clone_tags>	cloned	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </Ch20_Type58_bootcamp>
   <Ch12_111_1_2_3_FL>
     <id>	220	</id>
     <userString>	#china_vehicles:Ch12_111_1_2_3_FL	</userString>

@@ -12,7 +12,7 @@ import WoT
 import material_kinds
 import CGF
 import GenericComponents
-from constants import IS_DEVELOPMENT, IS_EDITOR
+from constants import IS_DEVELOPMENT, IS_EDITOR, IS_UE_EDITOR
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 import math_utils
@@ -914,6 +914,9 @@ def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
 
 
 def __assemblePrefabComponent(appearance, attachment, _, __):
-    hangar = dependency.instance(IHangarSpace)
-    modelName = attachment.hangarModelName if attachment.hangarModelName and hangar.inited else attachment.modelName
-    loadAppearancePrefab(modelName, appearance)
+    if not IS_UE_EDITOR:
+        hangar = dependency.instance(IHangarSpace)
+        modelName = attachment.hangarModelName if attachment.hangarModelName and hangar.inited else attachment.modelName
+        loadAppearancePrefab(modelName, appearance)
+    else:
+        loadAppearancePrefab(attachment.modelName, appearance)

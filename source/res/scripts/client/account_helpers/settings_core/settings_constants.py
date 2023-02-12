@@ -136,22 +136,6 @@ class GAME(CONST_CONTAINER):
     SCROLL_SMOOTHING = 'scrollSmoothing'
 
 
-class TUTORIAL(CONST_CONTAINER):
-    CUSTOMIZATION = 'customization'
-    PERSONAL_CASE = 'personalCase'
-    PERSONAL_CASE_WITH_FREE_SKILLS = 'personalCaseWithFreeSkills'
-    TECHNICAL_MAINTENANCE = 'technicalMaintenance'
-    RESEARCH = 'research'
-    RESEARCH_TREE = 'researchTree'
-    MEDKIT_INSTALLED = 'medKitInstalled'
-    REPAIRKIT_INSTALLED = 'repairKitInstalled'
-    FIRE_EXTINGUISHER_INSTALLED = 'fireExtinguisherInstalled'
-    MEDKIT_USED = 'medKitUsed'
-    REPAIRKIT_USED = 'repairKitUsed'
-    FIRE_EXTINGUISHER_USED = 'fireExtinguisherUsed'
-    WAS_QUESTS_TUTORIAL_STARTED = 'wasQuestsTutorialStarted'
-
-
 class SOUND(CONST_CONTAINER):
     GAME_EVENT_AMBIENT = 'specialAmbientVolume'
     GAME_EVENT_EFFECTS = 'specialEffectsVolume'

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/requester.py
+import typing
 from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from gui.prb_control import settings, prb_getters

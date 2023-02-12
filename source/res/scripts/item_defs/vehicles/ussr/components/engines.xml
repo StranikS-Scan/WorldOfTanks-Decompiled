@@ -133,9 +133,7 @@
     <Observer>	203	</Observer>
     <M-50T_fallout>	206	</M-50T_fallout>
     <V-55_fallout>	207	</V-55_fallout>
-    <MS-1_bot>	211	</MS-1_bot>
     <V-12-5_shortened>	212	</V-12-5_shortened>
-    <T-26_bot>	213	</T-26_bot>
     <V-5_W>	214	</V-5_W>
     <V-54-6_FL>	215	</V-54-6_FL>
     <V-12-5M>	218	</V-12-5M>
@@ -158,11 +156,13 @@
     <V_12BN>	238	</V_12BN>
     <V_12_7>	239	</V_12_7>
     <V_2_34A>	240	</V_2_34A>
+    <_5TDF_O>	241	</_5TDF_O>
     <KCH_30_A_CN>	242	</KCH_30_A_CN>
     <V-2IS_R1_CN>	243	</V-2IS_R1_CN>
     <V-11-IS-3_S>	244	</V-11-IS-3_S>
     <V_2K_P>	245	</V_2K_P>
     <V-2-34_C>	248	</V-2-34_C>
+    <V_2_IS_520_Roz>	251	</V_2_IS_520_Roz>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -177,13 +177,6 @@
     <V_2>	328	</V_2>
     <V-55U_FL>	501	</V-55U_FL>
     <V-12_7x7>	503	</V-12_7x7>
-    <M-80_prem_bootcamp>	64001	</M-80_prem_bootcamp>
-    <Maybach_HL_120_TRM_A_bootcamp>	64002	</Maybach_HL_120_TRM_A_bootcamp>
-    <M-5-400_bootcamp>	64003	</M-5-400_bootcamp>
-    <M-17T_bootcamp>	64004	</M-17T_bootcamp>
-    <V-2-34_bootcamp>	64005	</V-2-34_bootcamp>
-    <V-4_bootcamp>	64006	</V-4_bootcamp>
-    <GAZ-203_bootcamp>	64007	</GAZ-203_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
     <GMC_MapsTraining_Dummy_LT_1>	25	</GMC_MapsTraining_Dummy_LT_1>
     <T-26F_MapsTraining_Dummy_SPG_1>	26	</T-26F_MapsTraining_Dummy_SPG_1>
@@ -241,23 +234,6 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2040	</rpm_max>
     </V-2-34>
-    <V-2-34_bootcamp>
-      <userString>	#ussr_vehicles:V-2-34	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V-2-34_bootcamp>
     <V-2-34A>
       <userString>	#ussr_vehicles:V-2-34	</userString>
       <tags>	diesel	</tags>
@@ -492,6 +468,23 @@
       <rpm_min>	381	</rpm_min>
       <rpm_max>	2056	</rpm_max>
     </V-2IS_R>
+    <V_2_IS_520_Roz>
+      <userString>	#ussr_vehicles:V_2_IS_520_Roz	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	29000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
+    </V_2_IS_520_Roz>
     <V_2_10M>
       <userString>	#ussr_vehicles:V_2_10M	</userString>
       <tags>	diesel	</tags>
@@ -670,23 +663,6 @@
       <rpm_min>	343	</rpm_min>
       <rpm_max>	2701	</rpm_max>
     </M-17T>
-    <M-17T_bootcamp>
-      <userString>	#ussr_vehicles:M-17T_bootcamp	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	10770	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
-      <weight>	610	</weight>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
-    </M-17T_bootcamp>
     <M-17L_R>
       <userString>	#ussr_vehicles:M-17L_R	</userString>
       <tags>	gasoline	</tags>
@@ -752,23 +728,6 @@
       <rpm_min>	374	</rpm_min>
       <rpm_max>	2601	</rpm_max>
     </M-5-400>
-    <M-5-400_bootcamp>
-      <userString>	#ussr_vehicles:M-5-400_bootcamp	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	10230	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	400	</power>
-      <weight>	410	</weight>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	43	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
-    </M-5-400_bootcamp>
     <V-2K>
       <userString>	#ussr_vehicles:V-2K	</userString>
       <tags>	diesel	</tags>
@@ -835,23 +794,6 @@
       <rpm_min>	266	</rpm_min>
       <rpm_max>	2167	</rpm_max>
     </V-4>
-    <V-4_bootcamp>
-      <userString>	#ussr_vehicles:V-4	</userString>
-      <tags>	diesel	</tags>
-      <level>	4	</level>
-      <price>	9000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	300	</power>
-      <weight>	540	</weight>
-      <maxHealth>	93	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	266	</rpm_min>
-      <rpm_max>	2167	</rpm_max>
-    </V-4_bootcamp>
     <V-4M>
       <userString>	#ussr_vehicles:V-4M	</userString>
       <tags>	diesel	</tags>
@@ -916,23 +858,6 @@
       <rpm_min>	445	</rpm_min>
       <rpm_max>	2172	</rpm_max>
     </MS-1>
-    <MS-1_bot>
-      <userString>	#ussr_vehicles:MS-1_bot	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	43	</power>
-      <weight>	266	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	445	</rpm_min>
-      <rpm_max>	2172	</rpm_max>
-    </MS-1_bot>
     <GAZ-M1>
       <userString>	#ussr_vehicles:GAZ-M1	</userString>
       <tags>	gasoline	</tags>
@@ -1130,23 +1055,6 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2361	</rpm_max>
     </T-26>
-    <T-26_bot>
-      <userString>	#ussr_vehicles:T-26_bot	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	770	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	90	</power>
-      <weight>	545	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	20	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2361	</rpm_max>
-    </T-26_bot>
     <T-26M>
       <userString>	#ussr_vehicles:T-26M	</userString>
       <tags>	gasoline	</tags>
@@ -1628,23 +1536,6 @@
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2562	</rpm_max>
     </GAZ-203>
-    <GAZ-203_bootcamp>
-      <userString>	#ussr_vehicles:GAZ-203	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	3830	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	140	</power>
-      <weight>	550	</weight>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2562	</rpm_max>
-    </GAZ-203_bootcamp>
     <V-2KT>
       <userString>	#ussr_vehicles:V-2KT	</userString>
       <tags>	diesel	</tags>
@@ -1964,23 +1855,6 @@
       <rpm_min>	437	</rpm_min>
       <rpm_max>	2400	</rpm_max>
     </Maybach_HL_120_TRM_A>
-    <Maybach_HL_120_TRM_A_bootcamp>
-      <userString>	#ussr_vehicles:Maybach_HL_120_TRM_A_bootcamp	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <notInShop>	true	</notInShop>
-      <price>	10000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	300	</power>
-      <weight>	920	</weight>
-      <maxHealth>	86	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	437	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
-    </Maybach_HL_120_TRM_A_bootcamp>
     <M500>
       <userString>	#ussr_vehicles:M500	</userString>
       <tags>	diesel	</tags>
@@ -2213,6 +2087,23 @@
       <rpm_min>	381	</rpm_min>
       <rpm_max>	2056	</rpm_max>
     </_5TDF>
+    <_5TDF_O>
+      <userString>	#ussr_vehicles:_5TDF_O	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </_5TDF_O>
     <GTD_700P>
       <userString>	#ussr_vehicles:GTD_700P	</userString>
       <tags>	diesel	</tags>
@@ -2481,23 +2372,6 @@
       <rpm_min>	286	</rpm_min>
       <rpm_max>	2683	</rpm_max>
     </M-80_prem>
-    <M-80_prem_bootcamp>
-      <userString>	#ussr_vehicles:M-80_bootcamp	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4130	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	170	</power>
-      <weight>	550	</weight>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	286	</rpm_min>
-      <rpm_max>	2683	</rpm_max>
-    </M-80_prem_bootcamp>
     <V-2IS_R1>
       <userString>	#ussr_vehicles:V-2IS_R	</userString>
       <tags>	diesel	</tags>
@@ -2930,8 +2804,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </V_64R>
     <V_64S>
       <userString>	#ussr_vehicles:V_64S	</userString>

@@ -33,7 +33,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IFunRandomController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -336,27 +336,6 @@ class _EpicTrainingItem(_SelectorItem):
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
 
-class _BattleTutorialItem(_SelectorItem):
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isSelected = state.isInPreQueue(QUEUE_TYPE.TUTORIAL)
-        self._isDisabled = state.hasLockedState
-
-
-class _SandboxItem(_SelectorItem):
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isDisabled = state.hasLockedState
-        self._isSelected = state.isQueueSelected(queueType=QUEUE_TYPE.SANDBOX)
-        self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
-
-
 class _EventBattlesItem(_SelectorItem):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
@@ -518,17 +497,17 @@ class _SimpleSquadItem(_SquadItem):
         self._isVisible = not state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE)
 
 
-class _SpecialSquadItem(_SquadItem):
+class SpecialSquadItem(_SquadItem):
 
     def __init__(self, label, data, order, selectorType=None, isVisible=False):
-        super(_SpecialSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        super(SpecialSquadItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isDisabled = False
         self._isSelected = False
         self._isVisible = isVisible
         self._isSpecialBgIcon = False
 
     def getVO(self):
-        vo = super(_SpecialSquadItem, self).getVO()
+        vo = super(SpecialSquadItem, self).getVO()
         if self._isSpecialBgIcon:
             vo['specialBgIcon'] = backport.image(R.images.gui.maps.icons.lobby.eventPopoverBtnBG())
         return vo
@@ -538,7 +517,7 @@ class _SpecialSquadItem(_SquadItem):
         self._isDisabled = state.hasLockedState and not state.isInUnit(self._prebattleType)
 
 
-class _EventSquadItem(_SpecialSquadItem):
+class _EventSquadItem(SpecialSquadItem):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
@@ -553,7 +532,7 @@ class _EventSquadItem(_SpecialSquadItem):
         return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
 
 
-class _BattleRoyaleSquadItem(_SpecialSquadItem):
+class _BattleRoyaleSquadItem(SpecialSquadItem):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
@@ -578,7 +557,7 @@ class _BattleRoyaleSquadItem(_SpecialSquadItem):
         return backport.image(_R_ICONS.battleTypes.c_40x40.royaleSquad())
 
 
-class _MapboxSquadItem(_SpecialSquadItem):
+class _MapboxSquadItem(SpecialSquadItem):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
@@ -600,28 +579,7 @@ class _MapboxSquadItem(_SpecialSquadItem):
         return backport.image(_R_ICONS.battleTypes.c_40x40.mapboxSquad())
 
 
-class _FunRandomSquadItem(_SpecialSquadItem):
-    __funRandomController = dependency.descriptor(IFunRandomController)
-
-    def __init__(self, label, data, order, selectorType=None, isVisible=True):
-        super(_FunRandomSquadItem, self).__init__(label, data, order, selectorType, isVisible)
-        self._isVisible = self.__funRandomController.isFunRandomPrbActive()
-        self._prebattleType = PREBATTLE_TYPE.FUN_RANDOM
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.funRandomSquad())
-
-    def getFormattedLabel(self):
-        pass
-
-    def _update(self, state):
-        super(_FunRandomSquadItem, self)._update(state)
-        self._isVisible = self.__funRandomController.isFunRandomPrbActive()
-        self._isSelected = self._isSelected or self._isVisible
-
-
-class _Comp7SquadItem(_SpecialSquadItem):
+class _Comp7SquadItem(SpecialSquadItem):
     __controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
@@ -1008,17 +966,6 @@ def _addMapsTrainingBattleType(items):
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _addTutorialBattleType(items, lobbyContext=None):
-    settings = lobbyContext.getServerSettings()
-    isInRoaming = settings.roaming.isInRoaming()
-    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(backport.text(_R_BATTLE_TYPES.battleTutorial()), PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 10))
-
-
-def _addSandboxType(items):
-    items.append(_SandboxItem(backport.text(_R_BATTLE_TYPES.battleTeaching()), PREBATTLE_ACTION_NAME.SANDBOX, 11))
-
-
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _addEpicTrainingBattleType(items, lobbyContext=None):
     settings = lobbyContext.getServerSettings()
     visible = settings is not None and settings.frontline.isEpicTrainingEnabled
@@ -1043,30 +990,14 @@ BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,
  PREBATTLE_ACTION_NAME.EVENT_BATTLE: _addEventBattlesType,
  PREBATTLE_ACTION_NAME.COMP7: _addComp7BattleType}
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _createItems(lobbyContext=None):
-    settings = lobbyContext.getServerSettings()
-    isInRoaming = settings.roaming.isInRoaming()
+def _createItems():
     items = []
     for battleItem in viewvalues(BATTLES_SELECTOR_ITEMS):
         battleItem(items)
 
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
-    if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
-        _addSandboxType(items)
     return _BattleSelectorItems(items)
-
-
-def _createSquadSelectorItems():
-    items = []
-    _addSimpleSquadType(items)
-    _addBattleRoyaleSquadType(items)
-    _addEventSquadType(items)
-    _addMapboxSquadType(items)
-    _addFunRandomSquadType(items)
-    _addComp7SquadType(items)
-    return _SquadSelectorItems(items)
 
 
 def _addSimpleSquadType(items):
@@ -1090,8 +1021,18 @@ def _addMapboxSquadType(items):
     items.append(_MapboxSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.mapboxSquad())), PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, 2))
 
 
-def _addFunRandomSquadType(items):
-    items.append(_FunRandomSquadItem('', 'funRandomSquad', 2))
+BATTLES_SELECTOR_SQUAD_ITEMS = {PREBATTLE_ACTION_NAME.SQUAD: _addSimpleSquadType,
+ PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD: _addBattleRoyaleSquadType,
+ PREBATTLE_ACTION_NAME.MAPBOX_SQUAD: _addMapboxSquadType,
+ PREBATTLE_ACTION_NAME.EVENT_SQUAD: _addEventSquadType,
+ PREBATTLE_ACTION_NAME.COMP7_SQUAD: _addComp7SquadType}
+
+def _createSquadSelectorItems():
+    items = []
+    for battleSquadItem in BATTLES_SELECTOR_SQUAD_ITEMS.values():
+        battleSquadItem(items)
+
+    return _SquadSelectorItems(items)
 
 
 def _getCycleEndsInStr(modeCtrl, modeName, timeLeftStrGetter=time_utils.getTillTimeString):

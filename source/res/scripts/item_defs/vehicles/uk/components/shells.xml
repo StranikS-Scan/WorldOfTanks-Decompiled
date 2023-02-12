@@ -253,36 +253,6 @@
       </damage>
     </armorSpalls>
   </_47mm_3pdrHE>
-  <_47mm_3pdrAP_bot>
-    <id>	112	</id>
-    <userString>	#gb_vehicles:_47mm_3pdrAP_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	47	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	25	</armor>
-      <devices>	19	</devices>
-    </damage>
-  </_47mm_3pdrAP_bot>
-  <_47mm_3pdrAP_1_bot>
-    <id>	113	</id>
-    <userString>	#gb_vehicles:_47mm_3pdrAP_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	47	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	8	</armor>
-      <devices>	3	</devices>
-    </damage>
-  </_47mm_3pdrAP_1_bot>
   <_2pdr_AP_Mk.1T>
     <id>	4	</id>
     <userString>	#gb_vehicles:_2pdr_AP_Mk.1T	</userString>
@@ -2899,9 +2869,7 @@
     <caliber>	139.7	</caliber>
     <explosionRadius>	6.8	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	22	</stunDuration>
-    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <stunDuration>	15.4	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -2950,9 +2918,7 @@
     <caliber>	152.4	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	25	</stunDuration>
-    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.50	</damageDurationCoeff>
+    <stunDuration>	17.5	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3001,9 +2967,7 @@
     <caliber>	182.9	</caliber>
     <explosionRadius>	9.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	28	</stunDuration>
-    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.55	</damageDurationCoeff>
+    <stunDuration>	19.6	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3115,9 +3079,7 @@
     <caliber>	233.7	</caliber>
     <explosionRadius>	11.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	33	</stunDuration>
-    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.60	</damageDurationCoeff>
+    <stunDuration>	23.1	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>

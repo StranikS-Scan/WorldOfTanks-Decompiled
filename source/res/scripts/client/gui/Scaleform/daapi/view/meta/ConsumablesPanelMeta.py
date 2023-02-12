@@ -79,6 +79,9 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_handleAsReplayS(self):
         return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None
 
+    def as_handleAsObserverS(self):
+        return self.flashObject.as_handleAsObserver() if self._isDAAPIInited() else None
+
     def as_isVisibleS(self):
         return self.flashObject.as_isVisible() if self._isDAAPIInited() else None
 

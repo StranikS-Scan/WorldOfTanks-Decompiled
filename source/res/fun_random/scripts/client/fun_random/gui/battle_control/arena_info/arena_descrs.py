@@ -11,7 +11,7 @@ class FunRandomArenaDescription(ArenaWithLabelDescription, FunSubModesWatcher):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+        return not replayCtrl.isPlaying
 
     def getDescriptionString(self, isInBattle=True):
         description = super(FunRandomArenaDescription, self).getDescriptionString(isInBattle)

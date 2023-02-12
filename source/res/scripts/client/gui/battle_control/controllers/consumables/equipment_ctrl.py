@@ -398,7 +398,10 @@ class _ExpandedItem(_EquipmentItem):
 
             return (False, _ActivationError(self._getEntitiesAreSafeKey(), None))
         else:
-            return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
+            return self._canApplyForEntity(entityName, deviceStates)
+
+    def _canApplyForEntity(self, entityName, deviceStates):
+        return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
 
 
 class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
@@ -433,6 +436,14 @@ class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
     def _canActivate(self, entityName=None, avatar=None):
         result, error = super(_MedKitItem, self)._canActivate(entityName, avatar)
         return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() and self.isReusable else (result, error)
+
+    def _canApplyForEntity(self, entityName, deviceStates):
+        if entityName not in deviceStates:
+            if not avatar_getter.isVehicleStunned():
+                return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)}))
+            return (self.isReusable, None)
+        else:
+            return (True, None)
 
     def _getEntitiesAreSafeKey(self):
         pass

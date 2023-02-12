@@ -8,7 +8,9 @@ import BigWorld
 import BattleReplay
 import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
+from constants import StunTypes
 from ReplayEvents import g_replayEvents
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
 from gui.Scaleform.daapi.view.meta.TimersPanelMeta import TimersPanelMeta
@@ -29,15 +31,17 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from battle_royale.gui.constants import BattleRoyaleEquipments
 _logger = logging.getLogger(__name__)
-_TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
+_TIMERS_PRIORITY = {(_TIMER_STATES.STUN_FLAME, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
- (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 1,
- (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 2,
- (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 4,
- (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 3,
- (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 3}
+ (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 2,
+ (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 3,
+ (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 4,
+ (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 5,
+ (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 6,
+ (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 7,
+ (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 7}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
+ _TIMER_STATES.STUN_FLAME,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD,
@@ -195,12 +199,9 @@ class _StackTimersCollection(_BaseTimersCollection):
         if timerPriority == 0:
             timer.show()
         elif self._currentTimer is None:
-            npTimer = self.__findNextPriorityByPriorityMap()
-            if oldTimer and (npTimer is None or oldTimer.typeID != npTimer.typeID):
-                oldTimer.hide()
-            self._currentTimer = npTimer
+            self.__setNextPriorityTimer(oldTimer)
             if self._currentTimer is not None:
-                self._currentTimer.show(npTimer.typeID == timer.typeID)
+                self._currentTimer.show(self._currentTimer.typeID == timer.typeID)
         else:
             cmpResult = cmp(timerPriority, _TIMERS_PRIORITY[self._currentTimer.typeID, self._currentTimer.viewID])
             if cmpResult == -1 or cmpResult == 0 and self._currentTimer.finishTime >= timer.finishTime:
@@ -242,7 +243,7 @@ class _StackTimersCollection(_BaseTimersCollection):
             if self._currentTimer and self._currentTimer.typeID == typeID:
                 timer.hide()
                 self._currentTimer = None
-        self._currentTimer = self.__findNextPriorityByPriorityMap()
+        self.__setNextPriorityTimer()
         if self._currentTimer and self._currentTimer.typeID != typeID:
             self._currentTimer.show(False)
         return
@@ -266,6 +267,15 @@ class _StackTimersCollection(_BaseTimersCollection):
         self._currentTimer = None
         self._timers.clear()
         self._priorityMap.clear()
+        return
+
+    def __setNextPriorityTimer(self, oldTimer=None):
+        if oldTimer is None:
+            oldTimer = self._currentTimer
+        npTimer = self.__findNextPriorityByPriorityMap()
+        if oldTimer and (npTimer is None or oldTimer.typeID != npTimer.typeID):
+            oldTimer.hide()
+        self._currentTimer = npTimer
         return
 
     def __evaluateMultipleStatusStates(self, bubble=True):
@@ -403,15 +413,26 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateMainTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DESTROY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link), self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_ICON, link), self._getNotificationTimerData(_TIMER_STATES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link)]
+        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
+        if liftOverEnabled:
+            overturnedIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_GREEN_ICON
+            overturnedColor = BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN
+            iconOffsetY = -11
+            overturnedText = backport.text(R.strings.ingame_gui.destroyTimer.liftOver())
+        else:
+            overturnedIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_ICON
+            overturnedColor = BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE
+            iconOffsetY = 0
+            overturnedText = ''
+        data = [self._getNotificationTimerData(_TIMER_STATES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link), self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, overturnedIcon, link, description=overturnedText, color=overturnedColor, iconOffsetY=iconOffsetY), self._getNotificationTimerData(_TIMER_STATES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link)]
         return data
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)]
         return data
 
-    def _getNotificationTimerData(self, typeId, iconName, linkage, color='', noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0):
+    def _getNotificationTimerData(self, typeId, iconName, linkage, color='', noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
         return {'typeId': typeId,
          'iconName': iconName,
          'linkage': linkage,
@@ -422,7 +443,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
          'countdownVisible': countdownVisible,
          'isCanBeMainType': isCanBeMainType,
          'priority': priority,
-         'iconOffsetY': iconOffsetY}
+         'iconOffsetY': iconOffsetY,
+         'description': description}
 
     def _dispose(self):
         ctrl = self.sessionProvider.shared.vehicleState
@@ -535,12 +557,12 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__sound.play()
         return
 
-    def __playStunSoundIfNeed(self, isVisible):
+    def __playStunSoundIfNeed(self, isVisible, timerType):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
         if vehicle is None or not vehicle.isPlayerVehicle:
             return
         else:
-            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(_TIMER_STATES.STUN)
+            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(timerType)
             if isVisible:
                 SoundGroups.g_instance.playSound2D('artillery_stun_effect_start')
                 self.__stunSoundPlaying = True
@@ -551,11 +573,13 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def __showStunTimer(self, value):
         isVisible = value.duration > 0.0
-        self.__playStunSoundIfNeed(isVisible=isVisible)
+        timerType = _TIMER_STATES.STUN_FLAME if value.stunType == StunTypes.FLAME.value else _TIMER_STATES.STUN
+        self.__playStunSoundIfNeed(isVisible, timerType)
         if isVisible:
-            self._showTimer(_TIMER_STATES.STUN, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
+            self._showTimer(timerType, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
         else:
             self._hideTimer(_TIMER_STATES.STUN)
+            self._hideTimer(_TIMER_STATES.STUN_FLAME)
 
     def __showCaptureBlockTimer(self, value):
         if value:

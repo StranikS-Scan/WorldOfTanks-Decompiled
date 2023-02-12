@@ -32,7 +32,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         self.__onDestroy()
 
     def __onDestroy(self):
-        if self.targetVehicleID:
+        if getattr(self, 'targetVehicleID', None):
             self.update_targetVehicleID(None)
         self.__dict__.clear()
         return
@@ -53,7 +53,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar = self._avatar()
         if not avatar:
             return
-        avatar.syncVehicleAttrs(syncVehicleAttrs, self.entity.id)
+        avatar.syncVehicleAttrs(self.entity.id, syncVehicleAttrs)
 
     @noexcept
     def update_vehicleGunReloadTime(self, prop):
@@ -230,6 +230,13 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     def update_battleEventsSummary(self, data):
         avatar = self._avatar()
         return None if not avatar else None
+
+    @noexcept
+    def update_remoteCamera(self, data):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.setRemoteCamera(data)
 
     def onBattleEvents(self, battleEvents):
         avatar = self._avatar()

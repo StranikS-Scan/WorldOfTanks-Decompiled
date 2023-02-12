@@ -34,11 +34,13 @@ from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import StrongholdConfirm
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx
-from helpers import time_utils
+from helpers import time_utils, dependency
 from UnitBase import UNIT_ERROR, UNIT_ROLE
 from gui.prb_control.entities.base import vehicleAmmoCheck
+from skeletons.gui.game_control import IGameSessionController
 _CREATION_TIMEOUT = 30
 ERROR_MAX_RETRY_COUNT = 3
 SUCCESS_STATUSES = (200, 201, 403, 409)
@@ -167,6 +169,7 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
 
 
 class StrongholdEntity(UnitEntity):
+    __gameSession = dependency.descriptor(IGameSessionController)
     MATCHMAKING_BATTLE_BUTTON_BATTLE = 10 * time_utils.ONE_MINUTE
     MATCHMAKING_BATTLE_BUTTON_SORTIE = 10 * time_utils.ONE_MINUTE
     MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA = 5
@@ -206,6 +209,7 @@ class StrongholdEntity(UnitEntity):
         if unitMgr:
             unitMgr.onUnitResponseReceived += self.onUnitResponseReceived
             unitMgr.onUnitNotifyReceived += self.onUnitNotifyReceived
+            unitMgr.onUnitErrorReceived += self.onUnitErrorReceived
         self.__strongholdSettings.init()
         self.__strongholdUpdateEventsMapping = {'header': self.__onUpdateHeader,
          'timer': self.__onUpdateTimer,
@@ -217,12 +221,17 @@ class StrongholdEntity(UnitEntity):
             g_eventDispatcher.showStrongholdsBattleQueue()
         else:
             g_eventDispatcher.loadStrongholds()
+        self.__gameSession.onParentControlNotify += self.__onParentControlNotify
+        self.__gameSession.onNotifyTimeTillKick += self.__onParentControlNotify
         return ret
 
     def fini(self, ctx=None, woEvents=False):
+        self.__gameSession.onNotifyTimeTillKick -= self.__onParentControlNotify
+        self.__gameSession.onParentControlNotify -= self.__onParentControlNotify
         self.__cancelMatchmakingTimer()
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
+            unitMgr.onUnitErrorReceived -= self.onUnitErrorReceived
             unitMgr.onUnitResponseReceived -= self.onUnitResponseReceived
             unitMgr.onUnitNotifyReceived -= self.onUnitNotifyReceived
         self.__strongholdSettings.fini()
@@ -249,6 +258,16 @@ class StrongholdEntity(UnitEntity):
             SystemMessages.pushMessage(backport.text(R.strings.tooltips.stronghold.prebattle.noClanMembers()), type=SM_TYPE.Warning)
         elif notifyCode == UNIT_ERROR.FAIL_EXT_UNIT_QUEUE_START and not self.getFlags().isInQueue():
             self.__waitingManager.onResponseError()
+        elif notifyCode == UNIT_ERROR.EXPIRED_PLAY_LIMITS:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.EXPIRED_PLAY_LIMITS(), expiredTime=backport.getShortTimeFormat(self.__gameSession.getKickAtTime())), type=SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
+        elif notifyCode == UNIT_ERROR.EXPIRED_PLAY_LIMITS_TO_COMMANDER:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.EXPIRED_PLAY_LIMITS_TO_COMMANDER()), type=SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
+
+    def onUnitErrorReceived(self, requestID, unitMgrID, errorCode, errorString):
+        if errorCode == UNIT_ERROR.EXPIRED_PLAY_LIMITS:
+            self.__waitingManager.onResponseError()
+            g_eventDispatcher.updateUI()
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.EXPIRED_PLAY_LIMITS(), expiredTime=backport.getShortTimeFormat(self.__gameSession.getKickAtTime())), type=SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
 
     def canShowMaintenance(self):
         return self.__errorCount >= ERROR_MAX_RETRY_COUNT
@@ -1059,3 +1078,6 @@ class StrongholdEntity(UnitEntity):
     @staticmethod
     def __isEquipmentRoleChanged(left, right):
         return (left ^ right) & right > 0
+
+    def __onParentControlNotify(self):
+        g_eventDispatcher.updateUI()

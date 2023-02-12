@@ -119,6 +119,11 @@
       <buttons></buttons>
       <actions></actions>
     </dialog>
+    <dialog>	FinalRewardDialog	  <type>	bootcampFinalReward	</type>
+      <sequence></sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
     <window>	SubtitleGold	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
@@ -255,6 +260,7 @@
         <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
         <show-dialog>	GoldReceivedDialog	</show-dialog>
         <show-dialog>	PremiumAccountReceivedDialog	</show-dialog>
+        <show-dialog>	FinalRewardDialog	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	VideoCheckpoint	  <condition></condition>

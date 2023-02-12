@@ -43,7 +43,6 @@ MULTI_TEAM_TABS_BLOCK = base.StatsBlock(_MULTI_TEAM_TABS_VO_META, 'tabInfo')
 _TEXT_VO_META = base.DictMeta({'windowTitle': i18n.makeString(MENU.FINALSTATISTIC_WINDOW_TITLE),
  'shareButtonLabel': i18n.makeString(BATTLE_RESULTS.COMMON_RESULTSSHAREBTN),
  'shareButtonTooltip': i18n.makeString(TOOLTIPS.BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN),
- 'replayButtonLabel': i18n.makeString(BATTLE_RESULTS.REPLAYBTNLABEL),
  'ownTitle': BATTLE_RESULTS.TEAM_STATS_OWNTEAM,
  'enemyTitle': BATTLE_RESULTS.TEAM_STATS_ENEMYTEAM})
 REGULAR_TEXT_STATS_BLOCK = base.StatsBlock(_TEXT_VO_META, 'textData')
@@ -62,6 +61,7 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'resultShortStr': '',
  'resultStr': '',
  'finishReasonStr': '',
+ 'finishReasonClarificationStr': '',
  'playerFakeNameStr': '',
  'playerRealNameStr': '',
  'clanNameStr': '',
@@ -113,7 +113,10 @@ _TIME_STATS_BLOCK.addComponent(1, common.ArenaDurationVO('duration', 'duration')
 _TIME_STATS_BLOCK.addComponent(2, common.PlayerKillingTimeVO('playerKilled'))
 _STATS_SORTING_VO_META = base.PropertyMeta((('iconType', 'tank', 'criteria'), ('sortDirection', 'descending', 'direction')))
 _STATS_SORTING_VO_META.bind(shared.SortingBlock)
-FINISH_RESULT_VO_META = base.PropertyMeta((('finishReasonStr', '', 'finishReasonLabel'), ('resultShortStr', '', 'shortResultLabel'), ('resultStr', '', 'fullResultLabel')))
+FINISH_RESULT_VO_META = base.PropertyMeta((('finishReasonStr', '', 'finishReasonLabel'),
+ ('finishReasonClarificationStr', '', 'finishReasonClarificationLabel'),
+ ('resultShortStr', '', 'shortResultLabel'),
+ ('resultStr', '', 'fullResultLabel')))
 FINISH_RESULT_VO_META.bind(common.RegularFinishResultBlock)
 REGULAR_COMMON_STATS_BLOCK = base.StatsBlock(_COMMON_VO_META, 'common')
 REGULAR_COMMON_STATS_BLOCK.addComponent(0, shared.RegularSortingBlock())
@@ -157,8 +160,7 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'dynamicPremiumState': '',
  'premiumInfo': {},
  'premiumBonus': {},
- 'premiumEarnings': {},
- 'replayURL': ''})
+ 'premiumEarnings': {}})
 _PREMIUM_BLOCK_VO_META = base.PropertyMeta((('creditsPremiumBonusStr', '', 'creditsPremiumBonusStr'),
  ('xpPremiumBonusStr', '', 'xpPremiumBonusStr'),
  ('premiumBonusStr', '', 'premiumBonusStr'),
@@ -289,7 +291,6 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, personal.PremiumInfoBlock(_PREMIUM
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, details.PremiumBonusDetailsBlock(_PREMIUM_BONUS_VO_META, 'premiumBonus', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, _PREMIUM_EARNINGS_BLOCK.clone())
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, personal.DynamicPremiumState('dynamicPremiumState'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, personal.ReplayURL('replayURL'))
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('fakeName', '', 'fakeNameLabel'),
  ('userName', '', 'realNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),

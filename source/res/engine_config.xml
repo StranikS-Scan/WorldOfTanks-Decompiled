@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
@@ -372,6 +372,9 @@
           <name>	music_interactive_part_11.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_part_12.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -425,6 +428,9 @@
           <name>	researches.bnk	</name>
         </bank>
         <bank>
+          <name>	tasks.bnk	</name>
+        </bank>
+        <bank>
           <name>	cons_hangar.bnk	</name>
         </bank>
         <bank>
@@ -467,7 +473,10 @@
           <name>	ev_fep_hangar.pck	</name>
         </bank>
         <bank>
-          <name>	tasks_bp_fw.bnk	</name>
+          <name>	ev_lootboxes.bnk	</name>
+        </bank>
+        <bank>
+          <name>	tournaments.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -559,6 +568,9 @@
         </bank>
         <bank>
           <name>	style_monster.bnk	</name>
+        </bank>
+        <bank>
+          <name>	gameplay.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

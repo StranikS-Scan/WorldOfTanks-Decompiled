@@ -21,7 +21,6 @@ from gui import SystemMessages
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shop import showBuyGoldForVehicleWebOverlay, showTradeOffOverlay
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORE import STORE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -43,7 +42,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import ZERO_MONEY
-from gui.shared.gui_items.Vehicle import getTypeUserName, getSmallIconPath, getLevelSmallIconPath, getTypeSmallIconPath
+from gui.shared.gui_items.Vehicle import getTypeUserName, getSmallIconPath, getLevelSmallIconPath, getTypeSmallIconPath, getShopVehicleIconPath
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.formatters import updateActionInViewModel
 from gui.shared.formatters.tankmen import getItemPricesViewModel
@@ -53,7 +52,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
 from gui.shared.utils.vehicle_collector_helper import getCollectibleVehiclesInInventory
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor, showVehicleReceivedResultMessages
-from helpers import i18n, dependency, int2roman, func_utils
+from helpers import i18n, dependency, int2roman
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -176,7 +175,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             vm.setNation(nations.NAMES[self.__vehicle.nationID])
             vm.setNoCrewCheckboxLabel(noCrewLabelPath.restore.withoutCrew() if isRestore else noCrewLabelPath.buy.withoutCrew())
             vm.setTankLvl(int2roman(self.__vehicle.level))
-            vm.setTankName(self.__vehicle.shortUserName)
+            shortUserName = self.__vehicle.shortUserName
+            if self.__bootcamp.isInBootcamp():
+                shortUserName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=shortUserName)
+            vm.setTankName(shortUserName)
             vm.setNeedDisclaimer(self.__vehicle.hasDisclaimer())
             vm.setCountCrew(len(self.__vehicle.crew))
             vm.setBuyVehicleIntCD(self.__vehicle.intCD)
@@ -433,8 +435,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             self.viewModel.setIsContentHidden(True)
             with self.viewModel.congratulationAnim.transaction() as vm:
                 vehicleType = '{}_elite'.format(self.__vehicle.type) if self.__vehicle.isElite else self.__vehicle.type
-                image = func_utils.makeFlashPath(self.__vehicle.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE))
-                defaultImage = RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_LARGE, 'empty_tank')
+                image = self.__vehicle.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE)
+                defaultImage = getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_LARGE, 'empty_tank')
                 settings = self.__congratsViewSettings
                 if settings and 'bgSource' in settings:
                     self.viewModel.setBgSource(settings['bgSource'])
@@ -446,7 +448,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                 vm.setIsCollectible(self.__vehicle.isCollectible)
                 vm.setVehicleType(vehicleType)
                 vm.setLvl(int2roman(self.__vehicle.level))
-                vm.setVName(self.__vehicle.userName)
+                userName = self.__vehicle.userName
+                if self.__bootcamp.isInBootcamp():
+                    userName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=userName)
+                vm.setVName(userName)
                 vm.setImage(image if image is not None else defaultImage)
                 vm.setImageAlt(defaultImage)
                 vm.setTitle(R.strings.store.congratulationAnim.restoreLabel() if self.viewModel.getIsRestore() else R.strings.store.congratulationAnim.buyingLabel())

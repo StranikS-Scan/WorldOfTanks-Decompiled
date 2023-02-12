@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/container.py
 import logging
 import BattleReplay
+import GUI
 import WWISE
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
@@ -205,8 +206,8 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.component.position.z = DEPTH_OF_Aim
         self.component.focus = False
         self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
+        self.component.heightMode = GUI.Simple.eSizeMode.PIXEL
+        self.component.widthMode = GUI.Simple.eSizeMode.PIXEL
         self.movie.backgroundAlpha = 0
 
     def __setGunMarkers(self, gunMarkers):

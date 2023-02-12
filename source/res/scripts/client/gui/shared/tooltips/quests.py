@@ -45,8 +45,11 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
     def _formatComplexToken(self, complexToken, token, bonus):
         rTokenAlias = R.strings.tooltips.quests.bonuses.token
         userName = self._getUserName(complexToken.styleID)
-        tooltip = makeTooltip(backport.text(rTokenAlias.header(), userName=userName), backport.text(rTokenAlias.body()))
-        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=backport.text(rTokenAlias.header(), userName=userName), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
+        description = self.eventsCache.prefetcher.getTokenDetailedInfo(complexToken.token)
+        if description is None:
+            description = backport.text(rTokenAlias.body())
+        tooltip = makeTooltip(userName, description if description else None)
+        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=userName, labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):

@@ -4,6 +4,7 @@ from collections import OrderedDict
 import typing
 from battle_pass_common import BattlePassConsts
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
+from gui.battle_pass.battle_pass_constants import MIN_LEVEL
 from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator
 from helpers import dependency
 from helpers.dependency import replace_none_kwargs
@@ -19,6 +20,7 @@ class BattlePassPackage(object):
     _eventsCache = dependency.descriptor(IEventsCache)
     _itemsCache = dependency.descriptor(IItemsCache)
     _battlePassController = dependency.descriptor(IBattlePassController)
+    __TOP_PRIORITY_REWARDS_COUNT = 7
 
     def __init__(self, chapterID):
         self.__seasonID = self._battlePassController.getSeasonID()
@@ -33,6 +35,14 @@ class BattlePassPackage(object):
 
     def getCurrentLevel(self):
         return self._battlePassController.getLevelInChapter(chapterID=self.__chapterID)
+
+    def getTopPriorityAwards(self):
+        maxLevel = self._battlePassController.getMaxLevelInChapter(chapterId=self.__chapterID)
+        bonuses = []
+        if self.hasBattlePass():
+            bonuses.extend(self._battlePassController.getPackedAwardsInterval(self.__chapterID, MIN_LEVEL, maxLevel, awardType=BattlePassConsts.REWARD_PAID))
+        bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
+        return BattlePassAwardsManager.sortBonuses(bonuses)[:self.__TOP_PRIORITY_REWARDS_COUNT]
 
     def getNowAwards(self):
         fromLevel = 1

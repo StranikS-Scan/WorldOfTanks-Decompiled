@@ -1,24 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_utils.py
 import logging
-from constants_utils import attrValidate
-from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS
-from soft_exception import SoftException
+from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS, BATTLES_SELECTOR_SQUAD_ITEMS
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS
-from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_PRB_TYPE, _ARENA_GUI_TYPE_BY_QUEUE_TYPE
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, SELECTOR_BATTLE_TYPES, REQUEST_TYPE, REQUEST_TYPE_NAMES
-from gui.shared.system_factory import registerQueueEntity
+from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_QUEUE_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, QUEUE_TYPE_TO_PREBATTLE_TYPE, PREBATTLE_TYPE_TO_QUEUE_TYPE, REQUEST_TYPE, REQUEST_TYPE_NAMES
+from messenger.ext.channel_num_gen import PRB_CLIENT_COMBINED_IDS, initPrbTypeToClientID
+from gui.shared.system_factory import registerQueueEntity, registerUnitEntryPoint, registerUnitEntity, registerUnitEntryPointByType, registerModeSelectorItem, registerBannerEntryPointValidator, registerSquadFinder, registerArenaDescrs, registerCanSelectPrbEntity, registerBattleQueueProvider
 from gui.shared.system_factory import registerEntryPoint
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
-
-def addArenaGUITypeByPrbType(prbType, arenaGuiType, personality):
-    if prbType in _ARENA_GUI_TYPE_BY_PRB_TYPE:
-        raise SoftException('_ARENA_GUI_TYPE_BY_PRB_TYPE already has PREBATTLE_TYPE:{prbType}. Personality: {personality}'.format(prbType=prbType, personality=personality))
-    _ARENA_GUI_TYPE_BY_PRB_TYPE.update({prbType: arenaGuiType})
-    msg = 'PREBATTLE_TYPE:{prbType}->{guiType} was added to _ARENA_GUI_TYPE_BY_PRB_TYPE. Personality: {p}'.format(prbType=prbType, guiType=arenaGuiType, p=personality)
-    logging.debug(msg)
-
 
 def addArenaGUITypeByQueueType(queueType, arenaGuiType, personality):
     if queueType in _ARENA_GUI_TYPE_BY_QUEUE_TYPE:
@@ -28,47 +20,51 @@ def addArenaGUITypeByQueueType(queueType, arenaGuiType, personality):
     logging.debug(msg)
 
 
-def addPrebattleActionName(attrName, value, personality):
-    attrValidate(PREBATTLE_ACTION_NAME, attrName, int, value, personality)
-    setattr(PREBATTLE_ACTION_NAME, attrName, value)
-    msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=PREBATTLE_ACTION_NAME, value=value, personality=personality)
-    logging.debug(msg)
+def addFunctionalFlags(extFunctionalFlag, personality):
+    extraAttrs = extFunctionalFlag.getExtraAttrs()
+    extFunctionalFlag.inject(personality)
+    for value in extraAttrs.itervalues():
+        FUNCTIONAL_FLAG.MODES_BITMASK |= value
+        FUNCTIONAL_FLAG.RANGE += (value,)
+
+    _FUNCTIONAL_FLAG_NAMES.update(extraAttrs)
 
 
-def addPrebattleRequestType(attrName, value, personality):
-    attrValidate(REQUEST_TYPE, attrName, int, value, personality)
-    setattr(REQUEST_TYPE, attrName, value)
-    REQUEST_TYPE_NAMES.update({value: attrName})
-    msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=REQUEST_TYPE, value=value, personality=personality)
-    logging.debug(msg)
-
-
-def addFunctionalFlags(attrName, value, personality):
-    attrValidate(FUNCTIONAL_FLAG, attrName, int, value, personality)
-    setattr(FUNCTIONAL_FLAG, attrName, value)
-    FUNCTIONAL_FLAG.MODES_BITMASK |= value
-    FUNCTIONAL_FLAG.RANGE += (value,)
-    _FUNCTIONAL_FLAG_NAMES.update({attrName: value})
-    msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=FUNCTIONAL_FLAG, value=value, personality=personality)
-    logging.debug(msg)
-
-
-def addSupportedQueues(queueType, prbEntity, personality):
+def addSupportedQueues(queueType, prbEntity, canSelectPrbEntityFun, personality):
     registerQueueEntity(queueType, prbEntity)
-    msg = 'QUEUE_TYPE:{queueType} was registered. Personality: {personality}'.format(queueType=queueType, personality=personality)
+    registerCanSelectPrbEntity(queueType, canSelectPrbEntityFun)
+    msg = 'QUEUE_TYPE:{queueType} was registered for entity. Personality: {personality}'.format(queueType=queueType, personality=personality)
     logging.debug(msg)
 
 
-def addSupportedEntryByAction(prbActionName, prbEntity, personality):
-    registerEntryPoint(prbActionName, prbEntity)
-    msg = 'prbActionName:{prb} was registered. Personality: {p}'.format(prb=prbActionName, p=personality)
+def addSupportedEntryByAction(prbActionName, prbEntryPoint, personality):
+    registerEntryPoint(prbActionName, prbEntryPoint)
+    msg = 'prbActionName:{prb} was registered for entry point. Personality: {p}'.format(prb=prbActionName, p=personality)
     logging.debug(msg)
 
 
-def addBattleItemToColumnSelector(prbActionName, columSelector, personality):
+def addSupportedUnitEntryByAction(prbActionName, prbEntryPoint, personality):
+    registerUnitEntryPoint(prbActionName, prbEntryPoint)
+    msg = 'prbActionName:{prb} was registered for entry point (squad). Personality: {p}'.format(prb=prbActionName, p=personality)
+    logging.debug(msg)
+
+
+def addSupportedUnitEntryByType(prbType, prbEntryPoint, personality):
+    registerUnitEntryPointByType(prbType, prbEntryPoint)
+    msg = 'prebType:{prb} was registered for entry point (squad). Personality: {p}'.format(prb=prbType, p=personality)
+    logging.debug(msg)
+
+
+def addSupportedUnitByType(prbType, prbEntity, personality):
+    registerUnitEntity(prbType, prbEntity)
+    msg = 'prebType:{prb} was registered for entity (squad). Personality: {p}'.format(prb=prbType, p=personality)
+    logging.debug(msg)
+
+
+def addBattleItemToColumnSelector(prbActionName, selectorColumn, personality):
     if prbActionName in COLUMN_SETTINGS:
         raise SoftException('COLUMN_SETTINGS already has prbActionName:{prbActionName}. Personality: {p}'.format(prbActionName=prbActionName, p=personality))
-    COLUMN_SETTINGS.update({prbActionName: columSelector})
+    COLUMN_SETTINGS.update({prbActionName: selectorColumn})
     msg = 'prbActionName:{prbActionName} was added to COLUMN_SETTINGS. Personality: {p}'.format(prbActionName=prbActionName, p=personality)
     logging.debug(msg)
 
@@ -81,23 +77,79 @@ def addBattleSelectorItem(prbActionName, prbActionConstructor, personality):
     logging.debug(msg)
 
 
-def addSelectorBattleType(attrName, value, personality):
-    attrValidate(SELECTOR_BATTLE_TYPES, attrName, int, value, personality)
-    setattr(SELECTOR_BATTLE_TYPES, attrName, value)
-    msg = 'Attr: {attr}={value} was added to class: {clazz}. Personality: {personality}'.format(attr=attrName, clazz=SELECTOR_BATTLE_TYPES, value=value, personality=personality)
+def addModeSelectorItem(prbActionName, modeSelectorItem, personality):
+    registerModeSelectorItem(prbActionName, modeSelectorItem)
+    msg = 'prbActionName:{prbActionName} was registered for ModeSelectorDataProvider. Personality: {p}'.format(prbActionName=prbActionName, p=personality)
     logging.debug(msg)
 
 
-def initPrbGetter(attrName, arenaGUITypeValue, prebattleTypeValue, prebattleActionName, queueTypeValue, functionalFlag, personality):
-    addArenaGUITypeByPrbType(prebattleTypeValue, arenaGUITypeValue, personality)
-    addArenaGUITypeByQueueType(queueTypeValue, arenaGUITypeValue, personality)
-    addPrebattleActionName(attrName, prebattleActionName, personality)
-    addFunctionalFlags(attrName, functionalFlag, personality)
+def addBannerEntryPointValidatorMethod(alias, validator, personality):
+    registerBannerEntryPointValidator(alias, validator)
+    msg = 'alias:{alias} was registered for banner entry point validator. Personality: {p}'.format(alias=alias, p=personality)
+    logging.debug(msg)
 
 
-def initPrebbatleSelector(attrName, queueTypeValue, selectorBattleTypeValue, prebattleActionName, modeSelectorColumns, battleEntity, battleEntityPoint, addBattleSelectorItemFun, personality):
-    addSelectorBattleType(attrName, selectorBattleTypeValue, personality)
-    addBattleItemToColumnSelector(prebattleActionName, modeSelectorColumns, personality)
-    addBattleSelectorItem(prebattleActionName, addBattleSelectorItemFun, personality)
-    addSupportedQueues(queueTypeValue, battleEntity, personality)
-    addSupportedEntryByAction(prebattleActionName, battleEntityPoint, personality)
+def addProviderBattleQueueCls(queueType, providerCls, personality):
+    registerBattleQueueProvider(queueType, providerCls)
+    msg = 'queueType:{queueType} was registered for QueueProvider. Personality: {p}'.format(queueType=queueType, p=personality)
+    logging.debug(msg)
+
+
+def addBattleSelectorSquadItem(prbActionName, prbActionConstructor, personality):
+    if prbActionConstructor in BATTLES_SELECTOR_SQUAD_ITEMS:
+        raise SoftException('BATTLES_SELECTOR_SQUAD_ITEMS already has prbActionName:{prbActionName}. Personality: {p}'.format(prbActionName=prbActionName, p=personality))
+    BATTLES_SELECTOR_SQUAD_ITEMS.update({prbActionName: prbActionConstructor})
+    msg = 'prbActionName:{prbActionName} was added to BATTLES_SELECTOR_SQUAD_ITEMS. Personality: {p}'.format(prbActionName=prbActionName, p=personality)
+    logging.debug(msg)
+
+
+def addSquadFinder(arenaGuiType, squadFinderClass, personality):
+    registerSquadFinder(arenaGuiType, squadFinderClass)
+    msg = 'arenaGuiType:{arenaGuiType} was added for squad finder. Personality: {p}'.format(arenaGuiType=arenaGuiType, p=personality)
+    logging.debug(msg)
+
+
+def addPrbClientCombinedIds(prbType, value, personality):
+    if prbType in PRB_CLIENT_COMBINED_IDS:
+        raise SoftException('PRB_CLIENT_COMBINED_IDS already has prbActionName:{prbType}. Personality: {p}'.format(prbType=prbType, p=personality))
+    PRB_CLIENT_COMBINED_IDS.update({prbType: value})
+    msg = 'prbActionName:{prbType} was added to PRB_CLIENT_COMBINED_IDS. Personality: {p}'.format(prbType=prbType, p=personality)
+    initPrbTypeToClientID()
+    logging.debug(msg)
+
+
+def addQueueTypeToPrbType(queueType, prbType, personality):
+    if queueType in QUEUE_TYPE_TO_PREBATTLE_TYPE:
+        raise SoftException('QUEUE_TYPE_TO_PREBATTLE_TYPE already has queue type:{qType}. Personality: {p}'.format(qType=queueType, p=personality))
+    QUEUE_TYPE_TO_PREBATTLE_TYPE.update({queueType: prbType})
+    msg = 'queueType:{qtype} was added to QUEUE_TYPE_TO_PREBATTLE_TYPE. Personality: {p}'.format(qtype=queueType, p=personality)
+    logging.debug(msg)
+
+
+def addPrbTypeToQueueType(queueType, prbType, personality):
+    if queueType in PREBATTLE_TYPE_TO_QUEUE_TYPE:
+        raise SoftException('PREBATTLE_TYPE_TO_QUEUE_TYPE already has pre battle type:{prbType}. Personality: {p}'.format(prbType=prbType, p=personality))
+    PREBATTLE_TYPE_TO_QUEUE_TYPE.update({prbType: queueType})
+    msg = 'prbType:{prbType} was added to PREBATTLE_TYPE_TO_QUEUE_TYPE. Personality: {p}'.format(prbType=prbType, p=personality)
+    logging.debug(msg)
+
+
+def addArenaDescrs(arenaGuiType, arenaDescrClass, personality):
+    registerArenaDescrs(arenaGuiType, arenaDescrClass)
+    msg = 'arenaGuiType:{arenaGuiType} was added for arena descrs class. Personality: {p}'.format(arenaGuiType=arenaGuiType, p=personality)
+    logging.debug(msg)
+
+
+def initGuiTypes(guiConstants, personality):
+    guiConstants.PREBATTLE_ACTION_NAME.inject(personality)
+    addFunctionalFlags(guiConstants.FUNCTIONAL_FLAG, personality)
+    guiConstants.SELECTOR_BATTLE_TYPES.inject(personality)
+
+
+def initRequestType(guiConstants, personality):
+    guiConstants.REQUEST_TYPE.inject(personality)
+    REQUEST_TYPE_NAMES.update(dict([ (v, k) for k, v in REQUEST_TYPE.__dict__.iteritems() ]))
+
+
+def initScaleformGuiTypes(guiConstants, personality):
+    guiConstants.VIEW_ALIAS.inject(personality)

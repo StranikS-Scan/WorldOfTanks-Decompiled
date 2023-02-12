@@ -4,6 +4,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.gui_items.Vehicle import getShopVehicleIconPath
 from skeletons.gui.shared.congrats import ICongratsCtx
 
 class CongratsCtx(ICongratsCtx):
@@ -26,7 +27,7 @@ class CongratsCtx(ICongratsCtx):
 
     @property
     def imageAlt(self):
-        return RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_LARGE, 'empty_tank')
+        return getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_LARGE, 'empty_tank')
 
     @property
     def confirmLabel(self):

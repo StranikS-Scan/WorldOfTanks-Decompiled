@@ -172,21 +172,6 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_FrtPrf1935>
-  <_37mm_Odr_mle._1935_bot>
-    <id>	81	</id>
-    <userString>	#china_vehicles:_37mm_Odr_mle._1935_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	5	</armor>
-      <devices>	3	</devices>
-    </damage>
-  </_37mm_Odr_mle._1935_bot>
   <_40mm_AP>
     <id>	37	</id>
     <userString>	#china_vehicles:_40mm_AP	</userString>
@@ -453,63 +438,6 @@
       </damage>
     </armorSpalls>
   </_57mm_HE_Type_97>
-  <_57mm_AP_Type_97_bootcamp>
-    <id>	88	</id>
-    <userString>	#china_vehicles:_57mm_AP_Type_97	</userString>
-    <icon>	ap	</icon>
-    <price>	16	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	75	</armor>
-      <devices>	76	</devices>
-    </damage>
-  </_57mm_AP_Type_97_bootcamp>
-  <_57mm_HEAT_Type_97_bootcamp>
-    <id>	89	</id>
-    <userString>	#china_vehicles:_57mm_HEAT_Type_97	</userString>
-    <icon>	hc_premium	</icon>
-    <price>	1200	</price>
-    <improved>	true	</improved>
-    <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumHollowCharge	</effects>
-    <damage>
-      <armor>	75	</armor>
-      <devices>	76	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_57mm_HEAT_Type_97_bootcamp>
-  <_57mm_HE_Type_97_bootcamp>
-    <id>	90	</id>
-    <userString>	#china_vehicles:_57mm_HE_Type_97	</userString>
-    <icon>	he_modern	</icon>
-    <price>	20	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	57	</caliber>
-    <explosionRadius>	0.66	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumHighExplosive	</effects>
-    <damage>
-      <armor>	95	</armor>
-      <devices>	76	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	0.66	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	50	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
-  </_57mm_HE_Type_97_bootcamp>
   <_57mm_AP_Type_55_57>
     <id>	58	</id>
     <userString>	#china_vehicles:_57mm_AP_Type_55_57	</userString>
@@ -1255,21 +1183,6 @@
       </damage>
     </armorSpalls>
   </_100mm_SB-412GX>
-  <_100mm_UBR-412training>
-    <id>	71	</id>
-    <userString>	#china_vehicles:_100mm_UBR-412	</userString>
-    <icon>	ap	</icon>
-    <price>	252	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	100	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	160	</armor>
-      <devices>	135	</devices>
-    </damage>
-  </_100mm_UBR-412training>
   <_105mm_Chuan_bei_81-I>
     <id>	151	</id>
     <userString>	#china_vehicles:_105mm_Chuan_bei_81-I	</userString>
@@ -2511,60 +2424,4 @@
     </damage>
     <secondaryAttackReason>	clingBrander	</secondaryAttackReason>
   </Ch00_ClingeBot_SH_AP>
-  <_85mm_CJ_365_bootcamp>
-    <id>	13	</id>
-    <userString>	#china_vehicles:_85mm_CJ_365	</userString>
-    <icon>	ap	</icon>
-    <price>	109	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	85	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	160	</armor>
-      <devices>	115	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_85mm_CJ_365_bootcamp>
-  <_85mm_367_bootcamp>
-    <id>	14	</id>
-    <userString>	#china_vehicles:_85mm_367	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	2800	</price>
-    <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	85	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	160	</armor>
-      <devices>	115	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_85mm_367_bootcamp>
-  <_85mm_SB_365_bootcamp>
-    <id>	21	</id>
-    <userString>	#china_vehicles:_85mm_SB_365	</userString>
-    <icon>	he_modern	</icon>
-    <price>	98	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	85	</caliber>
-    <explosionRadius>	1.32	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	220	</armor>
-      <devices>	115	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-    <armorSpalls>
-      <impactRadius>	1.32	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	110	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
-  </_85mm_SB_365_bootcamp>
 </shells.xml>

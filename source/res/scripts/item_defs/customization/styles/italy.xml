@@ -888,4 +888,121 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It15_Rinoceronte	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	706	</id>
+      <texture>	gui/maps/vehicles/styles/It15_Rinoceronte__BXI_3DSt.png	</texture>
+      <modelsSet>	It15_Rinoceronte__BXI_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/It15_Rinoceronte__BXI_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/It15_Rinoceronte__BXI_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01 upgrade_eq_01	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02 upgrade_eq_02 upgrade_eq_02_skinned	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 upgrade_eq_03 upgrade_eq_03_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	706	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 upgrade_eq_04 upgrade_eq_04_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	707	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <attachments>
+                <item>
+                  <id>	57	</id>
+                  <slotId>	18000	</slotId>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It09_P43_ter italy:It10_P43_bis	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	722	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <tags>	addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	505	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </italy.xml>

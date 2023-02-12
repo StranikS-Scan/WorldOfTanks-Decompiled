@@ -11,7 +11,7 @@ _UPDATE_INTERVAL = 0.2
 
 class IDebugPanel(object):
 
-    def updateDebugInfo(self, ping, fps, isLaggingNow, fpsReplay=-1):
+    def updateDebugInfo(self, ping, fps, isLaggingNow, fpsReplay):
         raise NotImplementedError
 
 
@@ -46,9 +46,9 @@ class DebugController(IViewComponentsController):
 
     def _update(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and not replayCtrl.isBattleSimulation and replayCtrl.fps > 0 or replayCtrl.isServerSideReplay:
+        if replayCtrl.isPlaying:
             fps = BigWorld.getFPS()[1]
-            fpsReplay = int(replayCtrl.fps)
+            fpsReplay = replayCtrl.fps
             ping = replayCtrl.ping
             isLaggingNow = replayCtrl.isLaggingNow
         else:
@@ -62,9 +62,10 @@ class DebugController(IViewComponentsController):
         try:
             ping = int(ping)
             fps = int(fps)
+            fpsReplay = int(fpsReplay)
         except (ValueError, OverflowError):
             return
 
         if self._debugPanelUI is not None:
-            self._debugPanelUI.updateDebugInfo(ping, fps, isLaggingNow, fpsReplay=fpsReplay)
+            self._debugPanelUI.updateDebugInfo(ping, fps, isLaggingNow, fpsReplay)
         return

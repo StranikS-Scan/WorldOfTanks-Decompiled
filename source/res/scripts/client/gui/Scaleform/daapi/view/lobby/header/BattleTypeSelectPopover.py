@@ -55,11 +55,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 tooltip = TOOLTIPS.BATTLETYPES_EPIC_TRAINING
             elif itemData == PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST:
                 tooltip = TOOLTIPS.BATTLETYPES_SPEC
-            elif itemData == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL:
-                tooltip = TOOLTIPS.BATTLETYPES_BATTLETUTORIAL
-            elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
-                isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_ROYALE:
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
                 isSpecial = True

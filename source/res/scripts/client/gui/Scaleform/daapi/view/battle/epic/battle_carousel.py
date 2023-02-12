@@ -135,7 +135,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
                     self._selectedIdx = len(self._filteredIndices) - 1
 
         self._filteredIndices += self._getAdditionalItemsIndexes()
-        needUpdate = forceApply or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
+        needUpdate = forceApply or bool(not visibleVehiclesIntCDs and self._vehicles) or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
         if needUpdate:
             self._filterByIndices()
         return

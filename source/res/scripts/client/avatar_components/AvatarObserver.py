@@ -4,12 +4,11 @@ from collections import defaultdict
 import logging
 import BigWorld
 import Math
+import BattleReplay
 from PlayerEvents import g_playerEvents
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
 from helpers.CallbackDelayer import CallbackDelayer
-from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _OBSERVABLE_VIEWS = (CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.SNIPER,
@@ -30,16 +29,22 @@ class AvatarObserver(CallbackDelayer):
     observedVehicleID = property(lambda self: self.__observedVehicleID)
     observedVehicleData = property(lambda self: self.__observedVehicleData)
     isFPVModeSwitching = property(lambda self: self.__isFPVModeSwitching)
+    observerFPVControlMode = property(lambda self: self.__observerFPVControlMode)
 
     def __init__(self):
-        CallbackDelayer.__init__(self)
+        super(AvatarObserver, self).__init__()
         self.__observedVehicleID = None
         self.__observedVehicleData = defaultdict(ObservedVehicleData)
         self.__previousObservedVehicleID = None
         self.__isFPVModeSwitching = False
+        self.__observerFPVControlMode = CTRL_MODES.index(CTRL_MODE_NAME.ARCADE)
         return
 
     def switchObserverFPV(self):
+        if BattleReplay.isServerSideReplay():
+            self.isObserverFPV = not self.isObserverFPV
+            self.set_isObserverFPV(self.isObserverFPV)
+            return
         if self.__isFPVModeSwitching:
             self.stopCallback(self.__resetFPVModeSwitching)
             _logger.warning('switchObserverFPV happened during switching cooldown! isFPVModeSwitching check missed!')
@@ -57,20 +62,9 @@ class AvatarObserver(CallbackDelayer):
         return False
 
     def onEnterWorld(self):
-
-        def getFilterMethod(methodName):
-            method = getattr(self.filter, methodName, None)
-            if method is None:
-                raise SoftException('AvatarObserver.onEnterWorld(): filter does not have method', methodName)
-            return method
-
-        self.__filterSyncVector3 = getFilterMethod('syncVector3')
-        self.__filterGetVector3 = getFilterMethod('getVector3')
-        self.__filterResetVector3 = getFilterMethod('resetVector3')
-        self.__filterSetInterpolationType = getFilterMethod('setInterpolationType')
         if self.isObserver():
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT)
+            self.filter.setInterpolationType(BigWorld.AvatarSubfilters.CAMERA_SHOT_POINT, BigWorld.FilterInterpolationType.LINEAR)
+            self.filter.resetVector3(BigWorld.AvatarSubfilters.CAMERA_SHOT_POINT)
 
     def getObservedVehicleID(self):
         return self.__observedVehicleID if self.isObserver() else self.playerVehicleID
@@ -173,6 +167,13 @@ class AvatarObserver(CallbackDelayer):
             descr = self.getVehicleAttached().typeDescriptor
         return descr
 
+    def setRemoteCamera(self, remoteCamera):
+        self.remoteCamera = remoteCamera
+        if self.__observerFPVControlMode != remoteCamera.mode:
+            self.__setObserverFPVControlMode(remoteCamera.mode)
+        if self.inWorld:
+            self.filter.syncVector3(BigWorld.AvatarSubfilters.CAMERA_SHOT_POINT, remoteCamera.shotPoint, remoteCamera.time + (0.5 if BattleReplay.isServerSideReplay() else 0.0))
+
     def set_isObserverFPV(self, prev):
         _logger.debug('AvatarObserver.set_isObserverFPV() %r', self.isObserverFPV)
         self.__applyObserverModeChange()
@@ -199,39 +200,37 @@ class AvatarObserver(CallbackDelayer):
                 self.updateObservedVehicleData()
             return
 
-    def set_observerFPVControlMode(self, prev):
-        if self.isObserver() is not None:
-            eMode = CTRL_MODES[self.observerFPVControlMode]
+    def __setObserverFPVControlMode(self, observerFPVControlMode):
+        self.__observerFPVControlMode = observerFPVControlMode
+        if self.isObserver():
+            eMode = CTRL_MODES[observerFPVControlMode]
             if self.isObserverFPV:
                 if eMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
                     return
                 if eMode not in _OBSERVABLE_VIEWS:
-                    _logger.debug("AvatarObserver.set_observerFPVControlMode() requested control mode '%r' is not supported, switching out of FPV", eMode)
+                    _logger.warning("AvatarObserver.set_observerFPVControlMode() requested control mode '%r' is not supported, switching out of FPV", eMode)
                     self.cell.switchObserverFPV(False)
                 else:
                     self.__switchToObservedControlMode()
-        return
 
     def __switchToObservedControlMode(self):
-        eMode = CTRL_MODES[self.observerFPVControlMode]
-        _logger.debug('AvatarObserver.__switchToObservedControlMode(): %r, %r', self.observerFPVControlMode, eMode)
+        eMode = CTRL_MODES[self.__observerFPVControlMode]
+        _logger.info('AvatarObserver.__switchToObservedControlMode(): %r, %r', self.__observerFPVControlMode, eMode)
         if self.observerSeesAll() and self.inputHandler.ctrlModeName == eMode:
             return
         else:
             filteredValue = None
-            time = BigWorld.serverTime()
             if eMode in _OBSERVABLE_VIEWS:
-                filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
+                filteredValue = self.filter.getVector3(BigWorld.AvatarSubfilters.CAMERA_SHOT_POINT, BigWorld.serverTime())
             if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
-                _logger.debug('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
+                _logger.info('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
                 self.delayCallback(0.0, self.__switchToObservedControlMode)
                 return
             self.inputHandler.onVehicleControlModeChanged(eMode)
             return
 
-    def set_remoteCamera(self, prev):
-        if self.inWorld:
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, self.remoteCamera.shotPoint, self.remoteCamera.time)
+    def set_remoteCamera(self, _):
+        self.setRemoteCamera(self.remoteCamera)
 
     def observerSeesAll(self):
         return self.guiSessionProvider.getCtx().isObserver(self.playerVehicleID) and BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.OBSERVER_SEES_ALL)

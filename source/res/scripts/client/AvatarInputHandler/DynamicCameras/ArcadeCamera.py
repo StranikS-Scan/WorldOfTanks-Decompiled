@@ -223,7 +223,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
 
     def getTargetMProv(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.playerVehicleID != 0:
+        if replayCtrl.isPlaying and not replayCtrl.isServerSideReplay and replayCtrl.playerVehicleID != 0:
             vehicleID = replayCtrl.playerVehicleID
         else:
             vehicleID = BigWorld.player().playerVehicleID
@@ -310,7 +310,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         elif closesDist:
             camDist = self._ArcadeCamera__distRange.min
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying:
+        if replayCtrl.isPlaying and not replayCtrl.isServerSideReplay:
             camDist = None
             vehicle = BigWorld.entity(replayCtrl.playerVehicleID)
             if vehicle is not None:

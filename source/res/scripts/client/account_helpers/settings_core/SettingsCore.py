@@ -43,7 +43,6 @@ class SettingsCore(ISettingsCore):
         from account_helpers.settings_core import options, settings_storages, settings_constants
         from gui.shared.utils import graphics
         GAME = settings_constants.GAME
-        TUTORIAL = settings_constants.TUTORIAL
         GRAPHICS = settings_constants.GRAPHICS
         SOUND = settings_constants.SOUND
         CONTROLS = settings_constants.CONTROLS
@@ -62,7 +61,6 @@ class SettingsCore(ISettingsCore):
         GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME)
         EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED)
         EXTENDED_GAME_2_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED_2)
-        TUTORIAL_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.TUTORIAL)
         GAMEPLAY_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAMEPLAY)
         GRAPHICS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GRAPHICS)
         SOUND_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SOUND)
@@ -97,7 +95,6 @@ class SettingsCore(ISettingsCore):
          'extendedMessenger': EXTENDED_MESSENGER_SETTINGS_STORAGE,
          'marksOnGun': MARK_ON_GUN_SETTINGS_STORAGE,
          'FOV': FOV_SETTINGS_STORAGE,
-         'tutorial': TUTORIAL_SETTINGS_STORAGE,
          'damageIndicator': DAMAGE_INDICATOR_SETTINGS_STORAGE,
          'damageLog': DAMAGE_LOG_SETTINGS_STORAGE,
          'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE,
@@ -264,15 +261,6 @@ class SettingsCore(ISettingsCore):
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.DEAD, options.VehicleMarkerSetting(MARKERS.DEAD, storage=MARKERS_SETTINGS_STORAGE)),
          (MARKERS.ALLY, options.VehicleMarkerSetting(MARKERS.ALLY, storage=MARKERS_SETTINGS_STORAGE)),
-         (TUTORIAL.CUSTOMIZATION, options.TutorialSetting(TUTORIAL.CUSTOMIZATION, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.TECHNICAL_MAINTENANCE, options.TutorialSetting(TUTORIAL.TECHNICAL_MAINTENANCE, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.PERSONAL_CASE, options.TutorialSetting(TUTORIAL.PERSONAL_CASE, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.RESEARCH, options.TutorialSetting(TUTORIAL.RESEARCH, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.RESEARCH_TREE, options.TutorialSetting(TUTORIAL.RESEARCH_TREE, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.MEDKIT_USED, options.TutorialSetting(TUTORIAL.MEDKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.REPAIRKIT_USED, options.TutorialSetting(TUTORIAL.REPAIRKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.FIRE_EXTINGUISHER_USED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.TYPE, options.DamageIndicatorTypeSetting(DAMAGE_INDICATOR.TYPE, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.PRESET_CRITS, options.SettingTrueByDefault(DAMAGE_INDICATOR.PRESET_CRITS, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.PRESET_ALLIES, options.SettingTrueByDefault(DAMAGE_INDICATOR.PRESET_ALLIES, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),

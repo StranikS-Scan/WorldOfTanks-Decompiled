@@ -299,10 +299,9 @@
     <userString>	#artefacts:deluxeExtraHealthReserve/name	</userString>
     <longDescriptionSpecial>	#artefacts:deluxeExtraHealthReserve/long_special	</longDescriptionSpecial>
     <icon>	extraHealthReserve	</icon>
-    <price>	5000	  <crystal></crystal>
+    <price>	6000	  <crystal></crystal>
     </price>
     <tags>	healthReserve deluxe	</tags>
-    <notInShop>	true	</notInShop>
     <incompatibleTags>
       <installed>	healthReserve	</installed>
     </incompatibleTags>
@@ -1317,6 +1316,144 @@
       </add>
     </kpi>
   </trophyUpgradedTurbocharger>
+  <trophyBasicExtraHealthReserve>
+    <id>	118	</id>
+    <userString>	#artefacts:trophyBasicExtraHealthReserve/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicExtraHealthReserve/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicExtraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	extraHealthReserve	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	healthReserve trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.08	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.5	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.15	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedCompDescr>	30713	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.5	</value>
+      </mul>
+    </kpi>
+  </trophyBasicExtraHealthReserve>
+  <trophyUpgradedExtraHealthReserve>
+    <id>	119	</id>
+    <userString>	#artefacts:trophyUpgradedExtraHealthReserve/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:trophyBasicExtraHealthReserve/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:trophyBasicExtraHealthReserve/long_special	</longDescriptionSpecial>
+    <icon>	extraHealthReserve	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	healthReserve trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	healthReserve	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	UpgradedExtraHealthReserve	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/healthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.11	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisHealthFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.7	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/vehicleByChassisDamageFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.3	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.25	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.11	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.7	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisLoad	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleChassisFallDamage	</name>
+        <value>	0.3	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedExtraHealthReserve>
   <improvedConfiguration_tier2>
     <id>	61	</id>
     <userString>	#artefacts:improvedConfiguration_tier2/name	</userString>
@@ -1505,6 +1642,11 @@
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
+          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
           <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
@@ -1528,9 +1670,9 @@
         <specValue>	0.85	</specValue>
       </mul>
       <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-        <specValue>	0.75	</specValue>
+        <name>	crewStunResistance	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
       </mul>
     </kpi>
   </antifragmentationLining_tier4>
@@ -1572,6 +1714,11 @@
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
+          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
           <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
@@ -1595,9 +1742,9 @@
         <specValue>	0.85	</specValue>
       </mul>
       <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-        <specValue>	0.75	</specValue>
+        <name>	crewStunResistance	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
       </mul>
     </kpi>
   </antifragmentationLining_tier3>
@@ -1639,6 +1786,11 @@
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
+          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
+        <factor>
           <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
@@ -1662,9 +1814,9 @@
         <specValue>	0.85	</specValue>
       </mul>
       <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-        <specValue>	0.75	</specValue>
+        <name>	crewStunResistance	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
       </mul>
     </kpi>
   </antifragmentationLining_tier2>
@@ -1710,6 +1862,11 @@
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
         </factor>
+        <factor>
+          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
+        </factor>
       </factors>
     </script>
     <kpi>
@@ -1729,9 +1886,9 @@
         <specValue>	0.85	</specValue>
       </mul>
       <mul>
-        <name>	crewRepeatedStunDuration	</name>
-        <value>	0.8	</value>
-        <specValue>	0.75	</specValue>
+        <name>	crewStunResistance	</name>
+        <value>	0.9	</value>
+        <specValue>	0.85	</specValue>
       </mul>
     </kpi>
   </antifragmentationLining_tier1>

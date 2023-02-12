@@ -10,7 +10,7 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.shared.system_factory import collectScaleformLobbyPackages, collectScaleformBattlePackages
 from gui.Scaleform.battle_entry import BattleEntry
 from gui.Scaleform.daapi.settings import config as sf_config
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS, VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.waiting_worker import WaitingWorker
 from gui.Scaleform.framework.package_layout import PackageImporter
@@ -311,29 +311,8 @@ class AS3_AppFactory(IAppFactory):
 
     @staticmethod
     def _loadBattlePage(arenaGuiType):
-        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-            alias = VIEW_ALIAS.TUTORIAL_BATTLE_PAGE
-        elif arenaGuiType in (ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING):
-            alias = VIEW_ALIAS.EPIC_RANDOM_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.RANKED:
-            alias = VIEW_ALIAS.RANKED_BATTLE_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            alias = VIEW_ALIAS.BATTLE_ROYALE_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.BOOTCAMP:
-            alias = VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE
-        elif arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE:
-            alias = VIEW_ALIAS.EPIC_BATTLE_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            alias = VIEW_ALIAS.EVENT_BATTLE_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.MAPS_TRAINING:
-            alias = VIEW_ALIAS.MAPS_TRAINING_PAGE
-        elif arenaGuiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
-            alias = VIEW_ALIAS.STRONGHOLD_BATTLE_PAGE
-        elif arenaGuiType == ARENA_GUI_TYPE.COMP7:
-            alias = VIEW_ALIAS.COMP7_BATTLE_PAGE
-        else:
-            alias = VIEW_ALIAS.CLASSIC_BATTLE_PAGE
-        event = events.LoadViewEvent(SFViewLoadParams(alias, parent=AS3_AppFactory.getMainWindow()))
+        viewAlias = VIEW_BATTLE_PAGE_ALIAS_BY_ARENA_GUI_TYPE.get(arenaGuiType, VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
+        event = events.LoadViewEvent(SFViewLoadParams(viewAlias, parent=AS3_AppFactory.getMainWindow()))
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
 
     @staticmethod

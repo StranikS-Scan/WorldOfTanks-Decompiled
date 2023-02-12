@@ -8,13 +8,14 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, getKpiFormatDescription, KPI, collectKpi
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from gui.shared.utils.functions import stripColorTagDescrTags
+from gui.shared.utils.functions import stripColorTagDescrTags, replaceHyphenToUnderscore
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import i18n, dependency
 from items import artefacts, tankmen, ITEM_OPERATION
 from items.tankmen import PERKS
@@ -82,8 +83,9 @@ class VehicleArtefact(FittingItem):
     def isUpgradable(self):
         return False
 
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM, store=RES_SHOP_EXT):
-        return store.getArtefactIcon(size, self.descriptor.iconName)
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        resID = R.images.gui.maps.shop.artefacts.num(size).dyn(replaceHyphenToUnderscore(self.descriptor.iconName))()
+        return backport.image(resID) if resID != -1 else ''
 
     def getVehicleLevelRange(self):
         vehicleFilter = self.descriptor.getVehicleFilter()

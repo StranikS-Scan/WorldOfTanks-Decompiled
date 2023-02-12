@@ -26,7 +26,6 @@
     <_8V135>	26	</_8V135>
     <_12150LS_1>	27	</_12150LS_1>
     <Continental_AOSI_895_5_Prem>	28	</Continental_AOSI_895_5_Prem>
-    <_Renault_M26_27_bot>	29	</_Renault_M26_27_bot>
     <_12150LT2>	30	</_12150LT2>
     <_12150L2>	31	</_12150L2>
     <_12150L8>	32	</_12150L8>
@@ -78,13 +77,12 @@
     <_8V135_IGR>	60001	</_8V135_IGR>
     <_12150LS_IGR>	60002	</_12150LS_IGR>
     <_12150L7_IGR>	60003	</_12150L7_IGR>
-    <_Type97_bootcamp>	64001	</_Type97_bootcamp>
     <Development_Engine>	65000	</Development_Engine>
     <Continental_AOSI_895_5_Prem_SH>	64002	</Continental_AOSI_895_5_Prem_SH>
     <_12150L-3_V-12_SH>	64003	</_12150L-3_V-12_SH>
     <_12150L1_SH>	64004	</_12150L1_SH>
     <Ch00_ClingeBot_SH_Engine>	64005	</Ch00_ClingeBot_SH_Engine>
-    <_12150L_bootcamp>	3	</_12150L_bootcamp>
+    <_V-2-54SC_MT>	31003	</_V-2-54SC_MT>
   </ids>
   <shared>
     <NORINCO_12150L7>
@@ -448,23 +446,6 @@
       <rpm_min>	373	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </_12150LSG>
-    <_Renault_M26_27_bot>
-      <userString>	#china_vehicles:_Renault_M26_27_bot	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	45	</power>
-      <weight>	266	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	443	</rpm_min>
-      <rpm_max>	2180	</rpm_max>
-    </_Renault_M26_27_bot>
     <_12150LT>
       <userString>	#china_vehicles:_12150LT	</userString>
       <tags>	diesel	</tags>
@@ -742,23 +723,6 @@
       <rpm_min>	324	</rpm_min>
       <rpm_max>	2051	</rpm_max>
     </_Type97>
-    <_Type97_bootcamp>
-      <userString>	#china_vehicles:_Type97	</userString>
-      <tags>	diesel	</tags>
-      <level>	3	</level>
-      <price>	5000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	170	</power>
-      <weight>	650	</weight>
-      <maxHealth>	65	</maxHealth>
-      <maxRegenHealth>	32	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2051	</rpm_max>
-    </_Type97_bootcamp>
     <_Type100_W>
       <userString>	#china_vehicles:_Type100_W	</userString>
       <tags>	diesel	</tags>
@@ -857,6 +821,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </_V-2-54SC_7x7>
+    <_V-2-54SC_MT>
+      <userString>	#china_vehicles:_V-2-54SC	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	25000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1045	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </_V-2-54SC_MT>
     <_V-2-54SCP>
       <userString>	#china_vehicles:_V-2-54SCP	</userString>
       <tags>	diesel	</tags>
@@ -1476,22 +1457,5 @@
       <rpm_min>	266	</rpm_min>
       <rpm_max>	2167	</rpm_max>
     </Ch00_ClingeBot_SH_Engine>
-    <_12150L_bootcamp>
-      <userString>	#china_vehicles:_12150L	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	48000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </_12150L_bootcamp>
   </shared>
 </engines.xml>

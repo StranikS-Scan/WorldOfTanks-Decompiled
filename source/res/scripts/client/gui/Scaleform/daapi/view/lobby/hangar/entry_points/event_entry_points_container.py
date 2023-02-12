@@ -12,7 +12,7 @@ from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAva
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.system_factory import registerEntryPointValidator, collectEntryPointValidator
+from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIsActive
 from helpers import dependency
@@ -25,10 +25,10 @@ _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
 _COUNT_VISIBLE_ENTRY_POINTS = 2
 _ADDITIONAL_SWFS_MAP = {}
-registerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
-registerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
-registerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
-registerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
+registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
+registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
+registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
+registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -81,7 +81,7 @@ class _EntryPointData(object):
         return self.startDate > getServerUTCTime()
 
     def getIsEnabledByValidator(self):
-        configValidator = collectEntryPointValidator(self.id)
+        configValidator = collectBannerEntryPointValidator(self.id)
         return configValidator() if configValidator is not None else True
 
 

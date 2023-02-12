@@ -1440,4 +1440,125 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F06_ARL_44	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	713	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <tags>	addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	498	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	843	</id>
+              <tags>	left formfactor_rect1x2 safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F07_AMX_M4_1945	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	727	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <tags>	addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	498	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	843	</id>
+              <showOn>	TURRET	</showOn>
+              <doubleSided>	0	</doubleSided>
+              <position>
+                <p0>	-1.27996	</p0>
+                <p1>	2.37547	</p1>
+                <p2>	0.133127	</p2>
+              </position>
+              <rotation>
+                <r0>	1.30254	</r0>
+                <r1>	-1.62194	</r1>
+                <r2>	3.14159	</r2>
+              </rotation>
+              <scale>
+                <s0>	0.82874	</s0>
+                <s1>	0.911612	</s1>
+                <s2>	0.82874	</s2>
+              </scale>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F1035_AMX_AC_Mle1946_bootcamp	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	730	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <tags>	addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	507	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </france.xml>

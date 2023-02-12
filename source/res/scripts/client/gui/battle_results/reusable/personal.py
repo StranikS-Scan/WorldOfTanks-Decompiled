@@ -7,7 +7,7 @@ from ValueReplay import ValueReplay, ValueReplayConnector
 from constants import PREMIUM_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
-from gui.battle_results.reusable import records
+from gui.battle_results.reusable import records, ReusableInfoFactory
 from gui.battle_results.reusable import shared
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
@@ -23,13 +23,13 @@ if typing.TYPE_CHECKING:
     from gui.shared.utils.requesters.StatsRequester import _ControllableXPData
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 
-class _SquadBonusInfo(object):
+class SquadBonusInfo(object):
     itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
     __slots__ = ('__vehicles', '__joinedOnArena', '__size')
 
     def __init__(self, vehicles=None, joinedOnArena=None, size=0, **kwargs):
-        super(_SquadBonusInfo, self).__init__()
+        super(SquadBonusInfo, self).__init__()
         self.__vehicles = vehicles or set()
         self.__joinedOnArena = joinedOnArena or []
         self.__size = size
@@ -58,18 +58,20 @@ class _SquadBonusInfo(object):
         return (showSquadLabels, squadHasBonus)
 
 
-class _PersonalAvatarInfo(object):
+class PersonalAvatarInfo(object):
     __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo')
 
-    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
-        super(_PersonalAvatarInfo, self).__init__()
+    def __init__(self, bonusType, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
+        super(PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
         self.__team = team
         self.__isPrematureLeave = isPrematureLeave
         self.__eligibleForCrystalRewards = eligibleForCrystalRewards
-        self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
-        self.__squadBonusInfo = _SquadBonusInfo(**(squadBonusInfo or {}))
+        fairplayViolationsCls = ReusableInfoFactory.fairplayViolationForBonusType(bonusType)
+        self.__fairplayViolations = fairplayViolationsCls(*(fairplayViolations or ()))
+        squadBonusInfoCls = ReusableInfoFactory.squadBonusInfoForBonusType(bonusType)
+        self.__squadBonusInfo = squadBonusInfoCls(**(squadBonusInfo or {}))
         self.__winnerIfDraw = winnerIfDraw
         self.__extInfo = kwargs
 
@@ -415,15 +417,15 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__replayURL')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress')
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, personal):
+    def __init__(self, bonusType, personal):
         super(PersonalInfo, self).__init__()
         if _RECORD.PERSONAL_AVATAR in personal and personal[_RECORD.PERSONAL_AVATAR] is not None:
-            self.__avatar = _PersonalAvatarInfo(**personal[_RECORD.PERSONAL_AVATAR])
+            self.__avatar = PersonalAvatarInfo(bonusType, **personal[_RECORD.PERSONAL_AVATAR])
         else:
-            self.__avatar = _PersonalAvatarInfo()
+            self.__avatar = PersonalAvatarInfo(bonusType)
             self._addUnpackedItemID(_RECORD.PERSONAL_AVATAR)
         self.__vehicles = []
         self.__isObserver = False
@@ -439,7 +441,6 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         self.__dogTags = {}
         self.__goldBankGain = 0
-        self.__replayURL = ''
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -526,9 +527,6 @@ class PersonalInfo(shared.UnpackedInfo):
     def getGoldBankGain(self):
         return self.__goldBankGain
 
-    def getReplayURL(self):
-        return self.__replayURL
-
     def getPM2Progress(self):
         return self.__PM2Progress
 
@@ -596,7 +594,6 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__progressiveReward = infoAvatar.get('progressiveReward')
             self.__dogTags.update(infoAvatar.get('dogTags', {}))
             self.__goldBankGain = infoAvatar.get('goldBankGain', 0)
-            self.__replayURL = infoAvatar.get('replayURL', '')
         for item in items:
             intCD = item.intCD
             data = info[intCD]

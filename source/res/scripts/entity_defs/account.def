@@ -32,6 +32,8 @@
     <Interface>	QuestProcessor	</Interface>
     <Interface>	AvatarCreator	</Interface>
     <Interface>	AccountVersion	</Interface>
+    <Interface>	PlayLimits	</Interface>
+    <Interface>	ServerSideReplays	</Interface>
   </Implements>
   <Properties>
     <name>
@@ -200,11 +202,6 @@
     <onDequeued>
       <Arg>	UINT8	</Arg>
     </onDequeued>
-    <onTutorialEnqueued>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	INT32	</Arg>
-    </onTutorialEnqueued>
     <onKickedFromQueue>
       <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
@@ -338,7 +335,9 @@
       <Arg>	UINT64	</Arg>
     </onEntityCheckOutEnqueued>
     <onBootcampAccountMigrationComplete></onBootcampAccountMigrationComplete>
-    <chooseBootcampStart></chooseBootcampStart>
+    <chooseBootcampStart>
+      <Arg>	BOOL	</Arg>
+    </chooseBootcampStart>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>
@@ -347,10 +346,6 @@
     <onDequeued>
       <Arg>	UINT8	</Arg>
     </onDequeued>
-    <onTutorialEnqueued>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT64	</Arg>
-    </onTutorialEnqueued>
     <onMapsTrainingEnqueued>
       <Arg>	UINT8	</Arg>
     </onMapsTrainingEnqueued>
@@ -372,13 +367,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </onMapsTrainingArenaCreated>
-    <onTutorialCreated>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-    </onTutorialCreated>
     <onBootcampCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>

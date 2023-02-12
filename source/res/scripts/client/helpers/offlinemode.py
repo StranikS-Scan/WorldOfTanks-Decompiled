@@ -119,7 +119,7 @@ def _displayGUI(spaceName):
     _clearGUI()
     g_gui = GUI.Text("Entering offline space '%s'...\n%s" % (spaceName, INSTRUCTIONS))
     g_gui.multiline = True
-    g_gui.horizontalAnchor = 'CENTER'
+    g_gui.horizontalAnchor = GUI.Simple.eHAnchor.CENTER
     GUI.addRoot(g_gui)
 
 

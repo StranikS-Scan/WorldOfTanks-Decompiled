@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/excepthook.py
 import BigWorld
 import sys
+import re
 import linecache
 from functools import partial
 from traceback import format_exception_only
@@ -14,10 +15,11 @@ _ENABLE_EXTENDED_TRACEBACK = False
 
 def getLocationFromCode(fileNameToTrim, code, lineno=None):
     filename = code.co_filename
-    trim_to, trim_to_len = fileNameToTrim
-    idx = filename.find(trim_to)
-    if idx != -1:
-        filename = filename[idx + trim_to_len:]
+    trim_match = fileNameToTrim.findall(filename)
+    if trim_match:
+        trim_path = trim_match[0]
+        idx = filename.find(trim_path)
+        filename = filename[idx + len(trim_path):]
     if lineno is None:
         lineno = code.co_firstlineno
     name = code.co_name

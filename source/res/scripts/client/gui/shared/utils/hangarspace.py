@@ -28,6 +28,7 @@ from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from uilogging.performance.hangar.loggers import HangarMetricsLogger
 _Q_CHECK_DELAY = 0.0
 
 class _execute_after_hangar_space_inited(object):
@@ -173,6 +174,7 @@ class HangarSpace(IHangarSpace):
         self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
+        self._performanceMetricsLogger = HangarMetricsLogger()
         return
 
     @property
@@ -240,6 +242,7 @@ class HangarSpace(IHangarSpace):
             self.gameSession.onPremiumNotify += self.onPremiumChanged
             g_keyEventHandlers.add(self.__handleKeyEvent)
             g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
+            self._performanceMetricsLogger.initialize()
         return
 
     def refreshSpace(self, isPremium, forceRefresh=False):
@@ -276,6 +279,7 @@ class HangarSpace(IHangarSpace):
             self.__inited = False
             self.__spaceInited = False
             self.__space.destroy()
+            self._performanceMetricsLogger.log()
         elif self.spaceLoading():
             LOG_DEBUG('HangarSpace::destroy - delayed until space load done')
             self.__spaceDestroyedDuringLoad = True

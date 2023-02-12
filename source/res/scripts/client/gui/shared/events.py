@@ -270,7 +270,6 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_LEGAL_INFO_WINDOW = 'hideLegalInfoWindow'
     HIDE_VEHICLE_SELECTOR_WINDOW = 'hideVehicleSelectorWindow'
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'hideRosterSlotSettingsWindow'
-    HIDE_SANDBOX_QUEUE_DIALOG = 'hideSandboxQueueDialog'
     HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
     HIDE_PERSONAL_MISSION_DETAILS_VIEW = 'hidePersonalMissionDetailsView'
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
@@ -393,12 +392,10 @@ class CoolDownEvent(SharedEvent):
 class TutorialEvent(SharedEvent):
     START_TRAINING = 'startTraining'
     STOP_TRAINING = 'stopTraining'
-    SHOW_TUTORIAL_BATTLE_HISTORY = 'Tutorial.Dispatcher.BattleHistory'
     ON_COMPONENT_FOUND = 'onComponentFound'
     ON_COMPONENT_LOST = 'onComponentLost'
     ON_TRIGGER_ACTIVATED = 'onTriggerActivated'
     ON_ANIMATION_COMPLETE = 'onAnimationComplete'
-    SIMPLE_WINDOW_CLOSED = 'simpleWindowClosed'
     SIMPLE_WINDOW_PROCESSED = 'simpleWindowProcessed'
     OVERRIDE_HANGAR_MENU_BUTTONS = 'overrideHangarMenuButtons'
     OVERRIDE_HEADER_MENU_BUTTONS = 'overrideHeaderMenuButtons'
@@ -622,6 +619,7 @@ class HangarVehicleEvent(HasCtxEvent):
     ON_PLATOON_TANK_DESTROY = 'hangarVehicle/onPlatoonTankDestroy'
     PLATOON_TANK_MARKER = 'hangarVehicle/platoonTankMarker'
     SELECT_VEHICLE_IN_HANGAR = 'hangarVehicle/selectVehicleInHangar'
+    BOOTCAMP_SECOND_TANK_MARKER = 'hangarVehicle/bootcampSecondTankMarker'
 
 
 class ManualEvent(HasCtxEvent):

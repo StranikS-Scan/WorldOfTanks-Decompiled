@@ -3,7 +3,7 @@
 import itertools
 import logging
 from constants import ARENA_BONUS_TYPE
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_how_to_earn_points_view_model import BattlePassHowToEarnPointsViewModel
@@ -13,13 +13,15 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_model import Gam
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_item_model import VehicleItemModel
 from gui.impl.lobby.missions.daily_quests_view import DailyTabs
-from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showHangar
+from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_BATTLE, ARENA_BONUS_TYPE.COMP7]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -30,7 +32,6 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def __init__(self, layoutID, chapterID):
         settings = ViewSettings(layoutID)
-        settings.flags = ViewFlags.LOBBY_SUB_VIEW
         settings.model = BattlePassHowToEarnPointsViewModel()
         self.__chapterID = chapterID
         super(BattlePassHowToEarnPointsView, self).__init__(settings)
@@ -45,11 +46,12 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def __createGeneralModel(self):
         with self.viewModel.transaction() as tx:
-            tx.gameModes.clearItems()
+            gameModes = tx.getGameModes()
+            gameModes.clear()
             for supportedArenaType in SUPPORTED_ARENA_BONUS_TYPES:
                 if supportedArenaType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO:
-                    tx.gameModes.addViewModel(self.__createBattleRoyalGameModel())
-                tx.gameModes.addViewModel(self.__createGameModel(supportedArenaType))
+                    gameModes.addViewModel(self.__createBattleRoyalGameModel())
+                gameModes.addViewModel(self.__createGameModel(supportedArenaType))
 
             tx.setSyncInitiator((tx.getSyncInitiator() + 1) % 1000)
             tx.setChapterID(self.__chapterID)
@@ -79,27 +81,27 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         previousLevelSolo = 1
         previousLevelSquad = 1
         for pointsSolo, pointsSquad in itertools.izip_longest(self.__battlePass.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO), self.__battlePass.getPerBattleRoyalePoints(gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD), fillvalue=0):
-            tableRow = GameModeRowsModel()
             cellSoloPoints = GameModeCellModel()
             if pointsSolo == 0:
                 cellLabelSolo, cellSoloPoints = self.__createEmptyCell()
             else:
-                cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo)
+                cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo, viewModel)
                 cellSoloPoints.setPoints(pointsSolo.points)
             cellSquadPoints = GameModeCellModel()
             if pointsSquad == 0:
                 cellLabelSquad, cellSquadPoints = self.__createEmptyCell()
             else:
-                cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad)
+                cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad, viewModel)
                 cellSquadPoints.setPoints(pointsSquad.points)
-            tableRow.cell.addViewModel(cellLabelSolo)
-            tableRow.cell.addViewModel(cellSoloPoints)
-            tableRow.cell.addViewModel(cellLabelSquad)
-            tableRow.cell.addViewModel(cellSquadPoints)
-            viewModel.tableRows.addViewModel(tableRow)
+            tableRow = GameModeRowsModel()
+            tableRow.getCell().addViewModel(cellLabelSolo)
+            tableRow.getCell().addViewModel(cellSoloPoints)
+            tableRow.getCell().addViewModel(cellLabelSquad)
+            tableRow.getCell().addViewModel(cellSquadPoints)
+            viewModel.getTableRows().addViewModel(tableRow)
 
     @staticmethod
-    def __createCellName(gameType, points, previousLevel):
+    def __createCellName(gameType, points, previousLevel, viewModel):
         cell = GameModeCellModel()
         if points.label - previousLevel > 0:
             cell.setText(backport.text(_rBattlePass.howToEarnPoints.rangeLevels.num(gameType)(), startLevel=previousLevel, endLevel=points.label))
@@ -126,10 +128,10 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             cellLosePoints = GameModeCellModel()
             cellLosePoints.setPoints(points.losePoint)
             tableRow = GameModeRowsModel()
-            tableRow.cell.addViewModel(cellLabel)
-            tableRow.cell.addViewModel(cellWinPoints)
-            tableRow.cell.addViewModel(cellLosePoints)
-            viewModel.tableRows.addViewModel(tableRow)
+            tableRow.getCell().addViewModel(cellLabel)
+            tableRow.getCell().addViewModel(cellWinPoints)
+            tableRow.getCell().addViewModel(cellLosePoints)
+            viewModel.getTableRows().addViewModel(tableRow)
 
     @staticmethod
     def __createBattleRoyalTableHeader(battleType, viewModel):
@@ -142,11 +144,11 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         cellSquadPoints = GameModeCellModel()
         cellSquadPoints.setText('')
         tableRow = GameModeRowsModel()
-        tableRow.cell.addViewModel(cellLabelSolo)
-        tableRow.cell.addViewModel(cellSoloPoints)
-        tableRow.cell.addViewModel(cellLabelSquad)
-        tableRow.cell.addViewModel(cellSquadPoints)
-        viewModel.tableRows.addViewModel(tableRow)
+        tableRow.getCell().addViewModel(cellLabelSolo)
+        tableRow.getCell().addViewModel(cellSoloPoints)
+        tableRow.getCell().addViewModel(cellLabelSquad)
+        tableRow.getCell().addViewModel(cellSquadPoints)
+        viewModel.getTableRows().addViewModel(tableRow)
 
     @staticmethod
     def __createTableHeader(gameType, viewModel):
@@ -157,10 +159,10 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         cellLosePoints = GameModeCellModel()
         cellLosePoints.setText(backport.text(_rBattlePass.howToEarnPoints.lose.num(gameType)()))
         tableRow = GameModeRowsModel()
-        tableRow.cell.addViewModel(cellLabel)
-        tableRow.cell.addViewModel(cellWinPoints)
-        tableRow.cell.addViewModel(cellLosePoints)
-        viewModel.tableRows.addViewModel(tableRow)
+        tableRow.getCell().addViewModel(cellLabel)
+        tableRow.getCell().addViewModel(cellWinPoints)
+        tableRow.getCell().addViewModel(cellLosePoints)
+        viewModel.getTableRows().addViewModel(tableRow)
 
     def __createCardsModel(self, gameType, viewModel):
         if gameType == ARENA_BONUS_TYPE.REGULAR:
@@ -184,6 +186,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
 
     def __createRandomCardsModel(self, gameType, viewModel):
+        self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.REGULAR)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 
@@ -192,25 +195,25 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(pointsCardType)
         gameModeCard.setViewId(str(gameType))
-        viewModel.cards.addViewModel(gameModeCard)
+        viewModel.getCards().addViewModel(gameModeCard)
 
     @staticmethod
     def __createLimitCard(viewModel):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.LIMIT)
-        viewModel.cards.addViewModel(gameModeCard)
+        viewModel.getCards().addViewModel(gameModeCard)
 
     @staticmethod
     def __createEpicBattlePointsCard(viewModel):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.EPIC_BATTLE_POINTS)
-        viewModel.cards.addViewModel(gameModeCard)
+        viewModel.getCards().addViewModel(gameModeCard)
 
     @staticmethod
     def __createBattleRoyalCardsModel(viewModel):
         gameModeCard = GameModeCardModel()
         gameModeCard.setCardType(PointsCardType.BATTLE)
-        viewModel.cards.addViewModel(gameModeCard)
+        viewModel.getCards().addViewModel(gameModeCard)
 
     def __createSpecialVehCard(self, viewModel, gameType=ARENA_BONUS_TYPE.REGULAR):
         gameModeCard = GameModeCardModel()
@@ -230,9 +233,9 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             item.setVehicleTop(pointsDiff.top)
             item.setTextResource(backport.text(pointsDiff.textID))
             item.setIsElite(vehicle.isElite)
-            gameModeCard.vehiclesList.addViewModel(item)
+            gameModeCard.getVehiclesList().addViewModel(item)
 
-        viewModel.cards.addViewModel(gameModeCard)
+        viewModel.getCards().addViewModel(gameModeCard)
         return
 
     def _getEvents(self):
@@ -255,8 +258,13 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             showHangar()
 
 
-class BattlePassHowToEarnPointsWindow(WindowImpl):
-    __slots__ = ()
+class BattlePassHowToEarnPointsWindow(LobbyWindow):
+    __slots__ = ('__blur',)
 
     def __init__(self, parent=None, chapterID=0):
-        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView(), chapterID), parent=parent)
+        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView(), chapterID))
+        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer)
+
+    def _finalize(self):
+        self.__blur.fini()
+        super(BattlePassHowToEarnPointsWindow, self)._finalize()

@@ -1,15 +1,15 @@
 <china.xml>
-  <china:Ch19_1219>	ussr	</china:Ch19_1219>
-  <china:Ch19_1212>	germany	</china:Ch19_1212>
-  <china:Ch19_1218>	usa	</china:Ch19_1218>
-  <xmlns:china>	china	</xmlns:china>
-  <china:Ch19_1211>	france	</china:Ch19_1211>
-  <china:Ch19_1217>	uk	</china:Ch19_1217>
-  <china:Ch19_1214>	japan	</china:Ch19_1214>
-  <china:Ch19_1210>	czech	</china:Ch19_1210>
-  <china:Ch19_1216>	sweden	</china:Ch19_1216>
-  <china:Ch19_1215>	poland	</china:Ch19_1215>
-  <china:Ch19_1213>	italy	</china:Ch19_1213>
+  <china:Ch19_1211>	ussr	</china:Ch19_1211>
+  <china:Ch04_T34_14>	germany	</china:Ch04_T34_14>
+  <china:Ch19_1210>	usa	</china:Ch19_1210>
+  <china:Ch04_T34_11>	china	</china:Ch04_T34_11>
+  <china:Ch04_T34_13>	france	</china:Ch04_T34_13>
+  <china:Ch04_T34_19>	uk	</china:Ch04_T34_19>
+  <china:Ch04_T34_16>	japan	</china:Ch04_T34_16>
+  <china:Ch04_T34_12>	czech	</china:Ch04_T34_12>
+  <china:Ch04_T34_18>	sweden	</china:Ch04_T34_18>
+  <china:Ch04_T34_17>	poland	</china:Ch04_T34_17>
+  <china:Ch04_T34_15>	italy	</china:Ch04_T34_15>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -45,7 +45,6 @@
         <Ch04_T34_1>	5.2 5.2 0.7 0.88	</Ch04_T34_1>
         <Ch05_T34_2>	5.8 5.7 0.21 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.7 1.7 4.1 1.7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 6.3 2.8	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	2 2 0.15 0.27	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	5.3 5.3 0.88 0.1	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3.4 3.4 0.09 0.29	</Ch09_M5>
@@ -88,6 +87,7 @@
         <Ch40_WZ120G_FT>	4.8 4.8 1.5 1.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.8 2.8 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -132,7 +132,6 @@
         <Ch04_T34_1>	5.3 5.3 0.28 0.16	</Ch04_T34_1>
         <Ch05_T34_2>	5.7 5.7 0.1 0.2	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.7 1.7 0.33 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.8 1.8 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.8 3.8 0.31 0.31	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3 3 0.12 0.12	</Ch09_M5>
@@ -175,6 +174,7 @@
         <Ch40_WZ120G_FT>	7 7 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch43_WZ_122_2>	3.5 3.5 0.07 0.000000	</china:Ch43_WZ_122_2>
         <china:Ch42_WalkerBulldog_M41D>	2.65 2.65 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
@@ -220,7 +220,6 @@
         <Ch04_T34_1>	3.3 3.3 0.18 0.62	</Ch04_T34_1>
         <Ch05_T34_2>	4.1 4.1 0.24 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 0.33 0.05	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 0.06 0.17	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.1 4.1 0.45 0.04	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3 3 0.34 0.32	</Ch09_M5>
@@ -261,6 +260,7 @@
         <Ch40_WZ120G_FT>	7 7 4.6 4.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.04 2.04 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -305,7 +305,6 @@
         <Ch04_T34_1>	3.8 3.8 0.23 1	</Ch04_T34_1>
         <Ch05_T34_2>	6.2 6.2 0.53 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.7 1.7 0.55 0.57	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 4.5 7.9	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.8 1.8 0.02 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	5.1 5.1 0.4 0.14	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3 3 0.25 0.1	</Ch09_M5>
@@ -348,6 +347,7 @@
         <Ch40_WZ120G_FT>	8.5 8.5 3.3 2	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	3.2 3.2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -392,7 +392,6 @@
         <Ch04_T34_1>	2.8 2.8 0.26 0.68	</Ch04_T34_1>
         <Ch05_T34_2>	2.8 2.8 0.33 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 0.11 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1 1 4.2 3.7	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1 1 0.6 0.84	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.6 3.6 0.22 0.27	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.4 1.4 0.74 0.06	</Ch09_M5>
@@ -434,6 +433,7 @@
         <Ch40_WZ120G_FT>	7.5 7.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.95 1.95 0.28 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -478,7 +478,6 @@
         <Ch04_T34_1>	3.9 3.9 1 0.24	</Ch04_T34_1>
         <Ch05_T34_2>	3.9 3.9 0.16 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 0.1 0.2	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.08 0.19	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.9 3.9 0.09 0.03	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.9 1.9 0.48 0.2	</Ch09_M5>
@@ -520,6 +519,7 @@
         <Ch40_WZ120G_FT>	6.2 6.2 2.7 1.4	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.6 2.6 0.2 0.17	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -564,7 +564,6 @@
         <Ch04_T34_1>	6.4 6.4 0.74 0.14	</Ch04_T34_1>
         <Ch05_T34_2>	4 4.1 0.07 0.2	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.2 1.2 4.2 7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 0.24 0.16	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.5 4.5 0.26 0.09	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.9 1.9 0.000000 0.2	</Ch09_M5>
@@ -607,6 +606,7 @@
         <Ch40_WZ120G_FT>	7 7 0.8 0.1	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.5 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.5 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.5 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.25 2.25 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -651,7 +651,6 @@
         <Ch04_T34_1>	3.3 3.3 0.93 0.54	</Ch04_T34_1>
         <Ch05_T34_2>	3.9 3.8 0.22 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.3 1.3 0.5 0.05	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.27 0.15	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	5.3 5.3 0.22 0.2	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.2 2.2 0.16 0.000000	</Ch09_M5>
@@ -694,6 +693,7 @@
         <Ch40_WZ120G_FT>	5.6 5.6 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.42 2.42 0.4 0.71	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -738,7 +738,6 @@
         <Ch04_T34_1>	4.1 4.1 0.72 0.27	</Ch04_T34_1>
         <Ch05_T34_2>	4.1 4.1 0.6 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.3 1.3 0.35 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 1.7	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.2 0.15	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.4 4.4 0.000000 0.41	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.2 0.17	</Ch09_M5>
@@ -779,6 +778,7 @@
         <Ch40_WZ120G_FT>	5.7 5.7 2.3 2.8	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.35 2.35 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -823,7 +823,6 @@
         <Ch04_T34_1>	6.1 6.1 0.64 0.9	</Ch04_T34_1>
         <Ch05_T34_2>	6.1 6.3 0.31 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.7 1.7 4.5 5.2	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 3.2 6.3	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 6 7.9	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	5.5 5.5 0.2 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.7 2.7 0.24 0.41	</Ch09_M5>
@@ -866,6 +865,7 @@
         <Ch40_WZ120G_FT>	8 8 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	6 6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	6 6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	6 6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.65 2.65 0.48 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -922,7 +922,6 @@
         <Ch04_T34_1>	3.4 3.4 0.000000 0.96	</Ch04_T34_1>
         <Ch05_T34_2>	4.3 4.1 0.19 0.13	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.2 1.2 0.93 0.27	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1 1 0.29 0.09	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.5 4.5 0.4 0.43	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.8 2.8 0.76 0.04	</Ch09_M5>
@@ -964,6 +963,7 @@
         <Ch40_WZ120G_FT>	6 6 1.2 2.9	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.3 2.3 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1008,7 +1008,6 @@
         <Ch04_T34_1>	5.4 5.4 0.42 0.45	</Ch04_T34_1>
         <Ch05_T34_2>	3.5 3.5 0.3 0.02	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 0.000000 0.68	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.2 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	5.1 5.1 0.2 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.2 2.2 0.35 0.35	</Ch09_M5>
@@ -1051,6 +1050,7 @@
         <Ch40_WZ120G_FT>	7.5 7.5 1.7 0.6	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	4.3 4.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	4.3 4.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	4.3 4.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.45 2.45 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1095,7 +1095,6 @@
         <Ch04_T34_1>	4.1 4.1 0.28 0.4	</Ch04_T34_1>
         <Ch05_T34_2>	4.8 4.8 0.23 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 0.17 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.7 1.7 0.47 0.07	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.3 3.3 0.96 0.09	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.5 2.5 0.21 0.000000	</Ch09_M5>
@@ -1136,6 +1135,7 @@
         <Ch40_WZ120G_FT>	4.8 4.8 1.9 2.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.8 1.8 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.8 1.8 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.8 1.8 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.32 2.32 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1267,10 +1267,8 @@
         <Ch02_Type62>	3.8 3.8 0.25 0.43	</Ch02_Type62>
         <Ch03_WZ-111>	3.8 3.8 0.48 0.56	</Ch03_WZ-111>
         <Ch04_T34_1>	4.3 4.3 0.000000 0.38	</Ch04_T34_1>
-        <Ch04_T34_1_training>	3.3 3.2 0.3 0.21	</Ch04_T34_1_training>
         <Ch05_T34_2>	3.8 4.1 0.05 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 5.3 4.1	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 5.2 7.9	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.7 1.7 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.6 3.6 0.000000 0.01	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3.9 3.9 0.15 0.000000	</Ch09_M5>
@@ -1313,6 +1311,7 @@
         <Ch40_WZ120G_FT>	6.4 6.4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.8 2.8 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1357,7 +1356,6 @@
         <Ch04_T34_1>	5.3 5.3 0.65 0.84	</Ch04_T34_1>
         <Ch05_T34_2>	7.5 4.6 0.81 0.2	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.8 1.8 0.3 0.21	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.8 1.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	2 2 0.34 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.5 4.5 0.27 0.7	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3.6 3.6 0.06 0.13	</Ch09_M5>
@@ -1400,6 +1398,7 @@
         <Ch40_WZ120G_FT>	5.8 5.8 0.2 0.7	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	4.7 4.7 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	4.7 4.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	4.7 4.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	3.15 3.15 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1456,7 +1455,6 @@
         <Ch04_T34_1>	4.4 4.4 0.2 0.77	</Ch04_T34_1>
         <Ch05_T34_2>	4 3.9 0.1 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.2 1.2 0.25 1.8	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.2 1.2 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.06 3.2	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.3 3.3 0.11 0.21	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.8 1.8 0.09 0.1	</Ch09_M5>
@@ -1498,6 +1496,7 @@
         <Ch40_WZ120G_FT>	3.6 3.6 0.5 0.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.8 1.8 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1542,10 +1541,8 @@
         <Ch02_Type62>	3.2 3.2 0.22 0.000000	</Ch02_Type62>
         <Ch03_WZ-111>	2.9 2.9 0.34 0.12	</Ch03_WZ-111>
         <Ch04_T34_1>	4.8 4.8 0.64 0.82	</Ch04_T34_1>
-        <Ch04_T34_1_training>	7 7 0.6 0.88	</Ch04_T34_1_training>
         <Ch05_T34_2>	5.6 5.6 0.42 0.92	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.3 1.3 0.24 0.81	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.3 1.3 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.5 1.5 0.76 0.26	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.2 4.2 0.46 0.52	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	3.2 3.2 0.000000 0.14	</Ch09_M5>
@@ -1587,6 +1584,7 @@
         <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.2 2.2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1631,7 +1629,6 @@
         <Ch04_T34_1>	5.4 5.4 0.4 0.68	</Ch04_T34_1>
         <Ch05_T34_2>	4.4 4.4 0.2 0.45	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.8 3.8 0.000000 0.12	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.6 2.6 0.71 0.000000	</Ch09_M5>
@@ -1672,6 +1669,7 @@
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2 2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1716,7 +1714,6 @@
         <Ch04_T34_1>	5.6 5.6 0.000000 0.48	</Ch04_T34_1>
         <Ch05_T34_2>	4.6 4.6 0.24 0.1	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.1 4.1 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.6 2.6 0.62 0.51	</Ch09_M5>
@@ -1757,6 +1754,7 @@
         <Ch40_WZ120G_FT>	4 4 0.5 0.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2 2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1801,7 +1799,6 @@
         <Ch04_T34_1>	4.8 4.8 0.48 0.22	</Ch04_T34_1>
         <Ch05_T34_2>	4.4 4.3 0.000000 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.5 4.5 0.62 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.6 2.6 0.51 0.24	</Ch09_M5>
@@ -1842,6 +1839,7 @@
         <Ch40_WZ120G_FT>	4 4 2.5 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2 2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1886,7 +1884,6 @@
         <Ch04_T34_1>	5.8 5.8 0.69 0.34	</Ch04_T34_1>
         <Ch05_T34_2>	4.4 4.2 0.000000 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 7.3 5.7	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 4.3 2.8	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.3 1.3 6.9 4.7	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.2 4.2 0.76 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.6 2.6 0.33 0.22	</Ch09_M5>
@@ -1926,6 +1923,7 @@
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2 2 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -1972,7 +1970,6 @@
         <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
         <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
@@ -2014,6 +2011,7 @@
         <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.15 1.15 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2059,7 +2057,6 @@
         <Ch04_T34_1>	2.7 2.7 0.38 0.29	</Ch04_T34_1>
         <Ch05_T34_2>	2.2 2.2 0.23 0.54	</Ch05_T34_2>
         <Ch06_Renault_NC31>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.7 0.7 0.1 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.4 3.4 0.48 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.2 2.2 0.000000 0.000000	</Ch09_M5>
@@ -2101,6 +2098,7 @@
         <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.6 2.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.6 2.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.6 2.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.5 1.5 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2146,7 +2144,6 @@
         <Ch04_T34_1>	2.3 2.7 0.42 0.85	</Ch04_T34_1>
         <Ch05_T34_2>	3 3 0.28 0.06	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 0.24 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1 1 0.000000 7.1	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1 1 0.6 0.16	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.5 3.5 0.06 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
@@ -2188,6 +2185,7 @@
         <Ch40_WZ120G_FT>	2.7 2.7 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.85 1.85 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2233,7 +2231,6 @@
         <Ch04_T34_1>	3 3 0.000000 0.000000	</Ch04_T34_1>
         <Ch05_T34_2>	2.7 2.7 0.14 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	0.8 0.8 0.000000 5.1	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.8 0.8 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.8 2.8 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.4 1.4 0.000000 0.000000	</Ch09_M5>
@@ -2274,6 +2271,7 @@
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.25 1.25 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2320,7 +2318,6 @@
         <Ch04_T34_1>	4.8 4.8 0.98 0.6	</Ch04_T34_1>
         <Ch05_T34_2>	5.2 5.2 0.000000 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.5 1.5 0.000000 3.1	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.4 1.4 0.16 4.5	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	4.6 4.6 0.32 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2.3 2.3 0.17 0.000000	</Ch09_M5>
@@ -2363,6 +2360,7 @@
         <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.65 2.65 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2409,7 +2407,6 @@
         <Ch04_T34_1>	3.4 3.4 0.62 0.52	</Ch04_T34_1>
         <Ch05_T34_2>	2.8 2.8 0.61 0.37	</Ch05_T34_2>
         <Ch06_Renault_NC31>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.8 0.8 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1 1 0.000000 0.21	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.3 2.3 0.62 0.04	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.12 0.000000	</Ch09_M5>
@@ -2452,6 +2449,7 @@
         <Ch40_WZ120G_FT>	5 5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.3 1.3 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2498,7 +2496,6 @@
         <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
         <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
@@ -2540,6 +2537,7 @@
         <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.4 1.4 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2583,9 +2581,7 @@
         <Ch02_Type62>	2 2 0.44 0.08	</Ch02_Type62>
         <Ch03_WZ-111>	2 2 0.52 0.48	</Ch03_WZ-111>
         <Ch04_T34_1>	3 3 0.44 0.38	</Ch04_T34_1>
-        <Ch04_T34_1_training>	2.7 2.7 0.000000 0.000000	</Ch04_T34_1_training>
         <Ch05_T34_2>	2.4 2.4 0.62 0.43	</Ch05_T34_2>
-        <Ch06_Renault_NC31_bot>	1 1 0.000000 4.3	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1 1 0.54 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.4 3.4 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.2 1.2 0.37 0.000000	</Ch09_M5>
@@ -2626,6 +2622,7 @@
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.5 1.5 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.5 1.5 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.5 1.5 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.4 1.4 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2671,7 +2668,6 @@
         <Ch04_T34_1>	2 2 0.000000 0.06	</Ch04_T34_1>
         <Ch05_T34_2>	2.2 2.2 0.000000 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	0.7 0.7 0.000000 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.7 0.7 0.000000 3.9	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.7 0.7 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.3 2.3 0.000000 0.000000	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.5 1.5 0.000000 0.000000	</Ch09_M5>
@@ -2713,6 +2709,7 @@
         <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.3 1.3 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.3 1.3 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.3 1.3 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.15 1.15 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2757,10 +2754,8 @@
         <Ch02_Type62>	2.2 2.2 0.16 0.000000	</Ch02_Type62>
         <Ch03_WZ-111>	2.1 2.1 0.3 0.12	</Ch03_WZ-111>
         <Ch04_T34_1>	3.1 3.1 0.000000 0.11	</Ch04_T34_1>
-        <Ch04_T34_1_training>	4 4 0.44 0.000000	</Ch04_T34_1_training>
         <Ch05_T34_2>	3.4 3.4 0.000000 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 0.26 0.42	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1 1 0.18 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.2 1.2 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.4 3.4 0.54 0.38	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.7 1.7 0.14 0.000000	</Ch09_M5>
@@ -2803,6 +2798,7 @@
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.7 1.7 0.4 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.7 1.7 0.4 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.7 1.7 0.4 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.35 1.35 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -2849,7 +2845,6 @@
         <Ch04_T34_1>	3 3 0.5 0.000000	</Ch04_T34_1>
         <Ch05_T34_2>	2.2 2.2 0.6 1	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1 1 3.5 3.4	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	0.7 0.7 3.7 7.6	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.9 0.9 0.000000 0.000000	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.5 2.5 0.11 0.16	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.000000 0.000000	</Ch09_M5>
@@ -2891,6 +2886,7 @@
         <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	1.15 1.15 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -3012,7 +3008,6 @@
         <Ch04_T34_1>	3.5 3.5 0.28 0.07	</Ch04_T34_1>
         <Ch05_T34_2>	2.24 2.24 0.29 0.31	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.01 1.01 4.32 4.44	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.84 0.84 0.2 0.03	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.42 2.42 0.72 0.38	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.39 1.39 0.37 0.24	</Ch09_M5>
@@ -3055,6 +3050,7 @@
         <Ch40_WZ120G_FT>	4 4 2.21 1.98	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_MT>
         <Ch42_WalkerBulldog_M41D>	1.44 1.44 0.22 0.05	</Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -3104,7 +3100,6 @@
         <Ch04_T34_1>	3.5 3.5 0.28 0.07	</Ch04_T34_1>
         <Ch05_T34_2>	2.24 2.24 0.29 0.31	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.01 1.01 4.32 4.44	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.84 0.84 0.2 0.03	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.42 2.42 0.72 0.38	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.39 1.39 0.37 0.24	</Ch09_M5>
@@ -3147,6 +3142,7 @@
         <Ch40_WZ120G_FT>	4 4 2.21 1.98	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_MT>
         <Ch42_WalkerBulldog_M41D>	1.44 1.44 0.22 0.05	</Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -3196,7 +3192,6 @@
         <Ch04_T34_1>	3.5 3.5 0.28 0.07	</Ch04_T34_1>
         <Ch05_T34_2>	2.24 2.24 0.29 0.31	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.01 1.01 4.32 4.44	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.7 1.7 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	0.84 0.84 0.2 0.03	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.42 2.42 0.72 0.38	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.39 1.39 0.37 0.24	</Ch09_M5>
@@ -3239,6 +3234,7 @@
         <Ch40_WZ120G_FT>	4 4 2.21 1.98	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	1.85 1.85 0.01 0.9	</Ch41_WZ_111_MT>
         <Ch42_WalkerBulldog_M41D>	1.44 1.44 0.22 0.05	</Ch42_WalkerBulldog_M41D>
       </tiling>
       <tilingSettings>
@@ -3288,7 +3284,6 @@
         <Ch04_T34_1>	4.8 4.8 1.16 0.71	</Ch04_T34_1>
         <Ch05_T34_2>	4 4 0.12 0.07	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.3 1.3 0.11 0.000000	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1 1 4.2 3.7	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.6 1.6 0.13 0.84	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.6 3.6 0.62 0.22	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	2 2 2.60771 1.42	</Ch09_M5>
@@ -3330,6 +3325,7 @@
         <Ch40_WZ120G_FT>	7.5 7.5 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.8 2.8 0.32 -0.04	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.8 2.8 0.32 -0.04	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.8 2.8 0.32 -0.04	</Ch41_WZ_111_MT>
         <china:Ch03_WZ_111_A>	3 3 0.000000 0.000000	</china:Ch03_WZ_111_A>
         <china:Ch29_Type_62C_prot>	1.02 1.02 0.35 0.000000	</china:Ch29_Type_62C_prot>
         <china:Ch42_WalkerBulldog_M41D>	2.8 2.8 1 0.000000	</china:Ch42_WalkerBulldog_M41D>
@@ -3381,7 +3377,6 @@
         <Ch04_T34_1>	4 4 1.45 1.02	</Ch04_T34_1>
         <Ch05_T34_2>	3 3 0.16 0.000000	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.1 1.1 2.17 2.03	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.1 1.1 0.49 0.7	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	2.8 2.8 0.29 0.03	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.5 1.5 2.12 1.28	</Ch09_M5>
@@ -3423,6 +3418,7 @@
         <Ch40_WZ120G_FT>	4.6 4.6 2.75 2.73	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.2 2.2 0.000000 0.51	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.2 2.2 0.000000 0.51	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.2 2.2 0.000000 0.51	</Ch41_WZ_111_MT>
         <china:Ch28_WZ_132A>	1.2 1.2 0.32 0.38	</china:Ch28_WZ_132A>
         <china:Ch42_WalkerBulldog_M41D>	1.6 1.6 0.52 0.82	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
@@ -3473,7 +3469,6 @@
         <Ch04_T34_1>	4.08 4.08 1.07 0.62	</Ch04_T34_1>
         <Ch05_T34_2>	3.3 3.3 0.24 -0.08	</Ch05_T34_2>
         <Ch06_Renault_NC31>	1.2 1.2 0.43 0.05	</Ch06_Renault_NC31>
-        <Ch06_Renault_NC31_bot>	1.5 1.5 0.000000 0.000000	</Ch06_Renault_NC31_bot>
         <Ch07_Vickers_MkE_Type_BT26>	1.28 1.28 0.5 -0.36	</Ch07_Vickers_MkE_Type_BT26>
         <Ch08_Type97_Chi_Ha>	3.3 3.3 0.37 0.16	</Ch08_Type97_Chi_Ha>
         <Ch09_M5>	1.6 1.6 0.45 0.54	</Ch09_M5>
@@ -3514,6 +3509,7 @@
         <Ch40_WZ120G_FT>	5.66 5.66 4.6 4.5	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	2.4 2.4 0.88 0.000000	</Ch41_WZ_111_5A>
         <Ch41_WZ_111_5A_7x7>	2.4 2.4 0.88 0.000000	</Ch41_WZ_111_5A_7x7>
+        <Ch41_WZ_111_MT>	2.4 2.4 0.88 0.000000	</Ch41_WZ_111_MT>
         <china:Ch39_WZ120_1G_FT>	1.4 1.4 0.65 1.72	</china:Ch39_WZ120_1G_FT>
         <china:Ch42_WalkerBulldog_M41D>	2 2 0.07 0.18	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
@@ -3595,11 +3591,53 @@
         <GUN>	2.704562	</GUN>
       </rotation>
       <tiling>
-        <china:Ch52_WZ_122_6_F3>	2.37 2.37 0 0	</china:Ch52_WZ_122_6_F3>
+        <china:Ch04_T34_10>	2.37 2.37 0 0	</china:Ch04_T34_10>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
         <factor>	1.000000  1.000000	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch04_T34_1 china:Ch20_Type58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	501	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_06.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_06_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_06_generic_custom_look_3/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	31 38 19 255	</c0>
+          <c1>	170 136 136 25	</c1>
+          <c2>	121 127 100 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.436332	</HULL>
+        <TURRET>	-0.436332	</TURRET>
+        <GUN>	-0.436332	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch04_T34_1>	4.8 4.8 1.16 0.71	</china:Ch04_T34_1>
+        <china:Ch20_Type58>	6 6 0.25 0.58	</china:Ch20_Type58>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.55564 3.5552	</factor>
         <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>

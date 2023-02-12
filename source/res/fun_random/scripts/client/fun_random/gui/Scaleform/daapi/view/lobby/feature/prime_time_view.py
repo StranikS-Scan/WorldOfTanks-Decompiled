@@ -3,7 +3,7 @@
 from helpers import dependency
 from fun_random.gui.feature.util.fun_mixins import FunSubModeHolder
 from fun_random.gui.feature.util.fun_wrappers import hasHoldingSubMode, filterHoldingSubModeUpdates
-from fun_random.gui.fun_gui_constants import PrebattleActionName
+from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
@@ -53,7 +53,7 @@ class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunSubModeHolder):
         return self._getPrbForcedActionName()
 
     def _getPrbForcedActionName(self):
-        return PrebattleActionName.FUN_RANDOM
+        return PREBATTLE_ACTION_NAME.FUN_RANDOM
 
     def _getServerText(self, serverList, serverInfo, isServerNameShort=False):
         if any((server.isAvailable() for server in serverList)):

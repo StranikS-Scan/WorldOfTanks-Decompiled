@@ -68,9 +68,9 @@ quest_progress = globals().get('quest_progress')
 
 filter = globals().get('BattleResults')
 
-PROGRESS_ID_MAIN = 'stunNumber'
-PROGRESS_ID_ADD = "topByExp"
-PROGRESS_SERIES = "topByExpSeries"
+STUN_TIME_MAIN = 'stunTime'
+TOP_BY_EXP_ADD = "topByExp"
+TOP_BY_EXP_SERIES = "topByExpSeries"
 
 
 def onInit(eventType, eventData, quest, processor):
@@ -83,14 +83,14 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
     brfilter = filter.BattleResultsFilter(eventData)
-    mainCondition = len(brfilter.filterStun())
-    if eventData['avatarResults']['misc']['max']['xp'] &lt;= questProgress.getProgress(PROGRESS_ID_ADD).getParam('desiredPosition'):
-        questProgress.setCompleted(PROGRESS_ID_ADD)
-        questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
-    questProgress.increaseUntilComplete(PROGRESS_ID_MAIN, mainCondition)
+    mainCondition = eventData['avatarResults']['stunDuration']
+    if eventData['avatarResults']['misc']['max']['xp'] &lt;= questProgress.getProgress(TOP_BY_EXP_ADD).getParam('desiredPosition'):
+        questProgress.setCompleted(TOP_BY_EXP_ADD)
+        questProgress.increaseUntilComplete(TOP_BY_EXP_SERIES, 1)
+    questProgress.increaseUntilComplete(STUN_TIME_MAIN, mainCondition)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID,
-                                additionalProgressID=PROGRESS_SERIES))
+                                additionalProgressID=TOP_BY_EXP_SERIES))
 
     processor.setQuestProgress(quest.progressID, questProgress.save())
 

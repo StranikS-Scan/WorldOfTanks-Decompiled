@@ -43,7 +43,7 @@ class BaseDealPanel(object):
         dealPanelModel.setTotalItemsInStorage(prices[cls._IN_STORAGE])
         dealPanelModel.getPrice().clear()
         buyMoney = prices[cls._MONEY]
-        BuyPriceModelBuilder.fillPriceModel(dealPanelModel, buyMoney)
+        BuyPriceModelBuilder.fillPriceModel(dealPanelModel, buyMoney, checkBalanceAvailability=True)
         dealPanelModel.getPrice().invalidate()
         cls._updateDisabled(prices, dealPanelModel)
 
@@ -75,5 +75,6 @@ class BaseDealPanel(object):
     @classmethod
     def _updateDisabled(cls, prices, dealPanelModel):
         buyMoney = prices[cls._MONEY]
-        isEnabled = not buyMoney.isDefined() or canBuyWithGoldExchange(buyMoney, cls._itemsCache.items.stats.money, cls._itemsCache.items.shop.exchangeRate)
+        stats = cls._itemsCache.items.stats
+        isEnabled = not buyMoney.isDefined() or canBuyWithGoldExchange(buyMoney, stats.money, cls._itemsCache.items.shop.exchangeRate) and stats.mayConsumeWalletResources
         dealPanelModel.setIsDisabled(not isEnabled)

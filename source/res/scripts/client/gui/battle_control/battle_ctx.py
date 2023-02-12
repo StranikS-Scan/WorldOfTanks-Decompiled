@@ -3,6 +3,8 @@
 import logging
 import Settings
 from gui.battle_control.arena_info import player_format
+from gui.impl import backport
+from gui.impl.gen import R
 from unit_roster_config import SquadRoster, EpicRoster
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider, IBattleContext
@@ -127,7 +129,8 @@ class BattleContext(IBattleContext):
         return self.__arenaDP.getPersonalDescription().getWinString(isInBattle)
 
     def getArenaFrameLabel(self):
-        return '../maps/icons/battleTypes/136x136/%s.png' % self.__arenaDP.getPersonalDescription().getFrameLabel()
+        iconRes = R.images.gui.maps.icons.battleTypes.c_136x136.dyn(self.__arenaDP.getPersonalDescription().getFrameLabel())
+        return backport.image(iconRes()) if iconRes.exists() else ''
 
     def getFrameLabel(self):
         return self.__arenaDP.getPersonalDescription().getFrameLabel()

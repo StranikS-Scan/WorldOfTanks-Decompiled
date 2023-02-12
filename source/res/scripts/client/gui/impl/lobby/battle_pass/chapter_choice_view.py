@@ -52,6 +52,15 @@ class ChapterChoiceView(ViewImpl):
     def viewModel(self):
         return super(ChapterChoiceView, self).getViewModel()
 
+    def startListeners(self):
+        self._subscribe()
+
+    def stopListeners(self):
+        self._unsubscribe()
+
+    def updateData(self):
+        self._fillModel()
+
     def _onLoading(self, *args, **kwargs):
         super(ChapterChoiceView, self)._onLoading(*args, **kwargs)
         self._fillModel()
@@ -154,7 +163,8 @@ class ChapterChoiceView(ViewImpl):
             showMissionsBattlePass()
             return
         if len(self.__battlePass.getChapterIDs()) != len(self.viewModel.getChapters()):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            with self.viewModel.transaction() as model:
+                self.__updateChapters(model.getChapters())
 
     @staticmethod
     def __buyBattlePass(_):

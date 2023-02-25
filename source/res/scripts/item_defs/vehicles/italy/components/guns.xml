@@ -41,6 +41,7 @@
     <_120mm_Cannone_Da_120_60>	41	</_120mm_Cannone_Da_120_60>
     <_127mm_Cannone_Da_127_58>	42	</_127mm_Cannone_Da_127_58>
     <Cannone_da_75_34_semovente>	44	</Cannone_da_75_34_semovente>
+    <Cannone_da_90_50_T119E1_LE>	45	</Cannone_da_90_50_T119E1_LE>
     <_47_mm_Cannone_Da_47_40_bis>	46	</_47_mm_Cannone_Da_47_40_bis>
   </ids>
   <shared>
@@ -1130,6 +1131,64 @@
         </_90mm_c_g_90_50_HE_T_COMP_B_T91>
       </shots>
     </Cannone_da_90_50_T119E1>
+    <Cannone_da_90_50_T119E1_LE>
+      <userString>	#italy_vehicles:Cannone_da_90_50_T119E1_LE	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	61	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	1202	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.34	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_c_p_90_50_AP_T_T33E4>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	929	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	212 193	</piercingPower>
+        </_90mm_c_p_90_50_AP_T_T33E4>
+        <_90mm_c_p_90_50_HVAP_T_M332_T67>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	259 228	</piercingPower>
+        </_90mm_c_p_90_50_HVAP_T_M332_T67>
+        <_90mm_c_g_90_50_HE_T_COMP_B_T91>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	732	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_c_g_90_50_HE_T_COMP_B_T91>
+      </shots>
+    </Cannone_da_90_50_T119E1_LE>
     <Cannone_da_90_Rh>
       <userString>	#italy_vehicles:Cannone_da_90_Rh	</userString>
       <tags></tags>

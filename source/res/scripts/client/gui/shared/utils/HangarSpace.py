@@ -158,6 +158,8 @@ class HangarSpace(IHangarSpace):
         self.__delayedRefreshCallback = None
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
+        self.__vehicleUpdateRequested = False
+        self.__logStatisticsPostponed = False
         self.onSpaceRefresh = Event.Event()
         self.onSpaceRefreshCompleted = Event.Event()
         self.onSpaceCreating = Event.Event()
@@ -305,6 +307,7 @@ class HangarSpace(IHangarSpace):
             Waiting.hide('loadHangarSpaceVehicle')
 
     def startToUpdateVehicle(self, vehicle, outfit=None):
+        self.__vehicleUpdateRequested = True
         Waiting.show('loadHangarSpaceVehicle', isSingle=True)
         self.updateVehicle(vehicle, outfit)
 
@@ -372,25 +375,36 @@ class HangarSpace(IHangarSpace):
         self.onSpaceCreate()
         Waiting.hide('loadHangarSpace')
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_SPACE)
-        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY)
-        stats = self.statsCollector.getStatistics()
-        player = BigWorld.player()
-        if player is not None:
-            LOG_DEBUG_DEV(stats)
-            if stats['system'] and hasattr(player, 'logClientSystem'):
-                BigWorld.player().logClientSystem(stats['system'])
-            if stats['session'] and hasattr(player, 'logClientSessionStats'):
-                BigWorld.player().logClientSessionStats(stats['session'])
+        logStatistics = not self.__vehicleUpdateRequested
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY, showSummaryNow=logStatistics)
+        if logStatistics:
+            self.__logStatistics()
+        else:
+            self.__logStatisticsPostponed = True
         self.onHeroTankReady()
-        return
 
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='exit')
     def _changeDone(self):
         Waiting.hide('loadHangarSpaceVehicle')
         self.__isModelLoaded = True
+        self.__vehicleUpdateRequested = False
         self.onVehicleChanged()
-        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE, showSummaryNow=self.__logStatisticsPostponed)
+        if self.__logStatisticsPostponed:
+            self.__logStatistics()
+        self.__logStatisticsPostponed = False
         uniprof.exitFromRegion('client.loading')
+
+    def __logStatistics(self):
+        stats = self.statsCollector.getStatistics()
+        player = BigWorld.player()
+        if player is not None:
+            LOG_DEBUG_DEV(stats)
+            if stats['system'] and hasattr(player, 'logClientSystem'):
+                player.logClientSystem(stats['system'])
+            if stats['session'] and hasattr(player, 'logClientSessionStats'):
+                player.logClientSessionStats(stats['session'])
+        return
 
     def __delayedRefresh(self):
         self.__delayedRefreshCallback = None

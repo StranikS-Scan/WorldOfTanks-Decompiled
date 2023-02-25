@@ -66,6 +66,10 @@ class RankedSeason(GameSeason):
     def _buildCycle(self, idx, status, start, end, number, announceOnly):
         return RankedCycle(idx, status, start, end, number, announceOnly)
 
+    @property
+    def isSpecial(self):
+        return self.__isSpecial
+
     def getUserName(self):
         if self.__isSpecial:
             seasonName = backport.text(R.strings.ranked_battles.rankedBattleMainView.specialSeason())

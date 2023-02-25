@@ -395,7 +395,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def onVehicleMarkerAdded(self, _, vInfo, __):
         if self._vehicleID and self._vehicleID == vInfo.vehicleID:
-            self._addMarker(self._vehicleID)
+            self.__addAutoAimMarker(vInfo.vehicleID)
 
     def _destroyVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:

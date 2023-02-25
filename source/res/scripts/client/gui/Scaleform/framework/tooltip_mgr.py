@@ -101,7 +101,13 @@ class ToolTip(ToolTipMgrMeta):
                 region = 'Loading {} {}'.format(tooltipType, id)
                 uniprof.enterToRegion(region, LOADING_REGION_COLOR)
                 BigWorld.notify(BigWorld.EventType.LOADING_VIEW, name, id, name)
-                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                try:
+                    data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                except:
+                    BigWorld.notify(BigWorld.EventType.LOAD_FAILED, name, id, name)
+                    uniprof.exitFromRegion(region)
+                    raise
+
                 BigWorld.notify(BigWorld.EventType.VIEW_LOADED, name, id, name)
                 uniprof.exitFromRegion(region)
             else:

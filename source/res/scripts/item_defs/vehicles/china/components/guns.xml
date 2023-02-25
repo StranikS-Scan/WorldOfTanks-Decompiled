@@ -71,6 +71,7 @@
     <_100mm_Type_59_2>	76	</_100mm_Type_59_2>
     <_130mm_Type_62>	78	</_130mm_Type_62>
     <_105mm_Type_81-I>	80	</_105mm_Type_81-I>
+    <_105mm_L7C_MK>	81	</_105mm_L7C_MK>
     <_130mm_59_TP_A>	84	</_130mm_59_TP_A>
     <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_FL>	502	</_100mm_60-100TA_FL>
@@ -2666,6 +2667,64 @@
         </_105mm_HEP_M393A1>
       </shots>
     </_105mm_L7C>
+    <_105mm_L7C_MK>
+      <userString>	#china_vehicles:_105mm_L7C_MK	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APDS_M392A2_MK>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1478	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	261 251	</piercingPower>
+        </_105mm_APDS_M392A2_MK>
+        <_105mm_HEAT_M456_MK>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	350 350	</piercingPower>
+        </_105mm_HEAT_M456_MK>
+        <_105mm_HEP_M393A1_MK>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	732	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HEP_M393A1_MK>
+      </shots>
+    </_105mm_L7C_MK>
     <_105mm_L7A3C>
       <userString>	#china_vehicles:_105mm_L7A3C	</userString>
       <tags></tags>

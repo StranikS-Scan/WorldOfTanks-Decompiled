@@ -27,10 +27,9 @@ class RemoteCameraSender(InputHandlerCommand):
             if vehicle is None:
                 return
             ctrl = self.__aih.ctrl
-            ctrlModeName = self.__aih.ctrlModeName
-            aimSystem = ctrl.camera.aimingSystem
-            if isinstance(ctrl, ArcadeControlMode) and isinstance(aimSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(aimSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(aimSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(aimSystem, DualGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(aimSystem, StrategicAimingSystem) or isinstance(ctrl, MapCaseControlModeBase) and isinstance(aimSystem, ArcadeAimingSystem):
-                aimingSystem = ctrl.camera.aimingSystem
+            aimingSystem = ctrl.camera.aimingSystem
+            if isinstance(ctrl, ArcadeControlMode) and isinstance(aimingSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(aimingSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(aimingSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(aimingSystem, DualGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(aimingSystem, StrategicAimingSystem) or isinstance(ctrl, MapCaseControlModeBase) and isinstance(aimingSystem, ArcadeAimingSystem):
+                ctrlModeName = self.__aih.ctrlModeName
                 shotPoint = aimingSystem.getShotPoint()
                 zoom = aimingSystem.getZoom()
                 if shotPoint is not None and zoom is not None:

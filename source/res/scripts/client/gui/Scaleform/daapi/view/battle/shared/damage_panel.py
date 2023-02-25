@@ -354,6 +354,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
 
     def _switching(self, _):
         self.as_resetS()
+        self.__stunSourcesData = {}
         if self.__isWheeledTech:
             self.__isWheeledTech = False
         if self.__isTrackWithinVehicle:

@@ -31,7 +31,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui import DialogsInterface, makeHtmlString
 from debug_utils import LOG_ERROR
-from gui.shared.event_dispatcher import showResSimpleDialog
+from gui.shared.event_dispatcher import showResSimpleDialog, showModeSelectorWindow
 from skeletons.gui.shared import IItemsCache
 BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding premiumType')
 _GREEN = 'green'
@@ -257,6 +257,8 @@ class BootcampController(IBootcampController):
                 self.__goBootcamp()
             elif isFromLobbyMenu:
                 g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
+            else:
+                showModeSelectorWindow(False)
 
     def __skipBootcamp(self):
         window = BootcampExitWindow(partial(self.stopBootcamp, not self.isInBootcampAccount()))

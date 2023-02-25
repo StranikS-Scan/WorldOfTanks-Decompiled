@@ -14,6 +14,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDev
 from gui.shared.event_dispatcher import showShop
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.impl.gen import R
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -53,6 +54,7 @@ class CrystalsPromoView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(CrystalsPromoView, self)._onLoading(*args, **kwargs)
+        switchHangarOverlaySoundFilter(on=True)
         self.__destroyViewObject.init(self.getParentWindow())
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
@@ -70,6 +72,7 @@ class CrystalsPromoView(ViewImpl):
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
 
     def _finalize(self):
+        switchHangarOverlaySoundFilter(on=False)
         self.__destroyViewObject.fini()
         self.viewModel.goToShop -= self.__goToShopHandler
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged

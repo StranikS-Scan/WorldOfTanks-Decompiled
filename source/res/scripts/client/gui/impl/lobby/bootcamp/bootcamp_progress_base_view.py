@@ -76,7 +76,7 @@ class BootcampProgressBaseView(ViewImpl):
             lessonModel.setCompleted(lessonNumber <= currentLesson)
             lessonModel.setCurrent(lessonNumber == currentLesson + 1)
             lessonModel.setTooltipId(lessonNumber)
-            status = BootcampStatuses.IN_PROGRESS if lessonNumber == currentLesson else (BootcampStatuses.COMPLETED if lessonNumber < currentLesson else None)
+            status = BootcampStatuses.IN_PROGRESS if lessonNumber == currentLesson + 1 else (BootcampStatuses.COMPLETED if lessonNumber < currentLesson + 1 else None)
             self.__tooltipData[lessonNumber] = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOTCAMP_LESSON_PROGRESS, specialArgs=lessonRaw['tooltipArgs'] + [status])
             lessons.addViewModel(lessonModel)
 

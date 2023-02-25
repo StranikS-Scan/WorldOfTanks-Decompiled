@@ -93,16 +93,21 @@ class SmokeType(ShellType):
 
 
 class Stun(object):
-    __slots__ = ('stunRadius', 'stunDuration', 'stunType')
+    __slots__ = ('stunRadius', 'stunDuration', 'stunType', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
 
     def __init__(self):
         super(Stun, self).__init__()
         self.stunRadius = component_constants.ZERO_FLOAT
         self.stunDuration = component_constants.ZERO_FLOAT
         self.stunType = StunTypes.DEFAULT
+        self.stunFactor = component_constants.ZERO_FLOAT
+        self.guaranteedStunDuration = component_constants.ZERO_FLOAT
+        self.damageDurationCoeff = component_constants.ZERO_FLOAT
+        self.guaranteedStunEffect = component_constants.ZERO_FLOAT
+        self.damageEffectCoeff = component_constants.ZERO_FLOAT
 
     def __repr__(self):
-        return 'Stun(radius={}, duration={}, stunType={})'.format(self.stunRadius, self.stunDuration, self.stunType)
+        return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff)
 
 
 def createShellType(typeName):

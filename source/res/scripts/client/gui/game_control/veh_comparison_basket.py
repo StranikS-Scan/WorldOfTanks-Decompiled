@@ -132,14 +132,18 @@ class CONFIGURATION_TYPES(object):
 class _VehCmpCache(FileLocalCache):
     VERSION = 4
 
-    def __init__(self, databaseID, dataSetter, dataGetter):
+    def __init__(self, databaseID, vehiclesIterator):
         super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
-        self.__dataSetter = dataSetter
-        self.__dataGetter = dataGetter
+        self.__vehiclesIterator = vehiclesIterator
+        self.__cache = None
+        return
+
+    def getData(self):
+        return self.__cache
 
     def _getCache(self):
         vehsData = []
-        for vehCompareData in self.__dataGetter():
+        for vehCompareData in self.__vehiclesIterator():
             dynSlotType = vehCompareData.getDynSlotType()
             vehsData.append((vehCompareData.getVehicleStrCD(),
              vehCompareData.getEquipment(),
@@ -155,12 +159,11 @@ class _VehCmpCache(FileLocalCache):
     def _setCache(self, data):
         if isinstance(data, (tuple, list)) and len(data) == 2:
             if self.VERSION == data[0]:
-                self.__dataSetter(data[1])
-        return data
+                self.__cache = data[1]
 
     def clear(self):
-        self.__dataSetter = None
-        self.__dataGetter = None
+        self.__cache = None
+        self.__vehiclesIterator = None
         super(_VehCmpCache, self).clear()
         return
 
@@ -412,6 +415,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             if self.__cache is None:
                 self.__cache = self._createCache()
                 if self.__cache is not None:
+                    self.__cache.onRead += self.__onVehiclesCacheRead
                     self.__cache.read()
         self.__initHandlers()
         return
@@ -644,7 +648,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
     def _createCache(self):
         databaseID = BigWorld.player().databaseID if BigWorld.player() else None
-        return _VehCmpCache(databaseID, self._applyVehiclesFromCache, self._getVehiclesIterator) if databaseID is not None else None
+        return _VehCmpCache(databaseID, self._getVehiclesIterator) if databaseID is not None else None
 
     def _applyVehiclesFromCache(self, data):
         if not data:
@@ -673,6 +677,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     def _getVehiclesIterator(self):
         for vehCmpData in self.__vehicles:
             yield vehCmpData
+
+    def __onVehiclesCacheRead(self):
+        data = self.__cache.getData()
+        if data is not None:
+            self._applyVehiclesFromCache(data)
+        return
 
     def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None):
         oldVal = self.__isFull
@@ -798,6 +808,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
     def __disposeCache(self):
         if self.__cache is not None:
+            self.__cache.onRead -= self.__onVehiclesCacheRead
             self.__cache.clear()
             self.__cache = None
         return

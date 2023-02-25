@@ -742,13 +742,14 @@ class _DistancePlugin(CrosshairPlugin):
 
 
 class TargetDistancePlugin(_DistancePlugin):
-    __slots__ = ('__trackID', '__isEnabled', '__currentEntityInFocus')
+    __slots__ = ('__trackID', '__trackEnemy', '__trackAlly', '__currentEntityInFocus')
 
     def __init__(self, parentObj):
         super(TargetDistancePlugin, self).__init__(parentObj)
         self.__trackID = 0
         self.__currentEntityInFocus = 0
-        self.__isEnabled = False
+        self.__trackEnemy = False
+        self.__trackAlly = False
 
     def start(self):
         super(TargetDistancePlugin, self).start()
@@ -805,15 +806,16 @@ class TargetDistancePlugin(_DistancePlugin):
     def __setEnabled(self):
         getter = self.settingsCore.getSetting
         markerSettings = getter(MARKERS.ENEMY)
-        self.__isEnabled = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
-        if self.__isEnabled:
-            markerSettings = getter(MARKERS.ALLY)
-            self.__isEnabled = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
+        self.__trackEnemy = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
+        markerSettings = getter(MARKERS.ALLY)
+        self.__trackAlly = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
         if self.__currentEntityInFocus:
             self.__startTrack(self.__currentEntityInFocus)
 
     def __shouldTrackVehicle(self, target):
-        return self.__isEnabled
+        if not target.isAlive():
+            return True
+        return self.__trackAlly if BigWorld.player().team == target.publicInfo['team'] else self.__trackEnemy
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.ENTITY_IN_FOCUS:

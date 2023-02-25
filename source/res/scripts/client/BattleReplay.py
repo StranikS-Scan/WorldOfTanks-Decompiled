@@ -424,6 +424,7 @@ class BattleReplay(object):
 
     def onReplayTerminated(self, reason):
         _logger.info('BattleReplay.onReplayTerminated: reason=%r', reason)
+        g_replayEvents.onMuteSound(False)
         g_replayEvents.onReplayTerminated(reason)
         self.__isFinished = False
         if self.__originalPickleLoads is not None:
@@ -1084,6 +1085,8 @@ class BattleReplay(object):
             return
 
     def __onSettingsChanging(self, *_):
+        if not self.isPlaying:
+            return
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
         newQuiet = newSpeed == 0 or newSpeed > 4.0
         g_replayEvents.onMuteSound(newQuiet)
@@ -1101,6 +1104,7 @@ class BattleReplay(object):
         self.__updateGunOnTimeWarp = True
         EffectsList.EffectsListPlayer.clear()
         if self.__rewind:
+            self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
             playerControlModeName = BigWorld.player().inputHandler.ctrlModeName
             self.__wasVideoBeforeRewind = playerControlModeName == CTRL_MODE_NAME.VIDEO
             self.__videoCameraMatrix.set(BigWorld.camera().matrix)

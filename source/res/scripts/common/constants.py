@@ -1819,10 +1819,11 @@ class OVERTURN_WARNING_LEVEL:
     SAFE = 0
     CAUTION = 1
     DANGER = 2
+    BLOCKED = 3
 
     @classmethod
     def isOverturned(cls, warningLevel):
-        return warningLevel in (cls.CAUTION, cls.DANGER)
+        return warningLevel in (cls.CAUTION, cls.DANGER, cls.BLOCKED)
 
 
 class OVERTURN_CONDITION:

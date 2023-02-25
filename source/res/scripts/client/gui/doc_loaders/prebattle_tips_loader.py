@@ -6,7 +6,7 @@ _PREBATTLE_TIPS_XML_PATH = 'gui/prebattle_tips.xml'
 _PRECEDING_DEFAULT_SHOW_TIMES = 1
 DEFAULT_STATUS = 'payAttention'
 DEFAULT_GROUP = 'all'
-_OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isPostProgressionEnabled')
+_OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isRankedLeagueRewardEnabled', 'isPostProgressionEnabled')
 
 def _readPreBattleTips():
     filters = dict()
@@ -27,6 +27,7 @@ def _readPreBattleTips():
         for key in _OPTIONAL_FILTER_FLAGS:
             if filterSection.has_key(key):
                 filters[filterId][key] = filterSection.readBool(key)
+                print 'filters', filterId, key, filterSection.readBool(key), _OPTIONAL_FILTER_FLAGS
 
     for _, tipsSection in resource_helper.getIterator(ctx, root['tips']):
         filterId = tipsSection.readString('filter')
@@ -57,7 +58,7 @@ def getPreBattleTipsConfig():
     global _preBattleTipsConfig
     if _preBattleTipsConfig is None:
         _preBattleTipsConfig = _readPreBattleTips()
-    return _preBattleTipsConfig
+    return _readPreBattleTips()
 
 
 _preBattleTipsConfig = None

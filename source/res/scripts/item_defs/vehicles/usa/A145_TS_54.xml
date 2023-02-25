@@ -70,7 +70,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24365	</weight>
-    <maxHealth>	1280	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1289,8 +1289,8 @@
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2156,7 +2156,7 @@
         <armor_6>	240	</armor_6>
         <armor_7>	255	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <armor_9>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_9>
         <armor_10>	20	</armor_10>
         <armor_11>	50	</armor_11>
@@ -2183,8 +2183,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11800	</weight>
-      <maxHealth>	320	</maxHealth>
-      <rotationSpeed>	33	</rotationSpeed>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -2219,21 +2219,21 @@
             <maxPitch>	0 8 0.425 8 0.433333 6 0.486111 6 0.513889 6 0.566667 6 0.575 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	2.5	</chargeTime>
+            <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
-            <reloadLockTime>	6.0	</reloadLockTime>
-            <reloadTimes>	8.5 8.5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadLockTime>	2.0	</reloadLockTime>
+            <reloadTimes>	8 8	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>

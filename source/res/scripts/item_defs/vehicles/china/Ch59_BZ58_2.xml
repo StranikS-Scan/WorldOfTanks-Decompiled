@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	17	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.071	</moving>
@@ -742,7 +742,7 @@
       <weight>	11000	</weight>
       <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
-      <brakeForce>	5000	</brakeForce>
+      <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
@@ -1604,7 +1604,7 @@
       </armor>
       <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	480	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1646,7 +1646,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	14.5	</reloadTime>
+          <reloadTime>	15.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.15	</turretRotation>
             <afterShot>	3.5	</afterShot>

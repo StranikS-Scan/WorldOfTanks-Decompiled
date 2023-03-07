@@ -16941,6 +16941,70 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	styles 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31014	</id>
+      <texture>	gui/maps/vehicles/styles/cosmoday_2023.png	</texture>
+      <userString>	#vehicle_customization:styles/cosmoday_2023_MT	</userString>
+      <description>	#vehicle_customization:styles/cosmoday_2023_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:styles/cosmoday_2023_MT/description/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31012	</id>
+              <appliedTo>	23	</appliedTo>
+            </item>
+            <item>
+              <id>	31011	</id>
+              <appliedTo>	28928	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31015	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31014	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <projection_decals>
+            <item>
+              <id>	31030	</id>
+              <tags>	formfactor_rect1x2 direction_right_to_left mimic left	</tags>
+            </item>
+            <item>
+              <id>	31031	</id>
+              <tags>	safe formfactor_rect1x2 direction_left_to_right right	</tags>
+            </item>
+            <item>
+              <id>	31032	</id>
+              <tags>	formfactor_rect1x2 direction_right_to_left cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>

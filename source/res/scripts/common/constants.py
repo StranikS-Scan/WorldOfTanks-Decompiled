@@ -910,8 +910,6 @@ class Configs(enum.Enum):
     CUSTOMIZATION_QUESTS = 'customizationQuests'
     UI_LOGGING = 'ui_logging_config'
     BATTLE_MATTERS_CONFIG = 'battle_matters_config'
-    COLLECTIVE_GOAL_ENTRY_POINT_CONFIG = 'collective_goal_entry_point_config'
-    COLLECTIVE_GOAL_MARATHONS_CONFIG = 'collective_goal_marathons_config'
     PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
     COMP7_CONFIG = 'comp7_config'
     COMP7_PRESTIGE_RANKS_CONFIG = 'comp7_prestige_ranks_config'
@@ -1777,7 +1775,6 @@ class REQUEST_COOLDOWN:
     VEHICLE_IN_BATTLE_SWITCH = 2.0
     SET_VIVOX_PRESENCE = 1.0
     UNIT_UPDATE_EXTRAS = 2.0
-    SURVEY_RESULT = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1819,11 +1816,10 @@ class OVERTURN_WARNING_LEVEL:
     SAFE = 0
     CAUTION = 1
     DANGER = 2
-    BLOCKED = 3
 
     @classmethod
     def isOverturned(cls, warningLevel):
-        return warningLevel in (cls.CAUTION, cls.DANGER, cls.BLOCKED)
+        return warningLevel in (cls.CAUTION, cls.DANGER)
 
 
 class OVERTURN_CONDITION:
@@ -2122,10 +2118,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  108: 'Fun Random carousel filter 2',
  USER_SERVER_SETTINGS.UI_STORAGE_2: 'ui storage 2, used for preserving first entry flags etc',
  110: 'Competitive7x7 carousel filter 1',
- 111: 'Competitive7x7 carousel filter 2',
- 112: 'Enemy marker setting',
- 113: 'Dead marker setting',
- 114: 'Ally marker setting'}
+ 111: 'Competitive7x7 carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2537,16 +2530,6 @@ SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
 
-@enum.unique
-class StunTypes(enum.IntEnum):
-    NONE = 0
-    DEFAULT = 1
-    FLAME = 2
-    BULLET = 3
-
-
-AVAILABLE_STUN_TYPES_NAMES = [ key for key, value in StunTypes.__members__.iteritems() if value > 0 ]
-
 class SHELL_MECHANICS_TYPE:
     LEGACY = 'LEGACY'
     MODERN = 'MODERN'
@@ -2633,12 +2616,10 @@ class WGC_PUBLICATION:
     WGC_PC = 0
     WGC_360 = 1
     WGC_STEAM = 2
-    LGC_PC = 3
     NAMES = {WGC_UNKNOWN: 'Unknown',
      WGC_PC: 'PC',
      WGC_360: '360',
-     WGC_STEAM: 'Steam',
-     LGC_PC: 'LPC'}
+     WGC_STEAM: 'Steam'}
 
 
 class DISTRIBUTION_PLATFORM(enum.Enum):
@@ -2652,8 +2633,7 @@ class DISTRIBUTION_PLATFORM(enum.Enum):
 WGC_PUBLICATION_TO_DISTRIBUTION_PLATFORM = {WGC_PUBLICATION.WGC_UNKNOWN: DISTRIBUTION_PLATFORM.WG,
  WGC_PUBLICATION.WGC_PC: DISTRIBUTION_PLATFORM.WG,
  WGC_PUBLICATION.WGC_360: DISTRIBUTION_PLATFORM.CHINA_360,
- WGC_PUBLICATION.WGC_STEAM: DISTRIBUTION_PLATFORM.STEAM,
- WGC_PUBLICATION.LGC_PC: DISTRIBUTION_PLATFORM.WG}
+ WGC_PUBLICATION.WGC_STEAM: DISTRIBUTION_PLATFORM.STEAM}
 
 class TARGET_LOST_FLAGS:
     INVALID = 1

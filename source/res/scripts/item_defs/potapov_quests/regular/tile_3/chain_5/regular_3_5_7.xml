@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunDuration	</key>
-              <greaterOrEqual>	80	</greaterOrEqual>
+              <key>	stunned	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -66,8 +66,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunDuration	</key>
-              <greaterOrEqual>	80	</greaterOrEqual>
+              <key>	stunned	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
             <win></win>
             <isAlive></isAlive>
@@ -102,8 +102,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	stunDuration	</key>
-              <greaterOrEqual>	80	</greaterOrEqual>
+              <key>	stunned	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
             <win></win>
             <isAlive></isAlive>

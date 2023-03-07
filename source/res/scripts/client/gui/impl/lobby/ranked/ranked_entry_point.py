@@ -12,7 +12,7 @@ from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.ranked.ranked_season_model import RankedSeasonModel
-    from gui.ranked_battles.ranked_models import RankedSeason
+    from season_common import GameSeason
 _logger = logging.getLogger(__name__)
 
 @dependency.replace_none_kwargs(rankedController=IRankedBattlesController)
@@ -70,7 +70,6 @@ class RankedEntryPoint(ViewImpl):
             tx.setSeasonNumber(season.getNumber())
             tx.setStartDate(season.getStartDate())
             tx.setEndDate(season.getEndDate())
-            tx.setIsSpecialSeason(season.isSpecial)
         else:
             self.__resetSeasonViewModel(tx)
 
@@ -79,7 +78,6 @@ class RankedEntryPoint(ViewImpl):
         tx.setStartDate(-1)
         tx.setEndDate(-1)
         tx.setSeasonNumber(-1)
-        tx.setIsSpecialSeason(False)
 
     def __onUpdate(self, _=None):
         self.__updateViewModel()

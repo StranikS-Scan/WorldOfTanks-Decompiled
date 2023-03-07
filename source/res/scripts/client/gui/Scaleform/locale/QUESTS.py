@@ -1143,6 +1143,7 @@ class QUESTS(object):
     MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
     MISSIONDETAILS_NEXTPAGEBTN_LABEL = '#quests:missionDetails/nextPageBtn/label'
     MISSIONDETAILS_PREVPAGEBTN_LABEL = '#quests:missionDetails/prevPageBtn/label'
+    MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
     MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
     MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
     MISSIONS_TOKENPOPOVER_BUYBTN_LABEL = '#quests:missions/tokenPopover/buyBtn/label'
@@ -1540,7 +1541,6 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK = '#quests:personalMission/status/addBottom/vehicleType/heavyTank'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG = '#quests:personalMission/status/addBottom/vehicleType/AT-SPG'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG = '#quests:personalMission/status/addBottom/vehicleType/SPG'
-    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY = '#quests:personalMission/status/addBottom/vehicleType/any'
     PERSONALMISSION_STATUS_MISSIONDISABLED = '#quests:personalMission/status/missionDisabled'
     PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS = '#quests:personalMission/status/lockedByPrevMissions'
     PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION = '#quests:personalMission/status/lockedByPrevOperation'
@@ -2186,8 +2186,7 @@ class QUESTS(object):
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_MEDIUMTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY)
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG)
 
     @classmethod
     def getTokenTitle(cls, style):

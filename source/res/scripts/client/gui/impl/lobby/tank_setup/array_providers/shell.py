@@ -9,7 +9,7 @@ from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParamete
 from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
-_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunMaxDuration')
+_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList')
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)

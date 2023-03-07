@@ -9,11 +9,13 @@ import constants
 from battle_pass_common import BattlePassConsts
 from constants import EVENT_TYPE
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
-from gui import makeHtmlString, GUI_NATIONS
+from gui import GUI_NATIONS, makeHtmlString
 from gui.Scaleform import getNationsFilterAssetPath
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getNationText
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import OldStyleBonusesFormatter
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
@@ -23,9 +25,9 @@ from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, Qu
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
+from helpers.i18n import makeString as _ms
 from nations import ALLIANCE_TO_NATIONS
 from personal_missions import PM_BRANCH
-from potapov_quests import ClassifierByAlliance, ClassifierByClass
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -631,51 +633,33 @@ def getNationsForChain(operation, chainID):
     return ALLIANCE_TO_NATIONS[operation.getChainClassifier(chainID).classificationAttr]
 
 
-def getChainVehRequirements(operation, chainID, branchID, useIcons=False):
-    vehicleRequirements = getVehicleRequirements(operation.getID(), operation.getChainClassifier(chainID).getAllClassificationAttrs(), useIcons)
-    return backport.text(R.strings.personal_missions.operationInfo.chainVehReq.dyn(PM_BRANCH.TYPE_TO_NAME[branchID])(), **vehicleRequirements)
+def getChainVehRequirements(operation, chainID, useIcons=False):
+    vehs, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(operation, chainID)
+    if useIcons and operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+        nations = getNationsForChain(operation, chainID)
+        vehsData = []
+        for nation in GUI_NATIONS:
+            if nation in nations:
+                vehsData.append(icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4))
+
+        vehs = ' '.join(vehsData)
+    return _ms(PERSONAL_MISSIONS.OPERATIONINFO_CHAINVEHREQ, vehs=vehs, minLevel=minLevel, maxLevel=maxLevel)
 
 
-def getVehicleRequirements(operationID, classificationAttrs, replaceWithIcons=False):
-    classRestriction, allianceRestriction = getClassificationRestrictions(classificationAttrs, replaceWithIcons)
-    minLevel, maxLevel = getLevelRestriction(operationID)
-    args = {ClassifierByClass.CLASSIFIER_ALIAS: classRestriction,
-     'minLevel': minLevel,
-     'maxLevel': maxLevel}
-    if allianceRestriction is not None:
-        args[ClassifierByAlliance.CLASSIFIER_ALIAS] = allianceRestriction
-    return args
-
-
-def getLevelRestriction(operationID):
+def getChainVehTypeAndLevelRestrictions(operation, chainID):
     _eventsCache = dependency.instance(IEventsCache)
     pmCache = _eventsCache.getPersonalMissions()
-    minLevel, maxLevel = pmCache.getVehicleLevelRestrictions(operationID)
-    return (int2roman(minLevel), int2roman(maxLevel))
-
-
-def getClassificationRestrictions(classificationAttrs, replaceWithIcons=False):
-    allianceRestriction = None
-    if ClassifierByAlliance.CLASSIFIER_ALIAS in classificationAttrs:
-        delimiter = ' ' if replaceWithIcons else ', '
-        res = []
-        allianceName = classificationAttrs[ClassifierByAlliance.CLASSIFIER_ALIAS]
-        fitNations = ALLIANCE_TO_NATIONS[allianceName]
+    minLevel, maxLevel = pmCache.getVehicleLevelRestrictions(operation.getID())
+    vehType = _ms(QUESTS.getAddBottomVehType(operation.getChainClassifier(chainID).classificationAttr))
+    if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+        nations = getNationsForChain(operation, chainID)
+        nationsText = []
         for nation in GUI_NATIONS:
-            if nation in fitNations:
-                if replaceWithIcons:
-                    res.append(icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4))
-                else:
-                    res.append(backport.text(R.strings.nations.dyn(nation)()))
+            if nation in nations:
+                nationsText.append(getNationText(nation))
 
-        allianceRestriction = delimiter.join(res)
-        if not replaceWithIcons:
-            allianceRestriction = backport.text(R.strings.quests.personalMission.status.addBottom.vehicleType.dyn(allianceName.replace('-', '_'))(), nations=allianceRestriction)
-    if ClassifierByClass.CLASSIFIER_ALIAS in classificationAttrs:
-        classRestriction = backport.text(R.strings.quests.personalMission.status.addBottom.vehicleType.dyn(classificationAttrs[ClassifierByClass.CLASSIFIER_ALIAS].replace('-', '_'))())
-    else:
-        classRestriction = backport.text(R.strings.quests.personalMission.status.addBottom.vehicleType.any())
-    return (classRestriction, allianceRestriction)
+        vehType = _ms(vehType, nations=', '.join(nationsText))
+    return (vehType, int2roman(minLevel), int2roman(maxLevel))
 
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}

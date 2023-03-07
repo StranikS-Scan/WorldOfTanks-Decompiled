@@ -511,22 +511,15 @@
     </vehicleFilter>
     <style>
       <id>	31003	</id>
-      <texture>	gui/maps/vehicles/styles/J27_O_I_120_KB_MT_3dst.png	</texture>
-      <modelsSet>	J27_O_I_120_KB_MT_3dst	</modelsSet>
+      <texture></texture>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst	</userString>
-      <description>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:styles/special_styles	</userString>
+      <description>	#vehicle_customization:styles/special_styles	</description>
+      <longDescriptionSpecial>	#vehicle_customization:styles/special_styles	</longDescriptionSpecial>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
-          <insignias>
-            <item>
-              <id>	31004	</id>
-              <appliedTo>	4096	</appliedTo>
-            </item>
-          </insignias>
           <camouflages>
             <item>
               <id>	1	</id>
@@ -535,16 +528,6 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <attachments>
-            <item>
-              <id>	31001	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	31002	</id>
-              <slotId>	18000	</slotId>
-            </item>
-          </attachments>
         </outfit>
       </outfits>
       <itemFilters>

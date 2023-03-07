@@ -1266,7 +1266,6 @@ class VehicleMarkerSetting(StorageAccountSetting):
             VEHICLE_NAME = 'VehicleName'
             PLAYER_NAME = 'PlayerName'
             AIM_MARKER_2D = 'AimMarker2D'
-            VEHICLE_DIST = 'VehicleDist'
 
         @classmethod
         def getOptionName(cls, mType, mOption):

@@ -629,6 +629,8 @@ class MENU(object):
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     TANK_PARAMS_BURSTSEC = '#menu:tank_params/burstSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
+    TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
+    TANK_PARAMS_STUNDURATIONLIST = '#menu:tank_params/stunDurationList'
     TANK_PARAMS_CHARGETIME = '#menu:tank_params/chargeTime'
     TANK_PARAMS_NO_BRACKETS_KG = '#menu:tank_params/no_brackets/kg'
     TANK_PARAMS_NO_BRACKETS_S = '#menu:tank_params/no_brackets/s'
@@ -642,7 +644,7 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLERAMOREXPLOSIONDAMAGERESISTANCE = '#menu:extraParams/name/vehicleRamOrExplosionDamageResistance'
     EXTRAPARAMS_NAME_CREWHITCHANCE = '#menu:extraParams/name/crewHitChance'
     EXTRAPARAMS_NAME_CREWSTUNDURATION = '#menu:extraParams/name/crewStunDuration'
-    EXTRAPARAMS_NAME_CREWSTUNRESISTANCE = '#menu:extraParams/name/crewStunResistance'
+    EXTRAPARAMS_NAME_CREWREPEATEDSTUNDURATION = '#menu:extraParams/name/crewRepeatedStunDuration'
     EXTRAPARAMS_NAME_VEHICLECHASSISSTRENGTH = '#menu:extraParams/name/vehicleChassisStrength'
     EXTRAPARAMS_NAME_VEHICLECHASSISFALLDAMAGE = '#menu:extraParams/name/vehicleChassisFallDamage'
     EXTRAPARAMS_NAME_VEHICLECHASSISREPAIRSPEED = '#menu:extraParams/name/vehicleChassisRepairSpeed'
@@ -1170,7 +1172,10 @@ class MENU(object):
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
     MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
+    MODULEINFO_PARAMS_STUNMINDURATION = '#menu:moduleInfo/params/stunMinDuration'
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
+    MODULEINFO_PARAMS_STUNMINDURATIONLIST = '#menu:moduleInfo/params/stunMinDurationList'
+    MODULEINFO_PARAMS_STUNDURATIONLIST = '#menu:moduleInfo/params/stunDurationList'
     MODULEINFO_PARAMS_COOLDOWNSECONDS = '#menu:moduleInfo/params/cooldownSeconds'
     MODULEINFO_PARAMS_RELOADCOOLDOWNSECONDS = '#menu:moduleInfo/params/reloadCooldownSeconds'
     MODULEINFO_PARAMS_RADARRADIUS = '#menu:moduleInfo/params/radarRadius'
@@ -1245,6 +1250,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:vehicleInfo/params/rocketAccelerationEnginePower'
     VEHICLEINFO_PARAMS_ROCKETACCELERATIONREUSEANDDURATION = '#menu:vehicleInfo/params/rocketAccelerationReuseAndDuration'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
+    VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:vehicleInfo/params/chassisRepairTime'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:vehicleInfo/params/chassisRepairTimeYoh'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
@@ -2710,6 +2716,8 @@ class MENU(object):
      TANK_PARAMS_CLIPSEC,
      TANK_PARAMS_BURSTSEC,
      TANK_PARAMS_STUNMAXDURATION,
+     TANK_PARAMS_STUNMINDURATION,
+     TANK_PARAMS_STUNDURATIONLIST,
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,

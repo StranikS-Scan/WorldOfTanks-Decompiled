@@ -17,7 +17,7 @@ from math_common import ceilTo
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, VEHICLE_CLASSES, AVAILABLE_STUN_TYPES_NAMES, StunTypes
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, VEHICLE_CLASSES
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR
 from constants import IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -40,7 +40,7 @@ from items.readers import gun_readers
 from items.readers import json_vehicle_reader
 from items.readers import shared_readers
 from items.readers import sound_readers
-from items.stun import g_cfg as stunConfigs
+from items.stun import g_cfg as stunConfig
 from items.writers import chassis_writers
 from items.writers import gun_writers
 from items.writers import shared_writers
@@ -98,7 +98,6 @@ MODES_WITHOUT_CRYSTAL_EARNINGS = set(('bob',
  'event_battles',
  'battle_royale',
  'clanWarsBattles'))
-EXTENDED_VEHICLE_TYPE_ID_FLAG = 2
 
 class VEHICLE_PHYSICS_TYPE():
     TANK = 0
@@ -347,7 +346,7 @@ class VehicleDescriptor(object):
                     vehicleItem = g_list.getList(nationID)[vehicleTypeID]
                 except Exception as e:
                     nationID = nations.INDICES[nation]
-                    vehicleTypeID = 65535
+                    vehicleTypeID = 255
 
             if xmlPath is None:
                 type = g_cache.vehicle(nationID, vehicleTypeID)
@@ -363,11 +362,7 @@ class VehicleDescriptor(object):
                 ReflectedObject(type).edVisible = True if vehMode is VEHICLE_MODE.DEFAULT else False
             turretDescr = type.turrets[0][0]
             header = items.ITEM_TYPES.vehicle + (nationID << 4)
-            ext = vehicleTypeID >> 8
-            header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
-            compactDescr = struct.pack('<2B', header, vehicleTypeID & 255)
-            compactDescr += chr(ext) if ext else ''
-            compactDescr += struct.pack('<6HB', type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
+            compactDescr = struct.pack('<2B6HB', header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode, vehType)
         self.__applyExternalData(extData)
         self.__updateAttributes()
@@ -2758,7 +2753,7 @@ class VehicleList(object):
             ctx = (None, xmlPath + '/' + vname)
             if vname in ids:
                 _xml.raiseWrongXml(ctx, '', 'vehicle type name is not unique')
-            innationID = _xml.readInt(ctx, vsection, 'id', 0, 65535)
+            innationID = _xml.readInt(ctx, vsection, 'id', 0, 255)
             if innationID in res:
                 _xml.raiseWrongXml(ctx, 'id', 'is not unique')
             compactDescr = makeIntCompactDescrByID('vehicle', nationID, innationID)
@@ -2794,9 +2789,7 @@ class VehicleList(object):
 
 
 def parseVehicleCompactDescr(compactDescr):
-    header, vehicleTypeID = struct.unpack('2B', compactDescr[:2])
-    if header & EXTENDED_VEHICLE_TYPE_ID_FLAG:
-        vehicleTypeID += ord(compactDescr[2]) << 8
+    header, vehicleTypeID = struct.unpack('2B', compactDescr[0:2])
     return (header >> 4 & 15, vehicleTypeID)
 
 
@@ -2866,7 +2859,8 @@ def getVehicleType(compactDescr):
         nationID = compactDescr >> 4 & 15
         vehicleTypeID = compactDescr >> 8 & 65535
     else:
-        nationID, vehicleTypeID = parseVehicleCompactDescr(compactDescr)
+        header, vehicleTypeID = struct.unpack('2B', compactDescr[0:2])
+        nationID = header >> 4 & 15
     return g_cache.vehicle(nationID, vehicleTypeID)
 
 
@@ -3647,15 +3641,6 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVeh
         if sounds.isEmpty():
             raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
         item.sounds = sounds
-        if section.has_key('soundsSets'):
-            soundsSets = {}
-            for k, v in section['soundsSets'].items():
-                sound = sound_readers.readWWTripleSoundConfig(v)
-                if sound.isEmpty():
-                    raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
-                soundsSets[k] = sound
-
-            item.soundsSets = soundsSets
         item.physicalTracks = physicalTracksDict = {}
         physicalTracksSection = section['physicalTracks']
         if physicalTracksSection is not None:
@@ -4307,15 +4292,6 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             if reloadEff is None:
                 _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
             item.reloadEffect = reloadEff
-        if section.has_key('reloadEffectSets'):
-            reloadEffectSets = {}
-            for k, v in section['reloadEffectSets'].items():
-                effect = g_cache._gunReloadEffects.get(v.asString, None)
-                if reloadEff is None:
-                    _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
-                reloadEffectSets[k] = effect
-
-            item.reloadEffectSets = reloadEffectSets
         item.impulse = _xml.readNonNegativeFloat(xmlCtx, section, 'impulse')
         item.recoil = gun_readers.readRecoilEffect(xmlCtx, section, g_cache)
         if section.has_key('camouflage'):
@@ -4556,16 +4532,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
                 reloadEffect = g_cache._gunReloadEffects.get(effName, None)
                 if reloadEffect is None:
                     _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
-        reloadEffectSets = sharedItem.reloadEffectSets
-        if section.has_key('reloadEffectSets'):
-            hasOverride = True
-            reloadEffectSets = reloadEffectSets or {}
-            for k, v in section['reloadEffectSets'].items():
-                effect = g_cache._gunReloadEffects.get(v.asString, None)
-                if effect is None:
-                    _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % v.asString)
-                reloadEffectSets[k] = effect
-
         sharedCam = sharedItem.camouflage
         cam = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=sharedCam)
         if cam != sharedCam:
@@ -4678,7 +4644,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.edgeByVisualModel = edgeByVisualModel
             item.emblemSlots = emblemSlots
             item.reloadEffect = reloadEffect
-            item.reloadEffectSets = reloadEffectSets
             item.drivenJoints = drivenJoints
         if IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_BASEAPP:
             item.slotsAnchors = slotsAnchors
@@ -4947,14 +4912,6 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     hasStun = section.readBool('hasStun', False)
     if hasStun:
         stun = shell_components.Stun()
-        stunType = _xml.readStringWithDefaultValue(xmlCtx, section, 'stunType', component_constants.DEFAULT_STUN_TYPE)
-        if stunType in stunConfigs:
-            stunConfig = stunConfigs[stunType]
-        else:
-            _xml.raiseWrongXml(xmlCtx, 'stunType', "Unknown stun type '%s'" % stunType)
-        if stunType not in AVAILABLE_STUN_TYPES_NAMES:
-            _xml.raiseWrongXml(xmlCtx, 'stunType', "Stun type '%s' must be defined in StunTypes" % stunType)
-        stun.stunType = StunTypes[stunType]
         if section.has_key('stunRadius'):
             stunRadius = _xml.readPositiveFloat(xmlCtx, section, 'stunRadius')
         elif kind == 'HIGH_EXPLOSIVE':
@@ -4963,6 +4920,13 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             _xml.raiseWrongXml(xmlCtx, 'stunRadius', 'hasStun = true, but neither explosionRadius nor stunRadius defined')
         stun.stunRadius = stunRadius
         stun.stunDuration = _xml.readPositiveFloat(xmlCtx, section, 'stunDuration') if section.has_key('stunDuration') else stunConfig.get('baseStunDuration', 30)
+        stun.stunFactor = _xml.readPositiveFloat(xmlCtx, section, 'stunFactor') if section.has_key('stunFactor') else 1.0
+        if stun.stunFactor > 1:
+            _xml.raiseWrongXml(xmlCtx, 'stunFactor', 'stun factor cannot exceed 1')
+        stun.guaranteedStunDuration = _xml.readFraction(xmlCtx, section, 'guaranteedStunDuration') if section.has_key('guaranteedStunDuration') else stunConfig['guaranteedStunDuration']
+        stun.damageDurationCoeff = _xml.readFraction(xmlCtx, section, 'damageDurationCoeff') if section.has_key('damageDurationCoeff') else stunConfig['damageDurationCoeff']
+        stun.guaranteedStunEffect = _xml.readFraction(xmlCtx, section, 'guaranteedStunEffect') if section.has_key('guaranteedStunEffect') else stunConfig['guaranteedStunEffect']
+        stun.damageEffectCoeff = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff') if section.has_key('damageEffectCoeff') else stunConfig['damageEffectCoeff']
     else:
         stun = None
     shell.stun = stun
@@ -6734,18 +6698,14 @@ def _summPriceDiff(price, priceAdd, priceSub):
 
 def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehType=None):
     header = ord(compactDescr[0])
-    vehTypeOffset = 0
     vehicleTypeID = ord(compactDescr[1])
-    if header & EXTENDED_VEHICLE_TYPE_ID_FLAG:
-        vehicleTypeID += ord(compactDescr[2]) << 8
-        vehTypeOffset += 1
     nationID = header >> 4 & 15
     if vehType is None:
         type = g_cache.vehicle(nationID, vehicleTypeID, vehMode)
     else:
         type = vehType
-    idx = 10 + vehTypeOffset + len(type.turrets) * 4
-    components = compactDescr[2 + vehTypeOffset:idx]
+    idx = 10 + len(type.turrets) * 4
+    components = compactDescr[2:idx]
     flags = ord(compactDescr[idx])
     idx += 1
     count = 0
@@ -6811,11 +6771,7 @@ def _combineVehicleCompactDescr(type, components, optionalDeviceSlots, optionalD
         flags |= 32
     if camouflages:
         flags |= 128
-    vehTypeCD = chr(vehicleTypeID & 255)
-    if vehicleTypeID > 255:
-        vehTypeCD += chr(vehicleTypeID >> 8)
-        header += EXTENDED_VEHICLE_TYPE_ID_FLAG
-    cd = chr(header) + vehTypeCD + components + chr(flags) + optionalDevices
+    cd = chr(header) + chr(vehicleTypeID) + components + chr(flags) + optionalDevices
     if enhancements:
         cd += enhancements
     if emblems or inscriptions:

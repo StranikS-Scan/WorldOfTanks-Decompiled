@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class RankedSeasonModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(RankedSeasonModel, self).__init__(properties=properties, commands=commands)
 
     def getSeasonNumber(self):
@@ -32,16 +32,9 @@ class RankedSeasonModel(ViewModel):
     def setIsValid(self, value):
         self._setBool(3, value)
 
-    def getIsSpecialSeason(self):
-        return self._getBool(4)
-
-    def setIsSpecialSeason(self, value):
-        self._setBool(4, value)
-
     def _initialize(self):
         super(RankedSeasonModel, self)._initialize()
         self._addNumberProperty('seasonNumber', -1)
         self._addNumberProperty('startDate', -1)
         self._addNumberProperty('endDate', -1)
         self._addBoolProperty('isValid', False)
-        self._addBoolProperty('isSpecialSeason', False)

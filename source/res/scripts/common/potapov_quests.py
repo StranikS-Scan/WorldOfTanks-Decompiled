@@ -356,52 +356,13 @@ class PQCache(object):
         return
 
 
-class IClassifier(object):
+class ClassifierByClass(object):
 
-    @property
-    def classificationAttr(self):
-        raise NotImplementedError
-
-    def matchVehicle(self, vehicleType):
-        raise NotImplementedError
-
-    def getAllClassificationAttrs(self):
-        raise NotImplementedError
-
-
-class BaseClassifier(IClassifier):
-    CLASSIFIER_ALIAS = None
-
-    def getAllClassificationAttrs(self):
-        return {self.CLASSIFIER_ALIAS: self.classificationAttr}
-
-
-class CompositeClassifier(IClassifier):
-
-    def __init__(self, classifiers):
-        if len(classifiers) < 2:
-            raise SoftException('Attempted to build composite classifier with less than 2 classifiers')
-        self.__classifiers = classifiers
-
-    @property
-    def classificationAttr(self):
-        return self.__classifiers[0].classificationAttr
-
-    def getAllClassificationAttrs(self):
-        return {classifier.CLASSIFIER_ALIAS:classifier.classificationAttr for classifier in self.__classifiers}
-
-    def matchVehicle(self, vehicleType):
-        return all((classifier.matchVehicle(vehicleType) for classifier in self.__classifiers))
-
-
-class ClassifierByClass(BaseClassifier):
-    CLASSIFIER_ALIAS = 'vehType'
-
-    def __init__(self, classTags):
-        classTags = tuple(classTags)
-        if len(classTags) != 1:
-            raise SoftException('Potapov quest with tags %s has more than one vehicle class' % str(classTags))
-        self.vehClass = classTags[0]
+    def __init__(self, questTags):
+        vehClasses = list(questTags & VEHICLE_CLASS_TAGS)
+        if len(vehClasses) != 1:
+            raise SoftException('Potapov quest with tags %s has more than one vehicle class' % str(questTags))
+        self.vehClass = vehClasses[0]
 
     @property
     def classificationAttr(self):
@@ -412,14 +373,13 @@ class ClassifierByClass(BaseClassifier):
         return vehClass == self.vehClass
 
 
-class ClassifierByAlliance(BaseClassifier):
-    CLASSIFIER_ALIAS = 'alliance'
+class ClassifierByAlliance(object):
 
-    def __init__(self, allianceTags):
-        allianceTags = tuple(allianceTags)
-        if len(allianceTags) != 1:
-            raise SoftException('Potapov quest with tags %s has more than one alliance' % str(allianceTags))
-        self.alliance = allianceTags[0]
+    def __init__(self, questTags):
+        alliances = list(questTags & ALLIANCES_TAGS)
+        if len(alliances) != 1:
+            raise SoftException('Potapov quest with tags %s has more than one alliance' % str(questTags))
+        self.alliance = alliances[0]
 
     @property
     def classificationAttr(self):
@@ -451,8 +411,11 @@ class PQType(object):
         self.mainAwardListQuestID = basicInfo['mainAwardListQuestID']
         self.addQuestID = basicInfo['addQuestID']
         self.addAwardListQuestID = basicInfo['addAwardListQuestID']
-        self.classifier = _buildClassifier(self.tags)
-        if self.classifier is None:
+        if self.branch == PQ_BRANCH.REGULAR:
+            self.classifier = ClassifierByClass(self.tags)
+        elif self.branch == PQ_BRANCH.PERSONAL_MISSION_2:
+            self.classifier = ClassifierByAlliance(self.tags)
+        else:
             raise SoftException('wrong potapov quest branch: %i' % self.branch)
         if IS_CLIENT or IS_WEB:
             self.mainQuestInfo = basicInfo['mainQuestInfo']
@@ -463,7 +426,6 @@ class PQType(object):
             self.shortUserString = basicInfo['shortUserString']
             self.description = basicInfo['description']
             self.advice = basicInfo['advice']
-        return
 
     def getMajorTag(self):
         return self.classifier.classificationAttr
@@ -581,18 +543,3 @@ def _readTags(xmlCtx, section, subsectionName):
         res.add(intern(tagName))
 
     return frozenset(res)
-
-
-def _buildClassifier(tags):
-    classTags = tuple(tags & VEHICLE_CLASS_TAGS)
-    if not classTags:
-        raise SoftException('Potapov quest with tags %s has no vehicle class tags defined' % str(tags))
-    if len(classTags) == len(VEHICLE_CLASS_TAGS):
-        classTags = None
-    allianceTags = tuple(tags & ALLIANCES_TAGS)
-    if classTags and allianceTags:
-        return CompositeClassifier((ClassifierByAlliance(allianceTags), ClassifierByClass(classTags)))
-    elif classTags:
-        return ClassifierByClass(classTags)
-    else:
-        return ClassifierByAlliance(allianceTags) if allianceTags else None

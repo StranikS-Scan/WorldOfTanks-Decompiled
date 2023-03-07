@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
-from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE, StunTypes
+from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE
 from items.components import component_constants
 from typing import Set, Optional, Tuple, Union
 
@@ -93,13 +93,12 @@ class SmokeType(ShellType):
 
 
 class Stun(object):
-    __slots__ = ('stunRadius', 'stunDuration', 'stunType', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
+    __slots__ = ('stunRadius', 'stunDuration', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
 
     def __init__(self):
         super(Stun, self).__init__()
         self.stunRadius = component_constants.ZERO_FLOAT
         self.stunDuration = component_constants.ZERO_FLOAT
-        self.stunType = StunTypes.DEFAULT
         self.stunFactor = component_constants.ZERO_FLOAT
         self.guaranteedStunDuration = component_constants.ZERO_FLOAT
         self.damageDurationCoeff = component_constants.ZERO_FLOAT

@@ -11,6 +11,10 @@ class IViewLifecycleHandler(object):
     def __init__(self, monitoredViewKeys):
         self._monitoredViewKeys = monitoredViewKeys
 
+    def addMonitoredDynamicViewKey(self, viewKey):
+        if viewKey not in self._monitoredViewKeys:
+            self._monitoredViewKeys.append(viewKey)
+
     def onViewLoading(self, view):
         pass
 
@@ -50,6 +54,15 @@ class ViewLifecycleWatcher(object):
         self._containerManagerRef().onViewLoading += self.__onViewLoading
         self._containerManagerRef().onViewLoaded += self.__onViewLoaded
         self.__handlers = handlers
+        self.__updateViews()
+
+    def addMonitoredDynamicViewKey(self, viewKey):
+        for handler in self.__handlers:
+            handler.addMonitoredDynamicViewKey(viewKey)
+
+        self.__updateViews()
+
+    def __updateViews(self):
         for handler in self.__handlers:
             for viewKey in handler.monitoredViewKeys:
                 view = self._containerManagerRef().getViewByKey(viewKey)

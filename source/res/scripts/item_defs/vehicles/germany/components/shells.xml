@@ -2318,6 +2318,59 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_DM13A2>
+  <_105mm_DM13A1>
+    <id>	376	</id>
+    <userString>	#germany_vehicles:_105mm_DM13A1	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	980	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_DM13A1>
+  <_105mm_DM23A1>
+    <id>	377	</id>
+    <userString>	#germany_vehicles:_105mm_DM23A1	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_DM23A1>
+  <_105mm_DM11A1>
+    <id>	378	</id>
+    <userString>	#germany_vehicles:_105mm_DM11A1	</userString>
+    <icon>	he_modern	</icon>
+    <price>	660	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_DM11A1>
   <_105mm_M430>
     <id>	368	</id>
     <userString>	#germany_vehicles:_105mm_M430	</userString>
@@ -3269,7 +3322,7 @@
     <caliber>	170	</caliber>
     <explosionRadius>	8.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	19.6	</stunDuration>
+    <stunDuration>	16.6	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3318,7 +3371,7 @@
     <caliber>	210	</caliber>
     <explosionRadius>	11.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	21.7	</stunDuration>
+    <stunDuration>	18.5	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -4219,7 +4272,7 @@
     <caliber>	100	</caliber>
     <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	15	</stunDuration>
+    <stunDuration>	10	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>

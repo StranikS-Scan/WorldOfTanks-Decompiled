@@ -15,16 +15,19 @@ BATTLE_REQUIRED_LIBRARIES = ['windows.swf',
  'guiControlsLoginBattleDynamic.swf',
  'guiControlsBattleDynamic.swf',
  'battleMessages.swf']
+ADDITIONAL_BATTLE_REQUIRED_LIBRARIES = {}
 
 def addLobbyRequiredLibraries(swfList, personality):
-    for swf in swfList:
-        if swf in LOBBY_REQUIRED_LIBRARIES:
-            raise SoftException('LOBBY_REQUIRED_LIBRARIES already has swf:{swf}. Personality: {personality}'.format(swf=swf, personality=personality))
-        LOBBY_REQUIRED_LIBRARIES.append(swf)
+    intersection = set(LOBBY_REQUIRED_LIBRARIES).intersection(set(swfList))
+    if intersection:
+        raise SoftException('LOBBY_REQUIRED_LIBRARIES already has swf(s):{swfs}. Personality: {personality}'.format(swfs=intersection, personality=personality))
+    LOBBY_REQUIRED_LIBRARIES.extend(swfList)
 
 
-def addBattleRequiredLibraries(swfList, personality):
-    for swf in swfList:
-        if swf in BATTLE_REQUIRED_LIBRARIES:
-            raise SoftException('BATTLE_REQUIRED_LIBRARIES already has swf:{swf}. Personality: {personality}'.format(swf=swf, personality=personality))
-        BATTLE_REQUIRED_LIBRARIES.append(swf)
+def addBattleRequiredLibraries(swfList, arenaGuiType, personality):
+    intersection = set(BATTLE_REQUIRED_LIBRARIES).intersection(set(swfList))
+    if intersection:
+        raise SoftException('BATTLE_REQUIRED_LIBRARIES already has swf(s):{swfs}. Personality: {personality}'.format(swfs=intersection, personality=personality))
+    if arenaGuiType in ADDITIONAL_BATTLE_REQUIRED_LIBRARIES:
+        raise SoftException('ADDITIONAL_BATTLE_REQUIRED_LIBRARIES already has arena gui type:{t}. Personality: {personality}'.format(t=arenaGuiType, personality=personality))
+    ADDITIONAL_BATTLE_REQUIRED_LIBRARIES.update({arenaGuiType: swfList})

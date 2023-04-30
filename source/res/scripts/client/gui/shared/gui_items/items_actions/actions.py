@@ -5,6 +5,7 @@ from collections import namedtuple
 from functools import partial
 from itertools import chain
 import typing
+from typing import Callable
 import wg_async as future_async
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
@@ -18,7 +19,7 @@ from gui.Scaleform.daapi.view.bootcamp.lobby.unlock import BCUnlockItemConfirmat
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsForSlotMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
@@ -57,7 +58,7 @@ from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import RequestCriteria, REQ_CRITERIA
-from gui.shop import showBuyGoldForPersonalReserves
+from gui.shop import showBuyGoldForPersonalReserves, showBuyGoldForSlot
 from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
@@ -65,6 +66,7 @@ from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IWotPlusController
 from soft_exception import SoftException
 from uilogging.personal_reserves.logging_constants import PersonalReservesLogDialogs
 if typing.TYPE_CHECKING:
@@ -679,12 +681,36 @@ class VehicleRepairAction(AsyncGUIItemAction):
 
 
 class BuyVehicleSlotAction(CachedItemAction):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __DEFAULT_FLOW = -1
+    __NO_ENOUGH_CREDITS_FLOW = 0
+    __NO_ENOUGH_GOLD_FLOW = 1
+
+    def __init__(self):
+        super(BuyVehicleSlotAction, self).__init__()
+        self.__price = self.__itemsCache.items.shop.getVehicleSlotsPrice(self.__itemsCache.items.stats.vehicleSlots)
+        self.__currency = self.__price.getCurrency()
 
     @decorators.adisp_process('buySlot')
     def doAction(self):
+        isEnoughMoney, status = self.__checkMoney()
+        if not isEnoughMoney:
+            if status == self.__NO_ENOUGH_GOLD_FLOW:
+                showBuyGoldForSlot(self.__price)
+                return
+            if status == self.__NO_ENOUGH_CREDITS_FLOW:
+                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsForSlotMeta(name=backport.text(R.strings.dialogs.buySlot.hangarSlot.header()), count=1, price=self.__price.get(Currency.CREDITS)))
+                if not isOk:
+                    return
         result = yield VehicleSlotBuyer().request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+    def __checkMoney(self):
+        availableMoney = self.__itemsCache.items.stats.money
+        if self.__currency == Currency.GOLD and availableMoney.gold < self.__price.gold:
+            return (False, self.__NO_ENOUGH_GOLD_FLOW)
+        return (False, self.__NO_ENOUGH_CREDITS_FLOW) if self.__currency == Currency.CREDITS and availableMoney.credits < self.__price.credits and _needExchangeForBuy(self.__price) else (True, self.__DEFAULT_FLOW)
 
 
 class BuyBerthsAction(CachedItemAction):
@@ -1049,6 +1075,7 @@ class InstallBattleAbilities(AsyncGUIItemAction):
 class RemoveOptionalDevice(AsyncGUIItemAction):
     __slots__ = ('__vehicle', '__device', '__slotID', '__destroy', '__forFitting', '__everywhere', '__removeProcessor')
     __goodiesCache = dependency.descriptor(IGoodiesCache)
+    __wotPlusController = dependency.descriptor(IWotPlusController)
 
     def __init__(self, vehicle, device, slotID, destroy=False, forFitting=False, everywhere=True):
         super(RemoveOptionalDevice, self).__init__()
@@ -1063,12 +1090,19 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
     @adisp_async
     @future_async.wg_async
     def _confirm(self, callback):
+        isFreeToDemount = self.__wotPlusController.isFreeToDemount(self.__device)
         if self.__device.isRemovable:
             callback(True)
         elif self.__destroy:
+            if isFreeToDemount:
+                callback(False)
+                return
             isOk, _ = yield future_async.await_callback(shared_events.showOptionalDeviceDestroy)(self.__device.intCD)
             callback(isOk)
         else:
+            if isFreeToDemount:
+                callback(True)
+                return
             if self.__everywhere:
                 demountKit, _ = getDemountKitForOptDevice(self.__device)
                 isDkEnabled = demountKit and demountKit.enabled

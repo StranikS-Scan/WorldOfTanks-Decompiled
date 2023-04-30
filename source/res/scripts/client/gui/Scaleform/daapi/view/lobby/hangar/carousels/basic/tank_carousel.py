@@ -12,7 +12,6 @@ from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
-from gui.shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showVehicleRentalPage, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
@@ -131,12 +130,7 @@ class TankCarousel(TankCarouselMeta):
         return filtersVO
 
     def __buySlot(self):
-        price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
-        availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price:
-            showBuyGoldForSlot(price)
-        else:
-            ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
+        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
     def __onFittingUpdate(self, *args):
         self.updateParams()

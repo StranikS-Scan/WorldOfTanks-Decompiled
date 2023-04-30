@@ -51,11 +51,12 @@ class Comp7SquadEntity(SquadEntity):
 
     def init(self, ctx=None):
         self.storage.release()
+        self.__introPresenter.init()
+        result = super(Comp7SquadEntity, self).init(ctx)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.__watcher = Comp7VehiclesWatcher()
         self.__watcher.start()
-        self.__introPresenter.init()
-        return super(Comp7SquadEntity, self).init(ctx)
+        return result
 
     def fini(self, ctx=None, woEvents=False):
         self.__introPresenter.fini()
@@ -103,7 +104,7 @@ class Comp7SquadEntity(SquadEntity):
         validIntCDs = allIntCDs - intCDs
         isReady = self.getPlayerInfo().isReady
         if isReady and self.__validIntCDs != validIntCDs:
-            self.togglePlayerReadyAction()
+            self.togglePlayerReadyAction(True)
         self.__validIntCDs = validIntCDs
 
 

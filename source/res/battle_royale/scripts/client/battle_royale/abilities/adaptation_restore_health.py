@@ -11,7 +11,7 @@ import Triggers
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from constants import IS_CLIENT
 from items import vehicles
@@ -59,13 +59,17 @@ def getChildren(gameObject):
     return CGF.HierarchyManager(gameObject.spaceID).getChildren(gameObject) or []
 
 
-class AdaptationHealthRestoreAbilityPart(CGFComponent):
+@registerComponent
+class AdaptationHealthRestoreAbilityPart(object):
+    domain = CGF.DomainOption.DomainClient
     startAnimation = ComponentProperty(type=CGFMetaTypes.STRING, value='')
     cycleAnimation = ComponentProperty(type=CGFMetaTypes.STRING, value='')
     endAnimation = ComponentProperty(type=CGFMetaTypes.STRING, value='')
 
 
-class AdaptationHealthRestoreEffectArea(CGFComponent):
+@registerComponent
+class AdaptationHealthRestoreEffectArea(object):
+    domain = CGF.DomainOption.DomainClient
     teamMateRestoringRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=1.0, editorName='Teammate restoring radius')
 
 

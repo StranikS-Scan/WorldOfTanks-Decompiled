@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/dialogs.py
-from collections import namedtuple
 import typing
 from BWUtil import AsyncReturn
 from wg_async import wg_async, wg_await
@@ -17,13 +16,12 @@ from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConf
 from gui.impl.lobby.frontline.skill_drop_dialog import SkillDropDialog
 from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
-from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
+from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View
-SingleDialogResult = namedtuple('SingleDialogResult', ('busy', 'result'))
 
 @wg_async
 def show(dialog):

@@ -29,8 +29,8 @@ IS_DYNUPDATER = False
 IS_LOAD_GLOSSARY = False
 IS_CGF_DUMP = BigWorld.component == 'client_cgf_dump'
 IS_PROCESS_REPLAY = BigWorld.component.endswith('process_replay')
-DEFAULT_LANGUAGE = 'ru'
-AUTH_REALM = 'RU'
+DEFAULT_LANGUAGE = 'en'
+AUTH_REALM = 'EU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
 IS_CHINA = CURRENT_REALM == 'CN'
 IS_KOREA = CURRENT_REALM == 'KR'
@@ -80,13 +80,8 @@ class REALM_HELPER:
 
 
 if CURRENT_REALM == 'NA':
-    DEFAULT_LANGUAGE = 'en'
     AUTH_REALM = 'NA'
-elif CURRENT_REALM == 'EU':
-    DEFAULT_LANGUAGE = 'en'
-    AUTH_REALM = 'EU'
 elif CURRENT_REALM == 'ASIA':
-    DEFAULT_LANGUAGE = 'en'
     AUTH_REALM = 'ASIA'
 elif CURRENT_REALM == 'CN':
     DEFAULT_LANGUAGE = 'cn'
@@ -96,7 +91,10 @@ elif CURRENT_REALM == 'KR':
     AUTH_REALM = 'KR'
 elif CURRENT_REALM == 'CT':
     AUTH_REALM = 'CT'
-elif CURRENT_REALM in ('RU', 'ST', 'QA', 'DEV', 'SB'):
+elif CURRENT_REALM == 'RU':
+    DEFAULT_LANGUAGE = 'ru'
+    AUTH_REALM = 'CT'
+elif CURRENT_REALM in ('EU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
 IS_RENTALS_ENABLED = True
@@ -203,6 +201,7 @@ class ARENA_GUI_TYPE:
     RTS_BOOTCAMP = 28
     FUN_RANDOM = 29
     COMP7 = 30
+    WINBACK = 31
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -226,7 +225,8 @@ class ARENA_GUI_TYPE:
      RTS_TRAINING,
      RTS_BOOTCAMP,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     WINBACK)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -261,7 +261,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.MAPBOX: 'mapbox',
      ARENA_GUI_TYPE.MAPS_TRAINING: 'maps_training',
      ARENA_GUI_TYPE.FUN_RANDOM: 'fun_random',
-     ARENA_GUI_TYPE.COMP7: 'comp7'}
+     ARENA_GUI_TYPE.COMP7: 'comp7',
+     ARENA_GUI_TYPE.WINBACK: 'winback'}
 
 
 class ARENA_BONUS_TYPE:
@@ -301,6 +302,7 @@ class ARENA_BONUS_TYPE:
     RTS_BOOTCAMP = 41
     FUN_RANDOM = 42
     COMP7 = 43
+    WINBACK = 44
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -336,7 +338,8 @@ class ARENA_BONUS_TYPE:
      RTS_1x1,
      RTS_BOOTCAMP,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     WINBACK)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     TOURNAMENT_RANGE = (TOURNAMENT,
@@ -918,6 +921,10 @@ class Configs(enum.Enum):
     PERSONAL_RESERVES_CONFIG = 'personal_reserves_config'
     PLAY_LIMITS_CONFIG = 'play_limits_config'
     PRE_MODERATION_CONFIG = 'pre_moderation_config'
+    SPAM_PROTECTION_CONFIG = 'spam_protection_config'
+    ARMORY_YARD_CONFIG = 'armory_yard_config'
+    COLLECTIONS_CONFIG = 'collections_config'
+    WINBACK_CONFIG = 'winback_config'
 
 
 INBATTLE_CONFIGS = ('spgRedesignFeatures',
@@ -1502,6 +1509,7 @@ class QUEUE_TYPE:
     RTS_BOOTCAMP = 27
     FUN_RANDOM = 28
     COMP7 = 29
+    WINBACK = 30
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1526,7 +1534,8 @@ class QUEUE_TYPE:
      RTS_1x1,
      RTS_BOOTCAMP,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     WINBACK)
     REMOVED = (COMPANIES,)
     BASE_ON_DEQUEUE = (RANDOMS,
      EVENT_BATTLES,
@@ -1775,9 +1784,13 @@ class REQUEST_COOLDOWN:
     WATCH_REPLAY = 5.0
     RESOURCE_WELL_PUT = 1.0
     VEHICLE_IN_BATTLE_SWITCH = 2.0
-    SET_VIVOX_PRESENCE = 1.0
+    SET_VIVOX_PRESENCE = 0.5
     UNIT_UPDATE_EXTRAS = 2.0
     SURVEY_RESULT = 1.0
+    ARMORY_YARD_COLLECT_REWARDS = 1.0
+    ARMORY_YARD_BUY_STEPS = 1.0
+    ARMORY_YARD_CLAIM_FINAL_REWARDS = 1.0
+    DEV_ARMORY_YARD_ADD_TOKEN_S = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1995,6 +2008,7 @@ class USER_SERVER_SETTINGS:
     DOG_TAGS = 68
     BATTLE_COMM = 69
     BATTLE_HUD = 71
+    BATTLE_EVENTS = 84
     BATTLE_MATTERS_QUESTS = 89
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
@@ -2009,7 +2023,8 @@ class USER_SERVER_SETTINGS:
      GAME_EXTENDED_2,
      BATTLE_HUD,
      CONTOUR,
-     UI_STORAGE_2)
+     UI_STORAGE_2,
+     BATTLE_EVENTS)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -2125,7 +2140,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  111: 'Competitive7x7 carousel filter 2',
  112: 'Enemy marker setting',
  113: 'Dead marker setting',
- 114: 'Ally marker setting'}
+ 114: 'Ally marker setting',
+ 31001: 'Armory Yard progression'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2517,6 +2533,7 @@ class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
     ENTITY_DESTRUCTIBLE = 2
     SMOKE = 3
+    STATIC_GAME_OBJECT = 4
 
 
 class SHELL_TYPES(object):
@@ -2526,14 +2543,18 @@ class SHELL_TYPES(object):
     ARMOR_PIERCING_HE = 'ARMOR_PIERCING_HE'
     ARMOR_PIERCING_CR = 'ARMOR_PIERCING_CR'
     SMOKE = 'SMOKE'
+    FLAME = 'FLAME'
 
 
+HAS_EXPLOSION_EFFECT = (SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.FLAME)
+HAS_EXPLOSION = (SHELL_TYPES.HIGH_EXPLOSIVE,)
 SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR,
- SHELL_TYPES.SMOKE)
+ SHELL_TYPES.SMOKE,
+ SHELL_TYPES.FLAME)
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
 
@@ -2561,13 +2582,17 @@ class BATTLE_LOG_SHELL_TYPES(enum.IntEnum):
     HE_MODERN = 5
     HE_LEGACY_STUN = 6
     HE_LEGACY_NO_STUN = 7
+    FLAME = 8
 
     @classmethod
     def getType(cls, shellDescr):
-        if shellDescr.kind != SHELL_TYPES.HIGH_EXPLOSIVE:
-            return cls[shellDescr.kind]
-        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN:
+        shellKind = shellDescr.kind
+        if shellKind not in HAS_EXPLOSION_EFFECT:
+            return cls[shellKind]
+        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN and shellKind == SHELL_TYPES.HIGH_EXPLOSIVE:
             return cls.HE_MODERN
+        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN and shellKind == SHELL_TYPES.FLAME:
+            return cls.FLAME
         elif shellDescr.hasStun:
             return cls.HE_LEGACY_STUN
         else:
@@ -2853,10 +2878,12 @@ class ROLE_TYPE:
     ATSPG_SUPPORT = 13
     LT_UNIVERSAL = 14
     LT_WHEELED = 15
+    SPG_FLAME = 16
 
 
 ROLE_LABEL_TO_TYPE = {'NotDefined': ROLE_TYPE.NOT_DEFINED,
  'role_SPG': ROLE_TYPE.SPG,
+ 'role_SPG_flame': ROLE_TYPE.SPG_FLAME,
  'role_HT_assault': ROLE_TYPE.HT_ASSAULT,
  'role_HT_break': ROLE_TYPE.HT_BREAK,
  'role_HT_universal': ROLE_TYPE.HT_UNIVERSAL,
@@ -2943,6 +2970,10 @@ class DUAL_GUN:
         EMPTY = 0
         RELOADING = 1
         READY = 2
+
+    class RELOAD_ORDER:
+        FIRST = 0
+        SECOND = 1
 
     class COOLDOWNS:
         LEFT = 0
@@ -3068,6 +3099,13 @@ class BonusTypes(object):
      PERK)
 
 
+class TTC_TOOLTIP_SECTIONS(object):
+    EQUIPMENT = 'equipment'
+    SKILLS = 'skills'
+    CREW_MASTERY = 'crew_mastery'
+    ALL = (EQUIPMENT, SKILLS, CREW_MASTERY)
+
+
 class GF_RES_PROTOCOL(object):
     IMG = 'img://'
     CAMO = 'camo://'
@@ -3126,6 +3164,43 @@ DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
  'BLAST': DamageAbsorptionTypes.BLAST,
  'SPALLS': DamageAbsorptionTypes.SPALLS}
 DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))
+EQUIPMENT_COOLDOWN_MOD_SUFFIX = 'CooldownMod'
+CHANCE_TO_HIT_SUFFIX_FACTOR = 'ChanceToHitDeviceMod'
+
+class AbilitySystemScopeNames(object):
+    DETACHMENT = 'detachment'
+    CREW = 'crew'
+
+
+PerkData = namedtuple('PerkData', 'level, args')
+CrewContextArgs = namedtuple('CrewContextArgs', 'skillData')
+
+class SkillProcessorArgs(object):
+    __slots__ = ('level', 'levelIncrease', 'isActive', 'isFire', 'skillConfig', 'hasActiveTankmanForBooster', 'tankmenSkillConfig')
+
+    def __init__(self, level, levelIncrease, isActive, isFire, skillConfig, hasActiveTankmanForBooster):
+        self.level = level
+        self.levelIncrease = levelIncrease
+        self.isActive = isActive
+        self.isFire = isFire
+        self.skillConfig = skillConfig
+        self.tankmenSkillConfig = self.skillConfig
+        self.hasActiveTankmanForBooster = hasActiveTankmanForBooster
+
+    def isSkillActive(self):
+        return self.isActive and not self.isFire
+
+    def isBoosterApplicable(self):
+        return (self.isActive or self.hasActiveTankmanForBooster) and not self.isFire
+
+
+class GroupSkillProcessorArgs(object):
+    __slots__ = ('factor', 'baseAvgLevel')
+
+    def __init__(self, factor, baseAvgLevel):
+        self.factor = factor
+        self.baseAvgLevel = baseAvgLevel
+
 
 class ReloadRestriction(object):
     CYCLE_RELOAD = 1.0
@@ -3328,6 +3403,24 @@ PLAY_LIMITS = (CURFEW_PLAY_LIMIT,
  DAILY_PLAY_LIMIT,
  SESSION_PLAY_LIMIT)
 
+class WoTPlusBonusType(object):
+    GOLD_BANK = 'gold_bank'
+    IDLE_CREW_XP = 'idle_crew_xp'
+    EXCLUDED_MAP = 'excluded_map'
+    FREE_EQUIPMENT_DEMOUNTING = 'free_equipment_demounting'
+    EXCLUSIVE_VEHICLE = 'exclusive_vehicle'
+
+
+VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG = 'noCrewTransferPenalty'
+VEHICLE_PREMIUM_TAG = 'premium'
+VEHICLE_WOT_PLUS_TAG = 'wotPlus'
+
 class InitialVehsAdditionStrategy(object):
     REALM_AND_COUNTRY = 0
     COUNTRY = 1
+
+
+class WINBACK_CALL_BATTLE_TOKEN_DRAW_REASON(enum.IntEnum):
+    REGULAR = 0
+    MANUAL = 1
+    SQUAD = 2

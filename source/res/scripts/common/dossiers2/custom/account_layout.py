@@ -46,6 +46,7 @@ _rankedSeason3BlockBuilder = StaticSizeBlockBuilder('rankedSeason3', RANKED_BLOC
 _rankedArchiveBlockBuilder = StaticSizeBlockBuilder('rankedArchive', RANKED_BLOCK_LAYOUT, {}, [])
 _ranked_10x10BlockBuilder = StaticSizeBlockBuilder('ranked_10x10', RANKED_BLOCK_LAYOUT, RANKED_STATS_DEPENDENCIES, [])
 _comp7Season1BlockBuilder = StaticSizeBlockBuilder('comp7Season1', COMP7_BLOCK_LAYOUT, {}, [])
+_comp7Season2BlockBuilder = StaticSizeBlockBuilder('comp7Season2', COMP7_BLOCK_LAYOUT, {}, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -67,6 +68,7 @@ _maxRankedSeason3BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason3', MAX_A
 _maxRankedArchiveBlockBuilder = StaticSizeBlockBuilder('maxRankedArchive', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRanked_10x10BlockBuilder = StaticSizeBlockBuilder('maxRanked_10x10', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxComp7Season1BlockBuilder = StaticSizeBlockBuilder('maxComp7Season1', MAX_COMP7_BLOCK_LAYOUT, {}, [])
+_maxComp7Season2BlockBuilder = StaticSizeBlockBuilder('maxComp7Season2', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 
 class VEHICLE_STATS:
     FRAGS = 'vehTypeFrags'
@@ -88,6 +90,7 @@ class VEHICLE_STATS:
     MARK_OF_MASTERY_CUT = 'markOfMasteryCut'
     EPIC_BATTLE_CUT = 'epicBattleCut'
     COMP7_CUT_SEASON_1 = 'comp7CutSeason1'
+    COMP7_CUT_SEASON_2 = 'comp7CutSeason2'
     ALL = (FRAGS,
      A15x15_CUT,
      A30x30_CUT,
@@ -106,7 +109,8 @@ class VEHICLE_STATS:
      FALLOUT_CUT,
      MARK_OF_MASTERY_CUT,
      EPIC_BATTLE_CUT,
-     COMP7_CUT_SEASON_1)
+     COMP7_CUT_SEASON_1,
+     COMP7_CUT_SEASON_2)
 
 
 _vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
@@ -127,7 +131,8 @@ _rankedCut10x10BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_10X10, '
 _a30x30CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.A30x30_CUT, 'I', 'III', {})
 _markOfMasteryCut = DictBlockBuilder(VEHICLE_STATS.MARK_OF_MASTERY_CUT, 'I', 'B', {})
 _epicBattleCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.EPIC_BATTLE_CUT, 'I', 'III', {})
-_comp7CutSeason1BlockBuilder = _BattleCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_1, 'I', 'IIII', {})
+_comp7CutSeason1BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_1, 'I', 'IIII', {})
+_comp7CutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_2, 'I', 'IIII', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -821,7 +826,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'january23',
  'february23',
  'march23',
- 'prime_gaming_reserved_8',
+ 'april23',
  'prime_gaming_reserved_9',
  'prime_gaming_reserved_10',
  'prime_gaming_reserved_11',
@@ -833,7 +838,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'NY23_AtmsphrLevel',
  'NY23_CelebChallenge',
  'BattlePassCommonPr_NY23',
- 'BattlePassCommonPr_10']
+ 'BattlePassCommonPr_10',
+ 'comp7_2023_1']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1013,7 +1019,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'january23',
  'february23',
  'march23',
- 'prime_gaming_reserved_8',
+ 'april23',
  'prime_gaming_reserved_9',
  'prime_gaming_reserved_10',
  'prime_gaming_reserved_11',
@@ -1025,7 +1031,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'NY23_AtmsphrLevel',
  'NY23_CelebChallenge',
  'BattlePassCommonPr_NY23',
- 'BattlePassCommonPr_10']
+ 'BattlePassCommonPr_10',
+ 'comp7_2023_1']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1191,7 +1198,10 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _steamAchievementsBlockBuilder,
  _comp7Season1BlockBuilder,
  _maxComp7Season1BlockBuilder,
- _comp7CutSeason1BlockBuilder)
+ _comp7CutSeason1BlockBuilder,
+ _comp7Season2BlockBuilder,
+ _maxComp7Season2BlockBuilder,
+ _comp7CutSeason2BlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

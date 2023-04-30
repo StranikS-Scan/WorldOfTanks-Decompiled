@@ -3,7 +3,7 @@
 import logging
 from string import lower
 import BigWorld
-from constants import EMPTY_GEOMETRY_ID
+from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import makeIntCompactDescrByID
@@ -21,7 +21,7 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -337,6 +337,18 @@ class _MapsBlackListSelector(Processor):
         return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
 
     def _successHandler(self, code, ctx=None):
+        itemsCache = dependency.instance(IItemsCache)
+        wotPLusController = dependency.instance(IWotPlusController)
+        isPremiumActive = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        isWotPlusActive = wotPLusController.isEnabled()
+        isWotPlusEnabled = wotPLusController.isWotPlusEnabled()
+        if isWotPlusEnabled:
+            if not isPremiumActive and not isWotPlusActive:
+                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/noSubscriptions'.format(self._getMessagePrefix()))
+            if isPremiumActive and not isWotPlusActive:
+                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/premium'.format(self._getMessagePrefix()))
+            if not isPremiumActive and isWotPlusActive:
+                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/wotPlus'.format(self._getMessagePrefix()))
         return makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
 
     def _request(self, callback):

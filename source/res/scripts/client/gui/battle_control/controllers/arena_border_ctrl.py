@@ -79,6 +79,7 @@ class ArenaBorderController(IArenaLoadController):
             distanceFaderMode = 2
         BigWorld.ArenaBorderHelper.setArenaBorderDistanceFadeMode(self.__spaceID, distanceFaderMode)
         BigWorld.ArenaBorderHelper.setArenaBorderColor(self.__spaceID, color)
+        BigWorld.ArenaBorderHelper.updatePolygonBordersColor(self.__spaceID, self.settingsCore.getSetting('isColorBlind'))
 
     def __handleShowExtendedInfo(self, event):
         if not self.__spaceID:

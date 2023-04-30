@@ -55,16 +55,19 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(code, {'target': _ID_TO_DESTRUCTIBLE_ENTITY_NAME[entityID],
          'attacker': getFullName(attackerID, showClan=False)})
 
-    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
+    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID, ignoreMessages):
         _logger.debug('onShowPlayerMessage %r %r %r %r %r', code, postfix, targetID, attackerID, equipmentID)
-        getFullName = self.sessionProvider.getCtx().getPlayerFullName
-        if equipmentID:
-            equipment = vehicles.g_cache.equipments().get(equipmentID)
-            if equipment is not None:
-                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
-        self.showMessage(code, {'target': getFullName(targetID, showClan=False),
-         'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
-        return
+        if ignoreMessages:
+            return
+        else:
+            getFullName = self.sessionProvider.getCtx().getPlayerFullName
+            if equipmentID:
+                equipment = vehicles.g_cache.equipments().get(equipmentID)
+                if equipment is not None:
+                    postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
+            self.showMessage(code, {'target': getFullName(targetID, showClan=False),
+             'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
+            return
 
     def __onShowPlayerMessageByKey(self, key, args=None, extra=None):
         self.showMessage(key, args, extra)

@@ -17,16 +17,16 @@ def _achievementBlockValidator(block, _=None):
 
 
 class _RequestMedalsSchema(W2CSchema):
-    medal_ids = Field(required=True, type=list, default=[])
+    medal_ids = Field(type=list, default=[])
 
 
 class _RequestQuestBonusSchema(W2CSchema):
-    quest_id_base = Field(required=True, type=basestring, default='')
+    quest_id_base = Field(type=basestring, default='')
 
 
 class _RequestAchievementsSchema(W2CSchema):
-    medal_ids = Field(required=True, type=list, default=[])
-    achievement_block = Field(required=True, type=basestring, validator=_achievementBlockValidator, default='singleAchievements')
+    medal_ids = Field(type=list, default=[])
+    achievement_block = Field(type=basestring, validator=_achievementBlockValidator, default='singleAchievements')
 
 
 @w2capi(name='rewards', key='action')

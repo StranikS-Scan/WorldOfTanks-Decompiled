@@ -129,7 +129,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX)
+        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.WINBACK)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
@@ -463,6 +463,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def getSeasonNum(self):
         return self.__getConfig().seasonNum
+
+    def getCurrentCollectionId(self):
+        return self.__getConfig().currentCollectionId
 
     def getFinalOfferTime(self):
         return self.__getConfig().finalOfferTime

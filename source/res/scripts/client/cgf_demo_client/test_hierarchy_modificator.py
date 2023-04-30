@@ -3,7 +3,7 @@
 import math
 import logging
 import BigWorld
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import autoregister, tickGroup, onAddedQuery
 from cgf_demo.demo_category import DEMO_CATEGORY
 import GenericComponents
@@ -14,8 +14,10 @@ import Math
 from helpers import isPlayerAccount
 _logger = logging.getLogger(__name__)
 
-class TestMaterialParamManipulator(CGFComponent):
+@registerComponent
+class TestMaterialParamManipulator(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     model = ComponentProperty(type=CGFMetaTypes.LINK, editorName='model', value=GenericComponents.DynamicModelComponent)
     paramName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='paramName', value='g_tintColor')
 
@@ -40,8 +42,10 @@ def _updateTransform(go, newParent):
     objectTransform.transform = newLocal
 
 
-class HierarchyModifier(CGFComponent):
+@registerComponent
+class HierarchyModifier(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     gameObject1 = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Game Object 1', value='GameObject1')
     gameObject2 = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Game Object 2', value='GameObject2')
     gameObject3 = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Game Object 3', value='GameObject3')
@@ -93,8 +97,10 @@ class HierarchyModifier(CGFComponent):
             self.__zone2 = False
 
 
-class HierarchyModifier2(CGFComponent):
+@registerComponent
+class HierarchyModifier2(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     top = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Top Object', value=CGF.GameObject)
     bottom = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Bottom Object', value=CGF.GameObject)
     box = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Box Object', value=CGF.GameObject)
@@ -161,8 +167,10 @@ class TestHierarchyModifierManager(CGF.ComponentManager):
             return
 
 
-class TestModelSwapper(CGFComponent):
+@registerComponent
+class TestModelSwapper(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     model1 = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='model1', annotations={'path': '*.model'})
     model2 = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='model2', annotations={'path': '*.model'})
 

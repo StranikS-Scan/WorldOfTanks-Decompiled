@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_page.py
+import typing
 from logging import getLogger
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
@@ -44,6 +45,9 @@ from skeletons.gui.game_control import IBootcampController, ITradeInController
 from skeletons.gui.shared import IItemsCache
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from tutorial.control.context import GLOBAL_FLAG
+if typing.TYPE_CHECKING:
+    from typing import List, Tuple, Any
+    from gui.Scaleform.daapi.view.lobby.techtree.nodes import ExposedNode
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 4
 
@@ -66,7 +70,10 @@ def _getMoneyBenefits(benefits, root, _=None):
 
 def _getCrewBenefits(benefits, root, _=None):
     if not root.isCrewLocked:
-        benefits.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))
+        text = R.strings.vehicle_preview.infoPanel.premium.crewTransferText()
+        if root.ignoreRoleIncompatibility:
+            text = R.strings.vehicle_preview.infoPanel.premium.noCrewTransferPenaltyText()
+        benefits.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(text)))
 
 
 def _getCrystalsBenefit(benefits, root, _=None):
@@ -494,7 +501,7 @@ class Research(ResearchMeta):
 
     @staticmethod
     def __getRootStatusStr(root):
-        return text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.ClockIcon_1()), width=38, height=38, vSpace=-14), RentLeftFormatter(root.rentInfo).getRentLeftStr(strForSpecialTimeFormat=backport.text(R.strings.menu.research.status.rentLeft()))) if root.isRented and not root.rentalIsOver and not root.isTelecom and not root.isPremiumIGR else ''
+        return text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.ClockIcon_1()), width=38, height=38, vSpace=-14), RentLeftFormatter(root.rentInfo).getRentLeftStr(strForSpecialTimeFormat=backport.text(R.strings.menu.research.status.rentLeft()))) if root.isRented and not root.rentalIsOver and not root.isTelecom and not root.isPremiumIGR and not root.isWotPlus else ''
 
     @staticmethod
     def __getNationChangeTooltip(root):

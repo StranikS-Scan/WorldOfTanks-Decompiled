@@ -29,10 +29,11 @@ from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
-    from typing import Any, Callable, Tuple, List, Union
+    from goodies.goodie_helpers import GoodieData
+    from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
     from gui.shared.money import Money
     from skeletons.gui.goodies import IGoodiesCache
-    from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
+    from typing import Any, Callable, Tuple, List, Union
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -692,4 +693,5 @@ class RecertificationForm(_Goodie):
         return self.count
 
 
+GoodieType = typing.TypeVar('GoodieType', bound=_Goodie)
 BoostersType = typing.TypeVar('BoostersType', bound=BoosterUICommon)

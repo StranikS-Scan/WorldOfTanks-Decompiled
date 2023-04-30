@@ -9,25 +9,32 @@ import Triggers
 import CGF
 import Math
 from cgf_demo.demo_category import DEMO_CATEGORY
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_demo.test_movers import TestScriptAxisRotator
 from cgf_script.managers_registrator import autoregister, tickGroup, onAddedQuery
+from cgf_components_common.state_components import HealthComponent as HealthComponentCGF
 import logging
 _logger = logging.getLogger(__name__)
 
-class TestRotateWhileInTrigger(CGFComponent):
+@registerComponent
+class TestRotateWhileInTrigger(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     rotationSpeed = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='rotation speed when anyone is present', value=1.0)
 
 
-class TestComponentCreation(CGFComponent):
+@registerComponent
+class TestComponentCreation(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='AreaTrigger to subscribe', value=Triggers.AreaTriggerComponent)
     rotationSpeed = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='rotation speed', value=0.0)
 
 
-class TestPrefabSpawner(CGFComponent):
+@registerComponent
+class TestPrefabSpawner(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     prefabPath = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Prefab to spawn', value='content/Prefabs/1003_cgf_test/TestExplosion.prefab', annotations={'path': '*.prefab'})
     instancesCount = ComponentProperty(type=CGFMetaTypes.INT, editorName='Instances count', value=1)
     areaToSpawn = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Area to spawn', value=Triggers.CylinderAreaComponent)
@@ -115,3 +122,26 @@ class TestTriggersManager(CGF.ComponentManager):
             if trigger.objectsInProximity:
                 rotator.rotationSpeedYaw = config.rotationSpeed
             rotator.rotationSpeedYaw = 0.0
+
+
+@registerComponent
+class TestVehicleAreaTriggerComponent(object):
+    category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainServer | CGF.DomainOption.DomainEditor
+    trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='AreaTrigger', value=Triggers.AreaTriggerComponent)
+    health = ComponentProperty(type=CGFMetaTypes.INT, editorName='Health count', value=0)
+    isDamageTrigger = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='Is Damage trigger')
+
+
+@registerComponent
+class TestHealthTriggersComponent(object):
+    category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainServer | CGF.DomainOption.DomainEditor
+    healthComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Health component link', value=HealthComponentCGF)
+    trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='AreaTrigger', value=Triggers.AreaTriggerComponent)
+    health = ComponentProperty(type=CGFMetaTypes.INT, editorName='Health count', value=0)
+    isDamageTrigger = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='Is Damage trigger')
+
+    def __init__(self):
+        self.reactionID = None
+        return

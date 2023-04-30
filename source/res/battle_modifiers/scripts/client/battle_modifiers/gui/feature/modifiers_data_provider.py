@@ -11,9 +11,9 @@ class ModifiersDataProvider(object):
 
     def __init__(self, battleModifiersDescr=()):
         self.__modifiers = BattleModifiers(battleModifiersDescr)
-        domains = tuple((str(modifier.param.clientData.domain) for _, modifier in self.__modifiers if not self.isHiddenModifier(modifier)))
+        domains = tuple((self._readClientDomain(modifier) for _, modifier in self.__modifiers if not self.isHiddenModifier(modifier)))
         self.__domains = tuple((domain for i, domain in enumerate(domains) if domain not in domains[:i]))
-        self.__modifiersByDomain = {domain:tuple((modifier for _, modifier in self.__modifiers if not self.isHiddenModifier(modifier) and modifier.param.clientData.domain == domain)) for domain in self.__domains}
+        self.__modifiersByDomain = {domain:tuple((modifier for _, modifier in self.__modifiers if not self.isHiddenModifier(modifier) and self._readClientDomain(modifier) == domain)) for domain in self.__domains}
 
     @classmethod
     def isHiddenModifier(cls, mod):
@@ -27,3 +27,6 @@ class ModifiersDataProvider(object):
 
     def getModifiers(self):
         return self.__modifiers
+
+    def _readClientDomain(self, modifier):
+        return str(modifier.param.clientData.domain)

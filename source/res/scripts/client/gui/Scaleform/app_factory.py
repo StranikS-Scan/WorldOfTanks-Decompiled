@@ -148,7 +148,7 @@ class AS3_AppFactory(IAppFactory):
         _logger.info('Creating app: %s', _SPACE.SF_BATTLE)
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
-            battle = BattleEntry(_SPACE.SF_BATTLE, self.__ctrlModeFlags[_SPACE.SF_BATTLE])
+            battle = BattleEntry(_SPACE.SF_BATTLE, self.__ctrlModeFlags[_SPACE.SF_BATTLE], arenaGuiType)
             self.__apps[_SPACE.SF_BATTLE] = battle
             packages = collectScaleformBattlePackages(arenaGuiType)
             if not packages:

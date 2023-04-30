@@ -17,7 +17,7 @@ def isComp7Quest(qID):
 
 
 def getComp7QuestType(qID):
-    _, qType, __ = qID.split(COMP7_QUEST_DELIMITER, 2)
+    qType, _ = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER, 1)
     try:
         qType = Comp7QuestType(qType)
     except ValueError as e:
@@ -31,9 +31,14 @@ def parseComp7RanksQuestID(qID):
     return __getDivisionFromQuest(qID)
 
 
-def parseComp7WinsQuestID(qID):
-    _, __, winsCount = qID.split(COMP7_QUEST_DELIMITER)
-    return int(winsCount)
+def parseComp7TokensQuestID(qID):
+    _, __, tokensCount = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER)
+    return int(tokensCount)
+
+
+def parseComp7WeeklyQuestID(qID):
+    _, weekQuestID = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER, 1)
+    return weekQuestID
 
 
 def parseComp7PeriodicQuestID(qID):
@@ -41,18 +46,29 @@ def parseComp7PeriodicQuestID(qID):
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getComp7WinsQuests(eventsCache=None):
-    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WINS)
-    quests = {parseComp7WinsQuestID(qID):quest for qID, quest in quests.iteritems()}
+def getComp7TokensQuests(eventsCache=None):
+    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.TOKENS)
+    quests = {parseComp7TokensQuestID(qID):quest for qID, quest in quests.iteritems()}
+    return quests
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getComp7WeeklyQuests(eventsCache=None):
+    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WEEKLY and not q.isOutOfDate() and q.isStarted())
+    quests = {parseComp7WeeklyQuestID(qID):quest for qID, quest in quests.iteritems()}
     return quests
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
 def __getDivisionFromQuest(qID, lobbyCtx=None):
     ranksConfig = lobbyCtx.getServerSettings().comp7PrestigeRanksConfig
-    _, __, rankName, divisionName = qID.split(COMP7_QUEST_DELIMITER)
+    _, rankName, divisionName = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER)
     ranksOrder = ranksConfig.ranksOrder
     rankIdx = findFirst(lambda i: ranksOrder[i].lower() == rankName.lower(), range(len(ranksOrder)))
     divisionIdx = int(divisionName) - 1
     division = findFirst(lambda d: d.index == divisionIdx and d.rank == rankIdx, ranksConfig.divisions)
     return division
+
+
+def __cutComp7Prefix(qID):
+    return qID[len(COMP7_QUEST_PREFIX) + 1:]

@@ -195,7 +195,7 @@ class RankRewardsPage(PageSubModelPresenter):
         if g_currentVehicle.isPresent() and style.mayInstall(g_currentVehicle.item):
             return g_currentVehicle.item.intCD
         accDossier = cls.__itemsCache.items.getAccountDossier()
-        vehicles = accDossier.getComp7Stats().getVehicles()
+        vehicles = accDossier.getComp7StatsS2().getVehicles()
         if not vehicles:
             vehicles = accDossier.getRandomStats().getVehicles()
         if vehicles:

@@ -6,6 +6,8 @@ import BigWorld
 import CommandMapping
 import Keys
 import VOIP
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import COMP7_IS_VOIP_IN_BATTLE_ACTIVATED
 from constants import ARENA_PERIOD, IS_CHINA, REQUEST_COOLDOWN, ARENA_BONUS_TYPE
 from gui import g_keyEventHandlers
 from gui.battle_control import event_dispatcher
@@ -71,9 +73,9 @@ class Comp7VOIPController(IComp7VOIPController):
         return BATTLE_CTRL_ID.COMP7_VOIP_CTRL
 
     def arenaLoadCompleted(self):
-        self.__tryShowInfoMessage()
+        self.__tryActivateVOIP()
 
-    def toggleChannelConnection(self):
+    def toggleChannelConnection(self, automatic=False):
         if self.__sessionProvider.isReplayPlaying:
             return
         elif self.__cooldownCallback is not None:
@@ -84,8 +86,10 @@ class Comp7VOIPController(IComp7VOIPController):
             return
         else:
             _logger.info('toggleChannelConnection')
+            if not automatic and self.__isSoloPlayer():
+                AccountSettings.setSettings(COMP7_IS_VOIP_IN_BATTLE_ACTIVATED, not self.__VOIPManager.isCurrentChannelEnabled())
             event_dispatcher.toggleVoipChannelEnabled(ARENA_BONUS_TYPE.COMP7)
-            self.__cooldownCallback = BigWorld.callback(REQUEST_COOLDOWN.POST_PROGRESSION_CELL + 1.0, self.__clearCooldown)
+            self.__cooldownCallback = BigWorld.callback(REQUEST_COOLDOWN.SET_VIVOX_PRESENCE + 1.0, self.__clearCooldown)
             return
 
     def __subscribe(self):
@@ -99,10 +103,24 @@ class Comp7VOIPController(IComp7VOIPController):
         voipMgr.onChannelAvailable -= self.__onChannelAvailable
 
     def __onChannelAvailable(self, *_, **__):
-        self.__tryShowInfoMessage()
+        self.__tryActivateVOIP()
+
+    def __tryActivateVOIP(self):
+        if self.isVoipSupported and self.isTeamChannelAvailable and self.__VOIPManager.isChannelAvailable():
+            if self.__isSoloPlayer():
+                self.__restoreChannelState()
+            self.__tryShowInfoMessage()
+
+    def __restoreChannelState(self):
+        wasActivePreviously = AccountSettings.getSettings(COMP7_IS_VOIP_IN_BATTLE_ACTIVATED)
+        if wasActivePreviously != self.__VOIPManager.isCurrentChannelEnabled():
+            self.toggleChannelConnection(automatic=True)
+
+    def __isSoloPlayer(self):
+        return not self.__sessionProvider.getArenaDP().getVehicleInfo().prebattleID
 
     def __tryShowInfoMessage(self):
-        if self.__messageShown:
+        if self.__messageShown or self.__VOIPManager.isCurrentChannelEnabled():
             return
         else:
             arenaPeriod = self.__sessionProvider.shared.arenaPeriod.getPeriod()
@@ -114,18 +132,15 @@ class Comp7VOIPController(IComp7VOIPController):
             return
 
     def __getMessage(self):
-        if not self.isVoipSupported or not self.isTeamChannelAvailable:
-            return None
+        command = CommandMapping.CMD_VOICECHAT_ENABLE
+        resStr = R.strings.comp7.battleMessages
+        if not self.isVoipEnabled:
+            text = backport.text(resStr.withoutVOIP())
+        elif getKey(command) == Keys.KEY_NONE:
+            text = backport.text(resStr.specifyVOIP())
         else:
-            command = CommandMapping.CMD_VOICECHAT_ENABLE
-            resStr = R.strings.comp7.battleMessages
-            if not self.isVoipEnabled:
-                text = backport.text(resStr.withoutVOIP())
-            elif getKey(command) == Keys.KEY_NONE:
-                text = backport.text(resStr.specifyVOIP())
-            else:
-                text = backport.text(resStr.enableVOIP(), keyName=getReadableKey(command))
-            return ClientActionMessage(text)
+            text = backport.text(resStr.enableVOIP(), keyName=getReadableKey(command))
+        return ClientActionMessage(text)
 
     def __handleKeyEvent(self, event):
         if not self.isTeamVoipEnabled:

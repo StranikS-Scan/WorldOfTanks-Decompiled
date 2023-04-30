@@ -4,6 +4,7 @@ import typing
 from collections import defaultdict
 from operator import itemgetter
 from gui.shared.gui_items import KPI
+from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
 from items import utils, tankmen
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -93,7 +94,36 @@ def getKpiFactors(vehicle):
         for kpi in item.getKpi(vehicle):
             otherKPI.addKPI(kpi.name, kpi.value, kpi.type)
 
-    return baseKPI * otherKPI
+    baseKPI = baseKPI * otherKPI
+    for kpi in kpiFromCrewSkills(vehicle):
+        baseKPI.addKPI(kpi.name, kpi.value, kpi.type)
+
+    return baseKPI
+
+
+def kpiFromCrewSkills(vehicle):
+    skills = {}
+    for _, tankman in vehicle.crew:
+        if tankman is None:
+            continue
+        for skill in tankman.skills:
+            skills[skill.name] = crewMemberRealSkillLevel(vehicle, skill.name, skill.roleType)
+
+    for eq in vehicle.battleBoosters.installed.getItems():
+        if 'crewSkillBattleBooster' in eq.descriptor.tags:
+            if eq.descriptor.skillName not in skills:
+                skills[eq.descriptor.skillName] = tankmen.MAX_SKILL_LEVEL
+
+    kpi = []
+    skillsConfig = tankmen.getSkillsConfig()
+    for skillName, level in skills.items():
+        skillKpi = skillsConfig.getSkill(skillName).kpi
+        for _kpi in skillKpi:
+            baseValue = 1.0 if _kpi.type == KPI.Type.MUL else 0.0
+            value = baseValue - (baseValue - _kpi.value) / tankmen.MAX_SKILL_LEVEL * level
+            kpi.append(KPI(_kpi.name, value, kpiType=_kpi.type, specValue=_kpi.specValue, vehicleTypes=_kpi.vehicleTypes))
+
+    return kpi
 
 
 def getRocketAccelerationKpiFactors(vehDescr):
@@ -108,15 +138,12 @@ def getRocketAccelerationKpiFactors(vehDescr):
 def getVehicleFactors(vehicle):
     factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
-    perksController = vehicle.getPerksController()
-    if perksController and not perksController.isInitialized():
-        perksController.recalc()
     eqs = [ eq.descriptor for eq in vehicle.consumables.installed.getItems() ]
     for booster in vehicle.battleBoosters.installed.getItems():
         eqs.append(booster.descriptor)
 
     crewCompactDescrs = extractCrewDescrs(vehicle)
-    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, perksController)
+    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors)
     return factors
 
 

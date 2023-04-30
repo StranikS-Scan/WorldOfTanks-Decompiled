@@ -26,7 +26,7 @@ from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -145,6 +145,7 @@ class ModuleTooltipBlockConstructor(object):
     TURBOSHAFT_ENGINE_MODULE_PARAM = 'turboshaftEngine'
     ROCKET_ACCELERATION_ENGINE_MODULE_PARAM = 'rocketAcceleration'
     COOLDOWN_SECONDS = 'cooldownSeconds'
+    ACTIVE_SECONDS = 'activeSeconds'
     RELOAD_COOLDOWN_SECONDS = 'reloadCooldownSeconds'
     CALIBER = 'caliber'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime'),
@@ -163,10 +164,13 @@ class ModuleTooltipBlockConstructor(object):
      CLIP_GUN_MODULE_PARAM: ('avgDamageList',
                              'avgPiercingPower',
                              SHELLS_COUNT_PROP_NAME,
+                             'shellsBurstCount',
+                             'shellsFlameBurstCount',
                              SHELL_RELOADING_TIME_PROP_NAME,
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
                              'avgDamagePerMinute',
                              'stunMaxDurationList',
+                             'flameMaxDistance',
                              'dispertionRadius',
                              'maxShotDistance',
                              AIMING_TIME_PROP_NAME),
@@ -221,6 +225,10 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 descList.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
             elif module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 descParts = []
+                if module.descriptor.isActivatable():
+                    paramName = ModuleTooltipBlockConstructor.ACTIVE_SECONDS
+                    paramValue = params_formatters.formatParameter(paramName, module.descriptor.activeSeconds)
+                    descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 cooldownSeconds = module.descriptor.cooldownSeconds
                 if cooldownSeconds:
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
@@ -305,6 +313,8 @@ class ModuleHeaderBlockConstructor(ModuleTooltipBlockConstructor):
 
 class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     bootcamp = dependency.descriptor(IBootcampController)
+    wotPlusController = dependency.descriptor(IWotPlusController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
@@ -409,7 +419,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 needValue = value - money.getSignValue(removalPriceCurrency)
                 if needValue <= 0 or self.configuration.isStaticInfoOnly:
                     needValue = None
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=117, gap=15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit))
+                wotPlusStatus = self.wotPlusController.isEnabled()
+                isFreeDeluxeEnabled = self.lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled()
+                isFreeDemountEnabled = self.lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
+                isFreeToDemount = self.wotPlusController.isFreeToDemount(module)
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=117, gap=15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled))
                 isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
                 if isModernized:
                     itemPrice = module.getDeconstructPrice(self.itemsCache.items)
@@ -567,7 +581,9 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 title = None
                 if module.itemTypeID == GUI_ITEM_TYPE.GUN:
                     if extraInfo:
-                        if module.isClipGun(vDescr):
+                        if module.isFlameGun():
+                            title = R.strings.menu.moduleInfo.flameGunLabel()
+                        elif module.isClipGun(vDescr):
                             title = R.strings.menu.moduleInfo.clipGunLabel()
                         elif module.isAutoReloadable(vDescr):
                             hasBoost = False

@@ -45,7 +45,8 @@ class TabbedFullStatsComponent(TabbedFullStatsMeta):
         super(TabbedFullStatsComponent, self)._populate()
         tabs = self._buildTabs(_TabsBuilder())
         for idx, tabData in enumerate(tabs):
-            self.__tabsMap[tabData.pop('alias')] = idx
+            self.__tabsMap[tabData['alias']] = idx
+            tabData['alias'] = tabData['alias'].value
 
         self.as_updateTabsS(tabs)
 

@@ -301,6 +301,10 @@ class OfferGift(object):
         return disabled
 
     @property
+    def rawBonuses(self):
+        return self._data.get('bonus', dict())
+
+    @property
     def bonuses(self):
         if self._bonuses is None:
             self._bonuses = []

@@ -37,12 +37,6 @@ class LoginPageMeta(View):
     def isCSISUpdateOnRequest(self):
         self._printOverrideError('isCSISUpdateOnRequest')
 
-    def isPwdInvalid(self, password):
-        self._printOverrideError('isPwdInvalid')
-
-    def isLoginInvalid(self, login):
-        self._printOverrideError('isLoginInvalid')
-
     def startListenCsisUpdate(self, startListenCsis):
         self._printOverrideError('startListenCsisUpdate')
 

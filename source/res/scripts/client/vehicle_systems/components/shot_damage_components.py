@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/shot_damage_components.py
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 import CGF
 import Math
@@ -16,8 +16,10 @@ class ShotDamageComponent(object):
         self.compound = compound
 
 
-class DamageStickerComponent(CGFComponent):
+@registerComponent
+class DamageStickerComponent(object):
     category = 'Render'
+    domain = CGF.DomainOption.DomainClient
     damageSticker = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Damage sticker', value='')
     lodDistance = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Lod Distance', value=100)
     fadeoutTime = ComponentProperty(type=CGFMetaTypes.FLOAT, editorName='Fadeout time', value=0)

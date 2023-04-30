@@ -53,7 +53,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, ApplyArea, ItemTags
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
@@ -778,8 +778,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.as_progressionEntryPointVisibleS(any((g_currentVehicle.item.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, areaId) for areaId in Area.ALL)))
         self.__closeConfirmatorHelper.start(self.__closeConfirmator)
         if not AccountSettings.getSettings(IS_CUSTOMIZATION_INTRO_VIEWED):
-            if self.service.getStyles(criteria=REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT | REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.QUESTS_PROGRESSION])):
-                showOnboardingView(True)
+            questProgressionStyles = self.service.getStyles(criteria=REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT | REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.QUESTS_PROGRESSION]))
+            if questProgressionStyles:
+                showOnboardingView(first(questProgressionStyles), True)
         return
 
     def _invalidate(self, *args, **kwargs):

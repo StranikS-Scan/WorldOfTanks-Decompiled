@@ -3,7 +3,6 @@
 import copy
 from operator import sub
 from typing import Any, Dict, Tuple
-from VehicleDescrCrew import VehicleDescrCrew
 from constants import VEHICLE_TTC_ASPECTS
 from debug_utils import *
 from items import tankmen
@@ -207,7 +206,12 @@ if IS_CLIENT:
                 if not all(map(isclose, original[factor], changed[factor])):
                     result[factor] = map(sub, original[factor], changed[factor])
             if not isclose(original[factor], changed[factor]):
-                result[factor] = original.get(factor, CLIENT_VEHICLE_ATTRIBUTE_FACTORS[factor]) - changed[factor]
+                originalFactor = original.get(factor, CLIENT_VEHICLE_ATTRIBUTE_FACTORS[factor])
+                changedFactor = changed[factor]
+                if originalFactor == changedFactor:
+                    continue
+                else:
+                    result[factor] = originalFactor - changedFactor
 
         return result
 
@@ -231,16 +235,16 @@ if IS_CLIENT:
         return (moving, still)
 
 
-    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, perksController=None):
+    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
         for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
-            updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, currFactors, aspect)
+            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
             for coefficient in extraAspects[aspect]:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
-        updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
+        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
         for coefficientName, coefficientValue in extras.iteritems():
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
             factors[coefficientName] = coefficientValue
@@ -268,7 +272,8 @@ if IS_CLIENT:
         return sum(filter(None, [ getattr(eq, 'crewLevelIncrease', None) for eq in eqs ]))
 
 
-    def updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, aspect):
+    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
+        from VehicleDescrCrew import VehicleDescrCrew
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
             if eq is not None:
@@ -282,8 +287,6 @@ if IS_CLIENT:
 
         vehicleDescrCrew.onCollectFactors(factors)
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
-        if perksController and aspect == VEHICLE_TTC_ASPECTS.DEFAULT:
-            perksController.onCollectFactors(factors)
         multShotDispersionFactor = factors.get('multShotDispersionFactor', 1.0)
         shotDispersionFactors = [multShotDispersionFactor, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)

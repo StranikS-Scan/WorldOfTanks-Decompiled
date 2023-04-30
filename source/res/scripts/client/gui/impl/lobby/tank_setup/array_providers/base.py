@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/array_providers/base.py
-from functools import partial
 from frameworks.wulf import Array
+from functools import partial
 from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.utils.requesters import REQ_CRITERIA

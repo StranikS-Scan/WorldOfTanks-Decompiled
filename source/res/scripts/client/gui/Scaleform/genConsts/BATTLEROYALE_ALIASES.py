@@ -14,4 +14,5 @@ class BATTLEROYALE_ALIASES(object):
     BATTLE_ROYALE_SUMMARY_RESULTS_CMP = 'BattleRoyaleSummaryResultsCmp'
     BATTLE_ROYALE_SCORE_RESULTS_CMP = 'BattleRoyaleScoreResultsCmp'
     BATTLE_ROYALE_PRIME_TIME = 'BattleRoyalePrimeTimeView'
+    BATTLE_ROYALE_BROWSER_VIEW = 'BattleRoyaleBrowserView'
     LEVEL_UP_UI = 'battleRoyaleLevelUpView.swf'

@@ -3,7 +3,7 @@
 import CGF
 import Triggers
 from cgf_demo.demo_category import DEMO_CATEGORY
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister, onProcessQuery
 from EdgeDrawer import HighlightComponent
 
@@ -13,8 +13,10 @@ class _Stage(object):
     Enemy = 2
 
 
-class TestEdgeDrawerComponent(CGFComponent):
+@registerComponent
+class TestEdgeDrawerComponent(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
 
     def __init__(self):
         super(TestEdgeDrawerComponent, self).__init__()

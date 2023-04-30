@@ -392,10 +392,9 @@ class ClientArena(object):
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
 
-    @staticmethod
-    def __preprocessVehicleInfo(info):
+    def __preprocessVehicleInfo(self, info):
         if not info['avatarSessionID']:
-            info['name'] = preprocessBotName(info['name'])
+            info['name'] = preprocessBotName(info['name'], self.bonusType)
         return info
 
 

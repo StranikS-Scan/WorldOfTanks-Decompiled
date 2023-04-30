@@ -14,7 +14,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from points_of_interest_shared import PoiStatus
+from points_of_interest_shared import PoiStatus, ENEMY_VEHICLE_ID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersBattleController, VehicleStateSoundPlayer, SoundPlayer
@@ -44,8 +44,7 @@ _PreDeactivationParams = namedtuple('_PreDeactivationParams', ('soundName', 'tim
 
 class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __EQUIPMENT_ACTIVATED = {'poi_radar': 'comp_7_ability_poi_radar',
-     'comp7_hunter': 'comp_7_ability_buff_common',
+    __EQUIPMENT_ACTIVATED = {'comp7_hunter': 'comp_7_ability_buff_common',
      'comp7_aoe_heal': 'comp_7_ability_aoe_heal_apply',
      'comp7_ally_support': 'comp_7_ability_buff_common',
      'comp7_concentration': 'comp_7_ability_buff_common',
@@ -59,8 +58,7 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
      'comp7_sniper': 'comp_7_ability_bullseye',
      'comp7_aggressive_detection': 'comp_7_ability_wheel',
      'comp7_march': 'comp_7_ability_buff_common',
-     'comp7_redline': 'comp_7_ability_arty_apply',
-     'poi_artillery_aoe': 'comp_7_ability_arty_apply'}
+     'comp7_redline': 'comp_7_ability_arty_apply'}
     __EQUIPMENT_DEACTIVATED = {'comp7_aoe_heal': 'comp_7_ability_aoe_heal_stop',
      'comp7_hunter': 'comp_7_ability_buff_end',
      'comp7_ally_support': 'comp_7_ability_buff_end',
@@ -78,6 +76,12 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
     __EQUIPMENT_PREPARING_CANCEL = {'comp7_redline': 'comp_7_ability_arty_cancel',
      'poi_artillery_aoe': 'comp_7_ability_arty_cancel'}
     __PRE_DEACTIVATION_SOUNDS = {'comp7_aoe_inspire': _PreDeactivationParams('comp_7_ability_insp_stop', 3.0)}
+    __POI_EQUIPMENT_ACTIVATED = {'poi_radar': 'comp_7_ability_poi_radar',
+     'poi_radar_ally': 'comp_7_ability_poi_radar_ally',
+     'poi_radar_enemy': 'comp_7_ability_poi_radar_enemy',
+     'poi_artillery_aoe': 'comp_7_ability_arty_apply',
+     'poi_artillery_aoe_ally': 'comp_7_ability_arty_ally',
+     'poi_artillery_aoe_enemy': 'comp_7_ability_arty_enemy'}
 
     def __init__(self):
         super(_EquipmentStateSoundPlayer, self).__init__()
@@ -103,6 +107,9 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
         ctrl = self.__sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated += self.__onEquipmentUpdated
+        poiCtrl = self.__sessionProvider.dynamic.pointsOfInterest
+        if poiCtrl is not None:
+            poiCtrl.onPoiEquipmentUsed += self.__onPoiEquipmentUsed
         return
 
     def _unsubscribe(self):
@@ -110,6 +117,9 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
         ctrl = self.__sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated -= self.__onEquipmentUpdated
+        poiCtrl = self.__sessionProvider.dynamic.pointsOfInterest
+        if poiCtrl is not None:
+            poiCtrl.onPoiEquipmentUsed -= self.__onPoiEquipmentUsed
         return
 
     def _onVehicleStateUpdated(self, state, value):
@@ -138,11 +148,18 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
             self.__play2dFromMapping(self.__EQUIPMENT_DEACTIVATED, item)
             self.__activeEquipment.discard(item.getDescriptor().name)
 
-    def __play2dFromMapping(self, soundsMapping, item):
-        soundName = soundsMapping.get(item.getDescriptor().name)
-        if soundName is not None:
-            _play2d(soundName)
-        return
+    def __onPoiEquipmentUsed(self, equipment, vehicleID):
+        equipmentName = equipment.name
+        ownVehicleID = self.__sessionProvider.shared.vehicleState.getControllingVehicleID()
+        if vehicleID == ENEMY_VEHICLE_ID:
+            equipmentName = '{}_enemy'.format(equipmentName)
+        elif vehicleID != ownVehicleID:
+            equipmentName = '{}_ally'.format(equipmentName)
+        self.__play2dFromMapping(self.__POI_EQUIPMENT_ACTIVATED, itemName=equipmentName)
+
+    def __play2dFromMapping(self, soundsMapping, item=None, itemName=None):
+        soundName = soundsMapping.get(itemName if itemName else item.getDescriptor().name)
+        _play2d(soundName)
 
     def __play2dFromMappingDelayed(self, soundsMapping, item):
         delayedSoundParams = soundsMapping.get(item.getDescriptor().name)
@@ -164,10 +181,8 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
 class _EquipmentZoneSoundPlayer(VehicleStateSoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __EQUIPMENT_ZONE_ENTER = {VEHICLE_VIEW_STATE.AOE_HEAL: 'comp_7_ability_aoe_heal_enter',
-     VEHICLE_VIEW_STATE.AOE_INSPIRE: 'comp_7_ability_insp_enter',
      VEHICLE_VIEW_STATE.STUN: 'artillery_stun_effect_start'}
     __EQUIPMENT_ZONE_EXIT = {VEHICLE_VIEW_STATE.AOE_HEAL: 'comp_7_ability_aoe_heal_exit',
-     VEHICLE_VIEW_STATE.AOE_INSPIRE: 'comp_7_ability_insp_exit',
      VEHICLE_VIEW_STATE.STUN: 'artillery_stun_effect_end'}
 
     def __init__(self):
@@ -318,6 +333,7 @@ class _PoiSNSoundPlayer(VehicleStateSoundPlayer):
 
 class _BuffSNSoundPlayer(VehicleStateSoundPlayer):
     __RESET_ABILITY = 'comp_7_ability_timer_reset'
+    __EQUIPMENT_STATE_ACTIVATED = {VEHICLE_VIEW_STATE.AOE_INSPIRE: 'comp_7_ability_insp_start'}
 
     def __init__(self):
         super(_BuffSNSoundPlayer, self).__init__()
@@ -331,6 +347,8 @@ class _BuffSNSoundPlayer(VehicleStateSoundPlayer):
                 currentValue = self.__vehicleStates.get(state)
                 if currentValue is not None and value.get('endTime') > currentValue:
                     _play2d(self.__RESET_ABILITY)
+                else:
+                    _play2d(self.__EQUIPMENT_STATE_ACTIVATED.get(state))
                 self.__vehicleStates[state] = value.get('endTime')
         return
 
@@ -341,7 +359,11 @@ def _getPlayerVehicle():
 
 
 def _play2d(soundName):
-    SoundGroups.g_instance.playSound2D(soundName)
+    if soundName is None:
+        return
+    else:
+        SoundGroups.g_instance.playSound2D(soundName)
+        return
 
 
 def _playVehiclePC(soundName, soundObjectIndex):

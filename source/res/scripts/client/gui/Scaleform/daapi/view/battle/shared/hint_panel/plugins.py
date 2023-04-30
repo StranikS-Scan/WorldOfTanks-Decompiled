@@ -3,9 +3,10 @@
 import logging
 import typing
 import BigWorld
+import aih_constants
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG
@@ -32,6 +33,7 @@ from hint_panel_plugin import HintPanelPlugin, HintData, HintPriority
 from dyn_squad_hint_plugin import DynSquadHintPlugin
 if typing.TYPE_CHECKING:
     from gui.goodies.booster_state_provider import BoosterStateProvider
+    from items.vehicles import VehicleDescriptor
 _logger = logging.getLogger(__name__)
 _HINT_MIN_VEHICLE_LEVEL = 4
 _HINT_TIMEOUT = 6
@@ -64,6 +66,8 @@ def createPlugins():
         result['commanderCameraHints'] = CommanderCameraHintPlugin
     if MapsTrainingHelpHintPlugin.isSuitable():
         result['mapsTrainingHelpHint'] = MapsTrainingHelpHintPlugin
+    if MapboxHelpPlugin.isSuitable():
+        result['mapboxHelpHint'] = MapboxHelpPlugin
     return result
 
 
@@ -150,7 +154,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
 
     def __onCrosshairViewChanged(self, viewID):
         haveHintsLeft = self._haveHintsLeft(self.__settings)
-        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft:
+        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.FLAMETHROWER:
             self.__addHint()
         elif self.__isHintShown:
             self.__removeHint()
@@ -713,7 +717,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration:
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or self.__checkFlameThrowerConditions(vTypeDesc):
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__canDisplayVehicleHelpHint(vTypeDesc) or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -758,7 +762,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayVehicleHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or self.__checkFlameThrowerConditions(typeDescriptor)) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+
+    def __checkFlameThrowerConditions(self, typeDescriptor):
+        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+        return typeDescriptor.isFlamethrower and guiType in ARENA_GUI_TYPE.RANDOM_RANGE
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)
@@ -811,7 +819,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             if viewCtx.get('hasUniqueVehicleHelpScreen', False):
                 vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
                 vTypeDesc = vehicle.typeDescriptor
-                if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration:
+                if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or self.__checkFlameThrowerConditions(vTypeDesc):
                     hintStats = self.__helpHintSettings[self.__vehicleId]
                     self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return
@@ -958,7 +966,7 @@ class CommanderCameraHintPlugin(HintPanelPlugin, CallbackDelayer):
         super(CommanderCameraHintPlugin, self).__init__(parentObj)
         CallbackDelayer.__init__(self)
         strings = R.strings.ingame_gui
-        self.__hintData = {'hintData': HintData(getVirtualKey(CommandMapping.CMD_COMMANDER_CAM), getReadableKey(CommandMapping.CMD_COMMANDER_CAM), '', backport.text(strings.commanderCam.hint.description()), 0, 0, HintPriority.HELP, reducedPanning=True),
+        self.__hintData = {'hintData': HintData(getVirtualKey(CommandMapping.CMD_COMMANDER_CAM), getReadableKey(CommandMapping.CMD_COMMANDER_CAM), '', backport.text(strings.commanderCam.hint.description()), 0, 0, HintPriority.HELP, True, HelpHintContext.COMMANDER_CAMERA),
          'btnID': CommandMapping.CMD_COMMANDER_CAM}
         self.__currPeriod = None
         self.__settings = {}
@@ -1021,3 +1029,99 @@ class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
 
     def _canDisplayCustomHelpHint(self):
         return True
+
+
+class HelpPlugin(HintPanelPlugin):
+    __slots__ = ('__isActive', '__settings', '__isShown', '__isInDisplayPeriod', '__callbackDelayer', '__isVisible', '__settingKey', '__settingSectionName', '__localeRes', '__hintPriority', '__hintContext')
+    _HINT_TIMEOUT = 6
+
+    def __init__(self, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj):
+        self.__isActive = False
+        self.__settings = None
+        self.__isShown = False
+        self.__isVisible = False
+        self.__isInDisplayPeriod = False
+        self.__callbackDelayer = None
+        self.__settingKey = settingKey
+        self.__settingSectionName = settingSectionName
+        self.__localeRes = localeRes
+        self.__hintPriority = hintPriority
+        self.__hintContext = hintContext
+        super(HelpPlugin, self).__init__(parentObj)
+        return
+
+    def start(self):
+        self.__isActive = True
+        self.__callbackDelayer = CallbackDelayer()
+        self.__settings = AccountSettings.getSettings(self.__settingSectionName)
+        self.__settings[self.__settingKey] = self.__settings.get(self.__settingKey, {HINTS_LEFT: 3})
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(GameEvent.BATTLE_LOADING, self.__onBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__onHintShown, scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    def stop(self):
+        if self.__isActive:
+            self.__hide()
+            self.__callbackDelayer.destroy()
+            self.__callbackDelayer = None
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.removeListener(GameEvent.BATTLE_LOADING, self.__onBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
+            g_eventBus.removeListener(GameEvent.SHOW_BTN_HINT, self.__onHintShown, scope=EVENT_BUS_SCOPE.GLOBAL)
+            if self.__isShown:
+                AccountSettings.setSettings(self.__settingSectionName, self.__settings)
+        self.__isActive = False
+        self.__settingKey = None
+        self.__settingSectionName = None
+        self.__localeRes = None
+        self.__hintPriority = None
+        self.__hintContext = None
+        return
+
+    def setPeriod(self, period):
+        if not self.__isActive:
+            return
+        self.__isInDisplayPeriod = period in BEFORE_START_BATTLE_PERIODS
+        if self.__isVisible and not self.__isInDisplayPeriod:
+            self.__hide()
+
+    def _getHint(self):
+        keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
+        key = getVirtualKey(CommandMapping.CMD_SHOW_HELP)
+        return HintData(key, keyName, backport.text(self.__localeRes.press()), backport.text(self.__localeRes.description()), 0, 0, self.__hintPriority, False, self.__hintContext)
+
+    def __showHint(self):
+        self._parentObj.setBtnHint(CommandMapping.CMD_SHOW_HELP, self._getHint())
+
+    def __onHintShown(self, event):
+        if event.ctx.get('hintCtx') == self.__hintContext and not self.__isShown:
+            self.__isVisible = True
+            self.__isShown = True
+            self.__callbackDelayer.delayCallback(self._HINT_TIMEOUT, self.__hide)
+
+    def __handleLoadView(self, event):
+        if event.alias == VIEW_ALIAS.INGAME_DETAILS_HELP:
+            self.__hide()
+
+    def __onBattleLoading(self, event):
+        battleLoadingShown = event.ctx.get('isShown')
+        if not battleLoadingShown and self.__isInDisplayPeriod and self.__settings[self.__settingKey][HINTS_LEFT] > 0:
+            self.__showHint()
+
+    def __hide(self):
+        if self.__isVisible:
+            self.__callbackDelayer.stopCallback(self.__hide)
+            self.__isVisible = False
+            hint = self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
+            if hint and hint.hintCtx == self.__hintContext:
+                self._updateBattleCounterOnUsed(self.__settings[self.__settingKey])
+
+
+class MapboxHelpPlugin(HelpPlugin):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, parentObj):
+        super(MapboxHelpPlugin, self).__init__(MAPBOX_HINT_SECTION, 'mapbox', R.strings.ingame_gui.helpScreen.mapbox, HintPriority.MAPBOX, HelpHintContext.MAPBOX, parentObj)
+
+    @classmethod
+    def isSuitable(cls):
+        return cls.__sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPBOX

@@ -55,7 +55,8 @@ _SHELL_TYPES_TO_STR = {BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGEL
  BATTLE_LOG_SHELL_TYPES.HOLLOW_CHARGE: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
  BATTLE_LOG_SHELL_TYPES.HE_MODERN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
- BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE}
+ BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
+ BATTLE_LOG_SHELL_TYPES.FLAME: INGAME_GUI.DAMAGELOG_SHELLTYPE_FLAME}
 _DEATH_ZONES_STR = INGAME_GUI.DAMAGELOG_DEATH_ZONE
 HIDDEN_SHELL = ''
 
@@ -655,6 +656,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if settingName == DAMAGE_LOG.ASSIST_STUN and result:
             isSPG = self.__arenaDP.getVehicleInfo(self.__vehStateCtrl.getControllingVehicleID()).isSPG()
             arenaVisitor = self.sessionProvider.arenaVisitor
-            isComp7Battle = arenaVisitor.gui.isComp7Battle
+            isComp7Battle = arenaVisitor.gui.isComp7Battle()
             result = (isSPG or isComp7Battle) and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
         return result

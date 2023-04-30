@@ -18,6 +18,7 @@ from gui.impl.lobby.mode_selector.items.battle_royale_mode_selector_item import 
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.comp7_mode_selector_item import Comp7ModeSelectorItem
+from gui.impl.lobby.mode_selector.items.winback_mode_selector_item import WinbackModeSelectorItem
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -36,6 +37,7 @@ registerModeSelectorItem(PREBATTLE_ACTION_NAME.MAPBOX, MapboxModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.EPIC, EpicModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.BATTLE_ROYALE, BattleRoyaleModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.COMP7, Comp7ModeSelectorItem)
+registerModeSelectorItem(PREBATTLE_ACTION_NAME.WINBACK, WinbackModeSelectorItem)
 registerModeSelectorItem(CustomModeName.BOOTCAMP, BootcampModeSelectorItem)
 
 class ModeSelectorDataProvider(IGlobalListener):
@@ -83,7 +85,7 @@ class ModeSelectorDataProvider(IGlobalListener):
         items = self.__getItems()
         self.__createItems(items)
         for nameItem in self._items:
-            if nameItem not in items:
+            if nameItem not in _ADDITIONAL_ITEMS and (not items.get(nameItem) or not items[nameItem].isVisible()):
                 self._clearItem(self._items.pop(nameItem))
 
         self._updateItems()
@@ -124,7 +126,7 @@ class ModeSelectorDataProvider(IGlobalListener):
             for idx, item in enumerate(self.itemList):
                 item.viewModel.setIndex(idx)
                 if item.isSelectable:
-                    isSelected = item.modeName == selected.getData()
+                    isSelected = item.modeName == selected.getData() or getattr(item, 'isSelected', lambda : False)()
                     item.viewModel.setIsSelected(isSelected)
 
     def _updateItemsPosition(self):

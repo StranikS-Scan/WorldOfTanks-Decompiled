@@ -1684,8 +1684,11 @@ class AccountDossierStats(_DossierStats):
         stats = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, playerDatabaseID)
         return BattleRoyaleSquadBlock(stats)
 
-    def getComp7Stats(self):
-        return AccountComp7StatsBlock(self._getDossierItem())
+    def getComp7StatsS1(self):
+        return AccountComp7StatsBlock(self._getDossierItem(), 1)
+
+    def getComp7StatsS2(self):
+        return AccountComp7StatsBlock(self._getDossierItem(), 2)
 
 
 class VehicleDossierStats(_DossierStats):
@@ -1759,8 +1762,8 @@ class VehicleDossierStats(_DossierStats):
         vehicleData = self.__itemsCache.items.getBattleRoyaleStats(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, playerDatabaseID, vehicleIntCD)
         return BattleRoyaleVehicleStats(vehicleData)
 
-    def getComp7Stats(self):
-        return Comp7StatsBlock(self._getDossierItem())
+    def getComp7Stats(self, seasonID=1):
+        return Comp7StatsBlock(self._getDossierItem(), seasonID)
 
 
 class TankmanDossierStats(_DossierStats):
@@ -2076,14 +2079,11 @@ class VehRanked10x10StatsBlock(VehRankedStatsBlock):
 
 class Comp7StatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock):
 
-    def __init__(self, dossier):
+    def __init__(self, dossier, seasonID=2):
+        self._seasonID = seasonID
         _BattleStatsBlock.__init__(self, dossier)
         _Battle2StatsBlock.__init__(self, dossier)
         _MaxStatsBlock.__init__(self, dossier)
-
-    @property
-    def _seasonID(self):
-        pass
 
     def getBattlesCountVer2(self):
         return self.getBattlesCount()
@@ -2160,8 +2160,8 @@ class Comp7VehiclesDossiersCut(_Comp7VehiclesDossiersCut):
 
 class AccountComp7StatsBlock(Comp7StatsBlock, _VehiclesStatsBlock, _MaxVehicleStatsBlock):
 
-    def __init__(self, dossier):
-        Comp7StatsBlock.__init__(self, dossier)
+    def __init__(self, dossier, seasonID=1):
+        Comp7StatsBlock.__init__(self, dossier, seasonID)
         _VehiclesStatsBlock.__init__(self, dossier)
         _MaxVehicleStatsBlock.__init__(self, dossier)
 

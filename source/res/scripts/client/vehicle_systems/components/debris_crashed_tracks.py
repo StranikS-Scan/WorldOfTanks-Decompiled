@@ -85,7 +85,7 @@ class NodeRemapperComponent(object):
         self.__nodes = nodes
 
 
-@autoregister(presentInAllWorlds=True, presentInEditor=True)
+@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
 class DebrisCrashedTracksManager(CGF.ComponentManager):
     RTPC_OUTER_TRACK_STATE = 'RTPC_ext_treads_outer'
     DEBRIS_MAX_LIFETIME = 10

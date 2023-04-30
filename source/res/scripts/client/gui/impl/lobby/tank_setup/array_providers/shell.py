@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/array_providers/shell.py
+import typing
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_slot_model import ShellSlotModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_specification_model import ShellSpecificationModel
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
@@ -9,7 +10,10 @@ from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParamete
 from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
-_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunMaxDuration')
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.vehicle_modules import Shell
+    from gui.impl.lobby.tank_setup.array_providers.base import BaseVehSectionContext
+_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration')
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)
@@ -73,11 +77,11 @@ class ShellProvider(VehicleBaseArrayProvider):
     def _fillSpecification(self, model, item):
         specifications = model.getSpecifications()
         specifications.clear()
+        shellParam = params_helper.getParameters(item, self._getVehicle().descriptor)
         for paramName in _SHELLS_INFO_PARAMS:
             specificationModel = ShellSpecificationModel()
             specificationModel.setParamName(paramName)
             specificationModel.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
-            shellParam = params_helper.getParameters(item, self._getVehicle().descriptor)
             specificationModel.setValue(formatParameter(paramName, shellParam.get(paramName)) or '')
             specifications.addViewModel(specificationModel)
 

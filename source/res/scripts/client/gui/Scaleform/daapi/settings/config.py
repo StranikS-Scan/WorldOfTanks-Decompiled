@@ -90,5 +90,6 @@ registerScaleformBattlePackages(ARENA_GUI_TYPE.FORT_BATTLE_2, BATTLE_PACKAGES + 
 registerScaleformBattlePackages(ARENA_GUI_TYPE.BOOTCAMP, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.bootcamp.battle',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.MAPS_TRAINING, ('messenger.gui.Scaleform.view.battle', 'gui.Scaleform.daapi.view.battle.maps_training') + (_BATTLE_DEBUG_PACKAGES if HAS_DEV_RESOURCES else ()))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.COMP7, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.comp7',))
+registerScaleformBattlePackages(ARENA_GUI_TYPE.WINBACK, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.winback',))
 registerBattleTooltipsBuilders(_BATTLE_TOOLTIPS_BUILDERS_PATHS)
 registerLobbyTooltipsBuilders(_LOBBY_TOOLTIPS_BUILDERS_PATHS)

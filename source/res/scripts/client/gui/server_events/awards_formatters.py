@@ -66,6 +66,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                       Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CRYSTAL,
                       Currency.EVENT_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EVENTCOIN,
                       Currency.BPCOIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BPCOIN,
+                      Currency.EQUIP_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EQUIPCOIN,
                       'creditsFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
                       'freeXP': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP,
                       'freeXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP,
@@ -79,6 +80,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                     Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CRYSTAL,
                     Currency.EVENT_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EVENTCOIN,
                     Currency.BPCOIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_BPCOIN,
+                    Currency.EQUIP_COIN: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EQUIPCOIN,
                     'creditsFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CREDITS,
                     'freeXP': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP,
                     'freeXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP,
@@ -107,6 +109,7 @@ TEXT_FORMATTERS = {Currency.CREDITS: text_styles.credits,
  Currency.CRYSTAL: text_styles.crystal,
  Currency.EVENT_COIN: text_styles.eventCoin,
  Currency.BPCOIN: text_styles.bpcoin,
+ Currency.EQUIP_COIN: text_styles.equipCoin,
  'creditsFactor': _getMultiplierFormatter(text_styles.credits),
  'freeXP': text_styles.expText,
  'freeXPFactor': _getMultiplierFormatter(text_styles.expText),
@@ -138,6 +141,7 @@ def getDefaultFormattersMap():
      Currency.CRYSTAL: simpleBonusFormatter,
      Currency.EVENT_COIN: simpleBonusFormatter,
      Currency.BPCOIN: simpleBonusFormatter,
+     Currency.EQUIP_COIN: simpleBonusFormatter,
      'freeXP': simpleBonusFormatter,
      'xp': simpleBonusFormatter,
      'tankmenXP': simpleBonusFormatter,
@@ -1446,12 +1450,8 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
 
     @classmethod
     def _getOverlayType(cls, item):
-
-        def formatOverlayType(overlayType):
-            return '{}_{}'.format(overlayType, item.level) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized else overlayType
-
-        return {AWARDS_SIZES.BIG: formatOverlayType(item.getBigOverlayType()),
-         AWARDS_SIZES.SMALL: formatOverlayType(item.getOverlayType())}
+        return {AWARDS_SIZES.BIG: item.getBigOverlayType(),
+         AWARDS_SIZES.SMALL: item.getOverlayType()}
 
     @classmethod
     def _getHighlightIcon(cls, item):

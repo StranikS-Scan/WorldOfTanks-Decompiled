@@ -184,6 +184,8 @@
     <V-2-34_MapsTraining_Player_MT_1>	30	</V-2-34_MapsTraining_Player_MT_1>
     <V-54K_MapsTraining_Player_MT_2>	32	</V-54K_MapsTraining_Player_MT_2>
     <V-5F_MapsTraining_Dummy_HT_2>	33	</V-5F_MapsTraining_Dummy_HT_2>
+    <V_26>	31001	</V_26>
+    <GAZ_T_26>	31002	</GAZ_T_26>
   </ids>
   <shared>
     <V-2>
@@ -3252,5 +3254,39 @@
       <rpm_max>	2200	</rpm_max>
       <notInShop>	True	</notInShop>
     </V-5F_MapsTraining_Dummy_HT_2>
+    <GAZ_T_26>
+      <userString>	#ussr_vehicles:GAZ_T_26	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	545	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	336	</rpm_min>
+      <rpm_max>	2522	</rpm_max>
+    </GAZ_T_26>
+    <V_26>
+      <userString>	#ussr_vehicles:V_26	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <notInShop>	true	</notInShop>
+      <price>	55300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </V_26>
   </shared>
 </engines.xml>

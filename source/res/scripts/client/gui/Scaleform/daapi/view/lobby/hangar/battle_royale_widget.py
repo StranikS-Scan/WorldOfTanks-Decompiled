@@ -1,36 +1,53 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/battle_royale_widget.py
 from collections import namedtuple
+from battle_royale.gui.impl.lobby.views.widget_view import WidgetView
+from gui.Scaleform.daapi.view.meta.BattleRoyaleHangarWidgetContentMeta import BattleRoyaleHangarWidgetContentMeta
 from helpers import int2roman
 from helpers import dependency
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.meta.BattleRoyaleHangarWidgetMeta import BattleRoyaleHangarWidgetMeta
 from skeletons.gui.game_control import IBattleRoyaleController
+from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from skeletons.connection_mgr import IConnectionManager
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.periodic_battles.models import PrimeTimeStatus, AlertData
 from helpers import time_utils
 from gui.shared import event_dispatcher
+from battle_royale_progression.gui.shared import event_dispatcher as battle_royale_event_dispatcher
 from gui.shared.formatters import text_styles
-BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'isModeAvailable', 'tooltipId', 'showAlert'))
+BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'isProgressionFinished', 'tooltipId', 'showAlert'))
+
+class BattleRoyaleHangarWidgetInject(BattleRoyaleHangarWidgetContentMeta):
+
+    def _makeInjectView(self):
+        self.__view = WidgetView(self.__onWrapperInitialized)
+        return self.__view
+
+    def __onWrapperInitialized(self):
+        self.as_onWrapperInitializedS()
+
 
 class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __slots__ = ()
 
     def onClick(self):
-        self.__battleRoyaleController.openURL()
+        if self.__brProgression.isEnabled:
+            battle_royale_event_dispatcher.showProgressionView()
+        else:
+            self.__battleRoyaleController.openURL()
 
     def onChangeServerClick(self):
         event_dispatcher.showBattleRoyalePrimeTimeWindow()
 
     def update(self):
-        isModeAvailable = self.__battleRoyaleController.isEnabled() and self.__battleRoyaleController.isInPrimeTime()
         showAlert = not self.__battleRoyaleController.isInPrimeTime() and self.__battleRoyaleController.isEnabled()
-        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), isModeAvailable=isModeAvailable, tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
+        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), isProgressionFinished=self.__brProgression.isFinished, tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
         self.as_setDataS(data)
 
     def _populate(self):

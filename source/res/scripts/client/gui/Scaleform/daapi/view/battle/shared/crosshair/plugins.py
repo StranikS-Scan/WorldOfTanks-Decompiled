@@ -54,6 +54,7 @@ _DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STAT
  CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
  CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
  CHARGE_MARKER_STATE.DIMMED: DUAL_GUN_MARKER_STATE.DIMMED}
+_STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.FLAMETHROWER)
 
 def createPlugins():
     resultPlugins = {'core': CorePlugin,
@@ -550,12 +551,11 @@ class AmmoPlugin(CrosshairPlugin):
         return
 
     def __onGunAutoReloadTimeSet(self, state, stunned):
-        if not self.__autoReloadCallbackID:
-            timeLeft = min(state.getTimeLeft(), state.getActualValue())
-            baseValue = round(state.getBaseValue(), 1)
-            if self.__shellsInClip == 0:
-                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+        timeLeft = min(state.getTimeLeft(), state.getActualValue())
+        baseValue = round(state.getBaseValue(), 1)
+        if self.__shellsInClip == 0:
+            baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):
@@ -796,7 +796,7 @@ class TargetDistancePlugin(_DistancePlugin):
         self.__trackID = 0
 
     def __updateDistance(self, target):
-        self._parentObj.setDistance(int(avatar_getter.getDistanceToTarget(target)))
+        self._parentObj.setDistance(int(round(avatar_getter.getDistanceToTarget(target))))
 
     def __onSettingsChanged(self, diff):
         settingsToUpdateTracking = {MARKERS.ENEMY, MARKERS.ALLY}
@@ -846,7 +846,7 @@ class GunMarkerDistancePlugin(_DistancePlugin):
             self._parentObj.clearDistance(immediate=True)
 
     def __updateDistance(self):
-        self._parentObj.setDistance(int(avatar_getter.getDistanceToGunMarker()))
+        self._parentObj.setDistance(int(round(avatar_getter.getDistanceToGunMarker())))
 
 
 class GunMarkersInvalidatePlugin(CrosshairPlugin):
@@ -1397,7 +1397,7 @@ class ArtyCameraDistancePlugin(_DistancePlugin):
 
     def __updateCameraDistance(self):
         inputHandler = avatar_getter.getInputHandler()
-        if inputHandler is None or inputHandler.ctrlModeName not in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY) or not inputHandler.ctrl.isEnabled:
+        if inputHandler is None or inputHandler.ctrlModeName not in _STRATEGIC_VIEW or not inputHandler.ctrl.isEnabled:
             return
         else:
             if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE):

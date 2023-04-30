@@ -3,6 +3,8 @@
 from frameworks.wulf import Array
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
+from gui.impl.gen.view_models.views.lobby.missions.missions_completed_visited_model import MissionsCompletedVisitedModel
 
 class DailyQuestsModel(ViewModel):
     __slots__ = ()
@@ -21,6 +23,10 @@ class DailyQuestsModel(ViewModel):
 
     def setQuests(self, value):
         self._setArray(1, value)
+
+    @staticmethod
+    def getQuestsType():
+        return DailyQuestModel
 
     def getIsEnabled(self):
         return self._getBool(2)
@@ -57,6 +63,10 @@ class DailyQuestsModel(ViewModel):
 
     def setMissionsCompletedVisited(self, value):
         self._setArray(7, value)
+
+    @staticmethod
+    def getMissionsCompletedVisitedType():
+        return MissionsCompletedVisitedModel
 
     def getSyncInitiator(self):
         return self._getNumber(8)

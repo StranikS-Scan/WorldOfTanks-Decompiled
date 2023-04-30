@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
-from operator import attrgetter
 import typing
+from operator import attrgetter
 from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
@@ -41,6 +41,7 @@ from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
+from gui.impl.lobby.crew.crew_header_view import BuildedMessage
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
@@ -64,21 +65,20 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, ISteamCompletionController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
-from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
+    from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional, Any
     from gui.marathon.marathon_event import MarathonEvent
     from enum import EnumMeta
+    from gui.impl.lobby.crew.confirm_skills_learn_dialog import ConfirmSkillsLearnDialogData
     from gui.Scaleform.framework.managers import ContainerManager
-    from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
+    from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -303,20 +303,14 @@ def showChangeVehicleNationDialog(vehicleCD):
     window.load()
 
 
-def showPiggyBankView():
-    import BigWorld
-    lobbyContext = dependency.instance(ILobbyContext)
-    isWotPlusEnabled = lobbyContext.getServerSettings().isRenewableSubEnabled()
-    isWotPlusNSEnabled = lobbyContext.getServerSettings().isWotPlusNewSubscriptionEnabled()
-    hasWotPlusActive = BigWorld.player().renewableSubscription.isEnabled()
-    hasGold = BigWorld.player().renewableSubscription.getGoldReserve()
-    showNewPiggyBank = isWotPlusEnabled and (hasWotPlusActive or isWotPlusNSEnabled or hasGold)
-    if showNewPiggyBank:
-        from gui.impl.lobby.currency_reserves.currency_reserves_view import CurrencyReservesView
+@dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
+def showPiggyBankView(wotPlusController=None):
+    from gui.impl.lobby.currency_reserves.currency_reserves_view import CurrencyReservesView
+    from gui.impl.lobby.premacc.piggybank import PiggyBankView
+    if wotPlusController.isWotPlusEnabled():
         viewId = R.views.lobby.currency_reserves.CurrencyReserves()
         params = GuiImplViewLoadParams(viewId, CurrencyReservesView, ScopeTemplates.LOBBY_SUB_SCOPE)
     else:
-        from gui.impl.lobby.premacc.piggybank import PiggyBankView
         viewId = R.views.lobby.premacc.piggybank.Piggybank()
         params = GuiImplViewLoadParams(viewId, PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE)
     uiLoader = dependency.instance(IGuiLoader)
@@ -330,7 +324,12 @@ def showPiggyBankView():
 
 def showMapsBlacklistView():
     from gui.impl.lobby.premacc.maps_blacklist_view import MapsBlacklistView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=R.views.lobby.premacc.maps_blacklist_view.MapsBlacklistView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=R.views.lobby.excluded_maps.ExcludedMapsView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showCrew22Welcome():
+    from gui.impl.lobby.crew.crew_intro_view import CrewIntroWindow
+    CrewIntroWindow().load()
 
 
 def showDailyExpPageView(exitEvent=None):
@@ -570,13 +569,17 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     marathonCtrl = dependency.instance(IMarathonEventsController)
+    armoryYardCtrl = dependency.instance(IArmoryYardController)
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
             descriptor = entity.typeDescriptor
             if descriptor:
                 marathons = marathonCtrl.getMarathons()
                 activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
-                if activeMarathon:
+                isArmoryYard = armoryYardCtrl is not None and armoryYardCtrl.isActive() and armoryYardCtrl.getFinalRewardVehicle().intCD == descriptor.type.compactDescr
+                if isArmoryYard:
+                    armoryYardCtrl.showHeroTankVehiclePreview()
+                elif activeMarathon:
                     title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                     showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
                 elif isResourceWellRewardVehicle(descriptor.type.compactDescr):
@@ -896,6 +899,7 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'style': style,
      'styleDescr': descr,
      'backCallback': backCallback,
+     'backPreviewAlias': kwargs.get('backPreviewAlias'),
      'backBtnDescrLabel': backBtnDescrLabel,
      'topPanelData': kwargs.get('topPanelData'),
      'itemsPack': kwargs.get('itemsPack'),
@@ -907,6 +911,7 @@ def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrL
      'style': style,
      'styleDescr': descr,
      'backCallback': backCallback,
+     'backPreviewAlias': kwargs.get('backPreviewAlias'),
      'backBtnDescrLabel': backBtnDescrLabel,
      'styleLevel': kwargs.get('styleLevel')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -926,6 +931,7 @@ def showStyleBuyingPreview(vehCD, style, descr, backCallback, backBtnDescrLabel=
      'style': style,
      'styleDescr': descr,
      'backCallback': backCallback,
+     'backPreviewAlias': kwargs.get('backPreviewAlias'),
      'backBtnDescrLabel': backBtnDescrLabel,
      'styleLevel': kwargs.get('styleLevel'),
      'price': kwargs.get('price'),
@@ -1092,6 +1098,14 @@ def showOptionalDeviceDestroy(itemCD, callback):
     from gui.impl.dialogs.dialog_template import DialogTemplateView
     result = yield wg_await(showOptDeviceCommonWindowDialog(lambda **_: builder.buildView(), layoutID=DialogTemplateView.LAYOUT_ID))
     callback(result)
+
+
+@wg_async
+def showLearnConfirmDialog(dialogData=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.crew.confirm_skills_learn_dialog import ConfirmSkillsLearnDialog
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=ConfirmSkillsLearnDialog.LAYOUT_ID, wrappedViewClass=ConfirmSkillsLearnDialog, dialogData=dialogData))
+    raise AsyncReturn(result)
 
 
 @wg_async
@@ -1327,6 +1341,11 @@ def showFrontlineAwards(bonuses, onCloseCallback=None, onAnimationEndedCallback=
     findAndLoadWindow(useQueue, AwardsWindow, bonuses, onCloseCallback=onCloseCallback, onAnimationEndedCallback=onAnimationEndedCallback)
 
 
+def showBlankGiftWindow(itemCD, count):
+    from gui.impl.lobby.blank_gift.awards_view import BlankGiftWindow
+    BlankGiftWindow(itemCD, count).load()
+
+
 def showNewLevelWindow(pLevel=1, cLevel=2, pXp=50, cXp=70, boosterFlXP=30, originalFlXP=10, rank=1):
     extensionInfo = {'metaLevel': (cLevel, cXp),
      'prevMetaLevel': (pLevel, pXp),
@@ -1414,11 +1433,12 @@ def showBattlePassBuyLevelWindow(ctx=None, parent=None, guiLoader=None):
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)
-def showOnboardingView(isFirstRun=False, parent=None, guiLoader=None):
+def showOnboardingView(styleCD=None, isFirstRun=False, parent=None, guiLoader=None):
     from gui.impl.lobby.customization.progression_styles.onboarding_view import OnboardingWindow
     view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progression_styles.OnboardingView())
     if view is None:
-        window = OnboardingWindow({'isFirstRun': isFirstRun}, parent or getParentWindow())
+        window = OnboardingWindow({'styleCD': styleCD,
+         'isFirstRun': isFirstRun}, parent or getParentWindow())
         window.load()
     return
 
@@ -1617,30 +1637,15 @@ def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
 
 
 @wg_async
-def showAccelerateCrewTrainingDialog(successCallback):
-    from gui.impl.dialogs import dialogs
-    from gui.impl.pub.dialog_window import DialogButtons
-    from gui.impl.dialogs.gf_builders import InfoDialogBuilder
-    builder = InfoDialogBuilder()
-    stringRoot = R.strings.dialogs.xpToTmenCheckbox
-    builder.setTitle(stringRoot.title())
-    builder.setDescription(stringRoot.message())
-    builder.setConfirmButtonLabel(stringRoot.submit())
-    builder.setCancelButtonLabel(stringRoot.cancel())
-    result = yield wg_await(dialogs.show(builder.build()))
-    if result.result == DialogButtons.SUBMIT:
-        successCallback()
-
-
-@wg_async
 def showIdleCrewBonusDialog(description, successCallback):
     from gui.impl.dialogs import dialogs
     from gui.impl.pub.dialog_window import DialogButtons
-    from gui.impl.dialogs.gf_builders import InfoDialogBuilder
-    builder = InfoDialogBuilder()
+    from gui.impl.dialogs.gf_builders import PassiveXPDialogBuilder
+    builder = PassiveXPDialogBuilder()
     stringRoot = R.strings.dialogs.idleCrewBonus
     builder.setTitle(stringRoot.title())
-    builder.setDescription(description)
+    builder.setDescriptionMsg(description.text)
+    builder.setMessageIcon(description.icon)
     builder.setConfirmButtonLabel(stringRoot.submit())
     builder.setCancelButtonLabel(stringRoot.cancel())
     result = yield wg_await(dialogs.show(builder.build()))
@@ -1724,9 +1729,19 @@ def showEliteWindow(vehicleCD, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showWotPlusInfoPage():
+def showWotPlusInfoPage(source):
+    from uilogging.wot_plus.loggers import WotPlusInfoPageLogger
+    WotPlusInfoPageLogger().logInfoPage(source)
     url = GUI_SETTINGS.renewableSubscriptionInfoPage
     showBrowserOverlayView(url, VIEW_ALIAS.WOT_PLUS_INFO_VIEW)
+
+
+def showSteamRedirectWotPlus():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.WOT_PLUS_STEAM_SHOP))
+
+
+def showWotPlusProductPage():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.WOT_PLUS_SHOP))
 
 
 def showVehicleRentalPage():
@@ -1765,26 +1780,9 @@ def showRankedSelectableReward(rewards=None):
     window.load()
 
 
-@wg_async
 def showSubscriptionsPage():
     from gui.impl.lobby.player_subscriptions.player_subscriptions_view import PlayerSubscriptionsView
-    from gui.platform.base.statuses.constants import StatusTypes
-    from gui.platform.products_fetcher.fetch_result import FetchResult
-    wgnpSteamAccCtrl = dependency.instance(IWGNPSteamAccRequestController)
-    steamRegistrationCtrl = dependency.instance(ISteamCompletionController)
-    playerSubscriptionsController = dependency.instance(ISubscriptionsFetchController)
-    incompleteSteamAccount = False
-    if steamRegistrationCtrl.isSteamAccount:
-        status = yield wg_await(wgnpSteamAccCtrl.getEmailStatus('loadingData'))
-        if not status.typeIs(StatusTypes.CONFIRMED):
-            fetchResult = FetchResult()
-            incompleteSteamAccount = True
-        else:
-            fetchResult = yield wg_await(playerSubscriptionsController.getProducts())
-    else:
-        fetchResult = yield wg_await(playerSubscriptionsController.getProducts())
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.player_subscriptions.PlayerSubscriptions(), PlayerSubscriptionsView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx={'fetchResult': fetchResult,
-     'incompleteSteamAccount': incompleteSteamAccount}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.player_subscriptions.PlayerSubscriptions(), PlayerSubscriptionsView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @dependency.replace_none_kwargs(resourceWell=IResourceWellController)
@@ -1964,7 +1962,56 @@ def showComp7RanksRewardsScreen(quest, periodicQuests, notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7WinsRewardsScreen(quest, notificationMgr=None):
-    from gui.impl.lobby.comp7.views.rewards_screen import WinsRewardsScreenWindow
-    window = WinsRewardsScreenWindow(quest=quest)
+def showComp7TokensRewardsScreen(quest, notificationMgr=None):
+    from gui.impl.lobby.comp7.views.rewards_screen import TokensRewardsScreenWindow
+    window = TokensRewardsScreenWindow(quest=quest)
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
+def showCollectionWindow(collectionId, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
+    if not collections.isEnabled():
+        showHangar()
+        return
+    else:
+        from gui.impl.lobby.collection.collection import CollectionWindow
+        view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.CollectionView())
+        if view is None:
+            window = CollectionWindow(collectionId, backCallback, backBtnText, parent or getParentWindow())
+            window.load()
+        return
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
+def showCollectionItemPreviewWindow(itemId, collectionId, guiLoader=None, collections=None):
+    if not collections.isEnabled():
+        showHangar()
+        return
+    else:
+        from gui.impl.lobby.collection.collection_item_preview import CollectionItemPreviewWindow
+        view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.CollectionItemPreview())
+        if view is None:
+            window = CollectionItemPreviewWindow(itemId, collectionId)
+            window.load()
+        return
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader, notificationMgr=INotificationWindowController)
+def showCollectionAwardsWindow(collectionId, bonuses, guiLoader=None, notificationMgr=None):
+    from gui.impl.lobby.collection.awards_view import AwardsWindow
+    if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.AwardsView()) is None:
+        window = AwardsWindow(collectionId, bonuses)
+        notificationMgr.append(WindowNotificationCommand(window))
+    return
+
+
+def showWinbackIntroView(parent=None):
+    from gui.impl.lobby.winback.winback_daily_quests_intro_view import WinbackDailyQuestsIntroWindow
+    window = WinbackDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
+    window.load()
+    return
+
+
+def showWinbackSelectRewardView(selectableBonusTokens=None):
+    from gui.impl.lobby.winback.winback_selectable_reward_view import WinbackSelectableRewardWindow
+    WinbackSelectableRewardWindow(selectableBonusTokens).load()

@@ -3,6 +3,7 @@
 import typing
 from CurrentVehicle import g_currentVehicle
 from constants import SEASON_NAME_BY_TYPE
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.gen import R
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
@@ -10,7 +11,6 @@ from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
@@ -65,6 +65,10 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 @dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
 def getVehicleDataVO(vehicle, bootcampCtrl=None):
+    return _getVehicleDataVO(vehicle, bootcampCtrl)
+
+
+def _getVehicleDataVO(vehicle, bootcampCtrl):
     rentInfoText = ''
     if not vehicle.isWotPlusRent and not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -101,8 +105,9 @@ def getVehicleDataVO(vehicle, bootcampCtrl=None):
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
-    isWotPlusSlot = (vehicle.isWotPlusRent or vehicle.isTelecomRent) and not vehicle.rentExpiryState
-    extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if isWotPlusSlot else ''
+    isWotPlusSlot = (vehicle.isWotPlus or vehicle.isTelecomRent) and not vehicle.rentExpiryState
+    showIcon = vehicle.isTelecomRent and not vehicle.rentExpiryState
+    extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if showIcon else ''
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -159,7 +164,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def hasRentedVehicles(self):
-        return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT | ~REQ_CRITERIA.VEHICLE.CLAN_WARS))
+        criteria = REQ_CRITERIA.VEHICLE.RENT
+        criteria |= ~REQ_CRITERIA.VEHICLE.CLAN_WARS
+        criteria |= ~REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE
+        return bool(self._getFilteredVehicles(criteria))
 
     def hasEventVehicles(self):
         return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.EVENT))
@@ -323,7 +331,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._addCriteria()
 
     def _addCriteria(self):
-        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | (~REQ_CRITERIA.VEHICLE.WOTPLUS_RENT | ~REQ_CRITERIA.VEHICLE.TELECOM_RENT))
+        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.TELECOM_RENT)
 
     def _buildVehicle(self, vehicle):
         vo = getVehicleDataVO(vehicle)

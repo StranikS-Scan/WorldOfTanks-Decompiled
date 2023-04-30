@@ -46,20 +46,16 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	7	</armor_1>
-      <armor_2>	15	</armor_2>
+      <armor_1>	15	</armor_1>
+      <armor_2>	10	</armor_2>
       <armor_3>	15	</armor_3>
       <armor_4>	15	</armor_4>
       <armor_5>	8	</armor_5>
       <armor_6>	6	</armor_6>
-      <armor_7>	15	</armor_7>
+      <armor_7>	6	</armor_7>
       <armor_8>	15	</armor_8>
-      <armor_9>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_9>
-      <armor_10>	15	</armor_10>
-      <armor_11>	0	</armor_11>
     </armor>
-    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7086	</weight>
     <maxHealth>	196	</maxHealth>
     <ammoBayHealth>
@@ -3687,13 +3683,7 @@
       <armor>
         <armor_1>	15	</armor_1>
         <armor_2>	6	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	15	</armor_8>
-        <armor_9>	15	</armor_9>
+        <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	49	</maxHealth>
@@ -3723,7 +3713,8 @@
           </shotDispersionFactors>
           <armor>
             <armor_1>	15	</armor_1>
-            <armor_2>	0	</armor_2>
+            <armor_3>	15	</armor_3>
+            <armor_8>	0	</armor_8>
             <gun>	15	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -3824,6 +3815,7 @@
               <anchorShift>	0.029990	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	82.746 83.0138	</density>
@@ -3843,7 +3835,8 @@
           </shotDispersionFactors>
           <armor>
             <armor_1>	15	</armor_1>
-            <armor_2>	0	</armor_2>
+            <armor_3>	15	</armor_3>
+            <armor_8>	0	</armor_8>
             <gun>	15	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -3944,6 +3937,7 @@
               <anchorShift>	0.049994	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	81.8864 87.6573	</density>
@@ -3963,7 +3957,8 @@
           </shotDispersionFactors>
           <armor>
             <armor_1>	15	</armor_1>
-            <armor_2>	0	</armor_2>
+            <armor_3>	15	</armor_3>
+            <armor_8>	0	</armor_8>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -4064,6 +4059,7 @@
               <anchorShift>	0.059995	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	98.2411 100.771	</density>
@@ -4073,7 +4069,8 @@
         <_152mm_mortar_NM_mod1931>	shared	  <maxAmmo>	18	</maxAmmo>
           <armor>
             <armor_1>	15	</armor_1>
-            <armor_2>	0	</armor_2>
+            <armor_3>	15	</armor_3>
+            <armor_8>	0	</armor_8>
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -4180,6 +4177,7 @@
               <anchorShift>	0.069998	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	87.4239 90.3168	</density>

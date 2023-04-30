@@ -212,8 +212,8 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def __updateTTC(self):
         currentSubView = self._tankSetup.getCurrentSubView()
         if currentSubView is not None:
-            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': currentSubView.getInteractor().getVehicleAfterInstall()}), EVENT_BUS_SCOPE.LOBBY)
             vehicleAfterInstall = currentSubView.getInteractor().getVehicleAfterInstall()
+            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': vehicleAfterInstall}), EVENT_BUS_SCOPE.LOBBY)
             if vehicleAfterInstall.intCD != g_currentVehicle.item.intCD:
                 self._tankSetup.currentVehicleUpdated(vehicleAfterInstall)
         return

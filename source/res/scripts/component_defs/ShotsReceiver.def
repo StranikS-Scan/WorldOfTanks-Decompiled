@@ -1,0 +1,15 @@
+<ShotsReceiver.def>
+  <Properties></Properties>
+  <ClientMethods>
+    <receiveShot>
+      <Args>
+        <position>	VECTOR3	</position>
+        <normal>	VECTOR3	</normal>
+        <shotID>	INT64	</shotID>
+        <effectIndex>	INT64	</effectIndex>
+        <matKind>	INT64	</matKind>
+      </Args>
+    </receiveShot>
+  </ClientMethods>
+  <DefaultKeyName>	shotsReceiver	</DefaultKeyName>
+</ShotsReceiver.def>

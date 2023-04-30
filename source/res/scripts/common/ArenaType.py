@@ -422,6 +422,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['description'] = i18n.makeString(_readString('description', section, defaultXml))
         if raiseIfMissing or __hasKey('minimap', section, defaultXml):
             cfg['minimap'] = _readString('minimap', section, defaultXml)
+        if section.has_key('minimapLayers'):
+            cfg['minimapLayers'] = section['minimapLayers'].readStrings('layer')
         if __hasKey('overviewmap', section, defaultXml):
             cfg['overviewmap'] = _readString('overviewmap', section, defaultXml)
         if raiseIfMissing or __hasKey('wwambientSound', section, defaultXml):

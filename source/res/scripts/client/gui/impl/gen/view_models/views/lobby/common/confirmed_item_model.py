@@ -42,11 +42,11 @@ class ConfirmedItemModel(ViewModel):
     def setHighlightType(self, value):
         self._setString(4, value)
 
-    def getCanUseDemountKit(self):
-        return self._getBool(5)
+    def getOptItemDescKey(self):
+        return self._getString(5)
 
-    def setCanUseDemountKit(self, value):
-        self._setBool(5, value)
+    def setOptItemDescKey(self, value):
+        self._setString(5, value)
 
     def getLevel(self):
         return self._getNumber(6)
@@ -61,5 +61,5 @@ class ConfirmedItemModel(ViewModel):
         self._addResourceProperty('imageSource', R.invalid())
         self._addStringProperty('overlayType', '')
         self._addStringProperty('highlightType', '')
-        self._addBoolProperty('canUseDemountKit', False)
+        self._addStringProperty('optItemDescKey', '')
         self._addNumberProperty('level', 0)

@@ -549,7 +549,7 @@ class VehiclePreviewWebApiMixin(object):
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
             showStyle = _getStylePreviewShowFunc(styleInfo, cmd.price)
             descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
-            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit)
+            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd))
             return True
         else:
             return False

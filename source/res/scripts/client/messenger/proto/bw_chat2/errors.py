@@ -20,15 +20,6 @@ def getChatActionName(actionID):
     return i18nName
 
 
-def getBattleCommandExample(msgText):
-    i18nKey = I18N_INGAME_GUI.chat_example(msgText)
-    if i18nKey is not None:
-        i18nName = html.escape(i18n.makeString(i18nKey))
-    else:
-        i18nName = msgText
-    return i18nName
-
-
 def getChatErrorMessage(errorID, kwargs):
     errorName = _ERRORS.getErrorName(errorID)
     i18nKey = I18N_MESSENGER.chat_error(errorName)
@@ -64,11 +55,10 @@ class _ActionCoolDownError(ChatCoolDownError):
 
 
 class _BattleCommandError(IChatError):
-    __slots__ = ('_example', '_coolDown')
+    __slots__ = ('_coolDown',)
 
     def __init__(self, command):
         super(_BattleCommandError, self).__init__()
-        self._example = getBattleCommandExample(command.msgText)
         self._coolDown = command.cooldownPeriod
 
 
@@ -83,9 +73,22 @@ class _BattleCommandCoolDownError(_BattleCommandError):
 
 
 class _BattleCommandGenericError(_BattleCommandError):
+    __slots__ = ('_commandMessageKey',)
+
+    def __init__(self, command):
+        super(_BattleCommandGenericError, self).__init__(command)
+        self._commandMessageKey = command.msgText
 
     def getMessage(self):
-        return i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_GENERIC_ERROR, strArg1=self._example)
+        return i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_GENERIC_ERROR, strArg1=self.__getBattleCommandExample())
+
+    def __getBattleCommandExample(self):
+        i18nKey = I18N_INGAME_GUI.chat_example(self._commandMessageKey)
+        if i18nKey is not None:
+            i18nName = html.escape(i18n.makeString(i18nKey))
+        else:
+            i18nName = self._commandMessageKey
+        return i18nName
 
 
 class _BattleCommandTeamCooldownError(_BattleCommandError):

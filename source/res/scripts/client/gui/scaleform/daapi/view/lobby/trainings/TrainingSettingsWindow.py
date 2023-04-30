@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
 import ArenaType
 from account_helpers import gameplay_ctx
-from constants import PREBATTLE_TYPE, IS_CHINA, Configs
+from constants import PREBATTLE_TYPE, Configs
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
@@ -111,7 +111,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         if not self.__isCreateRequest:
             permissions = self.prbEntity.getPermissions()
             info['canMakeOpenedClosed'] = permissions.canMakeOpenedClosed()
-            info['canChangeComment'] = permissions.canChangeComment() and not IS_CHINA
+            info['canChangeComment'] = permissions.canChangeComment() and canChangeComment
             info['canChangeArena'] = permissions.canChangeArena()
         return info
 
@@ -119,7 +119,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         self.__settings.setArenaTypeID(arena)
         self.__settings.setRoundLen(roundLength * 60)
         self.__settings.setOpened(not isPrivate)
-        self.__settings.setComment(comment if not IS_CHINA else '')
+        self.__settings.setComment(comment)
         if self.__isEpic:
             eventType = events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS
         else:

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/cgf_demo/test_bridge.py
 import CGF
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import autoregister, onProcessQuery, onAddedQuery
 import GenericComponents
 import Triggers
@@ -18,8 +18,10 @@ def createRTMatrix(rotation, translation):
     return result
 
 
-class TestBridge(CGFComponent):
+@registerComponent
+class TestBridge(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     moverTransform1 = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Mover1', value=GenericComponents.TransformComponent)
     moverTransform2 = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Mover2', value=GenericComponents.TransformComponent)
     trigger1 = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Trigger1', value=Triggers.AreaTriggerComponent)

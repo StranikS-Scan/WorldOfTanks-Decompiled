@@ -45,7 +45,7 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
     def _formatComplexToken(self, complexToken, token, bonus):
         rTokenAlias = R.strings.tooltips.quests.bonuses.token
         userName = self._getUserName(complexToken.styleID)
-        description = self.eventsCache.prefetcher.getTokenDetailedInfo(complexToken.token)
+        description = self.eventsCache.prefetcher.getTokenDetailedInfo(complexToken.styleID)
         if description is None:
             description = backport.text(rTokenAlias.body())
         tooltip = makeTooltip(userName, description if description else None)

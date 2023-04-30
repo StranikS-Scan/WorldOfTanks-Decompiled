@@ -477,6 +477,12 @@ class ProfileComp7StatisticsVO(ProfileDictStatisticsVO):
           tuple())))
 
 
+class ProfileComp7S2StatisticsVO(ProfileComp7StatisticsVO):
+
+    def _getHeaderText(self, data):
+        return backport.text(R.strings.profile.section.statistics.headerText.comp7_s2())
+
+
 _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FALLOUT: ProfileFalloutStatisticsVO,
  PROFILE_DROPDOWN_KEYS.HISTORICAL: ProfileHistoricalStatisticsVO,
@@ -490,7 +496,8 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: ProfileStatisticsBattleRoyaleVO,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: ProfileStatisticsBattleRoyaleVO,
- PROFILE_DROPDOWN_KEYS.COMP7: ProfileComp7StatisticsVO}
+ PROFILE_DROPDOWN_KEYS.COMP7: ProfileComp7StatisticsVO,
+ PROFILE_DROPDOWN_KEYS.COMP7_SEASON2: ProfileComp7S2StatisticsVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):
     return _VO_MAPPING[battlesType](targetData=targetData, accountDossier=accountDossier, isCurrentUser=isCurrentUser)

@@ -9,7 +9,7 @@ import items
 import nations
 from ArenaType import readVisualScriptSection
 from ResMgr import DataSection
-from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
+from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH, SkillProcessorArgs, GroupSkillProcessorArgs, TTC_TOOLTIP_SECTIONS
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
@@ -95,7 +95,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '_exportParams', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -113,6 +113,8 @@ class Artefact(BasicItem):
         self.isImproved = None
         self.kpi = None
         self._groupName = None
+        self.__tooltipSection = None
+        self.__archetype = None
         return
 
     def init(self, xmlCtx, section):
@@ -143,6 +145,14 @@ class Artefact(BasicItem):
     @property
     def groupName(self):
         return self._groupName or self.name
+
+    @property
+    def tooltipSection(self):
+        return self.__tooltipSection
+
+    @property
+    def archetype(self):
+        return self.__archetype
 
     def _readWeight(self, xmlCtx, section):
         if section.has_key('vehicleWeightFraction'):
@@ -206,6 +216,13 @@ class Artefact(BasicItem):
             self.kpi = readKpi(xmlCtx, section['kpi'])
         else:
             self.kpi = []
+        if IS_CLIENT:
+            if section.has_key('tooltipSection'):
+                self.__tooltipSection = section.readString('tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT)
+            else:
+                self.__tooltipSection = TTC_TOOLTIP_SECTIONS.EQUIPMENT
+            if section.has_key('archetype'):
+                self.__archetype = section.readString('archetype')
         if section.has_key('vehicleFilter'):
             self.__vehicleFilter = VehicleFilter.readVehicleFilter((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
         else:
@@ -544,6 +561,9 @@ class Equipment(Artefact):
         if 'builtin' not in self.tags:
             inventoryCallback(self.compactDescr)
 
+    def isActivatable(self):
+        return False
+
     def doesDependOnOptionalDevice(self):
         return False
 
@@ -618,7 +638,24 @@ class RotationMechanisms(StaticOptionalDevice):
         self.wheelCenterRotationFwdSpeed = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'wheelCenterRotationFwdSpeed')
 
 
-class Extinguisher(Equipment):
+class ActivatableEquipment(Equipment):
+    __slots__ = ('activeSeconds', 'activeDamageFactor')
+
+    def __init__(self):
+        super(ActivatableEquipment, self).__init__()
+        self.activeSeconds = None
+        self.activeDamageFactor = component_constants.ZERO_FLOAT
+        return
+
+    def _readConfig(self, xmlCtx, section):
+        self.activeSeconds = _xml.readIntOrNone(xmlCtx, section, 'activeSeconds')
+        self.activeDamageFactor = _xml.readFloat(xmlCtx, section, 'activeDamageFactor', 0.0)
+
+    def isActivatable(self):
+        return self.activeSeconds is not None
+
+
+class Extinguisher(ActivatableEquipment):
     __slots__ = ('fireStartingChanceFactor', 'autoactivate')
 
     def __init__(self):
@@ -627,6 +664,7 @@ class Extinguisher(Equipment):
         self.autoactivate = False
 
     def _readConfig(self, xmlCtx, section):
+        super(Extinguisher, self)._readConfig(xmlCtx, section)
         if not section.has_key('fireStartingChanceFactor'):
             self.fireStartingChanceFactor = 1.0
         else:
@@ -671,7 +709,7 @@ class Stimulator(Equipment):
         self.crewLevelIncrease = _xml.readFloat(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_FLOAT)
 
 
-class Repairkit(Equipment):
+class Repairkit(ActivatableEquipment):
     __slots__ = ('repairAll', 'bonusValue')
 
     def __init__(self):
@@ -680,6 +718,7 @@ class Repairkit(Equipment):
         self.bonusValue = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
+        super(Repairkit, self)._readConfig(xmlCtx, section)
         self.repairAll = section.readBool('repairAll', False)
         self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
 
@@ -1411,161 +1450,101 @@ class InvisibilityBattleBooster(DynamicEquipment):
         factors[attribute][1] *= factor[1]
 
 
-class FactorSkillBattleBooster(Equipment):
-    __slots__ = ('skillName', 'efficiencyFactor')
+class SkillEquipment(Equipment):
+    __slots__ = ('skillName', 'perkLevelMultiplier')
 
     def __init__(self):
-        super(FactorSkillBattleBooster, self).__init__()
-        self.skillName = None
-        self.efficiencyFactor = component_constants.ZERO_FLOAT
+        super(SkillEquipment, self).__init__()
+        self.skillName = component_constants.EMPTY_STRING
+        self.perkLevelMultiplier = None
         return
 
     def _readConfig(self, xmlCtx, section):
+        super(SkillEquipment, self)._readConfig(xmlCtx, section)
         self.skillName = _xml.readNonEmptyString(xmlCtx, section, 'skillName')
+        self.perkLevelMultiplier = _xml.readFloatOrNone(xmlCtx, section, 'perkLevelMultiplier')
+
+    def updateCrewSkill(self, *args):
+        pass
+
+
+class FactorSkillBattleBooster(SkillEquipment):
+    __slots__ = ('efficiencyFactor',)
+
+    def __init__(self):
+        super(FactorSkillBattleBooster, self).__init__()
+        self.efficiencyFactor = component_constants.ZERO_FLOAT
+
+    def _readConfig(self, xmlCtx, section):
+        super(FactorSkillBattleBooster, self)._readConfig(xmlCtx, section)
         self.efficiencyFactor = _xml.readPositiveFloat(xmlCtx, section, 'efficiencyFactor')
 
-    def updateCrewSkill(self, factor, baseAvgLevel):
-        if baseAvgLevel < 100:
-            factor = max(1.0, factor)
-            baseAvgLevel = 100
+    def updateCrewSkill(self, a):
+        if a.baseAvgLevel < 100:
+            a.factor = max(1.0, a.factor)
+            a.baseAvgLevel = 100
         else:
-            factor = 0.57 + (factor - 0.57) * self.efficiencyFactor
-        return (factor, baseAvgLevel)
+            a.factor = 0.57 + (a.factor - 0.57) * self.efficiencyFactor
 
 
-class SixthSenseBattleBooster(Equipment):
-    __slots__ = ('skillName', 'delay')
+class SixthSenseBattleBooster(SkillEquipment):
+    __slots__ = ('delay',)
 
     def __init__(self):
         super(SixthSenseBattleBooster, self).__init__()
-        self.skillName = 'commander_sixthSense'
         self.delay = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
+        super(SixthSenseBattleBooster, self)._readConfig(xmlCtx, section)
         self.delay = _xml.readNonNegativeFloat(xmlCtx, section, 'delay')
 
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        isFire = True
-        if level < MAX_SKILL_LEVEL or not isActive:
-            level = MAX_SKILL_LEVEL
-            isActive = True
+    def updateCrewSkill(self, a):
+        if not a.isBoosterApplicable():
+            return
+        if a.level < MAX_SKILL_LEVEL or not a.isActive:
+            a.level = MAX_SKILL_LEVEL
+            a.isActive = True
         else:
-            skillConfig = skillConfig.recreate(self.delay)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
+            a.skillConfig = a.skillConfig.recreate(self.delay)
 
 
-class RancorousBattleBooster(Equipment):
-    __slots__ = ('skillName', 'duration', 'sectorHalfAngle')
-
-    def __init__(self):
-        super(RancorousBattleBooster, self).__init__()
-        self.skillName = 'gunner_rancorous'
-        self.duration = component_constants.ZERO_FLOAT
-        self.sectorHalfAngle = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = 'gunner_rancorous'
-        self.duration = _xml.readPositiveFloat(xmlCtx, section, 'duration')
-        self.sectorHalfAngle = math.radians(_xml.readPositiveFloat(xmlCtx, section, 'sectorHalfAngle'))
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive or isFire:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-            isFire = False
-        else:
-            skillConfig = skillConfig.recreate(self.duration, self.sectorHalfAngle)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class PedantBattleBooster(Equipment):
-    __slots__ = ('skillName', 'ammoBayHealthFactor')
+class PedantBattleBooster(SkillEquipment):
+    __slots__ = ('ammoBayHealthFactor',)
 
     def __init__(self):
         super(PedantBattleBooster, self).__init__()
-        self.skillName = 'loader_pedant'
         self.ammoBayHealthFactor = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
-        self.skillName = 'loader_pedant'
+        super(PedantBattleBooster, self)._readConfig(xmlCtx, section)
         self.ammoBayHealthFactor = _xml.readPositiveFloat(xmlCtx, section, 'ammoBayHealthFactor')
 
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL:
+    def updateCrewSkill(self, a):
+        if a.level < MAX_SKILL_LEVEL:
             level = MAX_SKILL_LEVEL
         else:
-            skillConfig = skillConfig.recreate(self.ammoBayHealthFactor)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
+            a.skillConfig = a.skillConfig.recreate(self.ammoBayHealthFactor)
 
 
-class FactorPerLevelBattleBooster(Equipment):
-    __slots__ = ('skillName', 'factorName', 'factorPerLevel')
-
-    def __init__(self):
-        super(FactorPerLevelBattleBooster, self).__init__()
-        self.skillName = component_constants.EMPTY_STRING
-        self.factorName = component_constants.EMPTY_STRING
-        self.factorPerLevel = component_constants.ZERO_FLOAT
-
-    def _readConfig(self, xmlCtx, section):
-        self.skillName = _xml.readNonEmptyString(xmlCtx, section, 'skillName')
-        self.factorName = _xml.readNonEmptyString(xmlCtx, section, 'factorName')
-        self.factorPerLevel = _xml.readNonNegativeFloat(xmlCtx, section, 'factorPerLevel')
-
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive or isFire:
-            level = MAX_SKILL_LEVEL
-            isActive = True
-            isFire = False
-        else:
-            skillConfig = skillConfig.recreate(self.factorPerLevel)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
-
-
-class LastEffortBattleBooster(Equipment):
-    __slots__ = ('skillName', 'duration')
+class LastEffortBattleBooster(SkillEquipment):
+    __slots__ = ('durationPerLevel',)
 
     def __init__(self):
         super(LastEffortBattleBooster, self).__init__()
-        self.skillName = 'radioman_lastEffort'
-        self.duration = component_constants.ZERO_FLOAT
+        self.durationPerLevel = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
-        self.skillName = 'radioman_lastEffort'
-        self.duration = _xml.readNonNegativeFloat(xmlCtx, section, 'duration')
+        super(LastEffortBattleBooster, self)._readConfig(xmlCtx, section)
+        self.durationPerLevel = _xml.readNonNegativeFloat(xmlCtx, section, 'durationPerLevel')
 
-    def updateCrewSkill(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
-        if level < MAX_SKILL_LEVEL or not isActive:
-            level = MAX_SKILL_LEVEL
-            isActive = True
+    def updateCrewSkill(self, a):
+        if not a.isBoosterApplicable():
+            return
+        if a.level < MAX_SKILL_LEVEL or not a.isActive:
+            a.level = MAX_SKILL_LEVEL
+            a.isActive = True
         else:
-            skillConfig = skillConfig.recreate(self.duration)
-        return (idxInCrew,
-         level,
-         levelIncrease,
-         isActive,
-         isFire,
-         skillConfig)
+            a.skillConfig = a.skillConfig.recreate(self.durationPerLevel)
 
 
 class _OptionalDeviceFilter(object):
@@ -2451,12 +2430,11 @@ class Comp7AoeHealEquipment(VisualScriptEquipment):
 
 
 class Comp7AllySupportEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'radius', 'crewBuff')
+    __slots__ = ('duration', 'crewBuff')
 
     def _readConfig(self, xmlCtx, section):
         super(Comp7AllySupportEquipment, self)._readConfig(xmlCtx, section)
         self.duration = section.readFloat('duration')
-        self.radius = section.readInt('radius')
         self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
         self._exportSlotsToVSE()
@@ -2501,12 +2479,13 @@ class Comp7ConcentrationEquipment(VisualScriptEquipment):
 
 
 class Comp7BerserkEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'gunReloadTimeBuff', 'damageDistance')
+    __slots__ = ('duration', 'gunReloadTimeBuff', 'damageDistance', 'shotDispersionFactors')
 
     @property
     def tooltipParams(self):
         params = super(Comp7BerserkEquipment, self).tooltipParams
         params['gunReloadTimeBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.gunReloadTimeBuff))
+        params['shotDispersionFactorsBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.shotDispersionFactors))
         return params
 
     def _readConfig(self, xmlCtx, section):
@@ -2515,6 +2494,7 @@ class Comp7BerserkEquipment(VisualScriptEquipment):
         self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
         self.damageDistance = section.readFloat('damageDistance')
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
         self._exportSlotsToVSE()
 
 
@@ -2524,7 +2504,6 @@ class Comp7AoeInspireEquipment(VisualScriptEquipment):
     def _readConfig(self, xmlCtx, section):
         super(Comp7AoeInspireEquipment, self)._readConfig(xmlCtx, section)
         self.duration = section.readFloat('duration')
-        self.radius = section.readFloat('radius')
         self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
         self._exportSlotsToVSE()
@@ -2612,7 +2591,13 @@ class Comp7SureShotEquipment(VisualScriptEquipment):
 
 
 class Comp7SniperEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'dispersionFactor', 'damageDistance')
+    __slots__ = ('duration', 'dispersionFactor', 'damageDistance', 'damageFactors')
+
+    @property
+    def tooltipParams(self):
+        params = super(Comp7SniperEquipment, self).tooltipParams
+        params['damageFactors'] = tuple(map(lambda f: int(round((f - 1) * 100)), self.damageFactors))
+        return params
 
     def _readConfig(self, xmlCtx, section):
         super(Comp7SniperEquipment, self)._readConfig(xmlCtx, section)
@@ -2620,6 +2605,7 @@ class Comp7SniperEquipment(VisualScriptEquipment):
         self.dispersionFactor = section.readFloat('dispersionFactor')
         self.damageDistance = section.readFloat('damageDistance')
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.damageFactors = tuple(map(float, section.readString('damageFactors').split()))
         self._exportSlotsToVSE()
 
 

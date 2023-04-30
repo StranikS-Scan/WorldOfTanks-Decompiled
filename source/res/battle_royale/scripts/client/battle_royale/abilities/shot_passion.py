@@ -6,7 +6,7 @@ import Math
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from constants import IS_CLIENT
 from Event import EventsSubscriber
@@ -33,16 +33,20 @@ else:
 _NODE_NAME_IDX = {TankNodeNames.TURRET_JOINT: 0,
  TankNodeNames.GUN_INCLINATION: 1}
 
-class ShotPassionComponent(CGFComponent):
+@registerComponent
+class ShotPassionComponent(object):
     editorTitle = 'Shot Passion Component'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient
     turretNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Turret Node')
     gunNode = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='Gun Node')
 
 
-class ShotPassionNodeComponent(CGFComponent):
+@registerComponent
+class ShotPassionNodeComponent(object):
     editorTitle = 'Shot Passion Node Component'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient
     effectTemplate = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Effect Template')
     maxAnimationStage = ComponentProperty(type=CGFMetaTypes.INT, value=0, editorName='Max animation stage')
 

@@ -1,0 +1,15 @@
+<ActivationController.def>
+  <Properties>
+    <activated>
+      <Type>	ARRAY	  <of>	GAME_OBJECT_ACTIVATION	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </activated>
+    <deactivated>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </deactivated>
+  </Properties>
+  <DefaultKeyName>	activationController	</DefaultKeyName>
+</ActivationController.def>

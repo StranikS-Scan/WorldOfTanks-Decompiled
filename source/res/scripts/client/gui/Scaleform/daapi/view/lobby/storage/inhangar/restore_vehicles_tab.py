@@ -34,7 +34,7 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
         self._baseCriteria = REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE | ~REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.TELECOM_RENT
 
     def _addCriteria(self):
-        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.WOTPLUS_RENT)
+        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE)
 
     def applyFilter(self, forceApply=False):
         pass

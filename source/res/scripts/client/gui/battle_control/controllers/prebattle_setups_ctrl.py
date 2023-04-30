@@ -18,7 +18,6 @@ from helpers import dependency
 from items import vehicles
 from items.components.post_progression_components import getActiveModifications
 from items.utils import getCircularVisionRadius, getFirstReloadTime
-from PerksParametersController import PerksParametersController
 from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups, VehicleState
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -43,7 +42,6 @@ class _States(CONST_CONTAINER):
     CREW = 2
     DYN_SLOT = 4
     ENHANCEMENTS = 8
-    PERKS = 16
     PROGRESSION = 32
     RESPAWN = 64
     SETUPS = 128
@@ -53,7 +51,7 @@ class _States(CONST_CONTAINER):
     SELECTION_STARTED = 2048
     SELECTION_STOPPED = 4096
     SELECTION_ENDED = 8192
-    INIT_READY = VEHICLE_ID | CREW | DYN_SLOT | ENHANCEMENTS | PERKS | PROGRESSION | RESPAWN | SETUPS | SETUPS_INDEXES | DISABLED_SWITCHES
+    INIT_READY = VEHICLE_ID | CREW | DYN_SLOT | ENHANCEMENTS | PROGRESSION | RESPAWN | SETUPS | SETUPS_INDEXES | DISABLED_SWITCHES
     SELECTION_AWAIT_HIDING = 16384
 
 
@@ -82,7 +80,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __slots__ = ('__state', '__playerVehicleID', '__perksController', '__vehicle', '__invData', '__extData', '__hasValidCaps', '__cooldown', '__arenaLoaded')
+    __slots__ = ('__state', '__playerVehicleID', '__vehicle', '__invData', '__extData', '__hasValidCaps', '__cooldown', '__arenaLoaded')
 
     def __init__(self):
         super(PrebattleSetupsController, self).__init__()
@@ -90,7 +88,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__invData = {}
         self.__extData = {}
         self.__playerVehicleID = None
-        self.__perksController = None
         self.__vehicle = None
         self.__hasValidCaps = False
         self.__cooldown = BattleCooldownManager()
@@ -117,7 +114,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__invData.clear()
         self.__extData.clear()
         self.__playerVehicleID = None
-        self.__perksController = None
         self.__vehicle = None
         self.__hasValidCaps = False
         self.__arenaLoaded = False
@@ -169,13 +165,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             return
         self.__extData[_EXT_ENHANCEMENTS_KEY] = enhancements
         self.__onInitStepCompleted(_States.ENHANCEMENTS)
-
-    @MethodsRules.delayable('setPlayerVehicle')
-    def setPerks(self, vehicleID, perks):
-        if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.PERKS:
-            return
-        self.__perksController = PerksParametersController(self.__vehicle.compactDescr, perks)
-        self.__onInitStepCompleted(_States.PERKS)
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setPostProgression(self, vehicleID, itemCDs):
@@ -343,7 +332,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         invData, extData = self.__invData.copy(), self.__extData.copy()
         vehicle = self.__vehicle = Vehicle(strCompactDescr=self.__vehicle.strCD, extData=extData, invData=invData)
         vehicle.installPostProgressionItem(self.__itemsFactory.createVehPostProgression(vehicle.compactDescr, self.__extData[EXT_DATA_PROGRESSION_KEY], vehicle.typeDescr))
-        vehicle.setPerksController(self.__perksController)
         vehicle.descriptor.onSiegeStateChanged(self.__extData[_EXT_SIEGE_STATE_KEY])
         vehicle.descriptor.installModifications(self.__extData[_EXT_PROGRESSION_MODS], rebuildAttrs=False)
         vehicle.descriptor.installEnhancements(self.__extData[_EXT_ENHANCEMENTS_KEY], rebuildAttrs=False)
@@ -365,7 +353,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if addMask == _States.SELECTION_STOPPED and self.isSelectionStarted():
             self.__state |= _States.SELECTION_AWAIT_HIDING
             self.__state &= ~_States.SELECTION_STARTED
-            self.__vehicle.stopPerksController()
             for component in self._viewComponents:
                 component.stopSetupsSelection()
 

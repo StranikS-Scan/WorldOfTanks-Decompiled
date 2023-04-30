@@ -17,7 +17,7 @@ from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
 from gui.prb_control.entities.stronghold.unit.actions_handler import StrongholdActionsHandler
 from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
-from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
+from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions, StrongholdBrowserPermissions
 from gui.prb_control.entities.stronghold.unit.requester import StrongholdUnitRequestProcessor
 from gui.prb_control.entities.base.external_battle_unit.base_external_battle_waiting_manager import BaseExternalUnitWaitingManager
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -152,6 +152,9 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
 
     def canKeepMode(self):
         return False
+
+    def getPermissions(self, dbID=None, unitMgrID=None):
+        return StrongholdBrowserPermissions(self.hasLockedState())
 
     def _loadUnit(self):
         g_eventDispatcher.loadStrongholds()

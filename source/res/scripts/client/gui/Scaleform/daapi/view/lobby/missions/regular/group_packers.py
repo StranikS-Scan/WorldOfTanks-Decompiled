@@ -740,7 +740,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         return sorted(self._findEvents(srvEvents), cmp=premMissionsSortFunc, reverse=False)
 
     def getTitle(self):
-        title = backport.text(R.strings.quests.premiumQuests.header.title())
+        title = backport.text(R.strings.quests.premiumQuests.header.default())
         return '{}{}'.format(makeImageTag(backport.image(R.images.gui.maps.icons.premacc.icons.premium_40x40()), 40, 40, -12), title)
 
     def _getVO(self):

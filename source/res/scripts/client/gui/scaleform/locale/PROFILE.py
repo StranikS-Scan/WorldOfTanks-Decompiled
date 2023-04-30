@@ -623,6 +623,8 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE_BODY = '#profile:profile/params/tooltip/brAvgDamage/body'
     PROFILE_DROPDOWN_LABELS_COMP7 = '#profile:profile/dropdown/labels/comp7'
     SECTION_STATISTICS_HEADERTEXT_COMP7 = '#profile:section/statistics/headerText/comp7'
+    PROFILE_DROPDOWN_LABELS_COMP7_S2 = '#profile:profile/dropdown/labels/comp7_s2'
+    SECTION_STATISTICS_HEADERTEXT_COMP7_S2 = '#profile:section/statistics/headerText/comp7_s2'
     SECTION_STATISTICS_SCORES_AVGPRESTIGEPOINTS = '#profile:section/statistics/scores/avgPrestigePoints'
     SECTION_STATISTICS_DETAILED_AVGPRESTIGEPOINTS = '#profile:section/statistics/detailed/avgPrestigePoints'
     PROFILE_PARAMS_TOOLTIP_AVGPRESTIGEPOINTS_HEADER = '#profile:profile/params/tooltip/avgPrestigePoints/header'
@@ -663,6 +665,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_VEHICLE_HEADER = '#profile:profile/params/tooltip/maxHealthRepair/vehicle/header'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_VEHICLE_BODY = '#profile:profile/params/tooltip/maxHealthRepair/vehicle/body'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_COMP7 = '#profile:section/technique/emptyScreenLabel/battleType/comp7'
+    SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_COMP7_SEASON2 = '#profile:section/technique/emptyScreenLabel/battleType/comp7_season2'
     SECTION_TECHNIQUE_BUTTONBAR_PRESTIGEPOINTS = '#profile:section/technique/buttonBar/prestigePoints'
     SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS_HEADER = '#profile:section/technique/sort/tooltip/prestigePoints/header'
     SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS_BODY = '#profile:section/technique/sort/tooltip/prestigePoints/body'
@@ -689,7 +692,8 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_RANKED_10X10,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESOLO,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD,
-     PROFILE_DROPDOWN_LABELS_COMP7)
+     PROFILE_DROPDOWN_LABELS_COMP7,
+     PROFILE_DROPDOWN_LABELS_COMP7_S2)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
      PROFILE_RANKED_SEASONSDROPDOWN_1,
      PROFILE_RANKED_SEASONSDROPDOWN_2,

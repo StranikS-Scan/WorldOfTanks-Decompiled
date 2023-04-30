@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
 from Queue import Queue
-from functools import wraps
+from functools import wraps, partial
 import BigWorld
 import Math
 import Event
@@ -122,6 +122,7 @@ class HangarVideoCameraController(object):
             self.__videoCamera.enable()
             self.appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
             BigWorld.player().objectsSelectionEnabled(False)
+            self.hangarSpace.setSelectionEnabled(False)
             g_eventDispatcher.loadHangar()
             return
 
@@ -130,6 +131,7 @@ class HangarVideoCameraController(object):
         BigWorld.camera(self.hangarSpace.space.camera)
         self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
         BigWorld.player().objectsSelectionEnabled(True)
+        self.hangarSpace.setSelectionEnabled(True)
 
     def handleMouseEvent(self, event):
         if self.__videoCamera is None:
@@ -156,6 +158,7 @@ class HangarSpace(IHangarSpace):
         self.__delayedIsPremium = False
         self.__delayedForceRefresh = False
         self.__delayedRefreshCallback = None
+        self.__delayedRecreateCallback = None
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
         self.__vehicleUpdateRequested = False
@@ -176,6 +179,7 @@ class HangarSpace(IHangarSpace):
         self.onSpaceChangedByAction = Event.Event()
         self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
+        self.__isSelectionEnabledCounter = 0
         self._performanceMetricsLogger = HangarMetricsLogger()
         return
 
@@ -200,6 +204,10 @@ class HangarSpace(IHangarSpace):
         return self.__isCursorOver3DScene
 
     @property
+    def isSelectionEnabled(self):
+        return self.__isSelectionEnabledCounter > 0
+
+    @property
     def isModelLoaded(self):
         return self.__isModelLoaded
 
@@ -219,6 +227,12 @@ class HangarSpace(IHangarSpace):
 
     def updateAnchorsParams(self, *args):
         self.__space.updateAnchorsParams(*args)
+
+    def setSelectionEnabled(self, enabled):
+        if enabled:
+            self.__isSelectionEnabledCounter += 1
+        else:
+            self.__isSelectionEnabledCounter -= 1
 
     def __onNotifyCursorOver3dScene(self, event):
         self.__isCursorOver3DScene = event.ctx.get('isOver3dScene', False)
@@ -291,6 +305,9 @@ class HangarSpace(IHangarSpace):
         if self.__delayedRefreshCallback is not None:
             BigWorld.cancelCallback(self.__delayedRefreshCallback)
             self.__delayedRefreshCallback = None
+        if self.__delayedRecreateCallback is not None:
+            BigWorld.cancelCallback(self.__delayedRecreateCallback)
+            self.__delayedRecreateCallback = None
         self.gameSession.onPremiumNotify -= self.onPremiumChanged
         return
 
@@ -301,10 +318,15 @@ class HangarSpace(IHangarSpace):
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
-            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, outfit=outfit)
+            if self.__space.vehicleEntityId and self.getVehicleEntity() is None:
+                if self.__delayedRecreateCallback is None:
+                    self.__delayedRecreateCallback = BigWorld.callback(0.01, partial(self.__delayedRecreate, vehicle.descriptor, vehicle.modelState, outfit))
+            else:
+                self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, outfit=outfit)
             self.__lastUpdatedVehicle = vehicle
         else:
             Waiting.hide('loadHangarSpaceVehicle')
+        return
 
     def startToUpdateVehicle(self, vehicle, outfit=None):
         self.__vehicleUpdateRequested = True
@@ -414,3 +436,12 @@ class HangarSpace(IHangarSpace):
         else:
             self.refreshSpace(self.__delayedIsPremium, self.__delayedForceRefresh)
             return
+
+    def __delayedRecreate(self, descriptor, modelState, outfit):
+        self.__delayedRecreateCallback = None
+        if self.__space:
+            if self.__space.vehicleEntityId and self.getVehicleEntity():
+                self.__space.recreateVehicle(descriptor, modelState, outfit=outfit)
+            else:
+                self.__delayedRecreateCallback = BigWorld.callback(0.01, partial(self.__delayedRecreate, descriptor, modelState, outfit))
+        return

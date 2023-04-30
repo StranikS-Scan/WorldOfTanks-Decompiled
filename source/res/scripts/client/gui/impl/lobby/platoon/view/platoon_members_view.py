@@ -787,9 +787,8 @@ class Comp7MembersView(SquadMembersView):
     def _getWindowInfoTooltipHeaderAndBody(self):
         squadRatingSettings = self._comp7Controller.getModeSettings().squadRatingRestriction
         rating = squadRatingSettings.get(2)
-        rating7 = squadRatingSettings.get(7)
         tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.comp7.header())
-        tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.comp7.body(), rating=rating, rating7=rating7)
+        tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.comp7.body(), rating=rating)
         return (tooltipHeader, tooltipBody)
 
     def _createSimpleBonusTooltip(self):
@@ -815,11 +814,6 @@ class Comp7MembersView(SquadMembersView):
         slots = super(Comp7MembersView, self)._getPlatoonSlotsData()
         slots.sort(key=self.__playerTimeJoin)
         return slots
-
-    def __playerTimeJoin(self, slot):
-        player = slot['player'] or {}
-        roleIndex = -slot['role'] if not player.get('isOffline') else 0
-        return (not player, roleIndex, player.get('timeJoin', 0))
 
     def _hasFreeSlot(self):
         return len(self.__unitMgr.unit.getPlayers()) < self.__unitMgr.unit.getSquadSize() if self.__unitMgr is not None and self.__unitMgr.unit is not None else False
@@ -878,6 +872,12 @@ class Comp7MembersView(SquadMembersView):
         ranksConfig = cls._lobbyContext.getServerSettings().comp7PrestigeRanksConfig
         division = findFirst(lambda d: rating in d.range, ranksConfig.divisionsByRank.get(rank, ()))
         return division
+
+    @staticmethod
+    def __playerTimeJoin(slot):
+        player = slot['player'] or {}
+        roleIndex = -slot['role'] if not player.get('isOffline') else 0
+        return (not player, roleIndex, player.get('timeJoin', 0))
 
 
 class MembersWindow(PreloadableWindow):

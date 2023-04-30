@@ -351,8 +351,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
 class _Comp7DynObjects(DynObjectsBase):
     _AOE_HEAL_KEY = 'aoeHeal'
-    _AOE_INSPIRE_KEY = 'aoeInspire'
-    __ALL_KEYS = (_AOE_HEAL_KEY, _AOE_INSPIRE_KEY)
+    __ALL_KEYS = (_AOE_HEAL_KEY,)
     _SPAWNPOINT_VISUAL_PATH_KEY = 'spawnPointVisualPath'
 
     def __init__(self):
@@ -391,9 +390,6 @@ class _Comp7DynObjects(DynObjectsBase):
 
     def getAoeHealPrefab(self):
         return self.__prefabPaths[self._AOE_HEAL_KEY]
-
-    def getAoeInspirePrefab(self):
-        return self.__prefabPaths[self._AOE_INSPIRE_KEY]
 
     def getSpawnPointsConfig(self):
         return self.__spawnPointConfig

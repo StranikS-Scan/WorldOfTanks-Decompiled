@@ -286,6 +286,7 @@ class FormattedAward(AwardAbstract):
          Currency.CRYSTAL: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CRYSTAL),
          Currency.EVENT_COIN: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_EVENTCOINICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_EVENTCOIN),
          Currency.BPCOIN: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_BPCOINICON_1, tooltip=TOOLTIPS.AWARDITEM_BPCOIN),
+         Currency.EQUIP_COIN: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_EQUIPCOINICON_1, tooltip=TOOLTIPS.AWARDITEM_EQUIPCOIN),
          'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
          'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_1, tooltip=TOOLTIPS.AWARDITEM_PREMIUM),
          'items': self._ItemsFormatter(),

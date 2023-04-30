@@ -3,7 +3,6 @@
 
 
 class INVITES(object):
-    INVITES_TEXT_EPIC = '#invites:invites/text/EPIC'
     ERRORS_UNKNOWNUSER = '#invites:errors/unknownuser'
     ERRORS_USEROFFLINE = '#invites:errors/useroffline'
     ERRORS_SELFINVITE = '#invites:errors/selfinvite'
@@ -38,6 +37,7 @@ class INVITES(object):
     INVITES_TEXT_FORT_BATTLE = '#invites:invites/text/FORT_BATTLE'
     INVITES_TEXT_STRONGHOLD = '#invites:invites/text/STRONGHOLD'
     INVITES_TEXT_MAPBOX = '#invites:invites/text/MAPBOX'
+    INVITES_TEXT_EPIC = '#invites:invites/text/EPIC'
     INVITES_TEXT_COMP7 = '#invites:invites/text/COMP7'
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
@@ -116,6 +116,10 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_COMP7 = '#invites:invites/note/change_and_leave/QUEUE_COMP7'
     INVITES_NOTE_LEAVE_PREBATTLE_COMP7 = '#invites:invites/note/leave/PREBATTLE_COMP7'
     INVITES_NOTE_CHANGE_AND_LEAVE_PREBATTLE_COMP7 = '#invites:invites/note/change_and_leave/PREBATTLE_COMP7'
+    INVITES_NOTE_LEAVE_QUEUE_WINBACK = '#invites:invites/note/leave/QUEUE_WINBACK'
+    INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_WINBACK = '#invites:invites/note/change_and_leave/QUEUE_WINBACK'
+    INVITES_NOTE_LEAVE_PERMANENTLY_QUEUE_WINBACK = '#invites:invites/note/leave_permanently/QUEUE_WINBACK'
+    INVITES_NOTE_CHANGE_AND_LEAVE_PERMANENTLY_QUEUE_WINBACK = '#invites:invites/note/change_and_leave_permanently/QUEUE_WINBACK'
     INVITES_WARNING_ANONYMIZED = '#invites:invites/warning/anonymized'
     GUI_TITLES_RECEIVEDINVITES = '#invites:gui/titles/receivedInvites'
     GUI_TITLES_INVITE = '#invites:gui/titles/invite'

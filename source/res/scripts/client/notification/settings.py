@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/settings.py
+import logging
 from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from shared_utils import ScalarTypes
+log = logging.getLogger(__name__)
 LIST_SCROLL_STEP_FACTOR = 10
 DEF_ICON_NAME = '{0:>s}_1'
+DEF_ICON_PATH = '../maps/icons/library/{0:>s}-1.png'
 NotificationData = namedtuple('NotificationData', ('entityID', 'savedData', 'priorityLevel', 'entity'))
 
 class NOTIFICATION_STATE(object):
@@ -35,6 +38,7 @@ class NOTIFICATION_TYPE(object):
     RESOURCE_WELL_START = 18
     AUCTION_STAGE_START = 19
     AUCTION_STAGE_FINISH = 20
+    WINBACK_SELECTABLE_REWARD_AVAILABLE = 21
     RANGE = None
 
 
@@ -58,7 +62,8 @@ ITEMS_MAX_LENGTHS = {NOTIFICATION_TYPE.MESSAGE: 250,
  NOTIFICATION_TYPE.AUCTION_STAGE_START: 1,
  NOTIFICATION_TYPE.AUCTION_STAGE_FINISH: 1,
  NOTIFICATION_TYPE.SENIORITY_AWARDS_TOKENS: 1,
- NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST: 1}
+ NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST: 1,
+ NOTIFICATION_TYPE.WINBACK_SELECTABLE_REWARD_AVAILABLE: 1}
 
 class NOTIFICATION_BUTTON_STATE(object):
     HIDDEN = 0
@@ -71,4 +76,8 @@ def makePathToIcon(iconName):
     if not iconName:
         return ''
     iconRes = R.images.gui.maps.icons.library.dyn(DEF_ICON_NAME.format(iconName))
-    return backport.image(iconRes()) if iconRes.exists() else ''
+    if not iconRes.exists():
+        resIcon = DEF_ICON_PATH.format(iconName)
+        log.warning('Deprecated format, iconName %s-1.png does not match with file name %s', iconName, resIcon)
+        return resIcon
+    return backport.image(iconRes())

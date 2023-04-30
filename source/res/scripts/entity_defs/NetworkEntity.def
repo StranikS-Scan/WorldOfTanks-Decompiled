@@ -1,0 +1,73 @@
+<NetworkEntity.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <shouldBackup>	false	</shouldBackup>
+  <Implements></Implements>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+    <roll></roll>
+    <pitch></pitch>
+  </Volatile>
+  <Properties>
+    <unique_id>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </unique_id>
+    <prefab_path>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </prefab_path>
+    <scale>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </scale>
+    <goState>
+      <Type>	ARRAY	  <of>	GAME_OBJECT_STATE	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </goState>
+    <useDetailedPosition>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <default>	FALSE	</default>
+    </useDetailedPosition>
+  </Properties>
+  <ClientMethods>
+    <activateGameObject>
+      <Args>
+        <unique_id>	UINT64	</unique_id>
+      </Args>
+    </activateGameObject>
+    <activateGameObjectUnique>
+      <Args>
+        <unique_id>	STRING	</unique_id>
+      </Args>
+    </activateGameObjectUnique>
+    <deactivateGameObject>
+      <Args>
+        <unique_id>	UINT64	</unique_id>
+      </Args>
+    </deactivateGameObject>
+    <deactivateGameObjectUnique>
+      <Args>
+        <unique_id>	STRING	</unique_id>
+      </Args>
+    </deactivateGameObjectUnique>
+    <createGameObject>
+      <Args>
+        <unique_id>	UINT64	</unique_id>
+      </Args>
+    </createGameObject>
+    <removeGameObject>
+      <Args>
+        <unique_id>	UINT64	</unique_id>
+      </Args>
+    </removeGameObject>
+    <removeGameObjectUnique>
+      <Args>
+        <unique_id>	STRING	</unique_id>
+      </Args>
+    </removeGameObjectUnique>
+  </ClientMethods>
+  <CellMethods></CellMethods>
+</NetworkEntity.def>

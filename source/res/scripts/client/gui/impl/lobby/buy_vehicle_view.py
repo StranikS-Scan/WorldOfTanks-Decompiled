@@ -57,6 +57,8 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import WindowFlags, ViewStatus, ViewSettings
+from uilogging.shop.loggers import ShopBuyVehicleMetricsLogger
+from uilogging.shop.logging_constants import ShopLogItemStates
 _logger = logging.getLogger(__name__)
 
 class VehicleBuyActionTypes(CONST_CONTAINER):
@@ -113,6 +115,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         self.__selectedCardIdx = 0 if not self.__bootcamp.isInBootcamp() else _ACADEMY_SLOT
         self.__isWithoutCommander = False
         self.__vehicle = self.__itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.__nationID, self.__inNationID)
+        self.__uiMetricsLogger = ShopBuyVehicleMetricsLogger(str(self.__vehicle.intCD))
         self.__tradeInVehicleToSell = self.__tradeIn.getSelectedVehicleToSell()
         if self.__vehicle.isRestoreAvailable():
             self.__selectedRentID = self.__RENT_NOT_SELECTED_IDX
@@ -123,6 +126,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         self.__isGoldAutoPurchaseEnabled = self.__wallet.isAvailable
         self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
+        self.__useUiLogging = True
         self.__tradeInInProgress = False
         self.__purchaseInProgress = False
         self.__usePreviousAlias = False
@@ -149,6 +153,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
 
     def showCongratulations(self):
         self.__usePreviousAlias = True
+        self.__useUiLogging = False
         self.__processReturnCallback()
         event_dispatcher.hideVehiclePreview(back=False)
         if self.__isRenting():
@@ -204,9 +209,12 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             totalPriceArray = equipmentBlock.totalPrice.getItems()
             self.__addVMsInActionPriceList(totalPriceArray, ItemPrice(price=Money(credits=0, gold=0), defPrice=Money(credits=0, gold=0)))
             self.__updateTotalPrice()
+            if self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
+                self.__uiMetricsLogger.onViewOpen()
 
     def _finalize(self):
         self.__removeListeners()
+        self.__uiMetricsLogger.reset()
         super(BuyVehicleView, self)._finalize()
 
     def __checkSpecialDiscountCallback(self, hasFreePremiumCrew):
@@ -295,7 +303,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         if self.viewModel.getIsContentHidden():
             self.__onInHangar()
             return
+        self.__uiMetricsLogger.clearItemStates()
         totalPrice = self.__getTotalItemPrice().price
+        if self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiMetricsLogger.logVehiclePurchaseButtonClicked()
         if self.__isAvailablePrice(totalPrice):
             availableGold = self.__stats.money.gold
             requiredGold = totalPrice.gold
@@ -397,6 +408,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
     def __onWindowClose(self, *_):
         self.__startTutorial()
         self.__destroyWindow()
+        if self.__useUiLogging and self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiMetricsLogger.onViewClosed()
         if self.__usePreviousAlias and self.__returnCallback:
             self.__returnCallback()
         self.fireEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=False))
@@ -833,11 +846,15 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         if not self.__isWithoutCommander:
             commanderItemPrice = self.__getCommanderPrice(self.__selectedCardIdx)
             price += commanderItemPrice.price
+        else:
+            self.__uiMetricsLogger.addItemState(ShopLogItemStates.WITHOUT_CREW.value)
         if self.viewModel.equipmentBlock.slot.getIsSelected() and not (self.__selectedRentIdx >= 0 and self.__isRentVisible):
             vehSlots = self.__stats.vehicleSlots
             price += self.__shop.getVehicleSlotsItemPrice(vehSlots).price
+            self.__uiMetricsLogger.addItemState(ShopLogItemStates.WITH_SLOT.value)
         if self.viewModel.equipmentBlock.ammo.getIsSelected():
             price += self.__getAmmoItemPrice().price
+            self.__uiMetricsLogger.addItemState(ShopLogItemStates.WITH_AMMO.value)
         if defPrice is ZERO_MONEY:
             defPrice = price
         return ItemPrice(price=price, defPrice=defPrice)

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeFreeToTankmanXpWindow.py
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.impl.lobby.crew.confirm_skills_learn_dialog import ConfirmSkillsLearnDialogData
 from gui.Scaleform.daapi.view.meta.ExchangeFreeToTankmanXpWindowMeta import ExchangeFreeToTankmanXpWindowMeta
 from gui.shared.events import SkillDropEvent
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor
@@ -14,6 +15,7 @@ from helpers import dependency
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
+from wg_async import wg_await, wg_async
 
 class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -23,18 +25,29 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         super(ExchangeFreeToTankmanXpWindow, self).__init__()
         self.__tankManId = ctx.get('tankManId')
         self.__selectedXpForConvert = 0
+        self.__selectedLevel = 0
 
     def apply(self):
         self.doRequest()
 
-    @decorators.adisp_process('updatingSkillWindow')
+    @wg_async
     def doRequest(self):
         tankman = self.itemsCache.items.getTankman(self.__tankManId)
+        from gui.shared.event_dispatcher import showLearnConfirmDialog
+        result = yield wg_await(showLearnConfirmDialog(ConfirmSkillsLearnDialogData(tmanInvID=self.__tankManId, skill=tankman.skills[-1], xpAmount=self.__selectedXpForConvert, level=self.__selectedLevel)))
+        if not result.busy:
+            isOk, _ = result.result
+            if isOk:
+                self.__processTankmanFreeToOwnXpConvertor(tankman)
+
+    @decorators.adisp_process('updatingSkillWindow')
+    def __processTankmanFreeToOwnXpConvertor(self, tankman):
         xpConverter = TankmanFreeToOwnXpConvertor(tankman, self.__selectedXpForConvert)
         result = yield xpConverter.request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        self.onWindowClose()
+        if result.success:
+            self.onWindowClose()
 
     def calcValueRequest(self, toLevel):
         items = self.itemsCache.items
@@ -56,6 +69,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
             roundedNeedXp = self.__roundByModulo(needXp, rate)
             xpWithDiscount = roundedNeedXp / rate
             self.__selectedXpForConvert = max(1, xpWithDiscount)
+            self.__selectedLevel = toLevel
             defaultRate = items.shop.defaults.freeXPToTManXPRate
             if defaultRate and defaultRate != 0:
                 defaultRoundedNeedXp = self.__roundByModulo(needXp, defaultRate)

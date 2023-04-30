@@ -35,9 +35,7 @@ class PointsOfInterestStatsController(PointsOfInterestListener):
         if poiCtrl is not None:
             poiCtrl.onPoiEquipmentUsed += self.__onPoiEquipmentUsed
             poiCtrl.onPoiCaptured += self.__onPoiCaptured
-        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
-        if arena is not None:
-            arena.onVehicleKilled += self.__onVehicleKilled
+            poiCtrl.onPoiInvaderDestroyed += self.__onPoiInvaderDestroyed
         return
 
     def stopControl(self):
@@ -46,9 +44,7 @@ class PointsOfInterestStatsController(PointsOfInterestListener):
         if poiCtrl is not None:
             poiCtrl.onPoiEquipmentUsed -= self.__onPoiEquipmentUsed
             poiCtrl.onPoiCaptured -= self.__onPoiCaptured
-        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
-        if arena is not None:
-            arena.onVehicleKilled -= self.__onVehicleKilled
+            poiCtrl.onPoiInvaderDestroyed -= self.__onPoiInvaderDestroyed
         return
 
     def onPoiAdded(self, poiState):
@@ -107,10 +103,10 @@ class PointsOfInterestStatsController(PointsOfInterestListener):
         self.__statsDataController.as_updatePointOfInterestS(data=item.getVO())
         return
 
-    def __onVehicleKilled(self, victimID, *_):
-        statusItems = self.__poiStatusItems.pop(victimID, {})
+    def __onPoiInvaderDestroyed(self, vehicleID):
+        statusItems = self.__poiStatusItems.pop(vehicleID, {})
         for item in statusItems.values():
-            self.__statsDataController.as_removePointOfInterestS(vehicleID=victimID, type=item.type)
+            self.__statsDataController.as_removePointOfInterestS(vehicleID=vehicleID, type=item.type)
 
 
 class PoiStatusItem(object):

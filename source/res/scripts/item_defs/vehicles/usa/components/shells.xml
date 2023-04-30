@@ -2313,6 +2313,60 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_HEAT_M469R>
+  <_120mm_AP_M355>
+    <id>	204	</id>
+    <userString>	#usa_vehicles:_120mm_AP_M355	</userString>
+    <icon>	ap	</icon>
+    <price>	1030	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_M355>
+  <_120mm_HEAT_M835>
+    <id>	205	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_M835	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_M835>
+  <_120mm_HE_M358>
+    <id>	206	</id>
+    <userString>	#usa_vehicles:_120mm_HE_M358	</userString>
+    <icon>	he_modern	</icon>
+    <price>	800	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_M358>
   <_120mm_AP-T_M358>
     <id>	60	</id>
     <userString>	#usa_vehicles:_120mm_AP-T_M358	</userString>
@@ -2741,7 +2795,7 @@
     <caliber>	203	</caliber>
     <explosionRadius>	10.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	19.6	</stunDuration>
+    <stunDuration>	17.6	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2790,7 +2844,7 @@
     <caliber>	240	</caliber>
     <explosionRadius>	12.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	24.5	</stunDuration>
+    <stunDuration>	20.5	</stunDuration>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>

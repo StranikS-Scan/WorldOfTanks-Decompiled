@@ -35,6 +35,7 @@
     <AN_VRC-3_cl>	75	</AN_VRC-3_cl>
     <T23radio>	1000	</T23radio>
     <SCR_528_M>	76	</SCR_528_M>
+    <AN_GRC_7A>	80	</AN_GRC_7A>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -46,11 +47,13 @@
     <AN-VRC-7_SH>	316	</AN-VRC-7_SH>
     <AN-VRC-7_7x7>	501	</AN-VRC-7_7x7>
     <AN-ARC-27_FL>	502	</AN-ARC-27_FL>
+    <AN_VRC-3_7x7>	503	</AN_VRC-3_7x7>
     <SCR_508_bootcamp>	64002	</SCR_508_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
     <SCR_506_MapsTraining_Dummy_MT_1>	6	</SCR_506_MapsTraining_Dummy_MT_1>
     <SCR_508_1_MapsTraining_Player_HT_1>	20	</SCR_508_1_MapsTraining_Player_HT_1>
     <SCR_528_MapsTraining_Dummy_LT_2>	22	</SCR_528_MapsTraining_Dummy_LT_2>
+    <AN_VRC-3_7x7_HT>	31001	</AN_VRC-3_7x7_HT>
   </ids>
   <shared>
     <SCR_200>
@@ -251,6 +254,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </AN_VRC-3_cl>
+    <AN_VRC-3_7x7>
+      <userString>	#usa_vehicles:AN_VRC-3	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3_7x7>
     <AN_VRC-24>
       <userString>	#usa_vehicles:AN_VRC-24	</userString>
       <tags></tags>
@@ -366,6 +381,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-ARC-27>
+    <AN_GRC_7A>
+      <userString>	#usa_vehicles:AN_GRC_7A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_GRC_7A>
     <AN-ARC-27_FL>
       <userString>	#usa_vehicles:AN-ARC-27	</userString>
       <tags></tags>
@@ -659,5 +686,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_MapsTraining_Dummy_LT_2>
+    <AN_VRC-3_7x7_HT>
+      <userString>	#usa_vehicles:AN_VRC-3	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3_7x7_HT>
   </shared>
 </radios.xml>

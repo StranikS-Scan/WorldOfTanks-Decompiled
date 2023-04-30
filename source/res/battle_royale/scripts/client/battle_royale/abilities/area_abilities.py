@@ -6,13 +6,15 @@ import Math
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_royale.abilities.adaptation_restore_health import AdaptationHealthRestoreEffectArea
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery
 from items.artefacts import ThunderStrike, ZonesCircle
 
-class AreaAbilityVisualizer(CGFComponent):
+@registerComponent
+class AreaAbilityVisualizer(object):
     editorTitle = 'Area Ability Visualizer'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     areaTransform = ComponentProperty(type=CGFMetaTypes.LINK, value=GenericComponents.TransformComponent, editorName='Area object')
 
     def __init__(self):

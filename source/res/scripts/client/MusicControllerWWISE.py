@@ -124,6 +124,7 @@ class MusicController(object):
             if self.__event is not None:
                 if self.__event.name != event.name:
                     if unlink:
+                        self.__event.stop()
                         self.__event.unlink()
                 else:
                     self.__eventID = eventId

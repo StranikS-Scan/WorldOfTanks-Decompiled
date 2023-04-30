@@ -51,13 +51,14 @@ class RentalInfoProvider(_RentalInfoProvider):
     @staticmethod
     def __new__(cls, additionalData=None, time=0, battles=0, wins=0, seasonRent=None, isRented=False, *args, **kwargs):
         additionalData = additionalData or {}
+        seasonRent = seasonRent or {}
         if 'compensation' in additionalData:
             compensations = Money.makeFromMoneyTuple(additionalData['compensation'])
         else:
             compensations = MONEY_UNDEFINED
         isWotPlus = WOTPLUS_RENT_KEY in additionalData
         isTelecomRent = TELECOM_RENTALS_RENT_KEY in additionalData
-        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent or {}, isRented, isWotPlus, isTelecomRent)
+        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent, isRented, isWotPlus, isTelecomRent)
         return result
 
     def canRentRenewForSeason(self, seasonType):

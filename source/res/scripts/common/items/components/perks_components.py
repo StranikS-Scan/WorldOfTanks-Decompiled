@@ -1,66 +1,58 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/perks_components.py
+from collections import namedtuple
 import typing
-from items.components.perks_constants import PERKS_TYPE
+from items.components.perks_constants import PerkMasks, PerkTags
 from soft_exception import SoftException
+PerkArgument = namedtuple('PerkArgument', ('value', 'postValues'))
+
+def convertPerksListToDict(perksList):
+    return {perksList[i]:perksList[i + 1] for i in xrange(0, len(perksList), 2)}
+
+
+def convertPerksDictToList(perksDict):
+    return list(reduce(lambda t1, t2: t1 + t2, perksDict.iteritems()))
+
+
+def packPerk(perkID, level):
+    return (level & PerkMasks.PERK_LEVEL_MASK) << 10 | perkID & PerkMasks.PERK_ID_MASK
+
+
+def unpackPerk(val):
+    return (val & PerkMasks.PERK_ID_MASK, val >> 10 & PerkMasks.PERK_LEVEL_MASK)
+
 
 class Perk(object):
-    __slots__ = ('id', 'name', 'description', 'icon', 'branchID', 'perkType', 'maxCount', 'situational')
+    __slots__ = ('id', 'flags', 'defaultBlockSettings')
 
-    def __init__(self, ID, name, description, iconID, branchID, ultimative, maxCount, situational):
+    def __init__(self, ID, flags, args):
         self.id = ID
-        self.name = name
-        self.description = description
-        self.icon = iconID
-        self.branchID = branchID
-        self.perkType = PERKS_TYPE.CONFIGURATION_MAPPING[ultimative]
-        self.maxCount = maxCount
-        self.situational = situational
+        self.flags = flags
+        self.defaultBlockSettings = args
+
+    @property
+    def isAutoperk(self):
+        return bool(self.flags & PerkTags.AUTOPERK)
+
+    def getArgBonusByLevel(self, argName, perkLevel):
+        argRecord = self.defaultBlockSettings.get(argName)
+        if not argRecord:
+            raise SoftException('Perk item do not contain argument {}'.format(argName))
+        simpleLevel = perkLevel
+        value = argRecord.value * simpleLevel
+        postValues = argRecord.postValues
+        postLevel = min(perkLevel - simpleLevel, len(postValues))
+        if postLevel > 0:
+            value += sum((postValues[i] for i in xrange(postLevel)))
+        overloadLevel = perkLevel - simpleLevel - postLevel
+        if overloadLevel > 0:
+            overloadValue = postValues[-1] if postValues else argRecord.value
+            value += overloadValue * overloadLevel
+        return value
 
 
-class PerksBranch(object):
-    __slots__ = ('id', 'name', 'needPoints', 'perkIDs')
+class PerksCashe(dict):
+    __slots__ = ()
 
-    def __init__(self, ID, name, needPoints):
-        self.id = ID
-        self.name = name
-        self.needPoints = needPoints
-        self.perkIDs = []
-
-
-class PerksCache(object):
-    __slots__ = ('perks', 'branches')
-
-    def __init__(self):
-        self.perks = {}
-        self.branches = {}
-
-    def attachPerksToBranches(self):
-        for key, item in self.perks.iteritems():
-            branch = self.branches.get(item.branchID)
-            if branch is not None:
-                branch.perkIDs.append(key)
-            if item.branchID:
-                raise SoftException('PerksCache.attachPerksToBranches: wrong branch ID in perk {}'.format(key))
-
-        return
-
-    def getPerksOfBranch(self, branchID):
-        if branchID not in self.branches:
-            return None
-        else:
-            branchPerks = {}
-            for perkID in self.branches[branchID].perkIDs:
-                perkItem = self.perks[perkID]
-                perkType = perkItem.perkType
-                perks = branchPerks.setdefault(perkType, [])
-                perks.append(perkID)
-
-            return branchPerks
-
-    def getPerksOfType(self, perkType):
-        return filter(lambda itemID: self.perks[itemID].perkType == perkType, self.perks.iterkeys())
-
-    def validatePerk(self, itemID):
-        item = self.perks.get(itemID, None)
-        return (False, 'perk {} not found'.format(itemID)) if item is None else (True, '')
+    def validatePerk(self, perkID):
+        return perkID in self

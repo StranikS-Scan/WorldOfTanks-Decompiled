@@ -8,7 +8,7 @@ class DEMOUNT_KIT(object):
     STORAGE_USERNAME_COMMON = '#demount_kit:storage/userName/common'
     STORAGE_DESCRIPTION_COMMON = '#demount_kit:storage/description/common'
     DIALOGUE_DESCRIPTION_COMMON = '#demount_kit:dialogue/description/common'
-    EQUIPMENTINSTALL_DEMOUNTOR = '#demount_kit:equipmentInstall/demountOr'
+    EQUIPMENTINSTALL_DEMOUNTWITHKIT = '#demount_kit:equipmentInstall/demountWithKit'
     EQUIPMENTINSTALL_DEMOUNT = '#demount_kit:equipmentInstall/demount'
     EQUIPMENTDEMOUNT_OPTIONFREE = '#demount_kit:equipmentDemount/optionFree'
     EQUIPMENTDEMOUNT_CONFIRMATION_TITLE = '#demount_kit:equipmentDemount/confirmation/title'

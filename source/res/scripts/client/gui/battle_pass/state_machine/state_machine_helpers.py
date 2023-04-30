@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/state_machine_helpers.py
 import logging
 import typing
-from battle_pass_common import BattlePassState, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, BattlePassConsts
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, getOfferTokenByGift
+from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassConsts, BattlePassRewardReason, BattlePassState, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter
 from gui.impl.gen import R
-from gui.impl.pub.notification_commands import NotificationEvent, EventNotificationCommand
+from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -94,7 +94,11 @@ def packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=None):
                     isRareLevel = True
                     break
 
-        rewards.pop('entitlements', None)
+        if 'entitlements' in rewards:
+            rewards['entitlements'].pop(getBattlePassPassEntitlementName(battlePass.getSeasonID()), None)
+            rewards['entitlements'].pop(getBattlePassShopEntitlementName(battlePass.getSeasonID()), None)
+            if not rewards['entitlements']:
+                rewards.pop('entitlements')
         return None if not isPremiumPurchase and not isRareLevel and not isFinalLevel or not rewards else EventNotificationCommand(NotificationEvent(method=eventMethod, rewards=[rewards], data=data, packageRewards=packageRewards))
 
 

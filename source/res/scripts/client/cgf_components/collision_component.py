@@ -5,15 +5,17 @@ import logging
 import Math
 import BigWorld
 import CGF
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onProcessQuery, autoregister, onRemovedQuery
 import GenericComponents
 from vehicle_systems.tankStructure import ColliderTypes
 _logger = logging.getLogger(__name__)
 
-class SingleCollisionComponent(CGFComponent):
+@registerComponent
+class SingleCollisionComponent(object):
     editorTitle = 'Single Collision'
     category = 'Common'
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     asset = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Asset', annotations={'path': '*.model'})
     matrix = Math.Matrix()
 
@@ -23,7 +25,7 @@ class SingleCollisionComponent(CGFComponent):
         self.matrix.setIdentity()
 
 
-@autoregister(presentInAllWorlds=True, presentInEditor=True)
+@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
 class CollisionComponentManager(CGF.ComponentManager):
 
     @onAddedQuery(SingleCollisionComponent, CGF.GameObject)

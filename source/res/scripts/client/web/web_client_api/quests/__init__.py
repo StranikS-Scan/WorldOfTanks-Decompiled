@@ -22,7 +22,7 @@ class _QuestsSchema(W2CSchema):
 
 
 class _RequestQuestBonusSchema(W2CSchema):
-    quest_id_base = Field(required=True, type=basestring, default='')
+    quest_id_base = Field(type=basestring, default='')
 
 
 class _RawQuestConditionsFormatters(CardBattleConditionsFormatters):

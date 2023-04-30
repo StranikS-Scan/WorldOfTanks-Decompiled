@@ -3,7 +3,7 @@
 from collections import namedtuple
 import constants
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
-from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
+from external_strings_utils import isAccountLoginValid
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.MENU import MENU
@@ -77,8 +77,4 @@ class CredentialsMode(BaseMode):
                 isValid = False
                 errorMessage = _ms(MENU.LOGIN_STATUS_INVALID_LOGIN)
                 invalidFields = INVALID_FIELDS.LOGIN_INVALID
-            elif not isPasswordValid(password):
-                isValid = False
-                errorMessage = _ms(MENU.LOGIN_STATUS_INVALID_PASSWORD, minLength=_PASSWORD_MIN_LENGTH, maxLength=_PASSWORD_MAX_LENGTH)
-                invalidFields = INVALID_FIELDS.PWD_INVALID
             return _ValidateCredentialsResult(isValid, errorMessage, invalidFields)

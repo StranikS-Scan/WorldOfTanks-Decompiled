@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/vehicle_preview_dp.py
 import logging
+import typing
 import nations
 from gui.Scaleform import MENU
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
@@ -24,6 +25,8 @@ from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getData
 from items_kit_helper import getCouponDiscountForItemPack, getCouponBonusesForItemPack
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import CompensationType, ItemPackTypeGroup
+if typing.TYPE_CHECKING:
+    from typing import Dict, Any
 _logger = logging.getLogger(__name__)
 _CUSTOM_OFFER_ACTION_PERCENT = 100
 
@@ -91,7 +94,7 @@ class IVehPreviewDataProvider(object):
     def getBuyType(self, vehicle):
         raise NotImplementedError
 
-    def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None):
+    def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None, uniqueVehicleTitle=None):
         raise NotImplementedError
 
 
@@ -101,11 +104,14 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     def getBuyType(self, vehicle):
         return factory.BUY_VEHICLE if vehicle.isUnlocked or vehicle.isCollectible else factory.UNLOCK_ITEM
 
-    def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None):
-        isBuyingAvailable = not isHeroTank and (not item.isHidden or item.isRentable or item.isRestorePossible())
-        uniqueVehicleTitle = ''
-        if not (isBuyingAvailable or isHeroTank):
-            uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))
+    def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None, uniqueVehicleTitle=None):
+        isBuyingAvailable = not isHeroTank and not item.isWotPlus and (not item.isHidden or item.isRentable or item.isRestorePossible())
+        if uniqueVehicleTitle is None:
+            uniqueVehicleTitle = ''
+            if item.isWotPlus:
+                uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.availableForWotPlus()))
+            elif not (isBuyingAvailable or isHeroTank):
+                uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))
         compensationData = self.__getCompensationData(itemsPack)
         resultVO = {'setTitle': data.title,
          'uniqueVehicleTitle': uniqueVehicleTitle,
@@ -130,10 +136,10 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             resultVO.update({'customOffer': customOffer})
         return resultVO
 
-    def getItemPackBuyingPanelData(self, data, itemsPack, couponSelected, price):
+    def getItemPackBuyingPanelData(self, data, itemsPack, couponSelected, price, uniqueVehicleTitle=None):
         compensationData = self.__getCompensationData(itemsPack)
         resultVO = {'setTitle': data.title,
-         'uniqueVehicleTitle': '',
+         'uniqueVehicleTitle': uniqueVehicleTitle or '',
          'vehicleId': 0,
          'couponDiscount': getCouponDiscountForItemPack(itemsPack, price).gold if couponSelected else 0,
          'isBuyingAvailable': True,
@@ -154,9 +160,9 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             resultVO.update({'customOffer': data.customOffer})
         return resultVO
 
-    def getOffersBuyingPanelData(self, data):
+    def getOffersBuyingPanelData(self, data, uniqueVehicleTitle=None):
         return {'setTitle': data.title,
-         'uniqueVehicleTitle': '',
+         'uniqueVehicleTitle': uniqueVehicleTitle or '',
          'vehicleId': 0,
          'couponDiscount': 0,
          'isBuyingAvailable': True,

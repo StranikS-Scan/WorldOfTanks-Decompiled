@@ -47,13 +47,20 @@ class ShowShooting(EntityExtra):
         stages, effects, _ = gunDescr.effects
         data['entity_id'] = vehicle.id
         data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
+        if gunDescr.burstStartEffects is not None:
+            burstStages, burstEffects, _ = gunDescr.burstStartEffects
+            data['_burstStartEffectsListPlayer'] = EffectsListPlayer(burstEffects, burstStages, **data)
+            data['isFirstBurstShot'] = True
         data['_burst'] = (burstCount, gunDescr.burst[1])
         data['_gunModel'] = vehicle.appearance.compoundModel
         self.__doShot(data)
+        return
 
     def _cleanup(self, data):
         if data.get('_effectsListPlayer') is not None:
             data['_effectsListPlayer'].stop()
+        if data.get('_burstStartEffectsListPlayer') is not None:
+            data['_burstStartEffectsListPlayer'].stop()
         timerID = data.get('_timerID')
         if timerID is not None:
             BigWorld.cancelCallback(timerID)
@@ -74,9 +81,15 @@ class ShowShooting(EntityExtra):
                 shotsDone.addShot()
             burstCount, burstInterval = data['_burst']
             gunModel = data['_gunModel']
-            effPlayer = data['_effectsListPlayer']
-            effPlayer.stop()
+            if data.get('isFirstBurstShot', False):
+                data['isFirstBurstShot'] = False
+                effPlayer = data['_burstStartEffectsListPlayer']
+            else:
+                effPlayer = data['_effectsListPlayer']
+                effPlayer.stop()
             if burstCount == 1:
+                if data.get('_burstStartEffectsListPlayer') is not None:
+                    data['_burstStartEffectsListPlayer'].stop()
                 effPlayer.play(gunModel, None, partial(self.stop, data))
                 withShot = 1
             else:

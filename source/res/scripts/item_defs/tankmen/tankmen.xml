@@ -28,164 +28,612 @@
   </roles>
   <skills>
     <repair>
-      <userString>	#item_types:tankman/skills/repair	</userString>
-      <description>	#item_types:tankman/skills/repair_descr	</description>
-      <icon>	repair.png	</icon>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleRepairSpeed	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.008	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleRepairSpeed	</name>
+            <value>	1.8	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </repair>
-    <fireFighting>
-      <userString>	#item_types:tankman/skills/fire_fighting	</userString>
-      <description>	#item_types:tankman/skills/fire_fighting_descr	</description>
-      <icon>	fireFighting.png	</icon>
-    </fireFighting>
     <camouflage>
-      <userString>	#item_types:tankman/skills/camouflage	</userString>
-      <description>	#item_types:tankman/skills/camouflage_descr	</description>
-      <icon>	camouflage.png	</icon>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	maskingFactor	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.008	</value>
+          </arg>
+        </descr>
+      </UISettings>
     </camouflage>
     <brotherhood>
-      <userString>	#item_types:tankman/skills/brotherhood	</userString>
-      <description>	#item_types:tankman/skills/brotherhood_descr	</description>
-      <icon>	brotherhood.png	</icon>
       <crewLevelIncrease>	5	</crewLevelIncrease>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	crewLevelIncrease	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0005	</value>
+          </arg>
+        </descr>
+      </UISettings>
     </brotherhood>
     <commander_tutor>
-      <userString>	#item_types:tankman/skills/commander_tutor	</userString>
-      <description>	#item_types:tankman/skills/commander_tutor_descr	</description>
-      <icon>	commander_tutor.png	</icon>
       <xpBonusFactorPerLevel>	0.001	</xpBonusFactorPerLevel>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	xpBonusFactorPerLevel	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.001	</value>
+          </arg>
+        </descr>
+      </UISettings>
     </commander_tutor>
     <commander_expert>
-      <userString>	#item_types:tankman/skills/commander_expert	</userString>
-      <description>	#item_types:tankman/skills/commander_expert_descr	</description>
-      <icon>	commander_expert.png	</icon>
-      <delay>	4.0	</delay>
+      <vsePerk>	104	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	damageMonitoringDelay	</paramName>
+            <sign>	signLess	</sign>
+            <measureType>	seconds	</measureType>
+            <value>	-0.04	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	damageMonitoringDelay	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.04	</value>
+          </param>
+        </params>
+        <kpi>
+          <add>
+            <name>	damagedModulesDetectionTime	</name>
+            <situationalKpi>	true	</situationalKpi>
+            <value>	-4	</value>
+          </add>
+        </kpi>
+      </UISettings>
     </commander_expert>
     <commander_enemyShotPredictor>
-      <userString>	#item_types:tankman/skills/commander_enemyShotPredictor	</userString>
-      <description>	#item_types:tankman/skills/commander_enemyShotPredictor_descr	</description>
-      <icon>	commander_enemyShotPredictor.png	</icon>
       <targetRadius>	30.0	</targetRadius>
       <explosionMultiplier>	1.3	</explosionMultiplier>
       <minExplosionRadius>	3.0	</minExplosionRadius>
       <recalculatingHeight>	75.0	</recalculatingHeight>
+      <vsePerk>	105	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	artNotificationDelayFactor	</paramName>
+            <measureType>	seconds	</measureType>
+            <sign>	signLess	</sign>
+            <value>	-0.02	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <add>
+            <name>	artNotificationDelayFactor	</name>
+            <situationalKpi>	true	</situationalKpi>
+            <value>	-2	</value>
+          </add>
+        </kpi>
+      </UISettings>
     </commander_enemyShotPredictor>
     <commander_universalist>
-      <userString>	#item_types:tankman/skills/commander_universalist	</userString>
-      <description>	#item_types:tankman/skills/commander_universalist_descr	</description>
-      <icon>	commander_universalist.png	</icon>
       <efficiency>	0.5	</efficiency>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	woundedCrewEfficiency	</paramName>
+            <measureType>	percents	</measureType>
+            <sign>	minus	</sign>
+            <value>	0.005	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	woundedCrewEfficiency	</name>
+            <value>	0.5	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </commander_universalist>
     <commander_sixthSense>
-      <userString>	#item_types:tankman/skills/commander_sixthSense	</userString>
-      <description>	#item_types:tankman/skills/commander_sixthSense_descr	</description>
-      <icon>	commander_sixthSense.png	</icon>
       <delay>	3.0	</delay>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	commanderSpecial	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	delay	</paramName>
+            <measureType>	seconds	</measureType>
+            <value>	3.0	</value>
+            <isKpiVisible>	false	</isKpiVisible>
+          </arg>
+        </descr>
+      </UISettings>
     </commander_sixthSense>
     <commander_eagleEye>
-      <userString>	#item_types:tankman/skills/commander_eagleEye	</userString>
-      <description>	#item_types:tankman/skills/commander_eagleEye_descr	</description>
-      <icon>	commander_eagleEye.png	</icon>
-      <distanceFactorPerLevelWhenDeviceWorking>	0.0002	</distanceFactorPerLevelWhenDeviceWorking>
-      <distanceFactorPerLevelWhenDeviceDestroyed>	0.002	</distanceFactorPerLevelWhenDeviceDestroyed>
+      <vsePerk>	101	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	circularVisionRadius	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0002	</value>
+          </arg>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	circularVisionRadiusWhileSurveyingDeviceDamaged	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.002	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	circularVisionRadiusWhileSurveyingDeviceDamaged	</name>
+            <value>	1.2	</value>
+          </mul>
+        </kpi>
+        <params>
+          <param>
+            <name>	circularVisionRadius	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.0002	</value>
+          </param>
+        </params>
+      </UISettings>
     </commander_eagleEye>
     <driver_tidyPerson>
-      <userString>	#item_types:tankman/skills/driver_tidyPerson	</userString>
-      <description>	#item_types:tankman/skills/driver_tidyPerson_descr	</description>
-      <icon>	driver_tidyPerson.png	</icon>
-      <fireStartingChanceFactor>	0.75	</fireStartingChanceFactor>
+      <vsePerk>	304	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleFireChance	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.0025	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleFireChance	</name>
+            <value>	0.75	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </driver_tidyPerson>
     <driver_smoothDriving>
-      <userString>	#item_types:tankman/skills/driver_smoothDriving	</userString>
-      <description>	#item_types:tankman/skills/driver_smoothDriving_descr	</description>
-      <icon>	driver_smoothDriving.png	</icon>
-      <shotDispersionFactorPerLevel>	0.0004	</shotDispersionFactorPerLevel>
+      <vsePerk>	302	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleGunShotDispersionChassisMovement	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.0004	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleGunShotDispersionChassisMovement	</name>
+            <value>	0.96	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </driver_smoothDriving>
     <driver_virtuoso>
-      <userString>	#item_types:tankman/skills/driver_virtuoso	</userString>
-      <description>	#item_types:tankman/skills/driver_virtuoso_descr	</description>
-      <icon>	driver_virtuoso.png	</icon>
-      <rotationSpeedFactorPerLevel>	0.0005	</rotationSpeedFactorPerLevel>
+      <vsePerk>	301	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleAllGroundRotationSpeed	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0005	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	wheelsRotationSpeed	</name>
+            <value>	1.05	</value>
+          </mul>
+        </kpi>
+        <params>
+          <param>
+            <name>	vehicleAllGroundRotationSpeed	</name>
+            <value>	0.0005	</value>
+            <situationalParam>	false	</situationalParam>
+          </param>
+        </params>
+      </UISettings>
     </driver_virtuoso>
     <driver_badRoadsKing>
-      <userString>	#item_types:tankman/skills/driver_badRoadsKing	</userString>
-      <description>	#item_types:tankman/skills/driver_badRoadsKing_descr	</description>
-      <icon>	driver_badRoadsKing.png	</icon>
-      <softGroundResistanceFactorPerLevel>	0.001	</softGroundResistanceFactorPerLevel>
-      <mediumGroundResistanceFactorPerLevel>	0.00025	</mediumGroundResistanceFactorPerLevel>
+      <vsePerk>	303	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleWeakSoilResistance	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.001	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleAverageSoilResistance	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.00025	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleWeakSoilResistance	</name>
+            <value>	1.1	</value>
+          </mul>
+          <mul>
+            <name>	vehicleAverageSoilResistance	</name>
+            <value>	1.025	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </driver_badRoadsKing>
     <driver_rammingMaster>
-      <userString>	#item_types:tankman/skills/driver_rammingMaster	</userString>
-      <description>	#item_types:tankman/skills/driver_rammingMaster_descr	</description>
-      <icon>	driver_rammingMaster.png	</icon>
-      <rammingBonusFactorPerLevel>	0.0015	</rammingBonusFactorPerLevel>
+      <vsePerk>	305	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleRamDamageResistance	</paramName>
+            <measureType>	percents	</measureType>
+            <sign>	minus	</sign>
+            <value>	0.0015	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	damageEnemiesByRamming	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0015	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleRamDamageResistance	</name>
+            <value>	0.85	</value>
+          </mul>
+          <mul>
+            <name>	damageEnemiesByRamming	</name>
+            <value>	1.15	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </driver_rammingMaster>
     <gunner_smoothTurret>
-      <userString>	#item_types:tankman/skills/gunner_smoothTurret	</userString>
-      <description>	#item_types:tankman/skills/gunner_smoothTurret_descr	</description>
-      <icon>	gunner_smoothTurret.png	</icon>
-      <shotDispersionFactorPerLevel>	0.00075	</shotDispersionFactorPerLevel>
+      <vsePerk>	201	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	turretAimingDispersion	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.00075	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleGunShotDispersionTurretRotation	</name>
+            <value>	0.925	</value>
+          </mul>
+        </kpi>
+        <params>
+          <param>
+            <name>	turretAimingDispersion	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	-0.00075	</value>
+          </param>
+        </params>
+      </UISettings>
     </gunner_smoothTurret>
     <gunner_gunsmith>
-      <userString>	#item_types:tankman/skills/gunner_gunsmith	</userString>
-      <description>	#item_types:tankman/skills/gunner_gunsmith_descr	</description>
-      <icon>	gunner_gunsmith.png	</icon>
-      <shotDispersionFactorPerLevel>	0.002	</shotDispersionFactorPerLevel>
+      <vsePerk>	205	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleGunShotDispersionWhileGunDamaged	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.002	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+            <value>	0.80	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </gunner_gunsmith>
     <gunner_sniper>
-      <userString>	#item_types:tankman/skills/gunner_sniper	</userString>
-      <description>	#item_types:tankman/skills/gunner_sniper_descr	</description>
-      <icon>	gunner_sniper.png	</icon>
-      <deviceChanceToHitBoost>	0.03	</deviceChanceToHitBoost>
+      <vsePerk>	202	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	enemyModulesCrewCritChance	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0003	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	enemyModulesCrewCritChance	</name>
+            <value>	1.03	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </gunner_sniper>
     <gunner_rancorous>
-      <userString>	#item_types:tankman/skills/gunner_rancorous	</userString>
-      <description>	#item_types:tankman/skills/gunner_rancorous_descr	</description>
-      <icon>	gunner_rancorous.png	</icon>
-      <duration>	2.0	</duration>
-      <sectorHalfAngle>	5	</sectorHalfAngle>
+      <vsePerk>	203	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleEnemySpottingTime	</paramName>
+            <measureType>	seconds	</measureType>
+            <value>	0.02	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <add>
+            <name>	vehicleEnemySpottingTime	</name>
+            <value>	2	</value>
+          </add>
+        </kpi>
+      </UISettings>
     </gunner_rancorous>
     <loader_pedant>
-      <userString>	#item_types:tankman/skills/loader_pedant	</userString>
-      <description>	#item_types:tankman/skills/loader_pedant_descr	</description>
-      <icon>	loader_pedant.png	</icon>
-      <ammoBayHealthFactor>	1.125	</ammoBayHealthFactor>
+      <vsePerk>	402	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleAmmoBayStrength	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.00125	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleAmmoBayStrength	</name>
+            <value>	1.125	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </loader_pedant>
     <loader_desperado>
-      <userString>	#item_types:tankman/skills/loader_desperado	</userString>
-      <description>	#item_types:tankman/skills/loader_desperado_descr	</description>
-      <icon>	loader_desperado.png	</icon>
-      <vehicleHealthFraction>	0.1	</vehicleHealthFraction>
-      <gunReloadTimeFactor>	0.909	</gunReloadTimeFactor>
+      <vsePerk>	401	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	vehicleGunReloadTime	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.001	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	gunReloadSpeed	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	reloadTime	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	reloadTimeSecs	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	avgDamagePerMinute	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	autoReloadTime	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	clipFireRate	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+        </params>
+      </UISettings>
     </loader_desperado>
     <loader_intuition>
-      <userString>	#item_types:tankman/skills/loader_intuition	</userString>
-      <description>	#item_types:tankman/skills/loader_intuition_descr	</description>
-      <icon>	loader_intuition.png	</icon>
-      <quickShellChangerFactorPerPercent>	0.6	</quickShellChangerFactorPerPercent>
+      <vsePerk>	403	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleReloadTimeAfterShellChange	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.006	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleReloadTimeAfterShellChange	</name>
+            <value>	0.4	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </loader_intuition>
     <radioman_finder>
-      <userString>	#item_types:tankman/skills/radioman_finder	</userString>
-      <description>	#item_types:tankman/skills/radioman_finder_descr	</description>
-      <icon>	radioman_finder.png	</icon>
-      <visionRadiusFactorPerLevel>	0.0003	</visionRadiusFactorPerLevel>
+      <vsePerk>	501	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleCircularVisionRadius	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0003	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	vehicleCircularVisionRadius	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.0003	</value>
+          </param>
+        </params>
+      </UISettings>
     </radioman_finder>
     <radioman_inventor>
-      <userString>	#item_types:tankman/skills/radioman_inventor	</userString>
-      <description>	#item_types:tankman/skills/radioman_inventor_descr	</description>
-      <icon>	radioman_inventor.png	</icon>
-      <radioDistanceFactorPerLevel>	0.002	</radioDistanceFactorPerLevel>
+      <vsePerk>	505	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	radioDistance	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.002	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	radioDistance	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.002	</value>
+          </param>
+        </params>
+      </UISettings>
     </radioman_inventor>
     <radioman_lastEffort>
-      <userString>	#item_types:tankman/skills/radioman_lastEffort	</userString>
-      <description>	#item_types:tankman/skills/radioman_lastEffort_descr	</description>
-      <icon>	radioman_lastEffort.png	</icon>
-      <duration>	2	</duration>
+      <durationPerLevel>	0.02	</durationPerLevel>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	radiomanDurationPerLevel	</paramName>
+            <measureType>	seconds	</measureType>
+            <sign>	signLess	</sign>
+            <value>	0.02	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <add>
+            <name>	radiomanActivityTimeAfterVehicleDestroy	</name>
+            <value>	2	</value>
+            <situationalKpi>	true	</situationalKpi>
+          </add>
+        </kpi>
+      </UISettings>
     </radioman_lastEffort>
     <radioman_retransmitter>
-      <userString>	#item_types:tankman/skills/radioman_retransmitter	</userString>
-      <description>	#item_types:tankman/skills/radioman_retransmitter_descr	</description>
-      <icon>	radioman_retransmitter.png	</icon>
-      <distanceFactorPerLevel>	0.001	</distanceFactorPerLevel>
+      <teamRadioBonusFactorPerLevel>	0.001	</teamRadioBonusFactorPerLevel>
+      <vsePerk>	502	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	teamRadioBonusFactor	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.001	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleAllyRadioDistance	</name>
+            <value>	1.1	</value>
+          </mul>
+        </kpi>
+      </UISettings>
     </radioman_retransmitter>
+    <fireFighting>
+      <vsePerk>	506	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	fireExtinguishingRate	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.008	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	fireExtinguishingRate	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.0043	</value>
+          </param>
+        </params>
+        <kpi>
+          <mul>
+            <name>	fireExtinguishingRate	</name>
+            <value>	1.8	</value>
+          </mul>
+        </kpi>
+      </UISettings>
+    </fireFighting>
   </skills>
 </tankmen.xml>

@@ -1,0 +1,26 @@
+<hangar_v3_armory_yard.xml>
+  <wwmusic>	hangar_premium_2018_music	</wwmusic>
+  <wwambientSound>	hangar_premium_2018_wind_summer	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_Forest_env	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	hangar_premium_2018.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	95.357201 95.357201	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</hangar_v3_armory_yard.xml>

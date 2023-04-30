@@ -17,6 +17,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.platform.product_fetch_controller import IProductFetchController
 from skeletons.gui.web import IWebController
 from web.cache.web_downloader import WebDownloader
+if typing.TYPE_CHECKING:
+    from typing import List
 _logger = logging.getLogger(__name__)
 
 class _PlatformProductListParams(object):
@@ -117,41 +119,45 @@ class ProductsFetchController(IProductFetchController):
 
     def __init__(self):
         self.__downloader = None
-        self.__fetchResult = None
+        self._fetchResult = None
         return
 
     def init(self):
         self.__downloader = ProductsDownloader()
-        self.__fetchResult = FetchResult()
+        self._fetchResult = FetchResult()
         self._connectionMgr.onDisconnected += self._onDisconnect
 
     def fini(self):
         self.__downloader.stop()
-        self.__fetchResult.stop()
+        self._fetchResult.stop()
         self._connectionMgr.onDisconnected -= self._onDisconnect
+
+    @property
+    def isProductsReady(self):
+        return self._fetchResult.isProductsReady
 
     @wg_async.wg_async
     def getProducts(self, showWaiting=True):
         _logger.debug('Trying to fetch products')
-        if self.__fetchResult.isProductsReady:
+        if self._fetchResult.isProductsReady:
             _logger.debug('Return products from cache')
-            raise AsyncReturn(self.__fetchResult)
+            raise AsyncReturn(self._fetchResult)
         if showWaiting:
             Waiting.show('loadingData')
-        self.__fetchResult.reset()
+        self._fetchResult.reset()
         params = self.platformParams()
         yield wg_async.wg_await(params.setFields())
         requestSuccess, productsData = yield wg_async.await_callback(partial(self._requestProducts, params))()
         if requestSuccess and productsData:
             _logger.debug('Products request has been successfully processed. Downloading additional data')
             self._createDescriptors(productsData)
-            yield wg_async.await_callback(partial(self.__downloader.download, self.__fetchResult.products))()
-            self.__fetchResult.setProcessed()
+            yield wg_async.await_callback(partial(self.__downloader.download, self._fetchResult.products))()
+            self._fetchResult.setProcessed()
         else:
-            self.__fetchResult.setFailed()
+            self._fetchResult.setFailed()
         if showWaiting:
             Waiting.hide('loadingData')
-        raise AsyncReturn(self.__fetchResult)
+        raise AsyncReturn(self._fetchResult)
 
     @adisp_process
     def _requestProducts(self, params, callback):
@@ -167,8 +173,9 @@ class ProductsFetchController(IProductFetchController):
         for data in productsData:
             productCode = data.get('product_code', '')
             descriptor = next((v for k, v in self.productIDToDescriptor.items() if productCode.startswith(k)), self.defaultProductDescriptor)
-            self.__fetchResult.products.append(descriptor(data))
+            self._fetchResult.products.append(descriptor(data))
 
     def _onDisconnect(self):
-        self.__downloader.stop()
-        self.__fetchResult.stop()
+        if self.__downloader:
+            self.__downloader.stop()
+        self._fetchResult.stop()

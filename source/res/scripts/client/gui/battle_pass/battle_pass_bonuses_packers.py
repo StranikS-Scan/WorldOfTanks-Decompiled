@@ -19,7 +19,7 @@ from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap, GoodiesBonusUIPacker, TokenBonusUIPacker
+from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, GoodiesBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap
 from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -142,6 +142,7 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
             model.setUserName(tankManFullName)
             model.setLabel(tankManFullName)
             model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
+            model.setIsCollectionEntity(cls._isCollectionItem(recruitInfo.getGroupName()))
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
 
@@ -192,6 +193,7 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
         else:
             bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
         model.setBigIcon(bigIcon)
+        model.setIsCollectionEntity(cls._isCollectionItem(customizationItem.intCD))
         cls._injectAwardID(model, str(customizationItem.intCD))
         return model
 
@@ -252,11 +254,12 @@ class BattlePassDossierBonusPacker(DossierBonusUIPacker):
     def _pack(cls, bonus):
         result = []
         for achievement in bonus.getAchievements():
+            recordName = achievement.getRecordName()
             dossierIconName = achievement.getName()
             dossierValue = achievement.getValue()
             dossierNamePostfix = '_achievement'
             userName = achievement.getUserName()
-            result.append(cls._packSingleBonus(bonus, dossierIconName, dossierNamePostfix, dossierValue, userName))
+            result.append(cls._packSingleBonus(bonus, dossierIconName, dossierNamePostfix, dossierValue, userName, recordName))
 
         for badge in bonus.getBadges():
             dossierIconName = 'badge_' + str(badge.badgeID)
@@ -268,7 +271,7 @@ class BattlePassDossierBonusPacker(DossierBonusUIPacker):
         return result
 
     @classmethod
-    def _packSingleBonus(cls, bonus, dossierIconName, dossierNamePostfix, dossierValue, userName=''):
+    def _packSingleBonus(cls, bonus, dossierIconName, dossierNamePostfix, dossierValue, userName, recordName=None):
         model = RewardItemModel()
         model.setName(bonus.getName() + dossierNamePostfix)
         model.setIsCompensation(bonus.isCompensation())
@@ -276,6 +279,7 @@ class BattlePassDossierBonusPacker(DossierBonusUIPacker):
         model.setIcon(dossierIconName)
         model.setUserName(userName)
         model.setBigIcon(dossierIconName)
+        model.setIsCollectionEntity(cls._isCollectionItem(recordName))
         return model
 
 
@@ -353,10 +357,16 @@ class BattlePassStyleProgressTokenBonusPacker(_BattlePassFinalBonusPacker):
             model.setUserName(userName)
             postfix = str(customizationItem.id)
             model.setBigIcon('_'.join([cls._ICON_NAME_TEMPLATE.format(level), postfix]))
+            model.setIsCollectionEntity(cls._isCollectionItem((customizationItem.intCD, level)))
         else:
             postfix = 'undefined'
         cls._injectAwardID(model, postfix)
         return model
+
+    @classmethod
+    def _isCollectionItem(cls, validationData):
+        collectionItemID, level = validationData
+        return super(BattlePassStyleProgressTokenBonusPacker, cls)._isCollectionItem(collectionItemID) and level == cls._STYLE_MAX_LEVEL
 
     @classmethod
     def _getToolTip(cls, bonus):

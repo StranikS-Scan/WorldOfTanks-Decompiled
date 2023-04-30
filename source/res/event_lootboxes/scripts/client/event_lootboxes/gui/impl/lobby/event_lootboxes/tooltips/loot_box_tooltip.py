@@ -55,23 +55,29 @@ class LootBoxSlot(object):
         bonusList = []
         mergeRewards = {}
         for bonus in self.__bonuses:
-            if bonus.isShowInGUI():
-                if self.__rewardsType == RewardType.VEHICLE and bonus.getName() == _VEHICLES_BONUS_NAME or self.__rewardsType == RewardType.DEFAULT:
-                    packedBonuses = packer.pack(bonus)
-                    for packedBonus in packedBonuses:
-                        if packedBonus.getName() in _REWARDS_WHICH_NEED_MERGE:
-                            if packedBonus.getName() in mergeRewards:
-                                count = mergeRewards[packedBonus.getName()].getCount()
-                                mergeRewards[packedBonus.getName()].setCount(max(count, packedBonus.getCount()))
-                                packedBonus.unbind()
-                            else:
-                                mergeRewards[packedBonus.getName()] = packedBonus
+            if self.__isValidBonus(bonus):
+                packedBonuses = packer.pack(bonus)
+                for packedBonus in packedBonuses:
+                    if packedBonus.getName() in _REWARDS_WHICH_NEED_MERGE:
+                        if packedBonus.getName() in mergeRewards:
+                            count = mergeRewards[packedBonus.getName()].getCount()
+                            mergeRewards[packedBonus.getName()].setCount(max(count, packedBonus.getCount()))
+                            packedBonus.unbind()
+                        else:
+                            mergeRewards[packedBonus.getName()] = packedBonus
+                    if not self.__isExistingVehicle(packedBonus, bonusList):
                         bonusList.append(packedBonus)
 
         for mergeReward in mergeRewards.itervalues():
             bonusList.append(mergeReward)
 
         return bonusList
+
+    def __isValidBonus(self, bonus):
+        return bonus.isShowInGUI() and (self.__rewardsType == RewardType.VEHICLE and bonus.getName() == _VEHICLES_BONUS_NAME or self.__rewardsType == RewardType.DEFAULT)
+
+    def __isExistingVehicle(self, packedBonus, bonusList):
+        return self.__rewardsType == RewardType.VEHICLE and packedBonus.getName() in (b.getName() for b in bonusList)
 
 
 class EventLootBoxTooltip(ViewImpl):

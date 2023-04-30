@@ -146,10 +146,12 @@
     <SPA_19TB_mod_43_german>	258	</SPA_19TB_mod_43_german>
     <MB_881_P>	259	</MB_881_P>
     <V_2K_T>	260	</V_2K_T>
+    <Daimler-Benz_MB_880>	156	</Daimler-Benz_MB_880>
     <Maybach_HL_210_TRM_P30_SH>	324	</Maybach_HL_210_TRM_P30_SH>
     <Maybach_HL_230_TRM_P30_SH>	325	</Maybach_HL_230_TRM_P30_SH>
     <Maybach_HL_230_TRM_P35_SH>	326	</Maybach_HL_230_TRM_P35_SH>
     <G00_Bomber_SH_Engine>	261	</G00_Bomber_SH_Engine>
+    <Maybach_HL_235_7x7>	401	</Maybach_HL_235_7x7>
     <Maybach_HL_230_TRM_P30_FL>	501	</Maybach_HL_230_TRM_P30_FL>
     <Maybach_HL_234_TRM_P30_FL>	502	</Maybach_HL_234_TRM_P30_FL>
     <Porsche_Deutz_Typ180_2_FL>	504	</Porsche_Deutz_Typ180_2_FL>
@@ -1499,6 +1501,23 @@
       <rpm_min>	404	</rpm_min>
       <rpm_max>	2305	</rpm_max>
     </Maybach_HL_235>
+    <Maybach_HL_235_7x7>
+      <userString>	#germany_vehicles:Maybach_HL_235	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	123000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </Maybach_HL_235_7x7>
     <Maybach_HL_45P>
       <userString>	#germany_vehicles:Maybach_HL_45P	</userString>
       <tags>	gasoline	</tags>
@@ -2012,6 +2031,23 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Maybach_HL_234_TRM_P45>
+    <Daimler-Benz_MB_880>
+      <userString>	#germany_vehicles:Daimler-Benz_MB_880	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Daimler-Benz_MB_880>
     <Maybach_HL_234_TRM_P45_Leicht>
       <userString>	#germany_vehicles:Maybach_HL_234_TRM_P45_Leicht	</userString>
       <shortUserString>	#germany_vehicles:Maybach_HL_234_TRM_P45_Leicht_short	</shortUserString>

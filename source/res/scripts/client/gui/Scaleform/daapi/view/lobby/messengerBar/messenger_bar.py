@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import adisp_process
-from constants import PREBATTLE_TYPE, IS_DEVELOPMENT
+from constants import PREBATTLE_TYPE, IS_DEVELOPMENT, QUEUE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
@@ -224,9 +224,19 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and not self._uiSpamController.shouldBeHidden(SESSION_STATS_HINT))
         return
 
-    @staticmethod
-    def __getSessionStatsBtnTooltip(btnEnabled):
-        return makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.enabled())) if btnEnabled else makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.disabled()))
+    def __getSessionStatsBtnTooltip(self, btnEnabled):
+        mainBtn = R.strings.session_stats.tooltip.mainBtn
+        header = mainBtn.header()
+        body = mainBtn.body.disabled()
+        if btnEnabled:
+            body = mainBtn.body.enabled()
+        else:
+            dispatcher = self.prbDispatcher
+            if dispatcher is not None:
+                state = dispatcher.getFunctionalState()
+                if state.isInPreQueue() and state.entityTypeID == QUEUE_TYPE.WINBACK:
+                    body = mainBtn.body.disabled.winback()
+        return makeTooltip(backport.text(header), backport.text(body))
 
     def __onSessionStatsBtnOnlyOnceHintHidden(self, record=False):
         if record:

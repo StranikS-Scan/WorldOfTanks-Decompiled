@@ -5080,10 +5080,16 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <token>
-                <id>	action_convert_fragments_to	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </token>
+              <or>
+                <token>
+                  <id>	action_convert_fragments_to	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <vehiclesLocked>
+                  <levels>	1 2 3 4 5 6 7 8 9 10	</levels>
+                  <equal>	0	</equal>
+                </vehiclesLocked>
+              </or>
             </and>
           </account>
         </preBattle>

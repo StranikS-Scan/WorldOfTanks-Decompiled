@@ -6,7 +6,8 @@ ORDERED_ROLES = ('commander', 'gunner', 'driver', 'radioman', 'loader')
 ROLES = frozenset(('commander', 'radioman', 'driver', 'gunner', 'loader'))
 ROLE_LIMITS = {'commander': 1,
  'driver': 1}
-COMMON_SKILLS = frozenset(('repair', 'fireFighting', 'camouflage', 'brotherhood'))
+COMMON_SKILLS = frozenset(('repair', 'camouflage', 'brotherhood', 'fireFighting'))
+SEPARATE_SKILLS = frozenset(('radioman_lastEffort',))
 ROLES_AND_COMMON_SKILLS = ROLES | COMMON_SKILLS
 COMMANDER_SKILLS = frozenset(('commander_tutor', 'commander_expert', 'commander_universalist', 'commander_sixthSense', 'commander_eagleEye', 'commander_enemyShotPredictor'))
 SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(COMMANDER_SKILLS),
@@ -14,8 +15,32 @@ SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(COMMANDER_SKILLS),
  'gunner': COMMON_SKILLS.union(('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_gunsmith')),
  'loader': COMMON_SKILLS.union(('loader_pedant', 'loader_desperado', 'loader_intuition')),
  'radioman': COMMON_SKILLS.union(('radioman_finder', 'radioman_inventor', 'radioman_lastEffort', 'radioman_retransmitter'))}
+ROLES_BY_SKILLS = {}
+for role, skills in SKILLS_BY_ROLES.iteritems():
+    for skill in skills:
+        ROLES_BY_SKILLS.setdefault(skill, set()).add(role)
+
 ACTIVE_SKILLS = SKILLS_BY_ROLES['commander'] | SKILLS_BY_ROLES['radioman'] | SKILLS_BY_ROLES['driver'] | SKILLS_BY_ROLES['gunner'] | SKILLS_BY_ROLES['loader']
 ACTIVE_FREE_SKILLS = ACTIVE_SKILLS | {'any'}
 UNLEARNABLE_SKILLS = ('commander_sixthSense',)
 LEARNABLE_ACTIVE_SKILLS = ACTIVE_SKILLS.difference(UNLEARNABLE_SKILLS)
-PERKS = frozenset(('brotherhood', 'commander_sixthSense', 'commander_expert', 'commander_enemyShotPredictor', 'driver_tidyPerson', 'gunner_rancorous', 'gunner_sniper', 'loader_pedant', 'loader_desperado', 'radioman_lastEffort'))
+
+class ParamMeasureType(object):
+    PERCENTS = 'percents'
+    SECONDS = 'seconds'
+    PERCENT_GAP = 'percentGap'
+    MPH = 'mph'
+    METERS = 'meters'
+
+
+class ParamSignType(object):
+    PLUS = 'plus'
+    MINUS = 'minus'
+    SIGN_LESS = 'signLess'
+
+
+class SkillTypeName(object):
+    MAIN = 'main'
+    SITUATIONAL = 'situational'
+    COMMON = 'common'
+    COMMANDER_SPECIAL = 'commanderSpecial'

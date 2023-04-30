@@ -26,10 +26,12 @@ class MapBoxEntryPointView(ViewImpl):
     def _initialize(self, *args, **kwargs):
         super(MapBoxEntryPointView, self)._initialize(*args, **kwargs)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__onPrimeTimeUpdated
         self.viewModel.onActionClick += self.__onClick
 
     def _finalize(self):
         self.viewModel.onActionClick -= self.__onClick
+        self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeUpdated
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         super(MapBoxEntryPointView, self)._finalize()
 
@@ -41,8 +43,12 @@ class MapBoxEntryPointView(ViewImpl):
     def __onServerSettingsChanged(self, _):
         self.__updateViewModel()
 
+    def __onPrimeTimeUpdated(self, _):
+        self.__updateViewModel()
+
     def __updateViewModel(self):
         if not isMapboxEntryPointAvailable():
+            self.destroy()
             return
         with self.viewModel.transaction() as model:
             currServerTime = time_utils.getCurrentLocalServerTimestamp()

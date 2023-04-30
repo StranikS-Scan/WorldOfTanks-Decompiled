@@ -31,7 +31,7 @@ class CommonInfo(shared.UnpackedInfo):
                 vehicleID = info[0]
                 if vehicleID in allActiveVehicles:
                     team, name = info[1][:2]
-                    botPlayerInfo = PlayerInfo(team=team, realName=preprocessBotName(name))
+                    botPlayerInfo = PlayerInfo(team=team, realName=preprocessBotName(name, bonusType))
                     self.__bots[vehicleID] = botPlayerInfo
 
         if self.__arenaTypeID and self.__arenaTypeID in ArenaType.g_cache:

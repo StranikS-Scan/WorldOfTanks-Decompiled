@@ -4,8 +4,5 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class TmenXpPanelMeta(BaseDAAPIComponent):
 
-    def accelerateTmenXp(self, selected):
-        self._printOverrideError('accelerateTmenXp')
-
-    def as_setTankmenXpPanelS(self, visible, selected):
-        return self.flashObject.as_setTankmenXpPanel(visible, selected) if self._isDAAPIInited() else None
+    def as_setTankmenXpPanelS(self, visible):
+        return self.flashObject.as_setTankmenXpPanel(visible) if self._isDAAPIInited() else None

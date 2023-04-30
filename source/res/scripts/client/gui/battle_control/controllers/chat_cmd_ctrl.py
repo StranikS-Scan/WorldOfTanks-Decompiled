@@ -148,7 +148,7 @@ class ChatCommandsController(IBattleController):
             return
         else:
             targetID, targetMarkerType, markerSubType = self.__getAimedAtVehicleOrObject()
-            if targetMarkerType == MarkerType.INVALID_MARKER_TYPE:
+            if targetMarkerType == MarkerType.INVALID_MARKER_TYPE and self.__markersManager:
                 targetID, targetMarkerType, markerSubType = self.__markersManager.getCurrentlyAimedAtMarkerIDAndType()
             if targetMarkerType == MarkerType.INVALID_MARKER_TYPE and getAimedAtPositionWithinBorders(self._aimOffset[0], self._aimOffset[1]) is not None:
                 targetMarkerType = MarkerType.LOCATION_MARKER_TYPE

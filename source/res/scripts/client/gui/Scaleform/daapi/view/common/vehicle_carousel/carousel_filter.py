@@ -290,11 +290,11 @@ class BasicCriteriesGroup(CriteriesGroup):
 
     def _setRentedCriteria(self, filters):
         if filters[FILTER_KEYS.RENTED] and filters[FILTER_KEYS.CLAN_RENTED]:
-            self._criteria |= REQ_CRITERIA.VEHICLE.RENT
+            self._criteria |= REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS | ~REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE
         elif filters[FILTER_KEYS.CLAN_RENTED]:
             self._criteria |= REQ_CRITERIA.VEHICLE.CLAN_WARS
         elif not filters[FILTER_KEYS.RENTED]:
-            self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS
+            self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.CLAN_WARS ^ REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE
 
     def _setIGRCriteria(self, filters):
         if filters[FILTER_KEYS.IGR] and constants.IS_KOREA:

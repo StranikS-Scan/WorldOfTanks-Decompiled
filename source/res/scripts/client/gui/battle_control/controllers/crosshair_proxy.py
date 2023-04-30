@@ -20,7 +20,8 @@ _CTRL_MODE_TO_VIEW_ID = {_CTRL_MODE.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  _CTRL_MODE.POSTMORTEM: CROSSHAIR_VIEW_ID.POSTMORTEM,
  _CTRL_MODE.RESPAWN_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM,
  _CTRL_MODE.DEATH_FREE_CAM: CROSSHAIR_VIEW_ID.POSTMORTEM,
- _CTRL_MODE.DUAL_GUN: CROSSHAIR_VIEW_ID.SNIPER}
+ _CTRL_MODE.DUAL_GUN: CROSSHAIR_VIEW_ID.SNIPER,
+ _CTRL_MODE.FLAMETHROWER: CROSSHAIR_VIEW_ID.STRATEGIC}
 _GUN_MARKERS_SET_IDS = (_BINDING_ID.GUN_MARKERS_FLAGS,
  _BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER,
@@ -128,6 +129,9 @@ class CrosshairDataProxy(IBattleController):
         for bindingID in _GUN_MARKERS_SET_IDS:
             aih_global_binding.unsubscribe(bindingID, self.__onGunMarkersSetChanged)
 
+    def getCtrlMode(self):
+        return self.__ctrlMode
+
     def getViewID(self):
         return self.__viewID
 
@@ -194,8 +198,7 @@ class CrosshairDataProxy(IBattleController):
                 self.onCrosshairPositionChanged(posX, posY)
 
     def __setGunMarkerState(self, markerType, value):
-        position, direction, collision = value
-        self.onGunMarkerStateChanged(markerType, position, direction, collision)
+        self.onGunMarkerStateChanged(markerType, *value)
 
     def __onAvatarControlModeChanged(self, ctrlMode):
         viewID = getCrosshairViewIDByCtrlMode(ctrlMode)

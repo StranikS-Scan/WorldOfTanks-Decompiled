@@ -213,7 +213,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         slotDefaultPrice = shopDefaults.getVehicleSlotsPrice(stats.vehicleSlots)
         slotActionPriceData = None
         if slotPrice != slotDefaultPrice:
-            slotActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, Money(gold=slotPrice), Money(gold=slotDefaultPrice))
+            slotActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, slotPrice, slotDefaultPrice)
         tankmenTotalLabel = i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TANKMENTOTALLABEL, count=str(tankMenCount))
         studyData = []
         for index, (tCost, defTCost, typeID) in enumerate(zip(shop.getTankmanCostWithGoodyDiscount(vehicle.level), shopDefaults.tankmanCost, ('free', 'school', 'academy'))):
@@ -276,8 +276,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def _getSlotPrice(self):
         shop = self.itemsCache.items.shop
         stats = self.itemsCache.items.stats
-        price = Money(gold=shop.getVehicleSlotsPrice(stats.vehicleSlots))
-        defPrice = Money(gold=shop.defaults.getVehicleSlotsPrice(stats.vehicleSlots))
+        price = shop.getVehicleSlotsPrice(stats.vehicleSlots)
+        defPrice = shop.defaults.getVehicleSlotsPrice(stats.vehicleSlots)
         return ItemPrice(price, defPrice)
 
     def _getCrewPrice(self):

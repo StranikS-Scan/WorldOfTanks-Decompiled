@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
 import logging
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from gui import makeHtmlString
 from gui.impl import backport
@@ -14,6 +14,7 @@ from helpers import dependency
 from helpers.html import escape as htmlEscape
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 QUEUE_LEAVE_PREFIX = 'QUEUE_'
@@ -91,8 +92,8 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
     return text
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext, winbackController=IWinbackController)
+def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None, winbackController=None):
     isAnotherPeriphery = lobbyContext is not None and lobbyContext.isAnotherPeriphery(peripheryID)
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
@@ -103,11 +104,24 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
         else:
             _logger.error('Can not resolve name of entity. %s', funcState)
             return text
+        isInWinback = funcState.isInPreQueue(QUEUE_TYPE.WINBACK)
+        isPermanentlyWinbackLeave = winbackController is not None and winbackController.isModeAvailable() and invitePrbType == PREBATTLE_TYPE.SQUAD
         if isAnotherPeriphery:
-            text = backport.text(_R_INVITES.note.change_and_leave.dyn(entityName)(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+            if not isInWinback or not isPermanentlyWinbackLeave:
+                text = backport.text(_R_INVITES.note.change_and_leave.dyn(entityName)(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+            if isPermanentlyWinbackLeave:
+                if text:
+                    text = ''.join((text, '\n\n'))
+                permanentlyLeaveText = backport.text(_R_INVITES.note.change_and_leave_permanently.QUEUE_WINBACK(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+                text = ''.join((text, permanentlyLeaveText))
             text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))
         else:
-            text = backport.text(_R_INVITES.note.leave.dyn(entityName)())
+            if not isInWinback or not isPermanentlyWinbackLeave:
+                text = backport.text(_R_INVITES.note.leave.dyn(entityName)())
+            if isPermanentlyWinbackLeave:
+                if text:
+                    text = ''.join((text, '\n\n'))
+                text = ''.join((text, backport.text(_R_INVITES.note.leave_permanently.QUEUE_WINBACK())))
     elif isAnotherPeriphery:
         text = backport.text(_R_INVITES.note.server_change(), host=lobbyContext.getPeripheryName(peripheryID) or '')
         text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))

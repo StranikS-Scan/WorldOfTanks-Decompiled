@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 
 class MapsBlacklistViewModel(ViewModel):
-    __slots__ = ('onBackAction', 'onCloseEvent', 'onMapAddToBlacklistEvent', 'onMapRemoveFromBlacklistEvent', 'onFilterReset', 'onInitialized')
+    __slots__ = ('onBackAction', 'onCloseEvent', 'onMapAddToBlacklistEvent', 'onMapRemoveFromBlacklistEvent', 'onFilterReset', 'onInitialized', 'onFilterClick')
 
-    def __init__(self, properties=7, commands=6):
+    def __init__(self, properties=8, commands=7):
         super(MapsBlacklistViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -57,6 +57,12 @@ class MapsBlacklistViewModel(ViewModel):
     def setIsFilterApplied(self, value):
         self._setBool(6, value)
 
+    def getIsWotPlusEnabled(self):
+        return self._getBool(7)
+
+    def setIsWotPlusEnabled(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(MapsBlacklistViewModel, self)._initialize()
         self._addViewModelProperty('disabledMaps', ListModel())
@@ -66,9 +72,11 @@ class MapsBlacklistViewModel(ViewModel):
         self._addNumberProperty('mapsSelected', 0)
         self._addNumberProperty('mapsTotal', 0)
         self._addBoolProperty('isFilterApplied', False)
+        self._addBoolProperty('isWotPlusEnabled', False)
         self.onBackAction = self._addCommand('onBackAction')
         self.onCloseEvent = self._addCommand('onCloseEvent')
         self.onMapAddToBlacklistEvent = self._addCommand('onMapAddToBlacklistEvent')
         self.onMapRemoveFromBlacklistEvent = self._addCommand('onMapRemoveFromBlacklistEvent')
         self.onFilterReset = self._addCommand('onFilterReset')
         self.onInitialized = self._addCommand('onInitialized')
+        self.onFilterClick = self._addCommand('onFilterClick')

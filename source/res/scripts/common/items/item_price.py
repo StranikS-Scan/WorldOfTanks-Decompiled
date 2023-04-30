@@ -32,7 +32,9 @@ def getItemPrice(item, gameParams, goodies=None, goodieTarget=None):
 def getNextSlotPrice(slots, slotsPrices):
     addSlotNumber = slots - slotsPrices[0]
     if addSlotNumber < 0:
-        return 0
+        if len(slotsPrices[1]):
+            return (slotsPrices[1][0][0], 0)
+        return ('credits', 0)
     return slotsPrices[1][addSlotNumber] if addSlotNumber < len(slotsPrices[1]) else slotsPrices[1][-1]
 
 

@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class MapboxProgressionModel(ViewModel):
     __slots__ = ('onShowInfo', 'onSelectMapboxBattle', 'onShowSurvey', 'onTakeReward', 'onRemoveBubble', 'onClose', 'onAnimationEnded')
 
-    def __init__(self, properties=13, commands=7):
+    def __init__(self, properties=12, commands=7):
         super(MapboxProgressionModel, self).__init__(properties=properties, commands=commands)
 
     def getIsOverlapped(self):
@@ -33,59 +33,53 @@ class MapboxProgressionModel(ViewModel):
     def setProgressionRewards(self, value):
         self._setArray(3, value)
 
-    def getSeasonNumber(self):
-        return self._getNumber(4)
-
-    def setSeasonNumber(self, value):
-        self._setNumber(4, value)
-
     def getIsMapboxModeSelected(self):
-        return self._getBool(5)
+        return self._getBool(4)
 
     def setIsMapboxModeSelected(self, value):
-        self._setBool(5, value)
+        self._setBool(4, value)
 
     def getIsError(self):
-        return self._getBool(6)
+        return self._getBool(5)
 
     def setIsError(self, value):
-        self._setBool(6, value)
+        self._setBool(5, value)
 
     def getPrevTotalBattlesPlayed(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setPrevTotalBattlesPlayed(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getTotalBattlesPlayed(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setTotalBattlesPlayed(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def getTotalBattles(self):
-        return self._getNumber(9)
+        return self._getNumber(8)
 
     def setTotalBattles(self, value):
-        self._setNumber(9, value)
+        self._setNumber(8, value)
 
     def getStartEvent(self):
-        return self._getNumber(10)
+        return self._getNumber(9)
 
     def setStartEvent(self, value):
-        self._setNumber(10, value)
+        self._setNumber(9, value)
 
     def getEndEvent(self):
-        return self._getNumber(11)
+        return self._getNumber(10)
 
     def setEndEvent(self, value):
-        self._setNumber(11, value)
+        self._setNumber(10, value)
 
     def getTimeTillProgressionRestart(self):
-        return self._getString(12)
+        return self._getString(11)
 
     def setTimeTillProgressionRestart(self, value):
-        self._setString(12, value)
+        self._setString(11, value)
 
     def _initialize(self):
         super(MapboxProgressionModel, self)._initialize()
@@ -93,7 +87,6 @@ class MapboxProgressionModel(ViewModel):
         self._addBoolProperty('isDataSynced', False)
         self._addArrayProperty('maps', Array())
         self._addArrayProperty('progressionRewards', Array())
-        self._addNumberProperty('seasonNumber', 0)
         self._addBoolProperty('isMapboxModeSelected', False)
         self._addBoolProperty('isError', False)
         self._addNumberProperty('prevTotalBattlesPlayed', 0)

@@ -500,10 +500,10 @@ class AbstractBattleMode(object):
     def registerScaleformRequiredLibraries(self):
         if self._client_lobbyRequiredLibraries:
             from gui.Scaleform.required_libraries_config import addLobbyRequiredLibraries
-            addLobbyRequiredLibraries(self._client_lobbyRequiredLibraries, __name__)
+            addLobbyRequiredLibraries(self._client_lobbyRequiredLibraries, self._personality)
         if self._client_battleRequiredLibraries:
             from gui.Scaleform.required_libraries_config import addBattleRequiredLibraries
-            addBattleRequiredLibraries(self._client_battleRequiredLibraries, __name__)
+            addBattleRequiredLibraries(self._client_battleRequiredLibraries, self._ARENA_GUI_TYPE, self._personality)
 
     def registerSystemMessagesTypes(self):
         SYS_MESSAGE_TYPE.inject(self._SM_TYPES)

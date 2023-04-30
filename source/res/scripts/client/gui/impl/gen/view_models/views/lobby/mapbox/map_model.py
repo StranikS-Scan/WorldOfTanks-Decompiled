@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class MapModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(MapModel, self).__init__(properties=properties, commands=commands)
 
     def getMapName(self):
@@ -50,6 +50,12 @@ class MapModel(ViewModel):
     def setIsBubble(self, value):
         self._setBool(6, value)
 
+    def getIsSpecial(self):
+        return self._getBool(7)
+
+    def setIsSpecial(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(MapModel, self)._initialize()
         self._addStringProperty('mapName', '')
@@ -59,3 +65,4 @@ class MapModel(ViewModel):
         self._addBoolProperty('isSurveyAvailable', False)
         self._addNumberProperty('rating', 0)
         self._addBoolProperty('isBubble', False)
+        self._addBoolProperty('isSpecial', False)

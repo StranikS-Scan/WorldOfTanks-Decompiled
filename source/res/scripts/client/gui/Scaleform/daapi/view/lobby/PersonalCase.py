@@ -1,15 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import operator
-import BigWorld
+import typing
+from account_helpers.AccountSettings import CREW_SKINS_VIEWED, CREW_SKINS_HISTORICAL_VISIBLE
+from account_helpers.settings_core.settings_constants import GAME
 import SoundGroups
 import constants
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CREW_SKINS_VIEWED, CREW_SKINS_HISTORICAL_VISIBLE
-from account_helpers.settings_core.settings_constants import GAME
 from adisp import adisp_async
-from wg_async import wg_await, wg_async
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -18,44 +17,47 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONALCASECONST import PERSONALCASECONST
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
-from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.dialogs import showFreeSkillConfirmationDialog
-from gui.shop import showBuyGoldForCrew
+from gui.impl.dialogs.gf_builders import ResDialogBuilder
+from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath, Tankman, getTankmanSkill
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.dossier import dumpDossier, TankmanDossier
+from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath, Tankman, getTankmanSkill
 from gui.shared.gui_items.crew_skin import localizedFullName, GenderRestrictionsLocales
+from gui.shared.gui_items.dossier import dumpDossier, TankmanDossier
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanLearnFreeSkill, TankmanChangePassport, CrewSkinEquip, CrewSkinUnequip
 from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining, repackTankmanWithSkinData
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils import decorators, roundByModulo
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.impl.dialogs import dialogs
-from gui.impl.dialogs.gf_builders import ResDialogBuilder
-from gui.impl.gen import R
-from gui.impl import backport
+from gui.shop import showBuyGoldForCrew
 from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
 from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
-from skeletons.gui.game_control import IBootcampController
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IBootcampController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from skeletons.account_helpers.settings_core import ISettingsCore
+from wg_async import wg_await, wg_async
+if typing.TYPE_CHECKING:
+    from typing import Dict
 
 class CrewSkinsCache(object):
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -95,6 +97,7 @@ def countSkinAsNew(item):
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     crewSkinsHAConfig = CrewSkinsCache()
     _SOUND_PREVIEW = 'wwsound_mode_preview01'
     _CONTEXT_HINT = 'personalCase'
@@ -110,7 +113,6 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
         self.vehicle = self.itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr)
         self.__previewSound = None
-        self._renewableSubscription = BigWorld.player().renewableSubscription
         return
 
     def onPrbEntitySwitched(self):
@@ -121,7 +123,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             self.__setCommonData()
 
     def onWotPlusChanged(self, itemDiff):
-        self.__setDossierData()
+        if 'isEnabled' in itemDiff:
+            self.__setDossierData()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
@@ -285,7 +288,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         g_clientUpdateManager.addCallbacks({'': self.__onClientChanged})
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__hideTabsOnUpdate
         self.itemsCache.onSyncCompleted += self.__refreshData
-        self._renewableSubscription.onRenewableSubscriptionDataChanged += self.onWotPlusChanged
+        self._wotPlusCtrl.onDataChanged += self.onWotPlusChanged
         self.startGlobalListening()
         _hasFreeSkills = self._tankman.chosenFreeSkillsCount or self._tankman.newFreeSkillsCount
         self.setupContextHints(self._CONTEXT_HINT_WITH_FREE_SKILLS if _hasFreeSkills else self._CONTEXT_HINT, hintsArgs={'hangarTutorialPersonalCaseAdditional': (self.tmanInvID,)})
@@ -300,7 +303,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.stopGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__hideTabsOnUpdate
         self.itemsCache.onSyncCompleted -= self.__refreshData
-        self._renewableSubscription.onRenewableSubscriptionDataChanged -= self.onWotPlusChanged
+        self._wotPlusCtrl.onDataChanged -= self.onWotPlusChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__stopSoundPreview()
@@ -446,6 +449,8 @@ class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcamp = dependency.descriptor(IBootcampController)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    _MODIFIERS_UI_PRECISION = 2
 
     def __init__(self, tmanInvID):
         self.tmanInvID = tmanInvID
@@ -486,7 +491,7 @@ class PersonalCaseDataProvider(object):
              'val': bonuses[0]})
         if bonuses[1]:
             modifiers.append({'id': 'fromSkills',
-             'val': bonuses[1]})
+             'val': self.__roundModifiers(bonuses[1])})
         if bonuses[2] or bonuses[3]:
             modifiers.append({'id': 'fromEquipment',
              'val': bonuses[2] + bonuses[3]})
@@ -558,17 +563,17 @@ class PersonalCaseDataProvider(object):
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
             serverSettings = self.lobbyContext.getServerSettings()
-            isWotPlusEnabled = serverSettings.isRenewableSubEnabled()
+            isWotPlusEnabled = self._wotPlusCtrl.isWotPlusEnabled()
             isNewSubscriptionsEnabled = serverSettings.isWotPlusNewSubscriptionEnabled()
-            hasWotPlus = BigWorld.player().renewableSubscription.isEnabled()
-            secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_ACCELERATED_CREW_TRAINING if isWotPlusEnabled else RES_ICONS.MAPS_ICONS_LIBRARY_PREM_CHECKBOX
+            hasWotPlus = self._wotPlusCtrl.isEnabled()
+            secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_ACCELERATED_CREW_TRAINING if isWotPlusEnabled else RES_ICONS.MAPS_ICONS_LIBRARY_TMAN_ACC_TRAINING_20X20
             callbackInfo = {'achievements': packedAchieves,
              'stats': tmanDossier.getStats(self.itemsCache.items.getTankman(self.tmanInvID)),
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
              'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO),
              'secondIcon': secondIcon}
             if isWotPlusEnabled and (isNewSubscriptionsEnabled or hasWotPlus):
-                callbackInfo['wotPlusIcon'] = RES_ICONS.MAPS_ICONS_LIBRARY_WOT_PLUS
+                callbackInfo['wotPlusIcon'] = RES_ICONS.MAPS_ICONS_CREWHEADER_INACTIVE_WOT_PLUS_CREW_IDLE
                 callbackInfo['wotPlusMsg'] = self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS)
             callback(callbackInfo)
             return
@@ -741,3 +746,6 @@ class PersonalCaseDataProvider(object):
         if left_rate > 0:
             targetXp += rate - left_rate
         return targetXp
+
+    def __roundModifiers(self, modifier):
+        return round(modifier, self._MODIFIERS_UI_PRECISION)

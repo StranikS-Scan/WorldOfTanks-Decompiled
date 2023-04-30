@@ -362,6 +362,19 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_TMAN_ADD_SKILL, tmanInvID, skillIdx, 0, proxy)
             return
 
+    def earnAllSkillsForVehicleCrew(self, vehInvID, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt2(AccountCommands.CMD_EARN_ALL_SKILLS, vehInvID, 0, proxy)
+            return
+
     def learnTankmanFreeSkill(self, tmanInvID, skillName, callback):
         if self.__ignore:
             if callback is not None:

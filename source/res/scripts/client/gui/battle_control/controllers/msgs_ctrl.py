@@ -116,12 +116,12 @@ class BattleMessagesController(IBattleController):
                 avatar.soundNotifications.play(sound)
             if soundExt is not None:
                 avatar.soundNotifications.play(soundExt)
-            self.onShowPlayerMessageByCode(code, postfix, targetID, attackerID, equipmentID)
+            self.onShowPlayerMessageByCode(code, postfix, targetID, attackerID, equipmentID, False)
             return
 
     def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID, ignoreMessages=False):
         code, postfix = self.__getDamageInfo(avatar, code, entityID, targetID)
-        self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID)
+        self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID, ignoreMessages)
         self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID, ignoreMessages)
 
     def showVehicleMessage(self, key, args=None):

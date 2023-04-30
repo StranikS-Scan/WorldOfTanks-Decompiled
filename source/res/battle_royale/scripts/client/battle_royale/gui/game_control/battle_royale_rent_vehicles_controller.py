@@ -177,13 +177,7 @@ class BattleRoyaleRentVehiclesController(IBattleRoyaleRentVehiclesController):
             price = self.getRentPrice(intCD)
         else:
             return False
-        for currency in self.__balance.currencies:
-            currencyValue = price.get(currency)
-            if currencyValue is not None:
-                if currencyValue > self.__balance.get(currency):
-                    return False
-
-        return True
+        return not self.__balance.getShortage(price)
 
     @_defaultCurrentVehicle
     def purchaseRent(self, intCD=None):

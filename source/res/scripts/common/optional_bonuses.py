@@ -202,6 +202,14 @@ def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
     total[key] = value
 
 
+def __mergeNoviceReset(total, key, value, isLeaf=False, count=1, *args):
+    total[key] = value
+
+
+def __mergeDailyQuestReroll(total, key, value, isLeaf, count, *args):
+    total.setdefault(key, set()).update(value)
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -241,7 +249,9 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'dogTagComponents': __mergeDogTag,
  'battlePassPoints': __mergeBattlePassPoints,
  'freePremiumCrew': __mergeFreePremiumCrew,
- 'meta': __mergeMeta}
+ 'meta': __mergeMeta,
+ 'dailyQuestReroll': __mergeDailyQuestReroll,
+ 'noviceReset': __mergeNoviceReset}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}

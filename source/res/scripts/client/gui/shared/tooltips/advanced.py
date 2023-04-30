@@ -5,17 +5,16 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import DemountKit
 from gui.impl import backport
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.artefacts import OptionalDevice
-from gui.shared.items_parameters import formatters as param_formatter
-from gui.shared.tooltips import formatters
+from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
@@ -127,11 +126,16 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
         item = self._item
         itemId = item.getGUIEmblemID()
         header = self._item.userName
+        descReady = False
         if 'crewSkillBattleBooster' in item.tags:
             movie = SKILL_MOVIES[itemId]
+            affectedSkillName = item.getAffectedSkillName()
+            skillLocales = R.strings.crew_perks.dyn(affectedSkillName)
+            itemId = backport.text(skillLocales.shortDescription()) if skillLocales.isValid() else affectedSkillName
+            descReady = True
         else:
             movie = MODULE_MOVIES[itemId]
-        return self._packAdvancedBlocks(movie, header, itemId)
+        return self._packAdvancedBlocks(movie, header, itemId, descReady)
 
 
 class HangarModuleAdvanced(BaseAdvancedTooltip):
@@ -174,32 +178,20 @@ class TankmanTooltipAdvanced(BaseAdvancedTooltip):
         return self._packAdvancedBlocks(_TANKMAN_MOVIES[self._item.role], self._item.roleUserName, self._item.role)
 
 
-class SkillTooltipAdvanced(BaseAdvancedTooltip):
-
-    def _getBlocksList(self, *args, **kwargs):
-        return self._packAdvancedBlocks(SKILL_MOVIES[self._item.name], self._item.userName, self._item.name)
-
-
-class SkillExtendedTooltipAdvanced(BaseAdvancedTooltip):
-
-    def _getBlocksList(self, *args, **kwargs):
-        skillType = args[0]
-        return self._packAdvancedBlocks(SKILL_MOVIES[skillType], TOOLTIPS.skillTooltipHeader(skillType), skillType)
-
-
-class VehicleParametersAdvanced(BaseAdvancedTooltip):
+class VehicleParametersAdvanced(ToolTipBaseData):
     _movies = {'relativePower': 'statFirepower',
      'relativeArmor': 'statSurvivability',
      'relativeMobility': 'statMobility',
      'relativeCamouflage': 'statConcealment',
      'relativeVisibility': 'statSpotting'}
 
-    def _getBlocksList(self, paramName, *args, **kwargs):
-        return self._packAdvancedBlocks(VehicleParametersAdvanced._movies[paramName], MENU.tank_params(paramName), paramName)
+    def __init__(self, context):
+        super(VehicleParametersAdvanced, self).__init__(context, None)
+        return
 
-    @staticmethod
-    def readyForAdvanced(*args, **_):
-        return param_formatter.isRelativeParameter(args[0])
+    def getDisplayableData(self, paramName, *args, **kwargs):
+        from gui.impl.lobby.crew.tooltips.advanced_tooltip_view import AdvancedTooltipView
+        return DecoratedTooltipWindow(AdvancedTooltipView(self._movies[paramName], backport.text(R.strings.menu.tank_params.dyn(paramName)()), backport.text(R.strings.tooltips.advanced.dyn(paramName)())), useDecorator=False)
 
 
 class MoneyAndXpAdvanced(BaseAdvancedTooltip):
@@ -325,4 +317,5 @@ SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False): 'bulletAP',
  (SHELL_TYPES.HOLLOW_CHARGE, False): 'bulletHEAT',
  (SHELL_TYPES.HIGH_EXPLOSIVE, False): 'bulletHE',
  (SHELL_TYPES.ARMOR_PIERCING_CR, False): 'bulletAPCR',
- (SHELL_TYPES.HIGH_EXPLOSIVE, True): 'bulletHEModern'}
+ (SHELL_TYPES.HIGH_EXPLOSIVE, True): 'bulletHEModern',
+ (SHELL_TYPES.FLAME, False): 'bulletFlame'}

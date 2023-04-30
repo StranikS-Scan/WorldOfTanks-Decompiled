@@ -7,7 +7,6 @@ from gui import makeHtmlString
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -23,7 +22,7 @@ from helpers import time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, compareMastery
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -197,7 +196,7 @@ class TankmanStatusField(ToolTipDataField):
                         if role not in inactiveRoles:
                             inactiveRoles.append(role)
 
-            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
+            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID and not vehicle.isWotPlus:
                 if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
                     header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
                     text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
@@ -291,6 +290,17 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         titleBlock = []
         titleBlock.append(formatters.packTitleDescBlock(title=text_styles.highTitle(fullUserName), desc=text_styles.main(self._getTankmanDescription(item))))
         titleBlock.append(self._makeRoleLevelBlock(item))
+        if vehicle and vehicle.isXPToTman:
+            isLessMastered = True
+            for slotIdx, tman in vehicle.crew:
+                if tman is not None:
+                    res = compareMastery(tman.descriptor, self.item.descriptor)
+                    if res < 0 or res == 0 and slotIdx < self.item.vehicleSlotIdx:
+                        isLessMastered = False
+                        break
+
+            if isLessMastered:
+                titleBlock.append(self._makeXpToTankmanCaption())
         items.append(formatters.packBuildUpBlockData(titleBlock))
         innerBlock = []
         if vehicle:
@@ -332,6 +342,9 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         else:
             return text_styles.main(item.roleUserName)
 
+    def _makeXpToTankmanCaption(self):
+        return formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.tman_acc_training_24x24()), padding=formatters.packPadding(bottom=0, top=16, left=0), imgPadding=formatters.packPadding(top=-2, right=6), desc=text_styles.main(backport.text(R.strings.tooltips.hangar.crew.xpToTmen())))
+
     def _getSign(self, val):
         return '' if val < 0 else '+'
 
@@ -369,7 +382,7 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
     def _createCommanderFeatureBlock(self, commonStatsBlock):
         if self.item.role == Tankman.ROLES.COMMANDER:
             commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_COMMANDERFEATURE)})))
-            commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(ITEM_TYPES.TANKMAN_SKILLS_COMMANDER_SIXTHSENSE), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.commander_sixthSense()), **self._skillIconNamePadding))
+            commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.crew_perks.commander_sixthSense.name())), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.commander_sixthSense()), **self._skillIconNamePadding))
 
     def _createFreeSkillsBlock(self, commonStatsBlock):
         freeSkills = self.item.freeSkills

@@ -56,6 +56,8 @@ def _reCalcBestParameters(targetCache):
     for vcParamData in targetCache:
         params = vcParamData.getParams()
         for pKey, pVal in params.iteritems():
+            if pVal is None:
+                continue
             if isinstance(pVal, (tuple, list)):
                 bestParamsDict.addLen(pKey, pVal)
                 if pKey in bestParamsDict:

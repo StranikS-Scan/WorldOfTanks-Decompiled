@@ -61,6 +61,9 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_updateLevelInformationS(self, idx, level):
         return self.flashObject.as_updateLevelInformation(idx, level) if self._isDAAPIInited() else None
 
+    def as_updateTooltipS(self, idx, tooltipStr):
+        return self.flashObject.as_updateTooltip(idx, tooltipStr) if self._isDAAPIInited() else None
+
     def as_addOptionalDeviceSlotS(self, idx, timeRemaining, iconPath, tooltipText, isTooltipSpecial, intCD, isUsed):
         return self.flashObject.as_addOptionalDeviceSlot(idx, timeRemaining, iconPath, tooltipText, isTooltipSpecial, intCD, isUsed) if self._isDAAPIInited() else None
 

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_demo_client/test_state_machine_trigger.py
 import logging
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 import CGF
 import GenericComponents
 import Triggers
@@ -9,8 +9,10 @@ from cgf_demo.demo_category import DEMO_CATEGORY
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 _logger = logging.getLogger(__name__)
 
-class TestStateMachineStatesActivator(CGFComponent):
+@registerComponent
+class TestStateMachineStatesActivator(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     statesList = ComponentProperty(type=CGFMetaTypes.STRING_LIST, editorName='States', value=('Click', 'BowlClick'))
     animator = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Animator', value=GenericComponents.AnimatorComponent)
     trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Time trigger', value=Triggers.TimeTriggerComponent)

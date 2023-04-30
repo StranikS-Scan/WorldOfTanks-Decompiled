@@ -86,7 +86,8 @@ class IntSettingsRequester(object):
      COMP7_CAROUSEL_FILTER_2: 111,
      'MARKERS_ENEMY_2': 112,
      'MARKERS_DEAD_2': 113,
-     'MARKERS_ALLY_2': 114}
+     'MARKERS_ALLY_2': 114,
+     'ARMORY_YARD': 31001}
 
     def __init__(self):
         self.__isSynced = False

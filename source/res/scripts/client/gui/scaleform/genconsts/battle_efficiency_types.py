@@ -24,6 +24,7 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_WORLD_COLLISION = 'receivedWorldCollision'
     ASSIST_STUN = 'assistStun'
     STUN = 'stun'
+    PERK = 'perk'
     VEHICLE_RECOVERY = 'vehicleRecovery'
     ENEMY_SECTOR_CAPTURED = 'enemySectorCaptured'
     DESTRUCTIBLE_DAMAGED = 'destructibleDamaged'

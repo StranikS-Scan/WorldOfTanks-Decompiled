@@ -42,6 +42,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import messages
+    from gui.Scaleform.daapi.view.battle.shared import perks_panel
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, BCIntroVideoPage, 'BCIntroVideo.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, BCBattlePage, 'BCbattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', WindowLayer.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
@@ -66,7 +67,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, BCPreBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

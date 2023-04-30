@@ -5,7 +5,7 @@ import Math
 import BigWorld
 from death_zones_helpers import ZONE_STATE, idxFrom, zoneIdFrom, ZONES_X, ZONES_Y
 from constants import IS_CLIENT
-from cgf_script.managers_registrator import Rule, registerManager, onProcessQuery
+from cgf_script.managers_registrator import Rule, registerManager, onProcessQuery, registerRule
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes
 if IS_CLIENT:
     from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -117,9 +117,11 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         return self.__hashedBoundingBox
 
 
+@registerRule
 class DeathZonesRule(Rule):
     category = 'Steel Hunter'
     editorTitle = 'Death Zones Mechanics Rule'
+    domain = CGF.DomainOption.DomainAll
     maxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Max Alpha')
     height = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Height')
     activeColor = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(0.8, 0.0, 0.0, 0.0), editorName='Active color')

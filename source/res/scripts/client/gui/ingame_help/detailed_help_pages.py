@@ -3,19 +3,18 @@
 import logging
 import typing
 import CommandMapping
-from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE
+from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE, ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HelpHintContext
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.formatters import text_styles
 from gui.shared.system_factory import registerIngameHelpPagesBuilders, collectIngameHelpPagesBuilders
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
+from items.vehicles import getRolesActions
 from shared_utils import findFirst
 from soft_exception import SoftException
-from items.vehicles import getRolesActions
-from constants import ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
-from gui.shared.formatters import text_styles
 if typing.TYPE_CHECKING:
     from skeletons.gui.battle_session import IClientArenaVisitor
     from Vehicle import Vehicle
@@ -23,7 +22,7 @@ _logger = logging.getLogger(__name__)
 
 class HelpPagePriority(object):
     DEFAULT = 0
-    COMP7 = 1
+    MAPBOX = 1
     TRACK_WITHIN_TRACK = 2
     ROCKET_ACCELERATION = 3
     TURBOSHAFT_ENGINE = 4
@@ -33,6 +32,8 @@ class HelpPagePriority(object):
     BURNOUT = 8
     SIEGE_MODE = 9
     ROLE_TYPE = 10
+    COMP7 = 11
+    FLAMETHROWER = 11
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -54,20 +55,20 @@ def buildTitle(ctx):
 
 
 def buildPagesData(ctx):
-    datailedList = []
+    detailedList = []
     builders = collectIngameHelpPagesBuilders()
     for builder in sorted(builders, key=lambda item: item.priority(), reverse=True):
         if builder.hasPagesForCtx(ctx):
-            datailedList.extend(builder.buildPages(ctx))
+            detailedList.extend(builder.buildPages(ctx))
 
     selectedIdx = 0
     currentHintCtx = ctx.get('currentHintCtx')
-    hintContexts = [ pageData.pop('hintCtx') for pageData in datailedList ]
+    hintContexts = [ pageData.pop('hintCtx') for pageData in detailedList ]
     if currentHintCtx:
         selected = findFirst(lambda p: p == currentHintCtx, hintContexts)
         if selected is not None:
             selectedIdx = hintContexts.index(selected)
-    return (datailedList, selectedIdx)
+    return (detailedList, selectedIdx)
 
 
 class DetailedHelpPagesBuilder(object):
@@ -162,6 +163,28 @@ class WheeledPagesBuilder(DetailedHelpPagesBuilder):
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
         ctx['isWheeledVehicle'] = isWheeledVehicle = vehicle is not None and vehicle.typeDescriptor.isWheeledVehicle
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isWheeledVehicle
+        return
+
+
+class FlameTankPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isFlamethrower',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.FLAMETHROWER
+
+    @classmethod
+    def buildPages(cls, ctx):
+        headerTitle = buildTitle(ctx)
+        pages = []
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.flameTank.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.flameTank())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.flamethrowerHelp.flame_tank()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.flameTank.prosCons.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.flameTank.prosCons())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.flamethrowerHelp.flame_tank_pros_cons()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isFlamethrower'] = isFlamethrower = vehicle is not None and vehicle.typeDescriptor.isFlamethrower
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isFlamethrower
         return
 
 
@@ -332,7 +355,7 @@ class Comp7PagesBuilder(DetailedHelpPagesBuilder):
     def buildPages(cls, ctx):
         pages = []
         comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
-        for pageName in ('poi', 'roleSkills', 'rules'):
+        for pageName in ('seasonModifiers', 'poi', 'roleSkills', 'rules'):
             addPage(datailedList=pages, headerTitle=comp7Header, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
 
         return pages
@@ -340,6 +363,29 @@ class Comp7PagesBuilder(DetailedHelpPagesBuilder):
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
         ctx['isComp7'] = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.COMP7
+
+
+class MapboxPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isMapbox',)
+    _STR_PATH = R.strings.ingame_help.detailsHelp.mapbox
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.MAPBOX
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        header = backport.text(cls._STR_PATH.headerTitle())
+        hintCtx = HelpHintContext.MAPBOX
+        addPage(pages, header, backport.text(cls._STR_PATH.markers.title()), text_styles.mainBig(backport.text(cls._STR_PATH.markers.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.markers()), hintCtx)
+        addPage(pages, header, backport.text(cls._STR_PATH.environment.title()), text_styles.mainBig(backport.text(cls._STR_PATH.environment.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.environment()), hintCtx)
+        addPage(pages, header, backport.text(cls._STR_PATH.artefacts.title()), text_styles.mainBig(backport.text(cls._STR_PATH.artefacts.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.artefacts()), hintCtx)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isMapbox'] = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPBOX
 
 
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
@@ -351,4 +397,8 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  TurboshaftEnginePagesBuilder,
  RoleTypePagesBuilder,
  RocketAccelerationPagesBuilder,
- Comp7PagesBuilder))
+ Comp7PagesBuilder,
+ MapboxPagesBuilder,
+ RocketAccelerationPagesBuilder,
+ Comp7PagesBuilder,
+ FlameTankPagesBuilder))

@@ -3,6 +3,8 @@
 from frameworks.wulf import Array
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.common.missions.premium_mission_model import PremiumMissionModel
+from gui.impl.gen.view_models.views.lobby.missions.missions_completed_visited_model import MissionsCompletedVisitedModel
 
 class PremiumMissionsModel(ViewModel):
     __slots__ = ()
@@ -34,11 +36,19 @@ class PremiumMissionsModel(ViewModel):
     def setMissions(self, value):
         self._setArray(3, value)
 
+    @staticmethod
+    def getMissionsType():
+        return PremiumMissionModel
+
     def getMissionsCompletedVisited(self):
         return self._getArray(4)
 
     def setMissionsCompletedVisited(self, value):
         self._setArray(4, value)
+
+    @staticmethod
+    def getMissionsCompletedVisitedType():
+        return MissionsCompletedVisitedModel
 
     def getSyncInitiator(self):
         return self._getNumber(5)

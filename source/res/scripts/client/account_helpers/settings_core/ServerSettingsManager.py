@@ -67,6 +67,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
+    ARMORY_YARD = 'ARMORY_YARD'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -92,6 +93,10 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
     QUESTS_SHOWN = 'shown'
     QUEST_PROGRESS = 'questProgress'
+
+
+class ARMORY_YARD_KEYS(CONST_CONTAINER):
+    BUILD_PROGRESS = 'buildProgress'
 
 
 class ServerSettingsManager(object):
@@ -405,6 +410,7 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
+                                            GuiSettingsBehavior.CREW_22_WELCOME_SHOWN: 24,
                                             GuiSettingsBehavior.DISPLAY_PLATOON_MEMBER_CLICKED: 25,
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
                                             GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
@@ -711,7 +717,8 @@ class ServerSettingsManager(object):
                                                       'role_ATSPG_support': 22,
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
-                                                      'role_SPG': 25}, offsets={})}
+                                                      'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.ARMORY_YARD: Section(masks={}, offsets={ARMORY_YARD_KEYS.BUILD_PROGRESS: Offset(0, 65535)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -878,6 +885,12 @@ class ServerSettingsManager(object):
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
+
+    def getArmoryYardProgress(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, ARMORY_YARD_KEYS.BUILD_PROGRESS, -1)
+
+    def setArmoryYardProgress(self, lastSeenProgress):
+        self.setSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, {ARMORY_YARD_KEYS.BUILD_PROGRESS: lastSeenProgress})
 
     def _buildAimSettings(self, settings):
         settingToServer = {}
@@ -1240,6 +1253,10 @@ class ServerSettingsManager(object):
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:
             settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
+        armoryYard = data.get(SETTINGS_SECTIONS.ARMORY_YARD, {})
+        clearArmoryYard = clear.get(SETTINGS_SECTIONS.ARMORY_YARD, 0)
+        if armoryYard or clearArmoryYard:
+            settings[SETTINGS_SECTIONS.ARMORY_YARD] = self._buildSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, armoryYard) ^ clearArmoryYard
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

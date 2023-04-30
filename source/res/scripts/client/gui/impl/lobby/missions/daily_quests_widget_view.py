@@ -133,7 +133,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
                         questModel.setDescription(preFormattedConditionModel.getDescrData())
                     questModel.setId(fullQuestModel.getId())
                     questModel.setIcon(fullQuestModel.getIcon())
-                    questModel.setCompleted(fullQuestModel.getStatus() == MISSIONS_STATES.COMPLETED)
+                    questModel.setCompleted(fullQuestModel.getStatus().value == MISSIONS_STATES.COMPLETED)
                     modelQuests.addViewModel(questModel)
                     fullQuestModel.unbind()
 

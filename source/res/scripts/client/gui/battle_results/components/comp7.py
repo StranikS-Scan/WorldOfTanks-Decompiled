@@ -9,7 +9,7 @@ from gui.battle_results.components.vehicles import RegularVehicleStatValuesBlock
 from constants import FAIRPLAY_VIOLATIONS
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.impl.lobby.comp7 import comp7_shared
+from gui.impl.lobby.comp7 import comp7_shared, comp7_i18n_helpers
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
@@ -108,14 +108,14 @@ class Comp7RankBlock(base.StatsBlock):
         currentRankValue = comp7_shared.getRankEnumValue(division)
         currentDivisionValue = comp7_shared.getDivisionEnumValue(division)
         if EXTRA_RANK_NAME in division.tags:
-            return text_styles.middleTitle(backport.text(R.strings.comp7.rank.num(currentRankValue)()))
+            return text_styles.middleTitle(comp7_i18n_helpers.getRankLocale(currentRankValue))
         if division.dvsnID < prevDivision.dvsnID:
             title = R.strings.comp7.battleResult.subTask.title.c_raise()
         elif division.dvsnID > prevDivision.dvsnID:
             title = R.strings.comp7.battleResult.subTask.title.decrease()
         else:
             title = R.strings.comp7.battleResult.subTask.title.noRaise()
-        return text_styles.middleTitle(backport.text(title, division=backport.text(R.strings.comp7.division.text(), division=backport.text(R.strings.comp7.division.num(currentDivisionValue)())), rank=backport.text(R.strings.comp7.rank.num(currentRankValue)())))
+        return text_styles.middleTitle(backport.text(title, division=backport.text(R.strings.comp7.division.text(), division=comp7_i18n_helpers.getDivisionLocale(currentDivisionValue)), rank=comp7_i18n_helpers.getRankLocale(currentRankValue)))
 
     @staticmethod
     def __getRatingDiff(achievedRating):

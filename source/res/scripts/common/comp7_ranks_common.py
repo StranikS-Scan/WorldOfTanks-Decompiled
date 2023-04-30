@@ -4,9 +4,9 @@ from typing import Optional, FrozenSet, Tuple
 from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
-COMP7_RATING_ENTITLEMENT = 'comp7_rating_points'
-COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank'
-COMP7_ACTIVITY_ENTITLEMENT = 'comp7_activity_points'
+COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:2023:1'
+COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:2023:1'
+COMP7_ACTIVITY_ENTITLEMENT = 'comp7_activity_points:2023:1'
 COMP7_ENTITLEMENT_EXPIRES = None
 MAIN_RANK_NAME = 'main'
 EXTRA_RANK_NAME = 'extra'

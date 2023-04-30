@@ -27,6 +27,7 @@ from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPA
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView, createSimpleTooltip
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
+from gui.impl.lobby.winback.popovers.winback_leave_mode_popover_view import WinbackLeaveModePopoverView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -36,7 +37,7 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IWinbackController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
@@ -80,6 +81,7 @@ class ModeSelectorView(ViewImpl):
     __bootcamp = dependency.descriptor(IBootcampController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
+    __winbackController = dependency.descriptor(IWinbackController)
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -152,7 +154,11 @@ class ModeSelectorView(ViewImpl):
             return tooltipClass() if tooltipClass else None
 
     def createPopOverContent(self, event):
-        return RandomBattlePopover() if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover() else super(ModeSelectorView, self).createPopOverContent(event)
+        if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover():
+            if self.__winbackController.getWinbackBattlesCountLeft() > 0:
+                return WinbackLeaveModePopoverView()
+            return RandomBattlePopover()
+        return super(ModeSelectorView, self).createPopOverContent(event)
 
     def close(self):
         g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(self.layoutID))

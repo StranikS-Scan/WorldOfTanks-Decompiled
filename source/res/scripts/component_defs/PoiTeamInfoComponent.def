@@ -15,6 +15,9 @@
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
     </onPoiCaptured>
+    <onPoiInvaderDestroyed>
+      <Arg>	INT32	</Arg>
+    </onPoiInvaderDestroyed>
   </ClientMethods>
   <ofEntity>
     <TeamInfo></TeamInfo>

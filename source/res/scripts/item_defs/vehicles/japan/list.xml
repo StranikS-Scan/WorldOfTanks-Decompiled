@@ -105,7 +105,7 @@
     <shortUserString>	#japan_vehicles:Te_Ke_short	</shortUserString>
     <shortDescriptionSpecial>	#japan_vehicles:J02_Te_Ke_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J02_Te_Ke_long_special	</longDescriptionSpecial>
-    <price>	750	  <gold></gold>
+    <price>	2500	  <gold></gold>
     </price>
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
@@ -209,6 +209,60 @@
     <tags>	mediumTank HD collectorVehicle improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </J26_Type_89>
+  <J32_Chi_To_SPG>
+    <id>	24	</id>
+    <userString>	#japan_vehicles:J32_Chi_To_SPG	</userString>
+    <shortUserString>	#japan_vehicles:J32_Chi_To_SPG_short	</shortUserString>
+    <description>	#japan_vehicles:J32_Chi_To_SPG_descr	</description>
+    <price>	1470000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </J32_Chi_To_SPG>
+  <J33_Ho_Ri_2>
+    <id>	25	</id>
+    <userString>	#japan_vehicles:J33_Ho_Ri_2	</userString>
+    <shortUserString>	#japan_vehicles:J33_Ho_Ri_2_short	</shortUserString>
+    <description>	#japan_vehicles:J33_Ho_Ri_2_descr	</description>
+    <price>	2600000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </J33_Ho_Ri_2>
+  <J34_Ho_Ri_1>
+    <id>	26	</id>
+    <userString>	#japan_vehicles:J34_Ho_Ri_1	</userString>
+    <shortUserString>	#japan_vehicles:J34_Ho_Ri_1_short	</shortUserString>
+    <description>	#japan_vehicles:J34_Ho_Ri_1_descr	</description>
+    <price>	3650000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </J34_Ho_Ri_1>
+  <J37_Type_3_Ho_Ni_III>
+    <id>	27	</id>
+    <userString>	#japan_vehicles:J37_Type_3_Ho_Ni_III	</userString>
+    <shortUserString>	#japan_vehicles:J37_Type_3_Ho_Ni_III_short	</shortUserString>
+    <description>	#japan_vehicles:J37_Type_3_Ho_Ni_III_descr	</description>
+    <price>	405000	</price>
+    <tags>	AT-SPG HD lightAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_light_user	</tags>
+    <level>	5	</level>
+  </J37_Type_3_Ho_Ni_III>
+  <J38_Type_95_Ji_Ro>
+    <id>	28	</id>
+    <userString>	#japan_vehicles:J38_Type_95_Ji_Ro	</userString>
+    <shortUserString>	#japan_vehicles:J38_Type_95_Ji_Ro_short	</shortUserString>
+    <description>	#japan_vehicles:J38_Type_95_Ji_Ro_descr	</description>
+    <price>	930000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD lightAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </J38_Type_95_Ji_Ro>
+  <J35_Ho_Ri_3>
+    <id>	32	</id>
+    <userString>	#japan_vehicles:J35_Ho_Ri_3	</userString>
+    <shortUserString>	#japan_vehicles:J35_Ho_Ri_3_short	</shortUserString>
+    <description>	#japan_vehicles:J35_Ho_Ri_3_descr	</description>
+    <price>	6100000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </J35_Ho_Ri_3>
   <J27_O_I_120_BP>
     <id>	200	</id>
     <userString>	#japan_vehicles:J27_O_I_120_BP	</userString>
@@ -229,7 +283,7 @@
     <description>	#japan_vehicles:Chi_Nu_Kai_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:Chi_Nu_Kai_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:Chi_Nu_Kai_long_special	</longDescriptionSpecial>
-    <price>	1500	  <gold></gold>
+    <price>	4500	  <gold></gold>
     </price>
     <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
@@ -241,7 +295,7 @@
     <description>	#japan_vehicles:Ke_Ni_B_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J05_Ke_Ni_B_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J05_Ke_Ni_B_long_special	</longDescriptionSpecial>
-    <price>	1000	  <gold></gold>
+    <price>	3000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	lightTank private HD secret improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
@@ -254,7 +308,7 @@
     <shortUserString>	#japan_vehicles:STA_2_3_short	</shortUserString>
     <shortDescriptionSpecial>	#japan_vehicles:STA_2_3_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:STA_2_3_long_special	</longDescriptionSpecial>
-    <price>	6600	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
@@ -266,7 +320,7 @@
     <description>	#japan_vehicles:J19_Tiger_I_Jpn_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J19_Tiger_I_Jpn_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J19_Tiger_I_Jpn_long_special	</longDescriptionSpecial>
-    <price>	3300	  <gold></gold>
+    <price>	6000	  <gold></gold>
     </price>
     <tags>	heavyTank role_HT_break HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
@@ -278,7 +332,7 @@
     <description>	#japan_vehicles:J29_Nameless_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J29_Nameless_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J29_Nameless_long_special	</longDescriptionSpecial>
-    <price>	9600	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_break private HD lockExceptProgression secret unrecoverable lockCrew heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -291,7 +345,7 @@
     <description>	#japan_vehicles:J30_Edelweiss_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J30_Edelweiss_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J30_Edelweiss_long_special	</longDescriptionSpecial>
-    <price>	6900	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_universal private HD lockExceptProgression secret unrecoverable lockCrew improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
@@ -304,7 +358,7 @@
     <description>	#japan_vehicles:J31_Type_5_KaRi_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J31_Type_5_KaRi_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J31_Type_5_KaRi_long_special	</longDescriptionSpecial>
-    <price>	10250	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>

@@ -11,7 +11,8 @@ from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
+from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -30,6 +31,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import BADGES_ICONS, ICONS_SIZES, getBadgeIconPath
 from gui.app_loader.decorators import sf_lobby
+from gui.collection.collections_constants import COLLECTION_ITEM_BONUS_NAME, COLLECTION_ITEM_PREFIX_NAME
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.backport import TooltipData
@@ -62,15 +64,22 @@ from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import CONST_CONTAINER, first, makeTupleByDict
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import ICollectionsSystemController
+from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup, getItemPackByGroupAndName
 if typing.TYPE_CHECKING:
+    from typing import List, Tuple, Dict, Callable, Optional
+    from gui.goodies.goodie_items import Booster, _PersonalDiscount, DemountKit, RecertificationForm, GoodieType
+    from items.components.crew_skins_components import CrewSkin
     from account_helpers.offers.events_data import OfferEventData
     from account_helpers.offers.offer_bonuses import ItemsOfferBonus
     from gui.shared.gui_items.customization import C11nStyleProgressData
+    from gui.lobby_context import LobbyContext
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
@@ -358,6 +367,24 @@ class BpcoinBonus(IntegralBonus):
         return text_styles.bpcoin(self.getValue())
 
 
+class EquipCoinBonus(IntegralBonus):
+
+    def getIcon(self):
+        return backport.image(R.images.gui.maps.icons.library.equipCoin_1())
+
+    def getList(self):
+        res = [{'value': self.formatValue(),
+          'itemSource': self.getIcon(),
+          'tooltip': TOOLTIPS.AWARDITEM_EQUIPCOIN}]
+        return res
+
+    def hasIconFormat(self):
+        return True
+
+    def getIconLabel(self):
+        return text_styles.equipCoin(self.getValue())
+
+
 class CurrenciesBonus(IntegralBonus):
 
     def __init__(self, *args, **kwargs):
@@ -520,6 +547,7 @@ class MetaBonus(SimpleBonus):
 
 
 class TokensBonus(SimpleBonus):
+    TOKENS = 'tokens'
     _TOKEN_RECORD = namedtuple('_TOKEN_RECORD', ['id',
      'expires',
      'count',
@@ -600,6 +628,21 @@ class BattlePassTokensBonus(TokensBonus):
 
     def isShowInGUI(self):
         return False
+
+
+class Comp7TokenWeeklyRewardBonus(TokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(Comp7TokenWeeklyRewardBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = COMP7_TOKEN_WEEKLY_REWARD_NAME
+
+    def isShowInGUI(self):
+        return True
+
+    def getTooltip(self):
+        header = TOOLTIPS.getAwardHeader(self.getName())
+        body = TOOLTIPS.getAwardBody(self.getName())
+        return makeTooltip(header or None, body or None)
 
 
 class BattlePassSelectTokensBonus(TokensBonus):
@@ -912,6 +955,32 @@ class EntitlementBonus(SimpleBonus):
         return formattedValue if formattedValue else None
 
 
+class CollectionEntitlementBonus(EntitlementBonus):
+    __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(CollectionEntitlementBonus, self).__init__(name, value, isCompensation, ctx)
+        value = self.getValue()
+        _, _, collectionId, itemId = value.id.split('_')
+        self.__collectionId = int(collectionId)
+        self.__itemId = int(itemId)
+
+    def isShowInGUI(self):
+        return True
+
+    def getItem(self):
+        return self.__collectionsSystem.getCollection(self.__collectionId).items[self.__itemId]
+
+    def getType(self):
+        return self.getItem().type
+
+    def getCollectionId(self):
+        return self.__collectionId
+
+    def getItemId(self):
+        return self.__itemId
+
+
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
     completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
@@ -959,13 +1028,21 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if tID.startswith(CUSTOMIZATION_PROGRESS_PREFIX):
             result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(COMP7_TOKEN_WEEKLY_REWARD_NAME):
+            result.append(Comp7TokenWeeklyRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
 
 
 def entitlementsFactory(name, value, isCompensation=False, ctx=None):
-    return [ EntitlementBonus(name, (eID, eValue.get('count', 0)), isCompensation, ctx) for eID, eValue in value.iteritems() ]
+    result = []
+    for eID, eValue in value.iteritems():
+        if eID.startswith(COLLECTION_ITEM_PREFIX_NAME):
+            result.append(CollectionEntitlementBonus(COLLECTION_ITEM_BONUS_NAME, (eID, eValue.get('count', 0)), isCompensation, ctx))
+        result.append(EntitlementBonus(name, (eID, eValue.get('count', 0)), isCompensation, ctx))
+
+    return result
 
 
 class FreeTokensBonus(TokensBonus):
@@ -1118,6 +1195,7 @@ class ItemsBonus(SimpleBonus):
 
 
 class GoodiesBonus(SimpleBonus):
+    GOODIES = 'goodies'
     goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def getBoosters(self):
@@ -1914,6 +1992,51 @@ class UniversalCrewbook(SimpleBonus):
         return first(bonusCls(options.get('name'), options.get('value')))
 
 
+class WoTPlusBonus(SimpleBonus):
+
+    def __init__(self, name):
+        super(WoTPlusBonus, self).__init__(name, None)
+        return
+
+
+class GoldBank(WoTPlusBonus):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(GoldBank, self).__init__(WoTPlusBonusType.GOLD_BANK)
+
+    def getTooltip(self):
+        goldReserveCapacity = self._lobbyContext.getServerSettings().getRenewableSubMaxGoldReserveCapacity()
+        headerData, bodyData = getSimpleTooltipData(self._name)
+        header = i18n.makeString(headerData)
+        body = i18n.makeString(bodyData, goldReserveCapacity=goldReserveCapacity)
+        return makeTooltip(header, body)
+
+
+class IdleCrewXP(WoTPlusBonus):
+
+    def __init__(self):
+        super(IdleCrewXP, self).__init__(WoTPlusBonusType.IDLE_CREW_XP)
+
+
+class ExcludedMap(WoTPlusBonus):
+
+    def __init__(self):
+        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP)
+
+
+class FreeEquipmentDemounting(WoTPlusBonus):
+
+    def __init__(self):
+        super(FreeEquipmentDemounting, self).__init__(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
+
+
+class WoTPlusExclusiveVehicle(WoTPlusBonus):
+
+    def __init__(self):
+        super(WoTPlusExclusiveVehicle, self).__init__(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
+
+
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
     for params, fragmentCount in value.iteritems():
@@ -2469,6 +2592,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.CRYSTAL: CrystalBonus,
  Currency.EVENT_COIN: EventCoinBonus,
  Currency.BPCOIN: BpcoinBonus,
+ Currency.EQUIP_COIN: EquipCoinBonus,
  'strBonus': SimpleBonus,
  'groups': SimpleBonus,
  'xp': IntegralBonus,
@@ -2510,7 +2634,12 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'dogTagComponents': DogTagComponentBonus,
  'selectableCrewbook': UniversalCrewbook,
  'randomCrewbook': UniversalCrewbook,
- 'currencies': CurrenciesBonus}
+ 'currencies': CurrenciesBonus,
+ WoTPlusBonusType.GOLD_BANK: GoldBank,
+ WoTPlusBonusType.IDLE_CREW_XP: IdleCrewXP,
+ WoTPlusBonusType.EXCLUDED_MAP: ExcludedMap,
+ WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: FreeEquipmentDemounting,
+ WoTPlusBonusType.EXCLUSIVE_VEHICLE: WoTPlusExclusiveVehicle}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
@@ -2791,14 +2920,14 @@ def getVehicleCrewReward(vehiclesReward):
         return tmenBonus
 
 
-def getDynamicOfferTokens():
-    battleMatters = dependency.instance(IBattleMattersController)
-    return (battleMatters.getDelayedRewardToken(),)
+@dependency.replace_none_kwargs(bmController=IBattleMattersController, winbackController=IWinbackController)
+def isDynamicOfferToken(bonusID, bmController=None, winbackController=None):
+    return bonusID == bmController.getDelayedRewardToken() or winbackController.isWinbackOfferToken(bonusID)
 
 
 def _isSelectableBonusID(bonusID):
     offers = dependency.instance(IOffersDataProvider)
-    isSelectableBonus = any((bonusID.startswith(prefix) for prefix in FEATURE_TO_PREFIX.itervalues())) or bonusID in getDynamicOfferTokens()
+    isSelectableBonus = any((bonusID.startswith(prefix) for prefix in FEATURE_TO_PREFIX.itervalues())) or isDynamicOfferToken(bonusID)
     if isSelectableBonus and offers.getOfferByToken(bonusID) is None:
         _logger.debug('Offer token %s has no offer', bonusID)
     return isSelectableBonus

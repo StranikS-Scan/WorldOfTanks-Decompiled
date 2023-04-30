@@ -7,6 +7,7 @@ import GUI
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, INVALID_MARKER_ID
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
+from gui.Scaleform.daapi.view.battle.shared.map_zones.markers2d import MapZonesPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
@@ -215,6 +216,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         else:
             setup['vehicles'] = vehicle_plugins.VehicleMarkerPlugin
         setup['settings'] = plugins.SettingsPlugin
+        setup['map_zones'] = MapZonesPlugin
         return setup
 
     def __addCanvas(self, sessionProvider, arenaVisitor):

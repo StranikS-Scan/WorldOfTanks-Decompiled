@@ -41,16 +41,10 @@ class FetchResult(object):
         return self.isProcessed and self.products
 
     def reset(self):
-        self.status = ResponseStatus.UNDEFINED
-        for product in self.products:
-            product.destroy()
-
-        self.products = []
-        self.__timerTTL = None
-        return
+        self.stop()
 
     def stop(self):
-        self.__clearTimeoutBwCbId()
+        self._clearTimeoutBwCbId()
         self.status = ResponseStatus.UNDEFINED
         for product in self.products:
             product.destroy()
@@ -74,9 +68,11 @@ class FetchResult(object):
         return self.status == status
 
     def __onTTLTimer(self):
+        self.__timerTTL = None
         self.reset()
+        return
 
-    def __clearTimeoutBwCbId(self):
+    def _clearTimeoutBwCbId(self):
         if self.__timerTTL is not None:
             BigWorld.cancelCallback(self.__timerTTL)
         self.__timerTTL = None

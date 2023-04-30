@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/cgf_script/component_meta_class.py
 import sys
 import CGF
+import inspect
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class CGFMetaTypes(object):
@@ -85,69 +86,53 @@ class ComponentProperty(object):
         pass
 
 
-messages = []
+def defaultRegistrator(cls):
+    global g_propertyIndex
+    name = cls.__name__
+    meta = []
+    all_meta = []
+    bases = cls.__mro__
+    attrs = vars(cls)
+    basePropIndex = 0
+    for base in bases:
+        baseMeta = getattr(base, '__meta', None)
+        if baseMeta is not None:
+            basePropIndex += len(baseMeta)
+            all_meta.extend(baseMeta)
 
-class CGFMetaClass(type):
+    for key, value in attrs.iteritems():
+        if isinstance(value, ComponentProperty):
+            setattr(cls, key, None)
+            value.name = key
+            value.ownerName = name
+            value.applyIndex(basePropIndex)
+            meta.append(value)
 
-    def __new__(metacls, name, bases, attrs):
-        global g_propertyIndex
-        messages.append('InitMetaclass {0}'.format(name))
-        cls = type.__new__(metacls, name, bases, attrs)
-        if name == 'CGFComponent':
-            CGF.registerBaseComponent(cls)
-            return cls
-        elif name == 'Rule':
-            return cls
-        else:
-            meta = []
-            allMeta = []
-            basePropIndex = 0
-            for base in bases:
-                baseMeta = getattr(base, '__meta', None)
-                if baseMeta is not None:
-                    basePropIndex += len(baseMeta)
-                    allMeta.extend(baseMeta)
-
-            for key, value in attrs.items():
-                if isinstance(value, ComponentProperty):
-                    setattr(cls, key, None)
-                    value.name = key
-                    value.ownerName = name
-                    value.applyIndex(basePropIndex)
-                    meta.append(value)
-
-            allMeta.extend(meta)
-            setattr(cls, '__meta', allMeta)
-            category = getattr(cls, 'category', 'Python')
-            editorTitle = getattr(cls, 'editorTitle', name)
-            modulePath = getattr(cls, 'modulePath', None)
-            version = getattr(cls, 'version', 1)
-            userVisible = getattr(cls, 'userVisible', True)
-            vseVisible = getattr(cls, 'vseVisible', True)
-            if modulePath is None:
-                modulePath = sys.modules[cls.__module__].__file__ if cls.__module__ != '__builtin__' else '__builtin__'
-            CGF.registerComponent(cls, modulePath, name, editorTitle, userVisible, vseVisible, category, version)
-            g_propertyIndex = 0
-            return cls
-
-    def __call__(cls, *args, **kwds):
-        component = cls.__new__(cls, *args, **kwds)
-        for key, value in kwds.items():
-            component.__setattr__(key, value)
-
-        try:
-            component.__init__(*args)
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-        return component
+    all_meta.extend(meta)
+    setattr(cls, '__meta', all_meta)
+    category = getattr(cls, 'category', 'Python')
+    editor_title = getattr(cls, 'editorTitle', name)
+    module_path = getattr(cls, 'modulePath', None)
+    version = getattr(cls, 'version', 1)
+    user_visible = getattr(cls, 'userVisible', True)
+    vse_visible = getattr(cls, 'vseVisible', True)
+    domain = getattr(cls, 'domain', CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
+    if module_path is None:
+        module_path = sys.modules[cls.__module__].__file__ if cls.__module__ != '__builtin__' else '__builtin__'
+    CGF.registerComponent(cls, module_path, name, editor_title, user_visible, vse_visible, domain, category, version)
+    g_propertyIndex = 0
+    return cls
 
 
-class CGFComponent(object):
-    __metaclass__ = CGFMetaClass
+def registerComponent(cls):
+    setattr(cls, CGF.CGF_COMPONENT_MARKER, None)
+    return defaultRegistrator(cls)
 
-    def __init__(self):
-        super(CGFComponent, self).__init__()
+
+def registerReplicableComponent(cls):
+    setattr(cls, CGF.CGF_REPLICABLE_COMPONENT_MARKER, None)
+    setattr(cls, 'domain', CGF.DomainOption.DomainAll | CGF.DomainOption.LockDomain)
+    return defaultRegistrator(cls)
 
 
 class CGFConverterMetaClass(type):

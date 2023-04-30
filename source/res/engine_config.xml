@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -87,6 +87,7 @@
       <frames>	6	</frames>
     </lod>
     <dynamicShadows>	false	</dynamicShadows>
+    <dynamicShadowsInHangar>	true	</dynamicShadowsInHangar>
   </animation>
   <screenShot>
     <extension>	jpg	</extension>
@@ -198,8 +199,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
-    <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
+    <clientUrl>	http://cat.lstprod.net	</clientUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
@@ -478,6 +478,12 @@
         <bank>
           <name>	tournaments.bnk	</name>
         </bank>
+        <bank>
+          <name>	achievements.bnk	</name>
+        </bank>
+        <bank>
+          <name>	armory_yard.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -565,6 +571,12 @@
         </bank>
         <bank>
           <name>	rocket_accelerator.pck	</name>
+        </bank>
+        <bank>
+          <name>	flamethrower.bnk	</name>
+        </bank>
+        <bank>
+          <name>	flamethrower.pck	</name>
         </bank>
         <bank>
           <name>	style_monster.bnk	</name>

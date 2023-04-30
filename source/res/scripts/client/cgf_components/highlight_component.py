@@ -3,15 +3,18 @@
 import BigWorld
 import CGF
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from GenericComponents import DynamicModelComponent
 from hover_component import IsHovered
 
-class IsHighlighted(CGFComponent):
-    pass
+@registerComponent
+class IsHighlighted(object):
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
 
 
-class HighlightComponent(CGFComponent):
+@registerComponent
+class HighlightComponent(object):
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Highlight'
     category = 'Common'
     color = ComponentProperty(type=CGFMetaTypes.VECTOR4, editorName='Color', value=(0, 0, 0, 1))

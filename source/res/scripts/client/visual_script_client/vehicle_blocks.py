@@ -9,6 +9,11 @@ from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
+from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
+from constants import IS_VS_EDITOR
+if not IS_VS_EDITOR:
+    from helpers import dependency, isPlayerAccount
+    from skeletons.gui.shared import IItemsCache
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -139,6 +144,119 @@ class IsVehicleBurning(Block, VehicleMeta):
         return [ASPECT.CLIENT]
 
 
+class NoCrewCritical(NoCrewCriticalBase):
+
+    def _execute(self):
+        self._outSlot.setValue(True)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class NoInnerDeviceDamaged(NoInnerDeviceDamagedBase):
+
+    def _execute(self):
+        self._outSlot.setValue(True)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class OptionalDevices(OptionalDevicesBase):
+
+    def _execute(self):
+        self._outSlot.setValue([])
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class GetTankOptDevicesHPMod(GetTankOptDevicesHPModBase):
+
+    def _execute(self):
+        self._outSlot.setValue(1.0)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class VehicleClass(VehicleClassBase):
+
+    def _execute(self):
+        if isPlayerAccount():
+            from CurrentVehicle import g_currentVehicle
+            itemsCache = dependency.instance(IItemsCache)
+            vehicle = self._vehicle.getValue()
+            vehId = vehicle.vehicleID
+            if g_currentVehicle.item and g_currentVehicle.item.descriptor.type.compactDescr == vehId:
+                vehicle = g_currentVehicle.item
+            else:
+                vehicle = itemsCache.items.getItemByCD(vehId)
+            self._outSlot.setValue(next(iter(vehicle.type)))
+        else:
+            self._outSlot.setValue('')
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class GunTypeInfo(GunTypeInfoBase):
+
+    def _execute(self):
+        self._outSlot.setValue([])
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class VehicleForwardSpeed(VehicleForwardSpeedBase):
+
+    def _execute(self):
+        self._outSlot.setValue(0.0)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class VehicleCooldownEquipment(VehicleCooldownEquipmentBase):
+
+    def _execute(self):
+        if isPlayerAccount():
+            from CurrentVehicle import g_currentVehicle
+            itemsCache = dependency.instance(IItemsCache)
+            vehicle = self._vehicle.getValue()
+            vehIntId = vehicle.vehicleID
+            if g_currentVehicle.item and g_currentVehicle.item.descriptor.type.compactDescr == vehIntId:
+                vehicle = g_currentVehicle.item
+            else:
+                vehicle = itemsCache.items.getItemByCD(vehIntId)
+            eqs = vehicle.getCooldownEquipment()
+            self._outSlot.setValue(eqs)
+        else:
+            self._outSlot.setValue([])
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class VehicleClipFullAndReady(VehicleClipFullAndReadyBase):
+
+    def _execute(self):
+        self._outSlot.setValue(True)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
 class GetNearestAliveVehicle(Block, VehicleMeta):
     _settingTypes = ['Ally', 'Enemy', 'Any']
 
@@ -238,3 +356,23 @@ class GameObjectToVehicle(Block, VehicleMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
+
+
+class IsInHangar(IsInHangarBase):
+
+    def _execute(self):
+        self._outSlot.setValue(isPlayerAccount())
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class VehicleRadioDistance(VehicleRadioDistanceBase):
+
+    def _execute(self):
+        self._outSlot.setValue(256.0)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]

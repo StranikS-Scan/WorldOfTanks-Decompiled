@@ -3,20 +3,24 @@
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.mapbox.pre_queue.vehicles_watcher import MapboxVehiclesWatcher
+from gui.prb_control.entities.mapbox.scheduler import MapboxScheduler
+from gui.prb_control.entities.mapbox.squad.action_handler import MapboxSquadActionsHandler
+from gui.prb_control.entities.mapbox.squad.actions_validator import MapboxSquadActionsValidator
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.prb_control.entities.mapbox.squad.actions_validator import MapboxSquadActionsValidator
-from gui.prb_control.entities.mapbox.squad.action_handler import MapboxSquadActionsHandler
-from gui.prb_control.entities.mapbox.scheduler import MapboxScheduler
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IMapboxController
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 
 class MapboxSquadEntryPoint(SquadEntryPoint):
 
@@ -54,6 +58,7 @@ class MapboxSquadEntity(SquadEntity):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.__eventsCache.onSyncCompleted += self._onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
+        g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.__watcher = MapboxVehiclesWatcher()
         self.__watcher.start()
         return mapboxSquadEntity
@@ -67,6 +72,7 @@ class MapboxSquadEntity(SquadEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
+        g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self.invalidateVehicleStates()
         self.__restrictedSPGDataProvider.fini()
         self.__restrictedScoutDataProvider.fini()
@@ -152,3 +158,11 @@ class MapboxSquadEntity(SquadEntity):
         self.invalidateVehicleStates()
         if accountDBID != account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()
+
+    def __onVehicleClientStateChanged(self, _):
+        if self.getPlayerInfo().isReady:
+            vInfo = first(self.getVehiclesInfo())
+            vehicle = vInfo.getVehicle()
+            if vehicle and vehicle.getCustomState() in Vehicle.VEHICLE_STATE.UNSUITABLE:
+                self.resetPlayerState()
+        g_eventDispatcher.updateUI()

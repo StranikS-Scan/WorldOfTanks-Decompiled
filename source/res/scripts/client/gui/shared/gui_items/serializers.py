@@ -30,10 +30,9 @@ def packTankmanSkill(skill, isPermanent=False):
      'icon': {'big': skill.bigIconPath,
               'small': skill.smallIconPath,
               'role': roleIconPath},
-     'isActive': skill.isActive,
+     'isActive': True,
      'isEnable': skill.isEnable,
      'roleType': skill.roleType,
-     'isPerk': skill.isPerk,
      'isPermanent': isPermanent}
 
 

@@ -310,7 +310,7 @@ def getCrewComment(skill, crewLevel, role, forOne):
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORONE
     else:
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORALL
-    return _ms(key=tKey, level=crewLevel, role=_ms(TOOLTIPS.crewRole(role)) if role != '' else None, skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISPERK if skill.isPerk else TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
+    return _ms(key=tKey, level=crewLevel, role=_ms(TOOLTIPS.crewRole(role)) if role != '' else None, skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
 
 
 def _isSabatonBrotherhood(skill):

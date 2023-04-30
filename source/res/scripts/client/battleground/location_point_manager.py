@@ -122,6 +122,16 @@ class LocationPointManager(CallbackDelayer):
             for area in locPointData.areas:
                 area.setGUIVisible(visible)
 
+    def getRepliablePoints(self, currPlayerID):
+        result = []
+        for point in self.__markedAreas.itervalues():
+            commandName = _ACTIONS.battleChatCommandFromActionID(point.commandID).name
+            if point.creatorID == currPlayerID and commandName == BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION:
+                continue
+            result.append(point)
+
+        return result
+
     def __onPrereqsLoaded(self, resourceRefs):
         for chatCmd, params in self.__visualisationData.iteritems():
             if params['visual'] not in resourceRefs.failedIDs:

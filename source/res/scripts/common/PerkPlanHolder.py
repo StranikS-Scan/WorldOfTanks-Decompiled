@@ -1,217 +1,148 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/PerkPlanHolder.py
-import BigWorld
-import VSE
-from copy import copy
-from itertools import izip
 from collections import defaultdict
-from VSPlanEvents import SetPlanInitData, PLATOON_VS_PLAN_SIMPLE_EVENT
-from constants import IS_CELLAPP
-from debug_utils import LOG_ERROR
-from items import perks
-from visual_script.misc import ASPECT
-
-class VsePlan(object):
-    _PLAN_PATH = 'vscript/plans/{}.xml'
-    _PLAN_STARTED_EVENT = 'planStarted'
-    _PLAN_ID_PREFIX = 'abilityPerks/perk_'
-
-    def __init__(self, owner, scopeId, level, perkId):
-        self._owner = owner
-        self.scopeId = scopeId
-        self.perkId = perkId
-        self._level = level
-        self._planId = self._PLAN_ID_PREFIX + str(self.perkId)
-        self._isPlanLoaded = False
-        self._isPlanReady = False
-        self._isAutoStart = False
-        self._plan = None
-        return
-
-    def loadPlan(self, isAutoStart=False):
-        self._isAutoStart = isAutoStart
-        self._isPlanLoaded = False
-        self._plan = VSE.Plan()
-        valid, message = perks.g_cache.perks().validatePerk(self.perkId)
-        if not valid:
-            LOG_ERROR(message)
-            return
-        if IS_CELLAPP:
-            future = BigWorld.resMgr.fetchDataSection(self._PLAN_PATH.format(self._planId))
-            future.then(self._onPlanPreLoaded)
-        else:
-            self._onPlanPreLoaded()
-
-    def setInputParam(self, paramName, paramValue):
-        self._plan.setOptionalInputParam(paramName, paramValue)
-
-    def _onPlanPreLoaded(self, future=None):
-        try:
-            if IS_CELLAPP:
-                future.get()
-            self._isPlanLoaded = self._plan.load(self._planId, (ASPECT.SERVER, ASPECT.CLIENT))
-            if self._isAutoStart:
-                self.start()
-        except BigWorld.FutureNotReady:
-            LOG_ERROR("Plan xml '%s' not pre-loaded." % self._planId)
-
-    def start(self):
-        if self._plan is not None:
-            if not self._isPlanLoaded:
-                self._isAutoStart = True
-                return
-            self._plan.subscribe(self._PLAN_STARTED_EVENT, SetPlanInitData(self._owner.id, self.scopeId, self.perkId, self._level), self._onStartEvent)
-            self._plan.start()
-        else:
-            LOG_ERROR("Plan '%s' not created before start" % self._planId)
-        return
-
-    def restart(self):
-        self.triggerVSPlanEvent(SetPlanInitData(self._owner.id, self.scopeId, self.perkId, self._level))
-
-    def triggerVSPlanEvent(self, event):
-        if isinstance(event, str):
-            self._plan.triggerEvent(event)
-        else:
-            for key, value in izip(event._fields, event):
-                self.setInputParam(key, value)
-
-            self._plan.triggerEvent(event.__class__.__name__)
-
-    def destroy(self):
-        self._plan.stop()
-        self._plan = None
-        self._isPlanLoaded = False
-        self._isPlanReady = False
-        self._isAutoStart = False
-        return
-
-    def _onStartEvent(self, event):
-        self._isPlanReady = True
-        self.triggerVSPlanEvent(event)
-
-    @property
-    def isReady(self):
-        return self._isPlanReady
-
-
-class ImmediateVsePlan(VsePlan):
-
-    def __init__(self, owner, scopeId, level, perkId, callback):
-        super(ImmediateVsePlan, self).__init__(owner, scopeId, level, perkId)
-        self.__onStartCallback = callback
-
-    def _onStartEvent(self, event):
-        super(ImmediateVsePlan, self)._onStartEvent(event)
-        self.__onStartCallback(self.scopeId, self.perkId)
-
+from constants import IS_CELLAPP, IS_BASEAPP
+from typing import TYPE_CHECKING, List, Optional
+from wg_async import wg_async, wg_await, distributeLoopOverTicks
+from perks.PerksLoadStrategy import getLoadStarategy, LoadType, LoadState
+from perks.vse_plan import VsePlan
+if IS_CELLAPP or IS_BASEAPP:
+    from server_constants import VEHICLE_STATUS
+if TYPE_CHECKING:
+    from Vehicle import Vehicle
 
 class PCPlanHolder(object):
 
-    def __init__(self, scopedPerks):
+    def __init__(self, scopedPerks, owner, loadType):
         self._plans = []
+        self._owner = owner
         self._scopedPerks = scopedPerks
-
-    def start(self):
-        for plan in self._plans:
-            plan.start()
-
-    def destroy(self):
-        self._clean()
-        self._scopedPerks = None
+        self._isReadyForEvent = False
+        self._contextEventsScheme = None
+        self._delayedEvents = []
+        self._loader = getLoadStarategy(loadType)(self._plans, self._scopedPerks, self._owner, self._onPlanReady)
         return
 
-    def loadPlan(self, owner, isAutoStart=False):
-        for scopeId in range(len(self._scopedPerks)):
-            for perkId, level in self._scopedPerks[scopeId]:
-                plan = VsePlan(owner, scopeId, level, perkId)
-                plan.loadPlan(isAutoStart)
-                self._plans.append(plan)
+    def start(self):
+        if self._loader:
+            self._loader.start()
 
-    def setInputParam(self, paramName, paramValue):
-        for plan in self._plans:
-            plan.setInputParam(paramName, paramValue)
+    def beforeBattleStart(self):
+        if self._loader:
+            self._loader.beforeBattleStart()
+
+    def destroy(self):
+        self.clean()
+        self._owner = None
+        self._scopedPerks = None
+        self._contextEventsScheme = None
+        self._loader = None
+        return
+
+    def setScopedPerks(self, scopedPerks):
+        self._scopedPerks = scopedPerks
+
+    def loadPlans(self):
+        self._loader.load()
+
+    def loadPlan(self, owner, loadScopeID, loadPerkID, isAutostart=False):
+        scope, creator = self._scopedPerks[loadScopeID]
+        for perkID, (level, args) in scope:
+            if perkID != loadPerkID:
+                continue
+            plan = VsePlan(owner, loadScopeID, level, loadPerkID, self._onPlanReady, args)
+            self._setReady(False)
+            plan.load(creator, isAutostart)
+            self._plans.append(plan)
+            break
 
     def triggerVSPlanEvent(self, event):
-        if not self.isPlansReady:
+        if not self._isReadyForEvent:
+            if self._loader and self._loader.state in LoadState.STATUS_LOADED:
+                self._delayedEvents.append(event)
             return
-        for plan in self._plans:
+        if not self._contextEventsScheme:
+            return
+        if IS_CELLAPP or IS_BASEAPP:
+            serverActiveStatuses = (VEHICLE_STATUS.FIGHTING, VEHICLE_STATUS.BEFORE_ARENA)
+            if self._owner.status not in serverActiveStatuses:
+                return
+        if isinstance(event, str):
+            eventName = event
+        elif isinstance(event, tuple) and hasattr(event, '_fields'):
+            eventName = event.__class__.__name__
+        else:
+            return
+        plans = []
+        if eventName in self._contextEventsScheme:
+            plans = self._contextEventsScheme[eventName]
+        for plan in plans:
             plan.triggerVSPlanEvent(event)
 
-    def reload(self, owner, scopedPerks):
-        self._clean()
-        self._plans = []
+    def reload(self, scopedPerks):
+        self._forceClean()
         self._scopedPerks = scopedPerks
-        self.loadPlan(owner, True)
+        self._loader = getLoadStarategy(LoadType.AUTO_START)(self._plans, self._scopedPerks, self._owner, self._onPlanReady)
+        self._loader.load()
 
-    def _clean(self):
+    @wg_async
+    def clean(self):
+
+        def asyncLoop():
+            for plan in self._plans:
+                yield plan.destroy()
+
+        yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='clean'))
+        del self._plans[:]
+
+    def unloadPlan(self, perkID):
+        for index, plan in enumerate(self._plans):
+            if plan.perkId == perkID:
+                plan.destroy()
+                del self._plans[index]
+                break
+
+    def _getContextEventsScheme(self):
+        events = defaultdict(list)
+        for plan in self._plans:
+            for usedEvent in plan.usedEvents:
+                events[usedEvent].append(plan)
+
+        return events
+
+    def getPlan(self, scopeID, perkID):
+        for plan in self._plans:
+            if plan.perkId == perkID and plan.scopeId == scopeID:
+                return plan
+
+        return None
+
+    def _setReady(self, ready=True):
+        self._isReadyForEvent = ready
+        if ready:
+            self._setContextEventsScheme()
+
+    def _forceClean(self):
         for plan in self._plans:
             plan.destroy()
 
         del self._plans[:]
 
-    @property
-    def isPlansReady(self):
-        for value in self._plans:
-            if not value.isReady:
-                return False
+    def _setContextEventsScheme(self):
+        self._contextEventsScheme = self._getContextEventsScheme()
 
-        return True
-
-
-class RestartingMultiPlan(PCPlanHolder):
-
-    def __init__(self, scopedPerks, callback):
-        super(RestartingMultiPlan, self).__init__(scopedPerks)
-        self._scheduledPlans = defaultdict(list)
-        self._onStartedCallback = callback
-
-    def destroy(self):
-        self._onStartedCallback = None
-        super(RestartingMultiPlan, self).destroy()
+    def _onPlanReady(self):
+        if self._checkIsAllPlansReady():
+            self._setReady()
+            self._loader = None
+            self._sendDelayedEvents()
         return
 
-    def start(self):
-        for plan in self._plans:
-            plan.start()
+    def _sendDelayedEvents(self):
+        for event in self._delayedEvents:
+            self.triggerVSPlanEvent(event)
 
-    def loadPlan(self, owner, isAutoStart=False):
-        self.__schedulePlans()
-        for scopeId in range(len(self._scopedPerks)):
-            for perkId, level in self._scopedPerks[scopeId]:
-                plan = ImmediateVsePlan(owner, scopeId, level, perkId, self.__onPlanStarted)
-                plan.loadPlan(isAutoStart)
-                self._plans.append(plan)
+        del self._delayedEvents[:]
 
-    def allPerksDone(self):
-        return not self._scheduledPlans
-
-    def reloadPlans(self):
-        for plan in self._plans:
-            plan.restart()
-
-    def restorePlans(self, ignoredPerks):
-        ignored = copy(ignoredPerks)
-        for plan in self._plans:
-            if plan.perkId in ignored:
-                plan.restart()
-
-    def deactivatePerk(self, perkName):
-        for plan in self._plans:
-            if plan.perkId == perkName:
-                plan.triggerVSPlanEvent(PLATOON_VS_PLAN_SIMPLE_EVENT.CLIENT_DEACTIVATION_EVENT)
-
-    def __schedulePlans(self):
-        self._scheduledPlans = defaultdict(list)
-        for scopeId in range(len(self._scopedPerks)):
-            for perkId, _ in self._scopedPerks[scopeId]:
-                self._scheduledPlans[scopeId].append(perkId)
-
-    def __onPlanStarted(self, scopeID, perkID):
-        if scopeID not in self._scheduledPlans or perkID not in self._scheduledPlans[scopeID]:
-            return
-        self._scheduledPlans[scopeID].remove(perkID)
-        if not self._scheduledPlans[scopeID]:
-            self._scheduledPlans.pop(scopeID)
-        if self.allPerksDone():
-            self._onStartedCallback()
+    def _checkIsAllPlansReady(self):
+        return all((plan.isPlanStarted for plan in self._plans))

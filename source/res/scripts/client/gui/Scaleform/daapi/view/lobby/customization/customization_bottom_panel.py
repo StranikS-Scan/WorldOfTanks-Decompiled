@@ -139,6 +139,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def onEditItem(self, intCD):
         self.__ctx.editStyle(intCD, source=CustomizationModeSource.CAROUSEL)
+        self.__updatePopoverBtnIcon()
 
     def onItemIsNewAnimationShown(self, intCD):
         visitedSet = AccountSettings.getSettings(CUSTOMIZATION_STYLE_ITEMS_VISITED)
@@ -235,11 +236,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         tabsCounters = []
         visibleTabs = self.getVisibleTabs()
         season = self.__ctx.season
-        itemFilter = None
         if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE:
             itemFilter = self.__ctx.mode.style.isItemInstallable
         else:
-            itemFilter = lambda item: not item.isStyleOnly
+            itemFilter = lambda item: self.__filterAvailableStyles(item, vehicle)
         for tabId in visibleTabs:
             tabItemTypes = CustomizationTabs.ITEM_TYPES[tabId]
             tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=tabItemTypes, season=season, itemFilter=itemFilter))
@@ -253,7 +253,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             switchersCounter += getEditableStylesExtraNotificationCounter(styles)
         self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
          'switchersCounter': switchersCounter})
-        return
+
+    @staticmethod
+    def __filterAvailableStyles(item, vehicle):
+        return False if item.isStyleOnly else item.inventoryCount or item.installedCount(vehicle.intCD)
 
     def __resetTabs(self):
         self.as_setBottomPanelTabsDataS({'tabsDP': [],
@@ -553,12 +556,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
         else:
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
-        if self.__ctx.season == SeasonType.WINTER:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
-        elif self.__ctx.season == SeasonType.SUMMER:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
-        elif self.__ctx.season == SeasonType.DESERT:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
+            if self.__ctx.season == SeasonType.WINTER:
+                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
+            elif self.__ctx.season == SeasonType.SUMMER:
+                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
         if self.__ctx.modeId == CustomizationModes.STYLED:
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
         else:

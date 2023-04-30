@@ -4,6 +4,9 @@ import logging
 import typing
 import constants
 from adisp import adisp_async, adisp_process
+from collections_common import g_collectionsRelatedItems
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.dog_tag_composer import dogTagComposer
 from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
@@ -14,18 +17,16 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
-from gui.server_events.awards_formatters import TOKEN_SIZES, BATTLE_BONUS_X5_TOKEN, ItemsBonusFormatter, TokenBonusFormatter, formatCountLabel, AWARDS_SIZES
-from gui.server_events.formatters import COMPLEX_TOKEN, parseComplexToken, TokenComplex
+from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel
+from gui.server_events.formatters import COMPLEX_TOKEN, TokenComplex, parseComplexToken
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from helpers import i18n, dependency
+from helpers import dependency, i18n, time_utils
+from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.server_events import IEventsCache
-from helpers import time_utils
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
@@ -35,7 +36,7 @@ if typing.TYPE_CHECKING:
     from typing import Dict, List, Callable
     from frameworks.wulf.view.array import Array
     from gui.goodies.goodie_items import BoosterUICommon, RecertificationForm
-    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus
+    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus
     from gui.shared.gui_items.fitting_item import FittingItem
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -44,6 +45,7 @@ def getDefaultBonusPackersMap():
     simpleBonusPacker = SimpleBonusUIPacker()
     tokenBonusPacker = TokenBonusUIPacker()
     blueprintBonusPacker = BlueprintBonusUIPacker()
+    wotPlusBonusPacker = WoTPlusBonusPacker()
     return {'battlePassPoints': BattlePassPointsBonusPacker(),
      'battleToken': tokenBonusPacker,
      'berths': simpleBonusPacker,
@@ -78,7 +80,13 @@ def getDefaultBonusPackersMap():
      Currency.GOLD: simpleBonusPacker,
      Currency.BPCOIN: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.BASIC: simpleBonusPacker,
-     constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker}
+     constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker,
+     'currencies': CurrenciesBonusUIPacker,
+     constants.WoTPlusBonusType.GOLD_BANK: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.IDLE_CREW_XP: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.EXCLUDED_MAP: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker}
 
 
 def getLocalizedBonusName(name):
@@ -92,6 +100,7 @@ def getLocalizedBonusName(name):
 
 
 class BaseBonusUIPacker(object):
+    __collections = dependency.descriptor(ICollectionsSystemController)
 
     @classmethod
     def pack(cls, bonus):
@@ -131,6 +140,10 @@ class BaseBonusUIPacker(object):
     @classmethod
     def _getContentId(cls, bonus):
         return [BACKPORT_TOOLTIP_CONTENT_ID]
+
+    @classmethod
+    def _isCollectionItem(cls, collectionItemID):
+        return cls.__collections.isEnabled() and collectionItemID in g_collectionsRelatedItems.items
 
 
 class SimpleBonusUIPacker(BaseBonusUIPacker):
@@ -581,7 +594,7 @@ class DossierBonusUIPacker(BaseBonusUIPacker):
         return result
 
     @classmethod
-    def _packSingleBonus(cls, bonus, dossierIconName, dossierNamePostfix, dossierValue, dossierLabel):
+    def _packSingleBonus(cls, bonus, dossierIconName, dossierNamePostfix, dossierValue, dossierLabel, recordName=None):
         model = IconBonusModel()
         model.setName(bonus.getName() + dossierNamePostfix)
         model.setIsCompensation(bonus.isCompensation())
@@ -822,6 +835,28 @@ class BattlePassPointsBonusPacker(SimpleBonusUIPacker):
         return [TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS, specialArgs=[])]
 
 
+class CurrenciesBonusUIPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        label = getLocalizedBonusName(bonus.getCode())
+        return [cls._packSingleBonus(bonus, label if label else '')]
+
+    @classmethod
+    def _packCommon(cls, bonus, model):
+        model.setName(bonus.getCode())
+        model.setIsCompensation(bonus.isCompensation())
+        return model
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        model.setValue(str(bonus.getValue()))
+        model.setLabel(label)
+        return model
+
+
 class BonusUIPacker(object):
 
     def __init__(self, packers=None):
@@ -881,6 +916,21 @@ class AsyncBonusUIPacker(BonusUIPacker):
             callback(self.getToolTip(bonus))
 
 
+class WoTPlusBonusPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _getBonusModel(cls):
+        return IconBonusModel()
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = cls._getBonusModel()
+        model.setName(bonus.getName())
+        model.setLabel(label)
+        model.setIcon(bonus.getIcon())
+        return model
+
+
 def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
@@ -897,6 +947,8 @@ def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=
                 bonusTooltipList = packer.getToolTip(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
+                if hasattr(item, 'setTooltipId'):
+                    item.setTooltipId(str(bonusIndexTotal))
                 model.addViewModel(item)
                 if tooltipData is not None:
                     tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]

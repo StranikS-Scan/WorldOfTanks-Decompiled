@@ -2,9 +2,11 @@
 # Embedded file name: comp7/scripts/client/TeamInfoComp7Component.py
 import typing
 import VOIP
+from constants import REQUEST_COOLDOWN
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from script_component.ScriptComponent import ScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
@@ -12,6 +14,10 @@ if typing.TYPE_CHECKING:
 
 class TeamInfoComp7Component(ScriptComponent):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        super(TeamInfoComp7Component, self).__init__()
+        self.__callbackDelayer = CallbackDelayer()
 
     def onEnterWorld(self, *args):
         super(TeamInfoComp7Component, self).onEnterWorld(*args)
@@ -24,6 +30,7 @@ class TeamInfoComp7Component(ScriptComponent):
         voipManager = VOIP.getVOIPManager()
         voipManager.onJoinedChannel -= self.__onJoinedVoipChannel
         voipManager.onLeftChannel -= self.__onLeftVoipChannel
+        self.__callbackDelayer.clearCallbacks()
         super(TeamInfoComp7Component, self).onLeaveWorld()
 
     def set_roleSkillLevels(self, prev):
@@ -67,5 +74,7 @@ class TeamInfoComp7Component(ScriptComponent):
             voipManager.enableCurrentChannel(isEnabled=True)
 
     def __updateVivoxPresence(self):
-        voipManager = VOIP.getVOIPManager()
-        self.cell.setVivoxPresence(voipManager.isCurrentChannelEnabled())
+        isVoipEnabled = VOIP.getVOIPManager().isCurrentChannelEnabled()
+        if self.teamVivoxChannel.get(avatar_getter.getPlayerVehicleID(), False) != isVoipEnabled:
+            self.cell.setVivoxPresence(isVoipEnabled)
+            self.__callbackDelayer.delayCallback(REQUEST_COOLDOWN.SET_VIVOX_PRESENCE + 1.0, self.__updateVivoxPresence)

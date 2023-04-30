@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
+from typing import Optional
 import re
 import calendar
 import datetime

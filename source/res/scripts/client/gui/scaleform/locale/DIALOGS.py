@@ -130,12 +130,9 @@ class DIALOGS(object):
     BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
-    XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
-    XPTOTMENCHECKBOX_MESSAGE = '#dialogs:xpToTmenCheckbox/message'
-    XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
-    XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
     IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
-    IDLECREWBONUS_MESSAGE_REMOVE = '#dialogs:idleCrewBonus/message/remove'
+    IDLECREWBONUS_MESSAGE_REMOVETYPE = '#dialogs:idleCrewBonus/message/removeType'
+    IDLECREWBONUS_MESSAGE_REMOVENAME = '#dialogs:idleCrewBonus/message/removeName'
     IDLECREWBONUS_MESSAGE_CREWWARNING = '#dialogs:idleCrewBonus/message/crewWarning'
     IDLECREWBONUS_MESSAGE_CREWINCOMPLETE = '#dialogs:idleCrewBonus/message/crewIncomplete'
     IDLECREWBONUS_MESSAGE_CREWUNSUITABLE = '#dialogs:idleCrewBonus/message/crewUnsuitable'
@@ -180,6 +177,7 @@ class DIALOGS(object):
     REPLACEPASSPORTCONFIRMATION_MESSAGE = '#dialogs:replacePassportConfirmation/message'
     REPLACEPASSPORTCONFIRMATION_SUBMIT = '#dialogs:replacePassportConfirmation/submit'
     REPLACEPASSPORTCONFIRMATION_CANCEL = '#dialogs:replacePassportConfirmation/cancel'
+    BUYSLOT_HANGARSLOT_HEADER = '#dialogs:buySlot/hangarSlot/header'
     BUYSLOTSHOPCONFIRMATION_TITLE = '#dialogs:buySlotShopConfirmation/title'
     BUYSLOTSHOPCONFIRMATION_MESSAGECOMBINE = '#dialogs:buySlotShopConfirmation/messageCombine'
     BUYSLOTSHOPCONFIRMATION_SUBMIT = '#dialogs:buySlotShopConfirmation/submit'
@@ -238,10 +236,14 @@ class DIALOGS(object):
     RECRUITWINDOW_SUBMIT = '#dialogs:recruitWindow/submit'
     RECRUITWINDOW_CANCEL = '#dialogs:recruitWindow/cancel'
     RECRUITWINDOW_NATIONS_NO_VEHICLE = '#dialogs:recruitWindow/nations/no_vehicle'
-    BUYSLOTNOTENOUGHCREDITS_TITLE = '#dialogs:buySlotNotEnoughCredits/title'
-    BUYSLOTNOTENOUGHCREDITS_MESSAGE = '#dialogs:buySlotNotEnoughCredits/message'
-    BUYSLOTNOTENOUGHCREDITS_SUBMIT = '#dialogs:buySlotNotEnoughCredits/submit'
-    BUYSLOTNOTENOUGHCREDITS_CANCEL = '#dialogs:buySlotNotEnoughCredits/cancel'
+    BUYSLOTNOTENOUGH_CREDITS_TITLE = '#dialogs:buySlotNotEnough/credits/title'
+    BUYSLOTNOTENOUGH_CREDITS_MESSAGE = '#dialogs:buySlotNotEnough/credits/message'
+    BUYSLOTNOTENOUGH_CREDITS_SUBMIT = '#dialogs:buySlotNotEnough/credits/submit'
+    BUYSLOTNOTENOUGH_CREDITS_CANCEL = '#dialogs:buySlotNotEnough/credits/cancel'
+    BUYSLOTNOTENOUGH_GOLD_TITLE = '#dialogs:buySlotNotEnough/gold/title'
+    BUYSLOTNOTENOUGH_GOLD_MESSAGE = '#dialogs:buySlotNotEnough/gold/message'
+    BUYSLOTNOTENOUGH_GOLD_SUBMIT = '#dialogs:buySlotNotEnough/gold/submit'
+    BUYSLOTNOTENOUGH_GOLD_CANCEL = '#dialogs:buySlotNotEnough/gold/cancel'
     BUYVEHICLEWINDOW_TITLE = '#dialogs:buyVehicleWindow/title'
     BUYVEHICLEWINDOW_TRADEIN_TITLE = '#dialogs:buyVehicleWindow/tradein/title'
     BUYVEHICLEWINDOW_TRADEIN_PRICELABEL = '#dialogs:buyVehicleWindow/tradein/priceLabel'
@@ -332,7 +334,6 @@ class DIALOGS(object):
     PROTECTEDDISMISSTANKMAN_MESSAGE = '#dialogs:protectedDismissTankman/message'
     PROTECTEDDISMISSTANKMAN_MAINMESSAGE = '#dialogs:protectedDismissTankman/mainMessage'
     PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK = '#dialogs:protectedDismissTankman/additionalMessage/isPerk'
-    PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISABILLITY = '#dialogs:protectedDismissTankman/additionalMessage/isAbillity'
     PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE = '#dialogs:protectedDismissTankman/additionalMessage'
     PROTECTEDDISMISSTANKMAN_ERRORMESSAGE = '#dialogs:protectedDismissTankman/errorMessage'
     PROTECTEDDISMISSTANKMAN_SUBMIT = '#dialogs:protectedDismissTankman/submit'
@@ -1250,12 +1251,9 @@ class DIALOGS(object):
      BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
-     XPTOTMENCHECKBOX_TITLE,
-     XPTOTMENCHECKBOX_MESSAGE,
-     XPTOTMENCHECKBOX_SUBMIT,
-     XPTOTMENCHECKBOX_CANCEL,
      IDLECREWBONUS_TITLE,
-     IDLECREWBONUS_MESSAGE_REMOVE,
+     IDLECREWBONUS_MESSAGE_REMOVETYPE,
+     IDLECREWBONUS_MESSAGE_REMOVENAME,
      IDLECREWBONUS_MESSAGE_CREWWARNING,
      IDLECREWBONUS_MESSAGE_CREWINCOMPLETE,
      IDLECREWBONUS_MESSAGE_CREWUNSUITABLE,
@@ -1300,6 +1298,7 @@ class DIALOGS(object):
      REPLACEPASSPORTCONFIRMATION_MESSAGE,
      REPLACEPASSPORTCONFIRMATION_SUBMIT,
      REPLACEPASSPORTCONFIRMATION_CANCEL,
+     BUYSLOT_HANGARSLOT_HEADER,
      BUYSLOTSHOPCONFIRMATION_TITLE,
      BUYSLOTSHOPCONFIRMATION_MESSAGECOMBINE,
      BUYSLOTSHOPCONFIRMATION_SUBMIT,
@@ -1358,10 +1357,14 @@ class DIALOGS(object):
      RECRUITWINDOW_SUBMIT,
      RECRUITWINDOW_CANCEL,
      RECRUITWINDOW_NATIONS_NO_VEHICLE,
-     BUYSLOTNOTENOUGHCREDITS_TITLE,
-     BUYSLOTNOTENOUGHCREDITS_MESSAGE,
-     BUYSLOTNOTENOUGHCREDITS_SUBMIT,
-     BUYSLOTNOTENOUGHCREDITS_CANCEL,
+     BUYSLOTNOTENOUGH_CREDITS_TITLE,
+     BUYSLOTNOTENOUGH_CREDITS_MESSAGE,
+     BUYSLOTNOTENOUGH_CREDITS_SUBMIT,
+     BUYSLOTNOTENOUGH_CREDITS_CANCEL,
+     BUYSLOTNOTENOUGH_GOLD_TITLE,
+     BUYSLOTNOTENOUGH_GOLD_MESSAGE,
+     BUYSLOTNOTENOUGH_GOLD_SUBMIT,
+     BUYSLOTNOTENOUGH_GOLD_CANCEL,
      BUYVEHICLEWINDOW_TITLE,
      BUYVEHICLEWINDOW_TRADEIN_TITLE,
      BUYVEHICLEWINDOW_TRADEIN_PRICELABEL,
@@ -1452,7 +1455,6 @@ class DIALOGS(object):
      PROTECTEDDISMISSTANKMAN_MESSAGE,
      PROTECTEDDISMISSTANKMAN_MAINMESSAGE,
      PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK,
-     PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISABILLITY,
      PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE,
      PROTECTEDDISMISSTANKMAN_ERRORMESSAGE,
      PROTECTEDDISMISSTANKMAN_SUBMIT,

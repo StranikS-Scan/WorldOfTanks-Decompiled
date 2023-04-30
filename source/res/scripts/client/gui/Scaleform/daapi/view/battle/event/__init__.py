@@ -22,6 +22,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import damage_panel
     from gui.Scaleform.daapi.view.battle.shared import consumables_panel
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
+    from gui.Scaleform.daapi.view.battle.shared import perks_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
@@ -42,6 +43,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),

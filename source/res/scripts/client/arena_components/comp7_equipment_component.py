@@ -52,8 +52,6 @@ class Comp7EquipmentComponent(ClientArenaComponent):
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_AOE_HEAL:
             self.__updateAoeEffect(eventID=eventID, vehicleID=vehicleID, value=value, effectClass=_AoeHealEffect)
-        elif eventID == FEEDBACK_EVENT_ID.VEHICLE_AOE_INSPIRE:
-            self.__updateAoeEffect(eventID=eventID, vehicleID=vehicleID, value=value, effectClass=_AoeInspireEffect)
 
     def __updateAoeEffect(self, eventID, vehicleID, value, effectClass):
         vehicle = BigWorld.entities.get(vehicleID)
@@ -166,9 +164,3 @@ class _AoeHealEffect(_Effect):
         else:
             transformComponent.transform = math_utils.createSRTMatrix(Math.Vector3(self.radius, 1.0, self.radius), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0))
             return
-
-
-class _AoeInspireEffect(_Effect):
-
-    def _getPath(self):
-        return self._getDynObjectsCacheConfig().getAoeInspirePrefab()

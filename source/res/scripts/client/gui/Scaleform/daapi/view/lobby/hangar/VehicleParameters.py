@@ -57,11 +57,6 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.fini()
         self._vehParamsDP = None
         self._paramsProviderCls = None
-        cache = self._getVehicleCache()
-        if cache and cache.item:
-            perksController = cache.item.getPerksController()
-            if perksController:
-                perksController.setVehParams(None)
         super(VehicleParameters, self)._dispose()
         return
 
@@ -72,12 +67,7 @@ class VehicleParameters(VehicleParametersMeta):
         cache = self._getVehicleCache()
         if not cache.item:
             return
-        perksController = cache.item.getPerksController()
-        if not perksController:
-            self.rebuildParams()
-        elif not perksController.isEnabled():
-            perksController.recalc(self)
-            self.rebuildParams()
+        self.rebuildParams()
 
     def _getVehicleCache(self):
         return g_currentVehicle

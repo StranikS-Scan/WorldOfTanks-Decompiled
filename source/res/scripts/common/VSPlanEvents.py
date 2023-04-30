@@ -2,18 +2,39 @@
 # Embedded file name: scripts/common/VSPlanEvents.py
 from collections import namedtuple
 
-class PLATOON_VS_PLAN_SIMPLE_EVENT(object):
-    CLIENT_ACTIVATION_EVENT = 'client_activation_event'
-    CLIENT_DEACTIVATION_EVENT = 'client_deactivation_event'
-    VEHICLE_START_MOVING = 'vehicle_start_moving'
-    VEHICLE_STOP_MOVING = 'vehicle_stop_moving'
-    VEHICLE_SHOOT = 'vehicle_shoot'
-    VEHICLE_STUN_OFF = 'vehicle_stun_off'
-    VEHICLE_BLOCK_DAMAGE = 'vehicle_block_damage'
-    VEHICLE_CHANGE_HEALTH = 'vehicle_change_health'
-    VEHICLE_DEVICE_WAS_CRIT = 'vehicle_device_was_crit'
+class PcVSPlanSimpleEvent(object):
+    CLIENT_ACTIVATION_EVENT = 'OnClientActivation'
+    VEHICLE_START_MOVING = 'OnVehicleStartMoving'
+    VEHICLE_STOP_MOVING = 'OnVehicleStopMoving'
+    VEHICLE_START_FWD_MOVING = 'OnVehicleStartFwdMoving'
+    VEHICLE_STOP_FWD_MOVING = 'OnVehicleStopFwdMoving'
+    VEHICLE_SHOOT = 'OnVehicleShoot'
+    VEHICLE_STUN = 'OnVehicleStun'
+    VEHICLE_STUN_OFF = 'OnVehicleStunOff'
+    VEHICLE_FIRE_STARTED = 'OnVehicleFireStarted'
+    VEHICLE_FIRE_STOPPED = 'OnVehicleFireStopped'
+    VEHICLE_EQUIPMENT_SWAP = 'OnVehicleEquipmentSwap'
+    VEHICLE_BLOCK_DAMAGE = 'OnVehicleBlockDamage'
+    VEHICLE_CHANGE_HEALTH = 'OnVehicleChangeHealth'
+    VEHICLE_DEVICE_WAS_CRIT = 'OnVehicleDeviceWasCrit'
+    VEHICLE_TANKMAN_WAS_CRIT = 'OnVehicleTankmanWasCrit'
+    VEHICLE_TANKMAN_HEALED = 'OnVehicleTankmanHealed'
+    VEHICLE_DEVICE_HEALED = 'OnVehicleDeviceHealed'
+    VEHICLE_GUN_REALOAD_FINISHED = 'OnVehicleGunReloadFinished'
+    ENEMY_DETECTED = 'OnEnemyDetected'
+    VEHICLE_SIXTH_SENSE_ACTIVATE = 'OnVehicleSixthSenseActivate'
+    VEHICLE_CHANGE_SHELLS_BY_CLIENT = 'OnVehicleChangeShellsByClient'
+    VEHICLE_ON_TARGET_KILLED = 'OnVehicleOnTargetKilled'
+    VEHICLE_ON_TARGET_CRIT = 'OnVehicleOnTargetCrit'
+    ARENA_ON_BATTLE_START = 'OnArenaOnBattleStart'
 
 
-SetPlanInitData = namedtuple('SetPlanInitData', 'ownerVehicleId, scopeId, perkId, perkLevel')
-VehicleEquipmentActivatedEvent = namedtuple('VehicleEquipmentActivatedEvent', 'cooldownEquipmentIndex, cooldownEquipmentName')
-VehicleTotalDamageDealtIncrease = namedtuple('VehicleTotalDamageDealtIncrease', 'totalDamageDealt')
+OnInnerDeviceWasCrit = namedtuple('OnInnerDeviceWasCrit', 'modulesCount')
+OnVehicleEquipmentActivated = namedtuple('OnVehicleEquipmentActivated', 'cooldownEquipmentIndex, cooldownEquipmentName')
+OnVehicleTotalDamageDealtIncrease = namedtuple('OnVehicleTotalDamageDealtIncrease', 'totalDamageDealt')
+OnVehicleAssistIncrease = namedtuple('OnVehicleAssistIncrease', 'assistPoints')
+OnVehicleInRange = namedtuple('OnVehicleInRange', 'targetTeam, targetClass, enabled')
+OnVehicleShotDamagedEnemyVehicle = namedtuple('OnVehicleShotDamagedEnemyVehicle', 'targetId')
+OnVehicleRadioDistanceChange = namedtuple('OnVehicleRadioDistanceChange', 'radioDistance')
+OnWitnessEnemyDamaged = namedtuple('OnWitnessEnemyDamaged', 'targetID')
+OnTankmanStatusChanged = namedtuple('tankmanStatusChangedEffect', 'tmanIdx')

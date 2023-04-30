@@ -1,9 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/platform/products_fetcher/subscriptions/subscriptions_descriptor.py
 import typing
+from constants import SUBSCRIPTION_ENTITLEMENT
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_model import SubscriptionTypeEnum
+from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_model import WotSubscriptionStateEnum
 from gui.platform.products_fetcher.product_descriptor import ProductDescriptor
 from helpers import dependency
+from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -18,6 +25,10 @@ class SubscriptionDescriptor(ProductDescriptor):
         super(SubscriptionDescriptor, self).__init__(params)
         self._offerToken = None
         return
+
+    @property
+    def type(self):
+        return SubscriptionTypeEnum.EXTERNALSUBSCRIPTION
 
     @property
     def isSubscribed(self):
@@ -111,3 +122,42 @@ class PrimeGamingDescriptor(SubscriptionDescriptor):
 
     def __twitchFilterFunc(self, q):
         return q.getID().startswith('twitch')
+
+
+class WotPlusDescriptor(SubscriptionDescriptor):
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    _COMMON_TO_UI_STATE_DICT = {WotPlusState.INACTIVE: WotSubscriptionStateEnum.INACTIVE,
+     WotPlusState.ACTIVE: WotSubscriptionStateEnum.ACTIVE,
+     WotPlusState.CANCELLED: WotSubscriptionStateEnum.CANCELLED}
+
+    @property
+    def type(self):
+        return SubscriptionTypeEnum.WOTSUBSCRIPTION
+
+    @property
+    def productID(self):
+        return SUBSCRIPTION_ENTITLEMENT
+
+    @property
+    def name(self):
+        return backport.text(R.strings.subscription.dashboard.subscriptionCard.label())
+
+    @property
+    def description(self):
+        return backport.text(R.strings.subscription.dashboard.subscriptionCard.description())
+
+    @property
+    def largeImageURL(self):
+        return backport.image(R.images.gui.maps.icons.subscription.dashboard_card.largeCard())
+
+    @property
+    def mediumImageURL(self):
+        return backport.image(R.images.gui.maps.icons.subscription.dashboard_card.mediumCard())
+
+    @property
+    def expirationTime(self):
+        return self._wotPlusCtrl.getExpiryTime()
+
+    @property
+    def state(self):
+        return self._COMMON_TO_UI_STATE_DICT[self._wotPlusCtrl.getState()]

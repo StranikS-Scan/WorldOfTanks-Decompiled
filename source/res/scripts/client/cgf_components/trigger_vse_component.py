@@ -3,10 +3,12 @@
 import CGF
 import Event
 from GenericComponents import VSEComponent
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 
-class TriggerVSEComponent(CGFComponent):
+@registerComponent
+class TriggerVSEComponent(object):
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     eventName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='event name', value='event')
 
     def __init__(self):

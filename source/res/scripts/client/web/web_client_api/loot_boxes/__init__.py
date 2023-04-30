@@ -84,14 +84,19 @@ class LootBoxWebApi(object):
                         if bonusType in _BONUS_FOR_AGGREGATE:
                             if aggregateBonus.get(bonusType, None) is None or aggregateBonus[bonusType].get('value', 0) < bonusEntry.get('value', 0):
                                 aggregateBonus[bonusType] = bonusEntry
-                        bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
-                        result[idx]['bonuses'].append(bonusEntry)
-                        if bonusType in ItemPackTypeGroup.VEHICLE:
-                            result[idx]['guaranteed_bonus_limit'] = self.__eventLootBoxes.getGuaranteedBonusLimit(EventLootBoxes.PREMIUM)
+                        if not self.__isExistingVehicle(bonusEntry, result[idx]['bonuses']):
+                            bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
+                            result[idx]['bonuses'].append(bonusEntry)
+                            if bonusType in ItemPackTypeGroup.VEHICLE:
+                                result[idx]['guaranteed_bonus_limit'] = self.__eventLootBoxes.getGuaranteedBonusLimit(EventLootBoxes.PREMIUM)
 
                 result[idx]['bonuses'].extend([ _BONUS_WRAPPERS.get(bType, BonusAggregateWrapper).getWrappedBonus(bValue) for bType, bValue in aggregateBonus.iteritems() ])
 
         return result
+
+    @staticmethod
+    def __isExistingVehicle(bonusEntry, bonuses):
+        return bonusEntry['type'] in ItemPackTypeGroup.VEHICLE and bonusEntry['id'] in (b['id'] for b in bonuses)
 
     @w2c(W2CSchema, 'set_loot_box_category_visited')
     def setLootBoxCategoryVisited(self, _):

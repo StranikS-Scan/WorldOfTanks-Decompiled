@@ -3,7 +3,7 @@
 import logging
 from collections import namedtuple
 import typing
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
@@ -99,7 +99,8 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
          QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
          QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE,
-         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7}
+         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7,
+         QUEUE_TYPE.WINBACK: ARENA_BONUS_TYPE.WINBACK}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
 
@@ -167,14 +168,18 @@ def isBattlePassDailyQuestsIntroShown(settingsCore=None):
     return settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN, False)
 
 
+@replace_none_kwargs(settingsCore=ISettingsCore)
+def setBattlePassDailyQuestsIntroShown(settingsCore=None):
+    settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN: True})
+
+
 def showBattlePassDailyQuestsIntro():
     battlePassController = dependency.instance(IBattlePassController)
     if not battlePassController.isActive():
         return
-    settingsCore = dependency.instance(ISettingsCore)
-    if not isBattlePassDailyQuestsIntroShown(settingsCore=settingsCore):
+    if not isBattlePassDailyQuestsIntroShown():
         showBattlePassDailyQuestsIntroWindow()
-        settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN: True})
+        setBattlePassDailyQuestsIntroShown()
 
 
 def getRecruitNation(recruitInfo):
@@ -232,6 +237,7 @@ def updateBattlePassSettings(data, battlePass=None):
 def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
     AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, False)
+    AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, False)
 
 
 def _updateServerSettings(data):

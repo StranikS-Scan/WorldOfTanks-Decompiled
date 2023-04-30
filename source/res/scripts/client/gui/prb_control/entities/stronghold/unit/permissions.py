@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/stronghold/unit/permissions.py
 from UnitBase import UNIT_FLAGS, UNIT_ROLE
 from constants import CLAN_MEMBER_FLAGS
-from gui.prb_control.entities.base.unit.permissions import UnitPermissions
+from gui.prb_control.entities.base.unit.permissions import UnitPermissions, IUnitPermissions
 from gui.prb_control.items.stronghold_items import UNIT_ROLE_BY_RESERVE_TYPE
 from gui.shared.utils.decorators import ReprInjector
 
@@ -82,3 +82,17 @@ class StrongholdPermissions(UnitPermissions):
 
     def canCreateSquad(self):
         return False
+
+
+@ReprInjector.simple(('_hasLockedState', 'hasLockedState'))
+class StrongholdBrowserPermissions(IUnitPermissions):
+
+    def __init__(self, hasLockedState=False):
+        super(StrongholdBrowserPermissions, self).__init__()
+        self._hasLockedState = hasLockedState
+
+    def canCreateSquad(self):
+        return False
+
+    def canChangeVehicle(self):
+        return not self._hasLockedState

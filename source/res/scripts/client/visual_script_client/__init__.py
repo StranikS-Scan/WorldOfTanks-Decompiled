@@ -31,6 +31,8 @@ def registerForGeneral():
     import battle_hud_block
     import cgf_blocks
     import bitmask_blocks
+    import armory_yard_blocks
+    import web_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
@@ -44,6 +46,8 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(battle_hud_block)
     g_blockRegistrar.regBlocksFromModule(cgf_blocks)
     g_blockRegistrar.regBlocksFromModule(bitmask_blocks)
+    g_blockRegistrar.regBlocksFromModule(armory_yard_blocks)
+    g_blockRegistrar.regBlocksFromModule(web_blocks)
     g_blockRegistrar.regBlocksFromModule(hangar_blocks)
     g_blockRegistrar.regBlocksFromModule(hint_blocks)
 
@@ -60,8 +64,6 @@ def registerForVSEditor():
 
 def registerForClient():
     registerForGeneral()
-    from visual_script_client import client_perk_blocks
-    g_blockRegistrar.regBlocksFromModule(client_perk_blocks)
 
 
 if IS_UE_EDITOR:

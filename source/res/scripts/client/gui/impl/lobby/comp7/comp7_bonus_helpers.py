@@ -95,10 +95,13 @@ class _DogTagBonusHelper(_BaseBonusHelper):
     @staticmethod
     def getBonusType(bonus):
         component = first(bonus.getUnlockedComponents())
-        dogTagViewType = componentConfigAdapter.getComponentById(component.componentId).viewType
-        if dogTagViewType == ComponentViewType.ENGRAVING:
-            return BonusTypes.DOGTAG_ENGRAVING
-        return BonusTypes.DOGTAG_BACKGROUND if dogTagViewType == ComponentViewType.BACKGROUND else BonusTypes.NONE
+        if component:
+            dogTagViewType = componentConfigAdapter.getComponentById(component.componentId).viewType
+            if dogTagViewType == ComponentViewType.ENGRAVING:
+                return BonusTypes.DOGTAG_ENGRAVING
+            if dogTagViewType == ComponentViewType.BACKGROUND:
+                return BonusTypes.DOGTAG_BACKGROUND
+        return BonusTypes.NONE
 
 
 class _DossierBonusHelper(_BaseBonusHelper):

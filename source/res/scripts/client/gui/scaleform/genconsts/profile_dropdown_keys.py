@@ -21,3 +21,4 @@ class PROFILE_DROPDOWN_KEYS(object):
     BATTLE_ROYALE_SOLO = 'battleRoyaleSolo'
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
     COMP7 = 'comp7'
+    COMP7_SEASON2 = 'comp7_s2'

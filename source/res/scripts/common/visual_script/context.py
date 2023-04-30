@@ -3,7 +3,7 @@
 from inspect import getargspec, ismethod, getmembers, getmro
 from functools import wraps
 from types import FunctionType
-from typing import Tuple
+from typing import Tuple, Callable, List, Sequence
 from soft_exception import SoftException
 from misc import ASPECT
 from constants import IS_DEVELOPMENT
@@ -142,6 +142,42 @@ def vse_event_out(*args, **kwargs):
     return wrapper
 
 
+def vse_forward_event(name, argsSpecs, **kwargs):
+    meta = MetaData(MetaData.EVENT_OUT, name, argsSpecs, **kwargs)
+
+    def dummyMethod(self, *args_):
+        if self._vse_aspect not in meta.aspects:
+            raise UnsupportedMemberException(meta.name, self._vse_aspect)
+        getattr(self._vse_dispatchers, meta.name).call(args_)
+
+    dummyMethod.__name__ = name
+    dummyMethod.__doc__ = name
+    dummyMethod.vse_meta = meta
+    return dummyMethod
+
+
+def vse_context_effect_forward_event(name, argsSpecs, **kwargs):
+
+    def wrapper(effect):
+        meta = MetaData(MetaData.EVENT_OUT, name, argsSpecs, **kwargs)
+
+        def dummyMethod(self, *args_):
+            if self._vse_aspect not in meta.aspects:
+                raise UnsupportedMemberException(meta.name, self._vse_aspect)
+            getattr(self._vse_dispatchers, meta.name).call(args_)
+
+        def callWithEffect(self, *args):
+            effect(self, *args)
+            dummyMethod(self, *args)
+
+        callWithEffect.__name__ = name
+        callWithEffect.__doc__ = name
+        callWithEffect.vse_meta = meta
+        return callWithEffect
+
+    return wrapper
+
+
 class DispatchersHolder(object):
     pass
 
@@ -170,6 +206,11 @@ class VScriptContext(object):
     def destroy(self):
         if IS_DEVELOPMENT:
             debugPlanLoader.unregContext(self)
+
+    def triggerEvent(self, name, *args):
+        method = getattr(self, name, None)
+        method(*args)
+        return
 
     @property
     def _vse_aspect(self):

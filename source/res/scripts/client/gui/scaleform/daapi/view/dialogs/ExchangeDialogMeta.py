@@ -395,6 +395,49 @@ class _WebProductExchangeItem(_ExchangeItem):
         pass
 
 
+class _SlotInfoItem(InfoItemBase):
+
+    def __init__(self, name):
+        self.__name = name
+
+    @property
+    def itemTypeName(self):
+        pass
+
+    @property
+    def itemTypeID(self):
+        return None
+
+    @property
+    def userName(self):
+        return self.__name
+
+    def getExtraIconInfo(self):
+        return None
+
+    def getGUIEmblemID(self):
+        pass
+
+
+class _SlotExchangeItem(_ExchangeItem):
+
+    def __init__(self, price, count, infoItem):
+        super(_SlotExchangeItem, self).__init__(None, count)
+        self.__infoItem = infoItem
+        self.__price = price
+        return
+
+    @property
+    def price(self):
+        return self.__price
+
+    def _getInfoItem(self):
+        return self.__infoItem
+
+    def doAction(self, action, resultType):
+        pass
+
+
 class _ExchangeCreditsSubmitter(_ExchangeSubmitterBase):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -515,6 +558,22 @@ class ExchangeCreditsMultiItemsMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscri
 
     def _getSubmitterType(self):
         return _ExchangeCreditsSubmitter
+
+
+class _ExchangeCreditsForSlotSubmitter(_ExchangeCreditsSubmitter):
+
+    def _getResourceToExchange(self):
+        return self._exchangeItem.count * self._exchangeItem.price - self.itemsCache.items.stats.credits
+
+
+class ExchangeCreditsForSlotMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber):
+
+    def __init__(self, name, count, price, key='confirmExchangeDialog/exchangeCredits'):
+        infoItem = _SlotInfoItem(name)
+        super(ExchangeCreditsForSlotMeta, self).__init__(_SlotExchangeItem(price, count, infoItem), key)
+
+    def _getSubmitterType(self):
+        return _ExchangeCreditsForSlotSubmitter
 
 
 class _WebProductCreditsExchangeSubmitter(_ExchangeCreditsSubmitter):

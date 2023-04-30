@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
 from collections import namedtuple
 import json
+import typing
 import BigWorld
 from account_helpers.premium_info import PremiumInfo
 from adisp import adisp_async
@@ -14,6 +15,8 @@ from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 from nation_change.nation_change_helpers import NationalGroupDataAccumulator
+if typing.TYPE_CHECKING:
+    from typing import List, Tuple
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
 _ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
 

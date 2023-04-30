@@ -86,7 +86,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
 
     brfilter = filter.BattleResultsFilter(eventData)
     result = eventData['avatarResults']['stunDuration']
-    questProgress.increaseSumProgress(STUN_TIME_MAIN, STUN_TIME_MAIN, result)
+    questProgress.increaseSumProgress(STUN_TIME_MAIN, STUN_TIME_MAIN_SERIES, result)
     questProgress.increaseSumProgress(STUN_TIME_ADV, STUN_TIME_ADV_SERIES, result, STUN_TIME_MAIN)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=STUN_TIME_ADV))

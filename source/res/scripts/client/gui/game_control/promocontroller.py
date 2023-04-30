@@ -84,6 +84,10 @@ class PromoController(IPromoController):
         self.onTeaserClosed = Event(self.__em)
         return
 
+    @property
+    def isPromoOpen(self):
+        return self.__isPromoOpen
+
     @sf_lobby
     def app(self):
         pass

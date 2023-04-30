@@ -15,6 +15,7 @@ import BattleReplay
 import CommandMapping
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.ArtyCamera
+import DynamicCameras.FlameArtyCamera
 import DynamicCameras.DualGunCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
@@ -88,7 +89,8 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, _CTRL_MODE.VEHICLES_SELECTION, _CTRL_TYPE.USUAL)}
+ _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, _CTRL_MODE.VEHICLES_SELECTION, _CTRL_TYPE.USUAL),
+ _CTRL_MODE.FLAMETHROWER: (control_modes.FlamethrowerControlMode, 'flamethrowerMode', _CTRL_TYPE.USUAL)}
 _OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
  constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
@@ -98,7 +100,8 @@ _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
  DynamicCameras.ArtyCamera.ArtyCamera,
- DynamicCameras.DualGunCamera.DualGunCamera)
+ DynamicCameras.DualGunCamera.DualGunCamera,
+ DynamicCameras.FlameArtyCamera.FlameArtyCamera)
 _FREE_AND_CHAT_SHORTCUT_CMD = (CommandMapping.CMD_CM_FREE_CAMERA, CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND)
 
 class DynamicCameraSettings(object):
@@ -121,6 +124,7 @@ class DynamicCameraSettings(object):
         self.__dynamic['minCollisionSpeed'] = cameras.readFloat(dataSec, 'minCollisionSpeed', 0, 1000, 1.0)
         self.__dynamic['zeroDamageHitSensitivity'] = cameras.readFloat(dataSec, 'zeroDamageHitSensitivity', 0, 1000, 1.0)
         self.__dynamic['ownShotImpulseDelay'] = cameras.readFloat(dataSec, 'ownShotImpulseDelay', 0.0, 1000, 0.0)
+        self.__dynamic['excludedShellTypes'] = dataSec.readString('excludedShellTypes').split()
         return
 
     def getGunImpulse(self, caliber):
@@ -158,6 +162,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
     isDualGun = property(lambda self: self.__isDualGun)
+    isFlamethrower = property(lambda self: self.__isFlamethrower)
     isMagneticAimEnabled = property(lambda self: self.__isMagnetAimEnabled)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
@@ -236,6 +241,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__isSPG = False
         self.__isATSPG = False
         self.__isDualGun = False
+        self.__isFlamethrower = False
         self.__isMagnetAimEnabled = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
@@ -691,9 +697,11 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def onMinimapClicked(self, worldPos):
         return self.__curCtrl.onMinimapClicked(worldPos)
 
-    def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
-        if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
-            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, _ShakeReason.OWN_SHOT)
+    def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shellType, shakeReason):
+        if shellType in self.__dynamicCameraSettings.settings['excludedShellTypes']:
+            return
+        elif shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
+            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, shellType, _ShakeReason.OWN_SHOT)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
             self.delayCallback(delayTime, shakeFuncBound)
             return
@@ -784,8 +792,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             camera.applyDistantImpulse(position, impulseValue, cameras.ImpulseReason.HE_EXPLOSION)
             return
 
-    def onProjectileHit(self, position, caliber, isOwnShot):
+    def onProjectileHit(self, position, caliber, shellType, isOwnShot):
         if not isOwnShot:
+            return
+        elif shellType in self.__dynamicCameraSettings.settings['excludedShellTypes']:
             return
         else:
             camera = getattr(self.ctrl, 'camera', None)
@@ -833,6 +843,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__isSPG = 'SPG' in vehTypeDesc.tags
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
             self.__isDualGun = veh.typeDescriptor.isDualgunVehicle
+            self.__isFlamethrower = veh.typeDescriptor.isFlamethrower
             self.__isMagnetAimEnabled = bool(magnetAimTags & vehTypeDesc.tags)
             return
 

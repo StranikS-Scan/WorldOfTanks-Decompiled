@@ -29,6 +29,7 @@ _TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billab
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
 _ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
 _ConditionData = namedtuple('_ConditionData', 'conditionType, value')
+_DEFAULT_SLOT_PRICE = (0, ([Currency.CREDITS, 300],))
 
 class _NamedGoodieData(GoodieData):
 
@@ -188,10 +189,11 @@ class ShopCommonStats(IShopCommonStats):
 
     @property
     def slotsPrices(self):
-        return self.getValue('slotsPrices', (0, [300]))
+        return self.getValue('slotsPrices', _DEFAULT_SLOT_PRICE)
 
     def getVehicleSlotsPrice(self, currentSlotsCount):
-        return getNextSlotPrice(currentSlotsCount, self.slotsPrices)
+        price = getNextSlotPrice(currentSlotsCount, self.slotsPrices)
+        return Money.makeFrom(price[0], price[1])
 
     @property
     def dropSkillsCost(self):
@@ -412,17 +414,19 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         slotGoodies = self.personalSlotDiscounts
         if slotGoodies:
             bestGoody = self.bestGoody(slotGoodies)
-            return getPriceWithDiscount(price, bestGoody.resource)
+            currency = price.getCurrency()
+            return Money.makeFrom(currency, getPriceWithDiscount(price.get(price.getCurrency(), 0), bestGoody.resource))
         return price
 
     def getVehicleSlotsItemPrice(self, currentSlotsCount):
         defPrice = self.defaults.getVehicleSlotsPrice(currentSlotsCount)
         price = self.getVehicleSlotsPrice(currentSlotsCount)
+        currency = price.getCurrency()
         slotGoodies = self.personalSlotDiscounts
         if slotGoodies:
             bestGoody = self.bestGoody(slotGoodies)
-            price = getPriceWithDiscount(price, bestGoody.resource)
-        return ItemPrice(price=Money.makeFrom(Currency.GOLD, price), defPrice=Money.makeFrom(Currency.GOLD, defPrice))
+            price = Money.makeFrom(currency, getPriceWithDiscount(price.get(currency, 0), bestGoody.resource))
+        return ItemPrice(price=price, defPrice=defPrice)
 
     def getTankmanCostItemPrices(self, vehLevel):
         result = []

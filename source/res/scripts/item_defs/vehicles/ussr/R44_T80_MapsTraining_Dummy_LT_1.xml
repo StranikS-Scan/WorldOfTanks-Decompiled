@@ -45,17 +45,18 @@
       <armor_2>	45	</armor_2>
       <armor_3>	25	</armor_3>
       <armor_4>	25	</armor_4>
-      <armor_5>	20	</armor_5>
-      <armor_6>	15	</armor_6>
+      <armor_5>	15	</armor_5>
+      <armor_6>	10	</armor_6>
       <armor_7>	35	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	25	</armor_9>
-      <armor_10>	55	</armor_10>
-      <armor_11>	55	</armor_11>
-      <armor_12>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_12>
-      <armor_13>	45	</armor_13>
-      <armor_14>	10	</armor_14>
+      <armor_9>	35	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	25	</armor_11>
+      <armor_12>	6	</armor_12>
+      <armor_13>	10	</armor_13>
+      <armor_14>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_14>
+      <armor_15>	15	</armor_15>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5670	</weight>
@@ -87,8 +88,8 @@
       <turret>	-0.346155 0.572246 -0.072687	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/russian/R44_T80/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/russian/R44_T80/T80_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1196,8 +1197,8 @@
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.841494 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R44_T80/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05579 1.21123	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -1748,18 +1749,18 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	35	</armor_1>
-        <armor_2>	45	</armor_2>
+        <armor_2>	35	</armor_2>
         <armor_3>	35	</armor_3>
         <armor_4>	35	</armor_4>
-        <armor_5>	15	</armor_5>
+        <armor_5>	10	</armor_5>
         <armor_6>	10	</armor_6>
-        <armor_7>	40	</armor_7>
+        <armor_7>	35	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	15	</armor_9>
-        <armor_10>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_10>
-        <armor_11>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_11>
+        <armor_10>	20	</armor_10>
+        <armor_11>	10	</armor_11>
+        <armor_12>	35	</armor_12>
+        <armor_13>	25	</armor_13>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
@@ -1779,10 +1780,14 @@
       <guns>
         <_37mm_automatic_SH-37_MapsTraining_Dummy_LT_1>	shared	  <maxAmmo>	210	</maxAmmo>
           <armor>
-            <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
+            <armor_3>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
@@ -1804,8 +1809,8 @@
             <exploded>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R44_T80/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_TNSH_auto	</effects>
           <reloadEffect>	reload20_45	</reloadEffect>
@@ -1850,6 +1855,7 @@
               <anchorShift>	0.198771	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
             <density>	303.178 311.085	</density>
@@ -1863,8 +1869,8 @@
         <exploded>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R44_T80_MapsTraining_Dummy_LT_1/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R44_T80/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.014845 0.291077 0.486937	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

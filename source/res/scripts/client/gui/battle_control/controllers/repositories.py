@@ -1,23 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/repositories.py
-from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.shared.system_factory import registerBattleControllerRepo
+from typing import TYPE_CHECKING
 from constants import ARENA_GUI_TYPE
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
+from gui.battle_control.controllers import battle_hints_ctrl
+from gui.battle_control.controllers import map_zones_ctrl
+from gui.battle_control.controllers import points_of_interest_ctrl
+from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
-from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
 from gui.battle_control.controllers.comp7_prebattle_setup_ctrl import Comp7PrebattleSetupController
 from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
-from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
 from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
+from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
+from gui.shared.system_factory import registerBattleControllerRepo
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
-from gui.battle_control.controllers import battle_hints_ctrl
-from gui.battle_control.controllers import points_of_interest_ctrl
+if TYPE_CHECKING:
+    from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -177,6 +181,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def ingameHelp(self):
         return self._repository.getController(BATTLE_CTRL_ID.INGAME_HELP_CTRL)
 
+    @property
+    def mapZones(self):
+        return self._repository.getController(BATTLE_CTRL_ID.MAP_ZONES_CONTROLLER)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -252,6 +260,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def vehicleCount(self):
         return self._repository.getController(BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL)
+
+    @property
+    def perks(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PERKS)
 
     @property
     def battleHints(self):
@@ -391,6 +403,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
         repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
         repository.addController(ingame_help_ctrl.IngameHelpController(setup))
+        repository.addController(map_zones_ctrl.MapZonesController(setup))
         return repository
 
 
@@ -424,6 +437,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository = super(ClassicControllersRepository, cls).create(setup)
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addViewController(perk_ctrl.PerksController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
@@ -445,6 +459,7 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(epic_maps_ctrl.EpicMapsController(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(epic_spectator_ctrl.SpectatorViewController(setup), setup)
+        repository.addViewController(perk_ctrl.PerksController(), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
@@ -465,6 +480,7 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        repository.addViewController(perk_ctrl.PerksController(), setup)
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
         return repository

@@ -254,9 +254,9 @@ class _TechTreeDataProvider(object):
         unlockProps = self.getUnlockProps(vehicleCD, vehicleLevel)
         return (unlockProps.xpCost, unlockProps.discount, unlockProps.xpFullCost) if unlockProps is not None else (0, 0, 0)
 
-    def getBlueprintDiscountData(self, vehicleCD, level, xpCost):
+    def getBlueprintDiscountData(self, vehicleCD, level, xpCost, blueprintCount=0):
         blueprints = self.itemsCache.items.blueprints
-        discount = blueprints.getBlueprintDiscount(vehicleCD, level)
+        discount = blueprints.getBlueprintDiscount(vehicleCD, level, blueprintCount)
         newCost = blueprints.calculateCost(xpCost, discount)
         return (discount, newCost)
 

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/cgf_script/managers_registrator.py
 import sys
 import CGF
-from cgf_script.component_meta_class import CGFComponent
+from cgf_script.component_meta_class import registerComponent
 from soft_exception import SoftException
 
 class Reactions(object):
@@ -55,19 +55,20 @@ class ManagerRegistrator(object):
         return self.__wrapper
 
 
-class Rule(CGFComponent):
+class Rule(object):
 
     def __init__(self):
-        super(Rule, self).__init__()
         for value in self.__class__.__dict__.itervalues():
             if isinstance(value, ManagerRegistrator):
                 value.wrapper(self)
 
 
-def registerManager(manager, presentInEditor=False):
+registerRule = registerComponent
+
+def registerManager(manager, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor):
 
     def wrapper(func):
-        CGF.registerManager(manager, False, presentInEditor)
+        CGF.registerManager(manager, False, domain)
 
         def wrapper_self(self):
             CGF.createManager(manager, func(self), self.spaceID)
@@ -78,21 +79,21 @@ def registerManager(manager, presentInEditor=False):
     return wrapper
 
 
-_rule_template = "import sys\nclass {typename}Rule(rule):\n    vseVisible = False\n    category = '{category}'\n    modulePath = sys.modules[managerType.__module__].__file__\n    def __init__(self):\n        super({typename}Rule, self).__init__()\n    @registrator(managerType)\n    def registerReactor(self):\n        return None\n"
+_rule_template = "import sys\n@decorator\nclass {typename}Rule(rule):\n    vseVisible = False\n    category = '{category}'\n    modulePath = sys.modules[managerType.__module__].__file__\n    def __init__(self):\n        super({typename}Rule, self).__init__()\n    @registrator(managerType)\n    def registerReactor(self):\n        return None\n"
 
 def generateRule(cls, category):
     rule_class_definition = _rule_template.format(typename=cls.__name__, category=category)
-    namespace = dict(rule=Rule, registrator=registerManager, managerType=cls)
+    namespace = dict(rule=Rule, registrator=registerManager, managerType=cls, decorator=registerRule)
     try:
         exec rule_class_definition in namespace
     except SyntaxError as e:
         raise SoftException(e.message + ':\n' + rule_class_definition)
 
 
-def autoregister(presentInAllWorlds=False, category='', presentInEditor=False, creationPredicate=None):
+def autoregister(presentInAllWorlds=False, category='', domain=CGF.DomainOption.DomainClient, creationPredicate=None):
 
     def manager_registrator(cls):
-        CGF.registerManager(cls, presentInAllWorlds, presentInEditor, creationPredicate)
+        CGF.registerManager(cls, presentInAllWorlds, domain, creationPredicate)
         modulePath = sys.modules[cls.__module__].__file__ if cls.__module__ != '__builtin__' else '__builtin__'
         CGF.registerModulePath(cls, modulePath)
         if presentInAllWorlds is False:

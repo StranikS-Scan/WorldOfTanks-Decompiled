@@ -119,10 +119,7 @@ class DismissTankmanDialog(_TankmanOperationDialogBase):
                 question = _ms(DIALOGS.PROTECTEDDISMISSTANKMAN_MAINMESSAGE, roleLevel=text_styles.warning(str(controlNumber)))
         else:
             lastSkill = self._tankman.skills[-1]
-            if lastSkill.isPerk:
-                skillType = DIALOGS.PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK
-            else:
-                skillType = DIALOGS.PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISABILLITY
+            skillType = DIALOGS.PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK
             question = _ms(DIALOGS.PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE, skillType=_ms(skillType), skillName=text_styles.neutral(lastSkill.userName), roleLevel=text_styles.warning(str(lastSkill.level)))
             controlNumber = lastSkill.level
         viewPy.setControlNumbers(str(controlNumber))

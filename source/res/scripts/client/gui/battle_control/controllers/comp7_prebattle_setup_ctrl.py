@@ -134,6 +134,7 @@ class Comp7PrebattleSetupController(IComp7PrebattleSetupController):
             self.__guiVehicle = self.__makeGUIVehicle(vehicleInfo)
             if prevSetups != self.__guiVehicle.setupLayouts.groups or prevCD != self.__guiVehicle.intCD:
                 if prevCD == self.__guiVehicle.intCD:
+                    self.__sessionProvider.shared.ammo.updateForNewSetup(self.__guiVehicle.descriptor.gun, self.__guiVehicle.shells.installed.getItems())
                     playSound(Sounds.GAMEPLAY_SETUP_SWITCH)
             self.onVehicleChanged(self.__guiVehicle)
         return

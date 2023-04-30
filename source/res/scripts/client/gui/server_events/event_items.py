@@ -154,6 +154,9 @@ class ServerEventAbstract(object):
     def isOutOfDate(self):
         return self.getFinishTimeLeft() <= 0
 
+    def isStarted(self):
+        return self.getStartTimeLeft() <= 0
+
     def getUserType(self):
         pass
 

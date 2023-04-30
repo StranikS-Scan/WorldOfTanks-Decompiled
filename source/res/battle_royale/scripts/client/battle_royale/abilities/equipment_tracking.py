@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/equipment_tracking.py
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+import CGF
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 
-class EquipmentAnimatorTrigger(CGFComponent):
+@registerComponent
+class EquipmentAnimatorTrigger(object):
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     activeTrigger = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='active trigger name')
     inactiveTrigger = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='inactive trigger name')
 

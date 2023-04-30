@@ -85,7 +85,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         super(VehiclePostProgressionCfgView, self)._removeListeners()
 
     def _onExit(self):
-        if self._exitEvent.alias in _HERO_PREVIEW_ALIASES and self._exitEvent.ctx.get('itemCD') == self.__heroTanks.getCurrentTankCD():
+        if (self._exitEvent.alias in _HERO_PREVIEW_ALIASES or self._exitEvent.ctx.get('backToHeroTank')) and self._exitEvent.ctx.get('itemCD') == self.__heroTanks.getCurrentTankCD():
             self.__goToHeroTank()
         else:
             g_eventBus.handleEvent(self._exitEvent, scope=EVENT_BUS_SCOPE.LOBBY)

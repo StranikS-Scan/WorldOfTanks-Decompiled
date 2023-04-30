@@ -104,7 +104,7 @@ class OnShowMessage(BattleHUDEventMeta, Block):
             self._key.setValue(code)
             self._onVehicleMessage.call()
 
-    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
+    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID, ignoreMessages):
         if self.active:
             self._key.setValue(code)
             self._onPlayerMessage.call()

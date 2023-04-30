@@ -1,0 +1,98 @@
+<04_himmelsdorf_mb.xml>
+  <name>	#arenas:04_himmelsdorf_mb/name	</name>
+  <description>	#arenas:04_himmelsdorf_mb/description	</description>
+  <geometry>	spaces/04_himmelsdorf_mb	</geometry>
+  <estimatedLoad>	0.55	</estimatedLoad>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/04_himmelsdorf_mb/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>	spaces/04_himmelsdorf_mb/mmap_train01.dds	</layer>
+    <layer>	spaces/04_himmelsdorf_mb/mmap_zeppelin01.dds	</layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_himmelsdorf_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_himmelsdorf_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_himmelsdorf_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_himmelsdorf_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_himmelsdorf_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_himmelsdorf_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <wwambientSound>	amb_map_04_himmelsdorf_mb_wind_spring	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	2.499992 -252.600693	</position1>
+        </team1>
+        <team2>
+          <position1>	69.099640 348.999969	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	himmelsdorf_bomber	</name>
+      <trajectories>
+        <warplane>
+          <preset>	himmelsdorf_bomber_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	11.000000 30.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	himmelsdorf_bomber_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</04_himmelsdorf_mb.xml>

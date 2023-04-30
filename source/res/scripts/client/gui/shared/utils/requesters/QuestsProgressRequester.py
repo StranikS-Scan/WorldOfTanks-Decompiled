@@ -45,11 +45,15 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
 
 
 class QuestsProgressRequester(_QuestsProgressRequester):
+    DefaultFuncKey = 'DefaultFunc'
 
     def __init__(self):
         super(QuestsProgressRequester, self).__init__()
         self.__questProgressDelta = _QuestProgressDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_PROGRESS))
         self.__questCompletion = _QuestCompletionDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_COMPLETION))
+
+    def addFilterFunc(self, filterFunc, key=DefaultFuncKey):
+        self.__questCompletion.questsFilters.update({key: filterFunc})
 
     def getQuestCompletionChanged(self, questId):
         return self.__questCompletion.getQuestCompletionChanged(questId)
@@ -154,9 +158,16 @@ class _QuestProgressDelta(BaseDelta):
 
 class _QuestCompletionDelta(BaseDelta):
 
-    @staticmethod
-    def questFilter(quest):
-        return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID())
+    def __init__(self, prevFactory=None):
+        super(_QuestCompletionDelta, self).__init__(prevFactory)
+        self.questsFilters = dict()
+
+    def questFilter(self, quest):
+        return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID()) or any((filterFunc(quest) for filterFunc in self.questsFilters.values()))
+
+    def clear(self):
+        super(_QuestCompletionDelta, self).clear()
+        self.questsFilters = dict()
 
     def _getDataIterator(self, data):
         events = self.eventsCache.getEvents(self.questFilter)

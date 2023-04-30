@@ -43,9 +43,6 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
          tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
          vehicle.userName)
 
-    def _isWotPlusRentEnabled(self):
-        return False
-
     def _isTelecomRentalsEnabled(self):
         return False
 

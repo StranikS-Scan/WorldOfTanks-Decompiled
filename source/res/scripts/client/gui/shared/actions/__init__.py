@@ -9,6 +9,7 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.actions.chains import ActionsChain
 from gui.shared.events import LoginEventEx, GUICommonEvent
+from gui.winback.winback_helpers import leaveWinbackMode
 from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
 from skeletons.connection_mgr import IConnectionManager
@@ -16,7 +17,7 @@ from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
-from constants import WGC_STATE
+from constants import WGC_STATE, WINBACK_CALL_BATTLE_TOKEN_DRAW_REASON
 __all__ = ('LeavePrbModalEntity', 'DisconnectFromPeriphery', 'ConnectToPeriphery', 'PrbInvitesInit', 'ActionsChain')
 
 class Action(object):
@@ -326,3 +327,22 @@ class OnLobbyInitedAction(Action):
         self.__isLobbyInited = True
         g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
         self.invoke()
+
+
+class LeaveWinbackModeEntity(Action):
+
+    def __init__(self):
+        super(LeaveWinbackModeEntity, self).__init__()
+        self._running = False
+
+    def invoke(self):
+        self._running = True
+        self.__doLeave()
+
+    def isInstantaneous(self):
+        return False
+
+    def __doLeave(self):
+        leaveWinbackMode(WINBACK_CALL_BATTLE_TOKEN_DRAW_REASON.SQUAD)
+        self._completed = True
+        self._running = False

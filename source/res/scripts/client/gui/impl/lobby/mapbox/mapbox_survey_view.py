@@ -77,16 +77,18 @@ class MapBoxSurvey(ViewImpl):
             raise SoftException('There is an invalid question for the mapbox survey')
         surveyManager = self.__mapboxCtrl.surveyManager
         with self.getViewModel().transaction() as model:
+            self.__fillQuestionModel(model.question, question)
             model.setMapId(surveyManager.getMapId())
+            model.setSurveyGroup(surveyManager.getSurveyGroup())
             model.setCurrentPage(surveyManager.getCurrentQuestionIdx())
             model.setTotalPagesCount(surveyManager.getTotalQuestionsCount())
-            model.setCanContinue(surveyManager.canContinue())
-            self.__fillQuestionModel(model.question, question)
+            model.setCanContinue(surveyManager.canContinue(question.getQuestionId()))
         return
 
     def __fillQuestionModel(self, model, question):
         model.setType(question.getQuestionType())
         model.setImagePath(question.getImage())
+        model.setPathPrefix(question.getPathPrefix())
         model.setQuestionId(question.getQuestionId())
         model.setShowIcons(question.isUsingIcons())
         self.__fillTitleParameters(model, question)
@@ -118,7 +120,7 @@ class MapBoxSurvey(ViewImpl):
         titleParameters = model.getTitleParams()
         titleParameters.clear()
         for parameter in question.getTitleParameters():
-            titleParameters.addResource(parameter)
+            titleParameters.addString(parameter)
 
         titleParameters.invalidate()
 
@@ -169,7 +171,7 @@ class MapBoxSurvey(ViewImpl):
         if answers:
             surveyManager.saveAnswers(qId, answers)
         with self.getViewModel().transaction() as model:
-            model.setCanContinue(surveyManager.canContinue())
+            model.setCanContinue(surveyManager.canContinue(qId))
             question = surveyManager.getQuestion(qId)
             if question.getQuestionType() == QuestionType.TABLE:
                 for optionModel in model.question.options.getItems():
@@ -184,12 +186,17 @@ class MapBoxSurvey(ViewImpl):
         surveyManager = self.__mapboxCtrl.surveyManager
         with self.getViewModel().transaction() as model:
             model.setMapId(surveyManager.getMapId())
+            model.setSurveyGroup(surveyManager.getSurveyGroup())
             totalQuestions = surveyManager.getTotalQuestionsCount()
             model.setTotalPagesCount(totalQuestions)
             model.setCurrentPage(totalQuestions)
             model.setIsSurveyFinish(True)
+            model.question.setPathPrefix('')
             model.question.setQuestionId('')
             model.question.setType(QuestionType.UNDEFINED)
+            titleParameters = model.question.getTitleParams()
+            titleParameters.clear()
+            titleParameters.invalidate()
 
 
 class MapBoxSurveyWindow(LobbyWindow):

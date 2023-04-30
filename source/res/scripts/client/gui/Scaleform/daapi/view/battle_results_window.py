@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
 import logging
+from functools import partial
 import BigWorld
 import constants
 from adisp import adisp_process
@@ -11,6 +12,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.PERSONALCASECONST import PERSONALCASECONST
@@ -21,7 +23,7 @@ from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop
 from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
@@ -122,7 +124,8 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def onShowDetailsPremium(self):
         if self.__canNavigate():
-            BigWorld.callback(0.0, showTankPremiumAboutPage)
+            url = getBuyPremiumUrl()
+            BigWorld.callback(0.0, partial(showShop, url))
             self.destroy()
 
     def _populate(self):

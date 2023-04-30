@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/renewable_subscription_common/settings_constants.py
+from enum import Enum
 RS_PDATA_KEY = 'renewableSub'
 RS_ENABLED = 'isEnabled'
 RS_EXPIRATION_TIME = 'expiry'
@@ -14,3 +15,10 @@ PASSIVE_XP_ENTITLEMENT = 'subscription_passive_xp'
 PASSIVE_XP_SECONDS = 'passive_xp_seconds'
 SUBSCRIPTION_DURATION_LENGTH = 2592000
 WOTPLUS_BADGE_ID = 106
+DEFAULT_DEMOUNT_ACTION = 0
+WOT_PLUS_DEMOUNT_ACTION = 1
+
+class WotPlusState(Enum):
+    INACTIVE = 0
+    ACTIVE = 1
+    CANCELLED = 2

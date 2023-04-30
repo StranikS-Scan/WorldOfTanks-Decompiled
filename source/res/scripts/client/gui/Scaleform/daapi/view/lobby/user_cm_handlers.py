@@ -3,7 +3,7 @@
 import math
 from Event import Event
 from adisp import adisp_process
-from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA, PREBATTLE_TYPE
+from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA, PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -32,7 +32,7 @@ from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -80,6 +80,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
+    __winbackController = dependency.descriptor(IWinbackController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -287,6 +288,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             canCreate = not self.prbEntity.isInQueue()
             if not (self.__isSquadAlreadyCreated(PREBATTLE_TYPE.SQUAD) or self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EPIC) or self.__isSquadAlreadyCreated(PREBATTLE_TYPE.FUN_RANDOM)):
                 isEnabled = self.__epicCtrl.isCurrentCycleActive() if self.__epicCtrl.isEpicPrbActive() else True
+                state = self.prbDispatcher.getFunctionalState()
+                isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
+                isEnabled = isEnabled and (isRandomSquadAction or not self.__winbackController.isModeAvailable())
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
             if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,

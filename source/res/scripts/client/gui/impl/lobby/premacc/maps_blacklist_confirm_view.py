@@ -6,8 +6,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_confirm_dialog_model import MapsBlacklistConfirmDialogModel
-from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_slot_states import MapsBlacklistSlotStates
 from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_dialog_slot_model import MapsBlacklistDialogSlotModel
+from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_slot_model import MapStateEnum
 from gui.impl.pub.dialog_window import DialogWindow, DialogContent, DialogButtons
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel as FmtArg
 _logger = logging.getLogger(__name__)
@@ -37,12 +37,12 @@ class MapsBlacklistConfirmView(DialogWindow):
             self._addButton(DialogButtons.SUBMIT, R.strings.premacc.mapsBlacklistConfim.submit(), isFocused=True, isEnabled=not self.__showSelectedMaps)
             self._addButton(DialogButtons.CANCEL, R.strings.premacc.mapsBlacklistConfim.cancel(), invalidateAll=True)
             self._setPreset(DialogPresets.MAPS_BLACKLIST)
-            mapNameDyn = R.strings.arenas.dyn('c_' + self.__mapId)
+            mapNameDyn = R.strings.arenas.num(self.__mapId)
             if self.__showSelectedMaps:
                 model.setTitle(R.strings.premacc.mapsBlacklistReplace.title())
             else:
                 model.setTitle(R.strings.premacc.mapsBlacklistConfim.title())
-                if mapNameDyn:
+                if mapNameDyn.isValid():
                     titleArgs = model.getTitleFmtArgs()
                     titleArgs.addViewModel(FmtArg(backport.text(mapNameDyn.name()), 'mapName'))
                     titleArgs.invalidate()
@@ -87,7 +87,7 @@ class MapsBlacklistConfirmDialogContent(DialogContent):
             selectedMapsModel = model.selectedMaps.getItems()
             for mapName in self.__disabledMaps:
                 slotModel = MapsBlacklistDialogSlotModel()
-                slotModel.setState(MapsBlacklistSlotStates.MAPS_BLACKLIST_SLOT_STATE_ACTIVE_NO_HOVER)
+                slotModel.setState(MapStateEnum.MAPS_BLACKLIST_SLOT_STATE_ACTIVE_NO_HOVER)
                 slotModel.setMapId(mapName)
                 slotModel.setIsResizable(True)
                 selectedMapsModel.addViewModel(slotModel)
@@ -103,5 +103,5 @@ class MapsBlacklistConfirmDialogContent(DialogContent):
         with self.getViewModel().transaction() as model:
             for i, mapModel in enumerate(model.selectedMaps.getItems()):
                 if i == selectedIdx:
-                    mapModel.setState(MapsBlacklistSlotStates.MAPS_BLACKLIST_SLOT_STATE_SELECTED)
-                mapModel.setState(MapsBlacklistSlotStates.MAPS_BLACKLIST_SLOT_STATE_ACTIVE_NO_HOVER)
+                    mapModel.setState(MapStateEnum.MAPS_BLACKLIST_SLOT_STATE_SELECTED)
+                mapModel.setState(MapStateEnum.MAPS_BLACKLIST_SLOT_STATE_ACTIVE_NO_HOVER)

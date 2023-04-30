@@ -38,10 +38,10 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	360.648438 -154.437271	</position1>
+          <position1>	360.647827 -154.436874	</position1>
         </team1>
         <team2>
-          <position1>	-324.047974 -176.182037	</position1>
+          <position1>	-324.047791 -176.181946	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -71,6 +71,48 @@
         </client>
       </visualScript>
     </bootcamp>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-2.228362 -121.632729	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	6.907420 183.007416	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	18.617401 349.231384	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	10.227814 66.492439	</controlPoint>
+      <teamSpawnPoints>
+        <team1>
+          <position>	401.789551 19.933319	</position>
+        </team1>
+        <team2>
+          <position>	-384.827271 17.202351	</position>
+        </team2>
+      </teamSpawnPoints>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <warplane>

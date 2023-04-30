@@ -21,7 +21,7 @@ from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_BATTLE, ARENA_BONUS_TYPE.COMP7]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.COMP7]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -250,6 +250,8 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __onBattlePassSettingsChange(self, *_):
         if self.__battlePass.isVisible() and not self.__battlePass.isPaused():
             self.__createGeneralModel()
+        elif self.__battlePass.isPaused():
+            self.destroyWindow()
         else:
             showHangar()
 

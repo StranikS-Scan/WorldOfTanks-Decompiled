@@ -22,6 +22,7 @@ class PointsOfInterestController(IPointsOfInterestController):
         self.__eManager = Event.EventManager()
         self.onPoiEquipmentUsed = Event.Event(self.__eManager)
         self.onPoiCaptured = Event.Event(self.__eManager)
+        self.onPoiInvaderDestroyed = Event.Event(self.__eManager)
         self._vehPoiRegistry = {}
 
     def startControl(self):

@@ -321,8 +321,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         column2 = None
         column4 = None
         if self.__lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled():
-            column2 = style.makeGoldLabel(baseGold, canBeFaded=True)
-            column4 = style.makeGoldLabel(premiumGold, canBeFaded=True)
+            column2 = style.makeGoldLabel(baseGold, canBeFaded=True, isDiff=baseGold > 0)
+            column4 = style.makeGoldLabel(premiumGold, canBeFaded=True, isDiff=premiumGold > 0)
         self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column2=column2, column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0), column4=column4)
         return
 
@@ -749,10 +749,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def __setBlockedByXPToTman(self):
         self.xpValue = ''
-        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
-            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
-        else:
-            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()
+        textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenChanged()
         self.statusBonusLabel = text_styles.neutral(backport.text(textKey))
         self.statusBonusTooltip = makeTooltip(body=TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY)
 

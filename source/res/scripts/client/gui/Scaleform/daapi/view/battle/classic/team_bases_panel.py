@@ -127,7 +127,7 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         if not item:
             return
         else:
-            color = 'grey' if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE else item.getColor()
+            color = 'gray' if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE else item.getColor()
             self.as_updateCaptureDataS(clientID, points, 0, '-:-', '-', item.getBlockedString(), color)
             return
 

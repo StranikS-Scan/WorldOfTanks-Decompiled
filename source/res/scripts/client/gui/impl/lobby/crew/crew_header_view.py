@@ -1,45 +1,44 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_header_view.py
 import logging
-import string
 import typing
-import BigWorld
+from typing import NamedTuple
 from CurrentVehicle import g_currentVehicle
-from wg_async import wg_async, wg_await
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings, ViewEvent, View
-from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.backport.backport_pop_over import BackportPopOverContent, createPopOverData
 from gui.impl.gen import R
+from gui.impl.gen_utils import DynAccessor
 from gui.impl.gen.view_models.views.lobby.crew.crew_header_model import CrewHeaderModel
+from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBonusEnum
 from gui.impl.lobby.crew.accelerate_training_tooltip_view import AccelerateTrainingTooltipView
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
-from gui.shared.utils import decorators
-from helpers import dependency
+from gui.shared.gui_items.Vehicle import getIconResourceName
+from helpers import dependency, int2roman
 from renewable_subscription_common.passive_xp import isTagsSetOk, CrewValidator, CrewSlotValidationResult
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from account_helpers.renewable_subscription import RenewableSubscription
     from typing import Union, Dict, Callable
 _logger = logging.getLogger(__name__)
+BuildedMessage = NamedTuple('BuildedMessage', [('text', str), ('icon', DynAccessor)])
 
 class CrewHeaderView(ViewImpl):
-    __slots__ = ('_renewableSubInfo', '_serverSettings', '_crewValidationResults', '_tooltipModelFactories')
+    __slots__ = ('_serverSettings', '_crewValidationResults', '_tooltipModelFactories')
     itemsCache = dependency.descriptor(IItemsCache)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.crew.CrewHeader())
         settings.flags = ViewFlags.COMPONENT
         settings.model = CrewHeaderModel()
         super(CrewHeaderView, self).__init__(settings)
-        self._renewableSubInfo = BigWorld.player().renewableSubscription
         self._serverSettings = self._lobbyContext.getServerSettings()
         self._crewValidationResults = []
         self._tooltipModelFactories = {R.views.lobby.crew.AccelerateTrainingTooltipView(): AccelerateTrainingTooltipView,
@@ -47,7 +46,7 @@ class CrewHeaderView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(CrewHeaderView, self)._initialize(*args, **kwargs)
-        self._renewableSubInfo.onRenewableSubscriptionDataChanged += self._onRenewableSubscriptionDataChanged
+        self._wotPlusCtrl.onDataChanged += self._onWotPlusDataChanged
         self.viewModel.onAccelerateCrewTrainingToggle += self._onAccelerateCrewTrainingToggle
         self.viewModel.onCrewOperationsClick += self._onCrewOperationsClick
         self.viewModel.onIdleCrewBonusToggle += self._onIdleCrewBonusToggle
@@ -55,7 +54,7 @@ class CrewHeaderView(ViewImpl):
         g_currentVehicle.onChanged += self._onCurrentVehicleChanged
 
     def _finalize(self):
-        self._renewableSubInfo.onRenewableSubscriptionDataChanged -= self._onRenewableSubscriptionDataChanged
+        self._wotPlusCtrl.onDataChanged -= self._onWotPlusDataChanged
         self.viewModel.onAccelerateCrewTrainingToggle -= self._onAccelerateCrewTrainingToggle
         self.viewModel.onCrewOperationsClick -= self._onCrewOperationsClick
         self.viewModel.onIdleCrewBonusToggle -= self._onIdleCrewBonusToggle
@@ -86,70 +85,50 @@ class CrewHeaderView(ViewImpl):
             vehicle = g_currentVehicle.item
             if vehicle is None:
                 _logger.info('No current vehicle')
-                tx.setIsIdleCrewBonusAvailable(False)
-                tx.setIsIdleCrewBonusActive(False)
                 tx.setIsAccelerateCrewTrainingActive(False)
                 tx.setIsAccelerateCrewTrainingAvailable(False)
-                tx.setIsIdleCrewCompatible(False)
+                tx.setIdleCrewBonus(IdleCrewBonusEnum.DISABLED)
                 return
-            isCrewBonusAvailable = self._serverSettings.isRenewableSubPassiveCrewXPEnabled() and self._renewableSubInfo.isEnabled() and isTagsSetOk(vehicle.tags)
-            tx.setIsIdleCrewBonusAvailable(isCrewBonusAvailable)
-            tx.setIsIdleCrewBonusActive(self._renewableSubInfo.vehicleCrewHasIdleXP(vehicle.invID))
             tx.setIsAccelerateCrewTrainingActive(vehicle.isXPToTman)
             tx.setIsAccelerateCrewTrainingAvailable(vehicle.isElite)
-            tx.setIsIdleCrewCompatible(self._isEveryCrewMemberValid() and self._isEveryCrewFull())
+            tx.setIdleCrewBonus(self._getIdleCrewState())
         return
+
+    def _getIdleCrewState(self):
+        if not self._lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled():
+            return IdleCrewBonusEnum.INVISIBLE
+        if not self._wotPlusCtrl.isEnabled():
+            return IdleCrewBonusEnum.DISABLED
+        vehicle = g_currentVehicle.item
+        if not isTagsSetOk(vehicle.tags):
+            return IdleCrewBonusEnum.INCOMPATIBLEWITHCURRENTVEHICLE
+        if self._wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID):
+            return IdleCrewBonusEnum.ACTIVEONCURRENTVEHICLE
+        return IdleCrewBonusEnum.ACTIVEONANOTHERVEHICLE if self._wotPlusCtrl.getVehicleIDWithIdleXP() else IdleCrewBonusEnum.ENABLED
 
     def _onCurrentVehicleChanged(self):
         self._updateCrewValidationResults()
         self._updateModel()
 
-    @wg_async
     def _onAccelerateCrewTrainingToggle(self):
-        from gui.shared.event_dispatcher import showAccelerateCrewTrainingDialog
-        vehicle = g_currentVehicle.item
-        if vehicle is None:
-            _logger.info('No current vehicle')
-            return
-        else:
-            wasActive = vehicle.isXPToTman
-
-            def toggleCallback():
-                self._onAccelerateCrewTrainingConfirmed(vehicle, wasActive)
-
-            if wasActive:
-                toggleCallback()
-            else:
-                yield wg_await(showAccelerateCrewTrainingDialog(toggleCallback))
-            return
-
-    @decorators.adisp_process('updateTankmen')
-    def _onAccelerateCrewTrainingConfirmed(self, vehicle, wasActive):
-        nowActive = not wasActive
-        self.viewModel.setIsAccelerateCrewTrainingActive(nowActive)
-        result = yield VehicleTmenXPAccelerator(vehicle, nowActive, False).request()
-        if not result.success:
-            self.viewModel.setIsAccelerateCrewTrainingActive(wasActive)
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        pass
 
     def _onCrewOperationsClick(self):
         pass
 
     @wg_async
     def _onIdleCrewBonusToggle(self):
-        wasActive = self.viewModel.getIsIdleCrewBonusActive()
+        wasActive = self.viewModel.getIdleCrewBonus() == IdleCrewBonusEnum.ACTIVEONCURRENTVEHICLE
         toBeActive = not wasActive
         _logger.debug('[CrewHeaderView] _onIdleCrewBonusToggle, from=%s, to=%s', wasActive, toBeActive)
         currentVehicle = g_currentVehicle.item
 
-        def errorCallback():
-            self.viewModel.setIsIdleCrewBonusActive(wasActive)
+        def callback():
+            self.viewModel.setIdleCrewBonus(self._getIdleCrewState())
 
         def toggleCallback():
-            self.viewModel.setIsIdleCrewBonusActive(toBeActive)
             vehId = currentVehicle.invID if toBeActive else None
-            self._renewableSubInfo.idleCrewXPSelectVehicle(vehId, errorCallback)
+            self._wotPlusCtrl.selectIdleCrewXPVehicle(vehId, callback, callback)
             return
 
         dialogMessage = self._buildConfirmationMessage()
@@ -160,53 +139,25 @@ class CrewHeaderView(ViewImpl):
             yield wg_await(showIdleCrewBonusDialog(dialogMessage, toggleCallback))
 
     def _buildConfirmationMessage(self):
-        previousVehicleId = self._renewableSubInfo.getVehicleIDWithIdleXP()
+        previousVehicleId = self._wotPlusCtrl.getVehicleIDWithIdleXP()
         previousVehicle = self.itemsCache.items.getVehicle(previousVehicleId) if previousVehicleId else None
         stringRoot = R.strings.dialogs.idleCrewBonus
-        dialogMessage = []
+        message = None
         if previousVehicle:
-            vehicleName = previousVehicle.userName
-            vehicleName = vehicleName.replace('(', '%((')
-            vehicleName = vehicleName.replace(')', '))')
-            dialogMessage.append(backport.text(stringRoot.message.remove()) % vehicleName)
-        crewWarnings = []
-        if not self._isEveryCrewFull():
-            crewWarnings.append(backport.text(stringRoot.message.crewIncomplete()))
-        if not self._isEveryCrewMemberValid():
-            crewWarnings.append(backport.text(stringRoot.message.crewUnsuitable()))
-        if crewWarnings:
-            crewWarnings.insert(0, backport.text(stringRoot.message.crewWarning()))
-            dialogMessage.append('\n'.join(crewWarnings))
-        return '\n \n \n'.join(dialogMessage)
+            vehicleName = '{} {}'.format(int2roman(previousVehicle.level), previousVehicle.userName)
+            removeTypeString = backport.text(stringRoot.message.removeType())
+            removeNameString = backport.text(stringRoot.message.removeName(), vehicleName=vehicleName)
+            finalString = '{} {}'.format(removeTypeString, removeNameString)
+            message = BuildedMessage(text=finalString, icon=R.images.gui.maps.icons.vehicleTypes.dyn(getIconResourceName(previousVehicle.type)))
+        return message
 
-    def _onRenewableSubscriptionDataChanged(self, itemDiff):
-        self._updateModel()
+    def _onWotPlusDataChanged(self, itemDiff):
+        if 'isEnabled' in itemDiff:
+            self._updateModel()
 
     def _onServerSettingsChange(self, diff):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self._updateModel()
-
-    def _isEveryCrewMemberValid(self):
-        for result in self._crewValidationResults:
-            if not result.isEmpty and not result.tManValidRes.isValid:
-                return False
-
-        return True
-
-    def _isEveryCrewFull(self):
-        for result in self._crewValidationResults:
-            if result.isEmpty:
-                return False
-
-        return True
-
-    def _getWarningStr(self):
-        warningStrings = []
-        if not self._isEveryCrewMemberValid():
-            warningStrings.append(backport.text(R.strings.tooltips.idle_crew_tooltip.warningUnsuitable()))
-        if not self._isEveryCrewFull():
-            warningStrings.append(backport.text(R.strings.tooltips.idle_crew_tooltip.warningIncomplete()))
-        return string.join(warningStrings, sep='\n')
 
     def createPopOverContent(self, event):
         return BackportPopOverContent(createPopOverData(VIEW_ALIAS.CREW_OPERATIONS_POPOVER))
@@ -216,4 +167,4 @@ class CrewHeaderView(ViewImpl):
             _logger.error('Crew header view tried creating invalid tooltip with contentID %d', contentID)
             return None
         else:
-            return self._tooltipModelFactories[contentID](self.viewModel.getIsIdleCrewBonusActive(), self._getWarningStr())
+            return self._tooltipModelFactories[contentID](self.viewModel.getIdleCrewBonus())

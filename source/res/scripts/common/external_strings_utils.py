@@ -9,7 +9,7 @@ from soft_exception import SoftException
 _MAX_NORMALIZED_NAME_BYTES = 96
 
 class TextRestrictionsBasic(object):
-    __slots__ = ('ACCOUNT_NAME_RE', 'ACCOUNT_NAME_MIN_LENGTH', 'ACCOUNT_NAME_MAX_LENGTH', 'ACCOUNT_NAME_MIN_LENGTH_REG', 'LOGIN_NAME_RE', 'LOGIN_NAME_MIN_LENGTH', 'LOGIN_NAME_MAX_LENGTH', 'PASSWORD_RE', 'PASSWORD_MIN_LENGTH', 'PASSWORD_MAX_LENGTH', 'UPPERCASE_CLAN_ABBREV', 'REQUIRE_NORMALIZED_CLAN_ABBREV', 'CLAN_ABBREV_RE', 'CLAN_NAME_MAX_LENGTH', 'CLAN_ABBREV_MAX_LENGTH', 'CLAN_DESCR_MAX_LENGTH', 'CLAN_MOTTO_MAX_LENGTH')
+    __slots__ = ('ACCOUNT_NAME_RE', 'ACCOUNT_NAME_MIN_LENGTH', 'ACCOUNT_NAME_MAX_LENGTH', 'ACCOUNT_NAME_MIN_LENGTH_REG', 'LOGIN_NAME_RE', 'LOGIN_NAME_MIN_LENGTH', 'LOGIN_NAME_MAX_LENGTH', 'UPPERCASE_CLAN_ABBREV', 'REQUIRE_NORMALIZED_CLAN_ABBREV', 'CLAN_ABBREV_RE', 'CLAN_NAME_MAX_LENGTH', 'CLAN_ABBREV_MAX_LENGTH', 'CLAN_DESCR_MAX_LENGTH', 'CLAN_MOTTO_MAX_LENGTH')
 
     def __init__(self):
         self.ACCOUNT_NAME_RE = re.compile('^[a-zA-Z0-9_]+$')
@@ -19,9 +19,6 @@ class TextRestrictionsBasic(object):
         self.LOGIN_NAME_RE = re.compile('^[a-z0-9_-]+(\\.[a-z0-9_-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*\\.([a-z]{2,4})$')
         self.LOGIN_NAME_MIN_LENGTH = 1
         self.LOGIN_NAME_MAX_LENGTH = 255
-        self.PASSWORD_RE = re.compile('^[a-zA-Z0-9_]+$')
-        self.PASSWORD_MIN_LENGTH = 6
-        self.PASSWORD_MAX_LENGTH = 100
         self.UPPERCASE_CLAN_ABBREV = True
         self.REQUIRE_NORMALIZED_CLAN_ABBREV = True
         self.CLAN_ABBREV_RE = re.compile('^[A-Z0-9_\\-]+$')
@@ -50,8 +47,6 @@ class TextRestrictionsChinese(TextRestrictionsBasic):
         self.LOGIN_NAME_RE = re.compile('^[_a-z0-9-+@.]+$')
         self.LOGIN_NAME_MIN_LENGTH = 4
         self.LOGIN_NAME_MAX_LENGTH = 50
-        self.PASSWORD_RE = re.compile('^[!-~]+$')
-        self.PASSWORD_MAX_LENGTH = 32
         self.CLAN_ABBREV_RE = self.ACCOUNT_NAME_RE
         self.UPPERCASE_CLAN_ABBREV = False
         self.REQUIRE_NORMALIZED_CLAN_ABBREV = False
@@ -65,7 +60,6 @@ class TextRestrictionsKorea(TextRestrictionsChinese):
         self.LOGIN_NAME_MIN_LENGTH = 1
         self.LOGIN_NAME_MAX_LENGTH = 50
         self.LOGIN_NAME_RE = re.compile('^[a-z0-9_-]+(\\.[a-z0-9_-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,4}$')
-        self.PASSWORD_RE = re.compile('^[!-~]+$')
         self.ACCOUNT_NAME_RE = re.compile(u'^[a-zA-Z0-9_\uac00-\ud79d]+$')
 
 
@@ -104,9 +98,6 @@ _ACCOUNT_NAME_MIN_LENGTH_REG = textRestrictions.ACCOUNT_NAME_MIN_LENGTH_REG
 _LOGIN_NAME_RE = textRestrictions.LOGIN_NAME_RE
 _LOGIN_NAME_MIN_LENGTH = textRestrictions.LOGIN_NAME_MIN_LENGTH
 _LOGIN_NAME_MAX_LENGTH = textRestrictions.LOGIN_NAME_MAX_LENGTH
-_PASSWORD_RE = textRestrictions.PASSWORD_RE
-_PASSWORD_MIN_LENGTH = textRestrictions.PASSWORD_MIN_LENGTH
-_PASSWORD_MAX_LENGTH = textRestrictions.PASSWORD_MAX_LENGTH
 _CLAN_ABBREV_RE = textRestrictions.CLAN_ABBREV_RE
 _CLAN_NAME_MAX_LENGTH = textRestrictions.CLAN_NAME_MAX_LENGTH
 _CLAN_ABBREV_MAX_LENGTH = textRestrictions.CLAN_ABBREV_MAX_LENGTH
@@ -183,10 +174,6 @@ def isAccountNameValid(text, minLength=_ACCOUNT_NAME_MIN_LENGTH):
 
 def normalizedAccountName(text):
     return normalized_unicode_trim_and_lowercase(text, _ACCOUNT_NAME_MAX_LENGTH)
-
-
-def isPasswordValid(text):
-    return utf8_accepted(text, _PASSWORD_RE, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH)
 
 
 def isAccountLoginValid(text):

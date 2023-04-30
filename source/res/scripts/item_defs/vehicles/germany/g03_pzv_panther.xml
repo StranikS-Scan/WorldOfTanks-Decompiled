@@ -70,6 +70,13 @@
       <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G03_PzV_Panther_E_3DSt>
+          <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Hull.model	</exploded>
+        </G03_PzV_Panther_E_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -99,9 +106,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.457764 0.677167 2.42992	</rayStart>
-        <rayEnd>	-0.457764 0.3528 2.19586	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.457764 0.532525 2.325548	</rayStart>
+        <rayEnd>	-0.457764 0.451433 2.267032	</rayEnd>
+        <rayUp>	-0 0.585154 -0.810922	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1332,6 +1339,45 @@
         <clipAngle>	1.28801	</clipAngle>
         <anchorShift>	0.224826	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15099	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+        <position>	-0.0283729 1.60286 2.35215	</position>
+        <rotation>	0.511046 -0.000026 3.14155	</rotation>
+        <scale>	0.550896 0.309312 0.550898	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.803384	</clipAngle>
+        <anchorShift>	0.164162	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15100	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+        <position>	-1.7258 1.22975 -2.61985	</position>
+        <rotation>	1.62451 1.46552 -0.123347	</rotation>
+        <scale>	0.555956 0.155817 0.555961	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.830914	</clipAngle>
+        <anchorShift>	0.045138	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15101	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+        <position>	1.68469 1.24834 -0.429842	</position>
+        <rotation>	1.6245 -1.46553 0.123418	</rotation>
+        <scale>	0.555956 0.155817 0.555961	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.830914	</clipAngle>
+        <anchorShift>	0.045138	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.6 1.6 0.7 0.7	</tiling>
@@ -1372,6 +1418,13 @@
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G03_PzV_Panther_E_3DSt>
+            <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G03_PzV_Panther_E_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1870,12 +1923,12 @@
             <segmentSyncPivotOffset>	-1.369	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-568.577	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-565.697	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -2056,12 +2109,12 @@
             <segmentSyncPivotOffset>	1.369	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-562.74	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-565.696	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -2206,6 +2259,13 @@
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G03_PzV_Panther_E_3DSt>
+            <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G03_PzV_Panther_E_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2704,12 +2764,12 @@
             <segmentSyncPivotOffset>	-1.369	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-568.577	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-565.697	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -2890,12 +2950,12 @@
             <segmentSyncPivotOffset>	1.369	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-562.74	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-565.696	</startAngle>
+              <startAngle>	0	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -3085,6 +3145,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_01.model	</collisionModelServer>
@@ -3148,12 +3215,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.00329885 0.00630247 3.5	</rayStart>
-              <rayEnd>	0.0890514 -0.0354112 3.41937	</rayEnd>
-              <rayUp>	0.076 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.782	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
+              <rayStart>	-0.003299 0.006302 3.6	</rayStart>
+              <rayEnd>	-0.003299 0.006302 4.26	</rayEnd>
+              <rayUp>	0.076 0 0	</rayUp>
+              <size>	0.66	</size>
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -3192,6 +3257,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_06.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_06.model	</collisionModelServer>
@@ -3255,9 +3327,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.00884723 -0.01718 1.50455	</rayStart>
-              <rayEnd>	0.0905091 -0.0407427 1.49083	</rayEnd>
-              <rayUp>	0.097 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.008847 -0.01718 1.50455	</rayStart>
+              <rayEnd>	-0.008847 -0.01718 1.96455	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -3306,6 +3378,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_03.model	</collisionModelServer>
@@ -3367,9 +3446,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.00484723 0.00481995 5.79	</rayStart>
-              <rayEnd>	0.109957 0.00616942 5.86737	</rayEnd>
-              <rayUp>	0.07 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.004847 0.00482 5.79	</rayStart>
+              <rayEnd>	-0.004847 0.00482 6.288	</rayEnd>
+              <rayUp>	0.07 0 0	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.498	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -3387,6 +3466,13 @@
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G03_PzV_Panther_E_3DSt>
+            <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G03_PzV_Panther_E_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Turret_01.model	</collisionModelServer>
@@ -3836,6 +3922,58 @@
           <clipAngle>	0.898363	</clipAngle>
           <anchorShift>	0.506363	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+          <position>	-0.893074 2.59267 0.276201	</position>
+          <rotation>	1.18264 -1.46436 3.13004	</rotation>
+          <scale>	0.335928 0.0670053 0.335931	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.995548	</clipAngle>
+          <anchorShift>	0.032666	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+          <position>	1.11514 2.14072 -0.110147	</position>
+          <rotation>	1.18266 1.46433 3.13008	</rotation>
+          <scale>	0.351401 0.0700917 0.351405	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.995548	</clipAngle>
+          <anchorShift>	0.032666	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+          <position>	0.278786 2.78433 -0.446407	</position>
+          <rotation>	-0.000000 -0.000009 3.14155	</rotation>
+          <scale>	0.46568 0.0579196 0.46568	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.00403	</clipAngle>
+          <anchorShift>	0.03225	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G03_PzV_Panther_E_3DSt	</compatibleModels>
+          <position>	-0.378216 2.22006 -1.43891	</position>
+          <rotation>	1.98728 -0.000021 -0.000008	</rotation>
+          <scale>	0.52597 0.153616 0.525965	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.981748	</clipAngle>
+          <anchorShift>	0.098775	</anchorShift>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
@@ -3912,6 +4050,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_02.model	</collisionModelServer>
@@ -3949,12 +4094,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.0111131 -0.00478598 3.58617	</rayStart>
-              <rayEnd>	0.0779988 -0.0463893 3.58574	</rayEnd>
-              <rayUp>	0.082 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.601	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
+              <rayStart>	-0.011113 -0.004786 3.71	</rayStart>
+              <rayEnd>	-0.011113 -0.004786 4.27	</rayEnd>
+              <rayUp>	0.089 0 0	</rayUp>
+              <size>	0.56	</size>
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -3995,6 +4138,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_05.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_05.model	</collisionModelServer>
@@ -4034,9 +4184,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.0076083 -0.0047754 1.17786	</rayStart>
-              <rayEnd>	-0.0390053 0.00704249 1.17411	</rayEnd>
-              <rayUp>	0.097 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.007608 -0.004775 1.17786	</rayStart>
+              <rayEnd>	-0.007608 -0.004775 1.64286	</rayEnd>
+              <rayUp>	0.097 0 0	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.465	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -4083,6 +4233,13 @@
             <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <G03_PzV_Panther_E_3DSt>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_04.model	</exploded>
+              </G03_PzV_Panther_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_04.model	</collisionModelServer>
@@ -4120,9 +4277,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.0141508 0.018093 5.78628	</rayStart>
-              <rayEnd>	0.0473115 -0.0684701 5.79007	</rayEnd>
-              <rayUp>	0.07 0.000000 0.000000	</rayUp>
+              <rayStart>	-0.014151 0.018093 5.78628	</rayStart>
+              <rayEnd>	-0.014151 0.018093 6.28428	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.498	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -4140,6 +4297,13 @@
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <G03_PzV_Panther_E_3DSt>
+            <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Turret_02.model	</exploded>
+          </G03_PzV_Panther_E_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Turret_02.model	</collisionModelServer>

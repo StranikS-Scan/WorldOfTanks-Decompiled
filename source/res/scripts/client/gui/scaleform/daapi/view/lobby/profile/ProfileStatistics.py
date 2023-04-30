@@ -34,7 +34,8 @@ _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.RANKED_10X10: BATTLE_TYPES.RANKED_10X10,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: 'battle_royale',
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale',
- PROFILE_DROPDOWN_KEYS.COMP7: 'comp7'}
+ PROFILE_DROPDOWN_KEYS.COMP7: 'comp7',
+ PROFILE_DROPDOWN_KEYS.COMP7_SEASON2: 'comp7'}
 
 def _packProviderType(mainType, addValue=None):
     return '%s/%s' % (mainType, str(addValue)) if addValue is not None else mainType
@@ -46,7 +47,7 @@ def _parseProviderType(value):
 
 class ProfileStatistics(ProfileStatisticsMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, *args):
         try:
@@ -56,20 +57,15 @@ class ProfileStatistics(ProfileStatisticsMeta):
             self.__ctx = {}
 
         super(ProfileStatistics, self).__init__(*args)
-        seasonID = self.__getLastActiveSeasonID()
-        self.__rankedSeasonKey = _RANKED_SEASONS_ARCHIVE
-        if seasonID is not None and not self.rankedController.hasSpecialSeason():
-            self.__rankedSeasonKey = str(seasonID)
-        return
+        self.__seasonsManagers = self.__initSeasonsManagers()
 
     def setSeason(self, seasonId):
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
-            self.__rankedSeasonKey = seasonId
-            self.as_updatePlayerStatsBtnS(self.__getPlayersStatsBtnEnabled())
+        if self.__getSeasonsManager().setSeason(seasonId):
+            self.as_updatePlayerStatsBtnS(self.__getSeasonsManager().getPlayersStatsBtnEnabled())
             self.invokeUpdate()
 
     def showPlayersStats(self):
-        self.rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID,
+        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID,
          'clientParams': {'spaID': self._databaseID}})
 
     def onCompletedSeasonsInfoChanged(self):
@@ -89,6 +85,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
     def _dispose(self):
         super(ProfileStatistics, self)._dispose()
         g_eventBus.handleEvent(ProfileStatisticEvent(ProfileStatisticEvent.DISPOSE), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__clearSeasonsManagers()
 
     def _setInitData(self, accountDossier=None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)]
@@ -103,7 +100,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS))
-        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7))
+        dropDownProvider += [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.COMP7_SEASON2)]
         self.as_setInitDataS({'dropDownProvider': dropDownProvider})
         return
 
@@ -121,9 +118,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         elif self._battlesType in (PROFILE_DROPDOWN_KEYS.RANKED, PROFILE_DROPDOWN_KEYS.RANKED_10X10):
             vo['seasonDropdownAttachToTitle'] = True
             vo['playersStatsLbl'] = backport.text(R.strings.ranked_battles.statistic.playersRaiting())
-            if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10:
-                self.__updateRankedDropdownData(vo, self.__rankedSeasonKey)
-                vo['playersStats'] = self.__getPlayersStatsBtnEnabled()
+        self.__getSeasonsManager().addSeasonsDropdown(vo)
         self.as_responseDossierS(self._battlesType, vo, _FRAME_LABELS[self._battlesType], '')
         return
 
@@ -133,22 +128,24 @@ class ProfileStatistics(ProfileStatisticsMeta):
     def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
             accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
-            return self._getRanked15x15Stats(accountDossier)
+        seasonStats = self.__getSeasonsManager().getStats(accountDossier)
+        if seasonStats:
+            return seasonStats
         else:
-            return self._getRanked10x10Stats(accountDossier) if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED_10X10 else super(ProfileStatistics, self)._getNecessaryStats(accountDossier)
+            return accountDossier.getSeasonRanked15x15Stats(RankedDossierKeys.ARCHIVE, ARCHIVE_SEASON_ID) if self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED else super(ProfileStatistics, self)._getNecessaryStats(accountDossier)
 
-    def _getRanked10x10Stats(self, accountDossier):
-        if self.__rankedSeasonKey == _RANKED_SEASONS_ARCHIVE:
-            return accountDossier.getSeasonRankedStats(RANKED_SEASONS_ARCHIVE_10x10, 0)
-        season = self.rankedController.getSeason(int(self.__rankedSeasonKey))
-        if season:
-            seasonKey = RankedDossierKeys.SEASON % season.getNumber()
-            seasonID = season.getSeasonID()
-            return accountDossier.getSeasonRankedStats(seasonKey, seasonID)
+    def __initSeasonsManagers(self):
+        return {'default': _BaseSeasonManager(),
+         PROFILE_DROPDOWN_KEYS.RANKED_10X10: _RankedSeasonsManager(self._dataProviderEntry)}
 
-    def _getRanked15x15Stats(self, accountDossier):
-        return accountDossier.getSeasonRanked15x15Stats(RankedDossierKeys.ARCHIVE, ARCHIVE_SEASON_ID)
+    def __getSeasonsManager(self):
+        return self.__seasonsManagers[self._battlesType] if self._battlesType in self.__seasonsManagers else self.__seasonsManagers['default']
+
+    def __clearSeasonsManagers(self):
+        for manager in self.__seasonsManagers.values():
+            manager.clear()
+
+        self.__seasonsManagers = {}
 
     @classmethod
     def __updateStaticDropdownData(cls, vo):
@@ -157,48 +154,97 @@ class ProfileStatistics(ProfileStatisticsMeta):
         vo['seasonIndex'] = 0
         vo['seasonEnabled'] = False
 
-    def __updateRankedDropdownData(self, vo, selectedLabel):
-        showDropDown = self.__hasRankedSeasonsHistory() and not self.rankedController.hasSpecialSeason()
-        vo['showSeasonDropdown'] = showDropDown
+
+class _BaseSeasonManager(object):
+
+    def __init__(self, entryFactory=None):
+        self._entryFactory = entryFactory
+        self._seasonKey = None
+        return
+
+    def clear(self):
+        self._entryFactory = None
+        return
+
+    def setSeason(self, seasonId):
+        if self._seasonKey == seasonId:
+            return False
+        self._seasonKey = seasonId
+        return True
+
+    def addSeasonsDropdown(self, targetVO):
+        pass
+
+    def getPlayersStatsBtnEnabled(self):
+        return False
+
+    def getStats(self, accountDossier):
+        return None
+
+
+class _RankedSeasonsManager(_BaseSeasonManager):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, entryFactory):
+        super(_RankedSeasonsManager, self).__init__(entryFactory)
+        self._seasonKey = _RANKED_SEASONS_ARCHIVE
+        seasonID = self.__getLastActiveSeasonID()
+        if seasonID is not None and not self.__rankedController.hasSpecialSeason():
+            self._seasonKey = str(seasonID)
+        return
+
+    def addSeasonsDropdown(self, targetVO):
+        showDropDown = self.__hasRankedSeasonsHistory() and not self.__rankedController.hasSpecialSeason()
+        targetVO['showSeasonDropdown'] = showDropDown
         if showDropDown:
-            seasonItems = vo['seasonItems'] = [self._dataProviderEntry(_RANKED_SEASONS_ARCHIVE, backport.text(R.strings.profile.profile.ranked.seasonsdropdown.archive()))]
+            seasonItems = targetVO['seasonItems'] = [self._entryFactory(_RANKED_SEASONS_ARCHIVE, backport.text(R.strings.profile.profile.ranked.seasonsdropdown.archive()))]
             seasonIndex = 0
-            sortedSeasons = sorted(self.rankedController.getSeasonPassed(), key=lambda seasonData: seasonData[1])
+            sortedSeasons = sorted(self.__rankedController.getSeasonPassed(), key=lambda seasonData: seasonData[1])
             seasonIds = [ seasonID for seasonID, _ in sortedSeasons ]
-            currentSeason = self.rankedController.getCurrentSeason()
+            currentSeason = self.__rankedController.getCurrentSeason()
             if currentSeason:
                 seasonIds.append(currentSeason.getSeasonID())
             for seasonID in seasonIds:
-                season = self.rankedController.getSeason(seasonID)
+                season = self.__rankedController.getSeason(seasonID)
                 if season:
                     seasonsdropdown = R.strings.profile.profile.ranked.seasonsdropdown
-                    seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(seasonsdropdown.num(season.getNumber())())))
+                    seasonItems.append(self._entryFactory(str(seasonID), backport.text(seasonsdropdown.num(season.getNumber())())))
 
             for i, seasonItem in enumerate(seasonItems):
-                if seasonItem['key'] == selectedLabel:
+                if seasonItem['key'] == self._seasonKey:
                     seasonIndex = i
 
-            vo['seasonIndex'] = seasonIndex
-            vo['seasonEnabled'] = True
+            targetVO['seasonIndex'] = seasonIndex
+            targetVO['seasonEnabled'] = True
+        targetVO['playersStats'] = self.getPlayersStatsBtnEnabled()
 
-    def __hasRankedSeasonsHistory(self):
-        passedSeasons = len(self.rankedController.getSeasonPassed())
-        return passedSeasons >= 1 or self.rankedController.getCurrentSeason() is not None
+    def getPlayersStatsBtnEnabled(self):
+        if self.__rankedController.isEnabled():
+            statsSeasonID = self.__getLastActiveSeasonID()
+            if statsSeasonID is not None:
+                return str(statsSeasonID) == self._seasonKey
+        return False
+
+    def getStats(self, accountDossier):
+        if self._seasonKey == _RANKED_SEASONS_ARCHIVE:
+            return accountDossier.getSeasonRankedStats(RANKED_SEASONS_ARCHIVE_10x10, 0)
+        season = self.__rankedController.getSeason(int(self._seasonKey))
+        if season:
+            seasonKey = RankedDossierKeys.SEASON % season.getNumber()
+            seasonID = season.getSeasonID()
+            return accountDossier.getSeasonRankedStats(seasonKey, seasonID)
 
     def __getLastActiveSeasonID(self):
-        currentSeason = self.rankedController.getCurrentSeason()
+        currentSeason = self.__rankedController.getCurrentSeason()
         if currentSeason:
             statsSeasonID = currentSeason.getSeasonID()
         else:
-            seasons = self.rankedController.getSeasonPassed()
+            seasons = self.__rankedController.getSeasonPassed()
             seasons.sort()
             hasSeasons = bool(len(seasons))
             statsSeasonID = seasons[-1][0] if hasSeasons else None
         return statsSeasonID
 
-    def __getPlayersStatsBtnEnabled(self):
-        result = self.rankedController.isEnabled()
-        if result:
-            statsSeasonID = self.__getLastActiveSeasonID()
-            result = str(statsSeasonID) == self.__rankedSeasonKey if statsSeasonID is not None else False
-        return result
+    def __hasRankedSeasonsHistory(self):
+        passedSeasons = len(self.__rankedController.getSeasonPassed())
+        return passedSeasons >= 1 or self.__rankedController.getCurrentSeason() is not None

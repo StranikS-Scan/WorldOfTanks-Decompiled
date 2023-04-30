@@ -1,0 +1,28 @@
+<Perks_Vehicle.def>
+  <Properties>
+    <perkEffects>
+      <Type>	FIXED_DICT	  <Properties>
+          <equipment>
+            <Type>	ARRAY	  <of>	STRING	</of>
+            </Type>
+          </equipment>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perkEffects>
+    <perks>
+      <Type>	ARRAY	  <of>	PERK_INFO_HUD	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perks>
+    <perksRibbonNotify>
+      <Type>	ARRAY	  <of>	PERK_INFO_RIBBON	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </perksRibbonNotify>
+  </Properties>
+  <CellMethods></CellMethods>
+</Perks_Vehicle.def>

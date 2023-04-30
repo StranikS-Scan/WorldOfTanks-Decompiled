@@ -7,12 +7,13 @@ import types
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async, adisp_process
-from constants import IGR_TYPE
+from constants import IGR_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, GUI_SETTINGS
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities import initDevFunctional, finiDevFunctional
+from gui.prb_control.entities.base.squad.entity import SquadEntity
 from gui.prb_control.entities.base.unit.ctx import JoinUnitCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.factories import ControlFactoryComposite
@@ -33,7 +34,7 @@ from gui.shared import actions, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import dependency
-from skeletons.gui.game_control import IGameSessionController, IRentalsController
+from skeletons.gui.game_control import IGameSessionController, IRentalsController, IWinbackController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.prb_control import IPrbControlLoader
@@ -45,6 +46,7 @@ class _PreBattleDispatcher(ListenersCollection):
     rentals = dependency.descriptor(IRentalsController)
     igrCtrl = dependency.descriptor(IIGRController)
     eventsCache = dependency.descriptor(IEventsCache)
+    winbackCtrl = dependency.descriptor(IWinbackController)
 
     def __init__(self):
         super(_PreBattleDispatcher, self).__init__()
@@ -346,6 +348,15 @@ class _PreBattleDispatcher(ListenersCollection):
         self.__entity.resetPlayerState()
         SystemMessages.pushMessage(messages.getKickReasonMessage(reasonCode), type=SystemMessages.SM_TYPE.Error)
 
+    def pe_onClientUpdated(self, diff, _):
+        isRandomQueue = self.__entity.getQueueType() == QUEUE_TYPE.RANDOMS
+        if not isRandomQueue:
+            return
+        isSquadMode = isinstance(self.__entity, SquadEntity)
+        if not isSquadMode and self.winbackCtrl.isModeAvailable():
+            self.__unsetEntity()
+            self.__setDefault()
+
     def pe_onPrebattleAutoInvitesChanged(self):
         if GUI_SETTINGS.specPrebatlesVisible:
             isHidden = prb_getters.areSpecBattlesHidden()
@@ -519,6 +530,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_playerEvents.onPrebattleAutoInvitesChanged += self.pe_onPrebattleAutoInvitesChanged
         g_playerEvents.onPrebattleInvitationsError += self.pe_onPrebattleInviteError
         g_playerEvents.onUpdateSpecBattlesWindow += self.pe_onPrebattleAutoInvitesChanged
+        g_playerEvents.onClientUpdated += self.pe_onClientUpdated
         if self.gameSession.lastBanMsg is not None:
             self.gs_onTillBanNotification(*self.gameSession.lastBanMsg)
         self.gameSession.onTimeTillBan += self.gs_onTillBanNotification
@@ -563,6 +575,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.pe_onPrebattleAutoInvitesChanged
         g_playerEvents.onPrebattleInvitationsError -= self.pe_onPrebattleInviteError
         g_playerEvents.onUpdateSpecBattlesWindow -= self.pe_onPrebattleAutoInvitesChanged
+        g_playerEvents.onClientUpdated -= self.pe_onClientUpdated
         self.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
         self.rentals.onRentChangeNotify -= self.rc_onRentChange
         self.igrCtrl.onIgrTypeChanged -= self.igr_onRoomChange

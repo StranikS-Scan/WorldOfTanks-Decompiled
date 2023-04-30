@@ -302,7 +302,7 @@ def getComplexStatusWULF(statusKey, **kwargs):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEVEL, itemsCache=None):
+def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEVEL, blueprintCount=0, itemsCache=None):
     itemTypeId, _, _ = vehicles.parseIntCompactDescr(compactDescr)
     freeXP = itemsCache.items.stats.actualFreeXP
     unlocks = itemsCache.items.stats.unlocks
@@ -334,7 +334,9 @@ def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEV
         if parentCD is not None and parentCD == unlockProps.parentID:
             return getUnlockProps(isAvailable, parentCD, unlockProps)
         xpCost = pricesDict.get(parentCD, 0)
-        discount, newCost = g_techTreeDP.getBlueprintDiscountData(compactDescr, vehicleLevel, xpCost)
+        if xpCost == 0 and parentCD is None:
+            xpCost = unlockProps.xpFullCost
+        discount, newCost = g_techTreeDP.getBlueprintDiscountData(compactDescr, vehicleLevel, xpCost, blueprintCount)
         unlockProps = UnlockProps(parentCD, -1, newCost, None, discount, xpCost)
         return getUnlockProps(isAvailable, unlockProps.parentID, unlockProps)
     else:

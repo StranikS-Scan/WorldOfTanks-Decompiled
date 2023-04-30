@@ -235,7 +235,8 @@ class _ComponentsVisibilityManager(object):
          BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR: self.__fragCorrelationBarPredicate,
          BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL: self.__carouselPredicate,
          BATTLE_VIEW_ALIASES.POINT_OF_INTEREST_NOTIFICATIONS_PANEL: self.__POINotificationsPredicate,
-         BATTLE_VIEW_ALIASES.RIBBONS_PANEL: self.__ribbonPanelPredicate}
+         BATTLE_VIEW_ALIASES.RIBBONS_PANEL: self.__ribbonPanelPredicate,
+         BATTLE_VIEW_ALIASES.PERKS_PANEL: self.__perksPanelPredicate}
         self.__isSelectionConfirmed = isSelectionConfirmed
         self.__arenaPeriod = arenaPeriod
         self.__isBattleLoaded = False
@@ -309,6 +310,9 @@ class _ComponentsVisibilityManager(object):
 
     def __ribbonPanelPredicate(self):
         return self.__controllingOwnVehicle()
+
+    def __perksPanelPredicate(self):
+        return self.__arenaPeriod >= ARENA_PERIOD.BATTLE and self.__isBattleLoaded and avatar_getter.getPlayerTeam() == BigWorld.player().arena.vehicles[self.__controllingVehicleID]['team']
 
     def __carouselPredicate(self):
         return not BattleReplay.g_replayCtrl.isPlaying and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isSelectionConfirmed and not self.__isFullStatsShown

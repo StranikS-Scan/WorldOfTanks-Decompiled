@@ -5,12 +5,14 @@ from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOP
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
 if typing.TYPE_CHECKING:
+    from Math import Matrix
     from EmptyEntity import EmptyEntity
     from items.vehicles import VehicleDescr
     from gui.shared.gui_items.Vehicle import Vehicle
     from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
     from vehicle_systems.CompoundAppearance import CompoundAppearance
     from points_of_interest.components import PoiStateComponent
+    from cgf_components.zone_components import ZoneMarker, MinimapChanger, ZoneUINotification
 
 class IArenaController(IBattleController):
     __slots__ = ('__weakref__',)
@@ -352,9 +354,6 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
     def setEnhancements(self, vehicleID, enhancements):
         raise NotImplementedError
 
-    def setPerks(self, vehicleID, perks):
-        raise NotImplementedError
-
     def setPostProgression(self, vehicleID, postProgression):
         raise NotImplementedError
 
@@ -392,6 +391,7 @@ class IAppearanceCacheController(IArenaVehiclesController):
 class IPointsOfInterestController(IBattleController):
     onPoiEquipmentUsed = None
     onPoiCaptured = None
+    onPoiInvaderDestroyed = None
 
     @staticmethod
     def getPoiState(poiID):
@@ -478,4 +478,39 @@ class IComp7VOIPController(IArenaLoadController):
         raise NotImplementedError
 
     def toggleChannelConnection(self):
+        raise NotImplementedError
+
+
+class IMapZonesController(IBattleController):
+    onMarkerToZoneAdded = None
+    onMarkerFromZoneRemoved = None
+    onMarkerProgressUpdated = None
+    onZoneTransformed = None
+    onTransformedZoneRemoved = None
+
+    def addMarkerToZone(self, zoneMarker, matrix):
+        raise NotImplementedError
+
+    def removeMarkerFromZone(self, zoneMarker):
+        raise NotImplementedError
+
+    def addTransformedZone(self, zone):
+        raise NotImplementedError
+
+    def removeTransformedZone(self, zone):
+        raise NotImplementedError
+
+    def enterDangerZone(self, zone):
+        raise NotImplementedError
+
+    def exitDangerZone(self, zone):
+        raise NotImplementedError
+
+    def removeDangerZone(self, zone):
+        raise NotImplementedError
+
+    def getZoneMarkers(self):
+        raise NotImplementedError
+
+    def getTransformedZones(self):
         raise NotImplementedError

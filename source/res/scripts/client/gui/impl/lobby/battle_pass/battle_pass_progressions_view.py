@@ -19,7 +19,9 @@ from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, 
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, updateBuyAnimationFlag
+from gui.collection.collections_helpers import getCollectionRes
 from gui.impl import backport
+from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates
@@ -30,13 +32,13 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBattlePassStyleProgressionPreview, showBrowserOverlayView, showHangar, showShop, showStylePreview
+from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBattlePassStyleProgressionPreview, showBrowserOverlayView, showHangar, showShop, showStylePreview, showCollectionWindow
 from gui.shared.formatters.time_formatters import formatDate
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from helpers import dependency, int2roman, time_utils
 from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattlePassController, IWalletController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IWalletController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
@@ -56,6 +58,7 @@ class BattlePassProgressionsView(ViewImpl):
     __gui = dependency.descriptor(IGuiLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wallet = dependency.descriptor(IWalletController)
+    __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
     ANIMATION_PURCHASE_LEVELS = 'animPurchaseLevels'
     ANIMATIONS = {ANIMATION_PURCHASE_LEVELS: False}
 
@@ -103,11 +106,13 @@ class BattlePassProgressionsView(ViewImpl):
         self.__updateBuyButtonState()
 
     def setChapter(self, chapterID):
+        chapterChanged = chapterID != self.__chapterID
         self.__chapterID = chapterID or self.__getDefaultChapterID()
         with self.viewModel.transaction() as model:
             self.__updateProgressData(model=model)
         self.__updateBuyButtonState()
-        self.__setShowBuyAnimations()
+        if chapterChanged:
+            self.__setShowBuyAnimations()
 
     def _getEvents(self):
         return ((self.viewModel.onActionClick, self.__onActionClick),
@@ -125,6 +130,7 @@ class BattlePassProgressionsView(ViewImpl):
          (self.viewModel.onBpcoinClick, self.__showCoinsShop),
          (self.viewModel.onBpbitClick, self.__showPointsShop),
          (self.viewModel.onTakeRewardsClick, self.__takeAllRewards),
+         (self.viewModel.collectionEntryPoint.openCollection, self.__openCollection),
          (self.__battlePass.onPointsUpdated, self.__onPointsUpdated),
          (self.__battlePass.onBattlePassIsBought, self.__onBattlePassBought),
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
@@ -133,6 +139,8 @@ class BattlePassProgressionsView(ViewImpl):
          (self.__battlePass.onSelectTokenUpdated, self.__onSelectTokenUpdated),
          (self.__battlePass.onChapterChanged, self.__onChapterChanged),
          (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__collectionsSystem.onBalanceUpdated, self.__onCollectionsUpdated),
+         (self.__collectionsSystem.onServerSettingsChanged, self.__onCollectionsUpdated),
          (self.__wallet.onWalletStatusChanged, self.__updateWalletAvailability),
          (g_playerEvents.onClientUpdated, self.__onBpBitUpdated))
 
@@ -140,7 +148,9 @@ class BattlePassProgressionsView(ViewImpl):
         return ((events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY),
          (events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),
          (events.BattlePassEvent.ON_PURCHASE_LEVELS, self.__onPurchaseLevels, EVENT_BUS_SCOPE.LOBBY),
-         (events.BattlePassEvent.BUYING_THINGS, self.__updateBuyButtonState, EVENT_BUS_SCOPE.LOBBY))
+         (events.BattlePassEvent.BUYING_THINGS, self.__updateBuyButtonState, EVENT_BUS_SCOPE.LOBBY),
+         (events.CollectionsEvent.NEW_ITEM_SHOWN, self.__onCollectionsUpdated, EVENT_BUS_SCOPE.LOBBY),
+         (events.CollectionsEvent.BATTLE_PASS_ENTRY_POINT_VISITED, self.__onCollectionsUpdated, EVENT_BUS_SCOPE.LOBBY))
 
     def _getCallbacks(self):
         return (('stats.bpcoin', self.__updateBalance),)
@@ -325,6 +335,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setSeasonText(self.__makeSeasonTimeText())
         model.setHasExtra(self.__battlePass.hasExtra())
+        fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__setExpirations(model)
         if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
             self.__setStyleTaken(model)
@@ -661,6 +672,11 @@ class BattlePassProgressionsView(ViewImpl):
     def __takeAllRewards(self):
         self.__battlePass.takeAllRewards()
 
+    def __openCollection(self):
+        backText = backport.text(getCollectionRes(self.__battlePass.getCurrentCollectionId()).featureName())
+        backCallback = partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
+        showCollectionWindow(collectionId=self.__battlePass.getCurrentCollectionId(), backCallback=backCallback, backBtnText=backText)
+
     @staticmethod
     def __showCoinsShop():
         showShop(getBattlePassCoinProductsUrl())
@@ -668,3 +684,7 @@ class BattlePassProgressionsView(ViewImpl):
     @staticmethod
     def __showPointsShop():
         showShop(getBattlePassPointsProductsUrl())
+
+    def __onCollectionsUpdated(self, *_):
+        with self.viewModel.transaction() as model:
+            fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())

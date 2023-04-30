@@ -1,26 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from constants import BonusTypes
+from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from helpers import dependency
-from items import perks, vehicles
-from constants import BonusTypes
+from items import vehicles
 from items.components.c11n_components import SeasonType
 from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 
-def isSituationalBonus(bonusName, bonusType=''):
-    if bonusType == BonusTypes.PERK:
-        cache = perks.g_cache.perks()
-        perkItem = cache.perks[int(bonusName)]
-        return perkItem.situational
-    return bonusName in _SITUATIONAL_BONUSES
+def isSituationalBonus(bonusName, bonusType='', paramName=''):
+    from items import tankmen
+    skill = tankmen.getSkillsConfig().getSkill(bonusName)
+    if not paramName:
+        return skill.situational
+    if paramName and KPI.Name.getKeyByValue(paramName):
+        for kpi in skill.kpi:
+            if kpi.name in (paramName, VEHICLE_ATTR_TO_KPI_NAME_MAP.get(paramName)):
+                return kpi.situational
+
+    param = skill.params.get(paramName)
+    if param:
+        return param.situational
+    return paramName in _PARTIALLY_SITUATIONAL_BONUSES[bonusName] if bonusName in _PARTIALLY_SITUATIONAL_BONUSES else bonusName in _SITUATIONAL_BONUSES
 
 
-_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'gunner_rancorous')
+_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter')
+_PARTIALLY_SITUATIONAL_BONUSES = {'lastEffortBattleBooster': KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY}
 
 def _removeCamouflageModifier(vehicle, bonusID):
     if bonusID == EXTRAS_CAMOUFLAGE:
@@ -30,14 +39,6 @@ def _removeCamouflageModifier(vehicle, bonusID):
                 outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
                 vehicle.removeOutfitForSeason(season)
 
-    return vehicle
-
-
-def _removePlatoonPerkModifier(vehicle, perkName):
-    perksController = vehicle.getPerksController()
-    if not perksController:
-        return vehicle
-    perksController.customizedRecalc(int(perkName))
     return vehicle
 
 
@@ -100,11 +101,20 @@ _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.EQUIPMENT: _removeEquipmentModifier,
  BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
- BonusTypes.PERK: _removePlatoonPerkModifier,
  BonusTypes.PAIR_MODIFICATION: _removePostProgressionModification,
  BonusTypes.BASE_MODIFICATION: _removePostProgressionBaseModifications}
 _NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
- 'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE))}
+ 'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE), ('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER)),
+ 'chassisRotationSpeed': (('virtuosoBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'invisibilityMovingFactor': (('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'turboshaftInvisibilityMovingFactor': (('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'turboshaftInvisibilityStillFactor': (('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'vehicleGunShotDispersionTurretRotation': (('smoothTurretBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'vehicleGunShotDispersionChassisMovement': (('smoothDrivingBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'vehicleEnemySpottingTime': (('rancorousBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'vehicleAmmoBayStrength': (('pedantBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'radiomanHitChance': (('lastEffortBattleBooster', BonusTypes.BATTLE_BOOSTER),),
+ 'radiomanActivityTimeAfterVehicleDestroy': (('lastEffortBattleBooster', BonusTypes.BATTLE_BOOSTER),)}
 
 class _BonusSorter(object):
 
@@ -149,28 +159,27 @@ class BonusExtractor(object):
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__removeCamouflage = False
-        perksController = vehicle.getPerksController()
-        if perksController:
-            self.__vehicle.setPerksController(perksController)
-        self.__updateCurrValue()
 
     def getBonusInfo(self):
         for bnsId, bnsGroup in self.__bonuses:
             yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
 
     def extractBonus(self, bonusGroup, bonusID):
-        oldValue = self.__currValue
+        paramName = self.__paramName
+        if isSituationalBonus(bonusID, bonusGroup, paramName):
+            paramName += 'Situational'
+        valueWithBonus = self.__extractParamValue(paramName)
         self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
         if bonusGroup == BonusTypes.EXTRA and bonusID == EXTRAS_CAMOUFLAGE:
             self.__removeCamouflage = True
-        self.__updateCurrValue()
-        return getParamExtendedData(self.__paramName, oldValue, self.__currValue)
+        valueWithoutBonus = self.__extractParamValue(paramName)
+        return getParamExtendedData(self.__paramName, valueWithBonus, valueWithoutBonus)
 
     def _getCopyVehicle(self, vehicle):
         return self.itemsCache.items.getVehicleCopy(vehicle)
 
-    def __updateCurrValue(self):
-        self.__currValue = getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), self.__paramName)
+    def __extractParamValue(self, paramName):
+        return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), paramName)
 
 
 class TankSetupBonusExtractor(BonusExtractor):

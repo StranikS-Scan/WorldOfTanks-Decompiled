@@ -5,13 +5,14 @@ from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
 from gui.shared.tooltips import shell, advanced
 from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, AdvancedComplexBuilder
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 __all__ = ('getTooltipBuilders',)
 
 def _advancedBlockCondition(context):
 
     def advancedTooltipExist(*args):
         item = context.buildItem(*args)
-        return item.getGUIEmblemID() in advanced.MODULE_MOVIES
+        return not item.isFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES
 
     return advancedTooltipExist
 
@@ -58,7 +59,7 @@ class TechTreeModuleBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
     def __init__(self, tooltipType, linkage):
-        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.ModuleContext()), advanced.HangarModuleAdvanced(contexts.ModuleContext()))
+        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.ModuleContext()), advanced.HangarModuleAdvanced(contexts.ModuleContext()), condition=_advancedBlockCondition(contexts.ModuleContext()))
 
     def _buildData(self, _advanced, node, parentCD, *args, **kwargs):
         return super(TechTreeModuleBuilder, self)._buildData(_advanced, node, parentCD)

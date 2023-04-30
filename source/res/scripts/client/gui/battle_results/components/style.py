@@ -158,8 +158,10 @@ def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
 
 
-def makeGoldLabel(value, canBeFaded=False):
+def makeGoldLabel(value, canBeFaded=False, isDiff=False):
     formatted = backport.getGoldFormat(value)
+    if isDiff:
+        formatted = _DIFF_FORMAT.format(formatted)
     if canBeFaded and not value:
         template = 'gold_small_inactive_label'
     else:

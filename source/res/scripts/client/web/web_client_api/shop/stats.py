@@ -54,7 +54,8 @@ class BalanceWebApiMixin(object):
 
         getters = {'changeRoleCost': lambda stats: stats.changeRoleCost,
          'freeXPConversionDiscrecity': lambda stats: stats.freeXPConversion[0],
-         'slotsPrices': lambda stats: stats.slotsPrices[1][0],
+         'creditsSlotsPrices': lambda stats: stats.slotsPrices[1][0][1] if stats.slotsPrices[1][0][0] == Currency.CREDITS else 0,
+         'goldSlotsPrices': lambda stats: stats.slotsPrices[1][0][1] if stats.slotsPrices[1][0][0] == Currency.GOLD else 0,
          'berthsPrices': lambda stats: stats.berthsPrices[2][0],
          'goldTankmanCost': lambda stats: getTrainingCost(stats.tankmanCost, Currency.GOLD),
          'creditsTankmanCost': lambda stats: getTrainingCost(stats.tankmanCost, Currency.CREDITS),

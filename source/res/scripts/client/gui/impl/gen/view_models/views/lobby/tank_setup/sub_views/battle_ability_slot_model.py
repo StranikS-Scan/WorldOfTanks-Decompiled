@@ -7,48 +7,48 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_ability_by
 class BattleAbilitySlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=25, commands=0):
+    def __init__(self, properties=26, commands=0):
         super(BattleAbilitySlotModel, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
-        return self._getNumber(19)
+        return self._getNumber(20)
 
     def setLevel(self, value):
-        self._setNumber(19, value)
+        self._setNumber(20, value)
 
     def getKeyName(self):
-        return self._getString(20)
-
-    def setKeyName(self, value):
-        self._setString(20, value)
-
-    def getDescription(self):
         return self._getString(21)
 
-    def setDescription(self, value):
+    def setKeyName(self, value):
         self._setString(21, value)
 
-    def getCategory(self):
+    def getDescription(self):
         return self._getString(22)
 
-    def setCategory(self, value):
+    def setDescription(self, value):
         self._setString(22, value)
 
+    def getCategory(self):
+        return self._getString(23)
+
+    def setCategory(self, value):
+        self._setString(23, value)
+
     def getRanks(self):
-        return self._getArray(23)
+        return self._getArray(24)
 
     def setRanks(self, value):
-        self._setArray(23, value)
+        self._setArray(24, value)
 
     @staticmethod
     def getRanksType():
         return unicode
 
     def getAbilitiesByRank(self):
-        return self._getArray(24)
+        return self._getArray(25)
 
     def setAbilitiesByRank(self, value):
-        self._setArray(24, value)
+        self._setArray(25, value)
 
     @staticmethod
     def getAbilitiesByRankType():

@@ -56,6 +56,8 @@ class Origin(object):
     BATTLE_BOOSTERS = 'battle_boosters'
     CONSUMABLES = 'consumables'
     WITHOUT_NAME = 'without_name'
+    HANGAR_TOP_MENU = 'hangar_top_menu'
+    HANGAR_BONS_SCREEN = 'hangar_bons_screen'
 
 
 def _getParams(reason, price, itemId=None):
@@ -217,6 +219,14 @@ def showBuyGoldWebOverlay(params=None, parent=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OVERLAY_WEB_STORE, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showIngameShop(url, origin=None):
+    from gui.shared.event_dispatcher import showShop
+    params = {}
+    if origin:
+        params['origin'] = origin
+    showShop(url, params=params)
 
 
 def showBuyProductOverlay(params=None):

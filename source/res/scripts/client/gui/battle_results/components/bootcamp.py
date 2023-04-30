@@ -172,7 +172,7 @@ class PlayerResultItem(base.StatsItem):
         if killerID not in record['common']['bots']:
             return makeHtmlString('html_templates:bootcamp/player_status', 'dead', ctx=ctx)
         killerName = record['common']['bots'][killerID][1]
-        ctx['killer'] = preprocessBotName(killerName)
+        ctx['killer'] = preprocessBotName(killerName, reusable.common.arenaBonusType)
         return makeHtmlString('html_templates:bootcamp/player_status', 'killed', ctx=ctx)
 
 

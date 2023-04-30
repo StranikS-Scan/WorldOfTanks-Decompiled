@@ -340,8 +340,6 @@ class _Promise(object):
             cancel()
         elif IS_DEVELOPMENT:
             LOG_WARNING('Promise is not cancellable', self)
-            import traceback
-            traceback.print_stack()
 
     def get_future(self):
         self.__future_set = True

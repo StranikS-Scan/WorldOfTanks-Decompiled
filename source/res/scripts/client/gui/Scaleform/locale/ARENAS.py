@@ -59,6 +59,8 @@ class ARENAS(object):
     C_02_MALINOVKA_DESCRIPTION = '#arenas:02_malinovka/description'
     C_04_HIMMELSDORF_NAME = '#arenas:04_himmelsdorf/name'
     C_04_HIMMELSDORF_DESCRIPTION = '#arenas:04_himmelsdorf/description'
+    C_04_HIMMELSDORF_MB_NAME = '#arenas:04_himmelsdorf_mb/name'
+    C_04_HIMMELSDORF_MB_DESCRIPTION = '#arenas:04_himmelsdorf_mb/description'
     C_05_PROHOROVKA_NAME = '#arenas:05_prohorovka/name'
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
@@ -158,6 +160,14 @@ class ARENAS(object):
     C_128_LAST_FRONTIER_V_DESCRIPTION = '#arenas:128_last_frontier_v/description'
     C_121_LOST_PARADISE_V_NAME = '#arenas:121_lost_paradise_v/name'
     C_121_LOST_PARADISE_V_DESCRIPTION = '#arenas:121_lost_paradise_v/description'
+    TYPE_WINBACK_NAME = '#arenas:type/winback/name'
+    TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
+    C_127_JAPORT_MB_NAME = '#arenas:127_japort_mb/name'
+    C_127_JAPORT_MB_DESCRIPTION = '#arenas:127_japort_mb/description'
+    C_08_RUINBERG_MB_NAME = '#arenas:08_ruinberg_mb/name'
+    C_08_RUINBERG_MB_DESCRIPTION = '#arenas:08_ruinberg_mb/description'
+    C_05_PROHOROVKA_MB_NAME = '#arenas:05_prohorovka_mb/name'
+    C_05_PROHOROVKA_MB_DESCRIPTION = '#arenas:05_prohorovka_mb/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -214,6 +224,8 @@ class ARENAS(object):
      C_02_MALINOVKA_DESCRIPTION,
      C_04_HIMMELSDORF_NAME,
      C_04_HIMMELSDORF_DESCRIPTION,
+     C_04_HIMMELSDORF_MB_NAME,
+     C_04_HIMMELSDORF_MB_DESCRIPTION,
      C_05_PROHOROVKA_NAME,
      C_05_PROHOROVKA_DESCRIPTION,
      C_06_ENSK_NAME,
@@ -312,7 +324,15 @@ class ARENAS(object):
      C_128_LAST_FRONTIER_V_NAME,
      C_128_LAST_FRONTIER_V_DESCRIPTION,
      C_121_LOST_PARADISE_V_NAME,
-     C_121_LOST_PARADISE_V_DESCRIPTION)
+     C_121_LOST_PARADISE_V_DESCRIPTION,
+     TYPE_WINBACK_NAME,
+     TYPE_WINBACK_DESCRIPTION,
+     C_127_JAPORT_MB_NAME,
+     C_127_JAPORT_MB_DESCRIPTION,
+     C_08_RUINBERG_MB_NAME,
+     C_08_RUINBERG_MB_DESCRIPTION,
+     C_05_PROHOROVKA_MB_NAME,
+     C_05_PROHOROVKA_MB_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

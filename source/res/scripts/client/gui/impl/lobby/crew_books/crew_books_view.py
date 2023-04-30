@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_view.py
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showHangar
+from skeletons.gui.app_loader import IAppLoader
 from wg_async import wg_async, wg_await
 from frameworks.wulf import ViewFlags, ViewStatus, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -37,9 +39,10 @@ from skeletons.gui.shared import IItemsCache
 class CrewBooksView(ViewImpl):
     __itemsCache = descriptor(IItemsCache)
     __lobbyContext = descriptor(ILobbyContext)
+    __appLoader = descriptor(IAppLoader)
     __gui = descriptor(IGuiLoader)
     MIN_ROLE_LEVEL = 100
-    __slots__ = ('__vehicle', '__bookGuiItemList', '__selectedBookGuiItem', '__selectedTankmanVM', '__selectedBookIndex', '__selectedBookIndex', '__invalidTypes')
+    __slots__ = ('__vehicle', '__bookGuiItemList', '__selectedBookGuiItem', '__selectedTankmanVM', '__selectedBookIndex', '__selectedBookIndex', '__invalidTypes', '__toolTipMgr')
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.crew_books.crew_books_view.CrewBooksView())
@@ -52,6 +55,7 @@ class CrewBooksView(ViewImpl):
         self.__selectedBookGuiItem = None
         self.__selectedBookIndex = None
         self.__vehicle = g_currentVehicle.item
+        self.__toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
         crewBooksViewedCache().addViewedItems(self.__vehicle.nationID)
         return
 
@@ -61,6 +65,11 @@ class CrewBooksView(ViewImpl):
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+            tooltipId = event.getArgument('tooltipId')
+            if tooltipId == CrewBooksTooltips.TOOLTIP_TANKMAN_SKILL:
+                args = [event.getArgument('skillName'), int(event.getArgument('tankmanInvId'))]
+                self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
+                return TOOLTIPS_CONSTANTS.CREW_PERK_GF
             tooltipData = self.__getBackportTooltipData(event)
             window = BackportTooltipWindow(tooltipData, self.getParentWindow())
             window.load()
@@ -88,6 +97,7 @@ class CrewBooksView(ViewImpl):
         self.__selectedTankmanVM = None
         self.__selectedBookIndex = None
         self.__invalidTypes = None
+        self.__toolTipMgr = None
         switchHangarFilteredFilter(on=False)
         super(CrewBooksView, self)._finalize()
         return
@@ -469,8 +479,6 @@ class CrewBooksView(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         if tooltipId == CrewBooksTooltips.TOOLTIP_TANKMAN:
             args = [int(event.getArgument('invID'))]
-        elif tooltipId == CrewBooksTooltips.TOOLTIP_TANKMAN_SKILL:
-            args = [event.getArgument('skillName'), int(event.getArgument('tankmanInvId'))]
         elif tooltipId == CrewBooksTooltips.TOOLTIP_TANKMAN_NEW_SKILL:
             args = [int(event.getArgument('tankmanInvId'))]
         else:

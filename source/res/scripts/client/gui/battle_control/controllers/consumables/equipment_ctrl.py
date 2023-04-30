@@ -208,8 +208,7 @@ class _EquipmentItem(object):
         self._prevStage = self._stage
         self._stage = stage
         self._timeRemaining = timeRemaining
-        if not self.isReusable:
-            self._totalTime = totalTime
+        self._totalTime = totalTime
         self._soundUpdate(self._prevQuantity, quantity)
 
     def updateMapCase(self, stage=None):
@@ -315,7 +314,9 @@ class _RefillEquipmentItem(object):
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         super(_RefillEquipmentItem, self).update(quantity, stage, timeRemaining, totalTime)
-        if timeRemaining > self._PRE_REFILL_TIME and self._preRefillCallback is None:
+        if timeRemaining > self._PRE_REFILL_TIME:
+            if self._preRefillCallback is not None:
+                self.clear()
             self._preRefillCallback = BigWorld.callback(timeRemaining - self._PRE_REFILL_TIME, self._preRefill)
         if self.isReady and self._prevStage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
             self._refillComplete()
@@ -404,7 +405,26 @@ class _ExpandedItem(_EquipmentItem):
         return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
 
 
-class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
+class _ActivatableEquipment(_RefillEquipmentItem, _EquipmentItem):
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__totalCooldownTime = descriptor.cooldownSeconds
+        self.__totalActiveTime = descriptor.activeSeconds
+        super(_ActivatableEquipment, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+
+    def getAnimationType(self):
+        return ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_GREEN if self._stage == EQUIPMENT_STAGES.ACTIVE else super(_ActivatableEquipment, self).getAnimationType()
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_ActivatableEquipment, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.ACTIVE and self._prevStage != EQUIPMENT_STAGES.ACTIVE:
+            totalTime = self.__totalActiveTime
+        elif stage == EQUIPMENT_STAGES.COOLDOWN:
+            totalTime = self.__totalCooldownTime
+        self._totalTime = totalTime
+
+
+class _ExtinguisherItem(_ActivatableEquipment):
 
     def canActivate(self, entityName=None, avatar=None):
         result, error = super(_ExtinguisherItem, self).canActivate(entityName, avatar)
@@ -417,7 +437,7 @@ class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
         return 65536 + self._descriptor.id[1]
 
 
-class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
+class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
 
     def getActivationCode(self, entityName=None, avatar=None):
         activationCode = super(_MedKitItem, self).getActivationCode(entityName, avatar)
@@ -452,7 +472,7 @@ class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
         pass
 
 
-class _RepairKitItem(_RefillEquipmentItem, _ExpandedItem):
+class _RepairKitItem(_ActivatableEquipment, _ExpandedItem):
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
@@ -1383,14 +1403,18 @@ class _ReplayItem(_EquipmentItem):
         return round(float(totalTime - timeRemaining) / totalTime * 100.0) if totalTime > 0 else 0.0
 
 
-class _ReplayMedKitItem(_ReplayItem):
+class _ReplayExtinguisherItem(_ReplayItem, _ActivatableEquipment):
+    pass
+
+
+class _ReplayMedKitItem(_ReplayItem, _ActivatableEquipment):
     __slots__ = ('__cooldownTime',)
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
 
 
-class _ReplayRepairKitItem(_ReplayItem):
+class _ReplayRepairKitItem(_ReplayItem, _ActivatableEquipment):
     __slots__ = ('__cooldownTime',)
 
     def getEntitiesIterator(self, avatar=None):
@@ -1739,7 +1763,7 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
 _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('stimulator',): _ReplayItem,
  ('trigger',): _replayTriggerItemFactory,
- ('extinguisher',): _ReplayItem,
+ ('extinguisher',): _ReplayExtinguisherItem,
  ('medkit',): _ReplayMedKitItem,
  ('repairkit',): _ReplayRepairKitItem,
  ('regenerationKit',): _replayTriggerItemFactory,

@@ -16,6 +16,7 @@ __all__ = ('standard',
  'statusAttention',
  'middleTitle',
  'highTitle',
+ 'highTitleRegular',
  'highTitleAccented',
  'highTitleDisabled',
  'disabled',
@@ -115,6 +116,10 @@ def stats(text):
     return _formatText('statsText', text)
 
 
+def rewards(text):
+    return _formatText('rewardsText', text)
+
+
 def h15ParSecondary(text):
     return _formatText('h15ParSecondary', text)
 
@@ -145,6 +150,10 @@ def middleBonusTitle(text):
 
 def highTitle(text):
     return _formatText('highTitle', text)
+
+
+def highTitleRegular(text):
+    return _formatText('highTitleRegular', text)
 
 
 def highTitleAccented(text):
@@ -257,6 +266,10 @@ def goldSmall(text):
 
 def demountKitText(text):
     return _formatText('demountKitText', text)
+
+
+def wotPlusText(text):
+    return _formatText('wotPlusText', text)
 
 
 def credits(text):

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/post_progression_components.py
 import ResMgr
-from constants import IS_CLIENT, IS_WEB
+from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS
 from items import _xml
 from items.attributes_helpers import readModifiers
 from items.artefacts_helpers import VehicleFilter, readKpi
@@ -48,7 +48,7 @@ class SimpleItem(object):
 
 
 class ActionItem(SimpleItem):
-    __slots__ = ('name', 'actionType', 'locName', 'imgName')
+    __slots__ = ('name', 'actionType', 'locName', 'imgName', 'tooltipSection')
 
     def __init__(self):
         super(ActionItem, self).__init__()
@@ -66,6 +66,7 @@ class ActionItem(SimpleItem):
         if IS_CLIENT or IS_WEB:
             self.imgName = _xml.readStringWithDefaultValue(xmlCtx, section, 'imgName', self.name)
             self.locName = _xml.readStringWithDefaultValue(xmlCtx, section, 'locName', self.name)
+            self.tooltipSection = _xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT)
 
 
 class Modification(ActionItem):

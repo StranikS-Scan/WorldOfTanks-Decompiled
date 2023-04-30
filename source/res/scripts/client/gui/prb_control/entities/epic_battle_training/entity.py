@@ -15,7 +15,7 @@ from gui.prb_control.entities.base.legacy.entity import LegacyEntryPoint, Legacy
 from gui.prb_control.entities.epic_battle_training.limits import EpicBattleTrainingLimits
 from gui.prb_control.entities.epic_battle_training.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx, SetPlayerObserverStateCtx
-from gui.prb_control.entities.epic_battle_training.permissions import EpicBattleTrainingPermissions
+from gui.prb_control.entities.epic_battle_training.permissions import EpicBattleTrainingPermissions, EpicBattleTrainingIntroPermissions
 from gui.prb_control.entities.epic_battle_training.requester import EpicBattleTrainingListRequester
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_items, SelectResult, ValidationResult
@@ -95,6 +95,9 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
             g_eventDispatcher.loadEpicTrainingList()
             return SelectResult(True)
         return super(EpicBattleTrainingIntroEntity, self).doSelectAction(action)
+
+    def getPermissions(self, pID=None):
+        return EpicBattleTrainingIntroPermissions()
 
     def _createActionsValidator(self):
         return TrainingIntroActionsValidator(self)

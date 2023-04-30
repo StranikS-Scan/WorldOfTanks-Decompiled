@@ -48,6 +48,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import messages
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject, respawn_ammunition_panel_inject
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
+    from gui.Scaleform.daapi.view.battle.shared import perks_panel
     return (ViewSettings(VIEW_ALIAS.EPIC_BATTLE_PAGE, page.EpicBattlePage, 'epicBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.EpicBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
@@ -56,6 +57,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, reinforcement_panel.EpicReinforcementPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL, score_panel.EpicScorePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, missions_panel.EpicMissionsPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EpicBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, respawn.EpicBattleRespawn, ScopeTemplates.DEFAULT_SCOPE),

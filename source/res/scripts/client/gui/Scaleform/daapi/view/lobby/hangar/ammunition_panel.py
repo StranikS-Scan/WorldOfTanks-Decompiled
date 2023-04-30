@@ -17,6 +17,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
@@ -24,6 +25,7 @@ from skeletons.gui.game_control import IBootcampController, IUISpamController
 from skeletons.gui.shared import IItemsCache
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
+from tutorial.control.context import GLOBAL_FLAG
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
@@ -110,6 +112,20 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'roleId': vehicle.role,
              'roleMessage': getRoleMessage(g_currentVehicle.item.role),
              'vehicleCD': vehicle.intCD})
+            serverSettings = self.__settingsCore.serverSettings
+            tutorialStorage = getTutorialGlobalStorage()
+            if tutorialStorage is not None:
+                optionalDevices = vehicle.optDevices
+                hasRoleSlot = False
+                for slotIdx in range(len(optionalDevices.slots)):
+                    if optionalDevices.getSlot(slotIdx).item.categories:
+                        hasRoleSlot = True
+                        break
+
+                specializationSlotIsShown = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.AMMUNITION_PANEL_HINT)
+                isNeedToShowSpecializationSlot = not specializationSlotIsShown and hasRoleSlot
+                tutorialStorage.setValue(GLOBAL_FLAG.IS_NEED_TO_SHOW_SPECIALIZATION_SLOT, isNeedToShowSpecializationSlot)
+        return
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()
@@ -117,7 +133,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __applyCustomizationNewCounter(self, vehicle):
         if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp():
             availableItemTypes = getItemTypesAvailableForVehicle()
-            counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes)
+            itemsFilter = lambda item: self.__filterAvailableCustomizations(item, vehicle)
+            counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes, itemFilter=itemsFilter)
             serverSettings = self.__settingsCore.serverSettings
             progressiveItemsViewVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT)
             if not progressiveItemsViewVisited and self.__uiSpamController.shouldBeHidden(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT):
@@ -131,6 +148,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         else:
             counter = 0
         self.as_setCustomizationBtnCounterS(counter)
+
+    @staticmethod
+    def __filterAvailableCustomizations(item, vehicle):
+        if item.isStyleOnly:
+            season = vehicle.getAnyOutfitSeason()
+            style = vehicle.outfits[season].style
+            return style and style.isItemInstallable(item.descriptor)
+        return item.inventoryCount or item.installedCount(vehicle.intCD)
 
     def __moneyUpdateCallback(self, *_):
         self._update(onlyMoneyUpdate=True)

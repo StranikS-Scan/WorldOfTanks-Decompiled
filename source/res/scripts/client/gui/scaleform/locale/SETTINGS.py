@@ -638,6 +638,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_BATTLEEVENTS_LABEL_INFORMATION = '#settings:feedback/tab/battleEvents/label/Information'
     FEEDBACK_TAB_BATTLEEVENTS_LABEL_NEGATIVE = '#settings:feedback/tab/battleEvents/label/negative'
     FEEDBACK_TAB_BATTLEEVENTS_LABEL_POSITIVE = '#settings:feedback/tab/battleEvents/label/positive'
+    FEEDBACK_TAB_BATTLEEVENTS_LABEL_BATTLEEVENTS = '#settings:feedback/tab/battleEvents/label/BattleEvents'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_SHOWINBATTLE = '#settings:feedback/tab/battleEvents/checkbox/ShowInBattle'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYHPDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/EnemyHpDamage'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYBURNING = '#settings:feedback/tab/battleEvents/checkbox/EnemyBurning'

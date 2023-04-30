@@ -89,6 +89,7 @@ class _ArenaTypeSkeleton(object):
     squadTeamNumbers = []
     boundingBox = ((0, 0), (0, 0))
     minimap = ''
+    minimapLayers = []
     overviewmap = ''
     winPointsSettings = None
     battleCountdownTimerSound = ''
@@ -221,6 +222,10 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getMinimapTexture(self):
         return self._arenaType.minimap
 
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.minimapLayers)
+    def getMinimapLayers(self):
+        return self._arenaType.minimapLayers
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.overviewmap)
     def getOverviewMapTexture(self):
         return self._arenaType.overviewmap
@@ -300,6 +305,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
 
     def isMapbox(self):
         return self._guiType == _GUI_TYPE.MAPBOX
+
+    def isWinback(self):
+        return self._guiType == _GUI_TYPE.WINBACK
 
     def isMapsTraining(self):
         return self._guiType == _GUI_TYPE.MAPS_TRAINING

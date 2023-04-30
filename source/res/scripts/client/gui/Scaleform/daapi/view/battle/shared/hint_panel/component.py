@@ -1,33 +1,45 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/component.py
+from functools import partial
+import BigWorld
 import CommandMapping
 import SoundGroups
+from cgf_components.zone_components import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.hint_panel import plugins
 from gui.Scaleform.daapi.view.meta.BattleHintPanelMeta import BattleHintPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import PluginsCollection
+from helpers import dependency
 from shared_utils import first
 
 class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(BattleHintPanel, self).__init__()
         self._hints = {}
         self._plugins = None
         self.__isBattleLoaded = False
+        self.__invalidateCallbackID = None
         return
 
     def setBtnHint(self, btnID, hintData):
         if hintData:
-            self._hints[btnID] = hintData
+            if btnID in self._hints:
+                if hintData.priority < self._hints[btnID].priority:
+                    self._hints[btnID] = hintData
+            else:
+                self._hints[btnID] = hintData
             self.__invalidateBtnHint()
 
     def removeBtnHint(self, btnID):
+        hint = None
         if btnID in self._hints:
-            self._hints.pop(btnID)
-        self.__invalidateBtnHint()
+            hint = self._hints.pop(btnID)
+        self.__invalidateBtnHint(True)
+        return hint
 
     def setPeriod(self, period):
         if self._plugins is not None:
@@ -57,6 +69,9 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         self._finiPlugins()
         self._hints = None
         self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
+        if self.__invalidateCallbackID is not None:
+            BigWorld.cancelCallback(self.__invalidateCallbackID)
+        self.__invalidateCallbackID = None
         super(BattleHintPanel, self)._dispose()
         return
 
@@ -79,16 +94,29 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def __getActiveHintData(self):
         return first(sorted(self._hints.iteritems(), key=lambda h: h[1].priority, reverse=False))
 
-    def __invalidateBtnHint(self):
-        hintData = self.__getActiveHintData()
-        isHintActive = bool(hintData)
-        hintCanBeDisplayed = isHintActive and self.__isBattleLoaded
-        if hintCanBeDisplayed:
-            btnID, hint = hintData
-            self.as_setDataS(hint.vKey, hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY, hint.reducedPanning)
-            self.fireEvent(GameEvent(GameEvent.SHOW_BTN_HINT, ctx={'btnID': btnID,
-             'hintCtx': hint.hintCtx}), scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.as_toggleS(hintCanBeDisplayed)
+    def __invalidateBtnHint(self, isRemoved=False):
+        if self.__invalidateCallbackID is not None:
+            BigWorld.cancelCallback(self.__invalidateCallbackID)
+        self.__invalidateCallbackID = BigWorld.callback(0.01, partial(self.__prepareAndShowHint, isRemoved))
+        return
+
+    def __prepareAndShowHint(self, isRemoved):
+        self.__invalidateCallbackID = None
+        if isRemoved:
+            self.as_toggleS(False)
+            self.__invalidateBtnHint()
+            return
+        else:
+            hintData = self.__getActiveHintData()
+            isHintActive = bool(hintData)
+            hintCanBeDisplayed = isHintActive and self.__isBattleLoaded
+            if hintCanBeDisplayed:
+                btnID, hint = hintData
+                self.as_setDataS(hint.vKey, hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY, hint.reducedPanning)
+                self.fireEvent(GameEvent(GameEvent.SHOW_BTN_HINT, ctx={'btnID': btnID,
+                 'hintCtx': hint.hintCtx}), scope=EVENT_BUS_SCOPE.GLOBAL)
+            self.as_toggleS(hintCanBeDisplayed)
+            return
 
     def __handleBattleLoading(self, event):
         self.__isBattleLoaded = not event.ctx['isShown']

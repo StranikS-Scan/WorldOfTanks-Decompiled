@@ -265,7 +265,7 @@ class REQ_CRITERIA(object):
         IS_OUTFIT_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isOutfitLocked))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
-        WOTPLUS_RENT = RequestCriteria(PredicateCondition(lambda item: item.isWotPlusRent))
+        WOT_PLUS_VEHICLE = RequestCriteria(PredicateCondition(lambda item: item.isWotPlus))
         TELECOM_RENT = RequestCriteria(PredicateCondition(lambda item: item.isTelecomRent))
         SEASON_RENT = RequestCriteria(PredicateCondition(lambda item: item.isSeasonRent))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
@@ -390,7 +390,7 @@ class ItemsRequester(IItemsRequester):
      'dogTag',
      'battleRoyaleStats'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -404,6 +404,7 @@ class ItemsRequester(IItemsRequester):
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
         self.__festivity = festivityRequester
+        self.__armoryYard = armoryYard
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
@@ -471,6 +472,10 @@ class ItemsRequester(IItemsRequester):
     @property
     def festivity(self):
         return self.__festivity
+
+    @property
+    def armoryYard(self):
+        return self.__armoryYard
 
     @property
     def tokens(self):
@@ -549,6 +554,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
+        Waiting.show('download/festivity')
+        yield self.__armoryYard.request()
+        Waiting.hide('download/festivity')
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
@@ -595,11 +603,7 @@ class ItemsRequester(IItemsRequester):
 
     def clear(self):
         while self.__itemsCache:
-            itemsType, cache = self.__itemsCache.popitem()
-            if itemsType == GUI_ITEM_TYPE.VEHICLE:
-                for item in cache.itervalues():
-                    item.stopPerksController()
-
+            _, cache = self.__itemsCache.popitem()
             cache.clear()
 
         self.__vehCustomStateCache.clear()
@@ -617,6 +621,7 @@ class ItemsRequester(IItemsRequester):
         self.epicMetaGame.clear()
         self.__blueprints.clear()
         self.__festivity.clear()
+        self.__armoryYard.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
         self.__gameRestrictions.clear()
@@ -801,6 +806,7 @@ class ItemsRequester(IItemsRequester):
         copyVehicle.consumables.setInstalled(*vehicle.consumables.installed)
         copyVehicle.battleBoosters.setInstalled(*vehicle.battleBoosters.installed)
         copyVehicle.installPostProgression(vehicle.postProgression.getState(), ignoreDisabledProgression)
+        copyVehicle.initCrew()
         copyVehicle.crew = vehicle.crew
         return copyVehicle
 
@@ -1047,7 +1053,6 @@ class ItemsRequester(IItemsRequester):
                 self.__vehCustomStateCache[uid] = item.getCustomState()
             elif uid in self.__vehCustomStateCache:
                 del self.__vehCustomStateCache[uid]
-            item.stopPerksController()
         del cache[uid]
 
     def __getAccountDossierDescr(self):

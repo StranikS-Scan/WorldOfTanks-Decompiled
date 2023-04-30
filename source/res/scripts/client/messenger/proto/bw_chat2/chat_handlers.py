@@ -22,7 +22,7 @@ from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
-from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, UNIT_CHAT_COMMANDS, getCooldownGameModeDataForGameMode
+from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, UNIT_CHAT_COMMANDS, DEFAULT_SPAM_PROTECTION_SETTING, BattleChatCmdGameModeCoolDownData
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -421,7 +421,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
                 if decorator.isEnemyTarget():
                     self.__targetIDs.append(decorator.getTargetID())
                 if _ACTIONS.isBattleChatAction(command.id):
-                    cooldownConfig = getCooldownGameModeDataForGameMode(self.__sessionProvider.arenaVisitor.getArenaBonusType())
+                    cooldownConfig = getCoolDownConfig(self.__sessionProvider.arenaVisitor.getArenaBonusType())
                     provider.setBattleActionCoolDown(reqID, command.id, decorator.getTargetID(), cooldownConfig)
                 else:
                     provider.setActionCoolDown(command.id, command.cooldownPeriod)
@@ -679,6 +679,17 @@ class AntispamHandler(CallbackDelayer):
         else:
             return 0
         return self.__SEND_COMMAND_TICK_DELAY
+
+
+def getCoolDownConfig(bonusType):
+    if ARENA_BONUS_TYPE_CAPS.checkAny(bonusType, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION):
+        teamInfo = BigWorld.player().arena.teamInfo
+        spamProtection = teamInfo.dynamicComponents.get('spamProtection') if teamInfo else None
+        if spamProtection is not None:
+            return BattleChatCmdGameModeCoolDownData(*spamProtection.settingValues)
+        return DEFAULT_SPAM_PROTECTION_SETTING
+    else:
+        return
 
 
 g_mutedMessages = {}

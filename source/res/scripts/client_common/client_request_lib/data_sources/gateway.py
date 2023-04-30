@@ -178,6 +178,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v4/commerce/fetchProductListState/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
+    def agate_v5_get_user_subscriptions(self, callback, request_data, fields=None):
+        url = '/agate/api/v5/commerce/getUserSubscriptions/'
+        return self._request_data(callback, url, method='POST', post_data=request_data)
+
     def get_clan_members(self, callback, clan_id, fields=None):
         get_params = {'fields': fields}
         url = '/clans/%s/members/' % clan_id
@@ -626,6 +630,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             urlencoded_string = urllib.urlencode([ ('entitlement_codes', code) for code in entitlement_codes ])
             url = '{}?{}'.format(url, urlencoded_string)
         return self._request_data(callback, url, method='GET')
+
+    def get_inventory_entitlements_v5(self, callback, entitlementsFilter):
+        url = '/agate/api/v5/inventory/getInventoryEntitlements/'
+        return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

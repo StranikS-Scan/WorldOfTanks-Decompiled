@@ -1102,6 +1102,59 @@
       </damage>
     </armorSpalls>
   </_122mm_OF-471>
+  <_122mm_BR-471_M>
+    <id>	112	</id>
+    <userString>	#poland_vehicles:_122mm_BR-471_M	</userString>
+    <icon>	ap	</icon>
+    <price>	795	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR-471_M>
+  <_122mm_BR-471_DM>
+    <id>	113	</id>
+    <userString>	#poland_vehicles:_122mm_BR-471_DM	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR-471_DM>
+  <_122mm_OF-471M>
+    <id>	114	</id>
+    <userString>	#poland_vehicles:_122mm_OF-471M	</userString>
+    <icon>	he_modern	</icon>
+    <price>	740	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_OF-471M>
   <_130mm_AZ_PB_46>
     <id>	11	</id>
     <userString>	#poland_vehicles:_130mm_AZ_PB_46	</userString>

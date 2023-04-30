@@ -15,12 +15,13 @@ class QuestionType(Enum):
     TEXT = 'text'
     UNDEFINED = 'undefined'
     ALTERNATIVE = 'alternative'
+    MULTIPLE_CHOICE = 'multipleChoice'
 
 
 class MapBoxQuestionModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(MapBoxQuestionModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -51,27 +52,33 @@ class MapBoxQuestionModel(ViewModel):
     def setImagePath(self, value):
         self._setString(3, value)
 
+    def getPathPrefix(self):
+        return self._getString(4)
+
+    def setPathPrefix(self, value):
+        self._setString(4, value)
+
     def getShowIcons(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setShowIcons(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getQuestionId(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setQuestionId(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def getTitleParams(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setTitleParams(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getTitleParamsType():
-        return int
+        return unicode
 
     def _initialize(self):
         super(MapBoxQuestionModel, self)._initialize()
@@ -79,6 +86,7 @@ class MapBoxQuestionModel(ViewModel):
         self._addViewModelProperty('options', UserListModel())
         self._addStringProperty('type')
         self._addStringProperty('imagePath', '')
+        self._addStringProperty('pathPrefix', '')
         self._addBoolProperty('showIcons', False)
         self._addStringProperty('questionId', '')
         self._addArrayProperty('titleParams', Array())

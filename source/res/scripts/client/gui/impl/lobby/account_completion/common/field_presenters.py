@@ -12,7 +12,7 @@ from gui.impl.lobby.account_completion.common import errors
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.account_completion.common.base_field_model import BaseFieldModel
 _EMAIL_PATTERN = re.compile('^[a-z0-9_-]+(\\.[a-z0-9_-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,4}$', re.I)
-_PASSWORD_PATTERN = re.compile('^[a-z0-9_]+$', re.I)
+_PASSWORD_PATTERN = re.compile('^[\\x21-\\x7e]+$', re.I)
 
 class BaseFieldPresenter(object):
     __metaclass__ = ABCMeta

@@ -27,7 +27,7 @@ _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE: DemountOptionalDevice,
  GOODIE_TARGET_TYPE.EPIC_POST_BATTLE: EpicPostBattle,
  GOODIE_TARGET_TYPE.ON_DROP_SKILL: DropSkill}
-_RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
+RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.CREDITS: Credits,
  GOODIE_RESOURCE_TYPE.XP: Experience,
  GOODIE_RESOURCE_TYPE.CREW_XP: CrewExperience,
@@ -35,7 +35,7 @@ _RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.FL_XP: FrontlineExperience,
  GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: FreeXpCrewXpMultiResourceList,
  GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: FreeXpMainXpMultiResourceList}
-RESOURCE_TO_GOODIE_LOOKUP = {resource:goodieType for goodieType, resource in _RESOURCES.iteritems()}
+RESOURCE_TO_GOODIE_LOOKUP = {resource:goodieType for goodieType, resource in RESOURCES.iteritems()}
 GOODIE_CONDITION_TO_TEXT = {MaxVehicleLevel: 'max_vehicle_level'}
 GOODIE_RESOURCE_TO_TEXT = {Gold: 'gold',
  Credits: 'credits',
@@ -75,7 +75,7 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'drop_skill': GOODIE_TARGET_TYPE.ON_DROP_SKILL}
 CURRENCY_TO_RESOURCE_TYPE = {'gold': GOODIE_RESOURCE_TYPE.GOLD,
  'credits': GOODIE_RESOURCE_TYPE.CREDITS}
-CURRENCY_TO_RESOURCE = {k:_RESOURCES[v] for k, v in CURRENCY_TO_RESOURCE_TYPE.iteritems()}
+CURRENCY_TO_RESOURCE = {k:RESOURCES[v] for k, v in CURRENCY_TO_RESOURCE_TYPE.iteritems()}
 
 def loadDefinitions(d):
     goodies = {'goodies': {},
@@ -88,7 +88,7 @@ def loadDefinitions(d):
         else:
             condition = None
         target = _TARGETS[v_target[0]](v_target[1], v_target[2])
-        resource = _RESOURCES[v_resource[0]]
+        resource = RESOURCES[v_resource[0]]
         value = resource.provideCompatibleValueDescr(actualVal=v_resource[1], isPercent=v_resource[2])
         goodies['goodies'][uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
 

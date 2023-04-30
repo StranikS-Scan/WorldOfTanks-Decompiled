@@ -84,8 +84,8 @@
       <turret>	0.000000 0.655288 0.146847	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/german/G90_DW_II/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/german/G90_DW_II/DW_II_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1599,8 +1599,8 @@
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.19556 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G90_DW_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.31588 1.60808	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -2316,8 +2316,8 @@
             <exploded>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G90_DW_II/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <customization>
             <customizableVehicleAreas>
@@ -2361,6 +2361,7 @@
             </slot>
           </customizationSlots>
           <drivenJoints></drivenJoints>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
             <density>	156.265 159.433	</density>
@@ -2374,8 +2375,8 @@
         <exploded>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G90_DW_II_MapsTraining_Dummy_HT_1/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G90_DW_II/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0324 0.279639 0.841098	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

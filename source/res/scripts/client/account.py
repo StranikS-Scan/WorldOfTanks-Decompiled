@@ -17,7 +17,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -28,7 +28,6 @@ from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.game_restrictions import GameRestrictions
-from account_helpers.renewable_subscription import RenewableSubscription
 from account_helpers.resource_well import ResourceWell
 from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.settings_core import IntUserSettings
@@ -36,10 +35,12 @@ from account_helpers.session_statistics import SessionStatistics
 from account_helpers.spa_flags import SPAFlags
 from account_helpers.gift_system import GiftSystem
 from account_helpers.trade_in import TradeIn
+from account_helpers.winback import Winback
 from account_shared import NotificationItem, readClientServerVersion
+from items import tankmen
 from adisp import adisp_process
 from bootcamp.Bootcamp import g_bootcamp
-from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
+from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE, IS_DEVELOPMENT
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
@@ -167,6 +168,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame = g_accountRepository.epicMetaGame
         self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
+        self.armoryYard = g_accountRepository.armoryYard
         self.sessionStats = g_accountRepository.sessionStats
         self.spaFlags = g_accountRepository.spaFlags
         self.anonymizer = g_accountRepository.anonymizer
@@ -175,12 +177,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers = g_accountRepository.offers
         self.dogTags = g_accountRepository.dogTags
         self.mapsTraining = g_accountRepository.mapsTraining
-        self.renewableSubscription = g_accountRepository.renewableSubscription
         self.telecomRentals = g_accountRepository.telecomRentals
         self.tradeIn = g_accountRepository.tradeIn
         self.giftSystem = g_accountRepository.giftSystem
         self.gameRestrictions = g_accountRepository.gameRestrictions
         self.resourceWell = g_accountRepository.resourceWell
+        self.winback = g_accountRepository.winback
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -197,6 +199,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.setAccount(self)
         self.ranked.setAccount(self)
         self.battleRoyale.setAccount(self)
+        self.armoryYard.setAccount(self)
         self.badges.setAccount(self)
         self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
@@ -207,7 +210,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.setAccount(self)
         self.dogTags.setAccount(self)
         self.mapsTraining.setAccount(self)
-        self.renewableSubscription.setAccount(self)
         self.telecomRentals.setAccount(self)
         self.tradeIn.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
@@ -252,6 +254,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.onAccountBecomePlayer()
         self.ranked.onAccountBecomePlayer()
         self.battleRoyale.onAccountBecomePlayer()
+        self.armoryYard.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
@@ -259,7 +262,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities.onAccountBecomePlayer()
         self.dogTags.onAccountBecomePlayer()
         self.mapsTraining.onAccountBecomePlayer()
-        self.renewableSubscription.onAccountBecomePlayer()
         self.telecomRentals.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.spaFlags.onAccountBecomePlayer()
@@ -302,6 +304,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.onAccountBecomeNonPlayer()
         self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
+        self.armoryYard.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
         self.spaFlags.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
@@ -309,7 +312,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.onAccountBecomeNonPlayer()
         self.dogTags.onAccountBecomeNonPlayer()
         self.mapsTraining.onAccountBecomeNonPlayer()
-        self.renewableSubscription.onAccountBecomeNonPlayer()
         self.telecomRentals.onAccountBecomeNonPlayer()
         self.giftSystem.onAccountBecomeNonPlayer()
         self.gameRestrictions.onAccountBecomeNonPlayer()
@@ -329,6 +331,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.setAccount(None)
         self.ranked.setAccount(None)
         self.battleRoyale.setAccount(None)
+        self.armoryYard.setAccount(None)
         self.badges.setAccount(None)
         self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
@@ -794,6 +797,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPS_TRAINING, 0, 0, 0)
 
+    def enqueueWinback(self, vehInvID):
+        if events.isPlayerEntityChanging:
+            return
+        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.WINBACK, vehInvID])
+
+    def dequeueWinback(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.WINBACK)
+
     def requestMapsTrainingInitialConfiguration(self, accountID, callback):
         if not events.isPlayerEntityChanging:
             proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)
@@ -1136,6 +1148,21 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
         return
 
+    def addCrewBooks(self, book, count=1):
+        bookItem = tankmen.g_cache.crewBooks().books[int(book)]
+        self._doCmdIntArr(AccountCommands.CMD_ADD_CREW_BOOK, [bookItem.compactDescr, count], None)
+        return
+
+    @staticmethod
+    def resetScreenShown(screenName):
+        if IS_DEVELOPMENT:
+            from account_helpers.AccountSettings import GUI_START_BEHAVIOR
+            settingsCore = dependency.instance(ISettingsCore)
+            defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+            settings = settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+            settings[screenName] = False
+            settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, settings)
+
     def removeEquipment(self, deviceID, count=-1):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
         return
@@ -1189,6 +1216,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.recycleBin.synchronize(isFullSync, diff)
             self.ranked.synchronize(isFullSync, diff)
             self.battleRoyale.synchronize(isFullSync, diff)
+            self.armoryYard.synchronize(isFullSync, diff)
             self.badges.synchronize(isFullSync, diff)
             self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
@@ -1201,7 +1229,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.offers.synchronize(isFullSync, diff)
             self.dogTags.synchronize(isFullSync, diff)
             self.mapsTraining.synchronize(isFullSync, diff)
-            self.renewableSubscription.synchronize(isFullSync, diff)
             self.telecomRentals.synchronize(isFullSync, diff)
             self.giftSystem.synchronize(isFullSync, diff)
             self.gameRestrictions.synchronize(isFullSync, diff)
@@ -1443,6 +1470,7 @@ class _AccountRepository(object):
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
+        self.armoryYard = ArmoryYard.ArmoryYard(self.syncData)
         self.sessionStats = SessionStatistics(self.syncData)
         self.spaFlags = SPAFlags(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
@@ -1451,9 +1479,9 @@ class _AccountRepository(object):
         self.offers = OffersSyncData(self.syncData)
         self.dogTags = DogTags(self.syncData)
         self.mapsTraining = MapsTraining(self.syncData)
-        self.renewableSubscription = RenewableSubscription(self.syncData)
         self.telecomRentals = TelecomRentals(self.syncData)
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
+        self.winback = Winback(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

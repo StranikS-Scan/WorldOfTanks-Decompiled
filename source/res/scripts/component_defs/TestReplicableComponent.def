@@ -1,0 +1,35 @@
+<TestReplicableComponent.def>
+  <Properties>
+    <replicableInt>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </replicableInt>
+    <replicableFloat>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </replicableFloat>
+    <replicableString>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </replicableString>
+    <replicableVector3>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </replicableVector3>
+    <replicableStringList>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </replicableStringList>
+    <assetIndex>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </assetIndex>
+  </Properties>
+  <DefaultKeyName>	testReplicableComponent	</DefaultKeyName>
+</TestReplicableComponent.def>

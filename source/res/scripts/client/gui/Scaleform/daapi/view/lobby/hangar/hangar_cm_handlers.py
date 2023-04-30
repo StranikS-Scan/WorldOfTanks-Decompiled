@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
 from logging import getLogger
+from typing import TYPE_CHECKING
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
@@ -27,6 +28,9 @@ from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 _logger = getLogger(__name__)
+if TYPE_CHECKING:
+    from typing import Optional
+    from gui.shared.gui_items import Vehicle
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -281,15 +285,13 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                      'isNew': isNew}))
                 if vehicle.isRented:
                     canSell = vehicle.canSell and vehicle.rentalIsOver
-                    if not vehicle.isPremiumIGR:
+                    if vehicle.isWotPlus and not self._lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled():
+                        canSell = False
+                    if not vehicle.isPremiumIGR and not vehicle.isWotPlus:
                         items = self.itemsCache.items
                         enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
-                    if vehicle.isWotPlusRent:
-                        serverSettings = self._lobbyContext.getServerSettings()
-                        isRentalEnabled = serverSettings.isWotPlusTankRentalEnabled()
-                        options.append(self._makeItem(VEHICLE.WOT_PLUS_RENT, MENU.contextmenu(VEHICLE.WOT_PLUS_RENT), {'enabled': isRentalEnabled}))
                     if vehicle.isTelecomRent:
                         canSell = False
                         serverSettings = self._lobbyContext.getServerSettings()

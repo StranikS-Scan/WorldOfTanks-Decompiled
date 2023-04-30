@@ -129,8 +129,8 @@ class GLOBAL_FLAG(object):
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
     HANGAR_VEH_POST_PROGRESSION_PURCHASABLE = '_HangarVehPostProgressionPurchasable'
     RESEARCH_VEH_POST_PROGRESSION_PURCHASABLE = '_ResearchVehPostProgressionPurchasable'
-    WOTPLUS_ENABLED = '_WotPlusEnabled'
     PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
+    IS_NEED_TO_SHOW_SPECIALIZATION_SLOT = 'isNeedToShowSpecializationSlot'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
@@ -138,7 +138,6 @@ class GLOBAL_FLAG(object):
      CREW_BOOKS_ENABLED,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
-     WOTPLUS_ENABLED,
      PERSONAL_RESERVES_AVAILABLE)
 
 

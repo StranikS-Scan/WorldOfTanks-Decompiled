@@ -13,14 +13,15 @@ from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker
 _logger = logging.getLogger(__name__)
 
 class _WaitingTask(object):
-    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart')
+    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart', '__showSparks')
 
-    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
+    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showSparks=True):
         super(_WaitingTask, self).__init__()
         self.__messageID = messageID
         self.__isBlocking = isBlocking
         self.__isAlwaysOnTop = isAlwaysOnTop
         self.__backgroundImage = backgroundImage
+        self.__showSparks = showSparks
         self.__softStart = softStart
         if interruptCallback is not None:
             self.__interruptCallbacks = [interruptCallback]
@@ -54,6 +55,10 @@ class _WaitingTask(object):
     @property
     def backgroundImage(self):
         return self.__backgroundImage
+
+    @property
+    def showSparks(self):
+        return self.__showSparks
 
     def clear(self):
         del self.__interruptCallbacks[:]
@@ -136,7 +141,7 @@ class WaitingWorker(IWaitingWorker):
     def getSuspendedWaitingTask(self, messageID):
         return findFirst(lambda task: task.messageID == messageID, self.__suspendStack)
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showSparks=True):
         BigWorld.Screener.setEnabled(False)
         hasAlwaysOnTopWaiting = self._hasAlwaysOnTopWaiting()
         if hasAlwaysOnTopWaiting and isAlwaysOnTop:
@@ -147,7 +152,7 @@ class WaitingWorker(IWaitingWorker):
             if task is not None and isSingle:
                 task.addInterruptCallback(interruptCallback)
             else:
-                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart)
+                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart, showSparks)
             if not hasAlwaysOnTopWaiting:
                 self._showWaiting(task)
             return
@@ -234,9 +239,9 @@ class WaitingWorker(IWaitingWorker):
         found = findFirst(lambda task: task.isAlwaysOnTop, reversed(self.__waitingStack))
         return found is not None
 
-    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False):
+    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False, showSparks=True):
         isBlocking = isBlocking or self._hasBlockingWaiting()
-        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart)
+        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart, showSparks)
         if insertBeforeTop:
             self.__waitingStack.insert(-1, newTask)
         else:
@@ -251,7 +256,7 @@ class WaitingWorker(IWaitingWorker):
                 task.isBlocking = True
         if view is not None:
             if task.backgroundImage:
-                view.setBackgroundImage(task.backgroundImage)
+                view.setBackgroundImage(task.backgroundImage, task.showSparks)
             view.showWaiting(task.messageID, task.isSoftStart)
             appLoader = dependency.instance(IAppLoader)
             view.showAwards(appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN)

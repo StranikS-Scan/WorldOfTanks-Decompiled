@@ -175,11 +175,25 @@
       <module>	client.cgf_components.hover_component	</module>
       <module>	client.cgf_components.on_click_components	</module>
       <module>	client.cgf_components.hangar_rules	</module>
+      <module>	client.cgf_components.armory_yard_components	</module>
       <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
       <module>	client.cgf_components.rocket_acceleration_component	</module>
+      <module>	client.cgf_components.zone_components	</module>
+      <module>	client.cgf_components.on_shot_components	</module>
+      <module>	client.cgf_components.on_death_components	</module>
+      <module>	common.cgf_components_common.shots_receiver	</module>
+      <module>	common.cgf_components_common.state_components	</module>
+      <module>	common.cgf_components_common.vehicle_components	</module>
+      <module>	common.cgf_components_common.scenario.timed_activation	</module>
+      <module>	common.cgf_components_common.material_component	</module>
+      <module>	common.cgf_components_common.managers.state_managers	</module>
+      <module>	cell.cgf_cell.damage.shot_damage	</module>
+      <module>	cell.cgf_cell.shooting_obstacle	</module>
+      <module>	cell.cgf_cell.cgf_vehicle	</module>
+      <module>	cell.cgf_cell.cgf_loggers	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -187,11 +201,16 @@
       <module>	client.cgf_demo_client.test_state_machine_trigger	</module>
       <module>	client.cgf_demo_client.test_triggers	</module>
       <module>	client.cgf_demo_client.demo_rules	</module>
+      <module>	client.cgf_demo_client.test_zone_components	</module>
+      <module>	client.cgf_demo_client.test_death_triggers	</module>
       <module>	common.cgf_demo.test_movers	</module>
       <module>	common.cgf_demo.test_triggers	</module>
       <module>	common.cgf_demo.test_bridge	</module>
       <module>	common.cgf_demo.test_manager_rule	</module>
       <module>	common.cgf_demo.test_edge_drawer	</module>
+      <module>	common.cgf_demo.test_replicable	</module>
+      <module>	cell.cgf_demo_cell.demo_rules	</module>
+      <module>	cell.cgf_demo_cell.demo_managers	</module>
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
@@ -207,6 +226,65 @@
       <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/CarriageCoal.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ConcreteBigBlock.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ConcreteBigBlockDeathEffects.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ConcreteSmallBlock.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ConcreteSmallBlockDeathEffects.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ContainerBlue.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/ContainerBlueDeathEffects.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/TankPzIV.prefab	</path>
+      <path>	content/MapBox/DynamicCovers/TankPzIVHull.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/train_crashing/04_train01_Scenario.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/train_crashing/04_train01_normal_to_destroyed.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/train_crashing/04_train01_danger_zone_mmap.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/train_crashing/04_plane01.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/airship_crashing/04_zeppelin01_danger_zone_mmap.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/airship_crashing/04_zeppelin01_houses_walls.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/airship_crashing/04_zeppelin01_normal_to_destroyed.prefab	</path>
+      <path>	content/MapBox/04_himmelsdorf_mb/airship_crashing/04_zeppelin01_Scenario.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane1_crashing/05_plane1_scenario.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane1_crashing/05_plane1_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane1_crashing/05_plane1_danger_zone_minimap.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane2_crashing_to_alley/05_plane2_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane2_crashing_to_alley/05_plane2_danger_zone_minimap.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane3_crashing_to_hill/05_plane3_scenario.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane3_crashing_to_hill/05_plane3_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/plane3_crashing_to_hill/05_plane3_danger_zone_minimap.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/train1_crashing/05_train01_scenario.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/train1_crashing/05_train01_normal_to_destroyed.prefab	</path>
+      <path>	content/MapBox/05_prohorovka_mb/train1_crashing/05_train01_danger_zone_mmap.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/big_city/08_bigcity_scenario.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/big_city/08_bigcity_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/big_city/08_bigcity_main_bombers_trajectory.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/big_city/08_bigcity_secondary_effects.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/big_city/08_bigcity_danger_death_zone.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/little_city/08_littlecity_scenario.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/little_city/08_littlecity_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/little_city/08_littlecity_main_bombers_trajectory.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/little_city/08_littlecity_secondary_effects.prefab	</path>
+      <path>	content/MapBox/08_ruinberg_mb/little_city/08_littlecity_danger_death_zone.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_scenario.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_danger_zone_minimap.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_plane_attacker.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_plane_crashing.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bunker_crashing/127_bunker01_plane_escort.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bridge_bombing/127_bridge01_scenario.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bridge_bombing/127_bridge01_normal_to_destroy.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bridge_bombing/127_bridge01_main_bomber_bombs.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bridge_bombing/127_bridge01_bomber_escort_efx.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/bridge_bombing/127_bridge01_danger_zone_minimap.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_escort_bombers.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_main_bomber_bombs.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_bridge.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_danger_zone_mmap.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_in_port_final.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_moving_to_port.prefab	</path>
+      <path>	content/MapBox/127_japort_mb/ship_crashing/127_ship01_scenario.prefab	</path>
+      <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
+      <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01.prefab	</path>
+      <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01_fwd.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

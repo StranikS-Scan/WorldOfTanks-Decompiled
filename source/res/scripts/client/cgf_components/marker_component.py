@@ -9,7 +9,7 @@ import math_utils
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from cache import cached_property
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
 from helpers import dependency
 from constants import IS_CLIENT, IS_CGF_DUMP
@@ -37,19 +37,25 @@ if typing.TYPE_CHECKING:
     import BigWorld
 _logger = logging.getLogger(__name__)
 
-class LobbyFlashMarker(CGFComponent):
+@registerComponent
+class LobbyFlashMarker(object):
+    domain = CGF.DomainOption.DomainClient
     icon = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker icon', value='gui/maps/icons/marathon/marker/video.png', annotations={'path': '*.png'})
     textKey = ComponentProperty(type=CGFMetaTypes.STRING, editorName='marker text key', value='#marathon:3dObject/showVideo')
 
 
-class LobbyFlashMarkerVisibility(CGFComponent):
+@registerComponent
+class LobbyFlashMarkerVisibility(object):
+    domain = CGF.DomainOption.DomainClient
     mainTankMarkerGO = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='non-hero tank marker GO')
     heroTankMarkerGO = ComponentProperty(type=CGFMetaTypes.LINK, value=CGF.GameObject, editorName='hero tank marker GO')
 
 
-class CombatMarker(CGFComponent):
+@registerComponent
+class CombatMarker(object):
     category = 'UI'
     editorTitle = 'Combat Marker'
+    domain = CGF.DomainOption.DomainClient
     shape = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Shape')
     offset = ComponentProperty(type=CGFMetaTypes.VECTOR3, value=Math.Vector3(0, 0, 0), editorName='offset')
     areaRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.0, editorName='areaRadius')

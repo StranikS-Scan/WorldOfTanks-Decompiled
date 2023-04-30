@@ -196,7 +196,6 @@ class PostBattleConditionPacker(UIConditionPacker):
     def __init__(self):
         super(PostBattleConditionPacker, self).__init__()
         self.postBattleCondFormatter = getDefaultPostBattleCondFormatter()
-        self.typeOfPostBattleConditionGroup = CONDITION_GROUP_NOP
 
     def _convertConditionIntoPreFormattedCondition(self, ctx):
         conditionType = ctx['data'].getName()
@@ -209,7 +208,7 @@ class PostBattleConditionPacker(UIConditionPacker):
 
     def _pack(self, event, model):
         postBattleConditions = event.postBattleCond.getConditions()
-        postBattleCondsModelList, self.typeOfPostBattleConditionGroup = self._packConditions(postBattleConditions, event)
+        postBattleCondsModelList, typeOfPostBattleConditionGroup = self._packConditions(postBattleConditions, event)
         if not postBattleCondsModelList:
             _logger.debug('PostBattleConditions were not received for event %s.', event.getID())
             return None
@@ -219,7 +218,7 @@ class PostBattleConditionPacker(UIConditionPacker):
                     continue
                 model.getItems().addViewModel(postBattleCondModel)
 
-            model.setConditionType(self.typeOfPostBattleConditionGroup)
+            model.setConditionType(typeOfPostBattleConditionGroup)
             return None
 
     @classmethod

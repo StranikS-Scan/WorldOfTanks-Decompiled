@@ -107,12 +107,13 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
                 canConvert = self.canConvertToVehicleFragment(vehicleCD, vLevel)
             return _BlueprintData(filledCount, totalCount, canConvert)
 
-    def getBlueprintDiscount(self, vehicleCD, vLevel):
+    def getBlueprintDiscount(self, vehicleCD, vLevel, potentialFilledCount=0):
         _logger.debug('getBlueprintDiscount: vehicle=%s, level=%s ', vehicleCD, vLevel)
-        if not self.__vehicleFragments or vehicleCD in self.__itemsCache.items.stats.unlocks or vehicleCD not in self.__vehicleFragments:
+        if not potentialFilledCount and (not self.__vehicleFragments or vehicleCD in self.__itemsCache.items.stats.unlocks or vehicleCD not in self.__vehicleFragments):
             return 0
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
-        if filledCount == totalCount and filledCount != 0:
+        filledCount = potentialFilledCount or filledCount
+        if filledCount >= totalCount and filledCount != 0:
             return 100
         discount = self._bpfConfig.getFragmentDiscount(vLevel)
         return int(round(discount * filledCount * 100))

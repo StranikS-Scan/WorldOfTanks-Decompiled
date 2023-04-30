@@ -70,3 +70,34 @@ class PlatformFetchProductListCtx(CommonWebRequestCtx):
     @staticmethod
     def getDefDataObj():
         return None
+
+
+class PlatformGetUserSubscriptionsCtx(CommonWebRequestCtx):
+
+    def __init__(self, ctx, waitingID=''):
+        self.__params = {'status': ctx.status,
+         'product_code': ctx.productCode}
+        super(PlatformGetUserSubscriptionsCtx, self).__init__(waitingID=waitingID)
+
+    def getRequestType(self):
+        return WebRequestDataType.PLATFORM_GET_USER_SUBSCRIPTIONS
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    def isCaching(self):
+        return False
+
+    def getParams(self):
+        return self.__params
+
+    @staticmethod
+    def getDataObj(incomeData):
+        return incomeData
+
+    @staticmethod
+    def getDefDataObj():
+        return None

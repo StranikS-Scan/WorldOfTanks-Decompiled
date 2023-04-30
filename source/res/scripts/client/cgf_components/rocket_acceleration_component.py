@@ -4,7 +4,7 @@ import logging
 from functools import partial
 import CGF
 import BigWorld
-from cgf_script.component_meta_class import CGFComponent, CGFMetaTypes, ComponentProperty
+from cgf_script.component_meta_class import CGFMetaTypes, ComponentProperty, registerComponent
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery, tickGroup
 from GameplayDebug import DebugTextComponent
 from constants import IS_CLIENT, IS_DEVELOPMENT
@@ -30,18 +30,22 @@ class SoundEvents(object):
     ROCKET_ACCELERATION_EMPTY = 'ev_rocket_accel_empty'
 
 
-class RocketAccelerationTerrainEffect(CGFComponent):
+@registerComponent
+class RocketAccelerationTerrainEffect(object):
     editorTitle = 'Rocket Accelerator Terrain Effect'
     category = 'Rocket Accelerator'
+    domain = CGF.DomainOption.DomainClient
     snow = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Snow', value=CGF.GameObject)
     sand = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Sand', value=CGF.GameObject)
     ground = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Ground', value=CGF.GameObject)
     stone = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Stone', value=CGF.GameObject)
 
 
-class RocketAccelerationStateListener(CGFComponent):
+@registerComponent
+class RocketAccelerationStateListener(object):
     editorTitle = 'Rocket Accelerator State Listener'
     category = 'Rocket Accelerator'
+    domain = CGF.DomainOption.DomainClient
     vseComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='VS Plan', value=VSEComponent)
     start = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Start Object', value=CGF.GameObject)
     idle = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Idle Object', value=CGF.GameObject)

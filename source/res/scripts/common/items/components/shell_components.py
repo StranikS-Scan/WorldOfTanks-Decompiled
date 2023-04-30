@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
-from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE, StunTypes
+from constants import SHELL_TYPES, DamageAbsorptionTypeToLabel, SHELL_MECHANICS_TYPE, StunTypes, HAS_EXPLOSION_EFFECT
 from items.components import component_constants
-from typing import Set, Optional, Tuple, Union
+from typing import Set, Tuple, Union
 
 class ShellType(object):
     __slots__ = ('name',)
@@ -16,29 +16,31 @@ class ShellType(object):
 
 
 class ArmorPiercingType(ShellType):
-    __slots__ = ('normalizationAngle', 'ricochetAngleCos', 'protectFromDirectHits')
+    __slots__ = ('normalizationAngle', 'ricochetAngleCos', 'protectFromDirectHits', 'protectFromDestroy')
 
     def __init__(self, name):
         super(ArmorPiercingType, self).__init__(name)
         self.normalizationAngle = component_constants.ZERO_FLOAT
         self.ricochetAngleCos = component_constants.ZERO_FLOAT
         self.protectFromDirectHits = set()
+        self.protectFromDestroy = set()
 
     def __repr__(self):
-        return 'ArmorPiercingType(normalizationAngle={}, ricochetAngleCos={}, protectFromDirectHits = {})'.format(self.normalizationAngle, self.ricochetAngleCos, self.protectFromDirectHits)
+        return 'ArmorPiercingType(normalizationAngle={}, ricochetAngleCos={}, protectFromDirectHits = {}, protectFromDestroy = {})'.format(self.normalizationAngle, self.ricochetAngleCos, self.protectFromDirectHits, self.protectFromDestroy)
 
 
 class HollowChargeType(ShellType):
-    __slots__ = ('piercingPowerLossFactorByDistance', 'ricochetAngleCos', 'protectFromDirectHits')
+    __slots__ = ('piercingPowerLossFactorByDistance', 'ricochetAngleCos', 'protectFromDirectHits', 'protectFromDestroy')
 
     def __init__(self, name):
         super(HollowChargeType, self).__init__(name)
         self.piercingPowerLossFactorByDistance = component_constants.ZERO_FLOAT
         self.ricochetAngleCos = component_constants.ZERO_FLOAT
         self.protectFromDirectHits = set()
+        self.protectFromDestroy = set()
 
     def __repr__(self):
-        return 'HollowChargeType(piercingPowerLossFactorByDistance={}, ricochetAngleCos={}, protectFromDirectHits={})'.format(self.piercingPowerLossFactorByDistance, self.ricochetAngleCos, self.protectFromDirectHits)
+        return 'HollowChargeType(piercingPowerLossFactorByDistance={}, ricochetAngleCos={}, protectFromDirectHits={}, protectFromDestroy={})'.format(self.piercingPowerLossFactorByDistance, self.ricochetAngleCos, self.protectFromDirectHits, self.protectFromDestroy)
 
 
 class HighExplosiveImpactParams(object):
@@ -58,7 +60,7 @@ class HighExplosiveImpactParams(object):
 
 
 class HighExplosiveType(ShellType):
-    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'mechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor', 'obstaclePenetration', 'shieldPenetration', 'maxDamage', 'protectFromDirectHits', 'protectFromIndirectHits')
+    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'mechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor', 'obstaclePenetration', 'shieldPenetration', 'maxDamage', 'protectFromDirectHits', 'protectFromIndirectHits', 'protectFromDestroy')
 
     def __init__(self, name):
         super(HighExplosiveType, self).__init__(name)
@@ -75,11 +77,12 @@ class HighExplosiveType(ShellType):
         self.armorSpalls = None
         self.protectFromDirectHits = set()
         self.protectFromIndirectHits = set()
+        self.protectFromDestroy = set()
         self.maxDamage = None
         return
 
     def __repr__(self):
-        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, mechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={}, protectFromDirectHits = {}, protectFromIndirectHits = {}, '.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.mechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor, self.protectFromDirectHits, self.protectFromIndirectHits)
+        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, mechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={}, protectFromDirectHits = {}, protectFromIndirectHits = {}, protectFromDestroy = {}'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.mechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor, self.protectFromDirectHits, self.protectFromIndirectHits, self.protectFromDestroy)
 
 
 class SmokeType(ShellType):
@@ -93,13 +96,14 @@ class SmokeType(ShellType):
 
 
 class Stun(object):
-    __slots__ = ('stunRadius', 'stunDuration', 'stunType', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
+    __slots__ = ('stunRadius', 'stunDuration', 'stunType', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff', 'stunInPoint')
 
     def __init__(self):
         super(Stun, self).__init__()
         self.stunRadius = component_constants.ZERO_FLOAT
         self.stunDuration = component_constants.ZERO_FLOAT
         self.stunType = StunTypes.DEFAULT
+        self.stunInPoint = False
         self.stunFactor = component_constants.ZERO_FLOAT
         self.guaranteedStunDuration = component_constants.ZERO_FLOAT
         self.damageDurationCoeff = component_constants.ZERO_FLOAT
@@ -107,7 +111,7 @@ class Stun(object):
         self.damageEffectCoeff = component_constants.ZERO_FLOAT
 
     def __repr__(self):
-        return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff)
+        return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={}, stunInPoint={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff, self.stunInPoint)
 
 
 def createShellType(typeName):
@@ -116,7 +120,7 @@ def createShellType(typeName):
         shellType = ArmorPiercingType(typeName)
     elif typeName == SHELL_TYPES.HOLLOW_CHARGE:
         shellType = HollowChargeType(typeName)
-    elif typeName == SHELL_TYPES.HIGH_EXPLOSIVE:
+    elif typeName in HAS_EXPLOSION_EFFECT:
         shellType = HighExplosiveType(typeName)
     elif typeName == SHELL_TYPES.SMOKE:
         shellType = SmokeType(typeName)

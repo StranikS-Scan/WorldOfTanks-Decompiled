@@ -95,8 +95,8 @@ class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel])
             self._setBaseParams(model)
 
     def _finalize(self):
-        super(FullScreenDialogView, self)._finalize()
         self._removeListeners()
+        super(FullScreenDialogView, self)._finalize()
 
     def _addListeners(self):
         self.viewModel.onAcceptClicked += self._onAcceptClicked

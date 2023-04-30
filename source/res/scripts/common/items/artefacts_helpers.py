@@ -294,11 +294,12 @@ def _readKpiValue(xmlCtx, section, kpiType):
     value = section.readFloat('value')
     specValue = section.readString('specValue')
     vehicleTypes = section.readString('vehicleTypes').split()
+    isSituational = section.readBool('situationalKpi', False)
     if not name:
         _xml.raiseWrongXml(xmlCtx, kpiType, 'empty <name> tag not allowed')
     elif name not in KPI.Name.ALL():
         _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
-    return KPI(name, value, kpiType, float(specValue) if specValue else None, vehicleTypes)
+    return KPI(name, value, kpiType, float(specValue) if specValue else None, vehicleTypes, isSituational)
 
 
 def _readAggregateKPI(xmlCtx, section, kpiType):

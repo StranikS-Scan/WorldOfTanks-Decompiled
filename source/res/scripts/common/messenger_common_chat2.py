@@ -162,6 +162,8 @@ class MESSENGER_ACTION_IDS():
         return ADMIN_CHAT_COMMANDS[actionID - startID] if startID <= actionID < startID + len(ADMIN_CHAT_COMMANDS) else None
 
 
+RESPONSE_MESSENGER_ACTION_IDS = (MESSENGER_ACTION_IDS.RESPONSE_SUCCESS, MESSENGER_ACTION_IDS.RESPONSE_FAILURE)
+
 class CHAT_COMMAND_COOLDOWN_TYPE_IDS():
     TIMEFRAME_DATA_COOLDOWN = _makeID()
     SAME_COMMAND_COOLDOWN = _makeID()
@@ -287,22 +289,16 @@ ChatCommandBlockedData = namedtuple('ChatCommandBlockedData', ('reqID',
  'cooldownType',
  'cooldownEnd',
  'targetID'))
-BattleChatCmdGameModeCoolDownData = namedtuple('BattleChatCmdGameModeCoolDownData', ('teamChatCmdCooldown',
+COOLDOWN_SETTING_NAMES = ('teamChatCmdCooldown',
  'sameChatCmdCooldown',
  'sameTargetChatCmdCooldown',
  'otherChatCmdCooldown',
  'attentionToTeamLimit',
- 'attentionToTimeframeLimit'))
-SPAM_PROTECTION_SETTING = BattleChatCmdGameModeCoolDownData(teamChatCmdCooldown=_TEAM_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameChatCmdCooldown=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameTargetChatCmdCooldown=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, otherChatCmdCooldown=_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, attentionToTeamLimit=_MAX_ATTENTION_TO_PER_TEAM, attentionToTimeframeLimit=_MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME)
+ 'attentionToTimeframeLimit',
+ 'timeframeToAttentionCmds')
+BattleChatCmdGameModeCoolDownData = namedtuple('BattleChatCmdGameModeCoolDownData', COOLDOWN_SETTING_NAMES)
+DEFAULT_SPAM_PROTECTION_SETTING = BattleChatCmdGameModeCoolDownData(teamChatCmdCooldown=_TEAM_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameChatCmdCooldown=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, sameTargetChatCmdCooldown=_SAME_TARGET_PERSONAL_BATTLE_CHAT_CMD_COOLDOWN_DURATION, otherChatCmdCooldown=_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, attentionToTeamLimit=_MAX_ATTENTION_TO_PER_TEAM, attentionToTimeframeLimit=_MAX_ATTENTION_TO_CHAT_COMMANDS_WITHIN_TIMEFRAME, timeframeToAttentionCmds=_TIMEFRAME_FOR_ATTENTION_TO_STORAGE)
 BATTLE_CMD_COOLDOWN_ALLOWED_MARGIN = 0.1
-
-def getCooldownGameModeDataForGameMode(gameMode):
-    if ARENA_BONUS_TYPE_CAPS.checkAny(gameMode, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION):
-        return SPAM_PROTECTION_SETTING
-    else:
-        return None
-        return None
-
 
 def areSenderCooldownsActive(currTime, listOfCoolDownTimeData, cmdIDToSend, targetIDToSend):
     if listOfCoolDownTimeData is None:
@@ -343,5 +339,5 @@ def addCoolDowns(currTime, listOfCoolDownTimeData, cmdID, cmdName, cmdCooldownTi
         if activeOldAttComands and len(activeOldAttComands) >= cooldownConf.attentionToTimeframeLimit - 1:
             data = ChatCommandBlockedData(reqID=reqID, cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.ATTENTION_TO_BLOCKED_COOLDOWN, cooldownEnd=currTime + cooldownConf.sameChatCmdCooldown, targetID=cmdTargetID)
         else:
-            data = ChatCommandBlockedData(reqID=reqID, cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN, cooldownEnd=currTime + _TIMEFRAME_FOR_ATTENTION_TO_STORAGE, targetID=cmdTargetID)
+            data = ChatCommandBlockedData(reqID=reqID, cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN, cooldownEnd=currTime + cooldownConf.timeframeToAttentionCmds, targetID=cmdTargetID)
         listOfCoolDownTimeData.append(data)

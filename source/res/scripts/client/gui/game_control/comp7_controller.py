@@ -30,7 +30,6 @@ from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchContr
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from helpers.server_settings import Comp7Config
@@ -39,16 +38,17 @@ if typing.TYPE_CHECKING:
 class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListener):
     _ALERT_DATA_CLASS = Comp7AlertData
     __ENTITLEMENTS = {COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT}
+    __STATS_SEASONS_KEYS = ('1', '2')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
-    __hangarsSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(Comp7Controller, self).__init__()
         self.__serverSettings = None
         self.__comp7Config = None
+        self.__comp7RanksConfig = None
         self.__roleEquipmentsCache = None
         self.__viewData = {}
         self.__isOffline = False
@@ -70,9 +70,16 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     @property
     def __roleEquipments(self):
         if self.__roleEquipmentsCache is None:
+            self.__roleEquipmentsCache = {}
             equipmentsCache = vehicles.g_cache.equipments()
             roleEquipmentsConfig = self.getModeSettings().roleEquipments
-            self.__roleEquipmentsCache = {role:equipmentsCache[equipmentConfig['equipmentID']] for role, equipmentConfig in roleEquipmentsConfig.iteritems() if equipmentConfig['equipmentID'] is not None}
+            for role, equipmentConfig in roleEquipmentsConfig.iteritems():
+                if equipmentConfig['equipmentID'] is not None:
+                    startCharge = equipmentConfig['startCharge']
+                    startLevel = len([ levelCost for levelCost in equipmentConfig['cost'] if levelCost <= startCharge ])
+                    self.__roleEquipmentsCache[role] = {'item': equipmentsCache[equipmentConfig['equipmentID']],
+                     'startLevel': startLevel}
+
         return self.__roleEquipmentsCache
 
     @property
@@ -102,6 +109,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     @property
     def leaderboard(self):
         return self.__leaderboardDataProvider
+
+    @property
+    def battleModifiers(self):
+        return self.getModeSettings().battleModifiersDescr
 
     def init(self):
         super(Comp7Controller, self).init()
@@ -146,6 +157,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__serverSettings.onServerSettingsChange -= self.__onUpdateComp7Settings
         self.__serverSettings = None
         self.__comp7Config = None
+        self.__comp7RanksConfig = None
         self.__roleEquipmentsCache = None
         self.__viewData = {}
         self.__rating = 0
@@ -163,7 +175,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return self.__comp7Config
 
     def isEnabled(self):
-        return self.__comp7Config.isEnabled
+        return self.__comp7Config.isEnabled and self.__isRanksConfigAvailable()
 
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
@@ -176,7 +188,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return True
 
     def getRoleEquipment(self, roleName):
-        return self.__roleEquipments.get(roleName)
+        return self.__roleEquipments.get(roleName, {}).get('item')
+
+    def getEquipmentStartLevel(self, roleName):
+        return self.__roleEquipments.get(roleName, {}).get('startLevel')
 
     def isSuitableVehicle(self, vehicle):
         ctx = {}
@@ -239,9 +254,15 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def isComp7PrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
 
+    def isBattleModifiersAvailable(self):
+        return self.isComp7PrbActive() and len(self.battleModifiers) > 0
+
     def getPlatoonRatingRestriction(self):
         unitMgr = prb_getters.getClientUnitMgr()
         return self.__comp7Config.squadRatingRestriction.get(unitMgr.unit.getSquadSize(), 0) if unitMgr is not None and unitMgr.unit is not None else 0
+
+    def getStatsSeasonsKeys(self):
+        return self.__STATS_SEASONS_KEYS
 
     def _getAlertBlockData(self):
         if self.isOffline:
@@ -254,6 +275,12 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             vehicleLevelsStr = ', '.join(romanLevels)
             return self._ALERT_DATA_CLASS.constructForVehicle(levelsStr=vehicleLevelsStr, vehicleIsAvailableForBuy=self.vehicleIsAvailableForBuy(), vehicleIsAvailableForRestore=self.vehicleIsAvailableForRestore())
         return super(Comp7Controller, self)._getAlertBlockData()
+
+    def __isRanksConfigAvailable(self):
+        if not self.__comp7RanksConfig.ranks:
+            _logger.error('No ranks data available.')
+            return False
+        return True
 
     def __onCheckSceneChange(self):
         if self.isComp7PrbActive():
@@ -296,17 +323,19 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__serverSettings = serverSettings
         self.__serverSettings.onServerSettingsChange += self.__onUpdateComp7Settings
         self.__comp7Config = self.__serverSettings.comp7Config
+        self.__comp7RanksConfig = self.__serverSettings.comp7PrestigeRanksConfig
         self.__roleEquipmentsCache = None
         return
 
     def __onUpdateComp7Settings(self, diff):
+        if Configs.COMP7_PRESTIGE_RANKS_CONFIG.value in diff:
+            self.__comp7RanksConfig = self.__serverSettings.comp7PrestigeRanksConfig
+            self.onComp7RanksConfigChanged()
         if Configs.COMP7_CONFIG.value in diff:
             self.__comp7Config = self.__serverSettings.comp7Config
             self.__roleEquipmentsCache = None
             self.__resetTimer()
             self.onComp7ConfigChanged()
-        if Configs.COMP7_PRESTIGE_RANKS_CONFIG.value in diff:
-            self.onComp7RanksConfigChanged()
         return
 
     def __resetTimer(self):

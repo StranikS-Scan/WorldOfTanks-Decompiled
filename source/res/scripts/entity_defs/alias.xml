@@ -1025,6 +1025,21 @@
       <needsCount>
         <Type>	BOOL	</Type>
       </needsCount>
+      <damageDistributionLowerBound>
+        <Type>	FLOAT32	</Type>
+      </damageDistributionLowerBound>
+      <piercingDistributionLowerBound>
+        <Type>	FLOAT32	</Type>
+      </piercingDistributionLowerBound>
+      <damageDistributionUpperBound>
+        <Type>	FLOAT32	</Type>
+      </damageDistributionUpperBound>
+      <piercingDistributionUpperBound>
+        <Type>	FLOAT32	</Type>
+      </piercingDistributionUpperBound>
+      <criticalHitChanceBoost>
+        <Type>	FLOAT32	</Type>
+      </criticalHitChanceBoost>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1845,6 +1860,32 @@
       </reason>
     </Properties>
   </TIME_WITH_REASON>
+  <PERK_INFO_HUD>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <perkID>
+        <Type>	OBJECT_ID	</Type>
+      </perkID>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <coolDown>
+        <Type>	FLOAT32	</Type>
+      </coolDown>
+      <lifeTime>
+        <Type>	FLOAT64	</Type>
+      </lifeTime>
+    </Properties>
+  </PERK_INFO_HUD>
+  <PERK_INFO_RIBBON>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <perkID>
+        <Type>	OBJECT_ID	</Type>
+      </perkID>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+    </Properties>
+  </PERK_INFO_RIBBON>
   <TOURNAMEMT_PARTICIPANT>	FIXED_DICT	  <Properties>
       <databaseID>
         <Type>	DB_ID	</Type>
@@ -2397,4 +2438,25 @@
       </placed>
     </Properties>
   </TEAM_SPAWN_KEY_POINT>
+  <GAME_OBJECT_STATE>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	STRING	</Type>
+      </id>
+      <state>
+        <Type>	BOOL	</Type>
+      </state>
+    </Properties>
+  </GAME_OBJECT_STATE>
+  <GAME_OBJECT_ACTIVATION>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	STRING	</Type>
+      </id>
+      <start>
+        <Type>	FLOAT32	</Type>
+      </start>
+      <end>
+        <Type>	FLOAT32	</Type>
+      </end>
+    </Properties>
+  </GAME_OBJECT_ACTIVATION>
 </alias.xml>

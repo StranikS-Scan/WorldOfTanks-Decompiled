@@ -34,10 +34,6 @@ class EpicSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (8, 9)
 
 
-class MapboxSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (8, 10)
-
-
 class Comp7Slot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (10, 10)
 
@@ -88,8 +84,8 @@ class BattleRoyaleRoster(BaseUnitRoster):
 class MapBoxRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = MapboxSlot
-    DEFAULT_SLOT_PACK = MapboxSlot().pack()
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 

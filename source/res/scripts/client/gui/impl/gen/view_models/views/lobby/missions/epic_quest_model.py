@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/missions/epic_quest_model.py
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.missions.epic_quests_bonus_model import EpicQuestsBonusModel
 
 class EpicQuestModel(ViewModel):
     __slots__ = ()
@@ -38,6 +39,10 @@ class EpicQuestModel(ViewModel):
 
     def setBonuses(self, value):
         self._setArray(4, value)
+
+    @staticmethod
+    def getBonusesType():
+        return EpicQuestsBonusModel
 
     def getIsEnabled(self):
         return self._getBool(5)

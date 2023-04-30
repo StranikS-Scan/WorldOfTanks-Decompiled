@@ -57,7 +57,7 @@ class VehiclePickupComponent(object):
         self.__vehicleGameObject.removeComponent(self)
 
 
-@autoregister(presentInAllWorlds=True, presentInEditor=True)
+@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
 class VehiclePickupManager(CGF.ComponentManager):
 
     @onAddedQuery(VehiclePickupComponent)

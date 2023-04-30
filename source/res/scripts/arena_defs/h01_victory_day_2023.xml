@@ -1,0 +1,59 @@
+<h01_victory_day_2023.xml>
+  <name>	#arenas:h01_victory_day_2023/name	</name>
+  <description>	#arenas:hangar_victory_day_2023/description	</description>
+  <geometry>	spaces/h01_victory_day_2023	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	300.000000 300.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/h01_victory_day_2023/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwambientSound>	hangar_h01_ambient	</wwambientSound>
+  <wwmusic>	hangar_h01_2d_music	</wwmusic>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h01_victory_day_2023.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>
+        <name>	hangar_premium_2018.bnk	</name>
+      </bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_trees_green_comb_mid_01	</name>
+        <mod>	hangar_h01_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	0.0 50.0	</position1>
+        </team1>
+        <team2>
+          <position1>	0.0 -50.0	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</h01_victory_day_2023.xml>

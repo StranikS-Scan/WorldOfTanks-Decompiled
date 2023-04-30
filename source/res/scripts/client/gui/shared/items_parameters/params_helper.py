@@ -5,7 +5,7 @@ import typing
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, KPI
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
@@ -18,6 +18,7 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 RELATIVE_POWER_PARAMS = ('avgDamage',
  'avgPiercingPower',
  'stunMaxDuration',
+ 'flameMaxDistance',
  'reloadTime',
  AUTO_RELOAD_PROP_NAME,
  'reloadTimeSecs',
@@ -61,11 +62,49 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeMobility': RELATIVE_MOBILITY_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
  'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
-EXTRA_POWER_PARAMS = ('vehicleGunShotDispersion', 'vehicleGunShotDispersionChassisMovement', 'vehicleGunShotDispersionChassisRotation', 'vehicleGunShotDispersionTurretRotation', 'vehicleGunShotDispersionWhileGunDamaged', 'vehicleGunShotDispersionAfterShot', 'vehicleReloadTimeAfterShellChange')
-EXTRA_ARMOR_PARAMS = ('vehicleRepairSpeed', 'vehicleRamOrExplosionDamageResistance', 'crewHitChance', 'crewStunDuration', 'crewStunResistance', 'vehicleChassisStrength', 'vehicleChassisFallDamage', 'vehicleAmmoBayEngineFuelStrength', 'vehPenaltyForDamageEngineAndCombat', 'vehicleFireChance', 'vehicleRamDamageResistance', 'damageEnemiesByRamming')
-EXTRA_MOBILITY_PARAMS = ('vehicleSpeedGain',)
-EXTRA_CAMOUFLAGE_PARAMS = ('vehicleOwnSpottingTime',)
-EXTRA_VISIBILITY_PARAMS = ('vehicleEnemySpottingTime', 'demaskFoliageFactor', 'demaskMovingFactor')
+EXTRA_POWER_PARAMS = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_WHILE_GUN_DAMAGED,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_AFTER_SHOT,
+ KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND,
+ KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND,
+ KPI.Name.ENEMY_MODULES_CREW_CRIT_CHANCE,
+ KPI.Name.VEHICLE_DAMAGE_ENEMIES_BY_RAMMING)
+EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
+ KPI.Name.CREW_STUN_DURATION,
+ KPI.Name.CREW_STUN_RESISTANCE,
+ KPI.Name.EQUIPMENT_PREPARATION_TIME,
+ KPI.Name.VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH,
+ KPI.Name.VEHICLE_AMMO_BAY_STRENGTH,
+ KPI.Name.VEHICLE_CHASSIS_FALL_DAMAGE,
+ KPI.Name.VEHICLE_CHASSIS_STRENGTH,
+ KPI.Name.VEHICLE_FIRE_CHANCE,
+ KPI.Name.VEHICLE_RAM_DAMAGE_RESISTANCE,
+ KPI.Name.VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE,
+ KPI.Name.VEHICLE_REPAIR_SPEED,
+ KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT,
+ KPI.Name.STUN_RESISTANCE_EFFECT_FACTOR,
+ KPI.Name.VEHICLE_FUEL_TANK_LESION_CHANCE,
+ KPI.Name.VEHICLE_RAM_CHASSIS_DAMAGE_RESISTANCE,
+ KPI.Name.RADIOMAN_HIT_CHANCE,
+ KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY,
+ KPI.Name.FIRE_EXTINGUISHING_RATE,
+ KPI.Name.COMMANDER_HIT_CHANCE,
+ KPI.Name.WOUNDED_CREW_EFFICIENCY)
+EXTRA_MOBILITY_PARAMS = (KPI.Name.VEHICLE_SPEED_GAIN,
+ KPI.Name.VEHICLE_WEAK_SOIL_RESISTANCE,
+ KPI.Name.VEHICLE_AVERAGE_SOIL_RESISTANCE,
+ KPI.Name.WHEELS_ROTATION_SPEED)
+EXTRA_CAMOUFLAGE_PARAMS = (KPI.Name.VEHICLE_OWN_SPOTTING_TIME, KPI.Name.FOLIAGE_MASKING_FACTOR)
+EXTRA_VISIBILITY_PARAMS = (KPI.Name.VEHICLE_ENEMY_SPOTTING_TIME,
+ KPI.Name.DEMASK_FOLIAGE_FACTOR,
+ KPI.Name.DEMASK_MOVING_FACTOR,
+ KPI.Name.CIRCULAR_VISION_RADIUS_WHILE_SURVEYING_DEVICE_DAMAGED,
+ KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
+ KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
+ KPI.Name.VEHICLE_ALLY_RADIO_DISTANCE)
 EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeArmor': EXTRA_ARMOR_PARAMS,
  'relativeMobility': EXTRA_MOBILITY_PARAMS,

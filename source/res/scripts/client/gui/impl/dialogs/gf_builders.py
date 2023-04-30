@@ -3,6 +3,7 @@
 import typing
 from frameworks.wulf import WindowLayer
 from gui.impl.dialogs.dialog_template import DialogTemplateView, DEFAULT_DIMMER_ALPHA
+from gui.impl.dialogs.sub_views.common.simple_text import ImageSubstitution
 from gui.impl.dialogs.sub_views.content.text_warning_content import TextWithWarning
 from gui.impl.dialogs.dialog_template_button import ButtonPresenter, CancelButton, ConfirmButton
 from gui.impl.dialogs.dialog_template_utils import toString
@@ -203,6 +204,37 @@ class InfoDialogBuilder(ConfirmCancelDialogBuilder):
         super(InfoDialogBuilder, self).__init__(uniqueID)
         rDialogs = R.images.gui.maps.uiKit.dialogs
         self.setIcon(rDialogs.icons.info(), [rDialogs.highlights.blue()])
+
+
+class AcceleratedCrewTrainingDialogBuilder(ConfirmCancelDialogBuilder):
+    __slots__ = ()
+
+    def __init__(self, uniqueID=None):
+        super(AcceleratedCrewTrainingDialogBuilder, self).__init__(uniqueID)
+        self.setIcon(R.images.gui.maps.uiKit.dialogs.icons.accelerated_crew())
+
+
+class PassiveXPDialogBuilder(ConfirmCancelDialogBuilder):
+    __slots__ = ('__descriptionMsg', '__icon')
+
+    def __init__(self, uniqueID=None):
+        super(PassiveXPDialogBuilder, self).__init__(uniqueID)
+        self.setIcon(R.images.gui.maps.uiKit.dialogs.icons.intensive_crew())
+        self.__descriptionMsg = None
+        self.__icon = None
+        return
+
+    def setDescriptionMsg(self, text):
+        self.__descriptionMsg = text
+
+    def setMessageIcon(self, icon):
+        self.__icon = icon
+
+    def _extendTemplate(self, template):
+        super(PassiveXPDialogBuilder, self)._extendTemplate(template)
+        if self.__descriptionMsg and self.__icon:
+            image = ImageSubstitution(self.__icon(), 'typeIcon', 3, -5, -5, -5)
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, SimpleTextContent(self.__descriptionMsg, imageSubstitutions=[image]))
 
 
 class WarningDialogBuilder(ConfirmCancelDialogBuilder):

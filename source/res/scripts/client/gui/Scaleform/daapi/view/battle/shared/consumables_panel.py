@@ -36,7 +36,7 @@ from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 if TYPE_CHECKING:
-    from gui.battle_control.controllers.consumables.equipment_ctrl import _OrderItem
+    from gui.battle_control.controllers.consumables.equipment_ctrl import _OrderItem, _EquipmentItem
 _logger = logging.getLogger(__name__)
 R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
 NO_AMMO_ICON = 'NO_{}'
@@ -229,6 +229,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText)
 
+    def _updateEquipmentSlotTooltipText(self, idx, item):
+        toolTip = self._buildEquipmentSlotTooltipText(item)
+        self.as_updateTooltipS(idx=idx, tooltipStr=toolTip)
+
     def _buildEquipmentSlotTooltipText(self, item):
         descriptor = item.getDescriptor()
         reloadingTime = item.getTotalTime()
@@ -236,15 +240,22 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         body = descriptor.description
         consumeAmmo = descriptor.consumeAmmo if isSharedCooldownConfig else False
         if not consumeAmmo and reloadingTime > 0:
-            tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
+            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
+            body = '\n'.join((body, ''))
+            if descriptor.isActivatable():
+                activeSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.activeSeconds()
+                activeSecVal = descriptor.activeSeconds
+                activeSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, activeSecVal)))
+                activeSecondsParamsString = backport.text(activeSecondsTooltipStr, activeSeconds=activeSeconds)
+                body = '\n'.join((body, activeSecondsParamsString))
             if isSharedCooldownConfig:
                 cdSecVal = descriptor.cooldownTime
             else:
-                cdSecVal = descriptor.cooldownSeconds
-            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
+                cdSecVal = item.getTotalTime()
+            cooldownSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
             cooldownSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, cdSecVal)))
-            paramsString = backport.text(tooltipStr, cooldownSeconds=cooldownSeconds)
-            body = '\n\n'.join((body, paramsString))
+            cooldownSecondsParamsString = backport.text(cooldownSecondsTooltipStr, cooldownSeconds=cooldownSeconds)
+            body = '\n'.join((body, cooldownSecondsParamsString))
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         return toolTip
 
@@ -302,6 +313,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._setKeyHandler(item, bwKey, idx)
         self._updateEquipmentGlow(idx, item)
         self._updateActivatedSlot(idx, item)
+        self._updateEquipmentSlotTooltipText(idx, item)
 
     def _updateEquipmentGlow(self, idx, item):
         if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:

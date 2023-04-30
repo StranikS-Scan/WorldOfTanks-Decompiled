@@ -97,22 +97,22 @@ class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
         if self.__ctx is None:
             return
         else:
-            self.__datailedList, selectedIdx = detailed_help_pages.buildPagesData(self.__ctx)
+            self.__detailedList, selectedIdx = detailed_help_pages.buildPagesData(self.__ctx)
             if self.app is not None:
                 self.app.registerGuiKeyHandler(self)
-                if len(self.__datailedList) > 1:
+                if len(self.__detailedList) > 1:
                     self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.HELP_DETAILED, cursorVisible=True, enableAiming=False)
             pages = [ {'buttonsGroup': 'DetailsHelpPageGroup',
              'pageIndex': index,
              'label': str(index + 1),
              'status': '',
              'selected': index == selectedIdx,
-             'tooltip': {}} for index in range(len(self.__datailedList)) ]
+             'tooltip': {}} for index in range(len(self.__detailedList)) ]
             self.as_setPaginatorDataS(pages)
             return
 
     def requestPageData(self, index):
-        self.as_setPageDataS(self.__datailedList[index])
+        self.as_setPageDataS(self.__detailedList[index])
 
     def _dispose(self):
         if self.app is not None:

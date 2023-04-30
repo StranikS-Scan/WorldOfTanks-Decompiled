@@ -9,6 +9,7 @@ from gui.impl.lobby.dialogs.auxiliary.buy_and_exchange_state_machine import BuyA
 from gui.impl.lobby.dialogs.buy_and_exchange import BuyAndExchange
 from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult
 from gui.impl.lobby.dialogs.contents.multiple_items_content import MultipleItemsContent
+from gui.impl.lobby.dialogs.contents.multiple_items_content_to_upgrade import MultipleItemsContentToUpgrade
 from gui.shared.money import ZERO_MONEY
 from gui.shared.utils.requesters import REQ_CRITERIA
 _logger = logging.getLogger(__name__)
@@ -29,7 +30,8 @@ class ExchangeWithItems(BuyAndExchange):
 
     def _onLoading(self, *args, **kwargs):
         super(ExchangeWithItems, self)._onLoading(*args, **kwargs)
-        self._mainContent = MultipleItemsContent(viewModel=self.viewModel.mainContent, items=self.__items)
+        contentClass = self._getContentClass()
+        self._mainContent = contentClass(viewModel=self.viewModel.mainContent, items=self.__items)
         self._mainContent.onLoading()
 
     def _initialize(self, *args, **kwargs):
@@ -54,6 +56,10 @@ class ExchangeWithItems(BuyAndExchange):
          BuyAndExchangeStateEnum.GOLD_NOT_ENOUGH: BuyAndExchangeBottomContentType.EXCHANGE_PANEL,
          BuyAndExchangeStateEnum.EXCHANGE_NOT_REQUIRED: BuyAndExchangeBottomContentType.EXCHANGE_PANEL}
 
+    @classmethod
+    def _getContentClass(cls):
+        return MultipleItemsContent
+
 
 class ExchangeToBuyItems(ExchangeWithItems):
     __slots__ = ()
@@ -73,3 +79,7 @@ class ExchangeToUpgradeDevice(ExchangeWithItems):
             _logger.warning("Device doesn't upgradable!")
         settings = ViewSettings(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), model=ExchangeWithItemsModel())
         super(ExchangeToUpgradeDevice, self).__init__(settings=settings, items=[device], price=device.getUpgradePrice(self._itemsCache.items).price if device.isUpgradable else ZERO_MONEY)
+
+    @classmethod
+    def _getContentClass(cls):
+        return MultipleItemsContentToUpgrade

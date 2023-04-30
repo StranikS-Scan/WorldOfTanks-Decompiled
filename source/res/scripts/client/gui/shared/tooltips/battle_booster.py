@@ -138,7 +138,7 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
             block.append(formatters.packImageTextBlockData(title=description, txtOffset=20))
         elif module.isCrewBooster():
             skillLearnt = module.isAffectedSkillLearnt(vehicle)
-            skillName = backport.text(R.strings.item_types.tankman.skills.dyn(module.getAffectedSkillName())())
+            skillName = backport.text(R.strings.crew_perks.dyn(self.module.getAffectedSkillName()).name())
             replaceText = module.getCrewBoosterAction(True)
             boostText = module.getCrewBoosterAction(False)
             skillNotLearntText = text_styles.standard(backport.text(R.strings.tooltips.battleBooster.skill.not_learnt()))

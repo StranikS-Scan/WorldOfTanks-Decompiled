@@ -3,11 +3,13 @@
 from functools import partial
 import CGF
 from GenericComponents import DecalComponent, EntityGOSync
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, autoregister
 from vehicle_systems.model_assembler import loadAppearancePrefab
 
-class SerialNumberSwitcher(CGFComponent):
+@registerComponent
+class SerialNumberSwitcher(object):
+    domain = CGF.DomainOption.DomainClient
     lamp3digits = ComponentProperty(type=CGFMetaTypes.STRING, editorName='3 digits', annotations={'path': '*.prefab'})
     lamp4digits = ComponentProperty(type=CGFMetaTypes.STRING, editorName='4 digits', annotations={'path': '*.prefab'})
     lamp5digits = ComponentProperty(type=CGFMetaTypes.STRING, editorName='5 digits', annotations={'path': '*.prefab'})
@@ -19,7 +21,9 @@ class SerialNumberSwitcher(CGFComponent):
         return self.lamp4digits if length > 3 else self.lamp3digits
 
 
-class SerialNumberComponent(CGFComponent):
+@registerComponent
+class SerialNumberComponent(object):
+    domain = CGF.DomainOption.DomainClient
     counterValue = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Counter Value', value='00000')
     splitNumber = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='Split number', value=False)
     decalComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='DecalLink', value=DecalComponent)

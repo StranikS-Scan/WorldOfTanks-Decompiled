@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crystals_promo/crystals_promo_view.py
+from account_helpers.AccountSettings import AccountSettings, CRYSTALS_INFO_SHOWN
 from constants import ARENA_BONUS_TYPE, IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
-from account_helpers.AccountSettings import AccountSettings, CRYSTALS_INFO_SHOWN
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl
 from gui.impl.auxiliary.layer_monitor import LayerMonitor
+from gui.impl.backport.backport_system_locale import getIntegralFormat
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crystals_promo.battle_type_model import BattleTypeModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.condition_model import ConditionModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.crystals_promo_view_model import CrystalsPromoViewModel
-from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.pub import ViewImpl
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl
-from gui.shared.event_dispatcher import showShop
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.impl.gen import R
+from gui.shop import showIngameShop, Origin
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
@@ -98,7 +98,7 @@ class CrystalsPromoView(ViewImpl):
     def __goToShopHandler(self, args=None):
         if args is not None:
             tabIndex = args['tabIndex']
-            showShop(_shopUrlsMap[tabIndex])
+            showIngameShop(_shopUrlsMap[tabIndex], Origin.HANGAR_BONS_SCREEN)
             self.destroyWindow()
         return
 

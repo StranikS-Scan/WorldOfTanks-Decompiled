@@ -202,56 +202,50 @@ def abort():
 def fini():
     global g_replayCtrl
     LOG_DEBUG('fini')
-    if OfflineMode.enabled():
-        dependency.clear()
-        return
-    elif LightingGenerationMode.enabled():
-        return
-    else:
-        if g_replayCtrl is not None:
-            g_replayCtrl.stop(isDestroyed=True)
-        BigWorld.wg_setScreenshotNotifyCallback(None)
-        g_critMemHandler.restore()
-        g_critMemHandler.destroy()
-        if constants.IS_CAT_LOADED:
-            import Cat
-            Cat.fini()
-        MusicControllerWWISE.destroy()
-        if RSSDownloader.g_downloader is not None:
-            RSSDownloader.g_downloader.destroy()
-        ServiceLocator.connectionMgr.onConnected -= onConnected
-        ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
-        MessengerEntry.g_instance.fini()
-        from helpers import EdgeDetectColorController
-        if EdgeDetectColorController.g_instance is not None:
-            EdgeDetectColorController.g_instance.destroy()
-            EdgeDetectColorController.g_instance = None
-        BigWorld.resetEntityManager(False, False)
-        BigWorld.clearAllSpaces()
-        if TriggersManager.g_manager is not None:
-            TriggersManager.g_manager.destroy()
-            TriggersManager.g_manager = None
-        if g_replayCtrl is not None:
-            g_replayCtrl.unsubscribe()
-        gui_personality.fini()
-        from predefined_hosts import g_preDefinedHosts
-        if g_preDefinedHosts is not None:
-            g_preDefinedHosts.fini()
-        SoundGroups.g_instance.stopListeningGUISpaceChanges()
-        dependency.clear()
-        if g_replayCtrl is not None:
-            g_replayCtrl.destroy()
-            g_replayCtrl = None
-        voipRespHandler = VOIP.getVOIPManager()
-        if voipRespHandler is not None:
-            voipRespHandler.destroy()
-        SoundGroups.g_instance.destroy()
-        Settings.g_instance.save()
-        WebBrowser.destroyExternalCache()
-        if constants.HAS_DEV_RESOURCES:
-            import development
-            development.fini()
-        return
+    if g_replayCtrl is not None:
+        g_replayCtrl.stop(isDestroyed=True)
+    BigWorld.wg_setScreenshotNotifyCallback(None)
+    g_critMemHandler.restore()
+    g_critMemHandler.destroy()
+    if constants.IS_CAT_LOADED:
+        import Cat
+        Cat.fini()
+    MusicControllerWWISE.destroy()
+    if RSSDownloader.g_downloader is not None:
+        RSSDownloader.g_downloader.destroy()
+    ServiceLocator.connectionMgr.onConnected -= onConnected
+    ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
+    MessengerEntry.g_instance.fini()
+    from helpers import EdgeDetectColorController
+    if EdgeDetectColorController.g_instance is not None:
+        EdgeDetectColorController.g_instance.destroy()
+        EdgeDetectColorController.g_instance = None
+    BigWorld.resetEntityManager(False, False)
+    BigWorld.clearAllSpaces()
+    if TriggersManager.g_manager is not None:
+        TriggersManager.g_manager.destroy()
+        TriggersManager.g_manager = None
+    if g_replayCtrl is not None:
+        g_replayCtrl.unsubscribe()
+    gui_personality.fini()
+    from predefined_hosts import g_preDefinedHosts
+    if g_preDefinedHosts is not None:
+        g_preDefinedHosts.fini()
+    SoundGroups.g_instance.stopListeningGUISpaceChanges()
+    dependency.clear()
+    if g_replayCtrl is not None:
+        g_replayCtrl.destroy()
+        g_replayCtrl = None
+    voipRespHandler = VOIP.getVOIPManager()
+    if voipRespHandler is not None:
+        voipRespHandler.destroy()
+    SoundGroups.g_instance.destroy()
+    Settings.g_instance.save()
+    WebBrowser.destroyExternalCache()
+    if constants.HAS_DEV_RESOURCES:
+        import development
+        development.fini()
+    return
 
 
 def onChangeEnvironments(inside):

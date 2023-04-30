@@ -16,7 +16,7 @@ from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.impl.lobby.comp7.meta_view.pages.leaderboard_page import LeaderboardPage
 from gui.impl.lobby.comp7.meta_view.pages.progression_page import ProgressionPage
 from gui.impl.lobby.comp7.meta_view.pages.rank_rewards_page import RankRewardsPage
-from gui.impl.lobby.comp7.meta_view.pages.win_rewards_page import WinRewardsPage
+from gui.impl.lobby.comp7.meta_view.pages.weekly_quests_page import WeeklyQuestsPage
 from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
@@ -138,7 +138,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
     def __initPages(self):
         pages = (ProgressionPage(self.viewModel.progressionModel, self),
          RankRewardsPage(self.viewModel.rankRewardsModel, self),
-         WinRewardsPage(self.viewModel.winRewardsModel, self),
+         WeeklyQuestsPage(self.viewModel.weeklyQuestsModel, self),
          LeaderboardPage(self.viewModel.leaderboardModel, self))
         self.__pages = {p.pageId:p for p in pages}
 

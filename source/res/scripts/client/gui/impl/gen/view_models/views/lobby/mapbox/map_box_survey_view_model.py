@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.mapbox.map_box_question_model import M
 class MapBoxSurveyViewModel(ViewModel):
     __slots__ = ('onClose', 'onAnswerQuestion', 'onShowPreviousPage', 'onShowNextPage', 'onReady')
 
-    def __init__(self, properties=6, commands=5):
+    def __init__(self, properties=7, commands=5):
         super(MapBoxSurveyViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -23,34 +23,41 @@ class MapBoxSurveyViewModel(ViewModel):
     def setMapId(self, value):
         self._setString(1, value)
 
+    def getSurveyGroup(self):
+        return self._getString(2)
+
+    def setSurveyGroup(self, value):
+        self._setString(2, value)
+
     def getCurrentPage(self):
-        return self._getNumber(2)
-
-    def setCurrentPage(self, value):
-        self._setNumber(2, value)
-
-    def getTotalPagesCount(self):
         return self._getNumber(3)
 
-    def setTotalPagesCount(self, value):
+    def setCurrentPage(self, value):
         self._setNumber(3, value)
 
+    def getTotalPagesCount(self):
+        return self._getNumber(4)
+
+    def setTotalPagesCount(self, value):
+        self._setNumber(4, value)
+
     def getIsSurveyFinish(self):
-        return self._getBool(4)
-
-    def setIsSurveyFinish(self, value):
-        self._setBool(4, value)
-
-    def getCanContinue(self):
         return self._getBool(5)
 
-    def setCanContinue(self, value):
+    def setIsSurveyFinish(self, value):
         self._setBool(5, value)
+
+    def getCanContinue(self):
+        return self._getBool(6)
+
+    def setCanContinue(self, value):
+        self._setBool(6, value)
 
     def _initialize(self):
         super(MapBoxSurveyViewModel, self)._initialize()
         self._addViewModelProperty('question', MapBoxQuestionModel())
         self._addStringProperty('mapId', '')
+        self._addStringProperty('surveyGroup', '')
         self._addNumberProperty('currentPage', 0)
         self._addNumberProperty('totalPagesCount', 0)
         self._addBoolProperty('isSurveyFinish', False)

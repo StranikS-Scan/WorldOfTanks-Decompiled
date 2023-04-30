@@ -97,6 +97,27 @@ class _BasePointsRibbon(_Ribbon):
         self._points += ribbon.getPoints()
 
 
+class _PerkRibbon(_Ribbon):
+    __slots__ = ('__perkID',)
+
+    def __init__(self, ribbonID, perkID):
+        super(_PerkRibbon, self).__init__(ribbonID)
+        self.__perkID = perkID
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event['perkID'])
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.PERK
+
+    def getPerkID(self):
+        return self.__perkID
+
+    def _canAggregate(self, ribbon):
+        return self.getType() == ribbon.getType() and self.getPerkID() == ribbon.getPerkID()
+
+
 class _BaseCaptureRibbon(_BasePointsRibbon):
     __slots__ = ('_sessionID',)
 
@@ -907,7 +928,7 @@ _RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.DAMAGE,
  BATTLE_EFFICIENCY_TYPES.RAM,
  BATTLE_EFFICIENCY_TYPES.WORLD_COLLISION)
 _RIBBON_TYPES_EXCLUDED_IF_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.CRITS,)
-_RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM = (BATTLE_EFFICIENCY_TYPES.RECEIVED_CRITS,)
+_RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM = ((BATTLE_EFFICIENCY_TYPES.RECEIVED_CRITS, None), (BATTLE_EFFICIENCY_TYPES.RECEIVED_RAM, lambda ribbon, vehId: ribbon.getVehicleID() == vehId))
 _NOT_CACHED_RIBBON_TYPES = (BATTLE_EFFICIENCY_TYPES.DETECTION, BATTLE_EFFICIENCY_TYPES.DEFENCE, BATTLE_EFFICIENCY_TYPES.STUN)
 _ACCUMULATED_RIBBON_TYPES = (BATTLE_EFFICIENCY_TYPES.CAPTURE, BATTLE_EFFICIENCY_TYPES.BASE_CAPTURE_BLOCKED)
 _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE: _RibbonSingleClassFactory(_BaseCaptureRibbon),
@@ -1016,6 +1037,7 @@ class RibbonsAggregator(object):
         super(RibbonsAggregator, self).__init__()
         self.__feedbackProvider = None
         self.__vehicleStateCtrl = None
+        self.__perksCtrl = None
         self.__cache = _RibbonsCache()
         self.__accumulatedRibbons = _RibbonsCache()
         self.__rules = {}
@@ -1038,6 +1060,10 @@ class RibbonsAggregator(object):
             if self.__vehicleStateCtrl is not None:
                 self.__vehicleStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
                 self.__vehicleStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+        if self.__perksCtrl is None:
+            self.__perksCtrl = self.sessionProvider.dynamic.perks
+            if self.__perksCtrl is not None:
+                self.__perksCtrl.onPerkChanged += self._onPerksChanged
         return
 
     def suspend(self):
@@ -1059,6 +1085,9 @@ class RibbonsAggregator(object):
             self.__vehicleStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehicleStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
             self.__vehicleStateCtrl = None
+        if self.__perksCtrl is not None:
+            self.__perksCtrl.onPerkChanged -= self._onPerksChanged
+            self.__perksCtrl = None
         return
 
     def getRibbon(self, ribbonID):
@@ -1080,22 +1109,16 @@ class RibbonsAggregator(object):
     def __onRespawnBaseMoving(self):
         self.__isInPostmortemMode = False
 
+    def _onPerksChanged(self, perkData):
+        self._aggregateRibbons([_PerkRibbon.createFromFeedbackEvent(self.__idGenerator.next(), perkData)])
+
     def _onPlayerFeedbackReceived(self, events):
-
-        def _ribbonsGenerator(events):
-            for e in events:
-                r = _createRibbonFromPlayerFeedbackEvent(self.__idGenerator.next(), e)
-                if r is not None:
-                    yield r
-
-            return
-
-        self._aggregateRibbons(_ribbonsGenerator(events))
+        self._aggregateRibbons(list((_createRibbonFromPlayerFeedbackEvent(self.__idGenerator.next(), e) for e in events)))
 
     def _aggregateRibbons(self, ribbons):
         aggregatedRibbons = {}
         for ribbon in ribbons:
-            if self.__isSuspended and ribbon.getType() not in _ACCUMULATED_RIBBON_TYPES:
+            if self.__isSuspended and ribbon and ribbon.getType() not in _ACCUMULATED_RIBBON_TYPES:
                 continue
             if ribbon.getType() in aggregatedRibbons:
                 temporaryRibbons = aggregatedRibbons[ribbon.getType()]
@@ -1141,8 +1164,14 @@ class RibbonsAggregator(object):
 
     def __filterRibbons(self, ribbons):
         if self.__isInPostmortemMode and not avatar_getter.isObserver():
-            for rType in _RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM:
-                if rType in ribbons:
+            for rType, condition in _RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM:
+                if rType not in ribbons:
+                    continue
+                isValid = True
+                if condition is not None and self.__vehicleStateCtrl is not None:
+                    vehId = self.__vehicleStateCtrl.getControllingVehicleID()
+                    isValid = all([ condition(r, vehId) for r in ribbons[rType] ])
+                if isValid:
                     del ribbons[rType]
 
         if BATTLE_EFFICIENCY_TYPES.DESTRUCTION in ribbons:

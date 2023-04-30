@@ -1157,7 +1157,7 @@ class Style(Customization):
                 if self.descriptor.isItemInstallable(item.descriptor):
                     return EditingStyleReason(EDITING_STYLE_REASONS.IS_EDITABLE)
 
-            return EditingStyleReason(EDITING_STYLE_REASONS.NOT_HAVE_ANY_PROGRESIIVE_DECALS)
+            return EditingStyleReason(EDITING_STYLE_REASONS.NOT_HAVE_ANY_PROGRESSIVE_DECALS)
 
     def isProgressionRequiredCanBeEdited(self, vehicleIntCD):
         return self.isProgressionRequired and self.canBeEditedForVehicle(vehicleIntCD)

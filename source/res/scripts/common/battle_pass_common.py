@@ -268,6 +268,10 @@ class BattlePassConfig(object):
         return self._season.get('seasonNum', 0)
 
     @property
+    def currentCollectionId(self):
+        return self._season.get('currentCollectionId', 0)
+
+    @property
     def seasonStart(self):
         return self._season.get('seasonStart', 0)
 

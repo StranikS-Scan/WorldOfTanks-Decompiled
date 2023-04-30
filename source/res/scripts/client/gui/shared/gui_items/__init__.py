@@ -10,7 +10,7 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES,
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
-from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
+from collections import namedtuple
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
@@ -268,7 +268,7 @@ class ACTION_ENTITY_ITEM(object):
 
 
 class KPI(object):
-    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes', '__isDebuff')
+    __slots__ = ('__name', '__value', '__type', '__specValue', '__vehicleTypes', '__isDebuff', '__isSituational')
 
     class Name(CONST_CONTAINER):
         COMPOUND_KPI = 'compoundKPI'
@@ -314,6 +314,26 @@ class KPI(object):
         VEHICLE_TURRET_OR_CUTTING_ROTATION_SPEED = 'vehicleTurretOrCuttingRotationSpeed'
         VEHICLE_FORWARD_MAX_SPEED = 'vehicleForwardMaxSpeed'
         VEHICLE_BACKWARD_MAX_SPEED = 'vehicleBackwardMaxSpeed'
+        EQUIPMENT_PREPARATION_TIME = 'equipmentPreparationTime'
+        DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND = 'damageAndPiercingDistributionLowerBound'
+        DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND = 'damageAndPiercingDistributionUpperBound'
+        CIRCULAR_VISION_RADIUS_WHILE_SURVEYING_DEVICE_DAMAGED = 'circularVisionRadiusWhileSurveyingDeviceDamaged'
+        STUN_RESISTANCE_EFFECT_FACTOR = 'stunResistanceEffectFactor'
+        ART_NOTIFICATION_DELAY_FACTOR = 'artNotificationDelayFactor'
+        VEHICLE_WEAK_SOIL_RESISTANCE = 'vehicleWeakSoilResistance'
+        VEHICLE_AVERAGE_SOIL_RESISTANCE = 'vehicleAverageSoilResistance'
+        WHEELS_ROTATION_SPEED = 'wheelsRotationSpeed'
+        VEHICLE_FUEL_TANK_LESION_CHANCE = 'vehicleFuelTankLesionChance'
+        FOLIAGE_MASKING_FACTOR = 'foliageMaskingFactor'
+        ENEMY_MODULES_CREW_CRIT_CHANCE = 'enemyModulesCrewCritChance'
+        VEHICLE_RAM_CHASSIS_DAMAGE_RESISTANCE = 'vehicleRamChassisDamageResistance'
+        RADIOMAN_HIT_CHANCE = 'radiomanHitChance'
+        RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY = 'radiomanActivityTimeAfterVehicleDestroy'
+        DAMAGED_MODULES_DETECTION_TIME = 'damagedModulesDetectionTime'
+        FIRE_EXTINGUISHING_RATE = 'fireExtinguishingRate'
+        COMMANDER_HIT_CHANCE = 'commanderHitChance'
+        WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
+        VEHICLE_ALLY_RADIO_DISTANCE = 'vehicleAllyRadioDistance'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         CREW_LEVEL = 'crewLevel'
@@ -334,6 +354,7 @@ class KPI(object):
         CREW_SKILL_RANCOROUS_DURATION = 'crewSkillRancorousDuration'
         CREW_SKILL_PEDANT = 'crewSkillPedant'
         CREW_SKILL_SMOOTH_TURRET = 'crewSkillSmoothTurret'
+        CREW_SKILL_PRACTICAL = 'crewSkillPractical'
         DEMASK_FOLIAGE_FACTOR = 'demaskFoliageFactor'
         DEMASK_MOVING_FACTOR = 'demaskMovingFactor'
         GAME_XP = 'gameXp'
@@ -350,12 +371,13 @@ class KPI(object):
         ONE_OF = 'oneOf'
         AGGREGATE_MUL = 'aggregateMul'
 
-    def __init__(self, kpiName, kpiValue, kpyType=Type.MUL, specValue=None, vehicleTypes=None):
+    def __init__(self, kpiName, kpiValue, kpiType=Type.MUL, specValue=None, vehicleTypes=None, situational=False):
         self.__name = kpiName
         self.__value = kpiValue
-        self.__type = kpyType
+        self.__type = kpiType
         self.__specValue = specValue
         self.__vehicleTypes = vehicleTypes or None
+        self.__isSituational = situational
         return
 
     @property
@@ -379,7 +401,12 @@ class KPI(object):
         return self.__vehicleTypes
 
     @property
+    def situational(self):
+        return self.__isSituational
+
+    @property
     def isDebuff(self):
+        from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
         return self.isPositive if self.name in BACKWARD_QUALITY_PARAMS else not self.isPositive
 
     @property
@@ -405,6 +432,11 @@ def kpiAddEnding(kpiName, text):
 
 def kpiFormatValue(kpiName, value, addEnding=True):
     res = ('+' if value > 0 else '') + getNiceNumberFormat(value)
+    return kpiAddEnding(kpiName, res) if addEnding else res
+
+
+def kpiFormatNoSignValue(kpiName, value, addEnding=True):
+    res = getNiceNumberFormat(value)
     return kpiAddEnding(kpiName, res) if addEnding else res
 
 
@@ -482,11 +514,14 @@ VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
  'circularVisionRadiusBaseFactor': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
  'gunReloadTimeFactor': KPI.Name.VEHICLE_GUN_RELOAD_TIME,
  'gunAimingTimeFactor': KPI.Name.VEHICLE_GUN_AIM_SPEED,
- 'crewLevelIncrease': KPI.Name.CREW_LEVEL,
  'ammoBayHealthFactor': KPI.Name.VEHICLE_AMMO_BAY_STRENGTH,
  'fuelTankHealthFactor': KPI.Name.VEHICLE_FUEL_TANK_STRENGTH,
  'engineHealthFactor': KPI.Name.VEHICLE_ENGINE_STRENGTH,
- 'additiveShotDispersionFactor': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION}
+ 'additiveShotDispersionFactor': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
+ 'movingAimingDispersion': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
+ 'shotDemaskFactor': KPI.Name.VEHICLE_INVISIBILITY_AFTER_SHOT,
+ 'lowDamageDispersion': KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND,
+ 'lowPenetrationDispersion': KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND}
 CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
  'fireFighting': KPI.Name.CREW_SKILL_FIRE_FIGHTING,
  'camouflage': KPI.Name.CREW_SKILL_CAMOUFLAGE,

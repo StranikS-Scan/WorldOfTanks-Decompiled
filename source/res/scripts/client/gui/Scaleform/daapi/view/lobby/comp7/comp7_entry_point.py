@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/comp7/comp7_entry_point.py
-from shared_utils import nextTick
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.impl.lobby.comp7 import comp7_model_helpers
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.Scaleform.daapi.view.meta.Comp7EntryPointMeta import Comp7EntryPointMeta
+from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.views.banner_model import BannerModel, State
 from gui.periodic_battles.models import PeriodType
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from helpers import dependency, time_utils
+from shared_utils import nextTick
 from skeletons.gui.game_control import IComp7Controller
-from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 
 def isComp7EntryPointAvailable():
     comp7Ctrl = dependency.instance(IComp7Controller)
@@ -30,7 +32,7 @@ class Comp7EntryPoint(Comp7EntryPointMeta):
         return self.__view
 
 
-class Comp7EntryPointView(ViewImpl):
+class Comp7EntryPointView(ViewImpl, Notifiable):
     __START_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
     __END_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -54,12 +56,17 @@ class Comp7EntryPointView(ViewImpl):
         super(Comp7EntryPointView, self)._initialize(*args, **kwargs)
         self.viewModel.onOpen += self.__onOpen
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
+        self.__comp7Controller.onStatusTick += self.__onStatusTick
         self.__comp7Controller.onComp7ConfigChanged += self.__onConfigChanged
+        self.addNotificator(PeriodicNotifier(lambda : time_utils.ONE_MINUTE, self.__updateState, periods=(time_utils.ONE_MINUTE,)))
+        self.startNotification()
 
     def _finalize(self):
         self.viewModel.onOpen -= self.__onOpen
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
+        self.__comp7Controller.onStatusTick -= self.__onStatusTick
         self.__comp7Controller.onComp7ConfigChanged -= self.__onConfigChanged
+        self.clearNotification()
         super(Comp7EntryPointView, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
@@ -69,40 +76,42 @@ class Comp7EntryPointView(ViewImpl):
     def __onStatusUpdated(self, _):
         self.__updateState()
 
+    def __onStatusTick(self):
+        self.__updateState()
+
     def __onConfigChanged(self):
         self.__updateState()
 
     def __updateState(self):
         if isComp7EntryPointAvailable():
+            periodInfo = self.__comp7Controller.getPeriodInfo()
             with self.viewModel.transaction() as tx:
                 tx.setIsSingle(self.__isSingle)
-                state, actualTime = self.__getPeriodStateAndActualTime()
-                tx.setState(state)
-                tx.setTimestamp(actualTime or 0)
+                tx.setState(self.__getPeriodState(periodInfo))
+                tx.setTimeLeftUntilPrimeTime(periodInfo.primeDelta)
+                comp7_model_helpers.setSeasonInfo(model=tx.season)
         else:
             nextTick(self.destroy)()
 
-    def __getPeriodStateAndActualTime(self):
+    def __getPeriodState(self, periodInfo):
         currentTime = time_utils.getCurrentLocalServerTimestamp()
-        periodInfo = self.__comp7Controller.getPeriodInfo()
         if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            return (State.NOTSTARTED, periodInfo.cycleBorderRight.timestamp)
-        elif periodInfo.periodType in (PeriodType.AFTER_SEASON,
+            return State.NOTSTARTED
+        if periodInfo.periodType in (PeriodType.AFTER_SEASON,
          PeriodType.AFTER_CYCLE,
          PeriodType.ALL_NOT_AVAILABLE_END,
          PeriodType.NOT_AVAILABLE_END,
          PeriodType.STANDALONE_NOT_AVAILABLE_END):
-            return (State.END, None)
-        elif periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):
-            return (State.DISABLED, periodInfo.primeDelta)
+            return State.END
+        if periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):
+            return State.DISABLED
+        if periodInfo.cycleBorderLeft.delta(currentTime) < self.__START_NOTIFICATIONS_PERIOD_LENGTH:
+            status = State.JUSTSTARTED
+        elif periodInfo.cycleBorderRight.delta(currentTime) < self.__END_NOTIFICATIONS_PERIOD_LENGTH:
+            status = State.ENDSOON
         else:
-            if periodInfo.cycleBorderLeft.delta(currentTime) < self.__START_NOTIFICATIONS_PERIOD_LENGTH:
-                status = State.JUSTSTARTED
-            elif periodInfo.cycleBorderRight.delta(currentTime) < self.__END_NOTIFICATIONS_PERIOD_LENGTH:
-                status = State.ENDSOON
-            else:
-                status = State.ACTIVE
-            return (status, periodInfo.cycleBorderRight.timestamp)
+            status = State.ACTIVE
+        return status
 
     @staticmethod
     def __onOpen():

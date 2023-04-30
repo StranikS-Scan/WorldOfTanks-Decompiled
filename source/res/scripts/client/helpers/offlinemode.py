@@ -134,15 +134,6 @@ def _offlineLoadCheck():
         BigWorld.callback(0.5, _offlineLoadCheck)
 
 
-g_spaceID = 0
-g_avatar = None
-
-def createFakeAvatar():
-    entityID = BigWorld.createEntity('OfflineEntity', BigWorld.camera().spaceID, 0, (0, 0, 0), (0, 0, 0), {})
-    entity = BigWorld.entity(entityID)
-    BigWorld.player = lambda : entity
-
-
 def launch(spaceName):
     global g_offlineModeEnabled
     print 'Entering offline space', spaceName
@@ -166,7 +157,7 @@ def launch(spaceName):
     GUI.mcursor().clipped = False
     g_offlineModeEnabled = True
     BigWorld.callback(1.0, _offlineLoadCheck)
-    createFakeAvatar()
+    game_mode_emulator.createFakeAvatar()
     return
 
 

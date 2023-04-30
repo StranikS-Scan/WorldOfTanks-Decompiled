@@ -40,3 +40,9 @@ class PoiTeamInfoComponent(ScriptComponent):
         if poiCtrl is not None:
             poiCtrl.onPoiCaptured(poiID, vehicleID)
         return
+
+    def onPoiInvaderDestroyed(self, vehicleID):
+        poiCtrl = self.__sessionProvider.dynamic.pointsOfInterest
+        if poiCtrl is not None:
+            poiCtrl.onPoiInvaderDestroyed(vehicleID)
+        return

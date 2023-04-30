@@ -7,18 +7,26 @@ from gui.Scaleform.genConsts.NOTIFICATIONS_CONSTANTS import NOTIFICATIONS_CONSTA
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl.gen import R
+from gui.shared.formatters import icons
+from gui.shared.notifications import NotificationGroup
+from helpers import dependency
+from helpers.i18n import makeString as _ms
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
-from gui.shared.formatters import icons
-from gui.shared.notifications import NotificationGroup
-from helpers.i18n import makeString as _ms
-from helpers import dependency
+from skeletons.gui.game_control import IPromoController, IWinbackController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class NotificationListView(NotificationsListMeta, BaseNotificationView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __winbackController = dependency.descriptor(IWinbackController)
+    __promoController = dependency.descriptor(IPromoController)
+    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()
@@ -37,12 +45,25 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
     def getMessageActualTime(self, msTime):
         return TimeFormatter.getActualMsgTimeStr(msTime)
 
+    def onCheckNewsClick(self):
+        if not self.__promoController.isPromoOpen:
+            self.__promoController.showPromo(self.__winbackController.winbackPromoURL)
+        else:
+            browserView = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.common.BrowserView())
+            if browserView is not None and browserView.browser is not None:
+                browserView.browser.navigate(self.__winbackController.winbackPromoURL)
+        self.destroy()
+        return
+
     def _populate(self):
         super(NotificationListView, self)._populate()
         self._model.onNotificationReceived += self.__onNotificationReceived
         self._model.onNotificationUpdated += self.__onNotificationUpdated
         self._model.onNotificationRemoved += self.__onNotificationRemoved
+        self.__winbackController.onConfigUpdated += self.__updateWinbackPromo
+        self.__itemsCache.onSyncCompleted += self.__updateWinbackPromo
         self.__setInitData()
+        self.__updateWinbackPromo()
         self.__setNotificationList()
         self.__updateCounters()
 
@@ -56,6 +77,8 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.onNotificationRemoved -= self.__onNotificationRemoved
         self.cleanUp()
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.__winbackController.onConfigUpdated -= self.__updateWinbackPromo
+        self.__itemsCache.onSyncCompleted -= self.__updateWinbackPromo
         super(NotificationListView, self)._dispose()
 
     def __setInitData(self):
@@ -69,6 +92,9 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
          'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ICON_BELL_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
         if self._lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
             self.as_setProgressiveRewardEnabledS(True)
+
+    def __updateWinbackPromo(self, *_):
+        self.as_setIsNewsBlockEnabledS(self.__winbackController.isPromoEnabled())
 
     def __onServerSettingsChange(self, diff):
         if 'progressive_reward_config' in diff:

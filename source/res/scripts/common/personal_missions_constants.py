@@ -42,6 +42,7 @@ class CONDITION_ICON:
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
     RANK_UP = 'rank_up'
+    PRESTIGE_POINTS = 'prestige_points'
 
 
 class PROGRESS_TEMPLATE:

@@ -64,6 +64,7 @@ def writeEmblemSlots(slotDS, slot):
     if slot.type == 'insigniaOnGun':
         _xml.rewriteBool(slotDS, 'applyToFabric', slot.applyToFabric, True)
         _xml.rewriteString(slotDS, 'compatibleModels', ' '.join(slot.compatibleModels), '')
+        _xml.rewriteBool(slotDS, 'planeProjection', slot.planeProjection, False)
     slotDS.write('size', slot.size)
     _xml.rewriteBool(slotDS, 'hideIfDamaged', slot.hideIfDamaged, False)
     _xml.rewriteBool(slotDS, 'isUVProportional', slot.isUVProportional, None)

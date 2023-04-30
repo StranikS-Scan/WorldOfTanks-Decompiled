@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/data_structures.py
-
+from collections import defaultdict
+from soft_exception import SoftException
 
 class DictObj(dict):
 
@@ -116,3 +117,14 @@ class OrderedSet(set):
         return self
 
     __isub__ = difference_update
+
+
+class ParametrisedFactoryDefaultDict(defaultdict):
+
+    def __missing__(self, key):
+        self[key] = value = self.default_factory(key)
+        return value
+
+
+class DynamicFactorCollectorKeyError(SoftException):
+    pass

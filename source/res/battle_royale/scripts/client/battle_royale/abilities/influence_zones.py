@@ -10,7 +10,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_royale.abilities.area_abilities import AreaAbilityVisualizer
 from cgf_components.marker_component import CombatMarker
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from constants import IS_CLIENT
 from helpers import dependency
@@ -32,16 +32,20 @@ else:
         pass
 
 
-class InfluenceZoneMultiVisualizer(CGFComponent):
+@registerComponent
+class InfluenceZoneMultiVisualizer(object):
     editorTitle = 'Influence Zone Multi Visualizer'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient
     influencePrefab = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Influence prefab', annotations={'path': '*.prefab'})
     rotateFromCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Rotate from center')
 
 
-class InfluenceZoneTerrainArea(CGFComponent):
+@registerComponent
+class InfluenceZoneTerrainArea(object):
     editorTitle = 'Influence Zone Terrain Area'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient
     fullZoneVisual = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Full Zone Visual', annotations={'path': '*.visual'})
     dropOffset = ComponentProperty(type=CGFMetaTypes.FLOAT, value=1000.0, editorName='Drop Offset')
 
@@ -51,8 +55,10 @@ class InfluenceZoneTerrainArea(CGFComponent):
         return
 
 
-class InfluenceZoneEquipmentComponent(CGFComponent):
+@registerComponent
+class InfluenceZoneEquipmentComponent(object):
     editorTitle = 'Influence Zone Equipment'
+    domain = CGF.DomainOption.DomainClient
     userVisible = False
     radius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0, editorName='Radius')
     zonesCount = ComponentProperty(type=CGFMetaTypes.INT, value=0, editorName='Zones Count')

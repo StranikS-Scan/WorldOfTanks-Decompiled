@@ -8,17 +8,16 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, getKpiFormatDescription, KPI, collectKpi
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags, replaceHyphenToUnderscore
-from gui.impl import backport
-from gui.impl.gen import R
 from helpers import i18n, dependency
 from items import artefacts, tankmen, ITEM_OPERATION
-from items.tankmen import PERKS
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -309,11 +308,8 @@ class BattleBooster(Equipment):
         if not self.isCrewBooster():
             raise SoftException('This description is only for Crew Booster!')
         action = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_REPLACE if isPerkReplace else ARTEFACTS.CREWBATTLEBOOSTER_DESCR_BOOST)
-        if self.getAffectedSkillName() in PERKS:
-            skillOrPerk = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_PERK)
-        else:
-            skillOrPerk = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_SKILL)
-        skillName = i18n.makeString(ITEM_TYPES.tankman_skills(self.getAffectedSkillName()))
+        skillOrPerk = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_SKILL)
+        skillName = backport.text(R.strings.crew_perks.dyn(self.getAffectedSkillName()).name())
         description = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_COMMON)
         if formatter is None:
             formatted = description.format(action=action, skillOrPerk=skillOrPerk, name=skillName, colorTagOpen='', colorTagClose='')
@@ -611,10 +607,13 @@ class OptionalDevice(RemovableDevice):
         if self.isDeluxe:
             return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
         if self.isModernized:
-            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED
+            return '{}_{}'.format(SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED, self.level)
         if self.isUpgradable:
             return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC
         return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED if self.isUpgraded else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getBigOverlayType(self, vehicle=None):
+        return '{}_{}'.format(SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED_BIG, self.level) if self.isModernized else super(OptionalDevice, self).getBigOverlayType(vehicle)
 
     def getUpgradePrice(self, proxy=None):
         if self.isUpgradable and proxy is not None:

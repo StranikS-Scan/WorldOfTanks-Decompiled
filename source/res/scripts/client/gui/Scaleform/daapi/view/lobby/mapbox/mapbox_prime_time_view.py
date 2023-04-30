@@ -57,6 +57,12 @@ class MapboxPrimeTimeView(RankedPrimeTimeMeta):
             actualServers = [ server for server in actualServers if server.getPeripheryID() != self._connectionMgr.peripheryID ]
         return actualServers
 
+    def _getServerText(self, serverList, serverInfo, isServerNameShort=False):
+        if any((server.isAvailable() for server in serverList)):
+            availableKey = 'availableServers' if len(serverList) > 1 else 'availableServer'
+            return backport.text(R.strings.mapbox.primeTimes.dyn(availableKey)())
+        return super(MapboxPrimeTimeView, self)._getServerText(serverList, serverInfo, isServerNameShort)
+
     def _setHeaderData(self):
         header = {'title': backport.text(R.strings.mapbox.primeTimeView.title())}
         self.as_setHeaderDataS(header)

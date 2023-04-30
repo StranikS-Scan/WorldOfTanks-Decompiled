@@ -98,7 +98,7 @@ class _CachedVehicle(object):
     def _changeDone(self):
         self._clearChangeCallback()
         if isPlayerAccount():
-            self._updateVehicle()
+            self.onChanged()
         Waiting.hide('updateCurrentVehicle')
 
     def _onInventoryUpdate(self, invDiff):
@@ -110,13 +110,6 @@ class _CachedVehicle(object):
     def _onSyncCompleted(self, _, diff):
         if self.intCD in diff.get(GUI_ITEM_TYPE.VEH_POST_PROGRESSION, {}):
             self._onPostProgressionUpdate()
-
-    def _updateVehicle(self):
-        abilities = BigWorld.player().inventory.abilities.abilitiesManager
-        scopedPerks = abilities.getPerksByVehicle(self.invID)
-        if self.item:
-            self.item.initPerksController(scopedPerks)
-        self.onChanged()
 
     def _setChangeCallback(self, callback=None):
         self.__onVehicleChangedCallback = callback
@@ -156,8 +149,6 @@ class _CurrentVehicle(_CachedVehicle):
 
     def destroy(self):
         super(_CurrentVehicle, self).destroy()
-        if self.item:
-            self.item.stopPerksController()
         self.__vehInvID = 0
         self.hangarSpace.removeVehicle()
         self.selectNoVehicle()
@@ -179,12 +170,12 @@ class _CurrentVehicle(_CachedVehicle):
         elif 'isGroupLocked' in diff:
             isVehicleChanged = self.item.rotationGroupIdx in diff['isGroupLocked']
         if isVehicleChanged:
-            self._updateVehicle()
+            self.onChanged()
 
     def onLocksUpdate(self, locksDiff):
         if self.__vehInvID in locksDiff:
             self.refreshModel()
-            self._updateVehicle()
+            self.onChanged()
 
     def refreshModel(self, outfit=None):
         if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
@@ -386,8 +377,6 @@ class _CurrentVehicle(_CachedVehicle):
     def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
             return
-        if self.item:
-            self.item.stopPerksController()
         Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
@@ -425,11 +414,11 @@ class _CurrentVehicle(_CachedVehicle):
             elif isVehicleDescrChanged:
                 self.updateVehicleDescriptorInModel()
             if isVehicleChanged or isRepaired or isCustomizationChanged:
-                self._updateVehicle()
+                self.onChanged()
         return
 
     def _onPostProgressionUpdate(self):
-        self._updateVehicle()
+        self.onChanged()
 
     def __isVehicleSuitable(self, vehicle):
         return False if vehicle is None else not REQ_CRITERIA.VEHICLE.BATTLE_ROYALE(vehicle) or self.battleRoyaleController.isBattleRoyaleMode()

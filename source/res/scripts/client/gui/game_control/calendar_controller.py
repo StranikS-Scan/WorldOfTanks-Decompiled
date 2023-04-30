@@ -109,7 +109,10 @@ class _HeroAdventActionHelper(object):
             response = yield self.__webController.sendRequest(ctx=AdventCalendarFetchHeroTankInfoCtx())
             if response.isSuccess():
                 data = (response.getData() or {}).get('data', {})
-                self.__updateInfo(data.get('vehicle_cd', 0), data.get('style_id', 0), data.get('offer_type', None), data.get('finish_date', 0))
+                offerType = data.get('offer_type', None)
+                if offerType is None:
+                    _logger.warning('Unsupported calendar offer type %s.', offerType)
+                self.__updateInfo(data.get('vehicle_cd', 0), data.get('style_id', 0), offerType, data.get('finish_date', 0))
                 self.__postponeRecall()
             else:
                 _logger.warning('Unable to fetch Hero-Tank info. Code: %s.', response.getCode())
@@ -132,7 +135,6 @@ class _HeroAdventActionHelper(object):
         except ValueError:
             offerTypeEnum = None
             isEnabled = False
-            _logger.warning('Unsupported calendar offer type %s.', offerType)
 
         self.__actionInfo = _HeroAdventActionInfo(isEnabled, vehicleCD, styleId, offerTypeEnum, endTimestamp)
         if self.__actionInfo != oldInfo:

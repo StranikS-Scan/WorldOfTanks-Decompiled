@@ -6,11 +6,24 @@ import GameplayDebug
 import GenericComponents
 import Triggers
 from cgf_demo.demo_category import DEMO_CATEGORY
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
-from cgf_script.managers_registrator import onAddedQuery
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
+from cgf_script.managers_registrator import onAddedQuery, onProcessQuery
+from constants import IS_EDITOR
+if IS_EDITOR:
+    from cgf_components_common.state_components import HealthComponent
+else:
+    from HealthComponent import HealthComponent
 
-class TestEntranceNotifier(CGFComponent):
+@registerComponent
+class ShowHealthInfoComponent(object):
     category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+
+
+@registerComponent
+class TestEntranceNotifier(object):
+    category = DEMO_CATEGORY
+    domain = CGF.DomainOption.DomainClient
     textComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Text component to output', value=GameplayDebug.DebugTextComponent)
     trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='AreaTrigger to subscribe', value=Triggers.AreaTriggerComponent)
     title = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Title', value='Area')
@@ -50,3 +63,22 @@ class EntranceModifierManager(CGF.ComponentManager):
     def __onExit(self, entrance, who, where):
         transform = who.findComponentByType(GenericComponents.TransformComponent)
         entrance.addMessage('\n{0} was exited at {1}'.format(entrance.title, transform.worldPosition))
+
+
+class TestHealthMonitoringManager(CGF.ComponentManager):
+
+    @onAddedQuery(CGF.GameObject, ShowHealthInfoComponent, CGF.No(GameplayDebug.DebugTextComponent))
+    def onAddedShowHealthInfo(self, go, _):
+        go.createComponent(GameplayDebug.DebugTextComponent, '', (0, 0, 0), (1.0, 1.0, 1.0, 1.0))
+
+    @onProcessQuery(ShowHealthInfoComponent, HealthComponent, GameplayDebug.DebugTextComponent, tickGroup='Simulation')
+    def showCurrentHealth(self, _, health, debugText):
+        debugText.addFrameText('Current health: %d, max health: %d' % (health.health, health.maxHealth))
+
+    @onProcessQuery(ShowHealthInfoComponent, GenericComponents.HealthGradationComponent, HealthComponent, GameplayDebug.DebugTextComponent, tickGroup='Simulation')
+    def showExplosion(self, _, gradation, health, debugText):
+        gradations = {GenericComponents.EHealthGradation.RED_ZONE: 'Red',
+         GenericComponents.EHealthGradation.YELLOW_ZONE: 'Yellow',
+         GenericComponents.EHealthGradation.GREEN_ZONE: 'Green'}
+        zone = gradation.getHealthZone(health.health, health.maxHealth)
+        debugText.addFrameText('Gradation: {0}'.format(gradations[zone]))

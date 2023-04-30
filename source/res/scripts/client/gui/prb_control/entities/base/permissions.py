@@ -15,3 +15,6 @@ class IPrbPermissions(object):
 
     def canCreateSquad(self):
         return False
+
+    def hasSquadArrow(self):
+        return False

@@ -232,3 +232,22 @@ class GetEntityTransform(Block, EntityMeta):
             self._yaw.setValue(entity.yaw)
             self._pitch.setValue(entity.pitch)
             self._roll.setValue(entity.roll)
+
+
+class IsEntityDestroyed(Block, EntityMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(IsEntityDestroyed, self).__init__(*args, **kwargs)
+        self._entity = self._makeDataInputSlot('entity', SLOT_TYPE.ENTITY)
+        self._isDestroyed = self._makeDataOutputSlot('isDestroyed', SLOT_TYPE.BOOL, self._exec)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.SERVER]
+
+    def _exec(self):
+        entity = self._entity.getValue()
+        if entity:
+            self._isDestroyed.setValue(entity.isDestroyed)
+        else:
+            self._isDestroyed.setValue(True)

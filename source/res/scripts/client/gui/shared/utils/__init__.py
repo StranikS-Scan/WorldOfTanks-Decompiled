@@ -20,6 +20,8 @@ from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
 from avatar_helpers import getAvatarDatabaseID, getAvatarSessionID
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
+SHELLS_BURST_COUNT_PROP_NAME = 'shellsBurstCount'
+SHELLS_FLAME_BURST_COUNT_PROP_NAME = 'shellsFlameBurstCount'
 RELOAD_TIME_SECS_PROP_NAME = 'reloadTimeSecs'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'

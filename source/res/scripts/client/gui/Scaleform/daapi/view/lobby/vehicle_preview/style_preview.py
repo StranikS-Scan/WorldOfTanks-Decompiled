@@ -3,6 +3,7 @@
 import logging
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import STYLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
@@ -19,6 +20,7 @@ from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from uilogging.shop.loggers import ShopVehicleStylePreviewMetricsLogger, ShopVehicleStylePreviewFlowLogger
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -35,6 +37,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         super(VehicleStylePreview, self).__init__(ctx)
         self.__ctx = ctx
         self._style = ctx['style']
+        self.__backPreviewAlias = ctx.get('backPreviewAlias')
         self.__outfit = ctx.get('outfit')
         self.__vehicleCD = ctx['itemCD']
         self.__styleDescr = (ctx.get('styleDescr') or self._style.getDescription()) % {'insertion_open': '',
@@ -44,12 +47,16 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__selectedVehicleEntityId = None
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
+        self.__uiMetricsLogger = ShopVehicleStylePreviewMetricsLogger(self._style.intCD)
+        self.__uiFlowLogger = ShopVehicleStylePreviewFlowLogger()
         return
 
     def closeView(self):
         event_dispatcher.showHangar()
 
     def onBackClick(self):
+        if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiMetricsLogger.onViewClosed()
         self.__backCallback()
 
     def setTopPanel(self):
@@ -74,6 +81,9 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
          'objectTitle': self._style.userName,
          'descriptionTitle': backport.text(R.strings.tooltips.vehiclePreview.historicalReference.title()),
          'descriptionText': self.__styleDescr})
+        if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiFlowLogger.logOpenPreview()
+            self.__uiMetricsLogger.onViewOpen()
         return
 
     def _dispose(self):

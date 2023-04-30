@@ -23,6 +23,10 @@ def getShopURL():
     return _getUrl()
 
 
+def getShopRootUrl():
+    return _getUrl('shopRootUrl')
+
+
 def getBuyMoreGoldUrl():
     return _getUrl('buyMoreGoldUrl')
 
@@ -128,8 +132,8 @@ def getTelecomRentVehicleUrl():
     return _getUrl('telecomTankRental')
 
 
-def getBuyRenewableSubscriptionUrl():
-    return _getUrl('buyRenewableSubscription')
+def getWotPlusShopUrl():
+    return _getUrl('buyWotPlus')
 
 
 def getIntegratedAuctionUrl():

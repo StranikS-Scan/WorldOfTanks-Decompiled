@@ -32,7 +32,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
-from skeletons.gui.game_control import IBattlePassController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
@@ -1177,3 +1177,60 @@ class EventLootBoxesDecorator(MessageDecorator):
         if self._model is not None:
             self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
         return
+
+
+class CollectionsLockButtonDecorator(MessageDecorator):
+    __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(CollectionsLockButtonDecorator, self).__init__(entityID, entity, settings, model)
+        self.__collectionsSystem.onServerSettingsChanged += self.__update
+
+    def clear(self):
+        self.__collectionsSystem.onServerSettingsChanged -= self.__update
+        super(CollectionsLockButtonDecorator, self).clear()
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateEntityButtons()
+        super(CollectionsLockButtonDecorator, self)._make(formatted, settings)
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            if self.__collectionsSystem.isEnabled():
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            else:
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            buttonsStates = self._entity.get('buttonsStates')
+            if buttonsStates is None:
+                return
+            buttonsStates['submit'] = state
+            return
+
+    def __update(self, *_):
+        self.__updateEntityButtons()
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+
+class WinbackSelectableRewardReminderDecorator(MessageDecorator):
+
+    def __init__(self, entityID):
+        super(WinbackSelectableRewardReminderDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings())
+
+    def isShouldCountOnlyOnce(self):
+        return True
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getType(self):
+        return NOTIFICATION_TYPE.WINBACK_SELECTABLE_REWARD_AVAILABLE
+
+    def __makeEntity(self):
+        return g_settings.msgTemplates.format('WinbackSelectableRewardReminder')
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)

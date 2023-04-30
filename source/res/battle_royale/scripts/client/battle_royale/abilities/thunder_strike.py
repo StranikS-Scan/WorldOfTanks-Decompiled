@@ -5,7 +5,7 @@ import CGF
 import Math
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from cgf_script.bonus_caps_rules import bonusCapsManager
-from cgf_script.component_meta_class import CGFComponent, ComponentProperty, CGFMetaTypes
+from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery
 from constants import IS_CLIENT
 from helpers import dependency
@@ -22,9 +22,11 @@ else:
         pass
 
 
-class ThunderStrikeVisualizer(CGFComponent):
+@registerComponent
+class ThunderStrikeVisualizer(object):
     editorTitle = 'Thunder Strike Visualizer'
     category = 'Abilities'
+    domain = CGF.DomainOption.DomainClient
     strikePrefab = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='strike prefab', annotations={'path': '*.prefab'})
 
 

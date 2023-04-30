@@ -97,7 +97,9 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'isNotSpotted': CONDITION_ICON.SURVIVE,
  'rankChange': CONDITION_ICON.RANK_UP,
  'brPosInBattle': CONDITION_ICON.TOP,
- 'poiCapturedByOwnTeam': CONDITION_ICON.BASE_CAPTURE}
+ 'poiCapturedByOwnTeam': CONDITION_ICON.BASE_CAPTURE,
+ 'comp7PrestigePoints': CONDITION_ICON.PRESTIGE_POINTS,
+ 'win': CONDITION_ICON.WIN}
 BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['damageAssistedStun', 'damageAssistedTrack'])): CONDITION_ICON.ASSIST,

@@ -8,9 +8,12 @@
     <icon>	handExtinguishers	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
-    <script>	Extinguisher	  <cooldownSeconds>	90	</cooldownSeconds>
+    <script>	Extinguisher	  <autoactivate>	true	</autoactivate>
+      <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
     </script>
+    <tooltipSection>	equipment	</tooltipSection>
   </handExtinguishers>
   <autoExtinguishers>
     <id>	1	</id>
@@ -26,6 +29,7 @@
       <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
     </script>
     <kpi>
       <mul>
@@ -33,6 +37,7 @@
         <value>	0.9	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </autoExtinguishers>
   <smallMedkit>
     <id>	2	</id>
@@ -43,13 +48,15 @@
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
-    <script>	Repairkit	  <repairAll>	false	</repairAll>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.0	</stunResistanceDuration>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
     </script>
+    <tooltipSection>	equipment	</tooltipSection>
   </smallMedkit>
   <largeMedkit>
     <id>	3	</id>
@@ -67,6 +74,7 @@
       <stunResistanceDuration>	0.05	</stunResistanceDuration>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
     </script>
     <kpi>
       <mul>
@@ -78,6 +86,7 @@
         <value>	0.95	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </largeMedkit>
   <smallRepairkit>
     <id>	4	</id>
@@ -88,11 +97,13 @@
     <icon>	smallRepairkit	</icon>
     <price>	3000	</price>
     <tags>	repairkit	</tags>
-    <script>	Repairkit	  <repairAll>	false	</repairAll>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0	</bonusValue>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
     </script>
+    <tooltipSection>	equipment	</tooltipSection>
   </smallRepairkit>
   <largeRepairkit>
     <id>	5	</id>
@@ -114,6 +125,7 @@
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.1	</bonusValue>
       <cooldownSeconds>	90	</cooldownSeconds>
+      <activeSeconds>	3	</activeSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
     <kpi>
@@ -122,6 +134,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </largeRepairkit>
   <lendLeaseOil>
     <id>	6	</id>
@@ -149,6 +162,7 @@
         <value>	1.05	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </lendLeaseOil>
   <gasoline100>
     <id>	7	</id>
@@ -185,6 +199,7 @@
         <value>	1.05	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </gasoline100>
   <gasoline105>
     <id>	8	</id>
@@ -222,6 +237,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </gasoline105>
   <chocolate>
     <id>	9	</id>
@@ -246,6 +262,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </chocolate>
   <cocacola>
     <id>	100	</id>
@@ -270,6 +287,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </cocacola>
   <ration>
     <id>	11	</id>
@@ -294,6 +312,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration>
   <removedRpmLimiter>
     <id>	12	</id>
@@ -318,6 +337,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </removedRpmLimiter>
   <hotCoffee>
     <id>	13	</id>
@@ -342,6 +362,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </hotCoffee>
   <afterburning>
     <id>	14	</id>
@@ -367,6 +388,7 @@
       <maxSpeedFactor>	2.0	</maxSpeedFactor>
       <cooldownSeconds>	3	</cooldownSeconds>
     </script>
+    <tooltipSection>	equipment	</tooltipSection>
   </afterburning>
   <ration_china>
     <id>	15	</id>
@@ -391,6 +413,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_china>
   <qualityOil>
     <id>	16	</id>
@@ -418,6 +441,7 @@
         <value>	1.05	</value>
       </mul>
     </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
   </qualityOil>
   <ration_uk>
     <id>	17	</id>
@@ -442,6 +466,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_uk>
   <ration_japan>
     <id>	18	</id>
@@ -466,6 +491,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_japan>
   <ration_czech>
     <id>	61	</id>
@@ -490,6 +516,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_czech>
   <ration_sweden>
     <id>	62	</id>
@@ -514,6 +541,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_sweden>
   <ration_poland>
     <id>	63	</id>
@@ -538,6 +566,7 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_poland>
   <ration_italy>
     <id>	64	</id>
@@ -562,5 +591,6 @@
         <value>	1.1	</value>
       </mul>
     </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_italy>
 </vehicle_equipments.xml>

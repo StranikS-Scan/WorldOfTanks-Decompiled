@@ -924,8 +924,15 @@ def _migrateTo100(core, data, initialized):
 
 
 def _migrateTo101(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_INTRO_SHOWN] = False
     data['markersData'].setdefault('ally', {})['markerAltVehicleDist'] = True
     data['markersData'].setdefault('enemy', {})['markerAltVehicleDist'] = True
+
+
+def _migrateTo102(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_22_WELCOME_SHOWN] = False
 
 
 _versions = ((1,
@@ -1326,6 +1333,10 @@ _versions = ((1,
   False),
  (101,
   _migrateTo101,
+  False,
+  False),
+ (102,
+  _migrateTo102,
   False,
   False))
 

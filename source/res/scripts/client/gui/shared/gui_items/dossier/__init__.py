@@ -1,22 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
 import math
-import cPickle
 from typing import Dict, List, Optional
-import BigWorld
+import cPickle
 import dossiers2
 from constants import DOSSIER_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from gui.shared.gui_items.Tankman import Tankman
-from helpers import dependency, time_utils
-from items import tankmen
-from helpers import i18n
-from gui.shared.gui_items.gui_item import GUIItem
 from gui.shared.gui_items.dossier import stats
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
-from account_helpers.renewable_subscription import RenewableSubscription
+from gui.shared.gui_items.gui_item import GUIItem
+from helpers import dependency, time_utils
+from helpers import i18n
+from items import tankmen
 from renewable_subscription_common.passive_xp import CrewValidator
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -136,6 +135,7 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
 class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
     def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
@@ -148,7 +148,6 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         self.__extDossierDump = dumpDossier(extDossier)
         self.__currentVehicleIsPremium = currentVehicleItem and currentVehicleItem.isPremium
         self.__currentVehicleCrewXpFactor = currentVehicleType.crewXpFactor if currentVehicleType else 1.0
-        self._renewableSubInfo = BigWorld.player().renewableSubscription
         return
 
     def pack(self):
@@ -187,7 +186,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
              'isRowSeparator': True,
              'isPremium': self.__currentVehicleIsPremium,
              'stats': [self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image, isSecondActive=self.__currentVehicleIsPremium), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True, isSecondActive=self.__currentVehicleIsPremium)]}
-            showPassiveCrewXpInfo = self._renewableSubInfo.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
+            showPassiveCrewXpInfo = self._wotPlusCtrl.isEnabled() and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled()
             if showPassiveCrewXpInfo:
                 statsBlock = studyingBlock.get('stats', [])
                 statsBlock.append(self.__packWotPlus(tankman))
@@ -237,7 +236,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
             validator = CrewValidator(tankman.vehicleDescr.type)
             result = validator.validateCrewSlot(tankman.strCD)
             tankManIsEligible = not result.isEmpty and result.tManValidRes.isValid
-            tankHasPassiveXp = self._renewableSubInfo.vehicleCrewHasIdleXP(tankman.vehicleInvID)
+            tankHasPassiveXp = self._wotPlusCtrl.hasVehicleCrewIdleXP(tankman.vehicleInvID)
         xpPerMinute = self._lobbyContext.getServerSettings().getRenewableSubCrewXPPerMinute()
         xpPerSecond = float(xpPerMinute) / _SECONDS_IN_MINUTE
         secUntilNextLevel = tankman.getNextLevelXpCost() / xpPerSecond

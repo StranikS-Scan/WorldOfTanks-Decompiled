@@ -419,8 +419,11 @@ class DestructiblesManager(object):
             self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
         if dmgType == DestructiblesCache.DESTR_TYPE_TREE:
             destrIndex, fallDirYaw, pitchConstr, fallSpeed = DestructiblesCache.decodeFallenTree(destData)
-            _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
-            self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
+            if BigWorld.wg_checkDestructibleIsBush(self.__spaceID, chunkID, destrIndex):
+                BigWorld.wg_setDestructibleActive(self.__spaceID, chunkID, destrIndex, False)
+            else:
+                _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
+                self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
         elif dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
             destrIndex, isShotDamage = DestructiblesCache.decodeFragile(destData)
             self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage)

@@ -85,6 +85,13 @@
       <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G04_PzVI_Tiger_I_E_3DSt>
+          <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Hull.model	</exploded>
+        </G04_PzVI_Tiger_I_E_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1294,6 +1301,18 @@
         <clipAngle>	0.909981	</clipAngle>
         <anchorShift>	0.081348	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15094	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+        <position>	0.000018 1.36185 2.53859	</position>
+        <rotation>	0.207993 -0.000004 3.14158	</rotation>
+        <scale>	0.737315 0.147463 0.737313	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.909981	</clipAngle>
+        <anchorShift>	0.081346	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	96.5417 96.5468	</density>
@@ -1332,6 +1351,13 @@
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G04_PzVI_Tiger_I_E_3DSt>
+            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G04_PzVI_Tiger_I_E_3DSt>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G04_PzVI_Tiger_I/track/segmentL.model	</segmentModelLeft>
@@ -2346,6 +2372,13 @@
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G04_PzVI_Tiger_I_E_3DSt>
+            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G04_PzVI_Tiger_I_E_3DSt>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G04_PzVI_Tiger_I/track/segmentL.model	</segmentModelLeft>
@@ -3406,6 +3439,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_01.model	</collisionModelServer>
@@ -3515,6 +3555,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_07.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_07.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_07.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_07.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_07.model	</collisionModelServer>
@@ -3619,6 +3666,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_03.model	</collisionModelServer>
@@ -3702,6 +3756,13 @@
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G04_PzVI_Tiger_I_E_3DSt>
+            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G04_PzVI_Tiger_I_E_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Turret_01.model	</collisionModelServer>
@@ -3733,9 +3794,9 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-0.997804 0.465698 0.551324	</rayStart>
-          <rayEnd>	-0.807548 0.415135 0.516021	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayStart>	-0.907958 0.416824 0.765977	</rayStart>
+          <rayEnd>	-0.860191 0.404709 0.757516	</rayEnd>
+          <rayUp>	0.237859 0.970192 -0.046373	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
@@ -3744,9 +3805,9 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.09293 0.490979 0.568976	</rayStart>
-          <rayEnd>	0.712422 0.389854 0.498369	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayStart>	0.913412 0.387362 0.735722	</rayStart>
+          <rayEnd>	0.865849 0.374721 0.726896	</rayEnd>
+          <rayUp>	-0.248571 0.967515 -0.046125	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
@@ -4120,6 +4181,54 @@
           <clipAngle>	0.53661	</clipAngle>
           <anchorShift>	0.540503	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	-0.008995 2.720163 0.142158	</position>
+          <rotation>	0.2156 -0.000014 3.14156	</rotation>
+          <scale>	0.759984 0.17777 0.759985	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.641101	</clipAngle>
+          <anchorShift>	0.087063	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	-0.260779 2.277672 -1.24547	</position>
+          <rotation>	1.749072 0.194632 -0.00002	</rotation>
+          <scale>	0.836863 0.244415 0.836857	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.981748	</clipAngle>
+          <anchorShift>	0.121243	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	-1.184043 2.267958 0.299208	</position>
+          <rotation>	1.31869 -1.519949 -2.990839	</rotation>
+          <scale>	0.413077 0.581019 0.413078	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.033235	</clipAngle>
+          <anchorShift>	-0.18	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	0.794073 2.417706 -0.446852	</position>
+          <rotation>	1.963771 -1.300972 0.147312	</rotation>
+          <scale>	0.560571 0.560572 0.560572	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.410591	</clipAngle>
+          <anchorShift>	0.0893	</anchorShift>
+        </slot>
       </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
@@ -4205,6 +4314,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_02.model	</collisionModelServer>
@@ -4331,6 +4447,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_04.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_04.model	</collisionModelServer>
@@ -4458,6 +4581,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_05.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_05.model	</collisionModelServer>
@@ -4591,6 +4721,13 @@
             <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <G04_PzVI_Tiger_I_E_3DSt>
+                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_06.model	</exploded>
+              </G04_PzVI_Tiger_I_E_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_06.model	</collisionModelServer>
@@ -4684,6 +4821,13 @@
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <G04_PzVI_Tiger_I_E_3DSt>
+            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_02.model	</exploded>
+          </G04_PzVI_Tiger_I_E_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Turret_02.model	</collisionModelServer>
@@ -4715,10 +4859,10 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.17369 0.453776 0.882684	</rayStart>
-          <rayEnd>	-0.789082 0.453516 0.772767	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
+          <rayStart>	-0.990611 0.408609 0.965525	</rayStart>
+          <rayEnd>	-0.942551 0.408575 0.951732	</rayEnd>
+          <rayUp>	0.000664 1 -0.00019	</rayUp>
+          <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
@@ -4726,10 +4870,10 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.13431 0.462291 0.880953	</rayStart>
-          <rayEnd>	0.75999 0.462291 0.739927	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
+          <rayStart>	0.893631 0.408767 0.94131	</rayStart>
+          <rayEnd>	0.846756 0.408245 0.923919	</rayEnd>
+          <rayUp>	-0.009972 0.999945 -0.00314	</rayUp>
+          <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
@@ -5137,6 +5281,42 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.610018	</clipAngle>
           <anchorShift>	0.080462	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	0.000004 2.630041 0.566413	</position>
+          <rotation>	0.087267 0 3.14155	</rotation>
+          <scale>	0.761418 0.139898 0.761413	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.327	</clipAngle>
+          <anchorShift>	0.09	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square direction_right_to_left	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	-0.99546 2.273519 0.687927	</position>
+          <rotation>	1.568937 1.568966 -0.224613	</rotation>
+          <scale>	0.525661 0.105132 0.525661	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.543089	</clipAngle>
+          <anchorShift>	0.080445	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
+          <position>	0.844657 2.359762 -0.941462	</position>
+          <rotation>	1.569002 -1.568852 -0.717002	</rotation>
+          <scale>	0.499637 0.099927 0.499636	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.327	</clipAngle>
+          <anchorShift>	0.08939	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

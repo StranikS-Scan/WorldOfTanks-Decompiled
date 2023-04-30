@@ -39,6 +39,24 @@
       <sound>	gun_rld_intuition_20_45mm	</sound>
     </intuition_overrides>
   </reload20_45>
+  <reload20_45_flamePowder>
+    <type>	SimpleReload	</type>
+    <duration>	660.0	</duration>
+    <sound>	flamethrower_reload_powder	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_20_45mm	</sound>
+    </intuition_overrides>
+  </reload20_45_flamePowder>
+  <reload20_45_flamePneumatic>
+    <type>	SimpleReload	</type>
+    <duration>	660.0	</duration>
+    <sound>	flamethrower_reload_pneumatic	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_20_45mm	</sound>
+    </intuition_overrides>
+  </reload20_45_flamePneumatic>
   <reload_automat_reloading_20_45>
     <type>	BarrelReload	</type>
     <duration>	4450	</duration>

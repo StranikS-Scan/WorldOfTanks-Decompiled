@@ -86,8 +86,8 @@
       <turret>	0.000000 0.955067 -0.032009	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/american/A129_T6_medium/T6_medium_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -1435,8 +1435,8 @@
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.955663 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05494 1.88592	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -2185,8 +2185,8 @@
             <exploded>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision_client/Gun_07.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
@@ -2244,6 +2244,7 @@
               <anchorShift>	0.279994	</anchorShift>
             </slot>
           </customizationSlots>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	127.729 129.496	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -2257,8 +2258,8 @@
         <exploded>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A129_T6_medium_MapsTraining_Dummy_MT_1/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.322748 0.679186	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>

@@ -51,8 +51,10 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from tutorial.control.context import GLOBAL_FLAG
+from uilogging.shop.loggers import getPreviewUILoggers
+from uilogging.shop.logging_constants import ShopCloseItemStates
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup
-VEHICLE_PREVIEW_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
+VEHICLE_PREVIEW_ALIASES = [VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.HERO_VEHICLE_PREVIEW,
  VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW,
  VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
@@ -60,7 +62,7 @@ VEHICLE_PREVIEW_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
  VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW,
  VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
+ VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW]
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -166,7 +168,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._price = ctx.get('price', MONEY_UNDEFINED)
         self._oldPrice = ctx.get('oldPrice', MONEY_UNDEFINED)
         self._title = ctx.get('title')
-        self.__description = ctx.get('description')
+        self._description = ctx.get('description')
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
         self.__topPanelData = ctx.get('topPanelData') or {}
@@ -192,6 +194,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if not self.__isHeroTank:
             self.__hangarSpace.removeVehicle()
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
+        self.__uiMetricsLogger, self.__uiFlowLogger = getPreviewUILoggers(bool(self._itemsPack), str(self._vehicleCD), self.__buyParams)
         return
 
     def setTopPanel(self):
@@ -225,6 +228,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             event_dispatcher.showHangar()
         if not self._heroInteractive:
             self.__heroTanksControl.setInteractive(False)
+        if self._backAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiFlowLogger.logOpenPreview()
+            self.__uiMetricsLogger.onViewOpen()
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.enterEvent:
@@ -266,9 +272,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return
 
     def closeView(self):
+        if self._backAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiMetricsLogger.onViewClosed(ShopCloseItemStates.CLOSE_BUTTON.value)
         event_dispatcher.showHangar()
 
     def onBackClick(self):
+        if self._backAlias == VIEW_ALIAS.LOBBY_STORE:
+            self.__uiMetricsLogger.onViewClosed(ShopCloseItemStates.BACK_BUTTON.value)
         self._processBackClick()
 
     def onOpenInfoTab(self, index):
@@ -323,11 +333,13 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             viewPy.setBackAlias(self._backAlias)
             viewPy.setBackCallback(self._previewBackCb)
             if self._itemsPack:
-                viewPy.setPackItems(self._itemsPack, self._price, self._oldPrice, self._title)
+                viewPy.setPackItems(self._itemsPack, self._price, self._oldPrice)
+                viewPy.setPanelTextData(self._title)
                 viewPy.setTimerData(self.__endTime)
                 viewPy.setBuyParams(self.__buyParams)
+                viewPy.setBundlePreviewMetricsLogger(self.__uiMetricsLogger)
             elif self.__offers:
-                viewPy.setOffers(self.__offers, self._title, self.__description)
+                viewPy.setOffers(self.__offers, self._title)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
@@ -399,14 +411,16 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'price': self._price,
          'oldPrice': self._oldPrice,
          'title': self._title,
-         'description': self.__description,
+         'description': self._description,
          'endTime': self.__endTime,
          'buyParams': self.__buyParams,
          'vehParams': {'styleCD': self.__customizationCD} if self.__customizationCD is not None else {},
          'isHeroTank': self.__isHeroTank,
          'hangarVehicleCD': hangarVehicleCD,
          'topPanelData': self.__topPanelData,
-         'style': self.__ctx.get('style')})
+         'style': self.__ctx.get('style'),
+         'backBtnLabel': self._backBtnLabel,
+         'previewAppearance': self.__previewAppearance})
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):

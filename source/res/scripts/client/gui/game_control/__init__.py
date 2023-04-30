@@ -69,7 +69,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.comp7_controller import Comp7Controller as _Comp7Ctrl
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
-    from gui.game_control.wot_plus_controller import WotPlusNotificationController
+    from gui.game_control.wot_plus_controller import WotPlusController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
@@ -82,6 +82,9 @@ def getGameControllersConfig(manager):
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.game_control.event_lootboxes_controller import EventLootBoxesController
     from gui.entitlements.entitlements_controller import EntitlementsController
+    from gui.game_control.winback_controller import WinbackController
+    from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
+    from gui.game_control.collections_controller import CollectionsSystemController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -151,13 +154,16 @@ def getGameControllersConfig(manager):
     _config(_interface.ISteamCompletionController, _SteamCompletionController())
     _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
-    _config(_interface.IWotPlusNotificationController, WotPlusNotificationController())
+    _config(_interface.IWotPlusController, WotPlusController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
     _config(_interface.IEventLootBoxesController, EventLootBoxesController())
     _config(_interface.IEntitlementsController, EntitlementsController())
+    _config(_interface.ICollectionsSystemController, CollectionsSystemController())
+    _config(_interface.IWinbackController, WinbackController())
+    _config(_interface.IDailyQuestIntroPresenter, DailyQuestsIntroPresenter())
     _config(_interface.ICollectiveGoalEntryPointController, CollectiveGoalEntryPointController())
     _config(_interface.ICollectiveGoalMarathonsController, CollectiveGoalMarathonsController())
     collectGameControllers(_config)

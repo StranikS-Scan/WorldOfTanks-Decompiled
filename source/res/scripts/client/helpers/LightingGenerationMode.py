@@ -139,15 +139,6 @@ def _offlineLoadCheck():
         BigWorld.callback(1.0, _offlineLoadCheck)
 
 
-g_spaceID = 0
-g_avatar = None
-
-class FakeAvatar:
-    spaceID = property(lambda self: BigWorld.camera().spaceID)
-
-
-g_fakeAvatar = FakeAvatar()
-
 def launch(spaceName):
     global g_lightGenModeEnabled
     print 'Entering offline space', spaceName
@@ -172,6 +163,7 @@ def launch(spaceName):
     GUI.mcursor().clipped = False
     g_lightGenModeEnabled = True
     BigWorld.callback(1.0, _offlineLoadCheck)
+    game_mode_emulator.createFakeAvatar()
     return
 
 
@@ -187,7 +179,6 @@ def adjustFOV(diff):
     newFov = BigWorld.projection().fov + diff
     newFov = min(max(newFov, FOV_MIN), FOV_MAX)
     BigWorld.projection().rampFov(newFov, 0.1)
-    BigWorld.player = lambda : g_fakeAvatar
     if WWISE.enabled:
         WWISE.WG_loadBanks('', False)
 

@@ -8,6 +8,7 @@ import wg_async as future_async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from adisp import adisp_async, adisp_process
+from constants import IS_EDITOR
 from gui import DialogsInterface, makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view import dialogs
@@ -38,6 +39,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if not IS_EDITOR:
+    from gui.impl.pub.dialog_window import DialogResult, DialogButtons, SingleDialogResult
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from post_progression_common import ACTION_TYPES
@@ -1217,3 +1220,43 @@ class PostProgressionSetSlotTypeValidator(SyncValidator):
         if not self.__vehicle.isRoleSlotActive:
             return makeError('role_slot_switch_unavailable')
         return makeError('role_slot_invalid_option') if self.__slotID not in [ slot.slotID for slot in self.__vehicle.optDevices.dynSlotTypeOptions ] else makeSuccess()
+
+
+class AsyncDialogConfirmator(AsyncConfirmator):
+
+    def __init__(self, dialogMethod, *args, **kwargs):
+        super(AsyncDialogConfirmator, self).__init__()
+        self.__dialogMethod = dialogMethod
+        self.__dialogArgs = args
+        self.__dialogKwargs = kwargs
+        self.__dialogResult = None
+        return
+
+    def getResult(self):
+        return self.__dialogResult
+
+    @adisp_async
+    def _confirm(self, callback):
+        self._makeConfirm(callback)
+
+    @future_async.wg_async
+    def _makeConfirm(self, callback):
+        Waiting.suspend()
+        dialog = self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs)
+        self.__dialogResult = yield future_async.wg_await(dialog)
+        Waiting.resume()
+        if isinstance(self.__dialogResult, DialogResult):
+            result = self.__dialogResult.result in DialogButtons.ACCEPT_BUTTONS
+        elif isinstance(self.__dialogResult, SingleDialogResult):
+            if isinstance(self.__dialogResult.result, tuple):
+                result, _ = self.__dialogResult.result
+            else:
+                result = self.__dialogResult.result
+        elif isinstance(self.__dialogResult, tuple):
+            result, _ = self.__dialogResult
+        else:
+            result = self.__dialogResult
+        if result:
+            callback(makeSuccess())
+            return
+        callback(makeError())

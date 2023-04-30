@@ -3,11 +3,10 @@
 import logging
 import random
 from math import ceil
+import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, ATTACK_REASON_INDICES, ATTACK_REASON
-import BigWorld
 from debug_utils import LOG_ERROR
-from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -124,7 +123,7 @@ class PremiumInfoBlock(base.StatsBlock):
         self.isGetPremium = False
         self.isUpgradeToPremiumPlus = False
         self.inBattleQueue = False
-        self.visibleDetailsBtn = False
+        self.visibleDetailsBtn = True
         self.__xpDiff = 0
         self.__creditsDiff = 0
         self.__canUpgradeToBasic = False
@@ -161,7 +160,6 @@ class PremiumInfoBlock(base.StatsBlock):
             self.xpPremiumBonusStr = style.makeXpLabel(self.__xpDiff, isDiff=True, useBigIcon=True)
         player = BigWorld.player()
         self.inBattleQueue = player.isInBattleQueue()
-        self.visibleDetailsBtn = bool(GUI_SETTINGS.premiumInfo.get('baseURL'))
         return super(PremiumInfoBlock, self).getVO()
 
     def __setPremiumBonusData(self):

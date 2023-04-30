@@ -11,7 +11,7 @@ from ids_generators import SequenceIDGenerator
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from uilogging.constants import DEFAULT_LOGGER_NAME
-from uilogging.core.core_constants import LOGS_MAX_COUNT_PER_SEND, LOG_RECORD_MAX_PROPERTIES_COUNT, MAX_SESSION_GET_RETRIES, MIN_SESSION_LIFE_TIME
+from uilogging.core.core_constants import LOGS_MAX_COUNT_PER_SEND, LOG_RECORD_MAX_PROPERTIES_COUNT, MAX_SESSION_GET_RETRIES, MIN_SESSION_LIFE_TIME, REQUEST_SESSION_TIMEOUT
 from uilogging.core.log import LogRecord
 
 class WaitingSessionData(SoftException):
@@ -115,7 +115,7 @@ class Session(object):
         retries = MAX_SESSION_GET_RETRIES
         try:
             while True:
-                self._sessionData = yield wg_async.await_callback(self._getSessionData)()
+                self._sessionData = yield wg_async.await_callback(self._getSessionData, REQUEST_SESSION_TIMEOUT)()
                 if not self._sessionData or not self._sessionData.isExpired:
                     break
                 retries -= 1
@@ -123,6 +123,9 @@ class Session(object):
                     self._sessionData = None
                     break
 
+        except wg_async.TimeoutError:
+            self._logger.warning('Request session timout reached.')
+            self._sessionData = None
         except wg_async.BrokenPromiseError:
             self._logger.debug('Promise was destroyed while waiting for result.')
             self._sessionData = None

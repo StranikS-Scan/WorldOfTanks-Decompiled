@@ -10,7 +10,7 @@ class Type(IntEnum):
     DIVISION = 1
     FIRSTRANKREWARDS = 2
     RANKREWARDS = 3
-    WINREWARDS = 4
+    TOKENSREWARDS = 4
 
 
 class Rank(IntEnum):
@@ -60,10 +60,10 @@ class RewardsScreenModel(ViewModel):
     def setDivision(self, value):
         self._setNumber(3, value.value)
 
-    def getWinCount(self):
+    def getTokensCount(self):
         return self._getNumber(4)
 
-    def setWinCount(self, value):
+    def setTokensCount(self, value):
         self._setNumber(4, value)
 
     def getMainRewards(self):
@@ -92,7 +92,7 @@ class RewardsScreenModel(ViewModel):
         self._addNumberProperty('rank')
         self._addBoolProperty('hasRankInactivity', False)
         self._addNumberProperty('division')
-        self._addNumberProperty('winCount', 0)
+        self._addNumberProperty('tokensCount', 0)
         self._addArrayProperty('mainRewards', Array())
         self._addArrayProperty('additionalRewards', Array())
         self.onClose = self._addCommand('onClose')

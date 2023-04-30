@@ -135,15 +135,15 @@ class GameSeason(object):
                 status = CycleStatus.CURRENT
             else:
                 status = CycleStatus.FUTURE
-            self.__cycles[idx] = self._buildCycle(idx, status, cycleRawData['start'], cycleRawData['end'], number, bool(cycleRawData.get('announce', False)))
+            self.__cycles[idx] = self._buildCycle(idx, status, number, cycleRawData)
 
         return
 
-    def _buildCycle(self, idx, status, start, end, number, announceOnly):
-        return GameSeasonCycle(idx, status, start, end, number, announceOnly)
+    def _buildCycle(self, idx, status, number, rawData):
+        return GameSeasonCycle(idx, status, rawData['start'], rawData['end'], number, bool(rawData.get('announce', False)))
 
 
-def getSeason(config, now):
+def getSeason(config, now, nextPossibleOnGap=False):
     if not config or not config.get('isEnabled', False) or not config.get('cycleTimes', []):
         return (False, None)
     else:
@@ -159,7 +159,7 @@ def getSeason(config, now):
                 continue
             cycleActive = now >= startTime
             if not cycleActive and not isWithinSeasonTime(config, seasonID, now):
-                return (False, None)
+                return (False, cycleInfo if nextPossibleOnGap else None)
             return (cycleActive, cycleInfo)
 
         return (False, None)

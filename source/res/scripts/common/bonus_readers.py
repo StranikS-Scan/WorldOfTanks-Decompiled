@@ -17,7 +17,7 @@ from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
 if TYPE_CHECKING:
@@ -455,6 +455,8 @@ def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
         __readBonus_vehicleCustomizations(extra, None, section['customization'])
     if section.has_key('customCompensation'):
         __readBonus_customCompensation(extra, None, section['customCompensation'])
+    if section.has_key('customCompensationDetails'):
+        __readBonus_customCompensationDetails(extra, None, section['customCompensationDetails'])
     if section.has_key('outfits'):
         __readBonus_outfits(extra, None, section['outfits'])
     if section.has_key('ammo'):
@@ -462,6 +464,8 @@ def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
         extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
     if section.has_key('unlock'):
         extra['unlock'] = True
+    if section.has_key('unlockModules'):
+        extra['unlockModules'] = True
     vehicleBonuses = bonus.setdefault('vehicles', {})
     vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
     if vehKey in vehicleBonuses:
@@ -474,6 +478,12 @@ def __readBonus_customCompensation(bonus, _name, section):
     credits = section.readInt('credits', 0)
     gold = section.readInt('gold', 0)
     bonus['customCompensation'] = (credits, gold)
+
+
+def __readBonus_customCompensationDetails(bonus, _name, section):
+    bonus['customCompensationDetails'] = {}
+    if section.has_key('noCrew'):
+        bonus['customCompensationDetails']['noCrew'] = True
 
 
 def __readBonus_vehicleCustomizations(bonus, _name, section):
@@ -995,6 +1005,18 @@ def __readBonus_battlePassPoints(bonus, _name, section, eventType, checkLimit):
     bonus['battlePassPoints'] = {'vehicles': {NON_VEH_CD: count}}
 
 
+def __readBonus_dailyQuestReroll(bonus, name, section, eventType, checkLimit):
+    data = section.asString
+    levels = set(data.strip().split())
+    if set(levels).intersection(DailyQuestsLevels.DAILY) != levels:
+        raise SoftException('Invalid daily quest level {}'.format(levels))
+    bonus[name] = levels
+
+
+def __readBonus_noviceReset(bonus, name, section, eventType, checkLimit):
+    bonus[name] = True
+
+
 def __readBonus_freePremiumCrew(bonus, _name, section, eventType, checkLimit):
     vehLevel = section['vehLevel'].asInt
     count = section.readInt('count', 1)
@@ -1060,6 +1082,8 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'rankedBonusBattles': bonusReaderLimitDecorator(INVOICE_LIMITS.RANKED_BONUS_BATTLES_MAX, __readBonus_int),
  'dogTagComponent': __readBonus_dogTag,
  'battlePassPoints': __readBonus_battlePassPoints,
+ 'dailyQuestReroll': __readBonus_dailyQuestReroll,
+ 'noviceReset': __readBonus_noviceReset,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny,

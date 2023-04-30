@@ -22,7 +22,7 @@ from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
-from gui.Scaleform.required_libraries_config import BATTLE_REQUIRED_LIBRARIES
+from gui.Scaleform.required_libraries_config import BATTLE_REQUIRED_LIBRARIES, ADDITIONAL_BATTLE_REQUIRED_LIBRARIES
 from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
@@ -62,8 +62,9 @@ BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('
 
 class BattleEntry(AppEntry):
 
-    def __init__(self, appNS, ctrlModeFlags):
+    def __init__(self, appNS, ctrlModeFlags, arenaGuiType):
         super(BattleEntry, self).__init__(R.entries.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
+        self._arenaGuiType = arenaGuiType
         self.__input = None
         return
 
@@ -171,7 +172,7 @@ class BattleEntry(AppEntry):
         pass
 
     def _getRequiredLibraries(self):
-        return BATTLE_REQUIRED_LIBRARIES
+        return BATTLE_REQUIRED_LIBRARIES + ADDITIONAL_BATTLE_REQUIRED_LIBRARIES.get(self._arenaGuiType, [])
 
     def __getCursorFromContainer(self):
         return self._containerMgr.getView(WindowLayer.CURSOR) if self._containerMgr is not None else None

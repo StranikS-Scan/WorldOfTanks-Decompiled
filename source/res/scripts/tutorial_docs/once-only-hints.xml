@@ -292,24 +292,6 @@
         </class-condition>
       </condition>
     </hint>
-    <hint>	WotPlusHangarHint	  <item-id>	AccountButton	</item-id>
-      <text>	_(#tutorial:onceOnlyHints/wotPlus/playerProfile)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_WotPlusEnabled	</global-active>
-      </condition>
-    </hint>
     <hint>	PersonalReservesHangarHint	  <item-id>	ReservesButton	</item-id>
       <text>	_(#personal_reserves:hangarEntry/onlyOnceHint)	</text>
       <arrow>
@@ -370,12 +352,14 @@
       <update-runtime>	True	</update-runtime>
     </hint>
     <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
+      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemManual	</global-active>
       </condition>
     </hint>
     <hint>	LobbyMenuBootcampHint	  <item-id>	LobbyMenuBootcampItem	</item-id>
+      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemBootcamp	</global-active>
@@ -394,18 +378,6 @@
         <class-condition>	UISpamCondition	  <path>	gui.ui_spam.tutorial_conditions	</path>
           <arguments>	DogTagHangarHint	</arguments>
         </class-condition>
-      </condition>
-    </hint>
-    <hint>	WotPlusProfileHint	  <item-id>	PiggyBankWidget	</item-id>
-      <text>	_(#tutorial:onceOnlyHints/wotPlus/playerProfile)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_WotPlusEnabled	</global-active>
       </condition>
     </hint>
     <hint>	BattleSessionUpButtonTournamentHint	  <item-id>	BattleSessionUpButtonTournament	</item-id>
@@ -607,9 +579,6 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-inactive>	DisableSpecializationSlotHint	</global-inactive>
-      </condition>
     </hint>
     <hint>	AmmunitionPanelBattleAbilitiesHint	  <item-id>	AmmunitionPanelBattleAbilities	</item-id>
       <text>	_(#tank_setup:hints/ammunitionPanel/reserves/changed)	</text>

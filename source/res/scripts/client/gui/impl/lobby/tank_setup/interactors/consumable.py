@@ -49,7 +49,9 @@ class ConsumableInteractor(BaseConsumableInteractor):
 
     def getVehicleAfterInstall(self):
         vehicle = super(ConsumableInteractor, self).getVehicleAfterInstall()
-        vehicle.consumables.setInstalled(*self.getItem().consumables.layout)
+        layout = self.getItem().consumables.layout
+        vehicle.consumables.setInstalled(*layout)
+        vehicle.initCrew()
         return vehicle
 
     def revert(self):

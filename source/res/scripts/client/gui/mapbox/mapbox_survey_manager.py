@@ -16,47 +16,57 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class MapboxSurveyManager(object):
-    __slots__ = ('__questions', '__currentQuestionIdx', '__mapId', '__surveyData')
+    __slots__ = ('__questions', '__currentQuestionIdx', '__mapId', '__surveyGroup', '__surveyData')
 
     def __init__(self):
         self.__mapId = None
+        self.__surveyGroup = None
         self.__questions = None
-        self.__surveyData = None
+        self.__surveyData = {}
         self.__currentQuestionIdx = 0
         return
 
     def fini(self):
-        self.__surveyData = None
+        self.__surveyData = {}
+        self.__surveyGroup = None
         self.__mapId = None
         self.__questions = None
+        self.__currentQuestionIdx = 0
         return
 
     def startSurvey(self, mapId):
         self.__mapId = mapId
-        self.__questions = getSurvey(ARENA_BONUS_TYPE.MAPBOX)
-        if not self.__questions:
+        survey = getSurvey(ARENA_BONUS_TYPE.MAPBOX, mapId)
+        if survey is None:
             raise SoftException('Invalid survey config for Mapbox mode')
+        self.__questions = survey.questions
+        self.__surveyGroup = survey.surveyGroup
         self.__surveyData = AccountSettings.getSettings(MAPBOX_SURVEYS).get(self.__mapId, {})
         if not self.__surveyData:
-            self.__surveyData['geometry_name'] = self.__mapId
             self.__surveyData['data'] = {}
         self.__currentQuestionIdx = 0
+        return
 
     def clearSurvey(self):
         self.__mapId = None
+        self.__surveyGroup = None
         self.__currentQuestionIdx = 0
-        self.__surveyData = None
+        self.__surveyData = {}
         return
 
-    def resetSurvey(self):
-        if self.__mapId and self.__surveyData:
+    def resetSurvey(self, mapId):
+        surveys = AccountSettings.getSettings(MAPBOX_SURVEYS)
+        savedData = surveys.get(mapId, {}).get('data', {})
+        if self.__mapId and self.__surveyData or savedData:
             self.__surveyData['data'] = {}
-            surveys = AccountSettings.getSettings(MAPBOX_SURVEYS)
-            surveys[self.__mapId] = self.__surveyData
+            surveys[mapId] = self.__surveyData
             AccountSettings.setSettings(MAPBOX_SURVEYS, surveys)
 
     def getMapId(self):
         return self.__mapId
+
+    def getSurveyGroup(self):
+        return self.__surveyGroup
 
     def getSelectedAnswers(self, questionId, optionId=None):
         question = self.getQuestion(questionId)
@@ -95,14 +105,17 @@ class MapboxSurveyManager(object):
             AccountSettings.setSettings(MAPBOX_SURVEYS, surveys)
             return
 
-    def canContinue(self):
+    def canContinue(self, questionId=None):
         if self.__isShownAllQuestions():
             return False
         else:
-            question = self.getQuestion()
+            question = self.getQuestion(questionId)
             if question is None:
                 return False
-            return bool(self.getSelectedAnswers(question.getQuestionId())) if question.isRequired() else True
+            if not question.isRequired():
+                return True
+            questionId = question.getQuestionId() if questionId is None else questionId
+            return all((self.getSelectedAnswers(questionId, optionId) for optionId in question.getOptions())) if question.getQuestionType() == QuestionType.TABLE else bool(self.getSelectedAnswers(questionId))
 
     def getQuestion(self, qId=None):
         if qId is not None:

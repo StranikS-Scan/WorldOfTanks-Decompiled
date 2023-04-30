@@ -1,60 +1,59 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/battle_royale_controller.py
+import json
 import logging
 from functools import partial
-import typing
-import json
 import BigWorld
+import typing
+from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
+from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
+from battle_royale.gui.royale_models import BattleRoyaleSeason
 import Event
-from shared_utils import nextTick
 import season_common
-from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
+from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE, BATTLE_ROYALE_SCENE
+from gui import GUI_NATIONS_ORDER_INDEX
+from gui import GUI_SETTINGS
+from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
 from gui.ClientUpdateManager import g_clientUpdateManager
-from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
-from battle_royale.gui.royale_models import BattleRoyaleSeason
-from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
+from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from gui.game_control.links import URLMacros
+from gui.game_control.season_provider import SeasonProvider
+from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
+from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
+from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui import GUI_NATIONS_ORDER_INDEX
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
 from helpers import dependency, time_utils
 from helpers.statistics import HARDWARE_SCORE_PARAMS
-from gui.impl.gen import R
+from items.battle_royale import isBattleRoyale
 from shared_utils import first
+from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IHangarSpaceSwitchController, IBattleRoyaleController, IBattleRoyaleTournamentController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM
-from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.game_control.links import URLMacros
-from gui.game_control.season_provider import SeasonProvider
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from web.web_client_api.battle_royale import createBattleRoyaleWebHanlders
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.shared.utils.functions import getUniqueViewName
-from gui.shared.utils import SelectorBattleTypesUtils
-from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
-from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
-from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
-from skeletons.gui.impl import IGuiLoader
-from gui.shared.event_dispatcher import getParentWindow
-from gui import GUI_SETTINGS
-from items.battle_royale import isBattleRoyale
+from stats_params import BATTLE_ROYALE_STATS_ENABLED
 if typing.TYPE_CHECKING:
     from helpers.server_settings import BattleRoyaleConfig
 _logger = logging.getLogger(__name__)
@@ -80,6 +79,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     TOKEN_QUEST_ID = 'token:br:title:'
     MAX_STORED_ARENAS_RESULTS = 20
 
@@ -384,12 +384,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             return
 
     def __showBrowserView(self, url):
-        webHandlers = createBattleRoyaleWebHanlders()
-        alias = VIEW_ALIAS.BROWSER_VIEW
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': url,
-         'webHandlers': webHandlers,
-         'returnAlias': VIEW_ALIAS.LOBBY_HANGAR,
-         'onServerSettingsChange': self.__serverSettingsChangeBrowserHandler}), EVENT_BUS_SCOPE.LOBBY)
+        showBrowserOverlayView(url, alias=BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW)
 
     def __serverSettingsChangeBrowserHandler(self, browser, diff):
         if not diff.get(Configs.BATTLE_ROYALE_CONFIG.value, {}).get('isEnabled'):
@@ -526,6 +521,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__serverSettings.onServerSettingsChange -= self.__updateRoyaleSettings
         self.__serverSettings = serverSettings
         self.__battleRoyaleSettings = self.__getBattleRoyaleSettings()
+        self.__brProgression.setSettings(self.getModeSettings().eventProgression)
         self.__updateEquipmentCount()
         self.__serverSettings.onServerSettingsChange += self.__updateRoyaleSettings
         return
@@ -536,6 +532,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         else:
             self.__eventAvailabilityUpdate()
             self.__battleRoyaleSettings = self.__getBattleRoyaleSettings()
+            self.__brProgression.setSettings(self.getModeSettings().eventProgression)
             self.__updateEquipmentCount()
             self.__divisions = None
             self.onUpdated()

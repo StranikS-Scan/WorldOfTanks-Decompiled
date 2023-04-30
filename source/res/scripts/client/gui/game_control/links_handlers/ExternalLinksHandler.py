@@ -33,7 +33,9 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
  OpenLinkEvent.FRONTLINE_CHANGES: '_handleFrontlineChangesURL',
- OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL'}
+ OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL',
+ OpenLinkEvent.WOT_PLUS_STEAM_SHOP: '_handleWotPlusSteamShopURL',
+ OpenLinkEvent.WOT_PLUS_SHOP: '_handleWotPlusShopURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
     __loginManager = dependency.descriptor(ILoginManager)
@@ -167,6 +169,12 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleTokenShopURL(self, event):
         self.__openParsedUrl('tokenShopURL', event.params)
+
+    def _handleWotPlusSteamShopURL(self, _):
+        self.__openParsedUrl('wotPlusSteamURL')
+
+    def _handleWotPlusShopURL(self, _):
+        self.__openParsedUrl('wotPlusShopURL')
 
     def _getHandlers(self):
         if not self.__linksHandlers:

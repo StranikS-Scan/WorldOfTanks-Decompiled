@@ -33,10 +33,10 @@ class ShellSetupSubView(DealBaseSetupSubView):
         super(ShellSetupSubView, self)._removeListeners()
         self._viewModel.onShellUpdate -= self.__onShellUpdate
 
-    def _updateSlots(self, fullUpdate=True, dataUpdate=True):
+    def _updateSlots(self, fullUpdate=True, updateData=True):
         self._viewModel.setMaxCount(self._interactor.getItem().ammoMaxSize)
         self._viewModel.setInstalledCount(sum((shell.count for shell in self._interactor.getCurrentLayout())))
-        super(ShellSetupSubView, self)._updateSlots(fullUpdate, dataUpdate)
+        super(ShellSetupSubView, self)._updateSlots(fullUpdate, updateData)
 
     def __onSwapSlots(self, actionType, args):
         leftID = int(args.get('leftID'))

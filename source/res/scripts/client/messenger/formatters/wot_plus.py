@@ -4,33 +4,11 @@ import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.Vehicle import getUserName
-from helpers import time_utils
 from items.vehicles import getVehicleType
-from messenger import g_settings
-from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import ServiceChannelFormatter
-from messenger.formatters.service_channel_helpers import MessageData
+from messenger.formatters.service_channel import SimpleFormatter
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
-
-class SimpleFormatter(ServiceChannelFormatter):
-
-    def __init__(self, templateName):
-        self._template = templateName
-
-    def format(self, message, *args):
-        if message is None:
-            return []
-        else:
-            formatted = g_settings.msgTemplates.format(self._template, ctx=self.getCtx(message, *args))
-            return [MessageData(formatted, self._getGuiSettings(message, self._template))]
-
-    def getCtx(self, message, *args):
-        return None
-
-    def getConvertedDateTime(self, time):
-        return TimeFormatter.getShortDatetimeFormat(time_utils.makeLocalServerTime(time))
-
+    from typing import Dict, Tuple
 
 class IStandardMessageFormatter(SimpleFormatter):
 
@@ -38,16 +16,21 @@ class IStandardMessageFormatter(SimpleFormatter):
         ctx = {}
         title = self.getTitle(message, *args)
         text = self.getText(message, *args)
+        values = self.getValues(message, *args) or {}
         if title:
             ctx['title'] = title
         if text:
             ctx['text'] = text
+        ctx.update(values)
         return ctx
 
     def getTitle(self, message, *args):
         return None
 
     def getText(self, message, *args):
+        return None
+
+    def getValues(self, message, *args):
         return None
 
 
@@ -89,12 +72,48 @@ class WotPlusExpiredFormatter(IStandardMessageFormatter):
         return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.expireMessage.title(), time=self.getConvertedDateTime(timeOfExpiry))
 
 
-class RentEnd(IStandardMessageFormatter):
+class PassiveXpActivatedFormatter(IStandardMessageFormatter):
 
     def __init__(self):
-        super(RentEnd, self).__init__('WotPlusRentEndMessage')
+        super(PassiveXpActivatedFormatter, self).__init__('PassiveXPStatusMessage')
 
-    def getTitle(self, message, *args):
+    def getText(self, message, *args):
         vehTypeCD = message.data.get('vehTypeCD')
         vehName = getUserName(getVehicleType(vehTypeCD))
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.rental.end.title(), vehicleName=vehName)
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.passiveXP.isActivated.text(), vehicleName=vehName)
+
+
+class PassiveXpDeactivatedFormatter(IStandardMessageFormatter):
+
+    def __init__(self):
+        super(PassiveXpDeactivatedFormatter, self).__init__('PassiveXPStatusMessage')
+
+    def getText(self, message, *args):
+        vehTypeCD = message.data.get('vehTypeCD')
+        vehName = getUserName(getVehicleType(vehTypeCD))
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.passiveXP.isDeactivated.text(), vehicleName=vehName)
+
+
+class PassiveXpSwitchedFormatter(IStandardMessageFormatter):
+
+    def __init__(self):
+        super(PassiveXpSwitchedFormatter, self).__init__('PassiveXPSwitchedMessage')
+
+    def getValues(self, message, *args):
+        oldVehTypeCD = message.data.get('oldVehTypeCD')
+        newVehTypeCD = message.data.get('newVehTypeCD')
+        oldVehName = getUserName(getVehicleType(oldVehTypeCD))
+        newVehName = getUserName(getVehicleType(newVehTypeCD))
+        return {'oldVehName': oldVehName,
+         'newVehName': newVehName}
+
+
+class PassiveXpIncompatibleCrewFormatter(IStandardMessageFormatter):
+
+    def __init__(self):
+        super(PassiveXpIncompatibleCrewFormatter, self).__init__('PassiveXPIncompatibleCrewMessage')
+
+    def getValues(self, message, *args):
+        vehTypeCD = message.data.get('vehTypeCD')
+        vehName = getUserName(getVehicleType(vehTypeCD))
+        return {'vehicleName': vehName}

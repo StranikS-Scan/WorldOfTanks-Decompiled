@@ -26,8 +26,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     AIM_2 = 'AIM_2'
     AIM_3 = 'AIM_3'
     AIM_4 = 'AIM_4'
-    MARKERS_1 = 'MARKERS_1'
-    MARKERS_2 = 'MARKERS_2'
+    MARKERS = 'MARKERS'
     CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
@@ -67,7 +66,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
-    ARMORY_YARD = 'ARMORY_YARD'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -93,10 +91,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
     QUESTS_SHOWN = 'shown'
     QUEST_PROGRESS = 'questProgress'
-
-
-class ARMORY_YARD_KEYS(CONST_CONTAINER):
-    BUILD_PROGRESS = 'buildProgress'
 
 
 class ServerSettingsManager(object):
@@ -187,23 +181,21 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 3 << 4)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 3 << 1),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 3 << 3)}),
-     SETTINGS_SECTIONS.MARKERS_1: Section(masks={'markerBaseIcon': 0,
-                                   'markerBaseLevel': 1,
-                                   'markerBaseHpIndicator': 2,
-                                   'markerBaseDamage': 3,
-                                   'markerBaseVehicleName': 4,
-                                   'markerBasePlayerName': 5,
-                                   'markerBaseAimMarker2D': 6,
-                                   'markerAltIcon': 16,
-                                   'markerAltLevel': 17,
-                                   'markerAltHpIndicator': 18,
-                                   'markerAltDamage': 19,
-                                   'markerAltVehicleName': 20,
-                                   'markerAltPlayerName': 21,
-                                   'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
-                                   'markerAltHp': Offset(24, 4278190080L)}),
-     SETTINGS_SECTIONS.MARKERS_2: Section(masks={'markerBaseVehicleDist': 0,
-                                   'markerAltVehicleDist': 1}, offsets={}),
+     SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
+                                 'markerBaseLevel': 1,
+                                 'markerBaseHpIndicator': 2,
+                                 'markerBaseDamage': 3,
+                                 'markerBaseVehicleName': 4,
+                                 'markerBasePlayerName': 5,
+                                 'markerBaseAimMarker2D': 6,
+                                 'markerAltIcon': 16,
+                                 'markerAltLevel': 17,
+                                 'markerAltHpIndicator': 18,
+                                 'markerAltDamage': 19,
+                                 'markerAltVehicleName': 20,
+                                 'markerAltPlayerName': 21,
+                                 'markerAltAimMarker2D': 22}, offsets={'markerBaseHp': Offset(8, 65280),
+                                 'markerAltHp': Offset(24, 4278190080L)}),
      SETTINGS_SECTIONS.CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                            'germany': 1,
                                            'usa': 2,
@@ -515,7 +507,8 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.RECEIVED_DAMAGE: 15,
                                        BATTLE_EVENTS.RECEIVED_CRITS: 16,
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17,
-                                       BATTLE_EVENTS.ENEMIES_STUN: 18}, offsets={}),
+                                       BATTLE_EVENTS.ENEMIES_STUN: 18,
+                                       BATTLE_EVENTS.CREW_PERKS: 19}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: 0,
@@ -717,8 +710,7 @@ class ServerSettingsManager(object):
                                                       'role_ATSPG_support': 22,
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
-                                                      'role_SPG': 25}, offsets={}),
-     SETTINGS_SECTIONS.ARMORY_YARD: Section(masks={}, offsets={ARMORY_YARD_KEYS.BUILD_PROGRESS: Offset(0, 65535)})}
+                                                      'role_SPG': 25}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -732,24 +724,6 @@ class ServerSettingsManager(object):
      'gunTagType': 3,
      'reloaderTimer': 3,
      'zoomIndicator': 4}
-    MARKERS_MAPPING = {'markerBaseIcon': 1,
-     'markerBaseLevel': 1,
-     'markerBaseHpIndicator': 1,
-     'markerBaseDamage': 1,
-     'markerBaseVehicleName': 1,
-     'markerBasePlayerName': 1,
-     'markerBaseAimMarker2D': 1,
-     'markerAltIcon': 1,
-     'markerAltLevel': 1,
-     'markerAltHpIndicator': 1,
-     'markerAltDamage': 1,
-     'markerAltVehicleName': 1,
-     'markerAltPlayerName': 1,
-     'markerAltAimMarker2D': 1,
-     'markerBaseHp': 1,
-     'markerAltHp': 1,
-     'markerBaseVehicleDist': 2,
-     'markerAltVehicleDist': 2}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
@@ -886,12 +860,6 @@ class ServerSettingsManager(object):
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
 
-    def getArmoryYardProgress(self):
-        return self.getSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, ARMORY_YARD_KEYS.BUILD_PROGRESS, -1)
-
-    def setArmoryYardProgress(self, lastSeenProgress):
-        self.setSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, {ARMORY_YARD_KEYS.BUILD_PROGRESS: lastSeenProgress})
-
     def _buildAimSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
@@ -922,32 +890,23 @@ class ServerSettingsManager(object):
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
-        number = self.MARKERS_MAPPING[key]
-        storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
-        settingsKey = 'MARKERS_{number}'.format(number=number)
+        storageKey = 'MARKERS_{section}'.format(section=section.upper())
         storedValue = self.settingsCache.getSectionSettings(storageKey, None)
-        masks = self.SECTIONS[settingsKey].masks
-        offsets = self.SECTIONS[settingsKey].offsets
+        masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
+        offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
-            mapping = {}
-            for key, value in options.iteritems():
-                number = self.MARKERS_MAPPING[key]
-                mapping.setdefault(number, {})[key] = value
-
-            for number, value in mapping.iteritems():
-                settingsKey = 'MARKERS_{number}'.format(number=number)
-                storageKey = 'MARKERS_{section}_{number}'.format(section=section.upper(), number=number)
-                storingValue = storedValue = self.settingsCache.getSetting(storageKey)
-                masks = self.SECTIONS[settingsKey].masks
-                offsets = self.SECTIONS[settingsKey].offsets
-                storingValue = self._mapValues(value, storingValue, masks, offsets)
-                if storedValue == storingValue:
-                    continue
-                settingToServer[storageKey] = storingValue
+            storageKey = 'MARKERS_{section}'.format(section=section.upper())
+            storingValue = storedValue = self.settingsCache.getSetting(storageKey)
+            masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
+            offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
+            storingValue = self._mapValues(options, storingValue, masks, offsets)
+            if storedValue == storingValue:
+                continue
+            settingToServer[storageKey] = storingValue
 
         return settingToServer
 
@@ -1253,10 +1212,6 @@ class ServerSettingsManager(object):
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:
             settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
-        armoryYard = data.get(SETTINGS_SECTIONS.ARMORY_YARD, {})
-        clearArmoryYard = clear.get(SETTINGS_SECTIONS.ARMORY_YARD, 0)
-        if armoryYard or clearArmoryYard:
-            settings[SETTINGS_SECTIONS.ARMORY_YARD] = self._buildSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, armoryYard) ^ clearArmoryYard
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

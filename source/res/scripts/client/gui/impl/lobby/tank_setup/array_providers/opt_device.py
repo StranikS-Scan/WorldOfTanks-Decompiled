@@ -193,12 +193,13 @@ class BaseOptDeviceProvider(VehicleBaseArrayProvider):
     def _fillWotPlusStatus(self, model, item):
         model.setIsFreeToDemount(self._wotPlusController.isFreeToDemount(item))
         if item.isModernized:
-            model.setDestroyTooltipBodyPath('destroy_modernized')
-            return
+            if item.level > 1:
+                model.setDestroyTooltipBodyPath('destroy_without_wotplus_demount')
+                return
         if item.isDeluxe and not self._lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled():
             model.setDestroyTooltipBodyPath('destroy_without_wotplus_demount')
-            return
-        model.setDestroyTooltipBodyPath('destroy')
+        else:
+            model.setDestroyTooltipBodyPath('destroy')
 
     def createSlot(self, item, ctx):
         model = super(BaseOptDeviceProvider, self).createSlot(item, ctx)

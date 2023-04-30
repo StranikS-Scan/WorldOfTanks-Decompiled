@@ -598,7 +598,7 @@ EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.EXTERNAL: ExternalExtrasHandler}
 
 class UnitBase(OpsUnpacker):
-    _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qIi', '_setVehicle'),
+    _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
      UNIT_OP.SET_MEMBER: ('qB', '_setMember'),
      UNIT_OP.DEL_MEMBER: ('B', '_delMemberBySlot'),
      UNIT_OP.ADD_PLAYER: ('', '_unpackPlayer'),
@@ -626,7 +626,7 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.SET_VEHICLE_LIST: ('q',
                                 '_setVehicleList',
                                 'N',
-                                [('H', 'iI')]),
+                                [('H', 'iH')]),
      UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
@@ -847,11 +847,11 @@ class UnitBase(OpsUnpacker):
     _HEADER = '<HHHHHHHHBiiii?i'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
-    _PLAYER_VEHICLE_TUPLE = '<iI'
+    _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
     _IDS = '<IBB'
     _VEHICLE_DICT_HEADER = '<Hq'
-    _VEHICLE_DICT_ITEM = '<Ii'
+    _VEHICLE_DICT_ITEM = '<Hi'
     _VEHICLE_PROFILE_HEADER = '<qBB'
     _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)

@@ -5,6 +5,10 @@
     <id>	104	</id>
     <defaultBlockSettings>
       <arg>
+        <argId>	enemyModulesCrewDamageProbability	</argId>
+        <value>	0.0	</value>
+      </arg>
+      <arg>
         <argId>	damageMonitoringDelay	</argId>
         <value>	-0.04	</value>
       </arg>
@@ -27,8 +31,21 @@
     <id>	105	</id>
     <defaultBlockSettings>
       <arg>
+        <argId>	stunResistanceEffectFactor	</argId>
+        <value>	0.0	</value>
+      </arg>
+      <arg>
         <argId>	artNotificationDelayFactor	</argId>
         <value>	-0.02	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	106	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	equipmentPreparationTime	</argId>
+        <value>	-0.0015	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -60,11 +77,33 @@
     </defaultBlockSettings>
   </perk>
   <perk>
+    <id>	204	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	aimingDispersion	</argId>
+        <value>	-0.00025	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	205	</id>
     <defaultBlockSettings>
       <arg>
+        <argId>	rngMod	</argId>
+        <value>	0.0	</value>
+      </arg>
+      <arg>
         <argId>	damagedGunPrecisionPenaltyReduction	</argId>
         <value>	0.002	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	206	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleGunAimSpeed	</argId>
+        <value>	-0.00025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -103,6 +142,10 @@
     <id>	304	</id>
     <defaultBlockSettings>
       <arg>
+        <argId>	fuelTanksDevicesHitChanceProbability	</argId>
+        <value>	0.0	</value>
+      </arg>
+      <arg>
         <argId>	engineFireStartingChance	</argId>
         <value>	-0.0025	</value>
       </arg>
@@ -119,6 +162,41 @@
         <argId>	vehicleRamDamageResistance	</argId>
         <value>	0.0015	</value>
       </arg>
+      <arg>
+        <argId>	trackRamDamageResist	</argId>
+        <value>	0.0	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	306	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	backwardMaxSpeedKMHTerm	</argId>
+        <value>	0.01	</value>
+      </arg>
+      <arg>
+        <argId>	forwardMaxSpeedKMHTerm	</argId>
+        <value>	0.01	</value>
+      </arg>
+      <arg>
+        <argId>	enginePower	</argId>
+        <value>	0.0005	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	311	</id>
+    <ultimative>	true	</ultimative>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	shotDispersion	</argId>
+        <value>	-0.02	</value>
+      </arg>
+      <arg>
+        <argId>	aimingTime	</argId>
+        <value>	-0.02	</value>
+      </arg>
     </defaultBlockSettings>
   </perk>
   <perk>
@@ -126,7 +204,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	gunReloadSpeed	</argId>
-        <value>	-0.001	</value>
+        <value>	-0.0009	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -135,7 +213,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	vehicleAmmoBayStrength	</argId>
-        <value>	0.00125	</value>
+        <value>	0.0025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -145,6 +223,41 @@
       <arg>
         <argId>	vehicleReloadTimeAfterShellChange	</argId>
         <value>	-0.006	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	404	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	shotDemaskFactor	</argId>
+        <value>	0.001	</value>
+      </arg>
+      <arg>
+        <argId>	foliageMaskingFactor	</argId>
+        <value>	0.0002	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	405	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	gunReloadSpeed	</argId>
+        <value>	-0.00025	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	406	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	lowDamageDispersion	</argId>
+        <value>	0.0002	</value>
+      </arg>
+      <arg>
+        <argId>	lowPenetrationDispersion	</argId>
+        <value>	0.0002	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -161,8 +274,21 @@
     <id>	502	</id>
     <defaultBlockSettings>
       <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.0	</value>
+      </arg>
+      <arg>
         <argId>	teamRadioBonusFactor	</argId>
         <value>	0.001	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	503	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	ownSpottingTime	</argId>
+        <value>	0.01	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -173,6 +299,10 @@
         <argId>	radioDistance	</argId>
         <value>	0.002	</value>
       </arg>
+      <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.0	</value>
+      </arg>
     </defaultBlockSettings>
   </perk>
   <perk>
@@ -181,6 +311,15 @@
       <arg>
         <argId>	fireExtinguishingRate	</argId>
         <value>	0.0043	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
+    <id>	1101	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	vehicleAllGroundRotationSpeed	</argId>
+        <value>	0.005	</value>
       </arg>
     </defaultBlockSettings>
   </perk>

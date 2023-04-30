@@ -49,6 +49,6 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
 
         return
 
-    def setBackgroundImage(self, image, showSparks):
+    def setBackgroundImage(self, image):
         if image:
-            self.as_showBackgroundImgS(image, showSparks)
+            self.as_showBackgroundImgS(image)

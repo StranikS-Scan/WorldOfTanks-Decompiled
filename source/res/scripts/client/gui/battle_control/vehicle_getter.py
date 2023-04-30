@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/vehicle_getter.py
-from items.vehicles import FLAMETHROWER
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.battle_control import avatar_getter
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG, WHEELED_VEHICLE_DEVICES, WHEELED_VEHICLE_GUI_ITEMS, TRACK_WITHIN_TRACK_DEVICES
 _COATED_OPTICS_TAG = 'coatedOptics'
 
@@ -12,8 +10,12 @@ def hasTurretRotator(vDesc):
     if vDesc is None:
         return False
     else:
-        hasFakeTurret = vDesc.gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ())
-        return not hasFakeTurret
+        result = True
+        tags = vDesc.type.tags
+        if tags & {'SPG', 'AT-SPG'}:
+            if vDesc.gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
+                result = False
+        return result
 
 
 def isWheeledTech(vDesc):
@@ -39,11 +41,9 @@ def getVehicleIndicatorType(vDesc):
         iType = VEHICLE_INDICATOR_TYPE.DEFAULT
         if not hasTurretRotator(vDesc):
             tags = vDesc.type.tags
-            if FLAMETHROWER in tags:
-                iType = VEHICLE_INDICATOR_TYPE.AT_SPG
-            elif VEHICLE_CLASS_NAME.SPG in tags:
+            if 'SPG' in tags:
                 iType = VEHICLE_INDICATOR_TYPE.SPG
-            else:
+            elif 'AT-SPG' in tags:
                 iType = VEHICLE_INDICATOR_TYPE.AT_SPG
         return iType
 

@@ -83,7 +83,7 @@ class MENU(object):
     HANGAR_CREW_RODY_DOG_WINDOW_CLOSEBTNLABEL = '#menu:hangar/crew/rody/dog/window/closeBtnLabel'
     HANGAR_CREW_TOOLTIP_NEW_SKILL = '#menu:hangar/crew/tooltip/new_skill'
     HANGAR_CREW_TOOLTIP_DROP_SKILL = '#menu:hangar/crew/tooltip/drop_skill'
-    HANGAR_XPTOTMENCHECKBOX_TITLE = '#menu:hangar/xpToTmenCheckbox/title'
+    HANGAR_XPTOTMENCHECKBOX_TOOLTIP = '#menu:hangar/xpToTmenCheckbox/tooltip'
     LOGIN_STATUS_LOGIN_REJECTED_RATE_LIMITED = '#menu:login/status/LOGIN_REJECTED_RATE_LIMITED'
     LOGIN_STATUS_LOGIN_REJECTED_USERS_LIMIT = '#menu:login/status/LOGIN_REJECTED_USERS_LIMIT'
     LOGIN_STATUS_LOGIN_REJECTED_DB_GENERAL_FAILURE = '#menu:login/status/LOGIN_REJECTED_DB_GENERAL_FAILURE'
@@ -609,7 +609,6 @@ class MENU(object):
     TANK_PARAMS_VALUES_PARAM11_VALUE2 = '#menu:tank_params/values/param11/value2'
     TANK_PARAMS_VALUES_PARAM11_VALUE3 = '#menu:tank_params/values/param11/value3'
     TANK_PARAMS_EXPLOSIONRADIUS = '#menu:tank_params/explosionRadius'
-    TANK_PARAMS_FLAMEMAXDISTANCE = '#menu:tank_params/flameMaxDistance'
     TANK_PARAMS_INCREASEHEALTH = '#menu:tank_params/increaseHealth'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
@@ -631,10 +630,11 @@ class MENU(object):
     TANK_PARAMS_PERCENT = '#menu:tank_params/percent'
     TANK_PARAMS_KG = '#menu:tank_params/kg'
     TANK_PARAMS_MPS = '#menu:tank_params/mps'
-    TANK_PARAMS_L = '#menu:tank_params/l'
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     TANK_PARAMS_BURSTSEC = '#menu:tank_params/burstSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
+    TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
+    TANK_PARAMS_STUNDURATIONLIST = '#menu:tank_params/stunDurationList'
     TANK_PARAMS_CHARGETIME = '#menu:tank_params/chargeTime'
     TANK_PARAMS_NO_BRACKETS_KG = '#menu:tank_params/no_brackets/kg'
     TANK_PARAMS_NO_BRACKETS_S = '#menu:tank_params/no_brackets/s'
@@ -654,7 +654,7 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLERAMOREXPLOSIONDAMAGERESISTANCE = '#menu:extraParams/name/vehicleRamOrExplosionDamageResistance'
     EXTRAPARAMS_NAME_CREWHITCHANCE = '#menu:extraParams/name/crewHitChance'
     EXTRAPARAMS_NAME_CREWSTUNDURATION = '#menu:extraParams/name/crewStunDuration'
-    EXTRAPARAMS_NAME_CREWSTUNRESISTANCE = '#menu:extraParams/name/crewStunResistance'
+    EXTRAPARAMS_NAME_CREWREPEATEDSTUNDURATION = '#menu:extraParams/name/crewRepeatedStunDuration'
     EXTRAPARAMS_NAME_VEHICLECHASSISSTRENGTH = '#menu:extraParams/name/vehicleChassisStrength'
     EXTRAPARAMS_NAME_VEHICLECHASSISFALLDAMAGE = '#menu:extraParams/name/vehicleChassisFallDamage'
     EXTRAPARAMS_NAME_VEHICLECHASSISREPAIRSPEED = '#menu:extraParams/name/vehicleChassisRepairSpeed'
@@ -1133,7 +1133,6 @@ class MENU(object):
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
-    MODULEINFO_FLAMEGUNLABEL = '#menu:moduleInfo/flameGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
@@ -1166,8 +1165,6 @@ class MENU(object):
     MODULEINFO_PARAMS_ENGINEPOWER = '#menu:moduleInfo/params/enginePower'
     MODULEINFO_PARAMS_CALIBER = '#menu:moduleInfo/params/caliber'
     MODULEINFO_PARAMS_SHELLSCOUNT = '#menu:moduleInfo/params/shellsCount'
-    MODULEINFO_PARAMS_SHELLSBURSTCOUNT = '#menu:moduleInfo/params/shellsBurstCount'
-    MODULEINFO_PARAMS_SHELLSFLAMEBURSTCOUNT = '#menu:moduleInfo/params/shellsFlameBurstCount'
     MODULEINFO_PARAMS_SHELLRELOADINGTIME = '#menu:moduleInfo/params/shellReloadingTime'
     MODULEINFO_PARAMS_RELOADMAGAZINETIME = '#menu:moduleInfo/params/reloadMagazineTime'
     MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
@@ -1192,19 +1189,19 @@ class MENU(object):
     MODULEINFO_PARAMS_CIRCULARVISIONRADIUS = '#menu:moduleInfo/params/circularVisionRadius'
     MODULEINFO_PARAMS_WEIGHT = '#menu:moduleInfo/params/weight'
     MODULEINFO_PARAMS_EXPLOSIONRADIUS = '#menu:moduleInfo/params/explosionRadius'
-    MODULEINFO_PARAMS_FLAMEMAXDISTANCE = '#menu:moduleInfo/params/flameMaxDistance'
     MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER = '#menu:moduleInfo/params/piercingDistanceHeader'
     MODULEINFO_PARAMS_PIERCINGDISTANCE = '#menu:moduleInfo/params/piercingDistance'
     MODULEINFO_PARAMS_MAXSHOTDISTANCE = '#menu:moduleInfo/params/maxShotDistance'
     MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/maxShotDistance/footnote'
-    MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTEFLAME = '#menu:moduleInfo/params/noPiercingDistance/footnoteFlame'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
     MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
+    MODULEINFO_PARAMS_STUNMINDURATION = '#menu:moduleInfo/params/stunMinDuration'
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
+    MODULEINFO_PARAMS_STUNMINDURATIONLIST = '#menu:moduleInfo/params/stunMinDurationList'
+    MODULEINFO_PARAMS_STUNDURATIONLIST = '#menu:moduleInfo/params/stunDurationList'
     MODULEINFO_PARAMS_COOLDOWNSECONDS = '#menu:moduleInfo/params/cooldownSeconds'
-    MODULEINFO_PARAMS_ACTIVESECONDS = '#menu:moduleInfo/params/activeSeconds'
     MODULEINFO_PARAMS_RELOADCOOLDOWNSECONDS = '#menu:moduleInfo/params/reloadCooldownSeconds'
     MODULEINFO_PARAMS_RADARRADIUS = '#menu:moduleInfo/params/radarRadius'
     MODULEINFO_PARAMS_RADARCOOLDOWN = '#menu:moduleInfo/params/radarCooldown'
@@ -1220,7 +1217,6 @@ class MENU(object):
     MODULEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:moduleInfo/params/rocketAccelerationEnginePower'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
-    MODULEINFO_COMPATIBLE_AMMUNITION = '#menu:moduleInfo/compatible/ammunition'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
     MODULEINFO_COMPATIBLE_SHELLGUNS = '#menu:moduleInfo/compatible/shellGuns'
     MODULEINFO_COMPATIBLE_VEHICLES = '#menu:moduleInfo/compatible/vehicles'
@@ -1252,7 +1248,6 @@ class MENU(object):
     VEHICLEINFO_PARAMS_AIMINGTIME = '#menu:vehicleInfo/params/aimingTime'
     VEHICLEINFO_PARAMS_SHOTDISPERSIONANGLE = '#menu:vehicleInfo/params/shotDispersionAngle'
     VEHICLEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:vehicleInfo/params/avgDamagePerMinute'
-    VEHICLEINFO_PARAMS_FLAMEMAXDISTANCE = '#menu:vehicleInfo/params/flameMaxDistance'
     VEHICLEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:vehicleInfo/params/enginePowerPerTon'
     VEHICLEINFO_PARAMS_CLIPFIRERATE = '#menu:vehicleInfo/params/clipFireRate'
     VEHICLEINFO_PARAMS_BURSTFIRERATE = '#menu:vehicleInfo/params/burstFireRate'
@@ -1280,6 +1275,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_ROCKETACCELERATIONENGINEPOWER = '#menu:vehicleInfo/params/rocketAccelerationEnginePower'
     VEHICLEINFO_PARAMS_ROCKETACCELERATIONREUSEANDDURATION = '#menu:vehicleInfo/params/rocketAccelerationReuseAndDuration'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
+    VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:vehicleInfo/params/chassisRepairTime'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:vehicleInfo/params/chassisRepairTimeYoh'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
@@ -2256,8 +2252,6 @@ class MENU(object):
     ROLEEXP_ROLEGROUPNAME_ROLE_MT_SNIPER = '#menu:roleExp/roleGroupName/role_MT_sniper'
     ROLEEXP_ROLENAME_ROLE_MT_SUPPORT = '#menu:roleExp/roleName/role_MT_support'
     ROLEEXP_ROLEGROUPNAME_ROLE_MT_SUPPORT = '#menu:roleExp/roleGroupName/role_MT_support'
-    ROLEEXP_ROLENAME_ROLE_SPG_FLAME = '#menu:roleExp/roleName/role_SPG_flame'
-    ROLEEXP_ROLEGROUPNAME_ROLE_SPG_FLAME = '#menu:roleExp/roleGroupName/role_SPG_flame'
     ROLEEXP_ROLENAME_ROLE_ATSPG_ASSAULT = '#menu:roleExp/roleName/role_ATSPG_assault'
     ROLEEXP_ROLEGROUPNAME_ROLE_ATSPG_ASSAULT = '#menu:roleExp/roleGroupName/role_ATSPG_assault'
     ROLEEXP_ROLENAME_ROLE_ATSPG_UNIVERSAL = '#menu:roleExp/roleName/role_ATSPG_universal'
@@ -2287,7 +2281,6 @@ class MENU(object):
     ROLEEXP_ROLEDESCR_ROLE_LT_UNIVERSAL = '#menu:roleExp/roleDescr/role_LT_universal'
     ROLEEXP_ROLEDESCR_ROLE_LT_WHEELED = '#menu:roleExp/roleDescr/role_LT_wheeled'
     ROLEEXP_ROLEDESCR_ROLE_SPG = '#menu:roleExp/roleDescr/role_SPG'
-    ROLEEXP_ROLEDESCR_ROLE_SPG_FLAME = '#menu:roleExp/roleDescr/role_SPG_flame'
     ROLEEXP_ROLELABEL = '#menu:roleExp/roleLabel'
     ROLEEXP_ACTION_BLOCKANDTAKEDAMAGE = '#menu:roleExp/action/blockAndTakeDamage'
     ROLEEXP_ACTION_DONEARDAMAGE = '#menu:roleExp/action/doNearDamage'
@@ -2593,7 +2586,6 @@ class MENU(object):
      LEVELS_ROMAN_10)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
-     MODULEINFO_COMPATIBLE_AMMUNITION,
      MODULEINFO_COMPATIBLE_GUNS,
      MODULEINFO_COMPATIBLE_SHELLGUNS,
      MODULEINFO_COMPATIBLE_VEHICLES,
@@ -2726,7 +2718,6 @@ class MENU(object):
      TANK_PARAMS_VALUES_PARAM11_VALUE2,
      TANK_PARAMS_VALUES_PARAM11_VALUE3,
      TANK_PARAMS_EXPLOSIONRADIUS,
-     TANK_PARAMS_FLAMEMAXDISTANCE,
      TANK_PARAMS_INCREASEHEALTH,
      TANK_PARAMS_T,
      TANK_PARAMS_P,
@@ -2748,10 +2739,11 @@ class MENU(object):
      TANK_PARAMS_PERCENT,
      TANK_PARAMS_KG,
      TANK_PARAMS_MPS,
-     TANK_PARAMS_L,
      TANK_PARAMS_CLIPSEC,
      TANK_PARAMS_BURSTSEC,
      TANK_PARAMS_STUNMAXDURATION,
+     TANK_PARAMS_STUNMINDURATION,
+     TANK_PARAMS_STUNDURATIONLIST,
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,

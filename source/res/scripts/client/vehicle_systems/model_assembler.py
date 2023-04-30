@@ -487,14 +487,8 @@ def assembleVehicleAudition(isPlayer, appearance):
     PLAYER_UPDATE_PERIOD = 0.1
     NPC_UPDATE_PERIOD = 0.25
     typeDescriptor = appearance.typeDescriptor
-    modelsSet = appearance.outfit.modelsSet
-    chassis = typeDescriptor.chassis
-    if chassis.soundsSets and modelsSet in chassis.soundsSets:
-        soundConfig = chassis.soundsSets[modelsSet]
-    else:
-        soundConfig = chassis.sounds
     engineEventName = typeDescriptor.engine.sounds.getEvents()
-    chassisEventName = soundConfig.getEvents()
+    chassisEventName = typeDescriptor.chassis.sounds.getEvents()
     wheeledVehicle = False
     if typeDescriptor.chassis.generalWheelsAnimatorConfig is not None:
         wheeledVehicle = typeDescriptor.chassis.generalWheelsAnimatorConfig.isWheeledVehicle()

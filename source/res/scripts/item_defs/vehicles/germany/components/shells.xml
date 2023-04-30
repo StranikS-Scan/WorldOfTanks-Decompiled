@@ -2960,7 +2960,9 @@
     <caliber>	150	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	7.3	</stunDuration>
+    <stunDuration>	10.5	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3010,7 +3012,9 @@
     <caliber>	150	</caliber>
     <explosionRadius>	6.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	4.6	</stunDuration>
+    <stunDuration>	6.6	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3045,7 +3049,9 @@
     <caliber>	150	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	11.2	</stunDuration>
+    <stunDuration>	16	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3140,7 +3146,9 @@
     <caliber>	150	</caliber>
     <explosionRadius>	7.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	12.6	</stunDuration>
+    <stunDuration>	18	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3322,7 +3330,9 @@
     <caliber>	170	</caliber>
     <explosionRadius>	8.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	16.6	</stunDuration>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3371,7 +3381,9 @@
     <caliber>	210	</caliber>
     <explosionRadius>	11.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	18.5	</stunDuration>
+    <stunDuration>	31	</stunDuration>
+    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.60	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3501,6 +3513,8 @@
     <explosionRadius>	15	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	35	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -3519,6 +3533,8 @@
     <explosionRadius>	15	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	35	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -3537,6 +3553,8 @@
     <explosionRadius>	20	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	31	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	false	</isTracer>
     <effects>	airbombStrike	</effects>
     <damage>
@@ -3609,6 +3627,8 @@
     <explosionRadius>	5.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	18	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -3630,6 +3650,8 @@
     <explosionRadius>	5.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -3651,6 +3673,8 @@
     <explosionRadius>	5.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	26	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -3905,6 +3929,8 @@
     <explosionRadius>	4.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	26	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -3925,6 +3951,8 @@
     <explosionRadius>	7.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4021,6 +4049,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4042,6 +4072,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4063,6 +4095,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4084,6 +4118,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4105,6 +4141,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4126,6 +4164,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4147,6 +4187,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4168,6 +4210,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4189,6 +4233,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4210,6 +4256,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4231,6 +4279,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4252,6 +4302,8 @@
     <explosionRadius>	6.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
@@ -4273,6 +4325,8 @@
     <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.75	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>

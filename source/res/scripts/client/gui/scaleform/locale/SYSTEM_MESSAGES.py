@@ -1169,9 +1169,9 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/noSubscriptions'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/wotPlus'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM = '#system_messages:maps_black_list/select/success/wotPlusEnabled/premium'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/noSubscriptions'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlus'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM = '#system_messages:maps_black_list/select/success/premium'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
     MAPS_BLACK_LIST_SWITCH_OFF_TITLE = '#system_messages:maps_black_list/switch_off/title'
@@ -2637,9 +2637,9 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,
      MAPS_BLACK_LIST_SWITCH_OFF_TITLE,

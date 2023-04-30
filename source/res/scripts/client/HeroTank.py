@@ -53,7 +53,6 @@ class HeroTank(ClientSelectableCameraVehicle):
 
     def __init__(self):
         self.__heroTankCD = None
-        self.__isHidden = False
         ClientSelectableCameraVehicle.__init__(self)
         return
 
@@ -62,10 +61,8 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
         self._heroTankCtrl.onInteractive += self._updateInteractive
-        self._heroTankCtrl.onHidden += self.__onHidden
 
     def onLeaveWorld(self):
-        self._heroTankCtrl.onHidden -= self.__onHidden
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive
@@ -77,7 +74,7 @@ class HeroTank(ClientSelectableCameraVehicle):
             BigWorld.destroyEntity(self.id)
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
-        if self.__isInPreview() or self.__isHidden:
+        if self.__isInPreview():
             return
         if self.__heroTankCD and not self.__isInPreview():
             self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self.__heroTankCD)
@@ -121,14 +118,6 @@ class HeroTank(ClientSelectableCameraVehicle):
     @staticmethod
     def __isInPreview():
         return g_currentPreviewVehicle.item and g_currentPreviewVehicle.isHeroTank
-
-    def __onHidden(self, isHidden):
-        if self.__isHidden != isHidden:
-            self.__isHidden = isHidden
-            if self.__isHidden and not self.__isInPreview():
-                self.removeVehicle()
-            elif not self.__isHidden and self._heroTankCtrl.getRandomTankCD():
-                self.recreateVehicle()
 
 
 def debugReloadHero(heroName):

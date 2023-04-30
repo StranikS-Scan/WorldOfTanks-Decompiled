@@ -352,14 +352,12 @@
       <update-runtime>	True	</update-runtime>
     </hint>
     <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemManual	</global-active>
       </condition>
     </hint>
     <hint>	LobbyMenuBootcampHint	  <item-id>	LobbyMenuBootcampItem	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemBootcamp	</global-active>

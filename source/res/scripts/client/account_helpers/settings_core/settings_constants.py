@@ -219,11 +219,6 @@ class MARKERS(CONST_CONTAINER):
     DEAD = 'dead'
 
 
-class MARKER_SETTINGS(CONST_CONTAINER):
-    MARKER_BASE_VEHICLE_DIST = 'markerBaseVehicleDist'
-    MARKER_ALT_VEHICLE_DIST = 'markerAltVehicleDist'
-
-
 class FEEDBACK(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     DAMAGE_LOG = 'feedbackDamageLog'
@@ -272,6 +267,7 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
     ENEMIES_STUN = 'battleEventsEnemyStun'
+    CREW_PERKS = 'battleEventsCrewPerks'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):

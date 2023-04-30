@@ -1,49 +1,20 @@
 <stun.xml>
-  <DEFAULT>
-    <baseStunDuration>	1	</baseStunDuration>
-    <shellEffectFactor>	1	</shellEffectFactor>
-    <stunFactorEnginePower>	0.75	</stunFactorEnginePower>
-    <stunFactorVehicleRotationSpeed>	0.85	</stunFactorVehicleRotationSpeed>
-    <stunFactorTurretTraverse>	0.7	</stunFactorTurretTraverse>
-    <stunFactorViewDistance>	0.8	</stunFactorViewDistance>
-    <stunFactorMaxSpeed>	0.8	</stunFactorMaxSpeed>
-    <stunFactorReloadTime>	1.4	</stunFactorReloadTime>
-    <stunFactorAimingTime>	1.4	</stunFactorAimingTime>
-    <stunFactorVehicleMovementShotDispersion>	1.4	</stunFactorVehicleMovementShotDispersion>
-    <stunFactorVehicleRotationShotDispersion>	1.4	</stunFactorVehicleRotationShotDispersion>
-    <stunFactorTurretRotationShotDispersion>	1.4	</stunFactorTurretRotationShotDispersion>
-    <stunFactorMinShotDispersion>	1.6	</stunFactorMinShotDispersion>
-  </DEFAULT>
-  <stunTypes>
-    <FLAME>
-      <baseStunDuration>	1	</baseStunDuration>
-      <shellEffectFactor>	1	</shellEffectFactor>
-      <stunFactorEnginePower>	0.5	</stunFactorEnginePower>
-      <stunFactorVehicleRotationSpeed>	0.85	</stunFactorVehicleRotationSpeed>
-      <stunFactorTurretTraverse>	1	</stunFactorTurretTraverse>
-      <stunFactorViewDistance>	0.25	</stunFactorViewDistance>
-      <stunFactorMaxSpeed>	0.65	</stunFactorMaxSpeed>
-      <stunFactorReloadTime>	1.0	</stunFactorReloadTime>
-      <stunFactorAimingTime>	2	</stunFactorAimingTime>
-      <stunFactorVehicleMovementShotDispersion>	1.0	</stunFactorVehicleMovementShotDispersion>
-      <stunFactorVehicleRotationShotDispersion>	1.0	</stunFactorVehicleRotationShotDispersion>
-      <stunFactorTurretRotationShotDispersion>	1.0	</stunFactorTurretRotationShotDispersion>
-      <stunFactorMinShotDispersion>	1.6	</stunFactorMinShotDispersion>
-    </FLAME>
-    <BULLET>
-      <baseStunDuration>	1	</baseStunDuration>
-      <shellEffectFactor>	1	</shellEffectFactor>
-      <stunFactorEnginePower>	0.75	</stunFactorEnginePower>
-      <stunFactorVehicleRotationSpeed>	0.85	</stunFactorVehicleRotationSpeed>
-      <stunFactorTurretTraverse>	0.7	</stunFactorTurretTraverse>
-      <stunFactorViewDistance>	0.8	</stunFactorViewDistance>
-      <stunFactorMaxSpeed>	0.8	</stunFactorMaxSpeed>
-      <stunFactorReloadTime>	1.4	</stunFactorReloadTime>
-      <stunFactorAimingTime>	1.4	</stunFactorAimingTime>
-      <stunFactorVehicleMovementShotDispersion>	1.4	</stunFactorVehicleMovementShotDispersion>
-      <stunFactorVehicleRotationShotDispersion>	1.4	</stunFactorVehicleRotationShotDispersion>
-      <stunFactorTurretRotationShotDispersion>	1.4	</stunFactorTurretRotationShotDispersion>
-      <stunFactorMinShotDispersion>	1.6	</stunFactorMinShotDispersion>
-    </BULLET>
-  </stunTypes>
+  <baseStunDuration>	30	</baseStunDuration>
+  <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+  <damageDurationCoeff>	0.55	</damageDurationCoeff>
+  <guaranteedStunEffect>	0.75	</guaranteedStunEffect>
+  <damageEffectCoeff>	0.25	</damageEffectCoeff>
+  <minStunDuration>	5	</minStunDuration>
+  <shellEffectFactor>	1	</shellEffectFactor>
+  <stunFactorEnginePower>	0.7	</stunFactorEnginePower>
+  <stunFactorVehicleRotationSpeed>	0.8	</stunFactorVehicleRotationSpeed>
+  <stunFactorTurretTraverse>	0.6	</stunFactorTurretTraverse>
+  <stunFactorViewDistance>	0.75	</stunFactorViewDistance>
+  <stunFactorMaxSpeed>	0.75	</stunFactorMaxSpeed>
+  <stunFactorReloadTime>	1.5	</stunFactorReloadTime>
+  <stunFactorAimingTime>	1.5	</stunFactorAimingTime>
+  <stunFactorVehicleMovementShotDispersion>	1.5	</stunFactorVehicleMovementShotDispersion>
+  <stunFactorVehicleRotationShotDispersion>	1.5	</stunFactorVehicleRotationShotDispersion>
+  <stunFactorTurretRotationShotDispersion>	1.5	</stunFactorTurretRotationShotDispersion>
+  <stunFactorMinShotDispersion>	1.75	</stunFactorMinShotDispersion>
 </stun.xml>

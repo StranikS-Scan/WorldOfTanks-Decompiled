@@ -162,7 +162,6 @@
     <_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>	18	</_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>
     <_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>	26	</_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
-    <_120mm_Gun_M58_7x7>	31001	</_120mm_Gun_M58_7x7>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -9307,63 +9306,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
-    <_120mm_Gun_M58_7x7>
-      <userString>	#usa_vehicles:_120mm_Gun_M58	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	310000	</price>
-      <notInShop>	True	</notInShop>
-      <impulse>	0.68	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.19	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	shot_large	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	10.97142857142860	</reloadTime>
-      <maxAmmo>	22	</maxAmmo>
-      <aimingTime>	2.62857142857143	</aimingTime>
-      <weight>	3100	</weight>
-      <maxHealth>	210	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_120mm_AP-T_M358>
-          <defaultPortion>	0.9	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	258 238	</piercingPower>
-        </_120mm_AP-T_M358>
-        <_120mm_HEAT-T_M469>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	340 340	</piercingPower>
-        </_120mm_HEAT-T_M469>
-        <_120mm_HE_Shot>
-          <defaultPortion>	0.1	</defaultPortion>
-          <speed>	1067	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
-        </_120mm_HE_Shot>
-      </shots>
-    </_120mm_Gun_M58_7x7>
   </shared>
 </guns.xml>

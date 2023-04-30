@@ -5,9 +5,9 @@ import random
 import struct
 from functools import partial
 from itertools import izip
-from typing import List, Dict, Any, Tuple, Optional, Callable, Union
+from typing import List, Dict, Any, Tuple, Optional, Callable
 import nations
-from items import vehicles, ITEM_TYPES, parseIntCompactDescr, ITEM_ID_RANGES
+from items import vehicles, ITEM_TYPES, parseIntCompactDescr
 from items.components import skills_components, crew_skins_constants, crew_books_constants
 from items.components import skills_constants
 from items.components import tankmen_components
@@ -19,7 +19,7 @@ from items.readers import tankmen_readers
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
-from vehicles import VEHICLE_CLASS_TAGS, EXTENDED_VEHICLE_TYPE_ID_FLAG
+from vehicles import VEHICLE_CLASS_TAGS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from constants import ITEM_DEFS_PATH, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 from account_shared import AmmoIterator
@@ -29,9 +29,12 @@ if typing.TYPE_CHECKING:
 SKILL_NAMES = skills_constants.SKILL_NAMES
 SKILL_INDICES = skills_constants.SKILL_INDICES
 ROLES = skills_constants.ROLES
+COMMON_SKILL_ROLE_TYPE = skills_constants.COMMON_SKILL_ROLE_TYPE
 COMMON_SKILLS = skills_constants.COMMON_SKILLS
 SEPARATE_SKILLS = skills_constants.SEPARATE_SKILLS
 ROLES_AND_COMMON_SKILLS = skills_constants.ROLES_AND_COMMON_SKILLS
+LEARNABLE_ACTIVE_SKILLS = skills_constants.LEARNABLE_ACTIVE_SKILLS
+UNLEARNABLE_SKILLS = skills_constants.UNLEARNABLE_SKILLS
 SKILLS_BY_ROLES = skills_constants.SKILLS_BY_ROLES
 MAX_FREE_SKILLS_SIZE = 16
 NO_SKILL = -1
@@ -76,7 +79,7 @@ def getSkillsMask(skills):
     return result
 
 
-ALL_SKILLS_MASK = getSkillsMask([ skill for skill in SKILL_NAMES if skill != 'reserved' ])
+ALL_SKILLS_MASK = getSkillsMask([ skill for skill in LEARNABLE_ACTIVE_SKILLS if skill != 'reserved' ])
 
 def getNationConfig(nationID):
     global _g_nationsConfig
@@ -146,9 +149,8 @@ def crewMemberPreviewProducer(nationID, isPremium=False, vehicleTypeID=None, rol
 
 
 def generateSkills(role, skillsMask):
-    skills = []
+    tankmanSkills = set()
     if skillsMask != 0:
-        tankmanSkills = set()
         for i in xrange(len(role)):
             roleSkills = SKILLS_BY_ROLES[role[i]]
             if skillsMask == ALL_SKILLS_MASK:
@@ -157,8 +159,7 @@ def generateSkills(role, skillsMask):
                 if 1 << idx & skillsMask and skill in roleSkills:
                     tankmanSkills.add(skill)
 
-        skills.extend(tankmanSkills)
-    return skills
+    return [ skill for skill in tankmanSkills if skill not in UNLEARNABLE_SKILLS ]
 
 
 def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask, isPreview=False):
@@ -180,11 +181,7 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), la
     pack = struct.pack
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
-    ext = vehicleTypeID >> 8
-    header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
-    cd = pack('2B', header, vehicleTypeID & 255)
-    cd += chr(ext) if ext else ''
-    cd += pack('2B', SKILL_INDICES[role], roleLevel)
+    cd = pack('4B', header, vehicleTypeID, SKILL_INDICES[role], roleLevel)
     numSkills = len(skills) + len(freeSkills)
     allSkills = [ SKILL_INDICES[s] for s in freeSkills ]
     for s in skills:
@@ -240,18 +237,11 @@ def getNextUniqueID(databaseID, lastID, nationID, isPremium, groupID, name):
 
 
 def stripNonBattle(compactDescr):
-    vehTypeOffset = 1 if ord(compactDescr[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG else 0
-    return compactDescr[:6 + vehTypeOffset + ord(compactDescr[4 + vehTypeOffset]) + 1 + 6]
+    return compactDescr[:6 + ord(compactDescr[4]) + 1 + 6]
 
 
 def parseNationSpecAndRole(compactDescr):
-    vehicleTypeID = ord(compactDescr[1])
-    if ord(compactDescr[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG:
-        vehicleTypeID += ord(compactDescr[2]) << 8
-        roleID = ord(compactDescr[3])
-    else:
-        roleID = ord(compactDescr[2])
-    return (ord(compactDescr[0]) >> 4 & 15, vehicleTypeID, roleID)
+    return (ord(compactDescr[0]) >> 4 & 15, ord(compactDescr[1]), ord(compactDescr[2]))
 
 
 def compareMastery(tankmanDescr1, tankmanDescr2):
@@ -287,10 +277,9 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo):
 def fixObsoleteNames(compactDescr):
     cd = compactDescr
     header = ord(cd[0])
-    vehTypeOffset = 1 if header & EXTENDED_VEHICLE_TYPE_ID_FLAG else 0
     nationID = header >> 4 & 15
     conf = getNationConfig(nationID)
-    namesOffset = ord(cd[4 + vehTypeOffset]) + 7 + vehTypeOffset
+    namesOffset = ord(cd[4]) + 7
     firstNameID, lastNameID = struct.unpack('<2H', cd[namesOffset:namesOffset + 4])
     hasChanges = False
     if not conf.hasFirstName(firstNameID):
@@ -317,10 +306,6 @@ class TankmanDescr(object):
 
     def __init__(self, compactDescr, battleOnly=False):
         self.__initFromCompactDescr(compactDescr, battleOnly)
-
-    @property
-    def tags(self):
-        return getNationConfig(self.nationID).getGroups(self.isPremium)[self.gid].tags
 
     @property
     def skills(self):
@@ -613,23 +598,13 @@ class TankmanDescr(object):
     @property
     def gid(self):
         if self.__gid is None:
-            g = getNationConfig(self.nationID).getGroupByLastName(self.lastNameID)
-            if g and self.firstNameID in g.firstNames and self.iconID in g.icons:
-                self.__gid = g.groupID
-            elif g and self.iconID not in g.icons and self.nationID == 5 and self.iconID in (3001, 3002, 3003, 3004):
-                self.__gid = g.groupID
-            else:
-                self.__gid, _ = findGroupsByIDs(getNationGroups(self.nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID)[0]
+            self.__gid, _ = findGroupsByIDs(getNationGroups(self.nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID)[0]
         return self.__gid
 
     def makeCompactDescr(self):
         pack = struct.pack
         header = ITEM_TYPES.tankman + (self.nationID << 4)
-        ext = self.vehicleTypeID >> 8
-        header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
-        cd = pack('2B', header, self.vehicleTypeID & 255)
-        cd += chr(self.vehicleTypeID >> 8) if ext else ''
-        cd += pack('2B', SKILL_INDICES[self.role], self.roleLevel)
+        cd = pack('4B', header, self.vehicleTypeID, SKILL_INDICES[self.role], self.roleLevel)
         numSkills = self.lastSkillNumber
         skills = [ SKILL_INDICES[s] for s in self.__skills ]
         cd += pack((str(1 + numSkills) + 'B'), numSkills, *skills)
@@ -649,13 +624,8 @@ class TankmanDescr(object):
         cd = compactDescr
         unpack = struct.unpack
         try:
-            header, self.vehicleTypeID = unpack('2B', cd[:2])
-            is_ext = ord(cd[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG
-            cd = cd[2:]
-            self.vehicleTypeID += ord(cd[0]) << 8 if is_ext else 0
-            cd = cd[1:] if is_ext else cd
-            roleID, self.roleLevel, numSkills = unpack('3B', cd[:3])
-            cd = cd[3:]
+            header, self.vehicleTypeID, roleID, self.roleLevel, numSkills = unpack('5B', cd[:5])
+            cd = cd[5:]
             nationID = header >> 4 & 15
             nations.NAMES[nationID]
             self.nationID = nationID
@@ -744,65 +714,6 @@ class TankmanDescr(object):
             self.freeXP -= xpCost
             self.__lastSkillLevel += 1
             self.__updateRankAtSkillLevelUp()
-
-
-class NoneGroupSelection(object):
-
-    def matches(self, tankmanDescr):
-        return False
-
-
-class TankmanGroupSelection(NoneGroupSelection):
-    ANY = ('', '*')
-    PTYPE = {'premium': True,
-     'normal': False}
-
-    def __init__(self, ns=(), premiumFlags=None, gid=(), tags=()):
-        self.__nations = {nations.INDICES[n] for n in ns} if ns else nations.INDICES.values()
-        self.__tags = frozenset(tags)
-        self.__premiumFlags = (True, False) if premiumFlags is None else premiumFlags
-        self.__gids = gid
-        return
-
-    def matches(self, tankmanDescr):
-        tman = TankmanDescr(tankmanDescr) if type(tankmanDescr) is str else tankmanDescr
-        return tman.nationID in self.__nations and tman.isPremium in self.__premiumFlags and (tman.gid in self.__gids if self.__gids else True) and (not self.__tags.isdisjoint(tman.tags) if self.__tags else True)
-
-    def __str__(self):
-        return ':'.join(('|'.join((nations.MAP[i] for i in self.__nations)),
-         '|'.join((('premium' if p else 'normal') for p in self.__premiumFlags)),
-         '|'.join((str(i) for i in self.__gids or '*')),
-         '|'.join(self.__tags or '*')))
-
-    @staticmethod
-    def fromString(tstr):
-        tstr += '::::'
-        try:
-            ns, premium, gid, tags, _ = tstr.split(':', 4)
-            ns = {n for n in ns.split('|') if n in nations.NAMES} if ns not in TankmanGroupSelection.ANY else ()
-            premium = {TankmanGroupSelection.PTYPE[p] for p in premium.split('|')} if premium not in TankmanGroupSelection.ANY else None
-            gid = {int(g) for g in gid.split('|')} if gid not in TankmanGroupSelection.ANY else ()
-            tags = {t for t in tags.split('|')} if tags not in TankmanGroupSelection.ANY else ()
-            return TankmanGroupSelection(ns=ns, premiumFlags=premium, gid=gid, tags=tags)
-        except:
-            LOG_CURRENT_EXCEPTION()
-            return NoneGroupSelection()
-
-        return
-
-
-class TankmanGroupWoT(NoneGroupSelection):
-
-    def matches(self, tankmanDescr):
-        tman = TankmanDescr(tankmanDescr) if type(tankmanDescr) is str else tankmanDescr
-        return tman.gid in ITEM_ID_RANGES.WOT
-
-
-class TankmanGroupMT(NoneGroupSelection):
-
-    def matches(self, tankmanDescr):
-        tman = TankmanDescr(tankmanDescr) if type(tankmanDescr) is str else tankmanDescr
-        return tman.gid in ITEM_ID_RANGES.MT
 
 
 def makeTmanDescrByTmanData(tmanData):
@@ -991,11 +902,6 @@ def getGroupTags(nationID, isPremium, isFemale, firstNameID, secondNameID, iconI
         if overlap == 3:
             return groups[groupID].tags
     return frozenset()
-
-
-def getNationGroupByTmanDescr(tankmanDescr):
-    td = TankmanDescr(tankmanDescr)
-    return getNationConfig(td.nationID).getGroups(td.isPremium).get(td.gid)
 
 
 def __validateSkills(skills):
@@ -1298,3 +1204,14 @@ class Cache(object):
 
     def crewBooks(self):
         return self.__crewBooks
+
+
+def getSkillRoleType(skillName):
+    if skillName in COMMON_SKILLS:
+        return COMMON_SKILL_ROLE_TYPE
+    else:
+        for role, skills in SKILLS_BY_ROLES.iteritems():
+            if skillName in skills:
+                return role
+
+        return None

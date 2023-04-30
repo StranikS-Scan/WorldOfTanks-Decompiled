@@ -20,7 +20,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -250,9 +250,7 @@ def showMission(eventID, eventType=None):
             if prefix is not None:
                 return showMissionsMarathon(marathonPrefix=prefix)
             if events_helpers.isBattleMattersQuestID(eventID):
-                return showBattleMatters()
-            if events_helpers.isArmoryYardQuest(eventID):
-                return goToArmoryYardQuests()
+                showBattleMatters()
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
         elif quest is not None and quest.showMissionAction() is not None:
@@ -395,11 +393,6 @@ def showPersonalMissionFirstEntryAwardView(ctx):
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
-def goToArmoryYardQuests(armoryYardCtrl=None):
-    armoryYardCtrl.goToArmoryYardQuests()
 
 
 def _showMissions(**kwargs):

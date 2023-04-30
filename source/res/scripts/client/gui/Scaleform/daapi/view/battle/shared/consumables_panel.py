@@ -7,7 +7,6 @@ from types import NoneType
 from typing import TYPE_CHECKING
 import BigWorld
 import CommandMapping
-from battle_modifiers_common import BattleParams
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from items import vehicles
@@ -240,22 +239,13 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         body = descriptor.description
         consumeAmmo = descriptor.consumeAmmo if isSharedCooldownConfig else False
         if not consumeAmmo and reloadingTime > 0:
-            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
-            body = '\n'.join((body, ''))
-            if descriptor.isActivatable():
-                activeSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.activeSeconds()
-                activeSecVal = descriptor.activeSeconds
-                activeSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, activeSecVal)))
-                activeSecondsParamsString = backport.text(activeSecondsTooltipStr, activeSeconds=activeSeconds)
-                body = '\n'.join((body, activeSecondsParamsString))
+            tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
             if isSharedCooldownConfig:
                 cdSecVal = descriptor.cooldownTime
             else:
                 cdSecVal = item.getTotalTime()
-            cooldownSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-            cooldownSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, cdSecVal)))
-            cooldownSecondsParamsString = backport.text(cooldownSecondsTooltipStr, cooldownSeconds=cooldownSeconds)
-            body = '\n'.join((body, cooldownSecondsParamsString))
+            paramsString = backport.text(tooltipStr, cooldownSeconds=str(int(cdSecVal)))
+            body = '\n\n'.join((body, paramsString))
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         return toolTip
 
@@ -543,7 +533,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
             body = text_styles.concatStylesToMultiLine(*params)
             fmt = TOOLTIP_FORMAT
         else:

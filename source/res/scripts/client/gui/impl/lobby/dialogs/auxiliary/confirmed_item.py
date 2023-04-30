@@ -57,7 +57,7 @@ class ConfirmedItem(object):
         return False
 
     def getOptItemDescKey(self):
-        return 'itemWithDemountKit' if self.canUseDemountKit() else 'item'
+        return 'itemWithDemountKit' if self.canUseDemountKit() else 'itemDeluxe'
 
     def getLevel(self):
         pass
@@ -134,10 +134,11 @@ class ConfirmedOptDevice(ConfirmedArtefact):
                     return 'itemWotPlus'
                 return 'itemDeluxeWotPlus'
             return 'itemDeluxe'
+        if isActive:
+            return 'itemWotPlus'
         if self._item.isModernized:
             if self._item.level > 1:
                 return 'itemDeluxe'
-        return 'itemWotPlus' if isActive else 'itemWithDemountKit'
 
     @classmethod
     def createFromGUIItem(cls, item, ctx=None):

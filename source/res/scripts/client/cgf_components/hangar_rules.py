@@ -5,9 +5,7 @@ from cgf_script.managers_registrator import registerManager, Rule
 from hover_component import HoverManager
 from highlight_component import HighlightManager
 from on_click_components import ClickManager
-from cgf_script.component_meta_class import registerComponent
 
-@registerComponent
 class SelectionRule(Rule):
     category = 'Hangar rules'
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor

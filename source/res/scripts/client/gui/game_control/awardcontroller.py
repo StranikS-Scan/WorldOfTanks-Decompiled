@@ -260,9 +260,6 @@ class AwardController(IAwardController, IGlobalListener):
         handler = _NonOverlappingViewsLifecycleHandler(postponeAwardsCallback=self.__postponeAwards, handlePostponedCallback=self.handlePostponed)
         self.__viewLifecycleWatcher.start(app.containerManager, [handler])
 
-    def addMonitoredDynamicViewKey(self, viewKey):
-        self.__viewLifecycleWatcher.addMonitoredDynamicViewKey(viewKey)
-
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         self.handlePostponed()
 

@@ -16,7 +16,7 @@ from helpers import dependency
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from items.artefacts import SkillEquipment
-from items.components import skills_constants
+from items.components import skills_constants, perks_constants
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.skills_constants import SkillTypeName
@@ -538,7 +538,7 @@ class TankmanSkill(GUIItem):
                 else:
                     self._level = tankmen.MAX_SKILL_LEVEL
                 self._isPermanent = skills.index(self._name) < tdescr.freeSkillsNumber
-            self._roleType = self.__getSkillRoleType(skillName)
+            self._roleType = tankmen.getSkillRoleType(skillName)
             self._isEnable = self.__getEnabledSkill(tankman)
         else:
             self._isFemale = False
@@ -562,17 +562,6 @@ class TankmanSkill(GUIItem):
                 return True
 
         return False
-
-    @classmethod
-    def __getSkillRoleType(cls, skillName):
-        if skillName in tankmen.COMMON_SKILLS:
-            return 'common'
-        else:
-            for role, skills in tankmen.SKILLS_BY_ROLES.iteritems():
-                if skillName in skills:
-                    return role
-
-            return None
 
     @property
     def name(self):
@@ -957,8 +946,26 @@ def __isPersonalSkillLearnt(skillName, vehicle):
 def crewMemberRealSkillLevel(vehicle, skillName, role, commonWithIncrease=True):
     shouldIncrease = skillName not in tankmen.COMMON_SKILLS or commonWithIncrease and skillName != SKILLS.BROTHERHOOD
     booster = getBattleBooster(vehicle, skillName) if shouldIncrease else None
-    tankmenSkillLevels = [ tankmanPersonalSkillLevel(tankman, skillName, booster, shouldIncrease) for _, tankman in vehicle.crew if tankman and (role in tankman.combinedRoles or skillName in tankmen.COMMON_SKILLS) ]
-    return SKILL_LEVEL_PROCESSORS.get(skillName, DEFAULT_LEVEL_PROCESSOR)(vehicle.crew, tankmenSkillLevels)
+    tankmenSkillLevels = []
+    skillRoleType = tankmen.getSkillRoleType(skillName)
+    isCommonSkill = skillRoleType == tankmen.COMMON_SKILL_ROLE_TYPE
+    for _, tankman in vehicle.crew:
+        if tankman is None:
+            continue
+        if skillRoleType in tankman.combinedRoles or isCommonSkill:
+            tankmenSkillLevels.append(tankmanPersonalSkillLevel(tankman, skillName, booster if not isCommonSkill else None, shouldIncrease))
+
+    if isCommonSkill:
+        tankmenSkillLevels = _boostCommonSkill(vehicle.crew, skillName, tankmenSkillLevels, booster)
+    if skillName in tankmen.COMMON_SKILLS:
+        if tankmenSkillLevels and not all((hasSkill == tankmen.NO_SKILL for hasSkill in tankmenSkillLevels)):
+            return sum((lvl for lvl in tankmenSkillLevels if lvl != tankmen.NO_SKILL)) / float(len(vehicle.crew))
+        return tankmen.NO_SKILL
+    elif skillName in perks_constants.AVG_LVL_PERKS:
+        tmpTankmenSkillLevels = [ level for level in tankmenSkillLevels if level != tankmen.NO_SKILL ]
+        return sum(tmpTankmenSkillLevels) / len(tankmenSkillLevels)
+    else:
+        return max(tankmenSkillLevels or [0])
 
 
 def tankmanPersonalSkillLevel(tankman, skillName, booster=None, withIncrease=True):
@@ -969,6 +976,30 @@ def tankmanPersonalSkillLevel(tankman, skillName, booster=None, withIncrease=Tru
         if progress != tankmen.NO_SKILL:
             return tankman.skillsMap[skillName].level
     return progress
+
+
+def _boostCommonSkill(crew, skillName, tankmenSkillLevels, booster):
+    if booster is None:
+        return tankmenSkillLevels
+    boostedSkillLevels = []
+    allTankmenHasSkillAtMaxLevel = True
+    for _, tankman in crew:
+        if tankman is None or skillName not in tankman.skillsMap:
+            allTankmenHasSkillAtMaxLevel = False
+            boostedSkillLevels.append(tankmen.MAX_SKILL_LEVEL)
+            continue
+        skillLevel = tankman.skillsMap[skillName].level
+        if skillLevel != tankmen.MAX_SKILL_LEVEL:
+            allTankmenHasSkillAtMaxLevel = False
+            boostedSkillLevels.append(tankmen.MAX_SKILL_LEVEL)
+            continue
+        boostedSkillLevels.append(tankmen.MAX_SKILL_LEVEL)
+
+    if allTankmenHasSkillAtMaxLevel:
+        multiplier = booster.perkLevelMultiplier if booster.perkLevelMultiplier is not None else 1
+        return [ level * multiplier for level in tankmenSkillLevels ]
+    else:
+        return tankmenSkillLevels if sum(tankmenSkillLevels) / len(crew) >= tankmen.MAX_SKILL_LEVEL else boostedSkillLevels
 
 
 def _getSkillLevelWithIncrease(booster, skillProgress, tankman):
@@ -997,23 +1028,3 @@ def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeS
     tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=lastSkillLevel))
     tmanDescr.addXP(freeXpValue)
     return tmanDescr
-
-
-def __averageLevelProcessor(crew, levels):
-    return sum([ lvl for lvl in levels if lvl != tankmen.NO_SKILL ] or [0]) / float(len(levels))
-
-
-def __averageAllLevelProcessor(crew, levels):
-    return sum([ lvl for lvl in levels if lvl != tankmen.NO_SKILL ] or [0]) / float(len(crew))
-
-
-def __maxLevelProcessor(crew, levels):
-    return max(levels or [0])
-
-
-DEFAULT_LEVEL_PROCESSOR = __maxLevelProcessor
-SKILL_LEVEL_PROCESSORS = {'repair': __averageAllLevelProcessor,
- 'camouflage': __averageAllLevelProcessor,
- 'brotherhood': __averageAllLevelProcessor,
- 'fireFighting': __averageAllLevelProcessor,
- 'loader_intuition': __averageLevelProcessor}

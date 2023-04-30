@@ -70,7 +70,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return ArtyCamera._DYNAMIC_ENABLED
 
     camera = property(lambda self: self.__cam)
-    aimingSystem = property(lambda self: self._aimingSystem)
+    aimingSystem = property(lambda self: self.__aimingSystem)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSec):
@@ -87,7 +87,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__onChangeControlMode = None
         self.__camDist = 0.0
         self.__desiredCamDist = 0.0
-        self._aimingSystem = None
+        self.__aimingSystem = None
         self.__prevTime = 0.0
         self.__prevAimPoint = Vector3()
         self.__dxdydz = Vector3(0.0, 0.0, 0.0)
@@ -108,14 +108,11 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
     def _getConfigsKey():
         return ArtyCamera.__name__
 
-    @staticmethod
-    def _createAimingSystem():
-        return ArtyAimingSystemRemote() if BigWorld.player().isObserver() else ArtyAimingSystem()
-
     def create(self, onChangeControlMode=None):
         super(ArtyCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
-        self._aimingSystem = self._createAimingSystem()
+        aimingSystemClass = ArtyAimingSystemRemote if BigWorld.player().isObserver() else ArtyAimingSystem
+        self.__aimingSystem = aimingSystemClass()
         self.__camDist = self._cfg['camDist']
         self.__desiredCamDist = self.__camDist
         self.__positionHysteresis = PositionHysteresis(self._cfg['hPositionThresholdSq'])
@@ -135,9 +132,9 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
-        if self._aimingSystem is not None:
-            self._aimingSystem.destroy()
-            self._aimingSystem = None
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.destroy()
+            self.__aimingSystem = None
         CallbackDelayer.destroy(self)
         CameraWithSettings.destroy(self)
         return
@@ -158,11 +155,11 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__desiredCamDist = self.__camDist
         self.__scrollSmoother.start(self.__desiredCamDist)
         self.__enableSwitchers()
-        self._aimingSystem.enable(targetPos)
+        self.__aimingSystem.enable(targetPos)
         self.__positionHysteresis.update(Vector3(0.0, 0.0, 0.0))
         self.__timeHysteresis.update(BigWorld.timeExact())
         camTarget = MatrixProduct()
-        self.__rotation = max(self._aimingSystem.direction.pitch, self._cfg['minimalPitch'])
+        self.__rotation = max(self.__aimingSystem.direction.pitch, self._cfg['minimalPitch'])
         cameraDirection = self.__getCameraDirection()
         self.__targetMatrix.translation = self.aimingSystem.aimPoint - cameraDirection.scale(self.__camDist)
         self.__cam.target = camTarget
@@ -171,7 +168,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__cam.source = self.__sourceMatrix
         self.__cam.forceUpdate()
         BigWorld.camera(self.__cam)
-        BigWorld.player().positionControl.moveTo(self._aimingSystem.hitPoint)
+        BigWorld.player().positionControl.moveTo(self.__aimingSystem.hitPoint)
         BigWorld.player().positionControl.followCamera(False)
         self.__cameraUpdate()
         self.delayCallback(0.01, self.__cameraUpdate)
@@ -180,15 +177,15 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
 
     def disable(self):
         self.__scrollSmoother.stop()
-        if self._aimingSystem is not None:
-            self._aimingSystem.disable()
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
         self.__switchers.clear()
         self.__positionOscillator.reset()
         return
 
     def teleport(self, pos):
-        self._aimingSystem.updateTargetPos(pos)
+        self.__aimingSystem.updateTargetPos(pos)
         self.update(0.0, 0.0, 0.0)
 
     def getDistRatio(self):
@@ -281,18 +278,18 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
                 else:
                     self.__needReset += 1
             if replayCtrl.isControllingCamera:
-                self._aimingSystem.updateTargetPos(replayCtrl.getGunRotatorTargetPoint())
+                self.__aimingSystem.updateTargetPos(replayCtrl.getGunRotatorTargetPoint())
             else:
-                self._aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
+                self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
                 if self.__dxdydz.x != 0 or self.__dxdydz.y != 0 or self.__dxdydz.z != 0:
                     self.__needReset = 2
         else:
-            self._aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
+            self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
         return
 
     def __getCameraDirection(self):
         direction = Vector3()
-        direction.setPitchYaw(self.__rotation, self._aimingSystem.direction.yaw)
+        direction.setPitchYaw(self.__rotation, self.__aimingSystem.direction.yaw)
         direction.normalise()
         return direction
 
@@ -300,7 +297,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         distRange = self.__switchersDistRange()
         self.__desiredCamDist -= self.__dxdydz.z * self.__curSense
         self.__desiredCamDist = math_utils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
-        self.__desiredCamDist = self._aimingSystem.overrideCamDist(self.__desiredCamDist)
+        self.__desiredCamDist = self.__aimingSystem.overrideCamDist(self.__desiredCamDist)
         self._cfg['camDist'] = self.__camDist
         self.__scrollSmoother.moveTo(self.__desiredCamDist, distRange)
         return self.__desiredCamDist
@@ -316,7 +313,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return deltaTime
 
     def __choosePitchLevel(self, aimPoint):
-        useHighPitch = (aimPoint - self._aimingSystem.hitPoint).lengthSquared > self._cfg['highPitchThresholdSq']
+        useHighPitch = (aimPoint - self.__aimingSystem.hitPoint).lengthSquared > self._cfg['highPitchThresholdSq']
         if useHighPitch:
             useHighPitch = self.__positionHysteresis.check(aimPoint) or self.__timeHysteresis.check(self.__prevTime)
         else:
@@ -355,15 +352,15 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             endPoint = aimPoint
             collision = collideDynamicAndStatic(srcPoint, endPoint, (BigWorld.player().playerVehicleID,))
             if collision:
-                self._aimingSystem.aimPoint = collision[0]
+                self.__aimingSystem.aimPoint = collision[0]
                 if collision[1]:
                     self.__positionHysteresis.update(aimPoint)
                     self.__timeHysteresis.update(self.__prevTime)
         return collisionDist
 
     def __calculateIdealState(self, deltaTime):
-        aimPoint = self._aimingSystem.aimPoint
-        direction = self._aimingSystem.direction
+        aimPoint = self.__aimingSystem.aimPoint
+        direction = self.__aimingSystem.direction
         impactPitch = max(direction.pitch, self._cfg['minimalPitch'])
         self.__rotation = max(self.__rotation, impactPitch)
         distRange = self.__switchersDistRange()
@@ -392,7 +389,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         camDirection = Vector3()
         camDirection.setPitchYaw(-self.__sourceMatrix.pitch, self.__sourceMatrix.yaw)
         camDirection.normalise()
-        self.__camViewPoint = math_utils.lerp(self.__camViewPoint, self._aimingSystem.aimPoint, lerpParam)
+        self.__camViewPoint = math_utils.lerp(self.__camViewPoint, self.__aimingSystem.aimPoint, lerpParam)
         self.__collisionDist = math_utils.lerp(self.__collisionDist, collisionDist, collisionLerpParam)
         desiredDistance = max(desiredDistance, self.__collisionDist)
         self.__targetMatrix.translation = self.__camViewPoint - camDirection.scale(desiredDistance)
@@ -400,9 +397,9 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
 
     def __cameraUpdate(self):
         deltaTime = self.__updateTime()
-        self.__aimOffset = self.__calculateAimOffset(self._aimingSystem.aimPoint)
+        self.__aimOffset = self.__calculateAimOffset(self.__aimingSystem.aimPoint)
         self.__handleMovement()
-        aimPoint = Vector3(self._aimingSystem.aimPoint)
+        aimPoint = Vector3(self.__aimingSystem.aimPoint)
         self.__updateTrajectoryDrawer()
         rotation, desiredDistance, collisionDist = self.__calculateIdealState(deltaTime)
         self.__interpolateStates(deltaTime, math_utils.createRotationMatrix(rotation), desiredDistance, collisionDist)
@@ -415,7 +412,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
             BigWorld.player().positionControl.moveTo(aimPoint)
             self.__prevAimPoint = aimPoint
         self.__updateOscillator(deltaTime)
-        self._aimingSystem.update(deltaTime)
+        self.__aimingSystem.update(deltaTime)
         if self.__onChangeControlMode is not None and self.__switchers.needToSwitch(self.__dxdydz.z, self.__desiredCamDist, self._cfg['distRange'][0], self._cfg['distRange'][1], self._cfg['transitionDist']):
             self.__onChangeControlMode(*self.__switchers.getSwitchParams())
         if not self.__transitionEnabled and self.__desiredCamDist - TRANSITION_DIST_HYSTERESIS <= self._cfg['transitionDist']:

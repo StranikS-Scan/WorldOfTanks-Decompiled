@@ -93,7 +93,7 @@ elif CURRENT_REALM == 'CT':
     AUTH_REALM = 'CT'
 elif CURRENT_REALM == 'RU':
     DEFAULT_LANGUAGE = 'ru'
-    AUTH_REALM = 'CT'
+    AUTH_REALM = 'RU'
 elif CURRENT_REALM in ('EU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
@@ -913,8 +913,6 @@ class Configs(enum.Enum):
     CUSTOMIZATION_QUESTS = 'customizationQuests'
     UI_LOGGING = 'ui_logging_config'
     BATTLE_MATTERS_CONFIG = 'battle_matters_config'
-    COLLECTIVE_GOAL_ENTRY_POINT_CONFIG = 'collective_goal_entry_point_config'
-    COLLECTIVE_GOAL_MARATHONS_CONFIG = 'collective_goal_marathons_config'
     PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
     COMP7_CONFIG = 'comp7_config'
     COMP7_PRESTIGE_RANKS_CONFIG = 'comp7_prestige_ranks_config'
@@ -922,7 +920,6 @@ class Configs(enum.Enum):
     PLAY_LIMITS_CONFIG = 'play_limits_config'
     PRE_MODERATION_CONFIG = 'pre_moderation_config'
     SPAM_PROTECTION_CONFIG = 'spam_protection_config'
-    ARMORY_YARD_CONFIG = 'armory_yard_config'
     COLLECTIONS_CONFIG = 'collections_config'
     WINBACK_CONFIG = 'winback_config'
 
@@ -1786,11 +1783,6 @@ class REQUEST_COOLDOWN:
     VEHICLE_IN_BATTLE_SWITCH = 2.0
     SET_VIVOX_PRESENCE = 0.5
     UNIT_UPDATE_EXTRAS = 2.0
-    SURVEY_RESULT = 1.0
-    ARMORY_YARD_COLLECT_REWARDS = 1.0
-    ARMORY_YARD_BUY_STEPS = 1.0
-    ARMORY_YARD_CLAIM_FINAL_REWARDS = 1.0
-    DEV_ARMORY_YARD_ADD_TOKEN_S = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1832,11 +1824,10 @@ class OVERTURN_WARNING_LEVEL:
     SAFE = 0
     CAUTION = 1
     DANGER = 2
-    BLOCKED = 3
 
     @classmethod
     def isOverturned(cls, warningLevel):
-        return warningLevel in (cls.CAUTION, cls.DANGER, cls.BLOCKED)
+        return warningLevel in (cls.CAUTION, cls.DANGER)
 
 
 class OVERTURN_CONDITION:
@@ -2137,11 +2128,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  108: 'Fun Random carousel filter 2',
  USER_SERVER_SETTINGS.UI_STORAGE_2: 'ui storage 2, used for preserving first entry flags etc',
  110: 'Competitive7x7 carousel filter 1',
- 111: 'Competitive7x7 carousel filter 2',
- 112: 'Enemy marker setting',
- 113: 'Dead marker setting',
- 114: 'Ally marker setting',
- 31001: 'Armory Yard progression'}
+ 111: 'Competitive7x7 carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2543,30 +2530,16 @@ class SHELL_TYPES(object):
     ARMOR_PIERCING_HE = 'ARMOR_PIERCING_HE'
     ARMOR_PIERCING_CR = 'ARMOR_PIERCING_CR'
     SMOKE = 'SMOKE'
-    FLAME = 'FLAME'
 
 
-HAS_EXPLOSION_EFFECT = (SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.FLAME)
-HAS_EXPLOSION = (SHELL_TYPES.HIGH_EXPLOSIVE,)
 SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR,
- SHELL_TYPES.SMOKE,
- SHELL_TYPES.FLAME)
+ SHELL_TYPES.SMOKE)
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
-
-@enum.unique
-class StunTypes(enum.IntEnum):
-    NONE = 0
-    DEFAULT = 1
-    FLAME = 2
-    BULLET = 3
-
-
-AVAILABLE_STUN_TYPES_NAMES = [ key for key, value in StunTypes.__members__.iteritems() if value > 0 ]
 
 class SHELL_MECHANICS_TYPE:
     LEGACY = 'LEGACY'
@@ -2582,17 +2555,13 @@ class BATTLE_LOG_SHELL_TYPES(enum.IntEnum):
     HE_MODERN = 5
     HE_LEGACY_STUN = 6
     HE_LEGACY_NO_STUN = 7
-    FLAME = 8
 
     @classmethod
     def getType(cls, shellDescr):
-        shellKind = shellDescr.kind
-        if shellKind not in HAS_EXPLOSION_EFFECT:
-            return cls[shellKind]
-        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN and shellKind == SHELL_TYPES.HIGH_EXPLOSIVE:
+        if shellDescr.kind != SHELL_TYPES.HIGH_EXPLOSIVE:
+            return cls[shellDescr.kind]
+        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN:
             return cls.HE_MODERN
-        elif shellDescr.type.mechanics == SHELL_MECHANICS_TYPE.MODERN and shellKind == SHELL_TYPES.FLAME:
-            return cls.FLAME
         elif shellDescr.hasStun:
             return cls.HE_LEGACY_STUN
         else:
@@ -2658,12 +2627,10 @@ class WGC_PUBLICATION:
     WGC_PC = 0
     WGC_360 = 1
     WGC_STEAM = 2
-    LGC_PC = 3
     NAMES = {WGC_UNKNOWN: 'Unknown',
      WGC_PC: 'PC',
      WGC_360: '360',
-     WGC_STEAM: 'Steam',
-     LGC_PC: 'LPC'}
+     WGC_STEAM: 'Steam'}
 
 
 class DISTRIBUTION_PLATFORM(enum.Enum):
@@ -2677,8 +2644,7 @@ class DISTRIBUTION_PLATFORM(enum.Enum):
 WGC_PUBLICATION_TO_DISTRIBUTION_PLATFORM = {WGC_PUBLICATION.WGC_UNKNOWN: DISTRIBUTION_PLATFORM.WG,
  WGC_PUBLICATION.WGC_PC: DISTRIBUTION_PLATFORM.WG,
  WGC_PUBLICATION.WGC_360: DISTRIBUTION_PLATFORM.CHINA_360,
- WGC_PUBLICATION.WGC_STEAM: DISTRIBUTION_PLATFORM.STEAM,
- WGC_PUBLICATION.LGC_PC: DISTRIBUTION_PLATFORM.WG}
+ WGC_PUBLICATION.WGC_STEAM: DISTRIBUTION_PLATFORM.STEAM}
 
 class TARGET_LOST_FLAGS:
     INVALID = 1
@@ -2878,12 +2844,10 @@ class ROLE_TYPE:
     ATSPG_SUPPORT = 13
     LT_UNIVERSAL = 14
     LT_WHEELED = 15
-    SPG_FLAME = 16
 
 
 ROLE_LABEL_TO_TYPE = {'NotDefined': ROLE_TYPE.NOT_DEFINED,
  'role_SPG': ROLE_TYPE.SPG,
- 'role_SPG_flame': ROLE_TYPE.SPG_FLAME,
  'role_HT_assault': ROLE_TYPE.HT_ASSAULT,
  'role_HT_break': ROLE_TYPE.HT_BREAK,
  'role_HT_universal': ROLE_TYPE.HT_UNIVERSAL,

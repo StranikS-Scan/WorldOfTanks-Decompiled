@@ -452,6 +452,7 @@ def titleComplexRelationFormat(value, relation, titleKey=None):
 
 
 def titleComplexRelationFormatPlain(value, relation, titleKey=None):
+    _logger.error('Information loss: We are loosing information about the image.')
     return titleRelationFormatPlain(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey)
 
 

@@ -24,7 +24,6 @@ class ITEM_TYPES(object):
     TURRET_TAGS = '#item_types:turret/tags'
     GUN_NAME = '#item_types:gun/name'
     DUALGUN_NAME = '#item_types:dualGun/name'
-    FLAMEGUN_NAME = '#item_types:flameGun/name'
     GUN_DESC = '#item_types:gun/desc'
     GUN_TAGS = '#item_types:gun/tags'
     ENGINE_NAME = '#item_types:engine/name'
@@ -45,7 +44,6 @@ class ITEM_TYPES(object):
     OPTIONALDEVICE_DESC = '#item_types:optionalDevice/desc'
     OPTIONALDEVICE_TAGS = '#item_types:optionalDevice/tags'
     SHOT_NAME = '#item_types:shot/name'
-    ALTSHOT_NAME = '#item_types:altShot/name'
     SHOT_DESC = '#item_types:shot/desc'
     SHOT_TAGS = '#item_types:shot/tags'
     EQUIPMENT_NAME = '#item_types:equipment/name'
@@ -77,13 +75,11 @@ class ITEM_TYPES(object):
     SHELL_KINDS_ARMOR_PIERCING_HE = '#item_types:shell/kinds/ARMOR_PIERCING_HE'
     SHELL_KINDS_HOLLOW_CHARGE = '#item_types:shell/kinds/HOLLOW_CHARGE'
     SHELL_KINDS_HIGH_EXPLOSIVE = '#item_types:shell/kinds/HIGH_EXPLOSIVE'
-    SHELL_KINDS_FLAME = '#item_types:shell/kinds/FLAME'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_CR'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_HE'
     SHELL_KINDSABBREVIATION_HOLLOW_CHARGE = '#item_types:shell/kindsAbbreviation/HOLLOW_CHARGE'
     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE = '#item_types:shell/kindsAbbreviation/HIGH_EXPLOSIVE'
-    SHELL_KINDSABBREVIATION_FLAME = '#item_types:shell/kindsAbbreviation/FLAME'
     SHELL_DIMENSION_SM = '#item_types:shell/dimension/sm'
     SHELL_DIMENSION_INCH = '#item_types:shell/dimension/inch'
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
@@ -119,8 +115,7 @@ class ITEM_TYPES(object):
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR,
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
-     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE,
-     SHELL_KINDSABBREVIATION_FLAME)
+     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
      TANKMAN_SKILLS_PERMANENT_DESCR,
      TANKMAN_SKILLS_TYPE_SKILL,

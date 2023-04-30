@@ -25,8 +25,7 @@ class MarathonVehiclePreview(VehiclePreview):
                 viewPy.setMarathonEvent(self.__marathonPrefix)
                 viewPy.setInfoTooltip()
                 items = tuple((item for item in self._itemsPack if item.type not in ItemPackTypeGroup.CREW))
-                viewPy.setPackItems(items, self._price, self._oldPrice)
-                viewPy.setPanelTextData(self._title)
+                viewPy.setPackItems(items, self._price, self._oldPrice, self._title)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))

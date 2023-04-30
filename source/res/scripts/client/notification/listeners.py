@@ -10,9 +10,8 @@ from typing import TYPE_CHECKING
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COLLECTIONS_NOTIFICATIONS, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard
+from account_helpers.AccountSettings import COLLECTIONS_NOTIFICATIONS, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP
 from adisp import adisp_process
-from armory_yard_constants import State
 from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
@@ -58,7 +57,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -66,7 +65,6 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.game_vars import getVehicleByIntCD
 from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
@@ -1879,99 +1877,6 @@ class WinbackSelectableRewardReminder(BaseReminderListener):
         self._notifyOrRemove(isAdding)
 
 
-class ArmoryYardListener(_NotificationListener):
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
-    __armoryYardText = R.strings.armory_yard.notifications
-    __systemMessages = dependency.descriptor(ISystemMessages)
-    ARMORY_YARD_TEXT = R.strings.armory_yard.notifications
-
-    def start(self, model):
-        super(ArmoryYardListener, self).start(model)
-        self.__armoryYardCtrl.onCheckNotify += self.__onCheckNotify
-        self.__armoryYardCtrl.onAnnouncement += self.__announcement
-        self.__armoryYardCtrl.onPayed += self.__payed
-        self.__armoryYardCtrl.onServerSwitchChange += self.__switchChange
-        self.__armoryYardCtrl.onStyleQuestEnds += self.__onStyleQuestEnds
-        self.__armoryYardCtrl.onProgressUpdated += self.__checkChapter
-        self.__armoryYardCtrl.onQuestsUpdated += self.__checkChapter
-        self.__armoryYardCtrl.onCollectReward += self.__collectReward
-        self.__armoryYardCtrl.onPayedError += self.__payedError
-        return True
-
-    def stop(self):
-        self.__armoryYardCtrl.onCheckNotify -= self.__onCheckNotify
-        self.__armoryYardCtrl.onAnnouncement -= self.__announcement
-        self.__armoryYardCtrl.onPayed -= self.__payed
-        self.__armoryYardCtrl.onServerSwitchChange -= self.__switchChange
-        self.__armoryYardCtrl.onStyleQuestEnds -= self.__onStyleQuestEnds
-        self.__armoryYardCtrl.onProgressUpdated -= self.__checkChapter
-        self.__armoryYardCtrl.onQuestsUpdated -= self.__checkChapter
-        self.__armoryYardCtrl.onCollectReward -= self.__collectReward
-        self.__armoryYardCtrl.onPayedError -= self.__payedError
-        super(ArmoryYardListener, self).stop()
-
-    def __getHeader(self):
-        return backport.text(self.ARMORY_YARD_TEXT.title())
-
-    def __collectReward(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
-
-    def __switchChange(self):
-        if self.__armoryYardCtrl.getState() != State.DISABLED:
-            _, endDate = self.__armoryYardCtrl.getSeasonInterval()
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.switcher.enabled(), endDate=backport.getDateTimeFormat(endDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        else:
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.switcher.disabled()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
-
-    def __announcement(self, startDate, chapterInfo=None):
-        if chapterInfo is None:
-            if not AccountSettings.getArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT):
-                AccountSettings.setArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.event(), startDate=backport.getDateTimeFormat(startDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        else:
-            key = '%s_%s' % (ArmoryYard.ANNOUNCEMENT_CHAPTER_PREFIX, chapterInfo.ID)
-            if not AccountSettings.getArmoryYard(key):
-                AccountSettings.setArmoryYard(key, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.chapter(), count=chapterInfo.ordinalNumber, chapter_name=backport.text(R.strings.armory_yard.mainView.chapter.index.dyn('c_%d' % chapterInfo.ordinalNumber)()), startDate=backport.getDateTimeFormat(startDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        return
-
-    def __payed(self, count):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.payed(), count=count), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-    def __payedError(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.payed.error()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
-
-    def __checkState(self):
-        state = self.__armoryYardCtrl.getState()
-        if state == State.ACTIVELASTHOURS:
-            state = State.ACTIVE
-        if self.__armoryYardCtrl.isActive() and not AccountSettings.getArmoryYard(state.value):
-            AccountSettings.setArmoryYard(state.value, True)
-            if state == State.POSTPROGRESSION:
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.postProgression()), type=SystemMessages.SM_TYPE.ArmoryYardPostprogression, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-            else:
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.active()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-    def __checkChapter(self):
-        if self.__armoryYardCtrl.getState() not in (State.ACTIVELASTHOURS, State.ACTIVE):
-            return
-        nowTime = time_utils.getServerUTCTime()
-        for cycle in self.__armoryYardCtrl.serverSettings.getCurrentSeason().getAllCycles().values():
-            key = '%s_%s' % (ArmoryYard.START_CHAPTER_PREFIX, cycle.ID)
-            if cycle.startDate <= nowTime < cycle.endDate and not AccountSettings.getArmoryYard(key):
-                AccountSettings.setArmoryYard(key, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.started.chapter(), count=cycle.ordinalNumber, chapter_name=backport.text(R.strings.armory_yard.mainView.chapter.index.dyn('c_%d' % cycle.ordinalNumber)())), type=SystemMessages.SM_TYPE.ArmoryYardOpenChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-    def __onCheckNotify(self):
-        self.__checkState()
-        self.__checkChapter()
-
-    def __onStyleQuestEnds(self, endDate):
-        if not AccountSettings.getArmoryYard(ArmoryYard.STYLE_QUEST_ENDS):
-            AccountSettings.setArmoryYard(ArmoryYard.STYLE_QUEST_ENDS, True)
-            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.styleQuest(), endDate=backport.getDateTimeFormat(endDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-
-
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -1993,8 +1898,7 @@ registerNotificationsListeners((ServiceChannelListener,
  SeniorityAwardsTokenListener,
  EventLootBoxesListener,
  CollectionsListener,
- WinbackSelectableRewardReminder,
- ArmoryYardListener))
+ WinbackSelectableRewardReminder))
 
 class NotificationsListeners(_NotificationListener):
 

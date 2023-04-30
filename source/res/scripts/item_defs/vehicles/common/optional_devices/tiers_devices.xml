@@ -188,11 +188,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -215,13 +210,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -262,11 +257,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -289,13 +279,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -336,11 +326,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -363,13 +348,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -410,17 +395,12 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
       </factors>
     </script>
@@ -437,13 +417,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>

@@ -41,7 +41,7 @@ class HoverManager(CGF.ComponentManager):
 
     @tickGroup(groupName='Simulation')
     def tick(self):
-        if not self.__enabled or not GUI.mcursor().inWindow or not GUI.mcursor().inFocus or not self._hangarSpace.isCursorOver3DScene or not self._hangarSpace.isSelectionEnabled:
+        if not self.__enabled or not GUI.mcursor().inWindow or not GUI.mcursor().inFocus or not self._hangarSpace.isCursorOver3DScene:
             return
         else:
             cursorPosition = GUI.mcursor().position

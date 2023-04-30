@@ -46,8 +46,6 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             timeRemainig = vehicleAmmo.endTime
             if timeRemainig > 0:
                 timeRemainig = max(vehicleAmmo.endTime - self._serverTime(), 0)
-                if timeRemainig > vehicleAmmo.totalTime:
-                    timeRemainig = vehicleAmmo.totalTime
             avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, vehicleAmmo.previousStage, timeRemainig, vehicleAmmo.totalTime)
 
     @noexcept

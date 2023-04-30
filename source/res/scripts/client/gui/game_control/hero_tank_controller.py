@@ -39,7 +39,6 @@ class HeroTankController(IHeroTankController):
         self.__actionInfo = None
         self.onUpdated = Event.Event()
         self.onInteractive = Event.Event()
-        self.onHidden = Event.Event()
         return
 
     def init(self):
@@ -105,9 +104,6 @@ class HeroTankController(IHeroTankController):
 
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
-
-    def setHidden(self, isHidden):
-        self.onHidden(isHidden)
 
     def _getAdventHeroTankData(self):
         if not self.hasAdventHero():

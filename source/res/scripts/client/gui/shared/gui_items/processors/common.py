@@ -341,15 +341,11 @@ class _MapsBlackListSelector(Processor):
         wotPLusController = dependency.instance(IWotPlusController)
         isPremiumActive = itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
         isWotPlusActive = wotPLusController.isEnabled()
-        isWotPlusEnabled = wotPLusController.isWotPlusEnabled()
-        if isWotPlusEnabled:
-            if not isPremiumActive and not isWotPlusActive:
-                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/noSubscriptions'.format(self._getMessagePrefix()))
-            if isPremiumActive and not isWotPlusActive:
-                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/premium'.format(self._getMessagePrefix()))
-            if not isPremiumActive and isWotPlusActive:
-                return makeI18nSuccess(sysMsgKey='{}/success/wotPlusEnabled/wotPlus'.format(self._getMessagePrefix()))
-        return makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
+        if not isPremiumActive and not isWotPlusActive:
+            return makeI18nSuccess(sysMsgKey='{}/success/noSubscriptions'.format(self._getMessagePrefix()))
+        if isPremiumActive and not isWotPlusActive:
+            return makeI18nSuccess(sysMsgKey='{}/success/premium'.format(self._getMessagePrefix()))
+        return makeI18nSuccess(sysMsgKey='{}/success/wotPlus'.format(self._getMessagePrefix())) if not isPremiumActive and isWotPlusActive else makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
 
     def _request(self, callback):
         _logger.debug('Make server request to select black maps %r', self.__selectedMaps)

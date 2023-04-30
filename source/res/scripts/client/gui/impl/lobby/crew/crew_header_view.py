@@ -6,6 +6,7 @@ from typing import NamedTuple
 from CurrentVehicle import g_currentVehicle
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings, ViewEvent, View
+from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.backport.backport_pop_over import BackportPopOverContent, createPopOverData
@@ -16,7 +17,9 @@ from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBo
 from gui.impl.lobby.crew.accelerate_training_tooltip_view import AccelerateTrainingTooltipView
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Vehicle import getIconResourceName
+from gui.shared.gui_items.Vehicle import Vehicle, getIconResourceName
+from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
+from gui.shared.utils import decorators
 from helpers import dependency, int2roman
 from renewable_subscription_common.passive_xp import isTagsSetOk, CrewValidator, CrewSlotValidationResult
 from skeletons.gui.game_control import IWotPlusController
@@ -110,8 +113,34 @@ class CrewHeaderView(ViewImpl):
         self._updateCrewValidationResults()
         self._updateModel()
 
+    @wg_async
     def _onAccelerateCrewTrainingToggle(self):
-        pass
+        from gui.shared.event_dispatcher import showAccelerateCrewTrainingDialog
+        vehicle = g_currentVehicle.item
+        if vehicle is None:
+            _logger.info('No current vehicle')
+            return
+        else:
+            wasActive = vehicle.isXPToTman
+
+            def toggleCallback():
+                self._onAccelerateCrewTrainingConfirmed(vehicle, wasActive)
+
+            if wasActive:
+                toggleCallback()
+            else:
+                yield wg_await(showAccelerateCrewTrainingDialog(toggleCallback))
+            return
+
+    @decorators.adisp_process('updateTankmen')
+    def _onAccelerateCrewTrainingConfirmed(self, vehicle, wasActive):
+        nowActive = not wasActive
+        self.viewModel.setIsAccelerateCrewTrainingActive(nowActive)
+        result = yield VehicleTmenXPAccelerator(vehicle, nowActive, False).request()
+        if not result.success:
+            self.viewModel.setIsAccelerateCrewTrainingActive(wasActive)
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _onCrewOperationsClick(self):
         pass

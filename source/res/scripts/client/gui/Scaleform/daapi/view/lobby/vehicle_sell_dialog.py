@@ -707,16 +707,14 @@ class _OptionalDeviceData(_VSDItemData):
 
     def __init__(self, optDevice):
         super(_OptionalDeviceData, self).__init__(optDevice, FITTING_TYPES.OPTIONAL_DEVICE)
-        isWotPlusEnabled = self.__wotPlus.isWotPlusEnabled()
         self._flashData['isRemovable'] = optDevice.isRemovable
         self._flashData['isModernized'] = optDevice.isModernized
-        self._flashData['isWotPlusEnabled'] = isWotPlusEnabled
         removalPrice = optDevice.getRemovalPrice(self.__itemsCache.items)
         if removalPrice.isActionPrice():
             self._flashData['removeActionPrice'] = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
         serverSettings = self.__lobbyContext.getServerSettings()
         isFreeEquipmentDemountingEnabled = serverSettings.isFreeEquipmentDemountingEnabled()
-        if isFreeEquipmentDemountingEnabled and isWotPlusEnabled and self.__wotPlus.isFreeToDemount(optDevice):
+        if isFreeEquipmentDemountingEnabled and self.__wotPlus.isFreeToDemount(optDevice):
             self._itemRemovalPrice = _WOT_PLUS_ONE
         else:
             self._itemRemovalPrice = _VSDMoney(removalPrice.price)

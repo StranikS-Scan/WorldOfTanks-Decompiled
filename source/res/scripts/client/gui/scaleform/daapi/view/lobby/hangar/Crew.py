@@ -58,15 +58,12 @@ class Crew(CrewMeta):
             allTankmen = self.itemsCache.items.getTankmen()
             commander_bonus = vehicle.bonuses['commander']
             roles = []
-            lessMasteredIdx = -1
-            lessMasteredTman = None
+            lessMastered = 0
+            tankmenDescrs = dict(vehicle.crew)
             skillsConfig = getSkillsConfig()
             for slotIdx, tman in vehicle.crew:
-                if tman is not None:
-                    res = -1 if lessMasteredTman is None else compareMastery(tman.descriptor, lessMasteredTman.descriptor)
-                    if res < 0 or res == 0 and slotIdx < lessMasteredIdx:
-                        lessMasteredIdx = slotIdx
-                        lessMasteredTman = tman
+                if slotIdx > 0 and tman is not None and (tankmenDescrs[lessMastered] is None or compareMastery(tankmenDescrs[lessMastered].descriptor, tman.descriptor) > 0):
+                    lessMastered = slotIdx
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
                 roles.append({'tankmanID': tman.invID if tman is not None else None,
                  'roleType': role,
@@ -124,7 +121,7 @@ class Crew(CrewMeta):
                  'efficiencyLevel': tankman.efficiencyRoleLevel,
                  'bonus': bonus_role_level,
                  'lastSkillLevel': tankman.descriptor.lastSkillLevel,
-                 'isLessMastered': vehicle.isXPToTman and vehicle.crewIndices.get(tankman.invID) == lessMasteredIdx,
+                 'isLessMastered': vehicle.crewIndices.get(tankman.invID) == lessMastered and vehicle.isXPToTman,
                  'compact': tankman.strCD,
                  'availableSkillsCount': skills_count,
                  'skills': skillsList,

@@ -390,7 +390,7 @@ class ItemsRequester(IItemsRequester):
      'dogTag',
      'battleRoyaleStats'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -404,7 +404,6 @@ class ItemsRequester(IItemsRequester):
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
         self.__festivity = festivityRequester
-        self.__armoryYard = armoryYard
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
@@ -472,10 +471,6 @@ class ItemsRequester(IItemsRequester):
     @property
     def festivity(self):
         return self.__festivity
-
-    @property
-    def armoryYard(self):
-        return self.__armoryYard
 
     @property
     def tokens(self):
@@ -554,9 +549,6 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
-        Waiting.show('download/festivity')
-        yield self.__armoryYard.request()
-        Waiting.hide('download/festivity')
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
@@ -621,7 +613,6 @@ class ItemsRequester(IItemsRequester):
         self.epicMetaGame.clear()
         self.__blueprints.clear()
         self.__festivity.clear()
-        self.__armoryYard.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
         self.__gameRestrictions.clear()

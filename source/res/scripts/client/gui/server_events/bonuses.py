@@ -605,7 +605,8 @@ class BattleTokensBonus(TokensBonus):
         for tokenID, _ in self._value.iteritems():
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
-                result.append(self._getUserName(complexToken.styleID))
+                userName = self._getUserName(complexToken.styleID)
+                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
 
         return ', '.join(result) if result else None
 

@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT styles 75000s	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -60,7 +60,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -204,7 +204,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -261,7 +261,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -342,7 +342,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -423,7 +423,7 @@
     <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	japan:J16_ST_B1	</vehicles>
@@ -463,7 +463,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	japan:J20_Type_2605	</vehicles>
@@ -503,7 +503,7 @@
     <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	2	</historical>
-    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	japan:J27_O_I_120_BP	</vehicles>
@@ -511,22 +511,15 @@
     </vehicleFilter>
     <style>
       <id>	31003	</id>
-      <texture>	gui/maps/vehicles/styles/J27_O_I_120_KB_MT_3dst.png	</texture>
-      <modelsSet>	J27_O_I_120_KB_MT_3dst	</modelsSet>
+      <texture>	gui/maps/vehicles/styles/J27_O_I_120_BP.png	</texture>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst	</userString>
-      <description>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/J27_O_I_120_KB_MT_3dst/description/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:unique_style/J27_O_I_120_BP	</userString>
+      <description>	#vehicle_customization:unique_style/J27_O_I_120_BP	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/J27_O_I_120_BP	</longDescriptionSpecial>
       <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
-          <insignias>
-            <item>
-              <id>	31004	</id>
-              <appliedTo>	4096	</appliedTo>
-            </item>
-          </insignias>
           <camouflages>
             <item>
               <id>	1	</id>
@@ -535,16 +528,6 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <attachments>
-            <item>
-              <id>	31001	</id>
-              <slotId>	38000	</slotId>
-            </item>
-            <item>
-              <id>	31002	</id>
-              <slotId>	18000	</slotId>
-            </item>
-          </attachments>
         </outfit>
       </outfits>
       <itemFilters>
@@ -560,7 +543,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	japan:J10_Chi_To japan:J11_Chi_Ri	</vehicles>

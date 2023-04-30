@@ -218,8 +218,6 @@
     <_76mm_S-54_MapsTraining_Player_MT_1>	51	</_76mm_S-54_MapsTraining_Player_MT_1>
     <_85mm_D5T-85BM_MapsTraining_Player_MT_2>	60	</_85mm_D5T-85BM_MapsTraining_Player_MT_2>
     <_107mm_ZiS-6_MapsTraining_Dummy_HT_2>	63	</_107mm_ZiS-6_MapsTraining_Dummy_HT_2>
-    <_40mm_ATO_200_flamegun>	31001	</_40mm_ATO_200_flamegun>
-    <_20mm_KS_25_flamegun>	31002	</_20mm_KS_25_flamegun>
   </ids>
   <shared>
     <_12.7mm_DSHK>
@@ -12573,95 +12571,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_107mm_ZiS-6_MapsTraining_Dummy_HT_2>
-    <_20mm_KS_25_flamegun>
-      <userString>	#ussr_vehicles:_20mm_KS_25_flamegun	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	2350	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.01	</amplitude>
-        <recoilEffect>	auto	</recoilEffect>
-      </recoil>
-      <effects>	shot_flamePneumatic_small	</effects>
-      <burstStartEffects>	shot_flamePneumatic_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <pitchLimits>
-        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <rotationSpeed>	20	</rotationSpeed>
-      <reloadTime>	7.0	</reloadTime>
-      <maxAmmo>	92	</maxAmmo>
-      <aimingTime>	2.3	</aimingTime>
-      <weight>	68	</weight>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.38	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_25mm_AP_1_flameshell>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	60	</speed>
-          <gravity>	10	</gravity>
-          <maxDistance>	100	</maxDistance>
-          <piercingPower>	19 19	</piercingPower>
-        </_25mm_AP_1_flameshell>
-      </shots>
-    </_20mm_KS_25_flamegun>
-    <_40mm_ATO_200_flamegun>
-      <userString>	#ussr_vehicles:_40mm_ATO_200_flamegun	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	96000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.01	</amplitude>
-        <recoilEffect>	auto	</recoilEffect>
-      </recoil>
-      <effects>	shot_flame_small	</effects>
-      <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePowder	</reloadEffect>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <pitchLimits>
-        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <rotationSpeed>	20	</rotationSpeed>
-      <reloadTime>	7.0	</reloadTime>
-      <maxAmmo>	92	</maxAmmo>
-      <aimingTime>	2.3	</aimingTime>
-      <weight>	600	</weight>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.38	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_40mm_AP_7_flameshell>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	80	</speed>
-          <gravity>	18	</gravity>
-          <maxDistance>	150	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
-        </_40mm_AP_7_flameshell>
-      </shots>
-    </_40mm_ATO_200_flamegun>
   </shared>
 </guns.xml>

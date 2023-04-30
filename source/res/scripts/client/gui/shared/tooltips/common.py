@@ -1108,12 +1108,9 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         return
     icon = settings.icon
     countFormatted = text_styles.concatStylesWithSpace(settings.textStyle(_int(price)), icon)
-    if wotPlusStatus:
-        wotPlusLabel = text_styles.wotPlusText('free')
-        wotPlusIcon = icons.wotPlus()
-        wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
-    else:
-        wotPlusText = ''
+    wotPlusLabel = text_styles.wotPlusText(backport.text(R.strings.demount_kit.equipmentDemount.optionFree()))
+    wotPlusIcon = icons.wotPlus()
+    wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
     dkCount = text_styles.demountKitText('1')
     dkIcon = icons.demountKit()
     dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
@@ -1121,8 +1118,17 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         if isFreeToDemount:
             countFormatted = wotPlusText
     descr = R.strings.demount_kit.equipmentInstall
-    if wotPlusStatus or not canUseDemountKit or isDeluxe:
+    if wotPlusStatus and isFreeToDemount:
         dynAccId = descr.demount()
+    elif not canUseDemountKit and not isDeluxe:
+        dynAccId = descr.demount()
+    elif isDeluxe:
+        if isFreeDeluxeEnabled:
+            dynAccId = descr.demountNoKitOr()
+        else:
+            dynAccId = descr.demount()
+    elif isFreeDemountEnabled:
+        dynAccId = descr.demountWithKitOr()
     else:
         dynAccId = descr.demountWithKit()
     valueFormatted = backport.text(dynAccId, count=countFormatted, countDK=text_styles.main(dkText), wotPlus=text_styles.main(wotPlusText))
@@ -1336,7 +1342,7 @@ class MissionsToken(BlocksTooltipData):
         return items
 
     def __packTitleBlock(self, token):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(token.getUserName()), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
          'left': 11,
          'right': 5})
 

@@ -1,15 +1,32 @@
 <scripts_config.xml>
   <login>
     <host>
-      <name>	WOT PT1	</name>
-      <short_name>	PT1	</short_name>
-      <url>	login1-wotrpt.lesta.ru:20015	</url>
+      <name>	WOT CT1	</name>
+      <short_name>	CT1	</short_name>
+      <url>	login-ct-p1.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p1.worldoftanks.net:20015	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	11	</periphery_id>
     </host>
+    <host>
+      <name>	WOT CT2	</name>
+      <short_name>	CT2	</short_name>
+      <url>	login-ct-p2.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p2.worldoftanks.net:20015	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+      <periphery_id>	12	</periphery_id>
+    </host>
+    <host>
+      <name>	WOT CT3	</name>
+      <short_name>	CT3	</short_name>
+      <url>	login-ct-p3.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p3.worldoftanks.net:20015	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+      <periphery_id>	13	</periphery_id>
+    </host>
   </login>
-  <updateUrl></updateUrl>
-  <csisUrl>	https://csis-apex.lesta.ru/csis/wotrpt	</csisUrl>
+  <updateUrl>	http://worldoftanks.eu/update	</updateUrl>
+  <csisUrl>	http://csis-ct.worldoftanks.net/csis/wotct/	</csisUrl>
   <silhouetteColors>
     <common>
       <self>	0.5 0.5 0.5 1	</self>
@@ -170,15 +187,6 @@
       <Mine_2_GMM>
         <texture>	maps/decals_pbs/Mine_2_GMM.dds	</texture>
       </Mine_2_GMM>
-      <flamethrower_AM>
-        <texture>	maps/fx/flamethrower_AM.dds	</texture>
-      </flamethrower_AM>
-      <flamethrower_NM>
-        <texture>	maps/fx/flamethrower_NM.dds	</texture>
-      </flamethrower_NM>
-      <flamethrower_GMM>
-        <texture>	maps/fx/flamethrower_GMM.dds	</texture>
-      </flamethrower_GMM>
     </textures>
   </decal>
   <camouflage>

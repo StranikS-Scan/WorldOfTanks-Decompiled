@@ -325,18 +325,6 @@ def getOwnVehiclePosition(avatar=None):
     return position
 
 
-def getAvatarPosition(avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    try:
-        position = avatar.position
-    except AttributeError:
-        position = None
-        _logger.warning('Attribute "position" of Avatar is not found')
-
-    return position
-
-
 def getDistanceToTarget(target, avatar=None):
     ownPosition = getOwnVehiclePosition(avatar=avatar)
     return (target.position - ownPosition).length if ownPosition is not None else 0.0
@@ -360,7 +348,7 @@ def getDistanceToGunMarker(avatar=None):
 
 def isVehicleStunned():
     attachedVehicle = BigWorld.player().getVehicleAttached()
-    return attachedVehicle.stunInfo.stunFinishTime > 0.0 if attachedVehicle is not None else False
+    return attachedVehicle.stunInfo > 0.0 if attachedVehicle is not None else False
 
 
 def getHealthPercentage(avatar=None):

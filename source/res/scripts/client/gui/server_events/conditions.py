@@ -602,6 +602,11 @@ class Token(_Requirement):
     def isConsumable(self):
         return self._consumable
 
+    def getConsumeCount(self):
+        if self.isConsumable():
+            consumeData, _ = self._data['consume']
+            return dict(consumeData).get('value', 0)
+
     def getID(self):
         return self._id
 
@@ -805,9 +810,6 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
 
     def _isAvailable(self, vehicle):
         return vehicle.intCD in self._getVehiclesCache(self._data)
-
-    def parseFilters(self):
-        return self._parseFilters(self._data)
 
 
 class _DossierValue(_Requirement):
@@ -1470,6 +1472,9 @@ class VehicleDamage(_CountOrTotalEventsCondition):
             key += '/eventCount'
         return key
 
+    def _getKey(self):
+        pass
+
 
 class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
 
@@ -1494,7 +1499,7 @@ class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
         return self._bonus
 
     def getKey(self):
-        pass
+        return self._name
 
 
 class VehicleStun(_CountOrTotalEventsCondition):
@@ -1510,6 +1515,9 @@ class VehicleStun(_CountOrTotalEventsCondition):
 
     def getLabelKey(self):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT if self.isEventCount() else QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
+
+    def _getKey(self):
+        pass
 
 
 class VehicleStunCumulative(VehicleStun, _Cumulativable):
@@ -1538,7 +1546,7 @@ class VehicleStunCumulative(VehicleStun, _Cumulativable):
         return super(VehicleStunCumulative, self).getLabelKey() + '/cumulative'
 
     def getKey(self):
-        pass
+        return self._name
 
 
 class MultiStunEvent(_Condition, _Negatable):

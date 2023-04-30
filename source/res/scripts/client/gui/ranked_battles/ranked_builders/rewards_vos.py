@@ -13,19 +13,15 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import Rank, Division
     from gui.ranked_battles.constants import YearAwardsNames
 
-def getSeasonOnTabs(selectedLinkage, isYearRewardEnabled, isLeagueRewardEnabled):
-    result = [__getRanksTab(selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, True)]
-    if isLeagueRewardEnabled:
-        result.append(__getLeaguesTab(selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, True))
+def getSeasonOnTabs(selectedLinkage, isYearRewardEnabled):
+    result = [__getRanksTab(selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, True), __getLeaguesTab(selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, True)]
     if isYearRewardEnabled:
         result.append(__getYearRewardTab(selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI, True))
     return result
 
 
-def getSeasonOffTabs(isYearRewardEnabled, isLeagueRewardEnabled):
-    result = [__getRanksTab(False, False)]
-    if isLeagueRewardEnabled:
-        result.append(__getLeaguesTab(False, False))
+def getSeasonOffTabs(isYearRewardEnabled):
+    result = [__getRanksTab(False, False), __getLeaguesTab(False, False)]
     if isYearRewardEnabled:
         result.append(__getYearRewardTab(True, True))
     return result

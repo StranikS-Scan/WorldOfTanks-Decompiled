@@ -106,7 +106,3 @@ def getAction(actionType, *args, **kwargs):
     else:
         _logger.error('Action type is not found %s', actionType)
         return None
-
-
-def registerAction(actionType, action):
-    _ACTION_MAP[actionType] = action

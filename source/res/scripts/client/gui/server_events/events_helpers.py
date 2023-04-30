@@ -19,7 +19,7 @@ from gui.shared.gui_items.customization import C11nStyleProgressData
 from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -482,8 +482,3 @@ def getEventsData(eventsTypeName):
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getC11nQuestsConfig(lobbyContext=None):
     return lobbyContext.getServerSettings().getCustomizationQuestsConfig()
-
-
-@dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
-def isArmoryYardQuest(eventID, armoryYardCtrl=None):
-    return armoryYardCtrl.isProgressionQuest(eventID)

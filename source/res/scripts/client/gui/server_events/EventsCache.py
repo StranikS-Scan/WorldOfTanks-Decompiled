@@ -800,24 +800,6 @@ class EventsCache(IEventsCache):
         for qID, qData in self.__getDailyQuestsData().iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
-    def getQuestByID(self, questID):
-        questData = self.__getQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalMissionsHiddenQuests()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getDailyQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        elif questID in motivation_quests.g_cache:
-            return self._makeQuest(questID, motivation_quests.g_cache.getQuestByID(questID).questData, maker=_motiveQuestMaker)
-        else:
-            return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData) if questID in customization_quests.g_cust_cache else None
-
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
         questsData.update(self.__getPersonalQuestsData())

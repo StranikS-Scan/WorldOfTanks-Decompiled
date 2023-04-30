@@ -84,3 +84,6 @@ class RareAchievement(RegularAchievement):
 
     def __repr__(self):
         return '%s<rareID=%s; value=%s>' % (self.__class__.__name__, str(self._rareID), str(self._value))
+
+    def canDisplayAchievement(self):
+        return True

@@ -193,6 +193,7 @@
     <_122-mm_D-25TA_S>	245	</_122-mm_D-25TA_S>
     <_76mm_ZiS_5_MZ>	246	</_76mm_ZiS_5_MZ>
     <_107mm_ZiS-24_KTT>	247	</_107mm_ZiS-24_KTT>
+    <_130mm_M_65S_DR>	248	</_130mm_M_65S_DR>
     <_122mm_cannon_M-30_1938_dualgun>	250	</_122mm_cannon_M-30_1938_dualgun>
     <_85mm_H_3_457>	255	</_85mm_H_3_457>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
@@ -10168,6 +10169,64 @@
         </_130mm_53_VOF_482VS>
       </shots>
     </_130mm_M_65S>
+    <_130mm_M_65S_DR>
+      <userString>	#ussr_vehicles:_130mm_M_65S_DR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.21	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	4300	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_53_VBR_482S>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	243 230	</piercingPower>
+        </_130mm_53_VBR_482S>
+        <_130mm_3VBKS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_130mm_3VBKS>
+        <_130mm_53_VOF_482VS>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_53_VOF_482VS>
+      </shots>
+    </_130mm_M_65S_DR>
     <_130mm_2A50>
       <userString>	#ussr_vehicles:_130mm_2A50	</userString>
       <tags></tags>

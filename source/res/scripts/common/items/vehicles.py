@@ -1671,11 +1671,15 @@ class VehicleSelector(NoneVehicleSelector):
     def matches(self, vehTypeOrDescr=None, vehName=None):
         if not bool(vehTypeOrDescr) ^ bool(vehName):
             raise SoftException('Value Error')
-        if vehTypeOrDescr is not None:
-            _, nid, vnid = parseIntCompactDescr(vehTypeOrDescr)
-        elif vehName is not None:
-            nid, vnid = g_list.getIDsByName(vehName)
-        vdata = g_list.getList(nid)[vnid]
+        try:
+            if vehTypeOrDescr is not None:
+                _, nid, vnid = parseIntCompactDescr(vehTypeOrDescr)
+            elif vehName is not None:
+                nid, vnid = g_list.getIDsByName(vehName)
+            vdata = g_list.getList(nid)[vnid]
+        except (KeyError, SoftException):
+            return False
+
         vct, vt, vet = self.ctags, self.vtags, self.etags
         return (not self.__nations or nations.MAP[nid] in self.__nations) and (not self.__levels or vdata.level in self.__levels) and not (vct and vdata.tags.isdisjoint(vct)) and not (vt and not vdata.tags >= vt) and not (vet and vdata.tags >= vet)
 

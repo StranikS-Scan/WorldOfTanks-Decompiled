@@ -7,6 +7,10 @@ from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n
 
+def dyn_or_num(accessor, name, default=None):
+    return accessor.num(name, default=default) if name and name[0].isdigit() else accessor.dyn(name, default=default)
+
+
 class RegularAchievement(GUIItem):
     __slots__ = ('_name', '_block', '_value', '_lvlUpValue', '_lvlUpTotalValue', '_isDone', '_isInDossier', '_isValid')
 
@@ -101,15 +105,18 @@ class RegularAchievement(GUIItem):
         return bool(self._value)
 
     def tryGetSmallIcon(self, iconName):
-        accessor = R.images.gui.maps.icons.achievement.num('32x32').dyn(iconName)
+        resource = R.images.gui.maps.icons.achievement.num('32x32')
+        accessor = dyn_or_num(resource, iconName)
         return backport.image(accessor()) if accessor.isValid() else self.ICON_DEFAULT
 
     def tryGetBigIcon(self, iconName):
-        accessor = R.images.gui.maps.icons.achievement.big.dyn(iconName)
+        resource = R.images.gui.maps.icons.achievement.big
+        accessor = dyn_or_num(resource, iconName)
         return backport.image(accessor()) if accessor.isValid() else self.ICON_DEFAULT
 
     def tryGetMediumIcon(self, iconName):
-        accessor = R.images.gui.maps.icons.achievement.dyn(iconName)
+        resource = R.images.gui.maps.icons.achievement
+        accessor = dyn_or_num(resource, iconName)
         return backport.image(accessor()) if accessor.isValid() else self.ICON_DEFAULT
 
     def getIcons(self):
@@ -125,16 +132,15 @@ class RegularAchievement(GUIItem):
 
     def canDisplayAchievement(self):
         iconName = self._getIconName()
-        return R.images.gui.maps.icons.achievement.dyn(iconName).isValid()
+        resource = dyn_or_num(R.images.gui.maps.icons.achievement, iconName)
+        return resource.isValid()
 
     def getHugeIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_180X180]
 
     def getBigIcon(self):
         iconName = self._getIconName()
-        if len(iconName) > 0 and iconName[0].isdigit():
-            iconName = 'c_' + iconName
-        iconRes = R.images.gui.maps.icons.achievement.c_80x80.dyn(iconName)
+        iconRes = dyn_or_num(R.images.gui.maps.icons.achievement.c_80x80, iconName)
         if iconRes.exists():
             return backport.image(iconRes())
         else:
@@ -147,10 +153,11 @@ class RegularAchievement(GUIItem):
         return self.getIcons()[self.ICON_TYPE.IT_32X32]
 
     def getUserName(self):
-        return backport.text(R.strings.achievements.dyn(self._getActualName())())
+        resource = dyn_or_num(R.strings.achievements, self._getActualName())
+        return backport.text(resource())
 
     def getUserDescription(self):
-        return backport.text(R.strings.achievements.dyn('%s_descr' % self._getActualName())())
+        return backport.text(dyn_or_num(R.strings.achievements, '%s_descr' % self._getActualName())())
 
     def getUserWebDescription(self):
         return self.getUserDescription()

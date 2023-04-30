@@ -42,6 +42,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
+from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -2325,13 +2326,21 @@ class CrewBooksBonus(SimpleBonus):
 
     def getWrappedEventLootBoxesBonusList(self):
         result = []
+        icons = R.images.gui.maps.icons.crewBooks.books
         for item, count in self.getItems():
             if item is not None:
+                if item.isCommon():
+                    iconSmall = icons.big.brochure_random()
+                    iconBig = icons.s600x450.brochure_random()
+                else:
+                    resName = getIconResourceName(item.icon)
+                    iconSmall = icons.small.dyn(resName)()
+                    iconBig = icons.s600x450.dyn(resName)()
                 result.append({'id': item.intCD,
                  'type': 'crew_book/{}'.format(item.getBookType()),
                  'value': count,
-                 'icon': {AWARDS_SIZES.SMALL: item.getShopIcon(AWARDS_SIZES.SMALL),
-                          AWARDS_SIZES.BIG: item.getShopIcon(AWARDS_SIZES.BIG)},
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(iconSmall),
+                          AWARDS_SIZES.BIG: backport.image(iconBig)},
                  'name': item.userName,
                  'description': item.fullDescription})
 

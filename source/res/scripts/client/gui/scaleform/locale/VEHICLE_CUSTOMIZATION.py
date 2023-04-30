@@ -5630,6 +5630,8 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_FW_2022_STYLE_GRADE7_DESC = '#vehicle_customization:special_style/fw_2022_style_grade7_desc'
     SPECIAL_STYLE_TWITCH_OCTOBER_2022 = '#vehicle_customization:special_style/twitch_october_2022'
     SPECIAL_STYLE_TWITCH_OCTOBER_2022_DESC_LONG = '#vehicle_customization:special_style/twitch_october_2022_desc/long'
+    MAIN_STYLE_R159_SU_130PM_OCN_3DST = '#vehicle_customization:main_style/R159_SU_130PM_OCN_3DSt'
+    MAIN_STYLE_R159_SU_130PM_OCN_3DST_DESC_LONG = '#vehicle_customization:main_style/R159_SU_130PM_OCN_3DSt_desc/long'
     SPECIAL_STYLE_CN_LANTERN_FESTIVAL = '#vehicle_customization:special_style/cn_lantern_festival'
     SPECIAL_STYLE_CN_LANTERN_FESTIVAL_DESC = '#vehicle_customization:special_style/cn_lantern_festival_desc'
     SPECIAL_STYLE_CN_LANTERN_FESTIVAL_DESC_LONG = '#vehicle_customization:special_style/cn_lantern_festival_desc/long'

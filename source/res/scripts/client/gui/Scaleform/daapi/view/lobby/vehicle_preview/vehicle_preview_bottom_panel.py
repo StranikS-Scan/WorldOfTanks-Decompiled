@@ -379,7 +379,8 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             if hasExternalLink:
                 btnIcon = backport.image(R.images.gui.maps.icons.library.buyInWeb())
                 buyingPanelData.update({'buyButtonIcon': btnIcon,
-                 'buyButtonIconAlign': 'right'})
+                 'buyButtonIconAlign': 'right',
+                 'isBuyingAvailable': True})
             self.as_setBuyDataS(buyingPanelData)
             return
 

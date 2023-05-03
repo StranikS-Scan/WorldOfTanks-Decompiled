@@ -134,11 +134,10 @@ class ConfirmedOptDevice(ConfirmedArtefact):
                     return 'itemWotPlus'
                 return 'itemDeluxeWotPlus'
             return 'itemDeluxe'
-        if isActive:
-            return 'itemWotPlus'
         if self._item.isModernized:
             if self._item.level > 1:
                 return 'itemDeluxe'
+        return 'itemWotPlus' if isActive else 'itemWithDemountKit'
 
     @classmethod
     def createFromGUIItem(cls, item, ctx=None):

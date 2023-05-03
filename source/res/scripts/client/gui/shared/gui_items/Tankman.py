@@ -948,6 +948,8 @@ def crewMemberRealSkillLevel(vehicle, skillName, role, commonWithIncrease=True):
     booster = getBattleBooster(vehicle, skillName) if shouldIncrease else None
     tankmenSkillLevels = []
     skillRoleType = tankmen.getSkillRoleType(skillName)
+    if skillRoleType is None:
+        return tankmen.NO_SKILL
     isCommonSkill = skillRoleType == tankmen.COMMON_SKILL_ROLE_TYPE
     for _, tankman in vehicle.crew:
         if tankman is None:
@@ -957,11 +959,11 @@ def crewMemberRealSkillLevel(vehicle, skillName, role, commonWithIncrease=True):
 
     if isCommonSkill:
         tankmenSkillLevels = _boostCommonSkill(vehicle.crew, skillName, tankmenSkillLevels, booster)
-    if skillName in tankmen.COMMON_SKILLS:
+    if vehicle.crew and skillName in tankmen.COMMON_SKILLS:
         if tankmenSkillLevels and not all((hasSkill == tankmen.NO_SKILL for hasSkill in tankmenSkillLevels)):
             return sum((lvl for lvl in tankmenSkillLevels if lvl != tankmen.NO_SKILL)) / float(len(vehicle.crew))
         return tankmen.NO_SKILL
-    elif skillName in perks_constants.AVG_LVL_PERKS:
+    elif tankmenSkillLevels and skillName in perks_constants.AVG_LVL_PERKS:
         tmpTankmenSkillLevels = [ level for level in tankmenSkillLevels if level != tankmen.NO_SKILL ]
         return sum(tmpTankmenSkillLevels) / len(tankmenSkillLevels)
     else:

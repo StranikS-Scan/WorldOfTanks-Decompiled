@@ -3,20 +3,23 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_veteran_check_supertester	</id>
+      <id>	winback_newbie_check	</id>
       <hidden>	true	</hidden>
       <conditions>
         <preBattle>
           <account>
             <and>
               <token>
-                <id>	winback:progression_started_supertester	</id>
+                <id>	winback:newbie_reward_received	</id>
                 <equal>	0	</equal>
               </token>
-              <token>
-                <id>	winback:ct:supertester	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </token>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <lastLogout>
+                <greaterOrEqual>	90	</greaterOrEqual>
+              </lastLogout>
+              <totalBattles>
+                <less>	1000	</less>
+              </totalBattles>
             </and>
           </account>
         </preBattle>
@@ -25,16 +28,53 @@
         </common>
       </conditions>
       <bonus>
+        <premium_plus>	14	</premium_plus>
         <token>
-          <id>	winback:progression_started_supertester	</id>
+          <id>	winback:newbie_reward_received	</id>
           <expires>
-            <after>	4320	</after>
+            <after>	2160	</after>
           </expires>
         </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	hidden_winback_newbie_reset	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	winback:newbie_rating_reset	</id>
+                <equal>	0	</equal>
+              </token>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <lastLogout>
+                <greaterOrEqual>	90	</greaterOrEqual>
+              </lastLogout>
+              <totalBattles>
+                <less>	1000	</less>
+              </totalBattles>
+              <vehiclesUnlocked>
+                <levels>	7 8 9 10	</levels>
+                <equal>	0	</equal>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <noviceReset></noviceReset>
         <token>
-          <id>	winback:battle	</id>
-          <expires>	01.01.2050 00:00	</expires>
-          <count>	7	</count>
+          <id>	winback:newbie_rating_reset	</id>
+          <expires>
+            <after>	2160	</after>
+          </expires>
         </token>
       </bonus>
     </tokenQuest>
@@ -50,6 +90,17 @@
               <token>
                 <id>	winback:progression_started	</id>
                 <equal>	0	</equal>
+              </token>
+              <lastLogout>
+                <greaterOrEqual>	180	</greaterOrEqual>
+              </lastLogout>
+              <totalBattles>
+                <greaterOrEqual>	1000	</greaterOrEqual>
+              </totalBattles>
+              <token>
+                <id>	winback:battle	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
               </token>
               <token>
                 <id>	winback:access	</id>
@@ -82,22 +133,7 @@
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:unlock:2	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
                 <id>	winback:unlock:3	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
-                <id>	winback:unlock:4	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
-                <id>	winback:unlock:5	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -107,52 +143,117 @@
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:2	</id>
+                <id>	winback:unlock:9	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:3	</id>
+                <id>	winback:unlock:12	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:4	</id>
+                <id>	winback:unlock:15	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:5	</id>
+                <id>	winback:unlock:18	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:6	</id>
+                <id>	winback:unlock:21	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:2	</id>
+                <id>	winback:unlock:24	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:3	</id>
+                <id>	winback:unlock:27	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:4	</id>
+                <id>	winback:unlock:30	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:5	</id>
+                <id>	winback:unlock:33	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:6	</id>
+                <id>	winback:unlock:36	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:39	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:42	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:45	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:normal:33	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:normal:36	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:normal:39	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:normal:42	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:normal:45	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:compensation:33	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:compensation:36	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:compensation:39	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:compensation:42	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:update_offer:compensation:45	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -271,15 +372,22 @@
           </expires>
         </token>
         <token>
+          <id>	winback:battle	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	7	</count>
+        </token>
+        <token>
           <id>	winback:access	</id>
           <expires>	01.01.2050 00:00	</expires>
         </token>
         <token>
-          <id>	winback:unlock:1	</id>
-          <expires>	01.01.2050 00:00	</expires>
+          <id>	scrWhatsNewApr2023	</id>
+          <expires>
+            <after>	336	</after>
+          </expires>
         </token>
         <token>
-          <id>	winback:unlock:2	</id>
+          <id>	winback:unlock:1	</id>
           <expires>	01.01.2050 00:00	</expires>
         </token>
         <token>
@@ -287,15 +395,59 @@
           <expires>	01.01.2050 00:00	</expires>
         </token>
         <token>
-          <id>	winback:unlock:4	</id>
-          <expires>	01.01.2050 00:00	</expires>
-        </token>
-        <token>
-          <id>	winback:unlock:5	</id>
-          <expires>	01.01.2050 00:00	</expires>
-        </token>
-        <token>
           <id>	winback:unlock:6	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:9	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:12	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:15	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:18	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:21	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:24	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:27	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:30	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:33	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:36	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:39	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:42	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	winback:unlock:45	</id>
           <expires>	01.01.2050 00:00	</expires>
         </token>
         <token>
@@ -392,90 +544,6 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_normal_2	</id>
-      <conditions>
-        <preBattle>
-          <account>
-            <and>
-              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
-              <token>
-                <id>	winback:access	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </token>
-              <token>
-                <id>	winback:unlock:2	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-                <consume>	1	</consume>
-              </token>
-              <token>
-                <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	2	</greaterOrEqual>
-              </token>
-              <not>
-                <vehiclesUnlocked>
-                  <levels>	6	</levels>
-                  <greaterOrEqual>	46	</greaterOrEqual>
-                </vehiclesUnlocked>
-              </not>
-            </and>
-          </account>
-        </preBattle>
-        <common>
-          <bonusLimit>	1000	</bonusLimit>
-        </common>
-      </conditions>
-      <bonus>
-        <token>
-          <id>	offer:winback:vehicle:6_gift	</id>
-          <expires>	01.01.2050 00:00	</expires>
-        </token>
-      </bonus>
-    </tokenQuest>
-    <tokenQuest>
-      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
-      <enabled>	true	</enabled>
-      <hidden>	true	</hidden>
-      <id>	winback_compensation_2	</id>
-      <conditions>
-        <preBattle>
-          <account>
-            <and>
-              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
-              <token>
-                <id>	winback:access	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-              </token>
-              <token>
-                <id>	winback:unlock:2	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-                <consume>	1	</consume>
-              </token>
-              <token>
-                <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	2	</greaterOrEqual>
-              </token>
-              <vehiclesUnlocked>
-                <levels>	6	</levels>
-                <greaterOrEqual>	46	</greaterOrEqual>
-              </vehiclesUnlocked>
-            </and>
-          </account>
-        </preBattle>
-        <common>
-          <bonusLimit>	1000	</bonusLimit>
-        </common>
-      </conditions>
-      <bonus>
-        <token>
-          <id>	offer:winback:blueprints:6_gift	</id>
-          <expires>	01.01.2050 00:00	</expires>
-        </token>
-      </bonus>
-    </tokenQuest>
-    <tokenQuest>
-      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
-      <enabled>	true	</enabled>
-      <hidden>	true	</hidden>
       <id>	winback_normal_3	</id>
       <conditions>
         <preBattle>
@@ -497,8 +565,8 @@
               </token>
               <not>
                 <vehiclesUnlocked>
-                  <levels>	7	</levels>
-                  <greaterOrEqual>	51	</greaterOrEqual>
+                  <types>	france:F06_ARL_44	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
                 </vehiclesUnlocked>
               </not>
             </and>
@@ -509,10 +577,11 @@
         </common>
       </conditions>
       <bonus>
-        <token>
-          <id>	offer:winback:discount:7_gift	</id>
-          <expires>	01.01.2050 00:00	</expires>
-        </token>
+        <slots>	1	</slots>
+        <vehicle>	france:F06_ARL_44	  <crewLvl>	100	</crewLvl>
+          <unlock></unlock>
+          <unlockModules></unlockModules>
+        </vehicle>
       </bonus>
     </tokenQuest>
     <tokenQuest>
@@ -539,6 +608,995 @@
                 <greaterOrEqual>	3	</greaterOrEqual>
               </token>
               <vehiclesUnlocked>
+                <types>	france:F06_ARL_44	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:6	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	france:F07_AMX_M4_1945	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	6977	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13132	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:6	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	france:F07_AMX_M4_1945	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:9	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	9	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	france:F81_Char_de_65t	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	16449	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13232	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:9	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	9	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	france:F81_Char_de_65t	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:12	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	12	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	france:F83_AMX_M4_Mle1949_Bis	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	16705	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <goodie>
+          <id>	13334	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:12	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	12	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	france:F83_AMX_M4_Mle1949_Bis	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	9	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:15	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	15	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	france:F82_AMX_M4_Mle1949_Ter	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	16961	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13436	</id>
+          <count>	1	</count>
+        </goodie>
+        <vehicle>	usa:A141_M_IV_Y	  <rent>
+            <time>	7	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+          <customCompensationDetails>
+            <noCrew></noCrew>
+          </customCompensationDetails>
+        </vehicle>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:15	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	15	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	france:F82_AMX_M4_Mle1949_Ter	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	16	</count>
+        </blueprint>
+        <vehicle>	usa:A141_M_IV_Y	  <rent>
+            <time>	7	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+          <customCompensationDetails>
+            <noCrew></noCrew>
+          </customCompensationDetails>
+        </vehicle>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_18	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:18	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	18	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	usa:A142_Pawlack_Tank	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <vehicle>	usa:A142_Pawlack_Tank	  <crewLvl>	100	</crewLvl>
+          <unlock></unlock>
+          <unlockModules></unlockModules>
+        </vehicle>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_18	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:18	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	18	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	usa:A142_Pawlack_Tank	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_21	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:21	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	21	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	usa:A147_M_II_Y	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	20769	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13151	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_21	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:21	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	21	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	usa:A147_M_II_Y	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_24	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:24	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	24	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	usa:A139_M_III_Y	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	21025	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13255	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_24	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:24	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	24	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	usa:A139_M_III_Y	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	12	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_27	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:27	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	27	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	usa:A144_M_VI_Y	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	21281	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <goodie>
+          <id>	13358	</id>
+          <count>	1	</count>
+        </goodie>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_27	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:27	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	27	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	usa:A144_M_VI_Y	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	9	</count>
+        </blueprint>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_30	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:30	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	30	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <types>	usa:A143_M_V_Y	</types>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	21537	</compDescr>
+          <count>	4	</count>
+        </blueprint>
+        <goodie>
+          <id>	13463	</id>
+          <count>	1	</count>
+        </goodie>
+        <vehicle>	italy:It30_CC_mod_64_Prem	  <rent>
+            <time>	7	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+          <customCompensationDetails>
+            <noCrew></noCrew>
+          </customCompensationDetails>
+        </vehicle>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_30	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:30	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	30	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <types>	usa:A143_M_V_Y	</types>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	16	</count>
+        </blueprint>
+        <vehicle>	italy:It30_CC_mod_64_Prem	  <rent>
+            <time>	7	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+          <customCompensationDetails>
+            <noCrew></noCrew>
+          </customCompensationDetails>
+        </vehicle>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_33	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:33	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	33	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <levels>	6	</levels>
+                  <greaterOrEqual>	46	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	offer:winback:vehicle:6_gift	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_33	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:33	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	33	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
+                <levels>	6	</levels>
+                <greaterOrEqual>	46	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	offer:winback:blueprints:6_gift	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_normal_36	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:36	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	36	</greaterOrEqual>
+              </token>
+              <not>
+                <vehiclesUnlocked>
+                  <levels>	7	</levels>
+                  <greaterOrEqual>	51	</greaterOrEqual>
+                </vehiclesUnlocked>
+              </not>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	offer:winback:discount:7_gift	</id>
+          <expires>	01.01.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	winback_compensation_36	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
+              <token>
+                <id>	winback:access	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	winback:unlock:36	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	dqt:control:ticket:epic_reward	</id>
+                <greaterOrEqual>	36	</greaterOrEqual>
+              </token>
+              <vehiclesUnlocked>
                 <levels>	7	</levels>
                 <greaterOrEqual>	51	</greaterOrEqual>
               </vehiclesUnlocked>
@@ -560,7 +1618,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_normal_4	</id>
+      <id>	winback_normal_39	</id>
       <conditions>
         <preBattle>
           <account>
@@ -571,13 +1629,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:4	</id>
+                <id>	winback:unlock:39	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	4	</greaterOrEqual>
+                <greaterOrEqual>	39	</greaterOrEqual>
               </token>
               <not>
                 <vehiclesUnlocked>
@@ -603,7 +1661,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_compensation_4	</id>
+      <id>	winback_compensation_39	</id>
       <conditions>
         <preBattle>
           <account>
@@ -614,13 +1672,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:4	</id>
+                <id>	winback:unlock:39	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	4	</greaterOrEqual>
+                <greaterOrEqual>	39	</greaterOrEqual>
               </token>
               <vehiclesUnlocked>
                 <levels>	8	</levels>
@@ -644,7 +1702,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_normal_5	</id>
+      <id>	winback_normal_42	</id>
       <conditions>
         <preBattle>
           <account>
@@ -655,13 +1713,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:5	</id>
+                <id>	winback:unlock:42	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	5	</greaterOrEqual>
+                <greaterOrEqual>	42	</greaterOrEqual>
               </token>
               <not>
                 <vehiclesUnlocked>
@@ -687,7 +1745,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_compensation_5	</id>
+      <id>	winback_compensation_42	</id>
       <conditions>
         <preBattle>
           <account>
@@ -698,13 +1756,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:5	</id>
+                <id>	winback:unlock:42	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	5	</greaterOrEqual>
+                <greaterOrEqual>	42	</greaterOrEqual>
               </token>
               <vehiclesUnlocked>
                 <levels>	9	</levels>
@@ -728,7 +1786,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_normal_6	</id>
+      <id>	winback_normal_45	</id>
       <conditions>
         <preBattle>
           <account>
@@ -739,13 +1797,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:6	</id>
+                <id>	winback:unlock:45	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	6	</greaterOrEqual>
+                <greaterOrEqual>	45	</greaterOrEqual>
               </token>
               <not>
                 <vehiclesUnlocked>
@@ -775,7 +1833,7 @@
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	winback_compensation_6	</id>
+      <id>	winback_compensation_45	</id>
       <conditions>
         <preBattle>
           <account>
@@ -786,13 +1844,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
               </token>
               <token>
-                <id>	winback:unlock:6	</id>
+                <id>	winback:unlock:45	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
                 <id>	dqt:control:ticket:epic_reward	</id>
-                <greaterOrEqual>	6	</greaterOrEqual>
+                <greaterOrEqual>	45	</greaterOrEqual>
               </token>
               <vehiclesUnlocked>
                 <levels>	10	</levels>
@@ -837,27 +1895,77 @@
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:unlock:2	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
                 <id>	winback:unlock:3	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
               <token>
-                <id>	winback:unlock:4	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
-                <id>	winback:unlock:5	</id>
-                <greaterOrEqual>	0	</greaterOrEqual>
-                <consume>	100	</consume>
-              </token>
-              <token>
                 <id>	winback:unlock:6	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:9	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:12	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:15	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:18	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:21	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:24	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:27	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:30	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:33	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:36	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:39	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:42	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
+              <token>
+                <id>	winback:unlock:45	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -920,61 +2028,61 @@
       </conditions>
       <bonus>
         <token>
-          <id>	winback:update_offer:normal:2	</id>
+          <id>	winback:update_offer:normal:33	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:normal:3	</id>
+          <id>	winback:update_offer:normal:36	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:normal:4	</id>
+          <id>	winback:update_offer:normal:39	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:normal:5	</id>
+          <id>	winback:update_offer:normal:42	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:normal:6	</id>
+          <id>	winback:update_offer:normal:45	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:compensation:2	</id>
+          <id>	winback:update_offer:compensation:33	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:compensation:3	</id>
+          <id>	winback:update_offer:compensation:36	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:compensation:4	</id>
+          <id>	winback:update_offer:compensation:39	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:compensation:5	</id>
+          <id>	winback:update_offer:compensation:42	</id>
           <expires>
             <after>	720	</after>
           </expires>
         </token>
         <token>
-          <id>	winback:update_offer:compensation:6	</id>
+          <id>	winback:update_offer:compensation:45	</id>
           <expires>
             <after>	720	</after>
           </expires>
@@ -1044,7 +2152,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_normal_2	</id>
+      <id>	hidden_winback_update_offer_normal_33	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1052,12 +2160,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:normal:2	</id>
+                <id>	winback:update_offer:normal:33	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:2	</id>
+                <id>	winback:update_offer:compensation:33	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1085,7 +2193,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_normal_3	</id>
+      <id>	hidden_winback_update_offer_normal_36	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1093,12 +2201,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:normal:3	</id>
+                <id>	winback:update_offer:normal:36	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:3	</id>
+                <id>	winback:update_offer:compensation:36	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1126,7 +2234,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_normal_4	</id>
+      <id>	hidden_winback_update_offer_normal_39	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1134,12 +2242,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:normal:4	</id>
+                <id>	winback:update_offer:normal:39	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:4	</id>
+                <id>	winback:update_offer:compensation:39	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1167,7 +2275,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_normal_5	</id>
+      <id>	hidden_winback_update_offer_normal_42	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1175,12 +2283,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:normal:5	</id>
+                <id>	winback:update_offer:normal:42	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:5	</id>
+                <id>	winback:update_offer:compensation:42	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1208,7 +2316,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_normal_6	</id>
+      <id>	hidden_winback_update_offer_normal_45	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1216,12 +2324,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:normal:6	</id>
+                <id>	winback:update_offer:normal:45	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:compensation:6	</id>
+                <id>	winback:update_offer:compensation:45	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1249,7 +2357,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_compensation_2	</id>
+      <id>	hidden_winback_update_offer_compensation_33	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1257,12 +2365,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:compensation:2	</id>
+                <id>	winback:update_offer:compensation:33	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:2	</id>
+                <id>	winback:update_offer:normal:33	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1290,7 +2398,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_compensation_3	</id>
+      <id>	hidden_winback_update_offer_compensation_36	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1298,12 +2406,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:compensation:3	</id>
+                <id>	winback:update_offer:compensation:36	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:3	</id>
+                <id>	winback:update_offer:normal:36	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1331,7 +2439,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_compensation_4	</id>
+      <id>	hidden_winback_update_offer_compensation_39	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1339,12 +2447,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:compensation:4	</id>
+                <id>	winback:update_offer:compensation:39	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:4	</id>
+                <id>	winback:update_offer:normal:39	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1372,7 +2480,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_compensation_5	</id>
+      <id>	hidden_winback_update_offer_compensation_42	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1380,12 +2488,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:compensation:5	</id>
+                <id>	winback:update_offer:compensation:42	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:5	</id>
+                <id>	winback:update_offer:normal:42	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>
@@ -1413,7 +2521,7 @@
     <tokenQuest>
       <progressExpiryTime>	01.01.2050 00:00	</progressExpiryTime>
       <enabled>	true	</enabled>
-      <id>	hidden_winback_update_offer_compensation_6	</id>
+      <id>	hidden_winback_update_offer_compensation_45	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
@@ -1421,12 +2529,12 @@
             <and>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <token>
-                <id>	winback:update_offer:compensation:6	</id>
+                <id>	winback:update_offer:compensation:45	</id>
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
               <token>
-                <id>	winback:update_offer:normal:6	</id>
+                <id>	winback:update_offer:normal:45	</id>
                 <greaterOrEqual>	0	</greaterOrEqual>
                 <consume>	100	</consume>
               </token>

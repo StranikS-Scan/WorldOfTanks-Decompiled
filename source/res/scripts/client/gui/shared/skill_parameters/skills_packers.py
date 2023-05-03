@@ -27,7 +27,7 @@ def packBase(descrArgs, skillLevel, customValues=None):
 
 
 def _packCommanderExpert(descrArgs, skillLevel, customValues=None):
-    damageMonitoringDelayBase = 4
+    damageMonitoringDelayBase = 4.5
     damageMonitoringDelayMinimum = 0.5
 
     def _customValue(skillDescrArg, isKpi):

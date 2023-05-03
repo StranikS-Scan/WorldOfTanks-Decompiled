@@ -1660,58 +1660,52 @@ class Views(DynAccessor):
 
             class _feature(DynAccessor):
                 __slots__ = ()
-
-                class _common(DynAccessor):
-                    __slots__ = ()
-                    ModifierDomainIcon = DynAccessor(475)
-
-                common = _common()
-                FunRandomEntryPointView = DynAccessor(476)
-                FunRandomHangarWidgetView = DynAccessor(477)
-                FunRandomModeSubSelector = DynAccessor(478)
-                FunRandomProgression = DynAccessor(479)
+                FunRandomEntryPointView = DynAccessor(475)
+                FunRandomHangarWidgetView = DynAccessor(476)
+                FunRandomModeSubSelector = DynAccessor(477)
+                FunRandomProgression = DynAccessor(478)
 
             feature = _feature()
 
             class _tooltips(DynAccessor):
                 __slots__ = ()
-                FunRandomProgressionTooltipView = DynAccessor(480)
+                FunRandomProgressionTooltipView = DynAccessor(479)
 
             tooltips = _tooltips()
 
         lobby = _lobby()
 
     fun_random = _fun_random()
-    Anchor = DynAccessor(481)
-    Comp7DemoPageView = DynAccessor(482)
-    ComponentsDemo = DynAccessor(483)
-    DataLayerDemoView = DynAccessor(484)
-    DataTrackerDemo = DynAccessor(485)
-    DemoContextMenu = DynAccessor(486)
-    Easings = DynAccessor(487)
-    GFCharset = DynAccessor(488)
-    GFComponents = DynAccessor(489)
-    GFDemoPopover = DynAccessor(490)
-    GFDemoRichTooltipWindow = DynAccessor(491)
-    GFDemoWindow = DynAccessor(492)
-    GFHooksDemo = DynAccessor(493)
-    GFInjectView = DynAccessor(494)
-    GFSimpleTooltipWindow = DynAccessor(495)
-    GFWebSubDemoWindow = DynAccessor(496)
+    Anchor = DynAccessor(480)
+    Comp7DemoPageView = DynAccessor(481)
+    ComponentsDemo = DynAccessor(482)
+    DataLayerDemoView = DynAccessor(483)
+    DataTrackerDemo = DynAccessor(484)
+    DemoContextMenu = DynAccessor(485)
+    Easings = DynAccessor(486)
+    GFCharset = DynAccessor(487)
+    GFComponents = DynAccessor(488)
+    GFDemoPopover = DynAccessor(489)
+    GFDemoRichTooltipWindow = DynAccessor(490)
+    GFDemoWindow = DynAccessor(491)
+    GFHooksDemo = DynAccessor(492)
+    GFInjectView = DynAccessor(493)
+    GFSimpleTooltipWindow = DynAccessor(494)
+    GFWebSubDemoWindow = DynAccessor(495)
 
     class _gf_dialogs_demo(DynAccessor):
         __slots__ = ()
-        DefaultDialogProxy = DynAccessor(497)
-        GFDialogsDemo = DynAccessor(498)
+        DefaultDialogProxy = DynAccessor(496)
+        GFDialogsDemo = DynAccessor(497)
 
         class _sub_views(DynAccessor):
             __slots__ = ()
-            DummyContent = DynAccessor(499)
-            DummyFooter = DynAccessor(500)
-            DummyIcon = DynAccessor(501)
-            DummyStepper = DynAccessor(502)
-            DummyTitle = DynAccessor(503)
-            DummyTopRight = DynAccessor(504)
+            DummyContent = DynAccessor(498)
+            DummyFooter = DynAccessor(499)
+            DummyIcon = DynAccessor(500)
+            DummyStepper = DynAccessor(501)
+            DummyTitle = DynAccessor(502)
+            DummyTopRight = DynAccessor(503)
 
         sub_views = _sub_views()
 
@@ -1719,43 +1713,43 @@ class Views(DynAccessor):
 
     class _gf_viewer(DynAccessor):
         __slots__ = ()
-        GFViewerWindow = DynAccessor(505)
+        GFViewerWindow = DynAccessor(504)
 
     gf_viewer = _gf_viewer()
 
     class _igb_demo(DynAccessor):
         __slots__ = ()
-        BrowserFullscreenWindow = DynAccessor(506)
-        BrowserWindow = DynAccessor(507)
-        MainView = DynAccessor(508)
+        BrowserFullscreenWindow = DynAccessor(505)
+        BrowserWindow = DynAccessor(506)
+        MainView = DynAccessor(507)
 
     igb_demo = _igb_demo()
-    LocaleDemo = DynAccessor(509)
-    MediaWrapperDemo = DynAccessor(510)
-    MixBlendMode = DynAccessor(511)
-    MixBlendModeAnimation = DynAccessor(512)
-    ModeSelectorDemo = DynAccessor(513)
-    ModeSelectorToolsetView = DynAccessor(514)
-    NewYearLevelUp = DynAccessor(515)
-    PluralLocView = DynAccessor(516)
-    PropsSupportDemo = DynAccessor(517)
-    ReactSpringVizualizer = DynAccessor(518)
-    StructuralDataBindDemo = DynAccessor(519)
+    LocaleDemo = DynAccessor(508)
+    MediaWrapperDemo = DynAccessor(509)
+    MixBlendMode = DynAccessor(510)
+    MixBlendModeAnimation = DynAccessor(511)
+    ModeSelectorDemo = DynAccessor(512)
+    ModeSelectorToolsetView = DynAccessor(513)
+    NewYearLevelUp = DynAccessor(514)
+    PluralLocView = DynAccessor(515)
+    PropsSupportDemo = DynAccessor(516)
+    ReactSpringVizualizer = DynAccessor(517)
+    StructuralDataBindDemo = DynAccessor(518)
 
     class _sub_views_demo(DynAccessor):
         __slots__ = ()
-        GFSubViewsDemo = DynAccessor(520)
+        GFSubViewsDemo = DynAccessor(519)
 
         class _sub_views(DynAccessor):
             __slots__ = ()
-            CustomizationCartProxy = DynAccessor(521)
-            DailyProxy = DynAccessor(522)
-            ProgressiveItemsViewProxy = DynAccessor(523)
+            CustomizationCartProxy = DynAccessor(520)
+            DailyProxy = DynAccessor(521)
+            ProgressiveItemsViewProxy = DynAccessor(522)
 
         sub_views = _sub_views()
 
     sub_views_demo = _sub_views_demo()
-    UILoggerDemo = DynAccessor(524)
-    VideoSupportView = DynAccessor(525)
-    W2CTestPageWindow = DynAccessor(526)
-    WgcgMockView = DynAccessor(527)
+    UILoggerDemo = DynAccessor(523)
+    VideoSupportView = DynAccessor(524)
+    W2CTestPageWindow = DynAccessor(525)
+    WgcgMockView = DynAccessor(526)

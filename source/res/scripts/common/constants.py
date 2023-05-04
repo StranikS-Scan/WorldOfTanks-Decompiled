@@ -93,7 +93,7 @@ elif CURRENT_REALM == 'CT':
     AUTH_REALM = 'CT'
 elif CURRENT_REALM == 'RU':
     DEFAULT_LANGUAGE = 'ru'
-    AUTH_REALM = 'CT'
+    AUTH_REALM = 'RU'
 elif CURRENT_REALM in ('EU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE

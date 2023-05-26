@@ -28,6 +28,7 @@ class PlanStatus:
     DEFAULT = 0
     LOAD = 1
     START = 2
+    DESTROYED = 3
 
 
 class VsePlan(object):
@@ -130,6 +131,7 @@ class VsePlan(object):
         self._owner = None
         self._context = None
         self._contextCreator = None
+        self._status = PlanStatus.DESTROYED
         self._clearCallBack()
         return
 
@@ -142,6 +144,9 @@ class VsePlan(object):
         try:
             if IS_CELLAPP:
                 future.get()
+            if self.status == PlanStatus.DESTROYED:
+                LOG_ERROR("VsePlan: Plan xml '%s' already destroyed." % self._planId)
+                return
             self._usedEvents = []
             self._isPlanLoaded = self._plan.load(self._planId, (ASPECT.SERVER, ASPECT.CLIENT), [], self._usedEvents)
             if self._isPlanLoaded and self._contextCreator:

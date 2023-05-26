@@ -9,11 +9,14 @@ from items.components.skills_constants import ROLES_BY_SKILLS
 from items.utils import isclose
 from items.vehicles import TANKMAN_EXTRA_NAMES
 from soft_exception import SoftException
+if IS_CLIENT:
+    from items import perks
 if TYPE_CHECKING:
     from items.artefacts import SkillEquipment
 _DO_DEBUG_LOG = False
 CREW_CONTEXT_FORCE_UPDATE_INDEX = -29222
-_ADDITIVE_FACTORS = frozenset((ten + CHANCE_TO_HIT_SUFFIX_FACTOR for ten in TANKMAN_EXTRA_NAMES))
+_ADDITIVE_FACTORS = frozenset([ ten + CHANCE_TO_HIT_SUFFIX_FACTOR for ten in TANKMAN_EXTRA_NAMES ] + ['circularVisionRadiusB'])
+_COMPLEX_FACTORS = frozenset(('circularVisionRadius', 'circularVisionRadiusB'))
 
 class VehicleDescrCrew(object):
 
@@ -130,6 +133,8 @@ class VehicleDescrCrew(object):
             self._buildFactors()
         for name, value in self._factors.iteritems():
             try:
+                if name in _COMPLEX_FACTORS:
+                    continue
                 if name in _ADDITIVE_FACTORS:
                     factors[name] += value
                 else:
@@ -137,6 +142,9 @@ class VehicleDescrCrew(object):
             except:
                 pass
 
+        cvrA = self._factors.get('circularVisionRadius', 1.0)
+        cvrB = self._factors.get('circularVisionRadiusB', 0.0)
+        factors['circularVisionRadius'] *= cvrA * (1.0 + cvrB)
         try:
             r = factors['chassis/terrainResistance']
             value = self._terrainResistanceFactors
@@ -355,6 +363,22 @@ class VehicleDescrCrew(object):
         if _DO_DEBUG_LOG:
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('camouflage', a.factor, a.baseAvgLevel))
 
+    def _process_commander_eagleEye(self, a):
+        self._process_perk(a, 'circularVisionRadius', 'circularVisionRadiusB')
+
+    def _process_radioman_finder(self, a):
+        self._process_perk(a, 'vehicleCircularVisionRadius', 'circularVisionRadiusB')
+
+    def _process_perk(self, a, argName, factorName):
+        if not IS_CLIENT:
+            return
+        if not a.isActive or a.isFire:
+            return
+        vsePerk = a.skillConfig.vsePerk
+        perkCfg = perks.g_cache.perks.get(vsePerk)
+        factorPerLevel = perkCfg.defaultBlockSettings[argName].value
+        self._setFactor(factorName, round(a.level + a.levelIncrease) * factorPerLevel)
+
     def _findBestTankmanForSkill(self, skillData):
         if not self._useCachedLevelIncrease:
             commanderLevelIncrease = self._levelIncreaseByBrotherhood + self._levelIncreaseByVehicle
@@ -482,7 +506,7 @@ class VehicleDescrCrew(object):
      'commander_tutor': None,
      'commander_expert': None,
      'commander_sixthSense': None,
-     'commander_eagleEye': None,
+     'commander_eagleEye': _process_commander_eagleEye,
      'commander_enemyShotPredictor': None,
      'driver_tidyPerson': None,
      'driver_smoothDriving': None,
@@ -496,7 +520,7 @@ class VehicleDescrCrew(object):
      'loader_pedant': None,
      'loader_desperado': None,
      'loader_intuition': None,
-     'radioman_finder': None,
+     'radioman_finder': _process_radioman_finder,
      'radioman_inventor': None,
      'radioman_lastEffort': None,
      'radioman_retransmitter': None}

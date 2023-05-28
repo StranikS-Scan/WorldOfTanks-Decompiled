@@ -57,6 +57,14 @@ class RareAchievement(RegularAchievement):
     def requestBigImageID(self):
         return self._requestImageID(IMAGE_TYPE.IT_180X180)
 
+    def requestImagePath(self):
+        imgPath = self.rareAchievesCache.getAchievementImageUrl(IMAGE_TYPE.IT_67X71, self._rareID)
+        return 'R.images.gui.maps.icons.achievement.noImage' if imgPath is None else imgPath
+
+    def requestBigImagePath(self):
+        imgPath = self.rareAchievesCache.getAchievementImageUrl(IMAGE_TYPE.IT_180X180, self._rareID)
+        return 'R.images.gui.maps.icons.achievement.big.noImage' if imgPath is None else imgPath
+
     def _readValue(self, dossier):
         return dossier.getBlock(_AB.RARE).count(self._rareID)
 

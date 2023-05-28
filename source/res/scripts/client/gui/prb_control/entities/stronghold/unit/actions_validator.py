@@ -16,6 +16,7 @@ class StrongholdUnitSlotsValidator(CommanderValidator):
         rosterSettings = self._entity.getRosterSettings()
         stats = self._entity.getStats()
         isPlayersMatchingAvailable = self._entity.isPlayersMatchingAvailable()
+        hasEventFrozenVehicles = self._entity.hasEventFrozenVehicles()
         allMembersReady = stats.readyCount == stats.occupiedSlotsCount
         if isPlayersMatchingAvailable:
             isClanMembersEnough = stats.clanMembersInRoster >= rosterSettings.getMinClanMembersCount()
@@ -30,7 +31,7 @@ class StrongholdUnitSlotsValidator(CommanderValidator):
                 return ValidationResult(False, UNIT_RESTRICTION.MIN_SLOTS)
             if not allMembersReady:
                 return ValidationResult(False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
-        return super(StrongholdUnitSlotsValidator, self)._validate()
+        return ValidationResult(True, UNIT_RESTRICTION.HAS_FROZEN_VEHICLES) if hasEventFrozenVehicles else super(StrongholdUnitSlotsValidator, self)._validate()
 
 
 class StrongholdUnitStateValidator(UnitStateValidator):

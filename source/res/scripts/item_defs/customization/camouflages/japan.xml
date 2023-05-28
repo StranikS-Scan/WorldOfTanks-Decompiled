@@ -1994,4 +1994,125 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J20_Type_2605	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	732	</id>
+      <texture>	vehicles/russian/Camouflage/J20_Type_2605_BXI_3DSt_stage3_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	76 71 50 255	</c0>
+          <c1>	199 179 153 255	</c1>
+          <c2>	40 46 26 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <japan:J02_Te_Ke8>	3.46 3.46 -0.06 -1.69	</japan:J02_Te_Ke8>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.0 1.0	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	733	</id>
+      <texture>	vehicles/russian/Camouflage/J20_Type_2605_BXI_3DSt_stage3_gun_turret.dds	</texture>
+      <description>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	76 72 52 128	</c0>
+          <c1>	199 179 153 204	</c1>
+          <c2>	41 46 26 128	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.785398	</HULL>
+        <TURRET>	0.785398	</TURRET>
+        <GUN>	0.785398	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.0 1.0	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+      <tiling>
+        <japan:J02_Te_Ke8>	3.25 3.25 0 0	</japan:J02_Te_Ke8>
+      </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	734	</id>
+      <texture>	vehicles/russian/Camouflage/J20_Type_2605_BXI_3DSt_stage4_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	58 54 38 255	</c0>
+          <c1>	140 134 126 255	</c1>
+          <c2>	27 30 17 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.0 1.0	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+      <tiling>
+        <japan:J02_Te_Ke8>	3.46 3.46 -0.06 -1.69	</japan:J02_Te_Ke8>
+      </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	735	</id>
+      <texture>	vehicles/russian/Camouflage/J20_Type_2605_BXI_3DSt_stage4_gun_turret.dds	</texture>
+      <description>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/J20_Type_2605_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	58 55 40 255	</c0>
+          <c1>	140 134 126 255	</c1>
+          <c2>	27 30 17 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.785398	</HULL>
+        <TURRET>	0.785398	</TURRET>
+        <GUN>	0.785398	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.0 1.0	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+      <tiling>
+        <japan:J02_Te_Ke8>	3.25 3.25 0 0	</japan:J02_Te_Ke8>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </japan.xml>

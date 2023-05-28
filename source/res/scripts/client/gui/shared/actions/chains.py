@@ -17,6 +17,10 @@ class ActionsChain(object):
         self.onStopped = Event.Event(self.__eManager)
         return
 
+    @property
+    def isActive(self):
+        return not self.__isStopped
+
     def start(self):
         if self.__isStopped:
             LOG_DEBUG('Starts to perform actions', self)

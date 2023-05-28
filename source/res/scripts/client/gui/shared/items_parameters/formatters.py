@@ -512,7 +512,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-        values, separator = formatter(parameterName, round(paramValue, 3)), None
+        values, separator = formatter(parameterName, paramValue), None
     elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:

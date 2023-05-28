@@ -20,8 +20,8 @@ from gui.shared.account_settings_helper import AccountSettingsHelper
 import personal_missions
 import wg_async
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AWARDS, AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND, GuiSettingsBehavior
+from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
+from account_helpers.settings_core.settings_constants import SOUND
 from adisp import adisp_process
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
@@ -32,7 +32,6 @@ from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface, SystemMessages
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showPunishmentDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -53,6 +52,7 @@ from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewards
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7Quest, getComp7QuestType, parseComp7RanksQuestID, parseComp7TokensQuestID
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
@@ -71,7 +71,7 @@ from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency, i18n
-from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
+from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
@@ -81,7 +81,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -104,7 +104,7 @@ class QUEST_AWARD_POSTFIX(object):
 _POPUP_RECORDS = 'popUpRecords'
 
 class _NonOverlappingStarBehaviorDescr(object):
-    __NON_OVERLAPPING_START_BEHAVIOR = (GuiSettingsBehavior.CREW_22_WELCOME_SHOWN,)
+    __NON_OVERLAPPING_START_BEHAVIOR = ()
 
     @classmethod
     def hasAnyOverlap(cls):
@@ -804,26 +804,6 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
                 quests_events.showMotiveAward(motiveQuests[qID])
 
 
-class QuestBoosterAwardHandler(ServiceChannelHandler):
-    goodiesCache = dependency.descriptor(IGoodiesCache)
-
-    def __init__(self, awardCtrl):
-        super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        pass
-
-
-class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
-    goodiesCache = dependency.descriptor(IGoodiesCache)
-
-    def __init__(self, awardCtrl):
-        super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        pass
-
-
 class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
@@ -1046,164 +1026,6 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
         quests_events.showOperationUnlockedAward(quest, context)
 
 
-class SpecialAchievement(AwardHandler):
-    bootcampController = dependency.descriptor(IBootcampController)
-
-    def __init__(self, key, awardCtrl, awardCountToMessage):
-        super(SpecialAchievement, self).__init__(awardCtrl)
-        self.__key = key
-        self._awardCntToMsg = awardCountToMessage
-
-    def isChanged(self, value):
-        return value != AccountSettings.getFilter(AWARDS).get(self.__key)
-
-    def getAchievementCount(self):
-        raise NotImplementedError
-
-    def showAwardWindow(self, achievementCount, messageNumber):
-        raise NotImplementedError
-
-    def _needToShowAward(self, ctx=None):
-        return (not self._awardCtrl.canShow() or self._getAchievementToShow() is not None) and not self.bootcampController.isInBootcamp()
-
-    def _getAchievementToShow(self):
-        achievementCount = self.getAchievementCount()
-        lastElement = max(self._awardCntToMsg.keys())
-        if achievementCount != 0 and self.isChanged(achievementCount):
-            if achievementCount in self._awardCntToMsg or achievementCount % lastElement == 0:
-                return achievementCount
-            sortedKeys = sorted(self._awardCntToMsg.keys(), reverse=True)
-            for i in xrange(len(sortedKeys) - 1):
-                if sortedKeys[i] > achievementCount and achievementCount > sortedKeys[i + 1] and self.isChanged(sortedKeys[i + 1]):
-                    return sortedKeys[i + 1]
-
-        return None
-
-    def _showAward(self, ctx=None):
-        achievementCount = self._getAchievementToShow()
-        if achievementCount is not None:
-            messageNumber = self._awardCntToMsg.get(achievementCount, self._awardCntToMsg[max(self._awardCntToMsg.keys())])
-            self.__setNewValue(achievementCount)
-            self.showAwardWindow(achievementCount, messageNumber)
-        return
-
-    def __setNewValue(self, value):
-        achievement = AccountSettings.getFilter(AWARDS)
-        achievement[self.__key] = value
-        AccountSettings.setFilter(AWARDS, achievement)
-
-
-class VehiclesResearchHandler(SpecialAchievement):
-    VEHICLE_AMOUNT = {2: 1,
-     5: 2,
-     10: 3,
-     20: 4,
-     30: 1}
-
-    def __init__(self, awardCtrl):
-        super(VehiclesResearchHandler, self).__init__('vehicleResearchAward', awardCtrl, VehiclesResearchHandler.VEHICLE_AMOUNT)
-        self.__unlocks = set()
-        self.__achievementCounts = 0
-
-    def init(self):
-        g_clientUpdateManager.addCallbacks({'stats.unlocks': self.onUnlocksChanged})
-
-    def fini(self):
-        self.__unlocks.clear()
-        g_clientUpdateManager.removeObjectCallbacks(self)
-
-    def getAchievementCount(self):
-        self.__achievementCounts = len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.COLLECTIBLE))
-        return self.__achievementCounts
-
-    def onUnlocksChanged(self, unlocks):
-        isChanged = False
-        self.__unlocks.clear()
-        self.__achievementCounts = 0
-        for unlock in list(unlocks):
-            if getTypeOfCompactDescr(unlock) == ITEM_TYPE_INDICES['vehicle']:
-                self.__unlocks.add(unlock)
-                isChanged = True
-
-        if isChanged:
-            self.handle()
-
-    def showAwardWindow(self, achievementCount, messageNumber):
-        return award_events.showResearchAward(achievementCount, messageNumber)
-
-    def _needToShowAward(self, ctx=None):
-        isNeededToShow = super(VehiclesResearchHandler, self)._needToShowAward()
-        if isNeededToShow:
-            bcVehicles = self.bootcampController.getAwardVehicles()
-            isAwardVehicles = set(bcVehicles).issubset(self.__unlocks) if bcVehicles else False
-            return not isAwardVehicles and self.__achievementCounts in self._awardCntToMsg
-        return False
-
-
-class VictoryHandler(SpecialAchievement):
-    VICTORY_AMOUNT = {5: 1,
-     10: 2,
-     20: 3,
-     50: 4,
-     100: 1,
-     250: 2,
-     500: 3,
-     1000: 4}
-
-    def __init__(self, awardCtrl):
-        super(VictoryHandler, self).__init__('victoryAward', awardCtrl, VictoryHandler.VICTORY_AMOUNT)
-
-    def init(self):
-        g_playerEvents.onGuiCacheSyncCompleted += self.handle
-        g_playerEvents.onDossiersResync += self.handle
-        g_playerEvents.onBattleResultsReceived += self.handle
-
-    def fini(self):
-        g_playerEvents.onGuiCacheSyncCompleted -= self.handle
-        g_playerEvents.onDossiersResync -= self.handle
-        g_playerEvents.onBattleResultsReceived -= self.handle
-
-    def getAchievementCount(self):
-        return self.itemsCache.items.getAccountDossier().getTotalStats().getWinsCount()
-
-    def showAwardWindow(self, achievementCount, messageNumber):
-        return award_events.showVictoryAward(achievementCount, messageNumber)
-
-
-class BattlesCountHandler(SpecialAchievement):
-    BATTLE_AMOUNT = {50: 2,
-     100: 3,
-     250: 4,
-     500: 1,
-     1000: 2,
-     2000: 3,
-     5000: 4,
-     7500: 1,
-     10000: 2}
-
-    def __init__(self, awardCtrl, key='battlesCountAward'):
-        super(BattlesCountHandler, self).__init__(key, awardCtrl, self._getAwardCountToMessage())
-
-    def init(self):
-        g_playerEvents.onGuiCacheSyncCompleted += self.handle
-        g_playerEvents.onDossiersResync += self.handle
-        g_playerEvents.onBattleResultsReceived += self.handle
-
-    def fini(self):
-        g_playerEvents.onGuiCacheSyncCompleted -= self.handle
-        g_playerEvents.onDossiersResync -= self.handle
-        g_playerEvents.onBattleResultsReceived -= self.handle
-
-    def getAchievementCount(self):
-        return self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-
-    def showAwardWindow(self, achievementCount, messageNumber):
-        return award_events.showBattleAward(achievementCount, messageNumber)
-
-    def _getAwardCountToMessage(self):
-        return BattlesCountHandler.BATTLE_AMOUNT
-
-
 class GoldFishHandler(AwardHandler):
 
     def start(self):
@@ -1347,6 +1169,7 @@ class ProgressiveItemsRewardHandler(ServiceChannelHandler):
     _gui = dependency.descriptor(IGuiLoader)
     _hangarSpace = dependency.descriptor(IHangarSpace)
     _itemsCache = dependency.descriptor(IItemsCache)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, awardCtrl):
         super(ProgressiveItemsRewardHandler, self).__init__(SYS_MESSAGE_TYPE.customizationProgress.index(), awardCtrl)
@@ -1368,6 +1191,8 @@ class ProgressiveItemsRewardHandler(ServiceChannelHandler):
 
     def __show(self):
         self._hangarSpace.onSpaceCreate -= self.__show
+        if not self.__limitedUIController.isRuleCompleted(LuiRules.PROGRESSIVE_ITEMS_REWARD):
+            return
         for vehicleCD, items in self.__message.data.iteritems():
             newItemsCDs = items.keys()
             isFirst = checkIsFirstProgressionDecalOnVehicle(vehicleCD, newItemsCDs)
@@ -1958,14 +1783,9 @@ class WinbackQuestHandler(MultiTypeServiceChannelHandler):
 
 
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
- QuestBoosterAwardHandler,
- BoosterAfterBattleAwardHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
  MotiveQuestsWindowHandler,
- VehiclesResearchHandler,
- VictoryHandler,
- BattlesCountHandler,
  PersonalMissionBonusHandler,
  PersonalMissionWindowAfterBattleHandler,
  PersonalMissionAutoWindowHandler,

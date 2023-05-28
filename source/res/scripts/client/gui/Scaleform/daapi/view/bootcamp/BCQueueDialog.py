@@ -5,10 +5,11 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import LoadViewEvent
+from gui.shared.events import LoadViewEvent, BCLoginEvent
 from gui.Scaleform.daapi.view.meta.BCQueueWindowMeta import BCQueueWindowMeta
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+HIDE_GAME_LOADING_TIMEOUT = 10
 
 class BCQueueDialog(BCQueueWindowMeta):
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -20,12 +21,16 @@ class BCQueueDialog(BCQueueWindowMeta):
         self.__timeoutTime = settings['timeout']
         self.__startTime = BigWorld.time()
         self.__cancelCallbackId = None
+        self.__hideGameLoadingCallbackId = None
         return
 
     def updateSettings(self, settings):
         if self.__cancelCallbackId:
             BigWorld.cancelCallback(self.__cancelCallbackId)
             self.__cancelCallbackId = None
+        if self.__hideGameLoadingCallbackId:
+            BigWorld.cancelCallback(self.__hideGameLoadingCallbackId)
+            self.__hideGameLoadingCallbackId = None
         self.__backgroundImage = settings['backgroundImage']
         self.__lessonNumber = settings['lessonNumber']
         self.__timeoutTime = settings['timeout']
@@ -36,6 +41,7 @@ class BCQueueDialog(BCQueueWindowMeta):
             self.as_showCancelButtonS(False, '', '')
         else:
             self.showCancel()
+        self.__hideGameLoadingCallbackId = BigWorld.callback(HIDE_GAME_LOADING_TIMEOUT, self.__hideGameLoading)
         return
 
     def showCancel(self):
@@ -63,14 +69,23 @@ class BCQueueDialog(BCQueueWindowMeta):
         super(BCQueueDialog, self)._populate()
         self.connectionMgr.onDisconnected += self.__cm_onDisconnected
         self.__cancelCallbackId = BigWorld.callback(self.__timeoutTime, self.showCancel)
+        self.__hideGameLoadingCallbackId = BigWorld.callback(HIDE_GAME_LOADING_TIMEOUT, self.__hideGameLoading)
         self.applyData()
 
     def _dispose(self):
         if self.__cancelCallbackId is not None:
             BigWorld.cancelCallback(self.__cancelCallbackId)
             self.__cancelCallbackId = None
+        if self.__hideGameLoadingCallbackId is not None:
+            BigWorld.cancelCallback(self.__hideGameLoadingCallbackId)
+            self.__hideGameLoadingCallbackId = None
         self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
         super(BCQueueDialog, self)._dispose()
+        return
+
+    def __hideGameLoading(self):
+        self.__hideGameLoadingCallbackId = None
+        self.fireEvent(BCLoginEvent(BCLoginEvent.HIDE_GAME_LOADING), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __handleHideDialog(self, _):

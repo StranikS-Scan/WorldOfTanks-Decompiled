@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/frontline_bonus_packers.py
 import typing
-from epic_constants import FRONTLINE_BONUSES_ORDER, EPIC_SKILL_TOKEN_NAME
+from epic_constants import FRONTLINE_BONUSES_ORDER, EPIC_SKILL_TOKEN_NAME, EPIC_SELECT_BONUS_NAME
 from frontline.gui.bonus import FrontlineSkillBonus
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_reward_model import FrontlineRewardModel, ClaimState
 from gui.impl.backport import createTooltipData, TooltipData
@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
 def getFrontlineBonusPacker():
     mapping = getDefaultBonusPackersMap()
     mapping.update({'battlePassPoints': FrontlineBattlePassPointsBonusPacker(),
-     'epicSelectToken': FrontlineTokenBonusPacker(),
+     EPIC_SELECT_BONUS_NAME: FrontlineTokenBonusPacker(),
      'goodies': FrontlineGoodiesBonusPacker(),
      'crewBooks': FrontlineCrewBookBonusPacker(),
      Currency.CRYSTAL: FrontlineCrystalBonusPacker(),
@@ -30,6 +30,7 @@ def packBonusModelAndTooltipData(bonuses, listVM, tooltipData=None):
     packer = getFrontlineBonusPacker()
     listVM.clear()
     bonuses.sort(key=_keySortOrder)
+    bonusIndexTotal = len(tooltipData) if tooltipData is not None else 0
     for bonus in bonuses:
         if bonus.isShowInGUI():
             rewardsVM = packer.pack(bonus)
@@ -37,11 +38,12 @@ def packBonusModelAndTooltipData(bonuses, listVM, tooltipData=None):
             rewardsContentIds = packer.getContentId(bonus)
             for idx, rewardModel in enumerate(rewardsVM):
                 rewardTooltipData = rewardsTooltips[idx]
-                tooltipID = rewardTooltipData.specialAlias if rewardTooltipData.isSpecial else rewardModel.getName()
-                rewardModel.setTooltipId(tooltipID)
+                tooltipIdx = str(bonusIndexTotal)
+                rewardModel.setTooltipId(tooltipIdx)
                 rewardModel.setTooltipContentId(str(rewardsContentIds[idx]))
-                if tooltipData is not None and tooltipID not in tooltipData:
-                    tooltipData[tooltipID] = rewardsTooltips[idx]
+                if tooltipData is not None:
+                    tooltipData[tooltipIdx] = rewardTooltipData
+                    bonusIndexTotal += 1
                 listVM.addViewModel(rewardModel)
 
     listVM.invalidate()
@@ -85,12 +87,13 @@ class FrontlineTokenBonusPacker(SimpleBonusUIPacker):
     @classmethod
     def _packSingleBonus(cls, bonus, **kwargs):
         model = cls._getBonusModel()
-        name = bonus.getName()
-        model.setName(name)
-        model.setType(name)
+        bonusType = bonus.getType()
+        model.setName(bonusType)
+        model.setType(bonusType)
         claimState = ClaimState.CLAIMABLE if bonus.canClaim() else ClaimState.STATIC
         model.setClaimState(claimState)
-        model.setValue(str(bonus.firstOfferCount()))
+        value = bonus.firstOfferCount()
+        model.setValue(str(value) if value > 1 else '')
         return model
 
     @classmethod

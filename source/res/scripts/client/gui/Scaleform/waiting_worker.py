@@ -7,9 +7,8 @@ from gui.Scaleform.daapi.view.common.waiting_transitions import WaitingTransitio
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.impl.gen import R
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from helpers import dependency
 from shared_utils import findFirst
-from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker, IAppLoader, GuiGlobalSpaceID
+from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker
 _logger = logging.getLogger(__name__)
 
 class _WaitingTask(object):
@@ -258,8 +257,6 @@ class WaitingWorker(IWaitingWorker):
             if task.backgroundImage:
                 view.setBackgroundImage(task.backgroundImage, task.showSparks)
             view.showWaiting(task.messageID, task.isSoftStart)
-            appLoader = dependency.instance(IAppLoader)
-            view.showAwards(appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN)
             self.__isShown = True
             if task.isBlocking:
                 view.setCallback(task.interrupt)

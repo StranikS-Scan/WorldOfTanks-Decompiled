@@ -134,7 +134,7 @@ class BaseAmmunitionSetupView(ViewImpl):
                 if sectionName == TankSetupConstants.OPT_DEVICES:
                     playOptDeviceSlotEnter(self._vehItem.getItem(), slotID)
                 self._ammunitionPanel.changeSelectedSection(sectionName, slotID)
-                self._updateAmmunitionPanel()
+                self._updateAmmunitionPanel(sectionName)
 
     def _onPanelSlotClear(self, args):
         slotID = int(args.get('slotId'))

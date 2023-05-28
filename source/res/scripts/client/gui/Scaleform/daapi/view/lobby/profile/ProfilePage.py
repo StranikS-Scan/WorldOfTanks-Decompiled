@@ -8,13 +8,13 @@ from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.sounds.ambients import LobbySubViewEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IUISpamController
+from skeletons.gui.game_control import IAchievements20Controller, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
@@ -22,9 +22,9 @@ from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofDisabledKeys, o
 from gui.shared.events import ProfilePageEvent
 
 class ProfilePage(LobbySubView, ProfileMeta):
-    __sound_env__ = LobbySubViewEnv
     lobbyContext = dependency.descriptor(ILobbyContext)
-    uiSpamController = dependency.descriptor(IUISpamController)
+    _limitedUIController = dependency.descriptor(ILimitedUIController)
+    __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -54,6 +54,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def _populate(self):
         super(ProfilePage, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__achievements20Controller.onUpdate += self.__onProfileVisited
         if self.__ctx and self.__ctx.get('hofPageUrl'):
             self.__loadHofUrl(self.__ctx.get('hofPageUrl'))
 
@@ -65,6 +66,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.__achievements20Controller.onUpdate -= self.__onProfileVisited
         self.__tabNavigator = None
         super(ProfilePage, self)._dispose()
         return
@@ -88,29 +90,35 @@ class ProfilePage(LobbySubView, ProfileMeta):
             selectedAlias = event.ctx.get('selectedAlias', selectedAlias)
         sectionsData = [(PROFILE.SECTION_SUMMARY_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY,
-          VIEW_ALIAS.PROFILE_SUMMARY_PAGE,
-          True),
+          VIEW_ALIAS.PROFILE_TOTAL_PAGE,
+          True,
+          'statsSummary'),
          (PROFILE.SECTION_AWARDS_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_AWARDS,
           VIEW_ALIAS.PROFILE_AWARDS,
-          True),
+          True,
+          'statsAwards'),
          (PROFILE.SECTION_STATISTICS_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS,
           VIEW_ALIAS.PROFILE_STATISTICS,
-          True),
+          True,
+          'statsStatistics'),
          (PROFILE.SECTION_TECHNIQUE_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE,
           VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
-          True)]
+          True,
+          'statsTechnique')]
         if isHofEnabled:
             sectionsData.append((PROFILE.SECTION_HOF_TITLE,
              PROFILE.PROFILE_TABS_TOOLTIP_HOF,
              VIEW_ALIAS.PROFILE_HOF,
-             True))
+             True,
+             'statsHof'))
         return {'sectionsData': [ {'label': makeString(label),
                           'tooltip': tooltip,
                           'alias': alias,
-                          'enabled': isEnabled} for label, tooltip, alias, isEnabled in sectionsData ],
+                          'enabled': isEnabled,
+                          'id': uiId} for label, tooltip, alias, isEnabled, uiId in sectionsData ],
          'selectedAlias': selectedAlias}
 
     @property
@@ -128,18 +136,19 @@ class ProfilePage(LobbySubView, ProfileMeta):
         return
 
     def __updateTabCounters(self):
+        counters = []
+        if self.__achievements20Controller.getAchievementsTabCounter():
+            counters.append({'componentId': VIEW_ALIAS.PROFILE_TOTAL_PAGE,
+             'count': '1'})
         if self.__isHofEnabled:
-            counters = []
             hofCounter = getHofTabCounter()
-            if hofCounter and not self.uiSpamController.shouldBeHidden(VIEW_ALIAS.PROFILE_HOF):
+            if hofCounter and self._limitedUIController.isRuleCompleted(LuiRules.PROFILE_HOF):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_HOF,
                  'count': str(hofCounter)})
-            if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON) and not self.uiSpamController.shouldBeHidden(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE):
+            if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON) and self._limitedUIController.isRuleCompleted(LuiRules.PROFILE_TECHNIQUE_PAGE):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
                  'count': '1'})
-            self.__tabNavigator.as_setBtnTabCountersS(counters)
-        else:
-            self.__tabNavigator.as_setBtnTabCountersS([])
+        self.__tabNavigator.as_setBtnTabCountersS(counters)
 
     def __loadHofUrl(self, url):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_VIEW), ctx={'url': url,
@@ -149,3 +158,6 @@ class ProfilePage(LobbySubView, ProfileMeta):
          'selectedAlias': VIEW_ALIAS.PROFILE_HOF,
          'disabledKeys': getHofDisabledKeys(),
          'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)
+
+    def __onProfileVisited(self):
+        self.__updateTabCounters()

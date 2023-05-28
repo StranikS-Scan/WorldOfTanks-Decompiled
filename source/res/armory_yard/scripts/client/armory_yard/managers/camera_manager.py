@@ -9,12 +9,10 @@ import GenericComponents
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.account_helpers.settings_core import ISettingsCore
-from gui.ClientHangarSpace import hangarCFG
 from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from CameraComponents import CameraComponent, OrbitComponent, ParallaxComponent
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
-from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 
 class CameraManager(object):
 
@@ -43,16 +41,8 @@ class CameraManager(object):
                 self.__prevPosition = newTransform.worldPosition
             return
 
-    @dependency.replace_none_kwargs(hangarSpace=IHangarSpace)
-    def goToHangar(self, hangarSpace=None):
-        if hangarSpace is not None and hangarSpace.space is not None:
-            hangarCameraManager = hangarSpace.space.getCameraManager()
-            if hangarCameraManager is not None:
-                cfg = hangarCFG()
-                pos = cfg['cam_start_target_pos']
-                hangarCameraManager.setCameraLocation(targetPos=pos, pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']], movementMode=IMMEDIATE_CAMERA_MOVEMENT_MODE)
-                self.__prevPosition = pos
-        return
+    def goToHangar(self):
+        pass
 
 
 class ArmoryYardCameraYawFilter(object):

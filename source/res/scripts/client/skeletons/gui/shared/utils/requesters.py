@@ -346,6 +346,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def refSystem20(self):
+        raise NotImplementedError
+
+    @property
     def piggyBank(self):
         raise NotImplementedError
 
@@ -405,6 +409,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     def getWeeklyVehicleCrystals(self, vehCD):
+        raise NotImplementedError
+
+    @property
+    def luiVersion(self):
         raise NotImplementedError
 
 
@@ -1188,8 +1196,38 @@ class IResourceWellRequester(IRequester):
         raise NotImplementedError
 
 
+class IAchievements20Requester(IRequester):
+
+    def getLayout(self):
+        raise NotImplementedError
+
+    def getLayoutState(self):
+        raise NotImplementedError
+
+    def getAchievementBitmask(self):
+        raise NotImplementedError
+
+    def getLayoutLength(self):
+        raise NotImplementedError
+
+
 class IArmoryYardRequester(IRequester):
 
     @property
     def data(self):
+        raise NotImplementedError
+
+
+class IReferralProgramRequester(IRequester):
+
+    def getRPPgbPoints(self):
+        raise NotImplementedError
+
+    def getRPExpirationTime(self):
+        raise NotImplementedError
+
+    def getRecruitDelta(self):
+        raise NotImplementedError
+
+    def getRPPassiveIncome(self):
         raise NotImplementedError

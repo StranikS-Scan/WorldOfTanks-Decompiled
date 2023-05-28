@@ -271,6 +271,12 @@
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/compendium_1_2023.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/compendium_1_2023_3.dds	</texture>
     </insignia>
+    <insignia>
+      <id>	31006	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/compendiumo_2_2023_3.dds	</texture>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/compendium_2_2023.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/compendium_2_2023.xml	</alphabet>
+    </insignia>
   </itemGroup>
   <itemGroup>
     <name>	Battle Pass 2023 Winter RU	</name>
@@ -302,6 +308,48 @@
       <atlas>	gui/maps/vehicles/decals/insignia/custom/bp_koshei.dds	</atlas>
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/bp_koshei.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/bp_koshei_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	A95_T95_E6_S_3DSt	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <insignia>
+      <id>	39	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_a95.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_a95.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_a95_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cz14_Skoda_T-56_DB_3DSt	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <insignia>
+      <id>	42	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_cz14.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_cz14.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_cz14_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	J20_Type_2605_BXI_3DSt	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <insignia>
+      <id>	43	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_j20.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_j20.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_j20_3.dds	</texture>
     </insignia>
   </itemGroup>
 </custom_insignias.xml>

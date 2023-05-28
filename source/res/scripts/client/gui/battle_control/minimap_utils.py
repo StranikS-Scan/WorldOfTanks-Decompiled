@@ -12,21 +12,19 @@ EPIC_MINIMAP_HIT_AREA = 210
 _METERS_TO_KILOMETERS = 0.001
 _MAX_SIZE_INDEX = 5
 if AOI.ENABLE_MANUAL_RULES:
-    AOI_ESTIMATE = AOI.VEHICLE_CIRCULAR_AOI_RADIUS - 50.0
 
-    def isVehicleInAOI(matrix):
+    def isVehicleInAOI(matrix, estimateRadius):
         ownPos = Math.Matrix(BigWorld.camera().invViewMatrix).translation
         entryPos = Math.Matrix(matrix).translation
-        return (ownPos.x - entryPos.x) ** 2 + (ownPos.z - entryPos.z) ** 2 < AOI_ESTIMATE ** 2
+        return (ownPos.x - entryPos.x) ** 2 + (ownPos.z - entryPos.z) ** 2 < estimateRadius ** 2
 
 
 else:
-    AOI_ESTIMATE = 450.0
 
-    def isVehicleInAOI(matrix):
+    def isVehicleInAOI(matrix, estimateRadius):
         ownPos = Math.Matrix(BigWorld.camera().invViewMatrix).translation
         entryPos = Math.Matrix(matrix).translation
-        return bool(abs(ownPos.x - entryPos.x) < AOI_ESTIMATE and abs(ownPos.z - entryPos.z) < AOI_ESTIMATE)
+        return bool(abs(ownPos.x - entryPos.x) < estimateRadius and abs(ownPos.z - entryPos.z) < estimateRadius)
 
 
 def getPositionByLocal(localX, localY, bottomLeft, upperRight):

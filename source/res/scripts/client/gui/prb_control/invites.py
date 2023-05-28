@@ -348,6 +348,10 @@ class InvitesManager(UsersInfoHelper):
         self.clear()
         return
 
+    @property
+    def isAcceptChainActive(self):
+        return self.__acceptChain is not None and self.__acceptChain.isActive
+
     def start(self):
         self.__isInBattle = False
         if self.__inited & PRB_INVITES_INIT_STEP.STARTED == 0:

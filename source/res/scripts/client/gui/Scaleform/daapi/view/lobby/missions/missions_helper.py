@@ -501,7 +501,7 @@ class _BattleRoyaleDailyMissionInfo(_EventDailyMissionInfo):
         return self.__battleRoyaleController
 
     def _getCompleteKey(self):
-        return R.strings.battle_royale.questsTooltip.mission_info.timeLeft() if not self._controller.isDailyQuestsRefreshAvailable() else super(_BattleRoyaleDailyMissionInfo, self)._getCompleteKey()
+        return R.strings.battle_royale.questsTooltip.timeLeft() if not self._controller.isDailyQuestsRefreshAvailable() else super(_BattleRoyaleDailyMissionInfo, self)._getCompleteKey()
 
 
 class _RankedMissionInfo(_MissionInfo):

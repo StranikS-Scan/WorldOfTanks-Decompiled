@@ -879,6 +879,10 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['limitID'] = limitID
         if 'guaranteedFrequency' in limitConfig:
             limitIDs.add(limitID)
+    if section.has_key('depthLevel'):
+        properties['depthLevel'] = depthLevel = section['depthLevel'].asInt
+        if depthLevel < 0:
+            raise SoftException("Invalid value for 'checkDepth' option: {}".format(depthLevel))
     if section.has_key('probabilityStageDependence'):
         properties['probabilityStageDependence'] = section['probabilityStageDependence'].asBool
     if properties:
@@ -896,7 +900,7 @@ def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
     if config.get('useBonusProbability', False) and bonusProbability is None:
         raise SoftException("Missing bonusProbability attribute in 'optional'")
     properties = subBonus.get('properties', {})
-    for property in ('compensation', 'shouldCompensated'):
+    for property in ('compensation', 'shouldCompensated', 'depthLevel'):
         if properties.get(property, None) is not None:
             raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
 
@@ -1100,7 +1104,8 @@ _RESERVED_NAMES = frozenset(['config',
  'name',
  'shouldCompensated',
  'probabilityStageDependence',
- 'bonusProbability'])
+ 'bonusProbability',
+ 'depthLevel'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))

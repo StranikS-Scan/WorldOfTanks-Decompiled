@@ -21,7 +21,7 @@ if typing.TYPE_CHECKING:
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
-PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege, isTrackWithinTrack')
+PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege, isTrackWithinTrack, isWheeledOnSpotRotation')
 PrecachedEngine = namedtuple('PrecachedEngine', 'hasTurboshaftEngine, hasRocketAcceleration')
 
 class _PrecachedEngineTypes(object):
@@ -31,22 +31,25 @@ class _PrecachedEngineTypes(object):
 
 
 class _PrecachedChassisTypes(object):
-    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False)
-    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False)
-    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False)
-    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False)
-    HYDRAULIC_AUTO_SIEGE = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=True, isTrackWithinTrack=False)
-    TRACK_WITHIN_TRACK = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=True)
+    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
+    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
+    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
+    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
+    ON_SPOT_ROTATION_WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=True)
+    HYDRAULIC_AUTO_SIEGE = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=True, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
+    TRACK_WITHIN_TRACK = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=True, isWheeledOnSpotRotation=False)
     ALL = (DEFAULT,
      HYDRAULIC,
      WHEELED,
      HYDRAULIC_WHEELED,
      HYDRAULIC_AUTO_SIEGE,
-     TRACK_WITHIN_TRACK)
+     TRACK_WITHIN_TRACK,
+     ON_SPOT_ROTATION_WHEELED)
     MAP = dict((((pC.isHydraulic,
       pC.isWheeled,
       pC.hasAutoSiege,
-      pC.isTrackWithinTrack), pC) for pC in ALL))
+      pC.isTrackWithinTrack,
+      pC.isWheeledOnSpotRotation), pC) for pC in ALL))
 
 
 def isHydraulicChassis(vDescr):
@@ -194,6 +197,9 @@ class _ParamsCache(object):
 
     def isChassisWheeled(self, itemCD):
         return self.getPrecachedParameters(itemCD).isWheeled
+
+    def isChassisWheeledOnSpotRotation(self, itemCD):
+        return self.getPrecachedParameters(itemCD).isWheeledOnSpotRotation
 
     def isTrackWithinTrack(self, itemCD):
         return self.getPrecachedParameters(itemCD).isTrackWithinTrack
@@ -357,7 +363,7 @@ class _ParamsCache(object):
             for vDescr in vehiclesCache.generator(nationIdx):
                 for vChs in vDescr.type.chassis:
                     chassisCD = vChs.compactDescr
-                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[isHydraulicChassis(vDescr), vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode, isTrackWithinTrackChassis(vChs)]
+                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[isHydraulicChassis(vDescr), vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode, isTrackWithinTrackChassis(vChs), vDescr.isWheeledOnSpotRotation]
                     processedItems.add(chassisCD)
                     if vDescr.isWheeledVehicle:
                         chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]

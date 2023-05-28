@@ -31,6 +31,7 @@ from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_
 from shared_utils import makeTupleByDict, updateDict, findFirst
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
+from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Sequence
 _logger = logging.getLogger(__name__)
@@ -128,6 +129,9 @@ class _FileServerSettings(object):
 
     def getOffersRootUrl(self):
         return self.__getUrl('offers')
+
+    def getGameLoadingConfigUrl(self):
+        return self.__getUrl('game_loading_config')
 
     def __getUrl(self, urlKey, *args):
         try:
@@ -437,16 +441,19 @@ _EpicMetaGameConfig.__new__.__defaults__ = (0,
 class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
  'validVehicleLevels',
  'battlePassDataEnabled',
+ 'levelsToUpgrateAllReserves',
  'seasons',
  'cycleTimes',
  'unlockableInBattleVehLevels',
+ 'inBattleModifiers',
  'peripheryIDs',
  'primeTimes',
- 'rentVehicles'))):
+ 'rentVehicles',
+ 'tooltips'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, validVehicleLevels=[], battlePassDataEnabled=True, unlockableInBattleVehLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[])
+        defaults = dict(isEnabled=False, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={})
         defaults.update(kwargs)
         return super(EpicGameConfig, cls).__new__(cls, **defaults)
 
@@ -547,11 +554,12 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'defaultAmmo',
  'vehiclesSlotsConfig',
  'economics',
- 'url'))):
+ 'url',
+ 'respawns'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='')
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={})
         defaults.update(kwargs)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
@@ -1239,6 +1247,27 @@ class _EventLootBoxesConfig(object):
         return (self.__startDateInUTC, self.__finishDateInUTC)
 
 
+class RPConfig(namedtuple('RPConfig', ('pgbCapacity', 'pgbDayLimit'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(pgbCapacity=0, pgbDayLimit=0)
+        defaults.update(kwargs)
+        return super(RPConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
  'isPaused',
  'seasons',
@@ -1260,6 +1289,30 @@ class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
         defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0)
         defaults.update(kwargs)
         return super(ArmoryYardConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'version'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, rules=[], version=0)
+        defaults.update(kwargs)
+        return super(_LimitedUIConfig, cls).__new__(cls, **defaults)
+
+    def hasRules(self):
+        return bool(self.rules)
 
     def asDict(self):
         return self._asdict()
@@ -1320,8 +1373,10 @@ class ServerSettings(object):
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
         self.__eventLootBoxesConfig = _EventLootBoxesConfig()
+        self.__referralProgramConfig = RPConfig()
         self.__collectionsConfig = CollectionsConfig()
         self.__winbackConfig = WinbackConfig()
+        self.__limitedUIConfig = _LimitedUIConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1456,6 +1511,10 @@ class ServerSettings(object):
             self.__tournamentSettings = makeTupleByDict(_TournamentSettings, self.__serverSettings[TOURNAMENT_CONFIG])
         else:
             self.__tournamentSettings = _TournamentSettings.defaults()
+        if Configs.REFERRAL_PROGRAM_CONFIG.value in self.__serverSettings:
+            self.__referralProgramConfig = makeTupleByDict(RPConfig, self.__serverSettings[Configs.REFERRAL_PROGRAM_CONFIG.value])
+        else:
+            self.__referralProgramConfig = RPConfig.defaults()
         if Configs.COLLECTIONS_CONFIG.value in self.__serverSettings:
             self.__collectionsConfig = makeTupleByDict(CollectionsConfig, self.__serverSettings[Configs.COLLECTIONS_CONFIG.value])
         if Configs.WINBACK_CONFIG.value in self.__serverSettings:
@@ -1467,6 +1526,10 @@ class ServerSettings(object):
             self.__armoryYardSettings = makeTupleByDict(ArmoryYardConfig, self.__serverSettings[Configs.ARMORY_YARD_CONFIG.value])
         else:
             self.__armoryYardSettings = ArmoryYardConfig.defaults()
+        if Configs.LIMITED_UI_CONFIG.value in self.__serverSettings:
+            self.__limitedUIConfig = makeTupleByDict(_LimitedUIConfig, self.__serverSettings[Configs.LIMITED_UI_CONFIG.value])
+        else:
+            self.__limitedUIConfig = _LimitedUIConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1570,12 +1633,15 @@ class ServerSettings(object):
             self.__updateCollectiveGoalEntryPointConfig(serverSettingsDiff)
         if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectiveGoalMarathonsConfig(serverSettingsDiff)
+        if Configs.REFERRAL_PROGRAM_CONFIG.value in serverSettingsDiff:
+            self.__updateRPConfig(serverSettingsDiff)
         if Configs.ARMORY_YARD_CONFIG.value in serverSettingsDiff:
             self.__updateArmoryYard(serverSettingsDiff)
         self.__updatePersonalReserves(serverSettingsDiff)
         self.__updateEventLootBoxesConfig(serverSettingsDiff)
         if Configs.COLLECTIONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectionsConfig(serverSettingsDiff)
+        self.__updateLimitedUIConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1743,6 +1809,10 @@ class ServerSettings(object):
     @property
     def armoryYard(self):
         return self.__armoryYardSettings
+
+    @property
+    def limitedUIConfig(self):
+        return self.__limitedUIConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2082,6 +2152,12 @@ class ServerSettings(object):
     def getEventLootBoxesConfig(self):
         return self.__eventLootBoxesConfig
 
+    def getRPConfig(self):
+        return self.__referralProgramConfig
+
+    def getAchievements20GeneralConfig(self):
+        return Achievements20GeneralConfig(self.__getGlobalSetting(Configs.ACHIEVEMENTS20_CONFIG.value, {}))
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2218,6 +2294,9 @@ class ServerSettings(object):
                 self.__eventLootBoxesConfig = _EventLootBoxesConfig()
         return
 
+    def __updateRPConfig(self, diff):
+        self.__referralProgramConfig = self.__referralProgramConfig.replace(diff[Configs.REFERRAL_PROGRAM_CONFIG.value])
+
     def __updateCollectionsConfig(self, diff):
         self.__collectionsConfig = self.__collectionsConfig.replace(diff[Configs.COLLECTIONS_CONFIG.value])
 
@@ -2226,6 +2305,10 @@ class ServerSettings(object):
 
     def __updateArmoryYard(self, diff):
         self.__armoryYardSettings = self.__armoryYardSettings.replace(diff[Configs.ARMORY_YARD_CONFIG.value])
+
+    def __updateLimitedUIConfig(self, serverSettingsDiff):
+        if Configs.LIMITED_UI_CONFIG.value in serverSettingsDiff:
+            self.__limitedUIConfig = self.__limitedUIConfig.replace(serverSettingsDiff[Configs.LIMITED_UI_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

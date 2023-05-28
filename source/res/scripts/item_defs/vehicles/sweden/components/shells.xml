@@ -1594,19 +1594,18 @@
   <_105mm_kan_m_41_strv_G1_HEAT_SH>
     <id>	1000	</id>
     <userString>	#sweden_vehicles:_105mm_kan_m_41_strv_G1_HEAT_SH	</userString>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRmainArmorPiercing	</effects>
     <damage>
-      <armor>	200	</armor>
+      <armor>	240	</armor>
       <devices>	20	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_kan_m_41_strv_G1_HEAT_SH>
   <_105mm_kan_m_41_strv_G1_APCR_SH>
     <id>	1001	</id>
@@ -1620,26 +1619,25 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	150	</armor>
+      <armor>	190	</armor>
       <devices>	20	</devices>
     </damage>
   </_105mm_kan_m_41_strv_G1_APCR_SH>
   <_105mm_kan_ikv_103D_G2_HEAT_SH>
     <id>	1002	</id>
     <userString>	#sweden_vehicles:_105mm_kan_ikv_103D_G2_HEAT_SH	</userString>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRmainArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	300	</armor>
       <devices>	32	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_kan_ikv_103D_G2_HEAT_SH>
   <_105mm_kan_ikv_103D_G2_APCR_SH>
     <id>	1003	</id>
@@ -1660,19 +1658,18 @@
   <_120mm_kan_L_33_G3_HEAT_SH>
     <id>	1004	</id>
     <userString>	#sweden_vehicles:_120mm_kan_L_33_G3_HEAT_SH	</userString>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeHollowCharge	</effects>
+    <effects>	BRlargeArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	300	</armor>
       <devices>	32	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_kan_L_33_G3_HEAT_SH>
   <_120mm_kan_L_33_G3_APCR_SH>
     <id>	1005	</id>
@@ -1694,18 +1691,17 @@
     <id>	1006	</id>
     <userString>	#sweden_vehicles:_105mm_strvkan_L_45_G4_HEAT_SH	</userString>
     <improved>	true	</improved>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRmainArmorPiercing	</effects>
     <damage>
-      <armor>	650	</armor>
+      <armor>	560	</armor>
       <devices>	65	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_strvkan_L_45_G4_HEAT_SH>
   <_105mm_strvkan_L_45_G4_APCR_SH>
     <id>	1007	</id>
@@ -1719,26 +1715,25 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	450	</armor>
       <devices>	65	</devices>
     </damage>
   </_105mm_strvkan_L_45_G4_APCR_SH>
   <_105mm_Bofors_D_G5_HEAT_SH>
     <id>	1008	</id>
     <userString>	#sweden_vehicles:_105mm_Bofors_D_G5_HEAT_SH	</userString>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRmainHollowCharge	</effects>
+    <effects>	BRmainArmorPiercing	</effects>
     <damage>
-      <armor>	440	</armor>
+      <armor>	400	</armor>
       <devices>	44	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_Bofors_D_G5_HEAT_SH>
   <_105mm_Bofors_D_G5_APCR_SH>
     <id>	1009	</id>
@@ -1752,26 +1747,25 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	330	</armor>
+      <armor>	320	</armor>
       <devices>	44	</devices>
     </damage>
   </_105mm_Bofors_D_G5_APCR_SH>
   <_120mm_akan_L_40_G6_HEAT_SH>
     <id>	1010	</id>
     <userString>	#sweden_vehicles:_120mm_akan_L_40_G6_HEAT_SH	</userString>
-    <icon>	hc_premium	</icon>
+    <icon>	ap_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	HOLLOW_CHARGE	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeHollowCharge	</effects>
+    <effects>	BRlargeArmorPiercing	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	440	</armor>
       <devices>	49	</devices>
     </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_akan_L_40_G6_HEAT_SH>
   <_120mm_akan_L_40_G6_APCR_SH>
     <id>	1011	</id>
@@ -1785,7 +1779,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	370	</armor>
+      <armor>	350	</armor>
       <devices>	49	</devices>
     </damage>
   </_120mm_akan_L_40_G6_APCR_SH>

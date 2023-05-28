@@ -126,13 +126,14 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__activeQueue.append(command)
         self.__tryProcess()
 
-    def releasePostponed(self):
+    def releasePostponed(self, fireReleased=True):
         _logger.debug('Releasing the postponed queue.')
         if self.isEnabled():
             self.__activeQueue.extend(self.__postponedQueue)
             del self.__postponedQueue[:]
-            self.__destroyCurrentWindow()
-            self.__processNext()
+            if fireReleased:
+                self.__destroyCurrentWindow()
+                self.__processNext()
             self.__notifyWithPostponedQueueCount()
         else:
             _logger.error('Queue is currently disabled.')

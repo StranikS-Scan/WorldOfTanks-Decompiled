@@ -8,7 +8,7 @@ from UnitBase import UNIT_ROLE
 from debug_utils import LOG_ERROR
 from helpers.time_utils import ONE_MINUTE, ONE_HOUR
 _logger = logging.getLogger(__name__)
-BYTTLETYPE_SORTIE = 'SORTIE'
+BATTLE_TYPE_SORTIE = 'SORTIE'
 INSPIRATION = 'INSPIRATION'
 ARTILLERY_STRIKE = 'ARTILLERY_STRIKE'
 REQUISITION = 'REQUISITION'
@@ -386,7 +386,7 @@ class StrongholdData(object):
             return self.__battle_series_duration / ONE_HOUR
 
         def isSortie(self):
-            return self.getType() == BYTTLETYPE_SORTIE
+            return self.getType() == BATTLE_TYPE_SORTIE
 
     class StrongholdDataTimer(object):
 

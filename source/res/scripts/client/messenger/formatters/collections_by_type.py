@@ -254,3 +254,4 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED, _sc.SimpleFormatter('BonusExcludedMapUnavailable'))
     registerMessengerServerFormatter(_SM_TYPE.collectionsItems.index(), _sc.CollectionsItemsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.collectionsReward.index(), _sc.CollectionsRewardFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())

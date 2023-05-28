@@ -3,6 +3,8 @@
 import logging
 from string import lower
 import BigWorld
+from wg_async import wg_async, wg_await, await_callback
+from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -21,7 +23,7 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
-from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -447,3 +449,26 @@ class VehicleChangeNation(Processor):
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(sysMsgKey=backport.text(R.strings.system_messages.nation_change.success()), veh_name=self._cvh.userName)
+
+
+class BuyBattleAbilitiesProcessor(Processor):
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, skillIds):
+        super(BuyBattleAbilitiesProcessor, self).__init__()
+        self.__skillIds = skillIds
+
+    @wg_async
+    def _request(self, callback):
+        errorCode = yield wg_await(self._requestChain())
+        callback(makeError(errorCode) if errorCode else makeSuccess())
+
+    @wg_async
+    def _requestChain(self):
+        for skillId in self.__skillIds:
+            _, errorCode = yield await_callback(self.__epicMetaGameCtrl.increaseSkillLevel)(skillId)
+            if errorCode:
+                raise AsyncReturn(errorCode)
+
+        raise AsyncReturn(None)
+        return

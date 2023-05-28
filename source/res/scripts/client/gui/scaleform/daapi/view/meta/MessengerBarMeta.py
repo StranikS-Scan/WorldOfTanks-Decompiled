@@ -25,11 +25,11 @@ class MessengerBarMeta(BaseDAAPIComponent):
     def as_setReferralButtonEnabledS(self, value):
         return self.flashObject.as_setReferralButtonEnabled(value) if self._isDAAPIInited() else None
 
-    def as_enableReferralRecruterEffectS(self, value):
-        return self.flashObject.as_enableReferralRecruterEffect(value) if self._isDAAPIInited() else None
-
     def as_setReferralBtnCounterS(self, value):
         return self.flashObject.as_setReferralBtnCounter(value) if self._isDAAPIInited() else None
+
+    def as_setReferralBtnLimitIndicationS(self, value):
+        return self.flashObject.as_setReferralBtnLimitIndication(value) if self._isDAAPIInited() else None
 
     def as_openVehicleCompareCartPopoverS(self, value):
         return self.flashObject.as_openVehicleCompareCartPopover(value) if self._isDAAPIInited() else None
@@ -43,5 +43,5 @@ class MessengerBarMeta(BaseDAAPIComponent):
     def as_setSessionStatsButtonEnableS(self, value, tooltip):
         return self.flashObject.as_setSessionStatsButtonEnable(value, tooltip) if self._isDAAPIInited() else None
 
-    def as_setSessionStatsButtonSettingsUpdateS(self, show, tooltip):
-        return self.flashObject.as_setSessionStatsButtonSettingsUpdate(show, tooltip) if self._isDAAPIInited() else None
+    def as_setSessionStatsButtonSettingsUpdateS(self, show, value):
+        return self.flashObject.as_setSessionStatsButtonSettingsUpdate(show, value) if self._isDAAPIInited() else None

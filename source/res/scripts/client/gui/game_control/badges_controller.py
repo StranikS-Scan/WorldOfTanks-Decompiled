@@ -44,7 +44,8 @@ class BadgesController(IBadgesController, Notifiable):
     def onLobbyStarted(self, ctx):
         self.__initCurrentBadges()
         self.__badgesProcessing()
-        g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges})
+        g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges,
+         'stats.dossier': self.__updateBadges})
         self.itemsCache.onSyncCompleted += self.__onSyncCompleted
 
     def select(self, badges):

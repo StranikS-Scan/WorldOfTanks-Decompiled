@@ -7,7 +7,7 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_ta
 class FrontlineContainerViewModel(ViewModel):
     __slots__ = ('onTabChange', 'onClose')
 
-    def __init__(self, properties=3, commands=2):
+    def __init__(self, properties=2, commands=2):
         super(FrontlineContainerViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentTabId(self):
@@ -16,17 +16,11 @@ class FrontlineContainerViewModel(ViewModel):
     def setCurrentTabId(self, value):
         self._setNumber(0, value)
 
-    def getIsTopSubView(self):
-        return self._getBool(1)
-
-    def setIsTopSubView(self, value):
-        self._setBool(1, value)
-
     def getTabs(self):
-        return self._getArray(2)
+        return self._getArray(1)
 
     def setTabs(self, value):
-        self._setArray(2, value)
+        self._setArray(1, value)
 
     @staticmethod
     def getTabsType():
@@ -35,7 +29,6 @@ class FrontlineContainerViewModel(ViewModel):
     def _initialize(self):
         super(FrontlineContainerViewModel, self)._initialize()
         self._addNumberProperty('currentTabId', 0)
-        self._addBoolProperty('isTopSubView', False)
         self._addArrayProperty('tabs', Array())
         self.onTabChange = self._addCommand('onTabChange')
         self.onClose = self._addCommand('onClose')

@@ -34,8 +34,13 @@
     <onXPUpdated>
       <Arg>	INT16	</Arg>
     </onXPUpdated>
+    <onCrewRoleFactorAndRankUpdate>
+      <Arg>	FLOAT	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onCrewRoleFactorAndRankUpdate>
     <onRankUpdate>
-      <Arg>	INT16	</Arg>
+      <Arg>	UINT8	</Arg>
     </onRankUpdate>
     <showDestructibleShotResults>
       <Arg>	UINT8	</Arg>

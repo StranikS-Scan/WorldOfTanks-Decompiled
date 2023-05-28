@@ -13,6 +13,7 @@ from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.events import TutorialEvent
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -183,10 +184,13 @@ class _BMManualTriggeredHint(object):
     def _show(self):
         if not self._isHintVisible:
             self._isHintVisible = self._tutorialLoader.gui.showInteractiveHint(self.CONTROL_NAME, self._getHintSettings(), [], False)
+            if self._isHintVisible:
+                g_eventBus.handleEvent(TutorialEvent(TutorialEvent.IMPORTANT_HINT_SHOWING, state=True), scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def _hide(self):
         if self._isHintVisible:
             self._tutorialLoader.gui.closeInteractiveHint(self.CONTROL_NAME)
+            g_eventBus.handleEvent(TutorialEvent(TutorialEvent.IMPORTANT_HINT_SHOWING, state=False), scope=EVENT_BUS_SCOPE.GLOBAL)
         self._isHintVisible = False
 
     def _checkControlConditions(self, componentIsEnabled):
@@ -370,6 +374,11 @@ class EntryPointHint(_BMManualTriggeredHint):
         super(EntryPointHint, self)._onItemFound(event)
         if event.targetID == self.CONTROL_NAME:
             self.__checkHint()
+
+    def _onItemLost(self, event):
+        if event.targetID == self.CONTROL_NAME:
+            self._hide()
+        super(EntryPointHint, self)._onItemLost(event)
 
     def _getTutorialTriggers(self):
         return []

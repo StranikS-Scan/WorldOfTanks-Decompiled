@@ -49,5 +49,6 @@ class EpicBattlesEntryPointView(ViewImpl):
     def __onClick(self):
         if isHangarAvailable():
             self.__epicController.selectEpicBattle()
+        self.__epicController.showWelcomeScreenIfNeed()
         self.__epicController.showProgressionDuringSomeStates()
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.ENTRY_POINT.value, parentScreen=EpicBattleLogKeys.HANGAR.value)

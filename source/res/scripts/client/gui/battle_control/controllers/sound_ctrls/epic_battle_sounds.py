@@ -57,17 +57,22 @@ class _EquipmentSoundPlayer(object):
             playerDataComponent.onPlayerRankUpdated -= self.__onPlayerRankUpdated
         return
 
+    @staticmethod
+    def __getEventName(itemName):
+        for soundName in EPIC_SOUND.EQUIPMENT_ACTIVATED:
+            if soundName in itemName:
+                return EPIC_SOUND.EQUIPMENT_ACTIVATED.get(soundName)
+
+        return None
+
     def __onEquipmentUpdated(self, _, item):
         if item.getPrevStage() == item.getStage():
             return
         else:
-            itemName = item.getDescriptor().name
-            if 'level' in itemName:
-                itemName = itemName.partition('level')[0].rstrip('_')
             prevStageIsReady = item.getPrevStage() in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING)
             currentStageIsActive = item.getStage() in (EQUIPMENT_STAGES.ACTIVE, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.EXHAUSTED)
             if prevStageIsReady and currentStageIsActive:
-                eventName = EPIC_SOUND.EQUIPMENT_ACTIVATED.get(itemName)
+                eventName = self.__getEventName(item.getDescriptor().name)
                 if eventName is not None:
                     SoundGroups.g_instance.playSound2D(eventName)
             return
@@ -87,8 +92,12 @@ class _EquipmentSoundPlayer(object):
     def __onPlayerRankUpdated(self, rank):
         missionsCtrl = self.__sessionProvider.dynamic.missions
         firstUnlocked, _ = missionsCtrl.getRankUpdateData(rank)
-        reserveSoundId = EPIC_SOUND.EB_VO_RESERVE_UNLOCKED if firstUnlocked else EPIC_SOUND.EB_VO_RESERVE_UPGRADED
-        EpicBattleSoundController.playSoundNotification(reserveSoundId)
+        if firstUnlocked is None:
+            return
+        else:
+            reserveSoundId = EPIC_SOUND.EB_VO_RESERVE_UNLOCKED if firstUnlocked else EPIC_SOUND.EB_VO_RESERVE_UPGRADED
+            EpicBattleSoundController.playSoundNotification(reserveSoundId)
+            return
 
 
 class _MineFieldSoundPlayer(BaseEfficiencySoundPlayer):

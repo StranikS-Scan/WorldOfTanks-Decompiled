@@ -1,0 +1,41 @@
+<PolygonalDeathZoneAreaTrigger.def>
+  <Domain>	CELL	</Domain>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <EventID>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </EventID>
+    <ReactOnTeam>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+      <Default>	1	</Default>
+    </ReactOnTeam>
+    <DeathZoneType>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+      <Default>	default	</Default>
+    </DeathZoneType>
+    <markerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	POLYGONAL_ZONE	</Default>
+    </markerStyle>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </isActive>
+    <minimapMarkerPolygon>
+      <Type>	ARRAY	  <of>	VECTOR2	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </minimapMarkerPolygon>
+    <serverPolygon>
+      <Type>	POLYGON_TRIGGER_PARAMS	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </serverPolygon>
+  </Properties>
+</PolygonalDeathZoneAreaTrigger.def>

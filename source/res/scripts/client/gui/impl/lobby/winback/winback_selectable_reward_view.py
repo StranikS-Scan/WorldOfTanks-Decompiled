@@ -28,6 +28,7 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, getNationLessName
 from helpers import dependency
 from nations import NONE_INDEX
 from shared_utils import first
+from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.winback.selectable_reward_category_model import SelectableRewardCategoryModel
@@ -101,6 +102,7 @@ class WinbackSelectableRewardView(ViewImpl):
     __slots__ = ('__bonuses', '__filterPopover', '__filters', '__tooltipData', '__selectedTab')
     _selectableRewardManager = WinbackSelectableRewardManager
     _itemsCache = dependency.descriptor(IItemsCache)
+    _winbackController = dependency.descriptor(IWinbackController)
     _packer = getBonusPacker()
 
     def __init__(self, selectableTokens=None):
@@ -175,13 +177,16 @@ class WinbackSelectableRewardView(ViewImpl):
         self._selectableRewardManager.chooseRewards(rewardsToChoose, _showRewardView)
 
     def _update(self, selectableTokens):
-        selectableBonuses = self._selectableRewardManager.getAvailableSelectableBonuses(None if selectableTokens is None else (lambda tID: tID in selectableTokens))
-        for bonus in selectableBonuses:
-            level = int(getLevelFromSelectableToken(first(bonus.getValue())))
-            self.__bonuses[level] = self._createTabBonuses(level, bonus)
+        if not self._winbackController.isProgressionAvailable():
+            return
+        else:
+            selectableBonuses = self._selectableRewardManager.getAvailableSelectableBonuses(None if selectableTokens is None else (lambda tID: tID in selectableTokens))
+            for bonus in selectableBonuses:
+                level = int(getLevelFromSelectableToken(first(bonus.getValue())))
+                self.__bonuses[level] = self._createTabBonuses(level, bonus)
 
-        self.__bonuses = OrderedDict(sorted(self.__bonuses.iteritems(), key=lambda item: item[0]))
-        return
+            self.__bonuses = OrderedDict(sorted(self.__bonuses.iteritems(), key=lambda item: item[0]))
+            return
 
     def _createTabBonuses(self, level, bonus):
         currentTabBonuses = {}

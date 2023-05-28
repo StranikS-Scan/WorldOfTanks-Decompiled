@@ -326,6 +326,10 @@ class _CrosshairShotResults(object):
                 matInfo = cDetails.matInfo
                 if (cDetails.compName, matInfo.kind) in ignoredMaterials:
                     continue
+                if matInfo.armor is None:
+                    result = _SHOT_RESULT.UNDEFINED
+                    _logger.error('Unconfigured/default material/armor for material kind %d', matInfo.kind)
+                    continue
                 hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
                 piercingPercent = 1000.0
                 if not isJet and cls._shouldRicochet(shell, hitAngleCos, matInfo):

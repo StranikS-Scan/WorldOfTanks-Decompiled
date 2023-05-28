@@ -4,18 +4,6 @@ import gui.awards.special_achievement_awards as specialAwards
 from gui.shared.event_dispatcher import showAwardWindow
 from gui.impl.lobby.reward_window import DynamicRewardWindow
 
-def showResearchAward(vehiclesCount, messageNumber):
-    showAwardWindow(specialAwards.ResearchAward(vehiclesCount, messageNumber))
-
-
-def showVictoryAward(victoriesCount, messageNumber):
-    showAwardWindow(specialAwards.VictoryAward(victoriesCount, messageNumber))
-
-
-def showBattleAward(battlesCount, messageNumber):
-    showAwardWindow(specialAwards.BattleAward(battlesCount, messageNumber))
-
-
 def showBoosterAward(booster):
     showAwardWindow(specialAwards.BoosterAward(booster))
 

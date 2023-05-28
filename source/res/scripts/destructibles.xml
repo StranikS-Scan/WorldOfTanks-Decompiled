@@ -5062,6 +5062,16 @@
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
     </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_025_RoadPoles/normal/lod0/hd_env_UNI_025_RoadPoles_03.model	</filename>
+      <health>	1	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	inf_envJA_011_SmallPoleFracture	</fractureEffect>
+      <touchdownEffect>	hd_env_101_RoadPoles_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
   </fallingAtoms>
   <fragiles>
     <entry>
@@ -17136,7 +17146,7 @@
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_UNI_628_VentilationSys_04	</effect>
-      <hitEffect>	none	</hitEffect>
+      <hitEffect>	hd_env_UNI_628_VentilationSys_04_hit	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_metal0	</matName>
@@ -17995,6 +18005,60 @@
       <matName>	n_wood0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
       <hitEffect>	hd_env_AS_005_WoodDryer_end_hit	</hitEffect>
+    </entry>
+    <entry>
+      <filename>	content/MilitaryEnvironment/hd_mle_SU_004_GazMM/normal/lod0/hd_mle_SU_004_GazMM_01.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_mleSU_83_10_GazMM_1	</effect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2_08_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_016_Rabitz/normal/lod0/hd_gaf_UNI_016_Rabitz_07.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_gaf_UNI_016_Rabitz_02	</effect>
+      <hitEffect>	hd_gaf_UNI_016_Rabitz_02	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_016_Rabitz/normal/lod0/hd_gaf_UNI_016_Rabitz_08.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_gaf_UNI_016_Rabitz_01	</effect>
+      <hitEffect>	hd_gaf_UNI_016_Rabitz_01	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_016_Rabitz/normal/lod0/hd_gaf_UNI_016_Rabitz_09.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_gaf_UNI_016_Rabitz_02	</effect>
+      <hitEffect>	hd_gaf_UNI_016_Rabitz_02	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_003_RabitzFence/normal/lod0/hd_gaf_UNI_003_RabitzFence_End_Testpol.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_gaf003_RabitzFence_End_01	</effect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
   </fragiles>
   <structures>

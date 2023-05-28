@@ -266,7 +266,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             self.__isEnabled = True
         if not vehicle.isAlive() and self.__isObserver:
             self.__isEnabled = False
-        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
+        self.as_setVisibleS(self.__isVisible())
         if self.__isObserver:
             self.__soundManager.onObserverSwitched()
         self.__reloadingState.cleanup()
@@ -298,7 +298,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
 
     def __onBattleStarted(self):
         self.__updateContextAvailability()
-        self.as_setVisibleS(self.__isAllowedByContext and self.__isEnabled)
+        self.as_setVisibleS(self.__isVisible())
 
     def __updateContextAvailability(self):
         prebattleCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
@@ -328,7 +328,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             if cameraName != 'video':
                 vehicle = BigWorld.entities.get(currentVehicleId)
                 if vehicle and vehicle.isAlive() and vehicle.typeDescriptor.isDualgunVehicle:
-                    self.as_setVisibleS(True)
+                    self.as_setVisibleS(self.__isVisible())
             else:
                 self.as_setVisibleS(False)
             return
@@ -399,7 +399,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     def __onControlModeChange(self, event):
         mode = event.ctx.get('mode')
         if mode is not None and mode in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.DUAL_GUN):
-            self.as_setVisibleS(True)
+            self.as_setVisibleS(self.__isVisible())
         else:
             self.as_setVisibleS(False)
         return
@@ -463,3 +463,10 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     def __isPlayerVehicle(self):
         player = BigWorld.player()
         return player.vehicle.isPlayerVehicle if player is not None and player.vehicle is not None else False
+
+    def __isVisible(self):
+        ctrl = self.__sessionProvider.shared.vehicleState
+        isVisible = self.__isEnabled and self.__isAllowedByContext
+        if ctrl is not None:
+            isVisible = isVisible and not ctrl.isInPostmortem
+        return isVisible

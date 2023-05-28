@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gameplay/states.py
-import helpers
 from frameworks.state_machine import State, StateFlags
-from frameworks.state_machine import ConditionTransition
 from frameworks.state_machine import StringEventTransition
 from skeletons.gameplay import GameplayStateID
 from skeletons.gameplay import PlayerEventID
 from skeletons.gameplay import ReplayEventID
-from skeletons.gameplay import GUIEventID
 
 class OfflineState(State):
     __slots__ = ()
@@ -16,26 +13,11 @@ class OfflineState(State):
         super(OfflineState, self).__init__(stateID=GameplayStateID.OFFLINE, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
 
     @property
-    def loading(self):
+    def login(self):
         return self.getChildByIndex(0)
 
-    @property
-    def intro(self):
-        return self.getChildByIndex(1)
-
-    @property
-    def login(self):
-        return self.getChildByIndex(2)
-
     def configure(self):
-        loading = State(stateID=GameplayStateID.GAME_LOADING, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
-        intro = State(stateID=GameplayStateID.INTRO_VIDEO)
-        login = State(stateID=GameplayStateID.LOGIN)
-        loading.addTransition(ConditionTransition(lambda e: helpers.isShowStartupVideo(), invert=False), target=intro)
-        loading.addTransition(ConditionTransition(lambda e: helpers.isShowStartupVideo(), invert=True), target=login)
-        intro.addTransition(StringEventTransition(GUIEventID.INTRO_VIDEO_FINISHED), target=login)
-        self.addChildState(loading)
-        self.addChildState(intro)
+        login = State(stateID=GameplayStateID.LOGIN, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
         self.addChildState(login)
 
 

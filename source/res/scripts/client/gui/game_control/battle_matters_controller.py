@@ -21,7 +21,6 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SelectableBonus
 _BATTLE_MATTERS_UNLOCK_TOKEN = 'battle_matters_unlock'
@@ -39,7 +38,6 @@ class BattleMattersController(IBattleMattersController):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __systemMessages = dependency.descriptor(ISystemMessages)
     __connMgr = dependency.descriptor(IConnectionManager)
     __battleMattersSelectableRewardMgr = BattleMattersSelectableRewardManager
     __bootcampController = dependency.descriptor(IBootcampController)

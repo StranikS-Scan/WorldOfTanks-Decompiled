@@ -33,21 +33,27 @@ class WidgetView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setCurrentProgression(currentStage)
             model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress or not isPrimeTime else BattleStatus.COMPLETED)
+            model.setIsAlertMode(not isPrimeTime)
 
     def _onLoading(self, *args, **kwargs):
         super(WidgetView, self)._onLoading(args, kwargs)
         self.viewModel.onWrapperInitialized += self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated += self.__onProgressionUpdated
         self.brProgression.onSettingsChanged += self.__onProgressionUpdated
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
         self.updateModel()
 
     def _finalize(self):
         self.viewModel.onWrapperInitialized -= self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated -= self.__onProgressionUpdated
         self.brProgression.onSettingsChanged -= self.__onProgressionUpdated
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
         self.onWrapperInitialized = None
         super(WidgetView, self)._finalize()
         return
+
+    def __onPrimeTimeStatusUpdated(self, *args):
+        self.updateModel()
 
     def __onWrapperInitialized(self):
         self.onWrapperInitialized()

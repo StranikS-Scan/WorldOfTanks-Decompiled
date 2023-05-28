@@ -22,8 +22,8 @@ from MemoryCriticalController import g_critMemHandler
 from bootcamp.Bootcamp import g_bootcamp
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
-from gui.Scaleform.game_loading import GameLoading
 from gui.shared import personality as gui_personality
+from gui.game_loading import loading as gameLoading
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
 from helpers import dependency, log
 from messenger import MessengerEntry
@@ -32,8 +32,7 @@ from skeletons.gameplay import IGameplayLogic
 from wg_async import wg_async, wg_await
 from gui.impl.dialogs import dialogs
 from system_events import g_systemEvents
-loadingScreenClass = GameLoading
-__import__('__main__').GameLoading = loadingScreenClass
+from helpers import styles_perf_toolset
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
@@ -51,10 +50,11 @@ def autoFlushPythonLog():
     BigWorld.callback(5.0, autoFlushPythonLog)
 
 
-def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
+def init(scriptConfig, engineConfig, userPreferences):
     global g_replayCtrl
     try:
         log.config.setupFromXML()
+        gameLoading.step()
         import extension_rules
         extension_rules.init()
         import python_macroses
@@ -68,29 +68,36 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         BigWorld.wg_initCustomSettings()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
+        gameLoading.step()
         from helpers import DecalMap
         DecalMap.g_instance = DecalMap.DecalMap(scriptConfig['decal'])
+        gameLoading.step()
         from helpers import EdgeDetectColorController
         EdgeDetectColorController.g_instance = EdgeDetectColorController.EdgeDetectColorController(scriptConfig['silhouetteColors'])
         SoundGroups.g_instance = SoundGroups.SoundGroups()
+        gameLoading.startSound()
         import BattleReplay
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
         g_replayCtrl.registerWotReplayFileExtension()
         g_bootcamp.replayCallbackSubscribe()
         import nation_change
         nation_change.init()
+        gameLoading.step()
         import items
-        items.init(True, None if not constants.IS_DEVELOPMENT else {})
+        items.init(True, None if not constants.IS_DEVELOPMENT else {}, gameLoading.step)
+        gameLoading.step()
         import battle_results
         battle_results.init()
         import win_points
         win_points.init()
         import rage
         rage.init()
+        gameLoading.step()
         import ArenaType
         ArenaType.init()
         import dossiers2
         dossiers2.init()
+        gameLoading.step()
         import personal_missions
         personal_missions.init()
         import motivation_quests
@@ -98,15 +105,20 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         import customization_quests
         customization_quests.init()
         BigWorld.worldDrawEnabled(False)
+        gameLoading.step()
         manager = dependency.configure(services_config.getClientServicesConfig)
         g_systemEvents.onDependencyConfigReady(manager)
         SoundGroups.g_instance.startListeningGUISpaceChanges()
-        gui_personality.init(loadingScreenGUI=loadingScreenGUI)
+        gameLoading.step()
+        gui_personality.init()
+        gameLoading.step()
         EdgeDetectColorController.g_instance.create()
         g_replayCtrl.subscribe()
+        gameLoading.step()
         MessengerEntry.g_instance.init()
         AreaDestructibles.init()
         MusicControllerWWISE.create()
+        gameLoading.step()
         TriggersManager.init()
         RSSDownloader.init()
         items.clearXMLCache()
@@ -120,6 +132,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         if constants.HAS_DEV_RESOURCES:
             import development
             development.init()
+        gameLoading.step()
     except Exception:
         LOG_CURRENT_EXCEPTION()
         BigWorld.quit()
@@ -129,11 +142,14 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
 
 def start():
     LOG_DEBUG('start')
+    styles_perf_toolset.setup()
     checkBotNet()
     if OfflineMode.onStartup():
+        gameLoading.getLoader().idl()
         LOG_DEBUG('OfflineMode')
         return
     elif LightingGenerationMode.onStartup():
+        gameLoading.getLoader().idl()
         LOG_DEBUG('LightingGenerationMode')
         return
     else:
@@ -242,6 +258,7 @@ def fini():
     SoundGroups.g_instance.destroy()
     Settings.g_instance.save()
     WebBrowser.destroyExternalCache()
+    gameLoading.getLoader().stop()
     if constants.HAS_DEV_RESOURCES:
         import development
         development.fini()
@@ -285,6 +302,7 @@ def onStreamComplete(streamID, desc, data):
 def onConnected():
     gui_personality.onConnected()
     VOIP.getVOIPManager().onConnected()
+    gameLoading.getLoader().onConnected()
 
 
 def onGeometryMapped(spaceID, path):
@@ -302,6 +320,7 @@ def onDisconnected():
     gui_personality.onDisconnected()
     VOIP.getVOIPManager().logout()
     VOIP.getVOIPManager().onDisconnected()
+    gameLoading.getLoader().onDisconnected()
 
 
 def onFini():

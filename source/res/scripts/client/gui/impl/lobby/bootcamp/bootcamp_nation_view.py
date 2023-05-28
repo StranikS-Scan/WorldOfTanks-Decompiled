@@ -140,10 +140,6 @@ class BootcampNationView(TutorialWulfWindowView):
             Waiting.show('updateVehicle')
             model.setIsPreviewLoading(True)
             self.platoonController.onPlatoonTankUpdated(platoonTanks)
-            space = self.hangarSpace.space
-            if space is not None:
-                cameraManager = space.getCameraManager()
-                cameraManager.setPlatoonStartingCameraPosition()
         else:
             vehicleDescr = vehicles.VehicleDescr(typeName=nationData['vehicle_first_descr'])
             model.setSelectedTitle(vehicleDescr.type.shortUserString)

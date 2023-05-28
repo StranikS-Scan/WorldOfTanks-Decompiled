@@ -260,6 +260,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_REMOVED_PERSONALNUMBER_1VALUE = '#system_messages:customization/removed/personalNumber_1Value'
     CUSTOMIZATION_PROGRESSION_UP_STYLE = '#system_messages:customization/progression/up/style'
     CUSTOMIZATION_PROGRESSION_DOWN_STYLE = '#system_messages:customization/progression/down/style'
+    CUSTOMIZATION_CURRENCY_NOT_ENOUGH = '#system_messages:customization/currency_not_enough'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
@@ -1150,6 +1151,7 @@ class SYSTEM_MESSAGES(object):
     EPICBATTLES_SEASONEND_TEXT = '#system_messages:epicBattles/seasonEnd/text'
     EPICBATTLES_SEASONEND_REWARDS_CREWBOOK = '#system_messages:epicBattles/seasonEnd/rewards/crewBook'
     EPICBATTLES_SEASONEND_REWARDS_EQUIPMENT = '#system_messages:epicBattles/seasonEnd/rewards/equipment'
+    EPICBATTLES_SEASONEND_REWARDS_OPTIONALDEVICE = '#system_messages:epicBattles/seasonEnd/rewards/optionalDevice'
     EPICBATTLES_LEVELUP_TITLE = '#system_messages:epicBattles/levelUp/title'
     EPICBATTLES_LEVELUP_BODY_LEVELCONGRATS = '#system_messages:epicBattles/levelUp/body/levelCongrats'
     EPICBATTLES_LEVELUP_AWARDS = '#system_messages:epicBattles/levelUp/awards'
@@ -1346,6 +1348,11 @@ class SYSTEM_MESSAGES(object):
     UNIT_WARNINGS_EXPIRED_PLAY_LIMITS = '#system_messages:unit/warnings/EXPIRED_PLAY_LIMITS'
     UNIT_WARNINGS_EXPIRED_PLAY_LIMITS_TO_COMMANDER = '#system_messages:unit/warnings/EXPIRED_PLAY_LIMITS_TO_COMMANDER'
     WINBACK_TURNOFFBATTLESERROR = '#system_messages:winback/turnOffBattlesError'
+    ACHIEVEMENTS_SERVER_ERROR = '#system_messages:achievements/server_error'
+    LIMITEDUI_SWITCHON = '#system_messages:limitedUI/switchOn'
+    LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
+    REFERRALPROGRAM_COLLECTPGBPOINTS_SERVER_ERROR = '#system_messages:referralProgram_collectPgbPoints/server_error'
+    REFERRAL_PROGRAM_DISABLED = '#system_messages:referral_program/disabled'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1728,6 +1735,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_REMOVED_PERSONALNUMBER_1VALUE,
      CUSTOMIZATION_PROGRESSION_UP_STYLE,
      CUSTOMIZATION_PROGRESSION_DOWN_STYLE,
+     CUSTOMIZATION_CURRENCY_NOT_ENOUGH,
      BONUSES_BOOSTER_VALUE,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,
@@ -2618,6 +2626,7 @@ class SYSTEM_MESSAGES(object):
      EPICBATTLES_SEASONEND_TEXT,
      EPICBATTLES_SEASONEND_REWARDS_CREWBOOK,
      EPICBATTLES_SEASONEND_REWARDS_EQUIPMENT,
+     EPICBATTLES_SEASONEND_REWARDS_OPTIONALDEVICE,
      EPICBATTLES_LEVELUP_TITLE,
      EPICBATTLES_LEVELUP_BODY_LEVELCONGRATS,
      EPICBATTLES_LEVELUP_AWARDS,
@@ -2813,7 +2822,12 @@ class SYSTEM_MESSAGES(object):
      RESOURCEWELL_RESOURCESRETURNERROR,
      UNIT_WARNINGS_EXPIRED_PLAY_LIMITS,
      UNIT_WARNINGS_EXPIRED_PLAY_LIMITS_TO_COMMANDER,
-     WINBACK_TURNOFFBATTLESERROR)
+     WINBACK_TURNOFFBATTLESERROR,
+     ACHIEVEMENTS_SERVER_ERROR,
+     LIMITEDUI_SWITCHON,
+     LIMITEDUI_SWITCHOFF,
+     REFERRALPROGRAM_COLLECTPGBPOINTS_SERVER_ERROR,
+     REFERRAL_PROGRAM_DISABLED)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

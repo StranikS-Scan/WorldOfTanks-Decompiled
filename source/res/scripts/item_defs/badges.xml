@@ -1,6 +1,36 @@
 <badges.xml>
   <badges>
     <badge>
+      <name>	tournament_silver_rose	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31001	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	tournament_gold_rose	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31002	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
       <name>	ranked_beta_gold	</name>
       <type>	dict	</type>
       <value>
@@ -3364,6 +3394,54 @@
         </item>
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	stronghold_event_hero_2023	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	134	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.37	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	stronghold_event_legend_2023	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	135	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.38	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>

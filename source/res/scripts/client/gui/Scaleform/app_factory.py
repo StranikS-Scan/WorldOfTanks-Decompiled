@@ -239,11 +239,6 @@ class AS3_AppFactory(IAppFactory):
             self.__importer = None
         return
 
-    def goToIntroVideo(self, appNS):
-        if appNS != _SPACE.SF_LOBBY:
-            return
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.INTRO_VIDEO)), EVENT_BUS_SCOPE.LOBBY)
-
     def goToLogin(self, appNS):
         if appNS != _SPACE.SF_LOBBY:
             return

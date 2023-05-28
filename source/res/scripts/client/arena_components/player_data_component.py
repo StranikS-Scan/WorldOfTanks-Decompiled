@@ -20,7 +20,7 @@ class PlayerDataComponent(ClientArenaComponent):
         self.onPlayerGroupsUpdated = Event.Event(self._eventManager)
         self.__playerIngameRanksEnabled = BONUS_CAPS.checkAny(componentSystem.bonusType, BONUS_CAPS.PLAYER_RANK_MECHANICS)
         self.__playerRank = None
-        self.onVehicleRanksUpdated = Event.Event(self._eventManager)
+        self.onCrewRolesFactorUpdated = Event.Event(self._eventManager)
         self.onPlayerRankUpdated = Event.Event(self._eventManager)
         return
 
@@ -105,5 +105,4 @@ class PlayerDataComponent(ClientArenaComponent):
                 gameModeStats = dict(((vehID, {key: rank}) for vehID, rank in ranksPerTeam.iteritems()))
                 arena.onGameModeSpecificStats(False, gameModeStats)
 
-        self.onVehicleRanksUpdated(args)
         return

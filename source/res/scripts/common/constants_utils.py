@@ -241,7 +241,11 @@ class AbstractBattleMode(object):
 
     @property
     def _battleMgrConfig(self):
-        return (self._BATTLE_MGR_NAME, 0.2, ('periphery', 'standalone'))
+        from server_constants import SINGLETON_DEFAULT_GROUP
+        return (self._BATTLE_MGR_NAME,
+         0.2,
+         SINGLETON_DEFAULT_GROUP,
+         ('periphery', 'standalone'))
 
     @property
     def _client_prbEntityClass(self):
@@ -269,6 +273,10 @@ class AbstractBattleMode(object):
 
     @property
     def _client_bannerEntryPointValidatorMethod(self):
+        return None
+
+    @property
+    def _client_bannerEntryPointLUIRule(self):
         return None
 
     @property
@@ -376,6 +384,10 @@ class AbstractBattleMode(object):
     def _server_unitMethodRoles(self):
         return []
 
+    @property
+    def _client_limitedUITokensInfos(self):
+        return []
+
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
         addUnitMgrFlagToQueueType(self._UNIT_MGR_FLAGS, self._QUEUE_TYPE, self._personality)
@@ -426,6 +438,10 @@ class AbstractBattleMode(object):
     def registerBannerEntryPointValidatorMethod(self):
         from gui.prb_control import prb_utils
         prb_utils.addBannerEntryPointValidatorMethod(self._CLIENT_BANNER_ENTRY_POINT_ALIAS, self._client_bannerEntryPointValidatorMethod, self._personality)
+
+    def registerBannerEntryPointLUIRule(self):
+        from gui.prb_control import prb_utils
+        prb_utils.addBannerEntryPointLUIRule(self._CLIENT_BANNER_ENTRY_POINT_ALIAS, self._client_bannerEntryPointLUIRule, self._personality)
 
     def registerProviderBattleQueue(self):
         from gui.prb_control import prb_utils
@@ -539,3 +555,9 @@ class AbstractBattleMode(object):
     def registerClientTokenQuestsSubFormatters(self):
         from gui.shared.system_factory import registerTokenQuestsSubFormatters
         registerTokenQuestsSubFormatters(self._client_tokenQuestsSubFormatters)
+
+    def registerLimitedUITokens(self):
+        tokensInfos = self._client_limitedUITokensInfos
+        if tokensInfos:
+            from gui.shared.system_factory import registerLimitedUITokens
+            registerLimitedUITokens(tokensInfos)

@@ -134,6 +134,7 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.POI_BLOCKED_NOT_USED_ABILITY, '', link, _COLORS.ORANGE, countdownVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.POI_CAPTURING_INTERRUPTED, '', link, _COLORS.ORANGE, countdownVisible=True, isReversedTimerDirection=True)
         self._addNotificationTimerSetting(data, _TYPES.POI_BLOCKED_NOT_INVADER, '', link, _COLORS.ORANGE, countdownVisible=False)
+        self._addNotificationTimerSetting(data, _TYPES.POI_BLOCKED_OVERTURNED, '', link, _COLORS.ORANGE, countdownVisible=False)
 
     def __gerRoleSkillsTimersSettings(self, data):
         link = _LINKS.SECONDARY_TIMER_UI

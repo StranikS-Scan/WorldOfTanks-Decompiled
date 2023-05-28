@@ -48,35 +48,9 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	51	</armor_1>
-      <armor_2>	44	</armor_2>
-      <armor_3>	25	</armor_3>
-      <armor_4>	25	</armor_4>
-      <armor_5>	16	</armor_5>
-      <armor_6>	32	</armor_6>
-      <armor_7>	13	</armor_7>
-      <armor_8>	13	</armor_8>
-      <armor_9>	25	</armor_9>
-      <armor_10>	32	</armor_10>
-      <armor_11>	0	</armor_11>
-      <armor_12>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_12>
-      <armor_13>	30	</armor_13>
-      <armor_14>	20	</armor_14>
-      <loader_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-      </loader_1>
-      <driver>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-      </driver>
-      <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-      </gunner_1>
-      <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-        <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-      </commander>
+      <armor_1>	18	</armor_1>
     </armor>
-    <primaryArmor>	armor_1 armor_6 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
     <weight>	9550	</weight>
     <maxHealth>	192	</maxHealth>
     <ammoBayHealth>
@@ -275,24 +249,9 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	51	</armor_1>
-        <armor_2>	44	</armor_2>
-        <armor_3>	25	</armor_3>
-        <armor_4>	16	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
-        <loader_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </loader_1>
-        <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </gunner_1>
-        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </commander>
+        <armor_1>	18	</armor_1>
       </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	10	</weight>
       <maxHealth>	48	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
@@ -314,10 +273,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_2>	44	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
+            <armor_1>	18	</armor_1>
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.1	</reloadTime>

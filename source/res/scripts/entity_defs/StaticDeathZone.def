@@ -1,14 +1,11 @@
 <StaticDeathZone.def>
   <Implements></Implements>
+  <AppealRadius>	3000	</AppealRadius>
   <Properties>
     <zoneId>
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </zoneId>
-    <zoneIndex>
-      <Type>	INT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </zoneIndex>
     <isActive>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

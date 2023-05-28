@@ -327,6 +327,16 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </ownVehiclePosition>
+    <enableExternalRespawn>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <Default>	0	</Default>
+    </enableExternalRespawn>
+    <botDisplayStatus>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </botDisplayStatus>
   </Properties>
   <TempProperties>
     <events></events>

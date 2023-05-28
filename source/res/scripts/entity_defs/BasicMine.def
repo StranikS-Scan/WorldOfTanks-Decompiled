@@ -13,6 +13,18 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isDetonated>
+    <isActivated>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isActivated>
+    <activationTimeDelay>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </activationTimeDelay>
+    <mineNumber>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </mineNumber>
     <isMarkerEnabled>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

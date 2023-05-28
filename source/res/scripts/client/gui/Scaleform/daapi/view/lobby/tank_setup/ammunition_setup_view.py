@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g
 from gui.Scaleform.daapi.view.meta.AmmunitionSetupViewMeta import AmmunitionSetupViewMeta
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AmmunitionSetupViewEvent
 from helpers import dependency
@@ -66,8 +67,12 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
 
     def __onUpdateTTC(self, event):
         vehicleItem = event.ctx.get('vehicleItem')
+        sectionName = event.ctx.get('sectionName')
         g_tankSetupVehicle.setVehicle(vehicleItem)
         self.__parametersView.update()
+        if sectionName is not None:
+            self.as_toggleParamsS(sectionName != TankSetupConstants.BATTLE_ABILITIES)
+        return
 
     def __onCloseInjectView(self):
         self.as_showCloseAnimS()

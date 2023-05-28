@@ -7,7 +7,6 @@ from types import NoneType
 from typing import TYPE_CHECKING
 import BigWorld
 import CommandMapping
-from battle_modifiers_common import BattleParams
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from items import vehicles
@@ -240,21 +239,18 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         body = descriptor.description
         consumeAmmo = descriptor.consumeAmmo if isSharedCooldownConfig else False
         if not consumeAmmo and reloadingTime > 0:
-            battleModifiers = self.sessionProvider.arenaVisitor.getArenaModifiers()
             body = '\n'.join((body, ''))
             if descriptor.isActivatable():
                 activeSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.activeSeconds()
-                activeSecVal = descriptor.activeSeconds
-                activeSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, activeSecVal)))
-                activeSecondsParamsString = backport.text(activeSecondsTooltipStr, activeSeconds=activeSeconds)
+                activeSec = descriptor.activeSeconds
+                activeSecondsParamsString = backport.text(activeSecondsTooltipStr, activeSeconds=str(int(activeSec)))
                 body = '\n'.join((body, activeSecondsParamsString))
             if isSharedCooldownConfig:
                 cdSecVal = descriptor.cooldownTime
             else:
                 cdSecVal = item.getTotalTime()
             cooldownSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-            cooldownSeconds = str(int(battleModifiers(BattleParams.EQUIPMENT_COOLDOWN, cdSecVal)))
-            cooldownSecondsParamsString = backport.text(cooldownSecondsTooltipStr, cooldownSeconds=cooldownSeconds)
+            cooldownSecondsParamsString = backport.text(cooldownSecondsTooltipStr, cooldownSeconds=str(int(cdSecVal)))
             body = '\n'.join((body, cooldownSecondsParamsString))
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         return toolTip
@@ -437,8 +433,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched += self._onPostMortemSwitched
-            vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            vehicleCtrl.onRespawnBaseMoving += self._onRespawnBaseMoving
+            vehicleCtrl.onVehicleStateUpdated += self._onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             self.__fillShells(ammoCtrl)
@@ -486,8 +482,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
-            vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
-            vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            vehicleCtrl.onRespawnBaseMoving -= self._onRespawnBaseMoving
+            vehicleCtrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onShellsAdded -= self._onShellsAdded
@@ -730,10 +726,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if not BigWorld.player().isObserver():
                 self.__removeListeners()
 
-    def __onRespawnBaseMoving(self):
+    def _onRespawnBaseMoving(self):
         self._reset()
 
-    def __onVehicleStateUpdated(self, state, value):
+    def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DESTROYED:
             self.__clearAllEquipmentGlow()
             return

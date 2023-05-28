@@ -6,7 +6,6 @@ import BigWorld
 import WWISE
 from PlayerEvents import g_playerEvents
 from adisp import adisp_process
-from wg_async import wg_async, wg_await
 from connection_mgr import LOGIN_STATUS
 from frameworks.wulf import WindowFlags, WindowStatus
 from gui import DialogsInterface, GUI_SETTINGS
@@ -38,6 +37,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
+from wg_async import wg_async, wg_await
 _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALID, {LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_ILLEGAL_CHARACTERS: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_SERVER_NOT_READY: INVALID_FIELDS.SERVER_INVALID,
@@ -126,21 +126,6 @@ class LoginView(LoginPageMeta):
         self.__clearPeripheryRouting()
         self._loginMode.changeAccount()
 
-    def musicFadeOut(self):
-        self._loginMode.musicFadeOut()
-
-    def videoLoadingFailed(self):
-        self._loginMode.videoLoadingFailed()
-
-    def setMute(self, value):
-        self._loginMode.setMute(value)
-
-    def onVideoLoaded(self):
-        self._loginMode.onVideoLoaded()
-
-    def switchBgMode(self):
-        self._loginMode.switchBgMode()
-
     def startListenCsisUpdate(self, startListenCsis):
         self.loginManager.servers.startListenCsisQuery(startListenCsis)
 
@@ -171,6 +156,7 @@ class LoginView(LoginPageMeta):
         self.update()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.0, self.__checkUserInputState)
+        self.fireEvent(LoginEvent(LoginEvent.LOGIN_VIEW_READY))
         return
 
     @uniprof.regionDecorator(label='offline.login', scope='exit')

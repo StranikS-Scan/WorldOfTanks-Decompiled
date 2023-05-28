@@ -61,6 +61,9 @@ class CustomizationMainViewMeta(View):
     def onProgressionEntryPointClick(self):
         self._printOverrideError('onProgressionEntryPointClick')
 
+    def onShopEntryPointClick(self):
+        self._printOverrideError('onShopEntryPointClick')
+
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
 

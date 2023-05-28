@@ -54,6 +54,8 @@ class ModType(Enum):
     VISION_MIN_RADIUS = 'visionMinRadius'
     VISION_TIME = 'visionTime'
     EQUIPMENT_COOLDOWN = 'equipmentCooldown'
+    INVISIBILITY_FACTOR_AT_SHOT = 'invisibilityFactorAtShot'
+    VEHICLE_AOI_RADIUS = 'vehicleAoIRadius'
 
 
 class ModPhysType(Enum):

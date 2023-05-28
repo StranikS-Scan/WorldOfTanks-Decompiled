@@ -19,6 +19,7 @@ from gui.battle_pass.battle_pass_helpers import getSupportedArenaBonusTypeFor
 from gui.event_boards.listener import IEventBoardsListener
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import finders
@@ -39,7 +40,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -223,6 +224,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -289,6 +291,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onProgressUpdated += self.update
         self._festivityController.onStateChanged += self.update
         self.__battlePassController.onSeasonStateChanged += self.update
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
@@ -297,6 +300,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__collectiveGoalEntryPointController.onEventUpdated += self.__updateCollectiveGoalEntryPoint
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish += self.__onBattleMattersStateChanged
+        self.__limitedUIController.startObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
+        self.__limitedUIController.startObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
+        self.__limitedUIController.startObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
+        self.__limitedUIController.startObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
         self.__updateBattleMattersEntryPoint()
         self.__armoryYardCtrl.onUpdated += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
@@ -318,11 +325,16 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onProgressUpdated -= self.update
         self._festivityController.onStateChanged -= self.update
         self.__battlePassController.onSeasonStateChanged -= self.update
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__resourceWell.onEventUpdated -= self.update
         self.__collectiveGoalEntryPointController.onEventUpdated -= self.__updateCollectiveGoalEntryPoint
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish -= self.__onBattleMattersStateChanged
+        self.__limitedUIController.stopObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
+        self.__limitedUIController.stopObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
+        self.__limitedUIController.stopObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
+        self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
         self.__funRandomCtrl.subscription.removeSubModesWatcher(self.update, True)
         self.__armoryYardCtrl.onUpdated -= self.update
         self._currentVehicle = None
@@ -362,9 +374,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             personalMissions = self.__getPersonalMissionsVO(vehicle)
             if personalMissions:
                 quests.append(personalMissions)
-        battleQuests = self.__getBattleQuestsVO(vehicle)
-        if battleQuests:
-            quests.append(battleQuests)
+        if self.__limitedUIController.isRuleCompleted(LuiRules.BATTLE_MISSIONS):
+            battleQuests = self.__getBattleQuestsVO(vehicle)
+            if battleQuests:
+                quests.append(battleQuests)
         if self.__mapboxCtrl.isMapboxMode():
             mapboxProgression = self.__getMapboxProgressionVO()
             if mapboxProgression:
@@ -382,7 +395,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def isPersonalMissionEnabled(self):
-        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive()
+        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS)
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []
@@ -408,11 +421,16 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __updateBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
-        isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp()
+        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
+        isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp() and isRuleCompleted
         if isVisible:
             self.as_createBattlePassS()
         else:
             self.as_removeBattlePassS()
+
+    def __updateBattlePassWidgetVisibility(self, *_):
+        self.__updateBPWidget()
+        self.__updateBattlePassSmallWidget()
 
     def __updateRBWidget(self):
         if self.__rankedController.isRankedPrbActive():
@@ -655,7 +673,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return None
 
     def __getEpicBattleQuestsVO(self):
-        if not self.__epicController.isEnabled():
+        if not self.__epicController.isEnabled() or not self.__limitedUIController.isRuleCompleted(LuiRules.BATTLE_MISSIONS):
             return None
         else:
             quests = [ q for q in self._questController.getQuestForVehicle(g_currentVehicle.item) if isDailyEpic(q.getGroupID()) ]
@@ -786,13 +804,18 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          constants.ARENA_BONUS_TYPE.UNKNOWN,
          constants.ARENA_BONUS_TYPE.MAPBOX,
          constants.ARENA_BONUS_TYPE.WINBACK)
-        secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled()
+        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
+        secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled() and isRuleCompleted
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:
             self.getComponent(HANGAR_ALIASES.SECONDARY_ENTRY_POINT).update(currentArenaBonusType)
 
     def __updateVisibilityPersonalMission(self, isVisible):
         self.__isShowPersonalMission = isVisible
+
+    def __updateVOHeader(self, *_):
+        headerVO = self._makeHeaderVO()
+        self.as_setDataS(headerVO)
 
     def __updateResourceWellEntryPoint(self):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR and not self.__bootcampController.isInBootcamp()
@@ -809,4 +832,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __updateBattleMattersEntryPoint(self):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR
         controller = self.__battleMattersController
-        self.as_setBattleMattersEntryPointS(controller.isEnabled() and (not controller.isFinished() or controller.hasDelayedRewards()) and isRandom)
+        isLuiRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BM_FLAG)
+        self.as_setBattleMattersEntryPointS(controller.isEnabled() and (not controller.isFinished() or controller.hasDelayedRewards()) and isRandom and isLuiRuleCompleted)
+
+    def __updateVisibilityBattleMatter(self, *_):
+        self.__updateBattleMattersEntryPoint()

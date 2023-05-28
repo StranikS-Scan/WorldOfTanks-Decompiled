@@ -16,6 +16,11 @@ class PromoGetTeaserRequestCtx(CommonWebRequestCtx):
     def getDataObj(incomeData):
         return PromoDataParser.parse(incomeData)
 
+    @classmethod
+    def getAdditionalData(cls):
+        battlesCount = cls.itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
+        return {'additionalData': {'number_of_battles': battlesCount}}
+
     def isCaching(self):
         return False
 

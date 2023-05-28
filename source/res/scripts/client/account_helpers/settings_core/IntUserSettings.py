@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/IntUserSettings.py
 from functools import partial
 import AccountCommands
+from account_helpers.settings_core import longToInt32
 from debug_utils import LOG_DEBUG, LOG_ERROR
 
 class IntUserSettings(object):
@@ -58,9 +59,11 @@ class IntUserSettings(object):
         if dictIntSettings:
             arr = []
             for k, v in dictIntSettings.iteritems():
-                if isinstance(k, int) and isinstance(v, int):
-                    arr.append(k)
-                    arr.append(v)
+                key = longToInt32(k)
+                value = longToInt32(v)
+                if isinstance(key, int) and isinstance(value, int):
+                    arr.append(key)
+                    arr.append(value)
                 import traceback
                 traceback.print_stack()
                 LOG_ERROR('Bad key:value pair in addIntUserSettings: %r:%r (should be int:int)' % (k, v))

@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/visual_script_client/game_settings_blocks.py
 from constants import IS_VS_EDITOR
 from visual_script import ASPECT
-from visual_script.block import Block, Meta, EDITOR_TYPE, InitParam, buildStrKeysValue
-from visual_script.misc import errorVScript
+from visual_script.block import Block, Meta, InitParam, buildStrKeysValue
+from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
 if not IS_VS_EDITOR:
@@ -26,7 +26,7 @@ class GameSettingsMeta(Meta):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT]
+        return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
 class GetGameSetting(Block, GameSettingsMeta):

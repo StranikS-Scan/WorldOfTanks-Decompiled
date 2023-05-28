@@ -3,6 +3,7 @@
 from enum import Enum
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.loot_box.loot_box_helper import parseAllOfBonusInfoSection
 from gui.shared.gui_items.gui_item import GUIItem
 from shared_utils import CONST_CONTAINER
 
@@ -41,10 +42,17 @@ class EventLootBoxes(CONST_CONTAINER):
     COMMON = 'event_common'
 
 
+class ReferralProgramLootBoxes(CONST_CONTAINER):
+    SMALL = 'small_referral'
+    BIG = 'big_referral'
+    SPECIAL = 'special_referral'
+
+
 ALL_LUNAR_NY_LOOT_BOX_TYPES = ('lunar_base', 'lunar_simple', 'lunar_special')
 LUNAR_NY_LOOT_BOXES_CATEGORIES = 'LunarNY'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 EVENT_LOOT_BOXES_CATEGORY = 'eventLootBoxes'
+REFERRAL_PROGRAM_CATEGORY = 'referralProgram'
 GUI_ORDER_NY = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER_NY = (NewYearCategories.NEWYEAR,
  NewYearCategories.CHRISTMAS,
@@ -52,7 +60,7 @@ CATEGORIES_GUI_ORDER_NY = (NewYearCategories.NEWYEAR,
  NewYearCategories.FAIRYTALE)
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__rawBonuses', '__guaranteedFrequencyName')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -102,10 +110,17 @@ class LootBox(GUIItem):
     def getHistoryName(self):
         return self.__historyName
 
+    def getBoxInfo(self, historyData=None):
+        return {'id': self.getID(),
+         'limit': self.getGuaranteedFrequency(),
+         'slots': parseAllOfBonusInfoSection(self.__rawBonuses.get('allof', {})),
+         'history': historyData.get(self.getHistoryName(), (0, None, 0)) if historyData is not None else (0, None, 0)}
+
     def __updateByConfig(self, lootBoxConfig):
         self.__type = lootBoxConfig.get('type')
         self.__category = lootBoxConfig.get('category')
         self.__historyName = lootBoxConfig.get('historyName')
+        self.__rawBonuses = lootBoxConfig.get('bonus', {})
         self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
 
     @staticmethod

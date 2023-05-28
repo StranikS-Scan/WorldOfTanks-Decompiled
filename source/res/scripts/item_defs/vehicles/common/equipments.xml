@@ -4048,7 +4048,7 @@
     <vehicleFilter>
       <exclude>
         <vehicle>
-          <tags>	wheeledVehicle	</tags>
+          <mandatoryTags>	wheeledVehicle lightTank	</mandatoryTags>
         </vehicle>
       </exclude>
     </vehicleFilter>
@@ -6162,6 +6162,7 @@
 				10 0
 				10 10	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -6240,6 +6241,7 @@
 				10 5
 				10 15	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -6318,6 +6320,7 @@
 				10 5
 				10 15	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -6391,6 +6394,7 @@
 				10 0
 				10 10	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -6469,6 +6473,7 @@
 				10 5
 				10 15	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -6547,6 +6552,7 @@
 				10 5
 				10 15	</bombsPattern>
       <mineParams>
+        <activationDelay>	3	</activationDelay>
         <triggerRadius>	6	</triggerRadius>
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
@@ -7129,7 +7135,7 @@
           <applyTo>	enemy_team	</applyTo>
           <args>
             <damage>	350	</damage>
-            <damageDispersionPercent>	5	</damageDispersionPercent>
+            <damageDispersionPercent>	0	</damageDispersionPercent>
           </args>
         </action>
         <action>
@@ -7176,10 +7182,10 @@
     <notInShop>	true	</notInShop>
     <tags>	notForSale regenerationKit	</tags>
     <script>	RegenerationKit	  <consumeAmmo>	true	</consumeAmmo>
-      <healthRegenPerTick>	0.05	</healthRegenPerTick>
+      <healthRegenPerTick>	0.036	</healthRegenPerTick>
       <initialHeal>	0	</initialHeal>
       <healTime>	7	</healTime>
-      <cooldownSeconds>	30	</cooldownSeconds>
+      <cooldownSeconds>	15	</cooldownSeconds>
       <healGroup>	1	</healGroup>
       <tickInterval>	1	</tickInterval>
     </script>
@@ -7224,7 +7230,7 @@
       <shortDescription>	#artefacts:selfBuff/shortDescr	</shortDescription>
       <longDescription>	#artefacts:selfBuff/longDescr	</longDescription>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
-      <cooldownTime>	45.0	</cooldownTime>
+      <cooldownTime>	30.0	</cooldownTime>
       <duration>	20	</duration>
       <increaseFactors>
         <turret-rotationSpeed>	1.5	</turret-rotationSpeed>
@@ -7232,8 +7238,8 @@
         <chassis-shotDispersionFactors-movement>	0.5	</chassis-shotDispersionFactors-movement>
         <chassis-shotDispersionFactors-rotation>	0.5	</chassis-shotDispersionFactors-rotation>
         <gun-shotDispersionFactors-turretRotation>	0.5	</gun-shotDispersionFactors-turretRotation>
-        <gun-reloadTime>	0.7	</gun-reloadTime>
-        <gun-aimingTime>	0.7	</gun-aimingTime>
+        <gun-reloadTime>	0.75	</gun-reloadTime>
+        <gun-aimingTime>	0.75	</gun-aimingTime>
       </increaseFactors>
     </script>
   </selfBuff>
@@ -7262,7 +7268,7 @@
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
       <consumeAmmo>	true	</consumeAmmo>
-      <cooldownTime>	90.0	</cooldownTime>
+      <cooldownTime>	60.0	</cooldownTime>
       <duration>	7	</duration>
       <inactivationDelay>	0.0	</inactivationDelay>
       <radius>	18	</radius>
@@ -7294,10 +7300,10 @@
       </include>
     </vehicleFilter>
     <script>	AfterburningBattleRoyale	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <consumeSeconds>	15	</consumeSeconds>
-      <enginePowerFactor>	1.5	</enginePowerFactor>
-      <maxSpeedFactor>	2.25	</maxSpeedFactor>
+      <enginePowerFactor>	1.4	</enginePowerFactor>
+      <maxSpeedFactor>	1.8	</maxSpeedFactor>
       <vehicleRotationSpeed>	1.15	</vehicleRotationSpeed>
     </script>
   </afterburning_battle_royale>
@@ -7320,7 +7326,7 @@
       </include>
     </vehicleFilter>
     <script>	TrapPoint	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <influenceZone>
         <radius>	35.0	</radius>
         <height>	5.0	</height>
@@ -7329,16 +7335,16 @@
         <terrainResistance>	2.5	</terrainResistance>
         <influenceType>	2	</influenceType>
         <debuffFactors>
-          <turret-rotationSpeed>	0.6	</turret-rotationSpeed>
+          <turret-rotationSpeed>	0.7	</turret-rotationSpeed>
           <chassis-shotDispersionFactors-movement>	1.8	</chassis-shotDispersionFactors-movement>
           <chassis-shotDispersionFactors-rotation>	1.8	</chassis-shotDispersionFactors-rotation>
           <gun-shotDispersionFactors-turretRotation>	1.8	</gun-shotDispersionFactors-turretRotation>
           <gun-rotationSpeed>	0.6	</gun-rotationSpeed>
           <gun-reloadTime>	1.8	</gun-reloadTime>
           <gun-aimingTime>	1.8	</gun-aimingTime>
-          <vehicle-rotationSpeed>	0.5	</vehicle-rotationSpeed>
-          <vehicle-maxSpeed>	0.4	</vehicle-maxSpeed>
-          <engine-power>	0.5	</engine-power>
+          <vehicle-rotationSpeed>	0.7	</vehicle-rotationSpeed>
+          <vehicle-maxSpeed>	0.70	</vehicle-maxSpeed>
+          <engine-power>	0.75	</engine-power>
         </debuffFactors>
       </influenceZone>
     </script>
@@ -7365,21 +7371,21 @@
       <shortDescription>	#artefacts:berserker/shortDescr	</shortDescription>
       <longDescription>	#artefacts:berserker/longDescr	</longDescription>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
-      <cooldownTime>	90.0	</cooldownTime>
-      <duration>	20	</duration>
+      <cooldownTime>	60.0	</cooldownTime>
+      <duration>	15	</duration>
       <increaseFactors>
-        <turret-rotationSpeed>	1.5	</turret-rotationSpeed>
-        <gun-rotationSpeed>	1.5	</gun-rotationSpeed>
+        <turret-rotationSpeed>	1.3	</turret-rotationSpeed>
+        <gun-rotationSpeed>	1.3	</gun-rotationSpeed>
         <gun-piercing>	2.0	</gun-piercing>
         <chassis-shotDispersionFactors-movement>	0.5	</chassis-shotDispersionFactors-movement>
         <chassis-shotDispersionFactors-rotation>	0.5	</chassis-shotDispersionFactors-rotation>
         <gun-shotDispersionFactors-turretRotation>	0.5	</gun-shotDispersionFactors-turretRotation>
         <gun-reloadTime>	0.5	</gun-reloadTime>
-        <gun-aimingTime>	0.5	</gun-aimingTime>
+        <gun-aimingTime>	0.7	</gun-aimingTime>
       </increaseFactors>
       <dotParams>
         <tickInterval>	2	</tickInterval>
-        <damagePerTick>	0.015	</damagePerTick>
+        <damagePerTick>	0.0175	</damagePerTick>
         <restoreHealth>	False	</restoreHealth>
         <canDie>	False	</canDie>
         <groupID>	0	</groupID>
@@ -7409,7 +7415,7 @@
     <script>	ConsumableSpawnBot	  <shortDescription>	#artefacts:spawn_kamikaze/shortDescr	</shortDescription>
       <longDescription>	#artefacts:spawn_kamikaze/longDescr	</longDescription>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <cooldownFactors></cooldownFactors>
       <consumeAmmo>	true	</consumeAmmo>
       <disableAllyDamage>	true	</disableAllyDamage>
@@ -7417,7 +7423,7 @@
       <areaRadius>	4	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
       <noOwner>	false	</noOwner>
-      <maxApplyRadius>	300	</maxApplyRadius>
+      <maxApplyRadius>	150	</maxApplyRadius>
       <arenaAimLimits>
         <insetRadius>	5	</insetRadius>
         <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
@@ -7462,15 +7468,15 @@
       </include>
     </vehicleFilter>
     <script>	TrapPoint	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <influenceZone>
         <radius>	18.0	</radius>
         <height>	5.0	</height>
         <depth>	5.0	</depth>
-        <timer>	14.0	</timer>
+        <timer>	10.0	</timer>
         <influenceType>	1	</influenceType>
         <hotParams>
-          <healPerTick>	0.025	</healPerTick>
+          <healPerTick>	0.035	</healPerTick>
           <healCrew>	True	</healCrew>
           <healDevices>	True	</healDevices>
           <healGroup>	1	</healGroup>
@@ -7504,7 +7510,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <consumeAmmo>	true	</consumeAmmo>
       <delay>	2.0	</delay>
       <heights>	100 60	</heights>
@@ -7513,7 +7519,7 @@
       <areaLength>	25	</areaLength>
       <areaWidth>	25	</areaWidth>
       <minApplyRadius>	20	</minApplyRadius>
-      <maxApplyRadius>	300	</maxApplyRadius>
+      <maxApplyRadius>	150	</maxApplyRadius>
       <arenaAimLimits>
         <areaColor>	0xFFFF0000	</areaColor>
       </arenaAimLimits>
@@ -7561,7 +7567,7 @@
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
       <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <disableAllyDamage>	true	</disableAllyDamage>
       <bombsPattern>	-10 -10
 				-10 0
@@ -7581,7 +7587,7 @@
         <triggerHeight>	5	</triggerHeight>
         <triggerDepth>	1	</triggerDepth>
         <influenceType>	2	</influenceType>
-        <lifetime>	20	</lifetime>
+        <lifetime>	15	</lifetime>
         <damage>	0	</damage>
         <shellCompactDescr>	83994	</shellCompactDescr>
       </mineParams>
@@ -7622,7 +7628,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <consumeAmmo>	true	</consumeAmmo>
       <minDelay>	1.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
@@ -7687,7 +7693,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <consumeAmmo>	true	</consumeAmmo>
       <minDelay>	1.0	</minDelay>
       <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
@@ -7757,7 +7763,7 @@
     <usagePrefab>	content/CGFPrefabs/steel_hunter/Fire_ring.prefab	</usagePrefab>
     <ownerPrefab></ownerPrefab>
     <script>	FireCircle	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <radius>	18	</radius>
       <zonesCount>	12	</zonesCount>
       <vehicleHeightMultiplier>	2.5	</vehicleHeightMultiplier>
@@ -7811,7 +7817,7 @@
     </vehicleFilter>
     <script>	CorrodingShot	  <consumeAmmo>	true	</consumeAmmo>
       <tooltipMovie></tooltipMovie>
-      <cooldownSeconds>	45	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <damagePercentAfterShot>	0.05	</damagePercentAfterShot>
       <canBeStoppedRepairKit>	true	</canBeStoppedRepairKit>
       <increaseFactors>
@@ -7846,8 +7852,8 @@
     <script>	ConsumableSpawnBot	  <shortDescription>	#artefacts:clingBrander/shortDescr	</shortDescription>
       <longDescription>	#artefacts:clingBrander/longDescr	</longDescription>
       <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	90	</cooldownSeconds>
-      <botLifeTime>	45	</botLifeTime>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <botLifeTime>	30	</botLifeTime>
       <minApplyRadius>	5	</minApplyRadius>
       <maxApplyRadius>	50	</maxApplyRadius>
       <delay>	3	</delay>
@@ -7900,7 +7906,7 @@
       </include>
     </vehicleFilter>
     <script>	AdaptationHealthRestore	  <consumeAmmo>	true	</consumeAmmo>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <duration>	8	</duration>
       <immediatelyRestore>	200	</immediatelyRestore>
       <restoringCoefficient>	1.25	</restoringCoefficient>
@@ -7932,14 +7938,14 @@
     <script>	ThunderStrike	  <consumeAmmo>	true	</consumeAmmo>
       <shortDescription>	#artefacts:thunderStrike/shortDescr	</shortDescription>
       <longDescription>	#artefacts:thunderStrike/longDescr	</longDescription>
-      <cooldownSeconds>	40	</cooldownSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
       <delay>	1.0	</delay>
-      <thunderCount>	12	</thunderCount>
-      <thunderPeriod>	0.7	</thunderPeriod>
+      <thunderCount>	5	</thunderCount>
+      <thunderPeriod>	1	</thunderPeriod>
       <damageRadius>	10	</damageRadius>
       <isDamageAll>	false	</isDamageAll>
       <duration>	10	</duration>
-      <damage>	70	</damage>
+      <damage>	100	</damage>
       <canBeStoppedRepairKit>	true	</canBeStoppedRepairKit>
       <decreaseFactors>
         <gun-reloadTime>	1.0	</gun-reloadTime>
@@ -7947,7 +7953,7 @@
         <vehicle-maxSpeed>	0.35	</vehicle-maxSpeed>
         <engine-power>	0.5	</engine-power>
       </decreaseFactors>
-      <minApplyRadius>	20	</minApplyRadius>
+      <minApplyRadius>	15	</minApplyRadius>
       <maxApplyRadius>	150	</maxApplyRadius>
       <arenaAimLimits>
         <areaColor>	0xFFFF0000	</areaColor>
@@ -8234,11 +8240,11 @@
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	3 6.5 10.0	  <exports>	vse tooltip	</exports>
+      <crewBuff>	4 7.5 11.0	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_ally_support>
@@ -8289,9 +8295,9 @@
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <aimingTimeBuff>	0.65 0.475 0.3	  <exports>	vse	</exports>
+      <aimingTimeBuff>	0.55 0.475 0.3	  <exports>	vse	</exports>
       </aimingTimeBuff>
-      <shotDispersionFactors>	0.65 0.475 0.3	  <exports>	vse	</exports>
+      <shotDispersionFactors>	0.55 0.475 0.3	  <exports>	vse	</exports>
       </shotDispersionFactors>
       <clipReloadTimeBoost>	0.45 0.6 0.75	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
@@ -8311,15 +8317,15 @@
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <gunReloadTimeBuff>	0.85 0.725 0.6	  <exports>	vse	</exports>
+      <gunReloadTimeBuff>	0.75 0.7 0.6	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
       <damageDistance>	150	  <exports>	vse tooltip	</exports>
       </damageDistance>
-      <shotDispersionFactors>	0.85 0.7 0.55	  <exports>	vse	</exports>
+      <shotDispersionFactors>	0.8 0.675 0.55	  <exports>	vse	</exports>
       </shotDispersionFactors>
     </script>
   </comp7_berserk>
@@ -8337,7 +8343,7 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -8364,13 +8370,13 @@
       </cooldownSeconds>
       <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	8 11 15	  <exports>	vse tooltip	</exports>
+      <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	50 130 225	  <exports>	vse tooltip	</exports>
+      <damage>	75 150 250	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	7 9 11	  <exports>	vse tooltip	</exports>
+      <stunDuration>	0 6 10	  <exports>	vse tooltip	</exports>
       </stunDuration>
-      <fraction>	0.05	  <exports>	vse tooltip	</exports>
+      <fraction>	0	  <exports>	vse tooltip	</exports>
       </fraction>
       <areaShow>	always	</areaShow>
       <duration>	1.0	</duration>
@@ -8381,8 +8387,8 @@
       <effects>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
-          <offsetDeviation>	20	</offsetDeviation>
-          <repeatCount>	5	</repeatCount>
+          <offsetDeviation>	15	</offsetDeviation>
+          <repeatCount>	4	</repeatCount>
           <repeatDelay>	0	</repeatDelay>
           <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
         </action>
@@ -8406,9 +8412,9 @@
           <plan>	comp7Abilities/fastRecharge_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <gunReloadTimeBuff>	0.73 0.6 0.45	  <exports>	vse	</exports>
+      <gunReloadTimeBuff>	0.7 0.55 0.4	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
     </script>
   </comp7_fast_recharge>
@@ -8512,15 +8518,15 @@
       </duration>
       <healDuration>	10	  <exports>	vse tooltip	</exports>
       </healDuration>
-      <baseHeal>	125	  <exports>	vse tooltip	</exports>
+      <baseHeal>	150	  <exports>	vse tooltip	</exports>
       </baseHeal>
-      <extraHealFactor>	0.3 0.55 0.85	  <exports>	vse	</exports>
+      <extraHealFactor>	0.35 0.6 0.85	  <exports>	vse	</exports>
       </extraHealFactor>
       <fwdSpeedBoost>	10	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>
-      <bkwSpeedBoost>	5	  <exports>	vse tooltip	</exports>
+      <bkwSpeedBoost>	10	  <exports>	vse tooltip	</exports>
       </bkwSpeedBoost>
-      <enginePowerBuff>	10	  <exports>	vse tooltip	</exports>
+      <enginePowerBuff>	15	  <exports>	vse tooltip	</exports>
       </enginePowerBuff>
     </script>
   </comp7_risky_attack>
@@ -8538,11 +8544,11 @@
           <plan>	comp7Abilities/recon_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	10 12 15	  <exports>	vse tooltip	</exports>
+      <duration>	15 20 25	  <exports>	vse tooltip	</exports>
       </duration>
-      <delay>	3	  <exports>	vse tooltip	</exports>
+      <delay>	2	  <exports>	vse tooltip	</exports>
       </delay>
       <radius>	45 55 60	  <exports>	vse tooltip	</exports>
       </radius>

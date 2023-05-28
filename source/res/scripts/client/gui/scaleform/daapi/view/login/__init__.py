@@ -14,7 +14,6 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.login.EULA import EULADlg
-    from gui.Scaleform.daapi.view.login.IntroPage import IntroPage
     from gui.Scaleform.daapi.view.login.LegalInfoWindow import LegalInfoWindow
     from gui.Scaleform.daapi.view.login.LoginQueue import LoginQueue
     from gui.Scaleform.daapi.view.login.RssNewsFeed import RssNewsFeed
@@ -23,8 +22,7 @@ def getViewSettings():
         from SocialLoginView import SocialLoginView as LoginView
     else:
         from LoginView import LoginView
-    return (ViewSettings(VIEW_ALIAS.INTRO_VIDEO, IntroPage, 'introPage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
+    return (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EULA, EULADlg, 'EULADlg.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.LEGAL_INFO_WINDOW, LegalInfoWindow, 'legalInfoWindow.swf', WindowLayer.WINDOW, 'legalInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EULA_FULL, EULADlg, 'EULAFullDlg.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
@@ -42,7 +40,6 @@ class LoginPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.EULA, self.loadViewByCtxEvent),
          (VIEW_ALIAS.EULA_FULL, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.INTRO_VIDEO, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOGIN, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LEGAL_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOGIN_QUEUE, self.loadView),

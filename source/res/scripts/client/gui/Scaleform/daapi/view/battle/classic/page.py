@@ -190,6 +190,16 @@ class ClassicPage(SharedPage):
         if not self._fullStatsAlias or not self.as_isComponentVisibleS(self._fullStatsAlias):
             self._toggleGuiVisible()
 
+    def _onRespawnBaseMoving(self):
+        super(ClassicPage, self)._onRespawnBaseMoving()
+        if not self._canShowPostmortemTips:
+            return
+        if self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
+            self._fsToggling.discard(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+            self._fsToggling.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
+        else:
+            self._reloadPostmortem()
+
     def _switchToPostmortem(self):
         super(ClassicPage, self)._switchToPostmortem()
         ctrl = self.sessionProvider.shared.calloutCtrl
@@ -197,6 +207,9 @@ class ClassicPage(SharedPage):
             self._toggleRadialMenu(False)
         if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.CALLOUT_PANEL):
             self._processCallout(needShow=False)
+        if self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
+            self._fsToggling.add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
         return
 
     def _changeCtrlMode(self, ctrlMode):

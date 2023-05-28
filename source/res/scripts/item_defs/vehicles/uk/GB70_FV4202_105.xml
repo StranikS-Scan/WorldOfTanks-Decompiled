@@ -43,21 +43,9 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	121	</armor_1>
-      <armor_2>	76	</armor_2>
-      <armor_3>	51	</armor_3>
-      <armor_4>	32	</armor_4>
-      <armor_5>	30	</armor_5>
-      <armor_6>	16	</armor_6>
-      <armor_7>	32	</armor_7>
-      <armor_8>	0	</armor_8>
-      <armor_9>	13	</armor_9>
-      <armor_10>	20	</armor_10>
-      <armor_11>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_11>
-      <armor_12>	197	</armor_12>
+      <armor_1>	18	</armor_1>
     </armor>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
     <weight>	20634	</weight>
     <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
@@ -246,20 +234,9 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	125	</armor_1>
-        <armor_2>	196	</armor_2>
-        <armor_3>	120	</armor_3>
-        <armor_4>	35	</armor_4>
-        <armor_5>	25	</armor_5>
-        <armor_6>	25	</armor_6>
-        <armor_7>	196	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	45	</armor_9>
-        <armor_10>	25	</armor_10>
-        <armor_11>	170	</armor_11>
-        <armor_12>	140	</armor_12>
+        <armor_1>	18	</armor_1>
       </armor>
-      <primaryArmor>	armor_2 armor_7 armor_4	</primaryArmor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	8500	</weight>
       <maxHealth>	390	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
@@ -281,6 +258,7 @@
             <maxPitch>	0 10 0.297449 10 0.361111 0 0.638889 0 0.702551 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
+            <armor_1>	18	</armor_1>
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>

@@ -61,6 +61,33 @@
         </descr>
       </UISettings>
     </camouflage>
+    <fireFighting>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	fireExtinguishingRate	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.008	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	fireExtinguishingRate	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.0043	</value>
+          </param>
+        </params>
+        <kpi>
+          <mul>
+            <name>	fireExtinguishingRate	</name>
+            <value>	1.8	</value>
+          </mul>
+        </kpi>
+      </UISettings>
+    </fireFighting>
     <brotherhood>
       <crewLevelIncrease>	5	</crewLevelIncrease>
       <UISettings>
@@ -607,33 +634,5 @@
         </kpi>
       </UISettings>
     </radioman_retransmitter>
-    <fireFighting>
-      <vsePerk>	506	</vsePerk>
-      <UISettings>
-        <tooltipSection>	skills	</tooltipSection>
-        <typeName>	common	</typeName>
-        <descr>
-          <arg>
-            <situationalParam>	false	</situationalParam>
-            <paramName>	fireExtinguishingRate	</paramName>
-            <measureType>	percents	</measureType>
-            <value>	0.008	</value>
-          </arg>
-        </descr>
-        <params>
-          <param>
-            <name>	fireExtinguishingRate	</name>
-            <situationalParam>	false	</situationalParam>
-            <value>	0.0043	</value>
-          </param>
-        </params>
-        <kpi>
-          <mul>
-            <name>	fireExtinguishingRate	</name>
-            <value>	1.8	</value>
-          </mul>
-        </kpi>
-      </UISettings>
-    </fireFighting>
   </skills>
 </tankmen.xml>

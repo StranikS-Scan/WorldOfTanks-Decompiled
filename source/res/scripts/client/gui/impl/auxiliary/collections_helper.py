@@ -30,7 +30,7 @@ def fillCollectionModel(model, collectionId, collectionsSystem=None):
     if isEnabled:
         model.setCollectionItemCount(collectionsSystem.getReceivedProgressItemCount(collectionId))
         model.setMaxCollectionItemCount(collectionsSystem.getMaxProgressItemCount(collectionId))
-        model.setNewCollectionItemCount(collectionsSystem.getNewCollectionItemCount(collectionId))
+        model.setNewCollectionItemCount(collectionsSystem.getNewLinkedCollectionsItemCount(collectionId))
         model.setIsFirstEnter(not AccountSettings.getSettings(IS_BATTLE_PASS_COLLECTION_SEEN))
     return
 

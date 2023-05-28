@@ -962,6 +962,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_EPICREWARD_CRYSTAL = '#messenger:serviceChannelMessages/epicReward/crystal'
     SERVICECHANNELMESSAGES_EPICREWARD_BROCHURE_GIFT = '#messenger:serviceChannelMessages/epicReward/brochure_gift'
     SERVICECHANNELMESSAGES_EPICREWARD_BATTLEBOOSTER_GIFT = '#messenger:serviceChannelMessages/epicReward/battleBooster_gift'
+    SERVICECHANNELMESSAGES_EPICREWARD_EXPEQUIPMENTS_GIFT = '#messenger:serviceChannelMessages/epicReward/expequipments_gift'
     SERVICECHANNELMESSAGES_EPICREWARD_BATTLEPASSPOINTS = '#messenger:serviceChannelMessages/epicReward/battlePassPoints'
     SERVICECHANNELMESSAGES_EPICREWARD_EPICABILITYPOINTS = '#messenger:serviceChannelMessages/epicReward/epicAbilityPoints'
     SERVICECHANNELMESSAGES_EPICREWARD_RECERTIFICATIONFORM_GIFT = '#messenger:serviceChannelMessages/epicReward/recertificationForm_gift'
@@ -1099,6 +1100,8 @@ class MESSENGER(object):
     PLATFORMCURRENCYMSG_DEBITED_BRCOIN = '#messenger:platformCurrencyMsg/debited/brcoin'
     PLATFORMCURRENCYMSG_RECEIVED_EQUIP_COIN = '#messenger:platformCurrencyMsg/received/equip_coin'
     PLATFORMCURRENCYMSG_DEBITED_EQUIP_COIN = '#messenger:platformCurrencyMsg/debited/equip_coin'
+    PLATFORMCURRENCYMSG_RECEIVED_FAMECOIN = '#messenger:platformCurrencyMsg/received/famecoin'
+    PLATFORMCURRENCYMSG_DEBITED_FAMECOIN = '#messenger:platformCurrencyMsg/debited/famecoin'
     PLATFORMCURRENCYMSG_RECEIVED_FREEXP = '#messenger:platformCurrencyMsg/received/freeXP'
     PLATFORMCURRENCYMSG_DEBITED_FREEXP = '#messenger:platformCurrencyMsg/debited/freeXP'
     SERVICECHANNELMESSAGES_RESOURCEWELL_PUT_TITLE = '#messenger:serviceChannelMessages/resourceWell/put/title'
@@ -1171,6 +1174,16 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_WINBACK_AWARDS_DISCOUNTCONCRETE = '#messenger:serviceChannelMessages/winback/awards/discountConcrete'
     SERVICECHANNELMESSAGES_WINBACK_AWARDS_DISCOUNTHEADER = '#messenger:serviceChannelMessages/winback/awards/discountHeader'
     SERVICECHANNELMESSAGES_FINANCIAL_ADD = '#messenger:serviceChannelMessages/Financial/add'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMCASHBACK_HEADER = '#messenger:serviceChannelMessages/referralProgramCashback/header'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMCASHBACK_TEXT = '#messenger:serviceChannelMessages/referralProgramCashback/text'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMPGBFULL_TEXT = '#messenger:serviceChannelMessages/referralProgramPGBFull/text'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMPGBFULL_BUTTON = '#messenger:serviceChannelMessages/referralProgramPGBFull/button'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMPOINTSADDED_HEADER = '#messenger:serviceChannelMessages/referralProgramPointsAdded/header'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMPOINTSADDED_BODY = '#messenger:serviceChannelMessages/referralProgramPointsAdded/body'
+    SERVICECHANNELMESSAGES_REFERRALPROGRAMPOINTSDEBITED_BODY = '#messenger:serviceChannelMessages/referralProgramPointsDebited/body'
+    SERVICECHANNELMESSAGES_REFERRALLOOTBOXESRECEIVED_BODY = '#messenger:serviceChannelMessages/referralLootBoxesReceived/body'
+    SERVICECHANNELMESSAGES_REFERRALTRANSACTION_HEADER = '#messenger:serviceChannelMessages/referralTransaction/header'
+    SERVICECHANNELMESSAGES_REFERRALTRANSACTION_DATE = '#messenger:serviceChannelMessages/referralTransaction/date'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

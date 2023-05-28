@@ -8,7 +8,6 @@ from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.game_control import IArmoryYardController
-from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from debug_utils import LOG_DEBUG_DEV
 ARMORY_YARD_PREFAB_PATH = 'content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01.prefab'
 ARMORY_YARD_PREFAB_FORWARD_PATH = 'content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01_fwd.prefab'
@@ -34,9 +33,6 @@ class SceneLoadingManager(object):
         self.__loadedCallback = loadedCallback
         if hangarSpace is not None and hangarSpace.space is not None:
             hangarSpace.setSelectionEnabled(True)
-            hangarCameraManager = hangarSpace.space.getCameraManager()
-            if hangarCameraManager is not None:
-                hangarCameraManager.setCameraLocation(targetPos=ARMORY_YARD_PREFAB_TARGET_POS, movementMode=IMMEDIATE_CAMERA_MOVEMENT_MODE)
             cgfStageManager = CGF.getManager(hangarSpace.space.getSpaceID(), AssemblyStageIndexManager)
             cgfStageManager.onReady += self.sceneLoaded
             self.__isLoading = True

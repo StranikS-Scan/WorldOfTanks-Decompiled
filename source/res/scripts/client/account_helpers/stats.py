@@ -24,12 +24,13 @@ _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
 _SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
-_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals')
+_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals', 'refSystem20')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
 _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isSsrPlayEnabled', 'comp7')
 _PREFERRED_MAPS_KEY = 'preferredMaps'
 _ADDITIONAL_XP_CACHE_KEY = '_additionalXPCache'
+_LIMITED_UI = 'limitedUi'
 
 def _checkIfNonPlayer(*args):
 
@@ -141,6 +142,8 @@ class Stats(object):
             synchronizeDicts(piggyBankDiff, cache.setdefault(PIGGY_BANK_PDATA_KEY, dict()))
         if _PREFERRED_MAPS_KEY in diff:
             synchronizeDicts(diff[_PREFERRED_MAPS_KEY], cache.setdefault(_PREFERRED_MAPS_KEY, {}))
+        if _LIMITED_UI in diff:
+            synchronizeDicts(diff[_LIMITED_UI], cache.setdefault(_LIMITED_UI, {}))
         return
 
     def getCache(self, callback=None):

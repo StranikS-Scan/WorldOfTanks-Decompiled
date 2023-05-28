@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/comp7/comp7_entry_point.py
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.Scaleform.daapi.view.meta.ResizableEntryPointMeta import ResizableEntryPointMeta
 from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.Scaleform.daapi.view.meta.Comp7EntryPointMeta import Comp7EntryPointMeta
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.impl.pub import ViewImpl
@@ -21,7 +21,7 @@ def isComp7EntryPointAvailable():
     return comp7Ctrl.isEnabled() and settings is not None and settings.seasons
 
 
-class Comp7EntryPoint(Comp7EntryPointMeta):
+class Comp7EntryPoint(ResizableEntryPointMeta):
 
     def isSingle(self, value):
         if self.__view:

@@ -166,7 +166,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def onLobbyInited(self, ctx):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged += self.__invalidateBattleAbilities
-        self.__itemsCache.onSyncCompleted += self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
         g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
          'inventory': self.__onInventoryUpdate,
          'tokens': self.__onTokensUpdate})
@@ -223,6 +223,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def isCurrentCycleActive(self):
         season = self.getCurrentSeason()
         return season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()) if season is not None else False
+
+    def getLevelsToUPGAllReserves(self):
+        return self.getModeSettings().levelsToUpgrateAllReserves
 
     def isBattlePassDataEnabled(self):
         return self.getModeSettings().battlePassDataEnabled
@@ -298,9 +301,20 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getPlayerLevelInfo(self):
         return self.__itemsCache.items.epicMetaGame.playerLevelInfo
 
+    def getTooltipData(self, tooltip):
+        return self.getModeSettings().tooltips.get(tooltip)
+
+    def getSkillLevelRanks(self):
+        return self.getTooltipData('reserveLevels')
+
     def getPlayerRanksInfo(self):
         famePtsByRank = self.__metaSettings.metaLevel.get('famePtsByRank', {})
         return {rankLvl:(extraFamePts, getRankSettings().bonus.factor100ByRank[rankLvl]) for rankLvl, extraFamePts in famePtsByRank.iteritems()}
+
+    def getPlayerRanksWithBonusInfo(self):
+        famePtsByRank = self.__metaSettings.metaLevel.get('famePtsByRank', {})
+        fameBonusByRank = self.__metaSettings.metaLevel.get('fameBonusByRank', {})
+        return {rankLvl:(extraFamePts, getRankSettings().bonus.factor100ByRank[rankLvl], fameBonusByRank[rankLvl]) for rankLvl, extraFamePts in famePtsByRank.iteritems()}
 
     def getSeasonData(self):
         return self.__itemsCache.items.epicMetaGame.seasonData
@@ -332,8 +346,12 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         notRentedVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.SPECIFIC_BY_NAME(self.getModeSettings().rentVehicles) | ~REQ_CRITERIA.INVENTORY)
         return len(notRentedVehicles) > 0
 
-    def increaseSkillLevel(self, skillID):
-        BigWorld.player().epicMetaGame.increaseAbility(skillID)
+    def increaseSkillLevel(self, skillID, callback=None):
+        if callback is None:
+            BigWorld.player().epicMetaGame.increaseAbility(skillID)
+        else:
+            BigWorld.player().epicMetaGame.increaseAbility(skillID, callback)
+        return
 
     def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None, classVehs=False):
         if classVehs:
@@ -381,20 +399,22 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return BigWorld.player().epicMetaGame.getStoredDiscount()
 
     def getEventTimeLeft(self):
+        if not self.isEnabled():
+            return 0
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
     def getStats(self):
         return self.__itemsCache.items.epicMetaGame
 
-    def showWelcomeScreenIfNeed(self, showFullScreen=False, showContainerOnClose=False):
+    def showWelcomeScreenIfNeed(self):
         currentSeason = self.getActiveSeason()
         if currentSeason is not None:
             seasonId = currentSeason.getSeasonID()
             from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
             if not isWelcomeScreenViewed(seasonId):
                 from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
-                showFrontlineWelcomeWindow(showFullScreen, showContainerOnClose)
+                showFrontlineWelcomeWindow()
                 setWelcomeScreenViewed(seasonId)
                 return True
         return False
@@ -426,9 +446,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getMergedLevelRewards(self):
         from frontline.gui.bonus import isBonusesEqual, mergeSelectable
         rewardsData, levels = self.__getQuests()
-        startLvl = levels.pop(0)
-        if not startLvl:
+        if not levels:
             return []
+        startLvl = levels.pop(0)
         startBonuses = rewardsData[startLvl].getBonuses()
         self.__addSkillPointsBonus(startBonuses, startLvl)
         bonusesByLvl = {startLvl: startBonuses}
@@ -549,6 +569,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return None
 
+    def __onSyncCompleted(self, _, invalidItems):
+        if not invalidItems or GUI_ITEM_TYPE.BATTLE_ABILITY in invalidItems:
+            self.__invalidateBattleAbilityItems()
+        self.__invalidateBattleAbilitiesForVehicle()
+
     def __invalidateBattleAbilities(self, *_):
         if not self.__itemsCache.isSynced():
             return
@@ -587,7 +612,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.stopGlobalListening()
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged -= self.__invalidateBattleAbilities
-        self.__itemsCache.onSyncCompleted -= self.__invalidateBattleAbilities
+        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         g_clientUpdateManager.removeObjectCallbacks(self)
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.__lobbyContext.deleteFightButtonConfirmator(self.__confirmFightButtonPressEnabled)

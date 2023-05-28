@@ -151,6 +151,8 @@ class _CurrentVehicle(_CachedVehicle):
         super(_CurrentVehicle, self).destroy()
         self.__vehInvID = 0
         self.hangarSpace.removeVehicle()
+        if self.hangarSpace.spaceInited and not self.hangarSpace.space.getVehicleEntity():
+            self.hangarSpace.resetLastUpdatedVehicle()
         self.selectNoVehicle()
 
     def onIgrTypeChanged(self, *args):

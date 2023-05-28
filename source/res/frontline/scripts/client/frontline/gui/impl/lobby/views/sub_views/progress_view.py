@@ -19,8 +19,9 @@ class ProgressView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __slots__ = ('__tooltipItems', '__frontlineLevel', '__frontlineProgress', '__maxLevel', '__uiEpicBattleLogger')
 
-    def __init__(self, layoutID=R.views.frontline.lobby.ProgressView()):
+    def __init__(self, layoutID=R.views.frontline.lobby.ProgressView(), **kwargs):
         settings = ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, ProgressViewModel())
+        settings.kwargs = kwargs
         self.__tooltipItems = {}
         self.__frontlineLevel, self.__frontlineProgress = self.__epicController.getPlayerLevelInfo()
         self.__maxLevel = self.__epicController.getMaxPlayerLevel()

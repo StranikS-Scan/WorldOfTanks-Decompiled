@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
-import Math
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraDistanceModes
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
@@ -17,21 +16,8 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.mouseOverSoundName = ''
         self.edgeMode = 0
         self.modelName = ''
-        self.cameraShift = Math.Vector3(0.0, 0.0, 0.0)
-        self.cameraPivot = Math.Vector3(0.0, 1.0, 0.0)
-        self.cameraYaw = 0.0
-        self.cameraPitch = 0.0
-        self.cameraObjectAspect = 1.0
-        self.enableYawLimits = False
-        self.yawLimits = None
-        self.pitchLimitMin = 0.0
-        self.pitchLimitMax = 0.0
-        self.movementYDelta = 0.0
-        self.cameraBackwardDuration = 10.0
-        self.cameraUpcomingDuration = 10.0
         super(HangarVehicle, self).__init__()
         self.camDistState = CameraDistanceModes.CUSTOM
-        return
 
     def onEnterWorld(self, prereqs):
         super(HangarVehicle, self).onEnterWorld(prereqs)
@@ -50,7 +36,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
     def __onSpaceCreated(self):
         self.setEnable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
-        self.cameraPivot = self.hangarSpace.space.camera.pivotPosition
 
     def _setStartValues(self):
         pass

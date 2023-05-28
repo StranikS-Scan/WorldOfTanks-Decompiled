@@ -626,7 +626,8 @@ class Vehicle(FittingItem):
             for turretCD in filterIntCDsByItemType(total, GUI_ITEM_TYPE.TURRET):
                 total.remove(turretCD)
 
-        unlocked = total & self.itemsCache.items.stats.unlocks
+        unlocks = {items for items in self.itemsCache.items.stats.unlocks}
+        unlocked = total & unlocks
         toUnlock = total - unlocked
         return EliteStatusProgress(unlocked, toUnlock, total)
 

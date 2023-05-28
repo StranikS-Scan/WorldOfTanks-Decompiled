@@ -225,6 +225,9 @@ class ShowDialogEvent(SharedEvent):
 
 class LoginEvent(SharedEvent):
     CANCEL_LGN_QUEUE = 'cancelLoginQueue'
+    LOGIN_VIEW_READY = 'loginViewReady'
+    DISCONNECTION_STARTED = 'disconnectionStarted'
+    CONNECTION_FAILED = 'connectionFailed'
 
     def __init__(self, eventType, alias='', isSuccess=False, errorMsg=''):
         super(LoginEvent, self).__init__(eventType=eventType)
@@ -248,6 +251,7 @@ class LoginEventEx(LoginEvent):
 class BCLoginEvent(SharedEvent):
     CLOSE_WINDOW = 'closeBCLoginQueue'
     CANCEL_WAITING = 'cancelWaitingBCLoginQueue'
+    HIDE_GAME_LOADING = 'hideGameLoadingBCLoginQueue'
 
     def __init__(self, eventType, title=None, message=None, cancelLabel=None):
         super(BCLoginEvent, self).__init__(eventType=eventType)
@@ -397,12 +401,14 @@ class TutorialEvent(SharedEvent):
     ON_TRIGGER_ACTIVATED = 'onTriggerActivated'
     ON_ANIMATION_COMPLETE = 'onAnimationComplete'
     SIMPLE_WINDOW_PROCESSED = 'simpleWindowProcessed'
+    UPDATE_TUTORIAL_HINTS = 'updateTutorialHints'
+    IMPORTANT_HINT_SHOWING = 'importantHintShowing'
     OVERRIDE_HANGAR_MENU_BUTTONS = 'overrideHangarMenuButtons'
     OVERRIDE_HEADER_MENU_BUTTONS = 'overrideHeaderMenuButtons'
     SET_HANGAR_HEADER_ENABLED = 'setHangarHeaderEnabled'
     OVERRIDE_BATTLE_SELECTOR_HINT = 'overrideBattleSelectorHint'
 
-    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False, state=False):
+    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False, state=False, arguments=''):
         super(TutorialEvent, self).__init__(eventType)
         self.settingsID = settingsID
         self.targetID = targetID
@@ -412,6 +418,7 @@ class TutorialEvent(SharedEvent):
         self.isStopForced = isStopForced
         self.isAfterBattle = isAfterBattle
         self.componentState = state
+        self.arguments = arguments
 
     def getState(self):
         return {'reloadIfRun': self.reloadIfRun,
@@ -669,6 +676,7 @@ class AirDropEvent(HasCtxEvent):
     AIR_DROP_LANDED = 'onAirDropLanded'
     AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
     AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
+    AIR_DROP_NXT_SPAWNED = 'onAirDropNxtSpawned'
 
 
 class ProfilePageEvent(HasCtxEvent):
@@ -683,11 +691,6 @@ class ProfileStatisticEvent(HasCtxEvent):
 class ProfileTechniqueEvent(HasCtxEvent):
     SELECT_BATTLE_TYPE = 'onProfileTechniqueEventBattleTypeSelect'
     DISPOSE = 'onProfileTechniqueEventDispose'
-
-
-class HangarCameraManagerEvent(HasCtxEvent):
-    ON_CREATE = 'hangarCameraManagerEvent/onCreate'
-    ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
 
 
 class BattlePassEvent(HasCtxEvent):
@@ -814,3 +817,9 @@ class ArmoryYardEvent(HasCtxEvent):
     STAGE_FINISHED = 'ayStageFinished'
     DESTROY_ARMORY_YARD_MAIN_VIEW = 'armoryYardEvents/destroyMainView'
     SHOW_ARMORY_YARD_BUY_VIEW = 'armoryYardEvents/showBuyView'
+
+
+class Achievements20Event(HasCtxEvent):
+    LAYOUT_CHANGED = 'layoutChanged'
+    CLOSE_SUMMARY_VIEW = 'closeSummaryView'
+    CLOSE_EDIT_VIEW = 'closeEditView'

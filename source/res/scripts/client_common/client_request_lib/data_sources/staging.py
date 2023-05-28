@@ -1092,6 +1092,33 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'wgsh', url, method='GET')
 
+    def wgsh_event_settings(self, callback, fields=None):
+        url = '/settings'
+
+        @preprocess_callback(callback, 'wgshevents')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'wgshevents', url, method='GET')
+
+    def wgsh_event_clan_info(self, callback, fields=None):
+
+        @preprocess_callback(callback, 'wgshevents')
+        def inner_callback(data):
+            return data or {}
+
+        url = '/clan/info?%s' % urlencode({'spa_id': self._account})
+        return self._request_data(inner_callback, 'wgshevents', url, method='GET')
+
+    def wgsh_event_get_frozen_vehicles(self, callback, fields=None):
+
+        @preprocess_callback(callback, 'wgshevents')
+        def inner_callback(data):
+            return data or {}
+
+        url = '/frozen_vehicle?%s' % urlencode({'spa_id': self._account})
+        return self._request_data(inner_callback, 'wgshevents', url, method='GET')
+
     def account_statistics(self, callback, account_id, fields=None):
         try:
             account_id = int(account_id)
@@ -1163,7 +1190,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
         return self._request_data(inner_callback, 'strongholds', url)
 
     def get_teaser(self, callback, fields=None):
-        url = '/teaser/?%s' % urlencode(self._pack_promo_params())
+        url = '/teaser/?%s' % urlencode(self._pack_promo_params(fields))
 
         @preprocess_callback(callback, 'promo')
         def inner_callback(data):

@@ -17,11 +17,10 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showHangar
-from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.COMP7]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.EPIC_BATTLE]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -261,12 +260,6 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
 
 class BattlePassHowToEarnPointsWindow(LobbyWindow):
-    __slots__ = ('__blur',)
 
     def __init__(self, parent=None, chapterID=0):
         super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView(), chapterID))
-        self.__blur = CachedBlur(enabled=True, ownLayer=self.layer)
-
-    def _finalize(self):
-        self.__blur.fini()
-        super(BattlePassHowToEarnPointsWindow, self)._finalize()

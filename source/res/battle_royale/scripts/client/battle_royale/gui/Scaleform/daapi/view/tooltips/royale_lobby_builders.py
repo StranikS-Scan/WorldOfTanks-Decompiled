@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/tooltips/royale_lobby_builders.py
+from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.respawn_tooltip import RespawnTooltipData
 from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
 from battle_royale.gui.impl.lobby.tooltips.vehicle_tooltip_view import VehicleTooltipView
 from battle_royale.gui.shared.tooltips import contexts as brContexts
@@ -24,6 +25,7 @@ def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_MODULES_HANGAR, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleModulesTooltip(_BattleRoyaleHangarVehInfoContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_BATTLE_PROGRESSION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleProgressionTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_EQUIPMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EquipmentsTooltipData(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_RESPAWN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RespawnTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_SIMPLE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, PerfAttentionSimpleTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, PerfAttentionAdvancedTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleSelectorTooltip(contexts.ToolTipContext(None))),

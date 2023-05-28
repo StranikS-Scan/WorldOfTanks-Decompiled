@@ -124,6 +124,14 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_STYLE_DESCRIPTION_TITLE = '#vehicle_preview:buyingPanel/style/description/title'
     BUYINGPANEL_STYLE_DESCRIPTION_TEXT = '#vehicle_preview:buyingPanel/style/description/text'
     BUYINGPANEL_STYLE_DESCRIPTION_BUTTON_TEXT = '#vehicle_preview:buyingPanel/style/description/button/text'
+    SHOWCASESTYLEBUYING_ACTIONBTN_LABEL_BUY = '#vehicle_preview:showcaseStyleBuying/actionBtn/label/buy'
+    SHOWCASESTYLEBUYING_TIMEREMAINING_DESC = '#vehicle_preview:showcaseStyleBuying/timeRemaining/desc'
+    SHOWCASESTYLEBUYING_BOUGHTMSG = '#vehicle_preview:showcaseStyleBuying/boughtMsg'
+    SHOWCASESTYLEBUYING_NOVEHICLEMSG = '#vehicle_preview:showcaseStyleBuying/noVehicleMsg'
+    SHOWCASESTYLEBUYING_OUTOFTIMEMSG = '#vehicle_preview:showcaseStyleBuying/outOfTimeMsg'
+    SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_NOTENOUGHFUNDS = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/notEnoughFunds'
+    SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_UNAVAILABLE = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/unavailable'
+    SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_SERVICEUNAVAILABLE = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/serviceUnavailable'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,

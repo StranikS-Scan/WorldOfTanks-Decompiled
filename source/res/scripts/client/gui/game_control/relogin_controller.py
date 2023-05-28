@@ -14,6 +14,10 @@ class ReloginController(IReloginController):
         self.__reloginStoppedHandler = None
         return
 
+    @property
+    def isActive(self):
+        return self.__reloginChain is not None and self.__reloginChain.isActive
+
     def fini(self):
         self.__clearReloginChain()
         super(ReloginController, self).fini()

@@ -311,9 +311,9 @@ class VehicleSlotBuyer(Processor):
 class VehicleSeller(ItemProcessor):
     __restore = dependency.descriptor(IRestoreController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('vehicle', 'nationGroupVehs', 'shells', 'eqs', 'optDevs', 'gainMoney', 'spendMoney', 'inventory', 'customizationItems', 'boosters', 'itemsForDemountKit', 'isCrewDismiss', 'isDismantlingForMoney', 'isRemovedAfterRent', 'usedDemountKitsCount', '__hasPairModification')
+    __slots__ = ('vehicle', 'nationGroupVehs', 'shells', 'eqs', 'optDevs', 'gainMoney', 'spendMoney', 'inventory', 'customizationItems', 'boosters', 'itemsForDemountKit', 'itemsFreeToDemount', 'isCrewDismiss', 'isDismantlingForMoney', 'isRemovedAfterRent', 'usedDemountKitsCount', '__hasPairModification')
 
-    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False, itemsForDemountKit=None):
+    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False, itemsForDemountKit=None, itemsForFreeDemount=None):
         shells = shells or []
         eqs = eqs or []
         boosters = boosters or []
@@ -321,17 +321,19 @@ class VehicleSeller(ItemProcessor):
         inventory = inventory or []
         customizationItems = customizationItems or []
         itemsForDemountKit = itemsForDemountKit or []
+        itemsForFreeDemount = itemsForFreeDemount or []
         nationGroupVehs = vehicle.getAllNationGroupVehs(self.itemsCache.items)
         self.vehicle = vehicle
         self.nationGroupVehs = nationGroupVehs
         self.shells = shells
         self.eqs = eqs
         self.optDevs = optDevs
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, boosters, optDevs, inventory, customizationItems, itemsForDemountKit)
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, boosters, optDevs, inventory, customizationItems, itemsForDemountKit, itemsForFreeDemount)
         self.inventory = set((m.intCD for m in inventory))
         self.customizationItems = set(customizationItems)
         self.boosters = boosters
         self.itemsForDemountKit = itemsForDemountKit
+        self.itemsFreeToDemount = itemsForFreeDemount
         barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
@@ -369,6 +371,7 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
          proc_plugs.BattleBoosterValidator(boosters),
          proc_plugs.DismountForDemountKitValidator(vehicle, itemsForDemountKit),
+         proc_plugs.FreeToDemountValidator(itemsForFreeDemount),
          _getUniqueVehicleSellConfirmator(vehicle)]
         if self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
             ctx = {'price': self.__compensationAmount,
@@ -432,7 +435,7 @@ class VehicleSeller(ItemProcessor):
         _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s', self.nationGroupVehs, bool(self.shells), bool(self.eqs), bool(self.boosters), bool(self.inventory), bool(self.optDevs), self.isDismantlingForMoney, self.isCrewDismiss, saleData)
         BigWorld.player().inventory.sellVehicle(saleData, lambda code, errStr='': self._response(code, callback, errStr=errStr))
 
-    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, boosters, optDevicesToSell, inventory, customizationItems, itemsForDemountKit):
+    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, boosters, optDevicesToSell, inventory, customizationItems, itemsForDemountKit, itemsForFreeDemount):
         moneyGain = currentVehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
@@ -447,7 +450,7 @@ class VehicleSeller(ItemProcessor):
             getCount = getCustomizationItemSellCountForVehicle
             moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(module, veh.intCD), vehicles, 0)
 
-        dismantlingToInventoryDevices = getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles)
+        dismantlingToInventoryDevices = getDismantlingForMoneyToInventoryDevices(optDevicesToSell, (itemsForDemountKit + itemsForFreeDemount), *vehicles)
         moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)
         return (moneyGain, moneySpend)
 
@@ -477,6 +480,7 @@ class VehicleSeller(ItemProcessor):
             itemsFromVehicle = set()
             seenCustItems = set()
             itemsForDemountKit = set()
+            itemsFreeToDemount = set()
             customizationItems = []
             for shell in list(self.shells):
                 if shell.isInSetup(vehicle) and shell.intCD not in itemsFromVehicle:
@@ -511,12 +515,18 @@ class VehicleSeller(ItemProcessor):
                     itemsForDemountKit.add(od.intCD)
                     self.itemsForDemountKit.remove(od)
 
+            for od in list(self.itemsFreeToDemount):
+                if od.isInSetup(vehicle) and od.intCD not in itemsFreeToDemount and od.intCD not in itemsFromVehicle:
+                    itemsFreeToDemount.add(od.intCD)
+                    self.itemsFreeToDemount.remove(od)
+
             result.append((vehicle.invID,
              self.isCrewDismiss,
              list(itemsFromVehicle),
              list(itemsFromInventory[vehicle.invID]),
              customizationItems,
-             list(itemsForDemountKit)))
+             list(itemsForDemountKit),
+             list(itemsFreeToDemount)))
 
         return result
 

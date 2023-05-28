@@ -72,6 +72,13 @@
       <undamaged>	vehicles/czech/Cz14_Skoda_T-56/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz14_Skoda_T-56_DB_3DSt>
+          <undamaged>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Hull.model	</exploded>
+        </Cz14_Skoda_T-56_DB_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -104,11 +111,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0277541 0.15376 3.0796	</rayStart>
-        <rayEnd>	0.0277541 0.135634 3.07115	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.32	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <rayStart>	-0.803464 0.426163 2.507293	</rayStart>
+        <rayEnd>	-0.803464 0.408037 2.498842	</rayEnd>
+        <rayUp>	0 0.422525 -0.906351	</rayUp>
+        <size>	0.28	</size>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -861,6 +867,19 @@
         <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	0.161214	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+        <position>	-1.35473 1.12961 3.41991	</position>
+        <rotation>	0.41399 -0.0020225 3.14154	</rotation>
+        <scale>	0.690332 0.502188 0.690341	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.78928	</clipAngle>
+        <anchorShift>	0.11122	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <density>	107.114 107.21	</density>
@@ -896,6 +915,13 @@
         <undamaged>	vehicles/czech/Cz14_Skoda_T-56/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz14_Skoda_T-56_DB_3DSt>
+            <undamaged>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Chassis.model	</exploded>
+          </Cz14_Skoda_T-56_DB_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1945,6 +1971,13 @@
             <undamaged>	vehicles/czech/Cz14_Skoda_T-56/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz14_Skoda_T-56_DB_3DSt>
+                <undamaged>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </Cz14_Skoda_T-56_DB_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz14_Skoda_T-56/collision/Gun_01.model	</collisionModelServer>
@@ -1992,6 +2025,16 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.0048 -0.0032 3.2	</rayStart>
+              <rayEnd>	-0.0048 -0.0032 3.85	</rayEnd>
+              <rayUp>	0.110618 0 0	</rayUp>
+              <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+              <size>	0.65	</size>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <camouflage>
             <density>	98.2536 99.1124	</density>
@@ -2003,6 +2046,13 @@
         <undamaged>	vehicles/czech/Cz14_Skoda_T-56/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz14_Skoda_T-56/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz14_Skoda_T-56_DB_3DSt>
+            <undamaged>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz14_Skoda_T-56/_skins/Cz14_Skoda_T-56_DB_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </Cz14_Skoda_T-56_DB_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz14_Skoda_T-56/collision/Turret_01.model	</collisionModelServer>
@@ -2638,6 +2688,58 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.14312	</clipAngle>
           <anchorShift>	0.051205	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+          <position>	-1.24234 1.90868 0.587295	</position>
+          <rotation>	2.04973 1.54064 -0.0332506	</rotation>
+          <scale>	0.564277 0.354679 0.564279	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.01925	</clipAngle>
+          <anchorShift>	0.061221	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+          <position>	1.14988 1.87368 0.481481	</position>
+          <rotation>	2.14186 -1.49722 -0.0649731	</rotation>
+          <scale>	0.575512 0.217045 0.575514	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.01925	</clipAngle>
+          <anchorShift>	0.141222	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags>	formfactor_square	</tags>
+          <position>	0.410095 2.16389 1.32699	</position>
+          <rotation>	0.0946136 -0.000001 2.97098	</rotation>
+          <scale>	0.633536 0.138264 0.633542	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.14312	</clipAngle>
+          <anchorShift>	0.081217	</anchorShift>
+          <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35049	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz14_Skoda_T-56_DB_3DSt	</compatibleModels>
+          <position>	0.000017 2.1929 -0.861989	</position>
+          <rotation>	3.00718 -0.000002 -0.000010	</rotation>
+          <scale>	0.668247 0.145839 0.668252	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.3183	</clipAngle>
+          <anchorShift>	0.100067	</anchorShift>
         </slot>
       </customizationSlots>
       <camouflage>

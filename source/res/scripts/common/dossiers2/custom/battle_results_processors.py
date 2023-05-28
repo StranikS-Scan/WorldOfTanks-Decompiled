@@ -27,7 +27,7 @@ def getMaxVehResults(results):
         return {}
     tmpVehMaxResults = {}
     for vehTypeCompDescr, vehResults in results.iteritems():
-        for record in ('maxFragsVehicle', 'maxWinPointsVehicle', 'maxDamageVehicle', 'maxXPVehicle'):
+        for record in ('maxFragsVehicle', 'maxWinPointsVehicle', 'maxDamageVehicle', 'maxXPVehicle', 'maxDamageBlockedByArmorVehicle', 'maxAssistedVehicle'):
             if record == 'maxFragsVehicle':
                 kills = len(vehResults['killList'])
                 if tmpVehMaxResults.get('maxFragsVehicle', (0, 0))[1] <= kills:
@@ -44,6 +44,14 @@ def getMaxVehResults(results):
                 xp = vehResults['xp']
                 if tmpVehMaxResults.get('maxXPVehicle', (0, 0))[1] <= xp:
                     tmpVehMaxResults['maxXPVehicle'] = (vehTypeCompDescr, xp)
+            if record == 'maxDamageBlockedByArmorVehicle':
+                damageBlockedByArmor = vehResults['damageBlockedByArmor']
+                if tmpVehMaxResults.get('maxDamageBlockedByArmorVehicle', (0, 0))[1] <= damageBlockedByArmor:
+                    tmpVehMaxResults['maxDamageBlockedByArmorVehicle'] = (vehTypeCompDescr, damageBlockedByArmor)
+            if record == 'maxAssistedVehicle':
+                assisted = vehResults['damageAssistedTrack'] + vehResults['damageAssistedRadio'] + vehResults['damageAssistedStun']
+                if tmpVehMaxResults.get('maxAssistedVehicle', (0, 0))[1] <= assisted:
+                    tmpVehMaxResults['maxAssistedVehicle'] = (vehTypeCompDescr, assisted)
 
     return {key:value[0] for key, value in tmpVehMaxResults.iteritems()}
 
@@ -402,6 +410,15 @@ def __updateMaxValues(block, results, dossierXP):
         if winPoints > 0 and winPoints >= block['maxWinPoints']:
             block['maxWinPoints'] = winPoints
         maxValuesChanged.append('maxWinPointsVehicle')
+    if BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MAX15X15):
+        damageBlockedByArmor = results['damageBlockedByArmor']
+        if damageBlockedByArmor > 0 and damageBlockedByArmor >= block['maxDamageBlockedByArmor']:
+            block['maxDamageBlockedByArmor'] = damageBlockedByArmor
+            maxValuesChanged.append('maxDamageBlockedByArmorVehicle')
+        assisted = results['damageAssistedTrack'] + results['damageAssistedRadio'] + results['damageAssistedStun']
+        if assisted > 0 and assisted >= block['maxAssisted']:
+            block['maxAssisted'] = assisted
+            maxValuesChanged.append('maxAssistedVehicle')
     return maxValuesChanged
 
 

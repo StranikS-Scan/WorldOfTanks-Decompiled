@@ -4,6 +4,10 @@
 
 class IDownloader(object):
 
+    @property
+    def stopped(self):
+        raise NotImplementedError
+
     def close(self):
         raise NotImplementedError
 

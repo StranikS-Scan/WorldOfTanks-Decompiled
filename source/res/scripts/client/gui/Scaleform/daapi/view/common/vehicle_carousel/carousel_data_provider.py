@@ -217,9 +217,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def selectVehicle(self, filteredIdx):
         realIdx = self._filteredIndices[filteredIdx]
         vehicle = self._vehicles[realIdx]
-        if vehicle.isInInventory:
+        if vehicle.isInInventory and not self.isDisposed():
             self._selectedIdx = filteredIdx
             self._currentVehicleInvID = vehicle.invID
+            self.refresh()
         return self._currentVehicleInvID
 
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
@@ -293,10 +294,15 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self.__sortedIndices = sortedIndices(self._vehicles, self._vehicleComparisonKey, reverse)
         return self.__sortedIndices
 
+    def _populate(self):
+        super(CarouselDataProvider, self)._populate()
+        g_currentVehicle.onChanged += self.__updateCurrentVehicle
+
     def _dispose(self):
         self._filter = None
         self._itemsCache = None
         self._randomStats = None
+        g_currentVehicle.onChanged -= self.__updateCurrentVehicle
         super(CarouselDataProvider, self)._dispose()
         return
 
@@ -411,3 +417,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def __resetSortedIndices(self):
         self.__sortedIndices = []
+
+    def __updateCurrentVehicle(self):
+        self._currentVehicleInvID = g_currentVehicle.invID
+        self.applyFilter()

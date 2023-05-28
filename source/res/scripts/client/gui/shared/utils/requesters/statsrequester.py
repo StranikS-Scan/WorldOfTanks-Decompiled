@@ -243,6 +243,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('SPA', {})
 
     @property
+    def refSystem20(self):
+        return self.getCacheValue('refSystem20', {})
+
+    @property
     def piggyBank(self):
         return self.getCacheValue('piggyBank', {})
 
@@ -325,6 +329,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     def getWeeklyVehicleCrystals(self, vehCD):
         return self.getCacheValue('weeklyVehicleCrystals', {}).get(vehCD, 0)
+
+    @property
+    def luiVersion(self):
+        return self.getCacheValue('limitedUi', {}).get('ver', 1)
 
     @adisp_async
     def _requestCache(self, callback):

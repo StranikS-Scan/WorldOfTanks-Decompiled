@@ -25,6 +25,7 @@ class BATTLE_EFFICIENCY_TYPES(object):
     ASSIST_STUN = 'assistStun'
     STUN = 'stun'
     PERK = 'perk'
+    STATIC_DEATH_ZONE = 'staticDeathZone'
     VEHICLE_RECOVERY = 'vehicleRecovery'
     ENEMY_SECTOR_CAPTURED = 'enemySectorCaptured'
     DESTRUCTIBLE_DAMAGED = 'destructibleDamaged'

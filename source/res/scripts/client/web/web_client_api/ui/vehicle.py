@@ -334,6 +334,20 @@ class _VehicleStylePreviewSchema(W2CSchema):
     alternate_item = Field(required=False, type=list)
 
 
+class _ShowcaseVehicleStylePreviewSchema(W2CSchema):
+    vehicle_cd = Field(required=False, type=int)
+    style_id = Field(required=True, type=int)
+    back_btn_descr = Field(required=False, type=basestring)
+    back_url = Field(required=False, type=basestring)
+    level = Field(required=False, type=int)
+    price = Field(required=False, type=dict)
+    buy_params = Field(required=False, type=dict)
+    alternate_item = Field(required=False, type=list)
+    original_price = Field(required=False, type=dict)
+    discount_percent = Field(required=False, type=(int, float))
+    end_date = Field(required=False, type=basestring)
+
+
 class _VehicleMarathonStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
@@ -434,10 +448,7 @@ class VehiclePreviewWebApiMixin(object):
         if vehiclesIDs:
             localEndTime = None
             if cmd.end_date:
-                timestamp = getTimestampFromISO(cmd.end_date)
-                datetimeInUTC = getDateTimeInUTC(timestamp)
-                localDatetime = utcToLocalDatetime(datetimeInUTC)
-                localEndTime = (localDatetime - getDateTimeInLocal(0)).total_seconds()
+                localEndTime = self.__getLocalEndTime(cmd.end_date)
             event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesIDs[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params)
         else:
             _pushInvalidPreviewMessage()
@@ -446,6 +457,10 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
     def openVehicleStylePreview(self, cmd):
         return self._openVehicleStylePreview(cmd)
+
+    @w2c(_ShowcaseVehicleStylePreviewSchema, 'showcase_vehicle_style_preview')
+    def openShowcaseVehicleStylePreview(self, cmd):
+        return self._openVehicleStylePreview(cmd, event_dispatcher.showShowcaseStyleBuyingPreview, originalPrice=cmd.original_price, discountPercent=cmd.discount_percent, endTime=self.__getLocalEndTime(cmd.end_date) if cmd.end_date else None)
 
     @w2c(_VehicleMarathonStylePreviewSchema, 'marathon_vehicle_style_preview')
     def openMarathonVehicleStylePreview(self, cmd):
@@ -496,11 +511,18 @@ class VehiclePreviewWebApiMixin(object):
     def openMarathonRewardScreen(self, cmd):
         showMarathonRewardScreen(cmd.marathon_prefix)
 
-    def _openVehicleStylePreview(self, cmd):
+    def _openVehicleStylePreview(self, cmd, showStyleFunc=None, **additionalStyleFuncKwargs):
         if cmd.vehicle_cd:
-            return self.__showStylePreview(cmd.vehicle_cd, cmd)
+            return self.__showStylePreview(cmd.vehicle_cd, cmd, showStyleFunc, **additionalStyleFuncKwargs)
         styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
-        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd)
+        return False if not styledVehicleCD else self.__showStylePreview(styledVehicleCD, cmd, showStyleFunc, **additionalStyleFuncKwargs)
+
+    @staticmethod
+    def __getLocalEndTime(date):
+        timestamp = getTimestampFromISO(date)
+        datetimeInUTC = getDateTimeInUTC(timestamp)
+        localDatetime = utcToLocalDatetime(datetimeInUTC)
+        return (localDatetime - getDateTimeInLocal(0)).total_seconds()
 
     def __getStyledVehicleCD(self, styleId):
         styledVehicleCD = None
@@ -522,8 +544,8 @@ class VehiclePreviewWebApiMixin(object):
                 styledVehicleCD = vehicle.intCD if vehicle else None
             if not styledVehicleCD:
                 criteria = ~REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED | REQ_CRITERIA.VEHICLE.FOR_ITEM(style) | ~REQ_CRITERIA.VEHICLE.EVENT
-                vehicle = random.choice(self.__getVehiclesForStylePreview(criteria=criteria))
-                styledVehicleCD = vehicle.intCD if vehicle else None
+                suitableVehicles = self.__getVehiclesForStylePreview(criteria=criteria)
+                styledVehicleCD = random.choice(suitableVehicles).intCD if suitableVehicles else None
         return styledVehicleCD
 
     def __getVehiclesForStylePreview(self, criteria=None):
@@ -539,7 +561,7 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
-    def __showStylePreview(self, vehicleCD, cmd):
+    def __showStylePreview(self, vehicleCD, cmd, showStyleFunc=None, **additionalStyleFuncKwargs):
         styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         outfit = None
@@ -547,9 +569,9 @@ class VehiclePreviewWebApiMixin(object):
             alternateItemTypeName, alternateItemID = cmd.alternate_item
             outfit = styleInfo.getAlteredOutfit(CustomizationNamesToTypes[alternateItemTypeName.upper()], alternateItemID, vehicle.descriptor.makeCompactDescr())
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
-            showStyle = _getStylePreviewShowFunc(styleInfo, cmd.price)
+            showStyleFunc = showStyleFunc or _getStylePreviewShowFunc(styleInfo, cmd.price)
             descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
-            showStyle(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd))
+            showStyleFunc(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd), **additionalStyleFuncKwargs)
             return True
         else:
             return False

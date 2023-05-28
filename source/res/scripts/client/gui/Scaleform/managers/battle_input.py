@@ -71,11 +71,11 @@ class BattleGameInputMgr(object):
                         return True
 
             if isDown and self.__ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
-                event_dispatcher.showIngameMenu()
                 if isEventBattle:
                     event_dispatcher.toggleEventStats(False)
                 else:
                     event_dispatcher.toggleFullStats(False)
+                event_dispatcher.showIngameMenu()
             return True
         if isDown and CommandMapping.g_instance.isFired(CommandMapping.CMD_UPGRADE_PANEL_SHOW, key):
             event_dispatcher.hideBattleVehicleConfigurator()

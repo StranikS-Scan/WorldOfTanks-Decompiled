@@ -1,0 +1,109 @@
+<07_lakeville_nb.xml>
+  <name>	#arenas:07_lakeville_nb/name	</name>
+  <description>	#arenas:07_lakeville_nb/description	</description>
+  <geometry>	spaces/07_lakeville_nb	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 400.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/07_lakeville_nb/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_lakeville_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_lakeville_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_lakeville_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_lakeville_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_lakeville_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_lakeville_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_spring_01_night_battles	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_env_Mountain	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	env_Mountain.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-169.513458 319.351257	</position1>
+        </team1>
+        <team2>
+          <position1>	-169.513443 -319.048615	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities>
+    <scenario>
+      <startTime>	120.000000 330.000000	</startTime>
+      <possibility>	50.000000	</possibility>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	train	</name>
+      <trajectories>
+        <warplane>
+          <preset>	train	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	train2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.600000 1.600000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	train1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	2.550000 2.550000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	train3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	3.500000 3.500000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+        <warplane>
+          <preset>	train4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	4.450000 4.450000	</startTime>
+          <interval>	200.000000	</interval>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</07_lakeville_nb.xml>

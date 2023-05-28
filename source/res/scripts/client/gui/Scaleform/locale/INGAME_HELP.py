@@ -102,8 +102,6 @@ class INGAME_HELP(object):
     DETAILSHELP_FLAMETANK_PROSCONS = '#ingame_help:detailsHelp/flameTank/prosCons'
     DETAILSHELP_BATTLEROYALE_RADAR_TITLE = '#ingame_help:detailsHelp/battleRoyale/radar/title'
     DETAILSHELP_BATTLEROYALE_RADAR_DESCRIPTION = '#ingame_help:detailsHelp/battleRoyale/radar/description'
-    DETAILSHELP_BATTLEROYALE_SECTORVISION_TITLE = '#ingame_help:detailsHelp/battleRoyale/sectorVision/title'
-    DETAILSHELP_BATTLEROYALE_SECTORVISION_DESCRIPTION = '#ingame_help:detailsHelp/battleRoyale/sectorVision/description'
     DETAILSHELP_BATTLEROYALE_ZONE_TITLE = '#ingame_help:detailsHelp/battleRoyale/zone/title'
     DETAILSHELP_BATTLEROYALE_ZONE_DESCRIPTION = '#ingame_help:detailsHelp/battleRoyale/zone/description'
     DETAILSHELP_BATTLEROYALE_AIRDROP_TITLE = '#ingame_help:detailsHelp/battleRoyale/airDrop/title'

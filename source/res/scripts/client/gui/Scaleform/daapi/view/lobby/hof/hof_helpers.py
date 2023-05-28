@@ -83,6 +83,10 @@ def getAchievementsTabCounter():
     return _calculateCounters(NEW_ACHIEVEMENTS_BUTTONS_IDS)
 
 
+def getTabCounter():
+    return int(getHofTabCounter() > 0) + _calculateCounters((PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON,))
+
+
 def getHofTabCounter():
     return _calculateCounters(NEW_HOF_BUTTONS_IDS)
 

@@ -44,6 +44,7 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     POI_BLOCKED_NOT_USED_ABILITY = 'PoIBlockedNotUsedAbility'
     POI_CAPTURING_INTERRUPTED = 'PoICapturingInterrupted'
     POI_BLOCKED_NOT_INVADER = 'PoIBlockedNotInvader'
+    POI_BLOCKED_OVERTURNED = 'PoIBlockedOverturned'
     COMP7_RISKY_ATTACK = 'riskyAttack'
     COMP7_AOE_HEAL = 'aoeHeal'
     COMP7_ALLY_SUPPORT = 'allySupport'

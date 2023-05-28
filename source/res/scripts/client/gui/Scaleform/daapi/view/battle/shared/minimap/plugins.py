@@ -55,6 +55,8 @@ _MINIMAP_MIN_SCALE_INDEX = 0
 _MINIMAP_MAX_SCALE_INDEX = 5
 _MINIMAP_LOCATION_MARKER_MIN_SCALE = 1.0
 _MINIMAP_LOCATION_MARKER_MAX_SCALE = 0.72
+_AOI_ESTIMATE_RADIUS = 450.0
+_AOI_RADIUS_MARGIN = 50.0
 
 class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize')
@@ -475,8 +477,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             self.__removeAllCircles()
 
     def __onRespawnBaseMoving(self):
-        vInfo = self._arenaDP.getVehicleInfo()
-        self.__isAlive = vInfo.isAlive()
+        self.__isAlive = True
+        self.__isAlive = True
         self._invalidateMarkup(True)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
@@ -504,7 +506,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.DRAW_RANGE:
             return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.DRAW_RANGE
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_DRAW_CIRCLE, settings.CIRCLE_STYLE.COLOR.DRAW_RANGE, settings.CIRCLE_STYLE.ALPHA, AOI.VEHICLE_CIRCULAR_AOI_RADIUS)
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_DRAW_CIRCLE, settings.CIRCLE_STYLE.COLOR.DRAW_RANGE, settings.CIRCLE_STYLE.ALPHA, self._arenaVisitor.getVehicleCircularAoiRadius())
 
     def __removeDrawRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.DRAW_RANGE
@@ -568,13 +570,14 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
-    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__flagHpMinimap', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator', '__canShowVehicleHp', '__tempHealthStorage')
+    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__flagHpMinimap', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator', '__canShowVehicleHp', '__tempHealthStorage', '__aoiEstimateRadius')
 
     def __init__(self, parent):
         super(ArenaVehiclesPlugin, self).__init__(parent, clazz=entries.VehicleEntry)
         self.__playerVehicleID = 0
         self.__isObserver = False
         self.__isSPG = False
+        self.__aoiEstimateRadius = 0
         self.__aoiToFarCallbacksIDs = {}
         self.__destroyCallbacksIDs = {}
         self.__flags = _FEATURES.OFF
@@ -595,6 +598,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         self.__playerVehicleID = self._arenaDP.getPlayerVehicleID()
         self.__isObserver = vInfo.isObserver()
         self.__isSPG = vInfo.isSPG()
+        vehicleAoIRadius = self._arenaVisitor.getVehicleCircularAoiRadius()
+        self.__aoiEstimateRadius = vehicleAoIRadius - _AOI_RADIUS_MARGIN if AOI.ENABLE_MANUAL_RULES else _AOI_ESTIMATE_RADIUS
         g_eventBus.addListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
@@ -1003,7 +1008,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             return
         entry = self._entries[vehicleID]
         if entry.getLocation() == VEHICLE_LOCATION.AOI:
-            if replayCtrl.isServerSideReplay and replayCtrl.isVehicleChanging() or minimap_utils.isVehicleInAOI(entry.getMatrix()):
+            if replayCtrl.isServerSideReplay and replayCtrl.isVehicleChanging() or minimap_utils.isVehicleInAOI(entry.getMatrix(), self.__aoiEstimateRadius):
                 self._hideVehicle(entry)
                 self._notifyVehicleRemoved(vehicleID)
             else:
@@ -1513,48 +1518,6 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
 
 class AreaMarkerEntriesPlugin(common.BaseAreaMarkerEntriesPlugin):
     pass
-
-
-class DeathZonesMinimapPlugin(common.EntriesPlugin):
-    __slots__ = ('_activeDeathZones', '_scaleCoefX', '_scaleCoefY')
-    _SYMBOL_NAME = 'EventDeathZoneMinimapEntryUI'
-    _MINIMAP_1M_IN_PX = 0.21
-
-    def __init__(self, parentObj):
-        super(DeathZonesMinimapPlugin, self).__init__(parentObj)
-        self._activeDeathZones = {}
-        self._updateScaleCoefs()
-
-    def start(self):
-        super(DeathZonesMinimapPlugin, self).start()
-        g_playerEvents.onStaticDeathZoneActivated += self._onStaticDeathZoneActivated
-        g_playerEvents.onStaticDeathZoneDeactivated += self._onStaticDeathZoneDeactivated
-
-    def fini(self):
-        g_playerEvents.onStaticDeathZoneActivated -= self._onStaticDeathZoneActivated
-        g_playerEvents.onStaticDeathZoneDeactivated -= self._onStaticDeathZoneDeactivated
-        super(DeathZonesMinimapPlugin, self).fini()
-
-    def _onStaticDeathZoneActivated(self, zone):
-        zoneId = zone.zoneId
-        topLeft, bottomRight = zone.getCorners()
-        if zoneId in self._activeDeathZones:
-            return
-        matrix = minimap_utils.makePositionMatrix(topLeft)
-        entryID = self._addEntry(self._SYMBOL_NAME, _C_NAME.ICONS, matrix=matrix, active=True)
-        self._activeDeathZones[zoneId] = entryID
-        self._invoke(entryID, 'setZoneSize', abs(bottomRight[0] - topLeft[0]) * self._scaleCoefX, abs(bottomRight[2] - topLeft[2]) * self._scaleCoefY)
-
-    def _onStaticDeathZoneDeactivated(self, zoneId):
-        entryID = self._activeDeathZones.pop(zoneId, None)
-        if entryID:
-            self._delEntry(entryID)
-        return
-
-    def _updateScaleCoefs(self):
-        arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
-        self._scaleCoefX = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
-        self._scaleCoefY = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
 
 
 class _BaseEnemySPGImpl(object):

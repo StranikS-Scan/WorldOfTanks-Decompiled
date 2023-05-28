@@ -280,6 +280,15 @@ class WgshAccessor(BaseAccessor):
     def account_statistics(self, callback, account_id, fields=None):
         return self._data_source.account_statistics(callback, account_id, fields=fields)
 
+    def get_event_settings(self, callback, fields=None):
+        return self._data_source.wgsh_event_settings(callback, fields=fields)
+
+    def get_event_clan_info(self, callback, fields=None):
+        return self._data_source.wgsh_event_clan_info(callback, fields=fields)
+
+    def get_event_frozen_vehicles(self, callback, fields=None):
+        return self._data_source.wgsh_event_get_frozen_vehicles(callback, fields=fields)
+
 
 class RblbAccessor(BaseAccessor):
 
@@ -331,8 +340,8 @@ class WgrmsAccessor(BaseAccessor):
 
 class PromoScreensAccessor(BaseAccessor):
 
-    def get_teaser(self, callback):
-        return self._data_source.get_teaser(callback)
+    def get_teaser(self, callback, additionalData=None):
+        return self._data_source.get_teaser(callback, additionalData)
 
     def send_teaser(self, callback, promo_id):
         return self._data_source.send_teaser(callback, promo_id)

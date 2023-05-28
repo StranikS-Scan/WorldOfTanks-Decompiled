@@ -22,6 +22,7 @@ if typing.TYPE_CHECKING:
     from gui.game_control.trade_in import TradeInDiscounts
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes
+    from gui.limited_ui.lui_rules_storage import LuiRules
     from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
     from gui.prb_control.items import ValidationResult
@@ -198,6 +199,10 @@ class IGameStateTracker(IGameController):
 
 
 class IReloginController(IGameController):
+
+    @property
+    def isActive(self):
+        return NotImplementedError
 
     def doRelogin(self, peripheryID, onStoppedHandler=None, extraChainSteps=None):
         raise NotImplementedError
@@ -1238,7 +1243,13 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def isCurrentCycleActive(self):
         raise NotImplementedError
 
+    def getLevelsToUPGAllReserves(self):
+        raise NotImplementedError
+
     def isBattlePassDataEnabled(self):
+        raise NotImplementedError
+
+    def getTooltipData(self, tooltip):
         raise NotImplementedError
 
     def isUnlockVehiclesInBattleEnabled(self):
@@ -1292,7 +1303,13 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getPlayerLevelInfo(self):
         raise NotImplementedError
 
+    def getSkillLevelRanks(self):
+        raise NotImplementedError
+
     def getPlayerRanksInfo(self):
+        raise NotImplementedError
+
+    def getPlayerRanksWithBonusInfo(self):
         raise NotImplementedError
 
     def getSeasonData(self):
@@ -1310,10 +1327,10 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getSelectedSkills(self, vehicleCD):
         raise NotImplementedError
 
-    def increaseSkillLevel(self, skillID):
+    def increaseSkillLevel(self, skillID, callback=None):
         raise NotImplementedError
 
-    def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None):
+    def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None, classVehs=False):
         raise NotImplementedError
 
     def getAllUnlockedSkillInfoBySkillId(self):
@@ -1388,7 +1405,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getStats(self):
         raise NotImplementedError
 
-    def showWelcomeScreenIfNeed(self, showFullScreen=False, showContainerOnClose=False):
+    def showWelcomeScreenIfNeed(self):
         raise NotImplementedError
 
     def storeCycle(self):
@@ -1627,6 +1644,7 @@ class IReferralProgramController(IGameController):
     onReferralProgramEnabled = None
     onReferralProgramDisabled = None
     onReferralProgramUpdated = None
+    onPointsChanged = None
 
     def isFirstIndication(self):
         raise NotImplementedError
@@ -1635,6 +1653,9 @@ class IReferralProgramController(IGameController):
         raise NotImplementedError
 
     def updateBubble(self):
+        raise NotImplementedError
+
+    def isScoresLimitReached(self):
         raise NotImplementedError
 
 
@@ -1970,18 +1991,6 @@ class IReactiveCommunicationService(IGameController):
 class IRTSBattlesController(IGameController):
 
     def isVisible(self):
-        raise NotImplementedError
-
-
-class IUISpamController(IGameController):
-
-    def checkRule(self, ruleId):
-        raise NotImplementedError
-
-    def shouldBeHidden(self, aliasId):
-        raise NotImplementedError
-
-    def setVisited(self, aliasId):
         raise NotImplementedError
 
 
@@ -2361,12 +2370,6 @@ class IEventLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def getTimeLeftToResetPurchase(self):
-        raise NotImplementedError
-
-    def getCommonBoxInfo(self):
-        raise NotImplementedError
-
-    def getPremiumBoxInfo(self):
         raise NotImplementedError
 
     def getBoxInfo(self, boxType):
@@ -2995,10 +2998,19 @@ class ICollectionsSystemController(IGameController):
     def getCollection(self, collectionId):
         raise NotImplementedError
 
+    def getCollectionByName(self, collectionName):
+        raise NotImplementedError
+
     def isRelatedEventActive(self, collectionId):
         raise NotImplementedError
 
+    def getLinkedCollections(self, collectionId):
+        raise NotImplementedError
+
     def getCollectionItem(self, collectionId, itemId):
+        raise NotImplementedError
+
+    def getNewLinkedCollectionsItemCount(self, collectionId):
         raise NotImplementedError
 
     def getNewCollectionItemCount(self, collectionId):
@@ -3081,3 +3093,157 @@ class IWinbackController(IGameController):
 
 class IDailyQuestIntroPresenter(IGameController):
     pass
+
+
+class IAchievements20Controller(IGameController):
+    onUpdate = None
+    onRankIncrease = None
+    onRankDecrease = None
+
+    def showNewSummaryEnabled(self):
+        raise NotImplementedError
+
+    def showRatingUpgrade(self):
+        raise NotImplementedError
+
+    def showRatingChanged(self):
+        raise NotImplementedError
+
+    def showRankedComplete(self):
+        raise NotImplementedError
+
+    def showEditAvailable(self):
+        raise NotImplementedError
+
+    def onSummaryPageVisited(self):
+        raise NotImplementedError
+
+    def getAchievementsTabCounter(self):
+        raise NotImplementedError
+
+    def getPrevAchievementsList(self):
+        raise NotImplementedError
+
+    def setPrevAchievementsList(self, value):
+        raise NotImplementedError
+
+    def getInitialBattleCount(self):
+        raise NotImplementedError
+
+    def setInitialBattleCount(self, value):
+        raise NotImplementedError
+
+    def getWtrPrevPointsNotification(self):
+        raise NotImplementedError
+
+    def setMaxWtrPoints(self, points):
+        raise NotImplementedError
+
+    def getMaxWtrPoints(self):
+        raise NotImplementedError
+
+    def setWtrPrevPointsNotification(self, points):
+        raise NotImplementedError
+
+    def getWtrPrevPoints(self):
+        raise NotImplementedError
+
+    def setWtrPrevPoints(self, points):
+        raise NotImplementedError
+
+    def getWtrPrevRank(self):
+        raise NotImplementedError
+
+    def setWtrPrevRank(self, rank):
+        raise NotImplementedError
+
+    def getWtrPrevSubRank(self):
+        raise NotImplementedError
+
+    def setWtrPrevSubRank(self, subRank):
+        raise NotImplementedError
+
+    def getFirstEntryStatus(self):
+        raise NotImplementedError
+
+    def setFirstEntryStatus(self, value):
+        raise NotImplementedError
+
+    def getRatingCalculatedStatus(self):
+        raise NotImplementedError
+
+    def setRatingCalculatedStatus(self, value):
+        raise NotImplementedError
+
+    def getMedalAddedStatus(self):
+        raise NotImplementedError
+
+    def setMedalAddedStatus(self, value):
+        raise NotImplementedError
+
+    def getAchievementEditingEnabledStatus(self):
+        raise NotImplementedError
+
+    def setAchievementEditingEnabledStatus(self, value):
+        raise NotImplementedError
+
+    def getRatingChangedStatus(self):
+        raise NotImplementedError
+
+    def setRatingChangedStatus(self, value):
+        raise NotImplementedError
+
+    def getMedalCountInfo(self):
+        raise NotImplementedError
+
+    def setMedalCountInfo(self, value):
+        raise NotImplementedError
+
+
+class ILimitedUIController(IGameController):
+    onStateChanged = None
+    onConfigChanged = None
+    onVersionUpdated = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isInited(self):
+        raise NotImplementedError
+
+    @property
+    def configVersion(self):
+        raise NotImplementedError
+
+    @property
+    def version(self):
+        raise NotImplementedError
+
+    @property
+    def isOnlyUISpamOff(self):
+        raise NotImplementedError
+
+    @property
+    def isUserSettingsMayShow(self):
+        raise NotImplementedError
+
+    @property
+    def isFullCompleted(self):
+        raise NotImplementedError
+
+    def isRuleCompleted(self, ruleID):
+        raise NotImplementedError
+
+    def completeRule(self, ruleID):
+        raise NotImplementedError
+
+    def completeAllRules(self):
+        raise NotImplementedError
+
+    def startObserve(self, ruleID, handler):
+        raise NotImplementedError
+
+    def stopObserve(self, ruleID, handler):
+        raise NotImplementedError

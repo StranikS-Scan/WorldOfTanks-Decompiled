@@ -849,7 +849,7 @@ class _RegenerationKitItem(_EquipmentItem):
             return (result, error)
         else:
             vehicle = BigWorld.entities.get(avatar.playerVehicleID)
-            return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.maxHealth else (True, None)
+            return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.maxHealth and not any((deviceState in ('destroyed', 'critical') for deviceState in avatar.deviceStates.itervalues())) else (True, None)
 
     def getActivationCode(self, entityName=None, avatar=None):
         return 65536 + self._descriptor.id[1]

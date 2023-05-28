@@ -1,40 +1,62 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/referral_program_controller.py
 import logging
+import BigWorld
 from Event import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import REFERRAL_COUNTER
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from constants import RP_PGB_POINT
 from frameworks.wulf import WindowLayer
+from gui import SystemMessages
+from gui.SystemMessages import SM_TYPE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import createReferralWebHandlers
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, REF_RPOGRAM_PDATA_KEY
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IReferralProgramController, IUISpamController
+from skeletons.gui.game_control import IReferralProgramController
 from skeletons.gui.game_window_controller import GameWindowController
+from gui.ClientUpdateManager import g_clientUpdateManager
+from PlayerEvents import g_playerEvents
 _logger = logging.getLogger(__name__)
+USE_SERVER_RECRUIT_DELTA = True
+REQUEST_INCREMENT_COOLDOWN = 1
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __appLoader = dependency.descriptor(IAppLoader)
-    __uiSpamController = dependency.descriptor(IUISpamController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ReferralProgramController, self).__init__()
         self.__referralDisabled = False
+        self.__updateBubbleTimeoutID = None
+        self.__recruitDeltaInc = 0
         self.onReferralProgramEnabled = Event()
         self.onReferralProgramDisabled = Event()
         self.onReferralProgramUpdated = Event()
+        self.onPointsChanged = Event()
         CustomActionsKeeper.registerAction('id_action', self.__processButtonPress)
+        return
+
+    def fini(self):
+        self.__clearBubbleTimeout()
+        super(ReferralProgramController, self).fini()
 
     def showWindow(self, url=None, invokedFrom=None):
-        self._showWindow(url, invokedFrom)
+        if not self.__referralDisabled:
+            self._showWindow(url, invokedFrom)
+        else:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.referral_program.disabled()), type=SM_TYPE.Error)
 
     def hideWindow(self):
         browserView = self.__getBrowserView()
@@ -45,15 +67,21 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         return not self.__settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()
 
     def getBubbleCount(self):
-        count = AccountSettings.getCounters(REFERRAL_COUNTER)
-        return 0 if count and self.__uiSpamController.shouldBeHidden(REFERRAL_COUNTER) and not self.isFirstIndication() else count
+        return self.__getServerBubbleCount() if USE_SERVER_RECRUIT_DELTA else self.__getClientBubbleCount()
 
     def updateBubble(self):
         browserView = self.__getBrowserView()
         if browserView:
             return
-        AccountSettings.setCounters(REFERRAL_COUNTER, self.getBubbleCount() + 1)
-        self.__updateBubbleEvent()
+        if USE_SERVER_RECRUIT_DELTA:
+            self.__updateServerBubble()
+        else:
+            self.__updateClientBubble()
+
+    def isScoresLimitReached(self):
+        points = self.__itemsCache.items.stats.entitlements.get(RP_PGB_POINT, 0)
+        freePoints = self.__itemsCache.items.refProgram.getRPPgbPoints()
+        return freePoints > 0 and points >= freePoints
 
     def _openWindow(self, url, _=None):
         browserView = self.__getBrowserView()
@@ -77,9 +105,13 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def _addListeners(self):
         g_eventBus.addListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        g_playerEvents.onClientUpdated += self.__onClientUpdated
+        g_clientUpdateManager.addCallbacks({'cache.entitlements': self.__onEntitlementsUpdated})
 
     def _removeListeners(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        g_playerEvents.onClientUpdated -= self.__onClientUpdated
+        g_clientUpdateManager.removeObjectCallbacks(self)
         g_eventBus.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getBrowserView(self):
@@ -101,12 +133,58 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
             else:
                 self.__onReferralProgramEnabled()
 
-    def __resetBubbleCount(self):
-        AccountSettings.setCounters(REFERRAL_COUNTER, 0)
-        self.__uiSpamController.setVisited(REFERRAL_COUNTER)
-        self.__updateBubbleEvent()
+    def __onEntitlementsUpdated(self, diff):
+        if not self.__referralDisabled:
+            self.onPointsChanged()
 
-    def __updateBubbleEvent(self):
+    def __onClientUpdated(self, diff, _):
+        if diff is not None and REF_RPOGRAM_PDATA_KEY in diff:
+            self.onPointsChanged()
+            self.onReferralProgramUpdated()
+        return
+
+    def __getServerBubbleCount(self):
+        return self.__itemsCache.items.refProgram.getRecruitDelta()
+
+    def __getClientBubbleCount(self):
+        return AccountSettings.getCounters(REFERRAL_COUNTER)
+
+    def __updateServerBubble(self):
+        self.__recruitDeltaInc += 1
+        self.__clearBubbleTimeout()
+        self.__updateBubbleTimeoutID = BigWorld.callback(REQUEST_INCREMENT_COOLDOWN, self.__updateServerBubbleRequest)
+
+    def __updateServerBubbleRequest(self):
+        self.__updateBubbleTimeoutID = None
+        if self.__recruitDeltaInc:
+            BigWorld.player().referralProgram.incrementRecruitDelta(self.__recruitDeltaInc, None)
+            self.__recruitDeltaInc = 0
+        return
+
+    def __clearBubbleTimeout(self):
+        if self.__updateBubbleTimeoutID:
+            BigWorld.cancelCallback(self.__updateBubbleTimeoutID)
+            self.__updateBubbleTimeoutID = None
+        return
+
+    def __updateClientBubble(self):
+        AccountSettings.setCounters(REFERRAL_COUNTER, self.getBubbleCount() + 1)
+        self.onReferralProgramUpdated()
+
+    def __resetBubbleCount(self):
+        if USE_SERVER_RECRUIT_DELTA:
+            self.__resetServerBubbleCount()
+        else:
+            self.__resetClientBubbleCount()
+
+    def __resetServerBubbleCount(self):
+        BigWorld.player().referralProgram.resetRecruitDelta(None)
+        self.__clearBubbleTimeout()
+        self.__recruitDeltaInc = 0
+        return
+
+    def __resetClientBubbleCount(self):
+        AccountSettings.setCounters(REFERRAL_COUNTER, 0)
         self.onReferralProgramUpdated()
 
     def __onReferralProgramEnabled(self):

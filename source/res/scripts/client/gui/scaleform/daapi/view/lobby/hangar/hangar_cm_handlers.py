@@ -266,8 +266,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     options.append(self._makeItem(VEHICLE.EXCHANGE, MENU.contextmenu(VEHICLE.EXCHANGE), {'enabled': vehicle.isReadyToTradeOff,
                      'textColor': CM_BUY_COLOR}))
                 options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle})])
-                if not vehicleWasInBattle:
-                    options.append(self._makeSeparator())
                 self._manageVehCompareOptions(options, vehicle)
                 if self.prbDispatcher is not None:
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()

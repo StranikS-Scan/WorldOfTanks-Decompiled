@@ -21,6 +21,7 @@ from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -28,18 +29,17 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shop import canBuyGoldForVehicleThroughWeb
-from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IUISpamController, IBootcampController
+from skeletons.gui.game_control import IBootcampController, ILimitedUIController
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1
 
 class TechTree(TechTreeMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __uiSpamController = dependency.descriptor(IUISpamController)
     __bootcampController = dependency.descriptor(IBootcampController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
@@ -78,7 +78,7 @@ class TechTree(TechTreeMeta):
         self.__stopTopOfTheTreeSounds()
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
-        if self.__uiSpamController.shouldBeHidden(TECH_TREE_EVENT):
+        if not self.__limitedUIController.isRuleCompleted(LuiRules.TECH_TREE_EVENTS):
             g_techTreeDP.techTreeEventsListener.setNationViewed(nationIdx)
         self.__updateBlueprintBalance()
         self.__setVehicleCollectorState()

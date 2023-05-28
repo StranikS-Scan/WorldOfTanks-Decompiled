@@ -58,20 +58,30 @@ class UserDossier(object):
                 self.__cache['ranked'] = value[5]
                 self.__cache['dogTag'] = value[6]
                 self.__cache['battleRoyaleStats'] = value[7]
+                self.__cache['wtr'] = value[8]
+                self.__cache['layout'] = value[9]
+                self.__cache['layoutState'] = value[10]
                 for sID, d in (value[4] or {}).iteritems():
                     seasons[sID] = dossiers2.getRated7x7DossierDescr(d)
 
             callback(self.__cache['account'])
             return
 
-        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked, dogTag, br: self.__processValueResponse(c, code, (databaseID,
-         dossier,
-         (clanID, clanInfo),
-         gRating,
-         eSportSeasons,
-         ranked,
-         dogTag,
-         br)), proxyCallback)))
+        def callBackMethod(c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked, dogTag, br, wtr, layout, layoutState):
+            value = (databaseID,
+             dossier,
+             (clanID, clanInfo),
+             gRating,
+             eSportSeasons,
+             ranked,
+             dogTag,
+             br,
+             wtr,
+             layout,
+             layoutState)
+            self.__processValueResponse(c, code, value)
+
+        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(callBackMethod, proxyCallback)))
         self.__processQueue()
 
     def __requestAccountDossier(self, callback):
@@ -197,6 +207,39 @@ class UserDossier(object):
             return
         else:
             callback(self.__cache['battleRoyaleStats'])
+            return
+
+    @adisp_async
+    def getWTR(self, callback):
+        if not self.isValid:
+            callback(None)
+        if self.__cache.get('wtr') is None:
+            self.__requestPlayerInfo(callback)
+            return
+        else:
+            callback(self.__cache['wtr'])
+            return
+
+    @adisp_async
+    def getLayout(self, callback):
+        if not self.isValid:
+            callback(None)
+        if self.__cache.get('layout') is None:
+            self.__requestPlayerInfo(callback)
+            return
+        else:
+            callback(self.__cache['layout'])
+            return
+
+    @adisp_async
+    def getLayoutState(self, callback):
+        if not self.isValid:
+            callback(None)
+        if self.__cache.get('layoutState') is None:
+            self.__requestPlayerInfo(callback)
+            return
+        else:
+            callback(self.__cache['layoutState'])
             return
 
     @property

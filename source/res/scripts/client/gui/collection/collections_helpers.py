@@ -1,13 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/collection/collections_helpers.py
 import typing
+from gui.battle_pass.battle_pass_helpers import getSingleVehicleForCustomization
+from gui.impl.gen.view_models.views.lobby.collection.collection_item_preview_model import ItemType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import Vehicle
 from shared_utils import findFirst, first
 import nations
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLLECTIONS_SECTION, COLLECTION_SHOWN_NEW_ITEMS, COLLECTION_SHOWN_NEW_ITEMS_COUNT, COLLECTION_SHOWN_NEW_REWARDS, COLLECTION_TUTORIAL_COMPLETED
-from collections_common import CollectionItem, UNUSABLE_COLLECTION_ENTITIES
+from collections_common import CollectionItem, UNUSABLE_COLLECTION_ENTITIES, USABLE_COLLECTION_ENTITIES
 from gui.collection.collections_constants import COLLECTION_ITEM_RES_KEY_TEMPLATE, COLLECTION_RES_PREFIX
 from gui.impl import backport
 from gui.impl.gen import R
@@ -20,7 +24,7 @@ from items.tankmen import getNationConfig, getNationGroups
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import List, Dict, Tuple, Union
+    from typing import List, Dict, Optional, Tuple, Union
     from gui.impl.gen_utils import DynAccessor
 
 @replace_none_kwargs(itemsCache=IItemsCache)
@@ -60,17 +64,18 @@ def getItemInfo(itemId, collectionId, collections=None):
     collectionRes = getCollectionRes(collectionId, collectionsSystem=collections)
     descriptionRes = collectionRes.item.description.dyn(itemResKey)
     description = backport.text(descriptionRes()) if descriptionRes.exists() else ''
-    itemType = item.type
-    if itemType in UNUSABLE_COLLECTION_ENTITIES:
-        largeImage = backport.image(R.images.gui.maps.icons.collectionItems.c_1000x680.dyn(itemResKey)())
-        smallImage = backport.image(R.images.gui.maps.icons.collectionItems.c_600x450.dyn(itemResKey)())
-    else:
-        largeImage = backport.image(R.images.gui.maps.icons.collectionItems.c_600x450.dyn(itemResKey)())
-        smallImage = backport.image(R.images.gui.maps.icons.collectionItems.c_400x300.dyn(itemResKey)())
+    largeImageRes = R.images.gui.maps.icons.collectionItems.c_1000x680.dyn(itemResKey)
+    largeImage = backport.image(largeImageRes()) if largeImageRes.exists() else ''
+    mediumImageRes = R.images.gui.maps.icons.collectionItems.c_600x450.dyn(itemResKey)
+    mediumImage = backport.image(mediumImageRes()) if mediumImageRes.exists() else ''
+    smallImageRes = R.images.gui.maps.icons.collectionItems.c_400x300.dyn(itemResKey)
+    smallImage = backport.image(smallImageRes()) if smallImageRes.exists() else ''
+    itemType = getItemPreviewType(item)
     return (name,
      itemType,
      description,
      largeImage,
+     mediumImage,
      smallImage)
 
 
@@ -130,6 +135,33 @@ def getTankmanFullName(groupName):
             return '{} {}'.format(firstName, lastName)
 
     return ''
+
+
+def getItemPreviewType(item):
+    itemType = item.type
+    if itemType in USABLE_COLLECTION_ENTITIES:
+        if itemType == 'customizationItem':
+            return getCustomizationPreviewType(item.relatedId)
+        if itemType == 'dossier':
+            return ItemType.MEDAL
+    return ItemType(itemType)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getCustomizationPreviewType(itemCD, itemsCache=None):
+    customizationItem = itemsCache.items.getItemByCD(itemCD)
+    if customizationItem.itemTypeID == GUI_ITEM_TYPE.STYLE:
+        if customizationItem.modelsSet:
+            return ItemType.STYLE3D
+        return ItemType.STYLE2D
+    return ItemType.OTHERCUSTOMIZATION
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, collectionsSystem=ICollectionsSystemController)
+def getVehicleForStyleItem(item, itemsCache=None, collectionsSystem=None):
+    customizationItem = itemsCache.items.getItemByCD(item.relatedId)
+    vehicleCD = getSingleVehicleForCustomization(customizationItem)
+    return itemsCache.items.getItemByCD(vehicleCD) if vehicleCD is not None else None
 
 
 def composeBonuses(bonuses):

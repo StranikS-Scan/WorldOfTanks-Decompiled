@@ -74,6 +74,9 @@ class VehicleChassis(VehicleModule):
     def isWheeledChassis(self):
         return g_paramsCache.isChassisWheeled(self.intCD)
 
+    def isWheeledOnSpotRotationChassis(self):
+        return g_paramsCache.isChassisWheeledOnSpotRotation(self.intCD)
+
     def hasAutoSiege(self):
         return g_paramsCache.isChassisAutoSiege(self.intCD)
 

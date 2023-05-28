@@ -112,15 +112,18 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          FITTING_TYPES.CUSTOMIZATION: customizationItems,
          FITTING_TYPES.BOOSTER: boosters}
         itemsForDemountKit = []
+        itemsForFreeDemount = []
         for item in self.__items:
             guiItem = item.guiItem
             if item.toInventory:
                 if guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.removeCurrency == _DK_CURRENCY:
                     itemsForDemountKit.append(guiItem)
+                if guiItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.removeCurrency == _WP_CURRENCY:
+                    itemsForFreeDemount.append(guiItem)
             container = sellMap[item.itemType]
             container.append(guiItem)
 
-        self.__doSellVehicle(self.__vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, self.__isCrewDismissal, itemsForDemountKit, boosters)
+        self.__doSellVehicle(self.__vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, self.__isCrewDismissal, itemsForDemountKit, itemsForFreeDemount, boosters)
 
     def onWindowClose(self):
         self.destroy()
@@ -455,8 +458,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return False
 
     @decorators.adisp_process('sellVehicle')
-    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew, itemsForDemountKit, boosters):
-        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit)
+    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew, itemsForDemountKit, itemsForFreeDemount, boosters):
+        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit, itemsForFreeDemount)
         currentMoneyGold = self.__itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
         if currentMoneyGold < spendMoneyGold:

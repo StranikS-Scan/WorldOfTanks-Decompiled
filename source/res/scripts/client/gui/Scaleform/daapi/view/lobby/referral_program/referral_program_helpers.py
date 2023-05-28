@@ -4,7 +4,8 @@ from gui import GUI_SETTINGS
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-RECRUITER_SPA_ID_ATTR = '/wot/game/ref/recruiterSpaId'
+REF_RPOGRAM_PDATA_KEY = 'refProgram'
+RECRUITER_ID_ATTR = 'recruiterId'
 
 def _getUrl(urlName=None):
     return getReferralProgramURL() if urlName is None else getReferralProgramURL() + GUI_SETTINGS.referralProgram.get(urlName)
@@ -25,4 +26,4 @@ def getObtainVehicleURL():
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isCurrentUserRecruit(itemsCache=None):
-    return bool(itemsCache.items.stats.SPA.get(RECRUITER_SPA_ID_ATTR, False))
+    return bool(itemsCache.items.stats.refSystem20.get(RECRUITER_ID_ATTR, False))

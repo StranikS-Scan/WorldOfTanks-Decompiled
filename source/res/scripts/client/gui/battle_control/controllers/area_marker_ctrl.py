@@ -60,13 +60,13 @@ class AreaMarkersController(BaseMarkerController):
         if player is None:
             return
         else:
+            vehicle = player.getVehicleAttached()
+            observableVehiclePosition = vehicle.position if vehicle else None
             for marker in self._markers.itervalues():
                 if marker.isEmpty():
                     continue
-                distanceToArea = BaseMarkerController.getDistanceToArea(marker, player)
-                conditionDistance = marker.disappearingRadius
-                hide = conditionDistance < distanceToArea if marker.reverseDisappearing else conditionDistance > distanceToArea
-                if hide:
+                distanceToArea = marker.getDistanceToArea(observableVehiclePosition)
+                if not self._isMarkerActuallyVisibleImpl(marker, distanceToArea):
                     marker.setVisible(False)
                     continue
                 marker.setVisible(self._globalVisibility)
@@ -80,6 +80,24 @@ class AreaMarkersController(BaseMarkerController):
         removeList = set(markersIDs) - set(vehiclesMarkersIDs)
         for markerID in removeList:
             self.removeMarker(markerID)
+
+    def isMarkerActuallyVisible(self, marker):
+        player = BigWorld.player()
+        if player is None:
+            return False
+        else:
+            vehicle = player.getVehicleAttached()
+            observableVehiclePosition = vehicle.position if vehicle else None
+            distanceToArea = marker.getDistanceToArea(observableVehiclePosition)
+            return self._isMarkerActuallyVisibleImpl(marker, distanceToArea)
+
+    def _isMarkerActuallyVisibleImpl(self, marker, distanceToArea):
+        conditionDistance = marker.disappearingRadius
+        if conditionDistance <= 0:
+            return True
+        else:
+            isHidden = distanceToArea is None or (conditionDistance < distanceToArea if marker.reverseDisappearing else conditionDistance > distanceToArea)
+            return not isHidden
 
 
 class VehiclesAreaMarkerHandler(object):

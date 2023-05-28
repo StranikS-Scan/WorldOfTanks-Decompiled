@@ -4,9 +4,9 @@ import BigWorld
 import weakref
 import Math
 import items
-from visual_script.block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue
 from visual_script.slot_types import SLOT_TYPE, arrayOf
-from visual_script.misc import ASPECT, errorVScript
+from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 
 class EntityMeta(Meta):
 
@@ -246,8 +246,11 @@ class IsEntityDestroyed(Block, EntityMeta):
         return [ASPECT.SERVER]
 
     def _exec(self):
-        entity = self._entity.getValue()
-        if entity:
-            self._isDestroyed.setValue(entity.isDestroyed)
-        else:
+        try:
+            entity = self._entity.getValue()
+            if entity:
+                self._isDestroyed.setValue(entity.isDestroyed)
+            else:
+                self._isDestroyed.setValue(True)
+        except (AttributeError, ReferenceError):
             self._isDestroyed.setValue(True)

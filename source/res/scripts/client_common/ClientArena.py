@@ -383,7 +383,8 @@ class ClientArena(object):
          'overriddenBadge': info[23],
          'maxHealth': info[24],
          'vehPostProgression': info[25],
-         'customRoleSlotTypeId': info[26]}
+         'customRoleSlotTypeId': info[26],
+         'botDisplayStatus': info[27]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, compactDescr, extData):

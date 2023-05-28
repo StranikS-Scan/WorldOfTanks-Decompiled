@@ -51,8 +51,8 @@ class DefaultAppearanceCacheController(IAppearanceCacheController):
         for _, vo in updated:
             self.addVehicleInfo(vo, arenaDP)
 
-    def getAppearance(self, vId, vInfo, callback=None, strCD=None):
-        return self._appearanceCache.getAppearance(vId, vInfo, callback, strCD)
+    def getAppearance(self, vId, vInfo, callback=None, strCD=None, needLoad=True):
+        return self._appearanceCache.getAppearance(vId, vInfo, callback, strCD, needLoad)
 
     def reloadAppearance(self, vId, vInfo, callback=None, strCD=None, oldStrCD=None):
         oldAppearance = self._appearanceCache.removeAppearance(vId, oldStrCD)

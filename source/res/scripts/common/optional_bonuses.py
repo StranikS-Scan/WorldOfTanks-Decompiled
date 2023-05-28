@@ -306,6 +306,10 @@ class BonusItemsCache(object):
         return False
 
 
+DEEP_CHECKERS = {'groups': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: all((nodeAcceptor.depthCheck(subBonusNode, checkInventory, depthLevel) for subBonusNode in bonusNode)),
+ 'allof': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: all((nodeAcceptor.isAcceptable(subBonusNode[-1], False, depthLevel - 1) for subBonusNode in bonusNode)),
+ 'oneof': lambda nodeAcceptor, bonusNode, checkInventory, depthLevel: any((nodeAcceptor.isAcceptable(subBonusNode[-1], checkInventory, depthLevel - 1) for subBonusNode in bonusNode[-1]))}
+
 class BonusNodeAcceptor(object):
 
     def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
@@ -356,10 +360,10 @@ class BonusNodeAcceptor(object):
     def getBonusCache(self):
         return self.__bonusCache
 
-    def isAcceptable(self, bonusNode, checkInventory=True):
+    def isAcceptable(self, bonusNode, checkInventory=True, depthLevel=None):
         if self.isLimitReached(bonusNode):
             return False
-        return False if checkInventory and self.isBonusExists(bonusNode) else True
+        return False if checkInventory and self.isBonusExists(bonusNode) else self.depthCheck(bonusNode, checkInventory, depthLevel)
 
     def getNodesForVisit(self, ids):
         return self.__shouldVisitNodes.intersection(ids) if ids and self.__shouldVisitNodes else None
@@ -402,6 +406,10 @@ class BonusNodeAcceptor(object):
                     return True
 
         return False
+
+    def depthCheck(self, bonusNode, checkInventory, depthLevel=None):
+        currentDepthLevel = bonusNode.get('properties', {}).get('depthLevel', 0) if depthLevel is None else depthLevel
+        return True if currentDepthLevel <= 0 else all((DEEP_CHECKERS[bonusNodeName](self, bonusNodeValue, checkInventory, currentDepthLevel) for bonusNodeName, bonusNodeValue in bonusNode.iteritems() if bonusNodeName in DEEP_CHECKERS))
 
     def getProbabilityStages(self):
         return self.__probabilitiesStage

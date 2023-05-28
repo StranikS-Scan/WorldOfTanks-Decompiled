@@ -11,7 +11,7 @@ from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSetti
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.app_loader import settings as app_settings
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 __all__ = ('SharedPage',)

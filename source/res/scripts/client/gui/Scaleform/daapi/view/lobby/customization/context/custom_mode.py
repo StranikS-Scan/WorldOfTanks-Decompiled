@@ -83,16 +83,19 @@ class CustomMode(CustomizationMode):
         for areaId in Area.TANK_PARTS:
             regionsIndexes = getAvailableRegions(areaId, slotType)
             multiSlot = self._modifiedOutfits[season].getContainer(areaId).slotFor(slotType)
-            isLast = areaId == Area.TANK_PARTS[-1]
             for regionIdx in regionsIndexes:
                 otherSlotData = multiSlot.getSlotData(regionIdx)
                 df = slotData.weakDiff(otherSlotData)
                 if not otherSlotData.intCD or df.intCD:
                     slotId = C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx)
-                    res = self.installItem(intCD=slotData.intCD, slotId=slotId, season=season, component=slotData.component, refresh=isLast)
+                    res = self.installItem(intCD=slotData.intCD, slotId=slotId, season=season, component=slotData.component, refresh=False)
                     if res:
+                        item = self._service.getItemByCD(slotData.intCD)
+                        self._events.onItemInstalled(item, slotId, season, slotData.component)
                         additionallyAppliedItems += 1
 
+        if additionallyAppliedItems > 0:
+            self._ctx.refreshOutfit(season)
         return additionallyAppliedItems
 
     def installItemToAllSeasons(self, slotId, slotData):

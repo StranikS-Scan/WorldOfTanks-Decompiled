@@ -80,7 +80,6 @@ EULA_VERSION = 'EULA_VERSION'
 FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
 IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
-AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
@@ -241,6 +240,24 @@ COLLECTION_SHOWN_NEW_ITEMS_COUNT = 'collectionNewItemsCount'
 COLLECTION_TUTORIAL_COMPLETED = 'collectionTutorialCompleted'
 COLLECTION_WAS_ENABLED = 'collectionsWasEnabled'
 COLLECTIONS_NOTIFICATIONS = 'collectionsNotifications'
+REFERRAL_PROGRAM_PGB_FULL = 'referralProgramPgbFull'
+ACHIEVEMENTS_INFO = 'achievements20_info'
+ACHIEVEMENTS_INITIAL_BATTLE_COUNT = 'achievements20InitialBattleCount'
+ACHIEVEMENTS_MAX_WTR_POINTS = 'achievements20MaxWtrPoints'
+ACHIEVEMENTS_WTR_RANKS = 'achievementsWtrRanks'
+ACHIEVEMENTS_WTR_PREV_POINTS_NOTIFICATION = 'achievementWtrPointsNotification'
+ACHIEVEMENTS_WTR_INFO = 'achievementWtr'
+ACHIEVEMENTS_WTR_PREV_POINTS = 'achievementWtrPoints'
+ACHIEVEMENTS_WTR_PREV_RANK = 'achievementWtrPrevRank'
+ACHIEVEMENTS_WTR_PREV_SUB_RANK = 'achievementWtrPrevSubRank'
+PREV_ACHIEVEMENTS_NAME_LIST = 'prevAchievementNameList'
+ACHIEVEMENTS_VISITED = 'achievementsVisited'
+ACHIEVEMENTS_FIRST_ENTRY_STATUS = 'achievementsFirstEntryStatus'
+ACHIEVEMENTS_RATING_CALCULATED_STATUS = 'achievementsRatingCalculatedStatus'
+ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
+ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
+ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
+ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -736,9 +753,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'level': -1,
                                           'compatibleOnly': True},
                PROMO: {},
-               AWARDS: {'vehicleResearchAward': -1,
-                        'victoryAward': -1,
-                        'battlesCountAward': -1},
                PROFILE_TECHNIQUE: {'selectedColumn': 4,
                                    'selectedColumnSorting': 'descending',
                                    'isInHangarSelected': False},
@@ -930,8 +944,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isFreeDirectivesEnabled': True,
                            'isFreeDemountingEnabled': True,
                            'isExcludedMapEnabled': True,
-                           'rentPendingVehCD': None,
-                           'isExclusiveVehicleEnabled': False},
+                           'rentPendingVehCD': None},
                 TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
                                   'isTelecomRentalsBlocked': True},
                 CUSTOMIZATION_SECTION: {CAROUSEL_ARROWS_HINT_SHOWN_FIELD: False,
@@ -983,7 +996,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         GAME.GAMEPLAY_ONLY_10_MODE: True,
                                                         GAME.SHOW_ARTY_HIT_ON_MAP: True,
                                                         GAME.SWITCH_SETUPS_IN_LOADING: True,
-                                                        GAME.SCROLL_SMOOTHING: True},
+                                                        GAME.SCROLL_SMOOTHING: True,
+                                                        GAME.LIMITED_UI_ACTIVE: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -1115,6 +1129,20 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
+                ACHIEVEMENTS_INFO: {ACHIEVEMENTS_WTR_RANKS: {},
+                                    ACHIEVEMENTS_INITIAL_BATTLE_COUNT: -1,
+                                    ACHIEVEMENTS_MAX_WTR_POINTS: 0,
+                                    ACHIEVEMENTS_FIRST_ENTRY_STATUS: 0,
+                                    ACHIEVEMENTS_RATING_CALCULATED_STATUS: 0,
+                                    ACHIEVEMENTS_EDITING_ENABLED_STATUS: 0,
+                                    ACHIEVEMENTS_MEDAL_ADDED_STATUS: 0,
+                                    ACHIEVEMENTS_RATING_CHANGED_STATUS: 0,
+                                    ACHIEVEMENTS_MEDAL_COUNT_INFO: 0,
+                                    ACHIEVEMENTS_WTR_PREV_POINTS_NOTIFICATION: 0,
+                                    ACHIEVEMENTS_WTR_INFO: {ACHIEVEMENTS_WTR_PREV_POINTS: 0,
+                                                            ACHIEVEMENTS_WTR_PREV_RANK: 0,
+                                                            ACHIEVEMENTS_WTR_PREV_SUB_RANK: 0},
+                                    PREV_ACHIEVEMENTS_NAME_LIST: []},
                 ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
                                                   ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
@@ -1145,6 +1173,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      BLUEPRINTS_CONVERT_SALE_STARTED_SEEN: False,
                      CLAN_NEWS_SEEN: False,
                      SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP: None,
+                     ACHIEVEMENTS_VISITED: False,
                      INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
                                                         AUCTION_FINISH_STAGE_SEEN: set()},
                      FUN_RANDOM_NOTIFICATIONS: {FUN_RANDOM_NOTIFICATIONS_FROZEN: set(),
@@ -1152,7 +1181,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                 FUN_RANDOM_NOTIFICATIONS_SUB_MODES: set()},
                      RESOURCE_WELL_NOTIFICATIONS: {RESOURCE_WELL_START_SHOWN: set(),
                                                    RESOURCE_WELL_END_SHOWN: set()},
-                     COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: []}},
+                     COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: []},
+                     REFERRAL_PROGRAM_PGB_FULL: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1253,7 +1283,26 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                       COLLECTION_SHOWN_NEW_ITEMS: {},
                                       COLLECTION_SHOWN_NEW_ITEMS_COUNT: {},
                                       COLLECTION_TUTORIAL_COMPLETED: set(),
-                                      COLLECTION_WAS_ENABLED: True}},
+                                      COLLECTION_WAS_ENABLED: True},
+                'uiSpamVisited_store': False,
+                'uiSpamVisited_profile': False,
+                'uiSpamVisited_profileHof': False,
+                'uiSpamVisited_profileTechniquePage': False,
+                'uiSpamVisited_sessionStats': False,
+                'uiSpamVisited_blueprintsButton': False,
+                'uiSpamVisited_missions': False,
+                'uiSpamVisited_MissionsMarathonView': False,
+                'uiSpamVisited_PersonalMissionOperations': False,
+                'uiSpamVisited_AmmunitionPanelHintZoneHint': False,
+                'uiSpamVisited_AmmunitionPanelBattleAbilitiesHint': False,
+                'uiSpamVisited_CustomizationProgressionViewHint': False,
+                'uiSpamVisited_TechTreeEvent': False,
+                'uiSpamVisited_DogTagHangarHint': False,
+                'uiSpamVisited_ModeSelectorWidgetsBtnHint': False,
+                'uiSpamVisited_PersonalReservesHangarHint': False,
+                'uiSpamVisited_ModernizedSetupTabHint': False,
+                'uiSpamVisited_OfferBannerWindow': False,
+                'uiSpamVisited_StrongholdView': False},
  ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
                                    ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {},
                                    ArmoryYard.EVENT_ANNOUNCEMENT: False,
@@ -1295,7 +1344,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 59
+    version = 62
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1881,6 +1930,25 @@ class AccountSettings(object):
                     keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if IS_BATTLE_PASS_COLLECTION_SEEN in keySettings.keys():
                         keySettings.write(IS_BATTLE_PASS_COLLECTION_SEEN, _pack(False))
+
+            if currVersion < 60:
+                if Settings.g_instance.userPrefs.has_key('loginPage'):
+                    Settings.g_instance.userPrefs.deleteSection('loginPage')
+            if currVersion < 61:
+                for key, section in _filterAccountSection(ads):
+                    accSessionSettings = AccountSettings._readSection(section, KEY_FILTERS)
+                    obsoleteKey = 'awards'
+                    if obsoleteKey in accSessionSettings.keys():
+                        accSessionSettings.deleteSection(obsoleteKey)
+
+            if currVersion < 62:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if KNOWN_SELECTOR_BATTLES in accSettings.keys():
+                        known = _unpack(accSettings[KNOWN_SELECTOR_BATTLES].asString)
+                        if SELECTOR_BATTLE_TYPES.BATTLE_ROYALE in known:
+                            known.remove(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+                            accSettings.write(KNOWN_SELECTOR_BATTLES, _pack(known))
 
             ads.writeInt('version', AccountSettings.version)
         return

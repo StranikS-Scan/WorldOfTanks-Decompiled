@@ -35,9 +35,9 @@ from skeletons.gui.shared.utils import IHangarSpace
 from armory_yard.managers.stage_manager import showVideo
 from gui.impl.gen import R
 import ScaleformFileLoader
-from gui.Scaleform import SCALEFORM_STARTUP_VIDEO_PATH
+from gui.doc_loaders.GuiDirReader import GuiDirReader
 from items import vehicles
-AY_VIDEOS_FOLDER = '/'.join((SCALEFORM_STARTUP_VIDEO_PATH, 'armory_yard'))
+AY_VIDEOS_FOLDER = '/'.join((GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, 'armory_yard'))
 
 class ArmoryYardController(IArmoryYardController):
     __eventsCache = dependency.descriptor(IEventsCache)

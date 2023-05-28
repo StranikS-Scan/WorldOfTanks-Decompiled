@@ -42,13 +42,16 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar = self._avatar()
         if not avatar:
             return
-        for vehicleAmmo in ammoList:
-            timeRemainig = vehicleAmmo.endTime
-            if timeRemainig > 0:
-                timeRemainig = max(vehicleAmmo.endTime - self._serverTime(), 0)
-                if timeRemainig > vehicleAmmo.totalTime:
-                    timeRemainig = vehicleAmmo.totalTime
-            avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, vehicleAmmo.previousStage, timeRemainig, vehicleAmmo.totalTime)
+        else:
+            for vehicleAmmo in ammoList:
+                timeRemainig = vehicleAmmo.endTime
+                if timeRemainig > 0:
+                    timeRemainig = max(vehicleAmmo.endTime - self._serverTime(), 0)
+                    if timeRemainig > vehicleAmmo.totalTime:
+                        timeRemainig = vehicleAmmo.totalTime
+                avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, None if self.__isAttachingToVehicle else vehicleAmmo.previousStage, timeRemainig, vehicleAmmo.totalTime)
+
+            return
 
     @noexcept
     def update_syncVehicleAttrs(self, syncVehicleAttrs):
@@ -437,3 +440,6 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     def _avatar(self):
         raise NotImplementedError('_avatar must be overrided in ownVehicle')
+
+    def _entities(self):
+        raise NotImplementedError('_entities must be overrided in ownVehicle')

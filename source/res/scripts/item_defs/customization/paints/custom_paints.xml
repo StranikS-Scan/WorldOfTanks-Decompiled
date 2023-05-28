@@ -4027,6 +4027,68 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	meteorit	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	372	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <color>	43 50 56 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.9	</metallic>
+      <userString>	#vehicle_customization:repaint/meteorit	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Steel Hunter Arcade	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	364	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	71 74 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/steel_hunter_arcade_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	373	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
+      <color>	128 110 85 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/steel_hunter_arcade_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	NA Womens Day	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -4272,6 +4334,94 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	Cosm Event	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	404	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/cosm	</userString>
+    </paint>
+    <paint>
+      <id>	405	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 17 20 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/cosm_3	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass S11	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	407	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_04.png	</texture>
+      <color>	94 82 71 255	</color>
+      <gloss>	0.51	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battle_pass_s11_camo1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	408	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
+      <color>	148 120 89 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battle_pass_s11_camo2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	409	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	174 169 155 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/battle_pass_s11_camo3	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	410	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	148 146 135 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/battle_pass_s11_camo4	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Battle Pass 2023 Winter RU	</name>
     <userString>	#vehicle_customization:repaint/color_group_05	</userString>
     <season>	ALL	</season>
@@ -4423,7 +4573,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -4459,7 +4609,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -4469,6 +4619,95 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/stalingrad_2023_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Yandex 2023	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31014	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <color>	159 170 179 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.7	</metallic>
+      <userString>	#vehicle_customization:repaint/Yandex_2023_MT	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Compendium RU_02	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31015	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	25 44 56 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/compendium_2_2023_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Flags BY RU	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31020	</id>
+      <texture>	gui/maps/vehicles/repaints/china_base_color.png	</texture>
+      <color>	47 84 67 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/FlagBY_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31021	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_color_07.png	</texture>
+      <color>	46 70 102 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/FlagRU_MT	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

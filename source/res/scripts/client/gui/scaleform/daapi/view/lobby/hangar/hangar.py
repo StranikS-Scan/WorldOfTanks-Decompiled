@@ -32,6 +32,7 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
+from gui.game_loading.resources.consts import Milestones
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
@@ -120,8 +121,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__banTimer = None
         self.__updateDogTagsState()
         self.__updateWotPlusState()
-        self.__isEventLootBoxesActive = False
-        self.__isLootBoxesAvailable = False
         return
 
     def onEscape(self):
@@ -155,8 +154,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__banTimer = CallbackDelayer()
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
         self.__isVehicleReadyForC11n = self.hangarSpace.isModelLoaded
-        self.__isEventLootBoxesActive = self.__eventLootBoxes.isActive()
-        self.__isLootBoxesAvailable = self.__eventLootBoxes.isLootBoxesAvailable()
         self.__checkVehicleCameraState()
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted += self.__onVehicleLoading
@@ -197,6 +194,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY)
+        g_playerEvents.onLoadingMilestoneReached(Milestones.HANGAR_UI_READY)
         lobbyContext = dependency.instance(ILobbyContext)
         isCrewBooksEnabled = lobbyContext.getServerSettings().isCrewBooksEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
@@ -538,6 +536,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateAlertMessage()
 
     def __updateAll(self):
+        g_playerEvents.onLoadingMilestoneReached(Milestones.UPDATE_VEHICLE)
         Waiting.show('updateVehicle')
         self.__switchCarousels()
         self.__updateState()

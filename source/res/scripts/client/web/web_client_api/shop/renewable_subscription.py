@@ -6,12 +6,12 @@ from constants import WoTPlusBonusType
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showWotPlusInfoPage
 from gui.shared.gui_items.Vehicle import getUserName
 from helpers import dependency
 from items.vehicles import getVehicleType
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
+from uilogging.wot_plus.loggers import WotPlusInfoPageLogger
 from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
 from web.web_client_api import W2CSchema, w2c, Field
 _logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ class RenewableSubWebApiMixin(object):
 
     @w2c(W2CSchema, 'subscription_info_window')
     def handleSubscriptionInfoWindow(self, cmd):
-        showWotPlusInfoPage(WotPlusInfoPageSource.SHOP)
+        WotPlusInfoPageLogger().logInfoPage(WotPlusInfoPageSource.SHOP)
 
     @w2c(_RenewableSubRentVehicleInfoSchema, 'subscription_rent_delayed')
     def subscriptionRentDelayed(self, cmd):

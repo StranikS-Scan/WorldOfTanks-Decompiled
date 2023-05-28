@@ -33,7 +33,7 @@ from helpers import dependency
 from items import tankmen
 from items.components import skills_constants
 from items.components.c11n_constants import SeasonType
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -980,6 +980,21 @@ class DismountForDemountKitValidator(SyncValidator):
                 return makeError('demount_kit_disabled')
             spentDemountKits[demountKit.goodieID] = spentDemountKits.get(demountKit.goodieID, 0) + 1
             if demountKit.inventoryCount < spentDemountKits[demountKit.goodieID]:
+                return makeError()
+
+        return makeSuccess()
+
+
+class FreeToDemountValidator(SyncValidator):
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+
+    def __init__(self, itemsFreeToDemount):
+        super(FreeToDemountValidator, self).__init__(isEnabled=bool(itemsFreeToDemount))
+        self.itemsFreeToDemount = itemsFreeToDemount
+
+    def _validate(self):
+        for device in self.itemsFreeToDemount:
+            if not self._wotPlusCtrl.isFreeToDemount(device):
                 return makeError()
 
         return makeSuccess()

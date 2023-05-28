@@ -1688,4 +1688,49 @@
     </projection_decal>
     <name>	Easter West	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	913	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_561.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_561_562/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_561	</userString>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	914	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_562.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_561_562/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_562	</userString>
+      <tags>	formfactor_square direction_right_to_left disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	915	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_563.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_563	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror hiddenInUI	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	916	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_564.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_564	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror hiddenInUI	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	twitch w 2023	</name>
+  </itemGroup>
 </projection_decals_nonCN.xml>

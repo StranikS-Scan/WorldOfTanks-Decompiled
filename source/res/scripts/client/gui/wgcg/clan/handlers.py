@@ -17,7 +17,7 @@ class ClanRequestHandlers(RequestHandlers):
          WebRequestDataType.CLAN_RATINGS: self.__getClanRatings,
          WebRequestDataType.CLAN_GLOBAL_MAP_STATS: self.__getClanGlobalMapStats,
          WebRequestDataType.CLAN_ACCOUNTS: self.__getClanAccounts,
-         WebRequestDataType.STRONGHOLD_INFO: self.__getStronholdInfo,
+         WebRequestDataType.STRONGHOLD_INFO: self.__getStrongholdInfo,
          WebRequestDataType.ACCOUNT_APPLICATIONS_COUNT: self.__accountApplications,
          WebRequestDataType.CLAN_INVITATIONS_COUNT: self.__getClanInvitations,
          WebRequestDataType.CLAN_MEMBERS: self.__getClanMembers,
@@ -37,7 +37,9 @@ class ClanRequestHandlers(RequestHandlers):
          WebRequestDataType.DECLINE_INVITES: self.__declineInvites,
          WebRequestDataType.GET_ACCOUNT_APPLICATIONS: self.__getAccountApplications,
          WebRequestDataType.CLANS_INFO: self.__getClansInfo,
-         WebRequestDataType.CLAN_FAVOURITE_ATTRS: self.__getClanFavoriteAttributes}
+         WebRequestDataType.CLAN_FAVOURITE_ATTRS: self.__getClanFavoriteAttributes,
+         WebRequestDataType.STRONGHOLD_EVENT_SETTINGS: self.__getStrongholdEventSettings,
+         WebRequestDataType.STRONGHOLD_EVENT_CLAN_INFO: self.__getStrongholdEventClanInfo}
         return handlers
 
     def __getClanInfo(self, ctx, callback=None):
@@ -105,8 +107,14 @@ class ClanRequestHandlers(RequestHandlers):
     def __getClanMembersRating(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('exporter', 'get_accounts_info'), ctx.getAccountsIDs())
 
-    def __getStronholdInfo(self, ctx, callback=None):
+    def __getStrongholdInfo(self, ctx, callback=None):
         return self.__doClanRequest(ctx, callback, ('strongholds', 'get_info'))
+
+    def __getStrongholdEventSettings(self, ctx, callback=None):
+        return self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_event_settings'))
+
+    def __getStrongholdEventClanInfo(self, ctx, callback=None):
+        return self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_event_clan_info'))
 
     def __accountApplications(self, ctx, callback):
         return self.__doTotalRequest(ctx, callback, ('clans', 'get_account_applications_count_since'))

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/social/__init__.py
 import BigWorld
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import isPlayerAccount
 from messenger.m_constants import USER_TAG

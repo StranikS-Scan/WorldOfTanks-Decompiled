@@ -18,3 +18,6 @@ class AmmunitionSetupViewMeta(View):
 
     def as_onAnimationEndS(self):
         return self.flashObject.as_onAnimationEnd() if self._isDAAPIInited() else None
+
+    def as_toggleParamsS(self, isVisible):
+        return self.flashObject.as_toggleParams(isVisible) if self._isDAAPIInited() else None

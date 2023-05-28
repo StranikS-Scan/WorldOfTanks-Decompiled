@@ -25,6 +25,7 @@ def getViewSettings():
     from gui.Scaleform.framework import ScopeTemplates, GroupedViewSettings
     from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_style_buying import VehiclePreviewBottomPanelStyleBuying
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_showcase_style_buying import VehiclePreviewBottomPanelShowcaseStyleBuying
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_style_progression import VehiclePreviewBottomPanelStyleProgression
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.wot_plus_vehicle_preview import VehiclePreviewBottomPanelWotPlus
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_resource_well import VehiclePreviewBottomPanelResourceWell
@@ -34,6 +35,7 @@ def getViewSettings():
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_TRADE_IN_PY_ALIAS, VehiclePreviewBottomPanelTradeIn, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_STYLE_PROGRESSION_PY_ALIAS, VehiclePreviewBottomPanelStyleProgression, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_STYLE_BUYING_PY_ALIAS, VehiclePreviewBottomPanelStyleBuying, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_PY_ALIAS, VehiclePreviewBottomPanelShowcaseStyleBuying, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_OFFER_GIFT_PY_ALIAS, VehiclePreviewBottomPanelOfferGift, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WELL_PY_ALIAS, VehiclePreviewBottomPanelResourceWell, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE, VehiclePreviewBrowseTab, ScopeTemplates.DEFAULT_SCOPE),

@@ -6,7 +6,7 @@ from notification.settings import NOTIFICATION_TYPE
 
 class ShowBRProgressionActionHandler(NavigationDisabledActionHandler):
 
-    def handleAction(self, model, entityID, action):
+    def doAction(self, model, entityID, action):
         showProgressionView()
 
     @classmethod

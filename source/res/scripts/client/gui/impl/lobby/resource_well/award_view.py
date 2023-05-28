@@ -10,7 +10,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.resource_well.sounds import RESOURCE_WELL_SOUND_SPACE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showResourceWellProgressionWindow, showHangar
-from helpers import dependency
+from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IResourceWellController
 from tutorial.control.game_vars import getVehicleByIntCD
 
@@ -43,7 +43,8 @@ class AwardView(ViewImpl):
 
     def _finalize(self):
         self.soundManager.playSound(backport.sound(R.sounds.gui_hangar_award_screen_stop()))
-        showResourceWellProgressionWindow()
+        if isPlayerAccount():
+            showResourceWellProgressionWindow()
         super(AwardView, self)._finalize()
 
     def _getEvents(self):

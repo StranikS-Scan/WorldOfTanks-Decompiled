@@ -102,7 +102,6 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
     _itemsCache = dependency.descriptor(IItemsCache)
     _layoutID = R.views.lobby.platoon.MembersWindow()
     _prebattleType = PrebattleTypes.SQUAD
-    _SHOW_VEHICLE_TIER = True
     _bonusTooltipTexts = R.strings.tooltips.squadBonus.complex
 
     def __init__(self, prbType):
@@ -708,7 +707,6 @@ class EpicMembersView(SquadMembersView):
 
 class BattleRoyalMembersView(SquadMembersView):
     _prebattleType = PrebattleTypes.BATTLEROYAL
-    _SHOW_VEHICLE_TIER = False
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())

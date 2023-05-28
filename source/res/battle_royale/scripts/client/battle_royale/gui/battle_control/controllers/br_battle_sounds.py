@@ -67,12 +67,10 @@ class BREvents(object):
     INSTALL_MODULE_HULL = 'BR_upgrade_hull'
     PHASE_MIDDLE = 'BR_combat_phase_activated'
     PLAYER_LEVEL_MIDDLE = 'BR_combat_phase_our'
-    SOLO_ENEMIES_AMOUNT = {10: 'BR_enemy_remained_10',
-     5: 'BR_enemy_remained_05',
+    SOLO_ENEMIES_AMOUNT = {5: 'BR_enemy_remained_05',
      2: 'BR_enemy_remained_02',
      1: 'BR_enemy_remained_01'}
-    SQUAD_ENEMIES_AMOUNT = {10: 'BR_enemy_remained_platoon_10',
-     5: 'BR_enemy_remained_platoon_05',
+    SQUAD_ENEMIES_AMOUNT = {5: 'BR_enemy_remained_platoon_05',
      2: 'BR_enemy_remained_platoon_02',
      1: 'BR_enemy_remained_platoon_01'}
     ENEMY_KILLED = 'BR_enemy_killed'
@@ -496,6 +494,7 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
         self.__period = None
         self.__winStatus = None
         self.__isAlive = None
+        self.__lives = None
         return
 
     def detachedFromCtrl(self, ctrlID):
@@ -514,9 +513,14 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
         self.__checkBattleEnd()
 
     def setPlayerVehicleAlive(self, isAlive):
-        if self.__isAlive and not isAlive and not BigWorld.player().isObserver():
+        if self.__isAlive and not isAlive and self.__lives < 0:
             BREvents.playSound(BREvents.BATTLE_DEFEAT)
         self.__isAlive = isAlive
+
+    def setLives(self, lives):
+        if lives < 0 <= self.__lives and not self.__isAlive:
+            BREvents.playSound(BREvents.BATTLE_DEFEAT)
+        self.__lives = lives
 
     def __checkBattleEnd(self):
         if BigWorld.player().isObserver():
@@ -548,39 +552,17 @@ class ArenaTypeSoundPlayer(object):
 
 
 class SelectRespawnSoundPlayer(ISpawnListener, IAbstractPeriodView):
-    __slots__ = ('__isSpawnTimerWorking', '__isSpawnTimerStopped', '__mainTimerStopped', '__selectEndingSoonTime')
+    __slots__ = ('__selectEndingSoonTime',)
 
     def __init__(self):
         super(SelectRespawnSoundPlayer, self).__init__()
-        self.__isSpawnTimerWorking = False
-        self.__isSpawnTimerStopped = False
-        self.__mainTimerStopped = False
         self.__selectEndingSoonTime = getBattleRoyaleSettings().spawn.selectEndingSoonTime
 
-    def closeSpawnPoints(self):
-        self.__isSpawnTimerStopped = True
-
-    def updateCloseTime(self, timeLeft, state):
-        if state == COUNTDOWN_STATE.WAIT:
+    def setCountdown(self, state, timeLeft):
+        if state != COUNTDOWN_STATE.START or timeLeft < 0:
             return
-        if self.__isSpawnTimerStopped:
-            self.__isSpawnTimerWorking = False
-            return
-        if self.__mainTimerStopped:
-            return
-        self.__isSpawnTimerWorking = not timeLeft == 0
         eventName = BREvents.SPAWN_TIMER_WARNING if timeLeft < self.__selectEndingSoonTime else BREvents.SPAWN_TIMER
         BREvents.playSound(eventName)
-
-    def setCountdown(self, state, timeLeft):
-        if state != COUNTDOWN_STATE.START:
-            return
-        self.__mainTimerStopped = False
-        if self.__isSpawnTimerStopped or not self.__isSpawnTimerWorking:
-            BREvents.playSound(BREvents.SPAWN_TIMER)
-
-    def hideCountdown(self, state, speed):
-        self.__mainTimerStopped = True
 
     def updatePoint(self, vehicleId, pointId, prevPointId):
         BREvents.playSound(BREvents.SPAWN_ALLY)

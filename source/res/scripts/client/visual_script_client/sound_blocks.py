@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/visual_script_client/sound_blocks.py
 import BigWorld
 from visual_script import ASPECT
-from visual_script.block import Block, Meta, EDITOR_TYPE
+from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
-from visual_script.misc import errorVScript
+from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 BattleReplay, SoundGroups, MusicControllerWWISE, helpers = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers')
 
@@ -264,4 +264,18 @@ class PlayGlobalSound(Block, SoundMeta):
 
     def _execute(self):
         SoundGroups.g_instance.playSound2D(self._sound.getValue())
+        self._out.call()
+
+
+class SetGlobalSoundSwitch(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetGlobalSoundSwitch, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._switchName = self._makeDataInputSlot('switchName', SLOT_TYPE.STR)
+        self._switchValue = self._makeDataInputSlot('switchValue', SLOT_TYPE.STR)
+
+    def _setValue(self):
+        SoundGroups.g_instance.setState(self._switchName.getValue(), self._switchValue.getValue())
         self._out.call()

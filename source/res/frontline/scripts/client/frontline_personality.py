@@ -22,10 +22,16 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
         from frontline.gui.Scaleform.daapi.view.lobby.hangar.entry_point import isEpicBattlesEntryPointAvailable
         return isEpicBattlesEntryPointAvailable
 
+    @property
+    def _client_bannerEntryPointLUIRule(self):
+        from gui.limited_ui.lui_rules_storage import LuiRules
+        return LuiRules.EPIC_BATTLES_ENTRY_POINT
+
 
 def preInit():
     battleMode = ClientFrontlineBattleMode(__name__)
     battleMode.registerBannerEntryPointValidatorMethod()
+    battleMode.registerBannerEntryPointLUIRule()
 
 
 def init():

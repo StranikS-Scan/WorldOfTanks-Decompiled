@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/bitmask_blocks_common.py
-from visual_script.block import Block, InitParam, EDITOR_TYPE, buildStrKeysValue, Meta
-from visual_script.misc import errorVScript
+from visual_script.block import Block, InitParam, buildStrKeysValue, Meta
+from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE
 
 class BitMaskMeta(Meta):

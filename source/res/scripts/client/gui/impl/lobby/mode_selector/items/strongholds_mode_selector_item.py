@@ -4,7 +4,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 
 class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ()

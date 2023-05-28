@@ -47,6 +47,8 @@ class IntSettingsRequester(object):
      'CONTACTS': 58,
      'GAME_EXTENDED': constants.USER_SERVER_SETTINGS.GAME_EXTENDED,
      'FALLOUT': 60,
+     'LIMITED_UI_1': 61,
+     'LIMITED_UI_2': 62,
      'AIM_ARCADE_4': 63,
      'AIM_SNIPER_4': 64,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN,
@@ -87,6 +89,7 @@ class IntSettingsRequester(object):
      'MARKERS_ENEMY_2': 112,
      'MARKERS_DEAD_2': 113,
      'MARKERS_ALLY_2': 114,
+     'ONCE_ONLY_HINTS_3': 115,
      'ARMORY_YARD': 31001}
 
     def __init__(self):

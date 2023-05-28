@@ -9,7 +9,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import OFFERS_DISABLED_MSG_SEEN
 from account_helpers.offers import events_data
-from account_helpers.offers.cache import CachePrefetchResult, CdnResourcesCache
+from account_helpers.offers.cache import CdnResourcesCache
 from constants import EVENT_CLIENT_DATA, OFFERS_ENABLED_KEY, OFFER_TOKEN_PREFIX
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -22,6 +22,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
+from web.cache.web_cache import CachePrefetchResult
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Set, Union
 _logger = logging.getLogger(__name__)

@@ -4,6 +4,7 @@ import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import BattlePassCoinTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_gold_mission_tooltip_view import BattlePassGoldMissionTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_lock_icon_tooltip_view import BattlePassLockIconTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_points_view import BattlePassPointsTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_quests_chain_tooltip_view import BattlePassQuestsChainTooltipView
@@ -39,7 +40,11 @@ def createTooltipContentDecorator():
 
         def wrapper(self, event, contentID):
             tooltipData = self.getTooltipData(event)
-            if contentID == R.views.lobby.battle_pass.tooltips.BattlePassUpgradeStyleTooltipView():
+            if contentID == R.views.lobby.battle_pass.tooltips.BattlePassGoldMissionTooltipView():
+                if tooltipData is None:
+                    return
+                return BattlePassGoldMissionTooltipView(*tooltipData.specialArgs)
+            elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassUpgradeStyleTooltipView():
                 if tooltipData is None:
                     return
                 return BattlePassUpgradeStyleTooltipView(*tooltipData.specialArgs)

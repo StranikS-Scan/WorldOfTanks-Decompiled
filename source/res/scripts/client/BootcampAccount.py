@@ -9,6 +9,7 @@ from constants import QUEUE_TYPE
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootCampEvents import g_bootcampEvents
+from gui.game_loading.resources.consts import Milestones
 
 class PlayerBootcampAccount(PlayerAccount):
 
@@ -67,6 +68,7 @@ class PlayerBootcampAccount(PlayerAccount):
 
     def onBootcampEnqueued(self, number, queueLen, avgWaitingTime):
         LOG_DEBUG_DEV_BOOTCAMP('onBootcampEnqueued', number, queueLen, avgWaitingTime)
+        events.onLoadingMilestoneReached(Milestones.BOOTCAMP_ENQUEUED)
         self.battleQueueType = QUEUE_TYPE.BOOTCAMP
         events.onBootcampEnqueued(number, queueLen, avgWaitingTime)
         events.onEnqueued(QUEUE_TYPE.BOOTCAMP)

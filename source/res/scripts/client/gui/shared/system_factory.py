@@ -36,6 +36,8 @@ BATTLE_RESULTS_COMPOSER = 32
 SEASON_PROVIDER_HANDLER = 33
 MESSENGER_SERVER_FORMATTERS = 34
 CAROUSEL_EVENTS_ENTRIES = 35
+BANNER_ENTRY_POINT_LUI_RULE = 36
+LIMITED_UI_TOKENS = 37
 
 class _CollectEventsManager(object):
 
@@ -424,6 +426,18 @@ def collectBannerEntryPointValidator(alias):
     return __collectEM.handleEvent((BANNER_ENTRY_POINT_VALIDATOR, alias), ctx={}).get('validator')
 
 
+def registerBannerEntryPointLUIRule(alias, ruleID):
+
+    def onCollect(ctx):
+        ctx['ruleID'] = ruleID
+
+    __collectEM.addListener((BANNER_ENTRY_POINT_LUI_RULE, alias), onCollect)
+
+
+def collectBannerEntryPointLUIRule(alias):
+    return __collectEM.handleEvent((BANNER_ENTRY_POINT_LUI_RULE, alias), ctx={}).get('ruleID')
+
+
 def registerCarouselEventEntryPoint(viewID, viewClass):
 
     def onCollect(ctx):
@@ -559,3 +573,23 @@ def registerSeasonProviderHandler(seasonType, seasonControllerHandler):
 
 def collectSeasonProviderHandler(seasonType):
     return __collectEM.handleEvent((SEASON_PROVIDER_HANDLER, seasonType), ctx={}).get(seasonType, None)
+
+
+def registerLimitedUIToken(tokenInfo):
+
+    def onCollect(ctx):
+        ctx['tokens'].append(tokenInfo)
+
+    __collectEM.addListener(LIMITED_UI_TOKENS, onCollect)
+
+
+def registerLimitedUITokens(tokensInfos):
+
+    def onCollect(ctx):
+        ctx['tokens'].extend(tokensInfos)
+
+    __collectEM.addListener(LIMITED_UI_TOKENS, onCollect)
+
+
+def collectLimitedUITokens():
+    return __collectEM.handleEvent(LIMITED_UI_TOKENS, ctx={'tokens': []})['tokens']

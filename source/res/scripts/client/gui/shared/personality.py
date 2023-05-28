@@ -19,11 +19,12 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.game_loading.resources.consts import Milestones
 from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
@@ -102,6 +103,7 @@ class ServicesLocator(object):
 
 @future_async.wg_async
 def onAccountShowGUI(ctx):
+    g_playerEvents.onLoadingMilestoneReached(Milestones.ENTER)
     Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
@@ -220,6 +222,8 @@ def onShopResync():
 
 
 def onCenterIsLongDisconnected(isLongDisconnected):
+    if not BigWorld.player():
+        return
     isAvailable = not BigWorld.player().isLongDisconnectedFromCenter
     if isAvailable and not isLongDisconnected:
         SystemMessages.pushI18nMessage(MENU.CENTERISAVAILABLE, type=SystemMessages.SM_TYPE.Information)
@@ -232,7 +236,7 @@ def onIGRTypeChanged(roomType, xpFactor):
                  'igrXPFactor': xpFactor}})
 
 
-def init(loadingScreenGUI=None):
+def init():
     global onCenterIsLongDisconnected
     global onShopResyncStarted
     global onAccountShowGUI
@@ -262,8 +266,6 @@ def init(loadingScreenGUI=None):
     from gui.Scaleform.app_factory import createAppFactory
     ServicesLocator.appLoader.init(createAppFactory())
     g_paramsCache.init()
-    if loadingScreenGUI and loadingScreenGUI.script:
-        loadingScreenGUI.script.active(False)
     g_prbLoader.init()
     g_clanCache.init()
     BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)

@@ -1,0 +1,15 @@
+<TeamInfoLivesComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <teamLives>
+      <Type>	ARRAY	  <of>	TEAM_LIVES	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teamLives>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	teamLivesComponent	</DefaultKeyName>
+</TeamInfoLivesComponent.def>

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/vehicle_items_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
 from gui.shared.tooltips import shell, advanced
@@ -12,7 +13,7 @@ def _advancedBlockCondition(context):
 
     def advancedTooltipExist(*args):
         item = context.buildItem(*args)
-        return not item.isFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES
+        return not item.isFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
 
     return advancedTooltipExist
 

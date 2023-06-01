@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
-from account_helpers.settings_core import settings_constants
+from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
 from adisp import adisp_process, adisp_async
@@ -66,6 +66,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
+    LIMITED_UI_1 = 'LIMITED_UI_1'
+    LIMITED_UI_2 = 'LIMITED_UI_2'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -86,11 +88,56 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
+    ACHIEVEMENT_EDIT_VIEW_VISITED = 'achievement_edit_view_visited'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
     QUESTS_SHOWN = 'shown'
     QUEST_PROGRESS = 'questProgress'
+
+
+LIMITED_UI_STORAGES = (SETTINGS_SECTIONS.LIMITED_UI_1, SETTINGS_SECTIONS.LIMITED_UI_2)
+LIMITED_UI_KEY = 'LIMITED_UI'
+
+class LIMITED_UI_SPAM_OFF(CONST_CONTAINER):
+    LOBBY_HEADER_COUNTERS_STORE = 'store'
+    LOBBY_HEADER_COUNTERS_PROFILE = 'profile'
+    PROFILE_HOF = 'profileHof'
+    PROFILE_TECHNIQUE_PAGE = 'profileTechniquePage'
+    SESSION_STATS = 'sessionStats'
+    BLUEPRINTS_BUTTON = 'blueprintsButton'
+    LOBBY_HEADER_COUNTERS_MISSIONS = 'missions'
+    MISSIONS_MARATHON_VIEW = 'MissionsMarathonView'
+    LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
+    REFERRAL_BTN_COUNTER = 'referralButtonCounter'
+    AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
+    AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
+    C7N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'
+    TECH_TREE_EVENTS = 'TechTreeEvent'
+    DOG_TAG_HINT = 'DogTagHangarHint'
+    MODE_SELECTOR_WIDGET_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
+    PR_HANGAR_HINT = 'PersonalReservesHangarHint'
+    MODERNIZE_SETUP_HINT = 'ModernizedSetupTabHint'
+    OFFER_BANNER_WINDOW = 'OfferBannerWindow'
+    ORDER = (LOBBY_HEADER_COUNTERS_STORE,
+     LOBBY_HEADER_COUNTERS_PROFILE,
+     PROFILE_HOF,
+     PROFILE_TECHNIQUE_PAGE,
+     SESSION_STATS,
+     BLUEPRINTS_BUTTON,
+     LOBBY_HEADER_COUNTERS_MISSIONS,
+     MISSIONS_MARATHON_VIEW,
+     LOBBY_HEADER_COUNTERS_PM_OPERATIONS,
+     REFERRAL_BTN_COUNTER,
+     AP_ZONE_HINT,
+     AP_BATTLE_ABILITIES_HINT,
+     C7N_PROGRESSION_HINT,
+     TECH_TREE_EVENTS,
+     DOG_TAG_HINT,
+     MODE_SELECTOR_WIDGET_BTN_HINT,
+     PR_HANGAR_HINT,
+     MODERNIZE_SETUP_HINT,
+     OFFER_BANNER_WINDOW)
 
 
 class ServerSettingsManager(object):
@@ -475,7 +522,8 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
                                            OnceOnlyHints.PERSONAL_RESERVES_HANGAR_HINT: 27,
                                            OnceOnlyHints.PERSONAL_RESERVES_ACTIVATION_HINT: 28,
-                                           OnceOnlyHints.AMMUNITION_FILTER_HINT: 29}, offsets={}),
+                                           OnceOnlyHints.AMMUNITION_FILTER_HINT: 29,
+                                           OnceOnlyHints.SUMMARY_CUSTOMIZATION_BUTTON_HINT: 30}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -531,7 +579,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
-     SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: 0}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14)}),
+     SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: 0,
+                                      UI_STORAGE_KEYS.ACHIEVEMENT_EDIT_VIEW_VISITED: 4}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -710,7 +759,9 @@ class ServerSettingsManager(object):
                                                       'role_ATSPG_support': 22,
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
-                                                      'role_SPG': 25}, offsets={})}
+                                                      'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -763,6 +814,8 @@ class ServerSettingsManager(object):
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def getOnceOnlyHintsSetting(self, key, default=None):
+        if not self.settingsCache.isSynced():
+            return default
         for onlyHintSection in SETTINGS_SECTIONS.ONCE_ONLY_HINTS_GROUP:
             if self._hasKeyInSection(onlyHintSection, key):
                 return self.getSectionSettings(onlyHintSection, key, default)
@@ -856,6 +909,33 @@ class ServerSettingsManager(object):
 
     def setBattleMattersQuestProgress(self, lastSeenProgress):
         self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {BATTLE_MATTERS_KEYS.QUEST_PROGRESS: lastSeenProgress})
+
+    def getLimitedUIProgress(self, storageIdx, offset):
+        if storageIdx >= len(LIMITED_UI_STORAGES):
+            LOG_ERROR("Can't read LimitedUI flag. storageIdx is out of range")
+            return 0
+        storageID = LIMITED_UI_STORAGES[storageIdx]
+        flags = self.getSectionSettings(storageID, LIMITED_UI_KEY, 0)
+        return flags & 1 << offset
+
+    def setLimitedUIProgress(self, storageIdx, offset):
+        if storageIdx >= len(LIMITED_UI_STORAGES):
+            LOG_ERROR("Can't store LimitedUI flag. storageIdx is out of range")
+            return
+        luiProgress = self.getLimitedUIProgress(storageIdx, offset)
+        if luiProgress:
+            return
+        storageID = LIMITED_UI_STORAGES[storageIdx]
+        flags = self.getSectionSettings(storageID, LIMITED_UI_KEY, 0)
+        flags |= 1 << offset
+        self.setSectionSettings(storageID, {LIMITED_UI_KEY: flags})
+
+    def setLimitedUIFullComplete(self, offset):
+        settings = {storage:4294967295L for storage in LIMITED_UI_STORAGES}
+        if offset and settings:
+            flag = (1 << offset) - 1
+            settings[LIMITED_UI_STORAGES[-1]] = flag
+        self.setSettings(settings)
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
@@ -1017,7 +1097,7 @@ class ServerSettingsManager(object):
                 storingValue &= ~(1 << masks[key])
                 itemValue = int(value) << masks[key]
             elif key in offsets:
-                storingValue &= ~offsets[key].mask
+                storingValue &= ~longToInt32(offsets[key].mask)
                 itemValue = int(value) << offsets[key].offset
             else:
                 LOG_ERROR('Trying to apply unsupported option: ', key, value)
@@ -1067,7 +1147,9 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
          'clear': {},
-         'delete': []}
+         'delete': [],
+         SETTINGS_SECTIONS.LIMITED_UI_1: {},
+         SETTINGS_SECTIONS.LIMITED_UI_2: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1212,6 +1294,12 @@ class ServerSettingsManager(object):
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:
             settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
+        for luiStorage in LIMITED_UI_STORAGES:
+            limitedUI = data.get(luiStorage, {})
+            clearLimitedUI = clear.get(luiStorage, 0)
+            if limitedUI or clearLimitedUI:
+                settings[luiStorage] = self._buildSectionSettings(luiStorage, limitedUI) ^ clearLimitedUI
+
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

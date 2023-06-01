@@ -36,7 +36,7 @@ from vehicle_systems.tankStructure import TankNodeNames
 from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound, MAPS_TRAINING_SOUND_SPACE
 
 class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
-    __slots__ = ('__selectedMap', '__selectedScenario', '__ctxVehicleType', '__ctxSide', '__ctxShowAnimation', '__tooltipData', '__account', '__mapsConfig', '__isDataLoaded', '__blur', '__blurRectId', '__packer', '__hangarCameraManager', '__tickCallback', '__preferences', '__markerPosOffset', '__finalizationInProgress')
+    __slots__ = ('__selectedMap', '__selectedScenario', '__ctxVehicleType', '__ctxSide', '__ctxShowAnimation', '__tooltipData', '__account', '__mapsConfig', '__isDataLoaded', '__blur', '__blurRectId', '__packer', '__tickCallback', '__preferences', '__markerPosOffset', '__finalizationInProgress')
     _TACTICAL_MAPS_CONFIG_PATH = 'scripts/maps_training_tactical_maps.xml'
     _SCENARIO_COUNT = len(VEHICLE_TYPE.ALL_TYPES) * len(VEHICLE_TYPE.ALL_TEAMS)
     _UPDATE_TICK_RATE = 0.1
@@ -64,7 +64,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__blur = CachedBlur(blurAnimRepeatCount=1, blurRadius=0.1)
         self.__blurRectId = None
         self.__packer = getDefaultBonusPacker()
-        self.__hangarCameraManager = None
         self.__tickCallback = None
         self.__preferences = self.mapsTrainingController.preferences
         self.__markerPosOffset = 0.0
@@ -100,8 +99,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     def _onLoading(self, *args, **kwargs):
         super(MapsTrainingView, self)._onLoading(*args, **kwargs)
         self.__finalizationInProgress = False
-        if self.hangarSpace.spaceInited:
-            self.__hangarCameraManager = self.hangarSpace.space.getCameraManager()
         Waiting.show('loadPage')
         self.mapsTrainingController.requestInitialDataFromServer(self.__fillData)
 
@@ -138,7 +135,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.viewModel.onFilteringChange += self.__filterChangeHandler
         self.viewModel.onInfoClicked += self.__clickInfoHandler
         self.viewModel.onClose += self.__clickCloseHandler
-        self.hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
         g_currentPreviewVehicle.onChangeStarted += self.__onPreviewVehicleChangeStarted
         g_currentPreviewVehicle.onChanged += self.__onPreviewVehicleChanged
 
@@ -152,12 +148,8 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.viewModel.onFilteringChange -= self.__filterChangeHandler
         self.viewModel.onInfoClicked -= self.__clickInfoHandler
         self.viewModel.onClose -= self.__clickCloseHandler
-        self.hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreate
         g_currentPreviewVehicle.onChangeStarted -= self.__onPreviewVehicleChangeStarted
         g_currentPreviewVehicle.onChanged -= self.__onPreviewVehicleChanged
-
-    def __onHangarSpaceCreate(self):
-        self.__hangarCameraManager = self.hangarSpace.space.getCameraManager()
 
     def __onBack(self):
         self.__selectedMap = ''

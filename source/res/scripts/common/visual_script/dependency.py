@@ -53,7 +53,7 @@ if IS_VS_EDITOR:
         for module in modules:
             try:
                 yield import_module(module)
-            except ImportError as er:
+            except Exception as er:
                 MOCK_IMPORT_ERRORS.append('On import module <%s> was raised ImportError with msg - %s' % (module, er.message))
                 yield MockObject
 

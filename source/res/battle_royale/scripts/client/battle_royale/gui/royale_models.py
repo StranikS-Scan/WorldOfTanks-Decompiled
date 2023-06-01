@@ -8,6 +8,9 @@ class BattleRoyaleCycle(namedtuple('BattleRoyaleCycle', 'ID, status, startDate, 
     def __cmp__(self, other):
         return cmp(self.ID, other.ID)
 
+    def getUserName(self):
+        return str(self.ordinalNumber)
+
     def getEpicCycleNumber(self):
         return self.ordinalNumber
 

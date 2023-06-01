@@ -3,7 +3,6 @@
 import logging
 import typing
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
 import wg_async
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
@@ -43,8 +42,8 @@ def showIntro(introKey, *args, **kwargs):
 
 
 def getIntroAmmunitionSetupWindowProc():
-    return getInfoWindowProc(R.views.lobby.tanksetup.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN, OnceOnlyHints.AMMUNITION_PANEL_HINT)
+    return getInfoWindowProc(R.views.lobby.tanksetup.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN)
 
 
 def getIntroBattleAbilitiesSetupWindowProc():
-    return getInfoWindowProc(R.views.lobby.frontline.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN, OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT)
+    return getInfoWindowProc(R.views.lobby.frontline.IntroScreen(), createContentData(_IntroAmmunitionSetupView), UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN)

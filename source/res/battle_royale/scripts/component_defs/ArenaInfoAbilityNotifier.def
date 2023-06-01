@@ -7,5 +7,11 @@
       <Arg>	FLOAT32	</Arg>
     </notifyLaunchPosition>
   </ClientMethods>
+  <Properties>
+    <nextDropWave>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </nextDropWave>
+  </Properties>
   <DefaultKeyName>	abilityNotifierComponent	</DefaultKeyName>
 </ArenaInfoAbilityNotifier.def>

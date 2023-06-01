@@ -86,7 +86,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
             verticalOffset = self._VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE
         return verticalOffset
 
-    def _addNotificationTimerSetting(self, data, typeId, iconName, linkage, color='', noiseVisible=False, text='', countdownVisible=True, iconOffsetY=0, iconSmallName='', isReversedTimerDirection=False, canBlink=False):
+    def _addNotificationTimerSetting(self, data, typeId, iconName, linkage, color='', noiseVisible=False, text='', countdownVisible=True, iconOffsetY=0, iconSmallName='', isReversedTimerDirection=False, canBlink=False, descriptionFontSize=14, descriptionOffsetY=0):
         data.append({'typeId': typeId,
          'iconName': iconName,
          'iconSmallName': iconSmallName,
@@ -97,7 +97,9 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
          'countdownVisible': countdownVisible,
          'iconOffsetY': iconOffsetY,
          'isReversedTimerDirection': isReversedTimerDirection,
-         'canBlink': canBlink})
+         'canBlink': canBlink,
+         'descriptionFontSize': descriptionFontSize,
+         'descriptionOffsetY': descriptionOffsetY})
 
     def _updatePanelPosition(self):
         vehicle = BigWorld.entity(self.__vehicleID) if self.__vehicleID is not None else None

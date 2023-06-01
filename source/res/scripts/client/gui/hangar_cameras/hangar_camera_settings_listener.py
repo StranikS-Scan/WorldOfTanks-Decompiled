@@ -28,10 +28,10 @@ class HangarCameraSettingsListener(HangarSpaceListener):
         del self.__settingHandlers[setting]
         return True
 
-    def _onSpaceCreated(self):
+    def _activate(self):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
-    def _onSpaceDestroy(self, inited):
+    def _deactivate(self, inited):
         if inited:
             self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
 

@@ -37,11 +37,15 @@
     <Radio_VK4502P>	255	</Radio_VK4502P>
     <Radio_Auf_Panther>	256	</Radio_Auf_Panther>
     <FuG5_KW>	257	</FuG5_KW>
+    <SEM_25B>	258	</SEM_25B>
     <FuG5_SH>	314	</FuG5_SH>
     <FuG7_SH>	315	</FuG7_SH>
     <FuG12_SH>	316	</FuG12_SH>
     <G00_Bomber_SH_Radio>	318	</G00_Bomber_SH_Radio>
     <_10WSc_7x7>	401	</_10WSc_7x7>
+    <FuG_Spr.1_SH>	319	</FuG_Spr.1_SH>
+    <FuG5A_SH_bot>	320	</FuG5A_SH_bot>
+    <FuG7A_SH_B>	321	</FuG7A_SH_B>
     <FuG12_FL>	501	</FuG12_FL>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
@@ -462,6 +466,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM25_1>
+    <SEM_25B>
+      <userString>	#germany_vehicles:SEM_25B	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM_25B>
     <SEM_25_funkgerat>
       <userString>	#germany_vehicles:SEM_25_funkgerat	</userString>
       <tags></tags>
@@ -609,6 +625,20 @@
       <radarRadius>	250	</radarRadius>
       <radarCooldown>	20	</radarCooldown>
     </FuG7_SH>
+    <FuG7A_SH_B>
+      <userString>	#germany_vehicles:FuG7_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	370	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </FuG7A_SH_B>
     <FuG12_SH>
       <userString>	#germany_vehicles:FuG12_SH	</userString>
       <tags></tags>
@@ -623,6 +653,30 @@
       <radarRadius>	450	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </FuG12_SH>
+    <FuG_Spr.1_SH>
+      <userString>	#germany_vehicles:FuG_Spr.1	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	455	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG_Spr.1_SH>
+    <FuG5A_SH_bot>
+      <userString>	#germany_vehicles:FuG5A	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	620	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG5A_SH_bot>
     <G00_Bomber_SH_Radio>
       <userString>	#germany_vehicles:G00_Bomber_SH_Radio	</userString>
       <tags></tags>

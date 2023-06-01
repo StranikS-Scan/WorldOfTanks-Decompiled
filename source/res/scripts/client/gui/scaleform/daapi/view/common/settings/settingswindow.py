@@ -7,6 +7,7 @@ import WGC
 import VOIP
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
+from account_helpers.settings_core.ServerSettingsManager import LIMITED_UI_KEY
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -30,8 +31,10 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController
+from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
+from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
+from uilogging.limited_ui.loggers import LimitedUILogger
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
  SETTINGS.SOUNDTITLE,
@@ -64,6 +67,7 @@ class SettingsWindow(SettingsWindowMeta):
     anonymizerController = dependency.descriptor(IAnonymizerController)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -145,7 +149,7 @@ class SettingsWindow(SettingsWindowMeta):
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
         self._update()
-        self.settingsCore.onSettingsChanged += self.__onColorSettingsChange
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.anonymizerController.onStateChanged += self.__refreshSettings
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
@@ -158,6 +162,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
         self.__setColorGradingTechnique()
+        self.__setLimitedUISettingVisibility()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -168,7 +173,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopAltBulbPreview()
         self.stopArtyBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
-        self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(SettingsWindow, self)._dispose()
         return
 
@@ -300,19 +305,24 @@ class SettingsWindow(SettingsWindowMeta):
         return setting.isSoundModeValid()
 
     def showWarningDialog(self, dialogID, settings, isCloseWnd):
+        ctx = None
+        applyMethod = functools.partial(self.applySettings, settings, False)
+        if dialogID == SETTINGS_DIALOGS.MINIMAP_ALPHA_NOTIFICATION:
+            ctx = {'icon': icons.alert(),
+             'alert': makeHtmlString('html_templates:lobby/dialogs', 'minimapAlphaNotification', {'message': backport.text(R.strings.dialogs.minimapAlphaNotification.message.alert())})}
+        elif dialogID == SETTINGS_DIALOGS.LIMITED_UI_OFF_NOTIFICATION:
+            ctx = {'icon': icons.alert(),
+             'alert': makeHtmlString('html_templates:lobby/dialogs', 'limitedUIOffNotification', {'message': backport.text(R.strings.dialogs.limitedUIOffNotification.message.alert())})}
+            applyMethod = self.__applyLimitedUISetting
 
         def callback(isOk):
             if not self.isDisposed():
                 if isOk:
-                    self.applySettings(settings, False)
+                    applyMethod()
                 self.as_confirmWarningDialogS(isOk, dialogID)
                 if isCloseWnd and isOk:
                     self.onWindowClose()
 
-        ctx = None
-        if dialogID == SETTINGS_DIALOGS.MINIMAP_ALPHA_NOTIFICATION:
-            ctx = {'icon': icons.alert(),
-             'alert': makeHtmlString('html_templates:lobby/dialogs', 'minimapAlphaNotification', {'message': backport.text(R.strings.dialogs.minimapAlphaNotification.message.alert())})}
         DialogsInterface.showI18nConfirmDialog(dialogID, callback, ctx)
         return
 
@@ -337,9 +347,11 @@ class SettingsWindow(SettingsWindowMeta):
 
         return self.as_isPresetAppliedS() if isGraphicsQualitySettings else True
 
-    def __onColorSettingsChange(self, diff):
+    def __onSettingsChanged(self, diff):
         if settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE in diff:
             self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
+        if LIMITED_UI_KEY in diff:
+            self.__setLimitedUISettingVisibility()
         return
 
     def __refreshSettings(self, **_):
@@ -372,3 +384,10 @@ class SettingsWindow(SettingsWindowMeta):
                 image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
         self.as_setColorGradingTechniqueS(image, label)
         return
+
+    def __setLimitedUISettingVisibility(self):
+        self.as_showLimitedUISettingS(self.limitedUIController.isUserSettingsMayShow)
+
+    def __applyLimitedUISetting(self):
+        self.limitedUIController.completeAllRules()
+        LimitedUILogger().handleClickOnce(LimitedUILogItem.DISABLE_LIMITED_UI_BUTTON, LimitedUILogScreenParent.SETTINGS_WINDOW)

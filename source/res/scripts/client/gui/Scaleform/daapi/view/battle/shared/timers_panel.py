@@ -606,19 +606,6 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.as_setSecondaryTimerTextS(state, backport.text(R.strings.battle_royale.equipment.repairPoint()))
         return
 
-    def __updateDeathZoneWarningNotification(self, visible, strikeTime, waveDuration):
-        if visible:
-            self._showTimer(_TIMER_STATES.DEATH_ZONE, waveDuration, 'critical', strikeTime)
-        else:
-            self._hideTimer(_TIMER_STATES.DEATH_ZONE)
-
-    def __updatePersonalDeathZoneWarningNotification(self, visible, time):
-        if visible:
-            self._showTimer(_TIMER_STATES.DEATH_ZONE, max(time - BigWorld.serverTime(), 0), 'warning', None)
-        else:
-            self._hideTimer(_TIMER_STATES.DEATH_ZONE)
-        return
-
     def __updateDangerZoneWarningNotification(self, value):
         if value.needToCloseTimer():
             self._hideTimer(_TIMER_STATES.DANGER_ZONE)
@@ -692,10 +679,6 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__updateHealingTimer(**value)
         elif state == VEHICLE_VIEW_STATE.REPAIR_POINT:
             self.__updateRepairingTimer(**value)
-        elif state == VEHICLE_VIEW_STATE.DEATHZONE:
-            self.__updateDeathZoneWarningNotification(*value)
-        elif state == VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE:
-            self.__updatePersonalDeathZoneWarningNotification(*value)
         elif state == VEHICLE_VIEW_STATE.DANGER_ZONE:
             self.__updateDangerZoneWarningNotification(value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):

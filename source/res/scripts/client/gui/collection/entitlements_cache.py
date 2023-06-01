@@ -86,7 +86,8 @@ class EntitlementsCache(object):
 
                 if response.isSuccess():
                     result = response.data.get('balance', [])
-                    self.__balanceCache = {entitlement['code']:self.__createEntitlementFromResponse(entitlement) for entitlement in result if entitlement.get('amount', 0) > 0}
+                    self.__balanceCache.update({entitlement['code']:self.__createEntitlementFromResponse(entitlement) for entitlement in result if entitlement.get('amount', 0) > 0})
+                    self.__clearAbsentEntitlements()
                     for code in self.__balanceCache.iterkeys():
                         self.__pendingEntitlementAttempts.pop(code, None)
 
@@ -148,3 +149,8 @@ class EntitlementsCache(object):
             collectionIds.add(collectionId)
 
         return [ COLLECTIONS_TAG_PREFIX.format(collectionId) for collectionId in collectionIds ]
+
+    def __clearAbsentEntitlements(self):
+        entitlementsToRemove = [ code for code, entitlement in self.__balanceCache.iteritems() if entitlement.amount <= 0 ]
+        for code in entitlementsToRemove:
+            self.__balanceCache.pop(code)

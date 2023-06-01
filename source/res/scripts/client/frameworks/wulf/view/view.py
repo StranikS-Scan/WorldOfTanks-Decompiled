@@ -18,12 +18,12 @@ if typing.TYPE_CHECKING:
 class ViewSettings(typing.Generic[TViewModel]):
     __slots__ = ('__proxy', 'args', 'kwargs')
 
-    def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None, args=()):
+    def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None, args=(), kwargs=None):
         super(ViewSettings, self).__init__()
         self.__proxy = PyObjectViewSettings(layoutID)
         self.__proxy.flags = flags
         self.args = args
-        self.kwargs = {}
+        self.kwargs = kwargs or {}
         if model is not None:
             self.__proxy.model = getProxy(model)
         return

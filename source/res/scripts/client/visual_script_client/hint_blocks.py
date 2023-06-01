@@ -3,9 +3,9 @@
 import BigWorld
 import aih_constants
 from bootcamp.BootcampConstants import HINT_NAMES, HINT_TYPE
-from visual_script.block import Block, Meta, EDITOR_TYPE
+from visual_script.block import Block, Meta
 from visual_script.slot_types import SLOT_TYPE
-from visual_script.misc import ASPECT, errorVScript
+from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 from constants import IS_VS_EDITOR
 from hint_common import ProcessHint
 if not IS_VS_EDITOR:

@@ -72,13 +72,12 @@ class _PlayerEvents(object):
         self.onShowDevelopmentInfo = Event.Event()
         self.onEntityCheckOutEnqueued = Event.Event()
         self.onRoundFinished = Event.Event()
-        self.onStaticDeathZoneActivated = Event.Event()
-        self.onStaticDeathZoneDeactivated = Event.Event()
         self.onServerReplayEntering = Event.Event()
         self.onServerReplayExiting = Event.Event()
         self.onPlatformBlueprintsConvertSaleLimits = Event.Event()
         self.onCollectPrebattleInvites = Event.Event()
         self.onUpdateSpecBattlesWindow = Event.Event()
+        self.onLoadingMilestoneReached = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

@@ -11,7 +11,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.battle_session_model import BattleSessionModel
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from gui.shared.view_helpers.emblems import getClanEmblemURL, EmblemSize
 from gui.tournament.tournament_helpers import isTournamentEnabled, showTournaments
 from helpers import dependency

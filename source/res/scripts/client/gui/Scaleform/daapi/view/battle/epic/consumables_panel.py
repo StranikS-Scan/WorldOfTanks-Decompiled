@@ -56,11 +56,15 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
         if idx not in self.__battleReserveSlots:
             return
         _, prevQuantity = self.__battleReserveSlots[idx]
-        if prevQuantity < item.getQuantity():
+        quantity = item.getQuantity()
+        if prevQuantity < quantity:
             self.as_updateLockedInformationS(idx, self._EMPTY_LOCKED_SLOT, '')
-            self.__battleReserveSlots[idx] = (self._cds[idx], item.getQuantity())
+            self.__battleReserveSlots[idx] = (self._cds[idx], quantity)
             self.__glowUpdateInfo[idx] = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_UNLOCK
             self.delayCallback(self._GLOW_DELAY, self.__updateEquipmentGlowCB)
+        elif quantity < 1:
+            self.__addLockedInformationToEpicEquipment(idx)
+        self.__addEquipmentLevelToSlot(idx, item)
 
     def __updateEquipmentGlowCB(self):
         for idx in self.__glowUpdateInfo:

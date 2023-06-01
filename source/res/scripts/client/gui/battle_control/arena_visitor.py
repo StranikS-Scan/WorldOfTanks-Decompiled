@@ -559,6 +559,10 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def hasRespawns(self):
         return self._bonus.hasRespawns()
 
+    def isEnableExternalRespawn(self):
+        ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
+        return bool(ownVehicle.enableExternalRespawn) if ownVehicle else False
+
     def hasHealthBar(self):
         return self._bonus.hasHealthBar()
 
@@ -618,6 +622,9 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         for teamNum, points in enumerate(self.getTeamSpawnPoints(team), 1):
             for number, point in enumerate(points, 1):
                 yield (teamNum, (point[0], 0, point[1]), number)
+
+    def getVehicleCircularAoiRadius(self):
+        return self.getArenaModifiers().getConstantsModification().VEHICLE_CIRCULAR_AOI_RADIUS
 
     def getVisibilityMinRadius(self):
         return self.getArenaModifiers()(BattleParams.VISION_MIN_RADIUS, VISIBILITY.MIN_RADIUS)

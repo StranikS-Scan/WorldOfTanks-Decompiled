@@ -2,16 +2,15 @@
 # Embedded file name: scripts/client/gui/game_control/hangar_loading_controller.py
 import Event
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
-from gui.shared.account_settings_helper import AccountSettingsHelper, WelcomeScreen
+from gui.shared.account_settings_helper import AccountSettingsHelper
 from gui.shared.event_dispatcher import showCrew22Welcome
 from helpers import dependency
-from skeletons.gui.game_control import IHangarLoadingController, IBootcampController, IUISpamController
+from skeletons.gui.game_control import IHangarLoadingController, IBootcampController
 from skeletons.gui.shared.utils import IHangarSpace
 
 class HangarLoadingController(IHangarLoadingController):
     __bootcamp = dependency.descriptor(IBootcampController)
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    __uiSpamController = dependency.descriptor(IUISpamController)
 
     def __init__(self):
         super(HangarLoadingController, self).__init__()
@@ -45,15 +44,11 @@ class HangarLoadingController(IHangarLoadingController):
 
     def __processCrewWelcomeScreen(self):
         if not AccountSettingsHelper.isWelcomeScreenShown(GuiSettingsBehavior.CREW_22_WELCOME_SHOWN):
-            if self.__uiSpamController.shouldBeHidden(WelcomeScreen.CREW_22_WELCOME):
-                AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_22_WELCOME_SHOWN)
-            else:
-                showCrew22Welcome()
-                return
+            AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_22_WELCOME_SHOWN)
+            showCrew22Welcome()
 
     def __hangarLoadedAfterLoginNotify(self):
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
-        self.__processCrewWelcomeScreen()
         self.onHangarLoadedAfterLogin()
 
     def __isHangarLoadedAfterLogin(self):

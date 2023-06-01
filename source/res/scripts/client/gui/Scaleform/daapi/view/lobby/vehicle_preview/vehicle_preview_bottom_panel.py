@@ -379,8 +379,12 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             if hasExternalLink:
                 btnIcon = backport.image(R.images.gui.maps.icons.library.buyInWeb())
                 buyingPanelData.update({'buyButtonIcon': btnIcon,
-                 'buyButtonIconAlign': 'right',
-                 'isBuyingAvailable': True})
+                 'buyButtonIconAlign': 'right'})
+            if self.__isHeroTank:
+                heroTankUrl = self._heroTanks.getCurrentShopUrl() or self._heroTanks.getCurrentRelatedURL()
+                if heroTankUrl or self._heroTanks.isAdventHero():
+                    buyingPanelData.update({'isBuyingAvailable': True,
+                     'itemPrice': None})
             self.as_setBuyDataS(buyingPanelData)
             return
 

@@ -498,6 +498,18 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='POST', post_data=post_data)
 
+    def wgsh_event_settings(self, callback, fields=None):
+        url = '/wgshevents/settings'
+        return self._request_data(callback, url, get_data={}, method='GET')
+
+    def wgsh_event_clan_info(self, callback, fields=None):
+        url = '/wgshevents/clan/info'
+        return self._request_data(callback, url, method='GET')
+
+    def wgsh_event_get_frozen_vehicles(self, callback, fields=None):
+        url = '/wgshevents/frozen_vehicle'
+        return self._request_data(callback, url, method='GET')
+
     def clan_statistics(self, callback, clan_id, fields=None):
         url = '/wgsh/clans/{clan_id}/'.format(clan_id=clan_id)
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')
@@ -574,8 +586,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/hof/user/restore/'
         return self._request_data(callback, url, method='POST')
 
-    def get_teaser(self, callback):
+    def get_teaser(self, callback, additionalData=None):
         get_params = {'language': self._get_formatted_language_code()}
+        if additionalData:
+            get_params.update(additionalData)
         url = '/promobe/teaser/'
         return self._request_data(callback, url, get_data=get_params, method='GET')
 

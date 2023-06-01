@@ -2265,4 +2265,164 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A95_T95_E6	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	773	</id>
+      <texture>	gui/maps/vehicles/styles/A95_T95_E6_S_3DSt.png	</texture>
+      <modelsSet>	A95_T95_E6_S_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A95_T95_E6_S_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A95_T95_E6_S_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	39	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A67_T57_58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	790	</id>
+      <texture>	gui/maps/vehicles/styles/A67_T57_58_BXI_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A67_T57_58_BXI_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A67_T57_58_BXI_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A67_T57_58_BXI_3DSt	</userString>
+      <tags>	styleProgression	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01_eq	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02_eq tank_upgrade_02_eq_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <projection_decals>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35018	</slotId>
+                </item>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35019	</slotId>
+                </item>
+              </projection_decals>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03_eq tank_upgrade_03_eq_skinned tank_upgrade_decals	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	729	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <projection_decals>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35018	</slotId>
+                </item>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35019	</slotId>
+                </item>
+              </projection_decals>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04_eq tank_upgrade_04_net tank_upgrade_04_eq_skinned tank_upgrade_04_net_skinned tank_upgrade_decals	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	730	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <projection_decals>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35018	</slotId>
+                </item>
+                <item>
+                  <id>	901	</id>
+                  <slotId>	35019	</slotId>
+                </item>
+              </projection_decals>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	64	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </usa.xml>

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import logging
 import BigWorld
-from constants import EQUIP_TMAN_CODE
+from constants import EQUIP_TMAN_CODE, DROP_SKILL_OPTIONS
 from gui.impl import backport
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
@@ -496,6 +496,8 @@ class TankmanDropSkills(ItemProcessor):
         return makeI18nError(sysMsgKey='drop_tankman_skill/{}'.format(errStr), defaultSysMsgKey='drop_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
+        if self.dropSkillCostIdx == DROP_SKILL_OPTIONS.FREE_DROP_WITH_TOKEN_INDEX:
+            self.dropSkillCostIdx = 2
         msgType = self.__getTankmanSysMsgType(self.dropSkillCostIdx)
         price = self.itemsCache.items.shop.dropSkillsCost.get(self.dropSkillCostIdx)
         return makeI18nSuccess(sysMsgKey='drop_tankman_skill/success', money=formatPrice(Money(**price)), type=msgType)

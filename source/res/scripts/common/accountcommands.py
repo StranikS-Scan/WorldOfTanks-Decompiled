@@ -244,6 +244,7 @@ CMD_CONVERT_OBSOLETE_SKILLS = 10107
 CMD_ADD_EQUIPMENT = 10108
 CMD_SET_ACCOUNT_WTR = 10109
 CMD_TURNOFF_WINBACK_BATTLES = 10110
+CMD_SET_ACHIEVEMENTS20_LAYOUT = 10111
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

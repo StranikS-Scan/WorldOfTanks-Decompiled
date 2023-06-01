@@ -19,14 +19,17 @@ class RewardsView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battlePassController = dependency.descriptor(IBattlePassController)
+    __slots__ = ('__tooltipItems', '__frontlineLevel', '__uiEpicBattleLogger', '__rewardsSelectionWindow', '__rewardSelectionLogged', '__parentView')
 
-    def __init__(self, layoutID=R.views.frontline.lobby.RewardsView()):
+    def __init__(self, layoutID=R.views.frontline.lobby.RewardsView(), parentView=None, **kwargs):
         settings = ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, RewardsViewModel())
+        settings.kwargs = kwargs
         self.__tooltipItems = {}
         self.__frontlineLevel, _ = self.__epicController.getPlayerLevelInfo()
         self.__uiEpicBattleLogger = EpicBattleLogger()
         self.__rewardsSelectionWindow = None
         self.__rewardSelectionLogged = False
+        self.__parentView = parentView
         super(RewardsView, self).__init__(settings)
         return
 
@@ -100,6 +103,8 @@ class RewardsView(ViewImpl):
                 _logRewardSelectionClosed()
                 self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
                 showFrontlineAwards(rewards, _onAwardsClosed, _onAwardsAnimationEnded)
+            if self.__parentView:
+                self.__parentView.updateTabNotifications()
 
         self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.REWARDS.value, parentScreen=currentScreen)

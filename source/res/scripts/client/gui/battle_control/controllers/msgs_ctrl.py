@@ -10,7 +10,7 @@ from constants import ATTACK_REASON_INDICES as _AR_INDICES
 from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-from items.battle_royale import isSpawnedBot
+from items.battle_royale import isSpawnedBot, isHunterBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _ENTITY_TYPE(object):
@@ -26,6 +26,7 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['ramming']: 'DEATH_FROM_RAMMING',
  _AR_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  _AR_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
+ _AR_INDICES['static_deathzone']: 'DEATH_FROM_STATIC_DEATH_ZONE',
  _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING',
  _AR_INDICES['overturn']: 'DEATH_FROM_OVERTURN',
  _AR_INDICES['artillery_protection']: 'DEATH_FROM_ARTILLERY_PROTECTION',
@@ -302,10 +303,10 @@ class EpicBattleMessagesController(BattleMessagesController):
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
-def _isVehicleSpawnedBot(vehicleID, battleSessionProvider=None):
+def _isHideVehicleKilledMsg(vehicleID, battleSessionProvider=None):
     ctx = battleSessionProvider.getCtx()
     vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(vehicleID).vehicleType
-    return isSpawnedBot(vTypeInfoVO.tags)
+    return isSpawnedBot(vTypeInfoVO.tags) or isHunterBot(vTypeInfoVO.tags)
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
@@ -330,7 +331,7 @@ class BattleRoyaleBattleMessagesController(BattleMessagesController):
         super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID)
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
-        if _isVehicleSpawnedBot(targetID):
+        if _isHideVehicleKilledMsg(targetID):
             return
         equipmentID = 0
         super(BattleRoyaleBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
@@ -350,7 +351,7 @@ class BattleRoyaleBattleMessagesPlayer(BattleMessagesPlayer):
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        if _isVehicleSpawnedBot(targetID):
+        if _isHideVehicleKilledMsg(targetID):
             return
         equipmentID = 0
         super(BattleRoyaleBattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)

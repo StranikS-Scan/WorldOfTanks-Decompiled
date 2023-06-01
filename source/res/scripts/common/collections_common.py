@@ -4,7 +4,7 @@ from collections import namedtuple
 from copy import deepcopy
 import typing
 if typing.TYPE_CHECKING:
-    from typing import Optional
+    from typing import List, Optional, Tuple
 USABLE_COLLECTION_ENTITIES = {'customizationItem', 'dossier', 'tankman'}
 UNUSABLE_COLLECTION_ENTITIES = {'photo', 'video', 'note'}
 COLLECTION_ITEM_TYPE_NAMES = USABLE_COLLECTION_ENTITIES.union(UNUSABLE_COLLECTION_ENTITIES)
@@ -49,11 +49,11 @@ class Collection(namedtuple('Collection', ('collectionId', 'name', 'items', 'tag
         dataToUpdate['items'] = items
 
 
-class CollectionsConfig(namedtuple('CollectionsConfig', ('isEnabled', 'collections'))):
+class CollectionsConfig(namedtuple('CollectionsConfig', ('isEnabled', 'collections', 'linkedCollections'))):
 
     def __new__(cls, **kwargs):
         cls.__rawData = kwargs
-        defaults = dict(isEnabled=False, collections={})
+        defaults = dict(isEnabled=False, collections={}, linkedCollections=[])
         defaults.update(kwargs)
         cls.__packCollectionConfigs(defaults)
         return super(CollectionsConfig, cls).__new__(cls, **defaults)

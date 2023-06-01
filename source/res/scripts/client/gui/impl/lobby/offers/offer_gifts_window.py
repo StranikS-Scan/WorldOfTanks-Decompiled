@@ -4,7 +4,6 @@ import logging
 import random
 from functools import partial
 import ResMgr
-from account_helpers.offers.cache import CachePrefetchResult
 from adisp import adisp_process, adisp_async
 from constants import RentType, PREMIUM_ENTITLEMENTS
 from PlayerEvents import g_playerEvents
@@ -25,6 +24,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider, IOffersNovelty
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from web.cache.web_cache import CachePrefetchResult
 _logger = logging.getLogger(__name__)
 RENT_TYPE_TO_MODEL_CONSTANT = {RentType.NO_RENT: GiftModel.RENT_TYPE_NO,
  RentType.TIME_RENT: GiftModel.RENT_TYPE_TIME,

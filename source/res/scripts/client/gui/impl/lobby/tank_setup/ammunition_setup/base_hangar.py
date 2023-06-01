@@ -1,25 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_setup/base_hangar.py
 from BWUtil import AsyncReturn
+import adisp
 from CurrentVehicle import g_currentVehicle
 from Event import Event
-import adisp
-from gui.impl.backport.backport_tooltip import createBackportTooltipContent
-from wg_async import wg_async, wg_await
-from gui.shared.gui_items.items_actions import factory as ActionsFactory
+from frameworks.wulf import ViewSettings, ViewFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
+from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.gen import R
-from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_setup_view_model import AmmunitionSetupViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupView
 from gui.impl.lobby.tank_setup.backports.context_menu import getContextMenuData
-from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getShellsPriceDiscountTooltipData, getSlotSpecTooltipData
+from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.impl.lobby.tank_setup.tooltips.setup_tab_tooltip_view import SetupTabTooltipView
 from gui.impl.lobby.tank_setup.tooltips.warning_tooltip_view import WarningTooltipView
@@ -27,11 +25,13 @@ from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from gui.shared.events import AmmunitionSetupViewEvent, PrbActionEvent
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from post_progression_common import TANK_SETUP_GROUPS, TankSetupGroupsId
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+from wg_async import wg_async, wg_await
 
 class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 
@@ -48,7 +48,7 @@ class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 
 class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__blur', '__isClosed', '__closeConfirmatorHelper', 'onClose', 'onAnimationEnd', '__moneyCache')
+    __slots__ = ('__blur', '__isClosed', '__closeConfirmatorHelper', 'onClose', 'onAnimationEnd', '__moneyCache', '_previousSectionName')
 
     def __init__(self, layoutID=R.views.lobby.tanksetup.HangarAmmunitionSetup(), **kwargs):
         settings = ViewSettings(layoutID)
@@ -60,26 +60,31 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.__isClosed = False
         self.__closeConfirmatorHelper = TankSetupCloseConfirmatorsHelper()
         self.__moneyCache = self._itemsCache.items.stats.money
+        self._previousSectionName = None
         self.onClose = Event()
         self.onAnimationEnd = Event()
+        return
 
     @prbDispatcherProperty
     def prbDispatcher(self):
         return None
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.tanksetup.tooltips.SetupTabTooltipView():
+        if contentID == R.views.dialogs.common.DialogTemplateGenericTooltip():
+            tooltipID = event.getArgument('tooltipID')
+            return createBackportTooltipContent(tooltipID)
+        elif contentID == R.views.lobby.tanksetup.tooltips.SetupTabTooltipView():
             name = event.getArgument('name', '')
             return SetupTabTooltipView(name)
+        if contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+            tooltipId = event.getArgument('tooltipId')
+            if tooltipId == TankSetupConstants.EQUIP_COIN_INFO_TOOLTIP:
+                return createBackportTooltipContent(specialAlias=tooltipId, specialArgs=[])
+        if contentID == R.views.lobby.tanksetup.tooltips.WarningTooltipView():
+            reason = event.getArgument('reason')
+            isCritical = event.getArgument('isCritical')
+            return WarningTooltipView(reason, isCritical)
         else:
-            if contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-                tooltipId = event.getArgument('tooltipId')
-                if tooltipId == TankSetupConstants.EQUIP_COIN_INFO_TOOLTIP:
-                    return createBackportTooltipContent(specialAlias=tooltipId, specialArgs=[])
-            if contentID == R.views.lobby.tanksetup.tooltips.WarningTooltipView():
-                reason = event.getArgument('reason')
-                isCritical = event.getArgument('isCritical')
-                return WarningTooltipView(reason, isCritical)
             return None
 
     def sendSlotAction(self, args):
@@ -154,7 +159,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def _initialize(self, *args, **kwargs):
         super(BaseHangarAmmunitionSetupView, self)._initialize()
         playEnterTankSetupView()
-        self.__updateTTC()
+        self.__updateTTC(kwargs.get('selectedSection'))
 
     def _finalize(self):
         super(BaseHangarAmmunitionSetupView, self)._finalize()
@@ -206,14 +211,16 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
 
     def _updateAmmunitionPanel(self, sectionName=None):
         super(BaseHangarAmmunitionSetupView, self)._updateAmmunitionPanel(sectionName)
-        if sectionName != TankSetupConstants.SHELLS:
-            self.__updateTTC()
+        if self._previousSectionName != sectionName or sectionName not in (TankSetupConstants.SHELLS, TankSetupConstants.BATTLE_ABILITIES):
+            self.__updateTTC(sectionName)
+        self._previousSectionName = sectionName
 
-    def __updateTTC(self):
+    def __updateTTC(self, sectionName=None):
         currentSubView = self._tankSetup.getCurrentSubView()
         if currentSubView is not None:
             vehicleAfterInstall = currentSubView.getInteractor().getVehicleAfterInstall()
-            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': vehicleAfterInstall}), EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.UPDATE_TTC, {'vehicleItem': vehicleAfterInstall,
+             'sectionName': sectionName}), EVENT_BUS_SCOPE.LOBBY)
             if vehicleAfterInstall.intCD != g_currentVehicle.item.intCD:
                 self._tankSetup.currentVehicleUpdated(vehicleAfterInstall)
         return

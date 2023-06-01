@@ -27,7 +27,7 @@ from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
-from items.battle_royale import isSpawnedBot
+from items.battle_royale import isSpawnedBot, isHunterBot
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -313,7 +313,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if isShown and not isStatusActive:
             activeStatuses.append(marker)
             self._markersStates[vehicleID] = activeStatuses
-        elif not isShown and isStatusActive:
+        elif not isShown and isStatusActive and marker in self._markersStates[vehicleID]:
             self._markersStates[vehicleID].remove(marker)
         if self._markersStates[vehicleID]:
             activeStatuses = sorted(self._markersStates[vehicleID], key=self._getMarkerStatusPriority, reverse=False)
@@ -515,7 +515,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     @staticmethod
     def __needsMarker(vInfo):
-        return vInfo.isAlive() or not isSpawnedBot(vInfo.vehicleType.tags)
+        return vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))
 
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID

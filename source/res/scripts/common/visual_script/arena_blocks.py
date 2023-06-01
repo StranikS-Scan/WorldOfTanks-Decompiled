@@ -2,8 +2,8 @@
 # Embedded file name: scripts/common/visual_script/arena_blocks.py
 import Math
 from soft_exception import SoftException
-from visual_script.block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
-from visual_script.misc import errorVScript, ASPECT
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue
+from visual_script.misc import errorVScript, ASPECT, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 
 class ArenaMeta(Meta):

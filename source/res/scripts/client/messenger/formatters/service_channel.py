@@ -22,6 +22,7 @@ from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
+from debug_utils import LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from dossiers2.custom.records import DB_ID_TO_RECORD
@@ -47,6 +48,7 @@ from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.resource_well.resource_well_constants import ResourceType
+from gui.achievements.achievements_constants import Achievements20SystemMessages
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CompletionTokensBonusFormatter
 from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, getMergedBonusesFromDicts, SelectableBonus
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
@@ -68,7 +70,7 @@ from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
-from items import ITEM_TYPES as I_T, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core
+from items import ITEM_TYPES as I_T, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core, ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -537,6 +539,7 @@ class FormatSpecialReward(object):
 class BattleResultsFormatter(WaitItemsSyncFormatter):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __eventsCache = dependency.descriptor(IEventsCache)
     _battleResultKeys = {-1: u'battleDefeatResult',
      0: u'battleDrawGameResult',
      1: u'battleVictoryResult'}
@@ -846,10 +849,23 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return u'' if not credits_ else g_settings.htmlTemplates.format(u'piggyBank', ctx={u'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
 
     def __makeBRCoinString(self, battleResults):
-        value = battleResults.get(u'brcoin', 0)
+        value = battleResults.get(u'brcoin', 0) + self.__getBrCoinsQuestBonus(battleResults)
         if value:
             text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
             return g_settings.htmlTemplates.format(u'battleResultBrcoin', ctx={u'brcoin': text})
+
+    def __getBrCoinsQuestBonus(self, battleResults):
+        questBonus = 0
+        allQuests = self.__eventsCache.getAllQuests()
+        for qID in battleResults.get(u'completedQuestIDs', []):
+            quest = allQuests.get(qID)
+            if quest is None:
+                continue
+            for bonus in quest.getBonuses(u'currencies'):
+                if bonus.getCode() == u'brcoin':
+                    questBonus += bonus.getCount()
+
+        return questBonus
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -4364,10 +4380,13 @@ class EpicQuestAchievesFormatter(QuestAchievesFormatter):
             from epic_constants import EPIC_OFFER_TOKEN_PREFIX
             if token.startswith(EPIC_OFFER_TOKEN_PREFIX):
                 offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(token))
-                gift = first(offer.getAllGifts())
-                giftType = token.split(u':')[2]
-                rewardChoiceTokens.setdefault(giftType, 0)
-                rewardChoiceTokens[giftType] += gift.giftCount * tokenData.get(u'count', 1)
+                if offer is None:
+                    LOG_ERROR(u'Offer for {} token not found'.format(token))
+                else:
+                    gift = first(offer.getAllGifts())
+                    giftType = token.split(u':')[2]
+                    rewardChoiceTokens.setdefault(giftType, 0)
+                    rewardChoiceTokens[giftType] += gift.giftCount * tokenData.get(u'count', 1)
 
         result.extend(cls.__processRewardChoiceTokens(rewardChoiceTokens))
         return cls._SEPARATOR.join(result)
@@ -4419,14 +4438,15 @@ class EpicSeasonEndFormatter(WaitItemsSyncFormatter):
             itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(itemCD)
             if itemTypeID == I_T.crewBook:
                 rewardStrings.append(self.__formatCrewBookString(itemCD, count))
-            if itemTypeID == I_T.equipment:
-                rewardStrings.append(self.__formatBattleBoosterString(itemCD, count))
+            if itemTypeID in (I_T.equipment, I_T.optionalDevice):
+                rewardStrings.append(self.__formatRewardChoiceTokenString(itemCD, count, itemTypeID))
 
         return rewardStrings
 
-    def __formatBattleBoosterString(self, itemCD, count):
+    def __formatRewardChoiceTokenString(self, itemCD, count, itemTypeID):
+        typeName = ITEM_TYPE_NAMES[itemTypeID]
         item = self.__itemsCache.items.getItemByCD(itemCD)
-        textRes = R.strings.system_messages.epicBattles.seasonEnd.rewards.equipment()
+        textRes = R.strings.system_messages.epicBattles.seasonEnd.rewards.dyn(typeName)()
         text = backport.text(textRes, name=item.userName)
         return g_settings.htmlTemplates.format(self.__rewardTemplate, {u'text': text,
          u'count': count})
@@ -5321,3 +5341,54 @@ class CollectionsRewardFormatter(ServiceChannelFormatter):
         formatted = g_settings.msgTemplates.format(self.__ITEMS_TEMPLATE, ctx={u'title': backport.text(self.__MESSAGES.title.congratulation()),
          u'text': text}, data={u'savedData': {u'collectionId': collectionID}})
         return MessageData(formatted, self._getGuiSettings(message, self.__ITEMS_TEMPLATE, messageType=SYS_MESSAGE_TYPE.collectionsItems.index()))
+
+
+class AchievementsSMFormatter(ClientSysMessageFormatter):
+    __ACHIEVEMENTS_MESSAGES = R.strings.achievements_page.notifications
+    __ACHIEVEMENTS_IMAGES = R.images.gui.maps.icons.achievements
+
+    def format(self, message, *args):
+        messageType = message.get(u'type')
+        if messageType is None:
+            return
+        else:
+            rank = message.get(u'rank')
+            subRank = message.get(u'subRank')
+            template = self.__getTemplate(messageType)
+            formatted = g_settings.msgTemplates.format(template, self.__getCtx(messageType, rank, subRank), data={u'linkageData': self.__getSavedDate(messageType, rank, subRank)})
+            guiSettings = self._getGuiSettings(message, template)
+            return [MessageData(formatted, guiSettings)]
+
+    def __getSavedDate(self, type, rank=None, subRank=None):
+        if type == Achievements20SystemMessages.RATING_UPGRADE:
+            return {u'icon': backport.image(self.__ACHIEVEMENTS_IMAGES.messenger.rating.dyn(u'rating_{}_{}'.format(rank, subRank))()),
+             u'type': u'rating'}
+        if type == Achievements20SystemMessages.RATING_COMPLETE:
+            return {u'icon': backport.image(self.__ACHIEVEMENTS_IMAGES.messenger.rating.dyn(u'rating_{}_{}'.format(rank, subRank))()),
+             u'type': u'rating'}
+        return {u'icon': backport.image(self.__ACHIEVEMENTS_IMAGES.messenger.editing()),
+         u'type': u'editing'} if type == Achievements20SystemMessages.EDITING_AVAILABLE else None
+
+    def __getCtx(self, type, rank=None, subRank=None):
+        if type == Achievements20SystemMessages.RATING_UPGRADE:
+            return {u'title': backport.text(self.__ACHIEVEMENTS_MESSAGES.ratingUp.title()),
+             u'text': backport.text(self.__ACHIEVEMENTS_MESSAGES.ratingUp.text(), level=self.__getLevel(rank, subRank))}
+        if type == Achievements20SystemMessages.RATING_COMPLETE:
+            return {u'title': backport.text(self.__ACHIEVEMENTS_MESSAGES.ratingCalculated.title()),
+             u'text': backport.text(self.__ACHIEVEMENTS_MESSAGES.ratingCalculated.text(), level=self.__getLevel(rank, subRank))}
+        return {u'title': backport.text(self.__ACHIEVEMENTS_MESSAGES.editingEnabled.title()),
+         u'button': backport.text(self.__ACHIEVEMENTS_MESSAGES.editingEnabled.button())} if type == Achievements20SystemMessages.EDITING_AVAILABLE else None
+
+    def __getTemplate(self, type):
+        if type == Achievements20SystemMessages.RATING_UPGRADE or type == Achievements20SystemMessages.RATING_COMPLETE:
+            return u'achievementRating'
+        if type == Achievements20SystemMessages.RATING_DOWNGRADE:
+            return u'achievementRatingDowngrade'
+        if type == Achievements20SystemMessages.EDITING_AVAILABLE:
+            return u'achievementEditing'
+        if type == Achievements20SystemMessages.FIRST_ENTRY:
+            return u'achievementFirstEntry'
+        return u'achievementFirstEntryWithOutWTR' if type == Achievements20SystemMessages.FIRST_ENTRY_WITHOUT_WTR else None
+
+    def __getLevel(self, rank=None, subRank=None):
+        return backport.text(R.strings.achievements_page.tooltips.WTR.rating.levels.dyn(u'level_{}'.format(rank))(), level=int2roman(subRank))

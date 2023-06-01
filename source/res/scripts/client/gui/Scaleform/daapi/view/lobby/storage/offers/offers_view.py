@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/offers/offers_view.py
 import ResMgr
-from account_helpers.offers.cache import CachePrefetchResult
 from adisp import adisp_process, adisp_async
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
 from gui.Scaleform.daapi.view.meta.StorageCategoryOffersViewMeta import StorageCategoryOffersViewMeta
@@ -14,6 +13,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
+from web.cache.web_cache import CachePrefetchResult
 
 class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
     _offersProvider = dependency.descriptor(IOffersDataProvider)

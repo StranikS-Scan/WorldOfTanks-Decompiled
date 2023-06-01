@@ -5,14 +5,17 @@ import random
 from typing import TYPE_CHECKING
 import BigWorld
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
+from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.game_control import IHeroTankController, ILimitedUIController
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import ModelStates
 from items import vehicles
@@ -50,6 +53,7 @@ class _HeroTankAppearance(HangarVehicleAppearance):
 class HeroTank(ClientSelectableCameraVehicle):
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         self.__heroTankCD = None
@@ -61,17 +65,25 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
         self._heroTankCtrl.onInteractive += self._updateInteractive
+        self.__limitedUIController.startObserve(LuiRules.HERO_TANK, self.__updateHeroTankVisibility)
 
     def onLeaveWorld(self):
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive
+        self.__limitedUIController.stopObserve(LuiRules.HERO_TANK, self.__updateHeroTankVisibility)
         super(HeroTank, self).onLeaveWorld()
+
+    def onMouseClick(self):
+        ClientSelectableCameraObject.switchCamera(self, 'HeroTank')
+        return self.state != CameraMovementStates.FROM_OBJECT
 
     def removeModelFromScene(self):
         if self.isVehicleLoaded:
             self._onVehicleDestroy()
-            BigWorld.destroyEntity(self.id)
+            self.removeVehicle()
+        self.__heroTankCD = None
+        return
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         if self.__isInPreview():
@@ -89,8 +101,10 @@ class HeroTank(ClientSelectableCameraVehicle):
         if g_currentPreviewVehicle.item is not None:
             if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
                 return
-        self.__heroTankCD = self._heroTankCtrl.getRandomTankCD()
-        if self.__heroTankCD:
+        allowShowHeroTank = self.__limitedUIController.isRuleCompleted(LuiRules.HERO_TANK)
+        heroTankCD = self._heroTankCtrl.getRandomTankCD()
+        if allowShowHeroTank and heroTankCD:
+            self.__heroTankCD = heroTankCD
             self.recreateVehicle()
         else:
             self.removeModelFromScene()
@@ -106,9 +120,15 @@ class HeroTank(ClientSelectableCameraVehicle):
         super(HeroTank, self)._onVehicleLoaded()
         if self.enabled:
             g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__heroTankCD is None:
+            self.removeModelFromScene()
+        return
 
     def _onVehicleDestroy(self):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __updateHeroTankVisibility(self, *_):
+        self._updateHeroTank()
 
     @staticmethod
     def __getVehicleDescriptorByIntCD(vehicleIntCD):

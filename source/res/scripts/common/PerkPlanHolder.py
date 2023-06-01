@@ -102,6 +102,13 @@ class PCPlanHolder(object):
                 del self._plans[index]
                 break
 
+    @property
+    def isReadyForUse(self):
+        if not self._isReadyForEvent:
+            if self._loader and self._loader.state in LoadState.STATUS_LOADED:
+                return True
+        return self._isReadyForEvent
+
     def _getContextEventsScheme(self):
         events = defaultdict(list)
         for plan in self._plans:

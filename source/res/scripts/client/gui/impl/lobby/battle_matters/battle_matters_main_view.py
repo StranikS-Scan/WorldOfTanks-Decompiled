@@ -31,7 +31,7 @@ from gui.server_events.events_dispatcher import showBattleMatters, showBattleMat
 from gui.shared.event_dispatcher import showDelayedReward, showHangar
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from shared_utils import nextTick
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader

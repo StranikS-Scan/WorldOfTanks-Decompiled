@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_li
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_conversion_view_model import ReservesConversionViewModel
 from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
-from gui.shared.event_dispatcher import closeReservesIntroAndConversionView
+from gui.shared.event_dispatcher import closeViewsExceptReservesActivationView
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -149,4 +149,4 @@ class ReservesConversionView(ReservesViewMonitor):
             conversionModelArray.addViewModel(conversionItem)
 
     def _onClose(self):
-        closeReservesIntroAndConversionView()
+        closeViewsExceptReservesActivationView()

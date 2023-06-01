@@ -304,7 +304,7 @@
               <showOn>	HULL TURRET	</showOn>
               <doubleSided>	1	</doubleSided>
               <position>
-                <p0>	0.000000	</p0>
+                <p0>	0	</p0>
                 <p1>	-0.379	</p1>
                 <p2>	-0.062	</p2>
               </position>
@@ -771,6 +771,52 @@
           </camouflages>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz14_Skoda_T-56	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	802	</id>
+      <texture>	gui/maps/vehicles/styles/Cz14_Skoda_T-56_DB_3DSt.png	</texture>
+      <modelsSet>	Cz14_Skoda_T-56_DB_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Cz14_Skoda_T-56_DB_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Cz14_Skoda_T-56_DB_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	42	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
 </czech.xml>

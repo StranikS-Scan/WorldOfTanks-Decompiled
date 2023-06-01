@@ -1,0 +1,54 @@
+<115_sweden_nb.xml>
+  <name>	#arenas:115_sweden_nb/name	</name>
+  <description>	#arenas:115_sweden_nb/description	</description>
+  <geometry>	spaces/115_sweden_nb	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/115_sweden_nb/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_sweden_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_sweden_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_sweden_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_sweden_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_sweden_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_sweden_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_winter_01_night_battles	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	env_Mountain.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-303.160950 -345.729340	</position1>
+        </team1>
+        <team2>
+          <position1>	356.137238 246.011429	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</115_sweden_nb.xml>

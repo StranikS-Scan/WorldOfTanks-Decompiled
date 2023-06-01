@@ -6993,4 +6993,69 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A67_T57_58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	729	</id>
+      <texture>	vehicles/russian/Camouflage/A67_T57_58_BXI_3DSt_stage3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/A67_T57_58_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/A67_T57_58_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI styleOnly	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	140 123 91 255	</c0>
+          <c1>	140 123 91 255	</c1>
+          <c2>	89 102 102 230	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.17174	</HULL>
+        <TURRET>	0.17174	</TURRET>
+        <GUN>	0.17174	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.1 2.1	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	730	</id>
+      <texture>	vehicles/russian/Camouflage/A67_T57_58_BXI_3DSt_stage4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/A67_T57_58_BXI_3DSt/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/A67_T57_58_BXI_3DSt/label	</userString>
+      <tags>	hiddenInUI styleOnly	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	94 82 61 255	</c0>
+          <c1>	140 123 91 255	</c1>
+          <c2>	73 84 84 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.17174	</HULL>
+        <TURRET>	0.17174	</TURRET>
+        <GUN>	0.17174	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.1 2.1	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </usa.xml>

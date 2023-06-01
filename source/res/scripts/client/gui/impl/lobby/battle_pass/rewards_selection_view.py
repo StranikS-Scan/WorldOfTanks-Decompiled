@@ -27,6 +27,9 @@ class RewardsSelectionView(SelectableRewardBase):
         self.__onCloseCallback = onCloseCallback
         super(RewardsSelectionView, self).__init__(R.views.lobby.battle_pass.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, self.__chapterID, self.__level)), RewardsSelectionViewModel)
 
+    def _getReceivedRewards(self, rewardName):
+        pass
+
     @property
     def viewModel(self):
         return super(RewardsSelectionView, self).getViewModel()

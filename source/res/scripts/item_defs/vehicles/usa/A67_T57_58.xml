@@ -78,6 +78,11 @@
           <destroyed>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Hull.model	</exploded>
         </NYst>
+        <A67_T57_58_BXI_3DSt>
+          <undamaged>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Hull.model	</exploded>
+        </A67_T57_58_BXI_3DSt>
       </sets>
     </models>
     <swinging>
@@ -102,9 +107,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.577418 0.281869 2.70201	</rayStart>
-        <rayEnd>	-0.544864 0.094784 2.63925	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.556622 0.29137 2.684476	</rayStart>
+        <rayEnd>	-0.524068 0.104285 2.621716	</rayEnd>
+        <rayUp>	0.101137 0.332187 -0.937776	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -667,6 +672,26 @@
         <clipAngle>	0.602744	</clipAngle>
         <anchorShift>	0.146791	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+        <position>	1.44096 1.51669 2.97069	</position>
+        <rotation>	0.0821369 0.0017337 3.13333	</rotation>
+        <tags>	formfactor_square	</tags>
+        <scale>	0.458431 0.296648 0.458423	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.37208	</clipAngle>
+        <anchorShift>	0.017196	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <compatibleModels>	Effects A67_T57_58_BXI_3DSt	</compatibleModels>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -715,6 +740,11 @@
             <destroyed>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Chassis.model	</exploded>
           </NYst>
+          <A67_T57_58_BXI_3DSt>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A67_T57_58_BXI_3DSt>
         </sets>
       </models>
       <traces>
@@ -1135,37 +1165,37 @@
       <physicalTracks>
         <left>
           <segmentsCount>	164	</segmentsCount>
-          <segmentsOuterThickness>	0.0534227	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0706333	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.053423	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.070633	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.474	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.0900162	</back>
+              <back>	0.087	</back>
               <top>	0.08368	</top>
-              <front>	0.0829481	</front>
-              <bottom>	0.0655122	</bottom>
+              <front>	0.082948	</front>
+              <bottom>	0.065512	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.0845105	</back>
-              <top>	0.0885844	</top>
-              <front>	0.0891981	</front>
-              <bottom>	0.0655122	</bottom>
+              <back>	0.085	</back>
+              <top>	0.088584	</top>
+              <front>	0.089198	</front>
+              <bottom>	0.065512	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/american/A67_T57_58/track/segment1.model	</model>
-            <length>	0.0839737	</length>
+            <length>	0.083974	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A67_T57_58/track/segment2.model	</model>
-            <length>	0.0821146	</length>
+            <length>	0.082115	</length>
           </secSegment>
           <collisionHull>
             <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.30715	</xStart>
-                <xStep>	0.0403945	</xStep>
+                <xStep>	0.040394	</xStep>
                 <ySamples>	1.42026 1.43884 1.44937 1.45946 1.46389 1.46693 1.46857 1.46908 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46848 1.46664 1.4648 1.46296 1.46113 1.45929 1.45745 1.45561 1.45377 1.45193 1.4501 1.44826 1.44642 1.44458 1.44274 1.44091 1.43907 1.43723 1.43539 1.43355 1.43131 1.42823 1.42514 1.42206 1.41897 1.41589 1.41283 1.40986 1.40689 1.40392 1.40095 1.39798 1.39501 1.39204 1.38907 1.3861 1.38313 1.3733 1.35564 1.33791 1.31639 1.29098 1.27075	</ySamples>
               </part>
             </top>
@@ -1191,19 +1221,19 @@
             <topBack>
               <wheelName>	WD_L7	</wheelName>
               <basePos>	-2.9741 0.987992	</basePos>
-              <shiftVec>	-0.300285 0.0948159	</shiftVec>
+              <shiftVec>	-0.300285 0.094816	</shiftVec>
               <jointIdx>	96	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L6	</wheelName>
               <basePos>	-2.24519 0.426112	</basePos>
-              <shiftVec>	0.0339894 -0.397259	</shiftVec>
+              <shiftVec>	0.033989 -0.397259	</shiftVec>
               <jointIdx>	114	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
               <basePos>	2.15018 0.42611	</basePos>
-              <shiftVec>	0.0677602 -0.391438	</shiftVec>
+              <shiftVec>	0.06776 -0.391438	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -1219,7 +1249,7 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L7	</name>
               <startAngle>	2.89081	</startAngle>
@@ -1314,11 +1344,11 @@
                 <point>	-1.37773 1.55255 -0.19699	</point>
                 <point>	-1.37773 1.55255 -0.156595	</point>
                 <point>	-1.37773 1.55255 -0.1162	</point>
-                <point>	-1.37773 1.55255 -0.0758057	</point>
-                <point>	-1.37773 1.55255 -0.0354114	</point>
-                <point>	-1.37773 1.55255 0.00498338	</point>
-                <point>	-1.37773 1.55255 0.0453777	</point>
-                <point>	-1.37773 1.55255 0.0857725	</point>
+                <point>	-1.37773 1.55255 -0.075806	</point>
+                <point>	-1.37773 1.55255 -0.035411	</point>
+                <point>	-1.37773 1.55255 0.004983	</point>
+                <point>	-1.37773 1.55255 0.045378	</point>
+                <point>	-1.37773 1.55255 0.085772	</point>
                 <point>	-1.37773 1.55255 0.126167	</point>
                 <point>	-1.37773 1.55255 0.166562	</point>
                 <point>	-1.37773 1.55255 0.206956	</point>
@@ -1409,37 +1439,37 @@
         </left>
         <right>
           <segmentsCount>	164	</segmentsCount>
-          <segmentsOuterThickness>	0.0534227	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0706343	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.053423	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.070634	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.474	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.0902676	</back>
-              <top>	0.0839363	</top>
-              <front>	0.0845047	</front>
-              <bottom>	0.0655122	</bottom>
+              <back>	0.086500	</back>
+              <top>	0.083936	</top>
+              <front>	0.084505	</front>
+              <bottom>	0.065512	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.0829422	</back>
-              <top>	0.0885379	</top>
-              <front>	0.0895829	</front>
-              <bottom>	0.0655122	</bottom>
+              <back>	0.085	</back>
+              <top>	0.088538	</top>
+              <front>	0.089583	</front>
+              <bottom>	0.065512	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/american/A67_T57_58/track/segment1.model	</model>
-            <length>	0.0837697	</length>
+            <length>	0.08377	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A67_T57_58/track/segment2.model	</model>
-            <length>	0.0837177	</length>
+            <length>	0.083718	</length>
           </secSegment>
           <collisionHull>
             <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.2975	</xStart>
-                <xStep>	0.0405232	</xStep>
+                <xStep>	0.040523	</xStep>
                 <ySamples>	1.41311 1.43076 1.44088 1.45089 1.45885 1.46681 1.4687 1.46921 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46957 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.46031 1.45976 1.45977 1.45977 1.45978 1.45979 1.45979 1.4598 1.4598 1.45981 1.45981 1.45982 1.45983 1.45983 1.45984 1.45984 1.45985 1.45986 1.45986 1.45987 1.45987 1.45988 1.45988 1.45989 1.4599 1.4599 1.45991 1.45991 1.45992 1.45993 1.45993 1.45994 1.45994 1.45995 1.45995 1.45996 1.45997 1.45997 1.45998 1.45998 1.45999 1.46 1.46 1.46001 1.46001 1.46002 1.46003 1.46003 1.46004 1.46004 1.46005 1.46005 1.46006 1.46007 1.46007 1.46008 1.46915 1.46731 1.46546 1.46362 1.46178 1.45993 1.45809 1.45624 1.4544 1.45255 1.45071 1.44887 1.44702 1.44518 1.44333 1.44149 1.43965 1.4378 1.43596 1.43411 1.43225 1.42927 1.42629 1.4228 1.41852 1.41425 1.41049 1.40688 1.40327 1.40039 1.39784 1.39525 1.39316 1.39148 1.38979 1.38684 1.38386 1.37772 1.35939 1.34036 1.31977 1.29576 1.26988	</ySamples>
               </part>
             </top>
@@ -1459,25 +1489,25 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.0133 0.907205	</basePos>
-              <shiftVec>	0.380005 0.0798497	</shiftVec>
+              <shiftVec>	0.380005 0.07985	</shiftVec>
               <jointIdx>	17	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R7	</wheelName>
               <basePos>	-2.97463 0.987595	</basePos>
-              <shiftVec>	-0.299988 0.0953625	</shiftVec>
+              <shiftVec>	-0.299988 0.095362	</shiftVec>
               <jointIdx>	95	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R6	</wheelName>
               <basePos>	-2.15017 0.426071	</basePos>
-              <shiftVec>	-0.0389819 -0.395343	</shiftVec>
+              <shiftVec>	-0.038982 -0.395343	</shiftVec>
               <jointIdx>	113	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	2.2452 0.426073	</basePos>
-              <shiftVec>	0.0807967 -0.388957	</shiftVec>
+              <shiftVec>	0.080797 -0.388957	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -1493,7 +1523,7 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R7	</name>
               <startAngle>	2.875	</startAngle>
@@ -1587,11 +1617,11 @@
                 <point>	1.56773 1.54282 -0.217958	</point>
                 <point>	1.56773 1.54283 -0.177434	</point>
                 <point>	1.56773 1.54283 -0.136911	</point>
-                <point>	1.56773 1.54284 -0.0963875	</point>
-                <point>	1.56773 1.54284 -0.0558644	</point>
-                <point>	1.56773 1.54285 -0.0153414	</point>
-                <point>	1.56773 1.54286 0.0251821	</point>
-                <point>	1.56773 1.54286 0.0657052	</point>
+                <point>	1.56773 1.54284 -0.096387	</point>
+                <point>	1.56773 1.54284 -0.055864	</point>
+                <point>	1.56773 1.54285 -0.015341	</point>
+                <point>	1.56773 1.54286 0.025182	</point>
+                <point>	1.56773 1.54286 0.065705	</point>
                 <point>	1.56773 1.54287 0.106228	</point>
                 <point>	1.56773 1.54287 0.146752	</point>
                 <point>	1.56773 1.54288 0.187275	</point>
@@ -1791,6 +1821,11 @@
                 <destroyed>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Gun_01.model	</exploded>
               </NYst>
+              <A67_T57_58_BXI_3DSt>
+                <undamaged>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A67_T57_58_BXI_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2032,14 +2067,45 @@
               <anchorShift>	0.000010	</anchorShift>
             </slot>
             <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45016	</slotId>
               <rayStart>	0.000024 -0.0468545 4.3437	</rayStart>
               <rayEnd>	-0.0110014 -0.0601304 4.34313	</rayEnd>
               <rayUp>	0.105 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.8	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+              <position>	-0.379779 2.61969 1.08136	</position>
+              <rotation>	0.490139 0.000029 -3.11551	</rotation>
+              <scale>	0.590993 0.590993 0.590991	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.74986	</clipAngle>
+              <anchorShift>	-0.000010	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.000024 -0.046854 4.3437	</rayStart>
+              <rayEnd>	0.000024 -0.046854 5.1437	</rayEnd>
+              <rayUp>	0.14 0 0	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.8	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000024 -0.046854 6.74	</rayStart>
+              <rayEnd>	0.000024 -0.046854 7.33	</rayEnd>
+              <rayUp>	0.16 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+              <size>	0.59	</size>
               <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -2067,6 +2133,11 @@
             <destroyed>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A67_T57_58/_skins/NYst/crash/lod0/Turret_01.model	</exploded>
           </NYst>
+          <A67_T57_58_BXI_3DSt>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A67_T57_58_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A67_T57_58_BXI_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2299,7 +2370,7 @@
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35015	</slotId>
-          <tags>	formfactor_rect1x2 mimic  right direction_left_to_right	</tags>
+          <tags>	formfactor_rect1x2 mimic right direction_left_to_right	</tags>
           <position>	1.50111 1.94504 0.919989	</position>
           <rotation>	1.73139 -1.35611 0.458508	</rotation>
           <scale>	1.2042 8.52571 1.20419	</scale>
@@ -2308,6 +2379,57 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.04924	</clipAngle>
           <anchorShift>	-0.000008	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35016	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+          <position>	-1.51497 2.06921 0.660663	</position>
+          <rotation>	1.27625 -1.4861 -3.08677	</rotation>
+          <scale>	0.413473 0.413473 0.413471	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.74986	</clipAngle>
+          <anchorShift>	-0.000002	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35017	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+          <position>	1.515 2.06918 0.660663	</position>
+          <rotation>	1.27626 1.48615 3.08679	</rotation>
+          <scale>	0.413473 0.413473 0.413471	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.74986	</clipAngle>
+          <anchorShift>	-0.000002	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35018	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+          <position>	-1.089 2.188 1.489	</position>
+          <rotation>	1.371306 -0.866382 -2.73528	</rotation>
+          <scale>	1.63 1.169 1.63	</scale>
+          <showOn>	4352	</showOn>
+          <clipAngle>	0.843762	</clipAngle>
+          <anchorShift>	0.35426	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35019	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A67_T57_58_BXI_3DSt	</compatibleModels>
+          <position>	0.841646 2.14845 1.41217	</position>
+          <rotation>	1.336748 0.773006 -0.414341	</rotation>
+          <scale>	1.63 1.169 1.63	</scale>
+          <doubleSided>	true	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	0.843762	</clipAngle>
+          <anchorShift>	0.35426	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

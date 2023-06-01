@@ -3,7 +3,6 @@
 import types
 import BigWorld
 import ResMgr
-import Settings
 import i18n
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -107,37 +106,6 @@ def getFullClientVersion():
     else:
         version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
         return version
-
-
-def isShowStartupVideo():
-    from gui import GUI_SETTINGS
-    if not GUI_SETTINGS.guiEnabled:
-        return False
-    else:
-        p = Settings.g_instance.userPrefs
-        if p is not None:
-            if p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1:
-                if GUI_SETTINGS.compulsoryIntroVideos:
-                    return True
-                return isIntroVideoSettingChanged(p)
-            return False
-        return True
-
-
-def isIntroVideoSettingChanged(userPrefs=None):
-    userPrefs = userPrefs if userPrefs is not None else Settings.g_instance.userPrefs
-    import account_shared
-    mainVersion = account_shared.getClientMainVersion()
-    lastVideoVersion = userPrefs.readString(Settings.INTRO_VIDEO_VERSION, '')
-    return lastVideoVersion != mainVersion
-
-
-def writeIntroVideoSetting():
-    userPrefs = Settings.g_instance.userPrefs
-    if userPrefs is not None:
-        import account_shared
-        userPrefs.writeString(Settings.INTRO_VIDEO_VERSION, account_shared.getClientMainVersion())
-    return
 
 
 def newFakeModel():

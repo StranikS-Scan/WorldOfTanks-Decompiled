@@ -4,9 +4,9 @@ import weakref
 import random
 import BigWorld
 import GenericComponents
-from visual_script.block import Block, EDITOR_TYPE, InitParam, buildStrKeysValue
+from visual_script.block import Block, InitParam, buildStrKeysValue
 from visual_script.slot_types import SLOT_TYPE
-from visual_script.misc import ASPECT, errorVScript
+from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase

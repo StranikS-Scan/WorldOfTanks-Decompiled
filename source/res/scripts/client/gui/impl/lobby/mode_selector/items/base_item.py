@@ -12,10 +12,11 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_car
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
 from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
 from helpers import dependency, i18n, time_utils
-from skeletons.gui.game_control import IBootcampController, IUISpamController
+from skeletons.gui.game_control import IBootcampController, ILimitedUIController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Type, Union
@@ -43,7 +44,7 @@ class ModeSelectorItem(object):
     _VIEW_MODEL = None
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.DEFAULT
     _bootcamp = dependency.descriptor(IBootcampController)
-    _uiSpamController = dependency.descriptor(IUISpamController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(ModeSelectorItem, self).__init__()
@@ -129,7 +130,7 @@ class ModeSelectorItem(object):
 
     def _isNewLabelVisible(self):
         isInBootcamp = self._bootcamp.isInBootcamp()
-        isNewbie = self._uiSpamController.shouldBeHidden('ModeSelectorWidgetsBtnHint')
+        isNewbie = not self.__limitedUIController.isRuleCompleted(LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT)
         return self._getIsNew() and not isInBootcamp and not isNewbie
 
     def _isDisabled(self):

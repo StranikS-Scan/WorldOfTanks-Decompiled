@@ -407,6 +407,10 @@ class IStatsRequester(IRequester):
     def getWeeklyVehicleCrystals(self, vehCD):
         raise NotImplementedError
 
+    @property
+    def luiVersion(self):
+        raise NotImplementedError
+
 
 class IDossierRequester(IRequester):
 
@@ -1185,4 +1189,19 @@ class IResourceWellRequester(IRequester):
         raise NotImplementedError
 
     def getReward(self):
+        raise NotImplementedError
+
+
+class IAchievements20Requester(IRequester):
+
+    def getLayout(self):
+        raise NotImplementedError
+
+    def getLayoutState(self):
+        raise NotImplementedError
+
+    def getAchievementBitmask(self):
+        raise NotImplementedError
+
+    def getLayoutLength(self):
         raise NotImplementedError

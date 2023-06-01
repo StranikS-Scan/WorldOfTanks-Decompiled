@@ -29,6 +29,7 @@ from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.game_restrictions import GameRestrictions
 from account_helpers.resource_well import ResourceWell
+from account_helpers.achievements20 import Achievements20
 from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.session_statistics import SessionStatistics
@@ -44,7 +45,7 @@ from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
@@ -182,12 +183,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.gameRestrictions = g_accountRepository.gameRestrictions
         self.resourceWell = g_accountRepository.resourceWell
         self.winback = g_accountRepository.winback
+        self.achievements20 = g_accountRepository.achievements20
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
         self.stats.setAccount(self)
         self.questProgress.setAccount(self)
         self.shop.setAccount(self)
+        self.achievements20.setAccount(self)
         self.dossierCache.setAccount(self)
         self.battleResultsCache.setAccount(self)
         self.intUserSettings.setProxy(self, self.syncData)
@@ -268,6 +271,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.giftSystem.onAccountBecomePlayer()
         self.gameRestrictions.onAccountBecomePlayer()
         self.resourceWell.onAccountBecomePlayer()
+        self.achievements20.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -312,6 +316,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.giftSystem.onAccountBecomeNonPlayer()
         self.gameRestrictions.onAccountBecomeNonPlayer()
         self.resourceWell.onAccountBecomeNonPlayer()
+        self.achievements20.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -335,6 +340,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags.setAccount(None)
         self.anonymizer.setAccount(None)
         self.offers.setAccount(None)
+        self.achievements20.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -651,7 +657,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def requestPlayerInfo(self, databaseID, callback):
         if events.isPlayerEntityChanging:
             return
-        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}), ext.get('dogTag', {}), ext.get('battleRoyaleStats', {}))
+        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}), ext.get('ranked', {}), ext.get('dogTag', {}), ext.get('battleRoyaleStats', {}), ext.get('wtr', None), ext.get('layout', None), ext.get('layoutState', None))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_INFO, databaseID, 0, 0, proxy)
 
     def requestAccountDossier(self, accountID, callback):
@@ -1227,6 +1233,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.giftSystem.synchronize(isFullSync, diff)
             self.gameRestrictions.synchronize(isFullSync, diff)
             self.resourceWell.synchronize(isFullSync, diff)
+            self.achievements20.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
             self._synchronizeEventNotifications(diff)
@@ -1475,6 +1482,7 @@ class _AccountRepository(object):
         self.telecomRentals = TelecomRentals(self.syncData)
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.winback = Winback(self.commandProxy)
+        self.achievements20 = Achievements20(self.syncData, self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

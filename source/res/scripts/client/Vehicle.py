@@ -23,6 +23,7 @@ from aih_constants import ShakeReason
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND
 from debug_utils import LOG_DEBUG_DEV
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from Event import Event
 from gui.battle_control import vehicle_getter, avatar_getter
 from gui.battle_control.avatar_getter import getSoundNotifications
@@ -49,6 +50,7 @@ from shared_utils.vehicle_utils import createWheelFilters
 import GenericComponents
 import Projectiles
 import CGF
+from helpers.styles_perf_toolset import g_stylesOverrider
 if typing.TYPE_CHECKING:
     import OwnVehicle
 _logger = logging.getLogger(__name__)
@@ -116,6 +118,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     @property
     def isWheeledTech(self):
         return self.typeDescriptor.type.isWheeledVehicle
+
+    @property
+    def hasSpeedometer(self):
+        return self.typeDescriptor.type.hasSpeedometer
 
     @property
     def isScout(self):
@@ -223,14 +229,22 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         oldTypeDescriptor = self.typeDescriptor
         self.typeDescriptor = self.getDescr(None if isDelayedRespawn else self.respawnCompactDescr)
         forceReloading = self.respawnCompactDescr is not None
+        result = g_stylesOverrider.overrideStyleForVehicle(self.typeDescriptor.name)
+        if result is not None:
+            outfitDescr = result
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
             if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
                 forceReloading = True
+            if forceReloading:
+                self.isForceReloading = True
         strCD = self.typeDescriptor.makeCompactDescr()
         newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr)
         ctrl = self.guiSessionProvider.dynamic.appearanceCache
         if ctrl is not None:
+            appearance = ctrl.getAppearance(self.id, newInfo, None, strCD, False)
+            if BONUS_CAPS.checkAny(BigWorld.player().arenaBonusType, 'EPIC') and self.isAlive() and appearance and not appearance.isAlive:
+                forceReloading = True
             if forceReloading:
                 oldStrCD = oldTypeDescriptor.makeCompactDescr() if oldTypeDescriptor is not None else None
                 appearance = ctrl.reloadAppearance(self.id, newInfo, self.__onAppearanceReady, strCD, oldStrCD)
@@ -249,10 +263,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if respawnCompactDescr is not None:
             self.isCrewActive = True
             descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
+            self.__turretDetachmentConfirmed = False
             if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
                 self.__prevHealth = self.publicInfo.maxHealth
-                self.__turretDetachmentConfirmed = False
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
@@ -949,7 +963,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             progressionCtrl = self.guiSessionProvider.dynamic.progression
             if progressionCtrl is not None:
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
-            if self.respawnCompactDescr:
+            if hasattr(self, 'respawnCompactDescr') and self.respawnCompactDescr:
                 _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
                 BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
             self.refreshNationalVoice()

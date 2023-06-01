@@ -245,10 +245,7 @@ class DestructibleEntityState(ScriptGameObject):
                 visualModel.addRootPart(component.visualModel, 'root')
             else:
                 visualModel.emplacePart(component.visualModel, 'root', componentId)
-            bspModels.append((componentIdx,
-             component.physicsModel,
-             (0, 0, 0),
-             False))
+            bspModels.append((componentIdx, component.physicsModel))
 
         collisionAssembler = BigWorld.CollisionAssembler(tuple(bspModels), self.spaceID)
         collisionAssembler.name = self.__stateName + ASSEMBLER_NAME_SUFFIXES.PHYSICS

@@ -4,7 +4,7 @@
 
 class IAppearanceCache(object):
 
-    def getAppearance(self, vId, vInfo, callback=None, strCD=None):
+    def getAppearance(self, vId, vInfo, callback=None, strCD=None, needLoad=True):
         raise NotImplementedError
 
     def removeAppearance(self, vId, strCD=None):

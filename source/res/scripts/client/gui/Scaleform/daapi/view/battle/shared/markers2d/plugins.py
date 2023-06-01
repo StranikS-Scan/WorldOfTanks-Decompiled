@@ -35,8 +35,6 @@ from messenger.proto.bw_chat2.battle_chat_cmd import AUTOCOMMIT_COMMAND_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.impl import backport
-from gui.impl.gen import R
 _logger = logging.getLogger(__name__)
 _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER,
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
@@ -962,10 +960,10 @@ class BaseAreaMarkerPlugin(MarkerPlugin):
         else:
             return False
 
-    def setupMarker(self, uniqueID, shape, minDistance, maxDistance, distance, distanceFieldColor):
+    def setupMarker(self, uniqueID, shape, minDistance, maxDistance, distance, metersString, distanceFieldColor):
         if uniqueID not in self.__markers:
             return
-        self._invokeMarker(self.__markers[uniqueID], 'init', shape, minDistance, maxDistance, distance, backport.text(R.strings.ingame_gui.marker.meters()), distanceFieldColor)
+        self._invokeMarker(self.__markers[uniqueID], 'init', shape, minDistance, maxDistance, distance, metersString, distanceFieldColor)
 
     def markerSetDistance(self, uniqueID, distance):
         if uniqueID not in self.__markers:

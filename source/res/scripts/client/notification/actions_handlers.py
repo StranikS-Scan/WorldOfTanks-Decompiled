@@ -1203,6 +1203,20 @@ class _OpenWinbackSelectableRewardViewFromQuest(_OpenWinbackSelectableRewardView
         return NOTIFICATION_TYPE.MESSAGE
 
 
+class _OpenAchievementsScreen(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
     __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
 
@@ -1312,7 +1326,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenWinbackSelectableRewardView,
- _OpenWinbackSelectableRewardViewFromQuest)
+ _OpenWinbackSelectableRewardViewFromQuest,
+ _OpenAchievementsScreen)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

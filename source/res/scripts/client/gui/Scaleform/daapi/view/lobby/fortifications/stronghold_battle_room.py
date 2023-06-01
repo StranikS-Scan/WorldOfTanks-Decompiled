@@ -9,7 +9,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
 from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
-from gui.Scaleform.daapi.view.lobby.fortifications.vo_converters import FILTER_STATE, makeStrongholdsSlotsVOs, makeSortieVO
+from gui.Scaleform.daapi.view.lobby.fortifications.vo_converters import FILTER_STATE, makeStrongholdsSlotsVOs, makeSortieVO, makeStrongholdVehicleVO
 from gui.Scaleform.daapi.view.lobby.prb_windows.stronghold_action_button_state_vo import StrongholdActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
@@ -111,9 +111,10 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         pInfo = self.prbEntity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
+            frozenVehicles = self.prbEntity.getEventFrozenVehicles(dbID)
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = vo_converters.makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), self.prbEntity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeStrongholdVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), self.prbEntity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer(), frozenVehicles=frozenVehicles)
                 slotCost = vInfo.vehLevel
             else:
                 slotState = self.prbEntity.getSlotState(slotIdx)
@@ -123,6 +124,8 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
                 else:
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
+            if frozenVehicles:
+                self._updateMembersData()
         if pInfo.isCurrentPlayer() or pInfo.isCommander():
             self._setActionButtonState()
         return
@@ -207,6 +210,10 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._updateRallyData()
 
     def onSlotVehileFiltersChanged(self):
+        self._updateRallyData()
+
+    def onEventFrozenVehiclesChanged(self, data):
+        self._updateMembersData()
         self._updateRallyData()
 
     def onStrongholdDoBattleQueue(self, isFirstBattle, readyButtonEnabled, reserveOrder):

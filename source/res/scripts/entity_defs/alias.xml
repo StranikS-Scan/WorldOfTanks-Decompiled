@@ -4,6 +4,7 @@
   <SHOT_ID>	INT32	</SHOT_ID>
   <DB_ID>	INT64	</DB_ID>
   <EXTRA_ID>	UINT8	</EXTRA_ID>
+  <VEH_TYPE_CD>	UINT32	</VEH_TYPE_CD>
   <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
       <clusterCCU>
         <Type>	UINT32	</Type>
@@ -338,7 +339,7 @@
         <Type>	UINT8	</Type>
       </vehicleProgressTankmen>
       <vehTypeCompDescr>
-        <Type>	UINT16	</Type>
+        <Type>	VEH_TYPE_CD	</Type>
       </vehTypeCompDescr>
       <premiumType>
         <Type>	UINT8	</Type>
@@ -437,7 +438,7 @@
         <Type>	UINT8	</Type>
       </targetTeam>
       <targetTypeCompDescr>
-        <Type>	UINT16	</Type>
+        <Type>	VEH_TYPE_CD	</Type>
       </targetTypeCompDescr>
       <targetIsTeamKiller>
         <Type>	BOOL	</Type>
@@ -1004,7 +1005,7 @@
         <Type>	BOOL	</Type>
       </attackerWasInvisible>
       <attackerTypeCompactDescr>
-        <Type>	UINT16	</Type>
+        <Type>	VEH_TYPE_CD	</Type>
       </attackerTypeCompactDescr>
       <attackerVehicleIndex>
         <Type>	UINT8	</Type>
@@ -1420,7 +1421,7 @@
   <RESPAWN_COOLDOWN_ITEM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <vehTypeCompDescr>
-        <Type>	UINT16	</Type>
+        <Type>	VEH_TYPE_CD	</Type>
       </vehTypeCompDescr>
       <endOfCooldownPiT>
         <Type>	FLOAT32	</Type>
@@ -1471,7 +1472,7 @@
         <Type>	UINT8	</Type>
       </group>
       <vehTypeCompDescrs>
-        <Type>	ARRAY	  <of>	UINT16	</of>
+        <Type>	ARRAY	  <of>	VEH_TYPE_CD	</of>
         </Type>
       </vehTypeCompDescrs>
     </Properties>
@@ -1775,6 +1776,9 @@
       <customRoleSlotTypeId>
         <Type>	UINT8	</Type>
       </customRoleSlotTypeId>
+      <botDisplayStatus>
+        <Type>	UINT8	</Type>
+      </botDisplayStatus>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1834,6 +1838,9 @@
   </VEHICLE_MARKER_DATA>
   <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
+      <vehicleId>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleId>
       <nextStrikeTime>
         <Type>	FLOAT32	</Type>
       </nextStrikeTime>
@@ -2453,4 +2460,50 @@
       </end>
     </Properties>
   </GAME_OBJECT_ACTIVATION>
+  <POLYGON_TRIGGER_PARAMS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <step>
+        <Type>	UINT16	</Type>
+      </step>
+      <origin>
+        <Type>	VECTOR3	</Type>
+      </origin>
+      <dimensions>
+        <Type>	VECTOR3	</Type>
+      </dimensions>
+      <verts>
+        <Type>	ARRAY	  <of>	VECTOR3	</of>
+        </Type>
+      </verts>
+      <segments>
+        <Type>	ARRAY	  <of>	ARRAY	  <of>	UINT16	</of>
+          </of>
+        </Type>
+      </segments>
+    </Properties>
+  </POLYGON_TRIGGER_PARAMS>
+  <SPAWNGROUP_INFO>	FIXED_DICT	  <Properties>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <position>
+        <Type>	VECTOR2	</Type>
+      </position>
+    </Properties>
+  </SPAWNGROUP_INFO>
+  <TEAM_LIVES>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <lives>
+        <Type>	INT8	</Type>
+      </lives>
+      <usedLives>
+        <Type>	INT8	</Type>
+      </usedLives>
+      <lockedLives>
+        <Type>	INT8	</Type>
+      </lockedLives>
+    </Properties>
+  </TEAM_LIVES>
 </alias.xml>

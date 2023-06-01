@@ -7,15 +7,15 @@ class HangarSpaceListener(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
-        self.hangarSpace.onSpaceCreate += self._onSpaceCreated
-        self.hangarSpace.onSpaceDestroy += self._onSpaceDestroy
+        self.hangarSpace.onSpaceCreate += self._activate
+        self.hangarSpace.onSpaceDestroy += self._deactivate
 
     def destroy(self):
-        self.hangarSpace.onSpaceCreate -= self._onSpaceCreated
-        self.hangarSpace.onSpaceDestroy -= self._onSpaceDestroy
+        self.hangarSpace.onSpaceCreate -= self._activate
+        self.hangarSpace.onSpaceDestroy -= self._deactivate
 
-    def _onSpaceCreated(self):
+    def _activate(self):
         pass
 
-    def _onSpaceDestroy(self, inited):
+    def _deactivate(self, inited):
         pass

@@ -13,11 +13,13 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
+from gui.impl.lobby.mode_selector.mode_selector_view import ModeSelectorView
 from gui.prb_control.prb_getters import getQueueType
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController, IHangarSpaceSwitchController
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
@@ -46,6 +48,7 @@ class BootcampController(IBootcampController):
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
     spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         super(BootcampController, self).__init__()
@@ -247,6 +250,7 @@ class BootcampController(IBootcampController):
             icon = R.images.gui.maps.icons.bootcamp.dialog
             startAcc = R.strings.bootcamp.message.start if needAwarding else R.strings.bootcamp.message.restart
             iconAcc = icon.bc_enter_small() if needAwarding else icon.bc_enter_1_small()
+            isFromModeSelector = self.__isModeSelectorOpened()
             if needAwarding:
                 rewardStr = self.__format(startAcc.message.reward(), _YELLOW)
             else:
@@ -257,7 +261,7 @@ class BootcampController(IBootcampController):
                 self.__goBootcamp()
             elif isFromLobbyMenu:
                 g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
-            else:
+            elif isFromModeSelector:
                 showModeSelectorWindow(False)
 
     def __skipBootcamp(self):
@@ -277,3 +281,6 @@ class BootcampController(IBootcampController):
         app = self.appLoader.getApp()
         container = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         return container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}) is not None
+
+    def __isModeSelectorOpened(self):
+        return self.guiLoader.windowsManager.getViewByLayoutID(ModeSelectorView.layoutID) is not None

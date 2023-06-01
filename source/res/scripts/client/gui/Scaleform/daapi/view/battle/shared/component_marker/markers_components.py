@@ -6,7 +6,7 @@ import AnimationSequence
 import BigWorld
 import Math
 from ids_generators import SequenceIDGenerator
-from account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core import ISettingsCore, settings_constants
 from helpers import dependency
 from shared_utils import BitmaskHelper
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -15,6 +15,9 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION
 import CombatSelectedArea
+from gui.battle_control import minimap_utils
+from gui.impl import backport
+from gui.impl.gen import R
 
 def _getDirectionIndicator(swf, mcName):
     indicator = None
@@ -54,6 +57,8 @@ class _IMarkerComponentBase(object):
         self._initData = data
         self._matrixProduct = data.get('matrixProduct')
         self._isVisible = data.get('visible', True)
+        self._entity = None
+        return
 
     @property
     def isVisible(self):
@@ -92,6 +97,9 @@ class _IMarkerComponentBase(object):
 
     def setMarkerMatrix(self, matrix):
         self._matrixProduct.a = matrix
+
+    def setMarkerEntity(self, entity):
+        self._entity = weakref.proxy(entity)
 
     def setMarkerPosition(self, position):
         matrix = Math.Matrix()
@@ -169,7 +177,7 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         symbol = self.__marker2DData.get('symbol', settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER)
         if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible, symbol=symbol):
             return False
-        gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('distanceFieldColor', 'yellow'))
+        gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('metersString', backport.text(R.strings.ingame_gui.marker.meters())), self.__marker2DData.get('distanceFieldColor', 'yellow'))
         return True
 
 
@@ -428,3 +436,95 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
         if not self.__area:
             return
         self.__area.setGUIVisible(self._isVisible)
+
+
+class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    class Blending(object):
+        NORMAL = 'normal'
+        ADD = 'add'
+        MULTIPLY = 'multiply'
+        SCREEN = 'screen'
+        SUBTRACT = 'subtract'
+
+    def __init__(self, idx, data):
+        super(PolygonalZoneMinimapMarkerComponent, self).__init__(idx, data)
+        self._polygon = None
+        self._isBorderVisible = False
+        markerData = data.get(self.maskType)[idx]
+        self._properties = markerData['color']
+        return
+
+    @property
+    def isVisible(self):
+        return self._entity.entityPolygonalTrigger.isActive and self._entity.clientVisualComp.isVisible
+
+    def getPolygon(self):
+        udo = BigWorld.userDataObjects.get(self._entity.clientVisualComp.udoGuid, None)
+        return [] if udo is None else udo.minimapMarkerPolygon
+
+    def attachGUI(self, gui):
+        super(PolygonalZoneMinimapMarkerComponent, self).attachGUI(gui)
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        if not self._polygon:
+            polygon = self.getPolygon()
+            if not polygon:
+                return
+            arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
+            xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
+            yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), list())
+        self._updatePolygon()
+
+    def detachGUI(self):
+        super(PolygonalZoneMinimapMarkerComponent, self).detachGUI()
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+
+    def update(self, *args, **kwargs):
+        super(PolygonalZoneMinimapMarkerComponent, self).update(*args, **kwargs)
+        gui = self._gui()
+        if not self._isVisible or not gui or not self._isMarkerExists:
+            return
+        newIsVisible = self.isVisible
+        if self._isBorderVisible == newIsVisible:
+            return
+        self._isBorderVisible = newIsVisible
+        gui.setActive(self._componentID, self._isBorderVisible)
+        gui.invoke(self._componentID, 'setVisible', self._isBorderVisible)
+
+    def _updatePolygon(self):
+        isColorBlind = self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
+        self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(isColorBlind))
+        self._gui().invoke(self._componentID, 'setZoneData', self._polygon)
+        self._gui().invoke(self._componentID, 'setVisible', self._isBorderVisible)
+        self._gui().setActive(self._componentID, self._isBorderVisible)
+
+    def __getMarkerProperties(self, isColorBlind):
+        props = self._properties['default'] if not isColorBlind else self._properties['colorBlind']
+        return (props['fillColor'],
+         props['fillAlpha'],
+         props['outlineColor'],
+         props['outlineAlpha'],
+         props['lineThickness'],
+         props['fillBlendMode'],
+         props['outlineBlendMode'])
+
+    def __onSettingsChanged(self, diff):
+        if settings_constants.GRAPHICS.COLOR_BLIND in diff:
+            self._updatePolygon()
+
+
+class StaticDeathZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent):
+
+    @property
+    def isVisible(self):
+        return self._entity.isActive
+
+    def getPolygon(self):
+        p = self._entity.position
+        min, max = self._entity.clientVisualComp.getCorners()
+        return [(min.x - p.x, min.z - p.z),
+         (min.x - p.x, max.z - p.z),
+         (max.x - p.x, max.z - p.z),
+         (max.x - p.x, min.z - p.z)]

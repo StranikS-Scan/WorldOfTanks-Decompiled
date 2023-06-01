@@ -66,6 +66,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.ServerStats import ServerStats
     from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
     from gui.Scaleform.daapi.view.lobby.SkillDropWindow import SkillDropWindow
+    from gui.Scaleform.daapi.view.lobby.SkillDropForFreeWindow import SkillDropForFreeWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleBuyWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleRestoreWindow
     from gui.Scaleform.daapi.view.lobby.VehicleInfoWindow import VehicleInfoWindow
@@ -87,6 +88,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_preview import VehicleStylePreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_progression_preview import VehicleStyleProgressionPreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_buying_preview import VehicleStyleBuyingPreview
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.showcase_style_buying_preview import VehicleShowcaseStyleBuyingPreview
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_progress_component import BootcampProgressComponent
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.wot_plus_vehicle_preview import WotPlusVehiclePreview
     from gui.Scaleform.daapi.view.lobby.telecom_rentals.telecom_rentals_browser_pages import VehicleTelecomRentalView
@@ -103,6 +105,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.STYLE_PREVIEW, VehicleStylePreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW, VehicleStyleProgressionPreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_BUYING_PREVIEW, VehicleStyleBuyingPreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_BUYING_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.SHOWCASE_STYLE_BUYING_PREVIEW, VehicleShowcaseStyleBuyingPreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.SHOWCASE_STYLE_BUYING_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW, TradeInVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW, MarathonVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW, OfferGiftVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -150,6 +153,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.ROLE_CHANGE, RoleChangeWindow, 'roleChangeWindow.swf', WindowLayer.WINDOW, 'roleChangeWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, SkillDropWindow, 'skillDropWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, SkillDropForFreeWindow, 'skillDropForFreeWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_BUY_WINDOW, BootcampComponentOverride(VehicleBuyWindow, BCVehicleBuyWindow), BootcampComponentOverride('vehicleBuyWindow.swf', 'BCVehicleBuyWindow.swf'), WindowLayer.TOP_WINDOW, 'vehicleBuyWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, VehicleRestoreWindow, 'vehicleBuyWindow.swf', WindowLayer.TOP_WINDOW, 'vehicleRestoreWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_INFO_WINDOW, VehicleInfoWindow, 'vehicleInfo.swf', WindowLayer.WINDOW, 'vehicleInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isCentered=False),
@@ -203,6 +207,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.STYLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.STYLE_BUYING_PREVIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.SHOWCASE_STYLE_BUYING_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.IMAGE_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
@@ -220,6 +225,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ROLE_CHANGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),

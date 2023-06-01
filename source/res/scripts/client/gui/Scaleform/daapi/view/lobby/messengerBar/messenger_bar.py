@@ -18,16 +18,16 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.gui_items.processors.session_stats import ResetSessionStatsProcessor
-from gui.ui_spam.custom_aliases import SESSION_STATS_HINT
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
-from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController, IUISpamController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController, ILimitedUIController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from skeletons.gui.lobby_context import ILobbyContext
@@ -108,7 +108,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     _referralCtrl = dependency.descriptor(IReferralProgramController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _itemsCache = dependency.descriptor(IItemsCache)
-    _uiSpamController = dependency.descriptor(IUISpamController)
+    _limitedUIController = dependency.descriptor(ILimitedUIController)
     _NEW_PLAYER_BATTLES = 2
 
     @prbDispatcherProperty
@@ -221,7 +221,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
             btnIsVisible &= battlesCount >= self._NEW_PLAYER_BATTLES
         self.as_setSessionStatsButtonVisibleS(btnIsVisible)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
-        self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and not self._uiSpamController.shouldBeHidden(SESSION_STATS_HINT))
+        self.__updateSessionStatsHint(btnIsVisible and self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS))
         return
 
     def __getSessionStatsBtnTooltip(self, btnEnabled):

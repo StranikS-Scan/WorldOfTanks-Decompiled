@@ -24,6 +24,8 @@ class HintsProxy(SfLobbyProxy):
         self.onHintItemLost = Event.Event(self.__eManager)
         self.onVisibleChanged = Event.Event(self.__eManager)
         self.onEnabledChanged = Event.Event(self.__eManager)
+        self.onUpdateTutorialHints = Event.Event(self.__eManager)
+        self.onImportantHintShowing = Event.Event(self.__eManager)
 
     def init(self):
         addListener = g_eventBus.addListener
@@ -31,6 +33,8 @@ class HintsProxy(SfLobbyProxy):
         addListener(events.TutorialEvent.ON_COMPONENT_FOUND, self.__onItemFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
+        addListener(events.TutorialEvent.UPDATE_TUTORIAL_HINTS, self.__onUpdateTutorialHints, scope=EVENT_BUS_SCOPE.GLOBAL)
+        addListener(events.TutorialEvent.IMPORTANT_HINT_SHOWING, self.__onImportantHintShowing, scope=EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None and self.app.initialized:
             self.__load()
         return True
@@ -45,6 +49,8 @@ class HintsProxy(SfLobbyProxy):
         removeListener(events.TutorialEvent.ON_COMPONENT_FOUND, self.__onItemFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
+        removeListener(events.TutorialEvent.UPDATE_TUTORIAL_HINTS, self.__onUpdateTutorialHints, scope=EVENT_BUS_SCOPE.GLOBAL)
+        removeListener(events.TutorialEvent.IMPORTANT_HINT_SHOWING, self.__onImportantHintShowing, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def showHint(self, props, ignoreOutsideClick=False, silent=False):
         actionType = (ACTION_TAGS['click'],) if ignoreOutsideClick else (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])
@@ -71,6 +77,12 @@ class HintsProxy(SfLobbyProxy):
     def __onItemLost(self, event):
         if event.targetID:
             self.onHintItemLost(event.targetID)
+
+    def __onUpdateTutorialHints(self, event):
+        self.onUpdateTutorialHints(event.targetID, event.componentState, event.arguments)
+
+    def __onImportantHintShowing(self, event):
+        self.onImportantHintShowing(event.componentState)
 
     def __onTriggerActivated(self, event):
         if event.settingsID == TUTORIAL_TRIGGER_TYPES.CLICK_TYPE and event.targetID:

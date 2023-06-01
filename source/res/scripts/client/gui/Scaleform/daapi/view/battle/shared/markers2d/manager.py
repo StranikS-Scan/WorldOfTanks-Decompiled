@@ -211,7 +211,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             setup['vehiclesTargets'] = plugins.VehicleMarkerTargetPluginReplayPlaying
         if BattleReplay.g_replayCtrl.isRecording:
             setup['vehiclesTargets'] = plugins.VehicleMarkerTargetPluginReplayRecording
-        if arenaVisitor.hasRespawns():
+        if arenaVisitor.hasRespawns() or arenaVisitor.isEnableExternalRespawn():
             setup['vehicles'] = vehicle_plugins.RespawnableVehicleMarkerPlugin
         else:
             setup['vehicles'] = vehicle_plugins.VehicleMarkerPlugin

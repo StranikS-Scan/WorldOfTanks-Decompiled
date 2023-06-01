@@ -3,7 +3,6 @@
 import weakref
 from helpers import dependency
 from skeletons.gui.login_manager import ILoginManager
-from view_background import ViewBackground
 
 class INVALID_FIELDS(object):
     ALL_VALID = 0
@@ -19,16 +18,11 @@ class BaseMode(object):
     def __init__(self, view, fallbackMode=None):
         self._view = weakref.proxy(view)
         self._fallbackMode = fallbackMode
-        self._viewBackground = None
-        return
 
     def onPopulate(self):
         pass
 
     def destroy(self):
-        if self._viewBackground is not None:
-            self._viewBackground.hide()
-            self._viewBackground = None
         self._view = None
         self._fallbackMode = None
         return
@@ -76,42 +70,3 @@ class BaseMode(object):
 
     def skipRejectionError(self, *args):
         return False
-
-    def switchBgMode(self):
-        if self._viewBackground is not None:
-            self._viewBackground.switch()
-        elif self._fallbackMode is not None:
-            self._fallbackMode.switchBgMode()
-        return
-
-    def musicFadeOut(self):
-        if self._viewBackground is not None:
-            self._viewBackground.fadeSound()
-        elif self._fallbackMode is not None:
-            self._fallbackMode.musicFadeOut()
-        return
-
-    def videoLoadingFailed(self):
-        if self._viewBackground is not None:
-            self._viewBackground.showWallpaper(False)
-        elif self._fallbackMode is not None:
-            self._fallbackMode.videoLoadingFailed()
-        return
-
-    def setMute(self, value):
-        if self._viewBackground is not None:
-            self._viewBackground.toggleMute(value)
-        elif self._fallbackMode is not None:
-            self._fallbackMode.setMute(value)
-        return
-
-    def onVideoLoaded(self):
-        if self._viewBackground is not None:
-            self._viewBackground.startVideoSound()
-        elif self._fallbackMode is not None:
-            self._fallbackMode.onVideoLoaded()
-        return
-
-    def _initViewBackground(self):
-        self._viewBackground = ViewBackground(self._view)
-        self._viewBackground.show()

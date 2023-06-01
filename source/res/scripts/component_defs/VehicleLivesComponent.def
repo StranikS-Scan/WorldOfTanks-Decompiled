@@ -1,0 +1,22 @@
+<VehicleLivesComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <lives>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lives>
+    <usedLives>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </usedLives>
+    <lockedLives>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lockedLives>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	VehicleLivesComponent	</DefaultKeyName>
+</VehicleLivesComponent.def>

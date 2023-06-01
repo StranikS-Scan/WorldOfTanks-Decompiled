@@ -5,7 +5,7 @@ from debug_utils import LOG_DEBUG
 import GUI
 from account_helpers.AccountSettings import AccountSettings, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.settings_constants import GRAPHICS
+from account_helpers.settings_core.settings_constants import GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.settings.mixins import LayerVisibilityMixin
 from gui.Scaleform.daapi.view.meta.ColorSettingsViewMeta import ColorSettingsViewMeta
@@ -26,8 +26,6 @@ class TABS(object):
     FILTERS = 1
     CUSTOM = 2
 
-
-COLOR_GRADING_TECHNIQUE_DEFAULT = 0
 
 class ColorSettingsView(LayerVisibilityMixin, ColorSettingsViewMeta):
     settingsCore = dependency.descriptor(ISettingsCore)

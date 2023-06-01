@@ -17,7 +17,16 @@ class BasicMine(EntityGameObject):
     def _registerGameObject(self, gameObject):
         self.gameObject.setPosition(self.position)
         self.gameObject.setIsEnemyMarkerEnabled(self.isMarkerEnabled)
+        self.gameObject.setIsActivated(self.isActivated)
+        self.gameObject.setActivationTimeDelay(self.activationTimeDelay)
+        self.gameObject.setMineNumber(self.mineNumber)
         super(BasicMine, self)._registerGameObject(gameObject)
+
+    def set_isActivated(self, prev=None):
+        if self.isActivated:
+            if self.gameObject is not None:
+                self.gameObject.activateMine()
+        return
 
     def set_isMarkerEnabled(self, prev=None):
         if self.gameObject is not None:

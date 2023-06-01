@@ -503,6 +503,16 @@ class CLANS(object):
     CLANLANDING_NOTIFICATION_EDITED = '#clans:clanLanding/notification/edited'
     CLANLANDING_NOTIFICATION_ARCHIVED = '#clans:clanLanding/notification/archived'
     CLANLANDING_NOTIFICATION_DELETED = '#clans:clanLanding/notification/deleted'
+    BANNER_TITLE = '#clans:banner/title'
+    BANNER_INFO_BATTLESEND = '#clans:banner/info/battlesEnd'
+    BANNER_INFO_BATTLESTODAY = '#clans:banner/info/battlesToday'
+    BANNER_INFO_BATTLESTOMORROW = '#clans:banner/info/battlesTomorrow'
+    BANNER_CHOOSETIME = '#clans:banner/chooseTime'
+    BANNER_SEASONDATE_SEASONNOTSTARTED = '#clans:banner/seasonDate/seasonNotStarted'
+    BANNER_SEASONDATE_SEASONLASTS = '#clans:banner/seasonDate/seasonLasts'
+    BANNER_TIMELEFT_HOURS = '#clans:banner/timeLeft/hours'
+    BANNER_TIMELEFT_MIN = '#clans:banner/timeLeft/min'
+    BANNER_PRIMETIME = '#clans:banner/primeTime'
     CLANPROFILE_SUMMARYVIEW_BLOCKLBL_ENUM = (CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL10,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL8,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL6,

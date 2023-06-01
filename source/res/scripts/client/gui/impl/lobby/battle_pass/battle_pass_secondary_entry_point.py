@@ -56,11 +56,12 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
              'text': str(self.level + 1),
              'isEnabled': isEnabled,
              'isBought': self.isBought,
+             'isPaused': self.isPaused,
              'chapterID': self.chapterID,
              'points': self.freePoints if self.isCompleted else 0}
             self.__updateTooltipData(data, self.__arenaBonusType, gameModeIsEnabled)
             self.as_setDataS(data)
-            if isEnabled:
+            if not self.__battlePass.isDisabled():
                 self.as_setCountS(self._getNotChosenRewardCount())
             return
 

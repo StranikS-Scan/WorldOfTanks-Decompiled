@@ -167,6 +167,10 @@ class AvatarEpicData(object):
         playerDataComponent = BigWorld.player().arena.componentSystem.playerDataComponent
         playerDataComponent.setPlayerXP(xpValue)
 
+    def onCrewRoleFactorAndRankUpdate(self, newFactor, allyVehID, allyNewRank):
+        playerDataComponent = BigWorld.player().arena.componentSystem.playerDataComponent
+        playerDataComponent.onCrewRolesFactorUpdated(newFactor, allyVehID, allyNewRank)
+
     def onRankUpdate(self, newRank):
         playerDataComponent = BigWorld.player().arena.componentSystem.playerDataComponent
         playerDataComponent.onPlayerRankUpdated(newRank)

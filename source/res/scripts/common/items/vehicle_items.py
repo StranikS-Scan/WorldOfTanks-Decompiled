@@ -283,7 +283,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -314,6 +314,7 @@ class Gun(InstallableItem):
         self.customizableVehicleAreas = None
         self.edgeByVisualModel = True
         self.prefabs = component_constants.EMPTY_TUPLE
+        self.shootImpulses = component_constants.EMPTY_TUPLE
         return
 
 

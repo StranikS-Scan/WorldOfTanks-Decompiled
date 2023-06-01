@@ -30,8 +30,9 @@ class ModelComponent(Component):
         self.__isInWorld = False
 
     def activate(self):
-        if self.compoundModel is not None and not self.__isInWorld:
-            BigWorld.player().addModel(self.compoundModel)
+        player = BigWorld.player()
+        if self.compoundModel is not None and not self.__isInWorld and player is not None:
+            player.addModel(self.compoundModel)
             self.__isInWorld = True
         return
 

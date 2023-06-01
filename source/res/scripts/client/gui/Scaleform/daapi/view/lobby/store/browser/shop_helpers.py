@@ -144,6 +144,14 @@ def getEventLootBoxesUrl():
     return _getUrl('eventLootboxes')
 
 
+def getShowcaseUrl():
+    return _getUrl('showcase')
+
+
 def getClientControlledCloseCtx():
     return {'browserParams': makeBrowserParams(isCloseBtnVisible=True),
      'forcedSkipEscape': True}
+
+
+def getSteelHunterProductsUrl():
+    return _getUrl('shProducts')

@@ -40,9 +40,11 @@ def isAnyEntryVisible():
 
 def _getActiveCarouselEventEntryID():
     entries = collectCarouselEventEntryPoints()
-    state = g_prbLoader.getDispatcher().getFunctionalState()
-    for viewID, view in itertools.chain(_VIEWS.iteritems(), entries.iteritems()):
-        if view.getIsActive(state):
-            return viewID
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher is not None:
+        state = dispatcher.getFunctionalState()
+        for viewID, view in itertools.chain(_VIEWS.iteritems(), entries.iteritems()):
+            if view.getIsActive(state):
+                return viewID
 
     return R.invalid()

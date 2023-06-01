@@ -22,6 +22,7 @@ class PoiStatus(enum.IntEnum):
 class PoiBlockReasons(enum.IntEnum):
     DAMAGE = 1
     EQUIPMENT = 2
+    OVERTURNED = 3
 
 
 PoiEquipmentNamesByPoiType = {PoiType.ARTILLERY: 'poi_artillery_aoe',

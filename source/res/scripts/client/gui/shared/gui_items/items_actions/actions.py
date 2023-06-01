@@ -41,7 +41,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors import makeSuccess
-from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
+from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor, BuyBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
@@ -1058,17 +1058,45 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
 
 
 class InstallBattleAbilities(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__classVehs')
+    __slots__ = ('__vehicle', '__classVehs', '__setupItems')
 
-    def __init__(self, vehicle, classVehs=False):
+    def __init__(self, vehicle, classVehs=False, setupItems=None):
         super(InstallBattleAbilities, self).__init__()
         self.__vehicle = vehicle
         self.__classVehs = classVehs
+        self.__setupItems = setupItems
 
     @adisp_async
     @decorators.adisp_process('techMaintenance')
     def _action(self, callback):
         result = yield InstallBattleAbilitiesProcessor(self.__vehicle, self.__classVehs).request()
+        callback(result)
+
+    @adisp_async
+    @future_async.wg_async
+    def _confirm(self, callback):
+        if not self.__setupItems:
+            callback(True)
+        else:
+            dialogResult = yield future_async.wg_await(shared_events.showBattleAbilitiesConfirmDialog(items=self.__setupItems, withInstall=bool(self.__setupItems), vehicleType=self.__vehicle.type, applyForAllVehiclesByType=self.__classVehs))
+            if dialogResult is None or dialogResult.busy:
+                callback(False)
+            isOK, _ = dialogResult.result
+            callback(isOK)
+        return
+
+
+class BuyBattleAbilities(AsyncGUIItemAction):
+    __slots__ = ('__skillIDs',)
+
+    def __init__(self, skillIDs):
+        super(BuyBattleAbilities, self).__init__()
+        self.__skillIDs = skillIDs
+
+    @adisp_async
+    @decorators.adisp_process('buyItem')
+    def _action(self, callback):
+        result = yield BuyBattleAbilitiesProcessor(self.__skillIDs).request()
         callback(result)
 
 

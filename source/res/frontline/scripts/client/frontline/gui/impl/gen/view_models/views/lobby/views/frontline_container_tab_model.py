@@ -5,7 +5,6 @@ from frameworks.wulf import ViewModel
 
 class TabType(Enum):
     PROGRESS = 'progress'
-    SKILLS = 'skills'
     REWARDS = 'rewards'
     INFO = 'info'
 

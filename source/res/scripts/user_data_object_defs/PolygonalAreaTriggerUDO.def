@@ -1,0 +1,44 @@
+<PolygonalAreaTriggerUDO.def>
+  <Domain>	CELL	</Domain>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+    </name>
+    <entityTypeFilter>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	Vehicle	</Default>
+    </entityTypeFilter>
+    <markerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	POLYGONAL_ZONE	</Default>
+    </markerStyle>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	1	</Default>
+    </isActive>
+    <isVisible>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	1	</Default>
+    </isVisible>
+    <minimapMarkerPolygon>
+      <Type>	ARRAY	  <of>	VECTOR2	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </minimapMarkerPolygon>
+    <serverPolygon>
+      <Type>	POLYGON_TRIGGER_PARAMS	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </serverPolygon>
+  </Properties>
+</PolygonalAreaTriggerUDO.def>

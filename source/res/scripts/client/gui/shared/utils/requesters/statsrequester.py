@@ -326,6 +326,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def getWeeklyVehicleCrystals(self, vehCD):
         return self.getCacheValue('weeklyVehicleCrystals', {}).get(vehCD, 0)
 
+    @property
+    def luiVersion(self):
+        return self.getCacheValue('limitedUi', {}).get('ver', 1)
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))

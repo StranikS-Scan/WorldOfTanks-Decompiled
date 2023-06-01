@@ -9,8 +9,10 @@ BATTLE_PARAMS_XML_PATH = 'scripts/item_defs/battle_params.xml'
 REMAPPING_XML_PATH = 'scripts/item_defs/remapping.xml'
 BATTLE_MODIFIERS_DIR = 'scripts/server_xml/battle_modifiers/'
 BATTLE_MODIFIERS_XML = 'battle_modifiers.xml'
-USE_MODIFICATION_CACHE = True
-MAX_MODIFICATION_LAYER_COUNT = 5
+USE_VEHICLE_CACHE = True
+USE_CONSTANTS_CACHE = True
+MAX_VEHICLE_CACHE_LAYER_COUNT = 5
+MAX_CONSTANTS_CACHE_LAYER_COUNT = 5
 FAKE_MODIFIER_NAME = 'fakeModifier'
 FAKE_PARAM_NAME = 'fakeParam'
 DEBUG_MODIFIERS = IS_DEVELOPMENT
@@ -98,6 +100,7 @@ class ModifierDomain(object):
     ENGINE = 1024
     HULL = 2048
     VEHICLE = 4096
+    CONSTANTS = 8192
     SHELL_COMPONENTS = SHELL | SHELL_TYPE
     SHOT_COMPONENTS = SHOT | SHELL_COMPONENTS
     GUN_COMPONENTS = GUN | SHOT_COMPONENTS
@@ -117,7 +120,8 @@ class ModifierDomain(object):
      PHYSICS: 'physics',
      ENGINE: 'engine',
      HULL: 'hull',
-     VEHICLE: 'vehicle'}
+     VEHICLE: 'vehicle',
+     CONSTANTS: 'constants'}
     NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
     ALL = set(NAME_TO_ID.itervalues())
     NAMES = set(ID_TO_NAME.itervalues())
@@ -248,4 +252,5 @@ class RemappingConditionNames(object):
 
 class RemappingNames(object):
     TEST = 'test'
-    ALL = set(() + ((TEST,) if IS_DEVELOPMENT else ()))
+    FEP_NIGHT_BATTLES = 'fep_nb'
+    ALL = set((FEP_NIGHT_BATTLES,) + ((TEST,) if IS_DEVELOPMENT else ()))

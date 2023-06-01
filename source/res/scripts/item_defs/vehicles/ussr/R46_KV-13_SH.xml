@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	49	</forward>
-    <backward>	20	</backward>
+    <forward>	40	</forward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.2	</moving>
@@ -43,33 +43,33 @@
     <variants>
       <hull2>
         <chassis>	IS-3M_SH	</chassis>
-        <armor>
-          <armor_1>	140	</armor_1>
-          <armor_2>	60	</armor_2>
-          <armor_3>	110	</armor_3>
-          <armor_4>	50	</armor_4>
-          <armor_5>	20	</armor_5>
-          <armor_6>	20	</armor_6>
-          <armor_7>	90	</armor_7>
-          <armor_8>	0	</armor_8>
-          <armor_9>	80	</armor_9>
-          <armor_10>	110	</armor_10>
-          <armor_11>	40	</armor_11>
-          <armor_12>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_12>
-          <armor_13>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_13>
-          <armor_14>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_14>
-        </armor>
-        <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-        <weight>	36300	</weight>
-        <maxHealth>	1600	</maxHealth>
+        <weight>	28800	</weight>
+        <maxHealth>	1500	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
+        <armor>
+          <armor_1>	80	</armor_1>
+          <armor_2>	70	</armor_2>
+          <armor_3>	95	</armor_3>
+          <armor_4>	50	</armor_4>
+          <armor_5>	20	</armor_5>
+          <armor_6>	20	</armor_6>
+          <armor_7>	90	</armor_7>
+          <armor_8>	0	</armor_8>
+          <armor_9>	50	</armor_9>
+          <armor_10>	85	</armor_10>
+          <armor_11>	40	</armor_11>
+          <armor_12>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_12>
+          <armor_13>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_13>
+          <armor_14>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_14>
+        </armor>
+        <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <turretHardPoints>
           <hardPoint>	HP_turretJoint	</hardPoint>
         </turretHardPoints>
@@ -108,42 +108,54 @@
             <anchorPosition>	0.000000 0.653303 -2.01771	</anchorPosition>
             <anchorDirection>	0.000000 0.30804 -0.951373	</anchorDirection>
           </slot>
+          <slot>
+            <slotType>	projectionDecal	</slotType>
+            <slotId>	15000	</slotId>
+            <tags>	direction_right_to_left formfactor_rect1x2 cover	</tags>
+            <position>	0.000199 2.321503 0.562187	</position>
+            <rotation>	0.000524 -1.570796 2.737291	</rotation>
+            <scale>	6.375938 5.838184 6.605906	</scale>
+            <hiddenForUser>	true	</hiddenForUser>
+            <showOn>	4368	</showOn>
+            <clipAngle>	0.436332	</clipAngle>
+            <anchorShift>	0.8	</anchorShift>
+          </slot>
         </customizationSlots>
       </hull2>
       <hull3>
         <chassis>	Chassis_IS_M_SH	</chassis>
-        <armor>
-          <armor_1>	100	</armor_1>
-          <armor_2>	60	</armor_2>
-          <armor_3>	90	</armor_3>
-          <armor_4>	40	</armor_4>
-          <armor_5>	30	</armor_5>
-          <armor_6>	20	</armor_6>
-          <armor_7>	80	</armor_7>
-          <armor_8>	0	</armor_8>
-          <armor_9>	35	</armor_9>
-          <armor_10>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_10>
-          <armor_11>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_11>
-          <armor_12>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_12>
-          <armor_13>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_13>
-          <armor_14>	20	</armor_14>
-          <armor_15>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_15>
-          <armor_16>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-          </armor_16>
-        </armor>
-        <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-        <weight>	28800	</weight>
-        <maxHealth>	2000	</maxHealth>
+        <weight>	36300	</weight>
+        <maxHealth>	1200	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
+        <armor>
+          <armor_1>	100	</armor_1>
+          <armor_2>	120	</armor_2>
+          <armor_3>	110	</armor_3>
+          <armor_4>	40	</armor_4>
+          <armor_5>	30	</armor_5>
+          <armor_6>	20	</armor_6>
+          <armor_7>	130	</armor_7>
+          <armor_8>	0	</armor_8>
+          <armor_9>	35	</armor_9>
+          <armor_10>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_10>
+          <armor_11>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_11>
+          <armor_12>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_12>
+          <armor_13>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_13>
+          <armor_14>	20	</armor_14>
+          <armor_15>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_15>
+          <armor_16>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_16>
+        </armor>
+        <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <turretHardPoints>
           <hardPoint>	HP_turretJoint	</hardPoint>
         </turretHardPoints>
@@ -182,30 +194,21 @@
             <anchorPosition>	0.000000 0.653303 -2.01771	</anchorPosition>
             <anchorDirection>	0.000000 0.30804 -0.951373	</anchorDirection>
           </slot>
+          <slot>
+            <slotType>	projectionDecal	</slotType>
+            <slotId>	15000	</slotId>
+            <tags>	direction_right_to_left formfactor_rect1x2 cover	</tags>
+            <position>	0.00019 2.338621 0.522174	</position>
+            <rotation>	0.000524 -1.570796 2.737291	</rotation>
+            <scale>	6.494722 5.838178 5.904819	</scale>
+            <hiddenForUser>	true	</hiddenForUser>
+            <showOn>	4368	</showOn>
+            <clipAngle>	0.436332	</clipAngle>
+            <anchorShift>	0.8	</anchorShift>
+          </slot>
         </customizationSlots>
       </hull3>
     </variants>
-    <armor>
-      <armor_1>	80	</armor_1>
-      <armor_2>	40	</armor_2>
-      <armor_3>	70	</armor_3>
-      <armor_4>	20	</armor_4>
-      <armor_5>	20	</armor_5>
-      <armor_6>	18	</armor_6>
-      <armor_7>	100	</armor_7>
-      <armor_8>	0	</armor_8>
-      <armor_9>	100	</armor_9>
-      <armor_10>	85	</armor_10>
-      <armor_12>	40	</armor_12>
-      <armor_13>	20	</armor_13>
-      <armor_14>	20	</armor_14>
-      <armor_15>	20	</armor_15>
-      <armor_16>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_16>
-      <armor_17>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_17>
-    </armor>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16300	</weight>
     <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
@@ -213,6 +216,28 @@
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </ammoBayHealth>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	80	</armor_2>
+      <armor_3>	75	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	18	</armor_6>
+      <armor_7>	130	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	105	</armor_9>
+      <armor_10>	85	</armor_10>
+      <armor_11>	0	</armor_11>
+      <armor_12>	75	</armor_12>
+      <armor_13>	20	</armor_13>
+      <armor_14>	20	</armor_14>
+      <armor_15>	20	</armor_15>
+      <armor_16>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_16>
+      <armor_17>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_17>
+    </armor>
+    <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
     <models>
       <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Hull_01.model	</undamaged>
       <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Hull_01.model	</destroyed>
@@ -265,6 +290,18 @@
         <anchorPosition>	0.000000 0.653303 -2.01771	</anchorPosition>
         <anchorDirection>	0.000000 0.30804 -0.951373	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15000	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2 cover	</tags>
+        <position>	0.000195 2.32967 0.5431	</position>
+        <rotation>	0.000524 -1.570796 2.737292	</rotation>
+        <scale>	5.410258 5.838193 6.011266	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+        <showOn>	4368	</showOn>
+        <clipAngle>	0.436332	</clipAngle>
+        <anchorShift>	0.8	</anchorShift>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
@@ -277,24 +314,24 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
-      </armor>
       <weight>	6520	</weight>
       <maxLoad>	120000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.2	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Chassis_01.model	</undamaged>
         <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Chassis_01.model	</destroyed>
@@ -936,16 +973,12 @@
         <turret>	Turret_3_KV4_SH	  <cost>	0	</cost>
         </turret>
       </unlocks>
-      <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
-      </armor>
-      <weight>	14520	</weight>
+      <weight>	11520	</weight>
       <maxLoad>	120000	</maxLoad>
       <terrainResistance>	1 1.4 2.1	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -954,6 +987,10 @@
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Chassis_02.model	</undamaged>
         <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Chassis_02.model	</destroyed>
@@ -1685,16 +1722,12 @@
         <turret>	Turret_3_KV4_SH	  <cost>	0	</cost>
         </turret>
       </unlocks>
-      <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
-      </armor>
-      <weight>	11520	</weight>
+      <weight>	14520	</weight>
       <maxLoad>	120000	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	38500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.23	</vehicleMovement>
         <vehicleRotation>	0.23	</vehicleRotation>
@@ -1703,6 +1736,10 @@
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Chassis_03.model	</undamaged>
         <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Chassis_03.model	</destroyed>
@@ -2601,66 +2638,47 @@
         <turret>	Turret_3_KV4_SH	  <cost>	0	</cost>
         </turret>
       </unlocks>
-      <armor>
-        <armor_1>	120	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	80	</armor_3>
-        <armor_4>	40	</armor_4>
-        <armor_5>	20	</armor_5>
-        <armor_6>	20	</armor_6>
-        <armor_7>	60	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	60	</armor_9>
-        <armor_10>	60	</armor_10>
-        <armor_11>	35	</armor_11>
-        <armor_12>	35	</armor_12>
-        <armor_13>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_13>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
-        </ammoBay>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9780	</weight>
       <maxHealth>	500	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	155	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	90	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	100	</armor_9>
+        <armor_10>	100	</armor_10>
+        <armor_11>	60	</armor_11>
+        <armor_12>	75	</armor_12>
+        <armor_13>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_13>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_cannon_U-11_SH>	shared	  <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	130	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+        <_122mm_cannon_U-11_SH>	shared	  <maxAmmo>	55	</maxAmmo>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	6	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
@@ -2668,6 +2686,25 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <armor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_01.model	</destroyed>
@@ -2719,31 +2756,12 @@
             <chassis>	Chassis_IS_M_SH	  <cost>	0	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <reloadTime>	6	</reloadTime>
-          <armor>
-            <armor_1>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	130	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	40	</gun>
-          </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
@@ -2763,6 +2781,25 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <armor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_02.model	</destroyed>
@@ -2813,39 +2850,34 @@
             <chassis>	Chassis_IS_M_SH	  <cost>	0	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	53	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	8.3	</reloadTime>
+          <aimingTime>	2.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <armor>
-            <armor_1>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	130	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8.4	</reloadTime>
-          <aimingTime>	3	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_03.model	</destroyed>
@@ -2950,106 +2982,69 @@
         <gun>	_107mm_ZiS-6_dualgun_SH	  <cost>	0	</cost>
         </gun>
       </unlocks>
-      <armor>
-        <armor_1>	210	</armor_1>
-        <armor_2>	210	</armor_2>
-        <armor_3>	150	</armor_3>
-        <armor_4>	60	</armor_4>
-        <armor_5>	32	</armor_5>
-        <armor_6>	20	</armor_6>
-        <armor_7>	100	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_9>
-        <armor_10>	150	</armor_10>
-        <armor_11>	150	</armor_11>
-        <armor_12>	150	</armor_12>
-        <armor_13>	150	</armor_13>
-        <armor_14>	150	</armor_14>
-        <armor_15>	150	</armor_15>
-        <armor_16>	150	</armor_16>
-        <armor_17>	150	</armor_17>
-        <armor_18>	60	</armor_18>
-        <armor_19>	100	</armor_19>
-        <armor_20>	100	</armor_20>
-        <armor_21>	150	</armor_21>
-        <armor_22>	100	</armor_22>
-        <armor_23>	100	</armor_23>
-        <armor_24>	100	</armor_24>
-        <armor_25>	85	</armor_25>
-        <armor_26>	75	</armor_26>
-        <armor_27>	65	</armor_27>
-        <armor_28>	60	</armor_28>
-        <armor_29>	60	</armor_29>
-        <armor_30>	60	</armor_30>
-        <armor_31>	50	</armor_31>
-        <armor_32>	40	</armor_32>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
-        </ammoBay>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	21780	</weight>
-      <maxHealth>	800	</maxHealth>
-      <rotationSpeed>	39	</rotationSpeed>
+      <weight>	17280	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <armor>
+        <armor_1>	135	</armor_1>
+        <armor_2>	115	</armor_2>
+        <armor_3>	90	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	35	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	125	</armor_10>
+        <armor_11>	90	</armor_11>
+        <armor_12>	70	</armor_12>
+        <armor_13>	90	</armor_13>
+        <armor_14>	125	</armor_14>
+        <armor_15>	75	</armor_15>
+        <armor_16>	70	</armor_16>
+        <armor_17>	65	</armor_17>
+        <armor_18>	60	</armor_18>
+        <armor_19>	60	</armor_19>
+        <armor_20>	50	</armor_20>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <armor_21>	70	</armor_21>
+        <armor_22>	65	</armor_22>
+        <armor_23>	80	</armor_23>
+        <armor_24>	70	</armor_24>
+        <armor_25>	115	</armor_25>
+        <armor_26>	110	</armor_26>
+        <armor_27>	105	</armor_27>
+        <armor_28>	60	</armor_28>
+        <armor_29>	60	</armor_29>
+        <armor_30>	60	</armor_30>
+        <armor_31>	50	</armor_31>
+        <armor_32>	40	</armor_32>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_S34_dualgun_SH>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_100mm_S34_dualgun_SH>	shared	  <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
           <reloadTime>	6	</reloadTime>
-          <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	145	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	95	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	105	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_16>
-            <armor_17>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_17>
-            <gun>	40	</gun>
-          </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3069,6 +3064,43 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <armor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	95	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	105	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_04.model	</destroyed>
@@ -3113,57 +3145,52 @@
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_S34_dualgun_SH>
-        <_122mm_BL-9_SH>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_122mm_BL-9_SH>	shared	  <maxAmmo>	53	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
+          <reloadTime>	8.3	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	145	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	95	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	95	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	105	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_10>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
-            <armor_11>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_11>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_11>
-            <armor_12>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_12>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_12>
-            <armor_13>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_13>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_13>
-            <armor_14>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_14>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_14>
-            <armor_15>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_15>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_15>
-            <armor_16>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_16>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_16>
-            <armor_17>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_17>	105	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_17>
             <gun>	40	</gun>
           </armor>
-          <reloadTime>	8.4	</reloadTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_05.model	</destroyed>
@@ -3209,44 +3236,7 @@
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_122mm_BL-9_SH>
-        <_122mm_M62-T2_SH>	shared	  <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	145	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	95	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	105	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_16>
-            <armor_17>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_17>
-            <gun>	40	</gun>
-          </armor>
+        <_122mm_M62-T2_SH>	shared	  <maxAmmo>	68	</maxAmmo>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	7	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
@@ -3256,6 +3246,43 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <armor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	95	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	105	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_06.model	</destroyed>
@@ -3302,49 +3329,12 @@
           </camouflage>
         </_122mm_M62-T2_SH>
         <_107mm_ZiS-6_dualgun_SH>	shared	  <reloadTime>	8.5	</reloadTime>
-          <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	145	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	95	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	105	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_16>
-            <armor_17>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_17>
-            <gun>	40	</gun>
-          </armor>
+          <maxAmmo>	58	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3363,6 +3353,43 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <armor>
+            <armor_1>	165	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	95	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	105	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_07.model	</destroyed>
@@ -3469,70 +3496,53 @@
         <gun>	_130mm_S-70_SH	  <cost>	0	</cost>
         </gun>
       </unlocks>
-      <armor>
-        <armor_1>	190	</armor_1>
-        <armor_2>	140	</armor_2>
-        <armor_3>	100	</armor_3>
-        <armor_4>	50	</armor_4>
-        <armor_5>	25	</armor_5>
-        <armor_6>	30	</armor_6>
-        <armor_7>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	80	</armor_9>
-        <armor_10>	60	</armor_10>
-        <armor_11>	50	</armor_11>
-        <armor_12>	190	</armor_12>
-        <armor_13>	160	</armor_13>
-        <armor_14>	140	</armor_14>
-        <armor_15>	90	</armor_15>
-        <armor_16>	40	</armor_16>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
-        </ammoBay>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	17280	</weight>
-      <maxHealth>	1000	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <weight>	21780	</weight>
+      <maxHealth>	800	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	330	</circularVisionRadius>
+      <armor>
+        <armor_1>	210	</armor_1>
+        <armor_2>	140	</armor_2>
+        <armor_3>	135	</armor_3>
+        <armor_4>	110	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	80	</armor_9>
+        <armor_10>	65	</armor_10>
+        <armor_11>	65	</armor_11>
+        <armor_12>	215	</armor_12>
+        <armor_13>	200	</armor_13>
+        <armor_14>	140	</armor_14>
+        <armor_15>	90	</armor_15>
+        <armor_16>	40	</armor_16>
+        <ammoBay>	0	  <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
+        </ammoBay>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0.7	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
+        </surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_S34_dualgun_SH>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_100mm_S34_dualgun_SH>	shared	  <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
           <reloadTime>	6	</reloadTime>
-          <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	165	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	40	</gun>
-          </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3552,6 +3562,23 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <armor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_08.model	</destroyed>
@@ -3596,37 +3623,32 @@
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_S34_dualgun_SH>
-        <_122mm_BL-9_SH>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_122mm_BL-9_SH>	shared	  <maxAmmo>	53	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
+          <reloadTime>	8.3	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	165	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <gun>	40	</gun>
           </armor>
-          <reloadTime>	8.4	</reloadTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_09.model	</destroyed>
@@ -3673,29 +3695,12 @@
           </camouflage>
         </_122mm_BL-9_SH>
         <_107mm_ZiS-6_dualgun_SH>	shared	  <reloadTime>	8.5	</reloadTime>
-          <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	165	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	40	</gun>
-          </armor>
+          <maxAmmo>	58	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3714,6 +3719,23 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <armor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_10.model	</destroyed>
@@ -3759,24 +3781,7 @@
           </camouflage>
         </_107mm_ZiS-6_dualgun_SH>
         <_130mm_S-70_SH>	shared	  <reloadTime>	10	</reloadTime>
-          <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	165	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	40	</gun>
-          </armor>
+          <maxAmmo>	49	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 0.444444 6 0.45 2 0.55 2 0.555555 6 1 6	</maxPitch>
@@ -3789,6 +3794,23 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	1.8	</whileGunDamaged>
           </shotDispersionFactors>
+          <armor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/russian/R46_KV-13_SH/normal/lod0/Gun_11.model	</undamaged>
             <destroyed>	vehicles/russian/R46_KV-13_SH/crash/lod0/Gun_11.model	</destroyed>
@@ -3929,16 +3951,16 @@
     <detailed>
       <engines>
         <V-2K_SH>
-          <smplEnginePower>	600	</smplEnginePower>
+          <smplEnginePower>	800	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </V-2K_SH>
         <V-2-54M_SH>
-          <smplEnginePower>	1615	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplEnginePower>	1580	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </V-2-54M_SH>
         <M-40-2V_SH>
-          <smplEnginePower>	1230	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplEnginePower>	1270	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </M-40-2V_SH>
       </engines>
       <chassis>

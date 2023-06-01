@@ -2,15 +2,13 @@
 # Embedded file name: scripts/common/visual_script/balance.py
 import BigWorld
 import sys
-from block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
+from block import Meta, Block, InitParam, buildStrKeysValue
 from slot_types import SLOT_TYPE, arrayOf
 from type import VScriptStruct, VScriptStructField
-from visual_script.misc import errorVScript, ASPECT
+from visual_script.misc import errorVScript, ASPECT, EDITOR_TYPE
 import ResMgr
 import constants
 import nations
-_IS_VSE_EDITOR = sys.executable.endswith('vscript_editor.exe') or sys.executable.endswith('vscript_validator.exe')
-constants.IS_EDITOR = constants.IS_EDITOR and not _IS_VSE_EDITOR
 import items.vehicles as iv
 _dataSection = None
 _gList = None
@@ -18,7 +16,7 @@ _gList = None
 class VsePaths(object):
 
     def __enter__(self):
-        if _IS_VSE_EDITOR:
+        if constants.IS_VS_EDITOR:
             self.prevArenaPath = constants.ARENA_TYPE_XML_PATH
             self.prevItemDefPath = constants.ITEM_DEFS_PATH
             self.prevTypeXMLType = iv._VEHICLE_TYPE_XML_PATH
@@ -27,7 +25,7 @@ class VsePaths(object):
             iv._VEHICLE_TYPE_XML_PATH = constants.ITEM_DEFS_PATH + 'vehicles/'
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if _IS_VSE_EDITOR:
+        if constants.IS_VS_EDITOR:
             constants.ARENA_TYPE_XML_PATH = self.prevArenaPath
             constants.ITEM_DEFS_PATH = self.prevItemDefPath
             iv._VEHICLE_TYPE_XML_PATH = self.prevTypeXMLType
@@ -242,7 +240,7 @@ class EquipmentParams(Block, EquipmentMeta):
                             continue
                         section.writeString(param.name, param.value)
 
-                    if _IS_VSE_EDITOR:
+                    if constants.IS_VS_EDITOR:
                         spy = ResMgrSpy(self, {param.name for param in self._params.getValue()})
                     equipment.init(None, equipmentSection)
                 except Exception as e:

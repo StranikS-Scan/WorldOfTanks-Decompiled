@@ -87,6 +87,10 @@ class IItemsRequester(requesters.IRequester):
     def resourceWell(self):
         raise NotImplementedError
 
+    @property
+    def achievements20(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -184,6 +188,15 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def onDisconnected(self):
+        raise NotImplementedError
+
+    def getWTR(self, databaseID=None):
+        raise NotImplementedError
+
+    def getLayout(self, databaseID=None):
+        raise NotImplementedError
+
+    def getLayoutState(self, databaseID=None):
         raise NotImplementedError
 
 
@@ -328,4 +341,7 @@ class IRaresCache(object):
         raise NotImplementedError
 
     def getConditions(self, achieveID):
+        raise NotImplementedError
+
+    def getAchievementImageUrl(self, imgType, achieveID):
         raise NotImplementedError

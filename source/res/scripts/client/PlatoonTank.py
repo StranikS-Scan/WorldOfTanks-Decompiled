@@ -94,26 +94,22 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         super(PlatoonTank, self).onEnterWorld(prereqs)
         _logger.debug('Platoon tank with slot index: %s', self.slotIndex)
         self._platoonCtrl.onPlatoonTankUpdated += self._updatePlatoonTank
-        self._platoonCtrl.onPlatoonTankVisualizationChanged += self.removeModelFromScene
+        self._platoonCtrl.onPlatoonTankVisualizationChanged += self._setVisible
         self._platoonCtrl.onPlatoonTankRemove += self.__onPlatoonTankRemove
         self._platoonCtrl.registerPlatoonTank(self)
-        self.setEnable(False)
+        super(PlatoonTank, self).setEnable(False)
 
     def onLeaveWorld(self):
         self._platoonCtrl.onPlatoonTankUpdated -= self._updatePlatoonTank
-        self._platoonCtrl.onPlatoonTankVisualizationChanged -= self.removeModelFromScene
+        self._platoonCtrl.onPlatoonTankVisualizationChanged -= self._setVisible
         self._platoonCtrl.onPlatoonTankRemove -= self.__onPlatoonTankRemove
         super(PlatoonTank, self).onLeaveWorld()
 
     def onMouseClick(self):
         pass
 
-    def removeModelFromScene(self, isEnabled):
-        if self.isVehicleLoaded and not isEnabled:
-            self._onVehicleDestroy()
-            self.__tankInfo = None
-            self._isVehicleLoaded = False
-        return
+    def setEnable(self, enabled):
+        pass
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         if self.__tankInfo and self.__tankInfo.vehCompDescr != '':
@@ -143,14 +139,8 @@ class PlatoonTank(ClientSelectableCameraVehicle):
             return
         tankInfo = updatedTankInfoDict[self.slotIndex]
         _logger.debug('Updating platoon tank: slot: %s, tankInfo: %s', self.slotIndex, str(tankInfo))
-        if tankInfo != self.__tankInfo:
-            self.__tankInfo = tankInfo
-            if self.__tankInfo and self.__tankInfo.canDisplayModel and self.__tankInfo.vehCompDescr != '':
-                _logger.debug('Recreating Vehicle')
-                self.recreateVehicle()
-            else:
-                _logger.debug('Removing Vehicle')
-                self.removeModelFromScene(False)
+        self.__tankInfo = tankInfo
+        self._setVisible(True)
 
     def _onVehicleLoaded(self):
         super(PlatoonTank, self)._onVehicleLoaded()
@@ -161,9 +151,15 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeVehicle()
 
+    def _setVisible(self, visible):
+        if visible and self.__tankInfo and self.__tankInfo.canDisplayModel and self.__tankInfo.vehCompDescr != '':
+            self.recreateVehicle()
+        elif self.isVehicleLoaded:
+            self._onVehicleDestroy()
+
     def __onPlatoonTankRemove(self, slotIndex):
         if self.slotIndex == slotIndex:
-            self.removeModelFromScene(False)
+            self._setVisible(False)
 
     @staticmethod
     def __getVehicleDescriptorByIntCD(vehicleIntCD):

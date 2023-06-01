@@ -196,6 +196,30 @@ class _DeathZoneSN(LocalizationProvider, _DestroyTimerSN):
         self._setVisible(False)
 
 
+class StaticDeathZoneSN(_DestroyTimerSN):
+
+    def getItemID(self):
+        return VEHICLE_VIEW_STATE.DEATHZONE
+
+    def getViewTypeID(self):
+        return BATTLE_NOTIFICATIONS_TIMER_TYPES.SECTOR_AIRSTRIKE
+
+    def _getDescription(self, value):
+        return backport.text(R.strings.ingame_gui.statusNotificationTimers.staticDeathZone())
+
+    def _update(self, value):
+        visible, playerEntering, strikeTime, waveDuration = value
+        self._isVisible = visible
+        if playerEntering:
+            self._updateTimeParams(waveDuration, strikeTime)
+        else:
+            self._updateTimeParams(0, 0)
+        self._sendUpdate()
+
+    def _getSupportedLevel(self):
+        return None
+
+
 class DeathZoneDamagingSN(_DeathZoneSN):
 
     def getViewTypeID(self):

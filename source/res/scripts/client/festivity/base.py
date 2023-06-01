@@ -42,5 +42,9 @@ class BaseFestivityProcessor(object):
         self.__commandProxy = account
 
     def _perform(self, command, callback=None, *args):
-        cmdArgs = list(args) + [_getProxy(callback)]
-        self.__commandProxy.perform(command, *cmdArgs)
+        if self.__commandProxy is not None:
+            cmdArgs = list(args) + [_getProxy(callback)]
+            self.__commandProxy.perform(command, *cmdArgs)
+        else:
+            _logger.info('Festivity command can not be invoked due to proxy is not defined: cmd = %d', command)
+        return

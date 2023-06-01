@@ -451,6 +451,11 @@ class DIALOGS(object):
     MINIMAPALPHANOTIFICATION_MESSAGE_ALERT = '#dialogs:minimapAlphaNotification/message/alert'
     MINIMAPALPHANOTIFICATION_SUBMIT = '#dialogs:minimapAlphaNotification/submit'
     MINIMAPALPHANOTIFICATION_CANCEL = '#dialogs:minimapAlphaNotification/cancel'
+    LIMITEDUIOFFNOTIFICATION_TITLE = '#dialogs:limitedUIOffNotification/title'
+    LIMITEDUIOFFNOTIFICATION_MESSAGE = '#dialogs:limitedUIOffNotification/message'
+    LIMITEDUIOFFNOTIFICATION_MESSAGE_ALERT = '#dialogs:limitedUIOffNotification/message/alert'
+    LIMITEDUIOFFNOTIFICATION_SUBMIT = '#dialogs:limitedUIOffNotification/submit'
+    LIMITEDUIOFFNOTIFICATION_CANCEL = '#dialogs:limitedUIOffNotification/cancel'
     SOUNDMODEINVALID_TITLE = '#dialogs:soundModeInvalid/title'
     SOUNDMODEINVALID_MESSAGE = '#dialogs:soundModeInvalid/message'
     SOUNDMODEINVALID_SUBMIT = '#dialogs:soundModeInvalid/submit'
@@ -508,6 +513,8 @@ class DIALOGS(object):
     VOICECHATINITSUCCEDED_TITLE = '#dialogs:voiceChatInitSucceded/title'
     VOICECHATINITSUCCEDED_MESSAGE = '#dialogs:voiceChatInitSucceded/message'
     VOICECHATINITSUCCEDED_CANCEL = '#dialogs:voiceChatInitSucceded/cancel'
+    INGAMEBROWSER_TEXTURELOADINGFAILED_TITLE = '#dialogs:inGameBrowser/textureLoadingFailed/title'
+    INGAMEBROWSER_TEXTURELOADINGFAILED_MESSAGE = '#dialogs:inGameBrowser/textureLoadingFailed/message'
     MESSENGER_USERINFOHIDDEN_TITLE = '#dialogs:messenger/userInfoHidden/title'
     MESSENGER_USERINFOHIDDEN_MESSAGE = '#dialogs:messenger/userInfoHidden/message'
     MESSENGER_USERINFOHIDDEN_SUBMIT = '#dialogs:messenger/userInfoHidden/submit'
@@ -816,6 +823,9 @@ class DIALOGS(object):
     CUSTOMIZATION_CLOSE_TITLE = '#dialogs:customization/close/title'
     CUSTOMIZATION_CLOSE_SUBMIT = '#dialogs:customization/close/submit'
     CUSTOMIZATION_CLOSE_CANCEL = '#dialogs:customization/close/cancel'
+    CUSTOMIZATION_EXITTOSHOP_TITLE = '#dialogs:customization/exitToShop/title'
+    CUSTOMIZATION_EXITTOSHOP_SUBMIT = '#dialogs:customization/exitToShop/submit'
+    CUSTOMIZATION_EXITTOSHOP_CANCEL = '#dialogs:customization/exitToShop/cancel'
     CUSTOMIZATION_FILTER_TITLE = '#dialogs:customization/filter/title'
     CUSTOMIZATION_FILTER_MESSAGE = '#dialogs:customization/filter/message'
     CUSTOMIZATION_FILTER_SUBMIT = '#dialogs:customization/filter/submit'
@@ -1576,6 +1586,11 @@ class DIALOGS(object):
      MINIMAPALPHANOTIFICATION_MESSAGE_ALERT,
      MINIMAPALPHANOTIFICATION_SUBMIT,
      MINIMAPALPHANOTIFICATION_CANCEL,
+     LIMITEDUIOFFNOTIFICATION_TITLE,
+     LIMITEDUIOFFNOTIFICATION_MESSAGE,
+     LIMITEDUIOFFNOTIFICATION_MESSAGE_ALERT,
+     LIMITEDUIOFFNOTIFICATION_SUBMIT,
+     LIMITEDUIOFFNOTIFICATION_CANCEL,
      SOUNDMODEINVALID_TITLE,
      SOUNDMODEINVALID_MESSAGE,
      SOUNDMODEINVALID_SUBMIT,
@@ -1633,6 +1648,8 @@ class DIALOGS(object):
      VOICECHATINITSUCCEDED_TITLE,
      VOICECHATINITSUCCEDED_MESSAGE,
      VOICECHATINITSUCCEDED_CANCEL,
+     INGAMEBROWSER_TEXTURELOADINGFAILED_TITLE,
+     INGAMEBROWSER_TEXTURELOADINGFAILED_MESSAGE,
      MESSENGER_USERINFOHIDDEN_TITLE,
      MESSENGER_USERINFOHIDDEN_MESSAGE,
      MESSENGER_USERINFOHIDDEN_SUBMIT,
@@ -1941,6 +1958,9 @@ class DIALOGS(object):
      CUSTOMIZATION_CLOSE_TITLE,
      CUSTOMIZATION_CLOSE_SUBMIT,
      CUSTOMIZATION_CLOSE_CANCEL,
+     CUSTOMIZATION_EXITTOSHOP_TITLE,
+     CUSTOMIZATION_EXITTOSHOP_SUBMIT,
+     CUSTOMIZATION_EXITTOSHOP_CANCEL,
      CUSTOMIZATION_FILTER_TITLE,
      CUSTOMIZATION_FILTER_MESSAGE,
      CUSTOMIZATION_FILTER_SUBMIT,

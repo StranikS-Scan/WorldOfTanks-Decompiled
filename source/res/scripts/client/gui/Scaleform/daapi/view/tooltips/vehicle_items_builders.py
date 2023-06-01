@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/vehicle_items_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
 from gui.shared.tooltips import shell, advanced
@@ -11,7 +12,7 @@ def _advancedBlockCondition(context):
 
     def advancedTooltipExist(*args):
         item = context.buildItem(*args)
-        return item.getGUIEmblemID() in advanced.MODULE_MOVIES
+        return item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
 
     return advancedTooltipExist
 
@@ -58,7 +59,7 @@ class TechTreeModuleBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
     def __init__(self, tooltipType, linkage):
-        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.ModuleContext()), advanced.HangarModuleAdvanced(contexts.ModuleContext()))
+        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.ModuleContext()), advanced.HangarModuleAdvanced(contexts.ModuleContext()), condition=_advancedBlockCondition(contexts.ModuleContext()))
 
     def _buildData(self, _advanced, node, parentCD, *args, **kwargs):
         return super(TechTreeModuleBuilder, self)._buildData(_advanced, node, parentCD)

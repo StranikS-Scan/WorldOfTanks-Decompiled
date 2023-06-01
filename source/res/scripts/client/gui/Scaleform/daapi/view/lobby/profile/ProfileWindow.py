@@ -9,6 +9,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import dependency
 from helpers.i18n import makeString
@@ -39,6 +40,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         g_playerEvents.onDossiersResync += self.__dossierResyncHandler
         self.__updateUserInfo()
         g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
+        g_eventBus.addListener(events.Achievements20Event.CLOSE_SUMMARY_VIEW, self.onWindowCloseByIndex, EVENT_BUS_SCOPE.LOBBY)
         self.__checkUserRosterInfo()
         self.startClanListening()
 
@@ -46,6 +48,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
         self.stopClanListening()
         g_messengerEvents.users.onUserActionReceived -= self._onUserActionReceived
         g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
+        g_eventBus.removeListener(events.Achievements20Event.CLOSE_SUMMARY_VIEW, self.onWindowCloseByIndex, EVENT_BUS_SCOPE.LOBBY)
         self.itemsCache.items.unloadUserDossier(self.__databaseID)
         super(ProfileWindow, self)._dispose()
 
@@ -107,18 +110,19 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     def registerFlashComponent(self, component, alias, *args):
         if alias == VIEW_ALIAS.PROFILE_TAB_NAVIGATOR:
             super(ProfileWindow, self).registerFlashComponent(component, alias, self.__userName, self.__databaseID, self.__databaseID, {'selectedAlias': self.__selectedAlias,
-             'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_SUMMARY_WINDOW),
-                              self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS),
-                              self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS),
-                              self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW)]}, {'eventOwner': self.__eventOwner})
+             'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_TOTAL_PAGE, 'statsSummary'),
+                              self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS, 'statsAwards'),
+                              self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS, 'statsStatistics'),
+                              self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, 'statsTechnique')]}, {'eventOwner': self.__eventOwner})
         else:
             super(ProfileWindow, self).registerFlashComponent(component, alias)
 
-    def __getSectionDataObject(self, label, tooltip, alias):
+    def __getSectionDataObject(self, label, tooltip, alias, uiId):
         return {'label': makeString(label),
          'alias': alias,
          'tooltip': tooltip,
-         'enabled': True}
+         'enabled': True,
+         'id': uiId}
 
     def userAddFriend(self):
         self.proto.contacts.addFriend(self.__databaseID, self.__userName)
@@ -141,3 +145,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
 
     def onWindowClose(self):
         self.destroy()
+
+    def onWindowCloseByIndex(self, *args):
+        if self.__databaseID == args[0].ctx.get('databaseID'):
+            self.onWindowClose()

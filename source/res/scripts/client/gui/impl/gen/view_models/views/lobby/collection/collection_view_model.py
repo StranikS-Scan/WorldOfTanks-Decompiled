@@ -4,11 +4,12 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.collection.item_model import ItemModel
 from gui.impl.gen.view_models.views.lobby.collection.reward_info_model import RewardInfoModel
+from gui.impl.gen.view_models.views.lobby.collection.tab_model import TabModel
 
 class CollectionViewModel(ViewModel):
-    __slots__ = ('onSetItemReceived', 'onSetRewardReceived', 'onSetProgressItemsReceived', 'onOpenItemPreview', 'onFinishTutorial')
+    __slots__ = ('onSetItemReceived', 'onSetRewardReceived', 'onSetProgressItemsReceived', 'onOpenItemPreview', 'onFinishTutorial', 'onTabSelected', 'onPageChanged', 'onClose')
 
-    def __init__(self, properties=10, commands=5):
+    def __init__(self, properties=11, commands=8):
         super(CollectionViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBackButtonText(self):
@@ -35,49 +36,55 @@ class CollectionViewModel(ViewModel):
     def setIsTutorial(self, value):
         self._setBool(3, value)
 
+    def getPage(self):
+        return self._getNumber(4)
+
+    def setPage(self, value):
+        self._setNumber(4, value)
+
     def getTabs(self):
-        return self._getArray(4)
+        return self._getArray(5)
 
     def setTabs(self, value):
-        self._setArray(4, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getTabsType():
-        return unicode
+        return TabModel
 
     def getItems(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setItems(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getItemsType():
         return ItemModel
 
     def getMaxItemsCount(self):
-        return self._getNumber(6)
-
-    def setMaxItemsCount(self, value):
-        self._setNumber(6, value)
-
-    def getReceivedItemsCount(self):
         return self._getNumber(7)
 
-    def setReceivedItemsCount(self, value):
+    def setMaxItemsCount(self, value):
         self._setNumber(7, value)
 
-    def getPrevReceivedItemsCount(self):
+    def getReceivedItemsCount(self):
         return self._getNumber(8)
 
-    def setPrevReceivedItemsCount(self, value):
+    def setReceivedItemsCount(self, value):
         self._setNumber(8, value)
 
+    def getPrevReceivedItemsCount(self):
+        return self._getNumber(9)
+
+    def setPrevReceivedItemsCount(self, value):
+        self._setNumber(9, value)
+
     def getRewardsInfo(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setRewardsInfo(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getRewardsInfoType():
@@ -89,6 +96,7 @@ class CollectionViewModel(ViewModel):
         self._addStringProperty('currentCollection', 'defaultConfig')
         self._addBoolProperty('isCompleted', False)
         self._addBoolProperty('isTutorial', True)
+        self._addNumberProperty('page', -1)
         self._addArrayProperty('tabs', Array())
         self._addArrayProperty('items', Array())
         self._addNumberProperty('maxItemsCount', 0)
@@ -100,3 +108,6 @@ class CollectionViewModel(ViewModel):
         self.onSetProgressItemsReceived = self._addCommand('onSetProgressItemsReceived')
         self.onOpenItemPreview = self._addCommand('onOpenItemPreview')
         self.onFinishTutorial = self._addCommand('onFinishTutorial')
+        self.onTabSelected = self._addCommand('onTabSelected')
+        self.onPageChanged = self._addCommand('onPageChanged')
+        self.onClose = self._addCommand('onClose')

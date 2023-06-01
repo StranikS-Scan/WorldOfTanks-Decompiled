@@ -44,8 +44,8 @@ from AvatarInputHandler.control_modes import PostMortemControlMode, SniperContro
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
-from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions
+from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -951,6 +951,31 @@ class GraphicSetting(SettingAbstract):
     def refresh(self):
         self._currentValue = graphics.getGraphicsSetting(self.name)
         super(GraphicSetting, self).refresh()
+
+
+class ColorGradingSetting(GraphicSetting):
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __refreshLastAppliedValue(self):
+        appliedColorSetting = AccountSettings.getSettings(APPLIED_COLOR_SETTINGS)
+        selectedTabIdx = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)
+        if appliedColorSetting:
+            appliedTabValues = appliedColorSetting.get(selectedTabIdx)
+            if self._currentValue.value == appliedTabValues.get(GRAPHICS.COLOR_GRADING_TECHNIQUE):
+                return
+        else:
+            appliedTabValues = self.__getDefaultValues()
+        appliedColorSetting[selectedTabIdx] = appliedTabValues
+        AccountSettings.setSettings(APPLIED_COLOR_SETTINGS, appliedColorSetting)
+        self._set(appliedTabValues[GRAPHICS.COLOR_GRADING_TECHNIQUE])
+
+    @staticmethod
+    def __getDefaultValues():
+        return {GRAPHICS.COLOR_GRADING_TECHNIQUE: COLOR_GRADING_TECHNIQUE_DEFAULT}
+
+    def refresh(self):
+        self.__refreshLastAppliedValue()
+        super(ColorGradingSetting, self).refresh()
 
 
 class IGBHardwareAccelerationSetting(UserPrefsBoolSetting):

@@ -9,6 +9,7 @@ import TriggersManager
 import WWISE
 import MusicControllerWWISE as MC
 from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS, BootcampVersion
+from gui.game_loading.resources.consts import Milestones
 from realm import CURRENT_REALM
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
@@ -383,6 +384,7 @@ class Bootcamp(EventSystemEntity):
     def showActionWaitWindow(self):
         if not self.__showingWaitingActionWindow:
             self.__showingWaitingActionWindow = True
+            g_playerEvents.onLoadingMilestoneReached(Milestones.SYNCHRONIZE)
             Waiting.show('synchronize')
 
     def hideActionWaitWindow(self):

@@ -412,13 +412,13 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 removalActionPercent = removalPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0
                 defValue = removalPrice.defPrice.getSignValue(removalPriceCurrency)
                 needValue = value - money.getSignValue(removalPriceCurrency)
-                if needValue <= 0 or self.configuration.isStaticInfoOnly:
-                    needValue = None
                 wotPlusStatus = self.wotPlusController.isEnabled()
                 isFreeDeluxeEnabled = self.lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled()
                 isFreeDemountEnabled = self.lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
                 isFreeToDemount = self.wotPlusController.isFreeToDemount(module)
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=117, gap=15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled))
+                if needValue <= 0 or self.configuration.isStaticInfoOnly or isFreeToDemount:
+                    needValue = None
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=119, gap=13, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled))
                 isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
                 if isModernized:
                     itemPrice = module.getDeconstructPrice(self.itemsCache.items)

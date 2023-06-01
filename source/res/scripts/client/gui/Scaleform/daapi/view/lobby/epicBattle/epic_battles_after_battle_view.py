@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_battles_after_battle_view.py
+import collections
 import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
 from epic_constants import EPIC_SELECT_BONUS_NAME
@@ -29,7 +30,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
      'abilityPts': 2,
      'crystal': 3,
      'goodies': 4,
-     'epicSelectToken': 5,
+     EPIC_SELECT_BONUS_NAME: 5,
      'crewBooks': 6}
     _MIDDLE_PRIORITY = 50
     _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicBattleViewAwardPacker())
@@ -135,7 +136,22 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         achievedRank = max(levelUpInfo.get('playerRank', 0), 1)
         rankNameId = R.strings.epic_battle.rank.dyn('rank' + str(achievedRank))
         rankName = toUpper(backport.text(rankNameId())) if rankNameId.exists() else ''
-        bonuses = sorted(mergeBonuses(self.__getBonuses(prevPMetaLevel, pMetaLevel)), key=lambda item: self._BONUS_ORDER_PRIORITY.get(item.getName(), self._MIDDLE_PRIORITY))
+        sourceBonuses = self.__getBonuses(prevPMetaLevel, pMetaLevel)
+        tokenBonusesGroups = collections.defaultdict(list)
+        otherBonuses = []
+        for sourceBonus in sourceBonuses:
+            if sourceBonus.getName() == EPIC_SELECT_BONUS_NAME:
+                for key in sourceBonus.getValue():
+                    splitKey = key.rsplit(':', 2)[0]
+                    tokenBonusesGroups[splitKey].append(sourceBonus)
+
+            otherBonuses.append(sourceBonus)
+
+        tokenBonuses = []
+        for tokenBonusesGroup in tokenBonusesGroups.values():
+            tokenBonuses += mergeBonuses(tokenBonusesGroup)
+
+        bonuses = sorted(mergeBonuses(otherBonuses) + tokenBonuses, key=lambda item: self._BONUS_ORDER_PRIORITY.get(item.getName(), self._MIDDLE_PRIORITY))
         tooltipToBonusNameMapping = {}
         awardsVO = self.__markAnimationBonuses(self._awardsFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG))
         for idx, bonus in enumerate(bonuses):

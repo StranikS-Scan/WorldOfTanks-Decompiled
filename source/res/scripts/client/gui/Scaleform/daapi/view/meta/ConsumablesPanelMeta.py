@@ -108,3 +108,12 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_setRoleSkillSlotCounterS(self, idx, value):
         return self.flashObject.as_setRoleSkillSlotCounter(idx, value) if self._isDAAPIInited() else None
+
+    def as_addRespawnSlotS(self, idx, keyCode, sfKeyCode, quantity, tooltipText, isTooltipSpecial, isAvailable):
+        return self.flashObject.as_addRespawnSlot(idx, keyCode, sfKeyCode, quantity, tooltipText, isTooltipSpecial, isAvailable) if self._isDAAPIInited() else None
+
+    def as_setRespawnSlotQuantityS(self, idx, quantity):
+        return self.flashObject.as_setRespawnSlotQuantity(idx, quantity) if self._isDAAPIInited() else None
+
+    def as_setRespawnSlotStateS(self, idx, isAvailable):
+        return self.flashObject.as_setRespawnSlotState(idx, isAvailable) if self._isDAAPIInited() else None

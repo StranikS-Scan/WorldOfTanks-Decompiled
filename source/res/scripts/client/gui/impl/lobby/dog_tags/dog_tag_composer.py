@@ -11,9 +11,10 @@ from gui.dog_tag_composer import DogTagComposerClient
 from gui.impl.gen.view_models.views.lobby.account_dashboard.dog_tags_model import DogTagsModel
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_component import DtComponent
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_grid_section import DtGridSection
+from gui.limited_ui.lui_rules_storage import LuiRules
 from helpers import dependency
 from helpers import getLanguageCode
-from skeletons.gui.game_control import IUISpamController
+from skeletons.gui.game_control import ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterable
@@ -53,11 +54,10 @@ SECTION_BY_PURPOSE = {ComponentPurpose.TRIUMPH: EngravingSection.TRIUMPH,
  ComponentPurpose.DEDICATION: EngravingSection.DEDICATION,
  ComponentPurpose.BASE: BackgroundSection.TRIUMPH_MEDAL,
  ComponentPurpose.TRIUMPH_MEDAL: BackgroundSection.TRIUMPH_MEDAL}
-DOG_TAG_HINT = 'DogTagHangarHint'
 
 class DogTagComposerLobby(DogTagComposerClient):
     lobbyContext = dependency.descriptor(ILobbyContext)
-    uiSpamController = dependency.descriptor(IUISpamController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, dtHelper):
         self._dtHelper = dtHelper
@@ -80,7 +80,9 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setIsEnabled(self.serverSettings().isDogTagCustomizationScreenEnabled())
         model.setEngraving(engravingImage)
         model.setBackground(bgImage)
-        count = 0 if self.uiSpamController.shouldBeHidden(DOG_TAG_HINT) else len(self._dtHelper.getUnseenComps())
+        count = 0
+        if self.__limitedUIController.isRuleCompleted(LuiRules.DOG_TAG_HINT):
+            count = len(self._dtHelper.getUnseenComps())
         model.setCounter(count)
         grades = engraving.componentDefinition.grades
         if engraving and grades and engraving.grade == len(grades) - 1:

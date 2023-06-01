@@ -248,9 +248,9 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         showSquadLabels, _ = reusable.getPersonalSquadFlags()
         if showSquadLabels:
             self.__addSquadBonus(baseCredits, premiumCredits)
-        isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, None, 'achievementCredits')
-        isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, None, 'boosterCredits', 'boosterCreditsFactor100')
-        isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, None, 'orderCreditsFactor100')
+        isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, False, None, 'achievementCredits')
+        isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, False, None, 'boosterCredits', 'boosterCreditsFactor100')
+        isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, False, None, 'orderCreditsFactor100')
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
         self._addEmptyRow()
@@ -280,11 +280,15 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow(label, column1=baseLabel, column3=premiumLabel)
         return baseValue != 0 or premiumValue != 0
 
-    def __addStatsItemIfExists(self, label, baseRecords, premiumRecords, labelArgs=None, *names):
+    def __addStatsItemIfExists(self, label, baseRecords, premiumRecords, acceptAllIfExist, labelArgs=None, *names):
         baseValue = baseRecords.getRecord(*names)
         premiumValue = premiumRecords.getRecord(*names)
         result = False
-        if baseValue or premiumValue:
+        if acceptAllIfExist:
+            isToAdd = baseRecords.getFactor(*names) > 1.0 or premiumRecords.getFactor(*names) > 1.0
+        else:
+            isToAdd = baseValue or premiumValue
+        if isToAdd:
             result = True
             baseValue = style.makeCreditsLabel(baseValue, canBeFaded=not self.hasAnyPremium)
             premiumValue = style.makeCreditsLabel(premiumValue, canBeFaded=self.hasAnyPremium)
@@ -329,7 +333,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
     def __addReferralSystemFactor(self, baseCredits, premiumCredits):
         referralFactor = baseCredits.getFactor('referral20CreditsFactor100')
         labelArgs = {'bonusFactor': convertFactorToPercent(referralFactor)}
-        return self.__addStatsItemIfExists('referralBonus', baseCredits, premiumCredits, labelArgs, 'referral20CreditsFactor100')
+        return self.__addStatsItemIfExists('referralBonus', baseCredits, premiumCredits, False, labelArgs, 'referral20CreditsFactor100')
 
     def __addEventsMoney(self, baseCredits, premiumCredits, goldRecords):
         baseEventCredits = baseCredits.findRecord('eventCreditsList_') + baseCredits.findRecord('eventCreditsFactor100List_')

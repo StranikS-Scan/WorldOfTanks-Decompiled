@@ -3,6 +3,7 @@
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.epic.status_notifications.panel import EpicStatusNotificationTimerPanel
+from gui.Scaleform.daapi.view.battle.epic.damage_pannel import EpicDamagePanel
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -40,7 +41,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import consumables_panel
     from gui.Scaleform.daapi.view.common.filter_popover import BattleTankCarouselFilterPopover
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
-    from gui.Scaleform.daapi.view.battle.shared import damage_panel
     from gui.Scaleform.daapi.view.battle.epic import ingame_rank_panel
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
@@ -62,7 +62,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.EpicBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, respawn.EpicBattleRespawn, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.EpicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, EpicDamagePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, deployment_map.EpicDeploymentMapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, overviewmap_screen.OverviewMapScreen, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.EpicMessagePanel, ScopeTemplates.DEFAULT_SCOPE),

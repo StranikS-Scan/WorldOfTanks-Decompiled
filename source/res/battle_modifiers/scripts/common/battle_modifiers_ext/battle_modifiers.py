@@ -7,6 +7,7 @@ from battle_modifiers_ext import battle_params
 from battle_modifiers_ext.battle_params import BattleParam, FakeBattleParam
 from battle_modifiers_ext.battle_modifier.modifier_filters import ModificationTree
 from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODIFIERS_XML, ERROR_TEMPLATE, FAKE_MODIFIER_NAME, FAKE_PARAM_NAME, UseType, GameplayImpact, ModifierRestriction, NodeType
+from battle_modifiers_ext.modification_cache import vehicle_modifications, constants_modifications
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union, List
 from soft_exception import SoftException
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -15,6 +16,9 @@ from ResMgr import DataSection
 from collections import OrderedDict
 if TYPE_CHECKING:
     from battle_modifiers_common import ModifiersContext
+    from items.vehicles import VehicleType
+    from battle_modifiers_common.battle_modifiers import ConstantsSet
+    from battle_modifiers_ext.modification_cache.constants_modifications import ConstantsModification
 g_cache = None
 
 class ModifierBase(object):
@@ -259,6 +263,18 @@ class BattleModifiers(battle_modifiers.BattleModifiers):
 
         return tuple(res)
 
+    @staticmethod
+    def getConstantsOriginal():
+        return constants_modifications.g_cache.get()
+
+    @staticmethod
+    def clearVehicleModifications():
+        vehicle_modifications.g_cache.clear()
+
+    @staticmethod
+    def clearConstantsModifications():
+        constants_modifications.g_cache.clear()
+
     def get(self, paramId):
         return self.__modifiers.get(paramId)
 
@@ -282,6 +298,12 @@ class BattleModifiers(battle_modifiers.BattleModifiers):
         if self.__id is None:
             self.__id = self.__makeId()
         return self.__id
+
+    def getVehicleModification(self, vehType):
+        return vehicle_modifications.g_cache.get(vehType, self)
+
+    def getConstantsModification(self):
+        return constants_modifications.g_cache.get(self)
 
     def __readConfig(self, config):
         modifiers = self.__modifiers

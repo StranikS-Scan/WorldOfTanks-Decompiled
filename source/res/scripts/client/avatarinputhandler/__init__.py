@@ -462,6 +462,12 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, respawn=isRespawn)
         return
 
+    def movingToRespawnBase(self):
+        if self.ctrlModeName == _CTRL_MODE.POSTMORTEM:
+            self.onControlModeChanged(_CTRL_MODE.RESPAWN_DEATH)
+            respMode = self.__ctrls[_CTRL_MODE.RESPAWN_DEATH]
+            respMode.camera.setToVehicleDirection()
+
     def deactivatePostmortem(self):
         if self.ctrlModeName not in (_CTRL_MODE.POSTMORTEM, _CTRL_MODE.RESPAWN_DEATH, _CTRL_MODE.DEATH_FREE_CAM):
             LOG_WARNING('Trying to deactivate postmortem when it is not active. Current mode:', self.ctrlModeName)

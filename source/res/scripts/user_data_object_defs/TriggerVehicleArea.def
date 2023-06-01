@@ -12,5 +12,9 @@
       <Type>	STRING	</Type>
       <Editable>	True	</Editable>
     </name>
+    <serverPolygon>
+      <Type>	POLYGON_TRIGGER_PARAMS	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </serverPolygon>
   </Properties>
 </TriggerVehicleArea.def>

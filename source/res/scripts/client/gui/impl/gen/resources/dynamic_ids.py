@@ -7,33 +7,33 @@ class DynamicIds(DynAccessor):
 
     class _dialog_window(DynAccessor):
         __slots__ = ()
-        bottom_content = DynAccessor(73319)
-        balance_content = DynAccessor(73320)
+        bottom_content = DynAccessor(74878)
+        balance_content = DynAccessor(74879)
 
     dialog_window = _dialog_window()
 
     class _tooltip(DynAccessor):
         __slots__ = ()
-        normal_content = DynAccessor(73321)
-        advanced_content = DynAccessor(73322)
+        normal_content = DynAccessor(74880)
+        advanced_content = DynAccessor(74881)
 
     tooltip = _tooltip()
 
     class _blueprint_screen(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(73323)
+        balance_content = DynAccessor(74882)
 
     blueprint_screen = _blueprint_screen()
 
     class _crew_books_buy_dialog(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(73324)
+        balance_content = DynAccessor(74883)
 
     crew_books_buy_dialog = _crew_books_buy_dialog()
 
     class _demo_window(DynAccessor):
         __slots__ = ()
-        image_props = DynAccessor(73325)
-        bottom_panel = DynAccessor(73326)
+        image_props = DynAccessor(74884)
+        bottom_panel = DynAccessor(74885)
 
     demo_window = _demo_window()

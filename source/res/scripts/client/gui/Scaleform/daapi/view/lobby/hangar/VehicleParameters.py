@@ -51,7 +51,6 @@ class VehicleParameters(VehicleParametersMeta):
         super(VehicleParameters, self)._populate()
         self._vehParamsDP = self._createDataProvider()
         self._vehParamsDP.setFlashObject(self.as_getDPS())
-        self.update()
 
     def _dispose(self):
         self._vehParamsDP.fini()
@@ -80,6 +79,7 @@ class VehiclePreviewParameters(VehicleParameters):
 
     def _populate(self):
         super(VehiclePreviewParameters, self)._populate()
+        self.update()
         g_currentPreviewVehicle.onComponentInstalled += self.update
         g_currentPreviewVehicle.onChanged += self.update
         g_currentPreviewVehicle.onPostProgressionChanged += self.update

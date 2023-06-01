@@ -116,4 +116,56 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A83_T110E4	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	784	</id>
+      <texture>	gui/maps/vehicles/styles/A83_T110E4_Dl_22_3Dst.png	</texture>
+      <modelsSet>	A83_T110E4_Dl_22_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A83_T110E4_Dl_22_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A83_T110E4_Dl_22_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	40	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	58	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </usa_nonCN.xml>

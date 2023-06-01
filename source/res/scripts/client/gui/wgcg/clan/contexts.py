@@ -622,3 +622,37 @@ class AcceptInviteCtx(CommonWebRequestCtx):
 
     def isAuthorizationRequired(self):
         return True
+
+
+@ReprInjector.withParent()
+class StrongholdEventClanInfoCtx(CommonWebRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_EVENT_CLAN_INFO
+
+    def getDataObj(self, incomeData):
+        incomeData = incomeData or {}
+        return makeTupleByDict(items.StrongholdEventClanInfoData, incomeData)
+
+    def getDefDataObj(self):
+        return None
+
+    def isAuthorizationRequired(self):
+        return True
+
+
+@ReprInjector.withParent()
+class StrongholdEventSettingsCtx(CommonWebRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_EVENT_SETTINGS
+
+    def getDataObj(self, incomeData):
+        incomeData = incomeData or {}
+        return makeTupleByDict(items.StrongholdEventSettingsData, incomeData)
+
+    def getDefDataObj(self):
+        return None
+
+    def isAuthorizationRequired(self):
+        return True

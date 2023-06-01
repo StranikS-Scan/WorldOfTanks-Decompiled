@@ -51,13 +51,13 @@ class HeroTankController(IHeroTankController):
 
     def __onEventsCacheSyncCompleted(self, *_):
         self.__applyActions()
+        self.onUpdated()
 
     def onLobbyStarted(self, ctx):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self._eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
         self.__fullUpdate()
         self.__updateSettings()
-        self.onUpdated()
 
     def onAvatarBecomePlayer(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
@@ -133,10 +133,6 @@ class HeroTankController(IHeroTankController):
                     return
                 self.__fullUpdate()
                 self.__updateSettings()
-                for vehIntCD in vehDiff:
-                    if vehIntCD == self.__currentTankCD:
-                        self.onUpdated()
-
             return
 
     def __updateActionInfo(self, *_):
@@ -146,12 +142,10 @@ class HeroTankController(IHeroTankController):
     def __onServerSettingsChanged(self, diff):
         if _HERO_VEHICLES in diff:
             self.__updateSettings()
-            self.onUpdated()
 
     def __updateSettings(self):
         self.__data = {}
         heroVehiclesDict = self.lobbyContext.getServerSettings().getHeroVehicles()
-        self.__isEnabled = heroVehiclesDict.get('isEnabled', False)
         if 'vehicles' in heroVehiclesDict:
             heroVehicles = heroVehiclesDict['vehicles']
             for vCompDescr, vData in heroVehicles.iteritems():

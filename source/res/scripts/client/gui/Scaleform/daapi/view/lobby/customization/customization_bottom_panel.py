@@ -216,6 +216,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             self._carouselDP.refresh()
             self.__updateSelection(scroll=True)
+        self.__updatePopoverBtnIcon()
         self.__updateFilterMessage()
 
     def __onSlotUnselected(self):
@@ -228,6 +229,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self._carouselDP.refresh()
             self.__updateSelection(scroll=True)
         self.__updateFilterMessage()
+        self.__updatePopoverBtnIcon()
         return
 
     def __setNotificationCounters(self):
@@ -552,7 +554,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__scrollToNewItem()
 
     def __updatePopoverBtnIcon(self):
-        if self.__ctx.modeId == CustomizationModes.STYLED:
+        tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
+        if self.__ctx.modeId == CustomizationModes.STYLED and not self._selectedItem:
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
         else:
             imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
@@ -560,9 +563,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
             elif self.__ctx.season == SeasonType.SUMMER:
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
-        if self.__ctx.modeId == CustomizationModes.STYLED:
-            tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
-        else:
             seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.season)
             mapName = VEHICLE_CUSTOMIZATION.getMapName(seasonName)
             tooltip = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_DISABLED, mapType=_ms(mapName))
@@ -609,10 +609,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if modeId == CustomizationModes.EDITABLE_STYLE:
             record = self.__ctx.mode.source in (CustomizationModeSource.CAROUSEL, CustomizationModeSource.PROPERTIES_SHEET, CustomizationModeSource.CONTEXT_MENU)
             self.__onEditableStylesHintsHidden(record=record)
+        self.__updatePopoverBtnIcon()
 
     def __onChangesCanceled(self):
         self.__updateTabs()
         self.__setBottomPanelBillData()
+        self.__updatePopoverBtnIcon()
         self._carouselDP.invalidateFilteredItems()
         self.__rebuildCarousel()
         self.__updateSetSwitcherData()
@@ -661,6 +663,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if self._selectedItem is not None and scroll:
             self.__scrollToItem(self._selectedItem.intCD, True)
         self.__updateStageSwitcherVisibility()
+        self.__updatePopoverBtnIcon()
         return
 
     def __updateHints(self):

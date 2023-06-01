@@ -44,13 +44,16 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
 
-def _getAttackReason(vehicleState, hasKiller):
+def _getAttackReason(vehicleState, killerInfo):
     if vehicleState == DEATH_REASON_ALIVE:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.alive()
     elif vehicleState == ATTACK_REASON_INDICES[ATTACK_REASON.DEATH_ZONE]:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByZone()
-    elif hasKiller:
-        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
+    elif killerInfo:
+        if killerInfo.get('isBot', False):
+            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByBot()
+        else:
+            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
     else:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.other()
     return reason
@@ -190,7 +193,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if not self.__isObserverResult:
             killerInfo = statusInfo['killer']
             hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
-            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller))
+            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), killerInfo))
             if hasKiller:
                 self.__setUserName(statusModel.killer, killerInfo)
         return
@@ -289,9 +292,12 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getFinishReason(self):
         isWinner = self.__data[BRSections.COMMON]['playerPlace'] == _THE_BEST_PLACE
+        isWinnerPlace = self.__data[BRSections.COMMON]['playerPlace'] in (2, 3, 4, 5)
         isInSquad = self.__data[BRSections.COMMON]['isSquadMode']
         if isWinner:
-            finishReason = R.strings.battle_royale.battleResult.title.victory()
+            finishReason = R.strings.battle_royale.battleResult.title.victoryFirst()
+        elif isWinnerPlace:
+            finishReason = R.strings.battle_royale.battleResult.title.victoryOther()
         elif isInSquad:
             finishReason = R.strings.battle_royale.battleResult.title.squadDestroyed()
         else:

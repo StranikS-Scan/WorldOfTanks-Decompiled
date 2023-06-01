@@ -11,19 +11,20 @@ from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IReferralProgramController, IUISpamController
+from skeletons.gui.game_control import IReferralProgramController, ILimitedUIController
 from skeletons.gui.game_window_controller import GameWindowController
 _logger = logging.getLogger(__name__)
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __appLoader = dependency.descriptor(IAppLoader)
-    __uiSpamController = dependency.descriptor(IUISpamController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(ReferralProgramController, self).__init__()
@@ -46,7 +47,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def getBubbleCount(self):
         count = AccountSettings.getCounters(REFERRAL_COUNTER)
-        return 0 if count and self.__uiSpamController.shouldBeHidden(REFERRAL_COUNTER) and not self.isFirstIndication() else count
+        return 0 if count and not self.__limitedUIController.isRuleCompleted(LuiRules.REFERRAL_BTN_COUNTER) and not self.isFirstIndication() else count
 
     def updateBubble(self):
         browserView = self.__getBrowserView()
@@ -77,8 +78,10 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def _addListeners(self):
         g_eventBus.addListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.__limitedUIController.startObserve(LuiRules.REFERRAL_BTN_COUNTER, self.__updateBubbleVisibility)
 
     def _removeListeners(self):
+        self.__limitedUIController.stopObserve(LuiRules.REFERRAL_BTN_COUNTER, self.__updateBubbleVisibility)
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_eventBus.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -103,7 +106,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def __resetBubbleCount(self):
         AccountSettings.setCounters(REFERRAL_COUNTER, 0)
-        self.__uiSpamController.setVisited(REFERRAL_COUNTER)
+        self.__limitedUIController.completeRule(LuiRules.REFERRAL_BTN_COUNTER)
         self.__updateBubbleEvent()
 
     def __updateBubbleEvent(self):
@@ -124,3 +127,6 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def __processButtonPress(self, **_):
         self.showWindow()
+
+    def __updateBubbleVisibility(self, *_):
+        self.__updateBubbleEvent()

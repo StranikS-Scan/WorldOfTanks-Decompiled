@@ -56,7 +56,6 @@ _SHELL_TYPES_TO_STR = {BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGEL
  BATTLE_LOG_SHELL_TYPES.HE_MODERN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE}
-_DEATH_ZONES_STR = INGAME_GUI.DAMAGELOG_DEATH_ZONE
 HIDDEN_SHELL = ''
 
 def _formatTotalValue(value):
@@ -134,7 +133,7 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
         if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
-        if info.isDeathZone():
+        if info.isDeathZone() or info.isStaticDeathZone():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
         if info.isDamagingSmoke():
@@ -191,10 +190,13 @@ class _EmptyShellVOBuilder(_ShellVOBuilder):
         return DAMAGE_LOG_SHELL_BG_TYPES.EMPTY
 
 
-class _DeathZoneVOBuilder(_ShellVOBuilder):
+class _StaticDeathZoneVOBuilder(_ShellVOBuilder):
 
     def _getShellTypeStr(self, info):
-        return _DEATH_ZONES_STR
+        return HIDDEN_SHELL
+
+    def _getShellTypeBg(self, info, arenaDP=None):
+        return DAMAGE_LOG_SHELL_BG_TYPES.EMPTY
 
 
 class _EpicDeathZoneVOBuilder(_ShellVOBuilder):
@@ -211,8 +213,8 @@ class _DamageShellVOBuilder(_ShellVOBuilder):
     def buildVO(self, info, arenaDP):
         if info.isShot() or info.isFire():
             shellVOBuilder = _ShellVOBuilder()
-        elif info.isDeathZone():
-            shellVOBuilder = _DeathZoneVOBuilder()
+        elif info.isStaticDeathZone():
+            shellVOBuilder = _StaticDeathZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
         else:
@@ -225,8 +227,8 @@ class _CritsShellVOBuilder(_ShellVOBuilder):
     def buildVO(self, info, arenaDP):
         if info.isShot() or info.isFire():
             shellVOBuilder = _ShellVOBuilder()
-        elif info.isDeathZone():
-            shellVOBuilder = _DeathZoneVOBuilder()
+        elif info.isStaticDeathZone():
+            shellVOBuilder = _StaticDeathZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
         else:
@@ -309,7 +311,7 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
     def _getImage(self, info):
         if info.isClingBrander():
             return self.__clingBranderDmgIcon
-        if info.isShot() or info.isDeathZone() or info.isFortArtilleryEqDamage():
+        if info.isShot() or info.isDeathZone() or info.isFortArtilleryEqDamage() or info.isStaticDeathZone():
             return self.__shotIcon
         if info.isProtectionZoneDamage():
             return self.__deathZoneIcon

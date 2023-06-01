@@ -19,7 +19,7 @@ from items.readers import tankmen_readers
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
-from vehicles import VEHICLE_CLASS_TAGS
+from vehicles import VEHICLE_CLASS_TAGS, EXTENDED_VEHICLE_TYPE_ID_FLAG
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from constants import ITEM_DEFS_PATH, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 from account_shared import AmmoIterator
@@ -181,7 +181,11 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), la
     pack = struct.pack
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
-    cd = pack('4B', header, vehicleTypeID, SKILL_INDICES[role], roleLevel)
+    ext = vehicleTypeID >> 8
+    header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
+    cd = pack('2B', header, vehicleTypeID & 255)
+    cd += chr(ext) if ext else ''
+    cd += pack('2B', SKILL_INDICES[role], roleLevel)
     numSkills = len(skills) + len(freeSkills)
     allSkills = [ SKILL_INDICES[s] for s in freeSkills ]
     for s in skills:
@@ -237,11 +241,18 @@ def getNextUniqueID(databaseID, lastID, nationID, isPremium, groupID, name):
 
 
 def stripNonBattle(compactDescr):
-    return compactDescr[:6 + ord(compactDescr[4]) + 1 + 6]
+    vehTypeOffset = 1 if ord(compactDescr[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG else 0
+    return compactDescr[:6 + vehTypeOffset + ord(compactDescr[4 + vehTypeOffset]) + 1 + 6]
 
 
 def parseNationSpecAndRole(compactDescr):
-    return (ord(compactDescr[0]) >> 4 & 15, ord(compactDescr[1]), ord(compactDescr[2]))
+    vehicleTypeID = ord(compactDescr[1])
+    if ord(compactDescr[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG:
+        vehicleTypeID += ord(compactDescr[2]) << 8
+        roleID = ord(compactDescr[3])
+    else:
+        roleID = ord(compactDescr[2])
+    return (ord(compactDescr[0]) >> 4 & 15, vehicleTypeID, roleID)
 
 
 def compareMastery(tankmanDescr1, tankmanDescr2):
@@ -277,9 +288,10 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo):
 def fixObsoleteNames(compactDescr):
     cd = compactDescr
     header = ord(cd[0])
+    vehTypeOffset = 1 if header & EXTENDED_VEHICLE_TYPE_ID_FLAG else 0
     nationID = header >> 4 & 15
     conf = getNationConfig(nationID)
-    namesOffset = ord(cd[4]) + 7
+    namesOffset = ord(cd[4 + vehTypeOffset]) + 7 + vehTypeOffset
     firstNameID, lastNameID = struct.unpack('<2H', cd[namesOffset:namesOffset + 4])
     hasChanges = False
     if not conf.hasFirstName(firstNameID):
@@ -604,7 +616,11 @@ class TankmanDescr(object):
     def makeCompactDescr(self):
         pack = struct.pack
         header = ITEM_TYPES.tankman + (self.nationID << 4)
-        cd = pack('4B', header, self.vehicleTypeID, SKILL_INDICES[self.role], self.roleLevel)
+        ext = self.vehicleTypeID >> 8
+        header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
+        cd = pack('2B', header, self.vehicleTypeID & 255)
+        cd += chr(self.vehicleTypeID >> 8) if ext else ''
+        cd += pack('2B', SKILL_INDICES[self.role], self.roleLevel)
         numSkills = self.lastSkillNumber
         skills = [ SKILL_INDICES[s] for s in self.__skills ]
         cd += pack((str(1 + numSkills) + 'B'), numSkills, *skills)
@@ -624,8 +640,13 @@ class TankmanDescr(object):
         cd = compactDescr
         unpack = struct.unpack
         try:
-            header, self.vehicleTypeID, roleID, self.roleLevel, numSkills = unpack('5B', cd[:5])
-            cd = cd[5:]
+            header, self.vehicleTypeID = unpack('2B', cd[:2])
+            is_ext = ord(cd[0]) & EXTENDED_VEHICLE_TYPE_ID_FLAG
+            cd = cd[2:]
+            self.vehicleTypeID += ord(cd[0]) << 8 if is_ext else 0
+            cd = cd[1:] if is_ext else cd
+            roleID, self.roleLevel, numSkills = unpack('3B', cd[:3])
+            cd = cd[3:]
             nationID = header >> 4 & 15
             nations.NAMES[nationID]
             self.nationID = nationID

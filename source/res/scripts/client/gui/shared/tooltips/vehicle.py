@@ -100,7 +100,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockTopPadding = -4
         leftRightPadding = formatters.packPadding(left=leftPadding, right=rightPadding)
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
-        valueWidth = 75
+        valueWidth = 77
         textGap = -2
         headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
@@ -163,7 +163,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
         ctxParams = self.context.getParams()
-        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, ctxParams, valueWidth, leftPadding=20, rightPadding=20).construct()
+        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, ctxParams, valueWidth - 1, leftPadding=20, rightPadding=20).construct()
         if frontlineBlock:
             items.append(formatters.packBuildUpBlockData(frontlineBlock, gap=-4, padding=formatters.packPadding(left=25, right=20, top=0, bottom=-11)))
         if vehicle.canTradeIn and not self.__bootcamp.isInBootcamp():
@@ -199,11 +199,11 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                     items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
             if statsConfig.showRankedBonusBattle:
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
-            if statsConfig.dailyXP and not vehicle.isWotPlusRent:
+            if statsConfig.dailyXP and not vehicle.isWotPlus:
                 attrs = self.__itemsCache.items.stats.attributes
                 if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                     dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
-                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
+                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
             if statsConfig.restorePrice:
                 timeKey, formattedTime = vehicle.isRestorePossible() and vehicle.hasLimitedRestore() and getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(''.join(('#tooltips:vehicle/restoreLeft/', timeKey))), value=text_styles.stats(formattedTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
@@ -436,10 +436,11 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         typeStr = text_styles.main(vehicleType)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
         icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
-        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
+        leftOffset = 101
+        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=leftOffset, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
         if self.vehicle.role != constants.ROLE_TYPE.NOT_DEFINED:
             roleLabel = self.vehicle.roleLabel
-            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=99, bottom=9)))
+            headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=leftOffset, bottom=9)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
         return block
 
@@ -740,7 +741,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     state, diff = paramInfo.state
                     if state == PARAM_STATE.WORSE:
                         delta = -abs(diff)
-                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, delta=delta, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
+                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, delta=delta, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=76, top=8)))
 
         if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.vehicleParams.simplified.title())), padding=formatters.packPadding(top=-4)))

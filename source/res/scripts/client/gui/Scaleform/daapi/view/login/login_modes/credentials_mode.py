@@ -1,17 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/credentials_mode.py
 from collections import namedtuple
+import WWISE
 import constants
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from external_strings_utils import isAccountLoginValid
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers.i18n import makeString as _ms
 from base_mode import BaseMode, INVALID_FIELDS
 _ValidateCredentialsResult = namedtuple('ValidateCredentialsResult', ('isValid', 'errorMessage', 'invalidFields'))
 
 class CredentialsMode(BaseMode):
+    firstRun = True
 
     def __init__(self, *args):
         super(CredentialsMode, self).__init__(*args)
@@ -34,7 +38,10 @@ class CredentialsMode(BaseMode):
         return GUI_SETTINGS.rememberPassVisible
 
     def onPopulate(self):
-        self._initViewBackground()
+        if CredentialsMode.firstRun:
+            CredentialsMode.firstRun = False
+        else:
+            WWISE.WW_eventGlobal('loginscreen_ambient_start')
 
     def setRememberPassword(self, rememberUser):
         self._rememberUser = rememberUser
@@ -59,6 +66,8 @@ class CredentialsMode(BaseMode):
 
     def updateForm(self):
         self._view.as_showSimpleFormS(False, None, not constants.IS_CHINA)
+        if constants.IS_CHINA:
+            self._view.as_showHealthNoticeS(backport.text(R.strings.menu.login.healthNotice()))
         return
 
     @staticmethod

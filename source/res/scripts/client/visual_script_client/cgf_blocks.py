@@ -120,7 +120,7 @@ class RocketAcceleratorEvents(Block, CGFMeta):
     def __deactivate(self):
         self.__switcher = None
         if self.__controllerLink:
-            controller = self.__controllerLink()
+            controller = self.__controllerLink() if self.__controllerLink else None
             if controller:
                 controller.unsubscribe(self.__onStateChange, self.__onTryActivate)
             self.__controllerLink = None

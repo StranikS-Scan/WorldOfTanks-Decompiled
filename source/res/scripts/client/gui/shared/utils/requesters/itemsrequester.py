@@ -9,12 +9,14 @@ import constants
 import dossiers2
 import nations
 import wg_async as future_async
+from PlayerEvents import g_playerEvents
 from account_shared import LayoutIterator
 from adisp import adisp_async, adisp_process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_NOTE
 from goodies.goodie_constants import GOODIE_STATE
+from gui.game_loading.resources.consts import Milestones
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters import vehicle_items_getter
@@ -388,9 +390,12 @@ class ItemsRequester(IItemsRequester):
      'seasons',
      'ranked',
      'dogTag',
-     'battleRoyaleStats'])
+     'battleRoyaleStats',
+     'wtr',
+     'layout',
+     'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -411,6 +416,7 @@ class ItemsRequester(IItemsRequester):
         self.__giftSystem = giftSystemRequester
         self.__gameRestrictions = gameRestrictionsRequester
         self.__resourceWell = resourceWellRequester
+        self.__achievements20 = achievements20Requester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -500,28 +506,38 @@ class ItemsRequester(IItemsRequester):
     def resourceWell(self):
         return self.__resourceWell
 
+    @property
+    def achievements20(self):
+        return self.__achievements20
+
     @adisp_async
     @adisp_process
     def request(self, callback=None):
         from gui.Scaleform.Waiting import Waiting
+        g_playerEvents.onLoadingMilestoneReached(Milestones.INVENTORY)
         Waiting.show('download/inventory')
         yield self.__stats.request()
         yield self.__inventory.request()
         yield self.__vehicleRotation.request()
         Waiting.hide('download/inventory')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.SHOP)
         Waiting.show('download/shop')
         yield self.__shop.request()
         Waiting.hide('download/shop')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.DOSSIER)
         Waiting.show('download/dossier')
         yield self.__dossiers.request()
         yield self.__sessionStats.request()
         Waiting.hide('download/dossier')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.DISCOUNTS)
         Waiting.show('download/discounts')
         yield self.__goodies.request()
         Waiting.hide('download/discounts')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.RECYCLE_BIN)
         Waiting.show('download/recycleBin')
         yield self.__recycleBin.request()
         Waiting.hide('download/recycleBin')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.PLAYER_DATA)
         Waiting.show('download/anonymizer')
         yield self.__anonymizer.request()
         Waiting.hide('download/anonymizer')
@@ -558,6 +574,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/resourceWell')
         yield self.__resourceWell.request()
         Waiting.hide('download/resourceWell')
+        Waiting.show('download/achievements20')
+        yield self.__achievements20.request()
+        Waiting.hide('download/achievements20')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
@@ -574,8 +593,11 @@ class ItemsRequester(IItemsRequester):
         ranked = yield dr.getRankedInfo()
         dogTag = yield dr.getDogTag()
         battleRoyaleStats = yield dr.getBattleRoyaleStats()
+        wtr = yield dr.getWTR()
+        layout = yield dr.getLayout()
+        layoutState = yield dr.getLayoutState()
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        container[databaseID] = self._AccountItem(userAccDossier, clanInfo, seasons, ranked, dogTag, battleRoyaleStats)
+        container[databaseID] = self._AccountItem(userAccDossier, clanInfo, seasons, ranked, dogTag, battleRoyaleStats, wtr, layout, layoutState)
         callback((userAccDossier, clanInfo, dr.isHidden))
 
     def unloadUserDossier(self, databaseID):
@@ -991,6 +1013,39 @@ class ItemsRequester(IItemsRequester):
             return
         else:
             return dogTag
+
+    def getWTR(self, databaseID=None):
+        if databaseID is None:
+            return self.sessionStats.getAccountWtr()
+        container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
+        wtr = container.get(int(databaseID)).wtr
+        if wtr is None:
+            LOG_WARNING('Trying to get empty user wtr', databaseID)
+            return
+        else:
+            return wtr
+
+    def getLayout(self, databaseID=None):
+        if databaseID is None:
+            return self.achievements20.getLayout()
+        container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
+        layout = container.get(int(databaseID)).layout
+        if layout is None:
+            LOG_WARNING('Trying to get empty user layout', databaseID)
+            return
+        else:
+            return layout
+
+    def getLayoutState(self, databaseID=None):
+        if databaseID is None:
+            return self.achievements20.getLayoutState()
+        container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
+        layoutState = container.get(int(databaseID)).layoutState
+        if layoutState is None:
+            LOG_WARNING('Trying to get empty user layoutState', databaseID)
+            return
+        else:
+            return layoutState
 
     def getBattleRoyaleStats(self, arenaType, databaseID=None, vehicleIntCD=None):
         if databaseID is None:

@@ -7,7 +7,7 @@ from gui.shared import event_dispatcher as shared_events
 from helpers.i18n import makeString as _ms
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.formatters import getClanRoleString
-from gui.shared.ClanCache import ClanInfo
+from gui.clans.clan_cache import ClanInfo
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.Scaleform.daapi.view.meta.ProfileSummaryWindowMeta import ProfileSummaryWindowMeta

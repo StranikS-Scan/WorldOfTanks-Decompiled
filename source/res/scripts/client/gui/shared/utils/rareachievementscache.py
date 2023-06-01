@@ -6,7 +6,7 @@ import ResMgr
 import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n, getClientLanguage
-from account_helpers.rare_achievements import getRareAchievementImage, getRareAchievementImageBig, getRareAchievementText
+from account_helpers.rare_achievements import getRareAchievementImage, getRareAchievementImageUrl, getRareAchievementImageBig, getRareAchievementText
 from skeletons.gui.shared.utils import IRaresCache
 
 class IMAGE_TYPE(object):
@@ -18,6 +18,9 @@ class IMAGE_PATH(object):
     IT_67X71 = 'gui/maps/icons/achievement/'
     IT_180X180 = 'gui/maps/icons/achievement/big/'
 
+
+URL_NAMES = {IMAGE_TYPE.IT_67X71: 'rare_achievements_images',
+ IMAGE_TYPE.IT_180X180: 'rare_achievements_images_big'}
 
 class RaresCache(IRaresCache):
     RARE_ACHIEVEMENT_PREFIX = 'rare'
@@ -140,6 +143,9 @@ class RaresCache(IRaresCache):
 
     def getConditions(self, achieveID):
         return self.__cache.get(achieveID, dict()).get('conditions')
+
+    def getAchievementImageUrl(self, imgType, achieveID):
+        return getRareAchievementImageUrl(URL_NAMES[imgType], achieveID)
 
     @classmethod
     def __getRareAchievementID(cls, rareName):

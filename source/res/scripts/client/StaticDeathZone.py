@@ -2,71 +2,64 @@
 # Embedded file name: scripts/client/StaticDeathZone.py
 import functools
 import random
-import enum
 import BigWorld
-from Math import Vector3, Vector4, Matrix
+import Math
+import Event
 from items import vehicles
 from helpers import dependency
 from PlayerEvents import g_playerEvents
-from gui.shared import g_eventBus
-from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import GameEvent
 from skeletons.gui.battle_session import IBattleSessionProvider
 from debug_utils import LOG_DEBUG_DEV
 from gui.shared.gui_items.marker_items import MarkerItem
-_BORDER_COLOR = (0.8, 0.0, 0.0, 0.0)
+from shared_utils import nextTick
 _TIME_TO_STOP_FIRE_ON_LEAVE_ZONE = 5.0
-
-class _DrawType(enum.IntEnum):
-    NORMAL = 0
-    STRIPES = 1
-
 
 class StaticDeathZone(BigWorld.Entity):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(StaticDeathZone, self).__init__()
-        self._borders = _BordersHelper()
-        self._borderVisuals = []
-        self._borderDrawType = _DrawType.NORMAL
         self._warningIsVisible = False
         self.__callbackOnLeaveDeathZone = None
         self.__functionOnLeaveDeathZone = None
-        self.__marker = None
-        g_eventBus.addListener(GameEvent.ARENA_BORDER_TYPE_CHANGED, self._onArenaBorderTypeChanged, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_playerEvents.onAvatarReady += self._onAvatarReady
+        self._marker = None
+        self._onActiveChanged = Event.Event()
         return
 
+    @property
+    def visual(self):
+        return getattr(self, 'clientVisualComp', None)
+
+    @property
+    def onActiveChanged(self):
+        return self._onActiveChanged
+
+    @property
+    def isAvatarReady(self):
+        return BigWorld.player().userSeesWorld()
+
     def onEnterWorld(self, prereqs):
-        self._borders.init(self.position, self.deathzone_size)
-        arenaBorderCtrl = self.sessionProvider.shared.arenaBorder
-        if arenaBorderCtrl:
-            self._updateBorderDrawType(arenaBorderCtrl.getDrawType())
-        if self.isActive:
-            self._activateDeathZone()
+        if self.isAvatarReady:
+            nextTick(self._onAvatarReady)()
+        else:
+            g_playerEvents.onAvatarReady += self._onAvatarReady
 
     def onLeaveWorld(self):
+        self._removeMarker()
         if self.__callbackOnLeaveDeathZone is not None:
             BigWorld.cancelCallback(self.__callbackOnLeaveDeathZone)
             self.__callbackOnLeaveDeathZone = None
         g_playerEvents.onAvatarReady -= self._onAvatarReady
-        g_eventBus.removeListener(GameEvent.ARENA_BORDER_TYPE_CHANGED, self._onArenaBorderTypeChanged, scope=EVENT_BUS_SCOPE.BATTLE)
-        self._removeBorders()
-        self._removeMarker()
         return
+
+    def getClosestPoint(self, pos, searchRadius):
+        return self.position if not self.visual else self.visual.getClosestPoint(pos, searchRadius)
 
     def onEntityEnteredInZone(self, entityID):
-        player = BigWorld.player()
-        if player.playerVehicleID == entityID and self.__marker is not None:
-            self.__marker.setVisible(False)
-        return
+        self._marker.onVehicleEnteredZone(entityID)
 
     def onEntityLeftZone(self, entityID):
-        player = BigWorld.player()
-        if player.playerVehicleID == entityID and player.vehicle.health > 0 and self.__marker is not None:
-            self.__marker.setVisible(True)
-        return
+        self._marker.onVehicleLeftZone(entityID)
 
     def onDeathZoneNotification(self, show, entityID, timeToStrike, waveDuration):
         player = BigWorld.player()
@@ -92,58 +85,15 @@ class StaticDeathZone(BigWorld.Entity):
             LOG_DEBUG_DEV('There are no effects ', vfx)
 
     def set_isActive(self, _):
+        self._onActiveChanged(self.isActive)
         if self.isActive:
-            self._activateDeathZone()
+            self._createMarker()
         else:
-            self._deactivateDeathZone()
-
-    def getClosestPoint(self, point):
-        return self._borders.getClosestPoint(point)
-
-    def getCorners(self):
-        return self._borders.rect
-
-    def _removeBorders(self):
-        spaceID = self._spaceID
-        if spaceID:
-            BigWorld.ArenaBorderHelper.removeBorder(spaceID, self.zoneIndex)
-
-    def _activateDeathZone(self):
-        g_playerEvents.onStaticDeathZoneActivated(self)
-        self._drawBorders()
-        self._createMarker()
-
-    def _deactivateDeathZone(self):
-        g_playerEvents.onStaticDeathZoneDeactivated(self.zoneId)
-        self._hideBorders()
-        self._removeMarker()
-
-    def _drawBorders(self):
-        spaceID = self._spaceID
-        if spaceID:
-            BigWorld.ArenaBorderHelper.setBorderBounds(spaceID, self.zoneIndex, self.position, self._borders.bounds)
-            BigWorld.ArenaBorderHelper.setBorderColor(spaceID, self.zoneIndex, _BORDER_COLOR)
-            BigWorld.ArenaBorderHelper.setBorderVisible(spaceID, self.zoneIndex, True)
-
-    def _hideBorders(self):
-        spaceID = self._spaceID
-        if spaceID:
-            BigWorld.ArenaBorderHelper.setBorderVisible(spaceID, self.zoneIndex, False)
-
-    def _createMarker(self):
-        if self.__marker is None:
-            self.__marker = _DeathZoneMarkerHandler(self)
-        return
-
-    def _removeMarker(self):
-        if self.__marker:
-            self.__marker.destroy()
-            self.__marker = None
-        return
+            self._removeMarker()
 
     def _onAvatarReady(self):
         if self.isActive:
-            self._activateDeathZone()
+            self._createMarker()
             vehicleUnderFire = self._getVehicleUnderFire()
             if vehicleUnderFire is not None:
                 timeToStrike = vehicleUnderFire['nextStrikeTime']
@@ -162,32 +112,24 @@ class StaticDeathZone(BigWorld.Entity):
 
         return None
 
-    @property
-    def _spaceID(self):
-        player = BigWorld.player()
-        return player.spaceID if player and player.spaceID else None
-
-    def _updateBorderDrawType(self, arenaDrawType):
-        self._borderDrawType = _DrawType.STRIPES if arenaDrawType == _DrawType.NORMAL else _DrawType.NORMAL
-        spaceID = self._spaceID
-        if spaceID:
-            BigWorld.ArenaBorderHelper.setBordersDrawType(spaceID, self.zoneIndex, self._borderDrawType)
-
-    def _onArenaBorderTypeChanged(self, event):
-        self._updateBorderDrawType(event.ctx['drawType'])
-
     def _onLeaveDeathZone(self, callback):
         self.__callbackOnLeaveDeathZone = None
-        player = BigWorld.player()
-        if not player or not callback:
+        if not callback:
             return
         else:
-            playerPosition = player.getOwnVehiclePosition()
-            closestPointOnDeathZone = self.getClosestPoint(playerPosition)
-            distanceSquared = (closestPointOnDeathZone - playerPosition).lengthSquared
-            if distanceSquared >= 0.0:
-                callback()
+            callback()
             return
+
+    def _createMarker(self):
+        if self._marker is None and self.isAvatarReady:
+            self._marker = _DeathZoneMarkerHandler(self)
+        return
+
+    def _removeMarker(self):
+        if self._marker:
+            self._marker.destroy()
+            self._marker = None
+        return
 
     def __setCallbackOnLeaveDeathZone(self):
         if self.__functionOnLeaveDeathZone is not None:
@@ -197,43 +139,21 @@ class StaticDeathZone(BigWorld.Entity):
         return
 
 
-class _BordersHelper(object):
-
-    def __init__(self):
-        self._bounds = Vector4(0, 0, 0, 0)
-        self._min = Vector3(0, 0, 0)
-        self._max = Vector3(0, 0, 0)
-
-    def init(self, center, size):
-        self._bounds = Vector4(-size.x / 2, -size.z / 2, size.x / 2, size.z / 2)
-        self._min = Vector3(center.x + self._bounds[0], center.y, center.z + self._bounds[3])
-        self._max = Vector3(center.x + self._bounds[2], center.y, center.z + self._bounds[1])
-
-    def getClosestPoint(self, point):
-        x = min(max(point[0], self._min.x), self._max.x)
-        y = min(max(point[2], self._max.z), self._min.z)
-        return Vector3(x, point.y, y)
-
-    @property
-    def rect(self):
-        return (self._min, self._max)
-
-    @property
-    def bounds(self):
-        return self._bounds
-
-
 class _DeathZoneMarkerHandler(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    SEARCH_RADIUS_EXTENSION = 2.0
 
     def __init__(self, zone):
         self._zone = zone
         self._matrix = None
         self._markerId = None
+        self._searchRadius = 0.0
+        self._vehiclesInZone = set()
         areaMarkerCtrl = self.sessionProvider.shared.areaMarker
         if areaMarkerCtrl:
-            self._matrix = Matrix()
-            marker = areaMarkerCtrl.createMarker(self._matrix, MarkerItem.DEATHZONE)
+            self._matrix = Math.Matrix()
+            marker = areaMarkerCtrl.createMarker(self._matrix, MarkerItem.STATIC_DEATH_ZONE_PROXIMITY)
+            self._searchRadius = marker.disappearingRadius + self.SEARCH_RADIUS_EXTENSION
             self._markerId = areaMarkerCtrl.addMarker(marker)
             areaMarkerCtrl.onTickUpdate += self._tickUpdate
         return
@@ -244,7 +164,6 @@ class _DeathZoneMarkerHandler(object):
             areaMarkerCtrl.onTickUpdate -= self._tickUpdate
             areaMarkerCtrl.removeMarker(self._markerId)
         self._zone = None
-        self._updateTI = None
         self._matrix = None
         self._markerId = None
         return
@@ -258,8 +177,26 @@ class _DeathZoneMarkerHandler(object):
                 areaMarkerCtrl.hideMarkersById(self._markerId)
         return
 
+    def onVehicleEnteredZone(self, vehID):
+        self._vehiclesInZone.add(vehID)
+
+    def onVehicleLeftZone(self, vehID):
+        self._vehiclesInZone.discard(vehID)
+
     def _tickUpdate(self):
         player = BigWorld.player()
-        if player and self._matrix is not None:
-            self._matrix.setTranslate(self._zone.getClosestPoint(player.getOwnVehiclePosition()))
-        return
+        if not player or self._matrix is None:
+            return
+        else:
+            vehicle = player.getVehicleAttached()
+            isVisible = vehicle is not None and vehicle.id not in self._vehiclesInZone and vehicle.health > 0
+            self.setVisible(isVisible)
+            if not isVisible:
+                return
+            vehiclePos = vehicle.position
+            markerPos = self._zone.getClosestPoint(vehiclePos, self._searchRadius)
+            if not markerPos:
+                markerPos = vehiclePos
+                markerPos.y = markerPos.y + self._searchRadius * 2.0
+            self._matrix.setTranslate(markerPos)
+            return

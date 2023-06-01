@@ -7,14 +7,15 @@ import BigWorld
 import Math
 import MusicControllerWWISE
 import ResMgr
+import WebBrowser
 import constants
+import AnimationSequence
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.hangar_config import HangarConfig
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController, IEpicBattleMetaGameController
-from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
 from skeletons.map_activities import IMapActivities
@@ -117,15 +118,8 @@ def _readHangarSettings():
             secondaryCfg.loadSecondaryConfig(secondarySettingsXmlSection)
             cfg[_SECONDARY_HANGAR_SETTINGS_SEC] = secondaryCfg
         configset[spaceKey] = cfg
-        _validateConfigValues(cfg)
 
     return configset
-
-
-def _validateConfigValues(cfg):
-    if cfg['cam_pitch_constr'][0] <= -90.0:
-        _logger.warning('incorrect value - cam_pitch_constr[0] must be greater than -90 degrees!')
-        cfg['cam_pitch_constr'][0] = -89.9
 
 
 def _loadVisualScript(cfg, section):
@@ -149,7 +143,6 @@ class ClientHangarSpace(object):
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
         self.__spaceId = None
-        self.__cameraManager = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
         self.__spaceMappingId = None
@@ -201,8 +194,9 @@ class ClientHangarSpace(object):
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.turretAndGunAngles.init()
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
-        self.__cameraManager = HangarCameraManager(self.__spaceId)
-        self.__cameraManager.init()
+        camera = BigWorld.FreeCamera()
+        camera.spaceID = self.__spaceId
+        BigWorld.camera(camera)
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         BigWorld.wg_enableGUIBackground(True, False)
         BigWorld.wg_setGUIBackground(_LOGIN_BLACK_BG_IMG)
@@ -299,9 +293,6 @@ class ClientHangarSpace(object):
         BigWorld.hangarDestroyed()
         self._vsePlans.reset()
         MusicControllerWWISE.unloadCustomSounds()
-        if self.__cameraManager:
-            self.__cameraManager.destroy()
-            self.__cameraManager = None
         self.__loadingStatus = 0.0
         self.__onLoadedCallback = None
         if self.__waitCallback is not None:
@@ -326,6 +317,8 @@ class ClientHangarSpace(object):
     def __waitLoadingSpace(self):
         self.__loadingStatus = BigWorld.spaceLoadStatus()
         BigWorld.worldDrawEnabled(True)
+        AnimationSequence.setEnableAnimationSequenceUpdate(True)
+        WebBrowser.pauseExternalCache(False)
         if self.__loadingStatus < 1 or not BigWorld.virtualTextureRenderComplete():
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
@@ -342,19 +335,6 @@ class ClientHangarSpace(object):
 
     def getSpaceID(self):
         return self.__spaceId
-
-    def setCameraLocation(self, *args):
-        self.__cameraManager.setCameraLocation(*args)
-
-    def getCameraLocation(self):
-        return self.__cameraManager.getCameraLocation()
-
-    def getCameraManager(self):
-        return self.__cameraManager
-
-    @property
-    def camera(self):
-        return self.__cameraManager.camera
 
     @property
     def spacePath(self):

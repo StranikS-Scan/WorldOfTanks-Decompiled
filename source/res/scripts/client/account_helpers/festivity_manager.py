@@ -16,16 +16,16 @@ class FestivityManager(object):
         self.__cache = {}
         self.__ignore = True
         self.__festivityKey = self._festivityFactory.getRequester().dataKey
-        self._festivityFactory.getProcessor().setCommandProxy(clientCommandsProxy)
+        self.__commandProxy = clientCommandsProxy
 
     def onAccountBecomePlayer(self):
+        self._festivityFactory.getProcessor().setCommandProxy(self.__commandProxy)
         self.__ignore = False
 
     def onAccountBecomeNonPlayer(self):
+        self._festivityFactory.getProcessor().setCommandProxy(None)
         self.__ignore = True
-
-    def setAccount(self, account):
-        self._festivityFactory.getProcessor().setAccount(account)
+        return
 
     def synchronize(self, isFullSync, diff):
         if isFullSync:

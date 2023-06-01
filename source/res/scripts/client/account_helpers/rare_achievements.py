@@ -5,28 +5,19 @@ import ResMgr
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 def __makeAchievementFileRequest(urlName, params, achievementId, callback):
-    import Account
-    fileServerSettings = Account.g_accountRepository.fileServerSettings
-    url = ''
-    try:
-        url = fileServerSettings[urlName]['url_template']
-        url = url % params
-    except KeyError:
-        LOG_ERROR('Failed to find fileServer setting: %s' % urlName)
+    url = __buildRareImageUrl(urlName, params)
+    if url is None:
         callback(achievementId, None)
         return
-    except TypeError:
-        LOG_ERROR('Incorrect url format: %s' % url, params)
-        callback(achievementId, None)
-        return
-    except Exception:
-        LOG_CURRENT_EXCEPTION()
-        callback(achievementId, None)
+    else:
+        import Account
+        fileCache = Account.g_accountRepository.customFilesCache
+        fileCache.get(url, functools.partial(__fileLoadedCallback, achievementId=achievementId, dataCallback=callback), True)
         return
 
-    fileCache = Account.g_accountRepository.customFilesCache
-    fileCache.get(url, functools.partial(__fileLoadedCallback, achievementId=achievementId, dataCallback=callback), True)
-    return
+
+def getRareAchievementImageUrl(urlName, achievementId):
+    return __buildRareImageUrl(urlName, (achievementId,))
 
 
 def __fileLoadedCallback(url, data, achievementId, dataCallback):
@@ -68,6 +59,22 @@ def getRareAchievementImage(achievementId, onImageLoadedCallback):
 
 def getRareAchievementImageBig(achievementId, onImageLoadedCallback):
     __makeAchievementFileRequest('rare_achievements_images_big', (achievementId,), achievementId, onImageLoadedCallback)
+
+
+def __buildRareImageUrl(urlName, params):
+    import Account
+    fileServerSettings = Account.g_accountRepository.fileServerSettings
+    try:
+        url = fileServerSettings[urlName]['url_template']
+        return url % params
+    except KeyError:
+        LOG_ERROR('Failed to find fileServer setting: %s' % urlName)
+    except TypeError:
+        LOG_ERROR('Incorrect url format: %s' % url, params)
+    except Exception:
+        LOG_CURRENT_EXCEPTION()
+
+    return
 
 
 def getRareAchievementText(lang, achievementId, onTextLoadedCallback):

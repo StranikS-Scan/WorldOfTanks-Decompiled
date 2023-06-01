@@ -7,7 +7,7 @@ import BigWorld
 import Event
 import BattleReplay
 from ReplayEvents import g_replayEvents
-from constants import PLAYER_RANK, SECTOR_STATE
+from constants import SECTOR_STATE
 from debug_utils import verify, LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
@@ -22,6 +22,7 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency, i18n
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from items.vehicles import getVehicleClassFromVehicleType
 from skeletons.gui.battle_session import IBattleSessionProvider
 from shared_utils import first
@@ -77,6 +78,7 @@ MissionTriggerArgs = namedtuple('MissionTriggerArgs', ('forceMissionUpdate', 'ca
 
 class EpicMissionsController(IViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, setup):
         super(EpicMissionsController, self).__init__()
@@ -97,7 +99,6 @@ class EpicMissionsController(IViewComponentsController):
         self.__nearestObjective = -1
         self.__nearestObjectiveDistance = -1
         self.__objMsgSent = False
-        self.__generalRankMsgSent = False
         self.__overtimeCB = None
         self.__overTimeEnd = None
         self.__orderBattleAbilities = list()
@@ -171,8 +172,8 @@ class EpicMissionsController(IViewComponentsController):
             sectorComp.onWaypointsForPlayerActivated += self.__onWaypointsForPlayerActivated
             sectorComp.onPlayerSectorGroupChanged += self.__onPlayerSectorGroupChanged
             sectorComp.onSectorTransitionTimeChanged += self.__onSectorTransitionTimeChanged
+            playerDataComp.onCrewRolesFactorUpdated += self.__onCrewRoleFactorAndRankUpdate
             playerDataComp.onPlayerRankUpdated += self.__onPlayerRankUpdated
-            playerDataComp.onVehicleRanksUpdated += self.__onVehicleRanksUpdated
             overTimeComp.onOvertimeStart += self.__onOvertimeStart
             overTimeComp.onOvertimeOver += self.__onOvertimeOver
             hqs = destructibleEntityComp.destructibleEntities
@@ -180,9 +181,6 @@ class EpicMissionsController(IViewComponentsController):
                 firstHQ = first(hqs.values())
                 self.__activeMissionData['hqActive'] = firstHQ.isActive
                 self.__objMsgSent = firstHQ.isActive
-            arenaDP = self.__sessionProvider.getArenaDP()
-            if arenaDP:
-                self.__generalRankMsgSent = any((arenaDP.isAllyTeam(arenaDP.getVehicleInfo(vID).team) and arenaDP.isGeneral(vID) for vID in avatar_getter.getArena().vehicles))
             arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onPositionsUpdated += self.__updatePositions
@@ -219,7 +217,7 @@ class EpicMissionsController(IViewComponentsController):
         if playerDataComp is not None:
             playerDataComp.onPlayerPhysicalLaneUpdated -= self.__onPlayerPhysicalLaneUpdated
             playerDataComp.onPlayerRankUpdated -= self.__onPlayerRankUpdated
-            playerDataComp.onVehicleRanksUpdated -= self.__onVehicleRanksUpdated
+            playerDataComp.onCrewRolesFactorUpdated -= self.__onCrewRoleFactorAndRankUpdate
         destructibleEntityComp = getattr(componentSystem, 'destructibleEntityComponent', None)
         if destructibleEntityComp is not None:
             destructibleEntityComp.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
@@ -362,16 +360,21 @@ class EpicMissionsController(IViewComponentsController):
          'progress': points}))
 
     def __onPlayerPhysicalLaneUpdated(self, laneID):
+        componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
         if not self.__ready:
-            self.__ready = True
+            sectorComp = getattr(componentSystem, 'sectorComponent', None)
+            if sectorComp is None:
+                LOG_ERROR('Expected SectorComponent not present!')
+                return
+            self.__ready = sectorComp.currentPlayerSectorId is not None
             self.__currentLane = laneID
-            self.__onReady()
+            if self.__ready:
+                self.__onReady()
         invalidateMission = False
         if laneID != self.__currentLane:
             self.__currentLane = laneID
             invalidateMission = True
         if not invalidateMission:
-            componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
             playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
             if playerDataComp is None:
                 LOG_ERROR('Expected PlayerDataComponent not present!')
@@ -649,33 +652,45 @@ class EpicMissionsController(IViewComponentsController):
     def __onSpecificTimeReached(self, minutes, seconds):
         self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.TIME_REMAINING if self.__isAttacker() else GAME_MESSAGES_CONSTS.TIME_REMAINING_POSITIVE, {'title': i18n.makeString(EPIC_BATTLE.ZONE_TIME_LEFT, minutes=minutes)}))
 
-    def __onPlayerRankUpdated(self, rank):
+    def __onCrewRoleFactorAndRankUpdate(self, newFactor, allyVehID, allyNewRank):
+        if not allyVehID and not allyNewRank:
+            return
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        crewRoleFactorConf = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleModifiers').get('CrewRoleFactor')
+        if BigWorld.player().playerVehicleID == allyVehID:
+            factor = crewRoleFactorConf.get('ranks', {}).get(allyNewRank + 1, 0)
+            self.__onPlayerRankUpdated(allyNewRank, factor)
+            return
+        maxImpact = crewRoleFactorConf.get('maxImpact', 0.0)
+        if newFactor < maxImpact:
+            subTitleAddition = i18n.makeString(EPIC_BATTLE.RANK_CREWROLESFACTORPROMOTION, percent=newFactor)
+        else:
+            subTitleAddition = i18n.makeString(EPIC_BATTLE.RANK_CREWROLESFACTORPROMOTION1, percent=maxImpact)
+        subTitle = i18n.makeString(EPIC_BATTLE.RANK_PROMOTION, rank=i18n.makeString(RANK_TO_TRANSLATION[allyNewRank + 1]), placeholder='\n' + subTitleAddition)
+        self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.GENERAL_RANK_REACHED, {'title': self.__sessionProvider.getCtx().getPlayerFullName(vID=allyVehID, showVehShortName=False, showClan=True, showRegion=False),
+         'subTitle': subTitle}))
+
+    def __onPlayerRankUpdated(self, rank, crewRoleFactor=0.0):
         subTitleText = ''
+        rankIdx = rank + 1
         firstUnlocked, updateInfo = self.getRankUpdateData(rank)
         eqCtrl = self.__sessionProvider.shared.equipments
+        rRank = R.strings.epic_battle.rank
         if firstUnlocked is not None and eqCtrl is not None and eqCtrl.hasEquipment(updateInfo):
             equipmentName = eqCtrl.getEquipment(updateInfo).getDescriptor().userString
-            if firstUnlocked:
-                subTitleText = backport.text(R.strings.epic_battle.rank.recerveUnlocked(), reserveName=equipmentName)
-            else:
-                subTitleText = backport.text(R.strings.epic_battle.rank.reserveUpgraded(), reserveName=equipmentName)
-        self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.RANK_UP, {'rank': rank + 1,
-         'title': RANK_TO_TRANSLATION[rank + 1],
+            subTitleText = backport.text(rRank.recerveUnlocked() if firstUnlocked else rRank.reserveUpgraded(), reserveName=equipmentName)
+        if rankIdx in self.__epicController.getLevelsToUPGAllReserves():
+            if subTitleText:
+                subTitleText += '\n'
+            subTitleText += backport.text(rRank.allReserveUpgraded())
+        if crewRoleFactor > 0:
+            if subTitleText:
+                subTitleText += '\n'
+            subTitleText += i18n.makeString(EPIC_BATTLE.RANK_CREWROLESFACTORSELF, percent=crewRoleFactor)
+        self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.RANK_UP, {'rank': rankIdx,
+         'title': RANK_TO_TRANSLATION[rankIdx],
          'subTitle': subTitleText}))
-        if rank == PLAYER_RANK.GENERAL:
-            self.__generalRankMsgSent = True
         return
-
-    def __onVehicleRanksUpdated(self, teamRanks):
-        if self.__generalRankMsgSent:
-            return
-        if avatar_getter.getPlayerTeam() in teamRanks:
-            playerTeamRanks = teamRanks[avatar_getter.getPlayerTeam()]
-            for vehID, rank in playerTeamRanks.iteritems():
-                if rank == PLAYER_RANK.GENERAL:
-                    self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.GENERAL_RANK_REACHED, {'title': self.__sessionProvider.getCtx().getPlayerFullName(vID=vehID, showVehShortName=False, showClan=True, showRegion=False),
-                     'subTitle': i18n.makeString(EPIC_BATTLE.RANK_PROMOTION, rank=i18n.makeString(RANK_TO_TRANSLATION[rank]))}))
-                    self.__generalRankMsgSent = True
 
     def __onOvertimeStart(self, endTime):
         self.__overTimeEnd = endTime

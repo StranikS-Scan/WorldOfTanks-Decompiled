@@ -4821,6 +4821,24 @@
         </effects>
       </variant1>
     </hd_env_UNI_073_BurntTreeStump_01_touchdown>
+    <inf_envJA_011_SmallPoleFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envJA_011_SmallPoleFracture.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_pole	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envJA_011_SmallPoleFracture>
   </fallingAtoms>
   <fragiles>
     <hd_env_UNI_076_SnowHeap>
@@ -35367,6 +35385,75 @@
         </effects>
       </variant1>
     </hd_env_AS_040_SmallBoat_02>
+    <inf_envAF_005_ClayJug_1_12>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	26	</stone_1>
+              <glass>	1	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAF_005_ClayJug_1_12>
+    <inf_mleSU_83_10_GazMM_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mleSU_83_10_GazMM_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	40	</metal_2>
+              <wood_1>	24	</wood_1>
+              <cloth>	49	</cloth>
+              <glass>	24	</glass>
+              <debrisAmount>	51.83	</debrisAmount>
+              <weight>	7400	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mleSU_83_10_GazMM_1>
+    <inf_fuel_env418_OldGMercedes2_08_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_fuel_env418_OldGMercedes2.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	inf_fuel_env418_OldGMercedes2	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_fuel_env418_OldGMercedes2_08_hit>
   </fragiles>
   <structures>
     <hd_env_AS_001_Aqueduct_01>

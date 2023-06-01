@@ -14,9 +14,10 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.rank_item_model import
 class InfoView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, layoutID=R.views.frontline.lobby.InfoView(), showFullScreen=False):
+    def __init__(self, layoutID=R.views.frontline.lobby.InfoView(), showFullScreen=False, **kwargs):
         self._isFullScreen = showFullScreen
         settings = ViewSettings(layoutID, ViewFlags.VIEW if showFullScreen else ViewFlags.LOBBY_TOP_SUB_VIEW, InfoViewModel())
+        settings.kwargs = kwargs
         super(InfoView, self).__init__(settings)
 
     @property
@@ -30,7 +31,7 @@ class InfoView(ViewImpl):
         super(InfoView, self)._onLoading(*args, **kwargs)
         self._fillModel()
 
-    def _fillModel(self):
+    def _fillModel(self, _=None):
         with self.viewModel.transaction() as vm:
             vm.setIsFullScreen(self._isFullScreen)
             vm.setIsBattlePassAvailable(self.__epicController.isBattlePassDataEnabled())
@@ -48,15 +49,16 @@ class InfoView(ViewImpl):
                 packBaseSkills(skills, skillsData)
                 categories.addViewModel(categoryModel)
 
-            ranksInfo = self.__epicController.getPlayerRanksInfo()
+            ranksInfo = self.__epicController.getPlayerRanksWithBonusInfo()
             ranks = vm.getRanksWithPoints()
             ranks.clear()
-            for rankLvl, (points, bonus) in sorted(ranksInfo.iteritems()):
+            for rankLvl, (points, xpBonus, effectivenessBonus) in sorted(ranksInfo.iteritems()):
                 rankItem = RankItemModel()
                 rankItem.setRankName(PLAYER_RANK.NAMES[rankLvl])
                 rankItemPoints = rankItem.getRankPoints()
                 rankItemPoints.addNumber(points)
-                rankItemPoints.addNumber(bonus)
+                rankItemPoints.addNumber(xpBonus)
+                rankItemPoints.addReal(effectivenessBonus)
                 ranks.addViewModel(rankItem)
 
     def __onViewClose(self):

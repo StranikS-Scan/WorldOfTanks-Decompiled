@@ -93,7 +93,7 @@ class _VehiclesSelector(object):
             self.__edgedVehicles.append(v)
 
     def __validateVehicle(self, vehicle):
-        return vehicle.isStarted and vehicle.isAlive() and (not vehicle.isPlayerVehicle or self.__selectPlayer)
+        return hasattr(vehicle, 'isStarted') and vehicle.isStarted and vehicle.isAlive() and (not vehicle.isPlayerVehicle or self.__selectPlayer)
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle in self.__edgedVehicles:

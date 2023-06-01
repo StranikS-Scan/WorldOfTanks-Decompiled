@@ -4,8 +4,8 @@ import weakref
 import typing
 import BattleReplay
 from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
-from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import BaseStateObserver
+from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import StateEvent
 from frameworks.state_machine import StateObserversContainer
 from frameworks.wulf import WindowLayer
@@ -13,8 +13,8 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import spaces
 from helpers import dependency
 from skeletons.connection_mgr import DisconnectReason
-from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
+from skeletons.gui.app_loader import GuiGlobalSpaceID
 
 def makePredicatedObservers(predicate, *observers):
     for observer in observers:
@@ -81,15 +81,11 @@ class CreateLobbyObserver(AppLoaderObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
-        self._proxy.destroyBattle()
-        self._proxy.createLobby()
-
-
-class IntroVideoObserver(AppLoaderObserver):
-    __slots__ = ()
-
-    def onEnterState(self, event=None):
-        self._proxy.changeSpace(spaces.IntroVideoSpace())
+        if self._proxy.getDefBattleApp() is not None:
+            self._proxy.destroyBattle()
+        if self._proxy.getDefLobbyApp() is None:
+            self._proxy.createLobby()
+        return
 
 
 class LoginObserver(AppLoaderObserver):
@@ -288,7 +284,6 @@ class NormalAppTracker(StateObserversContainer):
 
     def __init__(self, proxy):
         common = (CreateLobbyObserver(GameplayStateID.OFFLINE, proxy),
-         IntroVideoObserver(GameplayStateID.INTRO_VIDEO, proxy),
          LoginObserver(GameplayStateID.LOGIN, proxy),
          LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy),
          ReplayEnteringOnlineObserver(GameplayStateID.SERVER_REPLAY_ENTERING, proxy),

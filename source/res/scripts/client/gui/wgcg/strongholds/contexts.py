@@ -467,3 +467,12 @@ class StrongholdLeaveModeCtx(StrongholdRequestCtx):
     @classmethod
     def fromPrbCtx(cls, prbCtx):
         raise SoftException('This method should not be reached in this context')
+
+
+class StrongholdEventGetFrozenVehiclesCtx(CommonWebRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_EVENT_GET_FROZEN_VEHICLES
+
+    def isAuthorizationRequired(self):
+        return True

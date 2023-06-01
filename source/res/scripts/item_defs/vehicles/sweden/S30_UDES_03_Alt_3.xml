@@ -10,8 +10,8 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	20	</backward>
+    <forward>	55	</forward>
+    <backward>	18	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.226	</moving>
@@ -1901,7 +1901,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_strvkan_L_45_Alt_3>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_105mm_strvkan_L_45_Alt_3>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <armor_1>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1921,12 +1921,12 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	23	</reloadTime>
+          <reloadTime>	30	</reloadTime>
           <clip>
             <count>	3	</count>
             <rate>	20	</rate>
           </clip>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
@@ -2581,8 +2581,8 @@
     <detailed>
       <engines>
         <Saab_Scania_DS14_Alt_3>
-          <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplEnginePower>	540	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Saab_Scania_DS14_Alt_3>
       </engines>
       <chassis>

@@ -206,6 +206,7 @@ def getDefaultWheeledChassisXPhysicsCfg():
      'axleSteeringSpeed': (0.0, 0.0, 0.0, 90.0),
      'brokenWheelPowerLoss': (0.0, 0.0, 0.0, 0.0),
      'brokenWheelSpeedLoss': (0.0, 0.0, 0.0, 0.0),
+     'brokenWheelRotationSpeedLoss': (0.0, 0.0, 0.0, 0.0),
      'fwdFrictionOnAxisModifiers': (1.0, 1.0, 1.0, 1.0),
      'sideFrictionOnAxisModifiers': (1.0, 1.0, 1.0, 1.0),
      'sideFrictionConstantRatioOnAxis': (0.0, 0.0, 0.0, 0.0),
@@ -240,7 +241,8 @@ def getDefaultWheeledChassisXPhysicsCfg():
                  'warningMaxHealth': 100.0,
                  'warningMaxHealthCritEngine': 50.0,
                  'power': 1.0,
-                 'impulse': 0.0}})
+                 'impulse': 0.0},
+     'isWheeledOnSpotRotation': False})
 
 
 def getDefaultTankVehicleXPhysicsShapeCfg():
@@ -587,7 +589,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['angVelocityFactor0'] = cfg['chassis']['angVelocityFactor0']
     cfg['axleCount'] = cfg['chassis']['axleCount']
     if cfg['vehiclePhysicsType'] == VEHICLE_PHYSICS_TYPE.WHEELED_TECH:
-        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier'):
+        for key in ('axleSteeringLockAngles', 'axleSteeringAngles', 'axleSteeringSpeed', 'fwdFrictionOnAxisModifiers', 'sideFrictionOnAxisModifiers', 'sideFrictionConstantRatioOnAxis', 'sinkageResistOnAxis', 'axleIsLeading', 'axleCanBeRised', 'wheelRiseHeight', 'wheelRiseSpeed', 'enableRail', 'handbrakeBrakeForce', 'brokenWheelRollingFrictionModifier', 'noSignalBrakeForce', 'afterDeathBrakeForce', 'afterDeathMinSpeedForImpulse', 'afterDeathImpulse', 'jumpingFactor', 'jumpingMinForce', 'slowTurnChocker', 'airPitchReduction', 'wheelToHullRollTransmission', 'steeringSpeedInTurnMultiplier', 'isWheeledOnSpotRotation'):
             cfg[key] = cfg['chassis'][key]
 
     cfg['gimletGoalWOnSpot'] = cfg['chassis']['gimletGoalWOnSpot']

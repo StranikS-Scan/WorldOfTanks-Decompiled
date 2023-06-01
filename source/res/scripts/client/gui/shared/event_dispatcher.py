@@ -42,14 +42,13 @@ from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQu
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.lobby.crew.crew_header_view import BuildedMessage
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import events, g_eventBus
-from gui.shared.ClanCache import g_clanCache
+from gui.clans.clan_cache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getNationLessName, getUserName
@@ -138,16 +137,16 @@ def showEpicBattlesAfterBattleWindow(levelUpInfo, parent=None):
 def showFrontlineContainerWindow(activeTab=None):
     from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import TabType
     from frontline.gui.impl.lobby.views.frontline_container_view import FrontlineContainerView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.frontline.lobby.FrontlineContainerView(), FrontlineContainerView, ScopeTemplates.VIEW_SCOPE), activeTab=activeTab if activeTab else TabType.PROGRESS, flags=ViewFlags.LOBBY_TOP_SUB_VIEW), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.frontline.lobby.FrontlineContainerView(), FrontlineContainerView, ScopeTemplates.VIEW_SCOPE), activeTab=activeTab if activeTab else TabType.PROGRESS), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def closeFrontlineContainerWindow():
     g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID=R.views.frontline.lobby.FrontlineContainerView()))
 
 
-def showFrontlineWelcomeWindow(showFullScreen=False, showContainerOnClose=False):
+def showFrontlineWelcomeWindow():
     from frontline.gui.impl.lobby.views.welcome_view import WelcomeViewWindow
-    WelcomeViewWindow(showFullScreen=showFullScreen, showContainerOnClose=showContainerOnClose).load()
+    WelcomeViewWindow().load()
 
 
 def showFrontlineInfoWindow():
@@ -584,7 +583,7 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                     showResourceWellHeroPreview(descriptor.type.compactDescr, previewAlias=previewAlias, previousBackAlias=previousBackAlias)
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
-            ClientSelectableCameraObject.switchCamera(entity)
+            ClientSelectableCameraObject.switchCamera(entity, 'HeroTank')
             break
 
     return
@@ -934,6 +933,20 @@ def showStyleBuyingPreview(vehCD, style, descr, backCallback, backBtnDescrLabel=
      'styleLevel': kwargs.get('styleLevel'),
      'price': kwargs.get('price'),
      'buyParams': kwargs.get('buyParams')}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showShowcaseStyleBuyingPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.SHOWCASE_STYLE_BUYING_PREVIEW), ctx={'itemCD': vehCD,
+     'style': style,
+     'styleDescr': descr,
+     'backCallback': backCallback,
+     'backPreviewAlias': kwargs.get('backPreviewAlias'),
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'price': kwargs.get('price'),
+     'originalPrice': kwargs.get('originalPrice'),
+     'buyParams': kwargs.get('buyParams'),
+     'endTime': kwargs.get('endTime'),
+     'discountPercent': kwargs.get('discountPercent')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedSeasonCompleteView(ctx, useQueue=False):
@@ -1339,6 +1352,18 @@ def showFrontlineAwards(bonuses, onCloseCallback=None, onAnimationEndedCallback=
     findAndLoadWindow(useQueue, AwardsWindow, bonuses, onCloseCallback=onCloseCallback, onAnimationEndedCallback=onAnimationEndedCallback)
 
 
+@wg_async
+def showFrontlineConfirmDialog(skillIds, callback, confirmType=None):
+    from gui.impl.lobby.tank_setup.dialogs.frontline_confirm_dialog import FrontlineReserveConfirmDialog, ConfirmType
+    from gui.impl.dialogs import dialogs
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(skillIds=skillIds, confirmType=confirmType or ConfirmType.Buy, layoutID=FrontlineReserveConfirmDialog.LAYOUT_ID, wrappedViewClass=FrontlineReserveConfirmDialog))
+    if result.busy:
+        callback(False)
+    else:
+        isOK, _ = result.result
+        callback(isOK)
+
+
 def showBlankGiftWindow(itemCD, count):
     from gui.impl.lobby.blank_gift.awards_view import BlankGiftWindow
     BlankGiftWindow(itemCD, count).load()
@@ -1354,10 +1379,12 @@ def showNewLevelWindow(pLevel=1, cLevel=2, pXp=50, cXp=70, boosterFlXP=30, origi
 
 
 @wg_async
-def showBattlePassActivateChapterConfirmDialog(chapterID, callback):
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showBattlePassActivateChapterConfirmDialog(chapterID, callback, guiLoader=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ActivateChapterConfirmDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog))
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassProgressionsView())
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=view.getParentWindow()))
     if result.busy:
         callback((False, {}))
     else:
@@ -1927,17 +1954,19 @@ def showBoostersActivation():
         from gui.impl.lobby.personal_reserves.reserves_activation_view import ReservesActivationView
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, ReservesActivationView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
     else:
-        closeReservesIntroAndConversionView()
+        closeViewsExceptReservesActivationView()
     return
 
 
-def closeReservesIntroAndConversionView():
+def closeViewsExceptReservesActivationView():
+    closeViewsWithFlags([R.views.lobby.personal_reserves.ReservesActivationView()], [ViewFlags.LOBBY_TOP_SUB_VIEW])
+
+
+def closeViewsWithFlags(ignoreViews, viewFlags):
     uiLoader = dependency.instance(IGuiLoader)
-    viewIdsToClose = [R.views.lobby.personal_reserves.ReservesIntroView(), R.views.lobby.personal_reserves.ReservesConversionView()]
-    for viewIdToClose in viewIdsToClose:
-        introView = uiLoader.windowsManager.getViewByLayoutID(viewIdToClose)
-        if introView:
-            introView.destroyWindow()
+    for view in uiLoader.windowsManager.findViews(lambda viewToFilter: viewToFilter.viewFlags & ViewFlags.VIEW_TYPE_MASK in viewFlags):
+        if view.layoutID not in ignoreViews:
+            view.destroyWindow()
 
 
 def showPersonalReservesConversion():
@@ -1983,7 +2012,7 @@ def showComp7TokensRewardsScreen(quest, notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
-def showCollectionWindow(collectionId, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
+def showCollectionWindow(collectionId, page=None, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
     if not collections.isEnabled():
         showHangar()
         return
@@ -1991,13 +2020,13 @@ def showCollectionWindow(collectionId, backCallback=None, backBtnText='', parent
         from gui.impl.lobby.collection.collection import CollectionWindow
         view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.CollectionView())
         if view is None:
-            window = CollectionWindow(collectionId, backCallback, backBtnText, parent or getParentWindow())
+            window = CollectionWindow(collectionId, page, backCallback, backBtnText, parent or getParentWindow())
             window.load()
         return
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
-def showCollectionItemPreviewWindow(itemId, collectionId, guiLoader=None, collections=None):
+def showCollectionItemPreviewWindow(itemId, collectionId, page, backCallback, backBtnText, guiLoader=None, collections=None):
     if not collections.isEnabled():
         showHangar()
         return
@@ -2005,7 +2034,7 @@ def showCollectionItemPreviewWindow(itemId, collectionId, guiLoader=None, collec
         from gui.impl.lobby.collection.collection_item_preview import CollectionItemPreviewWindow
         view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.CollectionItemPreview())
         if view is None:
-            window = CollectionItemPreviewWindow(itemId, collectionId)
+            window = CollectionItemPreviewWindow(itemId, collectionId, page, backCallback, backBtnText)
             window.load()
         return
 
@@ -2029,3 +2058,9 @@ def showWinbackIntroView(parent=None):
 def showWinbackSelectRewardView(selectableBonusTokens=None):
     from gui.impl.lobby.winback.winback_selectable_reward_view import WinbackSelectableRewardWindow
     WinbackSelectableRewardWindow(selectableBonusTokens).load()
+
+
+def showAchievementEditView(*args, **kwargs):
+    from gui.impl.lobby.achievements.edit_view import EditWindow
+    window = EditWindow(parent=getParentWindow(), *args, **kwargs)
+    window.load()

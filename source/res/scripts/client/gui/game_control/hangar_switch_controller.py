@@ -275,28 +275,27 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                         if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                             currentSceneChanged = True
 
-            if currentSceneChanged and self.hangarSpace.inited:
+            if currentSceneChanged:
                 if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                     spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
                     visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
+                    if not self.hangarSpace.inited:
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
+                        spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
+                        visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
+                        return
                     success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask)
                 else:
                     currentSceneConfig = self._sceneSpaceParams[self.currentSceneName]
                     spaceId = currentSceneConfig.getHangarSpaceId()
                     visibilityMask = currentSceneConfig.getVisibilityMask()
+                    if not self.hangarSpace.inited:
+                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
+                        return
                     success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
                 if success:
                     self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
-                elif err == ErrorFlags.HANGAR_NOT_READY:
-                    if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
-                        spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
-                        visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
-                    else:
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
-                elif err == ErrorFlags.DUPLICATE_REQUEST:
-                    _logger.warning('Redundant hangar update via event_notifications')
                 else:
                     raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
                 return

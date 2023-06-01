@@ -59,14 +59,14 @@ class ARENAS(object):
     C_02_MALINOVKA_DESCRIPTION = '#arenas:02_malinovka/description'
     C_04_HIMMELSDORF_NAME = '#arenas:04_himmelsdorf/name'
     C_04_HIMMELSDORF_DESCRIPTION = '#arenas:04_himmelsdorf/description'
-    C_04_HIMMELSDORF_MB_NAME = '#arenas:04_himmelsdorf_mb/name'
-    C_04_HIMMELSDORF_MB_DESCRIPTION = '#arenas:04_himmelsdorf_mb/description'
     C_05_PROHOROVKA_NAME = '#arenas:05_prohorovka/name'
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'
     C_07_LAKEVILLE_DESCRIPTION = '#arenas:07_lakeville/description'
+    C_07_LAKEVILLE_NB_NAME = '#arenas:07_lakeville_nb/name'
+    C_07_LAKEVILLE_NB_DESCRIPTION = '#arenas:07_lakeville_nb/description'
     C_08_RUINBERG_NAME = '#arenas:08_ruinberg/name'
     C_08_RUINBERG_DESCRIPTION = '#arenas:08_ruinberg/description'
     C_10_HILLS_NAME = '#arenas:10_hills/name'
@@ -104,6 +104,8 @@ class ARENAS(object):
     C_23_WESTFELD_DESCRIPTION = '#arenas:23_westfeld/description'
     C_28_DESERT_NAME = '#arenas:28_desert/name'
     C_28_DESERT_DESCRIPTION = '#arenas:28_desert/description'
+    C_28_DESERT_NB_NAME = '#arenas:28_desert_nb/name'
+    C_28_DESERT_NB_DESCRIPTION = '#arenas:28_desert_nb/description'
     C_29_EL_HALLOUF_NAME = '#arenas:29_el_hallouf/name'
     C_45_NORTH_AMERICA_NAME = '#arenas:45_north_america/name'
     C_45_NORTH_AMERICA_DESCRIPTION = '#arenas:45_north_america/description'
@@ -116,6 +118,8 @@ class ARENAS(object):
     C_101_DDAY_NAME = '#arenas:101_dday/name'
     C_101_DDAY_DESCRIPTION = '#arenas:101_dday/description'
     C_115_SWEDEN_DESCRIPTION = '#arenas:115_sweden/description'
+    C_115_SWEDEN_NB_NAME = '#arenas:115_sweden_nb/name'
+    C_115_SWEDEN_NB_DESCRIPTION = '#arenas:115_sweden_nb/description'
     C_112_EIFFEL_TOWER_CTF_NAME = '#arenas:112_eiffel_tower_ctf/name'
     C_112_EIFFEL_TOWER_CTF_DESCRIPTION = '#arenas:112_eiffel_tower_ctf/description'
     C_212_EPIC_RANDOM_VALLEY_NAME = '#arenas:212_epic_random_valley/name'
@@ -162,12 +166,8 @@ class ARENAS(object):
     C_121_LOST_PARADISE_V_DESCRIPTION = '#arenas:121_lost_paradise_v/description'
     TYPE_WINBACK_NAME = '#arenas:type/winback/name'
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
-    C_127_JAPORT_MB_NAME = '#arenas:127_japort_mb/name'
-    C_127_JAPORT_MB_DESCRIPTION = '#arenas:127_japort_mb/description'
-    C_08_RUINBERG_MB_NAME = '#arenas:08_ruinberg_mb/name'
-    C_08_RUINBERG_MB_DESCRIPTION = '#arenas:08_ruinberg_mb/description'
-    C_05_PROHOROVKA_MB_NAME = '#arenas:05_prohorovka_mb/name'
-    C_05_PROHOROVKA_MB_DESCRIPTION = '#arenas:05_prohorovka_mb/description'
+    C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
+    C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -224,14 +224,14 @@ class ARENAS(object):
      C_02_MALINOVKA_DESCRIPTION,
      C_04_HIMMELSDORF_NAME,
      C_04_HIMMELSDORF_DESCRIPTION,
-     C_04_HIMMELSDORF_MB_NAME,
-     C_04_HIMMELSDORF_MB_DESCRIPTION,
      C_05_PROHOROVKA_NAME,
      C_05_PROHOROVKA_DESCRIPTION,
      C_06_ENSK_NAME,
      C_06_ENSK_DESCRIPTION,
      C_07_LAKEVILLE_NAME,
      C_07_LAKEVILLE_DESCRIPTION,
+     C_07_LAKEVILLE_NB_NAME,
+     C_07_LAKEVILLE_NB_DESCRIPTION,
      C_08_RUINBERG_NAME,
      C_08_RUINBERG_DESCRIPTION,
      C_10_HILLS_NAME,
@@ -269,6 +269,8 @@ class ARENAS(object):
      C_23_WESTFELD_DESCRIPTION,
      C_28_DESERT_NAME,
      C_28_DESERT_DESCRIPTION,
+     C_28_DESERT_NB_NAME,
+     C_28_DESERT_NB_DESCRIPTION,
      C_29_EL_HALLOUF_NAME,
      C_45_NORTH_AMERICA_NAME,
      C_45_NORTH_AMERICA_DESCRIPTION,
@@ -281,6 +283,8 @@ class ARENAS(object):
      C_101_DDAY_NAME,
      C_101_DDAY_DESCRIPTION,
      C_115_SWEDEN_DESCRIPTION,
+     C_115_SWEDEN_NB_NAME,
+     C_115_SWEDEN_NB_DESCRIPTION,
      C_112_EIFFEL_TOWER_CTF_NAME,
      C_112_EIFFEL_TOWER_CTF_DESCRIPTION,
      C_212_EPIC_RANDOM_VALLEY_NAME,
@@ -327,12 +331,8 @@ class ARENAS(object):
      C_121_LOST_PARADISE_V_DESCRIPTION,
      TYPE_WINBACK_NAME,
      TYPE_WINBACK_DESCRIPTION,
-     C_127_JAPORT_MB_NAME,
-     C_127_JAPORT_MB_DESCRIPTION,
-     C_08_RUINBERG_MB_NAME,
-     C_08_RUINBERG_MB_DESCRIPTION,
-     C_05_PROHOROVKA_MB_NAME,
-     C_05_PROHOROVKA_MB_DESCRIPTION)
+     C_210_BF_EPIC_DESERT_NAME,
+     C_210_BF_EPIC_DESERT_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

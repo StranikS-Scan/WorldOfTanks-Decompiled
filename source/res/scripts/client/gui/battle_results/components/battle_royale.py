@@ -21,6 +21,7 @@ from skeletons.gui.game_control import IBattleRoyaleController
 from ValueReplay import ValueReplay, ValueReplayConnector
 from battle_results import g_config as battleResultsConfig
 from gui.battle_results.reusable import records
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Dict
     from gui.battle_results.reusable import _ReusableInfo
@@ -116,6 +117,7 @@ class BattleRoyaleIsPremiumBlock(base.StatsItem):
 
 
 class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
+    __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('killer', 'vehicleState', 'isSelfDestroyer')
 
     def __init__(self, meta=None, field='', *path):
@@ -130,17 +132,25 @@ class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
         vehicleId = reusable.vehicles.getVehicleID(playerInfo.dbID)
         vehicleInfo = reusable.vehicles.getVehicleInfo(vehicleId)
         self.vehicleState = vehicleInfo.deathReason
+        getter = self.__itemsCache.items.getItemByCD
         killerVehicleID = result[vehicleInfo.intCD]['killerID']
         if killerVehicleID:
             killerInfo = reusable.getPlayerInfoByVehicleID(killerVehicleID)
             isSelf = playerInfo.realName == killerInfo.realName
             isSquad = playerInfo.squadIndex > 0 and playerInfo.squadIndex == killerInfo.squadIndex or isSelf
+            isBot = killerInfo.dbID == 0
             if killerInfo.realName == killerInfo.fakeName or isSquad:
-                self.killer = {'userName': killerInfo.realName,
-                 'clanAbbrev': killerInfo.clanAbbrev}
+                userName = killerInfo.realName
+                if isBot:
+                    vehicle = getter(reusable.vehicles.getVehicleInfo(killerVehicleID).intCD)
+                    userName = vehicle.shortUserName
+                self.killer = {'userName': userName,
+                 'clanAbbrev': killerInfo.clanAbbrev,
+                 'isBot': isBot}
             else:
                 self.killer = {'userName': killerInfo.fakeName,
-                 'clanAbbrev': ''}
+                 'clanAbbrev': '',
+                 'isBot': isBot}
             self.isSelfDestroyer = killerInfo.realName == playerInfo.realName
 
 
@@ -157,6 +167,7 @@ class _BRCoinReplayRecords(records.ReplayRecords):
 
 class BattleRoyaleFinancialBlock(base.StatsBlock):
     __slots__ = ('credits', 'xp', 'crystal', 'brcoin')
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyaleFinancialBlock, self).__init__(meta, field, *path)
@@ -170,9 +181,10 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         self.credits = avatarInfo['credits']
         self.xp = avatarInfo['xp']
         self.crystal = avatarInfo['crystal']
-        self.brcoin = self._getBrCoins(result, isPremium=False)
+        self.brcoin = self._getBrCoins(result, reusable, isPremium=False)
 
-    def _getBrCoins(self, result, isPremium):
+    def _getBrCoins(self, result, reusable, isPremium):
+        questBonus = self.__getBrCoinsQuestBonus(reusable.personal.getQuestsProgress())
         vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
         info = result['personal'][vehicleCD]
         for code, data in info['currencies'].iteritems():
@@ -181,10 +193,26 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
                 replayConnector = ValueReplayConnector(data, meta)
                 replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
                 if not isPremium:
-                    return _BRCoinReplayRecords(replay, data).getRecord('count')
+                    return _BRCoinReplayRecords(replay, data).getRecord('count') + questBonus
                 if 'appliedPremiumFactor100' in replay:
                     replay['appliedPremiumFactor100'] = data['premiumPlusFactor100']
-                return _BRCoinReplayRecords(replay, data).getRecord('count')
+                return _BRCoinReplayRecords(replay, data).getRecord('count') + questBonus
+
+        return questBonus
+
+    def __getBrCoinsQuestBonus(self, questProgress):
+        questBonus = 0
+        allQuests = self.__eventsCache.getAllQuests()
+        for qID, qProgress in questProgress.iteritems():
+            if isQuestCompleted(*qProgress):
+                quest = allQuests.get(qID)
+                if quest is None:
+                    continue
+                for bonus in quest.getBonuses('currencies'):
+                    if bonus.getCode() == 'brcoin':
+                        questBonus += bonus.getCount()
+
+        return questBonus
 
 
 class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
@@ -204,7 +232,7 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
             _, premiumXP = rec[:2]
             self.xp = premiumXP.getRecord('xpToShow')
 
-        self.brcoin = self._getBrCoins(result, isPremium=True)
+        self.brcoin = self._getBrCoins(result, reusable, isPremium=True)
         self.credits += avatarInfo.get('eventCredits', 0)
 
 
@@ -266,10 +294,10 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
 
     def _getMaxValue(self, result, reusable):
 
-        def observerFilter(player):
-            return not player.vehicle.isObserver
+        def playerFilter(player):
+            return not player.vehicle.isObserver and player.player.dbID != 0
 
-        allPlayers = filter(observerFilter, list(reusable.getAllPlayersIterator(result['vehicles'])))
+        allPlayers = filter(playerFilter, list(reusable.getAllPlayersIterator(result['vehicles'])))
         return len(set((item.player.team for item in allPlayers))) if _isSquadMode(reusable) else len(allPlayers)
 
     def _getWreathImage(self, result, reusable):
@@ -447,8 +475,10 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
         for item in allPlayers:
             if item.vehicle is not None and item.vehicle.isObserver:
                 continue
-            block = BattleRoyalePlayerBlock()
             player = item.player
+            if player.dbID == 0:
+                continue
+            block = BattleRoyalePlayerBlock()
             block.isPersonal = player.dbID == personalDBID
             block.squadIdx = player.team
             block.isPersonalSquad = team != 0 and team == player.team

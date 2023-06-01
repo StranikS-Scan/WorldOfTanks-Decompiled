@@ -15,6 +15,7 @@ from helpers import dependency
 from helpers.events_handler import EventsHandler
 from helpers.server_settings import serverSettingsChangeListener
 from messenger.proto.events import g_messengerEvents
+from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
@@ -56,6 +57,19 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
             _logger.error('Collection with id <%s> does not exist!', collectionId)
         return collection
 
+    def getCollectionByName(self, collectionName):
+        collection = first((c for c in self.__getConfig().collections.itervalues() if c.name == collectionName))
+        if collection is None:
+            _logger.error('Collection with name <%s> does not exist!', collectionName)
+        return collection
+
+    def getLinkedCollections(self, collectionId):
+        for linkedGroup in self.__getConfig().linkedCollections:
+            if collectionId in linkedGroup:
+                return sorted(linkedGroup, reverse=True)
+
+        return [collectionId]
+
     def isRelatedEventActive(self, collectionId):
         collection = self.getCollection(collectionId)
         return False if collection is None else collection.isRelatedEventActive
@@ -77,6 +91,9 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
             return 0
         else:
             return sum((self.isItemReceived(collectionId, item.itemId) and isItemNew(collectionId, item.itemId) for item in collection.items.itervalues()))
+
+    def getNewLinkedCollectionsItemCount(self, collectionId):
+        return sum((self.getNewCollectionItemCount(linkedId) for linkedId in self.getLinkedCollections(collectionId)))
 
     def getReceivedItemCount(self, collectionId):
         balance = self.__entitlementsCache.getCollectionBalance(collectionId)

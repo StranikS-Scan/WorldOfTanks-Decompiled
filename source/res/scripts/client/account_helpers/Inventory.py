@@ -638,11 +638,12 @@ class Inventory(object):
                 proxy = None
             arr = [shopRev]
             for data in vehiclesSellData:
-                vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems, itemsForDemountKit = data
+                vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems, itemsForDemountKit, itemsFreeToDemount = data
                 arr += [vehInvID, flags, len(itemsFromVehicle)] + itemsFromVehicle
                 arr += [len(itemsFromInventory)] + itemsFromInventory
                 arr += [len(customizationItems)] + customizationItems
                 arr += [len(itemsForDemountKit)] + itemsForDemountKit
+                arr += [len(itemsFreeToDemount)] + itemsFreeToDemount
 
             self.__account._doCmdIntArr(AccountCommands.CMD_SELL_VEHICLE, arr, proxy)
             return

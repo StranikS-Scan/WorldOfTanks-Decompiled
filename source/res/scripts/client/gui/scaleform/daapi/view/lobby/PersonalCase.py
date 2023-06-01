@@ -275,7 +275,10 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.__setRetrainingData()
 
     def dropSkills(self):
-        self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID)), ctx={'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
+        alias = VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW
+        if self.itemsCache.items.tokens.isTokenAvailable(constants.FREE_DROP_SKILL_TOKEN):
+            alias = VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW
+        self.fireEvent(LoadViewEvent(SFViewLoadParams(alias, getViewName(alias, self.tmanInvID)), ctx={'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def showFreeSkillsInfo(self):
         builder = ResDialogBuilder()

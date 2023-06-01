@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
+from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_DEBUG
@@ -935,6 +936,25 @@ def _migrateTo102(core, data, initialized):
     feedbackBattleEvents[BATTLE_EVENTS.CREW_PERKS] = True
 
 
+def _migrateTo103(core, data, initialized):
+    from account_helpers import AccountSettings
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, LIMITED_UI_STORAGES, LIMITED_UI_SPAM_OFF, LIMITED_UI_KEY
+    for storage in LIMITED_UI_STORAGES:
+        data[storage][LIMITED_UI_KEY] = 0
+
+    settingsPrefix = 'uiSpamVisited_{}'
+    bitMask = 0
+    for index, key in enumerate(LIMITED_UI_SPAM_OFF.ORDER):
+        if AccountSettings.getUIFlag(settingsPrefix.format(key)):
+            AccountSettings.setUIFlag(settingsPrefix.format(key), False)
+            bitMask |= 1 << index
+
+    data[SETTINGS_SECTIONS.LIMITED_UI_1][LIMITED_UI_KEY] = bitMask
+    newSettingsCounter = AccountSettings.getSettings(NEW_SETTINGS_COUNTER)
+    newSettingsCounter['GameSettings'].update({GAME.LIMITED_UI_ACTIVE: True})
+    AccountSettings.setSettings(NEW_SETTINGS_COUNTER, newSettingsCounter)
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1337,6 +1357,10 @@ _versions = ((1,
   False),
  (102,
   _migrateTo102,
+  False,
+  False),
+ (103,
+  _migrateTo103,
   False,
   False))
 

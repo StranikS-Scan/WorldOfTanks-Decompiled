@@ -44,6 +44,8 @@ class Manager(ILoginManager):
         self.__wgcPublication = constants.WGC_PUBLICATION.WGC_UNKNOWN
         self.__wgcManager = None
         self.__triedToInitWGC = False
+        self.onConnectionInitiated = Event()
+        self.onConnectionRejected = Event()
         return
 
     @property
@@ -74,13 +76,18 @@ class Manager(ILoginManager):
     def fini(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.connectionMgr.onLoggedOn -= self._onLoggedOn
+        self.connectionMgr.onRejected -= self._onRejected
         self._preferences = None
         self.__servers.fini()
         self.__servers = None
         self.stopWgc()
+        self.onConnectionInitiated.clear()
+        self.onConnectionRejected.clear()
         return
 
     def initiateLogin(self, email, password, serverName, isSocialToken2Login, rememberUser):
+        self.onConnectionInitiated()
+        self.connectionMgr.onRejected += self._onRejected
         isToken2Login = isSocialToken2Login or self._preferences['token2']
         authMethod = CONNECTION_METHOD.TOKEN2 if isToken2Login else CONNECTION_METHOD.BASIC
         serverName = self._getHost(authMethod, serverName)
@@ -102,6 +109,8 @@ class Manager(ILoginManager):
         self.connectionMgr.setLastLogin(email)
 
     def initiateRelogin(self, login, token2, serverName):
+        self.onConnectionInitiated()
+        self.connectionMgr.onRejected += self._onRejected
         self._preferences['server_name'] = serverName
         if self.wgcAvailable:
             self.__wgcManager.relogin(token2, serverName)
@@ -140,6 +149,8 @@ class Manager(ILoginManager):
             self._preferences['server_name'] = serverName
             self._preferences['server_select_was_set'] = serverSelect
             self._preferences.writeLoginInfo()
+            self.__wgcManager.onRejected -= self._onRejected
+            self.__wgcManager.onInitiated -= self._onWGCInitiated
             return
         loginCount = self._preferences.get('loginCount', 0)
         self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1
@@ -160,6 +171,13 @@ class Manager(ILoginManager):
         self._preferences.writeLoginInfo()
         self.__dumpUserName(name)
         self._showSecurityMessage(responseData)
+        self.connectionMgr.onRejected -= self._onRejected
+
+    def _onWGCInitiated(self, *_):
+        self.onConnectionInitiated()
+
+    def _onRejected(self, *_):
+        self.onConnectionRejected()
 
     def _showSecurityMessage(self, responseData):
         securityWarningType = responseData.get('security_msg')
@@ -233,12 +251,16 @@ class Manager(ILoginManager):
                 serverName = selectedServer['data']
             else:
                 self._preferences['server_name'] = serverName
+            self.__wgcManager.onRejected += self._onRejected
+            self.__wgcManager.onInitiated += self._onWGCInitiated
             hostName = self._getHost(CONNECTION_METHOD.TOKEN, serverName)
             self.__wgcManager.login(hostName)
             return
 
     def stopWgc(self):
         if self.wgcAvailable:
+            self.__wgcManager.onRejected -= self._onRejected
+            self.__wgcManager.onInitiated -= self._onWGCInitiated
             self.__wgcManager.destroy()
             self.__wgcManager = None
         return
@@ -279,16 +301,20 @@ class _WgcModeManager(object):
         g_playerEvents.onAccountShowGUI += self.__onAccountDone
         self.connectionMgr.onRejected += self.__onRejected
         self.connectionMgr.onDisconnected += self.__onDisconnected
+        self.onInitiated = Event()
+        self.onRejected = Event()
         return
 
     def destroy(self):
         g_playerEvents.onAccountShowGUI -= self.__onAccountDone
         self.connectionMgr.onRejected -= self.__onRejected
         self.connectionMgr.onDisconnected -= self.__onDisconnected
+        self.onRejected.clear()
 
     def login(self, selectedServer):
         self.__selectedServer = selectedServer
         self.__lobbyContext.setAccountComplete(WGC.isAccountComplete())
+        self.onInitiated()
         WGC.prepareToken()
         Waiting.show('login')
         self.__wgcCheck()
@@ -320,6 +346,7 @@ class _WgcModeManager(object):
         else:
             WGC.printLastError()
             Waiting.hide('login')
+            self.onRejected()
             self.onWgcError()
 
     def __wgcConnect(self):
@@ -337,6 +364,7 @@ class _WgcModeManager(object):
         else:
             _logger.warning('No server was selected when WGC connect happened, so return')
         Waiting.hide('login')
+        self.onRejected()
         return
 
     def __onRejected(self, status, _):
@@ -346,6 +374,7 @@ class _WgcModeManager(object):
             self.login(self.__selectedServer)
         else:
             WGC.onServerResponse(False)
+            self.onRejected()
 
     def __onDisconnected(self):
         WGC.onServerResponse(False)

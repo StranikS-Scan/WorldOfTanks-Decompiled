@@ -10,6 +10,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -21,7 +22,7 @@ from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBootcampController, IUISpamController
+from skeletons.gui.game_control import IBootcampController, ILimitedUIController
 from skeletons.gui.shared import IItemsCache
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
@@ -33,7 +34,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __itemsCache = dependency.descriptor(IItemsCache)
     __service = dependency.descriptor(ICustomizationService)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __uiSpamController = dependency.descriptor(IUISpamController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
@@ -137,7 +138,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes, itemFilter=itemsFilter)
             serverSettings = self.__settingsCore.serverSettings
             progressiveItemsViewVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT)
-            if not progressiveItemsViewVisited and self.__uiSpamController.shouldBeHidden(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT):
+            if not progressiveItemsViewVisited and not self.__limitedUIController.isRuleCompleted(LuiRules.C7N_PROGRESSION_HINT):
                 progressiveItemsViewVisited = True
                 serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: True,
                  OnceOnlyHints.C11N_EDITABLE_STYLES_HINT: True,

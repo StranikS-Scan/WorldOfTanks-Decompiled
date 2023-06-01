@@ -9,6 +9,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
+from gui.limited_ui.lui_rules_storage import LuiRules
 from wg_async import wg_async, wg_await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
@@ -44,7 +45,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, IUISpamController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -92,9 +93,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     eventsController = dependency.descriptor(IEventBoardController)
     marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     battlePass = dependency.descriptor(IBattlePassController)
-    uiSpamController = dependency.descriptor(IUISpamController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -274,7 +275,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
                 elif self.marathonsCtrl.doesShowAnyMissionsTab():
                     enabledMarathon = self.marathonsCtrl.getFirstEnabledMarathon()
-                    if enabledMarathon is not None and not self.uiSpamController.shouldBeHidden(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS):
+                    if enabledMarathon is not None and self.__limitedUIController.isRuleCompleted(LuiRules.MISSIONS_MARATHON_VIEW):
                         self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
                         self.__marathonPrefix = enabledMarathon.prefix
         self._eventID = ctx.get('eventID')

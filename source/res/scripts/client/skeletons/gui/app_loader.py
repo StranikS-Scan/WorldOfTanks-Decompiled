@@ -7,11 +7,10 @@ from constants import ARENA_GUI_TYPE
 class GuiGlobalSpaceID(object):
     UNDEFINED = 0
     WAITING = 1
-    INTRO_VIDEO = 2
-    LOGIN = 3
-    LOBBY = 4
-    BATTLE_LOADING = 5
-    BATTLE = 6
+    LOGIN = 2
+    LOBBY = 3
+    BATTLE_LOADING = 4
+    BATTLE = 5
 
 
 class ApplicationStateID(object):
@@ -54,9 +53,6 @@ class IWaitingWidget(object):
         pass
 
     def hideWaiting(self):
-        pass
-
-    def showAwards(self, value):
         pass
 
     def setCallback(self, callback=None):
@@ -170,9 +166,6 @@ class IAppFactory(object):
         pass
 
     def syncCursor(self, appNS, flags=0):
-        pass
-
-    def goToIntroVideo(self, appNS):
         pass
 
     def goToLogin(self, appNS):

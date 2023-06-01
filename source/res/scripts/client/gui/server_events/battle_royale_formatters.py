@@ -78,7 +78,7 @@ class IngameBattleRoyaleResultsViewDataFormatter(object):
     def __maxPlaceValue(self):
         if self.isInSquad:
             vehicles = self.__arenaDP.getVehiclesItemsGenerator()
-            return len({vinfo.team for vinfo, _ in vehicles if not vinfo.isObserver()})
+            return len({vinfo.team for vinfo, _ in vehicles if vinfo.isPlayer()})
         return self.playersCount
 
     def __getKilled(self):

@@ -17,7 +17,6 @@ from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.shared.ClanCache import _ClanCache
 from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.requesters.abstract import Response
 from helpers import time_utils
@@ -176,7 +175,6 @@ class TournamentEntity(UnitEntity):
 
     def __init__(self):
         super(TournamentEntity, self).__init__(FUNCTIONAL_FLAG.TOURNAMENT, PREBATTLE_TYPE.TOURNAMENT)
-        self.__g_clanCache = _ClanCache()
         self.__revisionId = 0
         self.__battleModeData = {}
         self.__waitingManager = BaseExternalUnitWaitingManager()

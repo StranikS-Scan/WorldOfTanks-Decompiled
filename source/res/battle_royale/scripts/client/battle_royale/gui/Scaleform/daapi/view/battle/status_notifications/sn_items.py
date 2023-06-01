@@ -311,6 +311,7 @@ class AdaptationHealthRestoreSN(_BRLocalizationProvider, sn_items.TimerSN):
     def __init__(self, updateCallback):
         super(AdaptationHealthRestoreSN, self).__init__(updateCallback)
         self._vo['additionalState'] = BATTLE_ROYAL_CONSTS.COUNTER_STATE_INITIAL
+        self._vo['additionalInfo'] = '+0'
 
     def getItemID(self):
         return VEHICLE_VIEW_STATE.ADAPTATION_HEALTH_RESTORE

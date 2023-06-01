@@ -13,16 +13,16 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, Unlock
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.ui_spam.custom_aliases import TECH_TREE_EVENT
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from shared_utils.vehicle_utils import ModuleDependencies
-from skeletons.gui.game_control import ITradeInController, IBootcampController, IUISpamController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, ILimitedUIController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -41,7 +41,7 @@ def _checkCollectibleEnabled(state, lobbyContext=None):
 class _ItemsData(object):
     tradeIn = dependency.descriptor(ITradeInController)
     bootcamp = dependency.descriptor(IBootcampController)
-    uiSpamController = dependency.descriptor(IUISpamController)
+    limitedUIController = dependency.descriptor(ILimitedUIController)
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def __init__(self, dumper, itemsCache=None):
@@ -55,7 +55,7 @@ class _ItemsData(object):
         self._items = itemsCache.items
         self._stats = itemsCache.items.stats
         self._wereInBattle = self._getNodesWereInBattle()
-        self._hideTechTreeEvent = self.uiSpamController.shouldBeHidden(TECH_TREE_EVENT)
+        self._hideTechTreeEvent = not self.limitedUIController.isRuleCompleted(LuiRules.TECH_TREE_EVENTS)
         return
 
     def __del__(self):

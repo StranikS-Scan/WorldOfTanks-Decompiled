@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/vo_converters.py
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSlotsVOs, MAX_PLAYER_COUNT_ALL, makeTotalLevelLabel, makeUnitStateLabel
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSlotsVOs, MAX_PLAYER_COUNT_ALL, makeTotalLevelLabel, makeUnitStateLabel, makeVehicleVO
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.clans.stronghold_event_requester import FrozenVehiclesConstants
 from gui.prb_control import settings
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import i18n
@@ -58,6 +59,9 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYE
             slot['filterState'] = 0
             slot['vehicles'] = ()
             slot['isRemoveAvailable'] = unitEntity.getPermissions().canAssignToSlot(slot['player']['dbID'])
+            frozenVehicles = unitEntity.getEventFrozenVehicles(slot['player']['dbID'])
+            if frozenVehicles is not None and slot['selectedVehicle'] is not None:
+                slot['hasFrozenVehicle'] = _updateStrongholdEventVehicleVO(slot['selectedVehicle'], frozenVehicles)
             continue
         slot['filterState'] = vehTypesInSlot
         slot['vehicles'] = vehiclesInSlot
@@ -120,3 +124,20 @@ def setFreezedInSlots(slots):
         player['canBeTaken'] = False
 
     return slots
+
+
+def makeStrongholdVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True, frozenVehicles=None):
+    vehicleVO = makeVehicleVO(vehicle, levelsRange=levelsRange, vehicleTypes=vehicleTypes, isCurrentPlayer=isCurrentPlayer)
+    if frozenVehicles is not None:
+        _updateStrongholdEventVehicleVO(vehicleVO, frozenVehicles)
+    return vehicleVO
+
+
+def _updateStrongholdEventVehicleVO(vehicleVO, frozenVehicles):
+    if not vehicleVO['isReadyToFight']:
+        return False
+    if frozenVehicles == FrozenVehiclesConstants.ALL_VEHICLES_FROZEN or vehicleVO['intCD'] in frozenVehicles:
+        vehicleVO['isReadyToFight'] = False
+        vehicleVO['state'] = 'frozenVehicle'
+        return True
+    return False

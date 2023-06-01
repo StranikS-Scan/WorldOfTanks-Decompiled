@@ -1,0 +1,16 @@
+<EntityAreaBorderComponent.def>
+  <Properties>
+    <isVisible>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isVisible>
+    <udoGuid>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </udoGuid>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	entityAreaBorder	</DefaultKeyName>
+</EntityAreaBorderComponent.def>

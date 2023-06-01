@@ -49,6 +49,9 @@ class RegularAchievement(GUIItem):
     def getBlock(self):
         return self._block
 
+    def getResourceName(self):
+        return self._getActualName()
+
     def getValue(self):
         return self._value
 

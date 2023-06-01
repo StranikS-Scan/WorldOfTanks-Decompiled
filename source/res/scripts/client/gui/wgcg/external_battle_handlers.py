@@ -33,6 +33,7 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
          WebRequestDataType.STRONGHOLD_STOP_PLAYERS_MATCHING: partial(self.__stopPlayersMatching, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.STRONGHOLD_LEAVE_MODE: partial(self.__leaveMode, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.STRONGHOLD_SLOT_VEHICLE_FILTERS_UPDATE: partial(self.__getSlotVehicleFilters, ExternalBattleStorageName.STRONGHOLD),
+         WebRequestDataType.STRONGHOLD_EVENT_GET_FROZEN_VEHICLES: partial(self.__getFrozenVehicles, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.TOURNAMENT_LEAVE: partial(self.__leave, ExternalBattleStorageName.TOURNAMENT),
          WebRequestDataType.TOURNAMENT_ASSIGN: partial(self.__assign, ExternalBattleStorageName.TOURNAMENT),
          WebRequestDataType.TOURNAMENT_CHANGE_OPENED: partial(self.__changeOpened, ExternalBattleStorageName.TOURNAMENT),
@@ -120,6 +121,9 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
 
     def __getExternalBattleUnitStatistics(self, api, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, (api, 'clan_statistics'), clan_id=ctx.getClanID())
+
+    def __getFrozenVehicles(self, api, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, (api, 'get_event_frozen_vehicles'))
 
     def __getPeripheryIDStr(self):
         return str(self.connectionMgr.peripheryID)

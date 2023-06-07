@@ -18,7 +18,7 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
 
     def _getUnsuitableVehicles(self, onClear=False):
         config = self.lobbyContext.getServerSettings().epicBattles
-        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.LEVELS(config.validVehicleLevels)).itervalues()
+        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.LEVELS(config.validVehicleLevels) ^ REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(config.forbiddenVehTypes)).itervalues()
         eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
         clanWarsVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLAN_WARS).itervalues()
         comp7Vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.COMP7).itervalues()

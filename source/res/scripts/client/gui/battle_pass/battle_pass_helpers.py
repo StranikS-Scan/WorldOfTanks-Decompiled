@@ -81,6 +81,10 @@ def getIntroSlidesNames():
     return GUI_SETTINGS.battlePass.get('introSlides')
 
 
+def isIntroVideoExist():
+    return bool(GUI_SETTINGS.battlePass.get('introVideo'))
+
+
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def getChaptersOrder(battlePass=None):
     chapterIDs = [ chapter for chapter in battlePass.getChapterIDs() if not battlePass.isExtraChapter(chapter) ]

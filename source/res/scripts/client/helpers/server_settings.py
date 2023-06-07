@@ -449,11 +449,12 @@ class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'rentVehicles',
- 'tooltips'))):
+ 'tooltips',
+ 'forbiddenVehTypes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={})
+        defaults = dict(isEnabled=False, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={}, forbiddenVehTypes=set())
         defaults.update(kwargs)
         return super(EpicGameConfig, cls).__new__(cls, **defaults)
 

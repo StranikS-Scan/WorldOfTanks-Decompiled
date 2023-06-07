@@ -265,6 +265,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getValidVehicleLevels(self):
         return self.getModeSettings().validVehicleLevels
 
+    def getForbiddenVehicles(self):
+        return self.getModeSettings().forbiddenVehTypes
+
     def getUnlockableInBattleVehLevels(self):
         return self.getModeSettings().unlockableInBattleVehLevels
 

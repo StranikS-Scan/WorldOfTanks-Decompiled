@@ -97,10 +97,11 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
+        isForbidden = vehicle.intCD in cls.__epicController.getForbiddenVehicles()
         return (not vehicle.isInInventory,
          not vehicle.isEvent,
          not vehicle.isOnlyForBattleRoyaleBattles,
-         not cls._isSuitableForQueue(vehicle),
+         not isForbidden and not cls._isSuitableForQueue(vehicle),
          vehicle.level,
          not vehicle.isFavorite,
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
@@ -110,14 +111,20 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _isSuitableForQueue(cls, vehicle):
-        return vehicle.level in cls.__epicController.getValidVehicleLevels()
+        controller = cls.__epicController
+        return vehicle.level in controller.getValidVehicleLevels() and vehicle.intCD not in controller.getForbiddenVehicles()
 
     def _buildVehicle(self, vehicle):
         result = super(EpicBattleCarouselDataProvider, self)._buildVehicle(vehicle)
         state, _ = vehicle.getState()
-        resShortCut = R.strings.epic_battle.epicBattlesCarousel.lockedTooltip
+        resShortCut = R.strings.epic_battle.epicBattlesCarousel
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
-            result['lockedTooltip'] = makeTooltip(backport.text(resShortCut.header()), backport.text(resShortCut.body()))
+            header = resShortCut.lockedTooltip.header()
+            if vehicle.level in self.__epicController.getValidVehicleLevels():
+                body = resShortCut.wrongMode.body()
+            else:
+                body = resShortCut.lockedTooltip.body()
+            result['lockedTooltip'] = makeTooltip(backport.text(header), backport.text(body))
         if state == Vehicle.VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE:
             result['unlockedInBattle'] = True
         result['xpImgSource'] = ''

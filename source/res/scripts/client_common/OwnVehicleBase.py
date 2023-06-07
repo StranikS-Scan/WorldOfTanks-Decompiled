@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client_common/OwnVehicleBase.py
 from collections import namedtuple
 from functools import partial
+from math_utils import almostZero
 import BigWorld
 from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
 from items import vehicles, ITEM_TYPES
@@ -47,7 +48,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
                 timeRemainig = vehicleAmmo.endTime
                 if timeRemainig > 0:
                     timeRemainig = max(vehicleAmmo.endTime - self._serverTime(), 0)
-                    if timeRemainig > vehicleAmmo.totalTime:
+                    if not almostZero(vehicleAmmo.totalTime) and timeRemainig > vehicleAmmo.totalTime:
                         timeRemainig = vehicleAmmo.totalTime
                 avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, None if self.__isAttachingToVehicle else vehicleAmmo.previousStage, timeRemainig, vehicleAmmo.totalTime)
 

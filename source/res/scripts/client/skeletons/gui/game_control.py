@@ -1276,6 +1276,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getValidVehicleLevels(self):
         raise NotImplementedError
 
+    def getForbiddenVehicles(self):
+        raise NotImplementedError
+
     def getUnlockableInBattleVehLevels(self):
         raise NotImplementedError
 

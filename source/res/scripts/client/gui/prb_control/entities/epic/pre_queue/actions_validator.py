@@ -19,6 +19,9 @@ class EpicVehicleValidator(BaseActionsValidator):
         vehicleLevelsForStartBattle = [ level for level in config.validVehicleLevels if level not in config.unlockableInBattleVehLevels ]
         if vehicle.level not in config.validVehicleLevels:
             return ValidationResult(False, PRE_QUEUE_RESTRICTION.LIMIT_LEVEL, {'levels': vehicleLevelsForStartBattle})
+        forbiddenVehicles = config.forbiddenVehTypes
+        if vehicle.intCD in forbiddenVehicles:
+            return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED, {'vehicles': forbiddenVehicles})
         return ValidationResult(False, PRE_QUEUE_RESTRICTION.VEHICLE_WILL_BE_UNLOCKED, {'unlockableInBattleVehLevels': config.unlockableInBattleVehLevels,
          'vehicleLevelsForStartBattle': vehicleLevelsForStartBattle}) if isVehLevelUnlockableInBattle(vehicle.level) else super(EpicVehicleValidator, self)._validate()
 

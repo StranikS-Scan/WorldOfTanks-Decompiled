@@ -14,15 +14,22 @@ from items import vehicles as veh_core
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
 from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
 from gui.shared.money import Currency
-MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
-MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
-SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
+_MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
+_MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(_MODULE_TYPES_ORDER)))
+_SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
- SHELL_TYPES.SMOKE)
-SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
+ SHELL_TYPES.SMOKE,
+ SHELL_TYPES.ARMOR_PIERCING_HE,
+ SHELL_TYPES.FLAME)
+_SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(_SHELL_TYPES_ORDER)))
+_MAX_SHELL_TYPES_ORDER_INDEX = len(_SHELL_TYPES_ORDER_INDICES)
 _logger = logging.getLogger(__name__)
+
+def getShellTypesOrder(shellType):
+    return _SHELL_TYPES_ORDER_INDICES.get(shellType, _MAX_SHELL_TYPES_ORDER_INDEX)
+
 
 class VehicleModule(FittingItem):
     __slots__ = ('_vehicleModuleDescriptor',)
@@ -40,7 +47,7 @@ class VehicleModule(FittingItem):
         return self._vehicleModuleDescriptor if self._vehicleModuleDescriptor is not None else super(VehicleModule, self).descriptor
 
     def _sortByType(self, other):
-        return MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
+        return _MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - _MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
 
     def getGUIEmblemID(self):
         return self.itemTypeName
@@ -428,4 +435,4 @@ class Shell(FittingItem):
         return vehicle.shells.setupLayouts.isInOtherLayout(self)
 
     def _sortByType(self, other):
-        return SHELL_TYPES_ORDER_INDICES[self.type] - SHELL_TYPES_ORDER_INDICES[other.type]
+        return getShellTypesOrder(self.type) - getShellTypesOrder(other.type)

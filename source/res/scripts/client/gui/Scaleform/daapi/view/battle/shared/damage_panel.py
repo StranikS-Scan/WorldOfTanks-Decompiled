@@ -9,7 +9,7 @@ import BigWorld
 import GUI
 import Math
 from account_helpers.settings_core import settings_constants
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, StunTypes
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
@@ -411,7 +411,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
     def _updateThunderStrike(self, data):
         duration = data.get('duration', 0)
         objID = data.get('id', 0)
-        stunInfo = StunInfo(startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + duration, duration=duration, totalTime=duration)
+        stunInfo = StunInfo(stunType=StunTypes.DEFAULT.value, startTime=BigWorld.serverTime(), endTime=BigWorld.serverTime() + duration, duration=duration, totalTime=duration)
         self.__updateStunSources(objID, stunInfo)
         self.__updateStunAnimations(stunInfo)
 

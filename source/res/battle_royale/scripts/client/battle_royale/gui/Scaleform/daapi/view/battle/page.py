@@ -143,21 +143,35 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def isFullStatsShown(self):
         return self.__isFullStatsShown
 
-    def _canShowPostmortemTips(self):
+    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
+        self._updatePostmortemTips()
+        if not self.sessionProvider.getCtx().isPlayerObserver():
+            self._isInPostmortem = True
+            self._switchToPostmortem()
+
+    @property
+    def isPostmortemTispVisible(self):
         if avatar_getter.isObserverSeesAll():
             return False
-        else:
-            arenaDP = self.sessionProvider.getArenaDP()
-            enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
-            bonusType = BigWorld.player().arenaBonusType
-            isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
-            if enemiesTeamCount <= 1 or isTournament:
-                postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
-                if postmortemPanel is not None:
-                    postmortemPanel.as_setSpectatorPanelVisibleS(False)
-                    super(BattleRoyalePage, self).as_setPostmortemTipsVisibleS(True)
-                    return False
-            return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
+        bonusType = BigWorld.player().arenaBonusType
+        isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
+        vehicleCountCtrl = self.sessionProvider.dynamic.vehicleCount
+        if vehicleCountCtrl and vehicleCountCtrl.getTeamCount() <= 1 or isTournament:
+            return False
+        if not (self._canShowPostmortemTips() and not self.__isFullStatsShown and BigWorld.player().isFollowWinner()):
+            return False
+        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
+        if componentSystem and componentSystem.battleRoyaleComponent:
+            playerTeam = self.sessionProvider.getArenaDP().getVehicleInfo().team
+            defeatedTeams = set(componentSystem.battleRoyaleComponent.defeatedTeams)
+            return playerTeam in defeatedTeams
+        return False
+
+    def _updatePostmortemTips(self):
+        self.as_setPostmortemTipsVisibleS(self.isPostmortemTispVisible)
+
+    def _onDefeatedTeamsUpdated(self, *_):
+        self._updatePostmortemTips()
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
@@ -175,6 +189,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             if self.__selectSpawnToggling:
                 return
             super(BattleRoyalePage, self)._toggleFullStats(isShown, permanent, tabAlias)
+            self._updatePostmortemTips()
             return
 
     def _populate(self):
@@ -208,6 +223,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
+        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
+        if componentSystem and componentSystem.battleRoyaleComponent:
+            componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate += self._onDefeatedTeamsUpdated
         return
 
     def _stopBattleSession(self):
@@ -218,6 +236,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
+        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
+        if componentSystem and componentSystem.battleRoyaleComponent:
+            componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate -= self._onDefeatedTeamsUpdated
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):

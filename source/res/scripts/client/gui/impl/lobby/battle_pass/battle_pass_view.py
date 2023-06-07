@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroVideoURL
+from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroVideoURL, isIntroVideoExist
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsView
@@ -54,7 +54,7 @@ class _IntroVideoManager(object):
         g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
 
     def showIntroVideoIfNeeded(self, *_):
-        if not self.isIntroVideoShown:
+        if not self.isIntroVideoShown and isIntroVideoExist():
             _showOverlayVideo(getIntroVideoURL())
             _setTrueToBPStorage(_INTRO_VIDEO_SHOWN)
             self.__isIntroVideoShown = True

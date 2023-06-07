@@ -57,7 +57,7 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         else:
             deathZoneIcon = _LINKS.DEATHZONE_ICON
             damaginDeathZoneIcon = _LINKS.DAMAGING_DEATHZONE_ICON
-        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link, _COLORS.RED)
+        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_ZONE, damaginDeathZoneIcon, _LINKS.BATTLE_ROYALE_TIMER_UI, _COLORS.RED, countdownVisible=False)
         liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
         if liftOverEnabled:
